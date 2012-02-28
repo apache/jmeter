@@ -1084,7 +1084,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(requestHeaders, pattern)) {
             MatchResult match = localMatcher.getMatch();
-            return match.group(1);
+            String matchString =  match.group(1);
+            // Header may contain ;charset= , regexp extracts it so computed boundary is wrong
+            int indexOf = matchString.indexOf(";");
+            if(indexOf>=0) {
+                return matchString.substring(0, indexOf);
+            } else {
+                return matchString;
+            }
         }
         else {
             return null;
