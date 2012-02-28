@@ -30,12 +30,19 @@ public class StatusImpl implements Status {
 
     private final List<Connector> connectors;
 
+    // TODO - remove! Temporary hack to try and trace Gump failure
+    private static final boolean isGump = Boolean.parseBoolean(System.getProperty("gump.run","false"));
+    
     /**
      *
      */
     public StatusImpl() {
         super();
         connectors = new LinkedList<Connector>();
+        // TODO - remove! Temporary hack to try and trace Gump failure
+        if (isGump) {
+            new Throwable("\nGUMP DEBUG: "+this).printStackTrace();
+        }
     }
 
     /** {@inheritDoc} */
