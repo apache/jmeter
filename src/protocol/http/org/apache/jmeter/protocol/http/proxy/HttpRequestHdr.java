@@ -255,17 +255,11 @@ public class HttpRequestHdr {
             throws MalformedURLException, IOException {
         // Instantiate the sampler
         HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(httpSamplerName);
-        // Damn! A whole new GUI just to instantiate a test element?
-        // Isn't there a beter way?
-        HttpTestSampleGui tempGui = new HttpTestSampleGui();
-
-        sampler.setProperty(TestElement.GUI_CLASS, tempGui.getClass().getName());
+        sampler.setProperty(TestElement.GUI_CLASS, HttpTestSampleGui.class.getName());
 
         // Populate the sampler
         populateSampler(sampler, pageEncodings, formEncodings);
 
-        tempGui.configure(sampler);
-        tempGui.modifyTestElement(sampler);
         // Defaults
         sampler.setFollowRedirects(false);
         sampler.setUseKeepAlive(true);
