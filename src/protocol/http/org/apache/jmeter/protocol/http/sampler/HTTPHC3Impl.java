@@ -706,7 +706,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             // If a content encoding is specified, we use that as the
             // encoding of any parameter values
             String contentEncoding = getContentEncoding();
-            if(contentEncoding != null && contentEncoding.length() == 0) {
+            if(isNullOrEmptyTrimmed(contentEncoding)) {
                 contentEncoding = null;
             }
 
@@ -816,11 +816,11 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 // the post body will be encoded in the specified content encoding
                 String contentEncoding = getContentEncoding();
                 boolean haveContentEncoding = false;
-                if(contentEncoding != null && contentEncoding.trim().length() > 0) {
+                if(isNullOrEmptyTrimmed(contentEncoding)) {
+                    contentEncoding=null;                    
+                } else {
                     post.getParams().setContentCharset(contentEncoding);
-                    haveContentEncoding = true;
-                } else if (contentEncoding != null && contentEncoding.trim().length() == 0){
-                    contentEncoding=null;
+                    haveContentEncoding = true;                    
                 }
 
                 // If none of the arguments have a name specified, we
@@ -962,9 +962,11 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             // If a content encoding is specified, we set it as http parameter, so that
             // the post body will be encoded in the specified content encoding
-            final String contentEncoding = getContentEncoding();
+            String contentEncoding = getContentEncoding();
             boolean haveContentEncoding = false;
-            if(contentEncoding != null && contentEncoding.trim().length() > 0) {
+            if(isNullOrEmptyTrimmed(contentEncoding)) {
+                contentEncoding = null;
+            } else {
                 put.getParams().setContentCharset(contentEncoding);
                 haveContentEncoding = true;
             }
