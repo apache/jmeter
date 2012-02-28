@@ -792,7 +792,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Write the request to our own stream
             MultipartEntity multiPart = new MultipartEntity(
-                    getDoBrowserCompatibleMultipart() ? HttpMultipartMode.BROWSER_COMPATIBLE : HttpMultipartMode.STRICT);
+                    getDoBrowserCompatibleMultipart() ? HttpMultipartMode.BROWSER_COMPATIBLE : HttpMultipartMode.STRICT,
+                            null, Charset.forName(contentEncoding));
             // Create the parts
             // Add any parameters
             PropertyIterator args = getArguments().iterator();
