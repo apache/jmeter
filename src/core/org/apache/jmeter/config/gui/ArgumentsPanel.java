@@ -101,6 +101,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     private final boolean enableUpDown;
 
+    private JButton showDetail;
+
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
 
@@ -115,6 +117,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /** Command for moving a row down in the table. */
     private static final String DOWN = "down"; // $NON-NLS-1$
+
+    /** Command for showing detail. */
+    private static final String DETAIL = "detail"; // $NON-NLS-1$
 
     public static final String COLUMN_RESOURCE_NAMES_0 = "name"; // $NON-NLS-1$
 
@@ -330,6 +335,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             moveUp();
         } else if (action.equals(DOWN)) {
             moveDown();
+        } else if (action.equals(DETAIL)) {
+            showDetail();
         }
     }
 
@@ -382,6 +389,20 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         }
     }
 
+    /**
+     * Show Row Detail
+     */
+    private void showDetail() {
+        cancelEditing();
+
+        int[] rowsSelected = table.getSelectedRows();
+        if (rowsSelected.length == 1) {
+            table.clearSelection();
+            RowDetailDialog detailDialog = new RowDetailDialog(tableModel, rowsSelected[0]);
+            detailDialog.setVisible(true);
+        } 
+    }
+    
     /**
      * Remove the currently selected argument from the table.
      */
@@ -585,6 +606,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @return a GUI panel containing the buttons
      */
     private JPanel makeButtonPanel() {
+        showDetail = new JButton(JMeterUtils.getResString("detail")); // $NON-NLS-1$
+        showDetail.setActionCommand(DETAIL);
+        showDetail.setEnabled(true);
+        
         add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
         add.setActionCommand(ADD);
         add.setEnabled(true);
@@ -610,9 +635,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         if (this.background != null) {
             buttonPanel.setBackground(this.background);
         }
+        showDetail.addActionListener(this);
         add.addActionListener(this);
         addFromClipboard.addActionListener(this);
         delete.addActionListener(this);
+        buttonPanel.add(showDetail);
         buttonPanel.add(add);
         buttonPanel.add(addFromClipboard);
         buttonPanel.add(delete);
