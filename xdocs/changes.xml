@@ -149,6 +149,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <ul>
 <li>Bug 45839 - Test Action : Allow premature exit from a loop</li>
 <li>Bug 52614 - MailerModel.sendMail has strange way to calculate debug setting</li>
+<li>Bug 52782 - Add a detail button on parameters table to show detail of a Row</li>
 </ul>
 
 <h2>Non-functional changes</h2>
