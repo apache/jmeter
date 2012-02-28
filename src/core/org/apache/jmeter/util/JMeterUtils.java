@@ -68,6 +68,8 @@ import org.xml.sax.XMLReader;
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
+    // Note: cannot use a static variable here, because that would be processed before the JMeter properties
+    // have been defined (Bug 52783)
     private static class LazyPatternCacheHolder {
         public static final PatternCacheLRU INSTANCE = new PatternCacheLRU(
                 getPropDefault("oro.patterncache.size",1000), // $NON-NLS-1$
