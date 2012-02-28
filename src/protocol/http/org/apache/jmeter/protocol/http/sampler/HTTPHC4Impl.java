@@ -785,7 +785,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // If a content encoding is specified, we use that as the
             // encoding of any parameter values
             String contentEncoding = getContentEncoding();
-            if(contentEncoding != null && contentEncoding.length() == 0) {
+            if(isNullOrEmptyTrimmed(contentEncoding)) {
                 contentEncoding = null;
             }
             Charset charset = null;
@@ -880,11 +880,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 // the post body will be encoded in the specified content encoding
                 String contentEncoding = getContentEncoding();
                 boolean haveContentEncoding = false;
-                if(contentEncoding != null && contentEncoding.trim().length() > 0) {
+                if(isNullOrEmptyTrimmed(contentEncoding)) {
+                    contentEncoding=null;
+                } else {
                     post.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, contentEncoding);
                     haveContentEncoding = true;
-                } else if (contentEncoding != null && contentEncoding.trim().length() == 0){
-                    contentEncoding=null;
                 }
 
                 // If none of the arguments have a name specified, we
@@ -1010,7 +1010,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Check for local contentEncoding override
         final String contentEncoding = getContentEncoding();
-        boolean haveContentEncoding = (contentEncoding != null && contentEncoding.trim().length() > 0);
+        boolean haveContentEncoding = !isNullOrEmptyTrimmed(contentEncoding);
         
         HttpParams putParams = put.getParams();
         HTTPFileArg files[] = getHTTPFiles();
