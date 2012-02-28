@@ -583,7 +583,7 @@ public class JMeterTest extends JMeterTestCase {
                                     new Object[] { myThis }));
                         } catch (NoSuchMethodException f) {
                             // no luck. Ignore this class
-                            System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoSuchMethodException  " + n);
+                            System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoSuchMethodException  " + n + ", missing empty Constructor or Constructor with Object parameter");
                         }
                     }
                 } catch (NoClassDefFoundError e) {
