@@ -72,6 +72,14 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 
     private JButton closeButton;
 
+    private ObjectTableModel tableModel;
+
+    private int selectedRow;
+
+    
+    public RowDetailDialog() {
+        super();
+    }
 	/**
 	 * Hide Window on ESC
 	 */
@@ -90,12 +98,6 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 			setVisible(false);
 		}	
 	};
-
-
-    private ObjectTableModel tableModel;
-
-
-    private int selectedRow;
 	
 	public RowDetailDialog(ObjectTableModel tableModel, int selectedRow) {
         super((JFrame) null, JMeterUtils.getResString("search_tree_title"), true); //$NON-NLS-1$
