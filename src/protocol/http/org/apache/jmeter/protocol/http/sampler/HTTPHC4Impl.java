@@ -88,7 +88,6 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
-
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -789,11 +788,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(contentEncoding != null && contentEncoding.length() == 0) {
                 contentEncoding = null;
             }
+            Charset charset = null;
+            if(contentEncoding != null) {
+                charset = Charset.forName(contentEncoding);
+            }
 
             // Write the request to our own stream
             MultipartEntity multiPart = new MultipartEntity(
                     getDoBrowserCompatibleMultipart() ? HttpMultipartMode.BROWSER_COMPATIBLE : HttpMultipartMode.STRICT,
-                            null, Charset.forName(contentEncoding));
+                            null, charset);
             // Create the parts
             // Add any parameters
             PropertyIterator args = getArguments().iterator();
