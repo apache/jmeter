@@ -67,10 +67,12 @@ import org.xml.sax.XMLReader;
  */
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final PatternCacheLRU patternCache = new PatternCacheLRU(
-            getPropDefault("oro.patterncache.size",1000), // $NON-NLS-1$
-            new Perl5Compiler());
+    
+    private static class LazyPatternCacheHolder {
+        public static final PatternCacheLRU INSTANCE = new PatternCacheLRU(
+                getPropDefault("oro.patterncache.size",1000), // $NON-NLS-1$
+                new Perl5Compiler());
+    }
 
     private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
     
@@ -247,7 +249,7 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     public static PatternCacheLRU getPatternCache() {
-        return patternCache;
+        return LazyPatternCacheHolder.INSTANCE;
     }
 
     /**
@@ -276,7 +278,7 @@ public class JMeterUtils implements UnitTestManager {
      *
      */
     public static Pattern getPattern(String expression, int options){
-        return patternCache.getPattern(expression, options);
+        return LazyPatternCacheHolder.INSTANCE.getPattern(expression, options);
     }
 
     public void initializeProperties(String file) {
@@ -838,7 +840,7 @@ public class JMeterUtils implements UnitTestManager {
         }
         return ans;
     }
-
+    
     /**
      * Get the value of a JMeter property.
      *
