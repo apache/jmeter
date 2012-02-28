@@ -70,6 +70,9 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
         Pattern pattern = null;
         PatternCompiler compiler = new Perl5Compiler();
         String input = prop.getStringValue();
+        if(input == null) {
+            return prop;
+        }
         for(Entry<String, String> entry : getVariables().entrySet()){
             String key = entry.getKey();
             String value = entry.getValue();
