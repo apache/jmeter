@@ -832,9 +832,12 @@ public class JMeterUtils implements UnitTestManager {
      * @return The PropDefault value
      */
     public static String getPropDefault(String propName, String defaultVal) {
-        String ans;
+        String ans = defaultVal;
         try {
-            ans = appProperties.getProperty(propName, defaultVal).trim();
+            String value = appProperties.getProperty(propName, defaultVal);
+            if(value != null) {
+                ans = value.trim();
+            }
         } catch (Exception e) {
             ans = defaultVal;
         }
