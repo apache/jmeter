@@ -41,6 +41,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -521,7 +522,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
 
         HTTPArgument arg = null;
-        if(contentEncoding != null) {
+        final boolean nonEmptyEncoding = !StringUtils.isEmpty(contentEncoding);
+        if(nonEmptyEncoding) {
             arg = new HTTPArgument(name, value, metaData, true, contentEncoding);
         }
         else {
@@ -530,7 +532,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
         // Check if there are any difference between name and value and their encoded name and value
         String valueEncoded = null;
-        if(contentEncoding != null) {
+        if(nonEmptyEncoding) {
             try {
                 valueEncoded = arg.getEncodedValue(contentEncoding);
             }
@@ -999,7 +1001,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if (name.length() > 0) {
                 // If we know the encoding, we can decode the argument value,
                 // to make it easier to read for the user
-                if(contentEncoding != null) {
+                if(!StringUtils.isEmpty(contentEncoding)) {
                     addEncodedArgument(name, value, metaData, contentEncoding);
                 }
                 else {
