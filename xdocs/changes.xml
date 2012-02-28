@@ -71,6 +71,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li>Bug 52613 - Using Raw Post Body option, text gets encoded</li>
+<li>Bug 52781 - Content-Disposition header garbled even if browser compatible headers is checked (HC4) </li>
 </ul>
 
 <h3>Other Samplers</h3>
