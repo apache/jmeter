@@ -2229,6 +2229,7 @@ run JMeter unless all the JMeter jars are added.
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
+      <sysproperty key="gump.run" value="${gump.run}" />
       <arg value="${build.test}"/>
       <arg value="${basedir}/bin/testfiles/jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
