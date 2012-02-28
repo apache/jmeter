@@ -152,4 +152,12 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     protected static boolean isStaticProxy(String host){
         return PROXY_DEFINED && !isNonProxy(host);
     }
+    
+    /**
+     * @param value String value to test
+     * @return true if value is null or empty trimmed
+     */
+    protected static boolean isNullOrEmptyTrimmed(String value) {
+        return value == null || value.trim().length() == 0;
+    }
 }
