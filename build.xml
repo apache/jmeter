@@ -2445,6 +2445,13 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
 
+    <target name="_process_doc_jars">
+      <process_jarfile jarname="commons-collections"/>
+      <process_jarfile jarname="commons-lang"/>
+      <process_jarfile jarname="jdom"/>
+      <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
+    </target>
+
     <!-- Download all missing jars.-->
     <target name="download_jars" description="Download any missing jar files">
         <!-- build.dir may be needed as a temporary work area -->
@@ -2452,6 +2459,14 @@ run JMeter unless all the JMeter jars are added.
         <antcall target="_process_all_jars">
             <param name="_get_file" value="true"/>
         </antcall>
+    </target>
+
+    <target name="download_doc_jars">
+      <!-- build.dir may be needed as a temporary work area -->
+      <mkdir dir="${build.dir}" />
+      <antcall target="_process_doc_jars">
+          <param name="_get_file" value="true"/>
+      </antcall>
     </target>
 
     <target name="_check_exists" if="_check_exists">
