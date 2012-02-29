@@ -36,9 +36,13 @@
 	<span style="font-size : x-large"><b>These builds should not be used in production.</b></span>
 	</p>
 	<h2>Where are the nightly builds?</h2>
-	<p>There are currently no regular nightly builds - sorry.</p>
-    <p>However, occasional builds are made available from 
-    <a href="http://people.apache.org/builds/jmeter/nightly/">Nightly builds (use at your own risk)</a> 
+	<p>JMeter CI builds are currently run by Jenkins and Buildbot</p>
+    <p>These are located at:
+    <ul>
+    <li><a href="https://builds.apache.org/job/JMeter-trunk/lastSuccessfulBuild/artifact/trunk/dist/">Last Successful Jenkins build for JMeter-trunk</a></li>
+    <li><a href="http://ci.apache.org/projects/jmeter/nightlies/">Buildbot nightly builds for JMeter-trunk</a></li>
+    <li><a href="https://repository.apache.org/content/repositories/snapshots/org/apache/jmeter/">Maven Snapshots (Buildbot nightly builds)</a></li>
+    </ul>
     </p>
 	<h2>What do they consist of?</h2>
 <p>
@@ -61,7 +65,7 @@ The other archives are not needed to run JMeter.
 <h2>Building JMeter</h2>
 Download the _src, _bin and _lib files
 <br/>
-Unpack all the archives into the same directory structure
+Unpack all the archives into the <b>same directory structure</b>.
 <br/>
 </p>
 
