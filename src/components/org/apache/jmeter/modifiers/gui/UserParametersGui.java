@@ -35,6 +35,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.FontMetrics;
+import java.awt.Component;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -67,6 +73,8 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     private JButton addParameterButton, addUserButton, deleteRowButton, deleteColumnButton;
 
     private JCheckBox perIterationCheck;
+    
+    private JPanel paramPanel;
 
     public UserParametersGui() {
         super();
@@ -197,7 +205,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         // paramTable.setPreferredScrollableViewportSize(new Dimension(100,
         // 70));
 
-        JPanel paramPanel = new JPanel(new BorderLayout());
+        paramPanel = new JPanel(new BorderLayout());
         paramPanel.add(tableLabel, BorderLayout.NORTH);
         JScrollPane scroll = new JScrollPane(paramTable);
         scroll.setPreferredSize(scroll.getMinimumSize());
@@ -229,6 +237,56 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         return buttonPanel;
     }
 
+    /**
+     * Set Column size
+     */
+    private void setColumnWidths() {
+		int margin = 10;
+		int minwidth = 150;
+		
+		JTableHeader tableHeader = paramTable.getTableHeader();
+		FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
+	    
+	    for (int i = 0; i < tableModel.getColumnCount(); i++) {
+			int headerWidth = headerFontMetrics.stringWidth(paramTable.getColumnName(i));
+			int maxWidth = getMaximalRequiredColumnWidth(i, headerWidth);
+			
+			paramTable.getColumnModel().getColumn(i).setPreferredWidth(Math.max(maxWidth + margin, minwidth));
+        }
+    }
+    
+    /**
+     * Compute max width between width of the largest column at columnIndex and headerWidth
+     * @param columnIndex Column index
+     * @param headerWidth Header width based on Font
+     */
+    private int getMaximalRequiredColumnWidth(int columnIndex, int headerWidth) {
+        int maxWidth = headerWidth;
+
+        TableColumn column = paramTable.getColumnModel().getColumn(columnIndex);
+
+        TableCellRenderer cellRenderer = column.getCellRenderer();
+
+        if(cellRenderer == null) {
+            cellRenderer = new DefaultTableCellRenderer();
+        }
+
+        for(int row = 0; row < paramTable.getModel().getRowCount(); row++) {
+            Component rendererComponent = cellRenderer.getTableCellRendererComponent(paramTable,
+                paramTable.getModel().getValueAt(row, columnIndex),
+                false,
+                false,
+                row,
+                columnIndex);
+
+            double valueWidth = rendererComponent.getPreferredSize().getWidth();
+
+            maxWidth = (int) Math.max(maxWidth, valueWidth);
+        }
+
+        return maxWidth;
+    }
+    
     private class AddParamAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (paramTable.isEditing()) {
@@ -271,15 +329,6 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         }
     }
 
-    /**
-     * Set Column size
-     */
-    private void setColumnWidths() {
-        for (int i = 0; i < tableModel.getColumnCount(); i++) {
-            paramTable.getColumnModel().getColumn(i).setPreferredWidth(200);
-        }
-    }
-    
     private class DeleteRowAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (paramTable.isEditing()) {

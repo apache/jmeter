@@ -113,6 +113,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <li>Bug 52783 - oro.patterncache.size property never used due to early init</li>
 <li>Bug 52789 - Proxy with Regexp Matching can fail with NullPointerException in Value Replacement if value is null</li>
 <li>Bug 52645 - Recording with Proxy leads to OutOfMemory</li>
+<li>Bug 52679 - User Parameters columns narrow</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
