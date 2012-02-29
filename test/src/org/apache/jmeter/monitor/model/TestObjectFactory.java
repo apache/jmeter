@@ -40,7 +40,7 @@ public class TestObjectFactory extends JMeterTestCase {
 
     public void testNoStatus() throws Exception {
         status = of.parseString("<a></a>");
-        assertNotNull(status);
+        assertNull(status);
     }
 
     public void testFileData() throws Exception {
