@@ -27,68 +27,31 @@ public class TestObjectFactory extends JMeterTestCase {
     
     private Status status;
 
-    private boolean isGump;
-    
     @Override
     public void setUp(){
         of = ObjectFactory.getInstance();
-        isGump = Boolean.parseBoolean(System.getProperty("gump.run","false"));
     }
 
-    private String formatStatus(Status s) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(s.toString());
-        sb.append(" ");
-        sb.append(s.getConnectorPrefix());
-        final Jvm jvm = s.getJvm();
-        if (jvm != null) {
-            sb.append(' ');
-            sb.append(jvm.toString());
-            final Memory memory = jvm.getMemory();
-            if (memory != null) {
-                sb.append(' ');
-                sb.append(memory.toString());
-                sb.append(memory.getFree());
-                sb.append(' ');
-                sb.append(memory.getMax());
-                sb.append(' ');
-                sb.append(memory.getTotal());
-            }
-        }
-        return sb.toString();
-    }
-
-    private void printStatus(String caller, Status s){
-        if (s != null) {
-            if (isGump) {
-                System.out.println(caller+":"+formatStatus(status));
-            }            
-        }
-    }
-    public void testNoStatus() throws Exception {
-        status = of.parseString("<a></a>");
-        if (status != null) {
-            fail("Expected null status, but was "+formatStatus(status));
-        }
-    }
 
     public void testStatus() throws Exception {
         status = of.parseString("<status></status>");
         assertNotNull(status);
-        printStatus("testStatus", status);
+    }
+
+    public void testNoStatus() throws Exception {
+        status = of.parseString("<a></a>");
+        assertNotNull(status);
     }
 
     public void testFileData() throws Exception {
         byte[] bytes= FileUtils.readFileToByteArray(findTestFile("testfiles/monitorStatus.xml"));
         status = of.parseBytes(bytes);
-        printStatus("testFileData", status);
         checkResult();
     }
     
     public void testStringData() throws Exception {
         String content = FileUtils.readFileToString(findTestFile("testfiles/monitorStatus.xml"));
         status = of.parseString(content);
-        printStatus("testStringData", status);
         checkResult();
     }
     
