@@ -37,48 +37,49 @@ import org.apache.jmeter.monitor.model.WorkersImpl;
 public class MonitorHandler extends DefaultHandler {
     // private boolean startDoc = false;
     // private boolean endDoc = false;
-    private Stack<Object> stacktree = new Stack<Object>();
+    private final ObjectFactory factory;
 
-    private ObjectFactory factory = null;
+    private Stack<Object> stacktree;
 
-    private Status status = null;
+    private Status status;
 
-    private Jvm jvm = null;
+    private Jvm jvm;
 
-    private Memory memory = null;
+    private Memory memory;
 
-    private Connector connector = null;
+    private Connector connector;
 
-    private ThreadInfo threadinfo = null;
+    private ThreadInfo threadinfo;
 
-    private RequestInfo requestinfo = null;
+    private RequestInfo requestinfo;
 
-    private Worker worker = null;
+    private Worker worker;
 
-    private Workers workers = null;
+    private Workers workers;
 
-    // private List workerslist = null;
+    // private List workerslist;
 
     /**
      *
      */
-    public MonitorHandler() {
+    public MonitorHandler(ObjectFactory factory) {
         super();
-    }
-
-    /**
-     * Set the ObjectFactory used to create new
-     *
-     * @param factory
-     */
-    public void setObjectFactory(ObjectFactory factory) {
         this.factory = factory;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void startDocument() throws SAXException {
         // this.startDoc = true;
+        // Reset all work variables so reusing the instance starts afresh.
+        this.stacktree = new Stack<Object>();
+        this.status = null;
+        this.jvm = null;
+        this.memory = null;
+        this.connector = null;
+        this.threadinfo = null;
+        this.requestinfo = null;
+        this.worker = null;
+        this.workers = null;   
     }
 
     /** {@inheritDoc} */
