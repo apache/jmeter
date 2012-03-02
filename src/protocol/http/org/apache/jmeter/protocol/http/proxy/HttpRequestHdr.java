@@ -19,30 +19,20 @@
 package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.CharUtils;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
-import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
-import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -60,32 +50,9 @@ public class HttpRequestHdr {
     private static final String HTTP = "http"; // $NON-NLS-1$
     private static final String HTTPS = "https"; // $NON-NLS-1$
     private static final String PROXY_CONNECTION = "proxy-connection"; // $NON-NLS-1$
-    private static final String CONTENT_TYPE = "content-type"; // $NON-NLS-1$
-    private static final String CONTENT_LENGTH = "content-length"; // $NON-NLS-1$
+    public static final String CONTENT_TYPE = "content-type"; // $NON-NLS-1$
+    public static final String CONTENT_LENGTH = "content-length"; // $NON-NLS-1$
 
-    /** Filetype to be used for the temporary binary files*/
-    private static final String binaryFileSuffix =
-        JMeterUtils.getPropDefault("proxy.binary.filesuffix",// $NON-NLS-1$
-                                   ".binary"); // $NON-NLS-1$
-
-    /** Which content-types will be treated as binary (exact match) */
-    private static final Set<String> binaryContentTypes = new HashSet<String>();
-
-    /** Where to store the temporary binary files */
-    private static final String binaryDirectory =
-        JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$
-                System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.filetype=binary
-
-    static {
-        String binaries = JMeterUtils.getPropDefault("proxy.binary.types", // $NON-NLS-1$
-                "application/x-amf,application/x-java-serialized-object"); // $NON-NLS-1$
-        if (binaries.length() > 0){
-            StringTokenizer s = new StringTokenizer(binaries,"|, ");// $NON-NLS-1$
-            while (s.hasMoreTokens()){
-               binaryContentTypes.add(s.nextToken());
-            }
-        }
-    }
 
     /**
      * Http Request method, uppercased, e.g. GET or POST.
@@ -113,14 +80,6 @@ public class HttpRequestHdr {
     private final String httpSamplerName;
 
     private HeaderManager headerManager;
-
-    /*
-     * Optionally number the requests
-     */
-    private static final boolean numberRequests =
-        JMeterUtils.getPropDefault("proxy.number.requests", false); // $NON-NLS-1$
-
-    private static volatile int requestNumber = 0;// running number
 
     public HttpRequestHdr() {
         this.httpSamplerName = ""; // $NON-NLS-1$
@@ -251,26 +210,7 @@ public class HttpRequestHdr {
         return headerManager;
     }
 
-    public HTTPSamplerBase getSampler(Map<String, String> pageEncodings, Map<String, String> formEncodings)
-            throws MalformedURLException, IOException {
-        // Instantiate the sampler
-        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(httpSamplerName);
-        sampler.setProperty(TestElement.GUI_CLASS, HttpTestSampleGui.class.getName());
-
-        // Populate the sampler
-        populateSampler(sampler, pageEncodings, formEncodings);
-
-        // Defaults
-        sampler.setFollowRedirects(false);
-        sampler.setUseKeepAlive(true);
-
-        if (log.isDebugEnabled()) {
-            log.debug("getSampler: sampler path = " + sampler.getPath());
-        }
-        return sampler;
-    }
-
-    private String getContentType() {
+    public String getContentType() {
         Header contentTypeHeader = headers.get(CONTENT_TYPE);
         if (contentTypeHeader != null) {
             return contentTypeHeader.getValue();
@@ -285,179 +225,13 @@ public class HttpRequestHdr {
         return false;
     }
 
-    private MultipartUrlConfig getMultipartConfig(String contentType) {
+    public MultipartUrlConfig getMultipartConfig(String contentType) {
         if(isMultipart(contentType)) {
             // Get the boundary string for the multiparts from the content type
             String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
             return new MultipartUrlConfig(boundaryString);
         }
         return null;
-    }
-
-    private void populateSampler(
-            HTTPSamplerBase sampler,
-            Map<String, String> pageEncodings, Map<String, String> formEncodings)
-            throws MalformedURLException, UnsupportedEncodingException {
-        sampler.setDomain(serverName());
-        if (log.isDebugEnabled()) {
-            log.debug("Proxy: setting server: " + sampler.getDomain());
-        }
-        sampler.setMethod(method);
-        log.debug("Proxy: setting method: " + sampler.getMethod());
-        sampler.setPort(serverPort());
-        if (log.isDebugEnabled()) {
-            log.debug("Proxy: setting port: " + sampler.getPort());
-        }
-        if (url.indexOf("//") > -1) {
-            String protocol = url.substring(0, url.indexOf(":"));
-            if (log.isDebugEnabled()) {
-                log.debug("Proxy: setting protocol to : " + protocol);
-            }
-            sampler.setProtocol(protocol);
-        } else if (sampler.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT) {
-            sampler.setProtocol(HTTPS);
-            if (log.isDebugEnabled()) {
-                log.debug("Proxy: setting protocol to https");
-            }
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("Proxy setting default protocol to: http");
-            }
-            sampler.setProtocol(HTTP);
-        }
-
-        URL pageUrl = null;
-        if(sampler.isProtocolDefaultPort()) {
-            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), getPath());
-        }
-        else {
-            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), sampler.getPort(), getPath());
-        }
-        String urlWithoutQuery = getUrlWithoutQuery(pageUrl);
-
-
-        // Check if the request itself tells us what the encoding is
-        String contentEncoding = null;
-        String requestContentEncoding = ConversionUtils.getEncodingFromContentType(getContentType());
-        if(requestContentEncoding != null) {
-            contentEncoding = requestContentEncoding;
-        }
-        else {
-            // Check if we know the encoding of the page
-            if (pageEncodings != null) {
-                synchronized (pageEncodings) {
-                    contentEncoding = pageEncodings.get(urlWithoutQuery);
-                }
-            }
-            // Check if we know the encoding of the form
-            if (formEncodings != null) {
-                synchronized (formEncodings) {
-                    String formEncoding = formEncodings.get(urlWithoutQuery);
-                    // Form encoding has priority over page encoding
-                    if (formEncoding != null) {
-                        contentEncoding = formEncoding;
-                    }
-                }
-            }
-        }
-
-        // Get the post data using the content encoding of the request
-        String postData = null;
-        if (log.isDebugEnabled()) {
-            if(contentEncoding != null) {
-                log.debug("Using encoding " + contentEncoding + " for request body");
-            }
-            else {
-                log.debug("No encoding found, using JRE default encoding for request body");
-            }
-        }
-        if (contentEncoding != null) {
-            postData = new String(rawPostData, contentEncoding);
-        } else {
-            // Use default encoding
-            postData = new String(rawPostData);
-        }
-
-        if(contentEncoding != null) {
-            sampler.setPath(getPath(), contentEncoding);
-        }
-        else {
-            // Although the spec says UTF-8 should be used for encoding URL parameters,
-            // most browser use ISO-8859-1 for default if encoding is not known.
-            // We use null for contentEncoding, then the url parameters will be added
-            // with the value in the URL, and the "encode?" flag set to false
-            sampler.setPath(getPath(), null);
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("Proxy: setting path: " + sampler.getPath());
-        }
-        if (!HTTPConstants.CONNECT.equals(getMethod()) && numberRequests) {
-            requestNumber++;
-            sampler.setName(requestNumber + " " + sampler.getPath());
-        } else {
-            sampler.setName(sampler.getPath());
-        }
-
-        // Set the content encoding
-        if(contentEncoding != null) {
-            sampler.setContentEncoding(contentEncoding);
-        }
-
-        // If it was a HTTP GET request, then all parameters in the URL
-        // has been handled by the sampler.setPath above, so we just need
-        // to do parse the rest of the request if it is not a GET request
-        if((!HTTPConstants.CONNECT.equals(getMethod())) && (!HTTPConstants.GET.equals(method))) {
-            // Check if it was a multipart http post request
-            final String contentType = getContentType();
-            MultipartUrlConfig urlConfig = getMultipartConfig(contentType);
-            if (urlConfig != null) {
-                urlConfig.parseArguments(postData);
-                // Tell the sampler to do a multipart post
-                sampler.setDoMultipartPost(true);
-                // Remove the header for content-type and content-length, since
-                // those values will most likely be incorrect when the sampler
-                // performs the multipart request, because the boundary string
-                // will change
-                getHeaderManager().removeHeaderNamed(CONTENT_TYPE);
-                getHeaderManager().removeHeaderNamed(CONTENT_LENGTH);
-
-                // Set the form data
-                sampler.setArguments(urlConfig.getArguments());
-                // Set the file uploads
-                sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
-            // used when postData is pure xml (eg. an xml-rpc call) or for PUT
-            } else if (postData.trim().startsWith("<?") || "PUT".equals(sampler.getMethod())) {
-                sampler.addNonEncodedArgument("", postData, "");
-            } else if (contentType == null || contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) ){
-                // It is the most common post request, with parameter name and values
-                // We also assume this if no content type is present, to be most backwards compatible,
-                // but maybe we should only parse arguments if the content type is as expected
-                sampler.parseArguments(postData.trim(), contentEncoding); //standard name=value postData
-            } else if (postData.length() > 0) {
-                if (isBinaryContent(contentType)) {
-                    try {
-                        File tempDir = new File(binaryDirectory);
-                        File out = File.createTempFile(method, binaryFileSuffix, tempDir);
-                        FileUtils.writeByteArrayToFile(out,rawPostData);
-                        HTTPFileArg [] files = {new HTTPFileArg(out.getPath(),"",contentType)};
-                        sampler.setHTTPFiles(files);
-                    } catch (IOException e) {
-                        log.warn("Could not create binary file: "+e);
-                    }
-                } else {
-                    // Just put the whole postbody as the value of a parameter
-                    sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
-                }
-            }
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("sampler path = " + sampler.getPath());
-        }
-    }
-
-    private boolean isBinaryContent(String contentType) {
-        if (contentType == null) return false;
-        return binaryContentTypes.contains(contentType);
     }
 
     //
@@ -469,7 +243,7 @@ public class HttpRequestHdr {
      *
      * @return server's internet name
      */
-    private String serverName() {
+    public String serverName() {
         // chop to "server.name:x/thing"
         String str = url;
         int i = str.indexOf("//"); // $NON-NLS-1$
@@ -500,7 +274,7 @@ public class HttpRequestHdr {
      *
      * @return server's port (or UNSPECIFIED if not found)
      */
-    private int serverPort() {
+    public int serverPort() {
         String str = url;
         // chop to "server.name:x/thing"
         int i = str.indexOf("//");
@@ -525,7 +299,7 @@ public class HttpRequestHdr {
      *
      * @return the path
      */
-    private String getPath() {
+    public String getPath() {
         String str = url;
         int i = str.indexOf("//");
         if (i > 0) {
@@ -589,7 +363,7 @@ public class HttpRequestHdr {
 //        return strBuff.toString();
 //    }
 
-    private String getUrlWithoutQuery(URL _url) {
+    public String getUrlWithoutQuery(URL _url) {
         String fullUrl = _url.toString();
         String urlWithoutQuery = fullUrl;
         String query = _url.getQuery();
@@ -598,5 +372,43 @@ public class HttpRequestHdr {
             urlWithoutQuery = urlWithoutQuery.substring(0, urlWithoutQuery.length() - query.length() - 1);
         }
         return urlWithoutQuery;
+    }
+
+    /**
+     * @return the httpSamplerName
+     */
+    public String getHttpSamplerName() {
+        return httpSamplerName;
+    }
+
+    /**
+     * @return byte[] Raw post data
+     */
+    public byte[] getRawPostData() {
+        return rawPostData;
+    }
+
+    /**
+     * @param sampler {@link HTTPSamplerBase}
+     * @return String Protocol (http or https)
+     */
+    public String getProtocol(HTTPSamplerBase sampler) {
+        if (url.indexOf("//") > -1) {
+            String protocol = url.substring(0, url.indexOf(":"));
+            if (log.isDebugEnabled()) {
+                log.debug("Proxy: setting protocol to : " + protocol);
+            }
+            return protocol;
+        } else if (sampler.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT) {
+            if (log.isDebugEnabled()) {
+                log.debug("Proxy: setting protocol to https");
+            }
+            return HTTPS;
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Proxy setting default protocol to: http");
+            }
+            return HTTP;
+        }
     }
 }
