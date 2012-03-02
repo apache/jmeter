@@ -109,6 +109,8 @@ public class Proxy extends Thread {
     private static final char[] KEY_PASSWORD =
         JMeterUtils.getPropDefault("proxy.cert.keypassword","password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$
 
+    private static final SamplerCreatorFactory factory = new SamplerCreatorFactory();
+
     // Use with SSL connection
     private OutputStream outStreamClient = null;
 
@@ -202,10 +204,10 @@ public class Proxy extends Thread {
                 request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             }
 
-            // Populate the sampler. It is the same sampler as we sent into
-            // the constructor of the HttpRequestHdr instance above
-            sampler = request.getSampler(pageEncodings, formEncodings);
-
+            SamplerCreator samplerCreator = factory.getSamplerCreator(request, pageEncodings, formEncodings);
+            sampler = samplerCreator.createSampler(request, pageEncodings, formEncodings);
+            samplerCreator.populateSampler(sampler, request, pageEncodings, formEncodings);
+            
             /*
              * Create a Header Manager to ensure that the browsers headers are
              * captured and sent to the server
