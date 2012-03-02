@@ -569,7 +569,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
     }
 
     private HTTPSamplerBase getSamplerForRequest(String url, String request, String contentEncoding)
-            throws IOException {
+            throws Exception {
         HttpRequestHdr req = new HttpRequestHdr();
         ByteArrayInputStream bis = null;
         if(contentEncoding != null) {
@@ -587,7 +587,11 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         if(url != null && contentEncoding != null) {
             pageEncodings.put(url, contentEncoding);
         }
-        return req.getSampler(pageEncodings, formEncodings);
+        SamplerCreatorFactory creatorFactory = new SamplerCreatorFactory();
+        SamplerCreator creator = creatorFactory.getSamplerCreator(req, pageEncodings, formEncodings);
+        HTTPSamplerBase sampler = creator.createSampler(req, pageEncodings, formEncodings);
+        creator.populateSampler(sampler, req, pageEncodings, formEncodings);
+        return sampler;
     }
     
     private void checkArgument(
