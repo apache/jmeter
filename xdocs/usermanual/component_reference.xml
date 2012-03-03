@@ -5266,6 +5266,14 @@ This can cause the JMeter proxy server to fail.
 One solution is to ensure that any files to be uploaded are in the JMeter working directory,
 either by copying the files there or by starting JMeter in the directory containing the files.
 </p>
+<p><b>Recording HTTP Based Non Textual Protocols not natively available in JMeter</b></p>
+<p>
+You may have to record an HTTP protocol that is not handled by default by JMeter (Custom Binary Protocol, Adobe Flex, Microsoft Silverlight... ).
+Although JMeter does not provide a native proxy implementation to record these protocols, you have the ability to
+record these protocols by implementing a custom SamplerCreator. This Sampler Creator will translate the binary format into a HTTPSamplerBase subclass
+that can be added to the JMeter Test Case.
+For more details see "Extending JMeter".
+</p>
 </component>
 
 <component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="672" height="174" screenshot="mirrorserver.png">
