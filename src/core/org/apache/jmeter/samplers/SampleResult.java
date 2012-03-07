@@ -277,6 +277,8 @@ public class SampleResult implements Serializable {
         allThreads = res.allThreads;//OK
         assertionResults = res.assertionResults;// TODO ??
         bytes = res.bytes;
+        headersSize = res.headersSize;
+        bodySize = res.bodySize;
         contentType = res.contentType;//OK
         dataEncoding = res.dataEncoding;//OK
         dataType = res.dataType;//OK
@@ -559,6 +561,8 @@ public class SampleResult implements Serializable {
         setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
         // Include the byte count for the added sample
         setBytes(getBytes() + subResult.getBytes());
+        setHeadersSize(getHeadersSize() + subResult.getHeadersSize());
+        setBodySize(getBodySize() + subResult.getBodySize());
         addRawSubResult(subResult);
     }
     
