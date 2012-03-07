@@ -203,9 +203,9 @@ public class RunningSample {
      */
     public void addSample(SampleResult res) {
         long aTimeInMillis = res.getTime();
-        boolean aSuccessFlag = res.isSuccessful();
         
         counter+=res.getSampleCount();
+        errorCount += res.getErrorCount();
 
         long startTime = res.getStartTime();
         long endTime = res.getEndTime();
@@ -229,9 +229,6 @@ public class RunningSample {
             min = aTimeInMillis;
         }
 
-        if (!aSuccessFlag) {
-            errorCount += res.getErrorCount();
-        }
     }
 
     /**
