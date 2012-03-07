@@ -151,9 +151,7 @@ public class SamplingStatCalculator {
             calculator.addBytes(res.getBytes());
             setStartTime(res);
             eCount = getCurrentSample().getErrorCount();
-            if (!res.isSuccessful()) {
-                eCount++;
-            }
+            eCount += res.getErrorCount();
             endTime = getEndTime(res);
             long howLongRunning = endTime - firstTime;
             throughput = ((double) calculator.getCount() / (double) howLongRunning) * 1000.0;
