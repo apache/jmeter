@@ -91,6 +91,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 
 <h3>Assertions</h3>
 <ul>
+<li>Bug 52848 - NullPointer in "XPath Assertion"</li>
 </ul>
 
 <h3>Functions</h3>

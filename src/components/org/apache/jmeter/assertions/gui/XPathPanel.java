@@ -185,9 +185,9 @@ public class XPathPanel extends JPanel {
         try {
             if (testDoc == null) {
                 Document doc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
+                testDoc = doc;
                 Element el = testDoc.createElement("root"); //$NON-NLS-1$
                 doc.appendChild(el);
-                testDoc = doc;
 
             }
             XPathUtil.validateXPath(testDoc, xpathString);
