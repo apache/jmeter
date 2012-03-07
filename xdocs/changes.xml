@@ -86,6 +86,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 
 <h3>Listeners</h3>
 <ul>
+<li>Bug 43450 - Listeners/Savers assume SampleResult count is always 1; fixed Generate Summary Results</li>
 </ul>
 
 <h3>Assertions</h3>
