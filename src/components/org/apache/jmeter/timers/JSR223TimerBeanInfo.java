@@ -18,9 +18,9 @@
 
 package org.apache.jmeter.timers;
 
-import org.apache.jmeter.util.BSFBeanInfoSupport;
+import org.apache.jmeter.util.JSR223BeanInfoSupport;
 
-public class JSR223TimerBeanInfo extends BSFBeanInfoSupport {
+public class JSR223TimerBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223TimerBeanInfo() {
         super(JSR223Timer.class);

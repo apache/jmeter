@@ -18,9 +18,9 @@
 
 package org.apache.jmeter.visualizers;
 
-import org.apache.jmeter.util.BSFBeanInfoSupport;
+import org.apache.jmeter.util.JSR223BeanInfoSupport;
 
-public class JSR223ListenerBeanInfo extends BSFBeanInfoSupport {
+public class JSR223ListenerBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223ListenerBeanInfo() {
         super(JSR223Listener.class);
