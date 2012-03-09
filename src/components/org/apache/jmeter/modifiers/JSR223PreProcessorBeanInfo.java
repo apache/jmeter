@@ -18,9 +18,9 @@
 
 package org.apache.jmeter.modifiers;
 
-import org.apache.jmeter.util.BSFBeanInfoSupport;
+import org.apache.jmeter.util.JSR223BeanInfoSupport;
 
-public class JSR223PreProcessorBeanInfo extends BSFBeanInfoSupport {
+public class JSR223PreProcessorBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223PreProcessorBeanInfo() {
         super(JSR223PreProcessor.class);
