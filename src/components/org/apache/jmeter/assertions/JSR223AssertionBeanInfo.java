@@ -18,9 +18,9 @@
 
 package org.apache.jmeter.assertions;
 
-import org.apache.jmeter.util.BSFBeanInfoSupport;
+import org.apache.jmeter.util.JSR223BeanInfoSupport;
 
-public class JSR223AssertionBeanInfo extends BSFBeanInfoSupport {
+public class JSR223AssertionBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223AssertionBeanInfo() {
         super(JSR223Assertion.class);

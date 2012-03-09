@@ -18,28 +18,37 @@
 
 package org.apache.jmeter.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Properties;
+import java.util.List;
+
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
 
 /**
- * Parent class to handle common GUI design for BSF test elements
+ * Parent class to handle common GUI design for JSR223 test elements
  */
-public abstract class BSFBeanInfoSupport extends ScriptingBeanInfoSupport {
+public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
 
     private final static String[] LANGUAGE_TAGS;
 
     static {
-        Properties languages = JMeterUtils.loadProperties("org/apache/bsf/Languages.properties"); // $NON-NLS-1$
-        LANGUAGE_TAGS = new String[languages.size() + 1];
-        int i = 0;
-        for (Object language : languages.keySet()) {
-            LANGUAGE_TAGS[i++] = language.toString();
+        List<String> shortNames = new ArrayList<String>();
+        ScriptEngineManager sem = new ScriptEngineManager();
+        @SuppressWarnings("unchecked") // can be dropped in Java 1.6
+        final List<ScriptEngineFactory> engineFactories = sem.getEngineFactories();
+        for(ScriptEngineFactory fact : engineFactories){
+            @SuppressWarnings("unchecked") // can be dropped in Java 1.6
+            List<String> names = fact.getNames();
+            for(String shorName : names) {
+                shortNames.add(shorName);
+            }
         }
-        LANGUAGE_TAGS[i] = "jexl"; // $NON-NLS-1$
+        LANGUAGE_TAGS = shortNames.toArray(new String[shortNames.size()]);
         Arrays.sort(LANGUAGE_TAGS);
     }
 
-    protected BSFBeanInfoSupport(Class<?> beanClass) {
+    protected JSR223BeanInfoSupport(Class<?> beanClass) {
         super(beanClass, LANGUAGE_TAGS);
     }
 

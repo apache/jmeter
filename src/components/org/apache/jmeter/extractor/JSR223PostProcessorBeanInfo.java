@@ -18,9 +18,9 @@
 
 package org.apache.jmeter.extractor;
 
-import org.apache.jmeter.util.BSFBeanInfoSupport;
+import org.apache.jmeter.util.JSR223BeanInfoSupport;
 
-public class JSR223PostProcessorBeanInfo extends BSFBeanInfoSupport {
+public class JSR223PostProcessorBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223PostProcessorBeanInfo() {
         super(JSR223PostProcessor.class);
