@@ -3418,6 +3418,13 @@ This component is typically used in HTTPs scenarios where you don't want to take
   <property name="Alias End Index" required="Yes">The index of the last key to use in Keystore.</property>
 </properties>
 
+<note>
+To make JMeter use more than one certificate you need to ensure that:
+<ul>
+<li>https.use.cached.ssl.context=false is set in jmeter.properties or user.properties</li>
+<li>You use either HTTPClient 3.1 or 4 implementations for HTTP Request</li>
+</ul>
+</note>
 </component>
 
 <component name="Login Config Element" index="&sect-num;.4.10"  width="352" height="112" screenshot="login-config.png">
