@@ -19,6 +19,7 @@
 package org.apache.jmeter.util;
 
 import java.beans.PropertyDescriptor;
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
@@ -39,7 +40,8 @@ public abstract class BSFBeanInfoSupport extends BeanInfoSupport {
         for (Object language : languages.keySet()) {
             LANGUAGE_TAGS[i++] = language.toString();
         }
-        LANGUAGE_TAGS[i] = "jexl";
+        LANGUAGE_TAGS[i] = "jexl"; // $NON-NLS-1$
+        Arrays.sort(LANGUAGE_TAGS);
     }
 
     protected BSFBeanInfoSupport(Class<?> beanClass) {
