@@ -78,6 +78,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <h3>Other Samplers</h3>
 <ul>
 <li>Bug 51737 - TCPSampler : Packet gets converted/corrupted</li>
+<li>Bug 52868 - BSF language list should be sorted</li>
 </ul>
 
 <h3>Controllers</h3>
