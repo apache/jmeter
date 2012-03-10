@@ -18,19 +18,16 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import java.net.Socket;
 import java.security.GeneralSecurityException;
 
-import org.apache.http.params.HttpParams;
-import org.apache.jmeter.util.SlowSocket;
+import org.apache.jmeter.util.HttpSSLProtocolSocketFactory;
+import org.apache.jmeter.util.JsseSSLManager;
 
 /**
  * Apache HttpClient protocol factory to generate "slow" SSL sockets for emulating dial-up modems
  */
 
 public class SlowHC4SSLSocketFactory extends HC4TrustAllSSLSocketFactory {
-
-    private final int CPS; // Characters per second to emulate
 
     /**
      * Create a factory 
@@ -39,22 +36,6 @@ public class SlowHC4SSLSocketFactory extends HC4TrustAllSSLSocketFactory {
      * @throws IllegalArgumentException if cps &le; 0
      */
     public SlowHC4SSLSocketFactory(final int cps) throws GeneralSecurityException {
-        super();
-        if (cps <= 0) {
-            throw new IllegalArgumentException("CPS must be > 0, but is "+cps);
-        }
-        CPS = cps;
+        super(new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance(), cps));
     }
-
-    // Override all the socket creation methods in SSLSocketFactory
-    @Override
-    public Socket createSocket(final HttpParams params) {
-        return new SlowSocket(CPS);
-    }
-
-    @Override
-    public Socket createSocket() { // probably not used
-        return new SlowSocket(CPS);
-    }
-    
 }
