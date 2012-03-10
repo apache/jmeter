@@ -64,8 +64,6 @@ public abstract class SSLManager {
 
     private static final boolean isSSLSupported = true;
 
-    private static final Provider sslProvider = null;
-
     /** Cache the KeyStore instance */
     private volatile JmeterKeyStore keyStore;
 
@@ -244,7 +242,7 @@ public abstract class SSLManager {
      */
     public static final synchronized SSLManager getInstance() {
         if (null == SSLManager.manager) {
-            SSLManager.manager = new JsseSSLManager(SSLManager.sslProvider);
+            SSLManager.manager = new JsseSSLManager(null);
 //          if (SSLManager.isSSLSupported) {
 //              String classname = null;
 //              classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
