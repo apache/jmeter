@@ -52,9 +52,7 @@ public class HttpSSLProtocolSocketFactory
     private final int CPS; // Characters per second to emulate
 
     public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager) {
-        super();
-        this.sslManager = sslManager;
-        CPS=0;
+        this(sslManager, 0);
     }
 
     public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager, int cps) {
