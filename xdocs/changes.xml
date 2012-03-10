@@ -73,6 +73,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <li>Bug 52613 - Using Raw Post Body option, text gets encoded</li>
 <li>Bug 52781 - Content-Disposition header garbled even if browser compatible headers is checked (HC4) </li>
 <li>Bug 52796 - MonitorHandler fails to clear variables when starting a new parse</li>
+<li>Bug 52871 - Multiple Certificates not working with HTTP Client 4</li>
 </ul>
 
 <h3>Other Samplers</h3>
