@@ -186,20 +186,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void addJMSProperties(TextMessage msg) throws JMSException {
         Map<String, String> map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
-        for (Map.Entry<String, String> me : map.entrySet()) {
-            String name = me.getKey();
-            String value = me.getValue();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Adding property [" + name + "=" + value + "]");
-            }
-
-            // WebsphereMQ does not allow corr. id. to be set using setStringProperty()
-            if("JMSCorrelationID".equalsIgnoreCase(name)) { // $NON-NLS-1$
-                msg.setJMSCorrelationID(value);
-            } else {
-                msg.setStringProperty(name, value);
-            }
-        }
+        Utils.addJMSProperties(msg, map);
     }
 
     public Arguments getJMSProperties() {

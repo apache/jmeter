@@ -31,6 +31,7 @@ import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -38,6 +39,7 @@ import org.apache.log.Logger;
  * WARNING - the API for this class is likely to change!
  */
 public final class Utils {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static void close(MessageConsumer closeable, Logger log){
         if (closeable != null){
@@ -161,5 +163,31 @@ public final class Utils {
             }
         }
         throw new NamingException("Expected javax.jms.ConnectionFactory, found "+objfac.getClass().getName());
+    }
+    
+    /**
+     * Set JMS Properties to msg
+     * @param msg Message
+     * @param map Map<String, String>
+     * @throws JMSException
+     */
+    public static void addJMSProperties(Message msg, Map<String, String> map) throws JMSException {
+        if(map == null) {
+            return;
+        }
+        for (Map.Entry<String, String> me : map.entrySet()) {
+            String name = me.getKey();
+            String value = me.getValue();
+            if (log.isDebugEnabled()) {
+                log.debug("Adding property [" + name + "=" + value + "]");
+            }
+
+            // WebsphereMQ does not allow corr. id. to be set using setStringProperty()
+            if("JMSCorrelationID".equalsIgnoreCase(name)) { // $NON-NLS-1$
+                msg.setJMSCorrelationID(value);
+            } else {
+                msg.setStringProperty(name, value);
+            }
+        }
     }
 }
