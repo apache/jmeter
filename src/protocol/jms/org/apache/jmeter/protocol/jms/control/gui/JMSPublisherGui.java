@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.jms.control.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -28,6 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -111,6 +114,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private final JLabeledRadioI18N destSetup =
         new JLabeledRadioI18N("jms_dest_setup", DEST_SETUP_ITEMS, DEST_SETUP_STATIC); // $NON-NLS-1$
 
+    private ArgumentsPanel jmsPropertiesPanel;
+
     public JMSPublisherGui() {
         init();
     }
@@ -143,6 +148,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         sampler.setIterations(iterations.getText());
         sampler.setUseAuth(useAuth.isSelected());
         sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
+        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+        sampler.setJMSProperties(args);
+
         return sampler;
     }
 
@@ -170,6 +178,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         sampler.setUseAuth(useAuth.isSelected());
         sampler.setDestinationStatic(destSetup.getText().equals(DEST_SETUP_STATIC));
         sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
+        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+        sampler.setJMSProperties(args);
+
     }
 
     /**
@@ -189,10 +200,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(urlField);
         mainPanel.add(jndiConnFac);
         mainPanel.add(createDestinationPane());
-        mainPanel.add(useAuth);
-        mainPanel.add(jmsUser);
-        mainPanel.add(jmsPwd);
+        mainPanel.add(createAuthPane());
         mainPanel.add(iterations);
+
+        jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
+        mainPanel.add(jmsPropertiesPanel);
 
         configChoice.setLayout(new BoxLayout(configChoice, BoxLayout.X_AXIS));
         mainPanel.add(configChoice);
@@ -232,6 +244,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsPwd.setEnabled(false);
         destSetup.setText(DEST_SETUP_STATIC);
         useNonPersistentDelivery.setSelected(false);
+        jmsPropertiesPanel.clear();
     }
 
     /**
@@ -260,6 +273,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsPwd.setEnabled(useAuth.isSelected());
         destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
         useNonPersistentDelivery.setSelected(sampler.getUseNonPersistentDelivery());
+        jmsPropertiesPanel.configure(sampler.getJMSProperties());
     }
 
     /**
@@ -317,6 +331,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         }
     }
     
+    /**
+     * @return JPanel that contains destination infos
+     */
     private JPanel createDestinationPane() {
         JPanel pane = new JPanel(new BorderLayout(3, 0));
         pane.add(jmsDestination, BorderLayout.WEST);
@@ -324,6 +341,20 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         pane.add(destSetup, BorderLayout.CENTER);
         useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
         pane.add(useNonPersistentDelivery, BorderLayout.EAST);
+        return pane;
+    }
+    
+    /**
+     * @return JPanel Panel with checkbox to choose auth , user and password
+     */
+    private JPanel createAuthPane() {
+        JPanel pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+        pane.add(useAuth);
+        pane.add(Box.createHorizontalStrut(10));
+        pane.add(jmsUser);
+        pane.add(Box.createHorizontalStrut(10));
+        pane.add(jmsPwd);
         return pane;
     }
 }
