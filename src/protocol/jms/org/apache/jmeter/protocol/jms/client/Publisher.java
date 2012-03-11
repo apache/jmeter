@@ -53,6 +53,7 @@ public class Publisher implements Closeable {
     
     private final boolean staticDest;
 
+
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters.
      * Uses a static destination and persistent messages(for backward compatibility)
@@ -146,12 +147,18 @@ public class Publisher implements Closeable {
 
     public TextMessage publish(String text) throws JMSException,
             NamingException {
-        return publish(text, null);
+        return publish(text, null, null);
     }
     
     public TextMessage publish(String text, String destinationName)
             throws JMSException, NamingException {
+        return publish(text, destinationName, null);
+    }
+    
+    public TextMessage publish(String text, String destinationName, Map<String, String> properties)
+            throws JMSException, NamingException {
         TextMessage msg = session.createTextMessage(text);
+        Utils.addJMSProperties(msg, properties);
         if (staticDest || destinationName == null) {
             producer.send(msg);
         } else {
@@ -160,15 +167,21 @@ public class Publisher implements Closeable {
         }
         return msg;
     }
-
+    
     public ObjectMessage publish(Serializable contents) throws JMSException,
             NamingException {
         return publish(contents, null);
     }
+
+    public ObjectMessage publish(Serializable contents, String destinationName) 
+            throws JMSException, NamingException {
+        return publish(contents, destinationName, null);
+    }
     
-    public ObjectMessage publish(Serializable contents, String destinationName)
+    public ObjectMessage publish(Serializable contents, String destinationName, Map<String, String> properties)
             throws JMSException, NamingException {
         ObjectMessage msg = session.createObjectMessage(contents);
+        Utils.addJMSProperties(msg, properties);
         if (staticDest || destinationName == null) {
             producer.send(msg);
         } else {
@@ -180,12 +193,18 @@ public class Publisher implements Closeable {
 
     public MapMessage publish(Map<String, Object> map) throws JMSException,
             NamingException {
-        return publish(map, null);
+        return publish(map, null, null);
     }
     
     public MapMessage publish(Map<String, Object> map, String destinationName)
             throws JMSException, NamingException {
+        return publish(map, destinationName, null);
+    }
+    
+    public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, String> properties)
+            throws JMSException, NamingException {
         MapMessage msg = session.createMapMessage();
+        Utils.addJMSProperties(msg, properties);
         for (Entry<String, Object> me : map.entrySet()) {
             msg.setObject(me.getKey(), me.getValue());
         }
