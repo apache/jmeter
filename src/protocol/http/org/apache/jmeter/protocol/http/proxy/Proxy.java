@@ -38,6 +38,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -110,6 +111,8 @@ public class Proxy extends Thread {
         JMeterUtils.getPropDefault("proxy.cert.keypassword","password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$
 
     private static final SamplerCreatorFactory factory = new SamplerCreatorFactory();
+
+    private static final Pattern COOKIE_SECURE_PATTERN = Pattern.compile("\\bsecure\\b", Pattern.CASE_INSENSITIVE);
 
     // Use with SSL connection
     private OutputStream outStreamClient = null;
@@ -498,7 +501,7 @@ public class Proxy extends Thread {
                 }
                 if (forcedHTTPS && (HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0])))
                 {
-                    headerLines[i]=headerLines[i].replaceAll(" secure", "").trim(); //in forced https cookies need to be unsecured...
+                    headerLines[i]=COOKIE_SECURE_PATTERN.matcher(headerLines[i]).replaceAll("").trim(); //in forced https cookies need to be unsecured...
                 }
             }
         }
