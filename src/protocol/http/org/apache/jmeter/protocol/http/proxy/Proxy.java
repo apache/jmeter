@@ -496,7 +496,7 @@ public class Proxy extends Thread {
                     headerLines[i]=headerLines[i].replaceFirst(parts[1].substring(0,HTTPS_PREFIX.length()), "http://");
                     continue;
                 }
-                if (forcedHTTPS && HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0]))
+                if (forcedHTTPS && (HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0])))
                 {
                     headerLines[i]=headerLines[i].replaceAll(" secure", "").trim(); //in forced https cookies need to be unsecured...
                 }
