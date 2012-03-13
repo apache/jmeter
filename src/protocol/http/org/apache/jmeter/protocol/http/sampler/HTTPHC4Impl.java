@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpConnection;
 import org.apache.http.HttpConnectionMetrics;
@@ -1037,7 +1038,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(haveContentEncoding) {
                 putParams.setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET,contentEncoding);
             }
-
+            String charset = getCharsetWithDefault(putParams);
             // Just append all the parameter values, and use that as the post body
             StringBuilder putBodyContent = new StringBuilder();
             PropertyIterator args = getArguments().iterator();
@@ -1056,7 +1057,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 contentTypeValue = put.getFirstHeader(HEADER_CONTENT_TYPE).getValue();
             }
             StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentTypeValue, 
-                    (String) putParams.getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET));
+                    (String) charset);
             put.setEntity(requestEntity);
         }
         // Check if we have any content to send for body
@@ -1067,9 +1068,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 put.getEntity().writeTo(bos);
                 bos.flush();
+                String charset = getCharsetWithDefault(putParams);
+
                 // We get the posted bytes using the charset that was used to create them
-                putBody.append(new String(bos.toByteArray(),
-                        (String) putParams.getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET)));
+                // if none was set, platform encoding will be used
+                putBody.append(new String(bos.toByteArray(), charset));
                 bos.close();
             }
             else {
@@ -1088,6 +1091,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return putBody.toString();
         }
         return null;
+    }
+
+    /**
+     * If contentEncoding is not set by user, then Platform encoding will be used to convert to String
+     * @param putParams {@link HttpParams}
+     * @return String charset
+     */
+    protected String getCharsetWithDefault(HttpParams putParams) {
+        String charset =(String) putParams.getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET);
+        if(StringUtils.isEmpty(charset)) {
+            charset = Charset.defaultCharset().name();
+        }
+        return charset;
     }
 
     private void saveConnectionCookies(HttpResponse method, URL u, CookieManager cookieManager) {
