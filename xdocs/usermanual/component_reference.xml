@@ -456,6 +456,9 @@ If the Select statement returns zero rows, then the A_# and C_# variables would 
 Old variables are cleared if necessary - e.g. if the first select retrieves 6 rows and a second select returns only 3 rows,
 the additional variables for rows 4, 5 and 6 will be removed.
 </p>
+<p>
+<b>Note:</b> The latency time is set from the time it took to acquire a connection.
+</p>
 </description>
 
 <properties>
