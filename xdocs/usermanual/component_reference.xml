@@ -1250,7 +1250,7 @@ For details, see <complink name="BSF Sampler"/>.
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13" width="803" height="633" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" width="803" height="720" screenshot="jmspublisher.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1281,6 +1281,12 @@ For details, see <complink name="BSF Sampler"/>.
   <property name="Use non-persistent delivery mode?" required="No">
       Whether to set DeliveryMode.NON_PERSISTENT (defaults to false)
   </property>
+  <property name="JMS Properties" required="No">
+      The JMS Properties are properties specific for the underlying messaging system.
+      For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
+      webservices through JMS.
+  </property>
+
 </properties>
 <p>
 For the MapMessage type, JMeter reads the source as lines of text.
