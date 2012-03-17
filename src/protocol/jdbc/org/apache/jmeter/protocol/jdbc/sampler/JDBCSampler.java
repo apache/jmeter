@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.jdbc.sampler;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -79,14 +78,12 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
             final String errCode = Integer.toString(ex.getErrorCode());
             res.setResponseMessage(ex.toString());
             res.setResponseCode(ex.getSQLState()+ " " +errCode);
+            res.setResponseData(ex.getMessage().getBytes());
             res.setSuccessful(false);
-        } catch (UnsupportedOperationException ex) {
+        } catch (Exception ex) {
             res.setResponseMessage(ex.toString());
-            res.setResponseCode("000"); // TODO - is this correct?
-            res.setSuccessful(false);
-        } catch (IOException ex) {
-            res.setResponseMessage(ex.toString());
-            res.setResponseCode("000"); // TODO - is this correct?
+            res.setResponseCode("000");
+            res.setResponseData(ex.getMessage().getBytes());
             res.setSuccessful(false);
         } finally {
             close(conn);
