@@ -45,6 +45,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -218,6 +219,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             Iterator<Argument> modelData = (Iterator<Argument>) tableModel.iterator();
             while (modelData.hasNext()) {
                 Argument arg = modelData.next();
+                if(StringUtils.isEmpty(arg.getName()) && StringUtils.isEmpty(arg.getValue())) {
+                    continue;
+                }
                 arg.setMetaData("="); // $NON-NLS-1$
                 arguments.addArgument(arg);
             }
