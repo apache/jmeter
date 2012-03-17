@@ -63,7 +63,6 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 When doing replacement of User Defined Variables, Proxy will not substitute partial values anymore when "Regexp matching" is used. It will use Perl 5 word matching ("\b")
 </p>
 
-
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -84,6 +83,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <li>Bug 51737 - TCPSampler : Packet gets converted/corrupted</li>
 <li>Bug 52868 - BSF language list should be sorted</li>
 <li>Bug 52869 - JSR223 language list currently uses BSF list which is wrong</li>
+<li>Bug 52932 - JDBC Sampler : Sampler is not marked in error in an Exception which is not of class IOException, SQLException, IOException occurs</li>
 </ul>
 
 <h3>Controllers</h3>
