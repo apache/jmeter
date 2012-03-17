@@ -191,17 +191,7 @@ public class SmtpSampler extends AbstractSampler {
                 res.setBytes(-1);
             }
 
-        } catch (AddressException ex) {
-            log.warn("Error while preparing message", ex);
-            res.setResponseCode("500");
-            res.setResponseMessage(ex.toString());
-            return res;
-        } catch (IOException ex) {
-            log.warn("Error while preparing message", ex);
-            res.setResponseCode("500");
-            res.setResponseMessage(ex.toString());
-            return res;
-        } catch (MessagingException ex) {
+        } catch (Exception ex) {
             log.warn("Error while preparing message", ex);
             res.setResponseCode("500");
             res.setResponseMessage(ex.toString());
