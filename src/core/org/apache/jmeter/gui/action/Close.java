@@ -23,8 +23,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTree;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -96,8 +98,9 @@ public class Close implements Command {
         GuiPackage guiPackage = GuiPackage.getInstance();
 
         guiPackage.clearTestPlan();
-        guiPackage.getTreeListener().getJTree().setSelectionRow(1);
-
+        JTree tree = guiPackage.getTreeListener().getJTree();
+        tree.setSelectionRow(0);
+        new FocusRequester(tree);
         ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
     }
 }

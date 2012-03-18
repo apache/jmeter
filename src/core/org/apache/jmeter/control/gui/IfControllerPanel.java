@@ -40,7 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 
-public class IfControllerPanel extends AbstractControllerGui implements ActionListener {
+public class IfControllerPanel extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;
 
@@ -136,17 +136,6 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
         evaluateAll.setSelected(false);
     }
 
-    /**
-     * Invoked when an action occurs. This implementation assumes that the
-     * target component is the infinite loops checkbox.
-     *
-     * @param event
-     *            the event that has occurred
-     */
-    public void actionPerformed(ActionEvent event) {
-        new FocusRequester(theCondition);
-    }
-
     public String getLabelResource() {
         return "if_controller_title"; // $NON-NLS-1$
     }
@@ -188,8 +177,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
         theCondition = new JTextField(""); // $NON-NLS-1$
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(theCondition, BorderLayout.CENTER);
-        theCondition.addActionListener(this);
-
+       
         conditionPanel.add(Box.createHorizontalStrut(conditionLabel.getPreferredSize().width
                 + theCondition.getPreferredSize().width), BorderLayout.NORTH);
 

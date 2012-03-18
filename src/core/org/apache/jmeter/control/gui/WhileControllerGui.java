@@ -19,8 +19,6 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JLabel;
@@ -28,11 +26,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.WhileController;
-import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class WhileControllerGui extends AbstractControllerGui implements ActionListener {
+public class WhileControllerGui extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;
 
@@ -103,17 +100,6 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
         theCondition.setText(""); // $NON-NLS-1$
     }
 
-    /**
-     * Invoked when an action occurs. This implementation assumes that the
-     * target component is the infinite loops checkbox.
-     *
-     * @param event
-     *            the event that has occurred
-     */
-    public void actionPerformed(ActionEvent event) {
-        new FocusRequester(theCondition);
-    }
-
     public String getLabelResource() {
         return "while_controller_title"; // $NON-NLS-1$
     }
@@ -150,8 +136,7 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
         theCondition.setName(CONDITION);
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(theCondition, BorderLayout.CENTER);
-        theCondition.addActionListener(this);
-
+        
         conditionPanel.add(Box.createHorizontalStrut(conditionLabel.getPreferredSize().width
                 + theCondition.getPreferredSize().width), BorderLayout.NORTH);
 
