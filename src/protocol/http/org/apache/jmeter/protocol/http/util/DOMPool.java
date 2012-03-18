@@ -72,4 +72,11 @@ public final class DOMPool {
      */
     private DOMPool() {
     }
+
+    /**
+     * Clear cache
+     */
+    public static void clear() {
+        MEMCACHE.clear();
+    }
 }

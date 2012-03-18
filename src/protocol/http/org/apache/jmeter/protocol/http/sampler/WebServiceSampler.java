@@ -24,21 +24,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.jorphan.io.TextFile;
-import org.apache.jorphan.logging.LoggingManager;
-
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -46,14 +40,18 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.util.DOMPool;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.io.TextFile;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.soap.Envelope;
+import org.apache.soap.SOAPException;
 import org.apache.soap.messaging.Message;
 import org.apache.soap.rpc.SOAPContext;
 import org.apache.soap.transport.http.SOAPHTTPConnection;
 import org.apache.soap.util.xml.XMLParserUtils;
-import org.apache.soap.SOAPException;
 import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Sampler to handle Web Service requests. It uses Apache SOAP drivers to
@@ -63,7 +61,8 @@ import org.w3c.dom.Document;
  * Created on: Jun 26, 2003
  *
  */
-public class WebServiceSampler extends HTTPSamplerBase {
+public class WebServiceSampler extends HTTPSamplerBase  {
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
@@ -651,4 +650,21 @@ public class WebServiceSampler extends HTTPSamplerBase {
     public void setTimeout(String text) {
         setProperty(TIMEOUT, text);
     }
+    
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#testEnded()
+     */
+    @Override
+    public void testEnded() {
+        DOMPool.clear();
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#testEnded(java.lang.String)
+     */
+    @Override
+    public void testEnded(String host) {
+        testEnded();
+    }
+
 }
