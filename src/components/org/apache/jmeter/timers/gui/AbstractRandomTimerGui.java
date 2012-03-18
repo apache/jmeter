@@ -28,7 +28,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.ConstantTimer;
 import org.apache.jmeter.timers.RandomTimer;
@@ -148,9 +147,6 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
         threadDelayPropsPanel.setMaximumSize(new Dimension(threadDelayPropsPanel.getMaximumSize().width,
                 threadDelayPropsPanel.getPreferredSize().height));
         add(threadDelayPropsPanel);
-
-        // Set the initial focus to the delay field
-        new FocusRequester(rangeField);
     }
     
     /**

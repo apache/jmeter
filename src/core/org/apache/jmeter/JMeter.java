@@ -42,6 +42,9 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
+
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
@@ -62,6 +65,7 @@ import org.apache.jmeter.gui.action.LoadRecentProject;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.reporters.ResultCollector;
@@ -250,6 +254,11 @@ public class JMeter implements JMeterPlugin {
             } finally {
                 JOrphanUtils.closeQuietly(reader);
             }
+        } else {
+            JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
+            TreePath path = jTree.getPathForRow(0);
+            jTree.setSelectionPath(path);
+            new FocusRequester(jTree);
         }
     }
 

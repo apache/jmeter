@@ -34,6 +34,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
@@ -55,7 +56,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 public class Load implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", true); //$NON-NLS-1$
+    private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$
 
     private static final Set<String> commands = new HashSet<String>();
 
@@ -190,13 +191,17 @@ public class Load implements Command {
         }
 
         ActionRouter.getInstance().actionPerformed(actionEvent);
+        JTree jTree = guiInstance.getMainFrame().getTree();
         if (expandTree && !merging) { // don't automatically expand when merging
-            JTree jTree = guiInstance.getMainFrame().getTree();
-               for(int i = 0; i < jTree.getRowCount(); i++) {
-                 jTree.expandRow(i);
-               }
+            for(int i = 0; i < jTree.getRowCount(); i++) {
+                jTree.expandRow(i);
+            }
+        } else {
+            jTree.expandRow(0);
         }
-
+        TreePath path = jTree.getPathForRow(1);
+        jTree.setSelectionPath(path);
+        new FocusRequester(jTree);
         return isTestPlan;
     }
 
