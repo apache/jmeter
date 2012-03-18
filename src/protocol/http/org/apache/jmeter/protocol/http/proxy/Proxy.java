@@ -417,7 +417,7 @@ public class Proxy extends Thread {
         return in;
     }
 
-    private SampleResult generateErrorResult(SampleResult result, Exception e) {
+    private static SampleResult generateErrorResult(SampleResult result, Exception e) {
         if (result == null) {
             result = new SampleResult();
             result.setSampleLabel("Sample failed");
