@@ -73,6 +73,12 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
     private final JLabeledTextField soapAction = new JLabeledTextField(JMeterUtils.getResString("webservice_soap_action")); // $NON-NLS-1$
 
+    /**
+     * checkbox for Session maintenance.
+     */
+    private JCheckBox maintainSession = new JCheckBox(JMeterUtils.getResString("webservice_maintain_session"), true); // $NON-NLS-1$
+
+    
     private JTextArea soapXml;
 
     private final JLabeledTextField wsdlField = new JLabeledTextField(JMeterUtils.getResString("wsdl_url")); // $NON-NLS-1$
@@ -166,6 +172,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         sampler.setWsdlURL(wsdlField.getText());
         sampler.setMethod(HTTPSamplerBase.POST);
         sampler.setSoapAction(soapAction.getText());
+        sampler.setMaintainSession(maintainSession.isSelected());
         sampler.setXmlData(soapXml.getText());
         sampler.setXmlFile(soapXmlFile.getFilename());
         sampler.setXmlPathLoc(randomXmlFile.getText());
@@ -189,6 +196,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         port.setText(""); //$NON-NLS-1$
         path.setText(""); //$NON-NLS-1$
         soapAction.setText(""); //$NON-NLS-1$
+        maintainSession.setSelected(WebServiceSampler.MAINTAIN_SESSION_DEFAULT);
         soapXml.setText(""); //$NON-NLS-1$
         wsdlField.setText(""); //$NON-NLS-1$
         randomXmlFile.setText(""); //$NON-NLS-1$
@@ -263,11 +271,22 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         urlPane.add(connectTimeout);
         topPanel.add(urlPane);
         
-        topPanel.add(path);
-        topPanel.add(soapAction);
+        topPanel.add(createParametersPanel());
+        
         return topPanel;
     }
 
+    private final JPanel createParametersPanel() {
+        JPanel paramsPanel = new JPanel();
+        paramsPanel.setLayout(new BoxLayout(paramsPanel, BoxLayout.X_AXIS));
+        paramsPanel.add(path);
+        paramsPanel.add(Box.createHorizontalGlue());        
+        paramsPanel.add(soapAction);
+        paramsPanel.add(Box.createHorizontalGlue());        
+        paramsPanel.add(maintainSession);
+        return paramsPanel;
+    }
+    
     private final JPanel createMessagePanel() {
         JPanel msgPanel = new JPanel();
         msgPanel.setLayout(new BorderLayout(5, 0));
@@ -375,6 +394,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         port.setText(sampler.getPropertyAsString(HTTPSamplerBase.PORT));
         path.setText(sampler.getPath());
         soapAction.setText(sampler.getSoapAction());
+        maintainSession.setSelected(sampler.getMaintainSession());
         soapXml.setText(sampler.getXmlData());
         soapXml.setCaretPosition(0); // go to 1st line
         soapXmlFile.setFilename(sampler.getXmlFile());
