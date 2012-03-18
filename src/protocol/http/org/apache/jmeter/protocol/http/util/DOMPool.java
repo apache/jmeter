@@ -18,9 +18,11 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.collections.map.LRUMap;
+import org.apache.jmeter.util.JMeterUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -45,7 +47,8 @@ public final class DOMPool {
      * test on an old system will likely run into memory or CPU problems long
      * before the HashMap is an issue.
      */
-    private static final Map<Object, Document> MEMCACHE = new ConcurrentHashMap<Object, Document>(50);
+    private static final Map<Object, Document> MEMCACHE = Collections.<Object, Document>synchronizedMap(
+            new LRUMap(JMeterUtils.getPropDefault("soap.document_cache", 50)));
 
     /**
      * Return a document.

@@ -145,6 +145,7 @@ empty Name and Value are no more saved.
 <ul>
 <li>Bug 52775 - JMS Publisher : Add Non Persistent Delivery option</li>
 <li>Bug 52810 - Enable setting JMS Properties through JMS Publisher sampler</li>
+<li>Bug 52938 - Webservice Sampler : Add a jmeter property soap.document_cache to control size of Document Cache</li>
 </ul>
 
 <h3>Controllers</h3>
