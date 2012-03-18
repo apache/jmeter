@@ -68,6 +68,9 @@ In User Defined Variables, Test Plan, HTTP Sampler Arguments Table, Java Request
 empty Name and Value are no more saved.
 </p>
 
+<p>
+JMeter now expands the Test Plan tree to the testplan level and no further and selects the root of the tree. Furthermore default value of onload.expandtree is false.
+</p>
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -176,6 +179,7 @@ empty Name and Value are no more saved.
 <li>Bug 52614 - MailerModel.sendMail has strange way to calculate debug setting</li>
 <li>Bug 52782 - Add a detail button on parameters table to show detail of a Row</li>
 <li>Bug 52674 - Proxy : Add a Sampler Creator to allow plugging HTTP based samplers using potentially non textual POST Body (AMF, Silverlight...) and customizing them for others</li>
+<li>Bug 52934 - GUI : Open Test plan with the tree expanded to the testplan level and no further and select the root of the tree</li>
 </ul>
 
 <h2>Non-functional changes</h2>

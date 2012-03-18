@@ -31,7 +31,6 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
-import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.gui.util.JDateField;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
@@ -240,7 +239,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         threadPanel.add(threadInput, BorderLayout.CENTER);
 
         threadPropsPanel.add(threadPanel);
-        new FocusRequester(threadInput);
 
         // RAMP-UP
         JPanel rampPanel = new JPanel(new BorderLayout(5, 0));
