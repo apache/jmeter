@@ -90,6 +90,7 @@ empty Name and Value are no more saved.
 <li>Bug 52869 - JSR223 language list currently uses BSF list which is wrong</li>
 <li>Bug 52932 - JDBC Sampler : Sampler is not marked in error in an Exception which is not of class IOException, SQLException, IOException occurs</li>
 <li>Bug 52916 - JDBC Exception if there is an empty user defined variable</li>
+<li>Bug 52937 - Webservice Sampler : Clear Soap Documents Cache at end of Test </li>
 </ul>
 
 <h3>Controllers</h3>
