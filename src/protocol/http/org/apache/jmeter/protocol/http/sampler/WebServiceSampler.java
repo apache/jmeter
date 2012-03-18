@@ -78,6 +78,8 @@ public class WebServiceSampler extends HTTPSamplerBase  {
 
     private static final String MEMORY_CACHE = "WebServiceSampler.memory_cache"; //$NON-NLS-1$
 
+    private static final String MAINTAIN_SESSION = "WebServiceSampler.maintain_session"; //$NON-NLS-1$
+    
     private static final String READ_RESPONSE = "WebServiceSampler.read_response"; //$NON-NLS-1$
 
     private static final String USE_PROXY = "WebServiceSampler.use_proxy"; //$NON-NLS-1$
@@ -98,6 +100,8 @@ public class WebServiceSampler extends HTTPSamplerBase  {
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
 
     private static final String ENCODING = "UTF-8"; // $NON-NLS-1$ TODO should this be a variable?
+
+    public static final boolean MAINTAIN_SESSION_DEFAULT = true;
 
     /*
      * Random class for generating random numbers.
@@ -198,6 +202,24 @@ public class WebServiceSampler extends HTTPSamplerBase  {
         return getPropertyAsString(SOAP_ACTION);
     }
 
+    /**
+     * Set the maintain session option.
+     *
+     * @param cache
+     */
+    public void setMaintainSession(boolean maintainSession) {
+        setProperty(MAINTAIN_SESSION, maintainSession, MAINTAIN_SESSION_DEFAULT);
+    }
+
+    /**
+     * Get the maintain session option.
+     *
+     * @return boolean cache
+     */
+    public boolean getMaintainSession() {
+        return getPropertyAsBoolean(MAINTAIN_SESSION, MAINTAIN_SESSION_DEFAULT);
+    }
+    
     /**
      * Set the memory cache.
      *
@@ -504,8 +526,8 @@ public class WebServiceSampler extends HTTPSamplerBase  {
                     }
                 }
             }
-            // by default we maintain the session.
-            spconn.setMaintainSession(true);
+            
+            spconn.setMaintainSession(getMaintainSession());
             msg.setSOAPTransport(spconn);
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
             @SuppressWarnings("unchecked") // API uses raw types
