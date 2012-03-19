@@ -76,14 +76,33 @@ public class JMeterVariables {
         preloadVariables();
     }
 
+    /**
+     * Remove a variable.
+     * 
+     * @param key the variable name to remove
+     * 
+     * @return the variable value, or {@code null} if there was no such variable
+     */
     public Object remove(String key) {
         return variables.remove(key);
     }
 
+    /**
+     * Creates or updates a variable with a String value.
+     * 
+     * @param key the variable name
+     * @param value the variable value
+     */
     public void put(String key, String value) {
         variables.put(key, value);
     }
 
+    /**
+     * Creates or updates a variable with a value that does not have to be a String.
+     * 
+     * @param key the variable name
+     * @param value the variable value
+     */
     public void putObject(String key, Object value) {
         variables.put(key, value);
     }
@@ -97,17 +116,30 @@ public class JMeterVariables {
     }
 
     /**
-     * Returns null values if variable doesn't exist. Users of this must check
-     * for null.
+     * Gets the value of a variable, coerced to a String.
+     * 
+     * @param key the name of the variable
+     * @return the value of the variable, or {@code null} if it does not exist
      */
     public String get(String key) {
         return (String) variables.get(key);
     }
 
+    /**
+     * Gets the value of a variable (not converted to String).
+     * 
+     * @param key the name of the variable
+     * @return the value of the variable, or {@code null} if it does not exist
+     */
     public Object getObject(String key) {
         return variables.get(key);
     }
 
+    /**
+     * Gets a read-only Iterator over the variables.
+     * 
+     * @return the iterator
+     */
     public Iterator<Entry<String, Object>> getIterator(){
         return Collections.unmodifiableMap(variables).entrySet().iterator() ;
     }
