@@ -25,12 +25,15 @@
 	and you can then view the JTL in a browser
 -->
 	
-<xsl:output method="html" indent="yes" encoding="US-ASCII" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
+<xsl:output method="html" indent="yes" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
+
+<xsl:param name="titleReport" select="'Load Test Results'"/>
+<xsl:param name="dateReport" select="'date not defined'"/>
 
 <xsl:template match="testResults">
 	<html>
 		<head>
-			<title>Load Test Results</title>
+			<title><xsl:value-of select="$titleReport" /></title>
 			<style type="text/css">
 				body {
 					font:normal 68% verdana,arial,helvetica;
@@ -40,9 +43,10 @@
 					font-size: 68%;
 				}
 				table.details tr th{
+				    color: #ffffff;
 					font-weight: bold;
-					text-align:left;
-					background:#a6caf0;
+					text-align:center;
+					background:#2674a6;
 					white-space: nowrap;
 				}
 				table.details tr td{
@@ -68,10 +72,10 @@
 			<xsl:call-template name="pageHeader" />
 			
 			<xsl:call-template name="summary" />
-			<hr size="1" width="95%" align="left" />
+			<hr size="1" width="95%" align="center" />
 			
 			<xsl:call-template name="pagelist" />
-			<hr size="1" width="95%" align="left" />
+			<hr size="1" width="95%" align="center" />
 			
 			<xsl:call-template name="detail" />
 
@@ -80,11 +84,11 @@
 </xsl:template>
 
 <xsl:template name="pageHeader">
-	<h1>Load Test Results</h1>
+	<h1><xsl:value-of select="$titleReport" /></h1>
 	<table width="100%">
 		<tr>
-			<td align="left"></td>
-			<td align="right">Designed for use with <a href="http://jakarta.apache.org/jmeter">JMeter</a> and <a href="http://ant.apache.org">Ant</a>.</td>
+			<td align="left">Date report: <xsl:value-of select="$dateReport" /></td>
+			<td align="right">Designed for use with <a href="http://jmeter.apache.org/">JMeter</a> and <a href="http://ant.apache.org">Ant</a>.</td>
 		</tr>
 	</table>
 	<hr size="1" />
@@ -92,9 +96,9 @@
 
 <xsl:template name="summary">
 	<h2>Summary</h2>
-	<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+	<table align="center" class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 		<tr valign="top">
-			<th>Tests</th>
+			<th># Samples</th>
 			<th>Failures</th>
 			<th>Success Rate</th>
 			<th>Average Time</th>
@@ -123,28 +127,28 @@
 					<xsl:when test="$allFailureCount &gt; 0">Failure</xsl:when>
 				</xsl:choose>
 			</xsl:attribute>
-			<td>
+			<td align="center">
 				<xsl:value-of select="$allCount" />
 			</td>
-			<td>
+			<td align="center">
 				<xsl:value-of select="$allFailureCount" />
 			</td>
-			<td>
+			<td align="right">
 				<xsl:call-template name="display-percent">
 					<xsl:with-param name="value" select="$allSuccessPercent" />
 				</xsl:call-template>
 			</td>
-			<td>
+			<td align="right">
 				<xsl:call-template name="display-time">
 					<xsl:with-param name="value" select="$allAverageTime" />
 				</xsl:call-template>
 			</td>
-			<td>
+			<td align="right">
 				<xsl:call-template name="display-time">
 					<xsl:with-param name="value" select="$allMinTime" />
 				</xsl:call-template>
 			</td>
-			<td>
+			<td align="right">
 				<xsl:call-template name="display-time">
 					<xsl:with-param name="value" select="$allMaxTime" />
 				</xsl:call-template>
@@ -155,10 +159,10 @@
 
 <xsl:template name="pagelist">
 	<h2>Pages</h2>
-	<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+	<table align="center" class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 		<tr valign="top">
 			<th>URL</th>
-			<th>Tests</th>
+			<th># Samples</th>
 			<th>Failures</th>
 			<th>Success Rate</th>
 			<th>Average Time</th>
@@ -192,28 +196,28 @@
 				<td>
 					<xsl:value-of select="$label" />
 				</td>
-				<td>
+				<td align="center">
 					<xsl:value-of select="$count" />
 				</td>
-				<td>
+				<td align="center">
 					<xsl:value-of select="$failureCount" />
 				</td>
-				<td>
+				<td align="right">
 					<xsl:call-template name="display-percent">
 						<xsl:with-param name="value" select="$successPercent" />
 					</xsl:call-template>
 				</td>
-				<td>
+				<td align="right">
 					<xsl:call-template name="display-time">
 						<xsl:with-param name="value" select="$averageTime" />
 					</xsl:call-template>
 				</td>
-				<td>
+				<td align="right">
 					<xsl:call-template name="display-time">
 						<xsl:with-param name="value" select="$minTime" />
 					</xsl:call-template>
 				</td>
-				<td>
+				<td align="right">
 					<xsl:call-template name="display-time">
 						<xsl:with-param name="value" select="$maxTime" />
 					</xsl:call-template>
@@ -236,7 +240,7 @@
 			<xsl:if test="$failureCount > 0">
 				<h3><xsl:value-of select="@lb" /></h3>
 
-				<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+				<table align="center" class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 				<tr valign="top">
 					<th>Response</th>
 					<th>Failure Message</th>
