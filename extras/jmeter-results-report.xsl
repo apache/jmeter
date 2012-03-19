@@ -1,5 +1,5 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-<xsl:output method="html" indent="yes" encoding="US-ASCII" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
+<xsl:output method="html" indent="yes" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 
 
 <!--
@@ -76,7 +76,7 @@
 	<table width="100%">
 		<tr>
 			<td align="left"></td>
-			<td align="right">Designed for use with <a href="http://jakarta.apache.org/jmeter">JMeter</a> and <a href="http://ant.apache.org">Ant</a>.</td>
+			<td align="right">Designed for use with <a href="http://jmeter.apache.org/">JMeter</a> and <a href="http://ant.apache.org">Ant</a>.</td>
 		</tr>
 	</table>
 	<hr size="1" />

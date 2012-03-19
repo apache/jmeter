@@ -1,5 +1,5 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-<xsl:output method="html" indent="yes" encoding="US-ASCII" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
+<xsl:output method="html" indent="yes" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 
 
 <!--
@@ -102,12 +102,12 @@
 			   {
 			      if(document.getElementById(details_id+"_image").src.match("expand"))
 			      {
-			         document.getElementById(details_id+"_image").src = "collapse.jpg";
+			         document.getElementById(details_id+"_image").src = "collapse.png";
 			         expand(details_id);
 			      }
 			      else
 			      {
-			         document.getElementById(details_id+"_image").src = "expand.jpg";
+			         document.getElementById(details_id+"_image").src = "expand.png";
 			         collapse(details_id);
 			      } 
                            }
@@ -134,7 +134,7 @@
 	<table width="100%">
 		<tr>
 			<td align="left"></td>
-			<td align="right">Designed for use with <a href="http://jakarta.apache.org/jmeter">JMeter</a> and <a href="http://ant.apache.org">Ant</a>.</td>
+			<td align="right">Designed for use with <a href="http://jmeter.apache.org/">JMeter</a> and <a href="http://ant.apache.org">Ant</a>.</td>
 		</tr>
 	</table>
 	<hr size="1" />
@@ -279,7 +279,7 @@
 				<td align="center">
 				   <a href="">
 				      <xsl:attribute name="href"><xsl:text/>javascript:change('page_details_<xsl:value-of select="position()" />')</xsl:attribute>
-				      <img src="expand.jpg" alt="expand/collapse"><xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" />_image</xsl:attribute></img>				      
+				      <img src="expand.png" alt="expand/collapse"><xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" />_image</xsl:attribute></img>				      
 				   </a>
 				</td>
 			</tr>
