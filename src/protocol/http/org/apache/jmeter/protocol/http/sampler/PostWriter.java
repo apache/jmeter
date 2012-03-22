@@ -33,6 +33,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Class for setting the necessary headers for a POST request, and sending the
@@ -398,7 +399,7 @@ public class PostWriter {
      * @param out the stream to write to
      * @throws IOException
      */
-    private void writeFileToStream(String filename, OutputStream out) throws IOException {
+    private static void writeFileToStream(String filename, OutputStream out) throws IOException {
         byte[] buf = new byte[1024];
         // 1k - the previous 100k made no sense (there's tons of buffers
         // elsewhere in the chain) and it caused OOM when many concurrent
@@ -412,7 +413,7 @@ public class PostWriter {
             }
         }
         finally {
-            in.close();
+            JOrphanUtils.closeQuietly(in);
         }
     }
 
