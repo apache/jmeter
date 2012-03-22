@@ -42,8 +42,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h2>Known bugs</h2>
 
 <p>
-The Include Controller has some problems in non-GUI mode (see Bugs 40671, 41286, 44973, 50898). 
+The Include Controller has some problems in non-GUI mode (see Bug 50898). 
 In particular, it can cause a NullPointerException if there are two include controllers with the same name.
+The workaround is to use different names for IncludeControllers
 </p>
 
 <p>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
