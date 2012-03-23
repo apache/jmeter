@@ -2377,12 +2377,6 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 </description>
 </component>
 
-
-
-<component name="Graph Full Results" index="&sect-num;.3.2"  width="672" height="316" screenshot="graphfullresults.png">
-<description>No Description</description>
-</component>
-
 <component name="Graph Results" index="&sect-num;.3.3" width="915" height="686" screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
