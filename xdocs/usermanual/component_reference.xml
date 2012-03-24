@@ -2203,8 +2203,8 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 	    <p>
 	    The Transaction Controller generates an additional
 	    sample which measures the overall time taken to perform the nested test elements.
-	    Note that this time includes all processing within the controller scope, not just
-	    the samples.
+	    Note that this time by default includes all processing within the controller scope, not just
+	    the samples, this can be changed by unchecking "Include duration of timer and pre-post processors in generated sample".
 	    </p>
 	    <p>
 	    For JMeter versions after 2.3, there are two modes of operation
