@@ -103,6 +103,7 @@ Graph Full Results Listener has been removed.
 
 <h3>Controllers</h3>
 <ul>
+<li>Bug 52968 - Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs</li>
 </ul>
 
 <h3>Listeners</h3>
