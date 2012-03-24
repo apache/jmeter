@@ -26,6 +26,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.ListenerNotifier;
@@ -43,32 +44,51 @@ import org.apache.log.Logger;
  */
 public class TransactionController extends GenericController implements SampleListener, Controller, Serializable {
     private static final long serialVersionUID = 233L;
+    
+    private static final String TRUE = Boolean.toString(true); // i.e. "true"
 
+    private static final String PARENT = "TransactionController.parent";// $NON-NLS-1$
+
+    private final static String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
+    
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    /**
+     * Only used in parent Mode
+     */
     private transient TransactionSampler transactionSampler;
-
+    
+    /**
+     * Only used in NON parent Mode
+     */
     private transient ListenerNotifier lnf;
 
+    /**
+     * Only used in NON parent Mode
+     */
     private transient SampleResult res;
-
+    
+    /**
+     * Only used in NON parent Mode
+     */
     private transient int calls;
-
+    
+    /**
+     * Only used in NON parent Mode
+     */
     private transient int noFailingSamples;
 
     /**
      * Cumulated pause time to excluse timer and post/pre processor times
+     * Only used in NON parent Mode
      */
     private transient long pauseTime;
 
     /**
      * Previous end time
+     * Only used in NON parent Mode
      */
     private transient long prevEndTime;
-
-    private static final String PARENT = "TransactionController.parent";// $NON-NLS-1$
-
-    private final static String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
 
     /**
      * Creates a Transaction Controller
@@ -173,32 +193,12 @@ public class TransactionController extends GenericController implements SampleLi
         {
             if (res != null) {
                 res.setIdleTime(pauseTime+res.getIdleTime());
-                 res.sampleEnd();
+                res.sampleEnd();
                 res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
                 if(res.isSuccessful()) {
                     res.setResponseCodeOK();
                 }
-
-                // TODO could these be done earlier (or just once?)
-                JMeterContext threadContext = getThreadContext();
-                JMeterVariables threadVars = threadContext.getVariables();
-
-                SamplePackage pack = (SamplePackage) threadVars.getObject(JMeterThread.PACKAGE_OBJECT);
-                if (pack == null) {
-                	// If child of TransactionController is a ThroughputController and TPC does
-                	// not sample its children, then we will have this
-                	// TODO Should this be at warn level ?
-                    log.warn("Could not fetch SamplePackage");
-                } else {
-                    SampleEvent event = new SampleEvent(res, threadContext.getThreadGroup().getName(),threadVars, true);
-                    // We must set res to null now, before sending the event for the transaction,
-                    // so that we can ignore that event in our sampleOccured method
-                    res = null;
-                    // bug 50032 
-                    if (!getThreadContext().isReinitializingSubControllers()) {
-                        lnf.notifyListeners(event, pack.getSampleListeners());
-                    }
-                }
+                notifyListeners();
             }
         }
         else {
@@ -207,6 +207,52 @@ public class TransactionController extends GenericController implements SampleLi
         }
 
         return returnValue;
+    }
+
+    /**
+     * @see org.apache.jmeter.control.GenericController#triggerEndOfLoop()
+     */
+    @Override
+    public void triggerEndOfLoop() {
+        if(!isParent()) {
+            if (res != null) {
+                res.setIdleTime(pauseTime+res.getIdleTime());
+                res.sampleEnd();
+                res.setSuccessful(TRUE.equals(JMeterContextService.getContext().getVariables().get(JMeterThread.LAST_SAMPLE_OK)));
+                res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
+                notifyListeners();
+            }
+        } else {
+            transactionSampler.setTransactionDone();
+            // This transaction is done
+            transactionSampler = null;
+        }
+        super.triggerEndOfLoop();
+    }
+
+    /**
+     * Create additional SampleEvent in NON Parent Mode
+     */
+    protected void notifyListeners() {
+        // TODO could these be done earlier (or just once?)
+        JMeterContext threadContext = getThreadContext();
+        JMeterVariables threadVars = threadContext.getVariables();
+        SamplePackage pack = (SamplePackage) threadVars.getObject(JMeterThread.PACKAGE_OBJECT);
+        if (pack == null) {
+            // If child of TransactionController is a ThroughputController and TPC does
+            // not sample its children, then we will have this
+            // TODO Should this be at warn level ?
+            log.warn("Could not fetch SamplePackage");
+        } else {
+            SampleEvent event = new SampleEvent(res, threadContext.getThreadGroup().getName(),threadVars, true);
+            // We must set res to null now, before sending the event for the transaction,
+            // so that we can ignore that event in our sampleOccured method
+            res = null;
+            // bug 50032 
+            if (!getThreadContext().isReinitializingSubControllers()) {
+                lnf.notifyListeners(event, pack.getSampleListeners());
+            }
+        }
     }
 
     public void sampleOccurred(SampleEvent se) {
