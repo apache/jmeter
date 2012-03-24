@@ -407,13 +407,20 @@ public class PostWriter {
         // ratio in bin/jmeter[.bat], but this is better.
         InputStream in = new BufferedInputStream(new FileInputStream(filename));
         int read;
-        try {
+        boolean noException = false;
+        try { 
             while ((read = in.read(buf)) > 0) {
                 out.write(buf, 0, read);
             }
+            noException = true;
         }
         finally {
-            JOrphanUtils.closeQuietly(in);
+            if(!noException) {
+                // Exception in progress
+                JOrphanUtils.closeQuietly(in);
+            } else {
+                in.close();
+            }
         }
     }
 
