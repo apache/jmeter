@@ -271,7 +271,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 	process_sampler(sam, null, threadContext);
                 	if(onErrorStartNextLoop || threadContext.isRestartNextLoop()) {
                 	    if(threadContext.isRestartNextLoop()) {
-                            triggerEndOfLoopOnParentControllers(sam);
+                            triggerEndOfLoopOnParentControllers(sam, threadContext);
                             sam = null;
                             threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
                             threadContext.setRestartNextLoop(false);
@@ -281,7 +281,7 @@ public class JMeterThread implements Runnable, Interruptible {
     	                		if(log.isDebugEnabled()) {
     	                    		log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
     	                    	}
-    	                    	triggerEndOfLoopOnParentControllers(sam);
+    	                    	triggerEndOfLoopOnParentControllers(sam, threadContext);
     	                        sam = null;
     	                        threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
                     		} else {
@@ -333,10 +333,18 @@ public class JMeterThread implements Runnable, Interruptible {
     /**
      * Trigger end of loop on parent controllers up to Thread Group
      * @param sam Sampler Base sampler
+     * @param threadContext 
      */
-    private void triggerEndOfLoopOnParentControllers(Sampler sam) {
+    private void triggerEndOfLoopOnParentControllers(Sampler sam, JMeterContext threadContext) {
         // Find parent controllers of current sampler
-        FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
+        FindTestElementsUpToRootTraverser pathToRootTraverser=null;
+        TransactionSampler transactionSampler = null;
+        if(sam instanceof TransactionSampler) {
+            transactionSampler = (TransactionSampler) sam;
+            pathToRootTraverser = new FindTestElementsUpToRootTraverser((transactionSampler).getTransactionController());
+        } else {
+            pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
+        }
         testTree.traverse(pathToRootTraverser);
         List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
   	
@@ -350,6 +358,9 @@ public class JMeterThread implements Runnable, Interruptible {
             } else {
                 parentController.triggerEndOfLoop();
             }
+        }
+        if(transactionSampler!=null) {
+            process_sampler(transactionSampler, null, threadContext);
         }
     }
 
