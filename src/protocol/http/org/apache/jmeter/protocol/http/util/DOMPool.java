@@ -47,6 +47,7 @@ public final class DOMPool {
      * test on an old system will likely run into memory or CPU problems long
      * before the HashMap is an issue.
      */
+    @SuppressWarnings("unchecked") // LRUMap does not support generics currently
     private static final Map<Object, Document> MEMCACHE = Collections.<Object, Document>synchronizedMap(
             new LRUMap(JMeterUtils.getPropDefault("soap.document_cache", 50)));
 
