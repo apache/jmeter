@@ -25,6 +25,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.jmeter.services.FileServer;
@@ -66,7 +67,9 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     private final Object LOCK = new Object();
 
     private final int rmiPort;
-    
+
+    private Properties remotelySetProperties;
+
     private RemoteJMeterEngineImpl(int localPort, int rmiPort) throws RemoteException {
         super(localPort); // Create this object using the specified port (0 means anonymous)
         this.rmiPort = rmiPort;
@@ -197,7 +200,16 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 
     public void rsetProperties(Properties p) throws RemoteException, IllegalStateException {
         checkOwner("setProperties");
+        if(remotelySetProperties != null) {
+            Properties jmeterProperties = JMeterUtils.getJMeterProperties();
+            log.info("Cleaning previously set properties "+remotelySetProperties);
+            for (Iterator iterator = remotelySetProperties.keySet().iterator(); iterator.hasNext();) {
+                String key = (String) iterator.next();
+                jmeterProperties.remove(key);
+            }
+        }
         backingEngine.setProperties(p);
+        this.remotelySetProperties = p;
     }
 
     /**
