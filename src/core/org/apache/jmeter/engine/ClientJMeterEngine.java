@@ -131,14 +131,15 @@ public class ClientJMeterEngine implements JMeterEngine {
                 remote.rconfigure(testTree, host, baseDirRelative, scriptName);
             }
             log.info("sent test to " + host + " basedir='"+baseDirRelative+"'"); // $NON-NLS-1$
-            if (savep != null){
-                log.info("Sending properties "+savep);
-                try {
-                    methodName="rsetProperties()";
-                    remote.rsetProperties(savep);
-                } catch (RemoteException e) {
-                    log.warn("Could not set properties: " + e.toString());
-                }
+            if(savep == null) {
+                savep = new Properties();
+            }
+            log.info("Sending properties "+savep);
+            try {
+                methodName="rsetProperties()";
+                remote.rsetProperties(savep);
+            } catch (RemoteException e) {
+                log.warn("Could not set properties: " + e.toString());
             }
             methodName="rrunTest()";
             remote.rrunTest();
