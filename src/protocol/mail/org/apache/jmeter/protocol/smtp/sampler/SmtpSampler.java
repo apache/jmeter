@@ -36,6 +36,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.SendMailCommand;
 import org.apache.jmeter.protocol.smtp.sampler.tools.CounterOutputStream;
@@ -62,6 +63,8 @@ public class SmtpSampler extends AbstractSampler {
 
     //+JMX file attribute names - do not change any values!
     public final static String SERVER               = "SMTPSampler.server"; // $NON-NLS-1$
+
+
     public final static String SERVER_PORT          = "SMTPSampler.serverPort"; // $NON-NLS-1$
     public final static String USE_AUTH             = "SMTPSampler.useAuth"; // $NON-NLS-1$
     public final static String USERNAME             = "SMTPSampler.username"; // $NON-NLS-1$
@@ -368,5 +371,14 @@ public class SmtpSampler extends AbstractSampler {
         } else {
             return null;
         }
+    }
+    
+    /**
+     * No config element associated
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
+     */
+    @Override
+    public boolean applies(ConfigTestElement configElement) {
+        return false;
     }
 }

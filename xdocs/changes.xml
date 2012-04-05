@@ -104,6 +104,7 @@ public boolean applies(ConfigTestElement configElement);
 <li>Bug 52932 - JDBC Sampler : Sampler is not marked in error in an Exception which is not of class IOException, SQLException, IOException occurs</li>
 <li>Bug 52916 - JDBC Exception if there is an empty user defined variable</li>
 <li>Bug 52937 - Webservice Sampler : Clear Soap Documents Cache at end of Test </li>
+<li>Bug 53027 - Jmeter starts throwing exceptions while using SMTP Sample in a test plan with HTTP Cookie Mngr or HTTP Request Defaults</li>
 </ul>
 
 <h3>Controllers</h3>
