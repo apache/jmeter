@@ -166,9 +166,10 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
     }
 
     /**
-     * {@inheritDoc}
+     * No config element applies to BeanShellSampler
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
     public boolean applies(ConfigTestElement configElement) {
-        return true;
+        return false;
     }
 }

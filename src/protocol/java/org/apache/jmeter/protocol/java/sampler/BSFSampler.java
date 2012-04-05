@@ -132,6 +132,6 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean {
      * {@inheritDoc}
      */
     public boolean applies(ConfigTestElement configElement) {
-        return true;
+        return false;
     }
 }
