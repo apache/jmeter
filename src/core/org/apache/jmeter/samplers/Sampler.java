@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.samplers;
 
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
@@ -32,4 +33,11 @@ public interface Sampler extends java.io.Serializable, TestElement {
      * into a SampleResult.
      */
     public SampleResult sample(Entry e);
+    
+    /**
+     * Does configElement apply to Sampler 
+     * @param configElement {@link ConfigTestElement}
+     * @return boolean
+     */
+    public boolean applies(ConfigTestElement configElement);
 }
