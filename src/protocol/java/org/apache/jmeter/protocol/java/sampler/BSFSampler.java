@@ -24,6 +24,7 @@ import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.commons.io.IOUtils;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -125,5 +126,12 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean {
         }
 
         return res;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean applies(ConfigTestElement configElement) {
+        return true;
     }
 }

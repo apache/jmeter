@@ -288,7 +288,9 @@ public class TestCompiler implements HashTreeTraverser {
         for (ConfigTestElement config  : configs) {
             if (!(config instanceof NoConfigMerge)) 
             {
-                sam.addTestElement(config);
+                if(sam.applies(config)) {
+                    sam.addTestElement(config);
+                }
             }
         }
     }

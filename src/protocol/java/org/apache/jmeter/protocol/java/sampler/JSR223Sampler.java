@@ -23,6 +23,7 @@ import java.io.IOException;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -77,5 +78,12 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
         }
         result.sampleEnd();
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean applies(ConfigTestElement configElement) {
+        return true;
     }
 }
