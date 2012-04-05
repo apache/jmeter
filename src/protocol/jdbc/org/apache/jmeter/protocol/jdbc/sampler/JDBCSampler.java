@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.jdbc.sampler;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement;
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
 import org.apache.jmeter.samplers.Entry;
@@ -92,5 +93,12 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
         // TODO: process warnings? Set Code and Message to success?
         res.sampleEnd();
         return res;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean applies(ConfigTestElement configElement) {
+        return true;
     }
 }

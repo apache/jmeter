@@ -18,9 +18,16 @@
 
 package org.apache.jmeter.samplers;
 
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
 public abstract class AbstractSampler extends AbstractTestElement implements Sampler {
     private static final long serialVersionUID = 240L;
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean applies(ConfigTestElement configElement) {
+        return true;
+    }
 }

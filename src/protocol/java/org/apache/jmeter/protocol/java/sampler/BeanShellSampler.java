@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
@@ -162,5 +163,12 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
             return true;
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean applies(ConfigTestElement configElement) {
+        return true;
     }
 }
