@@ -15,10 +15,6 @@
  * limitations under the License.
  * 
  */
-
-/*
- * Created on Apr 23, 2003
- */
 package org.apache.jmeter.engine.util;
 
 import org.apache.jmeter.threads.TestCompiler;
@@ -30,6 +26,7 @@ import org.apache.jmeter.samplers.Sampler;
  * 
  * @see TestCompiler#configureSampler(Sampler)
  * @version $Revision$
+ * @since 2.7
  */
 public interface NoConfigMerge {
 }
