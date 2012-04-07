@@ -20,14 +20,19 @@ package org.apache.jmeter.protocol.jdbc.sampler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement;
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -35,7 +40,10 @@ import org.apache.log.Logger;
  * A sampler which understands JDBC database requests.
  *
  */
-public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, TestBean {
+public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
     
     private static final long serialVersionUID = 234L;
     
@@ -96,9 +104,10 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
     }
 
     /**
-     * {@inheritDoc}
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
     public boolean applies(ConfigTestElement configElement) {
-        return true;
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }

@@ -19,21 +19,29 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JSR223TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampler, TestBean {
-
+public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampler, TestBean, ConfigMergabilityIndicator {
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+    
     private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -81,9 +89,10 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
     }
 
     /**
-     * {@inheritDoc}
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
     public boolean applies(ConfigTestElement configElement) {
-        return true;
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }

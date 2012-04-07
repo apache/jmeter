@@ -13,23 +13,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
+ * 
  */
 
-package org.apache.jmeter.samplers;
+package org.apache.jmeter.engine.util;
 
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.threads.TestCompiler;
 
 /**
- * Classes which are able to generate information about an entry should
- * implement this interface.
- *
- * @version $Revision$
+ * Interface that gives a hint about the merge policy to apply between Samplers and Config elements
+ * @see TestCompiler#configureWithConfigElements
+ * @since 2.7 
  */
-public interface Sampler extends java.io.Serializable, TestElement {
+public interface ConfigMergabilityIndicator {
+
     /**
-     * Obtains statistics about the given Entry, and packages the information
-     * into a SampleResult.
+     * Does configElement apply to Sampler 
+     * @param configElement {@link ConfigTestElement}
+     * @return boolean
      */
-    public SampleResult sample(Entry e);
+    public boolean applies(ConfigTestElement configElement);
 }

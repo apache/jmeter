@@ -32,6 +32,7 @@ import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.control.TransactionSampler;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.engine.util.NoConfigMerge;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
@@ -288,7 +289,12 @@ public class TestCompiler implements HashTreeTraverser {
         for (ConfigTestElement config  : configs) {
             if (!(config instanceof NoConfigMerge)) 
             {
-                if(sam.applies(config)) {
+                if(sam instanceof ConfigMergabilityIndicator) {
+                    if(((ConfigMergabilityIndicator)sam).applies(config)) {
+                        sam.addTestElement(config);
+                    }
+                } else {
+                    // Backward compatibility
                     sam.addTestElement(config);
                 }
             }
