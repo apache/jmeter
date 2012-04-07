@@ -23,10 +23,16 @@
 package org.apache.jmeter.control;
 
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestElement;
 
 /**
  * Transaction Sampler class to measure transaction times
@@ -34,6 +40,10 @@ import org.apache.jmeter.samplers.Sampler;
  */
 public class TransactionSampler extends AbstractSampler {
     private static final long serialVersionUID = 240L;
+
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     private boolean transactionDone = false;
 
@@ -126,5 +136,14 @@ public class TransactionSampler extends AbstractSampler {
 
     protected void setSubSampler(Sampler subSampler) {
         this.subSampler = subSampler;
+    }
+
+    /**
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
+     */
+    @Override
+    public boolean applies(ConfigTestElement configElement) {
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
