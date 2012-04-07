@@ -29,9 +29,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -44,6 +46,7 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -94,6 +97,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.LoginConfigGui",
+                    "org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui",
+                    "org.apache.jmeter.config.gui.SimpleConfigGui",
+                    "org.apache.jmeter.protocol.http.gui.HeaderPanel",
+                    "org.apache.jmeter.protocol.http.gui.AuthPanel",
+                    "org.apache.jmeter.protocol.http.gui.CacheManagerGui",
+                    "org.apache.jmeter.protocol.http.gui.CookiePanel"}));
+    
     //+ JMX names - do not change
     public static final String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
 
@@ -1859,5 +1872,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         }
         return result;
+    }
+    
+    /**
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
+     */
+    @Override
+    public boolean applies(ConfigTestElement configElement) {
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
