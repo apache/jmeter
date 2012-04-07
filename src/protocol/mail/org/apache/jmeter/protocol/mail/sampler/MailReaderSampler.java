@@ -22,8 +22,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.mail.Address;
 import javax.mail.BodyPart;
@@ -38,6 +41,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.LocalTrustStoreSSLSocketFactory;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.TrustAllSSLSocketFactory;
@@ -46,6 +50,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -59,6 +64,10 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
+
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     //+ JMX attributes - do not change the values
     private final static String SERVER_TYPE = "host_type"; // $NON-NLS-1$
@@ -559,5 +568,14 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         boolean wasbusy = busy;
         busy = false;
         return wasbusy;
+    }
+
+    /**
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
+     */
+    @Override
+    public boolean applies(ConfigTestElement configElement) {
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
