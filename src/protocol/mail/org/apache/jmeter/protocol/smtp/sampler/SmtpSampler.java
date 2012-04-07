@@ -22,9 +22,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.BodyPart;
@@ -44,6 +47,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -58,6 +62,10 @@ import org.apache.log.Logger;
 public class SmtpSampler extends AbstractSampler {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -373,12 +381,12 @@ public class SmtpSampler extends AbstractSampler {
         }
     }
     
+
     /**
-     * No config element associated
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
-    @Override
     public boolean applies(ConfigTestElement configElement) {
-        return false;
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }

@@ -36,6 +36,10 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h2>New and Noteworthy</h2>
 
+<p>
+Plugin writers : New interface org.apache.jmeter.engine.util.ConfigMergabilityIndicator has been introduced to tell wether a ConfigTestElement can be merged in Sampler(see Bug 53042):<br/>
+public boolean applies(ConfigTestElement configElement);
+</p>
 
 <!--  =================== Known bugs =================== -->
 
@@ -77,10 +81,6 @@ JMeter now expands the Test Plan tree to the testplan level and no further and s
 Graph Full Results Listener has been removed.
 </p>
 
-<p>
-Plugin writers : Sampler interface contains a new method (see Bug 53042):<br/>
-public boolean applies(ConfigTestElement configElement);
-</p>
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>

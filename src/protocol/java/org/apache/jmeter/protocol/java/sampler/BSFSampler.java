@@ -19,16 +19,21 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import java.io.FileInputStream;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.BSFTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -37,7 +42,11 @@ import org.apache.log.Logger;
  * A sampler which understands BSF
  *
  */
-public class BSFSampler extends BSFTestElement implements Sampler, TestBean {
+public class BSFSampler extends BSFTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
+
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     private static final long serialVersionUID = 240L;
 
@@ -126,12 +135,13 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean {
         }
 
         return res;
-    }
-    
+    }    
+
     /**
-     * {@inheritDoc}
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
     public boolean applies(ConfigTestElement configElement) {
-        return false;
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
