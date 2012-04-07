@@ -65,6 +65,10 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestL
     }
 
     public void testStarted(String host) {
+        String reuseSSLContext = JMeterUtils.getProperty("https.use.cached.ssl.context");
+        if(StringUtils.isEmpty(reuseSSLContext)||"true".equals(reuseSSLContext)) {
+            log.warn("https.use.cached.ssl.context property must be set to false to ensure Multiple Certificates are used");
+        }
         int startIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
         int endIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
         
