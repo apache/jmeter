@@ -73,6 +73,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.protocol.ldap.config.gui.LdapConfigGui",
+                    "org.apache.jmeter.protocol.ldap.config.gui.LdapExtConfigGui",
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     /*
