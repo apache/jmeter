@@ -28,6 +28,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -40,6 +43,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -48,10 +52,17 @@ import org.apache.log.Logger;
  *
  */
 public class FTPSampler extends AbstractSampler implements Interruptible {
+
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.LoginConfigGui",
+                    "org.apache.jmeter.protocol.ftp.config.gui.FtpConfigGui",
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+    
     public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$
 
     public final static String PORT = "FTPSampler.port"; // $NON-NLS-1$
@@ -293,5 +304,13 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             }
         }
         return client != null;
+    }
+    
+    /**
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
+     */
+    public boolean applies(ConfigTestElement configElement) {
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
