@@ -18,11 +18,13 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -44,6 +46,11 @@ public class JavaSampler extends AbstractSampler implements TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
+
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.protocol.java.config.gui.JavaConfigGui",
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     /**
      * Property key representing the classname of the JavaSamplerClient to user.
@@ -283,5 +290,13 @@ public class JavaSampler extends AbstractSampler implements TestListener {
             results.setSampleLabel("ERROR: " + getClassname());
             return results;
         }
+    }
+
+    /**
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
+     */
+    public boolean applies(ConfigTestElement configElement) {
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
