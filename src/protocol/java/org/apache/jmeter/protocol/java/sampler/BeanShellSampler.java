@@ -18,11 +18,17 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -33,8 +39,12 @@ import org.apache.log.Logger;
  * A sampler which understands BeanShell
  *
  */
-public class BeanShellSampler extends BeanShellTestElement implements Sampler, Interruptible
+public class BeanShellSampler extends BeanShellTestElement implements Sampler, Interruptible, ConfigMergabilityIndicator
 {
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+    
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 3;
@@ -166,10 +176,10 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
     }
 
     /**
-     * No config element applies to BeanShellSampler
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
     public boolean applies(ConfigTestElement configElement) {
-        return false;
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
