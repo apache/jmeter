@@ -205,7 +205,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set the maintain session option.
      *
-     * @param cache
+     * @param maintainSession
      */
     public void setMaintainSession(boolean maintainSession) {
         setProperty(MAINTAIN_SESSION, maintainSession, MAINTAIN_SESSION_DEFAULT);
