@@ -266,7 +266,6 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     /**
      * Computes content encoding from request and if not found uses pageEncoding 
      * and formEncoding to see if URL was previously computed with a content type
-     * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
      * @param pageEncodings Map<String, String>
      * @param formEncodings Map<String, String>
