@@ -2644,14 +2644,14 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
-<component name="Aggregate Graph" index="&sect-num;.3.12"  width="905" height="657" screenshot="aggregate_graph.png">
+<component name="Aggregate Graph" index="&sect-num;.3.12"  width="914" height="684" screenshot="aggregate_graph.png">
 <description>The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file.</description>
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
-<figure width="903" height="653" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
+<figure width="913" height="443" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
 </p>
 </div>
 </component>
