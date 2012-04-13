@@ -173,6 +173,7 @@ Graph Full Results Listener has been removed.
 <ul>
 <li>Bug 52603 - MailerVisualizer : Enable SSL , TLS and Authentication</li>
 <li>Bug 52698 - Remove Graph Full Results Listener</li>
+<li>Bug 53070 - Change Aggregate graph to Clustered Bar chart, add more columns (median, 90% line, min, max) and options, fixed some bugs</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

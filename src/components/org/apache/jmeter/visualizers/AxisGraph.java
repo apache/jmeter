@@ -38,8 +38,8 @@ import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.ChartDataException;
 import org.jCharts.chartData.DataSeries;
 import org.jCharts.properties.AxisProperties;
-import org.jCharts.properties.BarChartProperties;
 import org.jCharts.properties.ChartProperties;
+import org.jCharts.properties.ClusteredBarChartProperties;
 import org.jCharts.properties.DataAxisProperties;
 import org.jCharts.properties.LabelAxisProperties;
 import org.jCharts.properties.LegendProperties;
@@ -67,19 +67,25 @@ public class AxisGraph extends JPanel {
     protected String[] xAxisLabels;
     protected int width, height;
     
+    protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") };
+    
     protected int maxYAxisScale;
 
     protected Font titleFont;
 
     protected Font legendFont;
 
-    protected Color color;
+    protected Font valueFont = new Font("SansSerif", Font.PLAIN, 8);
 
-    protected Color foreColor;
+    protected Color[] color = { Color.YELLOW };
+
+    protected Color foreColor = Color.BLACK;
 
     protected boolean outlinesBarFlag = false;
 
     protected boolean showGrouping = true;
+    
+    protected boolean valueOrientation = true;
 
     protected int legendPlacement = LegendProperties.BOTTOM;
 
@@ -133,6 +139,10 @@ public class AxisGraph extends JPanel {
         this.yAxisLabel = label;
     }
 
+    public void setLegendLabels(String[] labels) {
+        this.legendLabels = labels;
+    }
+
     public void setWidth(int w) {
         this.width = w;
     }
@@ -158,14 +168,14 @@ public class AxisGraph extends JPanel {
     /**
      * @return the color
      */
-    public Color getColor() {
+    public Color[] getColor() {
         return color;
     }
 
     /**
      * @param color the color to set
      */
-    public void setColor(Color color) {
+    public void setColor(Color[] color) {
         this.color = color;
     }
 
@@ -212,6 +222,20 @@ public class AxisGraph extends JPanel {
     }
 
     /**
+     * @return the valueFont
+     */
+    public Font getValueFont() {
+        return valueFont;
+    }
+
+    /**
+     * @param valueFont the valueFont to set
+     */
+    public void setValueFont(Font valueFont) {
+        this.valueFont = valueFont;
+    }
+
+    /**
      * @return the legendPlacement
      */
     public int getLegendPlacement() {
@@ -240,6 +264,20 @@ public class AxisGraph extends JPanel {
     }
 
     /**
+     * @return the valueOrientation
+     */
+    public boolean isValueOrientation() {
+        return valueOrientation;
+    }
+
+    /**
+     * @param valueOrientation the valueOrientation to set
+     */
+    public void setValueOrientation(boolean valueOrientation) {
+        this.valueOrientation = valueOrientation;
+    }
+
+    /**
      * @return the showGrouping
      */
     public boolean isShowGrouping() {
@@ -258,8 +296,10 @@ public class AxisGraph extends JPanel {
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.xAxisTitle != null && this.yAxisLabel != null &&
                 this.yAxisTitle != null) {
-            drawSample(this.title,this.maxLength,this.xAxisLabels,this.xAxisTitle,
-                this.yAxisTitle,this.data,this.width,this.height,this.color,this.legendFont,graphics);
+            drawSample(this.title, this.maxLength, this.xAxisLabels,
+                    this.xAxisTitle, this.yAxisTitle, this.legendLabels,
+                    this.data, this.width, this.height, this.color,
+                    this.legendFont, graphics);
         }
     }
 
@@ -285,7 +325,7 @@ public class AxisGraph extends JPanel {
     }
 
     private void drawSample(String _title, int _maxLength, String[] _xAxisLabels, String _xAxisTitle,
-            String _yAxisTitle, double[][] _data, int _width, int _height, Color color, Font font, Graphics g) {
+            String _yAxisTitle, String[] _legendLabels, double[][] _data, int _width, int _height, Color[] _color, Font font, Graphics g) {
         double max = maxYAxisScale > 0 ? maxYAxisScale : findMax(_data); // define max scale y axis
         try {
             /** These controls are already done in StatGraphVisualizer
@@ -309,25 +349,26 @@ public class AxisGraph extends JPanel {
                 _xAxisLabels[i]=squeeze(label, _maxLength);
             }
             this.setPreferredSize(new Dimension(_width,_height));
-            DataSeries dataSeries = new DataSeries( _xAxisLabels, _xAxisTitle, _yAxisTitle, _title );
+            DataSeries dataSeries = new DataSeries( _xAxisLabels, null, _yAxisTitle, _title ); // replace _xAxisTitle to null (don't display x axis title)
 
-            String[] legendLabels= { yAxisLabel };
-
-            BarChartProperties barChartProperties= new BarChartProperties();
-            barChartProperties.setShowOutlinesFlag(outlinesBarFlag);
+            ClusteredBarChartProperties clusteredBarChartProperties= new ClusteredBarChartProperties();
+            clusteredBarChartProperties.setShowOutlinesFlag(outlinesBarFlag);
             ValueLabelRenderer valueLabelRenderer = new ValueLabelRenderer(false, false, showGrouping, 0);
             valueLabelRenderer.setValueLabelPosition(ValueLabelPosition.AT_TOP);
-            valueLabelRenderer.useVerticalLabels(true);
-            if (legendFont != null) {
-                valueLabelRenderer.setValueChartFont(new ChartFont(legendFont, new Color(foreColor.getRGB())));
+
+            valueLabelRenderer.setValueChartFont(new ChartFont(valueFont, foreColor));
+            valueLabelRenderer.useVerticalLabels(valueOrientation);
+
+            clusteredBarChartProperties.addPostRenderEventListener(valueLabelRenderer);
+
+            Paint[] paints = new Paint[_color.length];
+            for (int i = 0; i < _color.length; i++) {
+                paints[i] =  _color[i];
             }
             
-            barChartProperties.addPostRenderEventListener(valueLabelRenderer);
-
-            Paint[] paints = new Paint[] { color };
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet(
-                        _data, legendLabels, paints, ChartType.BAR, barChartProperties );
+                        _data, _legendLabels, paints, ChartType.BAR_CLUSTERED, clusteredBarChartProperties );
             dataSeries.addIAxisPlotDataSet( axisChartDataSet );
 
             ChartProperties chartProperties= new ChartProperties();
