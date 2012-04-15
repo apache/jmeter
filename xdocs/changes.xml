@@ -105,6 +105,7 @@ Graph Full Results Listener has been removed.
 <li>Bug 52916 - JDBC Exception if there is an empty user defined variable</li>
 <li>Bug 52937 - Webservice Sampler : Clear Soap Documents Cache at end of Test </li>
 <li>Bug 53027 - Jmeter starts throwing exceptions while using SMTP Sample in a test plan with HTTP Cookie Mngr or HTTP Request Defaults</li>
+<li>Bug 53072 - JDBC PREPARED SELECT statements should return results in variables like non prepared SELECT</li>
 </ul>
 
 <h3>Controllers</h3>
