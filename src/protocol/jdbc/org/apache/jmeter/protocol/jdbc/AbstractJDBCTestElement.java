@@ -188,9 +188,13 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             } else if (PREPARED_SELECT.equals(_queryType)) {
                 PreparedStatement pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
-                boolean hasResultSet = pstmt.execute();
-                String sb = resultSetsToString(pstmt,hasResultSet,null);
-                return sb.getBytes(ENCODING);
+                ResultSet rs = null;
+                try {
+                    rs = pstmt.executeQuery();
+                    return getStringFromResultSet(rs).getBytes(ENCODING);
+                } finally {
+                    close(rs);
+                }
             } else if (PREPARED_UPDATE.equals(_queryType)) {
                 PreparedStatement pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);

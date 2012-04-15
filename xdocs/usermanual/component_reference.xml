@@ -523,7 +523,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <br></br>
         There must be as many types as there are placeholders in the statement.
         </property>
-        <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements</property>
+        <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements or Prepared Select Statements</property>
         <property name="Result Variable Name" required="No">
         If specified, this will create an Object variable containing a list of row maps.
         Each map contains the column name as the key and the column data as the value. Usage:<br></br>
