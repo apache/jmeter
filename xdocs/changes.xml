@@ -147,6 +147,7 @@ Graph Full Results Listener has been removed.
 <li>Bug 52679 - User Parameters columns narrow</li>
 <li>Bug 52843 - Sample headerSize and bodySize not being accumulated for subsamples</li>
 <li>Bug 52967 - The function __P() couldn't use default value when running with remote server in GUI mode.</li>
+<li>Bug 50799 - Having a non-HTTP sampler in a http test plan prevents multiple header managers from working</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
