@@ -1242,6 +1242,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Bug50898.xml"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Bug52310.xml"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/Bug52968.xml"/>
     <!-- Ignore unit test output -->
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
@@ -1271,6 +1272,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
     <include name="${dest.jar.jmeter}/testfiles/Bug50898.xml"/>
     <include name="${dest.jar.jmeter}/testfiles/Bug52310.xml"/>
+    <include name="${dest.jar.jmeter}/testfiles/Bug52968.xml"/>
     <!-- Include the image files used in parsing / embedded download tests -->
     <include name="${dest.jar.jmeter}/testfiles/**/*.gif"/>
     <include name="${dest.jar.jmeter}/testfiles/**/*.jpg"/>
@@ -2170,6 +2172,9 @@ run JMeter unless all the JMeter jars are added.
       <antcall target="batchtest">
           <param name="batchtest.name" value="Bug52310"/>
       </antcall>
+      <antcall target="batchtest">
+  	      <param name="batchtest.name" value="Bug52968"/>
+  	  </antcall>
   	
   <!-- TODO fix bug so test passes
       <antcall target="batchtest">
@@ -2433,7 +2438,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="soap"/>
         <process_jarfile jarname="tidy"/>
         <process_jarfile jarname="xstream"/>
-        <process_jarfile jarname="xpp3"/>
+    	<process_jarfile jarname="xpp3"/>
         <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="xalan"/>
         <process_jarfile jarname="xerces"/>
