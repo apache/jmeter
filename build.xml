@@ -382,6 +382,7 @@
     <include name="${lib.dir}/${xml-apis.jar}"/>
     <include name="${lib.dir}/${xpp3.jar}"/>
     <include name="${lib.dir}/${xstream.jar}"/>
+  	<include name="${lib.dir}/${xmlpull.jar}"/>
   </patternset>
 
   <!--
@@ -443,6 +444,7 @@
     <pathelement location="${lib.dir}/${xml-apis.jar}"/>
     <pathelement location="${lib.dir}/${xpp3.jar}"/>
     <pathelement location="${lib.dir}/${xstream.jar}"/>
+  	<pathelement location="${lib.dir}/${xmlpull.jar}"/>
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     <!-- API-only jars-->
@@ -2438,6 +2440,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="soap"/>
         <process_jarfile jarname="tidy"/>
         <process_jarfile jarname="xstream"/>
+    	<process_jarfile jarname="xmlpull"/>
     	<process_jarfile jarname="xpp3"/>
         <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="xalan"/>
