@@ -213,6 +213,7 @@ with other code that depends on an earlier version of the Rhino Javascript jar.
 <li>Bug 52788 - HttpRequestHdr : Optimize code to avoid useless work</li>
 <li>JMeter Ant (ant-jmeter-1.1.1.jar) task was upgraded from 1.0.9 to 1.1.1</li>
 <li>Updated to commons-io 2.2 (from 2.1)</li>
+<li>Bug 53129 - Upgrade XStream from 1.3.1 to 1.4.2</li>
 </ul>
 
 </section> 
