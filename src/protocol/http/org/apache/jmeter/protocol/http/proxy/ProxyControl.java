@@ -546,8 +546,7 @@ public class ProxyControl extends GenericController {
      * Helper method to add a Divider
      * Called from Application Thread that needs to update GUI (JMeterTreeModel)
      */
-    private void addDivider(final JMeterTreeModel model, final JMeterTreeNode node) 
-    		throws InterruptedException, InvocationTargetException {
+    private void addDivider(final JMeterTreeModel model, final JMeterTreeNode node) {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName("-------------------"); // $NON-NLS-1$
