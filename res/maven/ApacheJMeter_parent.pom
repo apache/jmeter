@@ -61,7 +61,7 @@ under the License.
       <commons-codec.version>1.6</commons-codec.version>
       <commons-collections.version>3.2.1</commons-collections.version>
       <commons-httpclient.version>3.1</commons-httpclient.version>
-      <commons-io.version>2.1</commons-io.version>
+      <commons-io.version>2.2</commons-io.version>
       <commons-jexl.version>1.1</commons-jexl.version>
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-lang.version>2.6</commons-lang.version>
