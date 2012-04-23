@@ -93,7 +93,7 @@ public final class ReportMenuFactory {
             }
 
             initializeMenus();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             log.error("", e);
         }
     }
@@ -280,7 +280,7 @@ public final class ReportMenuFactory {
                 } catch (NoClassDefFoundError e) {
                     log.warn("Missing jar? Could not create " + name + ". " + e);
                     continue;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     log.warn("Could not instantiate " + name, e);
                     continue;
                 }
