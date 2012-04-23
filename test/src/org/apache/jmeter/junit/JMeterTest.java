@@ -500,7 +500,7 @@ public class JMeterTest extends JMeterTestCase {
                 in.close();
                 assertEquals("deserializing class: " + serObj.getClass().getName(), serObj.getClass(), readObject
                         .getClass());
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 fail("serialization of " + serObj.getClass().getName() + " failed: " + e);
             }
         }
