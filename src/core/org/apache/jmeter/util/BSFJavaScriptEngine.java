@@ -227,7 +227,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             }
         }
         catch (Throwable t) {
-
+            handleError(t);
         }
         finally {
             Context.exit();
