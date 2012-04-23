@@ -110,7 +110,7 @@ public class ReportSave implements Command {
             ostream = new FileOutputStream(updateFile);
             SaveService.saveTree(subTree, ostream);
             log.info("saveTree");
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             ReportGuiPackage.getInstance().setReportPlanFile(null);
             log.error("", ex);
             throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
