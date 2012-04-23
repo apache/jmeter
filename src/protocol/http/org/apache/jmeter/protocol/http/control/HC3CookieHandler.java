@@ -184,7 +184,7 @@ public class HC3CookieHandler implements CookieHandler {
                     }
                 }
             } catch (MalformedCookieException e) { // This means the cookie was wrong for the URL
-                log.debug("Not storing invalid cookie: <"+cookieHeader+"> for URL "+url+" ("+e.getLocalizedMessage()+")");
+                log.warn("Not storing invalid cookie: <"+cookieHeader+"> for URL "+url+" ("+e.getLocalizedMessage()+")");
             } catch (IllegalArgumentException e) {
                 log.warn(cookieHeader+e.getLocalizedMessage());
             }
