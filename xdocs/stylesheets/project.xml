@@ -26,6 +26,7 @@
 	 <menu name="About">
 	   <item name="Overview"            href="/index.html"/>
 	   <item name="Changes"             href="/changes.html"/>
+       <item name="Subscribe to What's New" href="http://projects.apache.org/feeds/rss/jmeter.xml"/>
 	   <item name="Issues"              href="/issues.html"/>
 	   <item name="License"             href="http://www.apache.org/licenses/"/>
 	   <item name="Contributors"		href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
