@@ -203,7 +203,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         if(remotelySetProperties != null) {
             Properties jmeterProperties = JMeterUtils.getJMeterProperties();
             log.info("Cleaning previously set properties "+remotelySetProperties);
-            for (Iterator iterator = remotelySetProperties.keySet().iterator(); iterator.hasNext();) {
+            for (Iterator<?> iterator = remotelySetProperties.keySet().iterator(); iterator.hasNext();) {
                 String key = (String) iterator.next();
                 jmeterProperties.remove(key);
             }
