@@ -1056,8 +1056,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(hasContentTypeHeader) {
                 contentTypeValue = put.getFirstHeader(HEADER_CONTENT_TYPE).getValue();
             }
-            StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentTypeValue, 
-                    (String) charset);
+            StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentTypeValue, charset);
             put.setEntity(requestEntity);
         }
         // Check if we have any content to send for body
