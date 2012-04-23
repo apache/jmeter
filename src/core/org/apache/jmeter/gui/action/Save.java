@@ -141,12 +141,13 @@ public class Save implements Command {
             ostream = new FileOutputStream(updateFile);
             SaveService.saveTree(subTree, ostream);
         } catch (Throwable ex) {
-            GuiPackage.getInstance().setDirty(true);
-            GuiPackage.getInstance().setTestPlanFile(null);
             log.error("", ex);
             if (ex instanceof Error){
                 throw (Error) ex;
             }
+            GuiPackage guiPack = GuiPackage.getInstance();
+            guiPack.setDirty(true);
+            guiPack.setTestPlanFile(null);
             if (ex instanceof RuntimeException){
                 throw (RuntimeException) ex;
             }
