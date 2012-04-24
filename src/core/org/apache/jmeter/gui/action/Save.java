@@ -124,34 +124,27 @@ public class Save implements Command {
                 GuiPackage.getInstance().setTestPlanFile(updateFile);
             }
         }
-        // TODO: doesn't putting this here mark the tree as
-        // saved even though a failure may occur later?
 
-        ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
         try {
             convertSubTree(subTree);
         } catch (Exception err) {
+            log.warn("Error converting subtree "+err);
         }
+
         FileOutputStream ostream = null;
         try {
-            File outFile = new File(updateFile);
-            if(!outFile.canWrite()) {
-                throw new IllegalUserActionException("File cannot be written: " + outFile.getAbsolutePath());
-            }
             ostream = new FileOutputStream(updateFile);
             SaveService.saveTree(subTree, ostream);
+            ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
         } catch (Throwable ex) {
             log.error("", ex);
             if (ex instanceof Error){
                 throw (Error) ex;
             }
-            GuiPackage guiPack = GuiPackage.getInstance();
-            guiPack.setDirty(true);
-            guiPack.setTestPlanFile(null);
             if (ex instanceof RuntimeException){
                 throw (RuntimeException) ex;
             }
-            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
+            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
         } finally {
             JOrphanUtils.closeQuietly(ostream);
         }
