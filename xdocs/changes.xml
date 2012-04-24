@@ -166,6 +166,7 @@ Graph Full Results Listener has been removed.
 <li>Bug 52810 - Enable setting JMS Properties through JMS Publisher sampler</li>
 <li>Bug 52938 - Webservice Sampler : Add a jmeter property soap.document_cache to control size of Document Cache</li>
 <li>Bug 52939 - Webservice Sampler : Make MaintainSession configurable</li>
+<li>Bug 53073 - Allow to assign the OUT result of a JDBC CALLABLE to JMeter variables</li>
 </ul>
 
 <h3>Controllers</h3>
