@@ -245,15 +245,29 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
         } while (result || (updateCount != -1));
         if (out!=null && pstmt instanceof CallableStatement){
+            ArrayList<Object> outputValues = new ArrayList<Object>();
             CallableStatement cs = (CallableStatement) pstmt;
             sb.append("Output variables by position:\n");
             for(int i=0; i < out.length; i++){
                 if (out[i]!=java.sql.Types.NULL){
+                    Object o = cs.getObject(i+1);
+                    outputValues.add(o);
                     sb.append("[");
                     sb.append(i+1);
                     sb.append("] ");
-                    sb.append(cs.getObject(i+1));
+                    sb.append(o);
                     sb.append("\n");
+                }
+            }
+            String varnames[] = getVariableNames().split(COMMA);
+            if(varnames.length > 0) {
+        	JMeterVariables jmvars = getThreadContext().getVariables();
+                for(int i = 0; i < varnames.length && i < outputValues.size(); i++) {
+                    String name = varnames[i].trim();
+                    if (name.length()>0){ // Save the value in the variable if present
+                        Object o = outputValues.get(i);
+                        jmvars.put(name, o == null ? null : o.toString());
+                    }
                 }
             }
         }

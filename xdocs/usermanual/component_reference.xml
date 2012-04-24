@@ -523,7 +523,10 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <br></br>
         There must be as many types as there are placeholders in the statement.
         </property>
-        <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements or Prepared Select Statements</property>
+        <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements, Prepared Select Statements or CallableStatement. 
+        Note that when used with CallableStatement, list of variables must be in the same sequence as the OUT parameters returned by the call.
+        If there are less variable names than OUT parameters only as many results shall be stored in the thread-context variables as variable names were supplied. 
+        If more variable names than OUT parameters exist, the additional variables will be ignored</property>
         <property name="Result Variable Name" required="No">
         If specified, this will create an Object variable containing a list of row maps.
         Each map contains the column name as the key and the column data as the value. Usage:<br></br>
