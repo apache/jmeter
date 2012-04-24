@@ -34,4 +34,9 @@ public class IllegalUserActionException extends Exception {
     public IllegalUserActionException(String name) {
         super(name);
     }
+
+    public IllegalUserActionException(String name, Throwable t) {
+        super(name, t);
+    }
+
 }
