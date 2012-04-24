@@ -80,7 +80,19 @@ public final class ActionRouter implements ActionListener {
                     c.doAction(e);
                     postActionPerformed(c.getClass(), e);
                 } catch (IllegalUserActionException err) {
-                    JMeterUtils.reportErrorToUser(err.toString());
+                    String msg = err.getMessage();
+                    if (msg == null) {
+                        msg = err.toString();
+                    }
+                    Throwable t = err.getCause();
+                    if (t != null) {
+                        String cause = t.getMessage();
+                        if (cause == null) {
+                            cause = t.toString();
+                        }
+                        msg = msg + "\n" + cause;
+                    }
+                    JMeterUtils.reportErrorToUser(msg);                        
                 } catch (Exception err) {
                     log.error("", err);
                 }
