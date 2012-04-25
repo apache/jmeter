@@ -78,6 +78,7 @@ public class Save implements Command {
 
     public void doAction(ActionEvent e) throws IllegalUserActionException {
         HashTree subTree = null;
+        boolean fullSave = false; // are we saving the whole tree?
         if (!commands.contains(e.getActionCommand())) {
             throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
         }
@@ -91,6 +92,7 @@ public class Save implements Command {
             }
             subTree = GuiPackage.getInstance().getCurrentSubTree();
         } else {
+            fullSave = true;
             subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
         }
 
@@ -135,9 +137,12 @@ public class Save implements Command {
         try {
             ostream = new FileOutputStream(updateFile);
             SaveService.saveTree(subTree, ostream);
-            ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
+            if (fullSave) { // Only update the stored copy of the tree for a full save
+                subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
+                ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
+            }
         } catch (Throwable ex) {
-            log.error("", ex);
+            log.error("Error saving tree:", ex);
             if (ex instanceof Error){
                 throw (Error) ex;
             }
