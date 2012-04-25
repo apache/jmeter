@@ -1333,17 +1333,26 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public void testStarted() {
         JMeterProperty pathP = getProperty(PATH);
-        log.debug("path property is a " + pathP.getClass().getName());
-        log.debug("path beginning value = " + pathP.getStringValue());
-        if (pathP instanceof StringProperty && pathP.getStringValue().length() > 0) {
-            log.debug("Encoding spaces in path");
-            pathP.setObjectValue(encodeSpaces(pathP.getStringValue()));
-            dynamicPath = false;
+        boolean debugEnabled = log.isDebugEnabled();
+        if (debugEnabled) {
+            log.debug("path property is of type " + pathP.getClass().getName());
+        }
+        if (pathP instanceof StringProperty) {
+            String value = pathP.getStringValue();
+            if (value.length() > 0) {
+                if (debugEnabled) {
+                    log.debug("Encoding spaces in path: "+value);
+                }
+                pathP.setObjectValue(encodeSpaces(value));
+                dynamicPath = false;
+                if (debugEnabled) {
+                    log.debug("path ending value = " + pathP.getStringValue());
+                }
+            }
         } else {
             log.debug("setting dynamic path to true");
             dynamicPath = true;
         }
-        log.debug("path ending value = " + pathP.getStringValue());
     }
 
     /**
