@@ -94,7 +94,7 @@ public final class ActionRouter implements ActionListener {
                     }
                     JMeterUtils.reportErrorToUser(msg);                        
                 } catch (Exception err) {
-                    log.error("", err);
+                    log.error("Error processing "+c.toString(), err);
                 }
             }
         } catch (NullPointerException er) {
