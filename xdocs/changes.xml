@@ -94,6 +94,7 @@ Graph Full Results Listener has been removed.
 <li>Bug 52885 - Proxy : Recording issues with HTTPS, cookies starting with secure are partly truncated</li>
 <li>Bug 52886 - Proxy : Recording issues with HTTPS when spoofing is on, secure cookies are not always changed</li>
 <li>Bug 52897 - HTTPSampler : Using PUT method with HTTPClient4 and empty Content Encoding and sending files leads to NullPointerException</li>
+<li>Bug 53145 - HTTP Sampler - function in path evaluated too early</li>
 </ul>
 
 <h3>Other Samplers</h3>
