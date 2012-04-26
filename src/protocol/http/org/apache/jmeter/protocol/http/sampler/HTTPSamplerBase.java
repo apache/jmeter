@@ -297,12 +297,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     /** Whether to remove '/pathsegment/..' from redirects; default true */
     private static boolean REMOVESLASHDOTDOT = JMeterUtils.getPropDefault("httpsampler.redirect.removeslashdotdot", true);
 
-    ////////////////////// Variables //////////////////////
-
-    private boolean dynamicPath = false;// Set false if spaces are already encoded
-
-
-
     ////////////////////// Code ///////////////////////////
 
     public HTTPSamplerBase() {
@@ -420,10 +414,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public String getPath() {
         String p = getPropertyAsString(PATH);
-        if (dynamicPath) {
-            return encodeSpaces(p);
-        }
-        return p;
+        return encodeSpaces(p);
     }
 
     public void setFollowRedirects(boolean value) {
@@ -1298,7 +1289,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * {@inheritDoc}
      */
     public void testEnded() {
-        dynamicPath = false;
     }
 
     /**
@@ -1332,27 +1322,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * {@inheritDoc}
      */
     public void testStarted() {
-        JMeterProperty pathP = getProperty(PATH);
-        boolean debugEnabled = log.isDebugEnabled();
-        if (debugEnabled) {
-            log.debug("path property is of type " + pathP.getClass().getName());
-        }
-        if (pathP instanceof StringProperty) {
-            String value = pathP.getStringValue();
-            if (value.length() > 0) {
-                if (debugEnabled) {
-                    log.debug("Encoding spaces in path: "+value);
-                }
-                pathP.setObjectValue(encodeSpaces(value));
-                dynamicPath = false;
-                if (debugEnabled) {
-                    log.debug("path ending value = " + pathP.getStringValue());
-                }
-            }
-        } else {
-            log.debug("setting dynamic path to true");
-            dynamicPath = true;
-        }
     }
 
     /**
@@ -1368,7 +1337,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     @Override
     public Object clone() {
         HTTPSamplerBase base = (HTTPSamplerBase) super.clone();
-        base.dynamicPath = dynamicPath;
         return base;
     }
 
