@@ -51,17 +51,15 @@ public class CustomX509TrustManager implements X509TrustManager
      * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],String)
      */
     public void checkClientTrusted(X509Certificate[] certificates,String authType) throws CertificateException {
-        if (log.isDebugEnabled() && certificates != null) {
+        if (certificates != null && log.isDebugEnabled()) {
             for (int c = 0; c < certificates.length; c++) {
                 X509Certificate cert = certificates[c];
-                if (log.isDebugEnabled()){
-                    log.debug(" Client certificate " + (c + 1) + ":");
-                    log.debug("  Subject DN: " + cert.getSubjectDN());
-                    log.debug("  Signature Algorithm: " + cert.getSigAlgName());
-                    log.debug("  Valid from: " + cert.getNotBefore() );
-                    log.debug("  Valid until: " + cert.getNotAfter());
-                    log.debug("  Issuer: " + cert.getIssuerDN());
-                }
+                log.debug(" Client certificate " + (c + 1) + ":");
+                log.debug("  Subject DN: " + cert.getSubjectDN());
+                log.debug("  Signature Algorithm: " + cert.getSigAlgName());
+                log.debug("  Valid from: " + cert.getNotBefore() );
+                log.debug("  Valid until: " + cert.getNotAfter());
+                log.debug("  Issuer: " + cert.getIssuerDN());
             }
         }
 //        try {
@@ -75,7 +73,7 @@ public class CustomX509TrustManager implements X509TrustManager
      * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],String)
      */
     public void checkServerTrusted(X509Certificate[] certificates,String authType) throws CertificateException {
-        if (log.isDebugEnabled() && certificates != null) {
+        if (certificates != null && log.isDebugEnabled()) {
             for (int c = 0; c < certificates.length; c++) {
                 X509Certificate cert = certificates[c];
                 log.debug(" Server certificate " + (c + 1) + ":");
