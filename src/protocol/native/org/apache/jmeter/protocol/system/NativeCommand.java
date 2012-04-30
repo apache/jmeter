@@ -67,8 +67,8 @@ public class NativeCommand {
 			{
 				try {
 					proc.destroy();
-				} catch (Throwable e) {
-					// NOOP
+				} catch (Exception ignored) {
+					// Ignored
 				}
 			}
 		}
