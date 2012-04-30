@@ -28,7 +28,7 @@ import java.util.List;
 public class NativeCommand {
 
 	private StreamGobbler outputGobbler;
-    private File directory;
+    private final File directory;
 
 	/**
 	 * 
