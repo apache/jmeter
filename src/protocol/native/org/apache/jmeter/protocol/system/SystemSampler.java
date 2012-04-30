@@ -21,15 +21,20 @@ package org.apache.jmeter.protocol.system;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -54,6 +59,10 @@ public class SystemSampler extends AbstractSampler {
      * Logging
      */
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+            Arrays.asList(new String[]{
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     /**
      * Create a SystemSampler.
@@ -142,6 +151,16 @@ public class SystemSampler extends AbstractSampler {
         }
         return results;
     }
+    
+    
+    /**
+     * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
+     */
+    @Override
+    public boolean applies(ConfigTestElement configElement) {
+        String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
+        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
 
     /**
      * 
@@ -226,5 +245,4 @@ public class SystemSampler extends AbstractSampler {
     public int getExpectedReturnCode() {
         return getPropertyAsInt(EXPECTED_RETURN_CODE);
     }
-
 }
