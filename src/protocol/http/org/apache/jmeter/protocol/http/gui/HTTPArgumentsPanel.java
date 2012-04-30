@@ -47,7 +47,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     @Override
     protected void initializeTableModel(ObjectTableModel model) {
-        if(tableModel == null) {
+        if(model == null) {
             tableModel = new ObjectTableModel(new String[] {
                     ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
                     HTTPArgument.class,
