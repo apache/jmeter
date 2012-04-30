@@ -37,6 +37,7 @@
 	<classpathentry kind="src" output="build/protocol/jms" path="src/protocol/jms"/>
 	<classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
 	<classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
+    <classpathentry kind="src" output="build/protocol/native" path="src/protocol/native"/>
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/reports" path="src/reports"/>
 	<classpathentry kind="src" output="build/test" path="test/src"/>
