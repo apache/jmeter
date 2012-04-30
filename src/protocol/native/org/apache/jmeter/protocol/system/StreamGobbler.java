@@ -27,8 +27,8 @@ import java.io.InputStreamReader;
  * Thread that eats Output and Error Stream to avoid Deadlock on Windows Machines
  */
 class StreamGobbler extends Thread {
-	private InputStream is;
-	private StringBuilder buffer = new StringBuilder();
+	private final InputStream is;
+	private final StringBuilder buffer = new StringBuilder();
 	/**
 	 * @param is {@link InputStream}
 	 */
