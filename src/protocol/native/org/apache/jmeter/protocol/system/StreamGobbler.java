@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 
 /**
  * Thread that eats Output and Error Stream to avoid Deadlock on Windows Machines
+ * Inspired from:
+ * http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html
  */
 class StreamGobbler extends Thread {
 	private final InputStream is;
@@ -66,7 +68,7 @@ class StreamGobbler extends Thread {
 	}
 	
 	/**
-	 * @return
+	 * @return Output
 	 */
 	public String getResult()
 	{
