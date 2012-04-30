@@ -28,6 +28,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -36,6 +37,8 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.reflect.Functor;
 
 /**
  * GUI for {@link SystemSampler}
@@ -160,7 +163,14 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
      * @return JPanel Arguments Panel
      */
     private JPanel makeArgumentsPanel() {
-        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("arguments_panel_title"), true);
+        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("arguments_panel_title"), null, true, false , 
+                new ObjectTableModel(new String[] { ArgumentsPanel.COLUMN_RESOURCE_NAMES_1 },
+                        Argument.class,
+                        new Functor[] {
+                        new Functor("getValue") },  // $NON-NLS-1$
+                        new Functor[] {
+                        new Functor("setValue") }, // $NON-NLS-1$
+                        new Class[] {String.class }));
         return argsPanel;
     }
 

@@ -46,26 +46,30 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     private static final String INCLUDE_EQUALS = "include_equals"; //$NON-NLS-1$
 
     @Override
-    protected void initializeTableModel() {
-        tableModel = new ObjectTableModel(new String[] {
-                ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
-                HTTPArgument.class,
-                new Functor[] {
-                new Functor("getName"), //$NON-NLS-1$
-                new Functor("getValue"), //$NON-NLS-1$
-                new Functor("isAlwaysEncoded"), //$NON-NLS-1$
-                new Functor("isUseEquals") }, //$NON-NLS-1$
-                new Functor[] {
-                new Functor("setName"), //$NON-NLS-1$
-                new Functor("setValue"), //$NON-NLS-1$
-                new Functor("setAlwaysEncoded"), //$NON-NLS-1$
-                new Functor("setUseEquals") }, //$NON-NLS-1$
-                new Class[] {String.class, String.class, Boolean.class, Boolean.class });
+    protected void initializeTableModel(ObjectTableModel model) {
+        if(tableModel == null) {
+            tableModel = new ObjectTableModel(new String[] {
+                    ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
+                    HTTPArgument.class,
+                    new Functor[] {
+                    new Functor("getName"), //$NON-NLS-1$
+                    new Functor("getValue"), //$NON-NLS-1$
+                    new Functor("isAlwaysEncoded"), //$NON-NLS-1$
+                    new Functor("isUseEquals") }, //$NON-NLS-1$
+                    new Functor[] {
+                    new Functor("setName"), //$NON-NLS-1$
+                    new Functor("setValue"), //$NON-NLS-1$
+                    new Functor("setAlwaysEncoded"), //$NON-NLS-1$
+                    new Functor("setUseEquals") }, //$NON-NLS-1$
+                    new Class[] {String.class, String.class, Boolean.class, Boolean.class });
+        } else {
+            tableModel = model;
+        }
     }
 
     public static boolean testFunctors(){
         HTTPArgumentsPanel instance = new HTTPArgumentsPanel();
-        instance.initializeTableModel();
+        instance.initializeTableModel(null);
         return instance.tableModel.checkFunctors(null,instance.getClass());
     }
 
