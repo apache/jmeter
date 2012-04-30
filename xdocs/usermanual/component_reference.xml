@@ -1701,11 +1701,11 @@ Note: If the message body is not empty, and there is at least one attached file,
 </properties>
 </component>
 
-<component name="System Call Sampler"  index="&sect-num;.1.20"  width="695" height="400" screenshot="system_call_sampler.png">
+<component name="OS Process Sampler"  index="&sect-num;.1.20"  width="695" height="400" screenshot="os_process_sampler.png">
 <description>
 <p>
-The System Call Sampler A sampler that can be used to execute commands on the local machine.<br></br>
-It should allow execution of any command that can be run from the command line.   <br></br>
+The OS Process Sampler is a sampler that can be used to execute commands on the local machine.<br></br>
+It should allow execution of any command that can be run from the command line.<br></br>
 Validation of the return code can be enabled, and the expected return code can be specified.<br></br>
 </p>
 </description>
@@ -1714,7 +1714,7 @@ Validation of the return code can be enabled, and the expected return code can b
 <property name="Expected Return Code" required="No">Expected return code for System Call, required if "Check Return Code" is checked.</property>
 <property name="Directory" required="No">Directory from which command will be executed, defaults to folder referenced by "user.dir" System property</property>
 <property name="Command" required="Yes">The System command or shell to execute.</property>
-<property name="System Call Parameters" required="No">Parameters passed to Command, only Value column will be used.</property>
+<property name="OS Process Parameters" required="No">Parameters passed to process.</property>
 </properties>
 </component>
 
