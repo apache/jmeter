@@ -184,14 +184,15 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param bkg background colour
      * @param enableUpDown Add up/down buttons
      * @param standalone is standalone
-     * @param columns
+     * @param model the table model to use
      */
     public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone, ObjectTableModel model) {
         tableLabel = new JLabel(label);
         this.enableUpDown = enableUpDown;
         this.background = bkg;
         this.standalone = standalone;
-        init(model);
+        this.tableModel = model;
+        init();
     }
 
     /**
@@ -544,9 +545,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * Initialize the table model used for the arguments table.
-     * @param model ObjectTableModel
      */
-    protected void initializeTableModel(ObjectTableModel model) {
+    protected void initializeTableModel() {
+    if (tableModel == null) {
         if(standalone) {
             tableModel = new ObjectTableModel(new String[] { COLUMN_RESOURCE_NAMES_0, COLUMN_RESOURCE_NAMES_1, COLUMN_RESOURCE_NAMES_2 },
                     Argument.class,
@@ -560,10 +561,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                     new Functor("setDescription") },  // $NON-NLS-1$
                     new Class[] { String.class, String.class, String.class });
         } else {
-            if(model != null) {
-                tableModel = model;
-            } else  {
-                tableModel = new ObjectTableModel(new String[] { COLUMN_RESOURCE_NAMES_0, COLUMN_RESOURCE_NAMES_1 },
+            tableModel = new ObjectTableModel(new String[] { COLUMN_RESOURCE_NAMES_0, COLUMN_RESOURCE_NAMES_1 },
                     Argument.class,
                     new Functor[] {
                     new Functor("getName"), // $NON-NLS-1$
@@ -578,7 +576,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     public static boolean testFunctors(){
         ArgumentsPanel instance = new ArgumentsPanel();
-        instance.initializeTableModel(null);
+        instance.initializeTableModel();
         return instance.tableModel.checkFunctors(null,instance.getClass());
     }
 
@@ -593,12 +591,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * Create the main GUI panel which contains the argument table.
-     * @param model ObjectTableModel
      *
      * @return the main GUI panel
      */
-    private Component makeMainPanel(ObjectTableModel model) {
-        initializeTableModel(model);
+    private Component makeMainPanel() {
+        initializeTableModel();
         table = new JTable(tableModel);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -676,9 +673,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * Initialize the components and layout of this component.
-     * @param model ObjectTableModel
      */
-    private void init(ObjectTableModel model) {
+    private void init() {
         JPanel p = this;
 
         if (standalone) {
@@ -691,7 +687,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         p.setLayout(new BorderLayout());
 
         p.add(makeLabelPanel(), BorderLayout.NORTH);
-        p.add(makeMainPanel(model), BorderLayout.CENTER);
+        p.add(makeMainPanel(), BorderLayout.CENTER);
         // Force a minimum table height of 70 pixels
         p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
         p.add(makeButtonPanel(), BorderLayout.SOUTH);
