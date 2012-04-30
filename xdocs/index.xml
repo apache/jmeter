@@ -50,6 +50,7 @@ behavior under heavy concurrent load.
 	    <li>LDAP</li>
 	    <li>JMS</li>
 	    <li>Mail - POP3(S) and IMAP(S)</li>
+	    <li>Native commands or shell scripts</li>
 	    </ul>
 	</li>
 	<li>Complete portability and <b>100% Java purity</b>.</li>
