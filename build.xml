@@ -140,12 +140,14 @@
       <class location="${dest.jar}/ApacheJMeter_ldap.jar"/>
       <class location="${dest.jar}/ApacheJMeter_mail.jar"/>
       <class location="${dest.jar}/ApacheJMeter_monitors.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_native.jar"/>
       <class location="${dest.jar}/ApacheJMeter_report.jar"/>
       <class location="${dest.jar}/ApacheJMeter_tcp.jar"/>
       <class location="${dest.jar.jmeter}/ApacheJMeter.jar" />
       <sourcePath path="${src.jorphan}" />
       <sourcePath path="${src.tcp}" />
       <sourcePath path="${src.jms}" />
+      <sourcePath path="${src.native}" />
       <sourcePath path="${src.report}" />
       		
       <auxClasspath>
@@ -208,6 +210,7 @@
   <property name="src.monitor.components" value="src/monitor/components"/>
   <property name="src.monitor.model" value="src/monitor/model"/>
   <property name="src.jms" value="src/protocol/jms"/>
+  <property name="src.native" value="src/protocol/native"/>
   <property name="src.report" value="src/reports"/>
 
   <!-- Where the documentation sources live -->
@@ -234,6 +237,7 @@
     <pathelement location="${src.monitor.components}"/>
     <pathelement location="${src.monitor.model}"/>
     <pathelement location="${src.jms}"/>
+    <pathelement location="${src.native}"/>
     <pathelement location="${src.report}"/>
   </path>
 
@@ -255,6 +259,7 @@
   <property name="build.monitor.components" value="build/monitor/components"/>
   <property name="build.monitor.model" value="build/monitor/model"/>
   <property name="build.jms" value="build/protocol/jms"/>
+  <property name="build.native" value="build/protocol/native"/>
   <property name="build.report" value="build/reports"/>
   <property name="build.test" value="build/test"/>
   <property name="build.res" value="build/res"/>
@@ -809,9 +814,23 @@
       </classpath>
     </javac>
   </target>
+	
+  <target name="compile-native" depends="compile-jorphan,compile-core,compile-components"
+        description="Compile components specific to Native sampling.">
+    <mkdir dir="${build.native}"/>
+    <javac srcdir="${src.native}" destdir="${build.native}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
+      </classpath>
+    </javac>
+  </target>
 
   <target name="compile"
-  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-report"
+  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-native, compile-report"
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
@@ -1073,6 +1092,18 @@ run JMeter unless all the JMeter jars are added.
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.jms}" includes="**/*.class" />
       <fileset dir="${src.jms}" includes="**/*.properties" />
+    </jar>
+
+    <!-- native -->
+    <!-- Ensure that build dir exists, even if Native has not been built -->
+    <mkdir dir="${build.native}"/>
+    <jar jarfile="${dest.jar}/ApacheJMeter_native.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
+      <zipfileset file="${resources.meta-inf}/default.notice"
+        fullpath="META-INF/NOTICE" />
+      <zipfileset file="${resources.meta-inf}/default.license"
+        fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.native}" includes="**/*.class" />
+      <fileset dir="${src.native}" includes="**/*.properties" />
     </jar>
 
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
@@ -1633,6 +1664,7 @@ run JMeter unless all the JMeter jars are added.
     <deployfile stem="ApacheJMeter_ldap"/>
     <deployfile stem="ApacheJMeter_mail"/>
     <deployfile stem="ApacheJMeter_monitors"/>
+    <deployfile stem="ApacheJMeter_native"/>
     <deployfile stem="ApacheJMeter_report"/>
     <deployfile stem="ApacheJMeter_tcp"/>
   </target>
