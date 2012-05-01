@@ -98,7 +98,6 @@ public class SystemSampler extends AbstractSampler {
                 cmdLine.append(cmds.get(i+1));
             }
 
-            results.setSamplerData(cmdLine.toString());
             
             File directory = null;
             if(StringUtils.isEmpty(getDirectory())) {
@@ -112,6 +111,8 @@ public class SystemSampler extends AbstractSampler {
                     log.debug("Using configured directory:"+directory.getAbsolutePath());
                 }
             }
+            results.setSamplerData("Working Directory:"+directory.getAbsolutePath()+", Executing:" + cmdLine.toString());
+            
             NativeCommand nativeCommand = new NativeCommand(directory);
             
             String responseData = null;
