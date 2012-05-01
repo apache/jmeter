@@ -1708,6 +1708,28 @@ The OS Process Sampler is a sampler that can be used to execute commands on the 
 It should allow execution of any command that can be run from the command line.<br></br>
 Validation of the return code can be enabled, and the expected return code can be specified.<br></br>
 </p>
+<p>
+Note that OS shells generally provide command-line parsing. 
+This varies between OSes, but generally the shell will split parameters on white-space.
+Some shells expand wild-card file names; some don't.
+The quoting mechanism also varies between OSes.
+The sampler deliberately does not do any parsing or quote handling.
+The command and its parameters must be provided in the form expected by the executable.
+This means that the sampler settings will not be portable between OSes.
+</p>
+<p>
+Many OSes have some built-in commands which are not provided as separate executables. 
+For example the Windows DIR command is part of the command interpreter (CMD.EXE).
+These built-ins cannot be run as independent programs, but have to be provided as arguments to the appropriate command interpreter.
+<br/>
+For example, the Windows command-line: <b><code>DIR C:\TEMP</code></b> needs to be specified as follows:
+<pre>
+command:   CMD
+Param 1:   /C
+Param 2:   DIR
+Param 3:   C:\TEMP
+</pre>
+</p>
 </description>
 <properties>
 <property name="Check Return Code" required="No">If checked, sampler will compare return code with Expected Return Code.</property>
