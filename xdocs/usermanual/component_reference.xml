@@ -1701,7 +1701,7 @@ Note: If the message body is not empty, and there is at least one attached file,
 </properties>
 </component>
 
-<component name="OS Process Sampler"  index="&sect-num;.1.20"  width="695" height="400" screenshot="os_process_sampler.png">
+<component name="OS Process Sampler"  index="&sect-num;.1.20"  width="760" height="530" screenshot="os_process_sampler.png">
 <description>
 <p>
 The OS Process Sampler is a sampler that can be used to execute commands on the local machine.<br></br>
@@ -1737,6 +1737,7 @@ Param 3:   C:\TEMP
 <property name="Directory" required="No">Directory from which command will be executed, defaults to folder referenced by "user.dir" System property</property>
 <property name="Command" required="Yes">The System command or shell to execute.</property>
 <property name="OS Process Parameters" required="No">Parameters passed to process.</property>
+<property name="Environment Parameters" required="No">Key/Value pairs added to environment when running command.</property>
 </properties>
 </component>
 
