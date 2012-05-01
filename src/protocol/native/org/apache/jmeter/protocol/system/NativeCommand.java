@@ -20,7 +20,9 @@ package org.apache.jmeter.protocol.system;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Native Command 
@@ -29,13 +31,17 @@ public class NativeCommand {
 
 	private StreamGobbler outputGobbler;
     private final File directory;
+    private final Map<String, String> env;
+    private Map<String, String> executionEnvironment;
 
 	/**
-	 * 
+	 * @param env Environment variables appended to environment
+	 * @param directory File working directory
 	 */
-	public NativeCommand(File directory) {
+	public NativeCommand(File directory, Map<String, String> env) {
 		super();
 		this.directory = directory;
+		this.env = env;
 	}
 
 	/**
@@ -49,6 +55,8 @@ public class NativeCommand {
 		try
 		{
 		    ProcessBuilder procBuild = new ProcessBuilder(arguments);
+		    procBuild.environment().putAll(env);
+		    this.executionEnvironment = Collections.unmodifiableMap(procBuild.environment());
 		    procBuild.directory(directory);
             procBuild.redirectErrorStream(true);
             proc = procBuild.start();
@@ -84,4 +92,11 @@ public class NativeCommand {
 	        return "";
 	    }
 	}
+
+    /**
+     * @return the executionEnvironment
+     */
+    public Map<String, String> getExecutionEnvironment() {
+        return executionEnvironment;
+    }
 }

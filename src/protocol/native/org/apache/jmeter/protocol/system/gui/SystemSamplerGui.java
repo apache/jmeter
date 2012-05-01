@@ -55,6 +55,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     private JLabeledTextField directory;
     private JLabeledTextField command;
     private ArgumentsPanel argsPanel;
+    private ArgumentsPanel envPanel;
     
     /**
      * Constructor for JavaTestSamplerGui
@@ -106,6 +107,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         }
         sampler.setProperty(SystemSampler.COMMAND, command.getText());
         ((SystemSampler)sampler).setArguments((Arguments)argsPanel.createTestElement());
+        ((SystemSampler)sampler).setEnvironmentVariables((Arguments)envPanel.createTestElement());
         sampler.setProperty(SystemSampler.DIRECTORY, directory.getText());
     }
 
@@ -118,6 +120,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         desiredReturnCode.setEnabled(checkReturnCode.isSelected());
         command.setText(el.getPropertyAsString(SystemSampler.COMMAND));
         argsPanel.configure((Arguments)el.getProperty(SystemSampler.ARGUMENTS).getObjectValue());
+        envPanel.configure((Arguments)el.getProperty(SystemSampler.ENVIRONMENT).getObjectValue());
         directory.setText(el.getPropertyAsString(SystemSampler.DIRECTORY));
     }
 
@@ -156,6 +159,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         cmdPanel.add(command);
         panel.add(cmdPanel, BorderLayout.NORTH);
         panel.add(makeArgumentsPanel(), BorderLayout.CENTER);
+        panel.add(makeEnvironmentPanel(), BorderLayout.SOUTH);
         return panel;
     }
     
@@ -173,6 +177,14 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
                         new Class[] {String.class }));
         return argsPanel;
     }
+    
+    /**
+     * @return JPanel Environment Panel
+     */
+    private JPanel makeEnvironmentPanel() {
+        envPanel = new ArgumentsPanel(JMeterUtils.getResString("environment_panel_title"));
+        return envPanel;
+    }
 
     /**
      * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#clearGui()
@@ -183,6 +195,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         directory.setText("");
         command.setText("");
         argsPanel.clearGui();
+        envPanel.clearGui();
         desiredReturnCode.setText("");
         checkReturnCode.setSelected(false);
         desiredReturnCode.setEnabled(false);

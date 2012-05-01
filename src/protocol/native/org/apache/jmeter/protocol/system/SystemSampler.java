@@ -22,8 +22,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -51,6 +53,8 @@ public class SystemSampler extends AbstractSampler {
 
     public static final String ARGUMENTS = "SystemSampler.arguments";
     
+    public static final String ENVIRONMENT = "SystemSampler.environment";
+
     public static final String CHECK_RETURN_CODE = "SystemSampler.checkReturnCode";
     
     public static final String EXPECTED_RETURN_CODE = "SystemSampler.expectedReturnCode";
@@ -63,6 +67,7 @@ public class SystemSampler extends AbstractSampler {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+
 
     /**
      * Create a SystemSampler.
@@ -85,6 +90,7 @@ public class SystemSampler extends AbstractSampler {
         try {
             String command = getCommand();
             Arguments args = getArguments();
+            Arguments environment = getEnvironmentVariables();
             boolean checkReturnCode = getCheckReturnCode();
             int expectedReturnCode = getExpectedReturnCode();
             
@@ -98,6 +104,11 @@ public class SystemSampler extends AbstractSampler {
                 cmdLine.append(cmds.get(i+1));
             }
 
+            Map<String,String> env = new HashMap<String, String>();
+            for (int i=0;i<environment.getArgumentCount();i++) {
+                Argument arg = environment.getArgument(i);
+                env.put(arg.getName(), arg.getPropertyAsString(Argument.VALUE));
+            }
             
             File directory = null;
             if(StringUtils.isEmpty(getDirectory())) {
@@ -111,17 +122,24 @@ public class SystemSampler extends AbstractSampler {
                     log.debug("Using configured directory:"+directory.getAbsolutePath());
                 }
             }
-            results.setSamplerData("Working Directory:"+directory.getAbsolutePath()+", Executing:" + cmdLine.toString());
+            results.setSamplerData("Working Directory:"+directory.getAbsolutePath()+
+                    ", Environment:"+env+
+                    ", Executing:" + cmdLine.toString());
             
-            NativeCommand nativeCommand = new NativeCommand(directory);
+            NativeCommand nativeCommand = new NativeCommand(directory, env);
             
             String responseData = null;
             try {
                 if(log.isDebugEnabled()) {
-                    log.debug("Will run :"+cmdLine);
+                    log.debug("Will run :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
+                            " with environment:"+env);
                 }
                 results.sampleStart();
-                int returnCode = nativeCommand.run(cmds);   
+                int returnCode = nativeCommand.run(cmds);
+                if(log.isDebugEnabled()) {
+                    log.debug("Ran :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
+                            " with execution environment:"+nativeCommand.getExecutionEnvironment());
+                }
                 results.sampleEnd();
 
                 if (checkReturnCode && (returnCode != expectedReturnCode)) {
@@ -245,5 +263,21 @@ public class SystemSampler extends AbstractSampler {
      */
     public int getExpectedReturnCode() {
         return getPropertyAsInt(EXPECTED_RETURN_CODE);
+    }
+
+    /**
+     * @param arguments Env vars
+     */
+    public void setEnvironmentVariables(Arguments arguments) {
+        setProperty(new TestElementProperty(ENVIRONMENT, arguments));
+    }
+    
+    /**
+     * Get the env variables
+     * 
+     * @return the arguments
+     */
+    public Arguments getEnvironmentVariables() {
+        return (Arguments) getProperty(ENVIRONMENT).getObjectValue();
     }
 }
