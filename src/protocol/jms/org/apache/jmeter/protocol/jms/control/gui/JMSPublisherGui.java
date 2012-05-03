@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -131,29 +130,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
     public TestElement createTestElement() {
-        PublisherSampler sampler = new PublisherSampler();
-        this.configureTestElement(sampler);
-        sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
-        sampler.setJNDIIntialContextFactory(jndiICF.getText());
-        sampler.setProviderUrl(urlField.getText());
-        sampler.setConnectionFactory(jndiConnFac.getText());
-        sampler.setDestination(jmsDestination.getText());
-        sampler.setUsername(jmsUser.getText());
-        sampler.setPassword(jmsPwd.getText());
-        sampler.setTextMessage(textMessage.getText());
-        sampler.setInputFile(messageFile.getFilename());
-        sampler.setRandomPath(randomFile.getFilename());
-        sampler.setConfigChoice(configChoice.getText());
-        sampler.setMessageChoice(msgChoice.getText());
-        sampler.setIterations(iterations.getText());
-        sampler.setUseAuth(useAuth.isSelected());
-        sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
-        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
-        sampler.setJMSProperties(args);
+      PublisherSampler sampler = new PublisherSampler();
+      setupSamplerProperties(sampler);
 
-        return sampler;
-    }
-
+      return sampler;
+  }
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
      *
@@ -161,26 +142,35 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
      */
     public void modifyTestElement(TestElement s) {
         PublisherSampler sampler = (PublisherSampler) s;
-        this.configureTestElement(sampler);
-        sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
-        sampler.setJNDIIntialContextFactory(jndiICF.getText());
-        sampler.setProviderUrl(urlField.getText());
-        sampler.setConnectionFactory(jndiConnFac.getText());
-        sampler.setDestination(jmsDestination.getText());
-        sampler.setUsername(jmsUser.getText());
-        sampler.setPassword(jmsPwd.getText());
-        sampler.setTextMessage(textMessage.getText());
-        sampler.setInputFile(messageFile.getFilename());
-        sampler.setRandomPath(randomFile.getFilename());
-        sampler.setConfigChoice(configChoice.getText());
-        sampler.setMessageChoice(msgChoice.getText());
-        sampler.setIterations(iterations.getText());
-        sampler.setUseAuth(useAuth.isSelected());
+        setupSamplerProperties(sampler);
         sampler.setDestinationStatic(destSetup.getText().equals(DEST_SETUP_STATIC));
-        sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
-        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
-        sampler.setJMSProperties(args);
+    }
 
+    /**
+     * Initialize the provided {@link PublisherSampler} with all the values as configured in the GUI.
+     * 
+     * @param sampler {@link PublisherSampler} instance
+     */
+    private void setupSamplerProperties(final PublisherSampler sampler) {
+      this.configureTestElement(sampler);
+      sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
+      sampler.setJNDIIntialContextFactory(jndiICF.getText());
+      sampler.setProviderUrl(urlField.getText());
+      sampler.setConnectionFactory(jndiConnFac.getText());
+      sampler.setDestination(jmsDestination.getText());
+      sampler.setUsername(jmsUser.getText());
+      sampler.setPassword(jmsPwd.getText());
+      sampler.setTextMessage(textMessage.getText());
+      sampler.setInputFile(messageFile.getFilename());
+      sampler.setRandomPath(randomFile.getFilename());
+      sampler.setConfigChoice(configChoice.getText());
+      sampler.setMessageChoice(msgChoice.getText());
+      sampler.setIterations(iterations.getText());
+      sampler.setUseAuth(useAuth.isSelected());
+      sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
+     
+      Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+      sampler.setJMSProperties(args);
     }
 
     /**
@@ -283,8 +273,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     public void stateChanged(ChangeEvent event) {
         if (event.getSource() == configChoice) {
             updateConfig(configChoice.getText());
-        } else if (event.getSource() == msgChoice) {
-            updateMessageType(msgChoice.getText());
         } else if (event.getSource() == useProperties) {
             jndiICF.setEnabled(!useProperties.isSelected());
             urlField.setEnabled(!useProperties.isSelected());
@@ -313,21 +301,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             textMessage.setEnabled(false);
             messageFile.enableFile(true);
             randomFile.enableFile(false);
-        }
-    }
-
-    /**
-     *
-     * @param msgType
-     */
-    private void updateMessageType(String msgType) {
-        if (msgType.equals(OBJECT_MSG_RSC)) {
-            if (configChoice.getText().equals(USE_TEXT_RSC)) {
-                JOptionPane.showConfirmDialog(this,
-                        JMeterUtils.getResString("jms_error_msg"),  //$NON-NLS-1$
-                        "Warning",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-            }
         }
     }
     
