@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -40,7 +43,10 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+
+import com.thoughtworks.xstream.XStream;
 
 /**
  * This class implements the JMS Publisher sampler.
@@ -76,6 +82,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
     // Cache for file. Only used by sample() in a single thread
     private String file_contents = null;
+    // Cache for object-message, only used when parsing from a file because in text-area
+    // property replacement might have been used
+    private Serializable object_msg_file_contents = null;
 
     public PublisherSampler() {
     }
@@ -168,7 +177,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
                     Message msg = publisher.publish(m, getDestination(), getJMSProperties().getArgumentsAsMap());
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)){
-                    throw new JMSException(type+ " is not yet supported");
+                    Serializable omsg = getObjectContent();
+                    Message msg = publisher.publish(omsg, getDestination(), getJMSProperties().getArgumentsAsMap());
+                    Utils.messageProperties(propBuffer, msg);
                 } else {
                     throw new JMSException(type+ " is not recognised");                    
                 }
@@ -252,6 +263,79 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         return tf.getText();
     }
 
+    /**
+     * This method will load the contents for the JMS Object Message.
+     * The contents are either loaded from file (might be cached), random file
+     * or from the GUI text-area.
+     * 
+     * @return Serialized object as loaded from the specified input file
+     */
+    private Serializable getObjectContent() {
+        if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
+            // in the case the test uses a file, we set it locally and
+            // prevent loading the file repeatedly
+            if (object_msg_file_contents == null) {
+                object_msg_file_contents = getFileObjectContent(getInputFile());
+            }
+
+            return object_msg_file_contents;
+        } else if (getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
+            // Maybe we should consider creating a global cache for the
+            // random files to make JMeter more efficient.
+            final String fname = FSERVER.getRandomFile(getRandomPath(), new String[] {".txt", ".obj"})
+                .getAbsolutePath();
+
+            return getFileObjectContent(fname);
+        } else {
+            final String xmlMessage = getTextMessage();
+            return transformXmlToObjectMessage(xmlMessage);
+        }
+    }
+    
+    /**
+     * Try to load an object from a provided file, so that it can be used as body
+     * for a JMS message.
+     * An {@link IllegalStateException} will be thrown if loading the object fails.
+     * 
+     * @param path Path to the file that will be serialized
+     * @return Serialized object instance
+     */
+    private static Serializable getFileObjectContent(final String path) {
+      Serializable readObject = null;
+      InputStream inputStream = null;
+      try {
+          inputStream = new FileInputStream(path);
+          XStream xstream = new XStream();
+        readObject = (Serializable) xstream.fromXML(inputStream, readObject);
+      } catch (Exception e) {
+          log.error(e.getLocalizedMessage(), e);
+          throw new IllegalStateException("Unable to load object instance from file", e);
+      } finally {
+          JOrphanUtils.closeQuietly(inputStream);
+      }
+      return readObject;
+    }
+    
+    /**
+     * Try to load an object via XStream from XML text, so that it can be used as body
+     * for a JMS message.
+     * An {@link IllegalStateException} will be thrown if transforming the XML to an object fails.
+     *
+     * @param xmlMessage String containing XML text as input for the transformation
+     * @return Serialized object instance
+     */
+    private static Serializable transformXmlToObjectMessage(final String xmlMessage) {
+      Serializable readObject = null;
+      try {
+          XStream xstream = new XStream();
+          readObject = (Serializable) xstream.fromXML(xmlMessage, readObject);
+      } catch (Exception e) {
+          log.error(e.getLocalizedMessage(), e);
+          throw new IllegalStateException("Unable to load object instance from text", e);
+      }
+      return readObject;
+    }
+    
     // ------------- get/set properties ----------------------//
     /**
      * set the source of the message
