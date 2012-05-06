@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
@@ -141,6 +142,9 @@ public class TestSaveService extends JMeterTestCase {
     }
 
     public void testClasses(){
-        assertTrue("One or more classes not found - see log file",SaveService.checkClasses());
+        List<String> missingClasses = SaveService.checkClasses();
+        if(missingClasses.size()>0) {
+            fail("One or more classes not found:"+missingClasses);
+        }
     }
 }

@@ -23,13 +23,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.nio.charset.Charset;
 
 import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -43,15 +45,15 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.XppDriver;
-import com.thoughtworks.xstream.mapper.CannotResolveClassException;
-import com.thoughtworks.xstream.mapper.Mapper;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
+import com.thoughtworks.xstream.io.xml.XppDriver;
+import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+import com.thoughtworks.xstream.mapper.Mapper;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * Handles setting up XStream serialisation.
@@ -402,21 +404,22 @@ public class SaveService {
     }
 
     // Allow test code to check for spurious class references
-    static boolean checkClasses(){
+    static List<String> checkClasses(){
         final ClassLoader classLoader = SaveService.class.getClassLoader();
-        boolean OK = true;
+        List<String> missingClasses = new ArrayList<String>();
+        //boolean OK = true;
         for (Object clazz : classToAlias.keySet()) {
             String name = (String) clazz;
             if (!NameUpdater.isMapped(name)) {// don't bother checking class is present if it is to be updated
                 try {
                     Class.forName(name, false, classLoader);
                 } catch (ClassNotFoundException e) {
-                        log.error("Unexpected entry in saveservice.properties; class does not exist and is not upgraded: "+name);                    
-                        OK = false;
+                        log.error("Unexpected entry in saveservice.properties; class does not exist and is not upgraded: "+name);              
+                        missingClasses.add(name);
                 }
             }
         }
-        return OK;
+        return missingClasses;
     }
 
     static boolean checkVersions() {
