@@ -68,6 +68,8 @@ public class SystemSampler extends AbstractSampler {
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
+    public static final int DEFAULT_RETURN_CODE = 0;
+
 
     /**
      * Create a SystemSampler.
@@ -241,7 +243,7 @@ public class SystemSampler extends AbstractSampler {
      * @param checkit boolean indicates if we check or not return code
      */
     public void setCheckReturnCode(boolean checkit) {
-        setProperty(CHECK_RETURN_CODE, (new Boolean(checkit)).toString());
+        setProperty(CHECK_RETURN_CODE, checkit);
     }
     
     /**
