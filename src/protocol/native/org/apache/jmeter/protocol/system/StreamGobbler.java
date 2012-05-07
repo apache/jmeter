@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.jorphan.util.JOrphanUtils;
+
 /**
  * Thread that eats Output and Error Stream to avoid Deadlock on Windows Machines
  * Inspired from:
@@ -58,11 +60,7 @@ class StreamGobbler extends Thread {
 		{
 			if(br != null)
 			{
-				try {
-					br.close();
-				} catch (Throwable e) {
-					// NOOP
-				}
+			    JOrphanUtils.closeQuietly(br);
 			}
 		}
 	}
