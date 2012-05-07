@@ -28,6 +28,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -99,29 +100,35 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
 
     public void modifyTestElement(TestElement sampler) {
         super.configureTestElement(sampler);
-        sampler.setProperty(SystemSampler.CHECK_RETURN_CODE, Boolean.toString(checkReturnCode.isSelected()));
+        SystemSampler systemSampler = (SystemSampler)sampler;
+        systemSampler.setCheckReturnCode(checkReturnCode.isSelected());
         if(checkReturnCode.isSelected()) {
-            sampler.setProperty(SystemSampler.EXPECTED_RETURN_CODE, desiredReturnCode.getText());
+            if(!StringUtils.isEmpty(desiredReturnCode.getText())) {
+                systemSampler.setExpectedReturnCode(Integer.parseInt(desiredReturnCode.getText()));
+            } else {
+                systemSampler.setExpectedReturnCode(SystemSampler.DEFAULT_RETURN_CODE);
+            }
         } else {
-            sampler.setProperty(SystemSampler.EXPECTED_RETURN_CODE, "");
+            systemSampler.setExpectedReturnCode(SystemSampler.DEFAULT_RETURN_CODE);
         }
-        sampler.setProperty(SystemSampler.COMMAND, command.getText());
-        ((SystemSampler)sampler).setArguments((Arguments)argsPanel.createTestElement());
-        ((SystemSampler)sampler).setEnvironmentVariables((Arguments)envPanel.createTestElement());
-        sampler.setProperty(SystemSampler.DIRECTORY, directory.getText());
+        systemSampler.setCommand(command.getText());
+        systemSampler.setArguments((Arguments)argsPanel.createTestElement());
+        systemSampler.setEnvironmentVariables((Arguments)envPanel.createTestElement());
+        systemSampler.setDirectory(directory.getText());
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        checkReturnCode.setSelected(el.getPropertyAsBoolean(SystemSampler.CHECK_RETURN_CODE));
-        desiredReturnCode.setText(el.getPropertyAsString(SystemSampler.EXPECTED_RETURN_CODE));
+        SystemSampler systemSampler = (SystemSampler) el;
+        checkReturnCode.setSelected(systemSampler.getCheckReturnCode());
+        desiredReturnCode.setText(Integer.toString(systemSampler.getExpectedReturnCode()));
         desiredReturnCode.setEnabled(checkReturnCode.isSelected());
-        command.setText(el.getPropertyAsString(SystemSampler.COMMAND));
-        argsPanel.configure((Arguments)el.getProperty(SystemSampler.ARGUMENTS).getObjectValue());
-        envPanel.configure((Arguments)el.getProperty(SystemSampler.ENVIRONMENT).getObjectValue());
-        directory.setText(el.getPropertyAsString(SystemSampler.DIRECTORY));
+        command.setText(systemSampler.getCommand());
+        argsPanel.configure(systemSampler.getArguments());
+        envPanel.configure(systemSampler.getEnvironmentVariables());
+        directory.setText(systemSampler.getDirectory());
     }
 
     /**
