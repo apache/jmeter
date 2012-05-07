@@ -184,7 +184,7 @@ public class CollectionProperty extends MultiProperty {
      */
     @Override
     protected Class<? extends JMeterProperty> getPropertyType() {
-        if (value.size() > 0) {
+        if (value != null && value.size() > 0) {
             return value.iterator().next().getClass();
         }
         return NullProperty.class;
