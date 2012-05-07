@@ -89,7 +89,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
             if (ex instanceof RuntimeException){
                 throw (RuntimeException) ex;
             }
-}
+        }
     }
 
     public void testEnded(String host) {
