@@ -85,6 +85,9 @@ public class BeanShellServer implements Runnable {
                     Throwable t= e1.getCause();
                     if (t != null) {
                         log.warn(t.toString());
+                        if(t instanceof Error) {
+                            throw (Error)t;
+                        }
                     }
                 }
             }

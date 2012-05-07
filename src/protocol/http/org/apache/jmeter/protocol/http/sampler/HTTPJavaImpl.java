@@ -253,6 +253,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 Throwable cause = e.getCause();
                 if (cause != null){
                     log.error("Cause: "+cause);
+                    if(cause instanceof Error) {
+                        throw (Error)cause;
+                    }
                 }
             }
             // Normal InputStream is not available
@@ -276,6 +279,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             Throwable cause = e.getCause();
             if (cause != null){
                 log.error("Cause: "+cause);
+                if(cause instanceof Error) {
+                    throw (Error)cause;
+                }
             }
             in = new BufferedInputStream(conn.getErrorStream());
         }
