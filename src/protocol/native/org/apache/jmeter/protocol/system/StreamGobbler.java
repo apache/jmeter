@@ -58,10 +58,7 @@ class StreamGobbler extends Thread {
 		}
 		finally
 		{
-			if(br != null)
-			{
-			    JOrphanUtils.closeQuietly(br);
-			}
+		    JOrphanUtils.closeQuietly(br);
 		}
 	}
 	
