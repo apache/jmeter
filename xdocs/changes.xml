@@ -152,6 +152,7 @@ Graph Full Results Listener has been removed.
 <li>Bug 52967 - The function __P() couldn't use default value when running with remote server in GUI mode.</li>
 <li>Bug 50799 - Having a non-HTTP sampler in a http test plan prevents multiple header managers from working</li>
 <li>Bug 52997 - Jmeter should not exit without saving Test Plan if saving before exit fails</li>
+<li>Bug 53136 - Catching Throwable needs to be carefully handled</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
