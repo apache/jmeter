@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.assertions.gui.AssertionGui;
@@ -151,19 +153,19 @@ public class ProxyControl extends GenericController {
         JMeterUtils.getPropDefault("proxy.pause", 1000); // $NON-NLS-1$
     // Detect if user has pressed a new link
 
-    private boolean addAssertions;
+    private AtomicBoolean addAssertions = new AtomicBoolean(false);
 
-    private int groupingMode;
+    private AtomicInteger groupingMode = new AtomicInteger(0);
 
-    private boolean samplerRedirectAutomatically;
+    private AtomicBoolean samplerRedirectAutomatically = new AtomicBoolean(false);
 
-    private boolean samplerFollowRedirects;
+    private AtomicBoolean samplerFollowRedirects = new AtomicBoolean(false);
 
-    private boolean useKeepAlive;
+    private AtomicBoolean useKeepAlive = new AtomicBoolean(false);
 
-    private boolean samplerDownloadImages;
+    private AtomicBoolean samplerDownloadImages = new AtomicBoolean(false);
 
-    private boolean regexMatch = false;// Should we match using regexes?
+    private AtomicBoolean regexMatch = new AtomicBoolean(false);// Should we match using regexes?
 
     /**
      * Tree node where the samples should be stored.
@@ -192,12 +194,12 @@ public class ProxyControl extends GenericController {
     }
 
     public void setGroupingMode(int grouping) {
-        this.groupingMode = grouping;
+        this.groupingMode.set(grouping);
         setProperty(new IntegerProperty(GROUPING_MODE, grouping));
     }
 
     public void setAssertions(boolean b) {
-        addAssertions = b;
+        addAssertions.set(b);
         setProperty(new BooleanProperty(ADD_ASSERTIONS, b));
     }
 
@@ -206,12 +208,12 @@ public class ProxyControl extends GenericController {
     }
 
     public void setSamplerRedirectAutomatically(boolean b) {
-        samplerRedirectAutomatically = b;
+        samplerRedirectAutomatically.set(b);
         setProperty(new BooleanProperty(SAMPLER_REDIRECT_AUTOMATICALLY, b));
     }
 
     public void setSamplerFollowRedirects(boolean b) {
-        samplerFollowRedirects = b;
+        samplerFollowRedirects.set(b);
         setProperty(new BooleanProperty(SAMPLER_FOLLOW_REDIRECTS, b));
     }
 
@@ -219,12 +221,12 @@ public class ProxyControl extends GenericController {
      * @param b
      */
     public void setUseKeepAlive(boolean b) {
-        useKeepAlive = b;
+        useKeepAlive.set(b);
         setProperty(new BooleanProperty(USE_KEEPALIVE, b));
     }
 
     public void setSamplerDownloadImages(boolean b) {
-        samplerDownloadImages = b;
+        samplerDownloadImages.set(b);
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
@@ -240,7 +242,7 @@ public class ProxyControl extends GenericController {
      * @param b
      */
     public void setRegexMatch(boolean b) {
-        regexMatch = b;
+        regexMatch.set(b);
         setProperty(new BooleanProperty(REGEX_MATCH, b));
     }
 
@@ -403,10 +405,10 @@ public class ProxyControl extends GenericController {
 
             removeValuesFromSampler(sampler, defaultConfigurations);
             replaceValues(sampler, subConfigs, userDefinedVariables);
-            sampler.setAutoRedirects(samplerRedirectAutomatically);
-            sampler.setFollowRedirects(samplerFollowRedirects);
-            sampler.setUseKeepAlive(useKeepAlive);
-            sampler.setImageParser(samplerDownloadImages);
+            sampler.setAutoRedirects(samplerRedirectAutomatically.get());
+            sampler.setFollowRedirects(samplerFollowRedirects.get());
+            sampler.setUseKeepAlive(useKeepAlive.get());
+            sampler.setImageParser(samplerDownloadImages.get());
 
             placeSampler(sampler, subConfigs, myTarget);
         }
@@ -801,14 +803,15 @@ public class ProxyControl extends GenericController {
             boolean firstInBatch = false;
             long now = System.currentTimeMillis();
             long deltaT = now - lastTime;
+            int cachedGroupingMode = groupingMode.get();
             if (deltaT > sampleGap) {
-                if (!myTarget.isLeaf() && groupingMode == GROUPING_ADD_SEPARATORS) {
+                if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
                     addDivider(treeModel, myTarget);
                 }
-                if (groupingMode == GROUPING_IN_SIMPLE_CONTROLLERS) {
+                if (cachedGroupingMode == GROUPING_IN_SIMPLE_CONTROLLERS) {
                     addSimpleController(treeModel, myTarget, sampler.getName());
                 }
-                if (groupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
+                if (cachedGroupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
                     addTransactionController(treeModel, myTarget, sampler.getName());
                 }
                 firstInBatch = true;// Remember this was first in its batch
@@ -818,7 +821,7 @@ public class ProxyControl extends GenericController {
             }
             lastTime = now;
 
-            if (groupingMode == GROUPING_STORE_FIRST_ONLY) {
+            if (cachedGroupingMode == GROUPING_STORE_FIRST_ONLY) {
                 if (!firstInBatch) {
                     return; // Huh! don't store this one!
                 }
@@ -829,8 +832,8 @@ public class ProxyControl extends GenericController {
                 sampler.setImageParser(true);
             }
 
-            if (groupingMode == GROUPING_IN_SIMPLE_CONTROLLERS ||
-                groupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
+            if (cachedGroupingMode == GROUPING_IN_SIMPLE_CONTROLLERS ||
+                    cachedGroupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
                 // Find the last controller in the target to store the
                 // sampler there:
                 for (int i = myTarget.getChildCount() - 1; i >= 0; i--) {
@@ -849,7 +852,7 @@ public class ProxyControl extends GenericController {
 					try {
 			            final JMeterTreeNode newNode = treeModel.addComponent(sampler, myTargetFinal);
 			            if (firstInBatchFinal) {
-			                if (addAssertions) {
+			                if (addAssertions.get()) {
 			                    addAssertion(treeModel, newNode);
 			                }
 			                addTimers(treeModel, newNode, deltaTFinal);
@@ -968,12 +971,12 @@ public class ProxyControl extends GenericController {
         }
 
         try {
-            replacer.reverseReplace(sampler, regexMatch);
+            boolean cachedRegexpMatch = regexMatch.get();
+            replacer.reverseReplace(sampler, cachedRegexpMatch);
             for (int i = 0; i < configs.length; i++) {
                 if (configs[i] != null) {
-                    replacer.reverseReplace(configs[i], regexMatch);
+                    replacer.reverseReplace(configs[i], cachedRegexpMatch);
                 }
-
             }
         } catch (InvalidVariableException e) {
             log.warn("Invalid variables included for replacement into recorded " + "sample", e);
