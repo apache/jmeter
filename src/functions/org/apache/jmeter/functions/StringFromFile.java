@@ -136,7 +136,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
         }
     }
     
-    private void openFile() {
+    private synchronized void openFile() {
         String tn = Thread.currentThread().getName();
         fileName = ((CompoundVariable) values[0]).execute();
 
