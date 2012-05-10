@@ -70,6 +70,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         return "system_sampler_title";
     }
 
+    @Override
     public String getStaticLabel() {
         return JMeterUtils.getResString(getLabelResource());
     }
