@@ -174,8 +174,8 @@ public class SaveService {
     private static final String PROPVERSION = "2.3";// Expected version $NON-NLS-1$
 
     // Internal information only
-    private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-//    private static final String FILEVERSION = "958773"; // Expected value $NON-NLS-1$
+    private static String fileVersion = ""; // read from saveservice.properties file// $NON-NLS-1$
+    private static final String FILEVERSION = "1332608"; // Expected value $NON-NLS-1$
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
@@ -400,7 +400,7 @@ public class SaveService {
     }
 
     static boolean checkFileVersion(){
-        return true; // SaveService.FILEVERSION.equals(SaveService.fileVersion);
+        return SaveService.FILEVERSION.equals(SaveService.fileVersion);
     }
 
     // Allow test code to check for spurious class references
