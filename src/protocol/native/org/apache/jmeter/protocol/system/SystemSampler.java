@@ -183,10 +183,6 @@ public class SystemSampler extends AbstractSampler {
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 
-    /**
-     * 
-     * @return
-     */
     public String getDirectory() {
         return getPropertyAsString(DIRECTORY, FileServer.getDefaultBase());
     }
