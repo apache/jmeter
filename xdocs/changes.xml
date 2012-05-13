@@ -224,6 +224,7 @@ with other code that depends on an earlier version of the Rhino Javascript jar.
 <li>Updated to commons-io 2.2 (from 2.1)</li>
 <li>Bug 53129 - Upgrade XStream from 1.3.1 to 1.4.2</li>
 <li>Updated to httpcomponents-client 4.1.3 (from 4.1.2)</li>
+<li>Updated JMeter distributed testing guide (jmeter_distributed_testing_step_by_step.pdf). Changes source format to OpenOffice odt (from sxw)</li>
 </ul>
 
 </section> 
