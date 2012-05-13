@@ -44,6 +44,7 @@ commons-httpclient-3.1
 ----------------------
 http://hc.apache.org/downloads.cgi
 - httpclient version of HTTP sampler
+- Cookie manager implementation
 
 commons-io-2.2
 --------------
@@ -119,6 +120,11 @@ jTidy-r938
 junit 4.10
 -----------
 - unit tests, JUnit sampler
+
+HttpComponents (HttpComponents Core 4.x and HttpComponents Client 4.x)
+-----------
+http://hc.apache.org/
+- httpclient 4 implementation for HTTP sampler 
 
 logkit-2.0
 ----------
