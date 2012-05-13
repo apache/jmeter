@@ -143,22 +143,26 @@ public class WSDLHelper {
                 ports = node.getElementsByTagName("wsdl:port");
             }
             
-            Element pnode = (Element) ports.item(0);
-            // NOTUSED String portname = pnode.getAttribute("name");
-            // used to check binding, but now it doesn't. it was
-            // failing when wsdl did not using binding as expected
-            NodeList servlist = pnode.getElementsByTagName("soap:address");
-            // check wsdlsoap
-            if (servlist.getLength() == 0) {
-                servlist = pnode.getElementsByTagName("wsdlsoap:address");
+            if(ports.getLength()>0) {
+                Element pnode = (Element) ports.item(0);
+                // NOTUSED String portname = pnode.getAttribute("name");
+                // used to check binding, but now it doesn't. it was
+                // failing when wsdl did not using binding as expected
+                NodeList servlist = pnode.getElementsByTagName("soap:address");
+                // check wsdlsoap
+                if (servlist.getLength() == 0) {
+                    servlist = pnode.getElementsByTagName("wsdlsoap:address");
+                }
+                if (servlist.getLength() == 0) {
+                    servlist = pnode.getElementsByTagName("SOAP:address");
+                }
+                Element addr = (Element) servlist.item(0);
+                this.SOAPBINDING = addr.getAttribute("location");
+                this.bindingURL = new URL(this.SOAPBINDING);
+                return this.SOAPBINDING;
+            } else {
+                return null;
             }
-            if (servlist.getLength() == 0) {
-                servlist = pnode.getElementsByTagName("SOAP:address");
-            }
-            Element addr = (Element) servlist.item(0);
-            this.SOAPBINDING = addr.getAttribute("location");
-            this.bindingURL = new URL(this.SOAPBINDING);
-            return this.SOAPBINDING;
         } catch (Exception exception) {
             return null;
         }
