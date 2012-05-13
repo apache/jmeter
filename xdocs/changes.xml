@@ -37,7 +37,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h2>New and Noteworthy</h2>
 
 <p>
-Plugin writers : New interface org.apache.jmeter.engine.util.ConfigMergabilityIndicator has been introduced to tell wether a ConfigTestElement can be merged in Sampler(see Bug 53042):<br/>
+Plugin writers : New interface org.apache.jmeter.engine.util.ConfigMergabilityIndicator has been introduced to tell whether a ConfigTestElement can be merged in Sampler (see Bug 53042):<br/>
 public boolean applies(ConfigTestElement configElement);
 </p>
 
