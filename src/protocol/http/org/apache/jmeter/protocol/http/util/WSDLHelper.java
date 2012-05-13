@@ -38,6 +38,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * For now I use DOM for WSDLHelper, but it would be more efficient to use JAXB
@@ -49,7 +51,8 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
  *
  */
 public class WSDLHelper {
-    
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
     private static int GET_WDSL_TIMEOUT = 5000; // timeout to retrieve wsdl when server not response
     
     /**
@@ -164,6 +167,7 @@ public class WSDLHelper {
                 return null;
             }
         } catch (Exception exception) {
+            log.warn("Exception calling getBinding:"+exception.getMessage(),exception);
             return null;
         }
     }
