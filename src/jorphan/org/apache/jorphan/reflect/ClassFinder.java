@@ -253,7 +253,7 @@ public final class ClassFinder {
      *
      * @return List containing discovered classes
      */
-    private static List<String> findClassesThatExtend(String[] strPathsOrJars,
+    public static List<String> findClassesThatExtend(String[] strPathsOrJars,
                 final Class<?>[] classNames, final boolean innerClasses,
                 String contains, String notContains, boolean annotations)
                 throws IOException  {
