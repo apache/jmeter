@@ -255,25 +255,24 @@ public final class ActionRouter implements ActionListener {
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(), 
-                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }); // $NON-NLS-1$
+                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }, // $NON-NLS-1$
+                    false, "org.apache.jmeter.gui", null, false); // $NON-NLS-1$
             commands = new HashMap<String, Set<Command>>(listClasses.size());
-            if (listClasses.size() == 0) {
+            if (listClasses.isEmpty()) {
                 log.fatalError("!!!!!Uh-oh, didn't find any action handlers!!!!!");
                 throw new JMeterError("No action handlers found - check JMeterHome and libraries");
             }
             for (String strClassName : listClasses) {
-                if (strClassName.startsWith("org.apache.jmeter.gui")) { // $NON-NLS-1$
-                    Class<?> commandClass = Class.forName(strClassName);
-                    if (!Modifier.isAbstract(commandClass.getModifiers())) {
-                        Command command = (Command) commandClass.newInstance();
-                        for (String commandName : command.getActionNames()) {
-                            Set<Command> commandObjects = commands.get(commandName);
-                            if (commandObjects == null) {
-                                commandObjects = new HashSet<Command>();
-                                commands.put(commandName, commandObjects);
-                            }
-                            commandObjects.add(command);
+                Class<?> commandClass = Class.forName(strClassName);
+                if (!Modifier.isAbstract(commandClass.getModifiers())) {
+                    Command command = (Command) commandClass.newInstance();
+                    for (String commandName : command.getActionNames()) {
+                        Set<Command> commandObjects = commands.get(commandName);
+                        if (commandObjects == null) {
+                            commandObjects = new HashSet<Command>();
+                            commands.put(commandName, commandObjects);
                         }
+                        commandObjects.add(command);
                     }
                 }
             }
