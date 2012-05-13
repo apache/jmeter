@@ -26,7 +26,7 @@ package org.apache.jorphan.test;
  * N.B. This interface must be in the main src/ tree (not test/) because it is
  * implemented by JMeterUtils
  * </p>
- * @see org.apache.jorphan.test.AllTests
+ * see JUnit class: org.apache.jorphan.test.AllTests
  */
 public interface UnitTestManager {
     /**
