@@ -1052,7 +1052,7 @@ The following variables are made available to the script:
 <br/>
 ${__char(13,10)} = ${__char(0xD,0xA)} = ${__char(015,012)} = CRLF
 <br/>
-${__char(165)} = &#165; (yen)
+${__char(165)} = &#xa5; (yen)
  </p>
 </component>
 
