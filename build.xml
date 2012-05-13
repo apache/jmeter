@@ -1238,7 +1238,7 @@ run JMeter unless all the JMeter jars are added.
       These need special handling to create the correct file mode
   -->
   <property name="dist.executables"
-    value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server ${dest.jar.jmeter}/*.sh"/>
+    value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server ${dest.jar.jmeter}/*.sh ${extras.dir}/*.sh"/>
 
   <!-- List of files in source distribution that are eol=native -->
   <!--
