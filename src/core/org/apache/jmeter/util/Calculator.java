@@ -72,7 +72,7 @@ public class Calculator {
      * 
      * @param newValue
      * 
-     * @see #addValue(long)
+     * @see #addValue(long, int)
      * @deprecated Use {@link #addSample(SampleResult)} instead
      */
     @Deprecated
@@ -119,7 +119,7 @@ public class Calculator {
      * Add details for a sample result, which may consist of multiple samples.
      * Updates the number of bytes read, error count, startTime and elapsedTime
      * @param res the sample result; might represent multiple values
-     * @see #addSample(SampleResult)
+     * @see #addValue(long, int)
      */
     public void addSample(SampleResult res) {
         addBytes(res.getBytes());

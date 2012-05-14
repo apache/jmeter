@@ -260,6 +260,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param expression
      * @return compiled pattern
      *
+     * @throws  org.apache.oro.text.regex.MalformedPatternException (Runtime)
      * This should be caught for expressions that may vary (e.g. user input)
      *
      */
@@ -274,6 +275,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param options e.g. READ_ONLY_MASK
      * @return compiled pattern
      *
+     * @throws  org.apache.oro.text.regex.MalformedPatternException (Runtime)
      * This should be caught for expressions that may vary (e.g. user input)
      *
      */
