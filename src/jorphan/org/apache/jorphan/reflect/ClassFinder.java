@@ -456,7 +456,7 @@ public final class ClassFinder {
      * @param strClassName name of class to be checked
      * @param innerClasses should we allow inner classes?
      * @param contextClassLoader the classloader to use
-     * @return
+     * @return true if the class is a non-abstract, non-interface instance of at least one of the parent classes
      */
     private static boolean isChildOf(Class<?> [] parentClasses, String strClassName,
             ClassLoader contextClassLoader){
