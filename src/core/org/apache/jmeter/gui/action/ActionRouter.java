@@ -254,9 +254,14 @@ public final class ActionRouter implements ActionListener {
     private void populateCommandMap() {
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    JMeterUtils.getSearchPaths(), 
-                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }, // $NON-NLS-1$
-                    false, "org.apache.jmeter.gui", null, false); // $NON-NLS-1$
+                    JMeterUtils.getSearchPaths(), // strPathsOrJars - pathnames or jarfiles to search for classes
+                    // classNames - required parent class(es) or annotations
+                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }, // $NON-NLS-1$ 
+                    false, // innerClasses - should we include inner classes?
+                    // contains - classname should contain this string
+                    "org.apache.jmeter.gui",  // $NON-NLS-1$ 
+                    null, // notContains - classname should not contain this string
+                    false); // annotations - true if classnames are annotations
             commands = new HashMap<String, Set<Command>>(listClasses.size());
             if (listClasses.isEmpty()) {
                 log.fatalError("!!!!!Uh-oh, didn't find any action handlers!!!!!");
