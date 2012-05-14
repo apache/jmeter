@@ -269,16 +269,14 @@ public final class ActionRouter implements ActionListener {
             }
             for (String strClassName : listClasses) {
                 Class<?> commandClass = Class.forName(strClassName);
-                if (!Modifier.isAbstract(commandClass.getModifiers())) {
-                    Command command = (Command) commandClass.newInstance();
-                    for (String commandName : command.getActionNames()) {
-                        Set<Command> commandObjects = commands.get(commandName);
-                        if (commandObjects == null) {
-                            commandObjects = new HashSet<Command>();
-                            commands.put(commandName, commandObjects);
-                        }
-                        commandObjects.add(command);
+                Command command = (Command) commandClass.newInstance();
+                for (String commandName : command.getActionNames()) {
+                    Set<Command> commandObjects = commands.get(commandName);
+                    if (commandObjects == null) {
+                        commandObjects = new HashSet<Command>();
+                        commands.put(commandName, commandObjects);
                     }
+                    commandObjects.add(command);
                 }
             }
         } catch (HeadlessException e){
