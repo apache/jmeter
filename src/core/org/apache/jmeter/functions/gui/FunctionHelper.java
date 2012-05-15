@@ -22,11 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -37,6 +33,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Help;
@@ -47,7 +44,6 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.reflect.ClassFinder;
 
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener, LocaleChangeListener {
     private static final long serialVersionUID = 240L;
@@ -57,9 +53,6 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private ArgumentsPanel parameterPanel;
 
     private JLabeledTextField cutPasteFunction;
-
-    // Not modified after initial setup
-    private final Map<String, Class<?>> functionMap = new HashMap<String, Class<?>>();
 
     private JButton generateButton;
 
@@ -92,30 +85,14 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     }
 
     private void initializeFunctionList() {
-        try {
-            List<String> functionClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-                    new Class[] { Function.class }, true);
-            String[] functionNames = new String[functionClasses.size()];
-            int count = 0;
-            for (String clazz : functionClasses) {
-                Class<?> cl = Class.forName(clazz);
-                functionNames[count] = ((Function) cl.newInstance()).getReferenceKey();
-                functionMap.put(functionNames[count], cl);
-                count++;
-            }
-            functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
-            functionList.addChangeListener(this);
-        } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
-        } catch (InstantiationException e) {
-        } catch (IllegalAccessException e) {
-        }
+        functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), CompoundVariable.getFunctionNames()); //$NON-NLS-1$
+        functionList.addChangeListener(this);
     }
 
     public void stateChanged(ChangeEvent event) {
         try {
             Arguments args = new Arguments();
-            Function function = (Function) ((Class<?>) functionMap.get(functionList.getText())).newInstance();
+            Function function = CompoundVariable.getFunctionClass(functionList.getText()).newInstance();
             List<String> argumentDesc = function.getArgumentDesc();
             for (String help : argumentDesc) {
                 args.addArgument(help, ""); //$NON-NLS-1$
