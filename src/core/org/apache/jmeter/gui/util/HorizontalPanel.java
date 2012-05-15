@@ -51,7 +51,7 @@ public class HorizontalPanel extends JPanel {
 
     public HorizontalPanel(int hgap, float verticalAlign) {
         super(new BorderLayout());
-        add(subPanel, BorderLayout.WEST);
+        add(subPanel, BorderLayout.CENTER);
         this.hgap = hgap;
         this.verticalAlign = verticalAlign;
     }
