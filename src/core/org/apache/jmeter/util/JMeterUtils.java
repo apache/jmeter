@@ -55,6 +55,7 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.test.UnitTestManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -260,11 +261,11 @@ public class JMeterUtils implements UnitTestManager {
      * @param expression
      * @return compiled pattern
      *
-     * @throws  org.apache.oro.text.regex.MalformedPatternException (Runtime)
+     * @throws MalformedCachePatternException (Runtime)
      * This should be caught for expressions that may vary (e.g. user input)
      *
      */
-    public static Pattern getPattern(String expression){
+    public static Pattern getPattern(String expression) throws MalformedCachePatternException {
         return getPattern(expression, Perl5Compiler.READ_ONLY_MASK);
     }
 
@@ -275,11 +276,11 @@ public class JMeterUtils implements UnitTestManager {
      * @param options e.g. READ_ONLY_MASK
      * @return compiled pattern
      *
-     * @throws  org.apache.oro.text.regex.MalformedPatternException (Runtime)
+     * @throws MalformedCachePatternException (Runtime)
      * This should be caught for expressions that may vary (e.g. user input)
      *
      */
-    public static Pattern getPattern(String expression, int options){
+    public static Pattern getPattern(String expression, int options) throws MalformedCachePatternException {
         return LazyPatternCacheHolder.INSTANCE.getPattern(expression, options);
     }
 
