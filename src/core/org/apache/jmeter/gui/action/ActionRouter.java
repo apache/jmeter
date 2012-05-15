@@ -259,6 +259,7 @@ public final class ActionRouter implements ActionListener {
                     new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }, // $NON-NLS-1$ 
                     false, // innerClasses - should we include inner classes?
                     // contains - classname should contain this string
+                    // This was added in r325814 as part of changes for the reporting tool
                     "org.apache.jmeter.gui",  // $NON-NLS-1$ 
                     null, // notContains - classname should not contain this string
                     false); // annotations - true if classnames are annotations
