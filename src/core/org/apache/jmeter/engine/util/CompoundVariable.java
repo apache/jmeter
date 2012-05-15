@@ -198,6 +198,16 @@ public class CompoundVariable implements Function {
         return new SimpleVariable(functionName);
     }
 
+    // For use by FunctionHelper
+    public static Class<? extends Function> getFunctionClass(String className) {
+        return functions.get(className);
+    }
+
+    // For use by FunctionHelper
+    public static String[] getFunctionNames() {
+        return functions.keySet().toArray(new String[functions.size()]);
+    }
+
     public boolean hasFunction() {
         return hasFunction;
     }
