@@ -40,7 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class FilePanel extends HorizontalPanel implements ActionListener {
     private static final long serialVersionUID = 240L;
 
-    private final JTextField filename = new JTextField(20);
+    private final JTextField filename = new JTextField(10);
 
     private final JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename")); //$NON-NLS-1$
 
