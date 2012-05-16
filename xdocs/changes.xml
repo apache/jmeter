@@ -68,7 +68,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="270" height="61" image="changes/2.7/14_ws_document_cache.png"></figure>
 </p>
 
-<p>Make MaintainSession configurable
+<p>Make Maintain HTTP Session configurable
 <figure width="833" height="494" image="changes/2.7/15_ws_maintain_session.png"></figure>
 </p>
 
