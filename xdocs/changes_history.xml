@@ -38,32 +38,32 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 
 <h3>Toolbar</h3>
 <p>A new toolbar on JMeter's main window
-<figure width="986" height="91" image="changes/01_toolbar.png"></figure>
+<figure width="986" height="91" image="changes/2.6/01_toolbar.png"></figure>
 </p>
 
 <h3>JMeter start test button</h3>
 <p>A new menu option and button allow to start a test ignoring the Pause Timers
-<figure width="201" height="58" image="changes/02_ignore_pause_timers.png"></figure>
+<figure width="201" height="58" image="changes/2.6/02_ignore_pause_timers.png"></figure>
 </p>
 
 <h3>JMeter GUI Look and Feel</h3>
 <p>Allow System or CrossPlatform LAF to be set from options menu
-<figure width="373" height="162" image="changes/03_look_and_feel.png"></figure>
+<figure width="373" height="162" image="changes/2.6/03_look_and_feel.png"></figure>
 </p>
 
 <h3>JMeter GUI - duplicate node</h3>
 <p>Add "duplicate node" in context menu
-<figure width="323" height="136" image="changes/04_duplicate_context_menu.png"></figure>
+<figure width="323" height="136" image="changes/2.6/04_duplicate_context_menu.png"></figure>
 </p>
 
 <h3>JMeter tree view - search facility</h3>
 <p>Functionality to search by keyword in Samplers Tree View
-<figure width="554" height="219" image="changes/05_search_tree.png"></figure>
+<figure width="554" height="219" image="changes/2.6/05_search_tree.png"></figure>
 </p>
 
 <h3>HTTP Request - raw request pane</h3>
 <p>Improve HTTP Request GUI to better show parameters without name (GWT RPC request or SOAP request for example)
-<figure width="759" height="461" image="changes/06_post_data.png"></figure>
+<figure width="759" height="461" image="changes/2.6/06_post_data.png"></figure>
 </p>
 
 <h3>HTTP Request - other changes</h3>
@@ -72,33 +72,33 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <li>Allow to add (paste) entries from the clipboard to an arguments list</li>
 <li>Ability to move variables up or down in HTTP Request</li>
 </ul>
-<figure width="875" height="218" image="changes/07_multiple_selection_params.png"></figure>
+<figure width="875" height="218" image="changes/2.6/07_multiple_selection_params.png"></figure>
 </p>
 
 <h3>HTTP Request - file protocol</h3>
 <p>Better support for file: protocol in HTTP sampler
-<figure width="489" height="662" image="changes/08_file_protocol.png"></figure>
+<figure width="489" height="662" image="changes/2.6/08_file_protocol.png"></figure>
 </p>
 <p>Retrieve embedded resources with file: protocol
-<figure width="700" height="138" image="changes/09_file_protocol_embedded.png"></figure>
+<figure width="700" height="138" image="changes/2.6/09_file_protocol_embedded.png"></figure>
 </p>
 
 <h3>HTTP Request - Ignore embedded resources failed</h3>
 <p>Enable "ignore failed" for embedded resources
-<figure width="820" height="246" image="changes/26_ignore_child_failed.png"></figure>
+<figure width="820" height="246" image="changes/2.6/26_ignore_child_failed.png"></figure>
 </p>
 <p>Parent success with a embedded resource failed
-<figure width="590" height="214" image="changes/27_succes_with_child_failed.png"></figure>
+<figure width="590" height="214" image="changes/2.6/27_succes_with_child_failed.png"></figure>
 </p>
 
 <h3>View Results in Table - child sample display</h3>
 <p>Add option to TableVisualiser to display child samples instead of parent
-<figure width="911" height="619" image="changes/10_child_sampler.png"></figure>
+<figure width="911" height="619" image="changes/2.6/10_child_sampler.png"></figure>
 </p>
 
 <h3>Key Store - multiple certificates</h3>
 <p>Allowing multiple certificates (JKS)
-<figure width="324" height="166" image="changes/11_jks_keystore.png"></figure>
+<figure width="324" height="166" image="changes/2.6/11_jks_keystore.png"></figure>
 </p>
 
 <h3>Aggregate graph improvements</h3>
@@ -111,16 +111,16 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <li>allow to select only some samplers by a regexp filter</li>
 <li>allow to define Y axis maximum scale</li>
 </ul>
-<figure width="850" height="411" image="changes/12_aggregate_graph_settings.png"></figure>
+<figure width="850" height="411" image="changes/2.6/12_aggregate_graph_settings.png"></figure>
 </p>
 
 <p>Aggregate Graph bar
-<figure width="851" height="506" image="changes/13_aggregate_graph_bar.png"></figure>
+<figure width="851" height="506" image="changes/2.6/13_aggregate_graph_bar.png"></figure>
 </p>
 
 <h3>Counter - new reset option</h3>
 <p>Add an option to reset counter on each Thread Group iteration
-<figure width="345" height="257" image="changes/14_reset_counter.png"></figure>
+<figure width="345" height="257" image="changes/2.6/14_reset_counter.png"></figure>
 </p>
 
 <h3>Functions</h3>
@@ -130,7 +130,7 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <li>Add a new function __machineIP returning IP address</li>
 <li>Add a new function  __jexl2 to support Jexl2</li>
 </ul>
-<figure width="697" height="236" image="changes/15_random_string.png"></figure>
+<figure width="697" height="236" image="changes/2.6/15_random_string.png"></figure>
 </p>
 
 <h3>User Defined Variable improvements</h3>
@@ -138,62 +138,62 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <li>Allow to add (paste) entries from the clipboard to an arguments list</li>
 <li>Ability to move up or down variables in User Defined Variables</li>
 </ul>
-<figure width="543" height="237" image="changes/16_udv_comments.png"></figure>
+<figure width="543" height="237" image="changes/2.6/16_udv_comments.png"></figure>
 </p>
 
 <h3>View Results Tree</h3>
 <p>In View Results Tree rather than showing just a message if the results are to big, show as much of the result as are configured
-<figure width="953" height="98" image="changes/17_vrt_max_size_display.png"></figure>
+<figure width="953" height="98" image="changes/2.6/17_vrt_max_size_display.png"></figure>
 </p>
 
 <h3>Controllers - change elements</h3>
 <p>Add ability to Change Controller elements
-<figure width="643" height="112" image="changes/18_change_ctl_type.png"></figure>
+<figure width="643" height="112" image="changes/2.6/18_change_ctl_type.png"></figure>
 </p>
 
 <h3>JDBC pre- and post-processor</h3>
 <p>Add JDBC pre- and post-processor
-<figure width="535" height="217" image="changes/19_jdbc_pre_post_proc.png"></figure>
+<figure width="535" height="217" image="changes/2.6/19_jdbc_pre_post_proc.png"></figure>
 </p>
 
 <h3>JDBC transaction isolation option</h3>
 <p>Allow to set the transaction isolation in the JDBC Connection Configuration
-<figure width="437" height="351" image="changes/20_jdbc_trans_isolation.png"></figure>
+<figure width="437" height="351" image="changes/2.6/20_jdbc_trans_isolation.png"></figure>
 </p>
 
 <h3>Poisson Timer</h3>
 <p>Add a Poisson based timer
-<figure width="358" height="156" image="changes/21_poisson_timer.png"></figure>
+<figure width="358" height="156" image="changes/2.6/21_poisson_timer.png"></figure>
 </p>
 
 <h3>GUI and OS interaction</h3>
 <p>Support for file Drag and Drop. 
-<figure width="776" height="508" image="changes/22_drag_and_drop.png"></figure>
+<figure width="776" height="508" image="changes/2.6/22_drag_and_drop.png"></figure>
 </p>
 
 <h3>Confirm Remove Dialog box</h3>
 <p>Add a dialog box to confirm removing the element(s) when Remove action is called
-<figure width="583" height="210" image="changes/23_confirm_remove.png"></figure>
+<figure width="583" height="210" image="changes/2.6/23_confirm_remove.png"></figure>
 The dialogue can be skipped by setting the JMeter property <code>confirm.delete.skip=true</code> 
 </p>
 
 <h3>Remote batching support</h3>
 <p>Use external store to hold samples during distributed testing, 
 Added DiskStore remote sample sender: like Hold, but saves samples to disk until end of test
-<figure width="998" height="273" image="changes/24_diskstore.png"></figure>
+<figure width="998" height="273" image="changes/2.6/24_diskstore.png"></figure>
 </p>
 
 <h3>JMS Subscriber sampler</h3>
 <p>With JMS Subscriber, ability to use Selectors
-<figure width="705" height="297" image="changes/25_selector.png"></figure>
+<figure width="705" height="297" image="changes/2.6/25_selector.png"></figure>
 </p>
 
 <h3>New Logger Panel</h3>
 <p>A new Log Viewer  has been added to the GUI and can be enabled from menu Options > Log Viewer:
-<figure width="326" height="147" image="changes/28_loggerpanel_option.png"></figure>
+<figure width="326" height="147" image="changes/2.6/28_loggerpanel_option.png"></figure>
 </p>
 <p>This Log Viewer shows the jmeter.log file, and useful (for example) to debug BeanShell/BSF scripts:
-<figure width="953" height="466" image="changes/28_loggerpanel.png"></figure>
+<figure width="953" height="466" image="changes/2.6/28_loggerpanel.png"></figure>
 </p>
 
 <h3>The menu item Options / Choose Language is now fully functional</h3>
