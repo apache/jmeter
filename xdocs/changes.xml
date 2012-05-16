@@ -236,6 +236,7 @@ Graph Full Results Listener has been removed.
 <li>Bug 52603 - MailerVisualizer : Enable SSL , TLS and Authentication</li>
 <li>Bug 52698 - Remove Graph Full Results Listener</li>
 <li>Bug 53070 - Change Aggregate graph to Clustered Bar chart, add more columns (median, 90% line, min, max) and options, fixed some bugs</li>
+<li>Bug 53246 - Mailer Visualizer: improve GUI design and I18N</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -248,6 +249,7 @@ Graph Full Results Listener has been removed.
 
 <h3>I18N</h3>
 <ul>
+<li>Mailer Visualizer has been internationalized. French translation added. (see Bug 53246)</li>
 </ul>
 
 <h3>General</h3>

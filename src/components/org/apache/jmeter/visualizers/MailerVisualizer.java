@@ -19,15 +19,15 @@
 package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -93,10 +93,6 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 
     private JComboBox authTypeCombo;
 
-
-    // private JPanel mainPanel;
-    // private JLabel panelTitleLabel;
-
     /**
      * Constructs the MailerVisualizer and initializes its GUI.
      */
@@ -137,7 +133,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 
     @Override
     public String toString() {
-        return "E-Mail Notification";
+        return JMeterUtils.getResString("mailer_string"); // $NON-NLS-1$
     }
 
     /**
@@ -148,147 +144,155 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 
         // MAIN PANEL
         JPanel mainPanel = new VerticalPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-
+        Border margin = new EmptyBorder(5, 10, 5, 10);
         this.setBorder(margin);
 
-        // NAME
         mainPanel.add(makeTitlePanel());
+        
+        JPanel attributePane = new VerticalPanel();
+        attributePane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("mailer_title_settings"))); // $NON-NLS-1$
+        
+        // Settings panes
+        attributePane.add(createMailingSettings());      
+        attributePane.add(createSmtpSettings());
+        
+        // Test mail button
+        JPanel testerPanel = new JPanel(new BorderLayout());
+        testerButton = new JButton(JMeterUtils.getResString("mailer_test_mail")); // $NON-NLS-1$
+        testerButton.addActionListener(this);
+        testerButton.setEnabled(true);
+        testerPanel.add(testerButton, BorderLayout.EAST);
+        attributePane.add(testerPanel);
+        mainPanel.add(attributePane);
+        mainPanel.add(Box.createRigidArea(new Dimension(0,5)));
 
-        // mailer panel
-        JPanel mailerPanel = new JPanel();
+        // Failures count
+        JPanel mailerPanel = new JPanel(new BorderLayout());
+        mailerPanel.add(new JLabel(JMeterUtils.getResString("mailer_failures")), BorderLayout.WEST); // $NON-NLS-1$
+        failureField = new JTextField(6);
+        failureField.setEditable(false);
+        mailerPanel.add(failureField, BorderLayout.CENTER);
+        mainPanel.add(mailerPanel);
 
-        mailerPanel.setBorder(BorderFactory
-                .createTitledBorder(BorderFactory.createEtchedBorder(), getAttributesTitle()));
-        GridBagLayout g = new GridBagLayout();
-
-        mailerPanel.setLayout(g);
-        GridBagConstraints c = new GridBagConstraints();
-
-        c.anchor = GridBagConstraints.NORTHWEST;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("From:"));
-
+        this.add(mainPanel, BorderLayout.CENTER);
+    }
+    
+    private JPanel createMailingSettings() {
+        JPanel settingsPane = new JPanel(new BorderLayout());
+        settingsPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("mailer_title_message"))); // $NON-NLS-1$
+        
+        JPanel headerPane = new JPanel(new BorderLayout());
+        headerPane.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+        JPanel fromPane = new JPanel(new BorderLayout());
+        fromPane.add(new JLabel(JMeterUtils.getResString("mailer_from")), BorderLayout.WEST); // $NON-NLS-1$
         fromField = new JTextField(25);
         fromField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(fromField, c);
-        mailerPanel.add(fromField);
-
-        c.anchor = GridBagConstraints.NORTHWEST;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Addressee(s):"));
-
-        addressField = new JTextField(25);
+        fromPane.add(fromField, BorderLayout.CENTER);
+        fromPane.add(Box.createRigidArea(new Dimension(5,0)), BorderLayout.EAST);
+        headerPane.add(fromPane, BorderLayout.WEST);
+        JPanel addressPane = new JPanel(new BorderLayout());
+        addressPane.add(new JLabel(JMeterUtils.getResString("mailer_addressees")), BorderLayout.WEST); // $NON-NLS-1$
+        addressField = new JTextField(10);
         addressField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(addressField, c);
-        mailerPanel.add(addressField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("SMTP Host:"));
-
-        smtpHostField = new JTextField(25);
-        smtpHostField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(smtpHostField, c);
-        mailerPanel.add(smtpHostField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("SMTP Port:"));
-
-        smtpPortField = new JTextField(25);
-        smtpPortField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(smtpPortField, c);
-        mailerPanel.add(smtpPortField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("SMTP Login:"));
-
-        smtpLoginField = new JTextField(25);
-        smtpLoginField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(smtpLoginField, c);
-        mailerPanel.add(smtpLoginField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("SMTP Password:"));
-
-        smtpPasswordField = new JPasswordField(25);
-        smtpPasswordField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(smtpPasswordField, c);
-        mailerPanel.add(smtpPasswordField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("AUTH TYPE"));
+        addressPane.add(addressField, BorderLayout.CENTER);
+        headerPane.add(addressPane, BorderLayout.CENTER);
         
+        JPanel successPane = new JPanel(new BorderLayout());
+        successPane.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+        JPanel succesSubjectPane = new JPanel(new BorderLayout());
+        succesSubjectPane.add(new JLabel(JMeterUtils.getResString("mailer_success_subject")), BorderLayout.WEST); // $NON-NLS-1$
+        successSubjectField = new JTextField(10);
+        successSubjectField.setEditable(true);
+        succesSubjectPane.add(successSubjectField, BorderLayout.CENTER);
+        succesSubjectPane.add(Box.createRigidArea(new Dimension(5,0)), BorderLayout.EAST);
+        successPane.add(succesSubjectPane, BorderLayout.CENTER);
+        JPanel successLimitPane = new JPanel(new BorderLayout());
+        successLimitPane.add(new JLabel(JMeterUtils.getResString("mailer_success_limit")), BorderLayout.WEST); // $NON-NLS-1$
+        successLimitField = new JTextField("2", 5); // $NON-NLS-1$
+        successLimitField.setEditable(true);
+        successLimitPane.add(successLimitField, BorderLayout.CENTER);
+        successPane.add(successLimitPane, BorderLayout.EAST);
+        
+        JPanel failurePane = new JPanel(new BorderLayout());
+        failurePane.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+        JPanel failureSubjectPane = new JPanel(new BorderLayout());
+        failureSubjectPane.add(new JLabel(JMeterUtils.getResString("mailer_failure_subject")), BorderLayout.WEST); // $NON-NLS-1$
+        failureSubjectField = new JTextField(10);
+        failureSubjectField.setEditable(true);
+        failureSubjectPane.add(failureSubjectField, BorderLayout.CENTER);
+        failureSubjectPane.add(Box.createRigidArea(new Dimension(5,0)), BorderLayout.EAST);
+        failurePane.add(failureSubjectPane, BorderLayout.CENTER);
+        JPanel failureLimitPane = new JPanel(new BorderLayout());
+        failureLimitPane.add(new JLabel(JMeterUtils.getResString("mailer_failure_limit")), BorderLayout.WEST); // $NON-NLS-1$
+        failureLimitField = new JTextField("2", 5); // $NON-NLS-1$
+        failureLimitField.setEditable(true);
+        failureLimitPane.add(failureLimitField, BorderLayout.CENTER);
+        failurePane.add(failureLimitPane, BorderLayout.EAST);
+        
+        settingsPane.add(headerPane, BorderLayout.NORTH);
+        settingsPane.add(successPane, BorderLayout.CENTER);
+        settingsPane.add(failurePane, BorderLayout.SOUTH);
+        
+        return settingsPane;
+    }
+
+    private JPanel createSmtpSettings() {
+        JPanel settingsPane = new JPanel(new BorderLayout());
+        settingsPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("mailer_title_smtpserver"))); // $NON-NLS-1$
+        
+        JPanel hostPane = new JPanel(new BorderLayout());
+        hostPane.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+        JPanel smtpHostPane = new JPanel(new BorderLayout());
+        smtpHostPane.add(new JLabel(JMeterUtils.getResString("mailer_host")), BorderLayout.WEST); // $NON-NLS-1$
+        smtpHostField = new JTextField(10);
+        smtpHostField.setEditable(true);
+        smtpHostPane.add(smtpHostField, BorderLayout.CENTER);
+        smtpHostPane.add(Box.createRigidArea(new Dimension(5,0)), BorderLayout.EAST);
+        hostPane.add(smtpHostPane, BorderLayout.CENTER);
+        JPanel smtpPortPane = new JPanel(new BorderLayout());
+        smtpPortPane.add(new JLabel(JMeterUtils.getResString("mailer_port")), BorderLayout.WEST); // $NON-NLS-1$
+        smtpPortField = new JTextField(10);
+        smtpPortField.setEditable(true);
+        smtpPortPane.add(smtpPortField, BorderLayout.CENTER);
+        hostPane.add(smtpPortPane, BorderLayout.EAST);
+
+        JPanel authPane = new JPanel(new BorderLayout());
+        hostPane.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+        JPanel smtpLoginPane = new JPanel(new BorderLayout());
+        smtpLoginPane.add(new JLabel(JMeterUtils.getResString("mailer_login")), BorderLayout.WEST); // $NON-NLS-1$
+        smtpLoginField = new JTextField(10);
+        smtpLoginField.setEditable(true);
+        smtpLoginPane.add(smtpLoginField, BorderLayout.CENTER);
+        smtpLoginPane.add(Box.createRigidArea(new Dimension(5,0)), BorderLayout.EAST);
+        authPane.add(smtpLoginPane, BorderLayout.CENTER);
+        JPanel smtpPasswordPane = new JPanel(new BorderLayout());
+        smtpPasswordPane.add(new JLabel(JMeterUtils.getResString("mailer_password")), BorderLayout.WEST); // $NON-NLS-1$
+        smtpPasswordField = new JPasswordField(10);
+        smtpPasswordField.setEditable(true);
+        smtpPasswordPane.add(smtpPasswordField, BorderLayout.CENTER);
+        smtpPasswordPane.add(Box.createRigidArea(new Dimension(5,0)), BorderLayout.EAST);
+        authPane.add(smtpPasswordPane, BorderLayout.EAST);
+
+        JPanel authTypePane = new JPanel(new BorderLayout());
+        authTypePane.add(new JLabel(JMeterUtils.getResString("mailer_connection_security")), BorderLayout.WEST);
         authTypeCombo = new JComboBox(new Object[] { 
                 MailerModel.MailAuthType.NONE.toString(), 
                 MailerModel.MailAuthType.SSL.toString(),
                 MailerModel.MailAuthType.TLS.toString()});
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(authTypeCombo, c);
-        mailerPanel.add(authTypeCombo);
+        authTypeCombo.setFont(new Font("SansSerif", Font.PLAIN, 10)); // $NON-NLS-1$
+        authTypePane.add(authTypeCombo, BorderLayout.CENTER);
         
+        JPanel credPane = new JPanel(new BorderLayout());
+        credPane.add(authPane, BorderLayout.CENTER);
+        credPane.add(authTypePane, BorderLayout.EAST);
         
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Failure Subject:"));
-
-        failureSubjectField = new JTextField(25);
-        failureSubjectField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(failureSubjectField, c);
-        mailerPanel.add(failureSubjectField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Success Subject:"));
-
-        successSubjectField = new JTextField(25);
-        successSubjectField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(successSubjectField, c);
-        mailerPanel.add(successSubjectField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Failure Limit:"));
-
-        failureLimitField = new JTextField("2", 25);
-        failureLimitField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(failureLimitField, c);
-        mailerPanel.add(failureLimitField);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Success Limit:"));
-
-        successLimitField = new JTextField("2", 25);
-        successLimitField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(successLimitField, c);
-        mailerPanel.add(successLimitField);
-
-        testerButton = new JButton("Test Mail");
-        testerButton.addActionListener(this);
-        testerButton.setEnabled(true);
-        c.gridwidth = 1;
-        g.setConstraints(testerButton, c);
-        mailerPanel.add(testerButton);
-
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Failures:"));
-        failureField = new JTextField(6);
-        failureField.setEditable(false);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(failureField, c);
-        mailerPanel.add(failureField);
-
-        mainPanel.add(mailerPanel);
-
-        this.add(mainPanel, BorderLayout.WEST);
+        settingsPane.add(hostPane, BorderLayout.NORTH);
+        settingsPane.add(credPane, BorderLayout.CENTER);
+        
+        return settingsPane;
     }
 
     public String getLabelResource() {
@@ -425,7 +429,8 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         } else {
             type = JOptionPane.INFORMATION_MESSAGE;
         }
-        JOptionPane.showMessageDialog(null, message, isError ? "Error" : "Information", type);
+        JOptionPane.showMessageDialog(null, message, isError ? 
+                JMeterUtils.getResString("mailer_msg_title_error") : JMeterUtils.getResString("mailer_msg_title_information"), type);
     }
 
     /**
