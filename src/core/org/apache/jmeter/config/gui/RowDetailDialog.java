@@ -100,7 +100,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 	};
 	
 	public RowDetailDialog(ObjectTableModel tableModel, int selectedRow) {
-        super((JFrame) null, JMeterUtils.getResString("search_tree_title"), true); //$NON-NLS-1$
+        super((JFrame) null, JMeterUtils.getResString("detail"), true); //$NON-NLS-1$
         this.tableModel = tableModel;
         this.selectedRow = selectedRow;
         init();
@@ -111,8 +111,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 
         nameTF = new JLabeledTextField(JMeterUtils.getResString("name"), 20); //$NON-NLS-1$
         valueTA = new JLabeledTextArea(JMeterUtils.getResString("value")); //$NON-NLS-1$
-        valueTA.setPreferredSize(new Dimension(150, 300));
-        nameTF.setPreferredSize(new Dimension((int)Math.round(getWidth()*0.8), 40));
+        valueTA.setPreferredSize(new Dimension(450, 300));
         setValues(selectedRow);
         JPanel detailPanel = new JPanel();
         detailPanel.setLayout(new BorderLayout());
