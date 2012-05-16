@@ -2708,27 +2708,28 @@ the graph as a PNG file.</description>
 </div>
 </component>
 
-<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="807" height="415" screenshot="mailervisualizer.png">
+<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="860" height="463" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="From" required="Yes">Email address to send messages from.</property>
         <property name="Addressee(s)" required="Yes">Email address to send messages to, comma-separated.</property>
-        <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
-        server.</property>
-        <property name="SMTP Port" required="No">Port of SMTP server (defaults to 25).</property>
-        <property name="SMTP Login" required="No">Login used to authenticate.</property>
-        <property name="SMTP Password" required="No">Password used to authenticate.</property>
-        <property name="Auth Type" required="No">Type of encryption for SMTP authentication (SSL, TLS or none).</property>
-
-        <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
         <property name="Success Subject" required="No">Email subject line for success messages.</property>
-        <property name="Failure Limit" required="Yes">Once this number of failed responses is exceeded, a failure
-        email is sent - i.e. set the count to 0 to send an e-mail on the first failure.</property>
         <property name="Success Limit" required="Yes">Once this number of successful responses is exceeded
         <strong>after previously reaching the failure limit</strong>, a success email
         is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
+        <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
+        <property name="Failure Limit" required="Yes">Once this number of failed responses is exceeded, a failure
+        email is sent - i.e. set the count to 0 to send an e-mail on the first failure.</property>
+
+        <property name="Host" required="No">IP address or host name of SMTP server (email redirector)
+        server.</property>
+        <property name="Port" required="No">Port of SMTP server (defaults to 25).</property>
+        <property name="Login" required="No">Login used to authenticate.</property>
+        <property name="Password" required="No">Password used to authenticate.</property>
+        <property name="Connection security" required="No">Type of encryption for SMTP authentication (SSL, TLS or none).</property>
+
         <property name="Test Mail" required="No">Press this button to send a test mail</property>
         <property name="Failures" required="No">A field that keeps a running total of number
         of failures so far received.</property>
