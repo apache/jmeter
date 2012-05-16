@@ -692,16 +692,17 @@ public class JMeterUtils implements UnitTestManager {
      *
      * @return The XMLParser value
      */
+    // TODO only called by UserParameterXMLParser.getXMLParameters which is a deprecated class
     public static XMLReader getXMLParser() {
         XMLReader reader = null;
+        final String parserName = getPropDefault("xml.parser", // $NON-NLS-1$
+                "org.apache.xerces.parsers.SAXParser");  // $NON-NLS-1$
         try {
-            reader = (XMLReader) instantiate(getPropDefault("xml.parser", // $NON-NLS-1$
-                    "org.apache.xerces.parsers.SAXParser"), // $NON-NLS-1$
+            reader = (XMLReader) instantiate(parserName,
                     "org.xml.sax.XMLReader"); // $NON-NLS-1$
             // reader = xmlFactory.newSAXParser().getXMLReader();
         } catch (Exception e) {
-            reader = (XMLReader) instantiate(getPropDefault("xml.parser", // $NON-NLS-1$
-                    "org.apache.xerces.parsers.SAXParser"), // $NON-NLS-1$
+            reader = (XMLReader) instantiate(parserName, // $NON-NLS-1$
                     "org.xml.sax.XMLReader"); // $NON-NLS-1$
         }
         return reader;
@@ -896,9 +897,10 @@ public class JMeterUtils implements UnitTestManager {
      * @param className
      *            The name of the class to instantiate.
      * @param impls
-     *            The name of the class it subclases.
-     * @return Description of the Returned Value
+     *            The name of the class it must be an instance of
+     * @return an instance of the class, or null if instantiation failed or the class did not implement/extend as required 
      */
+    // TODO probably not needed
     public static Object instantiate(String className, String impls) {
         if (className != null) {
             className = className.trim();
