@@ -114,7 +114,7 @@ New interface org.apache.jmeter.engine.util.ConfigMergabilityIndicator has been 
 <pre>public boolean applies(ConfigTestElement configElement);</pre>
 </p>
 
-<p>New interface org.apache.jmeter.protocol.http.proxy.SamplerCreator to allow plugging HTTP based samplers that differ from default HTTP Samplers. 
+<p>New interface org.apache.jmeter.protocol.http.proxy.SamplerCreator to allow plugging HTTP based samplers that differ from default HTTP Samplers through Proxy during Recording Phase (see Bug 52674):<br/> 
 <pre>public String[] getManagedContentTypes();</pre>
 <pre>public HTTPSamplerBase createSampler(HttpRequestHdr request, Map&lt;String, String&gt; pageEncodings, Map&lt;String, String&gt; formEncodings);</pre>
 <pre>public void populateSampler(HTTPSamplerBase sampler, HttpRequestHdr request, Map&lt;String, String&gt; pageEncodings, Map&lt;String, String&gt; formEncodings) throws Exception;</pre>
@@ -162,7 +162,7 @@ Graph Full Results Listener has been removed.
 </p>
 
 <p>
-When calling "Clear All" command, if Log Viewer is opened its content will be cleaned up.
+When calling "Clear All" command, if Log Viewer is displayed its content will be cleared.
 </p>
 <!-- =================== Bug fixes =================== -->
 
