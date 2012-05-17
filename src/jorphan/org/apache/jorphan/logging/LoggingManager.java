@@ -348,12 +348,14 @@ public final class LoggingManager {
     }
 
     /**
-     * Add logTarget to root logger
+     * Add logTargets to root logger
      * FIXME What's the clean way to add a LogTarget afterwards ?
-     * @param logTarget LogTarget
+     * @param logTargets LogTarget array
      */
-    public static void addLogTargetToRootLogger(LogTarget logTarget) {
-        Hierarchy.getDefaultHierarchy().getRootLogger().setLogTargets(
-                new LogTarget[]{target, logTarget});
+    public static void addLogTargetToRootLogger(LogTarget[] logTargets) {
+        LogTarget[] newLogTargets = new LogTarget[logTargets.length+1];
+        System.arraycopy(logTargets, 0, newLogTargets, 1, logTargets.length);
+        newLogTargets[0] = target;
+        Hierarchy.getDefaultHierarchy().getRootLogger().setLogTargets(newLogTargets);
     }
 }
