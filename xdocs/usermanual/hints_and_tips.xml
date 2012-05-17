@@ -88,9 +88,9 @@ It provides search with following options:
 </p>
 
 <figure width="950" height="802" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
-<figure width="336" height="153" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
-<figure width="336" height="153" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
-<figure width="336" height="153" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
+<figure width="948" height="706" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
+<figure width="948" height="706" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
+<figure width="948" height="706" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
 
 </subsection>
 </section>
