@@ -65,6 +65,7 @@ public class Clear implements Command {
             JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
             guiComp.clearGui();
         } else {
+            guiPackage.getMainFrame().clearData();
             for (JMeterTreeNode node : guiPackage.getTreeModel().getNodesOfType(Clearable.class)) {
                 JMeterGUIComponent guiComp = guiPackage.getGui(node.getTestElement());
                 if (guiComp instanceof Clearable){

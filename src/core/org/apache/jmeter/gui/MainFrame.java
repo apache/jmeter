@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -74,6 +75,7 @@ import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.gui.util.JMeterToolBar;
+import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
@@ -81,14 +83,17 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.LogEvent;
+import org.apache.log.LogTarget;
 import org.apache.log.Logger;
+import org.apache.log.Priority;
 
 /**
  * The main JMeter frame, containing the menu bar, test tree, and an area for
  * JMeter component GUIs.
  *
  */
-public class MainFrame extends JFrame implements TestListener, Remoteable, DropTargetListener {
+public class MainFrame extends JFrame implements TestListener, Remoteable, DropTargetListener, Clearable {
 
     private static final long serialVersionUID = 240L;
 
@@ -107,6 +112,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     // Allow display/hide LoggerPanel
     private static final boolean DISPLAY_LOGGER_PANEL =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.display", false); // $NON-NLS-1$
+
+    // Allow display/hide Log Error/Fatal counter
+    private static final boolean DISPLAY_ERROR_FATAL_COUNTER =
+            JMeterUtils.getPropDefault("jmeter.errorscounter.display", true); // $NON-NLS-1$
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -131,6 +140,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     /** An image which is displayed when a test is not currently running. */
     private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
 
+    /** An image which is displayed to indicate FATAL, ERROR or WARNING. */
+    private ImageIcon warningIcon = JMeterUtils.getImage("warning.png");// $NON-NLS-1$
+
     /** The button used to display the running/stopped image. */
     private JButton runningIndicator;
 
@@ -150,6 +162,19 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     private JLabel activeThreads;
 
     private JMeterToolBar toolbar;
+
+    /**
+     * Indicator for Log errors and Fatals
+     */
+    private JButton warnIndicator;
+    /**
+     * Counter
+     */
+    private JLabel errorsOrFatalsLabel;
+    /**
+     * LogTarget that receives ERROR or FATAL
+     */
+    private ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
 
     /**
      * Create a new JMeter frame.
@@ -172,6 +197,11 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
 
         totalThreads = new JLabel("0"); // $NON-NLS-1$
         activeThreads = new JLabel("0"); // $NON-NLS-1$
+
+        warnIndicator = new JButton(warningIcon);
+        warnIndicator.setMargin(new Insets(0, 0, 0, 0));
+        warnIndicator.setBorder(BorderFactory.createEmptyBorder());
+        errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
 
         tree = makeTree(treeModel, treeListener);
 
@@ -327,7 +357,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
             }
         });
     }
-
+    
     public void setMainPanel(JComponent comp) {
         mainPanel.setViewportView(comp);
     }
@@ -424,7 +454,19 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
             topAndDown.setDividerSize(0);
         }
         mainPanel = createMainPanel();
+
         logPanel = createLoggerPanel();
+        if(DISPLAY_ERROR_FATAL_COUNTER) {
+            errorsAndFatalsCounterLogTarget = new ErrorsAndFatalsCounterLogTarget();
+            LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
+                logPanel,
+                errorsAndFatalsCounterLogTarget
+                 });
+        } else {
+            LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
+                    logPanel
+                     });            
+        }
         
         topAndDown.setTopComponent(mainPanel);
         topAndDown.setBottomComponent(logPanel);
@@ -482,6 +524,12 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
 
         toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
         toolPanel.add(Box.createGlue());
+        
+        if(DISPLAY_ERROR_FATAL_COUNTER) {
+            toolPanel.add(errorsOrFatalsLabel);
+            toolPanel.add(warnIndicator);
+            toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        }
         toolPanel.add(activeThreads);
         toolPanel.add(new JLabel(" / "));
         toolPanel.add(totalThreads);
@@ -519,7 +567,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         LoggerPanel loggerPanel = new LoggerPanel();
         loggerPanel.setMinimumSize(new Dimension(0, 100));
         loggerPanel.setPreferredSize(new Dimension(0, 150));
-        LoggingManager.addLogTargetToRootLogger(loggerPanel);
         GuiPackage guiInstance = GuiPackage.getInstance();
         guiInstance.setLoggerPanel(loggerPanel);
         guiInstance.getMenuItemLoggerPanel().getModel().setSelected(DISPLAY_LOGGER_PANEL);
@@ -676,5 +723,40 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
 
     public void dropActionChanged(DropTargetDragEvent dtde) {
         // NOOP
+    }
+    
+    /**
+     * 
+     */
+    public final class ErrorsAndFatalsCounterLogTarget implements LogTarget, Clearable {
+        public AtomicInteger errorOrFatal = new AtomicInteger(0);
+
+        public void processEvent(LogEvent event) {
+            if(event.getPriority().equals(Priority.ERROR) ||
+                    event.getPriority().equals(Priority.FATAL_ERROR)) {
+                final int newValue = errorOrFatal.incrementAndGet();
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        errorsOrFatalsLabel.setText(Integer.toString(newValue));
+                    }
+                });
+            }
+        }  
+        
+        public void clearData() {
+            errorOrFatal.set(0);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
+                }
+            });
+        }
+    }
+
+    
+    public void clearData() {
+        if(DISPLAY_ERROR_FATAL_COUNTER) {
+            errorsAndFatalsCounterLogTarget.clearData();
+        }
     }
 }
