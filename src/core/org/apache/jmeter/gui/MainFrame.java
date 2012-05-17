@@ -755,6 +755,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
 
     
     public void clearData() {
+        logPanel.clear();
         if(DISPLAY_ERROR_FATAL_COUNTER) {
             errorsAndFatalsCounterLogTarget.clearData();
         }
