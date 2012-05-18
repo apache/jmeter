@@ -47,13 +47,19 @@ public class TestSaveService extends JMeterTestCase {
         "SimpleTestPlan.jmx",
         "GuiTest.jmx", 
         "GuiTest231.jmx",
-        "GuiTest27.jmx",
+        "GenTest27.jmx",
         };
 
     // Test files for testLoad; output will generally be different in size
     private static final String[] FILES_LOAD_ONLY = new String[] {
         "GuiTest_original.jmx", 
         "GuiTest231_original.jmx",
+        "GenTest22.jmx",
+        "GenTest231.jmx",
+        "GenTest24.jmx",
+        "GenTest25.jmx", // GraphAccumVisualizer obsolete, BSFSamplerGui now a TestBean
+        "GenTest251.jmx", // GraphAccumVisualizer obsolete, BSFSamplerGui now a TestBean
+        "GenTest26.jmx", // GraphAccumVisualizer now obsolete
         };
 
     private static final boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
