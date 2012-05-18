@@ -2314,6 +2314,17 @@ run JMeter unless all the JMeter jars are added.
     </junitreport>
   </target>
 
+    <target name="generator_jar" depends="compile-tests" description="Create the test tree generator jar">
+      <jar jarfile="${dest.jar}/ApacheJMeter_generator.jar"
+          manifest="${build.dir}/MANIFEST_BIN.MF">
+        <zipfileset file="${resources.meta-inf}/default.notice"
+          fullpath="META-INF/NOTICE" />
+        <zipfileset file="${resources.meta-inf}/default.license"
+          fullpath="META-INF/LICENSE" />
+        <fileset dir="${build.test}" includes="**/GenerateTreeGui*.class"/>
+      </jar>
+    </target>
+
   <target name="svnCheck" description="Use SVN to get the current revision" unless="disable-svnCheck">
     <exec executable="svn" logerror="true" outputproperty="svn.exec.result" failonerror="true" failifexecutionfails="true">
       <arg line="info"/>
