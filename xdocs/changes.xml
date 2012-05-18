@@ -99,6 +99,11 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="860" height="403" image="changes/2.7/10_mailer_visualizer_gui.png"></figure>
 </p>
 
+<h3>New Visual Indicator of number of ERROR/FATAL messages in logs</h3>
+<p>Indicator show number of ERROR/FATAL messsages in logs, it can be clicked to toggle Log Viewer panel
+<figure width="1017" height="558" image="changes/2.7/16_log_errors_counter.png"></figure>
+</p>
+
 <h3>Dialog box to show detail of a parameter row</h3>
 <p>Add a detail button on parameters table to show detail of a Row 
 <figure width="824" height="165" image="changes/2.7/08_param_button_detail.png"></figure>
