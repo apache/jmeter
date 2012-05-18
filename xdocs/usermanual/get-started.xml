@@ -365,10 +365,10 @@ jmeter -LDEBUG</pre>
 		It defaults to <b>jmeter.log</b>, and will be found in the directory from which JMeter was launched.
 		</p>
 		<p>
-		Since JMeter 2.6, menu <b>Options > Log Viewer</b> display the log file in a bottom pane on main JMeter window. 
+		Since JMeter 2.6, menu <b>Options > Log Viewer</b> displays the log file in a bottom pane on main JMeter window. 
 		</p>
 		<p>
-		Since JMeter 2.7 (GUI mode), the number of error/fatal messages logged in the log file is display at top-right. 
+		Since JMeter 2.7 (GUI mode), the number of error/fatal messages logged in the log file is displayed at top-right. 
 		</p>
 		<figure image="log_errors_counter.png">Error/fatal counter</figure>
 		<p>
