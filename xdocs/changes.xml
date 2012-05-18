@@ -47,15 +47,15 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3>JMS Samplers improvements</h3>
 <p>Addition of a "Non Persistent Delivery" option to send "Non-Persistent" (Guaranteed to be delivered at most once. Message loss is not a concern.) JMS messages
-<figure width="1078" height="335" image="changes/2.7/11_jms_non_persistent_delivery_mode.png"></figure>
+<figure width="953" height="336" image="changes/2.7/11_jms_non_persistent_delivery_mode.png"></figure>
 </p>
 
 <p>Support sending of JMS Object Messages to enable sending Objects unmarshalled from XML by XStream
-<figure width="810" height="723" image="changes/2.7/12_jms_sending_objects.png"></figure>
+<figure width="808" height="726" image="changes/2.7/12_jms_sending_objects.png"></figure>
 </p>
 
 <p>Enable setting JMS Properties through JMS Publisher sampler
-<figure width="1073" height="472" image="changes/2.7/13_jms_properties.png"></figure>
+<figure width="1029" height="470" image="changes/2.7/13_jms_properties.png"></figure>
 </p>
 
 <h3>Test Action sampler</h3>
@@ -69,7 +69,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </p>
 
 <p>Make Maintain HTTP Session configurable
-<figure width="834" height="494" image="changes/2.7/15_ws_maintain_session.png"></figure>
+<figure width="833" height="505" image="changes/2.7/15_ws_maintain_session.png"></figure>
 </p>
 
 <h3>Aggregate graph: Clustered Bar char with average, median, 90% line, min and max columns</h3>
