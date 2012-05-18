@@ -93,7 +93,7 @@ import org.apache.log.Priority;
  * JMeter component GUIs.
  *
  */
-public class MainFrame extends JFrame implements TestListener, Remoteable, DropTargetListener, Clearable {
+public class MainFrame extends JFrame implements TestListener, Remoteable, DropTargetListener, Clearable, ActionListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -166,7 +166,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     /**
      * Indicator for Log errors and Fatals
      */
-    private JLabel warnIndicator;
+    private JButton warnIndicator;
     /**
      * Counter
      */
@@ -198,8 +198,11 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         totalThreads = new JLabel("0"); // $NON-NLS-1$
         activeThreads = new JLabel("0"); // $NON-NLS-1$
 
-        warnIndicator = new JLabel(warningIcon);
+        warnIndicator = new JButton(warningIcon);
+        warnIndicator.setMargin(new Insets(0, 0, 0, 0));
+        warnIndicator.setBorder(BorderFactory.createEmptyBorder());
         warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
+        warnIndicator.addActionListener(this);
         errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
         errorsOrFatalsLabel.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
 
@@ -758,6 +761,15 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         logPanel.clear();
         if(DISPLAY_ERROR_FATAL_COUNTER) {
             errorsAndFatalsCounterLogTarget.clearData();
+        }
+    }
+
+    /**
+     * Handles click on warnIndicator
+     */
+    public void actionPerformed(ActionEvent event) {
+        if(event.getSource()==warnIndicator) {
+            ActionRouter.getInstance().doActionNow(new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));
         }
     }
 }

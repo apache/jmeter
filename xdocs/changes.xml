@@ -294,6 +294,7 @@ When calling "Clear All" command, if Log Viewer is displayed its content will be
 <li>Bug 52771 - Documentation : Added RSS feed on JMeter Home page under link "Subscribe to What's New"</li>
 <li>Bug 42784 - Show the number of errors logged in the GUI</li>
 <li>Bug 53256 - Make Clear All command clean LogViewer content</li>
+<li>Bug 53261 - Make "Error/fatal" counter added in Bug 42784 open Log Viewer panel when Warn Indicator is clicked</li>
 </ul>
 
 <h2>Non-functional changes</h2>
