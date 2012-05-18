@@ -365,6 +365,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         spane.setLeftComponent(myScrollPane);
         spane.setRightComponent(tabbedGraph);
         spane.setResizeWeight(.2);
+        spane.setBorder(null); // see bug jdk 4131528
         spane.setContinuousLayout(true);
 
         this.add(mainPanel, BorderLayout.NORTH);
