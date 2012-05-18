@@ -49,7 +49,7 @@ behavior under heavy concurrent load.
 	    <li>Database via JDBC</li>
 	    <li>LDAP</li>
 	    <li>JMS</li>
-	    <li>Mail - POP3(S) and IMAP(S)</li>
+	    <li>Mail - SMTP(S), POP3(S) and IMAP(S)</li>
 	    <li>Native commands or shell scripts</li>
 	    </ul>
 	</li>
