@@ -55,15 +55,19 @@ public class SamplerCreatorFactory {
                     new Class[] {SamplerCreator.class }); 
             for (String strClassName : listClasses) {
                 try {
-                    log.info("Loading class:"+ strClassName);
+                    if(log.isDebugEnabled()) {
+                        log.debug("Loading class: "+ strClassName);
+                    }
                     Class<?> commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
-                            log.info("Instantiating :"+ commandClass.getName());
+                        if(log.isDebugEnabled()) {
+                            log.debug("Instantiating: "+ commandClass.getName());
+                        }
                             SamplerCreator creator = (SamplerCreator) commandClass.newInstance();
                             String[] contentTypes = creator.getManagedContentTypes();
                             for (String contentType : contentTypes) {
-                                if(log.isInfoEnabled()) {
-                                    log.info("Registering samplerCreator "+commandClass.getName()+" for content type:"+contentType);
+                                if(log.isDebugEnabled()) {
+                                    log.debug("Registering samplerCreator "+commandClass.getName()+" for content type:"+contentType);
                                 }
                                 samplerCreatorMap.put(contentType, creator);
                             }                        
