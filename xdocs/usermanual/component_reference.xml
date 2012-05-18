@@ -4473,7 +4473,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 </properties>
 </component>
 
-<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="597" height="303" screenshot="beanshell_preprocessor.png">
+<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="568" height="325" screenshot="beanshell_preprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
@@ -4798,7 +4798,7 @@ generate the template string, and store the result into the given variable name.
  
 </component>
 
-<component name="Result Status Action Handler" index="&sect-num;.8.3"  width="435" height="146" screenshot="resultstatusactionhandler.png">
+<component name="Result Status Action Handler" index="&sect-num;.8.3"  width="493" height="140" screenshot="resultstatusactionhandler.png">
    <description>This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    </description>
    <properties>
@@ -4816,7 +4816,7 @@ generate the template string, and store the result into the given variable name.
    </properties>
 </component>
 
-<component name="BeanShell PostProcessor"  index="&sect-num;.8.4"  width="597" height="303" screenshot="beanshell_postprocessor.png">
+<component name="BeanShell PostProcessor"  index="&sect-num;.8.4"  width="655" height="306" screenshot="beanshell_postprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
@@ -4933,7 +4933,7 @@ In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored p
 <description>
 		<br></br>
 </description>
-<component name="Test Plan" index="&sect-num;.9.1"  width="529" height="422" screenshot="testplan.png">
+<component name="Test Plan" index="&sect-num;.9.1"  width="559" height="435" screenshot="testplan.png">
 <description>
 <p>
 The Test Plan is where the overall settings for a test are specified.
