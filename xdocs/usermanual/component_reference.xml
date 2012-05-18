@@ -3001,7 +3001,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
 	<br></br>
 </description>
 
-<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="396" height="301" screenshot="csvdatasetconfig.png">
+<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="433" height="281" screenshot="csvdatasetconfig.png">
 <description>
     <p>
 	CSV Data Set Config is used to read lines from a file, and split them into variables.
@@ -3101,11 +3101,11 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
 </properties>
 </component>
 
-<component name="FTP Request Defaults" index="&sect-num;.4.2"  width="490" height="198" screenshot="ftp-config/ftp-request-defaults.png">
+<component name="FTP Request Defaults" index="&sect-num;.4.2"  width="520" height="202" screenshot="ftp-config/ftp-request-defaults.png">
 <description></description>
 </component>
 
-<component name="HTTP Authorization Manager" index="&sect-num;.4.3"  width="490" height="253" screenshot="http-config/http-auth-manager.png">
+<component name="HTTP Authorization Manager" index="&sect-num;.4.3"  width="439" height="238" screenshot="http-config/http-auth-manager.png">
 <note>If there is more than one Authorization Manager in the scope of a Sampler,
 there is currently no way to specify which one is to be used.</note>
 
@@ -3181,7 +3181,7 @@ to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, name
 "/index.html".</p>
 
 <figure width="289" height="201" image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
-<figure width="553" height="253" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
+<figure width="539" height="241" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
@@ -3232,7 +3232,7 @@ This may cause problems for Assertions.
 </properties>
 </component>
 
-<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="445" height="328" screenshot="http-config/http-cookie-manager.png">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="506" height="329" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
 there is currently no way to specify which one is to be used.
