@@ -5367,7 +5367,7 @@ Note that you can make simulate requests response time by adding an HTTP Header 
 </note>
 </component>
 
-<component name="Property Display" index="&sect-num;.9.7"  width="776" height="502" screenshot="property_display.png">
+<component name="Property Display" index="&sect-num;.9.7"  width="804" height="508" screenshot="property_display.png">
 <description>
 <p>
 The Property Display shows the values of System or JMeter properties.
@@ -5380,7 +5380,7 @@ It is available only on the WorkBench.
 </properties>
 </component>
 
-<component name="Debug Sampler" index="&sect-num;.9.8"  width="355" height="172" screenshot="debug_sampler.png">
+<component name="Debug Sampler" index="&sect-num;.9.8"  width="431" height="172" screenshot="debug_sampler.png">
 <description>
 <p>
 The Debug Sampler generates a sample containing the values of all JMeter variables and/or properties.
