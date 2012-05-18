@@ -100,7 +100,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </p>
 
 <h3>New Visual Indicator of number of ERROR/FATAL messages in logs</h3>
-<p>Indicator show number of ERROR/FATAL messsages in logs, it can be clicked to toggle Log Viewer panel
+<p>Indicator shows number of ERROR/FATAL messsages in logs, it can be clicked to toggle Log Viewer panel
 <figure width="815" height="633" image="changes/2.7/16_log_errors_counter.png"></figure>
 </p>
 
