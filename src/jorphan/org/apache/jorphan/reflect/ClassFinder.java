@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -244,7 +245,7 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param searchPathsOrJars - pathnames or jarfiles to search for classes
      * @param classNames - required parent class(es) or annotations
      * @param innerClasses - should we include inner classes?
      * @param contains - classname should contain this string
@@ -253,23 +254,21 @@ public final class ClassFinder {
      *
      * @return List containing discovered classes
      */
-    public static List<String> findClassesThatExtend(String[] strPathsOrJars,
+    public static List<String> findClassesThatExtend(String[] searchPathsOrJars,
                 final Class<?>[] classNames, final boolean innerClasses,
                 String contains, String notContains, boolean annotations)
                 throws IOException  {
         if (log.isDebugEnabled()) {
-            for (int i = 0; i < classNames.length ; i++){
-                log.debug("superclass: "+classNames[i].getName());
-            }
+            log.debug("searchPathsOrJars : " + Arrays.toString(searchPathsOrJars));
+            log.debug("superclass : " + Arrays.toString(classNames));
+            log.debug("innerClasses : " + innerClasses + " annotations: " + annotations);
+            log.debug("contains: " + contains + " notContains: " + notContains);
         }
 
         // Find all jars in the search path
-        strPathsOrJars = addJarsInPath(strPathsOrJars);
+        String[] strPathsOrJars = addJarsInPath(searchPathsOrJars);
         for (int k = 0; k < strPathsOrJars.length; k++) {
             strPathsOrJars[k] = fixPathEntry(strPathsOrJars[k]);
-            if (log.isDebugEnabled()) {
-                log.debug("strPathsOrJars : " + strPathsOrJars[k]);
-            }
         }
 
         // Now eliminate any classpath entries that do not "match" the search
