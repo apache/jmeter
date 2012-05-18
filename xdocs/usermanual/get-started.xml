@@ -173,18 +173,18 @@ and the JAVA_HOME environment variable set, there is nothing more for you to do.
 Note: there can be problems (especially with client-server mode) if the directory path contains any spaces.
 </p>
 <p>
-The installation directory structure should look something like this (for version 2.3.1):
+The installation directory structure should look something like this (for version 2.7):
 <pre>
-jakarta-jmeter-2.3.1
-jakarta-jmeter-2.3.1/bin
-jakarta-jmeter-2.3.1/docs
-jakarta-jmeter-2.3.1/extras
-jakarta-jmeter-2.3.1/lib/
-jakarta-jmeter-2.3.1/lib/ext
-jakarta-jmeter-2.3.1/lib/junit
-jakarta-jmeter-2.3.1/printable_docs
+apache-jmeter-2.7
+apache-jmeter-2.7/bin
+apache-jmeter-2.7/docs
+apache-jmeter-2.7/extras
+apache-jmeter-2.7/lib/
+apache-jmeter-2.7/lib/ext
+apache-jmeter-2.7/lib/junit
+apache-jmeter-2.7/printable_docs
 </pre>
-You can rename the parent directory (i.e. jakarta-jmeter-2.3.1) if you want, but do not change any of the sub-directory names.
+You can rename the parent directory (i.e. apache-jmeter-2.7) if you want, but do not change any of the sub-directory names.
 </p>
 </section>
 
@@ -364,6 +364,13 @@ jmeter -LDEBUG</pre>
 		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
 		It defaults to <b>jmeter.log</b>, and will be found in the directory from which JMeter was launched.
 		</p>
+		<p>
+		Since JMeter 2.6, menu <b>Options > Log Viewer</b> display the log file in a bottom pane on main JMeter window. 
+		</p>
+		<p>
+		Since JMeter 2.7 (GUI mode), the number of error/fatal messages logged in the log file is display at top-right. 
+		</p>
+		<figure image="log_errors_counter.png">Error/fatal counter</figure>
 		<p>
 		JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
 		This is processed after the initial properties file is read,
