@@ -64,14 +64,16 @@ public class LoggerPanelEnableDisable implements Command {
         GuiPackage guiInstance = GuiPackage.getInstance();
         JSplitPane splitPane = ((JSplitPane)guiInstance.getLoggerPanel().getParent());
         if (ActionNames.LOGGER_PANEL_ENABLE_DISABLE.equals(e.getActionCommand())) {
-            if (guiInstance.getMenuItemLoggerPanel().getModel().isSelected()) {
+            if (!guiInstance.getLoggerPanel().isVisible()) {
                 splitPane.setDividerSize(UIManager.getInt("SplitPane.dividerSize"));
                 guiInstance.getLoggerPanel().setVisible(true);
                 splitPane.setDividerLocation(0.8);
+                guiInstance.getMenuItemLoggerPanel().getModel().setSelected(true);
             } else {
                 guiInstance.getLoggerPanel().clear();
                 guiInstance.getLoggerPanel().setVisible(false);
                 splitPane.setDividerSize(0);
+                guiInstance.getMenuItemLoggerPanel().getModel().setSelected(false);
             }
         }
     }
