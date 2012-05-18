@@ -47,6 +47,7 @@ public class TestSaveService extends JMeterTestCase {
         "SimpleTestPlan.jmx",
         "GuiTest.jmx", 
         "GuiTest231.jmx",
+        "GuiTest27.jmx",
         };
 
     // Test files for testLoad; output will generally be different in size
