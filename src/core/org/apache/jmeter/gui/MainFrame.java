@@ -166,7 +166,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     /**
      * Indicator for Log errors and Fatals
      */
-    private JButton warnIndicator;
+    private JLabel warnIndicator;
     /**
      * Counter
      */
@@ -198,10 +198,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         totalThreads = new JLabel("0"); // $NON-NLS-1$
         activeThreads = new JLabel("0"); // $NON-NLS-1$
 
-        warnIndicator = new JButton(warningIcon);
-        warnIndicator.setMargin(new Insets(0, 0, 0, 0));
-        warnIndicator.setBorder(BorderFactory.createEmptyBorder());
+        warnIndicator = new JLabel(warningIcon);
+        warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
         errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
+        errorsOrFatalsLabel.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
 
         tree = makeTree(treeModel, treeListener);
 
@@ -450,13 +450,13 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         topAndDown.setResizeWeight(.8);
         topAndDown.setContinuousLayout(true);
         topAndDown.setBorder(null); // see bug jdk 4131528
-        if(!DISPLAY_LOGGER_PANEL) {
+        if (!DISPLAY_LOGGER_PANEL) {
             topAndDown.setDividerSize(0);
         }
         mainPanel = createMainPanel();
 
         logPanel = createLoggerPanel();
-        if(DISPLAY_ERROR_FATAL_COUNTER) {
+        if (DISPLAY_ERROR_FATAL_COUNTER) {
             errorsAndFatalsCounterLogTarget = new ErrorsAndFatalsCounterLogTarget();
             LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
                 logPanel,
@@ -525,10 +525,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
         toolPanel.add(Box.createGlue());
         
-        if(DISPLAY_ERROR_FATAL_COUNTER) {
+        if (DISPLAY_ERROR_FATAL_COUNTER) {
             toolPanel.add(errorsOrFatalsLabel);
             toolPanel.add(warnIndicator);
-            toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+            toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
         }
         toolPanel.add(activeThreads);
         toolPanel.add(new JLabel(" / "));
