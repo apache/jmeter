@@ -200,7 +200,11 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
 
         warnIndicator = new JButton(warningIcon);
         warnIndicator.setMargin(new Insets(0, 0, 0, 0));
-        warnIndicator.setBorder(BorderFactory.createEmptyBorder());
+        // Transparent JButton with no border
+        warnIndicator.setOpaque(false);
+        warnIndicator.setContentAreaFilled(false);
+        warnIndicator.setBorderPainted(false);
+        
         warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
         warnIndicator.addActionListener(this);
         errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
