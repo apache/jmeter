@@ -63,6 +63,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="./changes.html">Changes</a>
 </li>
+<li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
+</li>
 <li><a href="./issues.html">Issues</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
@@ -182,15 +184,37 @@ These builds should not be used in production.
 Where are the nightly builds?
 </h2>
 <p>
-There are currently no regular nightly builds - sorry.
+JMeter CI builds are currently run by Jenkins and Buildbot
 </p>
 <p>
-However, occasional builds are made available from 
+These are located at:
     
-<a href="http://people.apache.org/builds/jmeter/nightly/">
-Nightly builds (use at your own risk)
+<ul>
+
+    
+<li>
+<a href="https://builds.apache.org/job/JMeter-trunk/lastSuccessfulBuild/artifact/trunk/dist/">
+Last Successful Jenkins build for JMeter-trunk
 </a>
- 
+</li>
+
+    
+<li>
+<a href="http://ci.apache.org/projects/jmeter/nightlies/">
+Buildbot nightly builds for JMeter-trunk
+</a>
+</li>
+
+    
+<li>
+<a href="https://repository.apache.org/content/repositories/snapshots/org/apache/jmeter/">
+Maven Snapshots (Buildbot nightly builds)
+</a>
+</li>
+
+    
+</ul>
+
     
 </p>
 <h2>
@@ -254,7 +278,11 @@ Download the _src, _bin and _lib files
 <br>
 
 
-Unpack all the archives into the same directory structure
+Unpack all the archives into the 
+<b>
+same directory structure
+</b>
+.
 
 <br>
 

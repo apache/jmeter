@@ -63,6 +63,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
+<li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
+</li>
 <li><a href="../issues.html">Issues</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
@@ -169,6 +171,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#Mail_Reader_Sampler">Mail Reader Sampler</a></li>
 <li><a href="#Test_Action">Test Action</a></li>
 <li><a href="#SMTP_Sampler">SMTP Sampler</a></li>
+<li><a href="#OS_Process_Sampler">OS Process Sampler</a></li>
 </ul>
 <li><a href="#logic_controllers">18.2 Logic Controllers</a></li>
 <ul>
@@ -192,7 +195,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#listeners">18.3 Listeners</a></li>
 <ul>
 <li><a href="#Sample_Result_Save_Configuration">Sample Result Save Configuration</a></li>
-<li><a href="#Graph_Full_Results">Graph Full Results</a></li>
 <li><a href="#Graph_Results">Graph Results</a></li>
 <li><a href="#Spline_Visualizer">Spline Visualizer</a></li>
 <li><a href="#Assertion_Results">Assertion Results</a></li>
@@ -297,15 +299,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#setUp_Thread_Group">setUp Thread Group</a></li>
 <li><a href="#tearDown_Thread_Group">tearDown Thread Group</a></li>
 </ul>
-<li><a href="#Reports">18.10 Reports</a></li>
-<ul>
-<li><a href="#Report_Plan">Report Plan</a></li>
-<li><a href="#Report_Table">Report Table</a></li>
-<li><a href="#HTML_Report_Writer">HTML Report Writer</a></li>
-<li><a href="#Report_Page">Report Page</a></li>
-<li><a href="#Line_Graph">Line Graph</a></li>
-<li><a href="#Bar_Chart">Bar Chart</a></li>
-</ul>
 </ul>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
@@ -394,7 +387,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='499' height='292' src="../images/screenshots/ftptest/ftp-request.png"></div>
+<div align="center"><img width='519' height='289' src="../images/screenshots/ftptest/ftp-request.png"></div>
 <p>
 <b>Parameters</b>
 <a name="FTP_Request_parms"/>
@@ -1369,6 +1362,24 @@ sampleresult.getbytes.headers_size=true
 </ul>
 
 
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+The Java and HttpClient3 inplementations do not include transport overhead such as
+chunk headers in the response body size.
+<br>
+
+
+The HttpClient4 implementation does include the overhead in the response body size,
+so the value may be greater than the number of bytes in the response content.
+
+</td></tr>
+</table>
+</p>
+
+
+
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
@@ -1482,6 +1493,17 @@ If the Select statement returns zero rows, then the A_# and C_# variables would 
 
 Old variables are cleared if necessary - e.g. if the first select retrieves 6 rows and a second select returns only 3 rows,
 the additional variables for rows 4, 5 and 6 will be removed.
+
+</p>
+
+
+<p>
+
+
+<b>
+Note:
+</b>
+ The latency time is set from the time it took to acquire a connection.
 
 </p>
 
@@ -1683,7 +1705,10 @@ Yes, if a prepared or callable statement has parameters
 </tr>
 <tr>
 <td>Variable Names</td>
-<td>Comma-separated list of variable names to hold values returned by Select statements
+<td>Comma-separated list of variable names to hold values returned by Select statements, Prepared Select Statements or CallableStatement. 
+        Note that when used with CallableStatement, list of variables must be in the same sequence as the OUT parameters returned by the call.
+        If there are less variable names than OUT parameters only as many results shall be stored in the thread-context variables as variable names were supplied. 
+        If more variable names than OUT parameters exist, the additional variables will be ignored
 </td>
 <td>
 No
@@ -1769,7 +1794,7 @@ The fields allow variables to be used, so the values of these can readily be see
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='406' height='307' src="../images/screenshots/java_request.png"></div>
+<div align="center"><img width='563' height='347' src="../images/screenshots/java_request.png"></div>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>The Add/Delete buttons don't serve any purpose at present.
@@ -3107,7 +3132,7 @@ StandardGenerator and TCLogParser.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='582' height='301' src="../images/screenshots/accesslogsampler.png"></div>
+<div align="center"><img width='613' height='318' src="../images/screenshots/accesslogsampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Access_Log_Sampler_parms"/>
@@ -3234,7 +3259,7 @@ The interrupt() method can be defined in the script or the init file.
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='592' height='303' src="../images/screenshots/beanshellsampler.png"></div>
+<div align="center"><img width='1034' height='505' src="../images/screenshots/beanshellsampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="BeanShell_Sampler_parms"/>
@@ -3395,12 +3420,16 @@ ctx - JMeterContext
 
 			
 <li>
-vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
+vars - 
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
 </li>
 
             
 <li>
-props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - JMeterProperties (class java.util.Properties)- e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 		
@@ -3652,12 +3681,16 @@ ctx - JMeterContext
 
 
 <li>
-vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
+vars - 
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
 </li>
 
 
 <li>
-props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - JMeterProperties  (class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -3863,6 +3896,11 @@ TCPClientImpl
 tcp.eolByte
 </b>
 , otherwise until the end of the input stream.
+        You can control charset encoding by setting 
+<b>
+tcp.charset
+</b>
+, which will default to Platform default encoding.
         
 </p>
 
@@ -4107,7 +4145,7 @@ No
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='636' height='628' src="../images/screenshots/jmspublisher.png"></div>
+<div align="center"><img width='802' height='735' src="../images/screenshots/jmspublisher.png"></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Publisher_parms"/>
@@ -4213,6 +4251,28 @@ Yes
 Yes
 </td>
 </tr>
+<tr>
+<td>Use non-persistent delivery mode?</td>
+<td>
+      Whether to set DeliveryMode.NON_PERSISTENT (defaults to false)
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>JMS Properties</td>
+<td>
+      The JMS Properties are properties specific for the underlying messaging system.
+      For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
+      webservices through JMS.
+  
+</td>
+<td>
+No
+</td>
+</tr>
 </table>
 </p>
 <p>
@@ -4258,10 +4318,38 @@ This is a very simple implementation; it is not intended to support all possible
 <p>
 
 
-<b>
-Note: 
-</b>
- the Object message type is not implemented yet.
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td> 
+The Object message is implemented since 2.7 and works as follow:
+
+<ul>
+
+
+<li>
+Put the JAR that contain you object and its dependencies in jmeter_home/lib/ folder 
+</li>
+
+
+<li>
+Serialize your object as XML using XStream
+</li>
+
+
+<li>
+Either put result in a file suffixed with .txt or .obj or put XML content direclty in Text Area
+</li>
+  
+
+</ul>
+
+Note that if message is in an file, replacement of properties will not occur while it will happen if you use Text Area.
+
+</td></tr>
+</table>
+</p>
+
+
 
 </p>
 <p>
@@ -5434,7 +5522,7 @@ jmeterengine.threadstop.wait
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='330' height='158' src="../images/screenshots/test_action.png"></div>
+<div align="center"><img width='467' height='184' src="../images/screenshots/test_action.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Test_Action_parms"/>
@@ -5756,6 +5844,139 @@ No
 <tr>
 <td>Enable debug logging?</td>
 <td>If set, then the "mail.debug" property is set to "true"
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="OS_Process_Sampler">18.1.20 OS Process Sampler</a>
+<a class="sectionlink" href="#OS_Process_Sampler" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The OS Process Sampler is a sampler that can be used to execute commands on the local machine.
+<br>
+
+
+It should allow execution of any command that can be run from the command line.
+<br>
+
+
+Validation of the return code can be enabled, and the expected return code can be specified.
+<br>
+
+
+
+</p>
+
+
+<p>
+
+Note that OS shells generally provide command-line parsing. 
+This varies between OSes, but generally the shell will split parameters on white-space.
+Some shells expand wild-card file names; some don't.
+The quoting mechanism also varies between OSes.
+The sampler deliberately does not do any parsing or quote handling.
+The command and its parameters must be provided in the form expected by the executable.
+This means that the sampler settings will not be portable between OSes.
+
+</p>
+
+
+<p>
+
+Many OSes have some built-in commands which are not provided as separate executables. 
+For example the Windows DIR command is part of the command interpreter (CMD.EXE).
+These built-ins cannot be run as independent programs, but have to be provided as arguments to the appropriate command interpreter.
+
+<br>
+
+
+For example, the Windows command-line: 
+<b>
+<code>
+DIR C:\TEMP
+</code>
+</b>
+ needs to be specified as follows:
+
+<pre>
+
+command:   CMD
+Param 1:   /C
+Param 2:   DIR
+Param 3:   C:\TEMP
+
+</pre>
+
+
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='656' height='465' src="../images/screenshots/os_process_sampler.png"></div>
+<p>
+<b>Parameters</b>
+<a name="OS_Process_Sampler_parms"/>
+<a class="sectionlink" href="#OS_Process_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Check Return Code</td>
+<td>If checked, sampler will compare return code with Expected Return Code.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Expected Return Code</td>
+<td>Expected return code for System Call, required if "Check Return Code" is checked.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Directory</td>
+<td>Directory from which command will be executed, defaults to folder referenced by "user.dir" System property
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Command</td>
+<td>The System command or shell to execute.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>OS Process Parameters</td>
+<td>Parameters passed to process.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Environment Parameters</td>
+<td>Key/Value pairs added to environment when running command.
 </td>
 <td>
 No
@@ -7258,6 +7479,16 @@ the contents are used to prefix the pathname.
 
 
 <p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+When using IncludeController and including the same JMX file, ensure you name the IncludeController differently to avoid facing known issue 50898.
+
+</td></tr>
+</table>
+</p>
+
+
+<p>
 
 If the file cannot be found at the location given by prefix+filename, then the controller
 attempts to open the fileName relative to the JMX launch directory (versions of JMeter after 2.3.4).
@@ -7301,8 +7532,8 @@ Yes
 
 	    The Transaction Controller generates an additional
 	    sample which measures the overall time taken to perform the nested test elements.
-	    Note that this time includes all processing within the controller scope, not just
-	    the samples.
+	    Note that this time by default includes all processing within the controller scope, not just
+	    the samples, this can be changed by unchecking "Include duration of timer and pre-post processors in generated sample".
 	    
 </p>
 
@@ -7705,7 +7936,7 @@ by using the -l command-line flag.
 
 	The figure below shows an example of the result file configuration panel
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='786' height='145' src="../images/screenshots/simpledatawriter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='741' height='141' src="../images/screenshots/simpledatawriter.png"><br>
 <font size="-1">Result file configuration panel
 </font></td></tr></table></p>
 
@@ -7803,22 +8034,6 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 
 <p><b>Control Panel</b></p>
 <div align="center"><img width='629' height='300' src="../images/screenshots/sample_result_config.png"></div>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="Graph_Full_Results">18.3.2 Graph Full Results</a>
-<a class="sectionlink" href="#Graph_Full_Results" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td>
-No Description
-<p><b>Control Panel</b></p>
-<div align="center"><img width='672' height='316' src="../images/screenshots/graphfullresults.png"></div>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -8510,7 +8725,7 @@ The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file.
 <p><b>Control Panel</b></p>
-<div align="center"><img width='905' height='657' src="../images/screenshots/aggregate_graph.png"></div>
+<div align="center"><img width='914' height='684' src="../images/screenshots/aggregate_graph.png"></div>
 <div align="center">
 
 
@@ -8518,7 +8733,7 @@ the graph as a PNG file.
 
     The figure below shows an example of settings to draw this graph.
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='903' height='653' src="../images/screenshots/aggregate_graph_settings.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='913' height='443' src="../images/screenshots/aggregate_graph_settings.png"><br>
 <font size="-1">Aggregate graph settings
 </font></td></tr></table></p>
 
@@ -8545,7 +8760,7 @@ The mailer visualizer can be set up to send email if a test run receives too man
 failed responses from the server.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='645' height='345' src="../images/screenshots/mailervisualizer.png"></div>
+<div align="center"><img width='860' height='463' src="../images/screenshots/mailervisualizer.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Mailer_Visualizer_parms"/>
@@ -8576,25 +8791,30 @@ Yes
 </td>
 </tr>
 <tr>
-<td>SMTP Host</td>
-<td>IP address or host name of SMTP (email redirector)
-        server.
+<td>Success Subject</td>
+<td>Email subject line for success messages.
 </td>
 <td>
 No
+</td>
+</tr>
+<tr>
+<td>Success Limit</td>
+<td>Once this number of successful responses is exceeded
+        
+<strong>
+after previously reaching the failure limit
+</strong>
+, a success email
+        is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr>
 <td>Failure Subject</td>
 <td>Email subject line for fail messages.
-</td>
-<td>
-No
-</td>
-</tr>
-<tr>
-<td>Success Subject</td>
-<td>Email subject line for success messages.
 </td>
 <td>
 No
@@ -8610,17 +8830,44 @@ Yes
 </td>
 </tr>
 <tr>
-<td>Success Limit</td>
-<td>Once this number of successful responses is exceeded
-        
-<strong>
-after previously reaching the failure limit
-</strong>
-, a success email
-        is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.
+<td>Host</td>
+<td>IP address or host name of SMTP server (email redirector)
+        server.
 </td>
 <td>
-Yes
+No
+</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>Port of SMTP server (defaults to 25).
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Login</td>
+<td>Login used to authenticate.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>Password used to authenticate.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Connection security</td>
+<td>Type of encryption for SMTP authentication (SSL, TLS or none).
+</td>
+<td>
+No
 </td>
 </tr>
 <tr>
@@ -8779,12 +9026,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -9186,12 +9437,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -9438,8 +9693,20 @@ Yes
     
 <p>
 
-	Versions of JMeter after 2.3.1 allow variables to be quoted; this allows the value to contain a delimiter.
+	Versions of JMeter after 2.3.1 allow values to be quoted; this allows the value to contain a delimiter.
 	Previously it was necessary to choose a delimiter that was not used in any values.
+    If "allow quoted data" is enabled, a value may be enclosed in double-quotes.
+    These are removed. To include double-quotes within a quoted field, use two double-quotes.
+    For example:
+<pre>
+
+1,"2,3","4""5" =>
+1
+2,3
+4"5
+
+</pre>
+
 	
 </p>
 
@@ -9532,7 +9799,7 @@ csvdataset.eofstring
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='396' height='301' src="../images/screenshots/csvdatasetconfig.png"></div>
+<div align="center"><img width='433' height='281' src="../images/screenshots/csvdatasetconfig.png"></div>
 <p>
 <b>Parameters</b>
 <a name="CSV_Data_Set_Config_parms"/>
@@ -9598,6 +9865,12 @@ Yes
 <tr>
 <td>Allow quoted data?</td>
 <td>Should the CSV file allow values to be quoted?
+  If enabled, then values can be enclosed in 
+<code>
+"
+</code>
+ - double-quote - allowing values to contain a delimeter.
+  
 </td>
 <td>
 Yes
@@ -9674,7 +9947,7 @@ Yes
 </td></tr>
 <tr><td>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='490' height='198' src="../images/screenshots/ftp-config/ftp-request-defaults.png"></div>
+<div align="center"><img width='520' height='202' src="../images/screenshots/ftp-config/ftp-request-defaults.png"></div>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -9750,7 +10023,7 @@ These can be set up using a
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='490' height='253' src="../images/screenshots/http-config/http-auth-manager.png"></div>
+<div align="center"><img width='439' height='238' src="../images/screenshots/http-config/http-auth-manager.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Authorization_Manager_parms"/>
@@ -9883,7 +10156,7 @@ to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, name
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='553' height='253' src="../images/screenshots/http-config/auth-manager-example1b.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='539' height='241' src="../images/screenshots/http-config/auth-manager-example1b.png"><br>
 <font size="-1">Figure 11 - Authorization Manager Control Panel
 </font></td></tr></table></p>
 
@@ -10097,7 +10370,7 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='445' height='328' src="../images/screenshots/http-config/http-cookie-manager.png"></div>
+<div align="center"><img width='506' height='329' src="../images/screenshots/http-config/http-cookie-manager.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Cookie_Manager_parms"/>
@@ -10947,6 +11220,30 @@ Yes
 Yes
 </td>
 </tr>
+</table>
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+To make JMeter use more than one certificate you need to ensure that:
+
+<ul>
+
+
+<li>
+https.use.cached.ssl.context=false is set in jmeter.properties or user.properties
+</li>
+
+
+<li>
+You use either HTTPClient 3.1 or 4 implementations for HTTP Request
+</li>
+
+
+</ul>
+
+
+</td></tr>
 </table>
 </p>
 </td></tr>
@@ -12356,12 +12653,16 @@ ctx - JMeterContext
 
 	
 <li>
-vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());
+vars - 
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());
 </li>
 
     
 <li>
-props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - JMeterProperties (class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -12864,12 +13165,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -13629,12 +13934,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -13767,12 +14076,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -14350,7 +14663,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_preprocessor.png"></div>
+<div align="center"><img width='568' height='325' src="../images/screenshots/beanshell_preprocessor.png"></div>
 <p>
 <b>Parameters</b>
 <a name="BeanShell_PreProcessor_parms"/>
@@ -14441,12 +14754,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -14600,12 +14917,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -15426,7 +15747,7 @@ Tidy homepage
 This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    
 <p><b>Control Panel</b></p>
-<div align="center"><img width='435' height='146' src="../images/screenshots/resultstatusactionhandler.png"></div>
+<div align="center"><img width='493' height='140' src="../images/screenshots/resultstatusactionhandler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Result_Status_Action_Handler_parms"/>
@@ -15530,7 +15851,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_postprocessor.png"></div>
+<div align="center"><img width='655' height='306' src="../images/screenshots/beanshell_postprocessor.png"></div>
 <p>
 <b>Parameters</b>
 <a name="BeanShell_PostProcessor_parms"/>
@@ -15621,12 +15942,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -15783,12 +16108,16 @@ ctx - (JMeterContext) - gives access to the context
 
 
 <li>
-vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
+vars - (
+<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
 </li>
 
 
 <li>
-props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -15990,7 +16319,7 @@ In jmeter.properties, edit "user.classpath" to include additional libraries.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='529' height='422' src="../images/screenshots/testplan.png"></div>
+<div align="center"><img width='559' height='435' src="../images/screenshots/testplan.png"></div>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -16571,7 +16900,7 @@ Yes
 </tr>
 <tr>
 <td>Regex Matching</td>
-<td>Use Regex Matching when replacing variables?
+<td>Use Regex Matching when replacing variables? If checked replacement will use word boundaries, ie it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b.
 </td>
 <td>
 Yes
@@ -16976,6 +17305,20 @@ One solution is to ensure that any files to be uploaded are in the JMeter workin
 either by copying the files there or by starting JMeter in the directory containing the files.
 
 </p>
+<p>
+<b>
+Recording HTTP Based Non Textual Protocols not natively available in JMeter
+</b>
+</p>
+<p>
+
+You may have to record an HTTP protocol that is not handled by default by JMeter (Custom Binary Protocol, Adobe Flex, Microsoft Silverlight... ).
+Although JMeter does not provide a native proxy implementation to record these protocols, you have the ability to
+record these protocols by implementing a custom SamplerCreator. This Sampler Creator will translate the binary format into a HTTPSamplerBase subclass
+that can be added to the JMeter Test Case.
+For more details see "Extending JMeter".
+
+</p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -17085,7 +17428,7 @@ It is available only on the WorkBench.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='776' height='502' src="../images/screenshots/property_display.png"></div>
+<div align="center"><img width='804' height='508' src="../images/screenshots/property_display.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Property_Display_parms"/>
@@ -17133,7 +17476,7 @@ The values can be seen in the
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='355' height='172' src="../images/screenshots/debug_sampler.png"></div>
+<div align="center"><img width='431' height='172' src="../images/screenshots/debug_sampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Debug_Sampler_parms"/>
@@ -17353,119 +17696,6 @@ Yes
 
 <p><b>Control Panel</b></p>
 <div align="center"><img width='537' height='289' src="../images/screenshots/teardown_thread_group.png"></div>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<a href="#">
-^
-</a>
-</blockquote>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
-<tr><td bgcolor="#525D76">
-<font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="Reports"><strong>18.10 Reports</strong></a><a class="sectionlink" href="#Reports" title="Link to here">&para;</a></font>
-</td></tr>
-<tr><td>
-<blockquote>
-<description>
-
-		
-<br>
-
-
-
-</description>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="Report_Plan">18.10.1 Report Plan</a>
-<a class="sectionlink" href="#Report_Plan" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td>
-<p>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="Report_Table">18.10.2 Report Table</a>
-<a class="sectionlink" href="#Report_Table" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td>
-<p>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="HTML_Report_Writer">18.10.3 HTML Report Writer</a>
-<a class="sectionlink" href="#HTML_Report_Writer" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td>
-<p>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="Report_Page">18.10.4 Report Page</a>
-<a class="sectionlink" href="#Report_Page" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td>
-<p>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="Line_Graph">18.10.5 Line Graph</a>
-<a class="sectionlink" href="#Line_Graph" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td>
-<p>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="Bar_Chart">18.10.6 Bar Chart</a>
-<a class="sectionlink" href="#Bar_Chart" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td>
-<p>
-</p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>

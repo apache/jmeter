@@ -63,6 +63,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
+<li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
+</li>
 <li><a href="../issues.html">Issues</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
@@ -596,22 +598,22 @@ Note: there can be problems (especially with client-server mode) if the director
 </p>
 <p>
 
-The installation directory structure should look something like this (for version 2.3.1):
+The installation directory structure should look something like this (for version 2.7):
 
 <pre>
 
-jakarta-jmeter-2.3.1
-jakarta-jmeter-2.3.1/bin
-jakarta-jmeter-2.3.1/docs
-jakarta-jmeter-2.3.1/extras
-jakarta-jmeter-2.3.1/lib/
-jakarta-jmeter-2.3.1/lib/ext
-jakarta-jmeter-2.3.1/lib/junit
-jakarta-jmeter-2.3.1/printable_docs
+apache-jmeter-2.7
+apache-jmeter-2.7/bin
+apache-jmeter-2.7/docs
+apache-jmeter-2.7/extras
+apache-jmeter-2.7/lib/
+apache-jmeter-2.7/lib/ext
+apache-jmeter-2.7/lib/junit
+apache-jmeter-2.7/printable_docs
 
 </pre>
 
-You can rename the parent directory (i.e. jakarta-jmeter-2.3.1) if you want, but do not change any of the sub-directory names.
+You can rename the parent directory (i.e. apache-jmeter-2.7) if you want, but do not change any of the sub-directory names.
 
 </p>
 </blockquote>
@@ -1129,6 +1131,23 @@ jmeter.log
 , and will be found in the directory from which JMeter was launched.
 		
 </p>
+<p>
+
+		Since JMeter 2.6, menu 
+<b>
+Options > Log Viewer
+</b>
+ displays the log file in a bottom pane on main JMeter window. 
+		
+</p>
+<p>
+
+		Since JMeter 2.7 (GUI mode), the number of error/fatal messages logged in the log file is displayed at top-right. 
+		
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/log_errors_counter.png"><br>
+<font size="-1">Error/fatal counter
+</font></td></tr></table></p>
 <p>
 
 		JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
