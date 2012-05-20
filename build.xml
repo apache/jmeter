@@ -1179,8 +1179,9 @@ run JMeter unless all the JMeter jars are added.
     <!-- Binary file types -->
     <exclude name="${extras.dir}/*.jar"/>
     <exclude name="${extras.dir}/*.jpg"/>
-    <exclude name="${extras.dir}/*.jmx"/>
+    <exclude name="${extras.dir}/*.png"/>
     <!-- File types that need to retain their EOL setting -->
+    <exclude name="${extras.dir}/*.jmx"/>
     <exclude name="${extras.dir}/*.cmd"/>
     <exclude name="${extras.dir}/*.sh"/>
   </patternset>
@@ -1213,8 +1214,9 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/examples/*.jmx"/>
     <include name="${extras.dir}/*.jar"/>
     <include name="${extras.dir}/*.jpg"/>
-    <include name="${extras.dir}/*.jmx"/>
+    <include name="${extras.dir}/*.png"/>
     <!-- File types that need to retain their EOL setting -->
+    <include name="${extras.dir}/*.jmx"/>
     <include name="${extras.dir}/*.cmd"/>
     <include name="${extras.dir}/*.sh"/>
   </patternset>
