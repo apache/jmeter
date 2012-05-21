@@ -130,12 +130,6 @@ New interface org.apache.jmeter.engine.util.ConfigMergabilityIndicator has been 
 
 <h2>Known bugs</h2>
 
-<p>
-The Include Controller has some problems in non-GUI mode (see Bug 50898). 
-In particular, it can cause a NullPointerException if there are two include controllers with the same name.
-The workaround is to use different names for IncludeControllers
-</p>
-
 <p>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</p>
 
@@ -200,6 +194,7 @@ When calling "Clear All" command, if Log Viewer is displayed its content will be
 <h3>Controllers</h3>
 <ul>
 <li>Bug 52968 - Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs</li>
+<li>Bug 50898 - IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name</li>
 </ul>
 
 <h3>Listeners</h3>
