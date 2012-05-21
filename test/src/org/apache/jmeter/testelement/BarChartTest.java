@@ -18,6 +18,7 @@
 package org.apache.jmeter.testelement;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JComponent;
 
@@ -39,7 +40,7 @@ public class BarChartTest extends JMeterTestCase {
         super(arg0);
     }
 
-    public void testGenerateBarChart() {
+    public void testGenerateBarChart() throws IOException {
         log.info("jtl version=" + JMeterUtils.getProperty("file_format.testlog"));
         // String sampleLog = "C:/eclipse3/workspace/jmeter-21/bin/testfiles/sample_log1.jtl";
         String sampleLog = findTestPath("testfiles/sample_log1.jtl");
@@ -79,7 +80,7 @@ public class BarChartTest extends JMeterTestCase {
         String filename = bchart.getTitle();
         filename = filename.replace(' ','_');
         if (!"true".equalsIgnoreCase(System.getProperty("java.awt.headless"))){
-            String outName = findTestPath("./testfiles/" + filename);
+            String outName = File.createTempFile(filename, null).getAbsolutePath(); // tweak.
             serv.saveJComponent(outName,SaveGraphicsService.PNG,gr);
             assertTrue("Should have created the file",new File(outName+".png").exists());
         }
