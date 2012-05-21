@@ -63,6 +63,13 @@ public class IncludeController extends GenericController implements ReplaceableC
         super();
     }
 
+    // Bug 50898 - work round the problem just for Include Controllers for now.
+    // Can be removed if the AbstractTestElement#equals(Object o) method is fixed.
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj;
+    }
+
     @Override
     public Object clone() {
         // TODO - fix so that this is only called once per test, instead of at every clone
