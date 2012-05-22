@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.jorphan.util.JMeterError;
+
 /**
  * ListedHashTree is a different implementation of the {@link HashTree}
  * collection class. In the ListedHashTree, the order in which values are added
@@ -119,7 +121,22 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         HashTree tree = getTree(currentKey);
         data.remove(currentKey);
         data.put(newKey, tree);
-        order.set(order.indexOf(currentKey), newKey);
+        // find order.indexOf(currentKey) using == rather than equals()
+        // there may be multiple entries which compare equals (Bug 50898)
+        // This will be slightly slower than the built-in method,
+        // but replace() is not used frequently.
+        int entry=-1;
+        for (int i=0; i < order.size(); i++) {
+            Object ent = order.get(i);
+            if (ent == currentKey) {
+                entry = i;
+                break;
+            }
+        }
+        if (entry == -1) {
+            throw new JMeterError("Impossible state, data key not present in order: "+currentKey.getClass());
+        }
+        order.set(entry, newKey);
     }
 
     /** {@inheritDoc} */
