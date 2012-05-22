@@ -32,6 +32,7 @@ import java.util.TreeMap;
  * @see HashTree
  * @see HashTreeTraverser
  *
+ * TODO does not appear to be used currently
  */
 public class SortedHashTree extends HashTree implements Serializable {
 
