@@ -1913,7 +1913,7 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.docs.api}" includes="**/*.html"/>
     </delete>
     <echo level="info">Updating overview to ${docversion}</echo>
-    <replaceregexp match="version [\d.a-zA-Z]+"
+    <replaceregexp match="version [^\s]+"
                  encoding="${encoding}"
                  replace="version ${docversion}"
                  flags="g" byline="true">
