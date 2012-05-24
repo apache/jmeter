@@ -11177,7 +11177,51 @@ jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]
 <tr><td>
 <p>
 The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
-This component is typically used in HTTPs scenarios where you don't want to take into account keystore initialization into account in response time.
+This component is typically used in HTTPS scenarios where you don't want to take into account keystore initialization into account in response time.
+</p>
+
+
+<p>
+To use this element, you need to setup first a Java Key Store with the client certificates you want to test, to do that:
+
+<ol>
+
+
+<li>
+Create your certificates either with Java keytool utility or through your PKI
+</li>
+
+
+<li>
+If created by PKI, import your keys in Java Key Store by converting them to a format acceptable by JKS
+</li>
+
+
+<li>
+Then reference the keystore file through the 2 JVM properties (or add them in system.properties):
+    
+<ul>
+
+        
+<li>
+-Djavax.net.ssl.keyStore=path_to_keystore
+</li>
+
+        
+<li>
+-Djavax.net.ssl.keyStorePassword=password_of_keystore
+</li>
+
+    
+</ul>
+
+
+</li>
+
+
+</ol>
+
+
 </p>
 
 
