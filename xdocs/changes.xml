@@ -73,7 +73,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </p>
 
 <h3>Aggregate graph: Clustered Bar char with average, median, 90% line, min and max columns</h3>
-<p>Aggregate graph changes to Clustered Bar chart, add more columns (median, 90% line, min, max) and options, fixed some bugs 
+<p>Aggregate graph changes to Clustered Bar chart, add more columns (median, 90% line, min, max) and options, fixed some bugs.
 <figure width="1177" height="503" image="changes/2.7/03_aggregate_graph_with_new_cols.png"></figure>
 </p>
 
