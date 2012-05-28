@@ -99,6 +99,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h3>Other samplers</h3>
 <ul>
+<li>Bug 53310 - TestAction should implement Interruptible</li>
 </ul>
 
 <h3>Controllers</h3>

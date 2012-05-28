@@ -24,6 +24,7 @@ import java.util.Set;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -38,7 +39,7 @@ import org.apache.log.Logger;
  * intended for use in Conditional Controllers.
  *
  */
-public class TestAction extends AbstractSampler {
+public class TestAction extends AbstractSampler implements Interruptible {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -63,6 +64,8 @@ public class TestAction extends AbstractSampler {
     private final static String TARGET = "ActionProcessor.target"; //$NON-NLS-1$
     private final static String ACTION = "ActionProcessor.action"; //$NON-NLS-1$
     private final static String DURATION = "ActionProcessor.duration"; //$NON-NLS-1$
+
+    private volatile transient Thread pauseThread;
 
     public TestAction() {
         super();
@@ -112,9 +115,12 @@ public class TestAction extends AbstractSampler {
             milis=0;
         }
         try {
+            pauseThread = Thread.currentThread();
             Thread.sleep(milis);
         } catch (InterruptedException e) {
         	// NOOP
+        } finally {
+            pauseThread = null;
         }
     }
 
@@ -149,5 +155,14 @@ public class TestAction extends AbstractSampler {
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+
+    public boolean interrupt() {
+        Thread thrd = pauseThread; // take copy so cannot get NPE
+        if (thrd!= null) {
+            thrd.interrupt();
+            return true;
+        }
+        return false;
     }
 }
