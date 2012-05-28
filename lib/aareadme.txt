@@ -67,7 +67,7 @@ commons-logging-1.1.1
 http://commons.apache.org/downloads/download_logging.cgi
 - httpclient
 
-commons-net-3.0.1
+commons-net-3.1
 -----------------
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
