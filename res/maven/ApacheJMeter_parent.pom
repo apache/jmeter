@@ -66,7 +66,7 @@ under the License.
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-lang.version>2.6</commons-lang.version>
       <commons-logging.version>1.1.1</commons-logging.version>
-      <commons-net.version>3.0.1</commons-net.version>
+      <commons-net.version>3.1</commons-net.version>
       <excalibur-datasource.version>1.1.1</excalibur-datasource.version>
       <excalibur-instrument.version>1.0</excalibur-instrument.version>
       <excalibur-logger.version>1.1</excalibur-logger.version>
