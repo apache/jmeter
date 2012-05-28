@@ -1289,7 +1289,7 @@ public class JMeterUtils implements UnitTestManager {
             try {
                 SwingUtilities.invokeAndWait(runnable);
             } catch (InterruptedException e) {
-                throw new Error(e);
+                log.warn("Interrupted in thread "+Thread.currentThread().getName(), e);
             } catch (InvocationTargetException e) {
                 throw new Error(e);
             }
