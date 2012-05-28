@@ -128,6 +128,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h2>Non-functional changes</h2>
 <ul>
+<li>Bug 53311 - JMeterUtils#runSafe should not throw Error when interrupted</li>
 <li>Updated to commons-net-3.1 (from 3.0.1)</li>
 </ul>
 
