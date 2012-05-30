@@ -99,7 +99,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h3>Other samplers</h3>
 <ul>
-<li>Bug 53310 - TestAction should implement Interruptible</li>
+<li><bugzilla>55310</bugzilla> - TestAction should implement Interruptible</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -128,7 +128,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h2>Non-functional changes</h2>
 <ul>
-<li>Bug 53311 - JMeterUtils#runSafe should not throw Error when interrupted</li>
+<li><bugzilla>53311</bugzilla> - JMeterUtils#runSafe should not throw Error when interrupted</li>
 <li>Updated to commons-net-3.1 (from 3.0.1)</li>
 </ul>
 
