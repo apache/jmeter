@@ -688,7 +688,7 @@ HtmlParser & HtmlLexer v2.1
 
 also
 
-JUnit v4.9
+JUnit v4.10
 =====
 
 http://opensource.org/licenses/cpl1.0.txt
@@ -961,7 +961,7 @@ jCharts License
 
 ################################################################################
 
-JDOM v1.1
+JDOM v1.1.2
 ====
 
 /*-- 
@@ -1081,7 +1081,7 @@ JTidy (r938)
 ################################################################################
 
 
-Mozilla Rhino JavaScript v1.6R5
+Mozilla Rhino JavaScript v1.7R3
 ========================
  
 MPL 1.1 at http://www.mozilla.org/MPL/MPL-1.1.html
@@ -1611,7 +1611,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ################################################################################
 
-XStream v1.3.1
+XStream v1.4.2
 =======
 
 http://xstream.codehaus.org/license.html
