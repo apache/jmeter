@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.util.concurrent.CountDownLatch;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
@@ -69,29 +71,27 @@ public class FixedQueueExecutor implements QueueExecutor {
         if(id == null && !useReqMsgIdAsCorrelId){
             throw new IllegalArgumentException("Correlation id is null. Set the JMSCorrelationID header.");
         }
-
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
         final MessageAdmin admin = MessageAdmin.getAdmin();
         if(useReqMsgIdAsCorrelId) {// msgId not available until after send() is called
             // Note: there is only one admin object which is shared between all threads
             synchronized (admin) {// interlock with Receiver
                 producer.send(request);
                 id=request.getJMSMessageID();
-                admin.putRequest(id, request);
+                admin.putRequest(id, request, countDownLatch);
             }
         } else {
-            admin.putRequest(id, request);            
+            admin.putRequest(id, request, countDownLatch);            
             producer.send(request);
         }
 
         try {
             if (log.isDebugEnabled()) {
-                log.debug("wait for reply " + id + " started on " + System.currentTimeMillis());
+                log.debug(Thread.currentThread().getName()+" will wait for reply " + id + " started on " + System.currentTimeMillis());
             }
-            synchronized (request) {
-                request.wait(timeout);
-            }
+            countDownLatch.await();
             if (log.isDebugEnabled()) {
-                log.debug("done waiting for " + id + " ended on " + System.currentTimeMillis());
+                log.debug(Thread.currentThread().getName()+" done waiting for " + id + " on "+request+" ended on " + System.currentTimeMillis());
             }
 
         } catch (InterruptedException e) {
