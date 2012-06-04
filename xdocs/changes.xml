@@ -63,6 +63,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h3>Other Samplers</h3>
 <ul>
+<li><bugzilla>53348</bugzilla> - JMeter JMS Point-to-Point Request-Response sampler doesn't work when Request-queue and Receive-queue are different</li>
 </ul>
 
 <h3>Controllers</h3>
