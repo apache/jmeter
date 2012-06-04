@@ -1437,21 +1437,25 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
     messages that respect the Selector condition. Syntax uses subpart of SQL 92.
   </property>
   <property name="Communication style" required="Yes">
-    The Communication style can be Request Only (also known as Fire and Forget) or Request Reply.
-    Request Only will only sent messages and will not monitor replies. As such it can be used to put load on a system.
-    Request Reply will sent messages and monitor the replies it receives. Behaviour is depended on the value of the JNDI Name Reply Queue.
+    The Communication style can be <b>Request Only</b> (also known as Fire and Forget) or <b>Request Response</b>:
+    <ul>
+    <li><b>Request Only</b> will only send messages and will not monitor replies. As such it can be used to put load on a system.</li>
+    <li><b>Request Response</b> will send messages and monitor the replies it receives. Behaviour depends on the value of the JNDI Name Reply Queue.
     If JNDI Name Reply Queue has a value, this queue is used to monitor the results. Matching of request and reply is done with
-    the message id of the request with the correlation id of the reply. If the JNDI Name Reply Queue is empty, then
-    temporary queues will be used for the communication between the requestor and the server. This is very different from
-    the fixed reply queue. With temporary queues the diffent threads will block until the reply message has been received.
+    the message id of the request and the correlation id of the reply. If the JNDI Name Reply Queue is empty, then
+    temporary queues will be used for the communication between the requestor and the server.
+    This is very different from the fixed reply queue. With temporary queues the sending thread will block until the reply message has been received.
+    With <b>Request Response</b> mode, you need to have a Server that listens to messages sent to Request Queue and sends replies to 
+    queue referenced by <code>message.getJMSReplyTo()</code>.</li>
+    </ul>
   </property>
   <property name="Use alternate fields for message correlation" required="Yes">
     These check-boxes select the fields which will be used for matching the response message with the original request.
     <ul>
-    <li>Use Request Message Id - if selected, the request JMSMessageID will be used, 
+    <li><b>Use Request Message Id</b> - if selected, the request JMSMessageID will be used, 
     otherwise the request JMSCorrelationID will be used. 
     In the latter case the correlation id must be specified in the request.</li>
-    <li>Use Response Message Id - if selected, the response JMSMessageID will be used, 
+    <li><b>Use Response Message Id</b> - if selected, the response JMSMessageID will be used, 
     otherwise the response JMSCorrelationID will be used.
     </li>
     </ul>
@@ -1466,11 +1470,11 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
     </li>
     </ul>
     In both cases the JMS application is responsible for populating the correlation ID as necessary.
-    <b>Note:</b> if the same queue is used to send and receive messages, 
+    <note>if the same queue is used to send and receive messages, 
     then the response message will be the same as the request message.
     In which case, either provide a correlation id and clear both checkboxes;
     or select both checkboxes to use the message Id for correlation.
-    This can be useful for checking raw JMS throughput.
+    This can be useful for checking raw JMS throughput.</note>
   </property>
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
