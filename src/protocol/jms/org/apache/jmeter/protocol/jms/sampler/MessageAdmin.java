@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 
 import javax.jms.Message;
 
@@ -47,11 +48,11 @@ public class MessageAdmin {
     /**
      * @param request
      */
-    public void putRequest(String id, Message request) {
+    public void putRequest(String id, Message request, CountDownLatch latch) {
         if (log.isDebugEnabled()) {
             log.debug("REQ_ID [" + id + "]");
         }
-        table.put(id, new PlaceHolder(request));
+        table.put(id, new PlaceHolder(request, latch));
     }
 
     public void putReply(String id, Message reply) {
@@ -61,10 +62,13 @@ public class MessageAdmin {
         }
         if (holder != null) {
             holder.setReply(reply);
-            Object obj = holder.getRequest();
-            // Findbugs : False positive
-            synchronized (obj) {
-                obj.notify();
+            CountDownLatch latch = holder.getLatch();
+            if (log.isDebugEnabled()) {
+                log.debug(Thread.currentThread().getName()+" releasing latch : " + latch);
+            }
+            latch.countDown();
+            if (log.isDebugEnabled()) {
+                log.debug(Thread.currentThread().getName()+" released latch : " + latch);
             }
         } else {
             if (log.isDebugEnabled()) {
@@ -93,12 +97,14 @@ public class MessageAdmin {
 }
 
 class PlaceHolder {
+    private final CountDownLatch latch;
     private final Object request;
 
     private Object reply;
 
-    PlaceHolder(Object original) {
+    PlaceHolder(Object original, CountDownLatch latch) {
         this.request = original;
+        this.latch = latch;
     }
 
     void setReply(Object reply) {
@@ -120,5 +126,12 @@ class PlaceHolder {
     @Override
     public String toString() {
         return "request=" + request + ", reply=" + reply;
+    }
+
+    /**
+     * @return the latch
+     */
+    public CountDownLatch getLatch() {
+        return latch;
     }
 }
