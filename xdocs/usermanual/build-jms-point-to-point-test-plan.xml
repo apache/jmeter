@@ -146,7 +146,8 @@ Then, select the JMS Point-to-Point sampler element in the tree.
                     <tr>
                         <td colspan="1">Communication Style</td>
                         <td>Request Response</td>
-                        <td>This means that you need at least a service that responds to the requests.</td>
+                        <td>This means that you need at least a service running outside of JMeter and that will respond to the requests. 
+                        This service must listen to the Request Queue and send messages to the queue referenced by the <code>message.getJMSReplyTo()</code></td>
                     </tr>
                     <tr>
                         <td>Content</td>
