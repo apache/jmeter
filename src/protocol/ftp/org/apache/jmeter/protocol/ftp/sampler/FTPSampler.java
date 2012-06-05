@@ -299,6 +299,9 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             savedClient = null;
             try {
                 client.abort();
+            } catch (IOException ignored) {
+            }
+            try {
                 client.disconnect();
             } catch (IOException ignored) {
             }
