@@ -82,6 +82,10 @@ Properties are not the same as variables.
 Variables are local to a thread; properties are common to all threads,
 and need to be referenced using the __P or __property function.
 </note>
+<note>
+When using \ before a variable for a windows path for example C:\test\${test}, ensure you escape the \ otherwise JMeter will not interpret the variable, example:
+C:\\test\\${test}
+</note>
 <p>List of functions, loosely grouped into types.</p>
 <table border="1">
         
