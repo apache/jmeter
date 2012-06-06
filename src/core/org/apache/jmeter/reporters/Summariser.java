@@ -224,9 +224,7 @@ public class Summariser extends AbstractTestElement
         return JOrphanUtils.rightAlign(sb, len);
     }
 
-    private static final DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
-
-    private static StringBuilder doubleToSb(StringBuilder sb, double d, int len, int frac) {
+    private static StringBuilder doubleToSb(DecimalFormat dfDouble, StringBuilder sb, double d, int len, int frac) {
         sb.setLength(0);
         dfDouble.setMinimumFractionDigits(frac);
         dfDouble.setMaximumFractionDigits(frac);
@@ -239,7 +237,8 @@ public class Summariser extends AbstractTestElement
      * @param string
      * @return
      */
-    private String format(String name, RunningSample s, String type) {
+    private static String format(String name, RunningSample s, String type) {
+        DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
         StringBuilder tmp = new StringBuilder(20); // for intermediate use
         StringBuilder sb = new StringBuilder(100); // output line buffer
         sb.append(name);
@@ -249,10 +248,10 @@ public class Summariser extends AbstractTestElement
         sb.append(longToSb(tmp, s.getNumSamples(), 5));
         sb.append(" in ");
         long elapsed = s.getElapsed();
-        sb.append(doubleToSb(tmp, elapsed / 1000.0, 5, 1));
+        sb.append(doubleToSb(dfDouble, tmp, elapsed / 1000.0, 5, 1));
         sb.append("s = ");
         if (elapsed > 0) {
-            sb.append(doubleToSb(tmp, s.getRate(), 6, 1));
+            sb.append(doubleToSb(dfDouble, tmp, s.getRate(), 6, 1));
         } else {
             sb.append("******");// Rate is effectively infinite
         }
