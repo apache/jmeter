@@ -1413,6 +1413,10 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
         It is different from pub/sub messages and is generally used for handling transactions.
 		</p>
 		<p>
+		<b>Request Only</b> will typically used to put load on a JMS System.<br></br>
+        <b>Request Response</b> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br></br>		
+		</p>
+		<p>
 		Versions of JMeter after 2.3.2 use the properties java.naming.security.[principal|credentials] - if present -
 		when creating the Queue Connection. If this behaviour is not desired, set the JMeter property
 		<b>JMSSampler.useSecurity.properties=false</b>
