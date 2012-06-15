@@ -69,12 +69,34 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
 
     private static File temporaryFile;
 
+    private final int item;
+
     public TestHTTPSamplersAgainstHttpMirrorServer(String arg0) {
         super(arg0);
+        this.item = -1;
     }
-    
+
+    // additional ctor for processing tests which use int parameters
+    public TestHTTPSamplersAgainstHttpMirrorServer(String arg0, int item) {
+        super(arg0);
+        this.item = item;
+    }
+
+    // This is used to emulate @before class and @after class
     public static Test suite(){
-        TestSetup setup = new TestSetup(new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class)){
+        final TestSuite testSuite = new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class);
+        // Add parameterised tests. For simplicity we assune each has cases 0-10
+        for(int i=0; i<11; i++) {
+            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters", i));
+            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters2", i));
+            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters3", i));
+
+            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testPostRequest_UrlEncoded", i));
+            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testPostRequest_UrlEncoded2", i));
+            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testPostRequest_UrlEncoded3", i));
+        }
+
+        TestSetup setup = new TestSetup(testSuite){
             private HttpMirrorServer httpServer;
             @Override
             protected void setUp() throws Exception {
@@ -105,19 +127,19 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return setup;
     }
     
-    public void testPostRequest_UrlEncoded() throws Exception {
-        testPostRequest_UrlEncoded(HTTP_SAMPLER, ISO_8859_1);
+    public void itemised_testPostRequest_UrlEncoded() throws Exception {
+        testPostRequest_UrlEncoded(HTTP_SAMPLER, ISO_8859_1, item);
     }
 
-    public void testPostRequest_UrlEncoded2() throws Exception {
-        testPostRequest_UrlEncoded(HTTP_SAMPLER2, US_ASCII);
+    public void itemised_testPostRequest_UrlEncoded2() throws Exception {
+        testPostRequest_UrlEncoded(HTTP_SAMPLER2, US_ASCII, item);
     }
 
-    public void testPostRequest_UrlEncoded3() throws Exception {
-        testPostRequest_UrlEncoded(HTTP_SAMPLER3, US_ASCII);
+    public void itemised_testPostRequest_UrlEncoded3() throws Exception {
+        testPostRequest_UrlEncoded(HTTP_SAMPLER3, US_ASCII, item);
     }
 
-    public void testPostRequest_FormMultipart() throws Exception {
+    public void testPostRequest_FormMultipart_0() throws Exception {
         testPostRequest_FormMultipart(HTTP_SAMPLER, ISO_8859_1);
     }
 
@@ -165,120 +187,141 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         testGetRequest(HTTP_SAMPLER3);
     }
     
-    public void testGetRequest_Parameters() throws Exception {
-        testGetRequest_Parameters(HTTP_SAMPLER);
+    public void itemised_testGetRequest_Parameters() throws Exception {
+        testGetRequest_Parameters(HTTP_SAMPLER, item);
     }
     
-    public void testGetRequest_Parameters2() throws Exception {
-        testGetRequest_Parameters(HTTP_SAMPLER2);
+    public void itemised_testGetRequest_Parameters2() throws Exception {
+        testGetRequest_Parameters(HTTP_SAMPLER2, item);
     }   
 
-    public void testGetRequest_Parameters3() throws Exception {
-        testGetRequest_Parameters(HTTP_SAMPLER3);
+    public void itemised_testGetRequest_Parameters3() throws Exception {
+        testGetRequest_Parameters(HTTP_SAMPLER3, item);
     }   
 
-    private void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding) throws Exception {
+    private void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding, int test) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
         String descriptionValue = "mydescription";
-
-        // Test sending data with default encoding
         HTTPSamplerBase sampler = createHttpSampler(samplerType);
-        String contentEncoding = "";
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        HTTPSampleResult res = executeSampler(sampler);
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
+        HTTPSampleResult res;
+        String contentEncoding;
+
+        switch(test) {
+            case 0:
+                // Test sending data with default encoding
+                contentEncoding = "";
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 1:
+                // Test sending data as ISO-8859-1
+                contentEncoding = ISO_8859_1;
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 2:
+                // Test sending data as UTF-8
+                contentEncoding = "UTF-8";
+                titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 3:
+                // Test sending data as UTF-8, with values that will change when urlencoded
+                contentEncoding = "UTF-8";
+                titleValue = "mytitle/=";
+                descriptionValue = "mydescription   /\\";
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 4:
+                // Test sending data as UTF-8, with values that have been urlencoded
+                contentEncoding = "UTF-8";
+                titleValue = "mytitle%2F%3D";
+                descriptionValue = "mydescription+++%2F%5C";
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, true);
+                break;
+            case 5:
+                // Test sending data as UTF-8, with values similar to __VIEWSTATE parameter that .net uses
+                contentEncoding = "UTF-8";
+                titleValue = "/wEPDwULLTE2MzM2OTA0NTYPZBYCAgMPZ/rA+8DZ2dnZ2dnZ2d/GNDar6OshPwdJc=";
+                descriptionValue = "mydescription";
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 6:
+                // Test sending data as UTF-8, with values similar to __VIEWSTATE parameter that .net uses,
+                // with values urlencoded, but the always encode set to false for the arguments
+                // This is how the HTTP Proxy server adds arguments to the sampler
+                contentEncoding = "UTF-8";
+                titleValue = "%2FwEPDwULLTE2MzM2OTA0NTYPZBYCAgMPZ%2FrA%2B8DZ2dnZ2dnZ2d%2FGNDar6OshPwdJc%3D";
+                descriptionValue = "mydescription";
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+                ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
+                res = executeSampler(sampler);
+                assertFalse(((HTTPArgument)sampler.getArguments().getArgument(0)).isAlwaysEncoded());
+                assertFalse(((HTTPArgument)sampler.getArguments().getArgument(1)).isAlwaysEncoded());
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, true);
+                break;
+            case 7:
+                // Test sending data as UTF-8, where user defined variables are used
+                // to set the value for form data
+                JMeterUtils.setLocale(Locale.ENGLISH);
+                TestPlan testPlan = new TestPlan();
+                JMeterVariables vars = new JMeterVariables();
+                vars.put("title_prefix", "a test\u00c5");
+                vars.put("description_suffix", "the_end");
+                JMeterContextService.getContext().setVariables(vars);
+                JMeterContextService.getContext().setSamplingStarted(true);
+                ValueReplacer replacer = new ValueReplacer();
+                replacer.setUserDefinedVariables(testPlan.getUserDefinedVariables());
+                
+                contentEncoding = "UTF-8";
+                titleValue = "${title_prefix}mytitle\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
+                setupUrl(sampler, contentEncoding);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                // Replace the variables in the sampler
+                replacer.replaceValues(sampler);
+                res = executeSampler(sampler);
+                String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
+                String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
+                checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue, false);
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            default:
+                fail("Unexpected switch value: "+test);
+        }
         
-        // Test sending data as ISO-8859-1
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = ISO_8859_1;
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
 
-        // Test sending data as UTF-8
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
-        descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
 
-        // Test sending data as UTF-8, with values that will change when urlencoded
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "mytitle/=";
-        descriptionValue = "mydescription   /\\";
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
 
-        // Test sending data as UTF-8, with values that have been urlencoded
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "mytitle%2F%3D";
-        descriptionValue = "mydescription+++%2F%5C";
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, true);
 
-        // Test sending data as UTF-8, with values similar to __VIEWSTATE parameter that .net uses
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "/wEPDwULLTE2MzM2OTA0NTYPZBYCAgMPZ/rA+8DZ2dnZ2dnZ2d/GNDar6OshPwdJc=";
-        descriptionValue = "mydescription";
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
         
-        // Test sending data as UTF-8, with values similar to __VIEWSTATE parameter that .net uses,
-        // with values urlencoded, but the always encode set to false for the arguments
-        // This is how the HTTP Proxy server adds arguments to the sampler
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "%2FwEPDwULLTE2MzM2OTA0NTYPZBYCAgMPZ%2FrA%2B8DZ2dnZ2dnZ2d%2FGNDar6OshPwdJc%3D";
-        descriptionValue = "mydescription";
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
-        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
-        res = executeSampler(sampler);
-        assertFalse(((HTTPArgument)sampler.getArguments().getArgument(0)).isAlwaysEncoded());
-        assertFalse(((HTTPArgument)sampler.getArguments().getArgument(1)).isAlwaysEncoded());
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, true);
 
-        // Test sending data as UTF-8, where user defined variables are used
-        // to set the value for form data
-        JMeterUtils.setLocale(Locale.ENGLISH);
-        TestPlan testPlan = new TestPlan();
-        JMeterVariables vars = new JMeterVariables();
-        vars.put("title_prefix", "a test\u00c5");
-        vars.put("description_suffix", "the_end");
-        JMeterContextService.getContext().setVariables(vars);
-        JMeterContextService.getContext().setSamplingStarted(true);
-        ValueReplacer replacer = new ValueReplacer();
-        replacer.setUserDefinedVariables(testPlan.getUserDefinedVariables());
-        
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "${title_prefix}mytitle\u0153\u20a1\u0115\u00c5";
-        descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
-        setupUrl(sampler, contentEncoding);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        // Replace the variables in the sampler
-        replacer.replaceValues(sampler);
-        res = executeSampler(sampler);
-        String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
-        String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
-        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue, false);
     }
 
     private void testPostRequest_FormMultipart(int samplerType, String samplerDefaultEncoding) throws Exception {
@@ -430,7 +473,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         HTTPSampleResult res = executeSampler(sampler);
         String expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
-        
+
         // Test sending data as ISO-8859-1
         sampler = createHttpSampler(samplerType);
         contentEncoding = ISO_8859_1;
@@ -517,7 +560,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         res = executeSampler(sampler);
         expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
-        
+
         // Test sending data as UTF-8, with + as part of the value,
         // where the value is set in sampler as not urluencoded, but the 
         // isalwaysencoded flag of the argument is set to false.
@@ -534,7 +577,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         res = executeSampler(sampler);
         expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
-        
+
         // Test sending data as UTF-8, where user defined variables are used
         // to set the value for form data
         JMeterUtils.setLocale(Locale.ENGLISH);
@@ -591,111 +634,133 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkGetRequest(sampler, res);
     }
 
-    private void testGetRequest_Parameters(int samplerType) throws Exception {
+    private void testGetRequest_Parameters(int samplerType, int test) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
         String descriptionValue = "mydescription";
-        
-        // Test sending simple HTTP get
-        // Test sending data with default encoding
         HTTPSamplerBase sampler = createHttpSampler(samplerType);
-        String contentEncoding = "";
-        setupUrl(sampler, contentEncoding);
-        sampler.setMethod(HTTPSamplerBase.GET);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        HTTPSampleResult res = executeSampler(sampler);
-        sampler.setRunningVersion(true);
-        URL executedUrl = sampler.getUrl();
-        sampler.setRunningVersion(false);
-        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
-        
-        // Test sending data with ISO-8859-1 encoding
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = ISO_8859_1;
-        titleValue = "mytitle\uc385";
-        descriptionValue = "mydescription\uc385";
-        setupUrl(sampler, contentEncoding);
-        sampler.setMethod(HTTPSamplerBase.GET);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        sampler.setRunningVersion(true);
-        executedUrl = sampler.getUrl();
-        sampler.setRunningVersion(false);
-        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
-
-        // Test sending data with UTF-8 encoding
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
-        descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
-        setupUrl(sampler, contentEncoding);
-        sampler.setMethod(HTTPSamplerBase.GET);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        sampler.setRunningVersion(true);
-        executedUrl = sampler.getUrl();
-        sampler.setRunningVersion(false);
-        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
-        
-        // Test sending data as UTF-8, with values that changes when urlencoded
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "mytitle\u0153+\u20a1 \u0115&yes\u00c5";
-        descriptionValue = "mydescription \u0153 \u20a1 \u0115 \u00c5";
-        setupUrl(sampler, contentEncoding);
-        sampler.setMethod(HTTPSamplerBase.GET);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        sampler.setRunningVersion(true);
-        executedUrl = sampler.getUrl();
-        sampler.setRunningVersion(false);
-        String expectedTitleValue = "mytitle\u0153%2B\u20a1+\u0115%26yes\u00c5";
-        String expectedDescriptionValue = "mydescription+\u0153+\u20a1+\u0115+\u00c5";
-        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
-
-        // Test sending data as UTF-8, with values that have been urlencoded
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "mytitle%2F%3D";
-        descriptionValue = "mydescription+++%2F%5C";
-        setupUrl(sampler, contentEncoding);
-        sampler.setMethod(HTTPSamplerBase.GET);
-        setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
-        res = executeSampler(sampler);
-        sampler.setRunningVersion(true);
-        executedUrl = sampler.getUrl();
-        sampler.setRunningVersion(false);
-        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, true);
-
-        // Test sending data as UTF-8, where user defined variables are used
-        // to set the value for form data
-        JMeterUtils.setLocale(Locale.ENGLISH);
-        TestPlan testPlan = new TestPlan();
-        JMeterVariables vars = new JMeterVariables();
-        vars.put("title_prefix", "a test\u00c5");
-        vars.put("description_suffix", "the_end");
-        JMeterContextService.getContext().setVariables(vars);
-        JMeterContextService.getContext().setSamplingStarted(true);
-        ValueReplacer replacer = new ValueReplacer();
-        replacer.setUserDefinedVariables(testPlan.getUserDefinedVariables());
-        
-        sampler = createHttpSampler(samplerType);
-        contentEncoding = "UTF-8";
-        titleValue = "${title_prefix}mytitle\u0153\u20a1\u0115\u00c5";
-        descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
-        setupUrl(sampler, contentEncoding);
-        sampler.setMethod(HTTPSamplerBase.GET);
-        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-        // Replace the variables in the sampler
-        replacer.replaceValues(sampler);
-        res = executeSampler(sampler);
-        expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
-        expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
-        sampler.setRunningVersion(true);
-        executedUrl = sampler.getUrl();
-        sampler.setRunningVersion(false);
-        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue, false);
+        String contentEncoding;
+        HTTPSampleResult res;
+        URL executedUrl;
+   
+        switch(test) {
+            case 0:
+                // Test sending simple HTTP get
+                // Test sending data with default encoding
+                contentEncoding = "";
+                setupUrl(sampler, contentEncoding);
+                sampler.setMethod(HTTPSamplerBase.GET);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                sampler.setRunningVersion(true);
+                executedUrl = sampler.getUrl();
+                sampler.setRunningVersion(false);
+                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 1:
+                // Test sending data with ISO-8859-1 encoding
+                sampler = createHttpSampler(samplerType);
+                contentEncoding = ISO_8859_1;
+                titleValue = "mytitle\uc385";
+                descriptionValue = "mydescription\uc385";
+                setupUrl(sampler, contentEncoding);
+                sampler.setMethod(HTTPSamplerBase.GET);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                sampler.setRunningVersion(true);
+                executedUrl = sampler.getUrl();
+                sampler.setRunningVersion(false);
+                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 2:
+                // Test sending data with UTF-8 encoding
+                sampler = createHttpSampler(samplerType);
+                contentEncoding = "UTF-8";
+                titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
+                setupUrl(sampler, contentEncoding);
+                sampler.setMethod(HTTPSamplerBase.GET);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                sampler.setRunningVersion(true);
+                executedUrl = sampler.getUrl();
+                sampler.setRunningVersion(false);
+                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 3:
+                // Test sending data as UTF-8, with values that changes when urlencoded
+                sampler = createHttpSampler(samplerType);
+                contentEncoding = "UTF-8";
+                titleValue = "mytitle\u0153+\u20a1 \u0115&yes\u00c5";
+                descriptionValue = "mydescription \u0153 \u20a1 \u0115 \u00c5";
+                setupUrl(sampler, contentEncoding);
+                sampler.setMethod(HTTPSamplerBase.GET);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                sampler.setRunningVersion(true);
+                executedUrl = sampler.getUrl();
+                sampler.setRunningVersion(false);
+                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, false);
+                break;
+            case 4:
+                // Test sending data as UTF-8, with values that have been urlencoded
+                sampler = createHttpSampler(samplerType);
+                contentEncoding = "UTF-8";
+                titleValue = "mytitle%2F%3D";
+                descriptionValue = "mydescription+++%2F%5C";
+                setupUrl(sampler, contentEncoding);
+                sampler.setMethod(HTTPSamplerBase.GET);
+                setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
+                res = executeSampler(sampler);
+                sampler.setRunningVersion(true);
+                executedUrl = sampler.getUrl();
+                sampler.setRunningVersion(false);
+                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue, true);
+                break;
+            case 5:
+                // Test sending data as UTF-8, where user defined variables are used
+                // to set the value for form data
+                JMeterUtils.setLocale(Locale.ENGLISH);
+                TestPlan testPlan = new TestPlan();
+                JMeterVariables vars = new JMeterVariables();
+                vars.put("title_prefix", "a test\u00c5");
+                vars.put("description_suffix", "the_end");
+                JMeterContextService.getContext().setVariables(vars);
+                JMeterContextService.getContext().setSamplingStarted(true);
+                ValueReplacer replacer = new ValueReplacer();
+                replacer.setUserDefinedVariables(testPlan.getUserDefinedVariables());
+                
+                sampler = createHttpSampler(samplerType);
+                contentEncoding = "UTF-8";
+                titleValue = "${title_prefix}mytitle\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
+                setupUrl(sampler, contentEncoding);
+                sampler.setMethod(HTTPSamplerBase.GET);
+                setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+                // Replace the variables in the sampler
+                replacer.replaceValues(sampler);
+                res = executeSampler(sampler);
+                String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
+                String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
+                sampler.setRunningVersion(true);
+                executedUrl = sampler.getUrl();
+                sampler.setRunningVersion(false);
+                checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue, false);
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            default:
+                fail("Unexpected switch value: "+test);
+        }
     }
     
     private HTTPSampleResult executeSampler(HTTPSamplerBase sampler) {
