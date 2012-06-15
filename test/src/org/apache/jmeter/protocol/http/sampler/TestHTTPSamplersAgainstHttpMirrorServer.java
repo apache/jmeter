@@ -1160,9 +1160,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
-                System.out.println(">>>>>>>>>>>>>>>>>>>>");
+                System.out.println(">>>>>>>>>>>>>>>>>>>> expected:");
                 System.out.println(new String(expected,"UTF-8"));
-                System.out.println("====================");
+                System.out.println("==================== actual:");
                 System.out.println(new String(actual,"UTF-8"));
                 System.out.println("<<<<<<<<<<<<<<<<<<<<");
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
