@@ -761,7 +761,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // Check request headers
         checkHeaderTypeLength(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // Check post body from the result query string
-        checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding));
+        checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding), contentEncoding);
 
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
@@ -780,7 +780,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkHeaderTypeLength(headersSent, "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
-        checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding));
+        checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding), contentEncoding);
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
@@ -823,7 +823,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         assertNotNull("Sent body should not be null", bodySent);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
-        checkArraysHaveSameContent(expectedPostBody, bodySent);
+        checkArraysHaveSameContent(expectedPostBody, bodySent, contentEncoding);
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
@@ -842,7 +842,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // Check request headers
         checkHeaderTypeLength(res.getRequestHeaders(), HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, expectedPostBody.getBytes(contentEncoding).length);
          // Check post body from the result query string
-        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), res.getQueryString().getBytes(contentEncoding));
+        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), res.getQueryString().getBytes(contentEncoding), contentEncoding);
 
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
@@ -861,7 +861,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkHeaderTypeLength(headersSent, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, expectedPostBody.getBytes(contentEncoding).length);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
-        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), bodySent.getBytes(contentEncoding));
+        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), bodySent.getBytes(contentEncoding), contentEncoding);
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
@@ -986,7 +986,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             // Is it only the parameter values which are encoded in the specified
             // content encoding, the rest of the query is encoded in UTF-8
             // Therefore we compare the whole query using UTF-8
-            checkArraysHaveSameContent(expectedQueryString.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), queryStringSent.getBytes(EncoderCache.URL_ARGUMENT_ENCODING));
+            checkArraysHaveSameContent(expectedQueryString.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), queryStringSent.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), EncoderCache.URL_ARGUMENT_ENCODING);
         }
     }
 
@@ -1157,13 +1157,13 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
      * @param actual
      * @throws UnsupportedEncodingException 
      */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
+    private void checkArraysHaveSameContent(byte[] expected, byte[] actual, String encoding) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
                 System.out.println(">>>>>>>>>>>>>>>>>>>> expected:");
-                System.out.println(new String(expected,"UTF-8"));
+                System.out.println(new String(expected, encoding));
                 System.out.println("==================== actual:");
-                System.out.println(new String(actual,"UTF-8"));
+                System.out.println(new String(actual, encoding));
                 System.out.println("<<<<<<<<<<<<<<<<<<<<");
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
             }
@@ -1171,9 +1171,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
                         System.out.println(">>>>>>>>>>>>>>>>>>>> expected:");
-                        System.out.println(new String(expected,0,i+1,"UTF-8"));
+                        System.out.println(new String(expected,0,i+1, encoding));
                         System.out.println("==================== actual:");
-                        System.out.println(new String(actual,0,i+1,"UTF-8"));
+                        System.out.println(new String(actual,0,i+1, encoding));
                         System.out.println("<<<<<<<<<<<<<<<<<<<<");
 /*                        
                         // Useful to when debugging
