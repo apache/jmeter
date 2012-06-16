@@ -36,6 +36,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -87,7 +88,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
             ((ThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
         }
 
-        tg.setProperty(ThreadGroup.NUM_THREADS, threadInput.getText());
+        tg.setProperty(AbstractThreadGroup.NUM_THREADS, threadInput.getText());
         tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
         tg.setProperty(new LongProperty(ThreadGroup.START_TIME, start.getDate().getTime()));
         tg.setProperty(new LongProperty(ThreadGroup.END_TIME, end.getDate().getTime()));
@@ -99,9 +100,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     @Override
     public void configure(TestElement tg) {
         super.configure(tg);
-        threadInput.setText(tg.getPropertyAsString(ThreadGroup.NUM_THREADS));
+        threadInput.setText(tg.getPropertyAsString(AbstractThreadGroup.NUM_THREADS));
         rampInput.setText(tg.getPropertyAsString(ThreadGroup.RAMP_TIME));
-        loopPanel.configure((TestElement) tg.getProperty(ThreadGroup.MAIN_CONTROLLER).getObjectValue());
+        loopPanel.configure((TestElement) tg.getProperty(AbstractThreadGroup.MAIN_CONTROLLER).getObjectValue());
         scheduler.setSelected(tg.getPropertyAsBoolean(ThreadGroup.SCHEDULER));
 
         if (scheduler.isSelected()) {
