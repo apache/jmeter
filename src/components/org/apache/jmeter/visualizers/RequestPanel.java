@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -80,7 +81,7 @@ public class RequestPanel {
         }
         
         // Prepare the Request tabbed pane
-        tabbedRequest = new JTabbedPane(JTabbedPane.BOTTOM);
+        tabbedRequest = new JTabbedPane(SwingConstants.BOTTOM);
         for (RequestView requestView : listRequestView) {
             requestView.init();
             tabbedRequest.addTab(requestView.getLabel(), requestView.getPanel());

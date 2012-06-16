@@ -35,6 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -244,7 +246,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         field.setEditable(false);
         field.setForeground(Color.black);
         field.setBackground(getBackground());
-        field.setHorizontalAlignment(JTextField.RIGHT);
+        field.setHorizontalAlignment(SwingConstants.RIGHT);
         return field;
     }
 
@@ -325,8 +327,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      * @return a scroll pane containing the graph
      */
     private Component createGraphPanel() {
-        JScrollPane graphScrollPanel = makeScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane graphScrollPanel = makeScrollPane(graph, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         graphScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         graphScrollPanel.setPreferredSize(graphScrollPanel.getMinimumSize());
 

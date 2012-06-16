@@ -35,6 +35,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.GuiPackage;
@@ -91,9 +92,9 @@ public class AboutCommand implements Command {
             });
 
             JLabel jmeter = new JLabel(JMeterUtils.getImage("jmeter.jpg"));
-            JLabel copyright = new JLabel(JMeterUtils.getJMeterCopyright(), JLabel.CENTER);
-            JLabel rights = new JLabel("All Rights Reserved.", JLabel.CENTER);
-            JLabel version = new JLabel("Apache JMeter Version " + JMeterUtils.getJMeterVersion(), JLabel.CENTER);
+            JLabel copyright = new JLabel(JMeterUtils.getJMeterCopyright(), SwingConstants.CENTER);
+            JLabel rights = new JLabel("All Rights Reserved.", SwingConstants.CENTER);
+            JLabel version = new JLabel("Apache JMeter Version " + JMeterUtils.getJMeterVersion(), SwingConstants.CENTER);
             JPanel infos = new JPanel();
             infos.setOpaque(false);
             infos.setLayout(new GridLayout(0, 1));
