@@ -43,6 +43,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.WebServiceSampler;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.WSDLHelper;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -170,7 +171,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         sampler.setProtocol(protocol.getText());
         sampler.setPath(path.getText());
         sampler.setWsdlURL(wsdlField.getText());
-        sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPConstantsInterface.POST);
         sampler.setSoapAction(soapAction.getText());
         sampler.setMaintainSession(maintainSession.isSelected());
         sampler.setXmlData(soapXml.getText());
