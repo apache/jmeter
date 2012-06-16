@@ -35,6 +35,7 @@ import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
@@ -354,7 +355,7 @@ public class SmtpSampler extends AbstractSampler {
         writeHeaders(allHeaders, sb);
         String disposition = bodyPart.getDisposition(); // throws ME
         sb.append("\n");
-        if (BodyPart.ATTACHMENT.equals(disposition)) {
+        if (Part.ATTACHMENT.equals(disposition)) {
             sb.append("<attachment content not shown>");
         } else {
             sb.append(bodyPart.getContent()); // throws IOE, ME
