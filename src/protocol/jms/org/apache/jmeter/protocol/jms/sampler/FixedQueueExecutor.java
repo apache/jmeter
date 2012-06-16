@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -89,7 +90,13 @@ public class FixedQueueExecutor implements QueueExecutor {
             if (log.isDebugEnabled()) {
                 log.debug(Thread.currentThread().getName()+" will wait for reply " + id + " started on " + System.currentTimeMillis());
             }
-            countDownLatch.await();
+            // This used to be request.wait(timeout_ms), where 0 means forever
+            // However 0 means return immediately for the latch
+            if (timeout == 0){
+                countDownLatch.await(); //
+            } else {
+                countDownLatch.await(timeout, TimeUnit.MILLISECONDS);
+            }
             if (log.isDebugEnabled()) {
                 log.debug(Thread.currentThread().getName()+" done waiting for " + id + " on "+request+" ended on " + System.currentTimeMillis());
             }
