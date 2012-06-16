@@ -32,7 +32,7 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -161,7 +161,7 @@ public class HttpRequestHdr {
             log.debug("parsed version:" + version);
         }
         // SSL connection
-        if (getMethod().startsWith(HTTPConstants.CONNECT)) {
+        if (getMethod().startsWith(HTTPConstantsInterface.CONNECT)) {
             paramHttps = url;
         }
         if (url.startsWith("/")) {
@@ -193,7 +193,7 @@ public class HttpRequestHdr {
         for (String key : headers.keySet()) {
             if (!key.equals(PROXY_CONNECTION)
              && !key.equals(CONTENT_LENGTH)
-             && !key.equalsIgnoreCase(HTTPConstants.HEADER_CONNECTION)) {
+             && !key.equalsIgnoreCase(HTTPConstantsInterface.HEADER_CONNECTION)) {
                 manager.add(headers.get(key));
             }
         }
@@ -219,7 +219,7 @@ public class HttpRequestHdr {
     }
 
     private boolean isMultipart(String contentType) {
-        if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
+        if (contentType != null && contentType.startsWith(HTTPConstantsInterface.MULTIPART_FORM_DATA)) {
             return true;
         }
         return false;
@@ -399,7 +399,7 @@ public class HttpRequestHdr {
                 log.debug("Proxy: setting protocol to : " + protocol);
             }
             return protocol;
-        } else if (sampler.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT) {
+        } else if (sampler.getPort() == HTTPConstantsInterface.DEFAULT_HTTPS_PORT) {
             if (log.isDebugEnabled()) {
                 log.debug("Proxy: setting protocol to https");
             }

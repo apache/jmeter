@@ -32,7 +32,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.PostWriter;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -130,7 +130,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         // If it was a HTTP GET request, then all parameters in the URL
         // has been handled by the sampler.setPath above, so we just need
         // to do parse the rest of the request if it is not a GET request
-        if((!HTTPConstants.CONNECT.equals(request.getMethod())) && (!HTTPConstants.GET.equals(request.getMethod()))) {
+        if((!HTTPConstantsInterface.CONNECT.equals(request.getMethod())) && (!HTTPConstantsInterface.GET.equals(request.getMethod()))) {
             // Check if it was a multipart http post request
             final String contentType = request.getContentType();
             MultipartUrlConfig urlConfig = request.getMultipartConfig(contentType);
@@ -172,7 +172,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
             } else if (postData.trim().startsWith("<?") || "PUT".equals(sampler.getMethod())) {
                 sampler.addNonEncodedArgument("", postData, "");
-            } else if (contentType == null || contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) ){
+            } else if (contentType == null || contentType.startsWith(HTTPConstantsInterface.APPLICATION_X_WWW_FORM_URLENCODED) ){
                 // It is the most common post request, with parameter name and values
                 // We also assume this if no content type is present, to be most backwards compatible,
                 // but maybe we should only parse arguments if the content type is as expected
@@ -203,7 +203,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      */
     protected void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
-        if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
+        if (!HTTPConstantsInterface.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
             incrementRequestNumber();
             sampler.setName(getRequestNumber() + " " + sampler.getPath());
         } else {
