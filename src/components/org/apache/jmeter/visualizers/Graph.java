@@ -210,7 +210,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
             if (oneSample.isSuccess()) {
                 g.setColor(Color.black);
             } else {
-                g.setColor(JMeterColor.YELLOW);
+                g.setColor(Color.YELLOW);
             }
             g.drawLine(adjustedWidth, height - data, adjustedWidth, height - data - 1);
             if (log.isDebugEnabled()) {

@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.jCharts.properties.LegendProperties;
+import org.jCharts.properties.LegendAreaProperties;
 
 public class StatGraphProperties {
 
@@ -49,10 +49,10 @@ public class StatGraphProperties {
     @SuppressWarnings("boxing")
     public static Map<String, Integer> getPlacementNameMap() {
         Map<String, Integer> placementNameMap = new HashMap<String, Integer>();
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"), LegendProperties.BOTTOM);
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.right"), LegendProperties.RIGHT);
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.left"), LegendProperties.LEFT);
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.top"), LegendProperties.TOP);
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"), LegendAreaProperties.BOTTOM);
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.right"), LegendAreaProperties.RIGHT);
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.left"), LegendAreaProperties.LEFT);
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.top"), LegendAreaProperties.TOP);
         return placementNameMap;
     }
 }

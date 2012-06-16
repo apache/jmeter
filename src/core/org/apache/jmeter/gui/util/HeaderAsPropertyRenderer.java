@@ -20,8 +20,8 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -51,7 +51,7 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
             }
             setText(getText(value, row, column));
             setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-            setHorizontalAlignment(JLabel.CENTER);
+            setHorizontalAlignment(SwingConstants.CENTER);
         }
         return this;
     }

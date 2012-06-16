@@ -40,6 +40,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
@@ -415,7 +416,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         RendererUtils.applyRenderers(tableResFields, RENDERERS_FIELDS);
 
         // Prepare the Results tabbed pane
-        tabbedResult = new JTabbedPane(JTabbedPane.BOTTOM);
+        tabbedResult = new JTabbedPane(SwingConstants.BOTTOM);
 
         // Create the split pane
         JSplitPane topSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,

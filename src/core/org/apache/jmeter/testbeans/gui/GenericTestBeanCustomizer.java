@@ -37,6 +37,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -592,7 +593,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         }
         // if the displayName is the empty string, leave it like that.
         JLabel label = new JLabel(text);
-        label.setHorizontalAlignment(JLabel.TRAILING);
+        label.setHorizontalAlignment(SwingConstants.TRAILING);
         text = propertyToolTipMessage.format(new Object[] { desc.getName(), desc.getShortDescription() });
         label.setToolTipText(text);
 

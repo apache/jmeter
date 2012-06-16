@@ -53,6 +53,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
@@ -136,7 +137,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     //NOT USED protected double[][] data = null;
 
-    private JTabbedPane tabbedGraph = new JTabbedPane(JTabbedPane.TOP);
+    private JTabbedPane tabbedGraph = new JTabbedPane(SwingConstants.TOP);
 
     private JButton displayButton =
         new JButton(JMeterUtils.getResString("aggregate_graph_display"));                //$NON-NLS-1$

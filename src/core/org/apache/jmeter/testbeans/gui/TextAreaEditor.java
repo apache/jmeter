@@ -28,6 +28,7 @@ import java.beans.PropertyEditorSupport;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 public class TextAreaEditor extends PropertyEditorSupport implements FocusListener {
 
@@ -49,8 +50,8 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
         textUI.addFocusListener(this);
         textUI.setWrapStyleWord(true);
         textUI.setLineWrap(true);
-        scroller = new JScrollPane(textUI, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller = new JScrollPane(textUI, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     /**

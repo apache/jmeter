@@ -42,6 +42,7 @@ import org.jCharts.properties.ChartProperties;
 import org.jCharts.properties.ClusteredBarChartProperties;
 import org.jCharts.properties.DataAxisProperties;
 import org.jCharts.properties.LabelAxisProperties;
+import org.jCharts.properties.LegendAreaProperties;
 import org.jCharts.properties.LegendProperties;
 import org.jCharts.properties.PropertyException;
 import org.jCharts.properties.util.ChartFont;
@@ -87,7 +88,7 @@ public class AxisGraph extends JPanel {
     
     protected boolean valueOrientation = true;
 
-    protected int legendPlacement = LegendProperties.BOTTOM;
+    protected int legendPlacement = LegendAreaProperties.BOTTOM;
 
     /**
      *
