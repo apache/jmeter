@@ -373,7 +373,6 @@
     <include name="${lib.dir}/${httpcore.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
-    <include name="${lib.dir}/${jcharts.jar}"/>
     <include name="${lib.dir}/${jdom.jar}"/>
     <include name="${lib.dir}/${jms.jar}"/>
     <include name="${lib.dir}/${js_rhino.jar}"/>
@@ -388,6 +387,7 @@
     <include name="${lib.dir}/${xpp3.jar}"/>
     <include name="${lib.dir}/${xstream.jar}"/>
   	<include name="${lib.dir}/${xmlpull.jar}"/>
+    <include name="${lib.dir}/${jcharts.jar}"/>
   </patternset>
 
   <!--
