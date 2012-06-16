@@ -373,6 +373,7 @@
     <include name="${lib.dir}/${httpcore.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
+    <include name="${lib.dir}/${jcharts.jar}"/>
     <include name="${lib.dir}/${jdom.jar}"/>
     <include name="${lib.dir}/${jms.jar}"/>
     <include name="${lib.dir}/${js_rhino.jar}"/>
@@ -387,7 +388,6 @@
     <include name="${lib.dir}/${xpp3.jar}"/>
     <include name="${lib.dir}/${xstream.jar}"/>
   	<include name="${lib.dir}/${xmlpull.jar}"/>
-    <include name="${lib.dir}/${jcharts.jar}"/>
   </patternset>
 
   <!--
@@ -2477,7 +2477,6 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="httpmime"/>
         <process_jarfile jarname="httpcore"/>
         <process_jarfile jarname="jakarta-oro"/>
-        <process_jarfile jarname="jcharts"/>
         <process_jarfile jarname="jdom"/>
         <process_jarfile jarname="js_rhino"/>
         <process_jarfile jarname="junit"/>
@@ -2496,6 +2495,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="javamail"/>
         <process_jarfile jarname="jms"/>
         <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
+        <process_jarfile jarname="jcharts"/>
     </target>
 
     <target name="_process_doc_jars">
