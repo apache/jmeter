@@ -186,7 +186,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
      * @return true if thread should start next loop
      */
     public boolean getOnErrorStartNextLoop() {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_START_NEXT_LOOP);
+        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_START_NEXT_LOOP);
     }
 
     /**
@@ -195,7 +195,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
      * @return true if thread should stop
      */
     public boolean getOnErrorStopThread() {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
+        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
     }
 
     /**
@@ -204,7 +204,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
      * @return true if test (all threads) should stop
      */
     public boolean getOnErrorStopTest() {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
+        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
     }
 
     /**
@@ -213,7 +213,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
      * @return true if test (all threads) should stop immediately
      */
     public boolean getOnErrorStopTestNow() {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
+        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
     }
 
     public abstract void scheduleThread(JMeterThread thread);
