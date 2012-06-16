@@ -177,7 +177,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
     }
 
     private JPanel getParameterMaskPanel() {
-        HorizontalPanel panel = new HorizontalPanel(10, HorizontalPanel.TOP_ALIGNMENT);
+        HorizontalPanel panel = new HorizontalPanel(10, Component.TOP_ALIGNMENT);
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("html_parameter_mask"))); //$NON-NLS-1$
 
