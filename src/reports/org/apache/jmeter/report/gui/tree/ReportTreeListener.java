@@ -21,6 +21,7 @@ package org.apache.jmeter.report.gui.tree;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -286,7 +287,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
     }
 
     private boolean isRightClick(MouseEvent e) {
-        return e.isPopupTrigger() || (MouseEvent.BUTTON2_MASK & e.getModifiers()) > 0 || (MouseEvent.BUTTON3_MASK == e.getModifiers());
+        return e.isPopupTrigger() || (InputEvent.BUTTON2_MASK & e.getModifiers()) > 0 || (InputEvent.BUTTON3_MASK == e.getModifiers());
     }
 
     /*
