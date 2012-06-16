@@ -24,6 +24,7 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -65,8 +66,8 @@ public class LoggerPanel extends JPanel implements LogTarget {
         textArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
         JScrollPane areaScrollPane = new JScrollPane(textArea);
 
-        areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        areaScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.add(areaScrollPane, BorderLayout.CENTER); 
     }
 

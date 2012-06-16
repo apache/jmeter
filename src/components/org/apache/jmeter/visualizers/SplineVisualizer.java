@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -145,22 +146,22 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         minimumLabel.setBackground(backColor);
 
         maximumNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
-        maximumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+        maximumNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         maximumNumberLabel.setForeground(MAXIMUM_COLOR);
         maximumNumberLabel.setBackground(backColor);
 
         averageNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
-        averageNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+        averageNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         averageNumberLabel.setForeground(AVERAGE_COLOR);
         averageNumberLabel.setBackground(backColor);
 
         incomingNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
-        incomingNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+        incomingNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         incomingNumberLabel.setForeground(INCOMING_COLOR);
         incomingNumberLabel.setBackground(backColor);
 
         minimumNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
-        minimumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+        minimumNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         minimumNumberLabel.setForeground(MINIMUM_COLOR);
         minimumNumberLabel.setBackground(backColor);
 

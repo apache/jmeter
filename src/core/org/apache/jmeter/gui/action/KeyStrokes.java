@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
@@ -36,38 +37,38 @@ public final class KeyStrokes {
     private static final int CONTROL_MASK =Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     public static final KeyStroke COPY              = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK);
-    public static final KeyStroke DUPLICATE         = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke DUPLICATE         = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke DEBUG_OFF         = KeyStroke.getKeyStroke(KeyEvent.VK_D, CONTROL_MASK);
-    public static final KeyStroke DEBUG_ON          = KeyStroke.getKeyStroke(KeyEvent.VK_D, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke DEBUG_ON          = KeyStroke.getKeyStroke(KeyEvent.VK_D, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke CLEAR_ALL         = KeyStroke.getKeyStroke(KeyEvent.VK_E, CONTROL_MASK);
-    public static final KeyStroke CLEAR             = KeyStroke.getKeyStroke(KeyEvent.VK_E, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke CLEAR             = KeyStroke.getKeyStroke(KeyEvent.VK_E, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke ESC               = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
     public static final KeyStroke ENTER             = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
     public static final KeyStroke FUNCTIONS         = KeyStroke.getKeyStroke(KeyEvent.VK_F, CONTROL_MASK);
     public static final KeyStroke SAVE_GRAPHICS     = KeyStroke.getKeyStroke(KeyEvent.VK_G, CONTROL_MASK);
-    public static final KeyStroke SAVE_GRAPHICS_ALL = KeyStroke.getKeyStroke(KeyEvent.VK_G, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke SAVE_GRAPHICS_ALL = KeyStroke.getKeyStroke(KeyEvent.VK_G, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke HELP              = KeyStroke.getKeyStroke(KeyEvent.VK_H, CONTROL_MASK);
     public static final KeyStroke CLOSE             = KeyStroke.getKeyStroke(KeyEvent.VK_L, CONTROL_MASK);
     public static final KeyStroke SSL_MANAGER       = KeyStroke.getKeyStroke(KeyEvent.VK_M, CONTROL_MASK);
     public static final KeyStroke OPEN              = KeyStroke.getKeyStroke(KeyEvent.VK_O, CONTROL_MASK);
     public static final KeyStroke EXIT              = KeyStroke.getKeyStroke(KeyEvent.VK_Q, CONTROL_MASK);
     public static final KeyStroke ACTION_START      = KeyStroke.getKeyStroke(KeyEvent.VK_R, CONTROL_MASK);
-    public static final KeyStroke REMOTE_START_ALL  = KeyStroke.getKeyStroke(KeyEvent.VK_R, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke REMOTE_START_ALL  = KeyStroke.getKeyStroke(KeyEvent.VK_R, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke SAVE              = KeyStroke.getKeyStroke(KeyEvent.VK_S, CONTROL_MASK);
-    public static final KeyStroke SAVE_ALL_AS       = KeyStroke.getKeyStroke(KeyEvent.VK_S, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke SAVE_ALL_AS       = KeyStroke.getKeyStroke(KeyEvent.VK_S, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke TOGGLE            = KeyStroke.getKeyStroke(KeyEvent.VK_T, CONTROL_MASK);
     public static final KeyStroke PASTE             = KeyStroke.getKeyStroke(KeyEvent.VK_V, CONTROL_MASK);
     public static final KeyStroke WHAT_CLASS        = KeyStroke.getKeyStroke(KeyEvent.VK_W, CONTROL_MASK);
     public static final KeyStroke CUT               = KeyStroke.getKeyStroke(KeyEvent.VK_X, CONTROL_MASK);
-    public static final KeyStroke REMOTE_STOP_ALL   = KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.ALT_DOWN_MASK);
-    public static final KeyStroke REMOTE_SHUT_ALL   = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.ALT_DOWN_MASK);
+    public static final KeyStroke REMOTE_STOP_ALL   = KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK);
+    public static final KeyStroke REMOTE_SHUT_ALL   = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.ALT_DOWN_MASK);
 
     public static final KeyStroke REMOVE            = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
     public static final KeyStroke ACTION_STOP       = KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, CONTROL_MASK);
     public static final KeyStroke ACTION_SHUTDOWN   = KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, CONTROL_MASK);
     public static final KeyStroke COLLAPSE_ALL      = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL_MASK);
     // VK_PLUS + CTRL_DOWN_MASK did not work...
-    public static final KeyStroke EXPAND_ALL        = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke EXPAND_ALL        = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
 
     /**
      * Check if an event matches the KeyStroke definition.
