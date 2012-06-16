@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -289,6 +289,6 @@ public class AuthManager extends ConfigTestElement implements Serializable {
     // Needs to be package protected for Unit test
     static boolean isSupportedProtocol(URL url) {
         String protocol = url.getProtocol().toLowerCase(java.util.Locale.ENGLISH);
-        return protocol.equals(HTTPConstants.PROTOCOL_HTTP) || protocol.equals(HTTPConstants.PROTOCOL_HTTPS);
+        return protocol.equals(HTTPConstantsInterface.PROTOCOL_HTTP) || protocol.equals(HTTPConstantsInterface.PROTOCOL_HTTPS);
     }
 }
