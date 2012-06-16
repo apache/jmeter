@@ -18,7 +18,7 @@
 
 package org.apache.jorphan.gui;
 
-import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -29,6 +29,6 @@ public class RightAlignRenderer extends DefaultTableCellRenderer {
 
     public RightAlignRenderer() {
         super();
-        setHorizontalAlignment(JLabel.RIGHT);
+        setHorizontalAlignment(SwingConstants.RIGHT);
     }
 }

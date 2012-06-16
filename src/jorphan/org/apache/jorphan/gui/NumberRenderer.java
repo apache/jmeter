@@ -21,7 +21,7 @@ package org.apache.jorphan.gui;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -35,13 +35,13 @@ public class NumberRenderer extends DefaultTableCellRenderer {
     public NumberRenderer() {
         super();
         formatter = NumberFormat.getInstance();
-        setHorizontalAlignment(JLabel.RIGHT);
+        setHorizontalAlignment(SwingConstants.RIGHT);
     }
 
     public NumberRenderer(String format) {
         super();
         formatter = new DecimalFormat(format);
-        setHorizontalAlignment(JLabel.RIGHT);
+        setHorizontalAlignment(SwingConstants.RIGHT);
     }
 
     @Override
