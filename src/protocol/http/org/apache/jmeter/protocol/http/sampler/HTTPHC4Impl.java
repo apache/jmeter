@@ -69,6 +69,7 @@ import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
@@ -868,7 +869,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     }
                 }
 
-                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(String) null);// TODO is null correct?
+                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(ContentType) null);// TODO is null correct?
                 post.setEntity(fileRequestEntity);
 
                 // We just add placeholder text for file content
@@ -1022,7 +1023,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             hasPutBody = true;
 
             // If getSendFileAsPostBody returned true, it's sure that file is not null
-            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), (String) null); // TODO is null correct?
+            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), (ContentType) null); // TODO is null correct?
             put.setEntity(fileRequestEntity);
 
             // We just add placeholder text for file content
