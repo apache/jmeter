@@ -174,7 +174,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     /**
      * LogTarget that receives ERROR or FATAL
      */
-    private ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
+    private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
 
     /**
      * Create a new JMeter frame.
