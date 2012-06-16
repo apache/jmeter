@@ -920,7 +920,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         }
                         postBody.append(value);
                     }
-                    StringEntity requestEntity = new StringEntity(postBody.toString(), post.getFirstHeader(HEADER_CONTENT_TYPE).getValue(), contentEncoding);
+                    ContentType contentType = 
+                            ContentType.create(post.getFirstHeader(HEADER_CONTENT_TYPE).getValue(), contentEncoding);
+                    StringEntity requestEntity = new StringEntity(postBody.toString(), contentType);
                     post.setEntity(requestEntity);
                     postedBody.append(postBody.toString()); // TODO OK?
                 } else {
@@ -1057,7 +1059,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(hasContentTypeHeader) {
                 contentTypeValue = put.getFirstHeader(HEADER_CONTENT_TYPE).getValue();
             }
-            StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentTypeValue, charset);
+            ContentType contentType = 
+                    ContentType.create(contentTypeValue, charset);
+            StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentType);
             put.setEntity(requestEntity);
         }
         // Check if we have any content to send for body
