@@ -18,20 +18,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.io.IOUtils;
-import org.apache.jmeter.protocol.http.control.CacheManager;
-import org.apache.jmeter.protocol.http.control.Header;
-import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.util.HTTPConstants;
-import org.apache.jmeter.samplers.Interruptible;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +28,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.io.IOUtils;
+import org.apache.jmeter.protocol.http.control.CacheManager;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
+import org.apache.jmeter.samplers.Interruptible;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /**
  * Commons HTTPClient based soap sampler
@@ -248,7 +248,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         res.setMonitor(false);
 
         res.setSampleLabel(urlStr); // May be replaced later
-        res.setHTTPMethod(HTTPConstants.POST);
+        res.setHTTPMethod(HTTPConstantsInterface.POST);
         res.setURL(url);
         res.sampleStart(); // Count the retries as well in the time
         HttpClient client = null;
