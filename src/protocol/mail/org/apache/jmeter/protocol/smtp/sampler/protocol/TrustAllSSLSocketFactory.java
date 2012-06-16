@@ -67,7 +67,7 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
      * Factory method
      * @return New TrustAllSSLSocketFactory
      */
-    public static SocketFactory getDefault() {
+    public static synchronized SocketFactory getDefault() {
         return new TrustAllSSLSocketFactory();
     }
 
