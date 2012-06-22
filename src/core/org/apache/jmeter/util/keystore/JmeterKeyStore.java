@@ -44,7 +44,7 @@ public class JmeterKeyStore {
 
     private X509Certificate[][] certChains;
     private PrivateKey[] keys;
-    private String[] names;
+    private String[] names = new String[0]; // default empty array to prevent NPEs
 
     //@GuardedBy("this")
     private int last_user;
@@ -62,7 +62,8 @@ public class JmeterKeyStore {
      * Process the input stream
      */
     public void load(InputStream is, String pword) throws Exception {
-        store.load(is, pword.toCharArray());
+        char pw[] = pword==null ? null : pword.toCharArray();
+        store.load(is, pw);
     
         ArrayList<String> v_names = new ArrayList<String>();
         ArrayList<PrivateKey> v_keys = new ArrayList<PrivateKey>();
@@ -76,7 +77,7 @@ public class JmeterKeyStore {
                 String alias = aliases.nextElement();
                 if (store.isKeyEntry(alias)) {
                     if ((index >= startIndex && index <= endIndex)) {
-                        _key = (PrivateKey) store.getKey(alias, pword.toCharArray());
+                        _key = (PrivateKey) store.getKey(alias, pw);
                         if (null == _key) {
                             throw new Exception("No key found for alias: " + alias); // Should not happen
                         }
