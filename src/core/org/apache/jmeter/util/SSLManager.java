@@ -152,26 +152,20 @@ public abstract class SSLManager {
     private String getPassword() {
         String password = this.defaultpw;
         if (null == password) {
-            this.defaultpw = System.getProperty(KEY_STORE_PASSWORD);
-
-            if (null == defaultpw) {
-                final GuiPackage guiInstance = GuiPackage.getInstance();
-                if (guiInstance != null) {
-                    synchronized (this) {
-                        this.defaultpw = JOptionPane.showInputDialog(
-                                guiInstance.getMainFrame(),
-                                JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
-                                JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
-                                JOptionPane.QUESTION_MESSAGE);
-                        System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
-                    }
+            final GuiPackage guiInstance = GuiPackage.getInstance();
+            if (guiInstance != null) {
+                synchronized (this) { // TODO is sync really needed?
+                    this.defaultpw = JOptionPane.showInputDialog(
+                            guiInstance.getMainFrame(),
+                            JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
+                            JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
+                            JOptionPane.QUESTION_MESSAGE);
+                    System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
                     password = this.defaultpw;
-                    System.setProperty(KEY_STORE_PASSWORD, password);
-                } else {
-                    log.warn("No password provided, and no GUI present so cannot prompt");
                 }
+            } else {
+                log.warn("No password provided, and no GUI present so cannot prompt");
             }
-
         }
         return password;
     }
