@@ -39,7 +39,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.CacheManager.CacheEntry;
-import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 
 public class TestCacheManager extends JMeterTestCase {
@@ -63,13 +63,13 @@ public class TestCacheManager extends JMeterTestCase {
         
         @Override
         public String getHeaderField(String name) {
-            if (HTTPConstantsInterface.LAST_MODIFIED.equals(name)) {
+            if (HTTPConstants.LAST_MODIFIED.equals(name)) {
                 return currentTimeInGMT;
-            } else if (HTTPConstantsInterface.ETAG.equals(name)) {
+            } else if (HTTPConstants.ETAG.equals(name)) {
                 return EXPECTED_ETAG;
-            } else if (HTTPConstantsInterface.EXPIRES.equals(name)){
+            } else if (HTTPConstants.EXPIRES.equals(name)){
                 return expires;
-            } else if (HTTPConstantsInterface.CACHE_CONTROL.equals(name)){
+            } else if (HTTPConstants.CACHE_CONTROL.equals(name)){
                 return cacheControl;
             }
             return super.getHeaderField(name);
@@ -87,20 +87,20 @@ public class TestCacheManager extends JMeterTestCase {
         private String cacheControl;
         
         HttpMethodStub() {
-            this.lastModifiedHeader = new Header(HTTPConstantsInterface.LAST_MODIFIED, currentTimeInGMT);
-            this.etagHeader = new Header(HTTPConstantsInterface.ETAG, EXPECTED_ETAG);
+            this.lastModifiedHeader = new Header(HTTPConstants.LAST_MODIFIED, currentTimeInGMT);
+            this.etagHeader = new Header(HTTPConstants.ETAG, EXPECTED_ETAG);
         }
         
         @Override
         public Header getResponseHeader(String headerName) {
-            if (HTTPConstantsInterface.LAST_MODIFIED.equals(headerName)) {
+            if (HTTPConstants.LAST_MODIFIED.equals(headerName)) {
                 return this.lastModifiedHeader;
-            } else if (HTTPConstantsInterface.ETAG.equals(headerName)) {
+            } else if (HTTPConstants.ETAG.equals(headerName)) {
                 return this.etagHeader;
-            } else if (HTTPConstantsInterface.EXPIRES.equals(headerName)) {
-                return expires == null ? null : new Header(HTTPConstantsInterface.EXPIRES, expires);
-            } else if (HTTPConstantsInterface.CACHE_CONTROL.equals(headerName)) {
-                return cacheControl == null ? null : new Header(HTTPConstantsInterface.CACHE_CONTROL, cacheControl);
+            } else if (HTTPConstants.EXPIRES.equals(headerName)) {
+                return expires == null ? null : new Header(HTTPConstants.EXPIRES, expires);
+            } else if (HTTPConstants.CACHE_CONTROL.equals(headerName)) {
+                return cacheControl == null ? null : new Header(HTTPConstants.CACHE_CONTROL, cacheControl);
             }
             return null;
         }
@@ -292,12 +292,12 @@ public class TestCacheManager extends JMeterTestCase {
 
     public void testSetHeadersHttpMethodWithSampleResultWithResponseCode200GivesCacheEntry() throws Exception {
         this.httpMethod.setURI(this.uri);
-        this.httpMethod.addRequestHeader(new Header(HTTPConstantsInterface.IF_MODIFIED_SINCE, this.currentTimeInGMT, false));
-        this.httpMethod.addRequestHeader(new Header(HTTPConstantsInterface.ETAG, EXPECTED_ETAG, false));
+        this.httpMethod.addRequestHeader(new Header(HTTPConstants.IF_MODIFIED_SINCE, this.currentTimeInGMT, false));
+        this.httpMethod.addRequestHeader(new Header(HTTPConstants.ETAG, EXPECTED_ETAG, false));
         saveDetailsWithHttpMethodAndSampleResultWithResponseCode("200");
         setHeadersWithUrlAndHttpMethod();
-        checkRequestHeader(HTTPConstantsInterface.IF_NONE_MATCH, EXPECTED_ETAG);
-        checkRequestHeader(HTTPConstantsInterface.IF_MODIFIED_SINCE, this.currentTimeInGMT);
+        checkRequestHeader(HTTPConstants.IF_NONE_MATCH, EXPECTED_ETAG);
+        checkRequestHeader(HTTPConstants.IF_MODIFIED_SINCE, this.currentTimeInGMT);
     }
 
     public void testSetHeadersHttpMethodWithSampleResultWithResponseCode404GivesNoCacheEntry() throws Exception {
@@ -311,8 +311,8 @@ public class TestCacheManager extends JMeterTestCase {
         saveDetailsWithConnectionAndSampleResultWithResponseCode("200");
         setHeadersWithHttpUrlConnectionAndUrl();
         Map<String, List<String>> properties = this.httpUrlConnection.getRequestProperties();
-        checkProperty(properties, HTTPConstantsInterface.IF_NONE_MATCH, EXPECTED_ETAG);
-        checkProperty(properties, HTTPConstantsInterface.IF_MODIFIED_SINCE, this.currentTimeInGMT);
+        checkProperty(properties, HTTPConstants.IF_NONE_MATCH, EXPECTED_ETAG);
+        checkProperty(properties, HTTPConstants.IF_MODIFIED_SINCE, this.currentTimeInGMT);
     }
 
     public void testSetHeadersHttpURLConnectionWithSampleResultWithResponseCode404GivesNoCacheEntry() throws Exception {
