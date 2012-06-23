@@ -39,7 +39,7 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -138,7 +138,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      */
     protected HttpURLConnection setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
         SSLManager sslmgr = null;
-        if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
+        if (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
             try {
                 sslmgr=SSLManager.getInstance(); // N.B. this needs to be done before opening the connection
             } catch (Exception e) {
@@ -175,7 +175,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             conn.setReadTimeout(rto);
         }
 
-        if (HTTPConstantsInterface.PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
+        if (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
             try {
                 if (null != sslmgr){
                     sslmgr.setContext(conn); // N.B. must be done after opening connection
@@ -190,9 +190,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
         if (getUseKeepAlive()) {
-            conn.setRequestProperty(HEADER_CONNECTION, KEEP_ALIVE);
+            conn.setRequestProperty(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
         } else {
-            conn.setRequestProperty(HEADER_CONNECTION, CONNECTION_CLOSE);
+            conn.setRequestProperty(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
         }
 
         conn.setRequestMethod(method);
@@ -201,9 +201,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         setConnectionAuthorization(conn, u, getAuthManager());
 
-        if (method.equals(POST)) {
+        if (method.equals(HTTPConstants.POST)) {
             setPostHeaders(conn);
-        } else if (method.equals(PUT)) {
+        } else if (method.equals(HTTPConstants.PUT)) {
             setPutHeaders(conn);
         }
 
@@ -237,7 +237,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         // works OK even if ContentEncoding is null
-        boolean gzipped = ENCODING_GZIP.equals(conn.getContentEncoding());
+        boolean gzipped = HTTPConstants.ENCODING_GZIP.equals(conn.getContentEncoding());
         InputStream instream = null;
         try {
             instream = new CountingInputStream(conn.getInputStream());
@@ -337,7 +337,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         if (cookieManager != null) {
             cookieHeader = cookieManager.getCookieHeaderForURL(u);
             if (cookieHeader != null) {
-                conn.setRequestProperty(HEADER_COOKIE, cookieHeader);
+                conn.setRequestProperty(HTTPConstants.HEADER_COOKIE, cookieHeader);
             }
         }
         return cookieHeader;
@@ -391,7 +391,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         for(Map.Entry<String, List<String>> entry : requestHeaders.entrySet()) {
             String headerKey=entry.getKey();
             // Exclude the COOKIE header, since cookie is reported separately in the sample
-            if(!HEADER_COOKIE.equalsIgnoreCase(headerKey)) {
+            if(!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(headerKey)) {
                 // value is a List of Strings
                 for (String value : entry.getValue()){
                     hdrs.append(headerKey);
@@ -421,7 +421,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
-                conn.setRequestProperty(HEADER_AUTHORIZATION, auth.toBasicHeader());
+                conn.setRequestProperty(HTTPConstants.HEADER_AUTHORIZATION, auth.toBasicHeader());
             }
         }
     }
@@ -463,7 +463,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         // Check cache for an entry with an Expires header in the future
         final CacheManager cacheManager = getCacheManager();
-        if (cacheManager != null && GET.equalsIgnoreCase(method)) {
+        if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)) {
            if (cacheManager.inCache(url)) {
                res.sampleEnd();
                res.setResponseNoContent();
@@ -506,11 +506,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 throw new BindException();
             }
             // Nice, we've got a connection. Finish sending the request:
-            if (method.equals(POST)) {
+            if (method.equals(HTTPConstants.POST)) {
                 String postBody = sendPostData(conn);
                 res.setQueryString(postBody);
             }
-            else if (method.equals(PUT)) {
+            else if (method.equals(HTTPConstants.PUT)) {
                 String putBody = sendPutData(conn);
                 res.setQueryString(putBody);
             }
@@ -565,7 +565,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             String responseHeaders = getResponseHeaders(conn);
             res.setResponseHeaders(responseHeaders);
             if (res.isRedirect()) {
-                res.setRedirectLocation(conn.getHeaderField(HEADER_LOCATION));
+                res.setRedirectLocation(conn.getHeaderField(HTTPConstants.HEADER_LOCATION));
             }
             
             // record headers size to allow HTTPSampleResult.getBytes() with different options
@@ -613,10 +613,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     protected void disconnect(HttpURLConnection conn) {
         if (conn != null) {
-            String connection = conn.getHeaderField(HEADER_CONNECTION);
+            String connection = conn.getHeaderField(HTTPConstants.HEADER_CONNECTION);
             String protocol = conn.getHeaderField(0);
-            if ((connection == null && (protocol == null || !protocol.startsWith(HTTP_1_1)))
-                    || (connection != null && connection.equalsIgnoreCase(CONNECTION_CLOSE))) {
+            if ((connection == null && (protocol == null || !protocol.startsWith(HTTPConstants.HTTP_1_1)))
+                    || (connection != null && connection.equalsIgnoreCase(HTTPConstants.CONNECTION_CLOSE))) {
                 conn.disconnect();
             } // TODO ? perhaps note connection so it can be disconnected at end of test?
         }
@@ -638,7 +638,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private void saveConnectionCookies(HttpURLConnection conn, URL u, CookieManager cookieManager) {
         if (cookieManager != null) {
             for (int i = 1; conn.getHeaderFieldKey(i) != null; i++) {
-                if (conn.getHeaderFieldKey(i).equalsIgnoreCase(HEADER_SET_COOKIE)) {
+                if (conn.getHeaderFieldKey(i).equalsIgnoreCase(HTTPConstants.HEADER_SET_COOKIE)) {
                     cookieManager.addCookieFromHeader(conn.getHeaderField(i), u);
                 }
             }

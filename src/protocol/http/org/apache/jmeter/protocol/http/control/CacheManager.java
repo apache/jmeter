@@ -37,7 +37,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -109,11 +109,11 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
      */
     public void saveDetails(URLConnection conn, SampleResult res){
         if (isCacheable(res)){
-            String lastModified = conn.getHeaderField(HTTPConstantsInterface.LAST_MODIFIED);
-            String expires = conn.getHeaderField(HTTPConstantsInterface.EXPIRES);
-            String etag = conn.getHeaderField(HTTPConstantsInterface.ETAG);
+            String lastModified = conn.getHeaderField(HTTPConstants.LAST_MODIFIED);
+            String expires = conn.getHeaderField(HTTPConstants.EXPIRES);
+            String etag = conn.getHeaderField(HTTPConstants.ETAG);
             String url = conn.getURL().toString();
-            String cacheControl = conn.getHeaderField(HTTPConstantsInterface.CACHE_CONTROL);
+            String cacheControl = conn.getHeaderField(HTTPConstants.CACHE_CONTROL);
             setCache(lastModified, cacheControl, expires, etag, url);
         }
     }
@@ -126,11 +126,11 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
      */
     public void saveDetails(HttpMethod method, SampleResult res) throws URIException{
         if (isCacheable(res)){
-            String lastModified = getHeader(method ,HTTPConstantsInterface.LAST_MODIFIED);
-            String expires = getHeader(method ,HTTPConstantsInterface.EXPIRES);
-            String etag = getHeader(method ,HTTPConstantsInterface.ETAG);
+            String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
+            String expires = getHeader(method ,HTTPConstants.EXPIRES);
+            String etag = getHeader(method ,HTTPConstants.ETAG);
             String url = method.getURI().toString();
-            String cacheControl = getHeader(method, HTTPConstantsInterface.CACHE_CONTROL);
+            String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             setCache(lastModified, cacheControl, expires, etag, url);
         }
     }
@@ -144,10 +144,10 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
     public void saveDetails(HttpResponse method, SampleResult res) {
         if (isCacheable(res)){
             method.getLastHeader(USE_EXPIRES);
-            String lastModified = getHeader(method ,HTTPConstantsInterface.LAST_MODIFIED);
-            String expires = getHeader(method ,HTTPConstantsInterface.EXPIRES);
-            String etag = getHeader(method ,HTTPConstantsInterface.ETAG);
-            String cacheControl = getHeader(method, HTTPConstantsInterface.CACHE_CONTROL);
+            String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
+            String expires = getHeader(method ,HTTPConstants.EXPIRES);
+            String etag = getHeader(method ,HTTPConstants.ETAG);
+            String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString()); // TODO correct URL?
         }
     }
@@ -219,11 +219,11 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         if (entry != null){
             final String lastModified = entry.getLastModified();
             if (lastModified != null){
-                method.setRequestHeader(HTTPConstantsInterface.IF_MODIFIED_SINCE, lastModified);
+                method.setRequestHeader(HTTPConstants.IF_MODIFIED_SINCE, lastModified);
             }
             final String etag = entry.getEtag();
             if (etag != null){
-                method.setRequestHeader(HTTPConstantsInterface.IF_NONE_MATCH, etag);
+                method.setRequestHeader(HTTPConstants.IF_NONE_MATCH, etag);
             }
         }
     }
@@ -244,11 +244,11 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         if (entry != null){
             final String lastModified = entry.getLastModified();
             if (lastModified != null){
-                request.setHeader(HTTPConstantsInterface.IF_MODIFIED_SINCE, lastModified);
+                request.setHeader(HTTPConstants.IF_MODIFIED_SINCE, lastModified);
             }
             final String etag = entry.getEtag();
             if (etag != null){
-                request.setHeader(HTTPConstantsInterface.IF_NONE_MATCH, etag);
+                request.setHeader(HTTPConstants.IF_NONE_MATCH, etag);
             }
         }
     }
@@ -268,11 +268,11 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         if (entry != null){
             final String lastModified = entry.getLastModified();
             if (lastModified != null){
-                conn.addRequestProperty(HTTPConstantsInterface.IF_MODIFIED_SINCE, lastModified);
+                conn.addRequestProperty(HTTPConstants.IF_MODIFIED_SINCE, lastModified);
             }
             final String etag = entry.getEtag();
             if (etag != null){
-                conn.addRequestProperty(HTTPConstantsInterface.IF_NONE_MATCH, etag);
+                conn.addRequestProperty(HTTPConstants.IF_NONE_MATCH, etag);
             }
         }
     }
