@@ -65,6 +65,8 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 <ul>
 <li><bugzilla>53348</bugzilla> - JMeter JMS Point-to-Point Request-Response sampler doesn't work when Request-queue and Receive-queue are different</li>
 <li><bugzilla>53357</bugzilla> - JMS Point to Point reports too high response times in Request Response Mode</li>
+<li><bugzilla>53440</bugzilla> - SSL connection leads to ArrayStoreException on JDK 6 with some KeyManagerFactory SPI</li>
+
 </ul>
 
 <h3>Controllers</h3>
