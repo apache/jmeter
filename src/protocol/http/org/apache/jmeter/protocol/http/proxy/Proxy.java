@@ -50,7 +50,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -190,7 +190,7 @@ public class Proxy extends Thread {
             request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             outStreamClient = clientSocket.getOutputStream();
 
-            if ((request.getMethod().startsWith(HTTPConstantsInterface.CONNECT)) && (outStreamClient != null)) {
+            if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
                 log.debug("Method CONNECT => SSL");
                 // write a OK reponse to browser, to engage SSL exchange
                 outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes(SampleResult.DEFAULT_HTTP_ENCODING)); // $NON-NLS-1$
@@ -226,11 +226,11 @@ public class Proxy extends Thread {
                 if (httpsSpoofMatch.length() > 0){
                     String url = request.getUrl();
                     if (url.matches(httpsSpoofMatch)){
-                        sampler.setProtocol(HTTPConstantsInterface.PROTOCOL_HTTPS);
+                        sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
                         forcedHTTPS = true;
                     }
                 } else {
-                    sampler.setProtocol(HTTPConstantsInterface.PROTOCOL_HTTPS);
+                    sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
                     forcedHTTPS = true;
                 }
             }
@@ -247,7 +247,7 @@ public class Proxy extends Thread {
                 final String enc = result.getDataEncodingWithDefault();
                 String noHttpsResult = new String(result.getResponseData(),enc);
                 final String HTTPS_HOST = // match https://host[:port]/ and drop default port if present
-                    "https://([^:/]+)(:"+HTTPConstantsInterface.DEFAULT_HTTPS_PORT_STRING+")?"; // $NON-NLS-1$ $NON-NLS-2$
+                    "https://([^:/]+)(:"+HTTPConstants.DEFAULT_HTTPS_PORT_STRING+")?"; // $NON-NLS-1$ $NON-NLS-2$
                 noHttpsResult = noHttpsResult.replaceAll(HTTPS_HOST, "http://$1"); // $NON-NLS-1$
                 result.setResponseData(noHttpsResult.getBytes(enc));
             }
@@ -291,8 +291,8 @@ public class Proxy extends Thread {
              * We don't want to store any cookies in the generated test plan
              */
             if (headers != null) {
-                headers.removeHeaderNamed(HTTPConstantsInterface.HEADER_COOKIE);// Always remove cookies
-                headers.removeHeaderNamed(HTTPConstantsInterface.HEADER_AUTHORIZATION);// Always remove authorization
+                headers.removeHeaderNamed(HTTPConstants.HEADER_COOKIE);// Always remove cookies
+                headers.removeHeaderNamed(HTTPConstants.HEADER_AUTHORIZATION);// Always remove authorization
                 // Remove additional headers
                 for(String hdr : headersToRemove){
                     headers.removeHeaderNamed(hdr);
@@ -477,36 +477,36 @@ public class Proxy extends Thread {
             String line=headerLines[i];
             String[] parts=line.split(":\\s+",2); // $NON-NLS-1$
             if (parts.length==2){
-                if (HTTPConstantsInterface.TRANSFER_ENCODING.equalsIgnoreCase(parts[0])){
+                if (HTTPConstants.TRANSFER_ENCODING.equalsIgnoreCase(parts[0])){
                     headerLines[i]=null; // We don't want this passed on to browser
                     continue;
                 }
-                if (HTTPConstantsInterface.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
+                if (HTTPConstants.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
                     &&
-                    HTTPConstantsInterface.ENCODING_GZIP.equalsIgnoreCase(parts[1])
+                    HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
                 ){
                     headerLines[i]=null; // We don't want this passed on to browser
                     fixContentLength = true;
                     continue;
                 }
-                if (HTTPConstantsInterface.HEADER_CONTENT_LENGTH.equalsIgnoreCase(parts[0])){
+                if (HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(parts[0])){
                     contentLengthIndex=i;
                     continue;
                 }
                 final String HTTPS_PREFIX = "https://";
-                if (forcedHTTPS && HTTPConstantsInterface.HEADER_LOCATION.equalsIgnoreCase(parts[0])
+                if (forcedHTTPS && HTTPConstants.HEADER_LOCATION.equalsIgnoreCase(parts[0])
                         && parts[1].substring(0, HTTPS_PREFIX.length()).equalsIgnoreCase(HTTPS_PREFIX)){
                     headerLines[i]=headerLines[i].replaceFirst(parts[1].substring(0,HTTPS_PREFIX.length()), "http://");
                     continue;
                 }
-                if (forcedHTTPS && (HTTPConstantsInterface.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstantsInterface.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0])))
+                if (forcedHTTPS && (HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0])))
                 {
                     headerLines[i]=COOKIE_SECURE_PATTERN.matcher(headerLines[i]).replaceAll("").trim(); //in forced https cookies need to be unsecured...
                 }
             }
         }
         if (fixContentLength && contentLengthIndex>=0){// Fix the content length
-            headerLines[contentLengthIndex]=HTTPConstantsInterface.HEADER_CONTENT_LENGTH+": "+res.getResponseData().length;
+            headerLines[contentLengthIndex]=HTTPConstants.HEADER_CONTENT_LENGTH+": "+res.getResponseData().length;
         }
         StringBuilder sb = new StringBuilder(headers.length());
         for (int i=0;i<headerLines.length;i++){

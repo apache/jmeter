@@ -33,7 +33,7 @@ import org.apache.jmeter.protocol.http.parser.HtmlParsingUtils;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -96,7 +96,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             }
             sampler.setDomain(url.getDomain());
             sampler.setPath(url.getPath());
-            if (url.getMethod().equals(HTTPConstantsInterface.POST)) {
+            if (url.getMethod().equals(HTTPConstants.POST)) {
                 PropertyIterator iter = sampler.getArguments().iterator();
                 while (iter.hasNext()) {
                     Argument arg = (Argument) iter.next().getObjectValue();
@@ -154,7 +154,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             urls.addAll(HtmlParsingUtils.createURLFromForm(rootList.item(x), result.getURL()));
         }
         for (HTTPSamplerBase newUrl : urls) {
-            newUrl.setMethod(HTTPConstantsInterface.POST);
+            newUrl.setMethod(HTTPConstants.POST);
             if (log.isDebugEnabled()) {
                 log.debug("Potential Form match: " + newUrl.toString());
             }
@@ -186,7 +186,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             }
             try {
                 HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(hrefStr, ConversionUtils.makeRelativeURL(result.getURL(), base));
-                newUrl.setMethod(HTTPConstantsInterface.GET);
+                newUrl.setMethod(HTTPConstants.GET);
                 if (log.isDebugEnabled()) {
                     log.debug("Potential <a href> match: " + newUrl);
                 }
@@ -220,7 +220,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
            try {
                HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(
                        hrefStr, ConversionUtils.makeRelativeURL(result.getURL(), base));
-               newUrl.setMethod(HTTPConstantsInterface.GET);
+               newUrl.setMethod(HTTPConstants.GET);
                if (log.isDebugEnabled()) {
                    log.debug("Potential <frame src> match: " + newUrl);
                }

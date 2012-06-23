@@ -58,6 +58,7 @@ import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
@@ -150,7 +151,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
 
-    private static final String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
+    private static final String DEFAULT_PROTOCOL = HTTPConstants.PROTOCOL_HTTP;
 
     public static final String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
@@ -186,16 +187,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
     
     
-    public static final String DEFAULT_METHOD = GET; // $NON-NLS-1$
+    public static final String DEFAULT_METHOD = HTTPConstants.GET; // $NON-NLS-1$
     // Supported methods:
     private static final String [] METHODS = {
         DEFAULT_METHOD, // i.e. GET
-        POST,
-        HEAD,
-        PUT,
-        OPTIONS,
-        TRACE,
-        DELETE,
+        HTTPConstants.POST,
+        HTTPConstants.HEAD,
+        HTTPConstants.PUT,
+        HTTPConstants.OPTIONS,
+        HTTPConstants.TRACE,
+        HTTPConstants.DELETE,
         };
 
     private static final List<String> METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
@@ -353,7 +354,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         // We use multipart if we have been told so, or files are present
         // and the files should not be send as the post body
         HTTPFileArg[] files = getHTTPFiles();
-        if(POST.equals(getMethod()) && (getDoMultipartPost() || (files.length > 0 && !getSendFileAsPostBody()))) {
+        if(HTTPConstants.POST.equals(getMethod()) && (getDoMultipartPost() || (files.length > 0 && !getSendFileAsPostBody()))) {
             return true;
         }
         return false;
@@ -398,7 +399,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *            The encoding used for the querystring parameter values
      */
     public void setPath(String path, String contentEncoding) {
-        if (GET.equals(getMethod()) || DELETE.equals(getMethod())) {
+        if (HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod())) {
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
                 setProperty(PATH, path.substring(0, index));
@@ -616,8 +617,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static int getDefaultPort(String protocol,int port){
         if (port==URL_UNSPECIFIED_PORT){
             return
-                protocol.equalsIgnoreCase(PROTOCOL_HTTP)  ? DEFAULT_HTTP_PORT :
-                protocol.equalsIgnoreCase(PROTOCOL_HTTPS) ? DEFAULT_HTTPS_PORT :
+                protocol.equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP)  ? HTTPConstants.DEFAULT_HTTP_PORT :
+                protocol.equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTPS) ? HTTPConstants.DEFAULT_HTTPS_PORT :
                     port;
         }
         return port;
@@ -646,8 +647,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         final int port = getPortIfSpecified();
         final String protocol = getProtocol();
         if (port == UNSPECIFIED_PORT ||
-                (PROTOCOL_HTTP.equalsIgnoreCase(protocol) && port == DEFAULT_HTTP_PORT) ||
-                (PROTOCOL_HTTPS.equalsIgnoreCase(protocol) && port == DEFAULT_HTTPS_PORT)) {
+                (HTTPConstants.PROTOCOL_HTTP.equalsIgnoreCase(protocol) && port == HTTPConstants.DEFAULT_HTTP_PORT) ||
+                (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(protocol) && port == HTTPConstants.DEFAULT_HTTPS_PORT)) {
             return true;
         }
         return false;
@@ -662,14 +663,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         final int port = getPortIfSpecified();
         if (port == UNSPECIFIED_PORT) {
             String prot = getProtocol();
-            if (PROTOCOL_HTTPS.equalsIgnoreCase(prot)) {
-                return DEFAULT_HTTPS_PORT;
+            if (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(prot)) {
+                return HTTPConstants.DEFAULT_HTTPS_PORT;
             }
-            if (!PROTOCOL_HTTP.equalsIgnoreCase(prot)) {
+            if (!HTTPConstants.PROTOCOL_HTTP.equalsIgnoreCase(prot)) {
                 log.warn("Unexpected protocol: "+prot);
                 // TODO - should this return something else?
             }
-            return DEFAULT_HTTP_PORT;
+            return HTTPConstants.DEFAULT_HTTP_PORT;
         }
         return port;
     }
@@ -834,8 +835,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return res;
     }
 
-    private static final String HTTP_PREFIX = PROTOCOL_HTTP+"://"; // $NON-NLS-1$
-    private static final String HTTPS_PREFIX = PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
+    private static final String HTTP_PREFIX = HTTPConstants.PROTOCOL_HTTP+"://"; // $NON-NLS-1$
+    private static final String HTTPS_PREFIX = HTTPConstants.PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
 
     // Bug 51939
     private static final boolean SEPARATE_CONTAINER = 
@@ -873,7 +874,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         pathAndQuery.append(path);
 
         // Add the query string if it is a HTTP GET or DELETE request
-        if(GET.equals(getMethod()) || DELETE.equals(getMethod())) {
+        if(HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod())) {
             // Get the query string encoded in specified encoding
             // If no encoding is specified by user, we will get it
             // encoded in UTF-8, which is what the HTTP spec says
@@ -1028,7 +1029,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             StringBuilder stringBuffer = new StringBuilder();
             stringBuffer.append(this.getUrl().toString());
             // Append body if it is a post or put
-            if(POST.equals(getMethod()) || PUT.equals(getMethod())) {
+            if(HTTPConstants.POST.equals(getMethod()) || HTTPConstants.PUT.equals(getMethod())) {
                 stringBuffer.append("\nQuery Data: ");
                 stringBuffer.append(getQueryString());
             }
@@ -1173,10 +1174,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         
                         if (isConcurrentDwn()) {
                             // if concurrent download emb. resources, add to a list for async gets later
-                            liste.add(new ASyncSample(url, GET, false, frameDepth + 1, getCookieManager(), this));
+                            liste.add(new ASyncSample(url, HTTPConstants.GET, false, frameDepth + 1, getCookieManager(), this));
                         } else {
                             // default: serial download embedded resources
-                            HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
+                            HTTPSampleResult binRes = sample(url, HTTPConstants.GET, false, frameDepth + 1);
                             res.addSubResult(binRes);
                             setParentSampleSuccess(res, res.isSuccessful() && binRes.isSuccessful());
                         }
@@ -1372,7 +1373,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             location = encodeSpaces(location);
             try {
-                lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), GET, true, frameDepth);
+                lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), HTTPConstants.GET, true, frameDepth);
             } catch (MalformedURLException e) {
                 errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL
@@ -1556,7 +1557,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public static boolean isSecure(String protocol){
-        return PROTOCOL_HTTPS.equalsIgnoreCase(protocol);
+        return HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(protocol);
     }
 
     public static boolean isSecure(URL url){
