@@ -36,6 +36,7 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -90,7 +91,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending a request which contains both formdata and file content
      */
     public void testSendPostData() throws IOException {
-        sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPConstants.POST);
         setupFilepart(sampler);
         String titleValue = "mytitle";
         String descriptionValue = "mydescription";
@@ -248,7 +249,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending only a file multipart.
      */
     public void testSendFileData_Multipart() throws IOException {
-        sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPConstants.POST);
         String fileField = "upload";
         String mimeType = "text/plain";
         File file = temporaryFile;
@@ -302,7 +303,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending only a formdata, as a multipart/form-data request.
      */
     public void testSendFormData_Multipart() throws IOException {
-        sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPConstants.POST);
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -559,7 +560,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.setHeaders(URLConnection, HTTPSampler)'
      */
     public void testSetHeaders() throws IOException {
-        sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPConstants.POST);
         setupFilepart(sampler);
         setupFormData(sampler);
         
@@ -878,7 +879,7 @@ public class PostWriterTest extends TestCase {
     }
 
     private void checkContentTypeUrlEncoded(HttpURLConnection conn) {
-        assertEquals(HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, conn.getRequestProperty("Content-Type"));
+        assertEquals(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED, conn.getRequestProperty("Content-Type"));
     }
 
     private void checkContentLength(HttpURLConnection conn, int length) {
