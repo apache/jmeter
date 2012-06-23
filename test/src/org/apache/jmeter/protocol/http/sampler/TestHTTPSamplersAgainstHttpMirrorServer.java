@@ -847,7 +847,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding), contentEncoding, res);
         // Check method, path and query sent
-        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
     
     private void checkPostRequestFileUpload(
@@ -890,7 +890,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody, bodySent, contentEncoding, res);
         // Check method, path and query sent
-        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
 
     private void checkPostRequestBody(
@@ -928,7 +928,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), bodySent.getBytes(contentEncoding), contentEncoding, res);
         // Check method, path and query sent
-        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
 
     private void checkGetRequest(
@@ -958,7 +958,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // No body should have been sent
         assertEquals(bodySent.length(), 0);
         // Check method, path and query sent
-        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
     
     private void checkGetRequest_Parameters(
@@ -1007,14 +1007,16 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // No body should have been sent
         assertEquals(bodySent.length(), 0);
         // Check method, path and query sent
-        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), expectedQueryString);
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), expectedQueryString, res);
     }
     
     private void checkMethodPathQuery(
             String headersSent,
             String expectedMethod,
             String expectedPath,
-            String expectedQueryString)
+            String expectedQueryString,
+            HTTPSampleResult res
+            )
             throws IOException {
         // Check the Request URI sent to the mirror server, and
         // sent back by the mirror server
@@ -1051,7 +1053,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             // Is it only the parameter values which are encoded in the specified
             // content encoding, the rest of the query is encoded in UTF-8
             // Therefore we compare the whole query using UTF-8
-            checkArraysHaveSameContent(expectedQueryString.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), queryStringSent.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), EncoderCache.URL_ARGUMENT_ENCODING, null); // TODO add result
+            checkArraysHaveSameContent(expectedQueryString.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), queryStringSent.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), EncoderCache.URL_ARGUMENT_ENCODING, res);
         }
     }
 
