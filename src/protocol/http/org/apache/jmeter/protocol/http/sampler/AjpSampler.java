@@ -31,6 +31,7 @@ import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -168,7 +169,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         res.setHTTPMethod(method);
         outpos = 4;
         setByte((byte)2);
-        if(method.equals(POST)) {
+        if(method.equals(HTTPConstants.POST)) {
             setByte((byte)4);
         } else {
             setByte((byte)2);
@@ -176,14 +177,14 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         if(JMeterUtils.getPropDefault("httpclient.version","1.1").equals("1.0")) {//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             setString("HTTP/1.0");//$NON-NLS-1$
         } else {
-            setString(HTTP_1_1);
+            setString(HTTPConstants.HTTP_1_1);
         }
         setString(url.getPath());
         setString(localAddress);
         setString(localName);
         setString(host);
         setInt(url.getDefaultPort());
-        setByte(PROTOCOL_HTTPS.equalsIgnoreCase(scheme) ? (byte)1 : (byte)0);
+        setByte(HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(scheme) ? (byte)1 : (byte)0);
         setInt(getHeaderSize(method, url));
         String hdr = setConnectionHeaders(url, host, method);
         res.setRequestHeaders(hdr);
@@ -201,7 +202,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         CookieManager cookies = getCookieManager();
         AuthManager auth = getAuthManager();
         int hsz = 1; // Host always
-        if(method.equals(POST)) {
+        if(method.equals(HTTPConstants.POST)) {
             HTTPFileArg[] hfa = getHTTPFiles();
             if(hfa.length > 0) {
                 hsz += 3;
@@ -251,7 +252,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 setString(v);
             }
         }
-        if(method.equals(POST)) {
+        if(method.equals(HTTPConstants.POST)) {
             int cl = -1;
             HTTPFileArg[] hfa = getHTTPFiles();
             if(hfa.length > 0) {
@@ -260,17 +261,17 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 File input = new File(fn);
                 cl = (int)input.length();
                 body = new FileInputStream(input);
-                setString(HEADER_CONTENT_DISPOSITION);
+                setString(HTTPConstants.HEADER_CONTENT_DISPOSITION);
                 setString("form-data; name=\""+encode(fa.getParamName())+
                       "\"; filename=\"" + encode(fn) +"\""); //$NON-NLS-1$ //$NON-NLS-2$
                 String mt = fa.getMimeType();
-                hbuf.append(HEADER_CONTENT_TYPE).append(COLON_SPACE).append(mt).append(NEWLINE);
+                hbuf.append(HTTPConstants.HEADER_CONTENT_TYPE).append(COLON_SPACE).append(mt).append(NEWLINE);
                 setInt(0xA007); // content-type
                 setString(mt);
             } else {
-                hbuf.append(HEADER_CONTENT_TYPE).append(COLON_SPACE).append(APPLICATION_X_WWW_FORM_URLENCODED).append(NEWLINE);
+                hbuf.append(HTTPConstants.HEADER_CONTENT_TYPE).append(COLON_SPACE).append(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED).append(NEWLINE);
                 setInt(0xA007); // content-type
-                setString(APPLICATION_X_WWW_FORM_URLENCODED);
+                setString(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                 StringBuilder sb = new StringBuilder();
                 boolean first = true;
                 PropertyIterator args = getArguments().iterator();
@@ -288,7 +289,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 cl = sbody.length;
                 body = new ByteArrayInputStream(sbody);
             }
-            hbuf.append(HEADER_CONTENT_LENGTH).append(COLON_SPACE).append(String.valueOf(cl)).append(NEWLINE);
+            hbuf.append(HTTPConstants.HEADER_CONTENT_LENGTH).append(COLON_SPACE).append(String.valueOf(cl)).append(NEWLINE);
             setInt(0xA008); // Content-length
             setString(String.valueOf(cl));
         }
@@ -297,7 +298,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             if(authHeader != null) {
                 setInt(0xA005); // Authorization
                 setString(authHeader);
-                hbuf.append(HEADER_AUTHORIZATION).append(COLON_SPACE).append(authHeader).append(NEWLINE);
+                hbuf.append(HTTPConstants.HEADER_AUTHORIZATION).append(COLON_SPACE).append(authHeader).append(NEWLINE);
             }
         }
         return hbuf.toString();
@@ -378,7 +379,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     private void execute(String method, HTTPSampleResult res)
     throws IOException {
         send();
-        if(method.equals(POST)) {
+        if(method.equals(HTTPConstants.POST)) {
             res.setQueryString(stringBody);
             sendPostBody();
         }
@@ -434,7 +435,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         res.setResponseMessage(msg);
         int nh = getInt();
         StringBuilder sb = new StringBuilder();
-        sb.append(HTTP_1_1 ).append(status).append(" ").append(msg).append(NEWLINE);//$NON-NLS-1$//$NON-NLS-2$
+        sb.append(HTTPConstants.HTTP_1_1 ).append(status).append(" ").append(msg).append(NEWLINE);//$NON-NLS-1$//$NON-NLS-2$
         for(int i=0; i < nh; i++) {
             String name;
             int thn = peekInt();
@@ -445,10 +446,10 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 name = getString();
             }
             String value = getString();
-            if(HEADER_CONTENT_TYPE.equalsIgnoreCase(name)) {
+            if(HTTPConstants.HEADER_CONTENT_TYPE.equalsIgnoreCase(name)) {
                 res.setContentType(value);
                 res.setEncodingAndType(value);
-            } else if(HEADER_SET_COOKIE.equalsIgnoreCase(name)) {
+            } else if(HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(name)) {
                 CookieManager cookies = getCookieManager();
                 if(cookies != null) {
                     cookies.addCookieFromHeader(value, res.getURL());
