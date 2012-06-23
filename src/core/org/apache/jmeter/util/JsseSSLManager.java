@@ -232,13 +232,17 @@ public class JsseSSLManager extends SSLManager {
         JmeterKeyStore keys = this.getKeyStore();
         managerFactory.init(null, defaultpw == null ? new char[]{} : defaultpw.toCharArray());
         KeyManager[] managers = managerFactory.getKeyManagers();
+        KeyManager[] newManagers = new KeyManager[managers.length];
+        
         log.debug(keys.getClass().toString());
 
         // Now wrap the default managers with our key manager
         for (int i = 0; i < managers.length; i++) {
             if (managers[i] instanceof X509KeyManager) {
                 X509KeyManager manager = (X509KeyManager) managers[i];
-                managers[i] = new WrappedX509KeyManager(manager, keys);
+                newManagers[i] = new WrappedX509KeyManager(manager, keys);
+            } else {
+                newManagers[i] = managers[i];
             }
         }
 
@@ -255,7 +259,7 @@ public class JsseSSLManager extends SSLManager {
                     (X509TrustManager)trustmanagers[i]);
             }
         }
-        context.init(managers, trustmanagers, this.rand);
+        context.init(newManagers, trustmanagers, this.rand);
         if (log.isDebugEnabled()){
             String[] dCiphers = context.getSocketFactory().getDefaultCipherSuites();
             String[] sCiphers = context.getSocketFactory().getSupportedCipherSuites();
@@ -393,5 +397,10 @@ public class JsseSSLManager extends SSLManager {
         public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
             return this.manager.chooseServerAlias(arg0, arg1, arg2);
         }
+    }
+    
+    public static void main(String[] args) {
+        Number[] t = new Integer[5];
+        t[0] = new Long(123);
     }
 }
