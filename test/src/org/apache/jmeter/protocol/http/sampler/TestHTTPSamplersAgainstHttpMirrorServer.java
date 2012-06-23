@@ -228,8 +228,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             case 2:
                 // Test sending data as UTF-8
                 contentEncoding = "UTF-8";
-                titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
-                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
+                titleValue = "mytitle2\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription2\u0153\u20a1\u0115\u00c5";
                 setupUrl(sampler, contentEncoding);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
                 res = executeSampler(sampler);
@@ -238,8 +238,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             case 3:
                 // Test sending data as UTF-8, with values that will change when urlencoded
                 contentEncoding = "UTF-8";
-                titleValue = "mytitle/=";
-                descriptionValue = "mydescription   /\\";
+                titleValue = "mytitle3/=";
+                descriptionValue = "mydescription3   /\\";
                 setupUrl(sampler, contentEncoding);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
                 res = executeSampler(sampler);
@@ -248,8 +248,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             case 4:
                 // Test sending data as UTF-8, with values that have been urlencoded
                 contentEncoding = "UTF-8";
-                titleValue = "mytitle%2F%3D";
-                descriptionValue = "mydescription+++%2F%5C";
+                titleValue = "mytitle4%2F%3D";
+                descriptionValue = "mydescription4+++%2F%5C";
                 setupUrl(sampler, contentEncoding);
                 setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
                 res = executeSampler(sampler);
@@ -259,7 +259,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 // Test sending data as UTF-8, with values similar to __VIEWSTATE parameter that .net uses
                 contentEncoding = "UTF-8";
                 titleValue = "/wEPDwULLTE2MzM2OTA0NTYPZBYCAgMPZ/rA+8DZ2dnZ2dnZ2d/GNDar6OshPwdJc=";
-                descriptionValue = "mydescription";
+                descriptionValue = "mydescription5";
                 setupUrl(sampler, contentEncoding);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
                 res = executeSampler(sampler);
@@ -271,7 +271,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 // This is how the HTTP Proxy server adds arguments to the sampler
                 contentEncoding = "UTF-8";
                 titleValue = "%2FwEPDwULLTE2MzM2OTA0NTYPZBYCAgMPZ%2FrA%2B8DZ2dnZ2dnZ2d%2FGNDar6OshPwdJc%3D";
-                descriptionValue = "mydescription";
+                descriptionValue = "mydescription6";
                 setupUrl(sampler, contentEncoding);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
                 ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
@@ -295,15 +295,15 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 replacer.setUserDefinedVariables(testPlan.getUserDefinedVariables());
                 
                 contentEncoding = "UTF-8";
-                titleValue = "${title_prefix}mytitle\u0153\u20a1\u0115\u00c5";
-                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
+                titleValue = "${title_prefix}mytitle7\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription7\u0153\u20a1\u0115\u00c5${description_suffix}";
                 setupUrl(sampler, contentEncoding);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
                 // Replace the variables in the sampler
                 replacer.replaceValues(sampler);
                 res = executeSampler(sampler);
-                String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
-                String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
+                String expectedTitleValue = "a test\u00c5mytitle7\u0153\u20a1\u0115\u00c5";
+                String expectedDescriptionValue = "mydescription7\u0153\u20a1\u0115\u00c5the_end";
                 checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue, false);
                 break;
             case 8:
@@ -662,8 +662,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 // Test sending data with ISO-8859-1 encoding
                 sampler = createHttpSampler(samplerType);
                 contentEncoding = ISO_8859_1;
-                titleValue = "mytitle\uc385";
-                descriptionValue = "mydescription\uc385";
+                titleValue = "mytitle1\uc385";
+                descriptionValue = "mydescription1\uc385";
                 setupUrl(sampler, contentEncoding);
                 sampler.setMethod(HTTPSamplerBase.GET);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
@@ -677,8 +677,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 // Test sending data with UTF-8 encoding
                 sampler = createHttpSampler(samplerType);
                 contentEncoding = "UTF-8";
-                titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
-                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
+                titleValue = "mytitle2\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription2\u0153\u20a1\u0115\u00c5";
                 setupUrl(sampler, contentEncoding);
                 sampler.setMethod(HTTPSamplerBase.GET);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
@@ -692,8 +692,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 // Test sending data as UTF-8, with values that changes when urlencoded
                 sampler = createHttpSampler(samplerType);
                 contentEncoding = "UTF-8";
-                titleValue = "mytitle\u0153+\u20a1 \u0115&yes\u00c5";
-                descriptionValue = "mydescription \u0153 \u20a1 \u0115 \u00c5";
+                titleValue = "mytitle3\u0153+\u20a1 \u0115&yes\u00c5";
+                descriptionValue = "mydescription3 \u0153 \u20a1 \u0115 \u00c5";
                 setupUrl(sampler, contentEncoding);
                 sampler.setMethod(HTTPSamplerBase.GET);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
@@ -707,8 +707,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 // Test sending data as UTF-8, with values that have been urlencoded
                 sampler = createHttpSampler(samplerType);
                 contentEncoding = "UTF-8";
-                titleValue = "mytitle%2F%3D";
-                descriptionValue = "mydescription+++%2F%5C";
+                titleValue = "mytitle4%2F%3D";
+                descriptionValue = "mydescription4+++%2F%5C";
                 setupUrl(sampler, contentEncoding);
                 sampler.setMethod(HTTPSamplerBase.GET);
                 setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
@@ -733,16 +733,16 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 
                 sampler = createHttpSampler(samplerType);
                 contentEncoding = "UTF-8";
-                titleValue = "${title_prefix}mytitle\u0153\u20a1\u0115\u00c5";
-                descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
+                titleValue = "${title_prefix}mytitle5\u0153\u20a1\u0115\u00c5";
+                descriptionValue = "mydescription5\u0153\u20a1\u0115\u00c5${description_suffix}";
                 setupUrl(sampler, contentEncoding);
                 sampler.setMethod(HTTPSamplerBase.GET);
                 setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
                 // Replace the variables in the sampler
                 replacer.replaceValues(sampler);
                 res = executeSampler(sampler);
-                String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
-                String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
+                String expectedTitleValue = "a test\u00c5mytitle5\u0153\u20a1\u0115\u00c5";
+                String expectedDescriptionValue = "mydescription5\u0153\u20a1\u0115\u00c5the_end";
                 sampler.setRunningVersion(true);
                 executedUrl = sampler.getUrl();
                 sampler.setRunningVersion(false);
