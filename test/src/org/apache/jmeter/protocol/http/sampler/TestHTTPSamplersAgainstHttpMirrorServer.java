@@ -826,7 +826,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // Check request headers
         checkHeaderTypeLength(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // Check post body from the result query string
-        checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding), contentEncoding);
+        checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding), contentEncoding, res);
 
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
@@ -845,7 +845,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkHeaderTypeLength(headersSent, "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
-        checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding), contentEncoding);
+        checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding), contentEncoding, res);
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
@@ -888,7 +888,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         assertNotNull("Sent body should not be null", bodySent);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
-        checkArraysHaveSameContent(expectedPostBody, bodySent, contentEncoding);
+        checkArraysHaveSameContent(expectedPostBody, bodySent, contentEncoding, res);
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
@@ -907,7 +907,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // Check request headers
         checkHeaderTypeLength(res.getRequestHeaders(), HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, expectedPostBody.getBytes(contentEncoding).length);
          // Check post body from the result query string
-        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), res.getQueryString().getBytes(contentEncoding), contentEncoding);
+        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), res.getQueryString().getBytes(contentEncoding), contentEncoding, res);
 
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
@@ -926,7 +926,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkHeaderTypeLength(headersSent, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, expectedPostBody.getBytes(contentEncoding).length);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
-        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), bodySent.getBytes(contentEncoding), contentEncoding);
+        checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), bodySent.getBytes(contentEncoding), contentEncoding, res);
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
@@ -1051,7 +1051,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             // Is it only the parameter values which are encoded in the specified
             // content encoding, the rest of the query is encoded in UTF-8
             // Therefore we compare the whole query using UTF-8
-            checkArraysHaveSameContent(expectedQueryString.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), queryStringSent.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), EncoderCache.URL_ARGUMENT_ENCODING);
+            checkArraysHaveSameContent(expectedQueryString.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), queryStringSent.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), EncoderCache.URL_ARGUMENT_ENCODING, null); // TODO add result
         }
     }
 
@@ -1222,7 +1222,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
      * @param actual
      * @throws UnsupportedEncodingException 
      */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual, String encoding) throws UnsupportedEncodingException {
+    private void checkArraysHaveSameContent(byte[] expected, byte[] actual, String encoding, HTTPSampleResult res) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
                 System.out.println("\n>>>>>>>>>>>>>>>>>>>> expected:");
@@ -1230,6 +1230,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 System.out.println("==================== actual:");
                 System.out.println(new String(actual, encoding));
                 System.out.println("<<<<<<<<<<<<<<<<<<<<");
+                if (res != null) {
+                    System.out.println("URL="+res.getUrlAsString());
+                }
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
             }
             else {
@@ -1251,12 +1254,18 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                         }
                         System.out.println();
 */                        
+                        if (res != null) {
+                            System.out.println("URL="+res.getUrlAsString());
+                        }
                         fail("byte at position " + i + " is different, expected is " + expected[i] + ", actual is " + actual[i]);
                     }
                 }
             }
         }
         else {
+            if (res != null) {
+                System.out.println("URL="+res.getUrlAsString());
+            }
             fail("expected or actual byte arrays were null");
         }
     }
