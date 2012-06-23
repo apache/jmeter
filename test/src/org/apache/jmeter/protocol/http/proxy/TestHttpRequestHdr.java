@@ -31,6 +31,7 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 
 public class TestHttpRequestHdr  extends JMeterTestCase {
@@ -47,7 +48,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
             + "?update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= "
             + "HTTP/1.0\r\n\r\n";
         HTTPSamplerBase s = getSamplerForRequest(url, testGetRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.GET, s.getMethod());
+        assertEquals(HTTPConstants.GET, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
         Arguments arguments = s.getArguments();
@@ -71,12 +72,12 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         String postBody = "update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d=";
         String testPostRequest = "POST " + url + " HTTP/1.0\n"
                 + "Content-type: "
-                + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
+                + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
                 + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
                 + "\r\n"
                 + postBody;
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertFalse(s.getDoMultipartPost());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
@@ -105,7 +106,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
                 + "\r\n"
                 + postBody;
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertFalse(s.getDoMultipartPost());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
@@ -127,7 +128,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         // know the encoding for the page. Specify contentEncoding, so the
         // request is "sent" using that encoding
         s = getSamplerForRequest(null, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertFalse(s.getDoMultipartPost());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
@@ -158,7 +159,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         // Use null for url and contentEncoding, to simulate that HttpRequestHdr do not
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testGetRequest, null);
-        assertEquals(HTTPSamplerBase.GET, s.getMethod());
+        assertEquals(HTTPConstants.GET, s.getMethod());
         assertEquals(queryString, s.getQueryString());
         assertEquals(contentEncoding, s.getContentEncoding());
 
@@ -177,7 +178,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
             + "?" + queryString
             + " HTTP/1.1\r\n\r\n";
         s = getSamplerForRequest(url, testGetRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.GET, s.getMethod());
+        assertEquals(HTTPConstants.GET, s.getMethod());
         String expectedQueryString = "abc%3FSPACE=a+b&space=a+b&query=What%3F";
         assertEquals(expectedQueryString, s.getQueryString());
         assertEquals(contentEncoding, s.getContentEncoding());
@@ -194,14 +195,14 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         String postBody = "abc%3FSPACE=a+b&space=a%20b&query=What%3F";
         String testPostRequest = "POST " + url + " HTTP/1.1\r\n"
             + "Content-type: "
-            + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
+            + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
             + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
             + "\r\n"
             + postBody;
         // Use null for url and contentEncoding, to simulate that HttpRequestHdr do not
         // know the encoding for the page
         s = getSamplerForRequest(null, testPostRequest, null);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(queryString, s.getQueryString());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertFalse(s.getDoMultipartPost());
@@ -219,12 +220,12 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         postBody = "abc?SPACE=a+b&space=a%20b&query=What?";
         testPostRequest = "POST " + url + " HTTP/1.1\n"
             + "Content-type: "
-            + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
+            + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
             + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
             + "\r\n"
             + postBody;
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         expectedQueryString = "abc%3FSPACE=a+b&space=a+b&query=What%3F";
         assertEquals(expectedQueryString, s.getQueryString());
         assertEquals(contentEncoding, s.getContentEncoding());
@@ -259,7 +260,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         // Use null for url and contentEncoding, to simulate that HttpRequestHdr do not
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testGetRequest, null);
-        assertEquals(HTTPSamplerBase.GET, s.getMethod());
+        assertEquals(HTTPConstants.GET, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
         Arguments arguments = s.getArguments();
@@ -278,7 +279,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
             + "?param1=" + param1Value + "&param2=" + param2ValueEncoded + " "
             + "HTTP/1.1\r\n\r\n";
         s = getSamplerForRequest(url, testGetRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.GET, s.getMethod());
+        assertEquals(HTTPConstants.GET, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
         arguments = s.getArguments();
@@ -296,7 +297,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
             + "?param1=" + param1Value + "&param2=" + param2ValueEncoded + " "
             + "HTTP/1.1\r\n\r\n";
         s = getSamplerForRequest(url, testGetRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.GET, s.getMethod());
+        assertEquals(HTTPConstants.GET, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
         arguments = s.getArguments();
@@ -316,7 +317,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         String testPostRequest = 
             "POST " + url + " HTTP/1.1\r\n"
             + "Content-type: "
-            + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
+            + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
             + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
             + "\r\n"
             + postBody;
@@ -324,7 +325,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         // Use null for url and contentEncoding, to simulate that HttpRequestHdr do not
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testPostRequest, null);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
         Arguments arguments = s.getArguments();
@@ -342,13 +343,13 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         testPostRequest = 
             "POST " + url + " HTTP/1.1\r\n"
             + "Content-type: "
-            + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
+            + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
             + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
             + "\r\n"
             + postBody;
 
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
         arguments = s.getArguments();
@@ -365,13 +366,13 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         testPostRequest = 
             "POST " + url + " HTTP/1.1\r\n"
             + "Content-type: "
-            + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
+            + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
             + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
             + "\r\n"
             + postBody;
 
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         // Check arguments
         arguments = s.getArguments();
@@ -392,7 +393,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         String testPostRequest = createMultipartFormRequest(url, postBody, contentEncoding, boundary, endOfLine);
 
         HTTPSamplerBase s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
         
@@ -412,7 +413,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         testPostRequest = createMultipartFormRequest(url, postBody, contentEncoding, boundary, endOfLine);
 
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
         
@@ -432,7 +433,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         testPostRequest = createMultipartFormRequest(url, postBody, contentEncoding, boundary, endOfLine);
 
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
         
@@ -452,7 +453,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         testPostRequest = createMultipartFormRequest(url, postBody, contentEncoding, boundary, endOfLine);
 
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertTrue(s.getDoMultipartPost());
         
@@ -506,7 +507,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         String testPostRequest = createMultipartFormRequest(url, postBody, contentEncoding, boundary, endOfLine);
         
         HTTPSamplerBase s = getSamplerForRequest(url, testPostRequest, contentEncoding);
-        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        assertEquals(HTTPConstants.POST, s.getMethod());
         assertEquals(contentEncoding, s.getContentEncoding());
         assertEquals("", s.getQueryString());
         assertTrue(s.getDoMultipartPost());
@@ -560,7 +561,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
             throws IOException {
         String postRequest = "POST " + url + " HTTP/1.1" + endOfLine
             + "Content-type: "
-            + HTTPSamplerBase.MULTIPART_FORM_DATA
+            + HTTPConstants.MULTIPART_FORM_DATA
             + "; boundary=" + boundary + endOfLine
             + "Content-length: " + getBodyLength(postBody, contentEncoding) + endOfLine
             + endOfLine

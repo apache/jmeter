@@ -22,6 +22,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -47,7 +48,7 @@ public class UrlConfigTest extends JMeterTestCase {
         config.setName("Full Config");
         config.setProperty(HTTPSamplerBase.DOMAIN, "www.lazer.com");
         config.setProperty(HTTPSamplerBase.PATH, "login.jsp");
-        config.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.POST);
+        config.setProperty(HTTPSamplerBase.METHOD, HTTPConstants.POST);
         config.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
         defaultConfig = new HTTPNullSampler();
         defaultConfig.setName("default");
@@ -55,7 +56,7 @@ public class UrlConfigTest extends JMeterTestCase {
         defaultConfig.setProperty(HTTPSamplerBase.PATH, "default.html");
         partialConfig = new HTTPNullSampler();
         partialConfig.setProperty(HTTPSamplerBase.PATH, "main.jsp");
-        partialConfig.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.GET);
+        partialConfig.setProperty(HTTPSamplerBase.METHOD, HTTPConstants.GET);
     }
 
     public void testSimpleConfig() {

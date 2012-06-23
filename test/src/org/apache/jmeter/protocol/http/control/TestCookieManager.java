@@ -24,6 +24,7 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
@@ -67,7 +68,7 @@ public class TestCookieManager extends JMeterTestCase {
             HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setDomain("jakarta.apache.org");
             sampler.setPath("/index.html");
-            sampler.setMethod(HTTPSamplerBase.GET);
+            sampler.setMethod(HTTPConstants.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
 
@@ -76,7 +77,7 @@ public class TestCookieManager extends JMeterTestCase {
             HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setDomain("jakarta.apache.org");
             sampler.setPath("/index.html");
-            sampler.setMethod(HTTPSamplerBase.GET);
+            sampler.setMethod(HTTPConstants.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
 

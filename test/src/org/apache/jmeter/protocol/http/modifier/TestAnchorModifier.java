@@ -27,6 +27,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -115,8 +116,8 @@ public class TestAnchorModifier extends JMeterTestCase {
         // Test https works too
         public void testSimpleParse1() throws Exception {
             HTTPSamplerBase config = makeUrlConfig(".*/index\\.html");
-            config.setProtocol(HTTPSamplerBase.PROTOCOL_HTTPS);
-            config.setPort(HTTPSamplerBase.DEFAULT_HTTPS_PORT);
+            config.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
+            config.setPort(HTTPConstants.DEFAULT_HTTPS_PORT);
             HTTPSamplerBase context = makeContext("https://www.apache.org/subdir/previous.html");
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<a href=\"index.html\">Goto index page</a></body></html>";
@@ -257,7 +258,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         public void testSimpleFormParse() throws Exception {
             HTTPSamplerBase config = makeUrlConfig(".*index.html");
             config.addArgument("test", "g.*");
-            config.setMethod(HTTPSamplerBase.POST);
+            config.setMethod(HTTPConstants.POST);
             HTTPSamplerBase context = makeContext("http://www.apache.org/subdir/previous.html");
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<form action=\"index.html\" method=\"POST\">" + "<input type=\"checkbox\" name=\"test\""
@@ -277,7 +278,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         public void testBadCharParse() throws Exception {
             HTTPSamplerBase config = makeUrlConfig(".*index.html");
             config.addArgument("te$st", "g.*");
-            config.setMethod(HTTPSamplerBase.POST);
+            config.setMethod(HTTPConstants.POST);
             HTTPSamplerBase context = makeContext("http://www.apache.org/subdir/previous.html");
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<form action=\"index.html\" method=\"POST\">" + "<input type=\"checkbox\" name=\"te$st\""
@@ -300,7 +301,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         
         HTTPSamplerBase config = makeUrlConfig(".*index.html");
         config.addArgument("test", ".*");
-        config.setMethod(HTTPSamplerBase.POST);
+        config.setMethod(HTTPConstants.POST);
         HTTPSamplerBase context = makeContext("http://www.apache.org/subdir/previous.html");
         String responseText = "<html><head><title>Test page</title></head><body>"
             + "<form action=\"index.html\" method=\"POST\">" + "<input type=\"hidden\" name=\"test\""
@@ -333,10 +334,10 @@ public class TestAnchorModifier extends JMeterTestCase {
         private HTTPSamplerBase makeUrlConfig(String path) {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setDomain("www.apache.org");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.setPath(path);
-            config.setPort(HTTPSamplerBase.DEFAULT_HTTP_PORT);
-            config.setProtocol(HTTPSamplerBase.PROTOCOL_HTTP);
+            config.setPort(HTTPConstants.DEFAULT_HTTP_PORT);
+            config.setProtocol(HTTPConstants.PROTOCOL_HTTP);
             return config;
         }
 }
