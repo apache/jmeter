@@ -23,6 +23,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.NullSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -88,7 +89,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setDomain("server.com");
             sampler.setPath("index.html");
-            sampler.setMethod(HTTPSamplerBase.GET);
+            sampler.setMethod(HTTPConstants.GET);
             sampler.setProtocol("http");
             return sampler;
         }

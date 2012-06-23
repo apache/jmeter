@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import junit.framework.TestCase;
 
@@ -109,7 +110,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testArgumentWithoutEquals() throws Exception {
             HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setProtocol("http");
-            sampler.setMethod(HTTPSamplerBase.GET);
+            sampler.setMethod(HTTPConstants.GET);
             sampler.setPath("/index.html?pear");
             sampler.setDomain("www.apache.org");
             assertEquals("http://www.apache.org/index.html?pear", sampler.getUrl().toString());
@@ -118,7 +119,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.addArgument("param1", "value1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -128,7 +129,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testRedirect() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.setDomain("192.168.0.1");
             HTTPSampleResult res = new HTTPSampleResult();
             res.sampleStart();
@@ -152,7 +153,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl2() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("192.168.0.1");
@@ -162,7 +163,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl3() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.POST);
+            config.setMethod(HTTPConstants.POST);
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("192.168.0.1");
@@ -175,7 +176,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl4() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.addArgument("param1", "value1", "=");
             config.setPath("/index.html");
             config.setDomain("192.168.0.1");
@@ -185,7 +186,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl5() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.addArgument("param1", "", "=");
             config.setPath("/index.html");
             config.setDomain("192.168.0.1");
@@ -195,7 +196,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl6() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.addArgument("param1", "", "");
             config.setPath("/index.html");
             config.setDomain("192.168.0.1");
@@ -208,7 +209,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl7() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.parseArguments("param1=value1");
             config.setPath("/index.html");
             config.setDomain("192.168.0.1");
@@ -218,7 +219,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl8() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.parseArguments("param1=");
             config.setPath("/index.html");
             config.setDomain("192.168.0.1");
@@ -228,7 +229,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl9() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.parseArguments("param1");
             config.setPath("/index.html");
             config.setDomain("192.168.0.1");
@@ -238,7 +239,7 @@ public class TestHTTPSamplers extends TestCase {
         public void testMakingUrl10() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSamplerBase.GET);
+            config.setMethod(HTTPConstants.GET);
             config.parseArguments("");
             config.setPath("/index.html");
             config.setDomain("192.168.0.1");
