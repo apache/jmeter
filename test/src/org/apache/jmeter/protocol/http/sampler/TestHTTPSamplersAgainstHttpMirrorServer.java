@@ -1002,7 +1002,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
         }
         else {
-            fail("No header and body section found");
+            fail("No header and body section found in: ["+dataSentToMirrorServer+"]");
         }
         // No body should have been sent
         assertEquals(bodySent.length(), 0);
