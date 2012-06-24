@@ -398,9 +398,4 @@ public class JsseSSLManager extends SSLManager {
             return this.manager.chooseServerAlias(arg0, arg1, arg2);
         }
     }
-    
-    public static void main(String[] args) {
-        Number[] t = new Integer[5];
-        t[0] = new Long(123);
-    }
 }
