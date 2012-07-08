@@ -161,7 +161,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         if (useExpires) {// Check that we are processing Expires/CacheControl
             final String MAX_AGE = "max-age=";
             // TODO - check for other CacheControl attributes?
-            if (cacheControl != null && cacheControl.contains("public") && cacheControl.contains(MAX_AGE)) {
+            if (cacheControl != null && (cacheControl.contains("public") || cacheControl.contains("private")) && cacheControl.contains(MAX_AGE)) {
                 long maxAgeInSecs = Long.parseLong(
                         cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length())
                             .split("[, ]")[0] // Bug 51932 - allow for optional trailing attributes
