@@ -77,7 +77,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
     /**
      * Cache of compiled scripts
      */
-    private static Map<String, CompiledScript> compiledScriptsCache = 
+    private static final Map<String, CompiledScript> compiledScriptsCache = 
             Collections.synchronizedMap(
                     new LRUMap(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
     //-- For TestBean implementations only
