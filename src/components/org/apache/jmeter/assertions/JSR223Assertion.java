@@ -20,7 +20,7 @@ package org.apache.jmeter.assertions;
 
 import java.io.IOException;
 
-import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -38,23 +38,17 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         try {
-            ScriptEngineManager mgr = getManager();
-            if (mgr == null) {
-                result.setFailure(true);
-                result.setError(true);
-                result.setFailureMessage("JSR223 Manager not found");
-                return result;
-            }
-            mgr.put("SampleResult", response);
-            mgr.put("AssertionResult", result);
-            processFileOrScript(mgr);
+            ScriptEngine scriptEngine = getScriptEngine();
+            scriptEngine.put("SampleResult", response);
+            scriptEngine.put("AssertionResult", result);
+            processFileOrScript(scriptEngine);
             result.setError(false);
         } catch (IOException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script ", e);
             result.setError(true);
             result.setFailureMessage(e.toString());
         } catch (ScriptException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script ", e);
             result.setError(true);
             result.setFailureMessage(e.toString());
         }

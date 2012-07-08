@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.apache.jmeter.config.ConfigTestElement;
@@ -58,15 +58,9 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
         result.setDataType(SampleResult.TEXT);
         result.sampleStart();
         try {
-            ScriptEngineManager mgr = getManager();
-            if (mgr == null) {
-                result.setSuccessful(false);
-                result.setResponseCode("500"); // $NON-NLS-1$
-                result.setResponseMessage("Could not instantiate ScriptManager");
-                return result;
-            }
-            mgr.put("SampleResult",result);
-            Object ret = processFileOrScript(mgr);
+            ScriptEngine scriptEngine = getScriptEngine();
+            scriptEngine.put("SampleResult",result);
+            Object ret = processFileOrScript(scriptEngine);
             result.setSuccessful(true);
             result.setResponseCodeOK();
             result.setResponseMessageOK();
@@ -74,12 +68,12 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
                 result.setResponseData(ret.toString(), null);
             }
         } catch (IOException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script "+e, e);
             result.setSuccessful(false);
             result.setResponseCode("500"); // $NON-NLS-1$
             result.setResponseMessage(e.toString());
         } catch (ScriptException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script "+e, e);
             result.setSuccessful(false);
             result.setResponseCode("500"); // $NON-NLS-1$
             result.setResponseMessage(e.toString());
