@@ -59,6 +59,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
+<li><bugzilla>53521</bugzilla> - Cache Manager should cache content with Cache-control=private</li>
 </ul>
 
 <h3>Other Samplers</h3>
