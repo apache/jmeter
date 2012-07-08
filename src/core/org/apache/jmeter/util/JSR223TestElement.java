@@ -43,6 +43,20 @@ import org.apache.log.Logger;
 public abstract class JSR223TestElement extends AbstractTestElement
     implements Serializable, Cloneable
 {
+    /**
+     * Initialization On Demand Holder pattern
+     */
+    private static class LazyHolder {
+        public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
+    }
+ 
+    /**
+     * @return ScriptEngineManager singleton
+     */
+    public static ScriptEngineManager getInstance() {
+            return LazyHolder.INSTANCE;
+    }
+    
     private static final long serialVersionUID = 233L;
 
     //++ For TestBean implementations only
@@ -79,13 +93,19 @@ public abstract class JSR223TestElement extends AbstractTestElement
        return o;
     }
 
-    protected ScriptEngineManager getManager() {
-        ScriptEngineManager sem = new ScriptEngineManager();
-        initManager(sem);
-        return sem;
+    protected ScriptEngine getScriptEngine() throws ScriptException {
+        final String lang = getScriptLanguage();
+
+        ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
+        if (scriptEngine == null) {
+            throw new ScriptException("Cannot find engine named: "+lang);
+        }
+
+        initScriptEngine(scriptEngine);
+        return scriptEngine;
     }
 
-    protected void initManager(ScriptEngineManager sem) {
+    protected void initScriptEngine(ScriptEngine sem) {
         final String label = getName();
         final String fileName = getFilename();
         final String scriptParameters = getParameters();
@@ -116,15 +136,8 @@ public abstract class JSR223TestElement extends AbstractTestElement
     }
 
 
-    protected Object processFileOrScript(ScriptEngineManager sem) throws IOException, ScriptException {
-
-        final String lang = getScriptLanguage();
-        ScriptEngine scriptEngine = sem.getEngineByName(lang);
-        if (scriptEngine == null) {
-            throw new ScriptException("Cannot find engine named: "+lang);
-        }
-
-        File scriptFile = new File(getFilename());
+    protected Object processFileOrScript(ScriptEngine scriptEngine) throws IOException, ScriptException {
+        File scriptFile = new File(getFilename());        
         if (scriptFile.exists()) {
             BufferedReader fileReader = null;
             try {
@@ -136,7 +149,6 @@ public abstract class JSR223TestElement extends AbstractTestElement
         } else {
             return scriptEngine.eval(getScript());
         }
-
     }
 
     /**
@@ -184,5 +196,4 @@ public abstract class JSR223TestElement extends AbstractTestElement
     public void setScriptLanguage(String s) {
         scriptLanguage = s;
     }
-
 }

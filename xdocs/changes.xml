@@ -56,6 +56,13 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 <p>
 When using CacheManager, JMeter now caches responses with header Cache-Control=private,max-age=XX as described in specification, see <bugzilla>53521</bugzilla>. 
 </p>
+
+<p>
+A major change has occured on JSR223 Test Elements, previously variables set up before script execution where stored in ScriptEngineManager which was created once per execution, 
+now ScriptEngineManager is a singleton shared by all JSR223 elements and only ScriptEngine is created once per execution, variables set up before script execution are now stored 
+in ScriptEngine context, see <bugzilla>53365</bugzilla>. 
+</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -95,6 +102,7 @@ When using CacheManager, JMeter now caches responses with header Cache-Control=p
 
 <h3>General</h3>
 <ul>
+<li><bugzilla>53365</bugzilla> - JSR223TestElement should cache ScriptEngineManager</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

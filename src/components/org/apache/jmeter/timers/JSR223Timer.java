@@ -20,7 +20,7 @@ package org.apache.jmeter.timers;
 
 import java.io.IOException;
 
-import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.apache.jmeter.testbeans.TestBean;
@@ -37,22 +37,19 @@ public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, 
     public long delay() {
         long delay = 0;
         try {
-            ScriptEngineManager mgr = getManager();
-            if (mgr == null) {
-                return 0; 
-            }
-            Object o = processFileOrScript(mgr);
+            ScriptEngine scriptEngine = getScriptEngine();
+            Object o = processFileOrScript(scriptEngine);
             if (o == null) {
                 log.warn("Script did not return a value");
                 return 0;
             }
             delay = Long.valueOf(o.toString()).longValue();
         } catch (NumberFormatException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script ", e);
         } catch (IOException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script ", e);
         } catch (ScriptException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script ", e);
         }
         return delay;
     }

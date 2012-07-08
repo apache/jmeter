@@ -20,7 +20,7 @@ package org.apache.jmeter.extractor;
 
 import java.io.IOException;
 
-import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.apache.jmeter.processor.PostProcessor;
@@ -36,15 +36,13 @@ public class JSR223PostProcessor extends JSR223TestElement implements Cloneable,
     private static final long serialVersionUID = 232L;
 
     public void process() {
-
         try {
-            ScriptEngineManager sem = getManager();
-            if(sem == null) { return; }
-            processFileOrScript(sem);
+            ScriptEngine scriptEngine = getScriptEngine();
+            processFileOrScript(scriptEngine);
         } catch (ScriptException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script ", e);
         } catch (IOException e) {
-            log.warn("Problem in JSR223 script "+e);
+            log.warn("Problem in JSR223 script ", e);
         }
     }
 }
