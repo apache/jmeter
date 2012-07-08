@@ -20,6 +20,7 @@ package org.apache.jmeter.assertions;
 
 import java.io.IOException;
 
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -39,9 +40,10 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
         AssertionResult result = new AssertionResult(getName());
         try {
             ScriptEngine scriptEngine = getScriptEngine();
-            scriptEngine.put("SampleResult", response);
-            scriptEngine.put("AssertionResult", result);
-            processFileOrScript(scriptEngine);
+            Bindings bindings = scriptEngine.createBindings();
+            bindings.put("SampleResult", response);
+            bindings.put("AssertionResult", result);
+            processFileOrScript(scriptEngine, bindings);
             result.setError(false);
         } catch (IOException e) {
             log.warn("Problem in JSR223 script ", e);
