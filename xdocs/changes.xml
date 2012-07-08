@@ -53,6 +53,9 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h2>Incompatible changes</h2>
 
+<p>
+When using CacheManager, JMeter now caches responses with header Cache-Control=private,max-age=XX as described in specification, see <bugzilla>53521</bugzilla>. 
+</p>
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
