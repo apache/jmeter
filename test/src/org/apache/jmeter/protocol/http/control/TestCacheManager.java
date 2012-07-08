@@ -258,7 +258,7 @@ public class TestCacheManager extends JMeterTestCase {
         assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
         ((HttpMethodStub)httpMethod).cacheControl="no-cache";
         this.cacheManager.saveDetails(httpMethod, sampleResultOK);
-        assertNotNull("Should find entry",getThreadCacheEntry(LOCAL_HOST));
+        assertNull("Should find entry",getThreadCacheEntry(LOCAL_HOST));
         assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
     }
     
