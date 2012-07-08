@@ -23,12 +23,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
 
+import javax.script.Bindings;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -67,6 +73,13 @@ public abstract class JSR223TestElement extends AbstractTestElement
     private String script; // script (if file not provided)
 
     private String scriptLanguage; // JSR223 language to use
+
+    /**
+     * Cache of compiled scripts
+     */
+    private static Map<String, CompiledScript> compiledScriptsCache = 
+            Collections.synchronizedMap(
+                    new LRUMap(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
     //-- For TestBean implementations only
 
     public JSR223TestElement() {
@@ -101,55 +114,101 @@ public abstract class JSR223TestElement extends AbstractTestElement
             throw new ScriptException("Cannot find engine named: "+lang);
         }
 
-        initScriptEngine(scriptEngine);
         return scriptEngine;
     }
 
-    protected void initScriptEngine(ScriptEngine sem) {
+    /**
+     * Populate variables to be passed to scripts
+     * @param bindings Bindings
+     */
+    protected void populateBindings(Bindings bindings) {
         final String label = getName();
         final String fileName = getFilename();
         final String scriptParameters = getParameters();
         // Use actual class name for log
         final Logger logger = LoggingManager.getLoggerForShortName(getClass().getName());
-
-        sem.put("log", logger);
-        sem.put("Label", label);
-        sem.put("FileName", fileName);
-        sem.put("Parameters", scriptParameters);
+        bindings.put("log", logger);
+        bindings.put("Label", label);
+        bindings.put("FileName", fileName);
+        bindings.put("Parameters", scriptParameters);
         String [] args=JOrphanUtils.split(scriptParameters, " ");//$NON-NLS-1$
-        sem.put("args", args);
+        bindings.put("args", args);
         // Add variables for access to context and variables
         JMeterContext jmctx = JMeterContextService.getContext();
-        sem.put("ctx", jmctx);
+        bindings.put("ctx", jmctx);
         JMeterVariables vars = jmctx.getVariables();
-        sem.put("vars", vars);
+        bindings.put("vars", vars);
         Properties props = JMeterUtils.getJMeterProperties();
-        sem.put("props", props);
+        bindings.put("props", props);
         // For use in debugging:
-        sem.put("OUT", System.out);
+        bindings.put("OUT", System.out);
 
         // Most subclasses will need these:
         Sampler sampler = jmctx.getCurrentSampler();
-        sem.put("sampler", sampler);
+        bindings.put("sampler", sampler);
         SampleResult prev = jmctx.getPreviousResult();
-        sem.put("prev", prev);
+        bindings.put("prev", prev);
     }
 
 
-    protected Object processFileOrScript(ScriptEngine scriptEngine) throws IOException, ScriptException {
-        File scriptFile = new File(getFilename());        
+    /**
+     * This method will run inline script or file script with special behaviour for file script:
+     * - If ScriptEngine implements Compilable script will be compiled and cached
+     * - If not if will be run
+     * @param scriptEngine ScriptEngine
+     * @param bindings {@link Bindings} might be null
+     * @return Object returned by script
+     * @throws IOException
+     * @throws ScriptException
+     */
+    protected Object processFileOrScript(ScriptEngine scriptEngine, Bindings bindings) throws IOException, ScriptException {
+        if(bindings == null) {
+            bindings = scriptEngine.createBindings();
+        }
+        populateBindings(bindings);
+        File scriptFile = new File(getFilename()); 
+        // Hack as in bsh-2.0b5.jar BshScriptEngine implements Compilable but throws new Error
+        boolean supportsCompilable = scriptEngine instanceof Compilable 
+                && !(scriptEngine.getClass().getName().equals("bsh.engine.BshScriptEngine"));
         if (scriptFile.exists()) {
             BufferedReader fileReader = null;
             try {
-                fileReader = new BufferedReader(new FileReader(scriptFile)); // TODO Charset ?
-                return scriptEngine.eval(fileReader);
+                if(supportsCompilable) {
+                    String cacheKey = 
+                            getScriptLanguage()+"#"+
+                            scriptFile.getAbsolutePath()+"#"+
+                                    scriptFile.lastModified();
+                    CompiledScript compiledScript = 
+                            compiledScriptsCache.get(cacheKey);
+                    if(compiledScript==null) {
+                        synchronized (compiledScriptsCache) {
+                            compiledScript = 
+                                    compiledScriptsCache.get(cacheKey);
+                            if(compiledScript==null) {
+                                // TODO Charset ?
+                                fileReader = new BufferedReader(new FileReader(scriptFile), 
+                                        (int)scriptFile.length()); 
+                                compiledScript = 
+                                        ((Compilable) scriptEngine).compile(fileReader);
+                                compiledScriptsCache.put(cacheKey, compiledScript);
+                            }
+                        }
+                    }
+                    return compiledScript.eval(bindings);
+                } else {
+                    // TODO Charset ?
+                    fileReader = new BufferedReader(new FileReader(scriptFile), 
+                            (int)scriptFile.length()); 
+                    return scriptEngine.eval(fileReader, bindings);                    
+                }
             } finally {
                 IOUtils.closeQuietly(fileReader);
             }
         } else {
-            return scriptEngine.eval(getScript());
+            return scriptEngine.eval(getScript(), bindings);
         }
     }
+
 
     /**
      * Return the script (TestBean version).

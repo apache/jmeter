@@ -38,7 +38,7 @@ public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, 
         long delay = 0;
         try {
             ScriptEngine scriptEngine = getScriptEngine();
-            Object o = processFileOrScript(scriptEngine);
+            Object o = processFileOrScript(scriptEngine, null);
             if (o == null) {
                 log.warn("Script did not return a value");
                 return 0;

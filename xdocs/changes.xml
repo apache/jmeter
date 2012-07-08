@@ -61,7 +61,11 @@ Furthermore it doesn't put anymore in Cache deprecated entries for "no-cache" re
 <p>
 A major change has occured on JSR223 Test Elements, previously variables set up before script execution where stored in ScriptEngineManager which was created once per execution, 
 now ScriptEngineManager is a singleton shared by all JSR223 elements and only ScriptEngine is created once per execution, variables set up before script execution are now stored 
-in ScriptEngine context, see <bugzilla>53365</bugzilla>. 
+in Bindings created on each execution, see <bugzilla>53365</bugzilla>.
+</p>
+
+<p>
+JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports this feature, see <bugzilla>53520</bugzilla>.
 </p>
 
 <!-- =================== Bug fixes =================== -->
@@ -79,7 +83,6 @@ in ScriptEngine context, see <bugzilla>53365</bugzilla>.
 <li><bugzilla>53348</bugzilla> - JMeter JMS Point-to-Point Request-Response sampler doesn't work when Request-queue and Receive-queue are different</li>
 <li><bugzilla>53357</bugzilla> - JMS Point to Point reports too high response times in Request Response Mode</li>
 <li><bugzilla>53440</bugzilla> - SSL connection leads to ArrayStoreException on JDK 6 with some KeyManagerFactory SPI</li>
-
 </ul>
 
 <h3>Controllers</h3>
@@ -105,6 +108,7 @@ in ScriptEngine context, see <bugzilla>53365</bugzilla>.
 <h3>General</h3>
 <ul>
 <li><bugzilla>53365</bugzilla> - JSR223TestElement should cache ScriptEngineManager</li>
+<li><bugzilla>53520</bugzilla> - JSR223 Elements : Use Compilable interface to improve performances on File scripts</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
