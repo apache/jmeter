@@ -1154,9 +1154,17 @@ Currently the only way to changes these is via the SampleResult methods:
 <description>
 <p>
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
+JSR223 related elements have a feature that increases highly their performances.
+To benefit from this feature use Script files instead of inlining them. This will make JMeter compile them if this
+feature is available on ScriptEngine and cache them.
+Cache size is controlled by the following jmeter property (jmeter.properties):
+<ul>
+<li>jsr223.compiled_scripts_cache_size=100</li>
+</ul>
 For details, see <complink name="BSF Sampler"/>.
 </p>
 <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
+<note></note>
 </description>
 </component>
 
