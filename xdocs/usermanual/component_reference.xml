@@ -3217,7 +3217,8 @@ and if so, the If-Last-Modified and If-None-Match conditional headers are set fo
 Additionally, if the "Use Cache-Control/Expires header" option is selected, then the Cache-Control/Expires value is checked against the current time.
 If the request is a GET request, and the timestamp is in the future, then the sampler returns immediately,
 without requesting the URL from the remote server. This is intended to emulate browser behaviour.
-Note that the Cache-Control header must be "public" and only the "max-age" expiry option is processed.
+Note that if Cache-Control header is "no-cache", response will not be stored in cache, if Cache-Control has any other value, 
+only the "max-age" expiry option is processed to compute entry lifetime.
 </p>
 <p>
 By default, Cache Manager will store up to 5000 items in cache using LRU algorithm. Use property to modify this value.
