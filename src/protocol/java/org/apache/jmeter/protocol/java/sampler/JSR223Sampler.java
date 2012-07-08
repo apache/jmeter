@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -59,8 +60,9 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
         result.sampleStart();
         try {
             ScriptEngine scriptEngine = getScriptEngine();
-            scriptEngine.put("SampleResult",result);
-            Object ret = processFileOrScript(scriptEngine);
+            Bindings bindings = scriptEngine.createBindings();
+            bindings.put("SampleResult",result);
+            Object ret = processFileOrScript(scriptEngine, bindings);
             result.setSuccessful(true);
             result.setResponseCodeOK();
             result.setResponseMessageOK();

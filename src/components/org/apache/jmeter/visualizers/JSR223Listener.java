@@ -20,6 +20,7 @@ package org.apache.jmeter.visualizers;
 
 import java.io.IOException;
 
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -42,9 +43,10 @@ public class JSR223Listener extends JSR223TestElement
     public void sampleOccurred(SampleEvent event) {
         try {
             ScriptEngine scriptEngine = getScriptEngine();
-            scriptEngine.put("sampleEvent", event);
-            scriptEngine.put("sampleResult", event.getResult());
-            processFileOrScript(scriptEngine);
+            Bindings bindings = scriptEngine.createBindings();
+            bindings.put("sampleEvent", event);
+            bindings.put("sampleResult", event.getResult());
+            processFileOrScript(scriptEngine, bindings);
         } catch (ScriptException e) {
             log.warn("Problem in JSR223 script ", e);
         } catch (IOException e) {
