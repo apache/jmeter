@@ -208,26 +208,7 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private void startScheduler() {
         long delay = (startTime - System.currentTimeMillis());
-        if (delay > 0) {
-            long start = System.currentTimeMillis();
-            long end = start + delay;
-            long now=0;
-            long pause = RAMPUP_GRANULARITY;
-            while(running && (now = System.currentTimeMillis()) < end) {
-                long togo = end - now;
-                if (togo < pause) {
-                    pause = togo;
-                }
-                try {
-                    Thread.sleep(pause); // delay between checks
-                } catch (InterruptedException e) {
-                    if (running) { // Don't bother reporting stop test interruptions
-                        log.warn("startScheduler delay for "+threadName+" was interrupted. Waited "+(now - start)+" milli-seconds out of "+delay);
-                    }
-                    break;
-                }
-            }
-        }
+        delayBy(delay, "startScheduler");
     }
 
     public void setThreadName(String threadName) {
@@ -797,9 +778,18 @@ public class JMeterThread implements Runnable, Interruptible {
      * Initial delay if ramp-up period is active for this threadGroup.
      */
     private void rampUpDelay() {
-        if (initialDelay > 0) {
+        delayBy(initialDelay, "RampUp");
+    }
+
+    /**
+     * Wait for delay with RAMPUP_GRANULARITY
+     * @param delay delay in ms
+     * @param type Delay type
+     */
+    protected final void delayBy(long delay, String type) {
+        if (delay > 0) {
             long start = System.currentTimeMillis();
-            long end = start + initialDelay;
+            long end = start + delay;
             long now=0;
             long pause = RAMPUP_GRANULARITY;
             while(running && (now = System.currentTimeMillis()) < end) {
@@ -811,7 +801,7 @@ public class JMeterThread implements Runnable, Interruptible {
                     Thread.sleep(pause); // delay between checks
                 } catch (InterruptedException e) {
                     if (running) { // Don't bother reporting stop test interruptions
-                        log.warn("RampUp delay for "+threadName+" was interrupted. Waited "+(now - start)+" milli-seconds out of "+initialDelay);
+                        log.warn(type+" delay for "+threadName+" was interrupted. Waited "+(now - start)+" milli-seconds out of "+delay);
                     }
                     break;
                 }
