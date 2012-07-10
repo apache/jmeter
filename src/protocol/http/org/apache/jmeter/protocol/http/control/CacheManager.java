@@ -157,14 +157,12 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         if (log.isDebugEnabled()){
             log.debug("SET(both) "+url + " " + cacheControl + " " + lastModified + " " + " " + expires + " " + etag);
         }
-        if(cacheControl != null && cacheControl.contains("no-cache")) {
-            return;
-        } 
         Date expiresDate = null; // i.e. not using Expires
         if (useExpires) {// Check that we are processing Expires/CacheControl
             final String MAX_AGE = "max-age=";
-            if(cacheControl != null) { 
-                if(cacheControl.contains(MAX_AGE)) {
+            if(cacheControl != null) {
+                // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
+                if(cacheControl.contains(MAX_AGE) && ! cacheControl.contains("no-cache")) {
                     long maxAgeInSecs = Long.parseLong(
                             cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length())
                                 .split("[, ]")[0] // Bug 51932 - allow for optional trailing attributes
