@@ -21,14 +21,12 @@ package org.apache.jmeter.engine;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.testbeans.TestBean;
@@ -36,14 +34,14 @@ import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
-import org.apache.jmeter.threads.TestCompiler;
-import org.apache.jmeter.threads.AbstractThreadGroup;
-import org.apache.jmeter.threads.SetupThreadGroup;
 import org.apache.jmeter.threads.PostThreadGroup;
+import org.apache.jmeter.threads.SetupThreadGroup;
+import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -57,8 +55,6 @@ import org.apache.log.Logger;
  */
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
 
     // Should we exit at end of the test? (only applies to server, because host is non-null)
     private static final boolean exitAfterTest =
@@ -92,10 +88,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     /** Whether to call System.exit(1) if threads won't stop */
     private static final boolean SYSTEM_EXIT_ON_STOP_FAIL = JMeterUtils.getPropDefault("jmeterengine.stopfail.system.exit", true);
-
-    /** JMeterThread => its JVM thread */
-    private final Map<JMeterThread, Thread> allThreads;
-
+    
     /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
 
@@ -110,6 +103,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     private volatile SearchByClass<TestListener> testListenersSave;
 
     private final String host;
+
+    private List<AbstractThreadGroup> groups = Collections.synchronizedList(new ArrayList<AbstractThreadGroup>());
 
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
@@ -139,22 +134,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         if (engine == null) {
             return false;// e.g. not yet started
         }
+        boolean wasStopped = false;
         // ConcurrentHashMap does not need synch. here
-        for(Entry<JMeterThread, Thread> entry : engine.allThreads.entrySet()){
-            JMeterThread thrd = entry.getKey();
-            if (thrd.getThreadName().equals(threadName)){
-                thrd.stop();
-                thrd.interrupt();
-                if (now) {
-                    Thread t = entry.getValue();
-                    if (t != null) {
-                        t.interrupt();
-                    }
-                }
-                return true;
-            }
+        for (AbstractThreadGroup threadGroup : engine.groups) {
+            wasStopped = wasStopped || threadGroup.stopThread(threadName, now);
         }
-        return false;
+        return wasStopped;
     }
 
     // End of code to allow engine to be controlled remotely
@@ -165,7 +150,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     public StandardJMeterEngine(String host) {
         this.host = host;
-        this.allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
         // Hack to allow external control
         engine = this;
     }
@@ -268,7 +252,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     // Called by JMeter thread when it finishes
     public synchronized void threadFinished(JMeterThread thread) {
         log.info("Ending thread " + thread.getThreadName());
-        allThreads.remove(thread);
+        for (AbstractThreadGroup threadGroup : groups) {
+            threadGroup.threadFinished(thread);
+        }
     }
 
     public synchronized void stopTest() {
@@ -292,7 +278,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             engine = null;
             if (now) {
                 tellThreadsToStop();
-                pause(10 * allThreads.size());
+                pause(10 * countStillActiveThreads());
                 boolean stopped = verifyThreadsStopped();
                 if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
@@ -381,9 +367,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 String groupName = startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
                 if (serialized && setupIter.hasNext()) {
                     log.info("Waiting for setup thread group: "+groupName+" to finish before starting next setup group");
-                    while (running && allThreads.size() > 0) {
-                        pause(1000);
-                    }
+                    pauseWhileRemainingThreads();
                 }
             }    
             log.info("Waiting for all setup thread groups To Exit");
@@ -414,9 +398,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             String groupName=startThreadGroup(group, groupCount, searcher, testLevelElements, notifier);
             if (serialized && iter.hasNext()) {
                 log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
-                while (running && allThreads.size() > 0) {
-                    pause(1000);
-                }
+                pauseWhileRemainingThreads();
             }
         } // end of thread groups
         if (groupCount == 0){ // No TGs found
@@ -443,9 +425,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 String groupName = startThreadGroup(group, groupCount, postSearcher, testLevelElements, notifier);
                 if (serialized && postIter.hasNext()) {
                     log.info("Waiting for post thread group: "+groupName+" to finish before starting next post group");
-                    while (running && allThreads.size() > 0) {
-                        pause(1000);
-                    }
+                    pauseWhileRemainingThreads();
                 }
             }
             waitThreadsStopped(); // wait for Post threads to stop
@@ -454,6 +434,33 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         notifyTestListenersOfEnd(testListenersSave);
     }
 
+    /**
+     * Loop with 1s pause while thread groups have threads running 
+     */
+    private void pauseWhileRemainingThreads() {
+        while (running && groupsHaveThreads()) {
+            pause(1000);
+        }
+    }
+
+    /**
+     * @return true if remaining threads
+     */
+    private boolean groupsHaveThreads() {
+        return countStillActiveThreads()>0;
+    }
+
+    /**
+     * @return total of active threads in all Thread Groups
+     */
+    private int countStillActiveThreads() {
+        int reminingThreads= 0;
+        for (AbstractThreadGroup threadGroup : groups) {
+            reminingThreads += threadGroup.numberOfActiveThreads();
+        }
+        return reminingThreads; 
+    }
+    
     private String startThreadGroup(AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
     {
             int numThreads = group.getNumThreads();
@@ -478,6 +485,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             }
             ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
             threadGroupTree.add(group, testLevelElements);
+            
+            JMeterThread[] jmThreads = 
+                    new JMeterThread[numThreads];
             for (int i = 0; running && i < numThreads; i++) {
                 final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
                 jmeterThread.setThreadNum(i);
@@ -493,45 +503,33 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
                 group.scheduleThread(jmeterThread);
 
-                Thread newThread = new Thread(jmeterThread);
-                newThread.setName(threadName);
-                allThreads.put(jmeterThread, newThread);
-                newThread.start();
+                jmThreads[i] = jmeterThread;
             } // end of thread startup for this thread group
+            group.setJMeterThreads(jmThreads);
+            groups.add(group);
+            group.start();
             return groupName;
     }
 
+    /**
+     * @return boolean true if all threads of all Threead Groups stopped
+     */
     private boolean verifyThreadsStopped() {
         boolean stoppedAll = true;
         // ConcurrentHashMap does not need synch. here
-        for (Thread t : allThreads.values()) {
-            if (t != null) {
-                if (t.isAlive()) {
-                    try {
-                        t.join(WAIT_TO_DIE);
-                    } catch (InterruptedException e) {
-                    }
-                    if (t.isAlive()) {
-                        stoppedAll = false;
-                        log.warn("Thread won't exit: " + t.getName());
-                    }
-                }
-            }
+        for (AbstractThreadGroup threadGroup : groups) {
+            stoppedAll = stoppedAll && threadGroup.verifyThreadsStopped();
         }
         return stoppedAll;
     }
 
+    /**
+     * Wait for Group Threads to stop
+     */
     private void waitThreadsStopped() {
         // ConcurrentHashMap does not need synch. here
-        for (Thread t : allThreads.values()) {
-            if (t != null) {
-                while (t.isAlive()) {
-                    try {
-                        t.join(WAIT_TO_DIE);
-                    } catch (InterruptedException e) {
-                    }
-                }
-            }
+        for (AbstractThreadGroup threadGroup : groups) {
+            threadGroup.waitThreadsStopped();
         }
     }
 
@@ -545,14 +543,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
      */
     private void tellThreadsToStop() {
         // ConcurrentHashMap does not need protecting
-        for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
-            JMeterThread item = entry.getKey();
-            item.stop(); // set stop flag
-            item.interrupt(); // interrupt sampler if possible
-            Thread t = entry.getValue();
-            if (t != null ) { // Bug 49734
-                t.interrupt(); // also interrupt JVM thread
-            }
+        for (AbstractThreadGroup threadGroup : groups) {
+            threadGroup.tellThreadsToStop();
         }
     }
 
@@ -570,8 +562,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
      */
     private void stopAllThreads() {
         // ConcurrentHashMap does not need synch. here
-        for (JMeterThread item : allThreads.keySet()) {
-            item.stop();
+        for (AbstractThreadGroup threadGroup : groups) {
+            threadGroup.stop();
         }
     }
 
