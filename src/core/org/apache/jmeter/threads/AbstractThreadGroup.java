@@ -19,6 +19,9 @@
 package org.apache.jmeter.threads;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.LoopController;
@@ -29,6 +32,9 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
@@ -38,6 +44,10 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 public abstract class AbstractThreadGroup extends AbstractTestElement implements Serializable, Controller {
 
     private static final long serialVersionUID = 240L;
+
+    private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** Action to be taken when a Sampler error occurs */
     public final static String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
@@ -64,6 +74,10 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
 
     // @GuardedBy("this")
     private int numberOfThreads = 0; // Number of active threads in this group
+
+    private JMeterThread[] jmThreads;
+
+    private Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
 
     /** {@inheritDoc} */
     public boolean isDone() {
@@ -217,4 +231,172 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
     }
 
     public abstract void scheduleThread(JMeterThread thread);
+
+    /**
+     * Default implementation starts threads immediately
+     */
+    public void start() {
+        for (int i = 0; i < jmThreads.length; i++) {
+            Thread newThread = new Thread(jmThreads[i]);
+            newThread.setName(jmThreads[i].getThreadName());
+            registerStartedThread(jmThreads[i], newThread);
+            newThread.start();            
+        }
+    }
+
+    /**
+     * Register Thread when it starts
+     * @param jMeterThread {@link JMeterThread}
+     * @param newThread Thread
+     */
+    protected final void registerStartedThread(JMeterThread jMeterThread, Thread newThread) {
+        allThreads.put(jMeterThread, newThread);
+    }
+
+    /**
+     * 
+     * @param jmThreads JMeterThread[]
+     */
+    public final void setJMeterThreads(JMeterThread[] jmThreads) {
+        this.jmThreads = jmThreads;
+    }
+
+    /**
+     * @return JMeterThread[]
+     */
+    protected final JMeterThread[] getJMeterThreads() {
+        return this.jmThreads;
+    }
+    
+    /**
+     * Stop thread called threadName:
+     * <ol>
+     *  <li>stop JMeter thread</li>
+     *  <li>interrupt JMeter thread</li>
+     *  <li>interrupt underlying thread</li>
+     * <ol>
+     * @param threadName String thread name
+     * @param now boolean for stop
+     * @return true if thread stopped
+     */
+    public boolean stopThread(String threadName, boolean now) {
+        for(Entry<JMeterThread, Thread> entry : allThreads.entrySet()){
+            JMeterThread thrd = entry.getKey();
+            if (thrd.getThreadName().equals(threadName)){
+                thrd.stop();
+                thrd.interrupt();
+                if (now) {
+                    Thread t = entry.getValue();
+                    if (t != null) {
+                        t.interrupt();
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Called by JMeter thread when it finishes
+     */
+    public void threadFinished(JMeterThread thread) {
+        allThreads.remove(thread);
+    }
+
+    /**
+     * For each thread, invoke:
+     * <ul> 
+     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * <li>{@link JMeterThread#interrupt()} - interrupt sampler</li>
+     * <li>{@link Thread#interrupt()} - interrupt JVM thread</li>
+     * </ul> 
+     */
+    public void tellThreadsToStop() {
+        for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
+            JMeterThread item = entry.getKey();
+            item.stop(); // set stop flag
+            item.interrupt(); // interrupt sampler if possible
+            Thread t = entry.getValue();
+            if (t != null ) { // Bug 49734
+                t.interrupt(); // also interrupt JVM thread
+            }
+        }
+    }
+
+    /**
+     * For each thread, invoke:
+     * <ul> 
+     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * </ul> 
+     */
+    public void stop() {
+        for (JMeterThread item : allThreads.keySet()) {
+            item.stop();
+        }
+    }
+
+    /**
+     * @return number of active threads
+     */
+    public int numberOfActiveThreads() {
+        return allThreads.size();
+    }
+
+    /**
+     * @return boolean true if all threads stopped
+     */
+    public boolean verifyThreadsStopped() {
+        boolean stoppedAll = true;
+        for (Thread t : allThreads.values()) {
+            stoppedAll = stoppedAll && verifyThreadStopped(t);
+        }
+        return stoppedAll;
+    }
+
+    /**
+     * Verify thread stopped and return true if stopped successfully
+     * @param thread Thread
+     * @return boolean
+     */
+    protected final boolean verifyThreadStopped(Thread thread) {
+        boolean stoppedAll = true;
+        if (thread != null) {
+            if (thread.isAlive()) {
+                try {
+                    thread.join(WAIT_TO_DIE);
+                } catch (InterruptedException e) {
+                }
+                if (thread.isAlive()) {
+                    stoppedAll = false;
+                    log.warn("Thread won't exit: " + thread.getName());
+                }
+            }
+        }
+        return stoppedAll;
+    }
+
+    /**
+     * Wait for all Group Threads to stop
+     */
+    public void waitThreadsStopped() {
+        for (Thread t : allThreads.values()) {
+            waitThreadStopped(t);
+        }
+    }
+
+    /**
+     * Wait for thread to stop
+     * @param thread Thread
+     */
+    protected final void waitThreadStopped(Thread thread) {
+        if (thread != null) {
+            while (thread.isAlive()) {
+                try {
+                    thread.join(WAIT_TO_DIE);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+    }
 }

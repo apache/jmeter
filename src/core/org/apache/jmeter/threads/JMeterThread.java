@@ -196,7 +196,8 @@ public class JMeterThread implements Runnable, Interruptible {
      *
      */
     private void stopScheduler() {
-        long delay = System.currentTimeMillis() - endTime;
+        long now = System.currentTimeMillis();
+        long delay = now - endTime;
         if ((delay >= 0)) {
             running = false;
         }
@@ -770,6 +771,10 @@ public class JMeterThread implements Runnable, Interruptible {
 
     }
 
+    /**
+     * Set rampup delay for JMeterThread Thread
+     * @param delay Rampup delay for JMeterThread
+     */
     public void setInitialDelay(int delay) {
         initialDelay = delay;
     }

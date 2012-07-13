@@ -181,10 +181,10 @@ public class ThreadGroup extends AbstractThreadGroup {
     /**
      * This will schedule the time for the JMeterThread.
      *
-     * @param thread
-     * @param group
+     * @param thread JMeterThread
+     * @param group ThreadGroup
      */
-    private void scheduleThread(JMeterThread thread, ThreadGroup group) {
+    protected void scheduleThread(JMeterThread thread, ThreadGroup group) {
         // if true the Scheduler is enabled
         if (group.getScheduler()) {
             long now = System.currentTimeMillis();
