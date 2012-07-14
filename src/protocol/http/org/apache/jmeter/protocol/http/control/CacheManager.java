@@ -65,6 +65,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
 
     private static final int DEFAULT_MAX_SIZE = 5000;
 
+    private static final long TWO_WEEKS_MS = 15*86400*1000;
+
     public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
         setProperty(new BooleanProperty(USE_EXPIRES, false));
@@ -160,16 +162,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         Date expiresDate = null; // i.e. not using Expires
         if (useExpires) {// Check that we are processing Expires/CacheControl
             final String MAX_AGE = "max-age=";
-            if(cacheControl != null) {
-                // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
-                if(cacheControl.contains(MAX_AGE) && ! cacheControl.contains("no-cache")) {
-                    long maxAgeInSecs = Long.parseLong(
-                            cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length())
-                                .split("[, ]")[0] // Bug 51932 - allow for optional trailing attributes
-                            );
-                    expiresDate=new Date(System.currentTimeMillis()+maxAgeInSecs*1000);
-                }
-            } else if (expires != null) {
+            
+            if (expires != null) {
                 try {
                     expiresDate = DateUtil.parseDate(expires);
                 } catch (DateParseException e) {
@@ -178,6 +172,23 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
                     }
                     expiresDate = new Date(0L); // invalid dates must be treated as expired
                 }
+            }
+            // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
+            if(cacheControl != null && !cacheControl.contains("no-cache")) {    
+                // the max-age directive overrides the Expires header,
+                if(cacheControl.contains(MAX_AGE)) {
+                    long maxAgeInSecs = Long.parseLong(
+                            cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length())
+                                .split("[, ]")[0] // Bug 51932 - allow for optional trailing attributes
+                            );
+                    expiresDate=new Date(System.currentTimeMillis()+maxAgeInSecs*1000);
+                }   
+                // No max-age && No expires => store forever
+                else if(expires==null) {
+                    // No max-age
+                    expiresDate=new Date(System.currentTimeMillis()+TWO_WEEKS_MS);
+                }  
+                // else expiresDate computed in (expires!=null) condition is used
             }
         }
         getCache().put(url, new CacheEntry(lastModified, expiresDate, etag));
