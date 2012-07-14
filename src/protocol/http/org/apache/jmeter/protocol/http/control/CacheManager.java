@@ -33,6 +33,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -116,7 +117,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             String etag = conn.getHeaderField(HTTPConstants.ETAG);
             String url = conn.getURL().toString();
             String cacheControl = conn.getHeaderField(HTTPConstants.CACHE_CONTROL);
-            setCache(lastModified, cacheControl, expires, etag, url);
+            String date = conn.getHeaderField(HTTPConstants.DATE);
+            setCache(lastModified, cacheControl, expires, etag, url, date);
         }
     }
 
@@ -133,7 +135,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String url = method.getURI().toString();
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
-            setCache(lastModified, cacheControl, expires, etag, url);
+            String date = getHeader(method, HTTPConstants.DATE);
+            setCache(lastModified, cacheControl, expires, etag, url, date);
         }
     }
 
@@ -150,12 +153,13 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
-            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString()); // TODO correct URL?
+            String date = getHeader(method, HTTPConstants.DATE);
+            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date); // TODO correct URL?
         }
     }
 
     // helper method to save the cache entry
-    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url) {
+    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date) {
         if (log.isDebugEnabled()){
             log.debug("SET(both) "+url + " " + cacheControl + " " + lastModified + " " + " " + expires + " " + etag);
         }
@@ -186,7 +190,19 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
                 // No max-age && No expires => store forever
                 else if(expires==null) {
                     // No max-age
-                    expiresDate=new Date(System.currentTimeMillis()+TWO_WEEKS_MS);
+                    if(!StringUtils.isEmpty(lastModified)) {
+                        try {
+                            Date responseDate = DateUtil.parseDate( date );
+                            Date lastModifiedAsDate = DateUtil.parseDate( lastModified );
+                            // see https://developer.mozilla.org/en/HTTP_Caching_FAQ
+                            // see http://www.ietf.org/rfc/rfc2616.txt#13.2.4 
+                            expiresDate=new Date(System.currentTimeMillis()
+                                    +Math.round((responseDate.getTime()-lastModifiedAsDate.getTime())*0.1));
+                        } catch (DateParseException e) {
+                            // Not sure here
+                            expiresDate = new Date(0L); // invalid dates must be treated as expired
+                        }
+                    }
                 }  
                 // else expiresDate computed in (expires!=null) condition is used
             }
