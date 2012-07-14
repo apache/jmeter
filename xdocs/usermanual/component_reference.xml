@@ -3226,7 +3226,8 @@ Additionally, if the "Use Cache-Control/Expires header" option is selected, then
 If the request is a GET request, and the timestamp is in the future, then the sampler returns immediately,
 without requesting the URL from the remote server. This is intended to emulate browser behaviour.
 Note that if Cache-Control header is "no-cache", response will not be stored in cache, if Cache-Control has any other value, 
-the "max-age" expiry option is processed to compute entry lifetime, if missing then expire header will be used, if also missing entry will be cached forever (2 weeks).
+the "max-age" expiry option is processed to compute entry lifetime, if missing then expire header will be used, if also missing entry will be cached 
+as sas specified in <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a> section 13.2.4. 
 </p>
 <p>
 By default, Cache Manager will store up to 5000 items in cache using LRU algorithm. Use property to modify this value.

@@ -64,5 +64,6 @@ public interface HTTPConstantsInterface {
     public static final String LAST_MODIFIED = "Last-Modified"; // $NON-NLS-1$
     public static final String EXPIRES = "Expires"; // $NON-NLS-1$
     public static final String CACHE_CONTROL = "Cache-Control";  //e.g. public, max-age=259200
+    public static final String DATE = "Date";  //e.g. Date Header of response 
 
 }
