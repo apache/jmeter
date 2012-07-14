@@ -66,7 +66,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
 
     private static final int DEFAULT_MAX_SIZE = 5000;
 
-    private static final long TWO_WEEKS_MS = 15*86400*1000;
+    private static final long ONE_YEAR_MS = 365*86400*1000;
 
     public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
@@ -195,7 +195,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
                     expiresDate=new Date(System.currentTimeMillis()+maxAgeInSecs*1000);
 
                 } else if(expires==null) { // No max-age && No expires
-                    if(!StringUtils.isEmpty(lastModified)) {
+                    if(!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(date)) {
                         try {
                             Date responseDate = DateUtil.parseDate( date );
                             Date lastModifiedAsDate = DateUtil.parseDate( lastModified );
@@ -203,10 +203,23 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
                             // see http://www.ietf.org/rfc/rfc2616.txt#13.2.4 
                             expiresDate=new Date(System.currentTimeMillis()
                                     +Math.round((responseDate.getTime()-lastModifiedAsDate.getTime())*0.1));
-                        } catch (DateParseException e) {
-                            // Not sure here
-                            expiresDate = new Date(0L); // invalid dates must be treated as expired
+                        } catch(DateParseException e) {
+                            // date or lastModified may be null or in bad format
+                            if(log.isWarnEnabled()) {
+                                log.warn("Failed computing expiration date with following info:"
+                                    +lastModified + "," 
+                                    + cacheControl + ","
+                                    + expires + "," 
+                                    + etag + ","
+                                    + url + ","
+                                    + date);
+                            }
+                            // TODO Can't see anything in SPEC
+                            expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);                      
                         }
+                    } else {
+                        // TODO Can't see anything in SPEC
+                        expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);                      
                     }
                 }  
                 // else expiresDate computed in (expires!=null) condition is used
