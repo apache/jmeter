@@ -193,10 +193,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
                                 .split("[, ]")[0] // Bug 51932 - allow for optional trailing attributes
                             );
                     expiresDate=new Date(System.currentTimeMillis()+maxAgeInSecs*1000);
-                }   
-                // No max-age && No expires => store forever
-                else if(expires==null) {
-                    // No max-age
+
+                } else if(expires==null) { // No max-age && No expires
                     if(!StringUtils.isEmpty(lastModified)) {
                         try {
                             Date responseDate = DateUtil.parseDate( date );
