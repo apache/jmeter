@@ -161,7 +161,14 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
     // helper method to save the cache entry
     private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date) {
         if (log.isDebugEnabled()){
-            log.debug("SET(both) "+url + " " + cacheControl + " " + lastModified + " " + " " + expires + " " + etag);
+            log.debug("setCache("
+                  + lastModified + "," 
+                  + cacheControl + ","
+                  + expires + "," 
+                  + etag + ","
+                  + url + ","
+                  + date
+                  + ")");
         }
         Date expiresDate = null; // i.e. not using Expires
         if (useExpires) {// Check that we are processing Expires/CacheControl
