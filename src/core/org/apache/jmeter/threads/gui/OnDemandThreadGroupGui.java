@@ -52,6 +52,7 @@ public class OnDemandThreadGroupGui extends ThreadGroupGui {
     /**
      * @return String label key
      */
+    @Override
     public String getLabelResource() {
         return "ondemand_threadgroup"; // $NON-NLS-1$
     }
