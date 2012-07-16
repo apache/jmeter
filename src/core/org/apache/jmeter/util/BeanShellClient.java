@@ -70,8 +70,10 @@ public class BeanShellClient {
         while ((b=fis.read()) != -1){
             os.write(b);
         }
+        fis.close();
         sendLine("bsh.prompt=\"bsh % \";",os);// Reset for other users
         os.flush();
+        os.close();
         sock.shutdownOutput(); // Tell server that we are done
     }
 

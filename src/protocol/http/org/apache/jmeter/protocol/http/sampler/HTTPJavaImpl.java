@@ -285,9 +285,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
             in = new BufferedInputStream(conn.getErrorStream());
         }
+        // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);
         if (instream != null) {
             res.setBodySize(((CountingInputStream) instream).getCount());
+            instream.close();
         }
         return responseData;
     }

@@ -16,6 +16,8 @@
  */
 package org.apache.jmeter.monitor.model.benchmark;
 
+import org.apache.commons.io.IOUtils;
+
 public class ParseBenchmark {
 
     /**
@@ -41,21 +43,25 @@ public class ParseBenchmark {
             if (args[2] != null) {
                 loops = Integer.parseInt(args[2]);
             }
-
             java.io.File infile = new java.io.File(file);
             java.io.FileInputStream fis = null;
             java.io.InputStreamReader isr = null;
+            java.io.BufferedReader br = null;
             StringBuilder buf = new StringBuilder();
             try {
                 fis = new java.io.FileInputStream(infile);
                 isr = new java.io.InputStreamReader(fis);
-                java.io.BufferedReader br = new java.io.BufferedReader(isr);
+                br = new java.io.BufferedReader(isr);
                 String line = null;
                 while ((line = br.readLine()) != null) {
                     buf.append(line);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                IOUtils.closeQuietly(br);
+                IOUtils.closeQuietly(isr);
+                IOUtils.closeQuietly(fis);
             }
             long start = 0;
             long end = 0;
