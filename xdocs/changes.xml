@@ -148,6 +148,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <ul>
 <li><bugzilla>53364</bugzilla> - Sort list of Functions in Function Helper Dialog</li>
 <li><bugzilla>53418</bugzilla> - New OnDemandThreadGroup that creates threads when needed instead of creating them on Test startup</li>
+<li><bugzilla>42245</bugzilla> - Show clear passwords in HTTP Authorization Manager</li>
 </ul>
 
 <h2>Non-functional changes</h2>
