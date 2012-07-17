@@ -249,7 +249,6 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
         TableColumn passwordColumn = authTable.getColumnModel().getColumn(AuthManager.COL_PASSWORD);
-        passwordColumn.setCellEditor(new DefaultCellEditor(new JPasswordField()));
         passwordColumn.setCellRenderer(new PasswordCellRenderer());
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
