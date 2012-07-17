@@ -43,6 +43,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -1577,7 +1578,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *
      * For the MD5 case, the result byte count is set to the size of the original response.
      * 
-     * Closes the inputStream (unless there was an error)
+     * Closes the inputStream 
      * 
      * @param sampleResult
      * @param in input stream
@@ -1586,54 +1587,57 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @throws IOException
      */
     public byte[] readResponse(SampleResult sampleResult, InputStream in, int length) throws IOException {
-
-        byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
-        int bufferSize=32;// Enough for MD5
-
-        MessageDigest md=null;
-        boolean asMD5 = useMD5();
-        if (asMD5) {
-            try {
-                md = MessageDigest.getInstance("MD5"); //$NON-NLS-1$
-            } catch (NoSuchAlgorithmException e) {
-                log.error("Should not happen - could not find MD5 digest", e);
-                asMD5=false;
-            }
-        } else {
-            if (length <= 0) {// may also happen if long value > int.max
-                bufferSize = 4 * 1024;
+        try {
+            byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
+            int bufferSize=32;// Enough for MD5
+    
+            MessageDigest md=null;
+            boolean asMD5 = useMD5();
+            if (asMD5) {
+                try {
+                    md = MessageDigest.getInstance("MD5"); //$NON-NLS-1$
+                } catch (NoSuchAlgorithmException e) {
+                    log.error("Should not happen - could not find MD5 digest", e);
+                    asMD5=false;
+                }
             } else {
-                bufferSize = length;
+                if (length <= 0) {// may also happen if long value > int.max
+                    bufferSize = 4 * 1024;
+                } else {
+                    bufferSize = length;
+                }
             }
-        }
-        ByteArrayOutputStream w = new ByteArrayOutputStream(bufferSize);
-        int bytesRead = 0;
-        int totalBytes = 0;
-        boolean first = true;
-        while ((bytesRead = in.read(readBuffer)) > -1) {
-            if (first) {
+            ByteArrayOutputStream w = new ByteArrayOutputStream(bufferSize);
+            int bytesRead = 0;
+            int totalBytes = 0;
+            boolean first = true;
+            while ((bytesRead = in.read(readBuffer)) > -1) {
+                if (first) {
+                    sampleResult.latencyEnd();
+                    first = false;
+                }
+                if (asMD5 && md != null) {
+                    md.update(readBuffer, 0 , bytesRead);
+                    totalBytes += bytesRead;
+                } else {
+                    w.write(readBuffer, 0, bytesRead);
+                }
+            }
+            if (first){ // Bug 46838 - if there was no data, still need to set latency
                 sampleResult.latencyEnd();
-                first = false;
             }
+            in.close();
+            w.flush();
             if (asMD5 && md != null) {
-                md.update(readBuffer, 0 , bytesRead);
-                totalBytes += bytesRead;
-            } else {
-                w.write(readBuffer, 0, bytesRead);
+                byte[] md5Result = md.digest();
+                w.write(JOrphanUtils.baToHexBytes(md5Result)); 
+                sampleResult.setBytes(totalBytes);
             }
+            w.close();
+            return w.toByteArray();
+        } finally {
+            IOUtils.closeQuietly(in);
         }
-        if (first){ // Bug 46838 - if there was no data, still need to set latency
-            sampleResult.latencyEnd();
-        }
-        in.close();
-        w.flush();
-        if (asMD5 && md != null) {
-            byte[] md5Result = md.digest();
-            w.write(JOrphanUtils.baToHexBytes(md5Result)); 
-            sampleResult.setBytes(totalBytes);
-        }
-        w.close();
-        return w.toByteArray();
     }
 
     /**
