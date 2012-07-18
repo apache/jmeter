@@ -83,6 +83,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <li><bugzilla>53348</bugzilla> - JMeter JMS Point-to-Point Request-Response sampler doesn't work when Request-queue and Receive-queue are different</li>
 <li><bugzilla>53357</bugzilla> - JMS Point to Point reports too high response times in Request Response Mode</li>
 <li><bugzilla>53440</bugzilla> - SSL connection leads to ArrayStoreException on JDK 6 with some KeyManagerFactory SPI</li>
+<li><bugzilla>53511</bugzilla> - access log sampler SessionFilter throws NullPointerException - cookie manager not initialized properly</li>
 </ul>
 
 <h3>Controllers</h3>
