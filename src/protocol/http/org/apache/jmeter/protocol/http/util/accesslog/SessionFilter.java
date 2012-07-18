@@ -174,6 +174,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
             if(cm == null)
             {
                 cm = new CookieManager();
+                cm.testStarted();
                 cookieManagers.put(ipAddr,cm);
             }
             while(managersInUse.contains(cm))
