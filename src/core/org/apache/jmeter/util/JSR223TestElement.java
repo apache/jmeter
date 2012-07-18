@@ -77,6 +77,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
     /**
      * Cache of compiled scripts
      */
+    @SuppressWarnings("unchecked") // LRUMap does not support generics (yet)
     private static final Map<String, CompiledScript> compiledScriptsCache = 
             Collections.synchronizedMap(
                     new LRUMap(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
