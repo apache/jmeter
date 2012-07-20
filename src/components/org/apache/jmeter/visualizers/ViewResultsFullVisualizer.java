@@ -364,7 +364,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     .append(", ").append(JMeterUtils.getResString("view_results_response_partial_message"))
                     .append("\n").append(res.getResponseDataAsString().substring(0, MAX_DISPLAY_SIZE)).append("\n...");
                 response = builder.toString();
-                log.warn(response);
             } else {
                 response = res.getResponseDataAsString();
             }
