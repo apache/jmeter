@@ -369,13 +369,14 @@ public class WSDLHelper {
                 // we add it to the array
                 Element child = (Element) opnodes.item(idz);
 
-                // TODO - the following code looks wrong - it does the same in both cases
-                NodeList soapnode = child.getElementsByTagName(soapOp);
-                if (soapnode.getLength() > 0) {
-                    ops.add(child);
-                } else {
-                    ops.add(child);
-                }
+                // TODO - the following commented code looks wrong - it does the same in both cases
+//                NodeList soapnode = child.getElementsByTagName(soapOp);
+//                if (soapnode.getLength() > 0) {
+//                    ops.add(child);
+//                } else {
+//                    ops.add(child);
+//                }
+                ops.add(child);
             }
         }
         return ops.toArray();
