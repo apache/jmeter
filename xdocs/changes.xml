@@ -123,6 +123,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <h3>Other samplers</h3>
 <ul>
 <li><bugzilla>55310</bugzilla> - TestAction should implement Interruptible</li>
+<li><bugzilla>53318</bugzilla> - Add Embedded URL Filter to HTTP Request Defaults Control </li>
 </ul>
 
 <h3>Controllers</h3>

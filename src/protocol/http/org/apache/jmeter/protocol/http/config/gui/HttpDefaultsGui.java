@@ -32,12 +32,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
 
 public class HttpDefaultsGui extends AbstractConfigGui {
 
@@ -50,6 +52,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     private JTextField concurrentPool; 
 
     private UrlConfigGui urlConfig;
+
+    private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
 
     public HttpDefaultsGui() {
         super();
@@ -83,9 +87,16 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         if (imageParser.isSelected()) {
             config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
             enableConcurrentDwn(true);
+            if(!StringUtils.isEmpty(embeddedRE.getText())) {
+                config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_RE, embeddedRE.getText()));            
+            } else {
+                config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
+            }
         } else {
             config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
+            config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
             enableConcurrentDwn(false);
+            
         }
         if (concurrentDwn.isSelected()) {
             config.setProperty(new BooleanProperty(HTTPSamplerBase.CONCURRENT_DWN, true));
@@ -113,6 +124,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         imageParser.setSelected(false);
         concurrentDwn.setSelected(false);
         concurrentPool.setText(String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE));
+        embeddedRE.setText(""); // $NON-NLS-1$
     }
 
     @Override
@@ -122,6 +134,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         imageParser.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
         concurrentDwn.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.CONCURRENT_DWN));
         concurrentPool.setText(((AbstractTestElement) el).getPropertyAsString(HTTPSamplerBase.CONCURRENT_POOL));
+        embeddedRE.setText(((AbstractTestElement) el).getPropertyAsString(HTTPSamplerBase.EMBEDDED_URL_RE, ""));
     }
 
     private void init() {
@@ -134,7 +147,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         add(urlConfig, BorderLayout.CENTER);
 
         // OPTIONAL TASKS
-        final JPanel optionalTasksPanel = new HorizontalPanel();
+        final JPanel optionalTasksPanel = new VerticalPanel();
         optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("optional_tasks"))); // $NON-NLS-1$
 
@@ -160,6 +173,12 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         checkBoxPanel.add(concurrentDwn);
         checkBoxPanel.add(concurrentPool);
         optionalTasksPanel.add(checkBoxPanel);
+        
+        // Embedded URL match regex
+        embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
+        optionalTasksPanel.add(embeddedRE);
+
+        
         add(optionalTasksPanel, BorderLayout.SOUTH);
     }
 
@@ -171,12 +190,14 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     private void enableConcurrentDwn(final boolean enable) {
         if (enable) {
             concurrentDwn.setEnabled(true);
+            embeddedRE.setEnabled(true);
             if (concurrentDwn.isSelected()) {
                 concurrentPool.setEnabled(true);
             }
         } else {
             concurrentDwn.setEnabled(false);
             concurrentPool.setEnabled(false);
+            embeddedRE.setEnabled(false);
         }
     }
 
