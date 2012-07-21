@@ -3363,6 +3363,11 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
         <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
+        <property name="Embedded URLs must match:" required="No">
+        If present, this must be a regular expression that is used to match against any embedded URLs found.
+        So if you only want to download embedded resources from http://example.com/, use the expression:
+        http://example\.com/.*
+        </property>
 </properties>
 <note>
 Note: radio buttons only have two states - on or off.
