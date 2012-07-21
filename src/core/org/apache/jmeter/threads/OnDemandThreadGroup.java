@@ -89,12 +89,10 @@ public class OnDemandThreadGroup extends ThreadGroup {
                     delayBy(getDelay() * 1000, "start");
                 } else {
                     long start = getStartTime();
-                    if (start < now) {
-                        start = now; // Force a sensible start time
-                        // No delay
-                    } else {
+                    if (start >= now) {
                         delayBy(start-now, "start");
-                    }
+                    } 
+                    // else start immediately
                 }
             }
             for (int i = 0; i < jMeterThreads.length; i++) {
