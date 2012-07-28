@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -39,6 +40,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -101,9 +103,12 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     // The name is chosen to be an unlikely host-name
     private static final String LOCAL = "*local*"; // $NON-NLS-1$
 
+    // The application name
+    private static final String DEFAULT_APP_NAME = "Apache JMeter"; // $NON-NLS-1$
+    
     // The default title for the Menu bar
-    private static final String DEFAULT_TITLE =
-        "Apache JMeter ("+JMeterUtils.getJMeterVersion()+")"; // $NON-NLS-1$ $NON-NLS-2$
+    private static final String DEFAULT_TITLE = DEFAULT_APP_NAME +
+            " (" + JMeterUtils.getJMeterVersion() + ")"; // $NON-NLS-1$ $NON-NLS-2$
     
     // Allow display/hide toolbar
     private static final boolean DISPLAY_TOOLBAR =
@@ -491,6 +496,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
 
         setTitle(DEFAULT_TITLE);
         setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
+        setWindowTitle(); // define AWT WM_CLASS string 
     }
 
 
@@ -775,5 +781,23 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         if(event.getSource()==warnIndicator) {
             ActionRouter.getInstance().doActionNow(new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));
         }
+    }
+
+    /**
+     * Define AWT window title (WM_CLASS string) (useful on Gnome 3 / Linux)
+     */
+    private void setWindowTitle() {
+        Class<?> xtoolkit = Toolkit.getDefaultToolkit().getClass();
+        if (xtoolkit.getName().equals("sun.awt.X11.XToolkit")) { // $NON-NLS-1$
+            try {
+                final Field awtAppClassName = xtoolkit.getDeclaredField("awtAppClassName"); // $NON-NLS-1$
+                awtAppClassName.setAccessible(true);
+                awtAppClassName.set(null, DEFAULT_APP_NAME);
+            } catch (NoSuchFieldException nsfe) {
+                log.warn("Error awt title: " + nsfe); // $NON-NLS-1$
+            } catch (IllegalAccessException iae) {
+                log.warn("Error awt title: " + iae); // $NON-NLS-1$
+            }
+       }
     }
 }
