@@ -218,7 +218,10 @@ https.default.protocol=SSLv3
         <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
-        <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
+        <property name="Content Encoding" required="No">
+        Content encoding to be used (for POST, PUT and FILE). 
+        This the the character encoding to be used, and is not related to the Content-Encoding HTTP header.
+        </property>
 		<property name="Redirect Automatically" required="No">
 		Sets the underlying http protocol handler to automatically follow redirects,
 		so they are not seen by JMeter, and thus will not appear as samples.
