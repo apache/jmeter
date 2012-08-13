@@ -270,7 +270,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             running = false;
             engine = null;
             if (now) {
-                tellThreadsToStop();
+                tellThreadGroupsToStop();
                 pause(10 * countStillActiveThreads());
                 boolean stopped = verifyThreadsStopped();
                 if (!stopped) {  // we totally failed to stop the test
@@ -291,7 +291,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                     }
                 } // else will be done by threadFinished()
             } else {
-                stopAllThreads();
+                stopAllThreadGroups();
             }
         }
     }
@@ -524,14 +524,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     }
 
     /**
-     * For each thread, invoke:
-     * <ul> 
-     * <li>{@link JMeterThread#stop()} - set stop flag</li>
-     * <li>{@link JMeterThread#interrupt()} - interrupt sampler</li>
-     * <li>{@link Thread#interrupt()} - interrupt JVM thread</li>
-     * </ul> 
+     * For each thread group, invoke {@link AbstractThreadGroup#tellThreadsToStop()}
      */
-    private void tellThreadsToStop() {
+    private void tellThreadGroupsToStop() {
         // ConcurrentHashMap does not need protecting
         for (AbstractThreadGroup threadGroup : groups) {
             threadGroup.tellThreadsToStop();
@@ -545,12 +540,12 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     }
 
     /**
-     * For each thread, invoke:
+     * For each thread group, invoke:
      * <ul> 
-     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * <li>{@link AbstractThreadGroup#stop()} - set stop flag</li>
      * </ul> 
      */
-    private void stopAllThreads() {
+    private void stopAllThreadGroups() {
         // ConcurrentHashMap does not need synch. here
         for (AbstractThreadGroup threadGroup : groups) {
             threadGroup.stop();
