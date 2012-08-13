@@ -104,7 +104,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     private final String host;
 
-    private List<AbstractThreadGroup> groups = Collections.synchronizedList(new ArrayList<AbstractThreadGroup>());
+    // The list of current thread groups; may be setUp, main, or tearDown.
+    private final List<AbstractThreadGroup> groups = Collections.synchronizedList(new ArrayList<AbstractThreadGroup>());
 
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
@@ -370,6 +371,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterContextService.clearTotalThreads();
         }
 
+        groups.clear(); // The groups have all completed now
+
         /*
          * Here's where the test really starts. Run a Full GC now: it's no harm
          * at all (just delays test start by a tiny amount) and hitting one too
@@ -405,6 +408,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
         //wait for all Test Threads To Exit
         waitThreadsStopped();
+
+        groups.clear(); // The groups have all completed now
 
         if (postIter.hasNext()){
             groupCount = 0;
