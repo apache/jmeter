@@ -5022,7 +5022,7 @@ In jmeter.properties, edit "user.classpath" to include additional libraries.
 </description>
 </component>
 
-<component name="Thread Group" index="&sect-num;.9.2a"  width="609" height="387" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2"  width="583" height="447" screenshot="threadgroup.png">
 <description>
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
@@ -5051,6 +5051,15 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
         <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
         <property name="Loop Count" required="Yes, unless forever is selected">Number of times to perform the test case.  Alternatively, "forever" can be selected causing the test to run until manually stopped.</property>
+        <property name="Delay Thread creation until needed" required="Yes">
+        If selected, threads are created only when the appropriate proportion of the ramp-up time has elapsed.
+        This is most appropriate for tests with a ramp-up time that is significantly longer than the time to execute a single thread.
+        I.e. where earlier threads finish before later ones start. 
+        <br></br>
+        If not selected, all threads are created when the test starts (they then pause for the appropriate proportion of the ramp-up time).
+        This is the original default, and is appropriate for tests where threads are active throughout most of the test.
+        </property>
+        <property name="Scheduler" required="Yes">If selected, enables the scheduler</property>
         <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.
         	Note: the Startup Delay field over-rides this - see below.
         	</property>
@@ -5066,13 +5075,6 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
         	JMeter will use this to calculate the Start Time, and ignore the Start Time value.
         </property>
 </properties>
-</component>
-
-<component name="On Demand Thread Group" index="&sect-num;.9.2b"  width="609" height="387" screenshot="ondemandthreadgroup.png">
-<description>
-<p>An On Demand Thread Group has the same features as a Thread except that instead of starting threads at Test Startup, it does so when thread really starts sampling.</p>
-<p>See also <complink name="Thread Group"/>.</p>
-</description>
 </component>
 
 <component name="WorkBench" index="&sect-num;.9.3"  width="232" height="68" screenshot="workbench.png">
