@@ -47,8 +47,8 @@ public class ThreadGroup extends AbstractThreadGroup {
     /** Ramp-up time */
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";
 
-    /** Whether onDemand scheduler is being used */
-    public static final String ONDEMAND = "ThreadGroup.onDemand";
+    /** Whether thread startup is delayed until required */
+    public static final String DELAYED_START = "ThreadGroup.delayedStart";
 
     /** Whether scheduler is being used */
     public final static String SCHEDULER = "ThreadGroup.scheduler";
@@ -99,7 +99,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     public boolean getOnDemand() {
-        return getPropertyAsBoolean(ONDEMAND);
+        return getPropertyAsBoolean(DELAYED_START);
     }
 
     /**
