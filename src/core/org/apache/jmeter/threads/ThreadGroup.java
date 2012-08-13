@@ -18,9 +18,17 @@
 
 package org.apache.jmeter.threads;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
@@ -30,8 +38,17 @@ import org.apache.jmeter.testelement.property.LongProperty;
 public class ThreadGroup extends AbstractThreadGroup {
     private static final long serialVersionUID = 240L;
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
+
+    //+ JMX entries - do not change the string values
+
     /** Ramp-up time */
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";
+
+    /** Whether onDemand scheduler is being used */
+    public static final String ONDEMAND = "ThreadGroup.onDemand";
 
     /** Whether scheduler is being used */
     public final static String SCHEDULER = "ThreadGroup.scheduler";
@@ -48,6 +65,23 @@ public class ThreadGroup extends AbstractThreadGroup {
     /** Scheduler start delay, overrides start time */
     public final static String DELAY = "ThreadGroup.delay";
 
+    //- JMX entries
+
+    /** How often to check for shutdown during ramp-up, default 1000ms */
+    private static final int RAMPUP_GRANULARITY =
+            JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
+
+    private Thread threadStarter;
+
+    private JMeterThread[] jmThreads;
+
+    private Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
+
+    /**
+     * Was test stopped
+     */
+    private AtomicBoolean stopped = new AtomicBoolean(false);
+
     /**
      * No-arg constructor.
      */
@@ -62,6 +96,10 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     public void setScheduler(boolean Scheduler) {
         setProperty(new BooleanProperty(SCHEDULER, Scheduler));
+    }
+
+    public boolean getOnDemand() {
+        return getPropertyAsBoolean(ONDEMAND);
     }
 
     /**
@@ -171,10 +209,14 @@ public class ThreadGroup extends AbstractThreadGroup {
    @Override
    public void scheduleThread(JMeterThread thread)
    {
-       int rampUp = getRampUp();
-       float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
-       thread.setInitialDelay((int) (perThreadDelay * thread.getThreadNum()));
-
+       if (getOnDemand()) {
+           // No delay as OnDemandThreadGroup starts thread during rampup
+           thread.setInitialDelay(0);
+       } else {
+           int rampUp = getRampUp();
+           float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
+           thread.setInitialDelay((int) (perThreadDelay * thread.getThreadNum()));
+       }
        scheduleThread(thread, this);
    }
 
@@ -184,7 +226,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param thread JMeterThread
      * @param group ThreadGroup
      */
-    protected void scheduleThread(JMeterThread thread, ThreadGroup group) {
+    private void scheduleThread(JMeterThread thread, ThreadGroup group) {
         // if true the Scheduler is enabled
         if (group.getScheduler()) {
             long now = System.currentTimeMillis();
@@ -208,6 +250,278 @@ public class ThreadGroup extends AbstractThreadGroup {
 
             // Enables the scheduler
             thread.setScheduled(true);
+        }
+    }
+
+
+    /**
+     * Wait for delay with RAMPUP_GRANULARITY
+     * @param delay delay in ms
+     * @param type Delay type
+     */
+    private void delayBy(long delay, String type) {
+        if (delay > 0) {
+            long start = System.currentTimeMillis();
+            long end = start + delay;
+            long now=0;
+            long pause = RAMPUP_GRANULARITY;
+            while(!stopped.get() && (now = System.currentTimeMillis()) < end) {
+                long togo = end - now;
+                if (togo < pause) {
+                    pause = togo;
+                }
+                try {
+                    Thread.sleep(pause); // delay between checks
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Default implementation starts threads immediately
+     */
+    @Override
+    public void start() {
+        if (getOnDemand()) {
+            stopped.set(false);
+            this.threadStarter = new Thread(new ThreadStarter(), getName()+"-ThreadStarter");
+            threadStarter.start();  
+            try {
+                threadStarter.join();
+            } catch (InterruptedException e) {
+            }            
+        } else {
+            for (int i = 0; i < jmThreads.length; i++) {
+                Thread newThread = new Thread(jmThreads[i]);
+                newThread.setName(jmThreads[i].getThreadName());
+                registerStartedThread(jmThreads[i], newThread);
+                newThread.start();            
+            }
+        }
+    }
+
+    /**
+     * Register Thread when it starts
+     * @param jMeterThread {@link JMeterThread}
+     * @param newThread Thread
+     */
+    private void registerStartedThread(JMeterThread jMeterThread, Thread newThread) {
+        allThreads.put(jMeterThread, newThread);
+    }
+
+    /**
+     * 
+     * @param jmThreads JMeterThread[]
+     */
+    @Override
+    public final void setJMeterThreads(JMeterThread[] jmThreads) {
+        this.jmThreads = jmThreads;
+    }
+
+    /**
+     * Stop thread called threadName:
+     * <ol>
+     *  <li>stop JMeter thread</li>
+     *  <li>interrupt JMeter thread</li>
+     *  <li>interrupt underlying thread</li>
+     * <ol>
+     * @param threadName String thread name
+     * @param now boolean for stop
+     * @return true if thread stopped
+     */
+    @Override
+    public boolean stopThread(String threadName, boolean now) {
+        for(Entry<JMeterThread, Thread> entry : allThreads.entrySet()){
+            JMeterThread thrd = entry.getKey();
+            if (thrd.getThreadName().equals(threadName)){
+                thrd.stop();
+                thrd.interrupt();
+                if (now) {
+                    Thread t = entry.getValue();
+                    if (t != null) {
+                        t.interrupt();
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Called by JMeter thread when it finishes
+     */
+    @Override
+    public void threadFinished(JMeterThread thread) {
+        allThreads.remove(thread);
+    }
+
+    /**
+     * For each thread, invoke:
+     * <ul> 
+     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * <li>{@link JMeterThread#interrupt()} - interrupt sampler</li>
+     * <li>{@link Thread#interrupt()} - interrupt JVM thread</li>
+     * </ul> 
+     */
+    @Override
+    public void tellThreadsToStop() {
+        if (getOnDemand()) {
+            stopped.set(true);
+            try {
+                threadStarter.interrupt();
+            } catch (Exception e) {
+                log.warn("Exception occured interrupting ThreadStarter");
+            }            
+        }
+        for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
+            JMeterThread item = entry.getKey();
+            item.stop(); // set stop flag
+            item.interrupt(); // interrupt sampler if possible
+            Thread t = entry.getValue();
+            if (t != null ) { // Bug 49734
+                t.interrupt(); // also interrupt JVM thread
+            }
+        }
+    }
+
+
+    /**
+     * For each thread, invoke:
+     * <ul> 
+     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * </ul> 
+     */
+    @Override
+    public void stop() {
+        if (getOnDemand()) {
+            stopped.set(true);
+            try {
+                threadStarter.interrupt();
+            } catch (Exception e) {
+                log.warn("Exception occured interrupting ThreadStarter");
+            }            
+        }
+        for (JMeterThread item : allThreads.keySet()) {
+            item.stop();
+        }
+    }
+
+    /**
+     * @return number of active threads
+     */
+    @Override
+    public int numberOfActiveThreads() {
+        return allThreads.size();
+    }
+
+    /**
+     * @return boolean true if all threads stopped
+     */
+    @Override
+    public boolean verifyThreadsStopped() {
+        boolean stoppedAll = true;
+        if (getOnDemand()){
+            stoppedAll &= verifyThreadStopped(threadStarter);
+        }
+        for (Thread t : allThreads.values()) {
+            stoppedAll = stoppedAll && verifyThreadStopped(t);
+        }
+        return stoppedAll;
+    }
+
+    /**
+     * Verify thread stopped and return true if stopped successfully
+     * @param thread Thread
+     * @return boolean
+     */
+    private boolean verifyThreadStopped(Thread thread) {
+        boolean stopped = true;
+        if (thread != null) {
+            if (thread.isAlive()) {
+                try {
+                    thread.join(WAIT_TO_DIE);
+                } catch (InterruptedException e) {
+                }
+                if (thread.isAlive()) {
+                    stopped = false;
+                    log.warn("Thread won't exit: " + thread.getName());
+                }
+            }
+        }
+        return stopped;
+    }
+
+    /**
+     * Wait for all Group Threads to stop
+     */
+    @Override
+    public void waitThreadsStopped() {
+        if (getOnDemand()) {
+            waitThreadStopped(threadStarter);            
+        }
+        for (Thread t : allThreads.values()) {
+            waitThreadStopped(t);
+        }
+    }
+
+    /**
+     * Wait for thread to stop
+     * @param thread Thread
+     */
+    private void waitThreadStopped(Thread thread) {
+        if (thread != null) {
+            while (thread.isAlive()) {
+                try {
+                    thread.join(WAIT_TO_DIE);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+    }
+
+    /**
+     * Starts Threads using ramp up
+     */
+    class ThreadStarter implements Runnable {
+
+        public ThreadStarter() {
+            super();
+        }
+        
+        public void run() {
+            final JMeterThread[] jMeterThreads = jmThreads;
+            
+            int rampUp = getRampUp();
+            float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
+            if (getScheduler()) {
+                long now = System.currentTimeMillis();
+                // set the start time for the Thread
+                if (getDelay() > 0) {// Duration is in seconds
+                    delayBy(getDelay() * 1000, "start");
+                } else {
+                    long start = getStartTime();
+                    if (start >= now) {
+                        delayBy(start-now, "start");
+                    } 
+                    // else start immediately
+                }
+            }
+            for (int i = 0; i < jMeterThreads.length; i++) {
+                try {
+                    if(!stopped.get()) {
+                        Thread.sleep(Math.round(perThreadDelay));
+                        Thread newThread = new Thread(jMeterThreads[i]);
+                        newThread.setName(jMeterThreads[i].getThreadName());
+                        registerStartedThread(jMeterThreads[i], newThread);
+                        newThread.start();
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
         }
     }
 }
