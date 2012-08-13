@@ -357,10 +357,10 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     /**
-     * Called by JMeter thread when it finishes
+     * Called by JMeterThread when it finishes
      */
-    @Override
     public void threadFinished(JMeterThread thread) {
+        log.info("Ending thread " + thread.getThreadName());
         allThreads.remove(thread);
     }
 
