@@ -37,7 +37,6 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
-import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.PostThreadGroup;
 import org.apache.jmeter.threads.SetupThreadGroup;
@@ -53,7 +52,8 @@ import org.apache.log.Logger;
  * Runs JMeter tests, either directly for local GUI and non-GUI invocations, 
  * or started by {@link RemoteJMeterEngineImpl} when running in server mode.
  */
-public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable {
+public class StandardJMeterEngine implements JMeterEngine, Runnable {
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Should we exit at end of the test? (only applies to server, because host is non-null)
@@ -246,14 +246,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     public void reset() {
         if (running) {
             stopTest();
-        }
-    }
-
-    // Called by JMeter thread when it finishes
-    public synchronized void threadFinished(JMeterThread thread) {
-        log.info("Ending thread " + thread.getThreadName());
-        for (AbstractThreadGroup threadGroup : groups) {
-            threadGroup.threadFinished(thread);
         }
     }
 
@@ -489,7 +481,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             JMeterThread[] jmThreads = 
                     new JMeterThread[numThreads];
             for (int i = 0; running && i < numThreads; i++) {
-                final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
+                final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), group, notifier);
                 jmeterThread.setThreadNum(i);
                 jmeterThread.setThreadGroup(group);
                 jmeterThread.setInitialContext(JMeterContextService.getContext());

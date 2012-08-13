@@ -35,7 +35,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * 
  * This class is intended to be ThreadSafe.
  */
-public abstract class AbstractThreadGroup extends AbstractTestElement implements Serializable, Controller {
+public abstract class AbstractThreadGroup extends AbstractTestElement 
+    implements Serializable, Controller, JMeterThreadMonitor {
 
     private static final long serialVersionUID = 240L;
 
@@ -219,8 +220,6 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
     public abstract void scheduleThread(JMeterThread thread);
 
     public abstract boolean stopThread(String threadName, boolean now);
-
-    public abstract void threadFinished(JMeterThread thread);
 
     public abstract int numberOfActiveThreads();
 
