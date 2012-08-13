@@ -83,6 +83,11 @@ public class ThreadGroup extends AbstractThreadGroup {
     private AtomicBoolean stopped = new AtomicBoolean(false);
 
     /**
+     * Are we using delayed startup?
+     */
+    private boolean delayedStartup;
+
+    /**
      * No-arg constructor.
      */
     public ThreadGroup() {
@@ -98,7 +103,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         setProperty(new BooleanProperty(SCHEDULER, Scheduler));
     }
 
-    public boolean getOnDemand() {
+    private boolean isDelayedStartup() {
         return getPropertyAsBoolean(DELAYED_START);
     }
 
@@ -209,7 +214,8 @@ public class ThreadGroup extends AbstractThreadGroup {
    @Override
    public void scheduleThread(JMeterThread thread)
    {
-       if (getOnDemand()) {
+       if (isDelayedStartup()) { // Fetch once; needs to stay constant
+           delayedStartup = true; 
            // No delay as OnDemandThreadGroup starts thread during rampup
            thread.setInitialDelay(0);
        } else {
@@ -284,7 +290,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void start() {
-        if (getOnDemand()) {
+        if (delayedStartup) {
             stopped.set(false);
             this.threadStarter = new Thread(new ThreadStarter(), getName()+"-ThreadStarter");
             threadStarter.start();  
@@ -368,7 +374,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void tellThreadsToStop() {
-        if (getOnDemand()) {
+        if (delayedStartup) {
             stopped.set(true);
             try {
                 threadStarter.interrupt();
@@ -396,7 +402,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void stop() {
-        if (getOnDemand()) {
+        if (delayedStartup) {
             stopped.set(true);
             try {
                 threadStarter.interrupt();
@@ -423,7 +429,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     @Override
     public boolean verifyThreadsStopped() {
         boolean stoppedAll = true;
-        if (getOnDemand()){
+        if (delayedStartup){
             stoppedAll &= verifyThreadStopped(threadStarter);
         }
         for (Thread t : allThreads.values()) {
@@ -459,7 +465,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void waitThreadsStopped() {
-        if (getOnDemand()) {
+        if (delayedStartup) {
             waitThreadStopped(threadStarter);            
         }
         for (Thread t : allThreads.values()) {
