@@ -360,7 +360,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 String groupName = startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
                 if (serialized && setupIter.hasNext()) {
                     log.info("Waiting for setup thread group: "+groupName+" to finish before starting next setup group");
-                    pauseWhileRemainingThreads();
+                    pauseWhileRemainingThreads(group);
                 }
             }    
             log.info("Waiting for all setup thread groups To Exit");
@@ -393,7 +393,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             String groupName=startThreadGroup(group, groupCount, searcher, testLevelElements, notifier);
             if (serialized && iter.hasNext()) {
                 log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
-                pauseWhileRemainingThreads();
+                pauseWhileRemainingThreads(group);
             }
         } // end of thread groups
         if (groupCount == 0){ // No TGs found
@@ -422,7 +422,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 String groupName = startThreadGroup(group, groupCount, postSearcher, testLevelElements, notifier);
                 if (serialized && postIter.hasNext()) {
                     log.info("Waiting for post thread group: "+groupName+" to finish before starting next post group");
-                    pauseWhileRemainingThreads();
+                    pauseWhileRemainingThreads(group);
                 }
             }
             waitThreadsStopped(); // wait for Post threads to stop
@@ -432,19 +432,12 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     }
 
     /**
-     * Loop with 1s pause while thread groups have threads running 
+     * Loop with 1s pause while thread group has threads running 
      */
-    private void pauseWhileRemainingThreads() {
-        while (running && groupsHaveThreads()) {
+    private void pauseWhileRemainingThreads(AbstractThreadGroup threadGroup) {
+        while (running && threadGroup.numberOfActiveThreads() > 0) {
             pause(1000);
         }
-    }
-
-    /**
-     * @return true if remaining threads
-     */
-    private boolean groupsHaveThreads() {
-        return countStillActiveThreads()>0;
     }
 
     /**
