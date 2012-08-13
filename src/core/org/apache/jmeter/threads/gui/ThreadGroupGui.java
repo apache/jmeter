@@ -59,7 +59,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
     private JDateField end;
 
-    private JCheckBox onDemand;
+    private final boolean showDelayedStart;
+
+    private JCheckBox delayedStart;
 
     private JCheckBox scheduler;
 
@@ -68,7 +70,12 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private JTextField delay; // Relative start-up time
 
     public ThreadGroupGui() {
+        this(true);
+    }
+
+    public ThreadGroupGui(boolean showDelayedStart) {
         super();
+        this.showDelayedStart = showDelayedStart;
         init();
         initGui();
     }
@@ -94,7 +101,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
         tg.setProperty(new LongProperty(ThreadGroup.START_TIME, start.getDate().getTime()));
         tg.setProperty(new LongProperty(ThreadGroup.END_TIME, end.getDate().getTime()));
-        tg.setProperty(new BooleanProperty(ThreadGroup.ONDEMAND, onDemand.isSelected()));
+        if (showDelayedStart) {
+            tg.setProperty(ThreadGroup.DELAYED_START, delayedStart.isSelected(), false);
+        }
         tg.setProperty(new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
         tg.setProperty(ThreadGroup.DURATION, duration.getText());
         tg.setProperty(ThreadGroup.DELAY, delay.getText());
@@ -106,7 +115,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         threadInput.setText(tg.getPropertyAsString(AbstractThreadGroup.NUM_THREADS));
         rampInput.setText(tg.getPropertyAsString(ThreadGroup.RAMP_TIME));
         loopPanel.configure((TestElement) tg.getProperty(AbstractThreadGroup.MAIN_CONTROLLER).getObjectValue());
-        onDemand.setSelected(tg.getPropertyAsBoolean(ThreadGroup.ONDEMAND));
+        if (showDelayedStart) {
+            delayedStart.setSelected(tg.getPropertyAsBoolean(ThreadGroup.DELAYED_START));
+        }
         scheduler.setSelected(tg.getPropertyAsBoolean(ThreadGroup.SCHEDULER));
 
         if (scheduler.isSelected()) {
@@ -218,7 +229,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         threadInput.setText("1"); // $NON-NLS-1$
         rampInput.setText("1"); // $NON-NLS-1$
         loopPanel.clearGui();
-        onDemand.setSelected(false);
+        if (showDelayedStart) {
+            delayedStart.setSelected(false);
+        }
         scheduler.setSelected(false);
         Date today = new Date();
         end.setDate(today);
@@ -264,8 +277,10 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         // mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
         // add(mainPanel, BorderLayout.CENTER);
 
-        onDemand = new JCheckBox(JMeterUtils.getResString("ondemand")); // $NON-NLS-1$
-        threadPropsPanel.add(onDemand);
+        if (showDelayedStart) {
+            delayedStart = new JCheckBox(JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
+            threadPropsPanel.add(delayedStart);
+        }
         scheduler = new JCheckBox(JMeterUtils.getResString("scheduler")); // $NON-NLS-1$
         scheduler.addItemListener(this);
         threadPropsPanel.add(scheduler);

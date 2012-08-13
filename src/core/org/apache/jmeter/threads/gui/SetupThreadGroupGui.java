@@ -26,6 +26,10 @@ import org.apache.jmeter.threads.SetupThreadGroup;
 public class SetupThreadGroupGui extends ThreadGroupGui implements ItemListener {
     private static final long serialVersionUID = 240L;
 
+    public SetupThreadGroupGui() {
+        super(false);
+    }
+
     @Override
     public String getLabelResource() {
         return "setup_thread_group_title"; // $NON-NLS-1$
