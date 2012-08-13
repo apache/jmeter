@@ -303,7 +303,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 threadContext.clear();
                 log.info("Thread finished: " + threadName);
                 threadFinished(iterationListener);
-                monitor.threadFinished(this); // Tell the engine we are done
+                monitor.threadFinished(this); // Tell the monitor we are done
                 JMeterContextService.removeContext(); // Remove the ThreadLocal entry
             }
             finally {
