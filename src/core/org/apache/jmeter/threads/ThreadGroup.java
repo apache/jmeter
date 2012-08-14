@@ -22,10 +22,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.jmeter.engine.StandardJMeterEngine;
+import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -35,7 +38,7 @@ import org.apache.log.Logger;
  * This class is intended to be ThreadSafe.
  */
 public class ThreadGroup extends AbstractThreadGroup {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 280L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -71,8 +74,6 @@ public class ThreadGroup extends AbstractThreadGroup {
     //- JMX entries
 
     private Thread threadStarter;
-
-    private JMeterThread[] jmThreads;
 
     // List of active threads
     private Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
@@ -210,43 +211,37 @@ public class ThreadGroup extends AbstractThreadGroup {
         return getPropertyAsBoolean(DELAYED_START);
     }
 
-   @Override
-   public void scheduleThread(JMeterThread thread)
-   {
-       if (isDelayedStartup()) { // Fetch once; needs to stay constant
-           delayedStartup = true; 
-           // No delay as OnDemandThreadGroup starts thread during rampup
-           thread.setInitialDelay(0);
-       } else {
-           int rampUp = getRampUp();
-           float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
-           thread.setInitialDelay((int) (perThreadDelay * thread.getThreadNum()));
-       }
-       // if true the Scheduler is enabled
-       if (getScheduler()) {
-           long now = System.currentTimeMillis();
-           // set the start time for the Thread
-           if (getDelay() > 0) {// Duration is in seconds
-               thread.setStartTime(getDelay() * 1000 + now);
-           } else {
-               long start = getStartTime();
-               if (start < now) {
-                   start = now; // Force a sensible start time
-               }
-               thread.setStartTime(start);
-           }
+    /**
+     * This will schedule the time for the JMeterThread.
+     *
+     * @param thread JMeterThread
+     */
+    private void scheduleThread(JMeterThread thread, long now) {
+        // if true the Scheduler is enabled
+        if (getScheduler()) {
+            // set the start time for the Thread
+            if (getDelay() > 0) {// Duration is in seconds
+                thread.setStartTime(getDelay() * 1000 + now);
+            } else {
+                long start = getStartTime();
+                if (start < now) {
+                    start = now; // Force a sensible start time
+                }
+                thread.setStartTime(start);
+            }
 
-           // set the endtime for the Thread
-           if (getDuration() > 0) {// Duration is in seconds
-               thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
-           } else {
-               thread.setEndTime(getEndTime());
-           }
+            // set the endtime for the Thread
+            if (getDuration() > 0) {// Duration is in seconds
+                thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
+            } else {
+                thread.setEndTime(getEndTime());
+            }
 
-           // Enables the scheduler
-           thread.setScheduled(true);
-       }
-   }
+            // Enables the scheduler
+            thread.setScheduled(true);
+        }
+    }
+
 
     /**
      * Wait for delay with RAMPUP_GRANULARITY
@@ -268,27 +263,34 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
     }
 
-    /**
-     * Default implementation starts threads immediately
-     */
     @Override
-    public void start() {
+    public void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
+        log.info("Starting thread group number "+groupCount);
         running = true;
+        int numThreads = getNumThreads();       
+        int rampUp = getRampUp();
+        float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
+
+        delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
         if (delayedStartup) {
-            this.threadStarter = new Thread(new ThreadStarter(), getName()+"-ThreadStarter");
-            threadStarter.start();  
-            try {
-                threadStarter.join();
-            } catch (InterruptedException e) {
-            }            
+            threadStarter = new Thread(new ThreadStarter(groupCount, notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
+            threadStarter.setDaemon(true);
+            threadStarter.start();
+            // N.B. we don't wait for the thread to complete, as that would prevent parallel TGs
         } else {
-            for (int i = 0; i < jmThreads.length; i++) {
-                Thread newThread = new Thread(jmThreads[i]);
-                newThread.setName(jmThreads[i].getThreadName());
-                registerStartedThread(jmThreads[i], newThread);
-                newThread.start();            
+            long now = System.currentTimeMillis(); // needs to be same time for all threads in the group
+            final JMeterContext context = JMeterContextService.getContext();
+            for (int i = 0; running && i < numThreads; i++) {
+                JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, numThreads, i, context);
+                scheduleThread(jmThread, now); // set start and end time
+                jmThread.setInitialDelay((int)(i * perThreadDelay));
+                Thread newThread = new Thread(jmThread);
+                newThread.setName(jmThread.getThreadName());
+                registerStartedThread(jmThread, newThread);
+                newThread.start();
             }
         }
+        log.info("Started thread group number "+groupCount);
     }
 
     /**
@@ -300,13 +302,27 @@ public class ThreadGroup extends AbstractThreadGroup {
         allThreads.put(jMeterThread, newThread);
     }
 
-    /**
-     * 
-     * @param jmThreads JMeterThread[]
-     */
-    @Override
-    public final void setJMeterThreads(JMeterThread[] jmThreads) {
-        this.jmThreads = jmThreads;
+    private JMeterThread makeThread(int groupCount,
+            ListenerNotifier notifier, ListedHashTree threadGroupTree,
+            StandardJMeterEngine engine, int numThreads, int i, 
+            JMeterContext context) { // N.B. Context needs to be fetched in the correct thread
+        boolean onErrorStopTest = getOnErrorStopTest();
+        boolean onErrorStopTestNow = getOnErrorStopTestNow();
+        boolean onErrorStopThread = getOnErrorStopThread();
+        boolean onErrorStartNextLoop = getOnErrorStartNextLoop();
+        String groupName = getName();
+        final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
+        jmeterThread.setThreadNum(i);
+        jmeterThread.setThreadGroup(this);
+        jmeterThread.setInitialContext(context);
+        final String threadName = groupName + " " + (groupCount) + "-" + (i + 1);
+        jmeterThread.setThreadName(threadName);
+        jmeterThread.setEngine(engine);
+        jmeterThread.setOnErrorStopTest(onErrorStopTest);
+        jmeterThread.setOnErrorStopTestNow(onErrorStopTestNow);
+        jmeterThread.setOnErrorStopThread(onErrorStopThread);
+        jmeterThread.setOnErrorStartNextLoop(onErrorStartNextLoop);
+        return jmeterThread;
     }
 
     /**
@@ -471,6 +487,12 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
     }
 
+    private ListedHashTree cloneTree(ListedHashTree tree) {
+        TreeCloner cloner = new TreeCloner(true);
+        tree.traverse(cloner);
+        return cloner.getClonedTree();
+    }
+
     private void pause(long ms){
         try {
             Thread.sleep(ms);
@@ -483,17 +505,27 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     class ThreadStarter implements Runnable {
 
-        public ThreadStarter() {
+        private final int groupCount;
+        private final ListenerNotifier notifier;
+        private final ListedHashTree threadGroupTree;
+        private final StandardJMeterEngine engine;
+        private final JMeterContext context;
+
+        public ThreadStarter(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
             super();
+            this.groupCount = groupCount;
+            this.notifier = notifier;
+            this.threadGroupTree = threadGroupTree;
+            this.engine = engine;
+            this.context = JMeterContextService.getContext();
         }
         
         public void run() {
-            final JMeterThread[] jMeterThreads = jmThreads;
             
-            int rampUp = getRampUp();
-            float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
-            if (getScheduler()) {
-                long now = System.currentTimeMillis();
+            long now = System.currentTimeMillis(); // needs to be constant for all threads
+            long endtime = 0;
+            final boolean usingScheduler = getScheduler();
+            if (usingScheduler) {
                 // set the start time for the Thread
                 if (getDelay() > 0) {// Duration is in seconds
                     delayBy(getDelay() * 1000);
@@ -504,19 +536,33 @@ public class ThreadGroup extends AbstractThreadGroup {
                     } 
                     // else start immediately
                 }
-            }
-            for (int i = 0; i < jMeterThreads.length; i++) {
-                try {
-                    if(running) {
-                        Thread.sleep(Math.round(perThreadDelay));
-                        Thread newThread = new Thread(jMeterThreads[i]);
-                        newThread.setName(jMeterThreads[i].getThreadName());
-                        registerStartedThread(jMeterThreads[i], newThread);
-                        newThread.start();
-                    }
-                } catch (InterruptedException e) {
-                    break;
+                // set the endtime for the Thread
+                endtime = getDuration();
+                if (endtime > 0) {// Duration is in seconds, starting from when the threads start
+                    endtime = endtime *1000 + System.currentTimeMillis();
+                } else {
+                    endtime = getEndTime();
                 }
+            }
+            final int numThreads = getNumThreads();
+            final int perTthreadDelay = Math.round(((float) (getRampUp() * 1000) / (float) numThreads));
+            for (int i = 0; running && i < numThreads; i++) {
+                if (i > 0) {
+                    pause(perTthreadDelay); // ramp-up delay (except first)
+                }
+                if (usingScheduler && System.currentTimeMillis() > endtime) {
+                    break; // no point continuing beyond the end time
+                }
+                JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, numThreads, i, context);
+                jmThread.setInitialDelay(0);   // Already waited
+                if (usingScheduler) {
+                    jmThread.setScheduled(true);
+                    jmThread.setEndTime(endtime);
+                }
+                Thread newThread = new Thread(jmThread);
+                newThread.setName(jmThread.getThreadName());
+                registerStartedThread(jmThread, newThread);
+                newThread.start();
             }
         }
     }
