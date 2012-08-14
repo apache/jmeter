@@ -222,42 +222,31 @@ public class ThreadGroup extends AbstractThreadGroup {
            float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
            thread.setInitialDelay((int) (perThreadDelay * thread.getThreadNum()));
        }
-       scheduleThread(thread, this);
+       // if true the Scheduler is enabled
+       if (getScheduler()) {
+           long now = System.currentTimeMillis();
+           // set the start time for the Thread
+           if (getDelay() > 0) {// Duration is in seconds
+               thread.setStartTime(getDelay() * 1000 + now);
+           } else {
+               long start = getStartTime();
+               if (start < now) {
+                   start = now; // Force a sensible start time
+               }
+               thread.setStartTime(start);
+           }
+
+           // set the endtime for the Thread
+           if (getDuration() > 0) {// Duration is in seconds
+               thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
+           } else {
+               thread.setEndTime(getEndTime());
+           }
+
+           // Enables the scheduler
+           thread.setScheduled(true);
+       }
    }
-
-    /**
-     * This will schedule the time for the JMeterThread.
-     *
-     * @param thread JMeterThread
-     * @param group ThreadGroup
-     */
-    private void scheduleThread(JMeterThread thread, ThreadGroup group) {
-        // if true the Scheduler is enabled
-        if (group.getScheduler()) {
-            long now = System.currentTimeMillis();
-            // set the start time for the Thread
-            if (group.getDelay() > 0) {// Duration is in seconds
-                thread.setStartTime(group.getDelay() * 1000 + now);
-            } else {
-                long start = group.getStartTime();
-                if (start < now) {
-                    start = now; // Force a sensible start time
-                }
-                thread.setStartTime(start);
-            }
-
-            // set the endtime for the Thread
-            if (group.getDuration() > 0) {// Duration is in seconds
-                thread.setEndTime(group.getDuration() * 1000 + (thread.getStartTime()));
-            } else {
-                thread.setEndTime(group.getEndTime());
-            }
-
-            // Enables the scheduler
-            thread.setScheduled(true);
-        }
-    }
-
 
     /**
      * Wait for delay with RAMPUP_GRANULARITY
