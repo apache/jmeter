@@ -20,11 +20,14 @@
 package org.apache.jmeter.visualizers;
 
 import java.awt.Font;
+import java.awt.Shape;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.jCharts.properties.LegendAreaProperties;
+import org.jCharts.properties.PointChartProperties;
 
 public class StatGraphProperties {
 
@@ -55,4 +58,17 @@ public class StatGraphProperties {
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.top"), LegendAreaProperties.TOP);
         return placementNameMap;
     }
+    
+    @SuppressWarnings("boxing")
+    public static Map<String, Shape> getPointShapeMap() {
+        Map<String, Shape> pointShapeMap = new LinkedHashMap<String, Shape>();
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_circle"), PointChartProperties.SHAPE_CIRCLE);
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_diamond"), PointChartProperties.SHAPE_DIAMOND);
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_square"), PointChartProperties.SHAPE_SQUARE);
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_triangle"), PointChartProperties.SHAPE_TRIANGLE);
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_none"), null);
+        return pointShapeMap;
+    }
+    
+    public static final String[] strokeWidth = { "1.0f", "1.5f", "2.0f", "2.5f", "3.0f", "3.5f", "4.0f", "4.5f", "5.0f", "5.5f", "6.0f", "6.5f"};
 }

@@ -2734,6 +2734,15 @@ the graph as a PNG file.</description>
 </div>
 </component>
 
+<component name="Line Graph" index="&sect-num;.3.12" >
+<description>To do</description>
+<div align="center">
+<p>
+    The figure below shows an example of settings to draw this graph.
+</p>
+</div>
+</component>
+
 <component name="Mailer Visualizer" index="&sect-num;.3.13"  width="860" height="463" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
