@@ -161,10 +161,10 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));    //$NON-NLS-1$
 
     private JLabeledTextField maxLengthXAxisLabel =
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_max_length_xaxis_label"));//$NON-NLS-1$
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_max_length_xaxis_label"), 8);//$NON-NLS-1$
 
     private JLabeledTextField maxValueYAxisLabel =
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_yaxis_max_value"));//$NON-NLS-1$
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_yaxis_max_value"), 8);//$NON-NLS-1$
 
     /**
      * checkbox for use dynamic graph size
@@ -172,9 +172,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private JCheckBox dynamicGraphSize = new JCheckBox(JMeterUtils.getResString("aggregate_graph_dynamic_size")); // $NON-NLS-1$
 
     private JLabeledTextField graphWidth =
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"));        //$NON-NLS-1$
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"), 6);        //$NON-NLS-1$
     private JLabeledTextField graphHeight =
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"));        //$NON-NLS-1$
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"), 6);        //$NON-NLS-1$
 
     private String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
