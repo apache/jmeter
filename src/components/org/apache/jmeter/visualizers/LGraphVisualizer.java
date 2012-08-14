@@ -83,6 +83,10 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
      * Lock used to protect list update
      */
     private final transient Object lock = new Object();
+    /**
+     * Lock used to protect refresh interval
+     */
+    private final transient Object lockInterval = new Object();
 
     private final String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
@@ -181,12 +185,21 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
 
     private final List<Color> listColors = Colors.getColors();
 
+    private ArrayList<SampleResult> internalList = new ArrayList<SampleResult>();
+
     public LGraphVisualizer() {
         init();
     }
 
     public void add(final SampleResult sampleResult) {
         final String sampleLabel = sampleResult.getSampleLabel();
+        synchronized (lockInterval) {
+            // Internal light list to permit play with interval and label filter without a reading file results
+            SampleResult srTemp = new SampleResult(sampleResult.getStartTime(), sampleResult.getTime());
+            srTemp.setSampleLabel(sampleLabel);
+            internalList.add(srTemp);
+        }
+
         Matcher matcher = null;
         // Sampler selection
         if (samplerSelection.isSelected() && samplerMatchLabel.getText() != null
@@ -338,6 +351,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
 
     public void clearData() {
         synchronized (lock) {
+            internalList.clear();
             seriesNames.clear();
             pList.clear();
             minStartTime = Integer.MAX_VALUE;
@@ -482,16 +496,24 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
                 regexpChkBox.setEnabled(false);
             }
         } else if (eventSource == reloadButton || eventSource == intervalButton) {
-            if (getFile() == null || getFile().length() <= 0) {
-                String msgErr = JMeterUtils.getResString("graph_line_only_with_read_results_file"); // $NON-NLS-1$
-                JOptionPane.showMessageDialog(null, msgErr, msgErr, JOptionPane.WARNING_MESSAGE);
-            } else {
-                if (eventSource == intervalButton) {
-                    intervalValue = Integer.parseInt(intervalField.getText());
-                }
+            if (eventSource == intervalButton) {
+                intervalValue = Integer.parseInt(intervalField.getText());
+            }
+            if (getFile() != null && getFile().length() > 0) {
                 clearData();
                 FilePanel filePanel = (FilePanel) getFilePanel();
                 filePanel.actionPerformed(event);
+            } else {
+                if (internalList.size() >= 2) {
+                    synchronized (lockInterval) {
+                        @SuppressWarnings("unchecked")
+                        ArrayList<SampleResult> tempList = (ArrayList<SampleResult>) internalList.clone();
+                        this.clearData();
+                        for (SampleResult sr : tempList) {
+                            this.add(sr);
+                        }
+                    }
+                }
             }
         } 
 
