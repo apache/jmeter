@@ -78,6 +78,11 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
     private final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10);
 
     private final Border MARGIN = new EmptyBorder(0, 5, 0, 5);
+    
+    /**
+     * Lock used to protect list update
+     */
+    private final transient Object lock = new Object();
 
     private final String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
@@ -180,7 +185,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         init();
     }
 
-    public synchronized void add(final SampleResult sampleResult) {
+    public void add(final SampleResult sampleResult) {
         final String sampleLabel = sampleResult.getSampleLabel();
         Matcher matcher = null;
         // Sampler selection
@@ -194,33 +199,35 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
             final int startTimeInterval = (int) startTimeMS / intervalValue;
             JMeterUtils.runSafe(new Runnable() {
                 public void run() {
-                    // Use for x-axis scale
-                    if (startTimeInterval < minStartTime) {
-                        minStartTime = startTimeInterval;
-                    } else if (startTimeInterval > maxStartTime) {
-                        maxStartTime = startTimeInterval;
-                    }
-                    // Generate x-axis label and associated color
-                    if (!seriesNames.containsKey(sampleLabel)) {
-                        seriesNames.put(sampleLabel, 
-                                new LGraphLineBean(sampleLabel, listColors.get(colorIdx++)));
-                        // reset colors index
-                        if (colorIdx >= listColors.size()) {
-                            colorIdx = 0;
+                    synchronized (lock) {
+                        // Use for x-axis scale
+                        if (startTimeInterval < minStartTime) {
+                            minStartTime = startTimeInterval;
+                        } else if (startTimeInterval > maxStartTime) {
+                            maxStartTime = startTimeInterval;
                         }
-                    }
-                    // List of value by sampler
-                    if (pList.containsKey(sampleLabel)) {
-                        LinkedHashMap<Integer, Long> subList = pList.get(sampleLabel);
-                        long respTime = sampleResult.getTime();
-                        if (subList.containsKey(startTimeInterval)) {
-                            respTime = (subList.get(startTimeInterval) + respTime) / 2;
+                        // Generate x-axis label and associated color
+                        if (!seriesNames.containsKey(sampleLabel)) {
+                            seriesNames.put(sampleLabel, 
+                                    new LGraphLineBean(sampleLabel, listColors.get(colorIdx++)));
+                            // reset colors index
+                            if (colorIdx >= listColors.size()) {
+                                colorIdx = 0;
+                            }
                         }
-                        subList.put(startTimeInterval, respTime);
-                    } else {
-                        LinkedHashMap<Integer, Long> newSubList = new LinkedHashMap<Integer, Long>();
-                        newSubList.put(startTimeInterval, sampleResult.getTime());
-                        pList.put(sampleLabel, newSubList);
+                        // List of value by sampler
+                        if (pList.containsKey(sampleLabel)) {
+                            LinkedHashMap<Integer, Long> subList = pList.get(sampleLabel);
+                            long respTime = sampleResult.getTime();
+                            if (subList.containsKey(startTimeInterval)) {
+                                respTime = (subList.get(startTimeInterval) + respTime) / 2;
+                            }
+                            subList.put(startTimeInterval, respTime);
+                        } else {
+                            LinkedHashMap<Integer, Long> newSubList = new LinkedHashMap<Integer, Long>();
+                            newSubList.put(startTimeInterval, sampleResult.getTime());
+                            pList.put(sampleLabel, newSubList);
+                        }
                     }
                 }
             });
@@ -228,15 +235,6 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
     }
 
     public void makeGraph() {
-        // Calculate the test duration. Needs to xAxis Labels and getData.
-        durationTest = maxStartTime - minStartTime;
-        if (durationTest <= 0) {
-            JOptionPane.showMessageDialog(null, JMeterUtils
-                    .getResString("aggregate_graph_no_values_to_graph"), // $NON-NLS-1$
-                    JMeterUtils.getResString("aggregate_graph_no_values_to_graph"), // $NON-NLS-1$
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         Dimension size = graphPanel.getSize();
         // canvas size
         int width = (int) size.getWidth();
@@ -338,13 +336,15 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         return "graph_line_title"; // $NON-NLS-1$
     }
 
-    public synchronized void clearData() {
-        seriesNames.clear();
-        pList.clear();
-        minStartTime = Integer.MAX_VALUE;
-        maxStartTime = Integer.MIN_VALUE;
-        durationTest = 0;
-        colorIdx = 0;
+    public void clearData() {
+        synchronized (lock) {
+            seriesNames.clear();
+            pList.clear();
+            minStartTime = Integer.MAX_VALUE;
+            maxStartTime = Integer.MIN_VALUE;
+            durationTest = 0;
+            colorIdx = 0;
+        }
     }
 
     /**
@@ -482,10 +482,13 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
                 regexpChkBox.setEnabled(false);
             }
         } else if (eventSource == reloadButton || eventSource == intervalButton) {
-            if (eventSource == intervalButton) {
-                intervalValue = Integer.parseInt(intervalField.getText());
-            }
-            if (getFile() != null && getFile().length() > 0) {
+            if (getFile() == null || getFile().length() <= 0) {
+                String msgErr = JMeterUtils.getResString("graph_line_only_with_read_results_file"); // $NON-NLS-1$
+                JOptionPane.showMessageDialog(null, msgErr, msgErr, JOptionPane.WARNING_MESSAGE);
+            } else {
+                if (eventSource == intervalButton) {
+                    intervalValue = Integer.parseInt(intervalField.getText());
+                }
                 clearData();
                 FilePanel filePanel = (FilePanel) getFilePanel();
                 filePanel.actionPerformed(event);
@@ -500,8 +503,8 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         durationTest = maxStartTime - minStartTime;
         if (seriesNames.size() <= 0) {
             msgErr = JMeterUtils.getResString("aggregate_graph_no_values_to_graph"); // $NON-NLS-1$
-        } else   if (durationTest <= 1) {
-            msgErr = JMeterUtils.getResString("graph_line_no_duration"); // $NON-NLS-1$
+        } else   if (durationTest < 1) {
+            msgErr = JMeterUtils.getResString("graph_line_not_enough_data"); // $NON-NLS-1$
         }
         if (msgErr == null) {
             makeGraph();
