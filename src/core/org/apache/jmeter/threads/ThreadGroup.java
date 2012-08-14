@@ -41,6 +41,10 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
 
+    /** How often to check for shutdown during ramp-up, default 1000ms */
+    private static final int RAMPUP_GRANULARITY =
+            JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
+
     //+ JMX entries - do not change the string values
 
     /** Ramp-up time */
@@ -66,14 +70,11 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     //- JMX entries
 
-    /** How often to check for shutdown during ramp-up, default 1000ms */
-    private static final int RAMPUP_GRANULARITY =
-            JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
-
     private Thread threadStarter;
 
     private JMeterThread[] jmThreads;
 
+    // List of active threads
     private Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
 
     /**
@@ -92,7 +93,6 @@ public class ThreadGroup extends AbstractThreadGroup {
     public ThreadGroup() {
     }
 
-
     /**
      * Set whether scheduler is being used
      *
@@ -100,10 +100,6 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     public void setScheduler(boolean Scheduler) {
         setProperty(new BooleanProperty(SCHEDULER, Scheduler));
-    }
-
-    private boolean isDelayedStartup() {
-        return getPropertyAsBoolean(DELAYED_START);
     }
 
     /**
@@ -210,6 +206,10 @@ public class ThreadGroup extends AbstractThreadGroup {
         return getPropertyAsInt(ThreadGroup.RAMP_TIME);
     }
 
+    private boolean isDelayedStartup() {
+        return getPropertyAsBoolean(DELAYED_START);
+    }
+
    @Override
    public void scheduleThread(JMeterThread thread)
    {
@@ -262,24 +262,19 @@ public class ThreadGroup extends AbstractThreadGroup {
     /**
      * Wait for delay with RAMPUP_GRANULARITY
      * @param delay delay in ms
-     * @param type Delay type
      */
-    private void delayBy(long delay, String type) {
+    private void delayBy(long delay) {
         if (delay > 0) {
             long start = System.currentTimeMillis();
             long end = start + delay;
             long now=0;
-            long pause = RAMPUP_GRANULARITY;
+            long pause = RAMPUP_GRANULARITY; // maximum pause to use
             while(running && (now = System.currentTimeMillis()) < end) {
                 long togo = end - now;
                 if (togo < pause) {
                     pause = togo;
                 }
-                try {
-                    Thread.sleep(pause); // delay between checks
-                } catch (InterruptedException e) {
-                    break;
-                }
+                pause(pause); // delay between checks
             }
         }
     }
@@ -487,6 +482,13 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
     }
 
+    private void pause(long ms){
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+        }
+    }
+
     /**
      * Starts Threads using ramp up
      */
@@ -505,11 +507,11 @@ public class ThreadGroup extends AbstractThreadGroup {
                 long now = System.currentTimeMillis();
                 // set the start time for the Thread
                 if (getDelay() > 0) {// Duration is in seconds
-                    delayBy(getDelay() * 1000, "start");
+                    delayBy(getDelay() * 1000);
                 } else {
                     long start = getStartTime();
                     if (start >= now) {
-                        delayBy(start-now, "start");
+                        delayBy(start-now);
                     } 
                     // else start immediately
                 }
