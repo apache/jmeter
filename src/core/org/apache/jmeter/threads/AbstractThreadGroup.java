@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.LoopController;
+import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -29,6 +30,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jorphan.collections.ListedHashTree;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
@@ -217,15 +219,11 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
         return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
     }
 
-    public abstract void scheduleThread(JMeterThread thread);
-
     public abstract boolean stopThread(String threadName, boolean now);
 
     public abstract int numberOfActiveThreads();
 
-    public abstract void setJMeterThreads(JMeterThread[] jmThreads);
-
-    public abstract void start();
+    public abstract void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine);
 
     public abstract boolean verifyThreadsStopped();
 

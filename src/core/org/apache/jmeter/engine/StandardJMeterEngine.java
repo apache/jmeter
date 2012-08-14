@@ -36,7 +36,6 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.PostThreadGroup;
 import org.apache.jmeter.threads.SetupThreadGroup;
@@ -236,12 +235,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             }
         }
         active=false;
-    }
-
-    private ListedHashTree cloneTree(ListedHashTree tree) {
-        TreeCloner cloner = new TreeCloner(true);
-        tree.traverse(cloner);
-        return cloner.getClonedTree();
     }
 
     public void reset() {
@@ -479,29 +472,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
         ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
         threadGroupTree.add(group, testLevelElements);
-        
-        JMeterThread[] jmThreads = 
-                new JMeterThread[numThreads];
-        for (int i = 0; running && i < numThreads; i++) {
-            final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), group, notifier);
-            jmeterThread.setThreadNum(i);
-            jmeterThread.setThreadGroup(group);
-            jmeterThread.setInitialContext(JMeterContextService.getContext());
-            final String threadName = groupName + " " + (groupCount) + "-" + (i + 1);
-            jmeterThread.setThreadName(threadName);
-            jmeterThread.setEngine(this);
-            jmeterThread.setOnErrorStopTest(onErrorStopTest);
-            jmeterThread.setOnErrorStopTestNow(onErrorStopTestNow);
-            jmeterThread.setOnErrorStopThread(onErrorStopThread);
-            jmeterThread.setOnErrorStartNextLoop(onErrorStartNextLoop);
 
-            group.scheduleThread(jmeterThread);
-
-            jmThreads[i] = jmeterThread;
-        } // end of thread startup for this thread group
-        group.setJMeterThreads(jmThreads);
         groups.add(group);
-        group.start();
+        group.start(groupCount, notifier, threadGroupTree, this);
     }
 
     /**
