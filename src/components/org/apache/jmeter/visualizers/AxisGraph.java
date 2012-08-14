@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.visualizers;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -404,6 +405,10 @@ public class AxisGraph extends JPanel {
             LegendProperties legendProperties= new LegendProperties();
             legendProperties.setBorderStroke(null);
             legendProperties.setPlacement(legendPlacement);
+            legendProperties.setIconBorderPaint(Color.WHITE);
+            if (legendPlacement == LegendAreaProperties.RIGHT || legendPlacement == LegendAreaProperties.LEFT) {
+                legendProperties.setNumColumns(1);
+            }
             if (legendFont != null) {
                 legendProperties.setFont(legendFont); //new Font("SansSerif", Font.PLAIN, 10)
             }
