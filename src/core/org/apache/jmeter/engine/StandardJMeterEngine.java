@@ -457,51 +457,51 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     
     private void startThreadGroup(AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
     {
-            int numThreads = group.getNumThreads();
-            JMeterContextService.addTotalThreads(numThreads);
-            boolean onErrorStopTest = group.getOnErrorStopTest();
-            boolean onErrorStopTestNow = group.getOnErrorStopTestNow();
-            boolean onErrorStopThread = group.getOnErrorStopThread();
-            boolean onErrorStartNextLoop = group.getOnErrorStartNextLoop();
-            String groupName = group.getName();
-            log.info("Starting " + numThreads + " threads for group " + groupName + ".");
+        int numThreads = group.getNumThreads();
+        JMeterContextService.addTotalThreads(numThreads);
+        boolean onErrorStopTest = group.getOnErrorStopTest();
+        boolean onErrorStopTestNow = group.getOnErrorStopTestNow();
+        boolean onErrorStopThread = group.getOnErrorStopThread();
+        boolean onErrorStartNextLoop = group.getOnErrorStartNextLoop();
+        String groupName = group.getName();
+        log.info("Starting " + numThreads + " threads for group " + groupName + ".");
 
-            if (onErrorStopTest) {
-                log.info("Test will stop on error");
-            } else if (onErrorStopTestNow) {
-                log.info("Test will stop abruptly on error");
-            } else if (onErrorStopThread) {
-                log.info("Thread will stop on error");
-            } else if (onErrorStartNextLoop) {
-                log.info("Thread will start next loop on error");
-            } else {
-                log.info("Thread will continue on error");
-            }
-            ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
-            threadGroupTree.add(group, testLevelElements);
-            
-            JMeterThread[] jmThreads = 
-                    new JMeterThread[numThreads];
-            for (int i = 0; running && i < numThreads; i++) {
-                final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), group, notifier);
-                jmeterThread.setThreadNum(i);
-                jmeterThread.setThreadGroup(group);
-                jmeterThread.setInitialContext(JMeterContextService.getContext());
-                final String threadName = groupName + " " + (groupCount) + "-" + (i + 1);
-                jmeterThread.setThreadName(threadName);
-                jmeterThread.setEngine(this);
-                jmeterThread.setOnErrorStopTest(onErrorStopTest);
-                jmeterThread.setOnErrorStopTestNow(onErrorStopTestNow);
-                jmeterThread.setOnErrorStopThread(onErrorStopThread);
-                jmeterThread.setOnErrorStartNextLoop(onErrorStartNextLoop);
+        if (onErrorStopTest) {
+            log.info("Test will stop on error");
+        } else if (onErrorStopTestNow) {
+            log.info("Test will stop abruptly on error");
+        } else if (onErrorStopThread) {
+            log.info("Thread will stop on error");
+        } else if (onErrorStartNextLoop) {
+            log.info("Thread will start next loop on error");
+        } else {
+            log.info("Thread will continue on error");
+        }
+        ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
+        threadGroupTree.add(group, testLevelElements);
+        
+        JMeterThread[] jmThreads = 
+                new JMeterThread[numThreads];
+        for (int i = 0; running && i < numThreads; i++) {
+            final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), group, notifier);
+            jmeterThread.setThreadNum(i);
+            jmeterThread.setThreadGroup(group);
+            jmeterThread.setInitialContext(JMeterContextService.getContext());
+            final String threadName = groupName + " " + (groupCount) + "-" + (i + 1);
+            jmeterThread.setThreadName(threadName);
+            jmeterThread.setEngine(this);
+            jmeterThread.setOnErrorStopTest(onErrorStopTest);
+            jmeterThread.setOnErrorStopTestNow(onErrorStopTestNow);
+            jmeterThread.setOnErrorStopThread(onErrorStopThread);
+            jmeterThread.setOnErrorStartNextLoop(onErrorStartNextLoop);
 
-                group.scheduleThread(jmeterThread);
+            group.scheduleThread(jmeterThread);
 
-                jmThreads[i] = jmeterThread;
-            } // end of thread startup for this thread group
-            group.setJMeterThreads(jmThreads);
-            groups.add(group);
-            group.start();
+            jmThreads[i] = jmeterThread;
+        } // end of thread startup for this thread group
+        group.setJMeterThreads(jmThreads);
+        groups.add(group);
+        group.start();
     }
 
     /**
