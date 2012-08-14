@@ -78,9 +78,9 @@ public class ThreadGroup extends AbstractThreadGroup {
     private Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
 
     /**
-     * Was test stopped
+     * Is test (still) running?
      */
-    private AtomicBoolean stopped = new AtomicBoolean(false);
+    private volatile boolean running = false;
 
     /**
      * Are we using delayed startup?
@@ -271,7 +271,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             long end = start + delay;
             long now=0;
             long pause = RAMPUP_GRANULARITY;
-            while(!stopped.get() && (now = System.currentTimeMillis()) < end) {
+            while(running && (now = System.currentTimeMillis()) < end) {
                 long togo = end - now;
                 if (togo < pause) {
                     pause = togo;
@@ -290,8 +290,8 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void start() {
+        running = true;
         if (delayedStartup) {
-            stopped.set(false);
             this.threadStarter = new Thread(new ThreadStarter(), getName()+"-ThreadStarter");
             threadStarter.start();  
             try {
@@ -374,8 +374,8 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void tellThreadsToStop() {
+        running = false;
         if (delayedStartup) {
-            stopped.set(true);
             try {
                 threadStarter.interrupt();
             } catch (Exception e) {
@@ -402,8 +402,8 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void stop() {
+        running = false;
         if (delayedStartup) {
-            stopped.set(true);
             try {
                 threadStarter.interrupt();
             } catch (Exception e) {
@@ -517,7 +517,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             }
             for (int i = 0; i < jMeterThreads.length; i++) {
                 try {
-                    if(!stopped.get()) {
+                    if(running) {
                         Thread.sleep(Math.round(perThreadDelay));
                         Thread newThread = new Thread(jMeterThreads[i]);
                         newThread.setName(jMeterThreads[i].getThreadName());
