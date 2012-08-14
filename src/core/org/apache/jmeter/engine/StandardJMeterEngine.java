@@ -352,18 +352,19 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         JMeterContextService.clearTotalThreads();
         
         if (setupIter.hasNext()) {
-            log.info("Starting setup thread groups");
+            log.info("Starting setUp thread groups");
             while (running && setupIter.hasNext()) {//for each setup thread group
                 AbstractThreadGroup group = setupIter.next();
                 groupCount++;
-                log.info("Starting Setup Thread: " + groupCount);
-                String groupName = startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
+                String groupName = group.getName();
+                log.info("Starting setUp ThreadGroup: " + groupCount + " : " + groupName);
+                startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
                 if (serialized && setupIter.hasNext()) {
                     log.info("Waiting for setup thread group: "+groupName+" to finish before starting next setup group");
                     pauseWhileRemainingThreads(group);
                 }
             }    
-            log.info("Waiting for all setup thread groups To Exit");
+            log.info("Waiting for all setup thread groups to exit");
             //wait for all Setup Threads To Exit
             waitThreadsStopped();
             log.info("All Setup Threads have ended");
@@ -390,7 +391,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             if (group instanceof PostThreadGroup)
                 continue;
             groupCount++;
-            String groupName=startThreadGroup(group, groupCount, searcher, testLevelElements, notifier);
+            String groupName = group.getName();
+            log.info("Starting ThreadGroup: " + groupCount + " : " + groupName);
+            startThreadGroup(group, groupCount, searcher, testLevelElements, notifier);
             if (serialized && iter.hasNext()) {
                 log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
                 pauseWhileRemainingThreads(group);
@@ -400,9 +403,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             log.info("No enabled thread groups found");
         } else {
             if (running) {
-                log.info("All threads have been started");
+                log.info("All thread groups have been started");
             } else {
-                log.info("Test stopped - no more threads will be started");
+                log.info("Test stopped - no more thread groups will be started");
             }
         }
 
@@ -414,12 +417,13 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         if (postIter.hasNext()){
             groupCount = 0;
             JMeterContextService.clearTotalThreads();
-            log.info("Starting post thread groups");
+            log.info("Starting tearDown thread groups");
             while (running && postIter.hasNext()) {//for each setup thread group
                 AbstractThreadGroup group = postIter.next();
                 groupCount++;
-                log.info("Starting Post Thread: " + groupCount);
-                String groupName = startThreadGroup(group, groupCount, postSearcher, testLevelElements, notifier);
+                String groupName = group.getName();
+                log.info("Starting tearDown ThreadGroup: " + groupCount + " : " + groupName);
+                startThreadGroup(group, groupCount, postSearcher, testLevelElements, notifier);
                 if (serialized && postIter.hasNext()) {
                     log.info("Waiting for post thread group: "+groupName+" to finish before starting next post group");
                     pauseWhileRemainingThreads(group);
@@ -451,7 +455,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         return reminingThreads; 
     }
     
-    private String startThreadGroup(AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
+    private void startThreadGroup(AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
     {
             int numThreads = group.getNumThreads();
             JMeterContextService.addTotalThreads(numThreads);
@@ -498,7 +502,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             group.setJMeterThreads(jmThreads);
             groups.add(group);
             group.start();
-            return groupName;
     }
 
     /**
