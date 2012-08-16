@@ -73,7 +73,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 </p>
 </description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.</property>
         <property name="Port" required="No">Port to use. If this is  >0, then this specific port is used, otherwise JMeter uses the default FTP port.</property>
         <property name="Remote File:" required="Yes">File to retrieve or name of destination file to upload.</property>
@@ -200,7 +200,7 @@ https.default.protocol=SSLv3
         for additional configuration steps.</p>
 </description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server" required="Yes, unless provided by HTTP Request Defaults">
             Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]
             Note: in JMeter 2.5 (and later) if the "Host" header is defined in a Header Manager, then this will be used
@@ -465,7 +465,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
 </description>
 
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
 		<property name="Variable Name" required="Yes">
 		Name of the JMeter variable that the connection pool is bound to.
 		This must agree with the 'Variable Name' field of a JDBC Connection Configuration.
@@ -747,7 +747,7 @@ If this is zero, then the request is marked as failed.
                                     <p>This will delete the user-defined entry in the LDAP Server. The entries
                                       should be available in the LDAP Server. The execution time is calculated.</p></li></ol></ol>
                                       <properties>
-                                        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+                                        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
                                         <property name="Server Name or IP" required="Yes">Domain name or IP address of the LDAP server.
                                           JMeter assumes the LDAP server is listening on the default port(389).</property>
                                           <property name="Port" required="Yes">default port(389).</property>
@@ -960,7 +960,7 @@ StandardGenerator and TCLogParser.
 </description>
 
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
         <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
         <property name="Log parser class" required="Yes (default provided)">The log parser class is responsible for parsing the logs.</property>
@@ -1001,7 +1001,7 @@ The interrupt() method can be defined in the script or the init file.
 </p>
 	</description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.
+	<property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.
     The name is stored in the script variable Label</property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
@@ -1108,7 +1108,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
 	</description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
 	<property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.
 	N.B. Not all the languages in the drop-down list are supported by default.
 	The following are supported: jexl, javascript, xslt.
@@ -3372,7 +3372,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 </description>
 
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="Server" required="No">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.</property>
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
@@ -5215,7 +5215,7 @@ This setting will also be needed when running the generated test plan.
 </description>
 
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
         <property name="Attempt HTTPS Spoofing" required="Yes">
           [Note: HTTPS spoofing should no longer be required]
