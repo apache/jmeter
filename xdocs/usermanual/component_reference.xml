@@ -2736,16 +2736,35 @@ the graph as a PNG file.</description>
 </div>
 </component>
 
-<component name="Line Graph" index="&sect-num;.3.12" >
-<description>To do</description>
+<component name="Line Graph" index="&sect-num;.3.13"  width="837" height="610" screenshot="linegraph.png">
+<description>
+The Line Graph draws a line chart showing the evolution of response time during the test, for each labelled request. 
+</description>
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
+<figure width="835" height="472" image="linegraph_settings.png">Aggregate graph settings</figure>
 </p>
 </div>
+<p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
+<properties>
+        <property name="Interval (ms)" required="Yes">The time in milli-seconds for X axis interval. 
+        Before display the graph, click on <b>Apply interval</b> button to refresh internal data.</property>
+        <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex.<i>.*Transaction.*</i>. 
+        Before display the graph, click on <b>Reload data</b> button to refresh internal data.</property>
+        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "Line Graph". 
+        The button <b>Synchronize with name</b> define the title with the label of the listener. And define font settings for graph title</property>
+        <property name="Line settings" required="Yes">Define the width of the line. Define the type of each value point. Choose <i>none</i> to have a line without mark</property>
+        <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
+        Use Width and Height fields to define a custom size. The unit is pixel. </property>
+        <property name="X Axis settings" required="No">Customize the date format of  X axis label . The syntax is the Java SimpleDateFormat API. .</property>
+        <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis. Show or not the number grouping in Y Axis labels</property>
+        <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
+
+</properties>
 </component>
 
-<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="860" height="403" screenshot="mailervisualizer.png">
+<component name="Mailer Visualizer" index="&sect-num;.3.14"  width="860" height="403" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 <properties>
@@ -2773,7 +2792,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="553" height="382" screenshot="beanshell_listener.png">
+<component name="BeanShell Listener"  index="&sect-num;.3.15"  width="553" height="382" screenshot="beanshell_listener.png">
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
@@ -2818,7 +2837,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="Summary Report" index="&sect-num;.3.15"  width="784" height="287" screenshot="summary_report.png">
+<component name="Summary Report" index="&sect-num;.3.16"  width="784" height="287" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
@@ -2860,7 +2879,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 </div>
 </component>
 
-<component name="Save Responses to a file" index="&sect-num;.3.16"  width="358" height="225" screenshot="savetofile.png">
+<component name="Save Responses to a file" index="&sect-num;.3.17"  width="358" height="225" screenshot="savetofile.png">
     <description>
         <p>
         This test element can be placed anywhere in the test plan.
@@ -2903,7 +2922,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
  </properties>
 </component>
 
-<component name="BSF Listener" index="&sect-num;.3.17"  width="736" height="369" screenshot="bsf_listener.png">
+<component name="BSF Listener" index="&sect-num;.3.18"  width="736" height="369" screenshot="bsf_listener.png">
 <description>
 <p>
 The BSF Listener allows BSF script code to be applied to sample results.
@@ -2954,7 +2973,7 @@ For details, see <complink name="BSF Listener"/>.
 </description>
 </component>
 
-<component name="Generate Summary Results" index="&sect-num;.3.18"  width="358" height="131" screenshot="summary.png">
+<component name="Generate Summary Results" index="&sect-num;.3.19"  width="358" height="131" screenshot="summary.png">
     <description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
@@ -3015,7 +3034,7 @@ by using suitable labels and adding the summarisers to appropriate parts of the 
  </properties>
 </component>
 
-<component name="Comparison Assertion Visualizer" index="&sect-num;.3.19"  width="777" height="266" screenshot="comparison_assertion_visualizer.png">
+<component name="Comparison Assertion Visualizer" index="&sect-num;.3.20"  width="777" height="266" screenshot="comparison_assertion_visualizer.png">
 <description>
 The Comparison Assertion Visualizer shows the results of any <complink name="Compare Assertion"/> elements.
 </description>
