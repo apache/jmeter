@@ -1093,7 +1093,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.11"  width="1228" height="407" screenshot="bsfsampler.png">
+<component name="BSF Sampler" index="&sect-num;.1.11"  width="865" height="412" screenshot="bsfsampler.png">
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
 		website for details of the languages supported.
@@ -2593,8 +2593,10 @@ See Figure 9b (below).
 <p>
 	The Control Panel (above) shows an example of an HTML display.
 	Figure 9 (below) shows an example of an XML display.
+	<div align="center">
 <figure width="873" height="653" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
 <figure width="858" height="643" image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
+</div>
 </p>
 </component>
 
@@ -2743,7 +2745,7 @@ the graph as a PNG file.</description>
 </div>
 </component>
 
-<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="860" height="463" screenshot="mailervisualizer.png">
+<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="860" height="403" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 <properties>
