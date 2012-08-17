@@ -69,7 +69,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class LGraphVisualizer extends AbstractVisualizer implements ActionListener, Clearable {
+public class RespTimeGraphVisualizer extends AbstractVisualizer implements ActionListener, Clearable {
 
     private static final long serialVersionUID = 280L;
 
@@ -92,7 +92,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
 
     private final String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms"); //$NON-NLS-1$
 
-    private LGraphChart graphPanel = null;
+    private RespTimeGraphChart graphPanel = null;
 
     private JPanel settingsPane = null;
 
@@ -109,9 +109,9 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
     private int intervalValue = INTERVAL_DEFAULT;
     
     private final JLabeledTextField intervalField =
-            new JLabeledTextField(JMeterUtils.getResString("graph_line_interval_label"), 7); //$NON-NLS-1$
+            new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_interval_label"), 7); //$NON-NLS-1$
 
-    private final JButton intervalButton = new JButton(JMeterUtils.getResString("graph_line_interval_reload")); // $NON-NLS-1$
+    private final JButton intervalButton = new JButton(JMeterUtils.getResString("graph_resp_time_interval_reload")); // $NON-NLS-1$
 
     private final JButton displayButton =
             new JButton(JMeterUtils.getResString("aggregate_graph_display")); //$NON-NLS-1$
@@ -119,7 +119,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
     private JButton saveGraph =
             new JButton(JMeterUtils.getResString("aggregate_graph_save")); //$NON-NLS-1$
 
-    private final JCheckBox samplerSelection = new JCheckBox(JMeterUtils.getResString("graph_line_series_selection"), false); //$NON-NLS-1$
+    private final JCheckBox samplerSelection = new JCheckBox(JMeterUtils.getResString("graph_resp_time_series_selection"), false); //$NON-NLS-1$
 
     private final JTextField samplerMatchLabel = new JTextField();
 
@@ -153,10 +153,10 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
             new JButton(JMeterUtils.getResString("aggregate_graph_sync_with_name"));  //$NON-NLS-1$
 
     private final JLabeledTextField graphTitle =
-            new JLabeledTextField(JMeterUtils.getResString("graph_line_title_label")); //$NON-NLS-1$
+            new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_title_label")); //$NON-NLS-1$
 
     private final JLabeledTextField xAxisTimeFormat =
-            new JLabeledTextField(JMeterUtils.getResString("graph_line_xaxis_time_format"), 10); //$NON-NLS-1$ $NON-NLS-2$
+            new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_xaxis_time_format"), 10); //$NON-NLS-1$ $NON-NLS-2$
 
     private final JLabeledTextField maxValueYAxisLabel =
             new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_yaxis_max_value"), 8); //$NON-NLS-1$
@@ -175,7 +175,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
 
     private int maxStartTime = Integer.MIN_VALUE;
 
-    private final HashMap<String, LGraphLineBean> seriesNames = new HashMap<String, LGraphLineBean>();
+    private final HashMap<String, RespTimeGraphLineBean> seriesNames = new HashMap<String, RespTimeGraphLineBean>();
 
     private final LinkedHashMap<String, LinkedHashMap<Integer, Long>> pList = new LinkedHashMap<String, LinkedHashMap<Integer, Long>>();
 
@@ -187,7 +187,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
 
     private ArrayList<SampleResult> internalList = new ArrayList<SampleResult>();
 
-    public LGraphVisualizer() {
+    public RespTimeGraphVisualizer() {
         init();
     }
 
@@ -222,7 +222,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
                         // Generate x-axis label and associated color
                         if (!seriesNames.containsKey(sampleLabel)) {
                             seriesNames.put(sampleLabel, 
-                                    new LGraphLineBean(sampleLabel, listColors.get(colorIdx++)));
+                                    new RespTimeGraphLineBean(sampleLabel, listColors.get(colorIdx++)));
                             // reset colors index
                             if (colorIdx >= listColors.size()) {
                                 colorIdx = 0;
@@ -346,7 +346,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
     }
 
     public String getLabelResource() {
-        return "graph_line_title"; // $NON-NLS-1$
+        return "graph_resp_time_title"; // $NON-NLS-1$
     }
 
     public void clearData() {
@@ -379,7 +379,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         settingsPane = new VerticalPanel();
         settingsPane.setBorder(margin2);
 
-        graphPanel = new LGraphChart();
+        graphPanel = new RespTimeGraphChart();
         graphPanel.setPreferredSize(new Dimension(defaultWidth, defaultHeight));
 
         settingsPane.add(createGraphActionsPane());
@@ -441,7 +441,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         String[] legends = new String[seriesNames.size()];
         int i = 0;
         for (String key : seriesNames.keySet()) {
-            LGraphLineBean val = seriesNames.get(key);
+            RespTimeGraphLineBean val = seriesNames.get(key);
             legends[i] = val.getLabel();
             i++;
         }
@@ -452,7 +452,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         Color[] linesColors = new Color[seriesNames.size()];
         int i = 0;
         for (String key : seriesNames.keySet()) {
-            LGraphLineBean val = seriesNames.get(key);
+            RespTimeGraphLineBean val = seriesNames.get(key);
             linesColors[i] = val.getLineColor();
             i++;
         }
@@ -526,7 +526,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         if (seriesNames.size() <= 0) {
             msgErr = JMeterUtils.getResString("aggregate_graph_no_values_to_graph"); // $NON-NLS-1$
         } else   if (durationTest < 1) {
-            msgErr = JMeterUtils.getResString("graph_line_not_enough_data"); // $NON-NLS-1$
+            msgErr = JMeterUtils.getResString("graph_resp_time_not_enough_data"); // $NON-NLS-1$
         }
         if (msgErr == null) {
             makeGraph();
@@ -550,7 +550,7 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         JPanel settingsPane = new JPanel(new BorderLayout());
         settingsPane.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("graph_line_settings_pane"))); // $NON-NLS-1$
+                JMeterUtils.getResString("graph_resp_time_settings_pane"))); // $NON-NLS-1$
         
         JPanel intervalPane = new JPanel();
         intervalPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -629,11 +629,11 @@ public class LGraphVisualizer extends AbstractVisualizer implements ActionListen
         lineStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         lineStylePane.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("graph_line_settings_line"))); // $NON-NLS-1$
-        lineStylePane.add(createLabelCombo(JMeterUtils.getResString("graph_line_stroke_width"), //$NON-NLS-1$
+                JMeterUtils.getResString("graph_resp_time_settings_line"))); // $NON-NLS-1$
+        lineStylePane.add(createLabelCombo(JMeterUtils.getResString("graph_resp_time_stroke_width"), //$NON-NLS-1$
                 strokeWidthList));
         strokeWidthList.setSelectedItem(StatGraphProperties.strokeWidth[4]); // default: 3.0f
-        lineStylePane.add(createLabelCombo(JMeterUtils.getResString("graph_line_shape_label"), //$NON-NLS-1$
+        lineStylePane.add(createLabelCombo(JMeterUtils.getResString("graph_resp_time_shape_label"), //$NON-NLS-1$
                 pointShapeLine));
         pointShapeLine.setSelectedIndex(0); // default: circle
         return lineStylePane;

@@ -52,7 +52,7 @@ import org.jCharts.properties.PropertyException;
 import org.jCharts.properties.util.ChartFont;
 import org.jCharts.types.ChartType;
 
-public class LGraphChart extends JPanel {
+public class RespTimeGraphChart extends JPanel {
 
     private static final long serialVersionUID = 280L;
 
@@ -84,14 +84,14 @@ public class LGraphChart extends JPanel {
     /**
     *
     */
-   public LGraphChart() {
+   public RespTimeGraphChart() {
        super();
    }
 
    /**
     * @param layout
     */
-   public LGraphChart(LayoutManager layout) {
+   public RespTimeGraphChart(LayoutManager layout) {
        super(layout);
    }
 
@@ -99,7 +99,7 @@ public class LGraphChart extends JPanel {
     * @param layout
     * @param isDoubleBuffered
     */
-   public LGraphChart(LayoutManager layout, boolean isDoubleBuffered) {
+   public RespTimeGraphChart(LayoutManager layout, boolean isDoubleBuffered) {
        super(layout, isDoubleBuffered);
    }
 
@@ -258,7 +258,7 @@ public class LGraphChart extends JPanel {
         try {
             // if the title graph is empty, we can assume some default
             if (_title.length() == 0 ) {
-                _title = JMeterUtils.getResString("graph_line_title"); //$NON-NLS-1$
+                _title = JMeterUtils.getResString("graph_resp_time_title"); //$NON-NLS-1$
             }
             this.setPreferredSize(new Dimension(_width,_height));
             DataSeries dataSeries = new DataSeries( _xAxisLabels, null, _yAxisTitle, _title ); // replace _xAxisTitle to null (don't display x axis title)

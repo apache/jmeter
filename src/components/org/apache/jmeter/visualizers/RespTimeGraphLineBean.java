@@ -21,7 +21,7 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.Color;
 
-public class LGraphLineBean {
+public class RespTimeGraphLineBean {
 
     private String label;
 
@@ -31,7 +31,7 @@ public class LGraphLineBean {
      * @param label
      * @param lineColor
      */
-    public LGraphLineBean(String label, Color lineColor) {
+    public RespTimeGraphLineBean(String label, Color lineColor) {
         super();
         this.label = label;
         this.lineColor = lineColor;
