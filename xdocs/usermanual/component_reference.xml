@@ -2736,14 +2736,14 @@ the graph as a PNG file.</description>
 </div>
 </component>
 
-<component name="Line Graph" index="&sect-num;.3.13"  width="837" height="610" screenshot="linegraph.png">
+<component name="Response Time Graph" index="&sect-num;.3.13"  width="903" height="604" screenshot="response_time_graph.png">
 <description>
-The Line Graph draws a line chart showing the evolution of response time during the test, for each labelled request. 
+The Response Time Graph draws a line chart showing the evolution of response time during the test, for each labelled request. 
 </description>
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
-<figure width="835" height="472" image="linegraph_settings.png">Aggregate graph settings</figure>
+<figure width="906" height="473" image="response_time_graph_settings.png">Response time graph settings</figure>
 </p>
 </div>
 <p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
@@ -2752,7 +2752,7 @@ The Line Graph draws a line chart showing the evolution of response time during 
         Before display the graph, click on <b>Apply interval</b> button to refresh internal data.</property>
         <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex.<i>.*Transaction.*</i>. 
         Before display the graph, click on <b>Reload data</b> button to refresh internal data.</property>
-        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "Line Graph". 
+        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "Response Time Graph". 
         The button <b>Synchronize with name</b> define the title with the label of the listener. And define font settings for graph title</property>
         <property name="Line settings" required="Yes">Define the width of the line. Define the type of each value point. Choose <i>none</i> to have a line without mark</property>
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
