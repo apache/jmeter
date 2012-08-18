@@ -113,7 +113,7 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     /**
-     * Reset pack to it's initial state
+     * Reset pack to its initial state
      * @param pack
      */
     public void done(SamplePackage pack) {
