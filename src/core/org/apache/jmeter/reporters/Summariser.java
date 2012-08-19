@@ -33,6 +33,8 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterContextService.ThreadCounts;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.RunningSample;
 import org.apache.jorphan.logging.LoggingManager;
@@ -245,7 +247,7 @@ public class Summariser extends AbstractTestElement
         sb.append(" ");
         sb.append(type);
         sb.append(" ");
-        sb.append(longToSb(tmp, s.getNumSamples(), 5));
+        sb.append(longToSb(tmp, s.getNumSamples(), 6));
         sb.append(" in ");
         long elapsed = s.getElapsed();
         sb.append(doubleToSb(dfDouble, tmp, elapsed / 1000.0, 5, 1));
@@ -266,6 +268,15 @@ public class Summariser extends AbstractTestElement
         sb.append(" (");
         sb.append(s.getErrorPercentageString());
         sb.append(")");
+        if ("+".equals(type)) {
+            ThreadCounts tc = JMeterContextService.getThreadCounts();
+            sb.append(" Active: ");
+            sb.append(tc.activeThreads);
+            sb.append(" Started: ");
+            sb.append(tc.startedThreads);
+            sb.append(" Finished: ");
+            sb.append(tc.finishedThreads);
+        }
         return sb.toString();
     }
 
