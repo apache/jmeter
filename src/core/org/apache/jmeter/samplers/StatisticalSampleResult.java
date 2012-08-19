@@ -49,6 +49,7 @@ public class StatisticalSampleResult extends SampleResult implements
     @Deprecated
     public StatisticalSampleResult(long stamp, long elapsed) {
         super(stamp, elapsed);
+        this.elapsed = elapsed;
     }
 
     /**

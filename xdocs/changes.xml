@@ -92,6 +92,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 
 <h3>Listeners</h3>
 <ul>
+<li><bugzilla>53742</bugzilla> - When jmeter.save.saveservice.sample_count is set to true, elapsed time read by listener is always equal to 0</li>
 </ul>
 
 <h3>Assertions</h3>
