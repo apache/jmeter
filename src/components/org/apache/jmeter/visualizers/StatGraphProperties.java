@@ -22,6 +22,7 @@ package org.apache.jmeter.visualizers;
 import java.awt.Font;
 import java.awt.Shape;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -61,7 +62,8 @@ public class StatGraphProperties {
     }
     
     public static Map<String, Shape> getPointShapeMap() {
-        Map<String, Shape> pointShapeMap = new HashMap<String, Shape>(5);
+        // We want to retain insertion order, so LinkedHashMap is necessary
+        Map<String, Shape> pointShapeMap = new LinkedHashMap<String, Shape>(5);
         pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_circle"), PointChartProperties.SHAPE_CIRCLE);
         pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_diamond"), PointChartProperties.SHAPE_DIAMOND);
         pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_square"), PointChartProperties.SHAPE_SQUARE);
