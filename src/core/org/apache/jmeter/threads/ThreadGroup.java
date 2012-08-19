@@ -429,7 +429,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     public boolean verifyThreadsStopped() {
         boolean stoppedAll = true;
         if (delayedStartup){
-            stoppedAll &= verifyThreadStopped(threadStarter);
+            stoppedAll = verifyThreadStopped(threadStarter);
         }
         for (Thread t : allThreads.values()) {
             stoppedAll = stoppedAll && verifyThreadStopped(t);
@@ -497,6 +497,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
+            // TODO Is this silent exception intended
         }
     }
 
