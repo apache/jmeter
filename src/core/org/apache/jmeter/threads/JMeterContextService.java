@@ -39,6 +39,12 @@ public final class JMeterContextService {
     private static int numberOfActiveThreads = 0;
 
     //@GuardedGy("this")
+    private static int numberOfThreadsStarted = 0;
+
+    //@GuardedGy("this")
+    private static int numberOfThreadsFinished = 0;
+
+    //@GuardedGy("this")
     private static int totalThreads = 0;
 
     /**
@@ -92,6 +98,7 @@ public final class JMeterContextService {
      */
     static synchronized void incrNumberOfThreads() {
         numberOfActiveThreads++;
+        numberOfThreadsStarted++;
     }
 
     /**
@@ -99,6 +106,7 @@ public final class JMeterContextService {
      */
     static synchronized void decrNumberOfThreads() {
         numberOfActiveThreads--;
+        numberOfThreadsFinished++;
     }
 
     /**
@@ -107,6 +115,11 @@ public final class JMeterContextService {
      */
     public static synchronized int getNumberOfThreads() {
         return numberOfActiveThreads;
+    }
+
+    // return all the associated counts together
+    public static synchronized ThreadCounts getThreadCounts() {
+        return new ThreadCounts(numberOfActiveThreads, numberOfThreadsStarted, numberOfThreadsFinished);
     }
 
     /**
@@ -138,9 +151,27 @@ public final class JMeterContextService {
     }
 
     /**
-     * Set total threads to zero
+     * Set total threads to zero; also clears started and finished counts
      */
     public static synchronized void clearTotalThreads() {
         totalThreads = 0;
+        numberOfThreadsStarted = 0;
+        numberOfThreadsFinished = 0;
     }
+
+    public static class ThreadCounts {
+        
+        public final int activeThreads;
+        
+        public final int startedThreads;
+        
+        public final int finishedThreads;
+        
+        ThreadCounts (int active, int started, int finished) {
+            activeThreads = active;
+            startedThreads = started;
+            finishedThreads = finished;
+        }
+    }
+
 }
