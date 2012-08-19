@@ -21,12 +21,12 @@ package org.apache.jmeter.engine;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.testbeans.TestBean;
@@ -104,7 +104,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     private final String host;
 
     // The list of current thread groups; may be setUp, main, or tearDown.
-    private final List<AbstractThreadGroup> groups = Collections.synchronizedList(new ArrayList<AbstractThreadGroup>());
+    private final List<AbstractThreadGroup> groups = new CopyOnWriteArrayList<AbstractThreadGroup>();
 
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
@@ -365,7 +365,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterContextService.clearTotalThreads();
         }
 
-        groups.clear(); // The groups have all completed now
+        groups.clear(); // The groups have all completed now                
 
         /*
          * Here's where the test really starts. Run a Full GC now: it's no harm
@@ -404,8 +404,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
         //wait for all Test Threads To Exit
         waitThreadsStopped();
-
-        groups.clear(); // The groups have all completed now
+        groups.clear(); // The groups have all completed now            
 
         if (postIter.hasNext()){
             groupCount = 0;
@@ -435,7 +434,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         int reminingThreads= 0;
         for (AbstractThreadGroup threadGroup : groups) {
             reminingThreads += threadGroup.numberOfActiveThreads();
-        }
+        }            
         return reminingThreads; 
     }
     
