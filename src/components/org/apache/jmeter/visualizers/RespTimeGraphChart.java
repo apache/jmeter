@@ -355,7 +355,8 @@ public class RespTimeGraphChart extends JPanel {
         max = _data[0][0];
         for (int i = 0; i < _data.length; i++) {
             for (int j = 0; j < _data[i].length; j++) {
-                 if (Double.isNaN(max) || ((_data[i][j] != Double.NaN) && (_data[i][j] > max))) {
+                 if (Double.isNaN(max) || 
+                         ((!Double.isNaN(_data[i][j])) && (_data[i][j] > max))) {
                     max = _data[i][j];
                 }
             }
