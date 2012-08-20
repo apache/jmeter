@@ -25,11 +25,11 @@ package org.apache.jmeter.protocol.http.util;
  * @version $Revision$
  */
 public final class Base64Encoder {
-    private final static char[] pem_array = { 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82,
+    private static final char[] pem_array = { 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82,
             83, 84, 85, 86, 87, 88, 89, 90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
             112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 43, 47 };
 
-    private final static char eq = 61;
+    private static final char eq = 61;
 
     /**
      * Private constructor to prevent instantiation.
@@ -37,11 +37,11 @@ public final class Base64Encoder {
     private Base64Encoder() {
     }
 
-    public final static String encode(String s) {
+    public static final String encode(String s) {
         return encode(s.getBytes()); // TODO - charset?
     }
 
-    public final static String encode(byte[] bs) {
+    public static final String encode(byte[] bs) {
         StringBuilder out = new StringBuilder();
         int bl = bs.length;
         for (int i = 0; i < bl; i += 3) {
@@ -50,7 +50,7 @@ public final class Base64Encoder {
         return out.toString();
     }
 
-    public final static String encodeAtom(byte[] b, int strt, int left) {
+    public static final String encodeAtom(byte[] b, int strt, int left) {
         StringBuilder out = new StringBuilder();
         if (left == 1) {
             byte b1 = b[strt];

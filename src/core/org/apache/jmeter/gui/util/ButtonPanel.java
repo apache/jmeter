@@ -33,15 +33,15 @@ import org.apache.jmeter.util.JMeterUtils;
 public class ButtonPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 
-    public final static int ADD_BUTTON = 1;
+    public static final int ADD_BUTTON = 1;
 
-    public final static int EDIT_BUTTON = 2;
+    public static final int EDIT_BUTTON = 2;
 
-    public final static int DELETE_BUTTON = 3;
+    public static final int DELETE_BUTTON = 3;
 
-    public final static int LOAD_BUTTON = 4;
+    public static final int LOAD_BUTTON = 4;
 
-    public final static int SAVE_BUTTON = 5;
+    public static final int SAVE_BUTTON = 5;
 
     private JButton add, delete, edit, load, save;
 

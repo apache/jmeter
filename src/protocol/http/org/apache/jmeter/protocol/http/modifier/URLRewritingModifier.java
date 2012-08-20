@@ -53,15 +53,15 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     private transient Pattern pathExtensionNoEqualsNoQuestionmarkRegexp;
 
     // transient Perl5Compiler compiler = new Perl5Compiler();
-    private final static String ARGUMENT_NAME = "argument_name"; // $NON-NLS-1$
+    private static final String ARGUMENT_NAME = "argument_name"; // $NON-NLS-1$
 
-    private final static String PATH_EXTENSION = "path_extension"; // $NON-NLS-1$
+    private static final String PATH_EXTENSION = "path_extension"; // $NON-NLS-1$
 
-    private final static String PATH_EXTENSION_NO_EQUALS = "path_extension_no_equals"; // $NON-NLS-1$
+    private static final String PATH_EXTENSION_NO_EQUALS = "path_extension_no_equals"; // $NON-NLS-1$
 
-    private final static String PATH_EXTENSION_NO_QUESTIONMARK = "path_extension_no_questionmark"; // $NON-NLS-1$
+    private static final String PATH_EXTENSION_NO_QUESTIONMARK = "path_extension_no_questionmark"; // $NON-NLS-1$
 
-    private final static String SHOULD_CACHE = "cache_value"; // $NON-NLS-1$
+    private static final String SHOULD_CACHE = "cache_value"; // $NON-NLS-1$
 
     // PreProcessors are cloned per-thread, so this will be saved per-thread
     private transient String savedValue = ""; // $NON-NLS-1$

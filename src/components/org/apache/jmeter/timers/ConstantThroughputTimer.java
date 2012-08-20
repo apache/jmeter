@@ -68,10 +68,10 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     private double throughput;
 
     //For calculating throughput across all threads
-    private final static ThroughputInfo allThreadsInfo = new ThroughputInfo();
+    private static final ThroughputInfo allThreadsInfo = new ThroughputInfo();
 
     //For holding the ThrougputInfo objects for all ThreadGroups. Keyed by AbstractThreadGroup objects
-    private final static ConcurrentMap<AbstractThreadGroup, ThroughputInfo> threadGroupsInfoMap =
+    private static final ConcurrentMap<AbstractThreadGroup, ThroughputInfo> threadGroupsInfoMap =
         new ConcurrentHashMap<AbstractThreadGroup, ThroughputInfo>();
 
 

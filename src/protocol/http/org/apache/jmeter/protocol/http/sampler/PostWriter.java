@@ -45,9 +45,9 @@ public class PostWriter {
     private static final byte[] DASH_DASH_BYTES = {'-', '-'};
 
     /** The bounday string between multiparts */
-    protected final static String BOUNDARY = "---------------------------7d159c1302d0y0"; // $NON-NLS-1$
+    protected static final String BOUNDARY = "---------------------------7d159c1302d0y0"; // $NON-NLS-1$
 
-    private final static byte[] CRLF = { 0x0d, 0x0A };
+    private static final byte[] CRLF = { 0x0d, 0x0A };
 
     public static final String ENCODING = "ISO-8859-1"; // $NON-NLS-1$
 

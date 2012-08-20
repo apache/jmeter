@@ -33,7 +33,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 public abstract class RandomTimer extends ConstantTimer implements Timer, Serializable {
     private static final long serialVersionUID = 240L;
 
-    public final static String RANGE = "RandomTimer.range";
+    public static final String RANGE = "RandomTimer.range";
 
     protected final Random random;
 

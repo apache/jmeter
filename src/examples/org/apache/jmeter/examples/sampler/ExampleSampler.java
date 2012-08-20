@@ -45,7 +45,7 @@ public class ExampleSampler extends AbstractSampler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // The name of the property used to hold our data
-    public final static String DATA = "ExampleSampler.data"; //$NON-NLS-1$
+    public static final String DATA = "ExampleSampler.data"; //$NON-NLS-1$
 
     private static int classCount = 0; // keep track of classes created
 

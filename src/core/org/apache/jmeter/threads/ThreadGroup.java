@@ -51,25 +51,25 @@ public class ThreadGroup extends AbstractThreadGroup {
     //+ JMX entries - do not change the string values
 
     /** Ramp-up time */
-    public final static String RAMP_TIME = "ThreadGroup.ramp_time";
+    public static final String RAMP_TIME = "ThreadGroup.ramp_time";
 
     /** Whether thread startup is delayed until required */
     public static final String DELAYED_START = "ThreadGroup.delayedStart";
 
     /** Whether scheduler is being used */
-    public final static String SCHEDULER = "ThreadGroup.scheduler";
+    public static final String SCHEDULER = "ThreadGroup.scheduler";
 
     /** Scheduler absolute start time */
-    public final static String START_TIME = "ThreadGroup.start_time";
+    public static final String START_TIME = "ThreadGroup.start_time";
 
     /** Scheduler absolute end time */
-    public final static String END_TIME = "ThreadGroup.end_time";
+    public static final String END_TIME = "ThreadGroup.end_time";
 
     /** Scheduler duration, overrides end time */
-    public final static String DURATION = "ThreadGroup.duration";
+    public static final String DURATION = "ThreadGroup.duration";
 
     /** Scheduler start delay, overrides start time */
-    public final static String DELAY = "ThreadGroup.delay";
+    public static final String DELAY = "ThreadGroup.delay";
 
     //- JMX entries
 

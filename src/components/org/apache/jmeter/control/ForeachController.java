@@ -33,11 +33,11 @@ public class ForeachController extends GenericController implements Serializable
 
     private static final long serialVersionUID = 240L;
 
-    private final static String INPUTVAL = "ForeachController.inputVal";// $NON-NLS-1$
+    private static final String INPUTVAL = "ForeachController.inputVal";// $NON-NLS-1$
 
-    private final static String RETURNVAL = "ForeachController.returnVal";// $NON-NLS-1$
+    private static final String RETURNVAL = "ForeachController.returnVal";// $NON-NLS-1$
 
-    private final static String USE_SEPARATOR = "ForeachController.useSeparator";// $NON-NLS-1$
+    private static final String USE_SEPARATOR = "ForeachController.useSeparator";// $NON-NLS-1$
 
     private int loopCount = 0;
 

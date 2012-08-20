@@ -26,7 +26,7 @@ import java.util.Properties;
  */
 public abstract class BSFBeanInfoSupport extends ScriptingBeanInfoSupport {
 
-    private final static String[] LANGUAGE_TAGS;
+    private static final String[] LANGUAGE_TAGS;
 
     static {
         Properties languages = JMeterUtils.loadProperties("org/apache/bsf/Languages.properties"); // $NON-NLS-1$

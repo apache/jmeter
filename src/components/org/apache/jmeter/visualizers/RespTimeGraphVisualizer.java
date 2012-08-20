@@ -102,7 +102,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final int defaultHeight = 300;
     
-    private final static int INTERVAL_DEFAULT = 10000; // in milli-seconds // TODO: properties?
+    private static final int INTERVAL_DEFAULT = 10000; // in milli-seconds // TODO: properties?
     
     private int intervalValue = INTERVAL_DEFAULT;
     
