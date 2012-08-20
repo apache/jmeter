@@ -71,30 +71,30 @@ public class SmtpSampler extends AbstractSampler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     //+JMX file attribute names - do not change any values!
-    public final static String SERVER               = "SMTPSampler.server"; // $NON-NLS-1$
+    public static final String SERVER               = "SMTPSampler.server"; // $NON-NLS-1$
 
 
-    public final static String SERVER_PORT          = "SMTPSampler.serverPort"; // $NON-NLS-1$
-    public final static String USE_AUTH             = "SMTPSampler.useAuth"; // $NON-NLS-1$
-    public final static String USERNAME             = "SMTPSampler.username"; // $NON-NLS-1$
-    public final static String PASSWORD             = "SMTPSampler.password"; // $NON-NLS-1$
-    public final static String MAIL_FROM            = "SMTPSampler.mailFrom"; // $NON-NLS-1$
+    public static final String SERVER_PORT          = "SMTPSampler.serverPort"; // $NON-NLS-1$
+    public static final String USE_AUTH             = "SMTPSampler.useAuth"; // $NON-NLS-1$
+    public static final String USERNAME             = "SMTPSampler.username"; // $NON-NLS-1$
+    public static final String PASSWORD             = "SMTPSampler.password"; // $NON-NLS-1$
+    public static final String MAIL_FROM            = "SMTPSampler.mailFrom"; // $NON-NLS-1$
     public static final String MAIL_REPLYTO         = "SMTPSampler.replyTo"; // $NON-NLS-1$
-    public final static String RECEIVER_TO          = "SMTPSampler.receiverTo"; // $NON-NLS-1$
-    public final static String RECEIVER_CC          = "SMTPSampler.receiverCC"; // $NON-NLS-1$
-    public final static String RECEIVER_BCC         = "SMTPSampler.receiverBCC"; // $NON-NLS-1$
+    public static final String RECEIVER_TO          = "SMTPSampler.receiverTo"; // $NON-NLS-1$
+    public static final String RECEIVER_CC          = "SMTPSampler.receiverCC"; // $NON-NLS-1$
+    public static final String RECEIVER_BCC         = "SMTPSampler.receiverBCC"; // $NON-NLS-1$
 
-    public final static String SUBJECT              = "SMTPSampler.subject"; // $NON-NLS-1$
-    public final static String SUPPRESS_SUBJECT     = "SMTPSampler.suppressSubject"; // $NON-NLS-1$
-    public final static String MESSAGE              = "SMTPSampler.message"; // $NON-NLS-1$
-    public final static String PLAIN_BODY           = "SMTPSampler.plainBody"; // $NON-NLS-1$
-    public final static String INCLUDE_TIMESTAMP    = "SMTPSampler.include_timestamp"; // $NON-NLS-1$
-    public final static String ATTACH_FILE          = "SMTPSampler.attachFile"; // $NON-NLS-1$
-    public final static String MESSAGE_SIZE_STATS   = "SMTPSampler.messageSizeStatistics"; // $NON-NLS-1$
+    public static final String SUBJECT              = "SMTPSampler.subject"; // $NON-NLS-1$
+    public static final String SUPPRESS_SUBJECT     = "SMTPSampler.suppressSubject"; // $NON-NLS-1$
+    public static final String MESSAGE              = "SMTPSampler.message"; // $NON-NLS-1$
+    public static final String PLAIN_BODY           = "SMTPSampler.plainBody"; // $NON-NLS-1$
+    public static final String INCLUDE_TIMESTAMP    = "SMTPSampler.include_timestamp"; // $NON-NLS-1$
+    public static final String ATTACH_FILE          = "SMTPSampler.attachFile"; // $NON-NLS-1$
+    public static final String MESSAGE_SIZE_STATS   = "SMTPSampler.messageSizeStatistics"; // $NON-NLS-1$
     public static final String HEADER_FIELDS        = "SMTPSampler.headerFields"; // $NON-NLS-1$
 
-    public final static String USE_EML              = "SMTPSampler.use_eml"; // $NON-NLS-1$
-    public final static String EML_MESSAGE_TO_SEND  = "SMTPSampler.emlMessageToSend"; // $NON-NLS-1$
+    public static final String USE_EML              = "SMTPSampler.use_eml"; // $NON-NLS-1$
+    public static final String EML_MESSAGE_TO_SEND  = "SMTPSampler.emlMessageToSend"; // $NON-NLS-1$
     public static final String ENABLE_DEBUG         = "SMTPSampler.enableDebug"; // $NON-NLS-1$
 
     // Used to separate attachment file names in JMX fields - do not change!
