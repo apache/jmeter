@@ -19,9 +19,15 @@
 package org.apache.jorphan.gui;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -64,4 +70,21 @@ public class GuiUtils {
         column.setPreferredWidth(width);
         column.setResizable(false);        
     }
+    
+    /**
+     * Create a GUI component JLabel + JComboBox with a left and right margin (5px)
+     * @param label
+     * @param comboBox
+     * @return the JComponent (margin+JLabel+margin+JComboBox)
+     */
+    public static JComponent createLabelCombo(String label, JComboBox comboBox) {
+        JPanel labelCombo = new JPanel();
+        labelCombo.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JLabel caption = new JLabel(label);
+        caption.setBorder(new EmptyBorder(0, 5, 0, 5));
+        labelCombo.add(caption);
+        labelCombo.add(comboBox);
+        return labelCombo;
+    }
+
 }
