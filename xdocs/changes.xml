@@ -85,6 +85,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <li><bugzilla>53440</bugzilla> - SSL connection leads to ArrayStoreException on JDK 6 with some KeyManagerFactory SPI</li>
 <li><bugzilla>53511</bugzilla> - access log sampler SessionFilter throws NullPointerException - cookie manager not initialized properly</li>
 <li><bugzilla>53743</bugzilla> - JavaSamplers.allSamplers static Set keeps references even after thread has ended</li>
+<li><bugzilla>53715</bugzilla> - JMeter does not load WSDL</li>
 </ul>
 
 <h3>Controllers</h3>
