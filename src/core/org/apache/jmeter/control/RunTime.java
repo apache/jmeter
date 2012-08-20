@@ -28,7 +28,7 @@ public class RunTime extends GenericController implements Serializable {
 
     private static final long serialVersionUID = 240L;
 
-    private final static String SECONDS = "RunTime.seconds"; //$NON-NLS-1$
+    private static final String SECONDS = "RunTime.seconds"; //$NON-NLS-1$
 
     private long startTime = 0;
 

@@ -49,7 +49,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     private static final String PARENT = "TransactionController.parent";// $NON-NLS-1$
 
-    private final static String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
+    private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
     
     private static final Logger log = LoggingManager.getLoggerForClass();
 

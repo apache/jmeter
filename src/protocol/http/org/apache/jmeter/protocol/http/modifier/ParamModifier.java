@@ -61,7 +61,7 @@ public class ParamModifier extends AbstractTestElement implements TestListener, 
     /**
      * The key used to find the ParamMask object in the HashMap.
      */
-    private final static String MASK = "ParamModifier.mask";
+    private static final String MASK = "ParamModifier.mask";
 
     /*
      * ------------------------------------------------------------------------

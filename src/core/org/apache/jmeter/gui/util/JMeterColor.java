@@ -23,11 +23,11 @@ import java.awt.Color;
 public class JMeterColor extends Color {
     private static final long serialVersionUID = 240L;
 
-    public final static Color dark_green = new JMeterColor(0F, .5F, 0F);
+    public static final Color dark_green = new JMeterColor(0F, .5F, 0F);
 
-    public final static Color LAVENDER = new JMeterColor(206F / 255F, 207F / 255F, 1F);
+    public static final Color LAVENDER = new JMeterColor(206F / 255F, 207F / 255F, 1F);
 
-    public final static Color purple = new JMeterColor(150 / 255F, 0, 150 / 255F);
+    public static final Color purple = new JMeterColor(150 / 255F, 0, 150 / 255F);
 
     public JMeterColor(float r, float g, float b) {
         super(r, g, b);

@@ -49,7 +49,7 @@ public class SwitchController extends GenericController implements Serializable 
     private static final long serialVersionUID = 240L;
 
     // Package access for use by Test code
-    final static String SWITCH_VALUE = "SwitchController.value"; //$NON-NLS-1$
+    static final String SWITCH_VALUE = "SwitchController.value"; //$NON-NLS-1$
 
     public SwitchController() {
         super();

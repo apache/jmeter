@@ -37,34 +37,34 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     private static final long serialVersionUID = 241L;
 
     // * Static int to signify the type of logical comparitor to assert
-    public final static int EQUAL = 1;
+    public static final int EQUAL = 1;
 
-    public final static int NOTEQUAL = 2;
+    public static final int NOTEQUAL = 2;
 
-    public final static int GREATERTHAN = 3;
+    public static final int GREATERTHAN = 3;
 
-    public final static int LESSTHAN = 4;
+    public static final int LESSTHAN = 4;
 
-    public final static int GREATERTHANEQUAL = 5;
+    public static final int GREATERTHANEQUAL = 5;
 
-    public final static int LESSTHANEQUAL = 6;
+    public static final int LESSTHANEQUAL = 6;
 
     /** Key for storing assertion-informations in the jmx-file. */
     private static final String SIZE_KEY = "SizeAssertion.size"; // $NON-NLS-1$
 
     private static final String OPERATOR_KEY = "SizeAssertion.operator"; // $NON-NLS-1$
     
-    private final static String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
+    private static final String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
 
-    private final static String RESPONSE_NETWORK_SIZE = "SizeAssertion.response_network_size"; // $NON-NLS-1$
+    private static final String RESPONSE_NETWORK_SIZE = "SizeAssertion.response_network_size"; // $NON-NLS-1$
 
-    private final static String RESPONSE_HEADERS = "SizeAssertion.response_headers"; // $NON-NLS-1$
+    private static final String RESPONSE_HEADERS = "SizeAssertion.response_headers"; // $NON-NLS-1$
 
-    private final static String RESPONSE_BODY = "SizeAssertion.response_data"; // $NON-NLS-1$
+    private static final String RESPONSE_BODY = "SizeAssertion.response_data"; // $NON-NLS-1$
 
-    private final static String RESPONSE_CODE = "SizeAssertion.response_code"; // $NON-NLS-1$
+    private static final String RESPONSE_CODE = "SizeAssertion.response_code"; // $NON-NLS-1$
 
-    private final static String RESPONSE_MESSAGE = "SizeAssertion.response_message"; // $NON-NLS-1$
+    private static final String RESPONSE_MESSAGE = "SizeAssertion.response_message"; // $NON-NLS-1$
 
     /**
      * Returns the result of the Assertion. 

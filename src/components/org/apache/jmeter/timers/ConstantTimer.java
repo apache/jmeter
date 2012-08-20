@@ -34,7 +34,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
 
     private static final long serialVersionUID = 240L;
 
-    public final static String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
+    public static final String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
 
     private long delay = 0;
 

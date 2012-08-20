@@ -48,42 +48,42 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     private static final long serialVersionUID = 240L;
 
-    private final static String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
+    private static final String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
 
     // Values for TEST_FIELD
     // N.B. we cannot change the text value as it is in test plans
-    private final static String SAMPLE_URL = "Assertion.sample_label"; // $NON-NLS-1$
+    private static final String SAMPLE_URL = "Assertion.sample_label"; // $NON-NLS-1$
 
-    private final static String RESPONSE_DATA = "Assertion.response_data"; // $NON-NLS-1$
+    private static final String RESPONSE_DATA = "Assertion.response_data"; // $NON-NLS-1$
 
-    private final static String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
+    private static final String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
 
-    private final static String RESPONSE_MESSAGE = "Assertion.response_message"; // $NON-NLS-1$
+    private static final String RESPONSE_MESSAGE = "Assertion.response_message"; // $NON-NLS-1$
 
-    private final static String RESPONSE_HEADERS = "Assertion.response_headers"; // $NON-NLS-1$
+    private static final String RESPONSE_HEADERS = "Assertion.response_headers"; // $NON-NLS-1$
 
-    private final static String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
+    private static final String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
 
-    private final static String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
+    private static final String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
 
-    private final static String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
+    private static final String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
 
     /*
      * Mask values for TEST_TYPE TODO: remove either MATCH or CONTAINS - they
      * are mutually exckusive
      */
-    private final static int MATCH = 1 << 0;
+    private static final int MATCH = 1 << 0;
 
-    private final static int CONTAINS = 1 << 1;
+    private static final int CONTAINS = 1 << 1;
 
-    private final static int NOT = 1 << 2;
+    private static final int NOT = 1 << 2;
 
-    private final static int EQUALS = 1 << 3;
+    private static final int EQUALS = 1 << 3;
 
-    private final static int SUBSTRING = 1 << 4;
+    private static final int SUBSTRING = 1 << 4;
 
     // Mask should contain all types (but not NOT)
-    private final static int TYPE_MASK = CONTAINS | EQUALS | MATCH | SUBSTRING;
+    private static final int TYPE_MASK = CONTAINS | EQUALS | MATCH | SUBSTRING;
 
     private static final int  EQUALS_SECTION_DIFF_LEN
             = JMeterUtils.getPropDefault("assertion.equals_section_diff_len", 100);

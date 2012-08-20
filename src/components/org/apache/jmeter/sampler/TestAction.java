@@ -50,20 +50,20 @@ public class TestAction extends AbstractSampler implements Interruptible {
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     // Actions
-    public final static int STOP = 0;
-    public final static int PAUSE = 1;
-    public final static int STOP_NOW = 2;
-    public final static int RESTART_NEXT_LOOP = 3;
+    public static final int STOP = 0;
+    public static final int PAUSE = 1;
+    public static final int STOP_NOW = 2;
+    public static final int RESTART_NEXT_LOOP = 3;
 
     // Action targets
-    public final static int THREAD = 0;
-    // public final static int THREAD_GROUP = 1;
-    public final static int TEST = 2;
+    public static final int THREAD = 0;
+    // public static final int THREAD_GROUP = 1;
+    public static final int TEST = 2;
 
     // Identifiers
-    private final static String TARGET = "ActionProcessor.target"; //$NON-NLS-1$
-    private final static String ACTION = "ActionProcessor.action"; //$NON-NLS-1$
-    private final static String DURATION = "ActionProcessor.duration"; //$NON-NLS-1$
+    private static final String TARGET = "ActionProcessor.target"; //$NON-NLS-1$
+    private static final String ACTION = "ActionProcessor.action"; //$NON-NLS-1$
+    private static final String DURATION = "ActionProcessor.duration"; //$NON-NLS-1$
 
     private volatile transient Thread pauseThread;
 

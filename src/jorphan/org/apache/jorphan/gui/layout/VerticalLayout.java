@@ -43,35 +43,35 @@ public class VerticalLayout implements LayoutManager, Serializable {
      * The horizontal alignment constant that designates centering. Also used to
      * designate center anchoring.
      */
-    public final static int CENTER = 0;
+    public static final int CENTER = 0;
 
     /**
      * The horizontal alignment constant that designates right justification.
      */
-    public final static int RIGHT = 1;
+    public static final int RIGHT = 1;
 
     /**
      * The horizontal alignment constant that designates left justification.
      */
-    public final static int LEFT = 2;
+    public static final int LEFT = 2;
 
     /**
      * The horizontal alignment constant that designates stretching the
      * component horizontally.
      */
-    public final static int BOTH = 3;
+    public static final int BOTH = 3;
 
     /**
      * The anchoring constant that designates anchoring to the top of the
      * display area.
      */
-    public final static int TOP = 1;
+    public static final int TOP = 1;
 
     /**
      * The anchoring constant that designates anchoring to the bottom of the
      * display area.
      */
-    public final static int BOTTOM = 2;
+    public static final int BOTTOM = 2;
 
     /** The vertical vgap between components...defaults to 5. */
     private int vgap;

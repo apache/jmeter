@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class LoopController extends GenericController implements Serializable {
 
-    private final static String LOOPS = "LoopController.loops"; // $NON-NLS-1$
+    private static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
     private static final long serialVersionUID = 232L;
 
@@ -47,7 +47,7 @@ public class LoopController extends GenericController implements Serializable {
      * Thread Group sets the value false, so nextIsNull() sets done, and the Thread Group will not be repeated.
      * However, it's not clear that a Thread Group could ever be repeated.
      */
-    private final static String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
+    private static final String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
 
     private transient int loopCount = 0;
 
