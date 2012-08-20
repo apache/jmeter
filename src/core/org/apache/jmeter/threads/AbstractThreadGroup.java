@@ -43,27 +43,27 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     private static final long serialVersionUID = 240L;
 
     /** Action to be taken when a Sampler error occurs */
-    public final static String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
+    public static final String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
 
     /** Continue, i.e. ignore sampler errors */
-    public final static String ON_SAMPLE_ERROR_CONTINUE = "continue";
+    public static final String ON_SAMPLE_ERROR_CONTINUE = "continue";
 
     /** Start next loop for current thread if sampler error occurs */
-    public final static String ON_SAMPLE_ERROR_START_NEXT_LOOP = "startnextloop";
+    public static final String ON_SAMPLE_ERROR_START_NEXT_LOOP = "startnextloop";
 
     /** Stop current thread if sampler error occurs */
-    public final static String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
+    public static final String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
 
     /** Stop test (all threads) if sampler error occurs */
-    public final static String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
+    public static final String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
 
     /** Stop test NOW (all threads) if sampler error occurs */
-    public final static String ON_SAMPLE_ERROR_STOPTEST_NOW = "stoptestnow";
+    public static final String ON_SAMPLE_ERROR_STOPTEST_NOW = "stoptestnow";
 
     /** Number of threads in the thread group */
-    public final static String NUM_THREADS = "ThreadGroup.num_threads";
+    public static final String NUM_THREADS = "ThreadGroup.num_threads";
 
-    public final static String MAIN_CONTROLLER = "ThreadGroup.main_controller";
+    public static final String MAIN_CONTROLLER = "ThreadGroup.main_controller";
 
     // @GuardedBy("this")
     private int numberOfThreads = 0; // Number of active threads in this group
