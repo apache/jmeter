@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.jmeter.config.Arguments;
@@ -31,6 +30,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -41,7 +41,7 @@ import org.apache.log.Logger;
  * information on writing Java code to be executed by this sampler.
  *
  */
-public class JavaSampler extends AbstractSampler implements TestListener {
+public class JavaSampler extends AbstractSampler implements TestListener, ThreadListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -76,19 +76,10 @@ public class JavaSampler extends AbstractSampler implements TestListener {
     private transient JavaSamplerContext context = null;
 
     /**
-     * Set used to register all active JavaSamplers. This is used so that the
-     * samplers can be notified when the test ends.
-     */
-    private static final Set<JavaSampler> allSamplers = new HashSet<JavaSampler>();
-
-    /**
      * Create a JavaSampler.
      */
     public JavaSampler() {
         setArguments(new Arguments());
-        synchronized (allSamplers) {
-            allSamplers.add(this);
-        }
     }
 
     /**
@@ -240,23 +231,9 @@ public class JavaSampler extends AbstractSampler implements TestListener {
         log.debug(whoAmI() + "\ttestStarted(" + host + ")");
     }
 
-    /**
-     * Method called at the end of the test. This is called only on one instance
-     * of JavaSampler. This method will loop through all of the other
-     * JavaSamplers which have been registered (automatically in the
-     * constructor) and notify them that the test has ended, allowing the
-     * JavaSamplerClients to cleanup.
-     */
+    /* Implements TestListener.testEnded() */
     public void testEnded() {
         log.debug(whoAmI() + "\ttestEnded");
-        synchronized (allSamplers) {
-            Iterator<JavaSampler> i = allSamplers.iterator();
-            while (i.hasNext()) {
-                JavaSampler sampler = i.next();
-                sampler.releaseJavaClient();
-                i.remove();
-            }
-        }
     }
 
     /* Implements TestListener.testEnded(String) */
@@ -299,5 +276,16 @@ public class JavaSampler extends AbstractSampler implements TestListener {
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+
+    public void threadStarted() {
+        // NOOP
+    }
+
+    /**
+     * Cleanup java client
+     */
+    public void threadFinished() {
+        releaseJavaClient();
     }
 }
