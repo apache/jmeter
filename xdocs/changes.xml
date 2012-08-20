@@ -113,6 +113,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <ul>
 <li><bugzilla>53365</bugzilla> - JSR223TestElement should cache ScriptEngineManager</li>
 <li><bugzilla>53520</bugzilla> - JSR223 Elements : Use Compilable interface to improve performances on File scripts</li>
+<li><bugzilla>53501</bugzilla> - Synchronization timer blocks test end.</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
