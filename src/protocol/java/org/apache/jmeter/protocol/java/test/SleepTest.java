@@ -91,9 +91,10 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      */
     @Override
     public void setupTest(JavaSamplerContext context) {
-        getLogger().debug(whoAmI() + "\tsetupTest()");
-        listParameters(context);
-
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(whoAmI() + "\tsetupTest()");
+            listParameters(context);
+        }
         sleepTime = context.getLongParameter("SleepTime", DEFAULT_SLEEP_TIME);
         sleepMask = context.getLongParameter("SleepMask", DEFAULT_SLEEP_MASK);
     }
@@ -169,8 +170,10 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      */
     @Override
     public void teardownTest(JavaSamplerContext context) {
-        getLogger().debug(whoAmI() + "\tteardownTest()");
-        listParameters(context);
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(whoAmI() + "\tteardownTest()");
+            listParameters(context);
+        }
     }
 
     /**
@@ -200,12 +203,10 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      *            the context which contains the initialization parameters.
      */
     private void listParameters(JavaSamplerContext context) {
-        if (getLogger().isDebugEnabled()) {
-            Iterator<String> argsIt = context.getParameterNamesIterator();
-            while (argsIt.hasNext()) {
-                String name = argsIt.next();
-                getLogger().debug(name + "=" + context.getParameter(name));
-            }
+        Iterator<String> argsIt = context.getParameterNamesIterator();
+        while (argsIt.hasNext()) {
+            String name = argsIt.next();
+            getLogger().debug(name + "=" + context.getParameter(name));
         }
     }
 
