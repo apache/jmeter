@@ -85,6 +85,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private final JMeterVariables threadVars;
 
+    // Note: this is only used to implement TestListener#testIterationStart
+    // Since this is a frequent event, it makes sense to create the list once rather than scanning each time
+    // The memory used will be released when the thread finishes
     private final Collection<TestListener> testListeners;
 
     private final ListenerNotifier notifier;
@@ -573,6 +576,8 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
+    // N.B. This is only called at the start and end of a thread, so there is not
+    // necessary to cache the search results, thus saving memory
     private static class ThreadListenerTraverser implements HashTreeTraverser {
         private boolean isStart = false;
 
