@@ -91,13 +91,13 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         new JLabeledTextField(JMeterUtils.getResString("jms_separator")); //$NON-NLS-1$
 
     //++ Do not change these strings; they are used in JMX files to record the button settings
-    public final static String RECEIVE_RSC = "jms_subscriber_receive"; // $NON-NLS-1$
+    public static final String RECEIVE_RSC = "jms_subscriber_receive"; // $NON-NLS-1$
 
-    public final static String ON_MESSAGE_RSC = "jms_subscriber_on_message"; // $NON-NLS-1$
+    public static final String ON_MESSAGE_RSC = "jms_subscriber_on_message"; // $NON-NLS-1$
     //--
 
     // Button group resources
-    private final static String[] CLIENT_ITEMS = { RECEIVE_RSC, ON_MESSAGE_RSC };
+    private static final String[] CLIENT_ITEMS = { RECEIVE_RSC, ON_MESSAGE_RSC };
 
     private final JLabeledRadioI18N clientChoice =
         new JLabeledRadioI18N("jms_client_type", CLIENT_ITEMS, RECEIVE_RSC); // $NON-NLS-1$
@@ -106,11 +106,11 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         new JCheckBox(JMeterUtils.getResString("jms_stop_between_samples"), true); // $NON-NLS-1$
     
     // These are the names of properties used to define the labels
-    private final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
+    private static final String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
 
-    private final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
+    private static final String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
     // Button group resources
-    private final static String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
+    private static final String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
 
     private final JLabeledRadioI18N destSetup =
         new JLabeledRadioI18N("jms_dest_setup", DEST_SETUP_ITEMS, DEST_SETUP_STATIC); // $NON-NLS-1$

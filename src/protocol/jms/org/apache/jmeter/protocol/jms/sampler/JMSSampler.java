@@ -84,9 +84,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private static final String XML_DATA = "HTTPSamper.xml_data"; // $NON-NLS-1$
 
-    private final static String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
+    private static final String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
 
-    private final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
+    private static final String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
 
     private static final String IS_NON_PERSISTENT = "JMSSampler.isNonPersistent"; // $NON-NLS-1$
 
