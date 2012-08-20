@@ -69,6 +69,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
@@ -110,9 +111,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
-    
-    private final Border MARGIN = new EmptyBorder(0, 5, 0, 5);
-    
+
     private Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10);
 
     private JTable myJTable;
@@ -727,13 +726,13 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         
         JPanel titleStylePane = new JPanel();
         titleStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
-        titleStylePane.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
+        titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
                 titleFontNameList));
         titleFontNameList.setSelectedIndex(0); // default: sans serif
-        titleStylePane.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
+        titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 titleFontSizeList));
         titleFontSizeList.setSelectedItem(StatGraphProperties.fontSize[6]); // default: 16
-        titleStylePane.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
+        titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 titleFontStyleList));
         titleFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.bold")); // default: bold
 
@@ -748,13 +747,13 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private JPanel createGraphFontValuePane() {       
         JPanel fontValueStylePane = new JPanel();
         fontValueStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        fontValueStylePane.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_value_font"), //$NON-NLS-1$
+        fontValueStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_value_font"), //$NON-NLS-1$
                 valueFontNameList));
         valueFontNameList.setSelectedIndex(0); // default: sans serif
-        fontValueStylePane.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
+        fontValueStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 valueFontSizeList));
         valueFontSizeList.setSelectedItem(StatGraphProperties.fontSize[2]); // default: 10
-        fontValueStylePane.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
+        fontValueStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 valueFontStyleList));
         valueFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal")); // default: normal //$NON-NLS-1$
 
@@ -819,30 +818,20 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_legend"))); // $NON-NLS-1$
 
-        legendPanel.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$
+        legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$
                 legendPlacementList));
         legendPlacementList.setSelectedItem(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom")); // default: bottom
-        legendPanel.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
+        legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
                 fontNameList));
         fontNameList.setSelectedIndex(0); // default: sans serif
-        legendPanel.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
+        legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 fontSizeList));
         fontSizeList.setSelectedItem(StatGraphProperties.fontSize[2]); // default: 10
-        legendPanel.add(createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
+        legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 fontStyleList));
         fontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal")); // default: normal
 
         return legendPanel;
-    }
-
-    private JComponent createLabelCombo(String label, JComboBox comboBox) {
-        JPanel labelCombo = new JPanel();
-        labelCombo.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        JLabel caption = new JLabel(label);//$NON-NLS-1$
-        caption.setBorder(MARGIN);
-        labelCombo.add(caption);
-        labelCombo.add(comboBox);
-        return labelCombo;
     }
 
     /**
