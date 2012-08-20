@@ -185,7 +185,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final List<Color> listColors = Colors.getColors();
 
-    private ArrayList<SampleResult> internalList = new ArrayList<SampleResult>();
+    private HashMap<Long, Long> internalMap = new HashMap<Long, Long>(); // internal list of all results
 
     public RespTimeGraphVisualizer() {
         init();
@@ -193,11 +193,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     public void add(final SampleResult sampleResult) {
         final String sampleLabel = sampleResult.getSampleLabel();
+        // Make a internal list of all results to allow reload data with filter or interval
         synchronized (lockInterval) {
-            // Internal light list to permit play with interval and label filter without a reading file results
-            SampleResult srTemp = new SampleResult(sampleResult.getStartTime(), sampleResult.getTime());
-            srTemp.setSampleLabel(sampleLabel);
-            internalList.add(srTemp);
+            internalMap.put(sampleResult.getStartTime(), sampleResult.getTime());
         }
 
         Matcher matcher = null;
@@ -351,7 +349,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     public void clearData() {
         synchronized (lock) {
-            internalList.clear();
+            internalMap.clear();
             seriesNames.clear();
             pList.clear();
             minStartTime = Integer.MAX_VALUE;
@@ -504,13 +502,14 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 FilePanel filePanel = (FilePanel) getFilePanel();
                 filePanel.actionPerformed(event);
             } else {
-                if (internalList.size() >= 2) {
+                // Reload data form internal list of results
+                if (internalMap.size() >= 2) {
                     synchronized (lockInterval) {
                         @SuppressWarnings("unchecked")
-                        ArrayList<SampleResult> tempList = (ArrayList<SampleResult>) internalList.clone();
+                        HashMap<Long, Long> tempMap = (HashMap<Long, Long>) internalMap.clone();
                         this.clearData();
-                        for (SampleResult sr : tempList) {
-                            this.add(sr);
+                        for (Long key : tempMap.keySet()) {
+                            this.add(new SampleResult(key, tempMap.get(key)));
                         }
                     }
                 }
