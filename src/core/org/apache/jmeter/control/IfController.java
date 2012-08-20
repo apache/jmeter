@@ -59,9 +59,9 @@ public class IfController extends GenericController implements Serializable {
 
     private static final long serialVersionUID = 240L;
 
-    private final static String CONDITION = "IfController.condition"; //$NON-NLS-1$
+    private static final String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
-    private final static String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
+    private static final String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
 
     private static final String USE_EXPRESSION = "IfController.useExpression"; //$NON-NLS-1$
 

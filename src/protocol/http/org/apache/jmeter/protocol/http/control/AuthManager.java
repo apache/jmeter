@@ -55,9 +55,9 @@ public class AuthManager extends ConfigTestElement implements Serializable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final static String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$
+    private static final String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$
 
-    private final static String[] COLUMN_RESOURCE_NAMES = {
+    private static final String[] COLUMN_RESOURCE_NAMES = {
         "auth_base_url", //$NON-NLS-1$
         "username",      //$NON-NLS-1$
         "password",      //$NON-NLS-1$
@@ -66,13 +66,13 @@ public class AuthManager extends ConfigTestElement implements Serializable {
         };
 
     // Column numbers - must agree with order above
-    public final static int COL_URL = 0;
-    public final static int COL_USERNAME = 1;
-    public final static int COL_PASSWORD = 2;
-    public final static int COL_DOMAIN = 3;
-    public final static int COL_REALM = 4;
+    public static final int COL_URL = 0;
+    public static final int COL_USERNAME = 1;
+    public static final int COL_PASSWORD = 2;
+    public static final int COL_DOMAIN = 3;
+    public static final int COL_REALM = 4;
 
-    private final static int COLUMN_COUNT = COLUMN_RESOURCE_NAMES.length;
+    private static final int COLUMN_COUNT = COLUMN_RESOURCE_NAMES.length;
 
     /**
      * Default Constructor.

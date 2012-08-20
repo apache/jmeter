@@ -30,7 +30,7 @@ import javax.script.ScriptEngineManager;
  */
 public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
 
-    private final static String[] LANGUAGE_TAGS;
+    private static final String[] LANGUAGE_TAGS;
 
     static {
         List<String> shortNames = new ArrayList<String>();

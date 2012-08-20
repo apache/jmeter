@@ -47,9 +47,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
     private VerticalPanel mainPanel;
 
-    private final static String THREAD_NAME = "Thread Field";
+    private static final String THREAD_NAME = "Thread Field";
 
-    private final static String RAMP_NAME = "Ramp Up Field";
+    private static final String RAMP_NAME = "Ramp Up Field";
 
     private JTextField threadInput;
 

@@ -204,7 +204,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     // @see mergeFileProperties
     // Must be private, as the file list needs special handling
-    private final static String FILE_ARGS = "HTTPsampler.Files"; // $NON-NLS-1$
+    private static final String FILE_ARGS = "HTTPsampler.Files"; // $NON-NLS-1$
     // MIMETYPE is kept for backward compatibility with old test plans
     private static final String MIMETYPE = "HTTPSampler.mimetype"; // $NON-NLS-1$
     // FILE_NAME is kept for backward compatibility with old test plans

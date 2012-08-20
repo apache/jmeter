@@ -63,7 +63,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private int lastPosition = LAST_POSITION_DEFAULT;
 
-    private final static Color HILIT_COLOR = Color.LIGHT_GRAY;
+    private static final Color HILIT_COLOR = Color.LIGHT_GRAY;
 
     private Highlighter selection;
 

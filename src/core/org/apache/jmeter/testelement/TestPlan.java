@@ -42,18 +42,18 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // does not appear to be needed
-//  private final static String THREAD_GROUPS = "TestPlan.thread_groups"; //$NON-NLS-1$
+//  private static final String THREAD_GROUPS = "TestPlan.thread_groups"; //$NON-NLS-1$
 
-    private final static String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
+    private static final String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
 
-    private final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables"; //$NON-NLS-1$
+    private static final String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables"; //$NON-NLS-1$
 
-    private final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
+    private static final String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
 
-    private final static String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
+    private static final String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
     private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
 
-    private final static String BASEDIR = "basedir";
+    private static final String BASEDIR = "basedir";
 
     private transient List<AbstractThreadGroup> threadGroups = new LinkedList<AbstractThreadGroup>();
 

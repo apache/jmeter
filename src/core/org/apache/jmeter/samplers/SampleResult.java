@@ -77,7 +77,7 @@ public class SampleResult implements Serializable {
      * @see #getDataType
      * @see #setDataType(java.lang.String)
      */
-    public final static String TEXT = "text"; // $NON-NLS-1$
+    public static final String TEXT = "text"; // $NON-NLS-1$
 
     /**
      * Data type value indicating that the response data is binary.
@@ -85,7 +85,7 @@ public class SampleResult implements Serializable {
      * @see #getDataType
      * @see #setDataType(java.lang.String)
      */
-    public final static String BINARY = "bin"; // $NON-NLS-1$
+    public static final String BINARY = "bin"; // $NON-NLS-1$
 
     /* empty arrays which can be returned instead of null */
     private static final byte[] EMPTY_BA = new byte[0];

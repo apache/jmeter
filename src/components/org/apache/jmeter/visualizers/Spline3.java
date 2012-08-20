@@ -93,9 +93,9 @@ public class Spline3 {
 
     protected int _n; // number of non extreme nodes (_m-2)
 
-    final static protected float DEFAULT_PRECISION = (float) 1E-1;
+    static final protected float DEFAULT_PRECISION = (float) 1E-1;
 
-    final static protected int DEFAULT_MAX_ITERATIONS = 100;
+    static final protected int DEFAULT_MAX_ITERATIONS = 100;
 
     protected float _minPrecision = DEFAULT_PRECISION;
 
