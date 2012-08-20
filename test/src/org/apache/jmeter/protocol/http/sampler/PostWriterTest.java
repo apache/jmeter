@@ -47,8 +47,8 @@ public class PostWriterTest extends TestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String UTF_8 = "UTF-8";
-    private final static String HTTP_ENCODING = "ISO-8859-1";
-    private final static byte[] CRLF = { 0x0d, 0x0A };
+    private static final String HTTP_ENCODING = "ISO-8859-1";
+    private static final byte[] CRLF = { 0x0d, 0x0A };
     private static byte[] TEST_FILE_CONTENT;
     
     private StubURLConnection connection;

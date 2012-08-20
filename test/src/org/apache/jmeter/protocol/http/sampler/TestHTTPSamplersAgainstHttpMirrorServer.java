@@ -56,12 +56,12 @@ import junit.extensions.TestSetup;
  * started when the unit tests are executed.
  */
 public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
-    private final static int HTTP_SAMPLER = 0;
-    private final static int HTTP_SAMPLER2 = 1;
-    private final static int HTTP_SAMPLER3 = 2;
+    private static final int HTTP_SAMPLER = 0;
+    private static final int HTTP_SAMPLER2 = 1;
+    private static final int HTTP_SAMPLER3 = 2;
     
     /** The encodings used for http headers and control information */
-    private final static String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
+    private static final String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
     private static final String US_ASCII = "US-ASCII"; // $NON-NLS-1$
 
     private static final byte[] CRLF = { 0x0d, 0x0A };
