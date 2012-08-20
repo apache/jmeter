@@ -24,6 +24,8 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * The <code>SleepTest</code> class is a simple example class for a JMeter
@@ -44,6 +46,9 @@ import org.apache.jmeter.samplers.SampleResult;
  * @version $Revision$
  */
 public class SleepTest extends AbstractJavaSamplerClient implements Serializable {
+
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
+
     private static final long serialVersionUID = 240L;
 
     /**
@@ -74,7 +79,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      * of the client class.
      */
     public SleepTest() {
-        getLogger().debug(whoAmI() + "\tConstruct");
+        LOG.debug(whoAmI() + "\tConstruct");
     }
 
     /**
@@ -91,8 +96,8 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      */
     @Override
     public void setupTest(JavaSamplerContext context) {
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug(whoAmI() + "\tsetupTest()");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(whoAmI() + "\tsetupTest()");
             listParameters(context);
         }
         sleepTime = context.getLongParameter("SleepTime", DEFAULT_SLEEP_TIME);
@@ -143,17 +148,17 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
 
             results.setSuccessful(true);
         } catch (InterruptedException e) {
-            getLogger().warn("SleepTest: interrupted.");
+            LOG.warn("SleepTest: interrupted.");
             results.setSuccessful(true);
         } catch (Exception e) {
-            getLogger().error("SleepTest: error during sample", e);
+            LOG.error("SleepTest: error during sample", e);
             results.setSuccessful(false);
         } finally {
             results.sampleEnd();
         }
 
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug(whoAmI() + "\trunTest()" + "\tTime:\t" + results.getTime());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(whoAmI() + "\trunTest()" + "\tTime:\t" + results.getTime());
             listParameters(context);
         }
 
@@ -170,8 +175,8 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      */
     @Override
     public void teardownTest(JavaSamplerContext context) {
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug(whoAmI() + "\tteardownTest()");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(whoAmI() + "\tteardownTest()");
             listParameters(context);
         }
     }
@@ -206,7 +211,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
         Iterator<String> argsIt = context.getParameterNamesIterator();
         while (argsIt.hasNext()) {
             String name = argsIt.next();
-            getLogger().debug(name + "=" + context.getParameter(name));
+            LOG.debug(name + "=" + context.getParameter(name));
         }
     }
 
