@@ -190,8 +190,10 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
      */
     @Override
     public void setupTest(JavaSamplerContext context) {
-        getLogger().debug(whoAmI() + "\tsetupTest()");
-        listParameters(context);
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(whoAmI() + "\tsetupTest()");
+            listParameters(context);
+        }
     }
 
     /**
@@ -323,23 +325,24 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
      */
     @Override
     public void teardownTest(JavaSamplerContext context) {
-        getLogger().debug(whoAmI() + "\tteardownTest()");
-        listParameters(context);
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(whoAmI() + "\tteardownTest()");
+            listParameters(context);
+        }
     }
 
     /**
      * Dump a list of the parameters in this context to the debug log.
+     * Should only be called if debug is enabled.
      *
      * @param context
      *            the context which contains the initialization parameters.
      */
     private void listParameters(JavaSamplerContext context) {
-        if (getLogger().isDebugEnabled()) {
-            Iterator<String> argsIt = context.getParameterNamesIterator();
-            while (argsIt.hasNext()) {
-                String name = argsIt.next();
-                getLogger().debug(name + "=" + context.getParameter(name));
-            }
+        Iterator<String> argsIt = context.getParameterNamesIterator();
+        while (argsIt.hasNext()) {
+            String name = argsIt.next();
+            getLogger().debug(name + "=" + context.getParameter(name));
         }
     }
 
