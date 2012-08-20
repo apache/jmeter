@@ -265,13 +265,17 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     @Override
     public void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
-        log.info("Starting thread group number "+groupCount);
         running = true;
         int numThreads = getNumThreads();       
         int rampUp = getRampUp();
         float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
 
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
+        log.info("Starting thread group number " + groupCount
+                + " threads " + numThreads
+                + " ramp-up " + rampUp
+                + " perThread " + perThreadDelay
+                + " delayedStart=" + delayedStartup);
         if (delayedStartup) {
             threadStarter = new Thread(new ThreadStarter(groupCount, notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
             threadStarter.setDaemon(true);
