@@ -53,6 +53,12 @@ import org.apache.log.Logger;
 public class WSDLHelper {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final String WSDL_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/"; //$NON-NLS-1$
+
+    private static final String SOAP11_BINDING_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/soap/"; //$NON-NLS-1$
+    
+    private static final String SOAP12_BINDING_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/soap12/"; //$NON-NLS-1$
+
     private static int GET_WDSL_TIMEOUT = 5000; // timeout to retrieve wsdl when server not response
     
     /**
@@ -134,30 +140,20 @@ public class WSDLHelper {
      */
     public String getBinding() {
         try {
-            NodeList services = this.WSDLDOC.getElementsByTagName("service");
-            if (services.getLength() == 0) {
-                services = this.WSDLDOC.getElementsByTagName("wsdl:service");
-            }
+            NodeList services = this.WSDLDOC.getElementsByTagNameNS(WSDL_NAMESPACE, "service");
             // the document should only have one service node
             // if it doesn't it may not work!
             Element node = (Element) services.item(0);
-            NodeList ports = node.getElementsByTagName("port");
-            if (ports.getLength() == 0) {
-                ports = node.getElementsByTagName("wsdl:port");
-            }
-            
+            NodeList ports = node.getElementsByTagNameNS(WSDL_NAMESPACE, "port");            
             if(ports.getLength()>0) {
                 Element pnode = (Element) ports.item(0);
                 // NOTUSED String portname = pnode.getAttribute("name");
                 // used to check binding, but now it doesn't. it was
                 // failing when wsdl did not using binding as expected
-                NodeList servlist = pnode.getElementsByTagName("soap:address");
-                // check wsdlsoap
+                NodeList servlist = pnode.getElementsByTagNameNS(SOAP11_BINDING_NAMESPACE, "address");
+                // check soap12
                 if (servlist.getLength() == 0) {
-                    servlist = pnode.getElementsByTagName("wsdlsoap:address");
-                }
-                if (servlist.getLength() == 0) {
-                    servlist = pnode.getElementsByTagName("SOAP:address");
+                    servlist = pnode.getElementsByTagNameNS(SOAP12_BINDING_NAMESPACE, "address");
                 }
                 Element addr = (Element) servlist.item(0);
                 this.SOAPBINDING = addr.getAttribute("location");
@@ -216,6 +212,7 @@ public class WSDLHelper {
     protected void buildDocument() throws ParserConfigurationException, IOException, SAXException {
         try {
             DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+            dbfactory.setNamespaceAware(true);
             DocumentBuilder docbuild = dbfactory.newDocumentBuilder();
             WSDLDOC = docbuild.parse(CONN.getInputStream());
         } catch (ParserConfigurationException exception) {
@@ -256,15 +253,9 @@ public class WSDLHelper {
             // get the node
             Node act = (Node) SOAPOPS[idx];
             // get the soap:operation
-            NodeList opers = ((Element) act).getElementsByTagName("soap:operation");
+            NodeList opers = ((Element) act).getElementsByTagNameNS(SOAP11_BINDING_NAMESPACE, "operation");
             if (opers.getLength() == 0) {
-                opers = ((Element) act).getElementsByTagName("wsdlsoap:operation");
-            }
-            if (opers.getLength() == 0) {
-                opers = ((Element) act).getElementsByTagName("wsdl:operation");
-            }
-            if (opers.getLength() == 0) {
-                opers = ((Element) act).getElementsByTagName("operation");
+                opers = ((Element) act).getElementsByTagNameNS(SOAP12_BINDING_NAMESPACE, "operation");
             }
 
             // there should only be one soap:operation node per operation
@@ -307,21 +298,13 @@ public class WSDLHelper {
      */
     public Object[] getSOAPBindings() {
         ArrayList<Element> list = new ArrayList<Element>();
-        NodeList bindings = WSDLDOC.getElementsByTagName("binding");
-        String soapBind = "soap:binding";
-        if (bindings.getLength() == 0) {
-            bindings = WSDLDOC.getElementsByTagName("wsdl:binding");
-        }
-        if (WSDLDOC.getElementsByTagName(soapBind).getLength() == 0) {
-            soapBind = "wsdlsoap:binding";
-        }
-        if (WSDLDOC.getElementsByTagName(soapBind).getLength() == 0) {
-            soapBind = "SOAP:binding";
-        }
-
+        NodeList bindings = WSDLDOC.getElementsByTagNameNS(WSDL_NAMESPACE,"binding");
         for (int idx = 0; idx < bindings.getLength(); idx++) {
             Element nd = (Element) bindings.item(idx);
-            NodeList slist = nd.getElementsByTagName(soapBind);
+            NodeList slist = nd.getElementsByTagNameNS(SOAP11_BINDING_NAMESPACE,"binding");
+            if(slist.getLength()==0) {
+                slist = nd.getElementsByTagNameNS(SOAP12_BINDING_NAMESPACE,"binding");
+            }
             if (slist.getLength() > 0) {
                 nd.getAttribute("name");
                 list.add(nd);
@@ -355,28 +338,17 @@ public class WSDLHelper {
         // first we iterate through the bindings
         for (int idx = 0; idx < res.length; idx++) {
             Element one = (Element) res[idx];
-            NodeList opnodes = one.getElementsByTagName("operation");
-            String soapOp = "soap:operation";
-            if (opnodes.getLength() == 0) {
-                opnodes = one.getElementsByTagName("wsdl:operation");
-            }
-            if (one.getElementsByTagName(soapOp).getLength() == 0) {
-                soapOp = "wsdlsoap:operation";
-            }
+            NodeList opnodes = one.getElementsByTagNameNS(WSDL_NAMESPACE, "operation");
             // now we iterate through the operations
             for (int idz = 0; idz < opnodes.getLength(); idz++) {
                 // if the first child is soap:operation
                 // we add it to the array
                 Element child = (Element) opnodes.item(idz);
-
-                // TODO - the following commented code looks wrong - it does the same in both cases
-//                NodeList soapnode = child.getElementsByTagName(soapOp);
-//                if (soapnode.getLength() > 0) {
-//                    ops.add(child);
-//                } else {
-//                    ops.add(child);
-//                }
-                ops.add(child);
+                int numberOfSoapOperationNodes = child.getElementsByTagNameNS(SOAP11_BINDING_NAMESPACE, "operation").getLength()
+                        + child.getElementsByTagNameNS(SOAP12_BINDING_NAMESPACE, "operation").getLength();
+                if (numberOfSoapOperationNodes>0) {
+                    ops.add(child);
+                }
             }
         }
         return ops.toArray();
@@ -407,6 +379,8 @@ public class WSDLHelper {
             WSDLHelper help =
             // new WSDLHelper("http://localhost/WSTest/WSTest.asmx?WSDL");
             // new WSDLHelper("http://localhost/AxisWSDL.xml");
+            //new WSDLHelper("http://localhost:8080/WSMyUpper.wsdl");
+            //new WSDLHelper("http://localhost:8080/test.wsdl");
             new WSDLHelper("http://localhost:8080/ServiceGateway.wsdl");
             // new WSDLHelper("http://services.bio.ifi.lmu.de:1046/prothesaurus/services/BiologicalNameService?wsdl");
             long start = System.currentTimeMillis();
