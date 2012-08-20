@@ -43,8 +43,8 @@ public class TestXPathExtractor extends TestCase {
 
         private JMeterContext jmctx;
 
-        private final static String VAL_NAME = "value";
-        private final static String VAL_NAME_NR = "value_matchNr";
+        private static final String VAL_NAME = "value";
+        private static final String VAL_NAME_NR = "value_matchNr";
         @Override
         public void setUp() throws UnsupportedEncodingException {
             jmctx = JMeterContextService.getContext();
