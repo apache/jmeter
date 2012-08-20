@@ -42,12 +42,12 @@ public class SecuritySettingsPanel extends JPanel{
 
     //++JMX attribute names - do not change the values!
     // These were moved from SMTPSampler, which is why the prefix is still SMTSampler
-    public final static String USE_SSL              = "SMTPSampler.useSSL"; // $NON-NLS-1$
-    public final static String USE_STARTTLS         = "SMTPSampler.useStartTLS"; // $NON-NLS-1$
-    public final static String SSL_TRUST_ALL_CERTS  = "SMTPSampler.trustAllCerts"; // $NON-NLS-1$
-    public final static String ENFORCE_STARTTLS     = "SMTPSampler.enforceStartTLS"; // $NON-NLS-1$
-    public final static String USE_LOCAL_TRUSTSTORE = "SMTPSampler.useLocalTrustStore"; // $NON-NLS-1$
-    public final static String TRUSTSTORE_TO_USE    = "SMTPSampler.trustStoreToUse"; // $NON-NLS-1$
+    public static final String USE_SSL              = "SMTPSampler.useSSL"; // $NON-NLS-1$
+    public static final String USE_STARTTLS         = "SMTPSampler.useStartTLS"; // $NON-NLS-1$
+    public static final String SSL_TRUST_ALL_CERTS  = "SMTPSampler.trustAllCerts"; // $NON-NLS-1$
+    public static final String ENFORCE_STARTTLS     = "SMTPSampler.enforceStartTLS"; // $NON-NLS-1$
+    public static final String USE_LOCAL_TRUSTSTORE = "SMTPSampler.useLocalTrustStore"; // $NON-NLS-1$
+    public static final String TRUSTSTORE_TO_USE    = "SMTPSampler.trustStoreToUse"; // $NON-NLS-1$
     //--JMX attribute names
 
     private ButtonGroup bgSecuritySettings;

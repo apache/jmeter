@@ -61,8 +61,8 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 
     private static final long serialVersionUID = 240L;
 
-    // private final static String ROOTDN = "rootDn";
-    // private final static String TEST = "tesT";
+    // private static final String ROOTDN = "rootDn";
+    // private static final String TEST = "tesT";
     // private static String testValue="NNNN";
 
     private JTextField rootdn = new JTextField(20);

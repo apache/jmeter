@@ -104,11 +104,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private JCheckBox useNonPersistentDelivery;
 
     // These are the names of properties used to define the labels
-    private final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
+    private static final String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
 
-    private final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
+    private static final String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
     // Button group resources
-    private final static String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
+    private static final String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
 
     private final JLabeledRadioI18N destSetup =
         new JLabeledRadioI18N("jms_dest_setup", DEST_SETUP_ITEMS, DEST_SETUP_STATIC); // $NON-NLS-1$

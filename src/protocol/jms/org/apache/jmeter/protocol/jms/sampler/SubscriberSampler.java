@@ -428,7 +428,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
     
     // This was the old value that was checked for
-    private final static String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
+    private static final String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
 
     public boolean isStopBetweenSamples() {
         return getPropertyAsBoolean(STOP_BETWEEN, false);
