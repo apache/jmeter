@@ -160,7 +160,7 @@ public class JavaSampler extends AbstractSampler implements TestListener {
                                                         // to test element name
         context = new JavaSamplerContext(args);
         if (javaClient == null) {
-            log.debug(whoAmI() + "Creating Java Client");
+            log.debug(whoAmI() + "\tCreating Java Client");
             createJavaClient();
             javaClient.setupTest(context);
         }
