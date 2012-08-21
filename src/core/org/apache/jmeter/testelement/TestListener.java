@@ -18,13 +18,98 @@
 
 package org.apache.jmeter.testelement;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+
 /**
  * TestListener interface is used for methods that are called at different
  * stages of each test.
  *
- * This interface is kept for compatibility; users should implement one of
- * the more specific interfaces.
  */
-public interface TestListener extends TestIterationListener, TestEventListener {
+public interface TestListener {
+    /**
+     * <p>
+     * Called just before the start of the test from the main engine thread.
+     *
+     * This is before the test elements are cloned.
+     *
+     * Note that not all the test
+     * variables will have been set up at this point.
+     * </p>
+     *
+     * <p>
+     * <b>
+     * N.B. testStarted() and testEnded() are called from different threads.
+     * </b>
+     * </p>
+     * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
+     *
+     */
+    public void testStarted();
 
+    /**
+     * <p>
+     * Called just before the start of the test from the main engine thread.
+     *
+     * This is before the test elements are cloned.
+     *
+     * Note that not all the test
+     * variables will have been set up at this point.
+     * </p>
+     *
+     * <p>
+     * <b>
+     * N.B. testStarted() and testEnded() are called from different threads.
+     * </b>
+     * </p>
+     * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
+     * @param host name of host
+     */
+    public void testStarted(String host);
+
+    /**
+     * <p>
+     * Called once for all threads after the end of a test.
+     *
+     * This will use the same element instances as at the start of the test.
+     * </p>
+     *
+     * <p>
+     * <b>
+     * N.B. testStarted() and testEnded() are called from different threads.
+     * </b>
+     * </p>
+     * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
+     *
+     */
+    public void testEnded();
+
+    /**
+     * <p>
+     * Called once for all threads after the end of a test.
+     *
+     * This will use the same element instances as at the start of the test.
+     * </p>
+     *
+     * <p>
+     * <b>
+     * N.B. testStarted() and testEnded() are called from different threads.
+     * </b>
+     * </p>
+     * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
+     * @param host name of host
+     *
+     */
+
+    public void testEnded(String host);
+
+    /**
+     * Each time through a Thread Group's test script, an iteration event is
+     * fired for each thread.
+     *
+     * This will be after the test elements have been cloned, so in general
+     * the instance will not be the same as the ones the start/end methods call.
+     *
+     * @param event
+     */
+    public void testIterationStart(LoopIterationEvent event);
 }
