@@ -49,13 +49,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.util.ReportMenuBar;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.tree.ReportCellRenderer;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
-import org.apache.jmeter.samplers.Remoteable;
-import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
@@ -66,7 +63,7 @@ import org.apache.log.Logger;
  * but with changes for the report gui.
  *
  */
-public class ReportMainFrame extends JFrame implements TestListener, Remoteable {
+public class ReportMainFrame extends JFrame {
 
     private static final long serialVersionUID = 240L;
 
@@ -261,53 +258,6 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 
     public JTree getTree() {
         return this.tree;
-    }
-
-    // TestListener implementation
-
-    /**
-     * Not sure if this should be in the ReportMainFrame, since the
-     * report component doesn't really test, it generates reports. for
-     * now, I will use it to trigger reporting. Later we can refactor
-     * MainFrame and create an abstract base class.
-     */
-    public void testStarted() {
-
-        // super.testStarted();
-    }
-
-    /**
-     * Not sure if this should be in the ReportMainFrame, since the
-     * report component doesn't really test, it generates reports. for
-     * now, I will use it to trigger reporting. Later we can refactor
-     * MainFrame and create an abstract base class.
-     */
-    public void testStarted(String host) {
-        // super.testStarted(host);
-    }
-
-    /**
-     * Not sure if this should be in the ReportMainFrame, since the
-     * report component doesn't really test, it generates reports. for
-     * now, I will use it to trigger reporting. Later we can refactor
-     * MainFrame and create an abstract base class.
-     */
-    public void testEnded() {
-        // super.testEnded();
-    }
-
-    /**
-     * Not sure if this should be in the ReportMainFrame, since the
-     * report component doesn't really test, it generates reports. for
-     * now, I will use it to trigger reporting. Later we can refactor
-     * MainFrame and create an abstract base class.
-     */
-    public void testEnded(String host) {
-        // super.testEnded(host);
-    }
-
-    /* Implements TestListener#testIterationStart(LoopIterationEvent) */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 
     /**
