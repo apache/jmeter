@@ -88,7 +88,7 @@ public class JMeterThread implements Runnable, Interruptible {
     // Note: this is only used to implement TestListener#testIterationStart
     // Since this is a frequent event, it makes sense to create the list once rather than scanning each time
     // The memory used will be released when the thread finishes
-    private final Collection<TestListener> testListeners;
+    private final Collection<TestListener> testIterationStartListeners;
 
     private final ListenerNotifier notifier;
 
@@ -139,9 +139,9 @@ public class JMeterThread implements Runnable, Interruptible {
         testTree = test;
         compiler = new TestCompiler(testTree, threadVars);
         controller = (Controller) testTree.getArray()[0];
-        SearchByClass<TestListener> threadListenerSearcher = new SearchByClass<TestListener>(TestListener.class);
+        SearchByClass<TestListener> threadListenerSearcher = new SearchByClass<TestListener>(TestListener.class); // TL - IS
         test.traverse(threadListenerSearcher);
-        testListeners = threadListenerSearcher.getSearchResults();
+        testIterationStartListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
         running = true;
     }
@@ -760,7 +760,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     void notifyTestListeners() {
         threadVars.incIteration();
-        for (TestListener listener : testListeners) {
+        for (TestListener listener : testIterationStartListeners) {
             if (listener instanceof TestElement) {
                 listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
                 ((TestElement) listener).recoverRunningVersion();
