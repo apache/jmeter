@@ -924,7 +924,7 @@ Tomcat, Resin, Weblogic, and SunOne. Common log format looks
 like this:</p>
 <p>127.0.0.1 - - [21/Oct/2003:05:37:21 -0500] "GET /index.jsp?%2Findex.jsp= HTTP/1.1" 200 8343</p>
 <note>The current implementation of the parser only looks at the text within the quotes that contains one of the HTTP protocol methods (GET, PUT, POST, DELETE...).
-Everything else is stripped out and igored. For example, the response code is completely
+Everything else is stripped out and ignored. For example, the response code is completely
 ignored by the parser. </note>
 <p>For the future, it might be nice to filter out entries that
 do not have a response code of 200. Extending the sampler should be fairly simple. There
