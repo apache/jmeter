@@ -923,7 +923,7 @@ common log format can use the AccessLogSampler. Server that use common log forma
 Tomcat, Resin, Weblogic, and SunOne. Common log format looks
 like this:</p>
 <p>127.0.0.1 - - [21/Oct/2003:05:37:21 -0500] "GET /index.jsp?%2Findex.jsp= HTTP/1.1" 200 8343</p>
-<note>The current implementaion of the parser only looks at the text within the quotes that contains one of the HTTP protocol methods (GET, PUT, POST, DELETE...).
+<note>The current implementation of the parser only looks at the text within the quotes that contains one of the HTTP protocol methods (GET, PUT, POST, DELETE...).
 Everything else is stripped out and igored. For example, the response code is completely
 ignored by the parser. </note>
 <p>For the future, it might be nice to filter out entries that
@@ -1174,7 +1174,9 @@ Cache size is controlled by the following jmeter property (jmeter.properties):
 For details, see <complink name="BSF Sampler"/>.
 </p>
 <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
-<note></note>
+<note>
+Since JMeter 2.8, JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports this feature, this enables great performance enhancements.
+</note>
 </description>
 </component>
 
