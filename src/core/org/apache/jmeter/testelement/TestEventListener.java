@@ -19,12 +19,9 @@
 package org.apache.jmeter.testelement;
 
 /**
- * TestListener interface is used for methods that are called at different
- * stages of each test.
- *
- * This interface is kept for compatibility; users should implement one of
- * the more specific interfaces.
+ * TestEventListener interface is used for methods that are called at
+ * the start and end of a test
  */
-public interface TestListener extends TestIterationListener, TestEventListener {
+public interface TestEventListener extends TestStartListener, TestEndListener {
 
 }
