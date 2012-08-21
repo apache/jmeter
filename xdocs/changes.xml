@@ -140,6 +140,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <li><bugzilla>53716</bugzilla> - Small improvements in aggregate graph: legend at left or right is now on 1 column (instead of 1 large line), no border to the reference's square color, reduce width on some fields</li>
 <li><bugzilla>53718</bugzilla> - Add a new visualizer to draw a line graph showing the evolution of response time for a test</li>
 <li><bugzilla>53738</bugzilla> - Keep track of number of threads started and finished</li>
+<li><bugzilla>53753</bugzilla> -  Summariser: no point displaying fractional time in most cases</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
