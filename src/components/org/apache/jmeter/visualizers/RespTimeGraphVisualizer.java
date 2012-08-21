@@ -37,7 +37,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -89,9 +88,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
      */
     private final transient Object lockInterval = new Object();
 
-    private static final String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
+    private static final String Y_AXIS_LABEL = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
-    private static final String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms"); //$NON-NLS-1$
+    private static final String Y_AXIS_TITLE = JMeterUtils.getResString("aggregate_graph_ms"); //$NON-NLS-1$
 
     private RespTimeGraphChart graphPanel = null;
 
@@ -229,8 +228,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                             }
                         }
                         // List of value by sampler
-                        if (pList.containsKey(sampleLabel)) {
-                            Map<Integer, Long> subList = pList.get(sampleLabel);
+                        Map<Integer, Long> subList = pList.get(sampleLabel);
+                        if (subList != null) {
                             long respTime = sampleResult.getTime();
                             Long value = subList.get(startTimeInterval);
                             if (value!=null) {
@@ -271,8 +270,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         graphPanel.setTitle(graphTitle.getText());
         graphPanel.setMaxYAxisScale(maxYAxisScale);
 
-        graphPanel.setYAxisLabels(this.yAxisLabel);
-        graphPanel.setYAxisTitle(this.yAxisTitle);
+        graphPanel.setYAxisLabels(Y_AXIS_LABEL);
+        graphPanel.setYAxisTitle(Y_AXIS_TITLE);
         graphPanel.setXAxisLabels(getXAxisLabels());
         graphPanel.setLegendLabels(getLegendLabels());
         graphPanel.setColor(getLinesColors());
@@ -308,10 +307,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         double nanLast = 0;
         double nanBegin = 0;
         List<Double> nanList = new ArrayList<Double>();
-        Set<String> pointsKeys = pList.keySet();
         int s = 0;
-        for (String pointKey : pointsKeys) {
-            Map<Integer, Long> subList = pList.get(pointKey);
+        for (Map.Entry<String, Map<Integer, Long>> pointEntry : pList.entrySet()) {
+            Map<Integer, Long> subList = pointEntry.getValue();
 
             int idx = 0;
             while (idx < durationTest) {
@@ -442,8 +440,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private String[] getLegendLabels() {
         String[] legends = new String[seriesNames.size()];
         int i = 0;
-        for (String key : seriesNames.keySet()) {
-            RespTimeGraphLineBean val = seriesNames.get(key);
+        for (Map.Entry<String, RespTimeGraphLineBean> entry : seriesNames.entrySet()) {
+            RespTimeGraphLineBean val = entry.getValue();
             legends[i] = val.getLabel();
             i++;
         }
@@ -453,8 +451,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private Color[] getLinesColors() {
         Color[] linesColors = new Color[seriesNames.size()];
         int i = 0;
-        for (String key : seriesNames.keySet()) {
-            RespTimeGraphLineBean val = seriesNames.get(key);
+        for (Map.Entry<String, RespTimeGraphLineBean> entry : seriesNames.entrySet()) {
+            RespTimeGraphLineBean val = entry.getValue();
             linesColors[i] = val.getLineColor();
             i++;
         }
