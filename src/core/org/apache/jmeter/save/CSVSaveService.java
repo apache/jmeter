@@ -185,9 +185,8 @@ public final class CSVSaveService {
      * @throws JMeterError
      */
     private static SampleEvent makeResultFromDelimitedString(
-            final String[] parts, final SampleSaveConfiguration saveConfig, // may
-                                                                            // be
-                                                                            // updated
+            final String[] parts, 
+            final SampleSaveConfiguration saveConfig, // may be updated
             final long lineNumber, DateFormat dateFormat) {
 
         SampleResult result = null;
