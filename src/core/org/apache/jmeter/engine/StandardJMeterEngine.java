@@ -99,8 +99,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     private HashTree test;
 
-    private volatile SearchByClass<TestListener> testListenersSave;
-
     private final String host;
 
     // The list of current thread groups; may be setUp, main, or tearDown.
@@ -314,8 +312,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         testListeners.getSearchResults().addAll(testList);
         testList.clear(); // no longer needed
 
-        testListenersSave = testListeners;
-
         if (!startListenersLater ) { notifyTestListenersOfStart(testListeners); }
         test.traverse(new TurnElementsOn());
         if (startListenersLater) { notifyTestListenersOfStart(testListeners); }
@@ -424,7 +420,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             waitThreadsStopped(); // wait for Post threads to stop
         }
 
-        notifyTestListenersOfEnd(testListenersSave);
+        notifyTestListenersOfEnd(testListeners);
     }
 
     /**
