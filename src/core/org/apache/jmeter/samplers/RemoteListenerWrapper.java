@@ -130,6 +130,9 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
      * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
+        // Not implemented, probably because of high overheads
+        // At present there are no Remoteable classes that use the method
+        // so RemoteSampleListener does not implement it either
     }
 
 }
