@@ -161,6 +161,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <li><bugzilla>53418</bugzilla> - New Option "Delay thread creation until needed" that will create and start threads when needed instead of creating them on Test startup</li>
 <li><bugzilla>42245</bugzilla> - Show clear passwords in HTTP Authorization Manager</li>
 <li><bugzilla>53616</bugzilla> - Display 'Apache JMeter' title in app title bar in Gnome 3</li>
+<li><bugzilla>53759</bugzilla> - ClientJMeterEngine perfoms unnecessary traverse using SearchByClass(TestListener)</li>
 </ul>
 
 <h2>Non-functional changes</h2>

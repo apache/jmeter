@@ -28,11 +28,9 @@ import java.rmi.server.RemoteObject;
 import java.util.Properties;
 
 import org.apache.jmeter.services.FileServer;
-import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -104,14 +102,12 @@ public class ClientJMeterEngine implements JMeterEngine {
 
     public void runTest() throws JMeterEngineException {
         log.info("running clientengine run method");
-        SearchByClass<TestListener> testListeners = new SearchByClass<TestListener>(TestListener.class);
         ConvertListeners sampleListeners = new ConvertListeners();
         HashTree testTree = test;
         PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
         synchronized(testTree) {
             testTree.traverse(compiler);
             testTree.traverse(new TurnElementsOn());
-            testTree.traverse(testListeners);
             testTree.traverse(sampleListeners);
         }
 
