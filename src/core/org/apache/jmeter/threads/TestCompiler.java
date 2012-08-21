@@ -54,7 +54,14 @@ import org.apache.log.Logger;
  * </ul>
  */
 public class TestCompiler implements HashTreeTraverser {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
+
+    /*
+     * This set keeps track of which ObjectPairs have been seen.
+     * Its purpose is not entirely clear (please document if you know!) but it is needed,..
+     */
+    private static final Set<ObjectPair> PAIRING = new HashSet<ObjectPair>();
 
     private final LinkedList<TestElement> stack = new LinkedList<TestElement>();
 
@@ -64,14 +71,6 @@ public class TestCompiler implements HashTreeTraverser {
         new HashMap<TransactionController, SamplePackage>();
 
     private final HashTree testTree;
-
-    /*
-     * This set keeps track of which ObjectPairs have been seen.
-     * Its purpose is not entirely clear (please document if you know!) but it is needed,..
-     */
-    private static final Set<ObjectPair> pairing = new HashSet<ObjectPair>();
-
-    //List loopIterListeners = new ArrayList();
 
     public TestCompiler(HashTree testTree, JMeterVariables vars) {
         this.testTree = testTree;
@@ -83,8 +82,8 @@ public class TestCompiler implements HashTreeTraverser {
      */
     public static void initialize() {
         // synch is probably not needed as only called before run starts
-        synchronized (pairing) {
-            pairing.clear();
+        synchronized (PAIRING) {
+            PAIRING.clear();
         }
     }
 
@@ -127,7 +126,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     /** {@inheritDoc} */
     public void subtractNode() {
-        log.debug("Subtracting node, stack size = " + stack.size());
+        LOG.debug("Subtracting node, stack size = " + stack.size());
         TestElement child = stack.getLast();
         trackIterationListeners(stack);
         if (child instanceof Sampler) {
@@ -142,10 +141,10 @@ public class TestCompiler implements HashTreeTraverser {
             ObjectPair pair = new ObjectPair(child, parent);
             // Bug 53750: this condition used to be in ObjectPair#addTestElements()
             if (parent instanceof Controller && (child instanceof Sampler || child instanceof Controller)) {
-                synchronized (pairing) {// Called from multiple threads
-                    if (!pairing.contains(pair)) {
+                synchronized (PAIRING) {// Called from multiple threads
+                    if (!PAIRING.contains(pair)) {
                         parent.addTestElement(child);
-                        pairing.add(pair);
+                        PAIRING.add(pair);
                     }
                 }
             }
@@ -251,7 +250,7 @@ public class TestCompiler implements HashTreeTraverser {
      */
     private void addDirectParentControllers(List<Controller> controllers, TestElement maybeController) {
         if (maybeController instanceof Controller) {
-            log.debug("adding controller: " + maybeController + " to sampler config");
+            LOG.debug("adding controller: " + maybeController + " to sampler config");
             controllers.add((Controller) maybeController);
         }
     }
