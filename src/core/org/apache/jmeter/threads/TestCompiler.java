@@ -138,7 +138,8 @@ public class TestCompiler implements HashTreeTraverser {
         }
         stack.removeLast();
         if (stack.size() > 0) {
-            ObjectPair pair = new ObjectPair(child, stack.getLast());
+            TestElement parent = stack.getLast();
+            ObjectPair pair = new ObjectPair(child, parent);
             synchronized (pairing) {// Called from multiple threads
                 if (!pairing.contains(pair)) {
                     pair.addTestElements();
@@ -257,9 +258,9 @@ public class TestCompiler implements HashTreeTraverser {
         private final TestElement child;
         private final TestElement parent;
 
-        public ObjectPair(TestElement one, TestElement two) {
-            this.child = one;
-            this.parent = two;
+        public ObjectPair(TestElement child, TestElement parent) {
+            this.child = child;
+            this.parent = parent;
         }
 
         public void addTestElements() {
