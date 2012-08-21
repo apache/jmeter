@@ -250,7 +250,15 @@ public class Summariser extends AbstractTestElement
         sb.append(longToSb(tmp, s.getNumSamples(), 6));
         sb.append(" in ");
         long elapsed = s.getElapsed();
-        sb.append(doubleToSb(dfDouble, tmp, elapsed / 1000.0, 5, 1));
+        long elapsedSec = (elapsed + 500) / 1000; // rounded seconds
+        if (elapsedSec > 100       // No point displaying decimals (less than 1% error)
+         || (elapsed - elapsedSec * 1000) < 50 // decimal would be zero
+         ) {
+            sb.append(longToSb(tmp, elapsedSec, 5));
+        } else {
+            double elapsedSecf = elapsed / 1000.0d; // fractional seconds
+            sb.append(doubleToSb(dfDouble, tmp, elapsedSecf, 5, 1)); // This will round
+        }
         sb.append("s = ");
         if (elapsed > 0) {
             sb.append(doubleToSb(dfDouble, tmp, s.getRate(), 6, 1));
