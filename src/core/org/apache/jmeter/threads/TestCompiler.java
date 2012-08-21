@@ -140,10 +140,13 @@ public class TestCompiler implements HashTreeTraverser {
         if (stack.size() > 0) {
             TestElement parent = stack.getLast();
             ObjectPair pair = new ObjectPair(child, parent);
-            synchronized (pairing) {// Called from multiple threads
-                if (!pairing.contains(pair)) {
-                    pair.addTestElements();
-                    pairing.add(pair);
+            // Bug 53750: this condition used to be in ObjectPair#addTestElements()
+            if (parent instanceof Controller && (child instanceof Sampler || child instanceof Controller)) {
+                synchronized (pairing) {// Called from multiple threads
+                    if (!pairing.contains(pair)) {
+                        parent.addTestElement(child);
+                        pairing.add(pair);
+                    }
                 }
             }
         }
@@ -261,12 +264,6 @@ public class TestCompiler implements HashTreeTraverser {
         public ObjectPair(TestElement child, TestElement parent) {
             this.child = child;
             this.parent = parent;
-        }
-
-        public void addTestElements() {
-            if (parent instanceof Controller && (child instanceof Sampler || child instanceof Controller)) {
-                parent.addTestElement(child);
-            }
         }
 
         /** {@inheritDoc} */
