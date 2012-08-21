@@ -155,8 +155,8 @@ public class ClientJMeterEngine implements JMeterEngine {
      * @param logger where to log the information
      */
     public static void tidyRMI(Logger logger) {
+        String reaperRE = JMeterUtils.getPropDefault("rmi.thread.name", "^RMI Reaper$");
         for(Thread t : Thread.getAllStackTraces().keySet()){
-            String reaperRE = JMeterUtils.getPropDefault("rmi.thread.name", "^RMI Reaper$");
             String name = t.getName();
             if (name.matches(reaperRE)) {
                 logger.info("Interrupting "+name);
