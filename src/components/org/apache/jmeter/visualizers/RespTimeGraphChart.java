@@ -58,10 +58,21 @@ public class RespTimeGraphChart extends JPanel {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    protected double[][] data = null;
-    protected String title, xAxisTitle, yAxisTitle, yAxisLabel;
+    protected double[][] data;
+    
+    protected String title;
+    
+    protected String xAxisTitle;
+    
+    protected String yAxisTitle;
+    
+    protected String yAxisLabel;
+    
     protected String[] xAxisLabels;
-    protected int width, height;
+    
+    protected int width;
+    
+    protected int height;
 
     protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") };
 
@@ -75,7 +86,7 @@ public class RespTimeGraphChart extends JPanel {
 
     protected boolean showGrouping = true;
 
-    protected int legendPlacement = LegendProperties.BOTTOM;
+    protected int legendPlacement = LegendAreaProperties.BOTTOM;
 
     protected Shape pointShape = PointChartProperties.SHAPE_CIRCLE;
 
@@ -320,7 +331,7 @@ public class RespTimeGraphChart extends JPanel {
             legendProperties.setIconBorderPaint(Color.WHITE);
             legendProperties.setIconBorderStroke(new BasicStroke(0f, BasicStroke.CAP_SQUARE, BasicStroke.CAP_SQUARE));
             // Manage legend placement
-            legendProperties.setNumColumns(LegendProperties.COLUMNS_FIT_TO_IMAGE);
+            legendProperties.setNumColumns(LegendAreaProperties.COLUMNS_FIT_TO_IMAGE);
             if (legendPlacement == LegendAreaProperties.RIGHT || legendPlacement == LegendAreaProperties.LEFT) {
                 legendProperties.setNumColumns(1);
             }
@@ -350,14 +361,18 @@ public class RespTimeGraphChart extends JPanel {
         }
     }
 
-    private double findMax(double _data[][]) {
+    /**
+     * Find max in datas
+     * @param datas array of positive or NaN doubles
+     * @return double
+     */
+    private double findMax(double datas[][]) {
         double max = 0;
-        max = _data[0][0];
-        for (int i = 0; i < _data.length; i++) {
-            for (int j = 0; j < _data[i].length; j++) {
-                 if (Double.isNaN(max) || 
-                         ((!Double.isNaN(_data[i][j])) && (_data[i][j] > max))) {
-                    max = _data[i][j];
+        for (int i = 0; i < datas.length; i++) {
+            for (int j = 0; j < datas[i].length; j++) {
+                final double value = datas[i][j]; 
+                if ((!Double.isNaN(value)) && (value > max)) {
+                    max = value;
                 }
             }
         }
