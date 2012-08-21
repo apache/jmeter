@@ -102,13 +102,11 @@ public class ClientJMeterEngine implements JMeterEngine {
 
     public void runTest() throws JMeterEngineException {
         log.info("running clientengine run method");
-        ConvertListeners sampleListeners = new ConvertListeners();
         HashTree testTree = test;
-        PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
         synchronized(testTree) {
-            testTree.traverse(compiler);
+            testTree.traverse(new PreCompiler(true));  // limit the changes to client only test elements
             testTree.traverse(new TurnElementsOn());
-            testTree.traverse(sampleListeners);
+            testTree.traverse(new ConvertListeners());
         }
 
         String methodName="unknown";
