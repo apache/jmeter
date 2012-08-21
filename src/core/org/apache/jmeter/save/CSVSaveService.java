@@ -152,11 +152,12 @@ public final class CSVSaveService {
             // CSV output files should never contain empty lines, so probably
             // not
             // If so, then need to check whether the reader is at EOF
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
             while ((parts = csvReadFile(dataReader, delim)).length != 0) {
                 lineNumber++;
                 SampleEvent event = CSVSaveService
                         .makeResultFromDelimitedString(parts, saveConfig,
-                                lineNumber);
+                                lineNumber, dateFormat);
                 if (event != null) {
                     final SampleResult result = event.getResult();
                     if (ResultCollector.isSampleWanted(result.isSuccessful(),
@@ -178,6 +179,7 @@ public final class CSVSaveService {
      * @param saveConfig
      *            the save configuration (may be updated)
      * @param lineNumber
+     * @param dateFormat
      * @return the sample result
      * 
      * @throws JMeterError
@@ -186,7 +188,7 @@ public final class CSVSaveService {
             final String[] parts, final SampleSaveConfiguration saveConfig, // may
                                                                             // be
                                                                             // updated
-            final long lineNumber) {
+            final long lineNumber, DateFormat dateFormat) {
 
         SampleResult result = null;
         String hostname = "";// $NON-NLS-1$
@@ -195,8 +197,6 @@ public final class CSVSaveService {
         String text = null;
         String field = null; // Save the name for error reporting
         int i = 0;
-        final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(
-                DEFAULT_DATE_FORMAT_STRING);
         try {
             if (saveConfig.saveTimestamp()) {
                 field = TIME_STAMP;
@@ -208,11 +208,11 @@ public final class CSVSaveService {
                         log.warn(e.toString());
                         // method is only ever called from one thread at a time
                         // so it's OK to use a static DateFormat
-                        Date stamp = DEFAULT_DATE_FORMAT.parse(text);
+                        Date stamp = dateFormat.parse(text);
                         timeStamp = stamp.getTime();
                         log.warn("Setting date format to: "
                                 + DEFAULT_DATE_FORMAT_STRING);
-                        saveConfig.setFormatter(DEFAULT_DATE_FORMAT);
+                        saveConfig.setFormatter(dateFormat);
                     }
                 } else if (saveConfig.formatter() != null) {
                     Date stamp = saveConfig.formatter().parse(text);
