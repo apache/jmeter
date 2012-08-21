@@ -171,9 +171,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final JLabeledTextField graphHeight =
             new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"), 6); //$NON-NLS-1$
 
-    private Integer minStartTime = Integer.MAX_VALUE;
+    private int minStartTime = Integer.MAX_VALUE;
 
-    private Integer maxStartTime = Integer.MIN_VALUE;
+    private int maxStartTime = Integer.MIN_VALUE;
 
     private final Map<String, RespTimeGraphLineBean> seriesNames = new HashMap<String, RespTimeGraphLineBean>();
 
@@ -208,12 +208,12 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         }
         if ((matcher == null) || (matcher.find())) {
             final long startTimeMS = sampleResult.getStartTime();
-            final Integer startTimeInterval = Integer.valueOf(((int) startTimeMS / intervalValue));
+            final int startTimeInterval = (int) startTimeMS / intervalValue;
             JMeterUtils.runSafe(new Runnable() {
                 public void run() {
                     synchronized (lock) {
                         // Use for x-axis scale
-                        if (startTimeInterval.intValue() < minStartTime) {
+                        if (startTimeInterval < minStartTime) {
                             minStartTime = startTimeInterval;
                         } else if (startTimeInterval > maxStartTime) {
                             maxStartTime = startTimeInterval;
@@ -231,14 +231,14 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         Map<Integer, Long> subList = pList.get(sampleLabel);
                         if (subList != null) {
                             long respTime = sampleResult.getTime();
-                            Long value = subList.get(startTimeInterval);
+                            Long value = subList.get(Integer.valueOf(startTimeInterval));
                             if (value!=null) {
-                                respTime = (value + respTime) / 2;
+                                respTime = (value.longValue() + respTime) / 2;
                             }
-                            subList.put(startTimeInterval, respTime);
+                            subList.put(Integer.valueOf(startTimeInterval), Long.valueOf(respTime));
                         } else {
                             Map<Integer, Long> newSubList = new LinkedHashMap<Integer, Long>();
-                            newSubList.put(startTimeInterval, sampleResult.getTime());
+                            newSubList.put(Integer.valueOf(startTimeInterval), Long.valueOf(sampleResult.getTime()));
                             pList.put(sampleLabel, newSubList);
                         }
                     }
@@ -314,9 +314,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             int idx = 0;
             while (idx < durationTest) {
                 int keyShift = minStartTime + idx;
-                Long value = subList.get(keyShift);
+                Long value = subList.get(Integer.valueOf(keyShift));
                 if (value!=null) {
-                    nanLast = value;
+                    nanLast = value.doubleValue();
 
                     data[s][idx] = nanLast;
 
@@ -333,7 +333,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         nanList.clear();
                     }
                 } else {
-                    nanList.add(Double.NaN);
+                    nanList.add(Double.valueOf(Double.NaN));
                     nanBegin = nanLast;
                     data[s][idx] = Double.NaN;
                 }
@@ -432,7 +432,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$ 
         String[] xAxisLabels = new String[durationTest];
         for (int j = 0; j < durationTest; j++) {
-            xAxisLabels[j] = formatter.format(new Date((minStartTime.intValue() + j) * intervalValue));
+            xAxisLabels[j] = formatter.format(new Date((minStartTime + j) * intervalValue));
         }
         return xAxisLabels;
     }
@@ -525,7 +525,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private void actionMakeGraph() {
         String msgErr = null;
         // Calculate the test duration. Needs to xAxis Labels and getData.
-        durationTest = maxStartTime.intValue() - minStartTime.intValue();
+        durationTest = maxStartTime - minStartTime;
         if (seriesNames.size() <= 0) {
             msgErr = JMeterUtils.getResString("aggregate_graph_no_values_to_graph"); // $NON-NLS-1$
         } else   if (durationTest < 1) {
