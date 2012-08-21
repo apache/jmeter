@@ -18,13 +18,18 @@
 
 package org.apache.jmeter.testelement;
 
-/**
- * TestListener interface is used for methods that are called at different
- * stages of each test.
- *
- * This interface is kept for compatibility; users should implement one of
- * the more specific interfaces.
- */
-public interface TestListener extends TestIterationListener, TestEventListener {
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 
+public interface TestIterationListener {
+
+    /**
+     * Each time through a Thread Group's test script, an iteration event is
+     * fired for each thread.
+     *
+     * This will be after the test elements have been cloned, so in general
+     * the instance will not be the same as the ones the start/end methods call.
+     *
+     * @param event
+     */
+    public void testIterationStart(LoopIterationEvent event);
 }
