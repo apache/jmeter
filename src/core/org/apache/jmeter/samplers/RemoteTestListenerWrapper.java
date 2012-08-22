@@ -20,17 +20,16 @@ package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
  * @version $Revision$
  */
-public class RemoteTestListenerWrapper extends AbstractTestElement implements TestListener, Serializable, NoThreadClone {
+public class RemoteTestListenerWrapper extends AbstractTestElement implements TestStateListener, Serializable, NoThreadClone {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
@@ -77,13 +76,6 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         } catch (Exception ex) {
             log.error("", ex); // $NON-NLS-1$
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-        //listener.testIterationStart(event);
     }
 
 }

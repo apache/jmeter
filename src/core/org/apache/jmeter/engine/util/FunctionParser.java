@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -138,8 +138,8 @@ class FunctionParser {
                             throw new InvalidVariableException
                             ("Expected } after "+funcName+" function call in "+new String(cb, 0, nbRead));
                         }
-                        if (function instanceof TestListener) {
-                            StandardJMeterEngine.register((TestListener) function);
+                        if (function instanceof TestStateListener) {
+                            StandardJMeterEngine.register((TestStateListener) function);
                         }
                         return function;
                     } else { // Function does not exist, so treat as per missing variable

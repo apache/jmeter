@@ -54,7 +54,6 @@ import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
@@ -75,7 +74,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellServer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -916,7 +915,7 @@ public class JMeter implements JMeterPlugin {
      * If running a remote test, then after waiting a few seconds for listeners to finish files,
      * it calls ClientJMeterEngine.tidyRMI() to deal with the Naming Timer Thread.
      */
-    private static class ListenToTest implements TestListener, Runnable, Remoteable {
+    private static class ListenToTest implements TestStateListener, Runnable, Remoteable {
         private AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
 
         //NOT YET USED private JMeter _parent;
@@ -978,13 +977,6 @@ public class JMeter implements JMeterPlugin {
             ClientJMeterEngine.tidyRMI(log);
             println("... end of run");
             checkForRemainingThreads();
-        }
-
-        /**
-         * @see TestListener#testIterationStart(LoopIterationEvent)
-         */
-        public void testIterationStart(LoopIterationEvent event) {
-            // ignored
         }
 
         /**

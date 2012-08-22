@@ -38,7 +38,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -290,10 +289,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     @Override
     public String toString() {
         return getQueueConnectionFactory() + ", queue: " + getSendQueue();
-    }
-
-    public void testIterationStart(LoopIterationEvent event) {
-        // LOGGER.debug("testIterationStart");
     }
 
     public void threadStarted() {

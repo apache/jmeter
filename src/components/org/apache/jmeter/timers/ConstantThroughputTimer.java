@@ -21,10 +21,9 @@ package org.apache.jmeter.timers;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
@@ -40,7 +39,7 @@ import org.apache.log.Logger;
  * - delay each thread according to when it last ran
  * - delay each thread according to when any thread last ran
  */
-public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestListener, TestBean {
+public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestStateListener, TestBean {
     private static final long serialVersionUID = 3;
 
     private static class ThroughputInfo{
@@ -251,10 +250,4 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     	//NOOP
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-    	//NOOP
-    }
 }

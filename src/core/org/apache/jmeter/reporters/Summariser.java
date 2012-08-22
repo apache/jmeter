@@ -25,14 +25,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterContextService.ThreadCounts;
 import org.apache.jmeter.util.JMeterUtils;
@@ -61,7 +60,7 @@ import org.apache.log.Logger;
  *
  */
 public class Summariser extends AbstractTestElement
-    implements Serializable, SampleListener, TestListener, NoThreadClone, Remoteable {
+    implements Serializable, SampleListener, TestStateListener, NoThreadClone, Remoteable {
 
     /*
      * N.B. NoThreadClone is used to ensure that the testStarted() methods will share the same
@@ -385,8 +384,4 @@ public class Summariser extends AbstractTestElement
         }
     }
 
-    /** {@inheritDoc} */
-    public void testIterationStart(LoopIterationEvent event) {
-        // not used
-    }
 }

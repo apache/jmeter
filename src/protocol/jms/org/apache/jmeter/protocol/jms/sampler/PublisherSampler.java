@@ -30,7 +30,6 @@ import javax.jms.Message;
 import javax.naming.NamingException;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.client.ClientPool;
 import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
@@ -38,7 +37,7 @@ import org.apache.jmeter.protocol.jms.client.Publisher;
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.io.TextFile;
@@ -51,7 +50,7 @@ import com.thoughtworks.xstream.XStream;
 /**
  * This class implements the JMS Publisher sampler.
  */
-public class PublisherSampler extends BaseJMSSampler implements TestListener {
+public class PublisherSampler extends BaseJMSSampler implements TestStateListener {
 
     private static final long serialVersionUID = 233L;
 
@@ -105,8 +104,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
     /**
      * endTest cleans up the client
-     *
-     * @see junit.framework.TestListener#endTest(junit.framework.Test)
      */
     public void testEnded() {
         log.debug("PublisherSampler.testEnded called");
@@ -115,12 +112,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     }
 
     public void testStarted() {
-    }
-
-    /**
-     * NO implementation provided for the sampler. It is necessary in this case.
-     */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 
     /**
