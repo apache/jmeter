@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -124,7 +123,6 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
          * if(choiceList.isEditable()) { choiceList.addActionListener(new
          * ComboListener()); }
          */
-        choiceList.setBorder(BorderFactory.createLoweredBevelBorder());
         // Register the handler for focus listening. This handler will
         // only notify the registered when the text changes from when
         // the focus is gained to when it is lost.
