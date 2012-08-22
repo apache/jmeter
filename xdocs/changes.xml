@@ -68,6 +68,9 @@ in Bindings created on each execution, see <bugzilla>53365</bugzilla>.
 JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports this feature, see <bugzilla>53520</bugzilla>.
 </p>
 
+<p>
+Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F (CMD+F1 for Mac OS) now opens Search Dialog.
+</p>
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -162,6 +165,7 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <li><bugzilla>42245</bugzilla> - Show clear passwords in HTTP Authorization Manager</li>
 <li><bugzilla>53616</bugzilla> - Display 'Apache JMeter' title in app title bar in Gnome 3</li>
 <li><bugzilla>53759</bugzilla> - ClientJMeterEngine perfoms unnecessary traverse using SearchByClass(TestListener)</li>
+<li><bugzilla>52601</bugzilla> - CTRL + F for the new Find feature</li>
 </ul>
 
 <h2>Non-functional changes</h2>
