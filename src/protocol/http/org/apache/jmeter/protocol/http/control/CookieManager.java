@@ -30,7 +30,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.http.client.params.CookiePolicy;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestIterationListener;
@@ -41,6 +41,8 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.ClassTools;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -62,6 +64,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     private static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
 
     private static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
+    
+    private static final String IMPLEMENTATION = "CookieManager.implementation"; //$NON-NLS-1$
     //-- JMX tag values
 
     private static final String TAB = "\t"; //$NON-NLS-1$
@@ -98,6 +102,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     private transient CollectionProperty initialCookies;
 
     public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
+    
+    public static final String DEFAULT_IMPLEMENTATION = HC3CookieHandler.class.getName();
 
     public CookieManager() {
         clearCookies(); // Ensure that there is always a collection available
@@ -135,6 +141,14 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     public void setClearEachIteration(boolean clear) {
         setProperty(new BooleanProperty(CLEAR, clear));
+    }
+
+    public String getImplementation() {
+        return getPropertyAsString(IMPLEMENTATION, DEFAULT_IMPLEMENTATION);
+    }
+
+    public void setImplementation(String implementation){
+        setProperty(IMPLEMENTATION, implementation, DEFAULT_IMPLEMENTATION);
     }
 
     /**
@@ -356,7 +370,11 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     /** {@inheritDoc} */
     public void testStarted() {
         initialCookies = getCookies();
-        cookieHandler = new HC3CookieHandler(getPolicy());
+        try {
+            cookieHandler = (CookieHandler) ClassTools.construct(getImplementation(), getPolicy());
+        } catch (JMeterException e) {
+            log.error("Unable to load or invoke class: " + getImplementation(), e);
+        }
         if (log.isDebugEnabled()){
             log.debug("Policy: "+getPolicy()+" Clear: "+getClearEachIteration());
         }
