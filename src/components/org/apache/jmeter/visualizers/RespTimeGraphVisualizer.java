@@ -55,6 +55,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -183,6 +185,10 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     
     private int colorIdx = 0;
 
+    private Pattern pattern = null;
+
+    private Matcher matcher = null;
+
     private final List<Color> listColors = Colors.getColors();
 
     // Use implementation instead of Interface as we need it to be cloneable
@@ -199,11 +205,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             internalMap.put(Long.valueOf(sampleResult.getStartTime()), Long.valueOf(sampleResult.getTime()));
         }
 
-        Matcher matcher = null;
         // Sampler selection
-        if (samplerSelection.isSelected() && samplerMatchLabel.getText() != null
-                && samplerMatchLabel.getText().length() > 0) {
-            Pattern pattern = createPattern(samplerMatchLabel.getText());
+        if (samplerSelection.isSelected() && pattern != null) {
             matcher = pattern.matcher(sampleLabel);
         }
         if ((matcher == null) || (matcher.find())) {
@@ -395,10 +398,114 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_settings"), settingsPane); //$NON-NLS-1$
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_graph"), graphPanel); //$NON-NLS-1$
+        
+        // If clic on the Graph tab, make the graph (without apply interval or filter)
+        ChangeListener changeListener = new ChangeListener() {
+            public void stateChanged(ChangeEvent changeEvent) {
+                JTabbedPane srcTab = (JTabbedPane) changeEvent.getSource();
+                int index = srcTab.getSelectedIndex();
+                if (srcTab.getTitleAt(index).equals(JMeterUtils.getResString("aggregate_graph_tab_graph"))) { //$NON-NLS-1$
+                    actionMakeGraph();
+                }
+            }
+        };
+        tabbedGraph.addChangeListener(changeListener);
 
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(tabbedGraph, BorderLayout.CENTER);
 
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        boolean forceReloadData = false;
+        final Object eventSource = event.getSource();
+        if (eventSource == displayButton) {
+            actionMakeGraph();
+        } else if (eventSource == saveGraph) {
+            saveGraphToFile = true;
+            try {
+                ActionRouter.getInstance().getAction(
+                        ActionNames.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
+                                new ActionEvent(this,1,ActionNames.SAVE_GRAPHICS));
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        } else if (eventSource == syncWithName) {
+            graphTitle.setText(namePanel.getName());
+        } else if (eventSource == dynamicGraphSize) {
+            // if use dynamic graph size is checked, we disable the dimension fields
+            if (dynamicGraphSize.isSelected()) {
+                graphWidth.setEnabled(false);
+                graphHeight.setEnabled(false);
+            } else {
+                graphWidth.setEnabled(true);
+                graphHeight.setEnabled(true);
+            }
+        } else if (eventSource == samplerSelection) {
+            if (samplerSelection.isSelected()) {
+                samplerMatchLabel.setEnabled(true);
+                reloadButton.setEnabled(true);
+                caseChkBox.setEnabled(true);
+                regexpChkBox.setEnabled(true);
+            } else {
+                samplerMatchLabel.setEnabled(false);
+                reloadButton.setEnabled(false);
+                caseChkBox.setEnabled(false);
+                regexpChkBox.setEnabled(false);
+                // Force reload data
+                forceReloadData = true;
+            }
+        }
+        // Not 'else if' because forceReloadData 
+        if (eventSource == reloadButton || eventSource == intervalButton || forceReloadData) {
+            if (eventSource == intervalButton) {
+                intervalValue = Integer.parseInt(intervalField.getText());
+            }
+            if (eventSource == reloadButton && samplerSelection.isSelected() && samplerMatchLabel.getText() != null
+                    && samplerMatchLabel.getText().length() > 0) {
+                pattern = createPattern(samplerMatchLabel.getText());
+            } else if (forceReloadData) {
+                pattern = null;
+                matcher = null;
+            }
+            if (getFile() != null && getFile().length() > 0) {
+                // Reload data from file
+                clearData();
+                FilePanel filePanel = (FilePanel) getFilePanel();
+                filePanel.actionPerformed(event);
+            } else {
+                // Reload data form internal list of results
+                if (internalMap.size() >= 2) {
+                    synchronized (lockInterval) {
+                        @SuppressWarnings("unchecked")
+                        HashMap<Long, Long> tempMap = (HashMap<Long, Long>) internalMap.clone();
+                        this.clearData();
+                        for (Iterator<Map.Entry<Long, Long>> iterator = tempMap.entrySet().iterator(); iterator
+                                .hasNext();) {
+                            Map.Entry<Long, Long> entry = iterator.next();
+                            this.add(new SampleResult(entry.getKey().longValue(), entry.getValue().longValue()));
+                        }
+                    }
+                }
+            }
+        } 
+    }
+
+    private void actionMakeGraph() {
+        String msgErr = null;
+        // Calculate the test duration. Needs to xAxis Labels and getData.
+        durationTest = maxStartTime - minStartTime;
+        if (seriesNames.size() <= 0) {
+            msgErr = JMeterUtils.getResString("aggregate_graph_no_values_to_graph"); // $NON-NLS-1$
+        } else   if (durationTest < 1) {
+            msgErr = JMeterUtils.getResString("graph_resp_time_not_enough_data"); // $NON-NLS-1$
+        }
+        if (msgErr == null) {
+            makeGraph();
+            tabbedGraph.setSelectedIndex(1);
+        } else {
+            JOptionPane.showMessageDialog(null, msgErr, msgErr, JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     @Override
@@ -457,86 +564,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             i++;
         }
         return linesColors;
-    }
-
-    public void actionPerformed(ActionEvent event) {
-        final Object eventSource = event.getSource();
-        if (eventSource == displayButton) {
-            actionMakeGraph();
-        } else if (eventSource == saveGraph) {
-            saveGraphToFile = true;
-            try {
-                ActionRouter.getInstance().getAction(
-                        ActionNames.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
-                                new ActionEvent(this,1,ActionNames.SAVE_GRAPHICS));
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        } else if (eventSource == syncWithName) {
-            graphTitle.setText(namePanel.getName());
-        } else if (eventSource == dynamicGraphSize) {
-            // if use dynamic graph size is checked, we disable the dimension fields
-            if (dynamicGraphSize.isSelected()) {
-                graphWidth.setEnabled(false);
-                graphHeight.setEnabled(false);
-            } else {
-                graphWidth.setEnabled(true);
-                graphHeight.setEnabled(true);
-            }
-        } else if (eventSource == samplerSelection) {
-            if (samplerSelection.isSelected()) {
-                samplerMatchLabel.setEnabled(true);
-                reloadButton.setEnabled(true);
-                caseChkBox.setEnabled(true);
-                regexpChkBox.setEnabled(true);
-            } else {
-                samplerMatchLabel.setEnabled(false);
-                reloadButton.setEnabled(false);
-                caseChkBox.setEnabled(false);
-                regexpChkBox.setEnabled(false);
-            }
-        } else if (eventSource == reloadButton || eventSource == intervalButton) {
-            if (eventSource == intervalButton) {
-                intervalValue = Integer.parseInt(intervalField.getText());
-            }
-            if (getFile() != null && getFile().length() > 0) {
-                clearData();
-                FilePanel filePanel = (FilePanel) getFilePanel();
-                filePanel.actionPerformed(event);
-            } else {
-                // Reload data form internal list of results
-                if (internalMap.size() >= 2) {
-                    synchronized (lockInterval) {
-                        @SuppressWarnings("unchecked")
-                        HashMap<Long, Long> tempMap = (HashMap<Long, Long>) internalMap.clone();
-                        this.clearData();
-                        for (Iterator<Map.Entry<Long, Long>> iterator = tempMap.entrySet().iterator(); iterator
-                                .hasNext();) {
-                            Map.Entry<Long, Long> entry = iterator.next();
-                            this.add(new SampleResult(entry.getKey().longValue(), entry.getValue().longValue()));
-                        }
-                    }
-                }
-            }
-        } 
-
-    }
-    
-    private void actionMakeGraph() {
-        String msgErr = null;
-        // Calculate the test duration. Needs to xAxis Labels and getData.
-        durationTest = maxStartTime - minStartTime;
-        if (seriesNames.size() <= 0) {
-            msgErr = JMeterUtils.getResString("aggregate_graph_no_values_to_graph"); // $NON-NLS-1$
-        } else   if (durationTest < 1) {
-            msgErr = JMeterUtils.getResString("graph_resp_time_not_enough_data"); // $NON-NLS-1$
-        }
-        if (msgErr == null) {
-            makeGraph();
-            tabbedGraph.setSelectedIndex(1);
-        } else {
-            JOptionPane.showMessageDialog(null, msgErr, msgErr, JOptionPane.WARNING_MESSAGE);
-        }
     }
 
     private JPanel createGraphSettingsPane() {
