@@ -21,9 +21,8 @@ package org.apache.jmeter.util;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -34,7 +33,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public abstract class BeanShellTestElement extends AbstractTestElement
-    implements Serializable, Cloneable, ThreadListener, TestListener
+    implements Serializable, Cloneable, ThreadListener, TestStateListener
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -222,10 +221,6 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         } catch (JMeterException ignored) {
             log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
         }
-    }
-
-    public void testIterationStart(LoopIterationEvent event) {
-        // Not implemented
     }
 
     public void testStarted() {

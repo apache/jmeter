@@ -33,7 +33,8 @@ import java.util.ArrayList;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestIterationListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -50,7 +51,7 @@ import org.apache.log.Logger;
  * Now uses Commons HttpClient parsing and matching code (since 2.1.2)
  *
  */
-public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
+public class CookieManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();

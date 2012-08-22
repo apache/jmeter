@@ -39,11 +39,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -53,7 +52,7 @@ import org.apache.log.Logger;
  * A base class for all JDBC test elements handling the basics of a SQL request.
  * 
  */
-public abstract class AbstractJDBCTestElement extends AbstractTestElement implements TestListener{
+public abstract class AbstractJDBCTestElement extends AbstractTestElement implements TestStateListener{
     private static final long serialVersionUID = 235L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -615,7 +614,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 
 	/** 
 	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
+	 * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
 	 */
 	public void testStarted() {
 		testStarted("");
@@ -623,7 +622,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 
 	/**
 	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+	 * @see org.apache.jmeter.testelement.TestStateListener#testStarted(java.lang.String)
 	 */
 	public void testStarted(String host) {
 		cleanCache();
@@ -631,7 +630,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 
 	/**
 	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
+	 * @see org.apache.jmeter.testelement.TestStateListener#testEnded()
 	 */
 	public void testEnded() {
 		testEnded("");
@@ -639,7 +638,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 
 	/**
 	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+	 * @see org.apache.jmeter.testelement.TestStateListener#testEnded(java.lang.String)
 	 */
 	public void testEnded(String host) {
 		cleanCache();		
@@ -655,11 +654,4 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 		perConnCache.clear();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-	 */
-	public void testIterationStart(LoopIterationEvent event) {
-		// NOOP
-	}  
 }

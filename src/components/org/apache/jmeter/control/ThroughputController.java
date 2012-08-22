@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.FloatProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -42,7 +42,7 @@ import org.apache.log.Logger;
  * or the last N% of samples (BYPERCENT).
  */
 public class ThroughputController extends GenericController implements Serializable, LoopIterationListener,
-        TestListener {
+        TestStateListener {
 
     private static final long serialVersionUID = 233L;
 
@@ -269,7 +269,4 @@ public class ThroughputController extends GenericController implements Serializa
     	// NOOP
     }
 
-    public void testIterationStart(LoopIterationEvent event) {
-    	// NOOP
-    }
 }

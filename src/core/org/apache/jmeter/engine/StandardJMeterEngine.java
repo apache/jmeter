@@ -32,7 +32,7 @@ import org.apache.jmeter.JMeter;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -80,7 +80,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
      * Only used by the function parser so far.
      * The list is merged with the testListeners and then cleared.
      */
-    private static final List<TestListener> testList = new ArrayList<TestListener>();
+    private static final List<TestStateListener> testList = new ArrayList<TestStateListener>();
 
     /** Whether to call System.exit(0) in exit after stopping RMI */
     private static final boolean REMOTE_SYSTEM_EXIT = JMeterUtils.getPropDefault("jmeterengine.remote.system.exit", false);
@@ -116,7 +116,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    public static synchronized void register(TestListener tl) {
+    public static synchronized void register(TestStateListener tl) {
         testList.add(tl);
     }
 
@@ -197,8 +197,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     }
 
     @SuppressWarnings("deprecation") // Deliberate use of deprecated method
-    private void notifyTestListenersOfStart(SearchByClass<TestListener> testListeners) {
-        for (TestListener tl : testListeners.getSearchResults()) {
+    private void notifyTestListenersOfStart(SearchByClass<TestStateListener> testListeners) {
+        for (TestStateListener tl : testListeners.getSearchResults()) {
             if (tl instanceof TestBean) {
                 TestBeanHelper.prepare((TestElement) tl);
             }
@@ -210,9 +210,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    private void notifyTestListenersOfEnd(SearchByClass<TestListener> testListeners) {
+    private void notifyTestListenersOfEnd(SearchByClass<TestStateListener> testListeners) {
         log.info("Notifying test listeners of end of test");
-        for (TestListener tl : testListeners.getSearchResults()) {
+        for (TestStateListener tl : testListeners.getSearchResults()) {
             try {
                 if (host == null) {
                     tl.testEnded();
@@ -304,7 +304,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
          * Notification of test listeners needs to happen after function
          * replacement, but before setting RunningVersion to true.
          */
-        SearchByClass<TestListener> testListeners = new SearchByClass<TestListener>(TestListener.class);
+        SearchByClass<TestStateListener> testListeners = new SearchByClass<TestStateListener>(TestStateListener.class); // TL - S&E
         test.traverse(testListeners);
 
         // Merge in any additional test listeners

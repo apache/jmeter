@@ -40,7 +40,8 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestIterationListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -48,7 +49,7 @@ import org.apache.log.Logger;
 /**
  * Handles HTTP Caching
  */
-public class CacheManager extends ConfigTestElement implements TestListener, Serializable {
+public class CacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
 
     private static final long serialVersionUID = 234L;
 

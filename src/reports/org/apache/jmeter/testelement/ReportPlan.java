@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -36,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class ReportPlan extends AbstractTestElement implements Serializable, TestListener {
+public class ReportPlan extends AbstractTestElement implements Serializable, TestStateListener {
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -171,7 +170,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     /*
      * (non-Javadoc)
      *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
+     * @see org.apache.jmeter.testelement.TestStateListener#testEnded()
      */
     public void testEnded() {
         try {
@@ -184,7 +183,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     /*
      * (non-Javadoc)
      *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+     * @see org.apache.jmeter.testelement.TestStateListener#testEnded(java.lang.String)
      */
     public void testEnded(String host) {
         testEnded();
@@ -194,15 +193,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     /*
      * (non-Javadoc)
      *
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
+     * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
      */
     public void testStarted() {
         if (getBasedir() != null && getBasedir().length() > 0) {
@@ -217,7 +208,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     /*
      * (non-Javadoc)
      *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+     * @see org.apache.jmeter.testelement.TestStateListener#testStarted(java.lang.String)
      */
     public void testStarted(String host) {
         testStarted();

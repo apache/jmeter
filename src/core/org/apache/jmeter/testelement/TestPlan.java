@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.jmeter.NewDriver;
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -36,7 +35,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-public class TestPlan extends AbstractTestElement implements Serializable, TestListener {
+public class TestPlan extends AbstractTestElement implements Serializable, TestStateListener {
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -288,12 +287,6 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     public void testEnded(String host) {
         testEnded();
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 
     /**

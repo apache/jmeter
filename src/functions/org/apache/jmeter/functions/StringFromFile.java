@@ -26,11 +26,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -64,7 +63,7 @@ import org.apache.log.Logger;
  * Because function instances are shared, it does not make sense to use the thread number as part of the file name.
  * @since 1.9
  */
-public class StringFromFile extends AbstractFunction implements TestListener {
+public class StringFromFile extends AbstractFunction implements TestStateListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Only modified by static block so no need to synchronize subsequent read-only access
@@ -330,8 +329,4 @@ public class StringFromFile extends AbstractFunction implements TestListener {
     	closeFile();
     }
 
-    /** {@inheritDoc} */
-    public void testIterationStart(LoopIterationEvent event) {
-        //
-    }
 }

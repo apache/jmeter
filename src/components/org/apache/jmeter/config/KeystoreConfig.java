@@ -19,9 +19,8 @@
 package org.apache.jmeter.config;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
@@ -31,7 +30,7 @@ import org.apache.log.Logger;
 /**
  * Configure Keystore
  */
-public class KeystoreConfig extends ConfigTestElement implements TestBean, TestListener {
+public class KeystoreConfig extends ConfigTestElement implements TestBean, TestStateListener {
 
     private static final long serialVersionUID = -5781402012242794890L;
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -54,10 +53,6 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestL
     public void testEnded(String host) {
         log.info("Destroying Keystore");         
         SSLManager.getInstance().destroyKeystore();
-    }
-
-    public void testIterationStart(LoopIterationEvent event) {
-        // NOOP        
     }
 
     public void testStarted() {

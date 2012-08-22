@@ -27,7 +27,7 @@ import org.apache.jmeter.samplers.RemoteSampleListenerWrapper;
 import org.apache.jmeter.samplers.RemoteTestListenerWrapper;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleListener;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jorphan.collections.HashTree;
@@ -60,10 +60,10 @@ public class ConvertListeners implements HashTreeTraverser {
                 }
                 try {
                     RemoteSampleListener rtl = new RemoteSampleListenerImpl(item);
-                    if (item instanceof TestListener && item instanceof SampleListener) {
+                    if (item instanceof TestStateListener && item instanceof SampleListener) { // TL - all
                         RemoteListenerWrapper wrap = new RemoteListenerWrapper(rtl);
                         subTree.replace(item, wrap);
-                    } else if (item instanceof TestListener) {
+                    } else if (item instanceof TestStateListener) {
                         RemoteTestListenerWrapper wrap = new RemoteTestListenerWrapper(rtl);
                         subTree.replace(item, wrap);
                     } else if (item instanceof SampleListener) {

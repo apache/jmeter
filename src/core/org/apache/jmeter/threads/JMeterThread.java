@@ -44,7 +44,7 @@ import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -85,10 +85,10 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private final JMeterVariables threadVars;
 
-    // Note: this is only used to implement TestListener#testIterationStart
+    // Note: this is only used to implement TestIterationListener#testIterationStart
     // Since this is a frequent event, it makes sense to create the list once rather than scanning each time
     // The memory used will be released when the thread finishes
-    private final Collection<TestListener> testIterationStartListeners;
+    private final Collection<TestIterationListener> testIterationStartListeners;
 
     private final ListenerNotifier notifier;
 
@@ -139,7 +139,7 @@ public class JMeterThread implements Runnable, Interruptible {
         testTree = test;
         compiler = new TestCompiler(testTree, threadVars);
         controller = (Controller) testTree.getArray()[0];
-        SearchByClass<TestListener> threadListenerSearcher = new SearchByClass<TestListener>(TestListener.class); // TL - IS
+        SearchByClass<TestIterationListener> threadListenerSearcher = new SearchByClass<TestIterationListener>(TestIterationListener.class); // TL - IS
         test.traverse(threadListenerSearcher);
         testIterationStartListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
@@ -760,7 +760,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     void notifyTestListeners() {
         threadVars.incIteration();
-        for (TestListener listener : testIterationStartListeners) {
+        for (TestIterationListener listener : testIterationStartListeners) {
             if (listener instanceof TestElement) {
                 listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
                 ((TestElement) listener).recoverRunningVersion();

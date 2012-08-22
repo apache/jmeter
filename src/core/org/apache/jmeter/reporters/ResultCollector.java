@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.samplers.Clearable;
@@ -49,7 +48,7 @@ import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.apache.jmeter.visualizers.Visualizer;
@@ -66,7 +65,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * The class must be thread-safe because it is shared between threads (NoThreadClone).
  */
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
-        TestListener, Remoteable, NoThreadClone {
+        TestStateListener, Remoteable, NoThreadClone {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -568,12 +567,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
         }
         files.clear();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 
     /**
