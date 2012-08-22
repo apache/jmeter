@@ -18,6 +18,7 @@
 
 package org.apache.jorphan.reflect;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -74,6 +75,36 @@ public class ClassTools {
         } catch (SecurityException e) {
             throw new JMeterException(e);
         } catch (NoSuchMethodException e) {
+            throw new JMeterException(e);
+        }
+        return instance;
+    }
+
+    /**
+     * Call a class constructor with an String parameter
+     * @param className
+     * @param parameter (String)
+     * @return an instance of the class
+     * @throws JMeterException if class cannot be created
+     */
+    public static Object construct(String className, String parameter)
+            throws JMeterException {
+        Object instance = null;
+        try {
+            Class<?> clazz = Class.forName(className);
+            Constructor<?> constructor = clazz.getConstructor(String.class);
+            instance = constructor.newInstance(parameter);
+        } catch (ClassNotFoundException e) {
+            throw new JMeterException(e);
+        } catch (InstantiationException e) {
+            throw new JMeterException(e);
+        } catch (IllegalAccessException e) {
+            throw new JMeterException(e);
+        } catch (NoSuchMethodException e) {
+            throw new JMeterException(e);
+        } catch (IllegalArgumentException e) {
+            throw new JMeterException(e);
+        } catch (InvocationTargetException e) {
             throw new JMeterException(e);
         }
         return instance;
