@@ -78,6 +78,8 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
         }
     }
 
+    // TODO - does this code achieve anything?
+    // the method is not supported by RemoteSampleListener
     public void testIterationStart(LoopIterationEvent event) {
         if (testListener != null) {
             testListener.testIterationStart(event);
