@@ -21,19 +21,18 @@ package org.apache.jmeter.samplers;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Implementation of remote sampler listener, also supports TestListener
+ * Implementation of remote sampler listener, also supports TestStateListener
  */
 public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject 
-    implements RemoteSampleListener, SampleListener, TestListener {
+    implements RemoteSampleListener, SampleListener, TestStateListener {
 
     private static final long serialVersionUID = 240L;
 
-    private final TestListener testListener;
+    private final TestStateListener testListener;
 
     private final SampleListener sampleListener;
     
@@ -42,8 +41,8 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
 
     public RemoteSampleListenerImpl(Object listener) throws RemoteException {
         super(DEFAULT_LOCAL_PORT);
-        if (listener instanceof TestListener) {
-            testListener = (TestListener) listener;
+        if (listener instanceof TestStateListener) {
+            testListener = (TestStateListener) listener;
         } else {
             testListener = null;
         }
@@ -75,14 +74,6 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
     public void testEnded(String host) {
         if (testListener != null) {
             testListener.testEnded(host);
-        }
-    }
-
-    // TODO - does this code achieve anything?
-    // the method is not supported by RemoteSampleListener
-    public void testIterationStart(LoopIterationEvent event) {
-        if (testListener != null) {
-            testListener.testIterationStart(event);
         }
     }
 

@@ -21,10 +21,9 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -35,7 +34,7 @@ import org.apache.log.Logger;
  *
  * @version $Revision$
  */
-public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestListener, Serializable,
+public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestStateListener, Serializable,
         NoThreadClone {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -125,14 +124,4 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
             log.error("sampleStopped", err);
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-        // Not implemented, probably because of high overheads
-        // At present there are no Remoteable classes that use the method
-        // so RemoteSampleListener does not implement it either
-    }
-
 }

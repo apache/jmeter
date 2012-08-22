@@ -43,14 +43,13 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArgument;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArguments;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -64,7 +63,7 @@ import org.apache.log.Logger;
  * test available in the LDAP Test.
  ******************************************************************************/
 
-public class LDAPExtSampler extends AbstractSampler implements TestListener {
+public class LDAPExtSampler extends AbstractSampler implements TestStateListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -1081,10 +1080,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
             }
         }
         ldapContexts.clear();
-    }
-
-    public void testIterationStart(LoopIterationEvent event) {
-        // ignored
     }
 
     /**

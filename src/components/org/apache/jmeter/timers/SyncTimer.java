@@ -22,10 +22,9 @@ import java.io.Serializable;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
 
@@ -35,7 +34,7 @@ import org.apache.jmeter.threads.JMeterContextService;
  * thus create large instant loads at various points of the test plan.
  *
  */
-public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean, TestListener, ThreadListener {
+public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean, TestStateListener, ThreadListener {
 	
 	/**
 	 * Wrapper to {@link CyclicBarrier} to allow lazy init of CyclicBarrier when SyncTimer is configured with 0
@@ -190,10 +189,6 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         createBarrier();
     }
 
-	public void testIterationStart(LoopIterationEvent event) {
-		// NOOP
-	}
-	
 	/**
 	 * 
 	 */

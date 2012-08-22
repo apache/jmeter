@@ -21,12 +21,11 @@ package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
@@ -48,7 +47,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * @see ParamMask
  * @version $Revision$
  */
-public class ParamModifier extends AbstractTestElement implements TestListener, PreProcessor, Serializable {
+public class ParamModifier extends AbstractTestElement implements TestStateListener, PreProcessor, Serializable {
 
     private static final long serialVersionUID = 240L;
 
@@ -150,9 +149,4 @@ public class ParamModifier extends AbstractTestElement implements TestListener, 
         return false;
     }
 
-    /**
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-    }
 }

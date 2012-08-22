@@ -67,7 +67,8 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestIterationListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -93,7 +94,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  *
  */
 public abstract class HTTPSamplerBase extends AbstractSampler
-    implements TestListener, ThreadListener, HTTPConstantsInterface {
+    implements TestStateListener, TestIterationListener, ThreadListener, HTTPConstantsInterface {
 
     private static final long serialVersionUID = 240L;
 

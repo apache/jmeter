@@ -25,12 +25,11 @@ import java.util.Set;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -41,7 +40,7 @@ import org.apache.log.Logger;
  * information on writing Java code to be executed by this sampler.
  *
  */
-public class JavaSampler extends AbstractSampler implements TestListener {
+public class JavaSampler extends AbstractSampler implements TestStateListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -229,13 +228,13 @@ public class JavaSampler extends AbstractSampler implements TestListener {
         return sb.toString();
     }
 
-    // TestListener implementation
-    /* Implements TestListener.testStarted() */
+    // TestStateListener implementation
+    /* Implements TestStateListener.testStarted() */
     public void testStarted() {
         log.debug(whoAmI() + "\ttestStarted");
     }
 
-    /* Implements TestListener.testStarted(String) */
+    /* Implements TestStateListener.testStarted(String) */
     public void testStarted(String host) {
         log.debug(whoAmI() + "\ttestStarted(" + host + ")");
     }
@@ -259,13 +258,9 @@ public class JavaSampler extends AbstractSampler implements TestListener {
         }
     }
 
-    /* Implements TestListener.testEnded(String) */
+    /* Implements TestStateListener.testEnded(String) */
     public void testEnded(String host) {
         testEnded();
-    }
-
-    /* Implements TestListener.testIterationStart(LoopIterationEvent) */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 
     /**

@@ -69,7 +69,6 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.LoadDraggedFile;
@@ -80,7 +79,7 @@ import org.apache.jmeter.gui.util.JMeterToolBar;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -95,7 +94,7 @@ import org.apache.log.Priority;
  * JMeter component GUIs.
  *
  */
-public class MainFrame extends JFrame implements TestListener, Remoteable, DropTargetListener, Clearable, ActionListener {
+public class MainFrame extends JFrame implements TestStateListener, Remoteable, DropTargetListener, Clearable, ActionListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -378,7 +377,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         return tree;
     }
 
-    // TestListener implementation
+    // TestStateListener implementation
 
     /**
      * Called when a test is started on the local system. This implementation
@@ -436,10 +435,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
             stoppingMessage.dispose();
             stoppingMessage = null;
         }
-    }
-
-    /* Implements TestListener#testIterationStart(LoopIterationEvent) */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 
     /**
