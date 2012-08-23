@@ -2730,26 +2730,46 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
-<component name="Aggregate Graph" index="&sect-num;.3.12"  width="914" height="684" screenshot="aggregate_graph.png">
+<component name="Aggregate Graph" index="&sect-num;.3.12"  width="893" height="713" screenshot="aggregate_graph.png">
 <description>The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file.</description>
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
-<figure width="913" height="443" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
+<figure width="900" height="442" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
 </p>
 </div>
+<p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
+<properties>
+        <property name="Column settings" required="Yes"><ul>
+        <li><u>Columns to display:</u> Choose the column(s) to display in graph.</li>
+        <li><u>Rectangles color:</u> Clic on right color rectangle open a popup dialog to choose a custom color for column.</li>
+        <li><u>Foreground color</u> Allow to change the value text color.</li>
+        <li><u>Value font:</u> Allow to define font settings for the text.</li>
+        <li><u>Draw outlines bar?</u> To draw or not the border line on bar chart</li>
+        <li><u>Show number grouping?</u> Show or not the number grouping in Y Axis labels.</li>
+        <li><u>Value labels vertical?</u> Change orientation for value label. (Default is horizontal)</li>
+        <li><u>Column label selection:</u> Filter by result label. A regular expression can be used, example: <i>.*Transaction.*</i>
+        <br></br>Before display the graph, click on <b>Apply filter</b> button to refresh internal data.</li></ul></property>
+        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "Aggregate Graph". 
+        The button <b>Synchronize with name</b> define the title with the label of the listener. And define font settings for graph title</property>
+        <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
+        Use Width and Height fields to define a custom size. The unit is pixel. </property>
+        <property name="X Axis settings" required="No">Define the max length of X Axis label (in pixel).</property>
+        <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis.</property>
+        <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
+</properties>
 </component>
 
-<component name="Response Time Graph" index="&sect-num;.3.13"  width="903" height="604" screenshot="response_time_graph.png">
+<component name="Response Time Graph" index="&sect-num;.3.13"  width="869" height="620" screenshot="response_time_graph.png">
 <description>
 The Response Time Graph draws a line chart showing the evolution of response time during the test, for each labelled request. 
 </description>
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
-<figure width="906" height="473" image="response_time_graph_settings.png">Response time graph settings</figure>
+<figure width="871" height="489" image="response_time_graph_settings.png">Response time graph settings</figure>
 </p>
 </div>
 <p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
@@ -2757,16 +2777,16 @@ The Response Time Graph draws a line chart showing the evolution of response tim
         <property name="Interval (ms)" required="Yes">The time in milli-seconds for X axis interval. 
         Before display the graph, click on <b>Apply interval</b> button to refresh internal data.</property>
         <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex.<i>.*Transaction.*</i>. 
-        Before display the graph, click on <b>Reload data</b> button to refresh internal data.</property>
+        Before display the graph, click on <b>Apply filter</b> button to refresh internal data.</property>
         <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "Response Time Graph". 
         The button <b>Synchronize with name</b> define the title with the label of the listener. And define font settings for graph title</property>
         <property name="Line settings" required="Yes">Define the width of the line. Define the type of each value point. Choose <i>none</i> to have a line without mark</property>
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
         Use Width and Height fields to define a custom size. The unit is pixel. </property>
-        <property name="X Axis settings" required="No">Customize the date format of  X axis label . The syntax is the Java SimpleDateFormat API. .</property>
-        <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis. Show or not the number grouping in Y Axis labels</property>
+        <property name="X Axis settings" required="No">Customize the date format of  X axis label.
+        The syntax is the Java <a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
+        <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis. Show or not the number grouping in Y Axis labels.</property>
         <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
-
 </properties>
 </component>
 
@@ -3298,7 +3318,7 @@ This may cause problems for Assertions.
 </properties>
 </component>
 
-<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="506" height="329" screenshot="http-config/http-cookie-manager.png">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="513" height="383" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
 there is currently no way to specify which one is to be used.
@@ -3348,6 +3368,10 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
   http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
   [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
     </property>
+ <property name="Implementation" required="Yes">HC3CookieHandler (HttpClient 3.1 API) or HC4CookieHandler (HttpClient 4 API). 
+  Default is HC3CookieHandler.
+  <br></br>
+  <i>[Note: If your have a website to test with IPv6 address, choose HC4CookieHandler (IPv6 compliant)]</i></property>
   <property name="User-Defined Cookies" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.
   <br></br>
