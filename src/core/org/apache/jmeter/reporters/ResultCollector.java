@@ -299,7 +299,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             BufferedReader dataReader = null;
             BufferedInputStream bufferedInputStream = null;
             try {
-                dataReader = new BufferedReader(new FileReader(file));
+                dataReader = new BufferedReader(new FileReader(file)); // TODO Charset ?
                 // Get the first line, and see if it is XML
                 String line = dataReader.readLine();
                 dataReader.close();
