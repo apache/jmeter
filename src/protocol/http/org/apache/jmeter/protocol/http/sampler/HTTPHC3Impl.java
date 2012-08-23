@@ -1024,9 +1024,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             }
             // Set the content length
             put.setRequestHeader(HTTPConstants.HEADER_CONTENT_LENGTH, Long.toString(put.getRequestEntity().getContentLength()));
-            return putBody.toString();
         }
-        return null;
+        return putBody.toString();
     }
 
     /**
