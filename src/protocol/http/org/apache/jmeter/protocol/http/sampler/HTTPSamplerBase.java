@@ -139,6 +139,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
+    /** This is the encoding used for the content, i.e. the charset name, not the header "Content-Encoding" */
     public static final String CONTENT_ENCODING = "HTTPSampler.contentEncoding"; // $NON-NLS-1$
 
     public static final String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
@@ -446,10 +447,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getPropertyAsString(METHOD);
     }
 
-    public void setContentEncoding(String value) {
-        setProperty(CONTENT_ENCODING, value);
+    /**
+     * Sets the value of the encoding to be used for the content.
+     * 
+     * @param charsetName the name of the encoding to be used
+     */
+    public void setContentEncoding(String charsetName) {
+        setProperty(CONTENT_ENCODING, charsetName);
     }
 
+    /**
+     * 
+     * @return the encoding of the content, i.e. its charset name
+     */
     public String getContentEncoding() {
         return getPropertyAsString(CONTENT_ENCODING);
     }
