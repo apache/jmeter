@@ -26,7 +26,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
-import org.apache.commons.lang.CharUtils;
+import org.apache.commons.lang3.CharUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;

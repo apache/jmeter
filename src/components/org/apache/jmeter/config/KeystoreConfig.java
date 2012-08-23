@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.config;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;

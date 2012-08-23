@@ -20,7 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Searcher implementation that searches text as is

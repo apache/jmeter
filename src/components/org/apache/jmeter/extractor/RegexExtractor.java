@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -167,7 +167,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 : useHeaders() ? result.getResponseHeaders()
                 : useCode() ? result.getResponseCode() // Bug 43451
                 : useMessage() ? result.getResponseMessage() // Bug 43451
-                : useUnescapedBody() ? StringEscapeUtils.unescapeHtml(result.getResponseDataAsString())
+                : useUnescapedBody() ? StringEscapeUtils.unescapeHtml4(result.getResponseDataAsString())
                 : result.getResponseDataAsString() // Bug 36898
                 ;
        if (log.isDebugEnabled()) {
