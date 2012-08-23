@@ -1010,18 +1010,29 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         StringBuilder putBody = new StringBuilder(1000);
         boolean hasPutBody = false;
 
+        HTTPFileArg files[] = getHTTPFiles();
         // Check if the header manager had a content type header
         // This allows the user to specify his own content-type
         Header contentTypeHeader = put.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
-        final String contentTypeValue = contentTypeHeader == null ? null : contentTypeHeader.getValue();
-        final boolean hasContentTypeHeader = contentTypeValue != null;
+        String contentTypeValue = contentTypeHeader == null ? null : contentTypeHeader.getValue();
+        if(contentTypeValue == null) {
+            // Allow the mimetype of the file to control the content type
+            // This is not obvious in GUI if you are not uploading any files,
+            // but just sending the content of nameless parameters
+            HTTPFileArg file = files.length > 0? files[0] : null;
+            if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                contentTypeValue = file.getMimeType();
+            }
+        }
 
         // Check for local contentEncoding override
         final String contentEncoding = getContentEncodingOrNull();
         final boolean haveContentEncoding = contentEncoding != null;
-        
-        HttpParams putParams = put.getParams();
-        HTTPFileArg files[] = getHTTPFiles();
+
+        final HttpParams putParams = put.getParams();
+        final String charset = getCharsetWithDefault(putParams);
+        final ContentType contentType = ContentType.create(contentTypeValue, charset);
+
 
         // If there are no arguments, we can send a file as the body of the request
 
@@ -1029,7 +1040,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             hasPutBody = true;
 
             // If getSendFileAsPostBody returned true, it's sure that file is not null
-            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), (ContentType) null); // TODO is null correct?
+            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), contentType);
             put.setEntity(fileRequestEntity);
 
             // We just add placeholder text for file content
@@ -1040,12 +1051,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         else if(getSendParameterValuesAsPostBody()) {
             hasPutBody = true;
 
-            // If a content encoding is specified, we set it as http parameter, so that
-            // the post body will be encoded in the specified content encoding
-            if(haveContentEncoding) {
-                putParams.setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET,contentEncoding);
-            }
-            String charset = getCharsetWithDefault(putParams);
             // Just append all the parameter values, and use that as the post body
             StringBuilder putBodyContent = new StringBuilder();
             PropertyIterator args = getArguments().iterator();
@@ -1059,8 +1064,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 putBodyContent.append(value);
             }
-            ContentType contentType = 
-                    ContentType.create(contentTypeValue, charset);
             StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentType);
             put.setEntity(requestEntity);
         }
@@ -1072,7 +1075,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 put.getEntity().writeTo(bos);
                 bos.flush();
-                String charset = getCharsetWithDefault(putParams);
 
                 // We get the posted bytes using the charset that was used to create them
                 // if none was set, platform encoding will be used
@@ -1081,16 +1083,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             else {
                 putBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
-            }
-            if(!hasContentTypeHeader) {
-                // Allow the mimetype of the file to control the content type
-                // This is not obvious in GUI if you are not uploading any files,
-                // but just sending the content of nameless parameters
-                // TODO: needs a multiple file upload scenerio
-                HTTPFileArg file = files.length > 0? files[0] : null;
-                if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
-                    put.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
-                }
             }
             return putBody.toString();
         }
