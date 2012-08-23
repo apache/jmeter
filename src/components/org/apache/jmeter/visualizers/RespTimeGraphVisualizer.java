@@ -187,7 +187,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private Pattern pattern = null;
 
-    private Matcher matcher = null;
+    private transient Matcher matcher = null;
 
     private final List<Color> listColors = Colors.getColors();
 
