@@ -312,7 +312,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * i.e. without any additional wrapping.
      *
      * @return true if specified file is to be sent as the body,
-     * i.e. there is a single file entry which has a non-empty name and
+     * i.e. there is a single file entry which has a non-empty path and
      * an empty Parameter name.
      */
     public boolean getSendFileAsPostBody() {
