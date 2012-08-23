@@ -782,17 +782,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Buffer to hold the post body, except file content
         StringBuilder postedBody = new StringBuilder(1000);
         HTTPFileArg files[] = getHTTPFiles();
+
+        final String contentEncoding = getContentEncodingOrNull();
+        final boolean haveContentEncoding = contentEncoding != null;
+
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(getUseMultipartForPost()) {
             // If a content encoding is specified, we use that as the
             // encoding of any parameter values
-            String contentEncoding = getContentEncoding();
-            if(isNullOrEmptyTrimmed(contentEncoding)) {
-                contentEncoding = null;
-            }
             Charset charset = null;
-            if(contentEncoding != null) {
+            if(haveContentEncoding) {
                 charset = Charset.forName(contentEncoding);
             }
 
@@ -881,13 +881,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
                 // If a content encoding is specified, we set it as http parameter, so that
                 // the post body will be encoded in the specified content encoding
-                String contentEncoding = getContentEncoding();
-                boolean haveContentEncoding = false;
-                if(isNullOrEmptyTrimmed(contentEncoding)) {
-                    contentEncoding=null;
-                } else {
+                if(haveContentEncoding) {
                     post.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, contentEncoding);
-                    haveContentEncoding = true;
                 }
 
                 // If none of the arguments have a name specified, we
@@ -987,7 +982,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 //                    post.getEntity().writeTo(bos);
 //                    bos.flush();
 //                    // We get the posted bytes using the encoding used to create it
-//                    if (contentEncoding != null) {
+//                    if (haveContentEncoding) {
 //                        postedBody.append(new String(bos.toByteArray(), contentEncoding));
 //                    } else {
 //                        postedBody.append(new String(bos.toByteArray()));
@@ -1002,6 +997,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return postedBody.toString();
     }
 
+    // TODO merge put and post methods as far as possible.
+    // e.g. post checks for multipart form/files, and if not, invokes sendData(HttpEntityEnclosingRequestBase)
+
     // TODO - implementation not fully tested
     private String sendPutData(HttpPut put) throws IOException {
         // Buffer to hold the put body, except file content
@@ -1011,11 +1009,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Check if the header manager had a content type header
         // This allows the user to specify his own content-type
         Header contentTypeHeader = put.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
-        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
+        final String contentTypeValue = contentTypeHeader == null ? null : contentTypeHeader.getValue();
+        final boolean hasContentTypeHeader = contentTypeValue != null;
 
         // Check for local contentEncoding override
-        final String contentEncoding = getContentEncoding();
-        boolean haveContentEncoding = !isNullOrEmptyTrimmed(contentEncoding);
+        final String contentEncoding = getContentEncodingOrNull();
+        final boolean haveContentEncoding = contentEncoding != null;
         
         HttpParams putParams = put.getParams();
         HTTPFileArg files[] = getHTTPFiles();
@@ -1056,10 +1055,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 putBodyContent.append(value);
             }
-            String contentTypeValue = null;
-            if(hasContentTypeHeader) {
-                contentTypeValue = put.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE).getValue();
-            }
             ContentType contentType = 
                     ContentType.create(contentTypeValue, charset);
             StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentType);
@@ -1096,6 +1091,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return putBody.toString();
         }
         return null;
+    }
+
+    /**
+     * 
+     * @return the value of {@link #getContentEncoding()}; forced to null if empty
+     */
+    private String getContentEncodingOrNull() {
+        String ce = getContentEncoding();
+        if (isNullOrEmptyTrimmed(ce)) {
+            return null;
+        } else {
+            return ce;
+        }
     }
 
     /**
