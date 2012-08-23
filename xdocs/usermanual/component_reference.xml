@@ -279,7 +279,7 @@ In this case, the server, port and protocol are ignored; parameters are also ign
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <p>
-        If it is a POST or PUT or PATCH request and there is a single file whose 'name' attribute (below) is omitted, 
+        If it is a POST or PUT or PATCH request and there is a single file whose 'Parameter name' attribute (below) is omitted, 
         then the file is sent as the entire body
         of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for POST requests
         after version 2.2, and also for PUT requests after version 2.3.
@@ -288,7 +288,7 @@ In this case, the server, port and protocol are ignored; parameters are also ign
         </property>
         <property name="Parameter name:" required="No">Value of the "name" web request parameter.</property>
         <property name="MIME Type" required="No">MIME type (for example, text/plain).
-        If it is a POST or PUT request and either the 'name' atribute (below) are omitted or the request body is
+        If it is a POST or PUT or PATCH request and either the 'name' atribute (below) are omitted or the request body is
         constructed from parameter values only, then the value of this field is used as the value of the
         content-type request header.
         </property>
