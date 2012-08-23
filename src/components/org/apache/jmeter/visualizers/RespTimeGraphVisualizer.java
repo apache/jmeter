@@ -125,7 +125,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final JTextField samplerMatchLabel = new JTextField();
 
-    private final JButton reloadButton = new JButton(JMeterUtils.getResString("aggregate_graph_reload_data")); // $NON-NLS-1$
+    private final JButton applyFilterBtn = new JButton(JMeterUtils.getResString("graph_apply_filter")); // $NON-NLS-1$
 
     private final JCheckBox caseChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); // $NON-NLS-1$
 
@@ -318,11 +318,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             while (idx < durationTest) {
                 int keyShift = minStartTime + idx;
                 Long value = subList.get(Integer.valueOf(keyShift));
-                if (value!=null) {
+                if (value != null) {
                     nanLast = value.doubleValue();
-
                     data[s][idx] = nanLast;
-
                     // Calculate intermediate values (if needed)
                     int nlsize = nanList.size();
                     if (nlsize > 0) {
@@ -444,12 +442,12 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         } else if (eventSource == samplerSelection) {
             if (samplerSelection.isSelected()) {
                 samplerMatchLabel.setEnabled(true);
-                reloadButton.setEnabled(true);
+                applyFilterBtn.setEnabled(true);
                 caseChkBox.setEnabled(true);
                 regexpChkBox.setEnabled(true);
             } else {
                 samplerMatchLabel.setEnabled(false);
-                reloadButton.setEnabled(false);
+                applyFilterBtn.setEnabled(false);
                 caseChkBox.setEnabled(false);
                 regexpChkBox.setEnabled(false);
                 // Force reload data
@@ -457,11 +455,11 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             }
         }
         // Not 'else if' because forceReloadData 
-        if (eventSource == reloadButton || eventSource == intervalButton || forceReloadData) {
+        if (eventSource == applyFilterBtn || eventSource == intervalButton || forceReloadData) {
             if (eventSource == intervalButton) {
                 intervalValue = Integer.parseInt(intervalField.getText());
             }
-            if (eventSource == reloadButton && samplerSelection.isSelected() && samplerMatchLabel.getText() != null
+            if (eventSource == applyFilterBtn && samplerSelection.isSelected() && samplerMatchLabel.getText() != null
                     && samplerMatchLabel.getText().length() > 0) {
                 pattern = createPattern(samplerMatchLabel.getText());
             } else if (forceReloadData) {
@@ -596,7 +594,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
         searchPanel.add(samplerSelection);
         samplerMatchLabel.setEnabled(false);
-        reloadButton.setEnabled(false);
+        applyFilterBtn.setEnabled(false);
         caseChkBox.setEnabled(false);
         regexpChkBox.setEnabled(false);
         samplerSelection.addActionListener(this);
@@ -605,9 +603,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         searchPanel.add(Box.createRigidArea(new Dimension(5,0)));
 
         // Button
-        reloadButton.setFont(FONT_SMALL);
-        reloadButton.addActionListener(this);
-        searchPanel.add(reloadButton);
+        applyFilterBtn.setFont(FONT_SMALL);
+        applyFilterBtn.addActionListener(this);
+        searchPanel.add(applyFilterBtn);
 
         // checkboxes
         caseChkBox.setFont(FONT_SMALL);
