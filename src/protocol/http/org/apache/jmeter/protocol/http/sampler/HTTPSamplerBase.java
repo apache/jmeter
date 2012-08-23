@@ -327,7 +327,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     /**
      * Determine if none of the parameters have a name, and if that
      * is the case, it means that the parameter values should be sent
-     * as the post body
+     * as the entity body
      *
      * @return true if none of the parameters have a name specified
      */
