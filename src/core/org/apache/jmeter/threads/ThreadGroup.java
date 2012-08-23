@@ -73,7 +73,7 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     //- JMX entries
 
-    private Thread threadStarter;
+    private transient Thread threadStarter;
 
     // List of active threads
     private Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
