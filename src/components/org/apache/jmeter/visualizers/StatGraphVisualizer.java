@@ -235,7 +235,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private Pattern pattern = null;
 
-    private Matcher matcher = null;
+    private transient Matcher matcher = null;
 
     public StatGraphVisualizer() {
         super();
