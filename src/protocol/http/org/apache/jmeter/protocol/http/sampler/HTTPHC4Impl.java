@@ -277,8 +277,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 String postBody = sendPostData((HttpPost)httpRequest);
                 res.setQueryString(postBody);
             } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
-                String putBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
-                res.setQueryString(putBody);
+                String entityBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
+                res.setQueryString(entityBody);
             }
             HttpResponse httpResponse = httpClient.execute(httpRequest, localContext); // perform the sample
 
@@ -1004,9 +1004,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // TODO merge put and post methods as far as possible.
     // e.g. post checks for multipart form/files, and if not, invokes sendData(HttpEntityEnclosingRequestBase)
 
-    // TODO - implementation not fully tested
+
+    /**
+     * Creates the entity data to be sent.
+     * 
+     * @param entity to be processed, e.g. PUT or PATCH
+     * @return the entity content, may be empty
+     * @throws IOException
+     */
     private String sendEntityData( HttpEntityEnclosingRequestBase entity) throws IOException {
-        // Buffer to hold the entity body, except file content
+        // Buffer to hold the entity body
         StringBuilder entityBody = new StringBuilder(1000);
         boolean hasEntityBody = false;
 
@@ -1078,12 +1085,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 entityBody.append(new String(bos.toByteArray(), charset));
                 bos.close();
             }
-            else {
+            else { // this probably cannot happen
                 entityBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
             }
-            return entityBody.toString();
         }
-        return null;
+        return entityBody.toString(); // may be the empty string
     }
 
     /**
