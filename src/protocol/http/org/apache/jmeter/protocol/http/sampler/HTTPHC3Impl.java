@@ -960,9 +960,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             // If getSendFileAsPostBody returned true, it's sure that file is not null
             FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(files[0].getPath()),null);
             put.setRequestEntity(fileRequestEntity);
-
-            // We just add placeholder text for file content
-            putBody.append("<actual file content, not shown here>");
         }
         // If none of the arguments have a name specified, we
         // just send all the values as the put body
