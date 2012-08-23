@@ -65,7 +65,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private static final String US_ASCII = "US-ASCII"; // $NON-NLS-1$
 
     private static final byte[] CRLF = { 0x0d, 0x0A };
-    private static final int MIRROR_PORT = 8081; // Different from TestHTTPMirrorThread port
+    private static final int MIRROR_PORT = 8182; // Different from TestHTTPMirrorThread port and standard mirror server
     private static byte[] TEST_FILE_CONTENT;
 
     private static File temporaryFile;
