@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -40,7 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
  * e.g. "&amp;gt;&amp;zzzz;x" will become "&gt;&amp;zzzz;x".
  * </p>
- * @see org.apache.commons.lang.StringEscapeUtils#unescapeHtml(String)
+ * @see org.apache.commons.lang3.StringEscapeUtils#unescapeHtml(String)
  * @since 2.3.3
  */
 public class UnEscapeHtml extends AbstractFunction {
@@ -64,7 +64,7 @@ public class UnEscapeHtml extends AbstractFunction {
             throws InvalidVariableException {
 
         String escapedString = ((CompoundVariable) values[0]).execute();
-        return StringEscapeUtils.unescapeHtml(escapedString);
+        return StringEscapeUtils.unescapeHtml4(escapedString);
 
     }
 
