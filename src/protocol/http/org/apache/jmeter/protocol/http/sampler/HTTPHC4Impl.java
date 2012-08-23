@@ -55,9 +55,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpOptions;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -241,6 +243,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 httpRequest = new HttpDelete(uri);
             } else if (method.equals(HTTPConstants.GET)) {
                 httpRequest = new HttpGet(uri);
+            } else if (method.equals(HTTPConstants.PATCH)) {
+                httpRequest = new HttpPatch(uri);
             } else {
                 throw new IllegalArgumentException("Unexpected method: "+method);
             }
@@ -272,8 +276,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (method.equals(HTTPConstants.POST)) {
                 String postBody = sendPostData((HttpPost)httpRequest);
                 res.setQueryString(postBody);
-            } else if (method.equals(HTTPConstants.PUT)) {
-                String putBody = sendPutData((HttpPut)httpRequest);
+            } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
+                String putBody = sendPutData(( HttpEntityEnclosingRequestBase)httpRequest);
                 res.setQueryString(putBody);
             }
             HttpResponse httpResponse = httpClient.execute(httpRequest, localContext); // perform the sample
@@ -1001,7 +1005,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // e.g. post checks for multipart form/files, and if not, invokes sendData(HttpEntityEnclosingRequestBase)
 
     // TODO - implementation not fully tested
-    private String sendPutData(HttpPut put) throws IOException {
+    private String sendPutData( HttpEntityEnclosingRequestBase put) throws IOException {
         // Buffer to hold the put body, except file content
         StringBuilder putBody = new StringBuilder(1000);
         boolean hasPutBody = false;

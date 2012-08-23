@@ -217,9 +217,9 @@ https.default.protocol=SSLv3
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
-        <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
+        <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE, PATCH (HC4 only)</property>
         <property name="Content Encoding" required="No">
-        Content encoding to be used (for POST, PUT and FILE). 
+        Content encoding to be used (for POST, PUT, PATCH and FILE). 
         This the the character encoding to be used, and is not related to the Content-Encoding HTTP header.
         </property>
 		<property name="Redirect Automatically" required="No">
@@ -279,7 +279,7 @@ In this case, the server, port and protocol are ignored; parameters are also ign
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <p>
-        If it is a POST or PUT request and there is a single file whose 'name' attribute (below) is omitted, 
+        If it is a POST or PUT or PATCH request and there is a single file whose 'name' attribute (below) is omitted, 
         then the file is sent as the entire body
         of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for POST requests
         after version 2.2, and also for PUT requests after version 2.3.
@@ -364,14 +364,18 @@ To send a CRLF after the last line of data, just ensure that there is an empty l
 
 <p>
 <b>Method Handling:</b><br></br>
-The POST and PUT request methods work similarly, except that the PUT method does not support multipart requests.
-The PUT method body must be provided as one of the following:
+The POST, PUT and PATCH request methods work similarly, except that the PUT and PATCH methods do not support multipart requests
+or file upload.
+The PUT and PATCH method body must be provided as one of the following:
 <ul>
-<li>define the body as a file</li>
+<li>define the body as a file with empty Parameter name field; in which case the MIME Type is used as the Content-Type</li>
 <li>define the body as parameter value(s) with no name</li>
+<li>use the Post Body tab</li>
 </ul>
 If you define any parameters with a name in either the sampler or Http
 defaults then nothing is sent.
+PUT and PATCH require a Content-Type. 
+If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
 The GET and DELETE request methods work similarly to each other.
 </p>
 <p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for

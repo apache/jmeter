@@ -126,6 +126,7 @@ Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F
 
 <h3>HTTP Samplers</h3>
 <ul>
+<li><bugzilla>53675</bugzilla> - Add PATCH verb to HTTP sampler</li>
 </ul>
 
 <h3>Other samplers</h3>

@@ -199,6 +199,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         HTTPConstants.OPTIONS,
         HTTPConstants.TRACE,
         HTTPConstants.DELETE,
+        HTTPConstants.PATCH,
         };
 
     private static final List<String> METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
