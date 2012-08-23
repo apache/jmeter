@@ -96,6 +96,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getContentEncoding()}
+     * @return the encoding of the content, i.e. its charset name
      */
     protected String getContentEncoding() {
         return testElement.getContentEncoding();
