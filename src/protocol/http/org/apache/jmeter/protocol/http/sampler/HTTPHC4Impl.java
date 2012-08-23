@@ -277,7 +277,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 String postBody = sendPostData((HttpPost)httpRequest);
                 res.setQueryString(postBody);
             } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
-                String putBody = sendPutData(( HttpEntityEnclosingRequestBase)httpRequest);
+                String putBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
                 res.setQueryString(putBody);
             }
             HttpResponse httpResponse = httpClient.execute(httpRequest, localContext); // perform the sample
@@ -1005,15 +1005,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // e.g. post checks for multipart form/files, and if not, invokes sendData(HttpEntityEnclosingRequestBase)
 
     // TODO - implementation not fully tested
-    private String sendPutData( HttpEntityEnclosingRequestBase put) throws IOException {
-        // Buffer to hold the put body, except file content
-        StringBuilder putBody = new StringBuilder(1000);
-        boolean hasPutBody = false;
+    private String sendEntityData( HttpEntityEnclosingRequestBase entity) throws IOException {
+        // Buffer to hold the entity body, except file content
+        StringBuilder entityBody = new StringBuilder(1000);
+        boolean hasEntityBody = false;
 
         HTTPFileArg files[] = getHTTPFiles();
         // Check if the header manager had a content type header
         // This allows the user to specify his own content-type
-        Header contentTypeHeader = put.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
+        Header contentTypeHeader = entity.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
         String contentTypeValue = contentTypeHeader == null ? null : contentTypeHeader.getValue();
         if(contentTypeValue == null) {
             // Allow the mimetype of the file to control the content type
@@ -1029,30 +1029,30 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         final String contentEncoding = getContentEncodingOrNull();
         final boolean haveContentEncoding = contentEncoding != null;
 
-        final HttpParams putParams = put.getParams();
-        final String charset = getCharsetWithDefault(putParams);
+        final HttpParams entityParams = entity.getParams();
+        final String charset = getCharsetWithDefault(entityParams);
         final ContentType contentType = ContentType.create(contentTypeValue, charset);
 
 
         // If there are no arguments, we can send a file as the body of the request
 
         if(!hasArguments() && getSendFileAsPostBody()) {
-            hasPutBody = true;
+            hasEntityBody = true;
 
             // If getSendFileAsPostBody returned true, it's sure that file is not null
             FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), contentType);
-            put.setEntity(fileRequestEntity);
+            entity.setEntity(fileRequestEntity);
 
             // We just add placeholder text for file content
-            putBody.append("<actual file content, not shown here>");
+            entityBody.append("<actual file content, not shown here>");
         }
         // If none of the arguments have a name specified, we
-        // just send all the values as the put body
+        // just send all the values as the entity body
         else if(getSendParameterValuesAsPostBody()) {
-            hasPutBody = true;
+            hasEntityBody = true;
 
-            // Just append all the parameter values, and use that as the post body
-            StringBuilder putBodyContent = new StringBuilder();
+            // Just append all the parameter values, and use that as the entity body
+            StringBuilder entityBodyContent = new StringBuilder();
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
@@ -1062,29 +1062,29 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 } else {
                     value = arg.getEncodedValue();
                 }
-                putBodyContent.append(value);
+                entityBodyContent.append(value);
             }
-            StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentType);
-            put.setEntity(requestEntity);
+            StringEntity requestEntity = new StringEntity(entityBodyContent.toString(), contentType);
+            entity.setEntity(requestEntity);
         }
         // Check if we have any content to send for body
-        if(hasPutBody) {
+        if(hasEntityBody) {
             // If the request entity is repeatable, we can send it first to
             // our own stream, so we can return it
-            if(put.getEntity().isRepeatable()) {
+            if(entity.getEntity().isRepeatable()) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                put.getEntity().writeTo(bos);
+                entity.getEntity().writeTo(bos);
                 bos.flush();
 
                 // We get the posted bytes using the charset that was used to create them
                 // if none was set, platform encoding will be used
-                putBody.append(new String(bos.toByteArray(), charset));
+                entityBody.append(new String(bos.toByteArray(), charset));
                 bos.close();
             }
             else {
-                putBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
+                entityBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
             }
-            return putBody.toString();
+            return entityBody.toString();
         }
         return null;
     }
