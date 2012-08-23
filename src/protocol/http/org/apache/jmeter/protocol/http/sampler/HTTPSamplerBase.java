@@ -308,11 +308,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * Determine if the file should be sent as the entire Post body,
-     * i.e. without any additional wrapping
+     * Determine if the file should be sent as the entire Content body,
+     * i.e. without any additional wrapping.
      *
      * @return true if specified file is to be sent as the body,
-     * i.e. FileField is blank
+     * i.e. there is a single file entry which has a non-empty name and
+     * an empty Parameter name.
      */
     public boolean getSendFileAsPostBody() {
         // If there is one file with no parameter name, the file will
