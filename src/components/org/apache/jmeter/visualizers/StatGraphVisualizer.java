@@ -56,6 +56,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.gui.action.ActionNames;
@@ -193,7 +195,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private JTextField columnMatchLabel = new JTextField();
 
-    private JButton reloadButton = new JButton(JMeterUtils.getResString("aggregate_graph_reload_data")); // $NON-NLS-1$
+    private JButton applyFilterBtn = new JButton(JMeterUtils.getResString("graph_apply_filter")); // $NON-NLS-1$
 
     private JCheckBox caseChkBox = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); // $NON-NLS-1$
 
@@ -230,6 +232,10 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private Color colorForeGraph = Color.BLACK;
     
     private int nbColToGraph = 1;
+
+    private Pattern pattern = null;
+
+    private Matcher matcher = null;
 
     public StatGraphVisualizer() {
         super();
@@ -285,10 +291,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     public void add(final SampleResult res) {
         final String sampleLabel = res.getSampleLabel();
-        Matcher matcher = null;
-        if (columnSelection.isSelected() && columnMatchLabel.getText() != null && columnMatchLabel.getText().length() > 0) {
-                Pattern pattern = createPattern(columnMatchLabel.getText());
-                matcher = pattern.matcher(sampleLabel);
+        // Sampler selection
+        if (columnSelection.isSelected() && pattern != null) {
+            matcher = pattern.matcher(sampleLabel);
         }
         if ((matcher == null) || (matcher.find())) {
             JMeterUtils.runSafe(new Runnable() {
@@ -360,6 +365,18 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_settings"), settingsPane); //$NON-NLS-1$
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_graph"), graphPanel); //$NON-NLS-1$
+
+        // If clic on the Graph tab, make the graph (without apply interval or filter)
+        ChangeListener changeListener = new ChangeListener() {
+            public void stateChanged(ChangeEvent changeEvent) {
+                JTabbedPane srcTab = (JTabbedPane) changeEvent.getSource();
+                int index = srcTab.getSelectedIndex();
+                if (srcTab.getTitleAt(index).equals(JMeterUtils.getResString("aggregate_graph_tab_graph"))) { //$NON-NLS-1$
+                    actionMakeGraph();
+                }
+            }
+        };
+        tabbedGraph.addChangeListener(changeListener);
 
         spane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         spane.setLeftComponent(myScrollPane);
@@ -521,17 +538,10 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     public void actionPerformed(ActionEvent event) {
+        boolean forceReloadData = false;
         final Object eventSource = event.getSource();
         if (eventSource == displayButton) {
-            if (model.getRowCount() > 1) {
-                makeGraph();
-                tabbedGraph.setSelectedIndex(1);
-            } else {
-                JOptionPane.showMessageDialog(null, JMeterUtils
-                        .getResString("aggregate_graph_no_values_to_graph"), // $NON-NLS-1$
-                        JMeterUtils.getResString("aggregate_graph_no_values_to_graph"), // $NON-NLS-1$
-                        JOptionPane.WARNING_MESSAGE);
-            }
+            actionMakeGraph();
         } else if (eventSource == saveGraph) {
             saveGraphToFile = true;
             try {
@@ -579,16 +589,27 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         } else if (eventSource == columnSelection) {
             if (columnSelection.isSelected()) {
                 columnMatchLabel.setEnabled(true);
-                reloadButton.setEnabled(true);
+                applyFilterBtn.setEnabled(true);
                 caseChkBox.setEnabled(true);
                 regexpChkBox.setEnabled(true);
             } else {
                 columnMatchLabel.setEnabled(false);
-                reloadButton.setEnabled(false);
+                applyFilterBtn.setEnabled(false);
                 caseChkBox.setEnabled(false);
                 regexpChkBox.setEnabled(false);
+                // Force reload data
+                forceReloadData = true;
             }
-        } else if (eventSource == reloadButton) {
+        }
+        // Not 'else if' because forceReloadData 
+        if (eventSource == applyFilterBtn || forceReloadData) {
+            if (columnSelection.isSelected() && columnMatchLabel.getText() != null
+                    && columnMatchLabel.getText().length() > 0) {
+                pattern = createPattern(columnMatchLabel.getText());
+            } else if (forceReloadData) {
+                pattern = null;
+                matcher = null;
+            }
             if (getFile() != null && getFile().length() > 0) {
                 clearData();
                 FilePanel filePanel = (FilePanel) getFilePanel();
@@ -610,6 +631,17 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         }
     }
 
+    private void actionMakeGraph() {
+        if (model.getRowCount() > 1) {
+            makeGraph();
+            tabbedGraph.setSelectedIndex(1);
+        } else {
+            JOptionPane.showMessageDialog(null, JMeterUtils
+                    .getResString("aggregate_graph_no_values_to_graph"), // $NON-NLS-1$
+                    JMeterUtils.getResString("aggregate_graph_no_values_to_graph"), // $NON-NLS-1$
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
     @Override
     public JComponent getPrintableComponent() {
         if (saveGraphToFile == true) {
@@ -696,7 +728,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
         searchPanel.add(columnSelection);
         columnMatchLabel.setEnabled(false);
-        reloadButton.setEnabled(false);
+        applyFilterBtn.setEnabled(false);
         caseChkBox.setEnabled(false);
         regexpChkBox.setEnabled(false);
         columnSelection.addActionListener(this);
@@ -705,9 +737,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         searchPanel.add(Box.createRigidArea(new Dimension(5,0)));
 
         // Button
-        reloadButton.setFont(font);
-        reloadButton.addActionListener(this);
-        searchPanel.add(reloadButton);
+        applyFilterBtn.setFont(font);
+        applyFilterBtn.addActionListener(this);
+        searchPanel.add(applyFilterBtn);
 
         // checkboxes
         caseChkBox.setFont(font);
