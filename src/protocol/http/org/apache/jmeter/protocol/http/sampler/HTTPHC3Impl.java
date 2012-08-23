@@ -45,6 +45,7 @@ import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.FileRequestEntity;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
@@ -217,6 +218,13 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 httpMethod = new DeleteMethod(urlStr);
             } else if (method.equals(HTTPConstants.GET)){
                 httpMethod = new GetMethod(urlStr);
+            } else if (method.equals(HTTPConstants.PATCH)){
+                httpMethod = new EntityEnclosingMethod(urlStr) {
+                    @Override
+                    public String getName() { // HC3.1 does not have the method
+                        return "PATCH";
+                    }
+                };
             } else {
                 throw new IllegalArgumentException("Unexpected method: "+method);
             }
@@ -242,8 +250,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             if (method.equals(HTTPConstants.POST)) {
                 String postBody = sendPostData((PostMethod)httpMethod);
                 res.setQueryString(postBody);
-            } else if (method.equals(HTTPConstants.PUT)) {
-                String putBody = sendPutData((PutMethod)httpMethod);
+            } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
+                String putBody = sendEntityData((EntityEnclosingMethod) httpMethod);
                 res.setQueryString(putBody);
             }
 
@@ -931,9 +939,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Set up the PUT data
+     * Set up the PUT/PATCH data
      */
-    private String sendPutData(PutMethod put) throws IOException {
+    private String sendEntityData(EntityEnclosingMethod put) throws IOException {
         // Buffer to hold the put body, except file content
         StringBuilder putBody = new StringBuilder(1000);
         boolean hasPutBody = false;
