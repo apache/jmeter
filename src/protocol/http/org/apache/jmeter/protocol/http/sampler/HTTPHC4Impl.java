@@ -1042,9 +1042,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // If getSendFileAsPostBody returned true, it's sure that file is not null
             FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), contentType);
             entity.setEntity(fileRequestEntity);
-
-            // We just add placeholder text for file content
-            entityBody.append("<actual file content, not shown here>");
         }
         // If none of the arguments have a name specified, we
         // just send all the values as the entity body
