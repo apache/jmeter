@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 
 /**

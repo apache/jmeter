@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -68,7 +68,7 @@ public class EscapeHtml extends AbstractFunction {
             throws InvalidVariableException {
 
         String rawString = ((CompoundVariable) values[0]).execute();
-        return StringEscapeUtils.escapeHtml(rawString);
+        return StringEscapeUtils.escapeHtml4(rawString);
 
     }
 

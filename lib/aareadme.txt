@@ -60,6 +60,10 @@ commons-lang-2.6
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
+
+commons-lang3-3.1
+----------------
+http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
 
 commons-logging-1.1.1
