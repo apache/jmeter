@@ -914,19 +914,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     PropertyIterator args = getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                        String value;
-                        if (haveContentEncoding){
-                            value = arg.getEncodedValue(contentEncoding);
-                        } else {
-                            value = arg.getEncodedValue();
-                        }
-                        postBody.append(value);
+                        postBody.append(arg.getValue());
                     }
-                    ContentType contentType = 
-                            ContentType.create(post.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE).getValue(), contentEncoding);
-                    StringEntity requestEntity = new StringEntity(postBody.toString(), contentType);
+                    final String charset = getContentEncoding(HTTP.DEF_CONTENT_CHARSET.name());
+                    // Let StringEntity perform the encoding
+                    StringEntity requestEntity = new StringEntity(postBody.toString(), charset);
                     post.setEntity(requestEntity);
-                    postedBody.append(postBody.toString()); // TODO OK?
+                    postedBody.append(postBody.toString());
                 } else {
                     // It is a normal post request, with parameter names and values
 
