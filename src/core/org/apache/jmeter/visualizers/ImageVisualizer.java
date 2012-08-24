@@ -19,10 +19,10 @@
 package org.apache.jmeter.visualizers;
 
 /**
- * TODO - does not appear to be used
+ * TODO - interface is used but getImage() does not appear to be used
  *
  * @version $Revision$
  */
 public interface ImageVisualizer {
-    public java.awt.Image getImage();
+    java.awt.Image getImage();
 }
