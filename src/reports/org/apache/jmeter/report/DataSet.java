@@ -39,76 +39,76 @@ public interface DataSet extends Visualizer {
      * or a RDBMS. It's up to the implementing class to decide.
      * @param datasource
      */
-    public void setDataSource(String datasource);
+    void setDataSource(String datasource);
     /**
      * Return the datasource. For files, it should be the absolute path.
      * For databases, it should be the datasource name created in jmeter.
      */
-    public String getDataSource();
+    String getDataSource();
     /**
      * In some cases, we may want to return a string that isn't the full
      * datasource string or something different. For example, we may
      * want to return just the filename and not the absolutePath of
      * a JTL file.
      */
-    public String getDataSourceName();
+    String getDataSourceName();
     /**
      * Set the timestamp using the first result from the datasource
      * @param stamp
      */
-    public void setStartTimestamp(long stamp);
+    void setStartTimestamp(long stamp);
     /**
      * return the timestamp in millisecond format.
      */
-    public long getStartTimestamp();
+    long getStartTimestamp();
     /**
      * Set the timestamp using the last result from the datasource
      * @param stamp
      */
-    public void setEndTimestamp(long stamp);
+    void setEndTimestamp(long stamp);
     /**
      * return the timestamp in millisecond format.
      */
-    public long getEndTimestamp();
+    long getEndTimestamp();
     /**
      * Return the Date object using the start timestamp
      */
-    public Date getDate();
+    Date getDate();
     /**
      * convienance method for getting the date in mmdd format
      */
-    public String getMonthDayDate();
+    String getMonthDayDate();
     /**
      * convienant method for getting the date in yyyymmdd format
      */
-    public String getMonthDayYearDate();
+    String getMonthDayYearDate();
     /**
      * Classes implementing the method should return the URL's in the 
      * DataSet. It is up to the class to return Strings or URL.
      */
-    public Set<?> getURLs();
+    Set<?> getURLs();
     /**
      * Classes implementing the method should return instance of 
      * SamplingStatCalculator.
      * @return the set of statistics
      */
-    public Set<SamplingStatCalculator> getStats();
+    Set<SamplingStatCalculator> getStats();
     /**
      * Return the SamplingStatCalculator for a specific URL.
      * @param url
      */
-    public SamplingStatCalculator getStatistics(String url);
+    SamplingStatCalculator getStatistics(String url);
     /**
      * Convenience method for getting all the SamplingStatCalculators for
      * a given URL.
      * @param urls
      */
-    public List<SamplingStatCalculator> getStats(@SuppressWarnings("rawtypes")  // Method is broken anyway
+    List<SamplingStatCalculator> getStats(@SuppressWarnings("rawtypes")  // Method is broken anyway
             List urls);
     /**
      * Classes implementing the method should load the data from
      * the target location. It doesn't necessarily have to be a
      * file. It could be from a database.
      */
-    public void loadData();
+    void loadData();
 }
