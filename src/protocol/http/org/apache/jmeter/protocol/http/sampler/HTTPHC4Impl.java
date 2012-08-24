@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
@@ -91,6 +92,7 @@ import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -1007,47 +1009,48 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Creates the entity data to be sent.
+     * <p>
+     * If there is a file entry with a non-empty MIME type we use that to
+     * set the request Content-Type header, otherwise we default to whatever
+     * header is present from a Header Manager.
+     * <p>
+     * If the content charset {@link #getContentEncoding()} is null or empty 
+     * we use the HC4 default provided by {@link HTTP.DEF_CONTENT_CHARSET} which is
+     * ISO-8859-1.
      * 
      * @param entity to be processed, e.g. PUT or PATCH
      * @return the entity content, may be empty
-     * @throws IOException
+     * @throws  UnsupportedEncodingException for invalid charset name
+     * @throws IOException cannot really occur for ByteArrayOutputStream methods
      */
     private String sendEntityData( HttpEntityEnclosingRequestBase entity) throws IOException {
         // Buffer to hold the entity body
         StringBuilder entityBody = new StringBuilder(1000);
         boolean hasEntityBody = false;
 
-        HTTPFileArg files[] = getHTTPFiles();
-        // Check if the header manager had a content type header
-        // This allows the user to specify his own content-type
-        Header contentTypeHeader = entity.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
-        String contentTypeValue = contentTypeHeader == null ? null : contentTypeHeader.getValue();
-        if(contentTypeValue == null) {
-            // Allow the mimetype of the file to control the content type
-            // This is not obvious in GUI if you are not uploading any files,
-            // but just sending the content of nameless parameters
-            HTTPFileArg file = files.length > 0? files[0] : null;
-            if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
-                contentTypeValue = file.getMimeType();
-            }
+        final HTTPFileArg files[] = getHTTPFiles();
+        // Allow the mimetype of the file to control the content type
+        // This is not obvious in GUI if you are not uploading any files,
+        // but just sending the content of nameless parameters
+        final HTTPFileArg file = files.length > 0? files[0] : null;
+        String contentTypeValue = null;
+        if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+            contentTypeValue = file.getMimeType();
+            entity.setHeader(HEADER_CONTENT_TYPE, contentTypeValue); // we provide the MIME type here
         }
 
-        // Check for local contentEncoding override
-        final String contentEncoding = getContentEncodingOrNull();
-        final boolean haveContentEncoding = contentEncoding != null;
+        // Check for local contentEncoding (charset) override; fall back to default for content body
+        // we do this here rather so we can use the same charset to retrieve the data
+        final String charset = getContentEncoding(HTTP.DEF_CONTENT_CHARSET.name());
 
-        final HttpParams entityParams = entity.getParams();
-        final String charset = getCharsetWithDefault(entityParams);
-        final ContentType contentType = ContentType.create(contentTypeValue, charset);
-
-
+        // Only create this if we are overriding whatever default there may be
         // If there are no arguments, we can send a file as the body of the request
 
         if(!hasArguments() && getSendFileAsPostBody()) {
             hasEntityBody = true;
 
             // If getSendFileAsPostBody returned true, it's sure that file is not null
-            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), contentType);
+            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath())); // no need for content-type here
             entity.setEntity(fileRequestEntity);
         }
         // If none of the arguments have a name specified, we
@@ -1060,28 +1063,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                String value = null;
-                if (haveContentEncoding){
-                    value = arg.getEncodedValue(contentEncoding);
-                } else {
-                    value = arg.getEncodedValue();
-                }
-                entityBodyContent.append(value);
+                // Encoding is done by the StringEntity
+                entityBodyContent.append(arg.getValue());
             }
-            StringEntity requestEntity = new StringEntity(entityBodyContent.toString(), contentType);
+            StringEntity requestEntity = new StringEntity(entityBodyContent.toString(), charset);
             entity.setEntity(requestEntity);
         }
         // Check if we have any content to send for body
         if(hasEntityBody) {
             // If the request entity is repeatable, we can send it first to
             // our own stream, so we can return it
-            if(entity.getEntity().isRepeatable()) {
+            final HttpEntity entityEntry = entity.getEntity();
+            if(entityEntry.isRepeatable()) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                entity.getEntity().writeTo(bos);
+                entityEntry.writeTo(bos);
                 bos.flush();
-
                 // We get the posted bytes using the charset that was used to create them
-                // if none was set, platform encoding will be used
                 entityBody.append(new String(bos.toByteArray(), charset));
                 bos.close();
             }
@@ -1097,9 +1094,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return the value of {@link #getContentEncoding()}; forced to null if empty
      */
     private String getContentEncodingOrNull() {
+        return getContentEncoding(null);
+    }
+
+    /**
+     * @param dflt the default to be used
+     * @return the value of {@link #getContentEncoding()}; default if null or empty
+     */
+    private String getContentEncoding(String dflt) {
         String ce = getContentEncoding();
         if (isNullOrEmptyTrimmed(ce)) {
-            return null;
+            return dflt;
         } else {
             return ce;
         }
