@@ -28,10 +28,10 @@ public interface ModelListener {
     /**
      * Informs the Visualizer that the model has changed.
      */
-    public void updateVisualizer();
+    void updateVisualizer();
 
     /**
      * Informs the Visualizer that a message should be displayed.
      */
-    public void displayMessage(String messageString, boolean isError);
+    void displayMessage(String messageString, boolean isError);
 }

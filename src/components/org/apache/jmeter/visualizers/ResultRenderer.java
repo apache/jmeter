@@ -34,28 +34,28 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public interface ResultRenderer {
 
-    public void clearData();
+    void clearData();
 
-    public void init();
+    void init();
 
-    public void setupTabPane();
+    void setupTabPane();
 
-    public void setLastSelectedTab(int index);
+    void setLastSelectedTab(int index);
 
-    public void setRightSide(JTabbedPane rightSide);
+    void setRightSide(JTabbedPane rightSide);
 
-    public void setSamplerResult(Object userObject);
+    void setSamplerResult(Object userObject);
 
-    public void renderResult(SampleResult sampleResult);
+    void renderResult(SampleResult sampleResult);
 
-    public void renderImage(SampleResult sampleResult);
+    void renderImage(SampleResult sampleResult);
 
     /**
      *
      * @return the string to be displayed by the ComboBox
      */
-    public String toString();
+    String toString();
 
-    public void setBackgroundColor(Color backGround);
+    void setBackgroundColor(Color backGround);
 
 }

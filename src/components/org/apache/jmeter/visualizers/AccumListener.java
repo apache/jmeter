@@ -20,5 +20,5 @@ package org.apache.jmeter.visualizers;
 
 public interface AccumListener {
 
-    public void updateGui(RunningSample s);
+    void updateGui(RunningSample s);
 }

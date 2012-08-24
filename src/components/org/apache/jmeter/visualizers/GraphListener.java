@@ -19,7 +19,7 @@
 package org.apache.jmeter.visualizers;
 
 public interface GraphListener {
-    public void updateGui(Sample s);
+    void updateGui(Sample s);
 
-    public void updateGui();
+    void updateGui();
 }
