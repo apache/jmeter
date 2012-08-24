@@ -37,6 +37,6 @@ public interface QueueExecutor {
      * @throws JMSException
      *             in case of an exception from the messaging system
      */
-    public abstract Message sendAndReceive(Message request) throws JMSException;
+    Message sendAndReceive(Message request) throws JMSException;
 
 }

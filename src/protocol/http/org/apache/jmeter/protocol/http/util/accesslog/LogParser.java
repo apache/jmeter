@@ -41,7 +41,7 @@ public interface LogParser {
     /**
      * close the any streams or readers.
      */
-    public void close();
+    void close();
 
     /**
      * the method will parse the given number of lines. Pass "-1" to parse the
@@ -52,7 +52,7 @@ public interface LogParser {
      * @param count
      * @return int
      */
-    public int parseAndConfigure(int count, TestElement el);
+    int parseAndConfigure(int count, TestElement el);
 
     /**
      * We allow for filters, so that users can simply point to an Access log
@@ -63,7 +63,7 @@ public interface LogParser {
      *
      * @param filter
      */
-    public void setFilter(Filter filter);
+    void setFilter(Filter filter);
 
     /**
      * The method is provided to make it easy to dynamically create new classes
@@ -72,5 +72,5 @@ public interface LogParser {
      *
      * @param source
      */
-    public void setSourceFile(String source);
+    void setSourceFile(String source);
 }
