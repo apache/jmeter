@@ -34,7 +34,7 @@ public interface CookieHandler {
 	 * @param cookieHeader String cookie Header
 	 * @param url URL 
 	 */
-	public void addCookieFromHeader(CookieManager cookieManager, boolean checkCookies,
+	void addCookieFromHeader(CookieManager cookieManager, boolean checkCookies,
 			String cookieHeader, URL url);
 
     /**
@@ -45,7 +45,7 @@ public interface CookieHandler {
      *            URL of the request to which the returned header will be added.
      * @return the value string for the cookie header (goes after "Cookie: ").
      */
-	public String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
+	String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
 			boolean allowVariableCookie);
 
 }

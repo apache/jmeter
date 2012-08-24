@@ -43,21 +43,21 @@ public interface Filter {
      * @param oldextension
      * @param newextension
      */
-    public void setReplaceExtension(String oldextension, String newextension);
+    void setReplaceExtension(String oldextension, String newextension);
 
     /**
      * Include all files in the array.
      *
      * @param filenames
      */
-    public void includeFiles(String[] filenames);
+    void includeFiles(String[] filenames);
 
     /**
      * Exclude all files in the array
      *
      * @param filenames
      */
-    public void excludeFiles(String[] filenames);
+    void excludeFiles(String[] filenames);
 
     /**
      * Include any log entry that contains the following regular expression
@@ -65,7 +65,7 @@ public interface Filter {
      *
      * @param regexp
      */
-    public void includePattern(String[] regexp);
+    void includePattern(String[] regexp);
 
     /**
      * Exclude any log entry that contains the following regular expression
@@ -73,7 +73,7 @@ public interface Filter {
      *
      * @param regexp
      */
-    public void excludePattern(String[] regexp);
+    void excludePattern(String[] regexp);
 
     /**
      * Log parser will call this method to see if a particular entry should be
@@ -82,7 +82,7 @@ public interface Filter {
      * @param path
      * @return boolean
      */
-    public boolean isFiltered(String path,TestElement sampler);
+    boolean isFiltered(String path,TestElement sampler);
 
     /**
      * In case the user wants to replace the file extension, log parsers should
@@ -93,7 +93,7 @@ public interface Filter {
      * @param text
      * @return String
      */
-    public String filter(String text);
+    String filter(String text);
 
     /**
      * Tell the filter when the parsing has reached the end of the log file and
@@ -101,6 +101,6 @@ public interface Filter {
      * if needed.
      *
      */
-    public void reset();
+    void reset();
 
 }
