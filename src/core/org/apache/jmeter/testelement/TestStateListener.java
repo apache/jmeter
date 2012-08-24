@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.testelement;
 
+/**
+ * @since 2.8
+ */
 public interface TestStateListener {
 
     /**
