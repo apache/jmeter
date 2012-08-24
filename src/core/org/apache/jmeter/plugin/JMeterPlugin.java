@@ -19,7 +19,7 @@
 package org.apache.jmeter.plugin;
 
 public interface JMeterPlugin {
-    public String[][] getIconMappings();
+    String[][] getIconMappings();
 
-    public String[][] getResourceBundles();
+    String[][] getResourceBundles();
 }

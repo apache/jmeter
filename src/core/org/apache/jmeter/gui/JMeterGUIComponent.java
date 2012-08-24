@@ -183,7 +183,7 @@ public interface JMeterGUIComponent {
      * multiple test element objects and thus they need to be cleared between
      * use.
      */
-    public void clearGui();
+    void clearGui();
     // N.B. originally called clear()
     // @see also Clearable
 }

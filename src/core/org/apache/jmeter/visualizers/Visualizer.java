@@ -34,12 +34,12 @@ public interface Visualizer {
      * This method is called by sampling thread to inform the visualizer about
      * the arrival of a new sample.
      */
-    public void add(SampleResult sample);
+    void add(SampleResult sample);
 
     /**
      * This method is used to indicate a visualizer generates statistics.
      *
      * @return true if visualiser generates statistics
      */
-    public boolean isStats();
+    boolean isStats();
 }

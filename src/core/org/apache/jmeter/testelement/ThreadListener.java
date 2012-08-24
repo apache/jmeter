@@ -33,7 +33,7 @@ public interface ThreadListener {
      * @see org.apache.jmeter.threads.JMeterThread#threadStarted()
      *
      */
-    public void threadStarted();
+    void threadStarted();
 
     /**
      * Called for each thread after all samples have been processed.
@@ -41,6 +41,6 @@ public interface ThreadListener {
      * @see org.apache.jmeter.threads.JMeterThread#threadFinished(LoopIterationListener)
      *
      */
-    public void threadFinished();
+    void threadFinished();
 
 }

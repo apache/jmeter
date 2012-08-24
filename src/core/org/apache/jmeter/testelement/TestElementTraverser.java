@@ -33,14 +33,14 @@ public interface TestElementTraverser {
      *
      * @param el
      */
-    public void startTestElement(TestElement el);
+    void startTestElement(TestElement el);
 
     /**
      * Notification that the test element is now done.
      *
      * @param el
      */
-    public void endTestElement(TestElement el);
+    void endTestElement(TestElement el);
 
     /**
      * Notification that a property is starting. This could be a test element
@@ -48,7 +48,7 @@ public interface TestElementTraverser {
      *
      * @param key
      */
-    public void startProperty(JMeterProperty key);
+    void startProperty(JMeterProperty key);
 
     /**
      * Notification that a property is ending. Again, this could be a test
@@ -56,6 +56,6 @@ public interface TestElementTraverser {
      *
      * @param key
      */
-    public void endProperty(JMeterProperty key);
+    void endProperty(JMeterProperty key);
 
 }

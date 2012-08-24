@@ -19,9 +19,9 @@
 package org.apache.jmeter.testelement.property;
 
 public interface PropertyIterator {
-    public boolean hasNext();
+    boolean hasNext();
 
-    public JMeterProperty next();
+    JMeterProperty next();
 
-    public void remove();
+    void remove();
 }

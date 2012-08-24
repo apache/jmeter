@@ -33,7 +33,7 @@ public interface Controller extends TestElement {
      *
      * @return org.apache.jmeter.samplers.Sampler or null
      */
-    public Sampler next();
+    Sampler next();
 
     /**
      * Indicates whether the Controller is done delivering Samplers for the rest
@@ -44,27 +44,27 @@ public interface Controller extends TestElement {
      *
      * @return boolean
      */
-    public boolean isDone();
+    boolean isDone();
 
     /**
      * Controllers have to notify listeners of when they begin an iteration
      * through their sub-elements.
      */
-    public void addIterationListener(LoopIterationListener listener);
+    void addIterationListener(LoopIterationListener listener);
 
     /**
      * Called to initialize a controller at the beginning of a test iteration.
      */
-    public void initialize();
+    void initialize();
 
     /**
      * Unregister IterationListener
      * @param iterationListener {@link LoopIterationListener}
      */
-    public void removeIterationListener(LoopIterationListener iterationListener);
+    void removeIterationListener(LoopIterationListener iterationListener);
 
     /**
      * Trigger end of loop condition on controller (used by Start Next Loop feature)
      */
-    public void triggerEndOfLoop();
+    void triggerEndOfLoop();
 }

@@ -26,7 +26,7 @@ public interface SampleSender {
     /**
      * The test ended (probably not used; client-server mode needs a host)
      */
-    public void testEnded();
+    void testEnded();
 
     /**
      * The test ended.
@@ -36,7 +36,7 @@ public interface SampleSender {
      * @param host
      *            the host that the test ended on.
      */
-    public void testEnded(String host);
+    void testEnded(String host);
 
     /**
      * A sample occurred.
@@ -46,5 +46,5 @@ public interface SampleSender {
      * @param e
      *            a Sample Event
      */
-    public void sampleOccurred(SampleEvent e);
+    void sampleOccurred(SampleEvent e);
 }

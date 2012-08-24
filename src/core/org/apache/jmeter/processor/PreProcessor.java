@@ -24,5 +24,5 @@ package org.apache.jmeter.processor;
  * @version $Revision$
  */
 public interface PreProcessor {
-    public void process();
+    void process();
 }
