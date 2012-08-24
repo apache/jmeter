@@ -27,13 +27,13 @@ import javax.swing.event.ChangeListener;
  * @version $Revision$
  */
 public interface JLabeledField {
-    public String getText();
+    String getText();
 
-    public void setText(String text);
+    void setText(String text);
 
-    public void setLabel(String pLabel);
+    void setLabel(String pLabel);
 
-    public void addChangeListener(ChangeListener pChangeListener);
+    void addChangeListener(ChangeListener pChangeListener);
 
-    public List<JComponent> getComponentList();
+    List<JComponent> getComponentList();
 }
