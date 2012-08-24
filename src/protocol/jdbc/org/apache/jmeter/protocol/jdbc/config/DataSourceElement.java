@@ -115,8 +115,10 @@ public class DataSourceElement extends AbstractTestElement
     @Override
     public Object clone() {
         DataSourceElement el = (DataSourceElement) super.clone();
-        el.excaliburSource = excaliburSource;
-        el.perThreadPoolSet = perThreadPoolSet;
+        synchronized (this) {
+            el.excaliburSource = excaliburSource;
+            el.perThreadPoolSet = perThreadPoolSet;            
+        }
         return el;
     }
 
