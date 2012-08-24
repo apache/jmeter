@@ -32,29 +32,29 @@ public interface RequestView {
     /**
      * Init the panel
      */
-    public void init();
+    void init();
 
     /**
      * Clear all data in panel
      */
-    public void clearData();
+    void clearData();
     
     /**
      * Put the result bean to display in panel
      * @param userObject result to display
      */
-    public void setSamplerResult(Object userObject);
+    void setSamplerResult(Object userObject);
     
     /**
      * Get the panel
      * @return the panel viewer
      */
-    public JPanel getPanel();
+    JPanel getPanel();
     
     /**
      * Get the label. Use as name for bottom tab
      * @return the label's panel
      */
-    public String getLabel(); // return label
+    String getLabel(); // return label
     
 }
