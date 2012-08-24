@@ -916,9 +916,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
                         postBody.append(arg.getValue());
                     }
-                    final String charset = getContentEncoding(HTTP.DEF_CONTENT_CHARSET.name());
                     // Let StringEntity perform the encoding
-                    StringEntity requestEntity = new StringEntity(postBody.toString(), charset);
+                    StringEntity requestEntity = new StringEntity(postBody.toString(), contentEncoding);
                     post.setEntity(requestEntity);
                     postedBody.append(postBody.toString());
                 } else {
