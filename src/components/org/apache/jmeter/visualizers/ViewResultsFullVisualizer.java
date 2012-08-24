@@ -227,7 +227,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     /** {@inheritDoc} */
     public void valueChanged(TreeSelectionEvent e) {
         lastSelectionEvent = e;
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = null;
+        synchronized (this) {
+            node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+        }
 
         if (node != null) {
             // to restore last tab used

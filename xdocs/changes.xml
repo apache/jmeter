@@ -119,6 +119,7 @@ Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F
 <li><bugzilla>53520</bugzilla> - JSR223 Elements : Use Compilable interface to improve performances on File scripts</li>
 <li><bugzilla>53501</bugzilla> - Synchronization timer blocks test end.</li>
 <li><bugzilla>53750</bugzilla> - TestCompiler saves unnecessary entries in pairing collection</li>
+<li><bugzilla>52266</bugzilla> - Code:Inconsistent synchronization</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
