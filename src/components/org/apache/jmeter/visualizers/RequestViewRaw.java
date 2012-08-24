@@ -68,22 +68,22 @@ public class RequestViewRaw implements RequestView {
 
         if (objectResult instanceof SampleResult) {
             SampleResult sampleResult = (SampleResult) objectResult;
-            // load time label
+            String rh = sampleResult.getRequestHeaders();
+            StringBuilder sb = new StringBuilder();
             String sd = sampleResult.getSamplerData();
             if (sd != null) {
-                String rh = sampleResult.getRequestHeaders();
-                // Don't display Request headers label if rh is null or empty
-                if (rh != null && rh.length() > 0) {
-                    StringBuilder sb = new StringBuilder(sd.length()
-                            + rh.length() + 20);
-                    sb.append(sd);
-                    sb.append("\n"); //$NON-NLS-1$
-                    sb.append(JMeterUtils.getResString("view_results_request_headers")); //$NON-NLS-1$
-                    sb.append("\n"); //$NON-NLS-1$
-                    sb.append(rh);
-                    sd = sb.toString();
-                }
-                sampleDataField.setText(sd);
+                sb.append(sd);
+                sb.append("\n"); //$NON-NLS-1$
+            } 
+            // Don't display Request headers label if rh is null or empty
+            if (rh != null && rh.length() > 0) {
+                sb.append(JMeterUtils.getResString("view_results_request_headers")); //$NON-NLS-1$
+                sb.append("\n"); //$NON-NLS-1$
+                sb.append(rh);
+                sb.append("\n"); //$NON-NLS-1$
+            }
+            if (sb.length() > 0) {
+                sampleDataField.setText(sb.toString());
             } else {
                 // add a message when no request data (ex. Java request)
                 sampleDataField.setText(JMeterUtils
