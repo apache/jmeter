@@ -27,5 +27,5 @@ public interface LoopIterationListener {
      * 
      * @param iterEvent the event
      */
-    public void iterationStart(LoopIterationEvent iterEvent);
+    void iterationStart(LoopIterationEvent iterEvent);
 }

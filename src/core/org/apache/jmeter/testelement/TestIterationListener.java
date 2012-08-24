@@ -31,5 +31,5 @@ public interface TestIterationListener {
      *
      * @param event
      */
-    public void testIterationStart(LoopIterationEvent event);
+    void testIterationStart(LoopIterationEvent event);
 }

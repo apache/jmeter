@@ -33,5 +33,5 @@ public interface ConfigMergabilityIndicator {
      * @param configElement {@link ConfigTestElement}
      * @return boolean
      */
-    public boolean applies(ConfigTestElement configElement);
+    boolean applies(ConfigTestElement configElement);
 }

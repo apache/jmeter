@@ -24,7 +24,7 @@ import java.util.Set;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 
 public interface Command {
-    public void doAction(ActionEvent e) throws IllegalUserActionException;
+    void doAction(ActionEvent e) throws IllegalUserActionException;
 
-    public Set<String> getActionNames();
+    Set<String> getActionNames();
 }

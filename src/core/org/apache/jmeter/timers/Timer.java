@@ -32,5 +32,5 @@ public interface Timer extends Serializable {
      *
      * @return the computed delay value.
      */
-    public long delay();
+    long delay();
 }

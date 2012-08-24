@@ -30,5 +30,5 @@ public interface Interruptible {
      *
      * @return <code>true</code> if there was an operation to interrupt.
      */
-    public boolean interrupt();
+    boolean interrupt();
 }

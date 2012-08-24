@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.samplers;
 
+import java.io.Serializable;
+
 import org.apache.jmeter.testelement.TestElement;
 
 /**
@@ -26,10 +28,10 @@ import org.apache.jmeter.testelement.TestElement;
  *
  * @version $Revision$
  */
-public interface Sampler extends java.io.Serializable, TestElement {
+public interface Sampler extends Serializable, TestElement {
     /**
      * Obtains statistics about the given Entry, and packages the information
      * into a SampleResult.
      */
-    public SampleResult sample(Entry e);
+    SampleResult sample(Entry e);
 }

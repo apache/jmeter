@@ -29,15 +29,15 @@ public interface SampleListener {
     /**
      * A sample has started and stopped.
      */
-    public void sampleOccurred(SampleEvent e);
+    void sampleOccurred(SampleEvent e);
 
     /**
      * A sample has started.
      */
-    public void sampleStarted(SampleEvent e);
+    void sampleStarted(SampleEvent e);
 
     /**
      * A sample has stopped.
      */
-    public void sampleStopped(SampleEvent e);
+    void sampleStopped(SampleEvent e);
 }

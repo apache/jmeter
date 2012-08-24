@@ -19,5 +19,5 @@
 package org.apache.jmeter.util;
 
 public interface LocaleChangeListener {
-    public void localeChanged(LocaleChangeEvent event);
+    void localeChanged(LocaleChangeEvent event);
 }

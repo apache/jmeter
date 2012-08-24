@@ -37,7 +37,7 @@ public interface Function {
      * This method must be threadsafe - multiple threads will be using the same
      * object.
      */
-    public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException;
+    String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException;
 
     /**
      * A collection of the parameters used to configure your function. Each
@@ -48,13 +48,13 @@ public interface Function {
      * @param parameters
      * @throws InvalidVariableException
      */
-    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException;
+    void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException;
 
     /**
      * Return the name of your function. Convention is to prepend "__" to the
      * name (ie "__regexFunction")
      */
-    public String getReferenceKey();
+    String getReferenceKey();
 
     /**
      * Return a list of strings briefly describing each parameter your function
@@ -66,5 +66,5 @@ public interface Function {
      * least return a List containing the correct number of blank strings, one
      * for each argument.
      */
-    public List<String> getArgumentDesc();
+    List<String> getArgumentDesc();
 }
