@@ -18,11 +18,13 @@
 
 package org.apache.jmeter.visualizers;
 
+import java.awt.Image;
+
 /**
  * TODO - interface is used but getImage() does not appear to be used
  *
  * @version $Revision$
  */
 public interface ImageVisualizer {
-    java.awt.Image getImage();
+    Image getImage();
 }
