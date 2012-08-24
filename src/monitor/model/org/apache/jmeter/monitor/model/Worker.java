@@ -29,36 +29,36 @@ public interface Worker {
 
     void setRequestBytesSent(long value);
 
-    java.lang.String getCurrentQueryString();
+    String getCurrentQueryString();
 
-    void setCurrentQueryString(java.lang.String value);
+    void setCurrentQueryString(String value);
 
-    java.lang.String getRemoteAddr();
+    String getRemoteAddr();
 
-    void setRemoteAddr(java.lang.String value);
+    void setRemoteAddr(String value);
 
-    java.lang.String getCurrentUri();
+    String getCurrentUri();
 
-    void setCurrentUri(java.lang.String value);
+    void setCurrentUri(String value);
 
-    java.lang.String getStage();
+    String getStage();
 
-    void setStage(java.lang.String value);
+    void setStage(String value);
 
-    java.lang.String getVirtualHost();
+    String getVirtualHost();
 
-    void setVirtualHost(java.lang.String value);
+    void setVirtualHost(String value);
 
-    java.lang.String getProtocol();
+    String getProtocol();
 
-    void setProtocol(java.lang.String value);
+    void setProtocol(String value);
 
     long getRequestBytesReceived();
 
     void setRequestBytesReceived(long value);
 
-    java.lang.String getMethod();
+    String getMethod();
 
-    void setMethod(java.lang.String value);
+    void setMethod(String value);
 
 }
