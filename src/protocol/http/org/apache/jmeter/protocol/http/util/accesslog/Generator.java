@@ -45,42 +45,42 @@ public interface Generator {
     /**
      * close the generator
      */
-    public void close();
+    void close();
 
     /**
      * The host is the name of the server.
      *
      * @param host
      */
-    public void setHost(String host);
+    void setHost(String host);
 
     /**
      * This is the label for the request, which is used in the logs and results.
      *
      * @param label
      */
-    public void setLabel(String label);
+    void setLabel(String label);
 
     /**
      * The method is the HTTP request method. It's normally POST or GET.
      *
      * @param post_get
      */
-    public void setMethod(String post_get);
+    void setMethod(String post_get);
 
     /**
      * Set the request parameters
      *
      * @param params
      */
-    public void setParams(NVPair[] params);
+    void setParams(NVPair[] params);
 
     /**
      * The path is the web page you want to test.
      *
      * @param path
      */
-    public void setPath(String path);
+    void setPath(String path);
 
     /**
      * The default port for HTTP is 80, but not all servers run on that port.
@@ -88,21 +88,21 @@ public interface Generator {
      * @param port -
      *            port number
      */
-    public void setPort(int port);
+    void setPort(int port);
 
     /**
      * Set the querystring for the request if the method is GET.
      *
      * @param querystring
      */
-    public void setQueryString(String querystring);
+    void setQueryString(String querystring);
 
     /**
      * The source logs is the location where the access log resides.
      *
      * @param sourcefile
      */
-    public void setSourceLogs(String sourcefile);
+    void setSourceLogs(String sourcefile);
 
     /**
      * The target can be either a java.io.File or a Sampler. We make it generic,
@@ -110,7 +110,7 @@ public interface Generator {
      *
      * @param target
      */
-    public void setTarget(Object target);
+    void setTarget(Object target);
 
     /**
      * The method is responsible for calling the necessary methods to generate a
@@ -119,18 +119,18 @@ public interface Generator {
      * element, it should return the correct Sampler class with the required
      * fields set.
      */
-    public Object generateRequest();
+    Object generateRequest();
 
     /**
      * If the generator is converting the logs to a .jmx file, save should be
      * called.
      */
-    public void save();
+    void save();
 
     /**
      * The purpose of the reset is so Samplers can explicitly call reset to
      * create a new instance of HTTPSampler.
      *
      */
-    public void reset();
+    void reset();
 }

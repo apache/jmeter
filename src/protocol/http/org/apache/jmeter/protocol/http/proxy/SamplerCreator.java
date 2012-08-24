@@ -30,7 +30,7 @@ public interface SamplerCreator {
     /**
      * @return String[] array of Content types managed by Factory
      */
-    public String[] getManagedContentTypes();
+    String[] getManagedContentTypes();
 
     /**
      * Create HTTPSamplerBase
@@ -39,7 +39,7 @@ public interface SamplerCreator {
      * @param formEncodings Map<String, String>
      * @return {@link HTTPSamplerBase}
      */
-    public HTTPSamplerBase createSampler(HttpRequestHdr request,
+    HTTPSamplerBase createSampler(HttpRequestHdr request,
             Map<String, String> pageEncodings, Map<String, String> formEncodings);
 
     /**
@@ -50,7 +50,7 @@ public interface SamplerCreator {
      * @param formEncodings Map<String, String>
      * @throws Exception
      */
-    public void populateSampler(HTTPSamplerBase sampler,
+    void populateSampler(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings)
                     throws Exception;
