@@ -28,7 +28,7 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
      *
      * @return boolean
      */
-    public boolean isRunningVersion();
+    boolean isRunningVersion();
 
     /**
      * The name of the property. Typically this should match the name that keys
@@ -36,14 +36,14 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
      *
      * @return String
      */
-    public String getName();
+    String getName();
 
     /**
      * Set the property name.
      *
      * @param name
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * Make the property a running version or turn it off as the running
@@ -56,13 +56,13 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
      *
      * @param runningVersion
      */
-    public void setRunningVersion(boolean runningVersion);
+    void setRunningVersion(boolean runningVersion);
 
     /**
      * Tell the property to revert to the state at the time
      * setRunningVersion(true) was called.
      */
-    public void recoverRunningVersion(TestElement owner);
+    void recoverRunningVersion(TestElement owner);
 
     /**
      * Take the given property object and merge it's value with the current
@@ -72,23 +72,23 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
      *
      * @param prop
      */
-    public void mergeIn(JMeterProperty prop);
+    void mergeIn(JMeterProperty prop);
 
-    public int getIntValue();
+    int getIntValue();
 
-    public long getLongValue();
+    long getLongValue();
 
-    public double getDoubleValue();
+    double getDoubleValue();
 
-    public float getFloatValue();
+    float getFloatValue();
 
-    public boolean getBooleanValue();
+    boolean getBooleanValue();
 
-    public String getStringValue();
+    String getStringValue();
 
-    public Object getObjectValue();
+    Object getObjectValue();
 
-    public void setObjectValue(Object value);
+    void setObjectValue(Object value);
 
-    public JMeterProperty clone();
+    JMeterProperty clone();
 }

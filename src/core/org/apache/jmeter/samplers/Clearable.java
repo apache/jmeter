@@ -28,7 +28,7 @@ public interface Clearable {
     /**
      * Clears the current data of the object.
      */
-    public void clearData();
+    void clearData();
     // N.B. originally called clear()
     // @see also JMeterGUIComponent
 }

@@ -35,12 +35,12 @@ public interface ReplaceableController {
      *
      * @see org.apache.jorphan.collections.HashTree
      */
-    public HashTree getReplacementSubTree();
+    HashTree getReplacementSubTree();
 
     /**
      * Compute the replacement tree.
      *
      * @param context
      */
-    public void resolveReplacementSubTree(JMeterTreeNode context);
+    void resolveReplacementSubTree(JMeterTreeNode context);
 }

@@ -28,5 +28,5 @@ public interface PostProcessor {
      * Provides the PostProcessor with a SampleResult object from which to
      * extract values for use in future Queries.
      */
-    public void process();
+    void process();
 }

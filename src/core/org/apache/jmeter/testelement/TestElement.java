@@ -23,50 +23,50 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 
 public interface TestElement extends Cloneable {
-    public static final String NAME = "TestElement.name"; //$NON-NLS-1$
+    String NAME = "TestElement.name"; //$NON-NLS-1$
 
-    public static final String GUI_CLASS = "TestElement.gui_class"; //$NON-NLS-1$
+    String GUI_CLASS = "TestElement.gui_class"; //$NON-NLS-1$
 
-    public static final String ENABLED = "TestElement.enabled"; //$NON-NLS-1$
+    String ENABLED = "TestElement.enabled"; //$NON-NLS-1$
 
-    public static final String TEST_CLASS = "TestElement.test_class"; //$NON-NLS-1$
+    String TEST_CLASS = "TestElement.test_class"; //$NON-NLS-1$
 
     // Needed by AbstractTestElement.
     // Also TestElementConverter and TestElementPropertyConverter for handling empty comments
-    public static final String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
+    String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
     // N.B. Comments originally only applied to Test Plans, hence the name - which can now not be easily changed
 
-    public void addTestElement(TestElement child);
+    void addTestElement(TestElement child);
     
     /**
      * This method should clear any test element properties that are merged
      * by {@link #addTestElement(TestElement)}.
      */
-    public void clearTestElementChildren();
+    void clearTestElementChildren();
 
-    public void setProperty(String key, String value);
+    void setProperty(String key, String value);
 
-    public void setProperty(String key, String value, String dflt);
+    void setProperty(String key, String value, String dflt);
 
-    public void setProperty(String key, boolean value);
+    void setProperty(String key, boolean value);
 
-    public void setProperty(String key, boolean value, boolean dflt);
+    void setProperty(String key, boolean value, boolean dflt);
 
-    public void setProperty(String key, int value);
+    void setProperty(String key, int value);
 
-    public void setProperty(String key, int value, int dflt);
+    void setProperty(String key, int value, int dflt);
 
     /**
      * Check if ENABLED property is present and true ; defaults to true
      *
      * @return true if element is enabled
      */
-    public boolean isEnabled();
+    boolean isEnabled();
 
     /**
      * Returns true or false whether the element is the running version.
      */
-    public boolean isRunningVersion();
+    boolean isRunningVersion();
 
     /**
      * Test whether a given property is only a temporary resident of the
@@ -75,7 +75,7 @@ public interface TestElement extends Cloneable {
      * @param property
      * @return boolean
      */
-    public boolean isTemporary(JMeterProperty property);
+    boolean isTemporary(JMeterProperty property);
 
     /**
      * Indicate that the given property should be only a temporary property in
@@ -84,26 +84,26 @@ public interface TestElement extends Cloneable {
      * @param property
      *            void
      */
-    public void setTemporary(JMeterProperty property);
+    void setTemporary(JMeterProperty property);
 
     /**
      * Return a property as a boolean value.
      */
-    public boolean getPropertyAsBoolean(String key);
+    boolean getPropertyAsBoolean(String key);
 
-    public boolean getPropertyAsBoolean(String key, boolean defaultValue);
+    boolean getPropertyAsBoolean(String key, boolean defaultValue);
 
-    public long getPropertyAsLong(String key);
+    long getPropertyAsLong(String key);
 
-    public long getPropertyAsLong(String key, long defaultValue);
+    long getPropertyAsLong(String key, long defaultValue);
 
-    public int getPropertyAsInt(String key);
+    int getPropertyAsInt(String key);
 
-    public int getPropertyAsInt(String key, int defaultValue);
+    int getPropertyAsInt(String key, int defaultValue);
 
-    public float getPropertyAsFloat(String key);
+    float getPropertyAsFloat(String key);
 
-    public double getPropertyAsDouble(String key);
+    double getPropertyAsDouble(String key);
 
     /**
      * Make the test element the running version, or make it no longer the
@@ -113,76 +113,76 @@ public interface TestElement extends Cloneable {
      * and the element can be modified, but the state of the element at the time
      * of the call to setRunningVersion() must be recoverable.
      */
-    public void setRunningVersion(boolean run);
+    void setRunningVersion(boolean run);
 
     /**
      * Tells the test element to return to the state it was in when
      * setRunningVersion(true) was called.
      */
-    public void recoverRunningVersion();
+    void recoverRunningVersion();
 
     /**
      * Clear the TestElement of all data.
      */
-    public void clear();
+    void clear();
     // TODO - yet another ambiguous name - does it need changing?
     // See also: Clearable, JMeterGUIComponent
 
-    public String getPropertyAsString(String key);
+    String getPropertyAsString(String key);
 
-    public String getPropertyAsString(String key, String defaultValue);
+    String getPropertyAsString(String key, String defaultValue);
 
     /**
      * Sets and overwrites a property in the TestElement. This call will be
      * ignored if the TestElement is currently a "running version".
      */
-    public void setProperty(JMeterProperty property);
+    void setProperty(JMeterProperty property);
 
     /**
      * Given the name of the property, returns the appropriate property from
      * JMeter. If it is null, a NullProperty object will be returned.
      */
-    public JMeterProperty getProperty(String propName);
+    JMeterProperty getProperty(String propName);
 
     /**
      * Get a Property Iterator for the TestElements properties.
      *
      * @return PropertyIterator
      */
-    public PropertyIterator propertyIterator();
+    PropertyIterator propertyIterator();
 
-    public void removeProperty(String key);
+    void removeProperty(String key);
 
     // lifecycle methods
 
-    public Object clone();
+    Object clone();
 
     /**
      * Convenient way to traverse a test element.
      */
-    public void traverse(TestElementTraverser traverser);
+    void traverse(TestElementTraverser traverser);
 
     /**
      * @return Returns the threadContext.
      */
-    public JMeterContext getThreadContext();
+    JMeterContext getThreadContext();
 
     /**
      * @param threadContext
      *            The threadContext to set.
      */
-    public void setThreadContext(JMeterContext threadContext);
+    void setThreadContext(JMeterContext threadContext);
 
     /**
      * @return Returns the threadName.
      */
-    public String getThreadName();
+    String getThreadName();
 
     /**
      * @param threadName
      *            The threadName to set.
      */
-    public void setThreadName(String threadName);
+    void setThreadName(String threadName);
 
     /**
      * Called by Remove to determine if it is safe to remove the element. The
@@ -191,13 +191,13 @@ public interface TestElement extends Cloneable {
      *
      * @return true if safe to remove the element
      */
-    public boolean canRemove();
+    boolean canRemove();
 
-    public String getName();
+    String getName();
 
-    public void setName(String name);
+    void setName(String name);
 
-    public String getComment();
+    String getComment();
 
-    public void setComment(String comment);
+    void setComment(String comment);
 }

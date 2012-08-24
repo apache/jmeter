@@ -41,7 +41,7 @@ public interface TestStateListener {
      * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
      *
      */
-    public void testStarted();
+    void testStarted();
 
     /**
      * <p>
@@ -61,7 +61,7 @@ public interface TestStateListener {
      * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
      * @param host name of host
      */
-    public void testStarted(String host);
+    void testStarted(String host);
 
     /**
      * <p>
@@ -78,7 +78,7 @@ public interface TestStateListener {
      * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
      *
      */
-    public void testEnded();
+    void testEnded();
 
     /**
      * <p>
@@ -97,6 +97,6 @@ public interface TestStateListener {
      *
      */
 
-    public void testEnded(String host);
+    void testEnded(String host);
 
 }
