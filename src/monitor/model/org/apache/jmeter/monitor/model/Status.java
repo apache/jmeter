@@ -16,12 +16,14 @@
  */
 package org.apache.jmeter.monitor.model;
 
+import java.util.List;
+
 public interface Status {
     Jvm getJvm();
 
     void setJvm(Jvm vm);
 
-    java.util.List<Connector> getConnector();
+    List<Connector> getConnector();
 
     void addConnector(Connector conn);
 
