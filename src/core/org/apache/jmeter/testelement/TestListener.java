@@ -22,7 +22,7 @@ package org.apache.jmeter.testelement;
  * TestListener interface is used for methods that are called at different
  * stages of each test.
  *
- * @deprecated Please use {@link TestStateListener} and/or {@link TestIterationListener}
+ * @deprecated since 2.8, please use {@link TestStateListener} and/or {@link TestIterationListener}
  */
 @Deprecated
 public interface TestListener extends TestStateListener, TestIterationListener {
