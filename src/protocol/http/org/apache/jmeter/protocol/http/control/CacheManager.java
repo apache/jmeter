@@ -149,7 +149,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      */
     public void saveDetails(HttpResponse method, SampleResult res) {
         if (isCacheable(res)){
-            method.getLastHeader(USE_EXPIRES);
             String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
             String etag = getHeader(method ,HTTPConstants.ETAG);
