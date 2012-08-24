@@ -34,7 +34,7 @@ public interface TreeTableModel extends TableModel {
      * @param col
      * @return the value at the column
      */
-    public Object getValueAt(Object node, int col);
+    Object getValueAt(Object node, int col);
 
     /**
      * the method is similar to isCellEditable(int,int). Instead of int,
@@ -43,7 +43,7 @@ public interface TreeTableModel extends TableModel {
      * @param col
      * @return if cell is editable
      */
-    public boolean isCellEditable(Object node, int col);
+    boolean isCellEditable(Object node, int col);
 
     /**
      * the method is similar to isCellEditable(int,int). Instead of int,
@@ -52,5 +52,5 @@ public interface TreeTableModel extends TableModel {
      * @param node
      * @param column
      */
-    public void setValueAt(Object val, Object node, int column);
+    void setValueAt(Object val, Object node, int column);
 }

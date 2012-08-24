@@ -36,5 +36,5 @@ public interface UnitTestManager {
      *
      * @param filename
      */
-    public void initializeProperties(String filename);
+    void initializeProperties(String filename);
 }

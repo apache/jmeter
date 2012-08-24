@@ -56,14 +56,14 @@ public interface HashTreeTraverser {
      * @param subTree
      *            the HashTree under the node encountered
      */
-    public void addNode(Object node, HashTree subTree);
+    void addNode(Object node, HashTree subTree);
 
     /**
      * Indicates traversal has moved up a step, and the visitor should remove
      * the top node from its stack structure. This is a callback method, and
      * should not be called except by a HashTree during traversal.
      */
-    public void subtractNode();
+    void subtractNode();
 
     /**
      * Process path is called when a leaf is reached. If a visitor wishes to
@@ -72,5 +72,5 @@ public interface HashTreeTraverser {
      * every {@link #subtractNode()} call. This is a callback method, and should
      * not be called except by a HashTree during traversal.
      */
-    public void processPath();
+    void processPath();
 }
