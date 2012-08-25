@@ -44,7 +44,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Note that the commonly used apostrophe escape character (&amp;apos;)
  * is not a legal entity and so is not supported). </p>
  * 
- * @see StringEscapeUtils#escapeHtml(String) (Commons Lang)
+ * @see StringEscapeUtils#escapeHtml4(String) (Commons Lang)
  * @since 2.3.3
  */
 public class EscapeHtml extends AbstractFunction {

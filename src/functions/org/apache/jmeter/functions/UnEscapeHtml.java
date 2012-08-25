@@ -40,7 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
  * e.g. "&amp;gt;&amp;zzzz;x" will become "&gt;&amp;zzzz;x".
  * </p>
- * @see org.apache.commons.lang3.StringEscapeUtils#unescapeHtml(String)
+ * @see org.apache.commons.lang3.StringEscapeUtils#unescapeHtml4(String)
  * @since 2.3.3
  */
 public class UnEscapeHtml extends AbstractFunction {
