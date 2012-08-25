@@ -566,6 +566,9 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 </description>
 
+<note>Since JMeter 2.8, if method teardownTest is not overriden by subclasses of AbstractJavaSamplerClient, then the method will not be called to optimise JMeter memory behaviour.
+This will not have any impact on existing Test plans.
+</note>
 <note>The Add/Delete buttons don't serve any purpose at present.</note>
 
 <properties>
