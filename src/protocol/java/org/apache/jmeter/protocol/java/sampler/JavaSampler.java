@@ -18,10 +18,14 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -72,6 +76,13 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * client.
      */
     private transient JavaSamplerContext context = null;
+
+    /**
+     * Cache of classname, boolean that holds information about a class and wether or not it should 
+     * be registered for cleanup.
+     * This is done to avoid using reflection on each registration
+     */
+    private transient Map<String, Boolean> isToBeRegisteredCache = new ConcurrentHashMap<String, Boolean>();
 
     /**
      * Set used to register all JavaSamplerClient and JavaSamplerContext. 
@@ -137,27 +148,72 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * @param entry
      *            the Entry for this sample
      * @return test SampleResult
+     * @throws NoSuchMethodException 
+     * @throws SecurityException 
      */
-    public SampleResult sample(Entry entry) {
-        Arguments args = getArguments();
-        args.addArgument(TestElement.NAME, getName()); // Allow Sampler access
-                                                        // to test element name
-        context = new JavaSamplerContext(args);
-        if (javaClient == null) {
-            log.debug(whoAmI() + "\tCreating Java Client");
-            createJavaClient();
-            javaClientAndContextSet.add(new Object[]{javaClient, context});
-            javaClient.setupTest(context);
+    public SampleResult sample(Entry entry) {        
+        try {
+            Arguments args = getArguments();
+            args.addArgument(TestElement.NAME, getName()); // Allow Sampler access
+                                                            // to test element name
+            context = new JavaSamplerContext(args);
+            if (javaClient == null) {
+                log.debug(whoAmI() + "\tCreating Java Client");
+                createJavaClient();
+                registerForCleanup(javaClient, context);
+                javaClient.setupTest(context);
+            }
+    
+            SampleResult result = javaClient.runTest(context);
+    
+            // Only set the default label if it has not been set
+            if (result != null && result.getSampleLabel().length() == 0) {
+                result.setSampleLabel(getName());
+            }
+    
+            return result;
+        } catch(Exception ex) {
+            SampleResult sampleResultIfError = new SampleResult();
+            sampleResultIfError.setSampleLabel(getName());
+            sampleResultIfError.setSuccessful(false);
+            sampleResultIfError.setResponseCode("500"); // $NON-NLS-1$
+            sampleResultIfError.setResponseMessage(ExceptionUtils.getRootCauseMessage(ex));
+            sampleResultIfError.setResponseData(ExceptionUtils.getStackTrace(ex), "UTF-8");
+            return sampleResultIfError;
         }
+    }
 
-        SampleResult result = javaClient.runTest(context);
-
-        // Only set the default label if it has not been set
-        if (result != null && result.getSampleLabel().length() == 0) {
-            result.setSampleLabel(getName());
+    /**
+     * Only register jsClient if it contains a custom teardownTest method
+     * @param jsClient JavaSamplerClient
+     * @param jsContext JavaSamplerContext
+     * @throws NoSuchMethodException 
+     * @throws SecurityException 
+     */
+    private final void registerForCleanup(JavaSamplerClient jsClient,
+            JavaSamplerContext jsContext) throws SecurityException, NoSuchMethodException {
+        if(isToBeRegistered(jsClient.getClass())) {
+            javaClientAndContextSet.add(new Object[]{jsClient, jsContext});
         }
+    }
 
-        return result;
+    /**
+     * Tests clazz to see if a custom teardown method has been written and caches the test result.
+     * If classes uses {@link AbstractJavaSamplerClient#teardownTest(JavaSamplerContext)} then it won't
+     * be registered for cleanup as it does nothing.
+     * @param clazz Class to be verified
+     * @return true if clazz should be registered for cleanup
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     */
+    private boolean isToBeRegistered(Class<? extends JavaSamplerClient> clazz) throws SecurityException, NoSuchMethodException {
+        Boolean isToBeRegistered = isToBeRegisteredCache.get(clazz.getName());
+        if(isToBeRegistered == null) {
+            Method method = clazz.getMethod("teardownTest", new Class[]{JavaSamplerContext.class});
+            isToBeRegistered = Boolean.valueOf(!method.getDeclaringClass().equals(AbstractJavaSamplerClient.class));
+            isToBeRegisteredCache.put(clazz.getName(), isToBeRegistered);
+        } 
+        return isToBeRegistered.booleanValue();
     }
 
     /**
@@ -244,6 +300,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
             }
             javaClientAndContextSet.clear();
         }
+        isToBeRegisteredCache.clear();
     }
 
     /* Implements TestStateListener.testEnded(String) */

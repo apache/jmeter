@@ -135,6 +135,7 @@ Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F
 <ul>
 <li><bugzilla>55310</bugzilla> - TestAction should implement Interruptible</li>
 <li><bugzilla>53318</bugzilla> - Add Embedded URL Filter to HTTP Request Defaults Control </li>
+<li><bugzilla>53782</bugzilla> - Enhance JavaSampler handling of JavaSamplerClient cleanup to use less memory</li>
 </ul>
 
 <h3>Controllers</h3>
