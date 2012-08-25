@@ -1859,10 +1859,14 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 
 <component name="Once Only Controller" index="&sect-num;.2.3" anchor="once_only_controller" width="330" height="78" screenshot="logic-controller/once-only-controller.png">
 <description>
-<p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
+<p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once per Thread, and pass over any requests under it
 during further iterations through the test plan.</p>
 
-<p>The Once Only Controller will now execute always during the first iteration of any looping parent controller.  Thus, if the Once Only Controller is placed under a Loop Controller specified to loop 5 times, then the Once Only Controller will execute only on the first iteration through the Loop Controller (ie, every 5 times).  Note this means the Once Only Controller will still behave as previously expected if put under a Thread Group (runs only once per test), but now the user has more flexibility in the use of the Once Only Controller.</p>
+<p>The Once Only Controller will now execute always during the first iteration of any looping parent controller.  
+Thus, if the Once Only Controller is placed under a Loop Controller specified to loop 5 times, then the Once Only Controller will execute only on the first iteration through the Loop Controller 
+(ie, every 5 times).  
+Note this means the Once Only Controller will still behave as previously expected if put under a Thread Group (runs only once per test per Thread), 
+but now the user has more flexibility in the use of the Once Only Controller.</p>
 
 <p>For testing that requires a login, consider placing the login request in this controller since each thread only needs
 to login once to establish a session.</p>
