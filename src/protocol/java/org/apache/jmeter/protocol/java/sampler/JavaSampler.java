@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.jmeter.config.Arguments;
@@ -75,19 +74,16 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     private transient JavaSamplerContext context = null;
 
     /**
-     * Set used to register all active JavaSamplers. This is used so that the
-     * samplers can be notified when the test ends.
+     * Set used to register all JavaSamplerClient and JavaSamplerContext. 
+     * This is used so that the JavaSamplerClient can be notified when the test ends.
      */
-    private static final Set<JavaSampler> allSamplers = new HashSet<JavaSampler>();
+    private static final Set<Object[]> javaClientAndContextSet = new HashSet<Object[]>();
 
     /**
      * Create a JavaSampler.
      */
     public JavaSampler() {
-        setArguments(new Arguments());
-        synchronized (allSamplers) {
-            allSamplers.add(this);
-        }
+        setArguments(new Arguments());    
     }
 
     /**
@@ -109,17 +105,6 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      */
     public Arguments getArguments() {
         return (Arguments) getProperty(ARGUMENTS).getObjectValue();
-    }
-
-    /**
-     * Releases Java Client.
-     */
-    private void releaseJavaClient() {
-        if (javaClient != null) {
-            javaClient.teardownTest(context);
-        }
-        javaClient = null;
-        context = null;
     }
 
     /**
@@ -161,10 +146,11 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
         if (javaClient == null) {
             log.debug(whoAmI() + "\tCreating Java Client");
             createJavaClient();
+            javaClientAndContextSet.add(new Object[]{javaClient, context});
             javaClient.setupTest(context);
         }
 
-        SampleResult result = createJavaClient().runTest(context);
+        SampleResult result = javaClient.runTest(context);
 
         // Only set the default label if it has not been set
         if (result != null && result.getSampleLabel().length() == 0) {
@@ -248,13 +234,15 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      */
     public void testEnded() {
         log.debug(whoAmI() + "\ttestEnded");
-        synchronized (allSamplers) {
-            Iterator<JavaSampler> i = allSamplers.iterator();
-            while (i.hasNext()) {
-                JavaSampler sampler = i.next();
-                sampler.releaseJavaClient();
-                i.remove();
+        synchronized (javaClientAndContextSet) {
+            for (Object[] javaClientAndContext : javaClientAndContextSet) {
+                JavaSamplerClient jsClient = (JavaSamplerClient) javaClientAndContext[0];
+                JavaSamplerContext jsContext = (JavaSamplerContext) javaClientAndContext[1];
+                if (jsClient != null) {
+                    jsClient.teardownTest(jsContext);
+                }
             }
+            javaClientAndContextSet.clear();
         }
     }
 
