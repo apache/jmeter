@@ -82,7 +82,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * be registered for cleanup.
      * This is done to avoid using reflection on each registration
      */
-    private transient Map<String, Boolean> isToBeRegisteredCache = new ConcurrentHashMap<String, Boolean>();
+    private Map<String, Boolean> isToBeRegisteredCache = new ConcurrentHashMap<String, Boolean>();
 
     /**
      * Set used to register all JavaSamplerClient and JavaSamplerContext. 
