@@ -321,22 +321,6 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
     }
 
     /**
-     * Do any clean-up required by this test. In this case no clean-up is
-     * necessary, but some messages are logged for debugging purposes.
-     *
-     * @param context
-     *            the context to run with. This provides access to
-     *            initialization parameters.
-     */
-    @Override
-    public void teardownTest(JavaSamplerContext context) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(whoAmI() + "\tteardownTest()");
-            listParameters(context);
-        }
-    }
-
-    /**
      * Dump a list of the parameters in this context to the debug log.
      * Should only be called if debug is enabled.
      *
