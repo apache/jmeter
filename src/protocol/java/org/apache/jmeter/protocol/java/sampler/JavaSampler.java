@@ -217,7 +217,6 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
                 Class<?> javaClass = Class.forName(getClassname().trim(), false, Thread.currentThread()
                         .getContextClassLoader());
                 javaClient = (JavaSamplerClient) javaClass.newInstance();
-                context = new JavaSamplerContext(getArguments());
 
                 if (log.isDebugEnabled()) {
                     log.debug(whoAmI() + "\tCreated:\t" + getClassname() + "@"
