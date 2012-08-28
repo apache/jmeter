@@ -155,7 +155,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
         context = new JavaSamplerContext(args);
         if (javaClient == null) {
             log.debug(whoAmI() + "\tCreating Java Client");
-            createJavaClient();
+            javaClient = createJavaClient();
             javaClient.setupTest(context);
         }
 
@@ -212,24 +212,23 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * @return JavaSamplerClient reference.
      */
     private JavaSamplerClient createJavaClient() {
-        if (javaClient == null) {
-            try {
-                Class<?> javaClass = Class.forName(getClassname().trim(), false, Thread.currentThread()
-                        .getContextClassLoader());
-                javaClient = (JavaSamplerClient) javaClass.newInstance();
+        JavaSamplerClient client;
+        try {
+            Class<?> javaClass = Class.forName(getClassname().trim(), false, Thread.currentThread()
+                    .getContextClassLoader());
+            client = (JavaSamplerClient) javaClass.newInstance();
 
-                if (log.isDebugEnabled()) {
-                    log.debug(whoAmI() + "\tCreated:\t" + getClassname() + "@"
-                            + Integer.toHexString(javaClient.hashCode()));
-                }
-                
-                registerForCleanup(javaClient, context);
-            } catch (Exception e) {
-                log.error(whoAmI() + "\tException creating: " + getClassname(), e);
-                javaClient = new ErrorSamplerClient();
+            if (log.isDebugEnabled()) {
+                log.debug(whoAmI() + "\tCreated:\t" + getClassname() + "@"
+                        + Integer.toHexString(client.hashCode()));
             }
+            
+            registerForCleanup(client, context);
+        } catch (Exception e) {
+            log.error(whoAmI() + "\tException creating: " + getClassname(), e);
+            client = new ErrorSamplerClient();
         }
-        return javaClient;
+        return client;
     }
 
     /**
