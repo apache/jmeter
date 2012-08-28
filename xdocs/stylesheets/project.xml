@@ -37,6 +37,7 @@
 	 </menu>
 	 <menu name="Documentation">
 		<item name="User Manual"         href="/usermanual/index.html"/>
+        <item name="Best Practices"         href="/usermanual/best-practices.html"/>
         <item name="Component Reference"         href="/usermanual/component_reference.html"/>
         <item name="Functions Reference"         href="/usermanual/functions.html"/>
 		<item name="Javadocs"		     href="/api/index.html"/>
