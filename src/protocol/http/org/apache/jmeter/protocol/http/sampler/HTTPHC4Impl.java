@@ -914,7 +914,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     PropertyIterator args = getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                        postBody.append(arg.getValue());
+                        // Note: if "Encoded?" is not selected, arg.getEncodedValue is equivalent to arg.getValue
+                        if (haveContentEncoding) {
+                            postBody.append(arg.getEncodedValue(contentEncoding));                    
+                        } else {
+                            postBody.append(arg.getEncodedValue());
+                        }
                     }
                     // Let StringEntity perform the encoding
                     StringEntity requestEntity = new StringEntity(postBody.toString(), contentEncoding);
@@ -1056,8 +1061,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                // Encoding is done by the StringEntity
-                entityBodyContent.append(arg.getValue());
+                // Note: if "Encoded?" is not selected, arg.getEncodedValue is equivalent to arg.getValue
+                if (charset!= null) {
+                    entityBodyContent.append(arg.getEncodedValue(charset));                    
+                } else {
+                    entityBodyContent.append(arg.getEncodedValue());
+                }
             }
             StringEntity requestEntity = new StringEntity(entityBodyContent.toString(), charset);
             entity.setEntity(requestEntity);
