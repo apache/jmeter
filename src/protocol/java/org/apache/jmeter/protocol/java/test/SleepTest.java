@@ -166,22 +166,6 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
     }
 
     /**
-     * Do any clean-up required by this test. In this case no clean-up is
-     * necessary, but some messages are logged for debugging purposes.
-     *
-     * @param context
-     *            the context to run with. This provides access to
-     *            initialization parameters.
-     */
-    @Override
-    public void teardownTest(JavaSamplerContext context) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(whoAmI() + "\tteardownTest()");
-            listParameters(context);
-        }
-    }
-
-    /**
      * Provide a list of parameters which this test supports. Any parameter
      * names and associated values returned by this method will appear in the
      * GUI by default so the user doesn't have to remember the exact names. The
