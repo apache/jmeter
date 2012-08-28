@@ -52,6 +52,12 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
     /**
+     * Set used to register instances which implement tearDownTest.
+     * This is used so that the JavaSamplerClient can be notified when the test ends.
+     */
+    private static final Set<JavaSampler> TEAR_DOWN_SET = new HashSet<JavaSampler>();
+
+    /**
      * Property key representing the classname of the JavaSamplerClient to user.
      */
     public static final String CLASSNAME = "classname";
@@ -85,12 +91,6 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * client.
      */
     private transient JavaSamplerContext context = null;
-
-    /**
-     * Set used to register instances which implement tearDownTest.
-     * This is used so that the JavaSamplerClient can be notified when the test ends.
-     */
-    private static final Set<JavaSampler> TEAR_DOWN_SET = new HashSet<JavaSampler>();
 
     /**
      * Create a JavaSampler.
