@@ -172,12 +172,10 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     /**
      * Only register jsClient if it contains a custom teardownTest method
      * @param jsClient JavaSamplerClient
-     * @param jsContext JavaSamplerContext
      * @throws NoSuchMethodException 
      * @throws SecurityException 
      */
-    private final void registerForCleanup(JavaSamplerClient jsClient,
-            JavaSamplerContext jsContext) throws SecurityException, NoSuchMethodException  {
+    private final void registerForCleanup(JavaSamplerClient jsClient) throws SecurityException, NoSuchMethodException  {
         if(isToBeRegistered(jsClient.getClass())) {
             TEAR_DOWN_SET.add(this);
         }
@@ -223,7 +221,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
                         + Integer.toHexString(client.hashCode()));
             }
             
-            registerForCleanup(client, context);
+            registerForCleanup(client);
         } catch (Exception e) {
             log.error(whoAmI() + "\tException creating: " + getClassname(), e);
             client = new ErrorSamplerClient();
