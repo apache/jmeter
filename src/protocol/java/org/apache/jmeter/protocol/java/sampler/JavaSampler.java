@@ -84,10 +84,10 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     private static Map<String, Boolean> isToBeRegisteredCache = new ConcurrentHashMap<String, Boolean>();
 
     /**
-     * Set used to register all JavaSamplerClient and JavaSamplerContext. 
+     * Set used to register instances which implement tearDownTest.
      * This is used so that the JavaSamplerClient can be notified when the test ends.
      */
-    private static final Set<Object[]> javaClientAndContextSet = new HashSet<Object[]>();
+    private static final Set<JavaSampler> TEAR_DOWN_SET = new HashSet<JavaSampler>();
 
     /**
      * Create a JavaSampler.
@@ -179,7 +179,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     private final void registerForCleanup(JavaSamplerClient jsClient,
             JavaSamplerContext jsContext) throws SecurityException, NoSuchMethodException  {
         if(isToBeRegistered(jsClient.getClass())) {
-            javaClientAndContextSet.add(new Object[]{jsClient, jsContext});
+            TEAR_DOWN_SET.add(this);
         }
     }
 
@@ -278,15 +278,14 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      */
     public void testEnded() {
         log.debug(whoAmI() + "\ttestEnded");
-        synchronized (javaClientAndContextSet) {
-            for (Object[] javaClientAndContext : javaClientAndContextSet) {
-                JavaSamplerClient jsClient = (JavaSamplerClient) javaClientAndContext[0];
-                JavaSamplerContext jsContext = (JavaSamplerContext) javaClientAndContext[1];
-                if (jsClient != null) {
-                    jsClient.teardownTest(jsContext);
+        synchronized (TEAR_DOWN_SET) {
+            for (JavaSampler javaSampler : TEAR_DOWN_SET) {
+                JavaSamplerClient client = javaSampler.javaClient;
+                if (client != null) {
+                    client.teardownTest(javaSampler.context);
                 }
             }
-            javaClientAndContextSet.clear();
+            TEAR_DOWN_SET.clear();
         }
         isToBeRegisteredCache.clear();
     }
