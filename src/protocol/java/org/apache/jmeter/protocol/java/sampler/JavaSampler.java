@@ -21,9 +21,7 @@ package org.apache.jmeter.protocol.java.sampler;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -64,6 +62,18 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     public static final String ARGUMENTS = "arguments";
 
     /**
+     * The JavaSamplerClient class used by this sampler.
+     * Created by testStarted; copied to cloned instances.
+     */
+    private Class<?> javaClass;
+
+    /**
+     * If true, the JavaSamplerClient class implements tearDownTest.
+     * Created by testStarted; copied to cloned instances.
+     */
+    private boolean isToBeRegistered;
+
+    /**
      * The JavaSamplerClient instance used by this sampler to actually perform
      * the sample.
      */
@@ -77,13 +87,6 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     private transient JavaSamplerContext context = null;
 
     /**
-     * Cache of classname, boolean that holds information about a class and wether or not it should 
-     * be registered for cleanup.
-     * This is done to avoid using reflection on each registration
-     */
-    private static Map<String, Boolean> isToBeRegisteredCache = new ConcurrentHashMap<String, Boolean>();
-
-    /**
      * Set used to register instances which implement tearDownTest.
      * This is used so that the JavaSamplerClient can be notified when the test ends.
      */
@@ -94,6 +97,31 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      */
     public JavaSampler() {
         setArguments(new Arguments());    
+    }
+
+    /*
+     * Ensure that the required class variables are cloned,
+     * as this is not currently done by the super-implementation.
+     */
+    @Override
+    public Object clone() {
+        JavaSampler clone = (JavaSampler) super.clone();
+        clone.javaClass = this.javaClass;
+        clone.isToBeRegistered = this.isToBeRegistered;
+        return clone;
+    }
+
+    private void initClass() {
+        String name = getClassname().trim();
+        try {
+            javaClass = Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+            Method method = javaClass.getMethod("teardownTest", new Class[]{JavaSamplerContext.class});
+            isToBeRegistered = !method.getDeclaringClass().equals(AbstractJavaSamplerClient.class);
+            log.info("Created class: " + name + ". Uses tearDownTest: " + isToBeRegistered);
+        } catch (Exception e) {
+            log.error(whoAmI() + "\tException initialising: " + name, e);
+        }
+        
     }
 
     /**
@@ -170,37 +198,6 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     }
 
     /**
-     * Only register jsClient if it contains a custom teardownTest method
-     * @param jsClient JavaSamplerClient
-     * @throws NoSuchMethodException 
-     * @throws SecurityException 
-     */
-    private final void registerForCleanup(JavaSamplerClient jsClient) throws SecurityException, NoSuchMethodException  {
-        if(isToBeRegistered(jsClient.getClass())) {
-            TEAR_DOWN_SET.add(this);
-        }
-    }
-
-    /**
-     * Tests clazz to see if a custom teardown method has been written and caches the test result.
-     * If classes uses {@link AbstractJavaSamplerClient#teardownTest(JavaSamplerContext)} then it won't
-     * be registered for cleanup as it does nothing.
-     * @param clazz Class to be verified
-     * @return true if clazz should be registered for cleanup
-     * @throws SecurityException
-     * @throws NoSuchMethodException
-     */
-    private boolean isToBeRegistered(Class<? extends JavaSamplerClient> clazz) throws SecurityException, NoSuchMethodException {
-        Boolean isToBeRegistered = isToBeRegisteredCache.get(clazz.getName());
-        if(isToBeRegistered == null) {
-            Method method = clazz.getMethod("teardownTest", new Class[]{JavaSamplerContext.class});
-            isToBeRegistered = Boolean.valueOf(!method.getDeclaringClass().equals(AbstractJavaSamplerClient.class));
-            isToBeRegisteredCache.put(clazz.getName(), isToBeRegistered);
-        } 
-        return isToBeRegistered.booleanValue();
-    }
-
-    /**
      * Returns reference to <code>JavaSamplerClient</code>.
      *
      * The <code>createJavaClient()</code> method uses reflection to create an
@@ -210,10 +207,11 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * @return JavaSamplerClient reference.
      */
     private JavaSamplerClient createJavaClient() {
+        if (javaClass == null) { // failed to initialise the class
+            return new ErrorSamplerClient();
+        }
         JavaSamplerClient client;
         try {
-            Class<?> javaClass = Class.forName(getClassname().trim(), false, Thread.currentThread()
-                    .getContextClassLoader());
             client = (JavaSamplerClient) javaClass.newInstance();
 
             if (log.isDebugEnabled()) {
@@ -221,7 +219,9 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
                         + Integer.toHexString(client.hashCode()));
             }
             
-            registerForCleanup(client);
+            if(isToBeRegistered) {
+                TEAR_DOWN_SET.add(this);
+            }
         } catch (Exception e) {
             log.error(whoAmI() + "\tException creating: " + getClassname(), e);
             client = new ErrorSamplerClient();
@@ -258,11 +258,13 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     /* Implements TestStateListener.testStarted() */
     public void testStarted() {
         log.debug(whoAmI() + "\ttestStarted");
+        initClass();
     }
 
     /* Implements TestStateListener.testStarted(String) */
     public void testStarted(String host) {
         log.debug(whoAmI() + "\ttestStarted(" + host + ")");
+        initClass();
     }
 
     /**
@@ -283,7 +285,6 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
             }
             TEAR_DOWN_SET.clear();
         }
-        isToBeRegisteredCache.clear();
     }
 
     /* Implements TestStateListener.testEnded(String) */
