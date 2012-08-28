@@ -137,6 +137,7 @@ Some suggestions on reducing resource usage.
 <ul>
 <li>Use non-GUI mode: jmeter -n -t test.jmx -l test.jtl</li>
 <li>Use as few Listeners as possible; if using the -l flag as above they can all be deleted or disabled.</li>
+<li>Don't use "View Results Tree" or "View Results in Table" listeners during the load test, use them only during scripting phase to debug your scripts.</li>
 <li>Rather than using lots of similar samplers, 
 use the same sampler in a loop, and use variables (CSV Data Set) to vary the sample. 
 Or perhaps use the Access Log Sampler.
