@@ -35,6 +35,7 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -368,7 +369,7 @@ public final class AllTests {
                     tests++;
                     suite.addTest(t);
                 } catch (Exception ex) {
-                    System.out.println("ERROR: (see logfile) could not add test for class " + name + " " + ex.toString());
+                    System.out.println("ERROR: (see logfile) could not add test for class " + name + " " + ExceptionUtils.getStackTrace(ex));
                     log.error("error adding test :", ex);
                 }
             }
