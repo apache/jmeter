@@ -288,8 +288,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, numThreads, i, context);
                 scheduleThread(jmThread, now); // set start and end time
                 jmThread.setInitialDelay((int)(i * perThreadDelay));
-                Thread newThread = new Thread(jmThread);
-                newThread.setName(jmThread.getThreadName());
+                Thread newThread = new Thread(jmThread, jmThread.getThreadName());
                 registerStartedThread(jmThread, newThread);
                 newThread.start();
             }
@@ -564,8 +563,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                     jmThread.setScheduled(true);
                     jmThread.setEndTime(endtime);
                 }
-                Thread newThread = new Thread(jmThread);
-                newThread.setName(jmThread.getThreadName());
+                Thread newThread = new Thread(jmThread, jmThread.getThreadName());
                 registerStartedThread(jmThread, newThread);
                 newThread.start();
             }
