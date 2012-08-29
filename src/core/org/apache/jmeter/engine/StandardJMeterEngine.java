@@ -223,8 +223,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 log.warn("Error encountered during shutdown of "+tl.toString(),e);
             }
         }
-        log.info("Test has ended on host "+host);
         if (host != null) {
+            log.info("Test has ended on host "+host);
             long now=System.currentTimeMillis();
             System.out.println("Finished the test on host " + host + " @ "+new Date(now)+" ("+now+")"
             +(exitAfterTest ? " - exit requested." : ""));
