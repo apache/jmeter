@@ -564,6 +564,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                     jmThread.setEndTime(endtime);
                 }
                 Thread newThread = new Thread(jmThread, jmThread.getThreadName());
+                newThread.setDaemon(false); // ThreadStarter is daemon, but we don't want sampler threads to be so too
                 registerStartedThread(jmThread, newThread);
                 newThread.start();
             }
