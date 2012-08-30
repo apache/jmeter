@@ -23,12 +23,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.threads.TestCompiler;
+import org.apache.jmeter.threads.TestCompilerHelper;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -44,7 +48,7 @@ import org.apache.log.Logger;
  * <code>while (running && (sampler = controller.next()) != null)</code>
  * </p>
  */
-public class GenericController extends AbstractTestElement implements Controller, Serializable {
+public class GenericController extends AbstractTestElement implements Controller, Serializable, TestCompilerHelper {
 
     private static final long serialVersionUID = 234L;
 
@@ -52,6 +56,12 @@ public class GenericController extends AbstractTestElement implements Controller
 
     private transient LinkedList<LoopIterationListener> iterationListeners =
         new LinkedList<LoopIterationListener>();
+
+    // Only create the map if it is required
+    private transient final ConcurrentMap<TestElement, Object> children = 
+            TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
+
+    private static final Object DUMMY = new Object();
 
     // May be replaced by RandomOrderController
     protected transient List<TestElement> subControllersAndSamplers =
@@ -349,6 +359,17 @@ public class GenericController extends AbstractTestElement implements Controller
         if (child instanceof Controller || child instanceof Sampler) {
             addElement(child);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final boolean addTestElementOnce(TestElement child){
+        if (children.putIfAbsent(child, DUMMY) == null) {
+            addTestElement(child);
+            return true;
+        }
+        return false;
     }
 
     public void addIterationListener(LoopIterationListener lis) {

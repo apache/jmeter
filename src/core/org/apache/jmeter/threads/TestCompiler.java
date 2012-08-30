@@ -41,6 +41,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.logging.LoggingManager;
@@ -56,6 +57,18 @@ import org.apache.log.Logger;
 public class TestCompiler implements HashTreeTraverser {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
+
+    /**
+     * Set this property {@value} to true to revert to using a shared static set.
+     */
+    private static final String USE_STATIC_SET = "TestCompiler.useStaticSet";
+    
+    /**
+     * The default value - {@value} - assumed for {@link #USE_STATIC_SET}. 
+     */
+    private static final boolean USE_STATIC_SET_DEFAULT = false;
+
+    public static final boolean IS_USE_STATIC_SET = JMeterUtils.getPropDefault(USE_STATIC_SET, USE_STATIC_SET_DEFAULT);
 
     /*
      * This set keeps track of which ObjectPairs have been seen.
@@ -138,15 +151,26 @@ public class TestCompiler implements HashTreeTraverser {
         stack.removeLast();
         if (stack.size() > 0) {
             TestElement parent = stack.getLast();
-            ObjectPair pair = new ObjectPair(child, parent);
+            boolean duplicate = false;
             // Bug 53750: this condition used to be in ObjectPair#addTestElements()
             if (parent instanceof Controller && (child instanceof Sampler || child instanceof Controller)) {
-                synchronized (PAIRING) {// Called from multiple threads
-                    if (!PAIRING.contains(pair)) {
-                        parent.addTestElement(child);
-                        PAIRING.add(pair);
+                if (!IS_USE_STATIC_SET && parent instanceof TestCompilerHelper) {
+                    TestCompilerHelper te = (TestCompilerHelper) parent;
+                    duplicate = !te.addTestElementOnce(child);
+                } else { // this is only possible for 3rd party controllers by default
+                    ObjectPair pair = new ObjectPair(child, parent);
+                    synchronized (PAIRING) {// Called from multiple threads
+                        if (!PAIRING.contains(pair)) {
+                            parent.addTestElement(child);
+                            PAIRING.add(pair);
+                        } else {
+                            duplicate = true;
+                        }
                     }
                 }
+            }
+            if (duplicate) {
+                LOG.warn("Unexpected duplicate for " + parent.getClass().getName() + " and " + child.getClass().getName());
             }
         }
     }
