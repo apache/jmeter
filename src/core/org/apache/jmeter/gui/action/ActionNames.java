@@ -57,6 +57,7 @@ public class ActionNames {
     public static final String EXPAND_ALL       = "expand all"; // $NON-NLS-1$
     public static final String FUNCTIONS        = "functions"; // $NON-NLS-1$
     public static final String HELP             = "help"; // $NON-NLS-1$
+    public static final String HEAP_DUMP        = "heap_dump"; // $NON-NLS-1$
     public static final String INSERT_AFTER     = "drag_n_drop.insert_after";//$NON-NLS-1$
     public static final String INSERT_BEFORE    = "drag_n_drop.insert_before";//$NON-NLS-1$
     public static final String LAF_PREFIX       = "laf:"; // Look and Feel prefix
