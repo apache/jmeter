@@ -250,8 +250,7 @@ public class JMeterThread implements Runnable, Interruptible {
         try {
             iterationListener = initRun(threadContext);
             while (running) {
-                Sampler firstSampler = controller.next();
-                Sampler sam = firstSampler;
+                Sampler sam = controller.next();
                 while (running && sam != null) {
                 	process_sampler(sam, null, threadContext);
                 	if(onErrorStartNextLoop || threadContext.isRestartNextLoop()) {
