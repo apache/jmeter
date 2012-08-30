@@ -23,11 +23,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.HeapDumper;
 import org.apache.log.Logger;
 
 /**
@@ -48,6 +51,7 @@ public class What implements Command {
         commands.add(ActionNames.WHAT_CLASS);
         commands.add(ActionNames.DEBUG_ON);
         commands.add(ActionNames.DEBUG_OFF);
+        commands.add(ActionNames.HEAP_DUMP);
         commandSet = Collections.unmodifiableSet(commands);
     }
 
@@ -64,6 +68,13 @@ public class What implements Command {
             LoggingManager.setPriorityFullName("DEBUG",te.getClass().getName());//$NON-NLS-1$
         } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){
             LoggingManager.setPriorityFullName("INFO",te.getClass().getName());//$NON-NLS-1$
+        } else if (ActionNames.HEAP_DUMP.equals(e.getActionCommand())){
+            try {
+                String s = HeapDumper.dumpHeap();
+                JOptionPane.showMessageDialog(null, "Created "+s, "HeapDump", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.toString(), "HeapDump", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
