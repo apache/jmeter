@@ -55,6 +55,8 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 
     private final JCheckBox serializedMode;
 
+    private final JCheckBox tearDownOnShutdown;
+
     /** A panel allowing the user to define variables. */
     private final ArgumentsPanel argsPanel;
 
@@ -68,6 +70,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
         serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized")); // $NON-NLS-1$
         functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode")); // $NON-NLS-1$
+        tearDownOnShutdown = new JCheckBox(JMeterUtils.getResString("teardown_on_shutdown")); // $NON-NLS-1$
         init();
     }
 
@@ -113,6 +116,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         if (plan instanceof TestPlan) {
             TestPlan tp = (TestPlan) plan;
             tp.setFunctionalMode(functionalMode.isSelected());
+            tp.setTearDownOnShutdown(tearDownOnShutdown.isSelected());
             tp.setSerialized(serializedMode.isSelected());
             tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
             tp.setTestPlanClasspathArray(browseJar.getFiles());
@@ -151,6 +155,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
             TestPlan tp = (TestPlan) el;
         functionalMode.setSelected(tp.isFunctionalMode());
         serializedMode.setSelected(tp.isSerialized());
+        tearDownOnShutdown.setSelected(tp.isTearDownOnShutdown());
         final JMeterProperty udv = tp.getUserDefinedVariablesAsProperty();
         if (udv != null) {
             argsPanel.configure((Arguments) udv.getObjectValue());
@@ -172,6 +177,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 
         VerticalPanel southPanel = new VerticalPanel();
         southPanel.add(serializedMode);
+        southPanel.add(tearDownOnShutdown);
         southPanel.add(functionalMode);
         JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation")); // $NON-NLS-1$
         explain.setEditable(false);
@@ -187,6 +193,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         super.clearGui();
         functionalMode.setSelected(false);
         serializedMode.setSelected(false);
+        tearDownOnShutdown.setSelected(false);
         argsPanel.clear();
         browseJar.clearFiles();
     }
