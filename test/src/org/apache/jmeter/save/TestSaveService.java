@@ -87,14 +87,23 @@ public class TestSaveService extends JMeterTestCase {
 
             int [] orig = readFile(new BufferedReader(new FileReader(testFile)));
 
-            InputStream in = new FileInputStream(testFile);
-            HashTree tree = SaveService.loadTree(in);
-            in.close();
+            InputStream in = null;
+            HashTree tree = null;
+            try {
+                in = new FileInputStream(testFile);
+                tree = SaveService.loadTree(in);
+            } finally {
+                if(in != null) {
+                    in.close();
+                }
+            }
 
             ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
-
-            SaveService.saveTree(tree, out);
-            out.close(); // Make sure all the data is flushed out
+            try {
+                SaveService.saveTree(tree, out);
+            } finally {
+                out.close(); // Make sure all the data is flushed out
+            }
 
             ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
             
@@ -113,9 +122,15 @@ public class TestSaveService extends JMeterTestCase {
                 if (saveOut) {
                     final File outFile = findTestFile("testfiles/" + FILES[i] + ".out");
                     System.out.println("Write " + outFile);
-                    FileOutputStream outf = new FileOutputStream(outFile);
-                    outf.write(out.toByteArray());
-                    outf.close();
+                    FileOutputStream outf = null;
+                    try {
+                        outf = new FileOutputStream(outFile);
+                        outf.write(out.toByteArray());
+                    } finally {
+                        if(outf != null) {
+                            outf.close();
+                        }
+                    }
                     System.out.println("Wrote " + outFile);
                 }
             }
@@ -137,25 +152,34 @@ public class TestSaveService extends JMeterTestCase {
      * different attributes/attribute lengths.
      */
     private int[] readFile(BufferedReader br) throws Exception {
-        int length=0;
-        int lines=0;
-        String line;
-        while((line=br.readLine()) != null) {
-            lines++;
-            if (!line.startsWith("<jmeterTestPlan")) {
-                length += line.length();
+        try {
+            int length=0;
+            int lines=0;
+            String line;
+            while((line=br.readLine()) != null) {
+                lines++;
+                if (!line.startsWith("<jmeterTestPlan")) {
+                    length += line.length();
+                }
             }
+            return new int []{length, lines};
+        } finally {
+            br.close();
         }
-        br.close();
-        return new int []{length, lines};
     }
 
     public void testLoad() throws Exception {
         for (int i = 0; i < FILES_LOAD_ONLY.length; i++) {
-            InputStream in = new FileInputStream(findTestFile("testfiles/" + FILES_LOAD_ONLY[i]));
-            HashTree tree =SaveService.loadTree(in);
-            assertNotNull(tree);
-            in.close();
+            InputStream in = null;
+            try {
+                in = new FileInputStream(findTestFile("testfiles/" + FILES_LOAD_ONLY[i]));
+                HashTree tree =SaveService.loadTree(in);
+                assertNotNull(tree);
+            } finally {
+                if(in != null) {
+                    in.close();
+                }
+            }
         }
 
     }
