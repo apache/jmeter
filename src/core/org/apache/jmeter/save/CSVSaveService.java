@@ -913,14 +913,18 @@ public final class CSVSaveService {
             text.append(sample.getDataEncodingWithDefault());
         }
 
-        if (saveConfig.saveSampleCount()) {// Need both sample and error count
-                                           // to be any use
+        if (saveConfig.saveSampleCount()) {
+            // Need both sample and error count to be any use
             text.append(sample.getSampleCount());
             text.append(sample.getErrorCount());
         }
 
         if (saveConfig.saveHostname()) {
             text.append(event.getHostname());
+        }
+
+        if (saveConfig.saveIdleTime()) {
+            text.append(event.getResult().getIdleTime());
         }
 
         for (int i = 0; i < SampleEvent.getVarCount(); i++) {
