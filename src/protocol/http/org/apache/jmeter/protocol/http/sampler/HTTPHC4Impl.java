@@ -816,8 +816,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                    continue;
                }
                FormBodyPart formPart;
-               StringBody stringBody = new StringBody(arg.getValue(),
-                       Charset.forName(contentEncoding == null ? "US-ASCII" : contentEncoding));
+               StringBody stringBody = new StringBody(arg.getValue(), charset);
                formPart = new FormBodyPart(arg.getName(), stringBody);                   
                multiPart.addPart(formPart);
             }
