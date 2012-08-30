@@ -5046,7 +5046,7 @@ In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored p
 <description>
 		<br></br>
 </description>
-<component name="Test Plan" index="&sect-num;.9.1"  width="559" height="435" screenshot="testplan.png">
+<component name="Test Plan" index="&sect-num;.9.1"  width="534" height="468" screenshot="testplan.png">
 <description>
 <p>
 The Test Plan is where the overall settings for a test are specified.
