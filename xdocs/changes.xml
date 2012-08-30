@@ -190,7 +190,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 <li><bugzilla>52601</bugzilla> - CTRL + F for the new Find feature</li>
 <li><bugzilla>53796</bugzilla> - TestCompiler uses static Set which can grow huge</li>
 <li><bugzilla>53673</bugzilla> - Add JMeter version in the jmx file</li>
-<li>Add support for HeapDump to the JMeter non-GUI client</li>
+<li>Add support for HeapDump to the JMeter non-GUI and GUI client</li>
 </ul>
 
 <h2>Non-functional changes</h2>
