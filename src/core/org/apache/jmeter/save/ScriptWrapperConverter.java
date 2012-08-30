@@ -19,6 +19,7 @@
 package org.apache.jmeter.save;
 
 import org.apache.jmeter.save.converters.ConversionHelp;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 
 import com.thoughtworks.xstream.mapper.Mapper;
@@ -37,6 +38,7 @@ public class ScriptWrapperConverter implements Converter {
 
     private static final String ATT_PROPERTIES = "properties"; // $NON-NLS-1$
     private static final String ATT_VERSION = "version"; // $NON-NLS-1$
+    private static final String ATT_JMETER = "jmeter"; // $NON-NLS-1$
 
     /**
      * Returns the converter version; used to check for possible
@@ -68,6 +70,7 @@ public class ScriptWrapperConverter implements Converter {
         ConversionHelp.setOutVersion(version);// Ensure output follows version
         writer.addAttribute(ATT_VERSION, version);
         writer.addAttribute(ATT_PROPERTIES, SaveService.getPropertiesVersion());
+        writer.addAttribute(ATT_JMETER, JMeterUtils.getJMeterVersion());
         writer.startNode(classMapper.serializedClass(wrap.testPlan.getClass()));
         context.convertAnother(wrap.testPlan);
         writer.endNode();
