@@ -52,7 +52,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 
     private static final String FUNCTION_REF_SUFFIX = "}"; //$NON-NLS-1$
 
-    private boolean regexMatch;// Should we match using regexes?
+    private final boolean regexMatch;// Should we match using regexes?
 
     public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map<String, String> variables) {
         this(masterFunction, variables, false);
