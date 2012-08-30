@@ -977,24 +977,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
                     }
                 }
-
-//                // If the request entity is repeatable, we can send it first to
-//                // our own stream, so we can return it
-//                if(post.getEntity().isRepeatable()) {
-//                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//                    post.getEntity().writeTo(bos);
-//                    bos.flush();
-//                    // We get the posted bytes using the encoding used to create it
-//                    if (haveContentEncoding) {
-//                        postedBody.append(new String(bos.toByteArray(), contentEncoding));
-//                    } else {
-//                        postedBody.append(new String(bos.toByteArray()));
-//                    }
-//                    bos.close();
-//                }
-//                else {
-//                    postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
-//                }
             }
         }
         return postedBody.toString();
