@@ -29,6 +29,8 @@ import org.apache.jmeter.testelement.TestElement;
  * This uses a bit more memory, as each controller test element includes the data
  * structure to contain the child element. However, there is no need to store the
  * parent element. 
+ * 
+ * @since 2.8
  */
 public interface TestCompilerHelper {
 
