@@ -18,12 +18,15 @@
 
 package org.apache.jmeter.save;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -77,19 +80,15 @@ public class TestSaveService extends JMeterTestCase {
     }
 
     public void testLoadAndSave() throws Exception {
-        byte[] original = new byte[1000000];
-
         boolean failed = false; // Did a test fail?
 
         for (int i = 0; i < FILES.length; i++) {
-            InputStream in = new FileInputStream(findTestFile("testfiles/" + FILES[i]));
-            int len = in.read(original);
+            final File testFile = findTestFile("testfiles/" + FILES[i]);
 
-            in.close();
+            int [] orig = readFile(new BufferedReader(new FileReader(testFile)));
 
-            in = new ByteArrayInputStream(original, 0, len);
+            InputStream in = new FileInputStream(testFile);
             HashTree tree = SaveService.loadTree(in);
-
             in.close();
 
             ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
@@ -97,33 +96,27 @@ public class TestSaveService extends JMeterTestCase {
             SaveService.saveTree(tree, out);
             out.close(); // Make sure all the data is flushed out
 
+            ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
+            
+            int [] output = readFile(new BufferedReader(new InputStreamReader(ins)));
             // We only check the length of the result. Comparing the
             // actual result (out.toByteArray==original) will usually
             // fail, because the order of the properties within each
             // test element may change. Comparing the lengths should be
             // enough to detect most problem cases...
-            int outsz=out.size();
-            // Allow for input in CRLF and output in LF only
-            int lines=0;
-            byte ba[]=out.toByteArray();
-            for(int j=0;j<ba.length;j++) {
-                if (ba[j] == '\n'){
-                    lines++;
-                }
-            }
-            if (len != outsz && len != outsz+lines) {
+            if (orig[0] != output[0] || orig[1] != output[1]) {
                 failed = true;
                 System.out.println();
                 System.out.println("Loading file testfiles/" + FILES[i] + " and "
-                        + "saving it back changes its size from " + len + " to " + outsz + ".");
-                System.out.println("Diff "+(len-outsz)+" lines "+lines);
+                        + "saving it back changes its size from " + orig[0] + " to " + output[0] + ".");
+                System.out.println("Number of lines changes from " + orig[1] + " to " + output[1]);
                 if (saveOut) {
-                    String outfile = "testfiles/" + FILES[i] + ".out";
-                    System.out.println("Write " + outfile);
-                    FileOutputStream outf = new FileOutputStream(new File(outfile));
+                    final File outFile = findTestFile("testfiles/" + FILES[i] + ".out");
+                    System.out.println("Write " + outFile);
+                    FileOutputStream outf = new FileOutputStream(outFile);
                     outf.write(out.toByteArray());
                     outf.close();
-                    System.out.println("Wrote " + outfile);
+                    System.out.println("Wrote " + outFile);
                 }
             }
 
@@ -138,6 +131,25 @@ public class TestSaveService extends JMeterTestCase {
         }
     }
     
+    /**
+     * Calculate size and line count ignoring EOL and 
+     * "jmeterTestPlan" element which may vary because of 
+     * different attributes/attribute lengths.
+     */
+    private int[] readFile(BufferedReader br) throws Exception {
+        int length=0;
+        int lines=0;
+        String line;
+        while((line=br.readLine()) != null) {
+            lines++;
+            if (!line.startsWith("<jmeterTestPlan")) {
+                length += line.length();
+            }
+        }
+        br.close();
+        return new int []{length, lines};
+    }
+
     public void testLoad() throws Exception {
         for (int i = 0; i < FILES_LOAD_ONLY.length; i++) {
             InputStream in = new FileInputStream(findTestFile("testfiles/" + FILES_LOAD_ONLY[i]));
