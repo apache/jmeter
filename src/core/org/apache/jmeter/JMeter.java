@@ -83,6 +83,7 @@ import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassTools;
+import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -1121,6 +1122,8 @@ public class JMeter implements JMeterPlugin {
                         for(JMeterEngine engine : engines) {
                             engine.stopTest(false);
                         }
+                    } else if (command.equals("HeapDump")) {
+                        HeapDumper.dumpHeap();
                     } else {
                         System.out.println("Command: "+command+" not recognised ");
                     }
