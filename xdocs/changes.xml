@@ -150,6 +150,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 
 <h3>Controllers</h3>
 <ul>
+<li><bugzilla>53671</bugzilla> - tearDown thread group to run even if shutdown test happens</li>
 </ul>
 
 <h3>Listeners</h3>
