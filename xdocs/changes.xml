@@ -71,6 +71,16 @@ JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports
 <p>
 Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F (CMD+F1 for Mac OS) now opens Search Dialog.
 </p>
+
+<p>
+By default, the TestCompiler now stores details of which pairs it has seen in Controller instances rather than in a static Set.
+[Bug 53796]
+This gives much better memory behaviour for delayed start test plans, as memory used is proportional to the number of concurrent threads.
+With the static Set memory usage was proportional to the total thread count.
+This change is very unlikely to cause a problem.
+The original behaviour can be restored by setting the property <code>TestCompiler.useStaticSet=true</code>
+</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -176,6 +186,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 <li><bugzilla>53616</bugzilla> - Display 'Apache JMeter' title in app title bar in Gnome 3</li>
 <li><bugzilla>53759</bugzilla> - ClientJMeterEngine perfoms unnecessary traverse using SearchByClass(TestListener)</li>
 <li><bugzilla>52601</bugzilla> - CTRL + F for the new Find feature</li>
+<li><bugzilla>53796</bugzilla> - TestCompiler uses static Set which can grow huge</li>
 </ul>
 
 <h2>Non-functional changes</h2>

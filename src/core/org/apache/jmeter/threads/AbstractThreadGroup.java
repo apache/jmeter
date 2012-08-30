@@ -19,6 +19,8 @@
 package org.apache.jmeter.threads;
 
 import java.io.Serializable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.LoopController;
@@ -38,9 +40,15 @@ import org.apache.jorphan.collections.ListedHashTree;
  * This class is intended to be ThreadSafe.
  */
 public abstract class AbstractThreadGroup extends AbstractTestElement 
-    implements Serializable, Controller, JMeterThreadMonitor {
+    implements Serializable, Controller, JMeterThreadMonitor, TestCompilerHelper {
 
     private static final long serialVersionUID = 240L;
+
+    // Only create the map if it is required
+    private transient final ConcurrentMap<TestElement, Object> children = 
+            TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
+
+    private static final Object DUMMY = new Object();
 
     /** Action to be taken when a Sampler error occurs */
     public static final String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
@@ -108,6 +116,17 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     @Override
     public void addTestElement(TestElement child) {
         getSamplerController().addTestElement(child);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final boolean addTestElementOnce(TestElement child){
+        if (children.putIfAbsent(child, DUMMY) == null) {
+            addTestElement(child);
+            return true;
+        }
+        return false;
     }
 
     /** {@inheritDoc} */
