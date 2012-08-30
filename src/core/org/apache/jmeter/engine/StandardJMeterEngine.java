@@ -91,11 +91,17 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
 
+    /** Flag to show whether test was shutdown gracefully. */
+    private volatile boolean shutdown = false;
+
     /** Flag to show whether engine is active. Set to false at end of test. */
     private volatile boolean active = false;
 
     /** Thread Groups run sequentially */
     private volatile boolean serialized = false;
+
+    /** tearDown Thread Groups run after shutdown of main threads */
+    private volatile boolean tearDownOnShutdown = false;
 
     private HashTree test;
 
@@ -160,9 +166,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         if (plan.length == 0) {
             throw new RuntimeException("Could not find the TestPlan class!");
         }
-        if (((TestPlan) plan[0]).isSerialized()) {
-            serialized = true;
-        }
+        TestPlan tp = (TestPlan) plan[0];
+        serialized = tp.isSerialized();
+        tearDownOnShutdown = tp.isTearDownOnShutdown();
         active = true;
         test = testTree;
     }
@@ -245,8 +251,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         stopTest(true);
     }
 
-    public synchronized void stopTest(boolean b) {
-        Thread stopThread = new Thread(new StopTest(b));
+    public synchronized void stopTest(boolean now) {
+        shutdown = !now;
+        Thread stopThread = new Thread(new StopTest(now));
         stopThread.start();
     }
 
@@ -371,6 +378,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         System.gc();
 
         JMeterContextService.getContext().setSamplingStarted(true);
+        boolean mainGroups = running; // still running at this point, i.e. setUp was not cancelled
         while (running && iter.hasNext()) {// for each thread group
             AbstractThreadGroup group = iter.next();
             //ignore Setup and Post here.  We could have filtered the searcher. but then
@@ -406,6 +414,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             groupCount = 0;
             JMeterContextService.clearTotalThreads();
             log.info("Starting tearDown thread groups");
+            if (mainGroups && !running) { // i.e. shutdown/stopped during main thread groups
+                running = shutdown & tearDownOnShutdown; // re-enable for tearDown if necessary
+            }
             while (running && postIter.hasNext()) {//for each setup thread group
                 AbstractThreadGroup group = postIter.next();
                 groupCount++;
@@ -502,7 +513,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     }
 
     /**
-     * For each thread group, invoke:
+     * For each current thread group, invoke:
      * <ul> 
      * <li>{@link AbstractThreadGroup#stop()} - set stop flag</li>
      * </ul> 

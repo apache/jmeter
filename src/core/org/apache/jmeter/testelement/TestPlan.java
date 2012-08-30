@@ -48,6 +48,9 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     private static final String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
 
     private static final String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
+
+    private static final String TEARDOWN_ON_SHUTDOWN = "TestPlan.tearDown_on_shutdown"; //$NON-NLS-1$
+
     //- JMX field names
 
     private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
@@ -142,6 +145,14 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     public void setSerialized(boolean serializeTGs) {
         setProperty(new BooleanProperty(SERIALIZE_THREADGROUPS, serializeTGs));
+    }
+
+    public void setTearDownOnShutdown(boolean tearDown) {
+        setProperty(TEARDOWN_ON_SHUTDOWN, tearDown, false);
+    }
+
+    public boolean isTearDownOnShutdown() {
+        return getPropertyAsBoolean(TEARDOWN_ON_SHUTDOWN, false);
     }
 
     /**

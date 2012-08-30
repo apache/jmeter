@@ -5076,6 +5076,10 @@ If more data is required for a particular sampler only, then add a Listener to i
 [The option does not affect CSV result files, which cannot currently store such information.]
 </p>
 <p>Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
+<p>Run tearDown Thread Groups after shutdown of main threads: 
+if selected, the tearDown groups (if any) will be run after graceful shutdown of the main threads.
+The tearDown threads won't be run if the test is forcibly stopped.
+</p>
 <p>
 Test plan now provides an easy way to add classpath setting to a specific test plan. 
 The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter.
