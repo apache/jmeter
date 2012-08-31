@@ -70,9 +70,11 @@ public class TestCompiler implements HashTreeTraverser {
 
     public static final boolean IS_USE_STATIC_SET = JMeterUtils.getPropDefault(USE_STATIC_SET, USE_STATIC_SET_DEFAULT);
 
-    /*
+    /**
      * This set keeps track of which ObjectPairs have been seen.
-     * Its purpose is not entirely clear (please document if you know!) but it is needed,..
+     * It seems to be used to prevent adding a child to a parent if the child has already been added.
+     * If the ObjectPair (child, parent) is present, then the child has been added.
+     * Otherwise, the child is added to the parent and the pair is added to the Set.
      */
     private static final Set<ObjectPair> PAIRING = new HashSet<ObjectPair>();
 
