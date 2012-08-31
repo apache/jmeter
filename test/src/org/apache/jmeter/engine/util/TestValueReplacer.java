@@ -83,6 +83,37 @@ public class TestValueReplacer extends JMeterTestCase {
             assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
         }
 
+        public void testReplaceStringWithBackslash() throws Exception {
+            ValueReplacer replacer = new ValueReplacer();
+            replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
+            TestElement element = new ConfigTestElement();
+            String input = "\\${server} \\ \\\\ \\\\\\ \\, ";
+            element.setProperty(new StringProperty("domain", input));
+            replacer.replaceValues(element);
+            //log.debug("domain property = " + element.getProperty("domain"));
+            element.setRunningVersion(true);
+            assertEquals(input, element.getPropertyAsString("domain"));
+        }
+
+        /*
+         * This test should be compared with the one above.
+         * Here, the string contains a valid variable reference, so all
+         * backslashes are also processed.
+         * 
+         * See https://issues.apache.org/bugzilla/show_bug.cgi?id=53534
+         */
+        public void testReplaceFunctionWithBackslash() throws Exception {
+            ValueReplacer replacer = new ValueReplacer();
+            replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
+            TestElement element = new ConfigTestElement();
+            String input = "${server} \\ \\\\ \\\\\\ \\, ";
+            element.setProperty(new StringProperty("domain", input));
+            replacer.replaceValues(element);
+            //log.debug("domain property = " + element.getProperty("domain"));
+            element.setRunningVersion(true);
+            assertEquals("jakarta.apache.org \\ \\ \\\\ , ", element.getPropertyAsString("domain"));
+        }
+
         /** {@inheritDoc} */
         @Override
         protected void tearDown() throws Exception {
