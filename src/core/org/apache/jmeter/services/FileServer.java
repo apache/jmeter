@@ -282,7 +282,7 @@ public class FileServer {
    /**
      * Get the next line of the named file, recycle by default.
      *
-     * @param filename
+     * @param filename the filename or alias that was used to reserve the file
      * @return String containing the next line in the file
      * @throws IOException
      */
@@ -293,7 +293,7 @@ public class FileServer {
     /**
      * Get the next line of the named file, first line is name to false
      *
-     * @param filename
+     * @param filename the filename or alias that was used to reserve the file
      * @param recycle - should file be restarted at EOF?
      * @return String containing the next line in the file (null if EOF reached and not recycle)
      * @throws IOException
@@ -304,7 +304,7 @@ public class FileServer {
    /**
      * Get the next line of the named file.
      *
-     * @param filename
+     * @param filename the filename or alias that was used to reserve the file
      * @param recycle - should file be restarted at EOF?
      * @param firstLineIsNames - 1st line is fields names
      * @return String containing the next line in the file (null if EOF reached and not recycle)
