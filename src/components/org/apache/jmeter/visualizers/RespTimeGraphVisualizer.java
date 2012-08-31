@@ -179,6 +179,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final Map<String, RespTimeGraphLineBean> seriesNames = new HashMap<String, RespTimeGraphLineBean>();
 
+    /**
+     * We want to retain insertion order, so LinkedHashMap is necessary
+     */
     private final Map<String, Map<Integer, Long>> pList = new LinkedHashMap<String, Map<Integer, Long>>();
 
     private int durationTest = 0;
@@ -240,6 +243,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                             }
                             subList.put(Integer.valueOf(startTimeInterval), Long.valueOf(respTime));
                         } else {
+                            // We want to retain insertion order, so LinkedHashMap is necessary
                             Map<Integer, Long> newSubList = new LinkedHashMap<Integer, Long>();
                             newSubList.put(Integer.valueOf(startTimeInterval), Long.valueOf(sampleResult.getTime()));
                             pList.put(sampleLabel, newSubList);
@@ -311,9 +315,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         double nanBegin = 0;
         List<Double> nanList = new ArrayList<Double>();
         int s = 0;
-        for (Map.Entry<String, Map<Integer, Long>> pointEntry : pList.entrySet()) {
-            Map<Integer, Long> subList = pointEntry.getValue();
-
+        for (Map<Integer, Long> subList : pList.values()) {
             int idx = 0;
             while (idx < durationTest) {
                 int keyShift = minStartTime + idx;
