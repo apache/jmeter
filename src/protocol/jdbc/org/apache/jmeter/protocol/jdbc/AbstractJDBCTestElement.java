@@ -648,8 +648,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 	 * Clean cache of PreparedStatements
 	 */
 	private static final void cleanCache() {
-		for (Map.Entry<Connection, Map<String, PreparedStatement>> element : perConnCache.entrySet()) {
-			closeAllStatements(element.getValue().values());
+		for (Map<String, PreparedStatement> element : perConnCache.values()) {
+			closeAllStatements(element.values());
 		}
 		perConnCache.clear();
 	}
