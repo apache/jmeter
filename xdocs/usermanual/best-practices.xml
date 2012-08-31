@@ -35,7 +35,7 @@
 <section name="&sect-num;.1 Limit the Number of Threads" anchor="limit_threads">
 <p>Your hardware's capabilities will limit the number of threads you can effectively
 run with JMeter.  It will also depend on how fast your server is (a faster server
-gives makes JMeter work harder since it returns request quicker).  The more
+ makes JMeter work harder since it returns request quicker).  The more
 JMeter works, the less accurate its timing information will be.  The more work
 JMeter does, the more each thread has to wait to get access to the CPU, the more
 inflated the timing information gets.  If you need large-scale load testing, consider
