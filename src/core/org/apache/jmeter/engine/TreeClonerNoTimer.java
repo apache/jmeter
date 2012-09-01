@@ -26,7 +26,7 @@ import org.apache.log.Logger;
  * Clones the test tree,  skipping test elements that implement {@link Timer} by default.
  */
 public class TreeClonerNoTimer extends TreeCloner{
-    private Logger logger = LoggingManager.getLoggerForClass();
+    private static final Logger logger = LoggingManager.getLoggerForClass();
     
     public TreeClonerNoTimer() {
         super();
