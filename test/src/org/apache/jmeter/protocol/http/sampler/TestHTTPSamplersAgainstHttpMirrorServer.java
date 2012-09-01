@@ -1085,7 +1085,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String contentLengthValue = getSentRequestHeaderValue(headersSent, HTTPConstants.HEADER_CONTENT_LENGTH);
             int contentLength = -1;
             if(contentLengthValue != null) {
-                contentLength = new Integer(contentLengthValue).intValue();
+                contentLength = Integer.parseInt(contentLengthValue);
             }
             else {
                 fail("Did not receive any content-length header");
