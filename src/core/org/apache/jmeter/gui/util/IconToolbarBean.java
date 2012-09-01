@@ -43,9 +43,9 @@ public final class IconToolbarBean {
      * @param strToSplit - the line value (i18n key, ActionNames ID, icon path, optional icon pressed path)
      * @throws JMeterException if error in parsing.
      */
-    IconToolbarBean(final String strToSplit) throws NullPointerException, IllegalArgumentException {
+    IconToolbarBean(final String strToSplit) throws IllegalArgumentException {
         if (strToSplit == null) {
-            throw new NullPointerException("Icon definition must not be null"); //$NON-NLS-1$
+            throw new IllegalArgumentException("Icon definition must not be null"); //$NON-NLS-1$
         }
         final String tmp[] = strToSplit.split(ICON_FIELD_SEP);
         if (tmp.length > 2) {

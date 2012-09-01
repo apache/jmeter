@@ -66,7 +66,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
 
     public FileEditor(PropertyDescriptor descriptor) {
         if (descriptor == null) {
-            throw new NullPointerException("Descriptor must not be null");
+            throw new IllegalArgumentException("Descriptor must not be null");
         }
 
         // Create a button to trigger the file chooser:
