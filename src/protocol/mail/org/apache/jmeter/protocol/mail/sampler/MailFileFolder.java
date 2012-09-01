@@ -90,7 +90,7 @@ public class MailFileFolder extends Folder {
 
     @Override
     public Message[] expunge() throws MessagingException {
-        return null;
+        return new Message[0];
     }
 
     @Override
