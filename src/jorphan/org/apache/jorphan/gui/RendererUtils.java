@@ -25,7 +25,7 @@ import javax.swing.table.TableColumnModel;
 /**
  * Utility class for Renderers
  */
-public class RendererUtils {
+public final class RendererUtils {
     private RendererUtils(){
         // uninstantiable
     }
