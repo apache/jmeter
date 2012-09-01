@@ -24,7 +24,7 @@ package org.apache.jmeter.gui.action;
  *
  *
  */
-public class ActionNames {
+public final class ActionNames {
 
     public static final String ABOUT            = "about"; // $NON-NLS-1$
     public static final String ACTION_SHUTDOWN  = "shutdown"; // $NON-NLS-1$
