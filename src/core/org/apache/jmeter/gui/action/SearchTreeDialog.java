@@ -57,7 +57,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 	 */
 	private static final long serialVersionUID = -4436834972710248247L;
 
-	private Logger logger = LoggingManager.getLoggerForClass();
+	private static final Logger logger = LoggingManager.getLoggerForClass();
 
     private JButton searchButton;
     
