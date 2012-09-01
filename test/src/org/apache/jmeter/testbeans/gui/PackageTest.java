@@ -47,7 +47,7 @@ import junit.framework.TestSuite;
  * TODO: - Check property files don't have duplicate keys (is this important)
  * 
  */
-public class PackageTest extends JMeterTestCase {
+public final class PackageTest extends JMeterTestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // ResourceBundle i18nEdit=
