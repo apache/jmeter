@@ -58,8 +58,9 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
             compareContent(result);
             compareTime(result);
             return result;
-        } else
+        } else {
             return new AssertionResult(getName());
+        }
     }
 
     private void compareTime(CompareAssertionResult result) {
