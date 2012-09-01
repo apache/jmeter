@@ -39,7 +39,7 @@ import org.apache.commons.io.IOUtils;
  * Utility class to define the JMeter Version string
  *
  */
-public class JMeterVersion {
+public final class JMeterVersion {
 
     /*
      *

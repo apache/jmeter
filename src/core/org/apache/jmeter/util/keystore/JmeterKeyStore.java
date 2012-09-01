@@ -34,7 +34,7 @@ import org.apache.log.Logger;
  * Use this Keystore for JMeter specific KeyStores.
  *
  */
-public class JmeterKeyStore {
+public final class JmeterKeyStore {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
