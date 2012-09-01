@@ -35,7 +35,7 @@ import org.apache.log.Logger;
  * Receiver of pseudo-synchronous reply messages.
  *
  */
-public class Receiver implements Runnable {
+public final class Receiver implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private volatile boolean active;
