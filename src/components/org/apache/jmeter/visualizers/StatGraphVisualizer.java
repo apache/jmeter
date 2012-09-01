@@ -466,7 +466,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             }
             return data;
         }
-        return null;
+        return new double[0][0];
     }
 
     public String[] getAxisLabels() {
@@ -478,7 +478,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             }
             return labels;
         }
-        return null;
+        return new String[0];
     }
 
     private String[] getLegendLabels() {
