@@ -25,7 +25,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * an HTTPSampler; also creates the implementations for use with HTTPSamplerProxy.
  *
  */
-public class HTTPSamplerFactory {
+public final class HTTPSamplerFactory {
 
     // N.B. These values are used in jmeter.properties (jmeter.httpsampler) - do not change
     // They can alse be used as the implementation name
