@@ -116,7 +116,7 @@ public class FileServer {
      * @throws IllegalStateException if files are still open
      */
     public synchronized void setBasedir(String basedir) {
-        checkForOpenFiles();
+        checkForOpenFiles(); // TODO should this be called if basedir == null?
         if (basedir != null) {
             base = new File(basedir);
             if (!base.isDirectory()) {
