@@ -46,9 +46,4 @@ public class HtmlPane extends JTextPane {
             }
         });
     }
-
-    @Override
-    public void scrollToReference(String reference) {
-        super.scrollToReference(reference);
-    }
 }
