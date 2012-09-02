@@ -76,7 +76,7 @@ public final class JmeterKeyStore {
             while (aliases.hasMoreElements()) {
                 String alias = aliases.nextElement();
                 if (store.isKeyEntry(alias)) {
-                    if ((index >= startIndex && index <= endIndex)) {
+                    if (index >= startIndex && index <= endIndex) {
                         _key = (PrivateKey) store.getKey(alias, pw);
                         if (null == _key) {
                             throw new Exception("No key found for alias: " + alias); // Should not happen
