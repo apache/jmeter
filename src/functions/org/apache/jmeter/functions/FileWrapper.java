@@ -35,7 +35,7 @@ import org.apache.log.Logger;
  * together with the current line number.
  *
  */
-public class FileWrapper {
+public final class FileWrapper {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
