@@ -48,6 +48,11 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
 
     private final String[] filetypes;
 
+    // Mainly needed for unit test Serialisable tests
+    public FilePanelEntry() {
+        this(JMeterUtils.getResString("file_visualizer_filename")); //$NON-NLS-1$
+    }
+
     public FilePanelEntry(String label) {
         this(label, (ChangeListener) null);
     }
