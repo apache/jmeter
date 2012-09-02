@@ -39,14 +39,6 @@ public class DefaultTreeTableModel extends AbstractTreeTableModel {
     }
 
     /**
-     * @param root
-     * @param editable
-     */
-    public DefaultTreeTableModel(TreeNode root, boolean editable) {
-        super(root, editable);
-    }
-
-    /**
      * @param headers
      * @param readFunctors
      * @param writeFunctors
