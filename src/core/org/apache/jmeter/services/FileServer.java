@@ -82,7 +82,8 @@ public class FileServer {
 
     private final Random random = new Random();
 
-	private String scriptName;
+    // volatile needed to ensure safe publication
+	private volatile String scriptName;
 
     // Cannot be instantiated
     private FileServer() {
