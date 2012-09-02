@@ -26,6 +26,9 @@ import java.beans.PropertyEditorManager;
  */
 public class TestBooleanPropertyEditor extends junit.framework.TestCase {
  
+    private static final String FALSE = "False";
+    private static final String TRUE = "True";
+
     public TestBooleanPropertyEditor(String name) {
         super(name);
     }
@@ -35,21 +38,21 @@ public class TestBooleanPropertyEditor extends junit.framework.TestCase {
         assertNotNull(propertyEditor);
         String tags[] = propertyEditor.getTags();
         assertEquals(2,tags.length);
-        assertEquals("True",tags[0]);
-        assertEquals("False",tags[1]);
+        assertEquals(TRUE,tags[0]);
+        assertEquals(FALSE,tags[1]);
         
         propertyEditor.setValue(Boolean.FALSE);
-        assertEquals("False",propertyEditor.getAsText());
-        propertyEditor.setAsText("False");
-        assertEquals("False",propertyEditor.getAsText());
+        assertEquals(FALSE,propertyEditor.getAsText());
+        propertyEditor.setAsText(FALSE);
+        assertEquals(FALSE,propertyEditor.getAsText());
         propertyEditor.setAsText("false");
-        assertEquals("False",propertyEditor.getAsText());
+        assertEquals(FALSE,propertyEditor.getAsText());
         
         propertyEditor.setValue(Boolean.TRUE);
-        assertEquals("True",propertyEditor.getAsText());
-        propertyEditor.setAsText("True");
-        assertEquals("True",propertyEditor.getAsText());
+        assertEquals(TRUE,propertyEditor.getAsText());
+        propertyEditor.setAsText(TRUE);
+        assertEquals(TRUE,propertyEditor.getAsText());
         propertyEditor.setAsText("true");
-        assertEquals("True",propertyEditor.getAsText());
+        assertEquals(TRUE,propertyEditor.getAsText());
         }
 }
