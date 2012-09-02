@@ -118,10 +118,11 @@ public class FileServer {
     public synchronized void setBasedir(String basedir) {
         checkForOpenFiles(); // TODO should this be called if basedir == null?
         if (basedir != null) {
-            base = new File(basedir);
-            if (!base.isDirectory()) {
-                base = base.getParentFile();
+            File newBase = new File(basedir);
+            if (!newBase.isDirectory()) {
+                newBase = newBase.getParentFile();
             }
+            base = newBase;
             log.info("Set new base='"+base+"'");
         }
     }
