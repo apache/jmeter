@@ -48,6 +48,7 @@ public final class NullProperty extends AbstractProperty {
     }
 
     public void setObjectValue(Object v) {
+        // NOOP
     }
 
     /**
@@ -81,7 +82,7 @@ public final class NullProperty extends AbstractProperty {
     }
 
     @Override
-    public final NullProperty clone() {
+    public NullProperty clone() {
         return this;
     }
 
