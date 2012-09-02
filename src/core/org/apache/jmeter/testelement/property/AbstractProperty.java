@@ -290,7 +290,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      */
     protected Collection<JMeterProperty> normalizeList(Collection<?> coll) {
         if (coll.isEmpty()) {
-            @SuppressWarnings("unchecked") // empty collection
+            @SuppressWarnings("unchecked") // empty collection, local var is here to allow SuppressWarnings
             Collection<JMeterProperty> okColl = (Collection<JMeterProperty>) coll;
             return okColl;
         }
@@ -313,7 +313,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      */
     protected Map<String, JMeterProperty> normalizeMap(Map<?,?> coll) {
         if (coll.isEmpty()) {
-            @SuppressWarnings("unchecked")// empty collection ok to cast
+            @SuppressWarnings("unchecked")// empty collection ok to cast, local var is here to allow SuppressWarnings
             Map<String, JMeterProperty> emptyColl = (Map<String, JMeterProperty>) coll;
             return emptyColl;
         }
