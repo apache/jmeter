@@ -464,6 +464,7 @@ public class FileServer {
 
     /**
      * @return JMX Script name
+     * @since 2.6
      */
 	public String getScriptName() {
 		return scriptName;
@@ -471,6 +472,7 @@ public class FileServer {
 
 	/**
 	 * @param scriptName Script name
+	 * @since 2.6
 	 */
 	public void setScriptName(String scriptName) {
 		this.scriptName = scriptName;
