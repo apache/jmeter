@@ -578,7 +578,7 @@ public class JMeterThread implements Runnable, Interruptible {
     // N.B. This is only called at the start and end of a thread, so there is not
     // necessary to cache the search results, thus saving memory
     private static class ThreadListenerTraverser implements HashTreeTraverser {
-        private boolean isStart = false;
+        private final boolean isStart;
 
         private ThreadListenerTraverser(boolean start) {
             isStart = start;
