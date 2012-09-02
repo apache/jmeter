@@ -137,7 +137,7 @@ public class JMeterThread implements Runnable, Interruptible {
         this.monitor = monitor;
         threadVars = new JMeterVariables();
         testTree = test;
-        compiler = new TestCompiler(testTree, threadVars);
+        compiler = new TestCompiler(testTree);
         controller = (Controller) testTree.getArray()[0];
         SearchByClass<TestIterationListener> threadListenerSearcher = new SearchByClass<TestIterationListener>(TestIterationListener.class); // TL - IS
         test.traverse(threadListenerSearcher);

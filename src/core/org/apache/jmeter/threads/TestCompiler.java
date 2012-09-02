@@ -87,7 +87,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     private final HashTree testTree;
 
-    public TestCompiler(HashTree testTree, JMeterVariables vars) {
+    public TestCompiler(HashTree testTree) {
         this.testTree = testTree;
     }
 
