@@ -176,7 +176,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         if (val == null) {
             return false;
         }
-        return Boolean.valueOf(val).booleanValue();
+        return Boolean.parseBoolean(val);
     }
 
     /**
@@ -313,7 +313,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      */
     protected Map<String, JMeterProperty> normalizeMap(Map<?,?> coll) {
         if (coll.isEmpty()) {
-            @SuppressWarnings("unchecked") // empty collection ok to cast
+            @SuppressWarnings("unchecked")// empty collection ok to cast
             Map<String, JMeterProperty> emptyColl = (Map<String, JMeterProperty>) coll;
             return emptyColl;
         }
@@ -369,10 +369,10 @@ public abstract class AbstractProperty implements JMeterProperty {
                     (TestElement) item);
         }
         if (item instanceof Collection<?>) {
-            return new CollectionProperty("" + item.hashCode(), (Collection<?>) item);
+            return new CollectionProperty(Integer.toString(item.hashCode()), (Collection<?>) item);
         }
         if (item instanceof Map<?, ?>) {
-            return new MapProperty("" + item.hashCode(), (Map<?, ?>) item);
+            return new MapProperty(Integer.toString(item.hashCode()), (Map<?, ?>) item);
         }
         return null;
     }
@@ -381,7 +381,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         JMeterProperty prop = makeProperty(item);
         if (prop == null) {
             prop = getBlankProperty();
-            prop.setName("" + item.hashCode());
+            prop.setName(Integer.toString(item.hashCode()));
             prop.setObjectValue(item);
         }
         return prop;
@@ -400,5 +400,6 @@ public abstract class AbstractProperty implements JMeterProperty {
 
     /** {@inheritDoc} */
     public void mergeIn(JMeterProperty prop) {
+        // NOOP
     }
 }
