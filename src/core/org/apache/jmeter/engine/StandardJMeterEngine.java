@@ -375,8 +375,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
          * at all (just delays test start by a tiny amount) and hitting one too
          * early in the test can impair results for short tests.
          */
-        System.gc();
-
+        JMeterUtils.helpGC();
+        
         JMeterContextService.getContext().setSamplingStarted(true);
         boolean mainGroups = running; // still running at this point, i.e. setUp was not cancelled
         while (running && iter.hasNext()) {// for each thread group
