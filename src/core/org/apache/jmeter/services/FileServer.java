@@ -162,6 +162,8 @@ public class FileServer {
 	/**
 	 * Check if there are entries in use.
 	 * <p>
+	 * Caller must ensure that access to the files map is single-threaded as
+	 * there is a window between checking the files Map and clearing it.
 	 * 
 	 * @throws IllegalStateException if there are any entries still in use
 	 */
