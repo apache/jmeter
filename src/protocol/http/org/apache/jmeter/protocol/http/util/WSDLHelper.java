@@ -176,19 +176,15 @@ public class WSDLHelper {
      * @throws IOException
      */
     protected void connect() throws IOException {
-        try {
-            CONN = WSDLURL.openConnection();
-            CONN.setConnectTimeout(GET_WDSL_TIMEOUT);
-            CONN.setReadTimeout(GET_WDSL_TIMEOUT);
-            // in the rare case the WSDL is protected and requires
-            // authentication, use the AuthManager to set the
-            // authorization. Basic and Digest authorization are
-            // pretty weak and don't provide real security.
-            if (CONN instanceof HttpURLConnection && this.AUTH != null && this.AUTH.getAuthHeaderForURL(this.WSDLURL) != null) {
-                CONN.setRequestProperty("Authorization", this.AUTH.getAuthHeaderForURL(this.WSDLURL));
-            }
-        } catch (IOException exception) {
-            throw exception;
+        CONN = WSDLURL.openConnection();
+        CONN.setConnectTimeout(GET_WDSL_TIMEOUT);
+        CONN.setReadTimeout(GET_WDSL_TIMEOUT);
+        // in the rare case the WSDL is protected and requires
+        // authentication, use the AuthManager to set the
+        // authorization. Basic and Digest authorization are
+        // pretty weak and don't provide real security.
+        if (CONN instanceof HttpURLConnection && this.AUTH != null && this.AUTH.getAuthHeaderForURL(this.WSDLURL) != null) {
+            CONN.setRequestProperty("Authorization", this.AUTH.getAuthHeaderForURL(this.WSDLURL));
         }
     }
 
@@ -210,18 +206,10 @@ public class WSDLHelper {
      * using javax.xml.parser API.
      */
     protected void buildDocument() throws ParserConfigurationException, IOException, SAXException {
-        try {
-            DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
-            dbfactory.setNamespaceAware(true);
-            DocumentBuilder docbuild = dbfactory.newDocumentBuilder();
-            WSDLDOC = docbuild.parse(CONN.getInputStream());
-        } catch (ParserConfigurationException exception) {
-            throw exception;
-        } catch (IOException exception) {
-            throw exception;
-        } catch (SAXException exception) {
-            throw exception;
-        }
+        DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+        dbfactory.setNamespaceAware(true);
+        DocumentBuilder docbuild = dbfactory.newDocumentBuilder();
+        WSDLDOC = docbuild.parse(CONN.getInputStream());
     }
 
     /**
