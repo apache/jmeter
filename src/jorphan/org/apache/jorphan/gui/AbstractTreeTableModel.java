@@ -36,24 +36,20 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     protected final TreeNode rootNode;
     protected final EventListenerList listener = new EventListenerList();
 
-    protected transient final ArrayList<Object> objects = new ArrayList<Object>();
+    protected transient final List<Object> objects = new ArrayList<Object>();
 
     protected transient final List<String> headers = new ArrayList<String>();
 
-    protected transient final ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+    protected transient final List<Class<?>> classes = new ArrayList<Class<?>>();
 
-    protected transient final ArrayList<Functor> readFunctors;
+    protected transient final List<Functor> readFunctors;
 
-    protected transient final ArrayList<Functor> writeFunctors;
+    protected transient final List<Functor> writeFunctors;
 
     public AbstractTreeTableModel(TreeNode root) {
         this.rootNode = root;
         readFunctors = new ArrayList<Functor>();
         writeFunctors = new ArrayList<Functor>();
-    }
-
-    public AbstractTreeTableModel(TreeNode root, boolean editable) {
-        this(root);
     }
 
     public AbstractTreeTableModel(String[] headers,
