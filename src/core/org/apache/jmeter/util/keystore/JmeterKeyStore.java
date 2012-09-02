@@ -129,6 +129,7 @@ public final class JmeterKeyStore {
         if (entry >=0) {
             return this.certChains[entry];
         }
+        // API expects null not empty array, see http://javasourcecode.org/html/open-source/jdk/jdk-6u23/javax/net/ssl/X509KeyManager.java.html
         return null;
     }
 
