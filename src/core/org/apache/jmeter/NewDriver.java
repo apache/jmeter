@@ -126,7 +126,7 @@ public final class NewDriver {
         loader = AccessController.doPrivileged(
         		new java.security.PrivilegedAction<DynamicClassLoader>() {
         	        public DynamicClassLoader run() {
-        	        	return new DynamicClassLoader(jars.toArray(new URL[0]));
+        	        	return new DynamicClassLoader(jars.toArray(new URL[jars.size()]));
         	        }
         	    }
         );
@@ -212,7 +212,7 @@ public final class NewDriver {
                 initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
             }
             Object instance = initialClass.newInstance();
-            Method startup = initialClass.getMethod("start", new Class[] { (new String[0]).getClass() });// $NON-NLS-1$
+            Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
             startup.invoke(instance, new Object[] { args });
         } catch(Throwable e){
             e.printStackTrace();
