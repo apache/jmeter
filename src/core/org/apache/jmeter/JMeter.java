@@ -913,7 +913,7 @@ public class JMeter implements JMeterPlugin {
      * it calls ClientJMeterEngine.tidyRMI() to deal with the Naming Timer Thread.
      */
     private static class ListenToTest implements TestStateListener, Runnable, Remoteable {
-        private AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
+        private final AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
 
         //NOT YET USED private JMeter _parent;
 
