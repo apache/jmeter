@@ -234,7 +234,12 @@ public final class JmeterKeyStore {
 //            }
             aliases[i] = this.names[i];
         }
-        return aliases;
+        if(aliases.length>0) {
+            return aliases;
+        } else {
+            // API expects null not empty array, see http://javasourcecode.org/html/open-source/jdk/jdk-6u23/javax/net/ssl/X509KeyManager.java.html
+            return null;
+        }
     }
 
 }
