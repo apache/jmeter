@@ -41,7 +41,7 @@ public class TestTestCompiler extends junit.framework.TestCase {
             testing.add(controller, sampler);
             TestCompiler.initialize();
 
-            TestCompiler compiler = new TestCompiler(testing, new JMeterVariables());
+            TestCompiler compiler = new TestCompiler(testing);
             testing.traverse(compiler);
             sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
             assertEquals("A test value", sampler.getPropertyAsString("test.property"));
