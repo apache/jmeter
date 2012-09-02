@@ -112,6 +112,10 @@ public class AxisGraph extends JPanel {
         super(layout, isDoubleBuffered);
     }
 
+    /**
+     * Expects null array when no data  not empty array
+     * @param data
+     */
     public void setData(double[][] data) {
         this.data = data;
     }
@@ -132,6 +136,10 @@ public class AxisGraph extends JPanel {
         this.yAxisTitle = title;
     }
 
+    /**
+     * Expects null array when no labels not empty array
+     * @param labels
+     */
     public void setXAxisLabels(String[] labels) {
         this.xAxisLabels = labels;
     }
