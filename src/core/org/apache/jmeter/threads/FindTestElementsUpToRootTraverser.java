@@ -41,7 +41,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
     /**
      * Node to find in TestTree
      */
-    private Object nodeToFind;
+    private final Object nodeToFind;
     /**
      * Once we find the node in the Tree we stop recording nodes
      */
