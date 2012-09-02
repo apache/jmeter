@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.smtp.sampler.protocol;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.cert.X509Certificate;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
@@ -35,6 +36,9 @@ import javax.net.ssl.X509TrustManager;
 public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
 
     private final SSLSocketFactory factory;
+    
+    // Empty arrays are immutable
+    private static final X509Certificate[] EMPTY_X509Certificate = new X509Certificate[0];
 
     /**
      * Standard constructor
@@ -45,14 +49,14 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
             sslcontext = SSLContext.getInstance("TLS"); // $NON-NLS-1$
             sslcontext.init( null, new TrustManager[]{
                     new X509TrustManager() {
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return new java.security.cert.X509Certificate[0];
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return EMPTY_X509Certificate;
                         }
                         public void checkClientTrusted(
-                                java.security.cert.X509Certificate[] certs, String authType) {
+                                X509Certificate[] certs, String authType) {
                         }
                         public void checkServerTrusted(
-                                java.security.cert.X509Certificate[] certs, String authType) {
+                                X509Certificate[] certs, String authType) {
                         }
                     }
                 },
