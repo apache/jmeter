@@ -43,7 +43,7 @@ public class BooleanProperty extends AbstractProperty {
         if (v instanceof Boolean) {
             value = ((Boolean) v).booleanValue();
         } else {
-            value = Boolean.valueOf(v.toString()).booleanValue();
+            value = Boolean.parseBoolean(v.toString());
         }
     }
 
