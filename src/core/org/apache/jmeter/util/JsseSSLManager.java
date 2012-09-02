@@ -284,12 +284,19 @@ public class JsseSSLManager extends SSLManager {
     private static class WrappedX509KeyManager implements X509KeyManager {
 
         /**
-         * The parent X509KeyManager
+         * The parent X509KeyManager.
+         * This is used for the methods {@link #getServerAliases(String, Principal[])}
+         *  and {@link #chooseServerAlias(String, Principal[], Socket)}
          */
         private final X509KeyManager manager;
 
         /**
-         * The KeyStore this KeyManager uses
+         * The KeyStore this KeyManager uses.
+         * This is used for the remaining X509KeyManager methods: 
+         * {@link #getClientAliases(String, Principal[])},
+         * {@link #getCertificateChain(String)},
+         * {@link #getPrivateKey(String)} and
+         * {@link #chooseClientAlias(String[], Principal[], Socket)}
          */
         private final JmeterKeyStore store;
 
