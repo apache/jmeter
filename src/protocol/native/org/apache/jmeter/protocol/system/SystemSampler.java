@@ -47,6 +47,7 @@ import org.apache.log.Logger;
 public class SystemSampler extends AbstractSampler {
     private static final long serialVersionUID = 1;
     
+    // + JMX names, do not change their values
     public static final String COMMAND = "SystemSampler.command";
     
     public static final String DIRECTORY = "SystemSampler.directory";
@@ -58,6 +59,14 @@ public class SystemSampler extends AbstractSampler {
     public static final String CHECK_RETURN_CODE = "SystemSampler.checkReturnCode";
     
     public static final String EXPECTED_RETURN_CODE = "SystemSampler.expectedReturnCode";
+    
+    private static final String STDOUT = "SystemSampler.stdout";
+
+    private static final String STDERR = "SystemSampler.stderr";
+
+    private static final String STDIN = "SystemSampler.stdin";
+
+    // - JMX names
 
     /**
      * Logging
@@ -128,7 +137,7 @@ public class SystemSampler extends AbstractSampler {
                     ", Environment:"+env+
                     ", Executing:" + cmdLine.toString());
             
-            NativeCommand nativeCommand = new NativeCommand(directory, env);
+            NativeCommand nativeCommand = new NativeCommand(directory, env, getStdin(), getStdout(), getStderr());
             
             String responseData = null;
             try {
@@ -166,6 +175,7 @@ public class SystemSampler extends AbstractSampler {
             results.setResponseData((responseData+"\nProcess Output:\n"+nativeCommand.getOutResult()).getBytes());
             
         } catch (Exception e) {
+            log.warn("Unexpected error",e);
             results.setSuccessful(false);
             results.setResponseData(("Unknown Exception caught: "+e).getBytes());
             results.setSampleLabel("ERROR: " + getName());
@@ -278,4 +288,29 @@ public class SystemSampler extends AbstractSampler {
     public Arguments getEnvironmentVariables() {
         return (Arguments) getProperty(ENVIRONMENT).getObjectValue();
     }
+
+    public String getStdout() {
+        return getPropertyAsString(STDOUT, "");
+    }
+
+    public void setStdout(String filename) {
+        setProperty(STDOUT, filename, "");
+    }
+
+    public String getStderr() {
+        return getPropertyAsString(STDERR, "");
+    }
+
+    public void setStderr(String filename) {
+        setProperty(STDERR, filename, "");
+    }
+
+    public String getStdin() {
+        return getPropertyAsString(STDIN, "");
+    }
+
+    public void setStdin(String filename) {
+        setProperty(STDIN, filename, "");
+    }
+
 }
