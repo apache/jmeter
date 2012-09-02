@@ -102,6 +102,7 @@ public class FileServer {
      * Resets the current base to {@link #DEFAULT_BASE}.
      */
     public synchronized void resetBase() {
+        checkForOpenFiles();
         base = new File(DEFAULT_BASE);
         log.info("Reset base to'"+base+"'");
     }
