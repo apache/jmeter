@@ -132,7 +132,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             previousTime = currentTime;
             return 0;
         }
-        previousTime = currentTarget;
+        previousTime = currentTarget;            
         return currentTarget - currentTime;
     }
 
@@ -199,9 +199,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         return Math.max(calculatedDelay, 0);
     }
 
-    private synchronized void reset() {
-        allThreadsInfo.lastScheduledTime = 0;
+    private void reset() {
+        synchronized (allThreadsInfo.MUTEX) {
+            allThreadsInfo.lastScheduledTime = 0;            
+        }
         threadGroupsInfoMap.clear();
+        // no need to sync as one per instance
         previousTime = 0;
     }
 
