@@ -76,7 +76,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     private transient Thread threadStarter;
 
     // List of active threads
-    private Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
+    private final Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
 
     /**
      * Is test (still) running?
@@ -285,7 +285,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             long now = System.currentTimeMillis(); // needs to be same time for all threads in the group
             final JMeterContext context = JMeterContextService.getContext();
             for (int i = 0; running && i < numThreads; i++) {
-                JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, numThreads, i, context);
+                JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, i, context);
                 scheduleThread(jmThread, now); // set start and end time
                 jmThread.setInitialDelay((int)(i * perThreadDelay));
                 Thread newThread = new Thread(jmThread, jmThread.getThreadName());
@@ -307,7 +307,7 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     private JMeterThread makeThread(int groupCount,
             ListenerNotifier notifier, ListedHashTree threadGroupTree,
-            StandardJMeterEngine engine, int numThreads, int i, 
+            StandardJMeterEngine engine, int i, 
             JMeterContext context) { // N.B. Context needs to be fetched in the correct thread
         boolean onErrorStopTest = getOnErrorStopTest();
         boolean onErrorStopTestNow = getOnErrorStopTestNow();
@@ -557,7 +557,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 if (usingScheduler && System.currentTimeMillis() > endtime) {
                     break; // no point continuing beyond the end time
                 }
-                JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, numThreads, i, context);
+                JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, i, context);
                 jmThread.setInitialDelay(0);   // Already waited
                 if (usingScheduler) {
                     jmThread.setScheduled(true);
