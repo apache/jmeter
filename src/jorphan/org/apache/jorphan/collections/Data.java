@@ -48,7 +48,7 @@ public class Data implements Serializable {
 
     private final Map<String, List<Object>> data;
 
-    private ArrayList<String> header;
+    private List<String> header;
 
     // saves current position in data List
     private int currentPos, size;
@@ -268,8 +268,8 @@ public class Data implements Serializable {
      *            value to set into column.
      */
     public void addColumnValue(String column, Object value) {
-        ArrayList<Object> tempList;
-        if ((tempList = (ArrayList<Object>) data.get(column)) == null) {
+        List<Object> tempList;
+        if ((tempList = data.get(column)) == null) {
             tempList = new ArrayList<Object>();
             data.put(column, tempList);
         }
@@ -660,8 +660,9 @@ public class Data implements Serializable {
         line[0] = temp.toString();
         reset();
         int index = 1;
+        temp = new StringBuilder();
         while (next()) {
-            temp = new StringBuilder("");
+            temp.setLength(0);
             for (int count = 0; count < elements.length; count++) {
                 temp.append(getColumnValue(count));
                 if (count + 1 < elements.length) {
