@@ -21,6 +21,7 @@ package org.apache.jmeter.threads;
 import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.LoopController;
@@ -73,8 +74,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     public static final String MAIN_CONTROLLER = "ThreadGroup.main_controller";
 
-    // @GuardedBy("this")
-    private int numberOfThreads = 0; // Number of active threads in this group
+    private final AtomicInteger numberOfThreads = new AtomicInteger(0); // Number of active threads in this group
 
     /** {@inheritDoc} */
     public boolean isDone() {
@@ -92,8 +92,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return the sampler controller.
      */
     public Controller getSamplerController() {
-        Controller c = (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
-        return c;
+        return (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
     }
 
     /**
@@ -175,22 +174,22 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     /**
      * Increment the number of active threads
      */
-    synchronized void incrNumberOfThreads() {
-        numberOfThreads++;
+    void incrNumberOfThreads() {
+        numberOfThreads.incrementAndGet();
     }
 
     /**
      * Decrement the number of active threads
      */
-    synchronized void decrNumberOfThreads() {
-        numberOfThreads--;
+    void decrNumberOfThreads() {
+        numberOfThreads.decrementAndGet();
     }
 
     /**
      * Get the number of active threads
      */
-    public synchronized int getNumberOfThreads() {
-        return numberOfThreads;
+    public int getNumberOfThreads() {
+        return numberOfThreads.get();
     }
     
     /**
