@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
  * It maintains a list of nodelist containers, one for each file/xpath combination
  *
  */
-public class XPathWrapper {
+public final class XPathWrapper {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
