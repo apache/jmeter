@@ -194,8 +194,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         }
         log.info("Unbound from registry");
         // Help with garbage control
-        System.gc();
-        System.runFinalization();
+        JMeterUtils.helpGC();
     }
 
     public void rsetProperties(Properties p) throws RemoteException, IllegalStateException {

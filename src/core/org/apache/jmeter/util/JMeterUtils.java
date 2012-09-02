@@ -1295,4 +1295,12 @@ public class JMeterUtils implements UnitTestManager {
             }
         }
     }
+    
+    /**
+     * Help GC by triggering GC and finalization
+     */
+    public static final void helpGC() {
+        System.gc();
+        System.runFinalization();
+    }
 }
