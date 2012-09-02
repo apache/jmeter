@@ -208,15 +208,5 @@ public class FileEditor implements PropertyEditor, ActionListener {
         public void setAsText(String text) throws IllegalArgumentException {
             super.setValue(new File(text));
         }
-
-        @Override
-        public Object getValue() {
-            return super.getValue();
-        }
-
-        @Override
-        public void setValue(Object file) {
-            super.setValue(file);
-        }
     }
 }
