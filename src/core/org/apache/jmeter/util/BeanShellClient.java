@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import org.apache.jorphan.util.JOrphanUtils;
+
 
 /**
  * Implements a client that can talk to the JMeter BeanShell server.
@@ -103,12 +105,10 @@ public class BeanShellClient {
                     System.out.print(c);
                 }
             } catch (IOException e) {
+                // TODO Why empty block ?
             } finally {
                 System.out.println("... disconnected from server.");
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
+                JOrphanUtils.closeQuietly(is);
             }
 
         }
