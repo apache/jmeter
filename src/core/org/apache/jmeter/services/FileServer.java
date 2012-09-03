@@ -40,6 +40,7 @@ import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -320,7 +321,7 @@ public class FileServer {
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
-                fileEntry.inputOutputObject = createBufferedReader(fileEntry, filename);
+                fileEntry.inputOutputObject = createBufferedReader(fileEntry);
             } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
                 throw new IOException("File " + filename + " already in use");
             }
@@ -328,7 +329,7 @@ public class FileServer {
             String line = reader.readLine();
             if (line == null && recycle) {
                 reader.close();
-                reader = createBufferedReader(fileEntry, filename);
+                reader = createBufferedReader(fileEntry);
                 fileEntry.inputOutputObject = reader;
                 if (firstLineIsNames) {
                     // read first line and forget
@@ -342,12 +343,12 @@ public class FileServer {
         throw new IOException("File never reserved: "+filename);
     }
 
-    private BufferedReader createBufferedReader(FileEntry fileEntry, String filename) throws IOException {
+    private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
         FileInputStream fis = new FileInputStream(fileEntry.file);
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
-        if(charsetName != null && charsetName.trim().length() > 0) {
+        if(!JOrphanUtils.isBlank(charsetName)) {
             isr = new InputStreamReader(fis, charsetName);
         } else {
             isr = new InputStreamReader(fis);
@@ -359,7 +360,7 @@ public class FileServer {
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
-                fileEntry.inputOutputObject = createBufferedWriter(fileEntry, filename);
+                fileEntry.inputOutputObject = createBufferedWriter(fileEntry);
             } else if (!(fileEntry.inputOutputObject instanceof Writer)) {
                 throw new IOException("File " + filename + " already in use");
             }
@@ -371,12 +372,12 @@ public class FileServer {
         }
     }
 
-    private BufferedWriter createBufferedWriter(FileEntry fileEntry, String filename) throws IOException {
+    private BufferedWriter createBufferedWriter(FileEntry fileEntry) throws IOException {
         FileOutputStream fos = new FileOutputStream(fileEntry.file);
         OutputStreamWriter osw = null;
         // If file encoding is specified, write using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
-        if(charsetName != null && charsetName.trim().length() > 0) {
+        if(!JOrphanUtils.isBlank(charsetName)) {
             osw = new OutputStreamWriter(fos, charsetName);
         } else {
             osw = new OutputStreamWriter(fos);
