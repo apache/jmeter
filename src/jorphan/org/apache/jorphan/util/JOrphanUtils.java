@@ -514,7 +514,7 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Check that value is not empty (""), not null and not whitespace only.
+     * Check that value is empty (""), null or whitespace only.
      * @param value Value
      * @return true if the String is not empty (""), not null and not whitespace only.
      */
