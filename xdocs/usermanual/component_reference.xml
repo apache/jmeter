@@ -3746,7 +3746,7 @@ however the minimum and maximum values can be any long values so long as the ran
 
 </component>
 
-<component name="Counter" index="&sect-num;.4.16"  width="399" height="244" screenshot="counter.png">
+<component name="Counter" index="&sect-num;.4.16"  width="404" height="262" screenshot="counter.png">
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
@@ -5068,7 +5068,7 @@ In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored p
 <description>
 		<br></br>
 </description>
-<component name="Test Plan" index="&sect-num;.9.1"  width="534" height="468" screenshot="testplan.png">
+<component name="Test Plan" index="&sect-num;.9.1"  width="560" height="457" screenshot="testplan.png">
 <description>
 <p>
 The Test Plan is where the overall settings for a test are specified.
@@ -5490,7 +5490,7 @@ For more details see "Extending JMeter".
 </p>
 </component>
 
-<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="672" height="174" screenshot="mirrorserver.png">
+<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="671" height="174" screenshot="mirrorserver.png">
 <description>
 <p>
 The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
