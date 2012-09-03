@@ -46,9 +46,11 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
 
     private boolean drawThread = true;
 
-    private boolean drawYgrid = true;
+    // TODO field always true, what for ?
+    private final boolean drawYgrid = true;
 
-    private boolean drawXgrid = true;
+    // TODO field always true, what for ?
+    private final boolean drawXgrid = true;
 
     /**
      * Needed for Serialization tests.
