@@ -138,7 +138,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    if (line.startsWith("#") || line.trim().length() == 0) {// $NON-NLS-1$
+                    if (line.startsWith("#") || JOrphanUtils.isBlank(line)) {// $NON-NLS-1$
                         continue;
                     }
                     String[] st = JOrphanUtils.split(line, "\t", " ");// $NON-NLS-1$ $NON-NLS-2$
