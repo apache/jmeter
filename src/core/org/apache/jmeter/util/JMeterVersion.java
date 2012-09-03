@@ -96,7 +96,7 @@ public final class JMeterVersion {
         super();
     }
 
-    static final String getVERSION() {
+    static String getVERSION() {
         return IMPLEMENTATION;
     }
 
