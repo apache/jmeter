@@ -28,9 +28,9 @@ import org.apache.commons.collections.ArrayStack;
  *
  */
 public class XMLBuffer{
-    private StringBuilder sb = new StringBuilder(); // the string so far
+    private final StringBuilder sb = new StringBuilder(); // the string so far
 
-    private ArrayStack tags = new ArrayStack(); // opened tags
+    private final ArrayStack tags = new ArrayStack(); // opened tags
 
     public XMLBuffer(){
 
