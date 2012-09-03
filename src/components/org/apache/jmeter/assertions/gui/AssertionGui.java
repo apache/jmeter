@@ -104,9 +104,6 @@ public class AssertionGui extends AbstractAssertionGui {
     /** A table of patterns to test against. */
     private JTable stringTable;
 
-    /** Button to add a new pattern. */
-    private JButton addPattern;
-
     /** Button to delete a pattern. */
     private JButton deletePattern;
 
@@ -376,7 +373,7 @@ public class AssertionGui extends AbstractAssertionGui {
      * @return the new panel with add and delete buttons
      */
     private JPanel createButtonPanel() {
-        addPattern = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
+        JButton addPattern = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
         addPattern.addActionListener(new AddPatternListener());
 
         deletePattern = new JButton(JMeterUtils.getResString("delete")); //$NON-NLS-1$
