@@ -200,8 +200,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
     public MonitorModel createNewMonitorModel(URL url) {
         MonitorStats stat = new MonitorStats(Stats.DEAD, 0, 0, 0, 0, url.getHost(), String.valueOf(url.getPort()), url
                 .getProtocol(), System.currentTimeMillis());
-        MonitorModel mo = new MonitorModel(stat);
-        return mo;
+        return new MonitorModel(stat);
     }
 
     /**
