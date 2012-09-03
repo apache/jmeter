@@ -156,7 +156,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * Returns the distribution of the values in the list.
      *
      * @return map containing either Integer or Long keys; entries are a Number array containing the key and the [Integer] count.
-     * TODO - why is the key value also stored in the entry array?
+     * TODO - why is the key value also stored in the entry array? See Bug 53825
      */
     public Map<Number, Number[]> getDistribution() {
         Map<Number, Number[]> items = new HashMap<Number, Number[]>();
