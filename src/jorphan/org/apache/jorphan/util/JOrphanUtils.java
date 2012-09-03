@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * This class contains frequently-used static utility methods.
  *
@@ -319,12 +321,7 @@ public final class JOrphanUtils {
      */
     public static byte[] getByteArraySlice(byte[] array, int begin, int end) {
         byte[] slice = new byte[(end - begin + 1)];
-        int count = 0;
-        for (int i = begin; i <= end; i++) {
-            slice[count] = array[i];
-            count++;
-        }
-
+        System.arraycopy(array, begin, slice, 0, slice.length);
         return slice;
     }
 
@@ -340,6 +337,7 @@ public final class JOrphanUtils {
                 cl.close();
             }
         } catch (IOException ignored) {
+            // NOOP
         }
     }
 
@@ -353,6 +351,7 @@ public final class JOrphanUtils {
                 sock.close();
             }
         } catch (IOException ignored) {
+            // NOOP
         }
     }
 
@@ -366,6 +365,7 @@ public final class JOrphanUtils {
                 sock.close();
             }
         } catch (IOException ignored) {
+            // NOOP
         }
     }
 
@@ -441,7 +441,9 @@ public final class JOrphanUtils {
     }
 
     private static byte toHexChar(byte in){
-        if (in < 10) return (byte) (in+'0');
+        if (in < 10) {
+            return (byte) (in+'0');
+        }
         return (byte) ((in-10)+'a');
     }
 
@@ -479,10 +481,11 @@ public final class JOrphanUtils {
     public static void displayThreads(boolean includeDaemons) {
         Map<Thread, StackTraceElement[]> m = Thread.getAllStackTraces();
         String lineSeparator = System.getProperty("line.separator");
+        StringBuilder builder = new StringBuilder();
         for(Map.Entry<Thread, StackTraceElement[]> e : m.entrySet()) {
             boolean daemon = e.getKey().isDaemon();
             if (includeDaemons || !daemon){
-            	StringBuilder builder = new StringBuilder();
+            	builder.setLength(0);
             	StackTraceElement[] ste = e.getValue();
             	for (StackTraceElement stackTraceElement : ste) {
             		int lineNumber = stackTraceElement.getLineNumber();
@@ -499,7 +502,7 @@ public final class JOrphanUtils {
      * @param input String
      * @return String
      */
-    public static final String nullifyIfEmptyTrimmed(String input) {
+    public static String nullifyIfEmptyTrimmed(final String input) {
         if (input == null) {
             return null;
         }
@@ -508,5 +511,14 @@ public final class JOrphanUtils {
             return null;
         }
         return trimmed;
+    }
+
+    /**
+     * Check that value is not empty (""), not null and not whitespace only.
+     * @param value Value
+     * @return true if the String is not empty (""), not null and not whitespace only.
+     */
+    public static boolean isBlank(final String value) {
+        return StringUtils.isBlank(value);
     }
 }
