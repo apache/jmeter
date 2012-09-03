@@ -42,9 +42,6 @@ public class XPathPanel extends JPanel {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // Lazily constructed. Does not matter if it is constructed more than once.
-    private static Document testDoc;
-
     private JCheckBox negated;
 
     private JTextField xpath;
@@ -182,14 +179,11 @@ public class XPathPanel extends JPanel {
     public static boolean validXPath(String xpathString, boolean showDialog) {
         String ret = null;
         boolean success = true;
+        Document testDoc = null;
         try {
-            if (testDoc == null) {
-                Document doc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
-                testDoc = doc;
-                Element el = testDoc.createElement("root"); //$NON-NLS-1$
-                doc.appendChild(el);
-
-            }
+            testDoc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
+            Element el = testDoc.createElement("root"); //$NON-NLS-1$
+            testDoc.appendChild(el);
             XPathUtil.validateXPath(testDoc, xpathString);
         } catch (IllegalArgumentException e) {
         	log.warn(e.getLocalizedMessage());
