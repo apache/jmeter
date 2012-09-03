@@ -43,6 +43,7 @@ import javax.security.auth.x500.X500Principal;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.X509Name;
@@ -167,7 +168,7 @@ class SMIMEAssertion {
                         StringBuilder failureMessage = new StringBuilder();
 
                         String serial = testElement.getSignerSerial();
-                        if (serial.trim().length() > 0) {
+                        if (!JOrphanUtils.isBlank(serial)) {
                             BigInteger serialNbr = readSerialNumber(serial);
                             if (!serialNbr.equals(cert.getSerialNumber())) {
                                 res.setFailure(true);
@@ -180,7 +181,7 @@ class SMIMEAssertion {
                         }
 
                         String email = testElement.getSignerEmail();
-                        if (email.trim().length() > 0) {
+                        if (!JOrphanUtils.isBlank(email)) {
                             List<String> emailfromCert = getEmailFromCert(cert);
                             if (!emailfromCert.contains(email)) {
                                 res.setFailure(true);
