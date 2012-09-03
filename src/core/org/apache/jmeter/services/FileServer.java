@@ -218,7 +218,7 @@ public class FileServer {
      *
      * @param filename - relative (to base) or absolute file name (must not be null)
      */
-    public synchronized void reserveFile(String filename) {
+    public void reserveFile(String filename) {
         reserveFile(filename,null);
     }
 
@@ -229,7 +229,7 @@ public class FileServer {
      * @param filename - relative (to base) or absolute file name (must not be null)
      * @param charsetName - the character set encoding to use for the file (may be null)
      */
-    public synchronized void reserveFile(String filename, String charsetName) {
+    public void reserveFile(String filename, String charsetName) {
         reserveFile(filename, charsetName, filename, false);
     }
 
@@ -241,7 +241,7 @@ public class FileServer {
      * @param charsetName - the character set encoding to use for the file (may be null)
      * @param alias - the name to be used to access the object (must not be null)
      */
-    public synchronized void reserveFile(String filename, String charsetName, String alias) {
+    public void reserveFile(String filename, String charsetName, String alias) {
         reserveFile(filename, charsetName, alias, false);
     }
 
