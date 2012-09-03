@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Class representing an argument. Each argument consists of a name/value pair,
@@ -190,7 +191,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      * @return true if parameter should be skipped
      */
     public boolean isSkippable(String parameterName) {
-        if (parameterName.trim().length()==0){
+        if (JOrphanUtils.isBlank(parameterName)){
             return true; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
         }
         // TODO: improve this test
