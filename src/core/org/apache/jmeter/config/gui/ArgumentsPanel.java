@@ -77,9 +77,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** A button for adding new arguments to the table. */
     private JButton add;
 
-    /** A button for adding new arguments to the table from the clipboard. */
-    private JButton addFromClipboard;
-
     /** A button for removing arguments from the table. */
     private JButton delete;
 
@@ -101,8 +98,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private JButton down;
 
     private final boolean enableUpDown;
-
-    private JButton showDetail;
 
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
@@ -625,15 +620,15 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @return a GUI panel containing the buttons
      */
     private JPanel makeButtonPanel() {
-        showDetail = new JButton(JMeterUtils.getResString("detail")); // $NON-NLS-1$
+        JButton showDetail = new JButton(JMeterUtils.getResString("detail")); // $NON-NLS-1$
         showDetail.setActionCommand(DETAIL);
         showDetail.setEnabled(true);
         
         add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
         add.setActionCommand(ADD);
         add.setEnabled(true);
-
-        addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
+        /** A button for adding new arguments to the table from the clipboard. */
+        JButton addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
         addFromClipboard.setActionCommand(ADD_FROM_CLIPBOARD);
         addFromClipboard.setEnabled(true);
 

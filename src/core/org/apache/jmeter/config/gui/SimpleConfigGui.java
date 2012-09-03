@@ -58,9 +58,6 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     /** The model for the parameter table. */
     private PowerTableModel tableModel;
 
-    /** A button for adding new parameters to the table. */
-    private JButton add;
-
     /** A button for removing parameters from the table. */
     private JButton delete;
 
@@ -214,7 +211,8 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      * @return a GUI panel containing the buttons
      */
     private JPanel createButtonPanel() {
-        add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
+        /** A button for adding new parameters to the table. */
+        JButton add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
         add.setActionCommand(ADD);
         add.addActionListener(this);
         add.setEnabled(true);

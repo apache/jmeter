@@ -64,13 +64,9 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 
     private JLabeledTextArea valueTA;
 
-    private JButton updateButton;
-
     private JButton nextButton;
 
     private JButton previousButton;
-
-    private JButton closeButton;
 
     private ObjectTableModel tableModel;
 
@@ -83,7 +79,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 	/**
 	 * Hide Window on ESC
 	 */
-	private transient ActionListener enterActionListener = new ActionListener() {
+	private final transient ActionListener enterActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
 			doUpdate(actionEvent);
 			setVisible(false);
@@ -93,7 +89,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 	/**
 	 * Do search on Enter
 	 */
-	private transient ActionListener escapeActionListener = new ActionListener() {
+	private final transient ActionListener escapeActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
 			setVisible(false);
 		}	
@@ -126,10 +122,10 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
-        updateButton = new JButton(JMeterUtils.getResString("update")); //$NON-NLS-1$
+        JButton updateButton = new JButton(JMeterUtils.getResString("update")); //$NON-NLS-1$
         updateButton.setActionCommand(UPDATE);
         updateButton.addActionListener(this);
-        closeButton = new JButton(JMeterUtils.getResString("close")); //$NON-NLS-1$
+        JButton closeButton = new JButton(JMeterUtils.getResString("close")); //$NON-NLS-1$
         closeButton.setActionCommand(CLOSE);
         closeButton.addActionListener(this);
         nextButton = new JButton(JMeterUtils.getResString("next")); //$NON-NLS-1$
