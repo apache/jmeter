@@ -54,9 +54,9 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     
     private JCheckBox checkReturnCode;
     private JLabeledTextField desiredReturnCode;
-    private final FilePanelEntry stdin = new FilePanelEntry("stdin ");
-    private final FilePanelEntry stdout = new FilePanelEntry("stdout");
-    private final FilePanelEntry stderr = new FilePanelEntry("stderr");
+    private final FilePanelEntry stdin = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stdin"));
+    private final FilePanelEntry stdout = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stdout"));
+    private final FilePanelEntry stderr = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stderr"));
     private JLabeledTextField directory;
     private JLabeledTextField command;
     private ArgumentsPanel argsPanel;
