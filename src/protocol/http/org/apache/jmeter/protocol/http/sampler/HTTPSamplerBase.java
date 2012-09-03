@@ -929,7 +929,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getQueryString(String contentEncoding) {
          // Check if the sampler has a specified content encoding
-         if(contentEncoding == null || contentEncoding.trim().length() == 0) {
+         if(JOrphanUtils.isBlank(contentEncoding)) {
              // We use the encoding which should be used according to the HTTP spec, which is UTF-8
              contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
          }
