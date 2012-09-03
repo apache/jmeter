@@ -113,7 +113,7 @@ public abstract class SSLManager {
                 log.info("KeyStore created OK");
             } catch (Exception e) {
                 this.keyStore = null;
-                throw new RuntimeException("Could not create keystore: "+e.getMessage());
+                throw new RuntimeException("Could not create keystore: "+e.getMessage(), e);
             }
             FileInputStream fileInputStream = null;
             try {
@@ -203,7 +203,7 @@ public abstract class SSLManager {
                 log.info("TrustStore created OK, Type: JKS");
             } catch (Exception e) {
                 this.trustStore = null;
-                throw new RuntimeException("Problem creating truststore: "+e.getMessage());
+                throw new RuntimeException("Problem creating truststore: "+e.getMessage(), e);
             }
 
             FileInputStream fileInputStream = null;
@@ -219,7 +219,7 @@ public abstract class SSLManager {
                     this.trustStore.load(null, null);
                 }
             } catch (Exception e) {
-                throw new RuntimeException("Can't load TrustStore: " + e.toString());
+                throw new RuntimeException("Can't load TrustStore: " + e.getMessage(), e);
             } finally {
                 JOrphanUtils.closeQuietly(fileInputStream);
             }
