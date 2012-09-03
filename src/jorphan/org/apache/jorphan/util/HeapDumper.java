@@ -195,13 +195,13 @@ public class HeapDumper {
             if (f instanceof Exception){
                 throw (Exception )f;
             }
-            throw(e);
+            throw e;
         } catch (MBeanException e) {
             Throwable f = e.getCause();
             if (f instanceof Exception){
                 throw (Exception )f;
             }
-            throw(e);
+            throw e;
         }
     }
 }
