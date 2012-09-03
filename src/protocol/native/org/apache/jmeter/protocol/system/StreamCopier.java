@@ -28,6 +28,7 @@ import org.apache.log.Logger;
 
 /**
  * Thread that copies a stream in the background; closes both input and output streams.
+ * @since 2.8
  */
 class StreamCopier extends Thread {
 
@@ -37,7 +38,8 @@ class StreamCopier extends Thread {
     private final OutputStream os;
 
 	/**
-	 * @param is {@link InputStream}
+     * @param is {@link InputStream}
+	 * @param is {@link OutputStream}
 	 * @throws IOException 
 	 */
 	StreamCopier(InputStream is, OutputStream os) throws IOException {
