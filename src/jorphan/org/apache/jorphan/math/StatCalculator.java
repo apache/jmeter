@@ -34,7 +34,7 @@ import org.apache.commons.lang3.mutable.MutableLong;
 public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     // key is the type to collect (usually long), value = count of entries
-    private final TreeMap<T, MutableLong> valuesMap = new TreeMap<T, MutableLong>();
+    private final Map<T, MutableLong> valuesMap = new TreeMap<T, MutableLong>();
     // We use a TreeMap because we need the entries to be sorted
 
     // Running values, updated for each sample
@@ -158,15 +158,14 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * @return map containing either Integer or Long keys; entries are a Number array containing the key and the [Integer] count.
      * TODO - why is the key value also stored in the entry array?
      */
-    public synchronized Map<Number, Number[]> getDistribution() {
-        HashMap<Number, Number[]> items = new HashMap <Number, Number[]> ();
-        Number[] dis;
+    public Map<Number, Number[]> getDistribution() {
+        Map<Number, Number[]> items = new HashMap<Number, Number[]>();
 
-        for (T nx : valuesMap.keySet()) {
-            dis = new Number[2];
-            dis[0] = nx;
-            dis[1] = valuesMap.get(nx);
-            items.put(nx, dis);
+        for (Entry<T, MutableLong> entry : valuesMap.entrySet()) {
+            Number[] dis = new Number[2];
+            dis[0] = entry.getKey();
+            dis[1] = entry.getValue();
+            items.put(entry.getKey(), dis);
         }
         return items;
     }
