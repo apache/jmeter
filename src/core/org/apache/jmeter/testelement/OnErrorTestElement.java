@@ -51,8 +51,7 @@ public abstract class OnErrorTestElement extends AbstractTestElement {
     }
 
     public int getErrorAction() {
-        int value = getPropertyAsInt(ON_ERROR_ACTION);
-        return value;
+        return getPropertyAsInt(ON_ERROR_ACTION);
     }
 
     public boolean isContinue() {
