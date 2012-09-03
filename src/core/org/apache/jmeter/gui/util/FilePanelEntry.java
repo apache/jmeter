@@ -18,12 +18,12 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     private static final long serialVersionUID = 280L;
+
+    private final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10); //$NON-NLS-1$
 
     private final JTextField filename = new JTextField(10);
 
@@ -81,10 +83,9 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
 
     private void init() {
         add(label);
-        add(Box.createHorizontalStrut(5));
         add(filename);
-        add(Box.createHorizontalStrut(5));
         filename.addActionListener(this);
+        browse.setFont(FONT_SMALL);
         add(browse);
         browse.setActionCommand(ACTION_BROWSE);
         browse.addActionListener(this);
