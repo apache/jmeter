@@ -202,12 +202,8 @@ public class TextFile extends File {
 		}
 		TextFile other = (TextFile) obj;
 		if (encoding == null) {
-			if (other.encoding != null) {
-				return false;
-			}
-		} else if (!encoding.equals(other.encoding)) {
-			return false;
-		}
-		return true;
+		    return other.encoding == null;
+		} 
+		return encoding.equals(other.encoding);
 	}
 }
