@@ -493,4 +493,20 @@ public final class JOrphanUtils {
             }
         }
     }
+    
+    /**
+     * Returns null if input is empty, null or contains spaces
+     * @param input String
+     * @return String
+     */
+    public static final String nullifyIfEmptyTrimmed(String input) {
+        if (input == null) {
+            return null;
+        }
+        String trimmed = input.trim();
+        if (trimmed.length() == 0) {
+            return null;
+        }
+        return trimmed;
+    }
 }

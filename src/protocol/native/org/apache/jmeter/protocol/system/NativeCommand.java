@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jorphan.util.JOrphanUtils;
+
 /**
  * Native Command 
  */
@@ -51,9 +53,9 @@ public class NativeCommand {
         super();
         this.directory = directory;
         this.env = env;
-        this.stdin = nonEmpty(stdin);
-        this.stdout = nonEmpty(stdout);
-        this.stderr = nonEmpty(stderr);
+        this.stdin = JOrphanUtils.nullifyIfEmptyTrimmed(stdin);
+        this.stdout = JOrphanUtils.nullifyIfEmptyTrimmed(stdout);
+        this.stderr = JOrphanUtils.nullifyIfEmptyTrimmed(stderr);
     }
 
 	/**
@@ -140,16 +142,5 @@ public class NativeCommand {
      */
     public Map<String, String> getExecutionEnvironment() {
         return executionEnvironment;
-    }
-
-    private String nonEmpty(String input) {
-        if (input == null) {
-            return null;
-        }
-        String trimmed = input.trim();
-        if (trimmed.length() == 0) {
-            return null;
-        }
-        return trimmed;
     }
 }
