@@ -129,7 +129,7 @@ public final class JmeterKeyStore {
         if (entry >=0) {
             return this.certChains[entry];
         }
-        // API expects null not empty array, see http://javasourcecode.org/html/open-source/jdk/jdk-6u23/javax/net/ssl/X509KeyManager.java.html
+        // API expects null not empty array, see http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/X509KeyManager.html
         return null;
     }
 
@@ -237,7 +237,7 @@ public final class JmeterKeyStore {
         if(aliases.length>0) {
             return aliases;
         } else {
-            // API expects null not empty array, see http://javasourcecode.org/html/open-source/jdk/jdk-6u23/javax/net/ssl/X509KeyManager.java.html
+            // API expects null not empty array, see http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/X509KeyManager.html
             return null;
         }
     }
