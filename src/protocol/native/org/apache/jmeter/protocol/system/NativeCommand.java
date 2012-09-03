@@ -49,6 +49,14 @@ public class NativeCommand {
 	    this(directory, env, null, null, null);
 	}
 
+	/**
+	 * 
+     * @param env Environment variables appended to environment
+     * @param directory File working directory
+	 * @param stdin File name that will contain data to be input to process
+	 * @param stdout File name that will contain out stream
+	 * @param stderr File name that will contain err stream
+	 */
     public NativeCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
         super();
         this.directory = directory;
