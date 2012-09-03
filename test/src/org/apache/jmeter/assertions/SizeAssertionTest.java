@@ -26,21 +26,19 @@ import org.apache.jmeter.threads.JMeterVariables;
 
 public class SizeAssertionTest extends JMeterTestCase{
 
-      private JMeterContext jmctx;
       private SizeAssertion assertion;
       private SampleResult sample1,sample0;
-      private JMeterVariables vars;
       private AssertionResult result;
-      private String data1 = "response Data\n" +  "line 2\n\nEOF";
-      private int data1Len=data1.length();
+      private final String data1 = "response Data\n" +  "line 2\n\nEOF";
+      private final int data1Len=data1.length();
       
       @Override
     public void setUp() {
-          jmctx = JMeterContextService.getContext();
+          JMeterContext jmctx = JMeterContextService.getContext();
           assertion = new SizeAssertion();
           assertion.setThreadContext(jmctx);
           assertion.setTestFieldResponseBody();
-          vars = new JMeterVariables();
+          JMeterVariables vars = new JMeterVariables();
           jmctx.setVariables(vars);
           sample0 = new SampleResult();
           sample1 = new SampleResult();
@@ -151,9 +149,9 @@ public class SizeAssertionTest extends JMeterTestCase{
 // TODO - need a lot more tests
       
       private void assertPassed() throws Exception{
-          if (null != result.getFailureMessage()){
+         // if (null != result.getFailureMessage()){
               //System.out.println(result.getFailureMessage());// debug
-          }
+          //}
           assertNull("Failure message should be null",result.getFailureMessage());
           assertFalse(result.isError());
           assertFalse(result.isFailure());        
