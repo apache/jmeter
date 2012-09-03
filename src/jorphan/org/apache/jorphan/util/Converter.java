@@ -82,7 +82,7 @@ public class Converter {
      */
     public static Calendar getCalendar(Object date, Calendar defaultValue) {
         Calendar cal = new GregorianCalendar();
-        if (date != null && date instanceof java.util.Date) {
+        if (date instanceof java.util.Date) {
             cal.setTime((java.util.Date) date);
             return cal;
         } else if (date != null) {
@@ -125,7 +125,7 @@ public class Converter {
 
     public static Date getDate(Object date, Date defaultValue) {
         Date val = null;
-        if (date != null && date instanceof java.util.Date) {
+        if (date instanceof java.util.Date) {
             return (Date) date;
         } else if (date != null) {
             DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -202,7 +202,7 @@ public class Converter {
         } else if (o instanceof Boolean) {
             return ((Boolean) o).booleanValue();
         }
-        return Boolean.valueOf(o.toString()).booleanValue();
+        return Boolean.parseBoolean(o.toString());
     }
 
     /**
