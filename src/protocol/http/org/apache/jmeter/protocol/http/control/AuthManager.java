@@ -40,6 +40,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 // For Unit tests, @see TestAuthManager
@@ -244,7 +245,7 @@ public class AuthManager extends ConfigTestElement implements Serializable {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    if (line.startsWith("#") || line.trim().length() == 0) { //$NON-NLS-1$
+                    if (line.startsWith("#") || JOrphanUtils.isBlank(line)) { //$NON-NLS-1$
                         continue;
                     }
                     StringTokenizer st = new StringTokenizer(line, "\t"); //$NON-NLS-1$
