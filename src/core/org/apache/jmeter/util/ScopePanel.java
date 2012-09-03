@@ -29,7 +29,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Scope panel so users can choose whether
