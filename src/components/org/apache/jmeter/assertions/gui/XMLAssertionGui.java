@@ -55,16 +55,6 @@ public class XMLAssertionGui extends AbstractAssertionGui {
     }
 
     /**
-     * Configures the associated test element.
-     * 
-     * @param el
-     */
-    @Override
-    public void configure(TestElement el) {
-        super.configure(el);
-    }
-
-    /**
      * Inits the GUI.
      */
     private void init() {
