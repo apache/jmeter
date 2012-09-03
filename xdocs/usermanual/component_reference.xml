@@ -1798,10 +1798,10 @@ Param 3:   C:\TEMP
 <property name="Command" required="Yes">The System command or shell to execute.</property>
 <property name="OS Process Parameters" required="No">Parameters passed to process.</property>
 <property name="Environment Parameters" required="No">Key/Value pairs added to environment when running command.</property>
-<property name="stdin" required="No">Name of file from which input is to be taken (STDIN).</property>
-<property name="stdout" required="No">Name of output file for standard output (STDOUT). 
+<property name="File for standard input stream" required="No">Name of file from which input is to be taken (STDIN).</property>
+<property name="File for standard output stream" required="No">Name of output file for standard output (STDOUT). 
 If omitted, output is captured and returned as the response data.</property>
-<property name="stderr" required="No">Name of output file for standard error (STDERR). 
+<property name="File for standard error output stream" required="No">Name of output file for standard error (STDERR). 
 If omitted, output is captured and returned as the response data.</property>
 </properties>
 </component>
