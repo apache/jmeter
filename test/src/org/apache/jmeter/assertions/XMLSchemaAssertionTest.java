@@ -37,8 +37,6 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     private SampleResult result;
 
-    private JMeterVariables vars;
-
     private JMeterContext jmctx;
 
     public XMLSchemaAssertionTest(String arg0) {
@@ -53,15 +51,10 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertion.setThreadContext(jmctx);// This would be done by the run
                                             // command
         result = new SampleResult();
-        vars = new JMeterVariables();
+        JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
         // LoggingManager.setPriority("DEBUG","jmeter");
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
     }
 
     private ByteArrayOutputStream readBA(String name) throws IOException {
