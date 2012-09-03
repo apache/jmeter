@@ -314,4 +314,11 @@ public class TestJorphanUtils extends TestCase {
             assertEquals("values must be the same for index: "+i,expected[i],actual[i]);
         }
     }
+    
+    public void testIsBlank() {
+        assertTrue(JOrphanUtils.isBlank(""));
+        assertTrue(JOrphanUtils.isBlank(null));
+        assertTrue(JOrphanUtils.isBlank("    "));
+        assertFalse(JOrphanUtils.isBlank(" zdazd dzd "));
+    }
 }
