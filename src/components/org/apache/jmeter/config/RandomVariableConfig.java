@@ -139,56 +139,56 @@ public class RandomVariableConfig extends ConfigTestElement
     /**
      * @return the minValue
      */
-    public synchronized String getMinimumValue() {
+    public String getMinimumValue() {
         return minimumValue;
     }
 
     /**
      * @param minValue the minValue to set
      */
-    public synchronized void setMinimumValue(String minValue) {
+    public void setMinimumValue(String minValue) {
         this.minimumValue = minValue;
     }
 
     /**
      * @return the maxvalue
      */
-    public synchronized String getMaximumValue() {
+    public String getMaximumValue() {
         return maximumValue;
     }
 
     /**
      * @param maxvalue the maxvalue to set
      */
-    public synchronized void setMaximumValue(String maxvalue) {
+    public void setMaximumValue(String maxvalue) {
         this.maximumValue = maxvalue;
     }
 
     /**
      * @return the variableName
      */
-    public synchronized String getVariableName() {
+    public String getVariableName() {
         return variableName;
     }
 
     /**
      * @param variableName the variableName to set
      */
-    public synchronized void setVariableName(String variableName) {
+    public void setVariableName(String variableName) {
         this.variableName = variableName;
     }
 
     /**
      * @return the randomSeed
      */
-    public synchronized String getRandomSeed() {
+    public String getRandomSeed() {
         return randomSeed;
     }
 
     /**
      * @return the randomSeed as a long
      */
-    private synchronized long getRandomSeedAsLong() {
+    private long getRandomSeedAsLong() {
         long seed = 0;
         if (randomSeed.length()==0){
             seed = System.currentTimeMillis();
@@ -206,33 +206,33 @@ public class RandomVariableConfig extends ConfigTestElement
     /**
      * @param randomSeed the randomSeed to set
      */
-    public synchronized void setRandomSeed(String randomSeed) {
+    public void setRandomSeed(String randomSeed) {
         this.randomSeed = randomSeed;
     }
 
     /**
      * @return the perThread
      */
-    public synchronized boolean getPerThread() {
+    public boolean getPerThread() {
         return perThread;
     }
 
     /**
      * @param perThread the perThread to set
      */
-    public synchronized void setPerThread(boolean perThread) {
+    public void setPerThread(boolean perThread) {
         this.perThread = perThread;
     }
     /**
      * @return the outputFormat
      */
-    public synchronized String getOutputFormat() {
+    public String getOutputFormat() {
         return outputFormat;
     }
     /**
      * @param outputFormat the outputFormat to set
      */
-    public synchronized void setOutputFormat(String outputFormat) {
+    public void setOutputFormat(String outputFormat) {
         this.outputFormat = outputFormat;
     }
 
