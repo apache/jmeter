@@ -33,19 +33,17 @@ public class ResponseAssertionTest  extends TestCase {
     public ResponseAssertionTest() {
     }
 
-    private JMeterContext jmctx;
     private ResponseAssertion assertion;
     private SampleResult sample;
-    private JMeterVariables vars;
     private AssertionResult result;
     
     @Override
     public void setUp() throws MalformedURLException {
-        jmctx = JMeterContextService.getContext();
+        JMeterContext jmctx = JMeterContextService.getContext();
         assertion = new ResponseAssertion();
         assertion.setThreadContext(jmctx);
         sample = new SampleResult();
-        vars = new JMeterVariables();
+        JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(sample);
         sample.setResponseData("response Data\nline 2\n\nEOF", null);
