@@ -90,9 +90,9 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     private String lastHost = null;
     private String localName = null;
     private String localAddress = null;
-    private byte [] inbuf = new byte[8*1024];
-    private byte [] outbuf = new byte[8*1024];
-    private transient ByteArrayOutputStream responseData = new ByteArrayOutputStream();
+    private final byte [] inbuf = new byte[8*1024];
+    private final byte [] outbuf = new byte[8*1024];
+    private final transient ByteArrayOutputStream responseData = new ByteArrayOutputStream();
     private int inpos = 0;
     private int outpos = 0;
     private transient String stringBody = null;
