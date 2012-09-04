@@ -37,11 +37,11 @@ public final class Base64Encoder {
     private Base64Encoder() {
     }
 
-    public static final String encode(String s) {
+    public static String encode(String s) {
         return encode(s.getBytes()); // TODO - charset?
     }
 
-    public static final String encode(byte[] bs) {
+    public static String encode(byte[] bs) {
         StringBuilder out = new StringBuilder();
         int bl = bs.length;
         for (int i = 0; i < bl; i += 3) {
@@ -50,7 +50,7 @@ public final class Base64Encoder {
         return out.toString();
     }
 
-    public static final String encodeAtom(byte[] b, int strt, int left) {
+    public static String encodeAtom(byte[] b, int strt, int left) {
         StringBuilder out = new StringBuilder();
         if (left == 1) {
             byte b1 = b[strt];
