@@ -200,8 +200,9 @@ public class ModuleControllerGui extends AbstractControllerGui
         }
         String seperator = " > "; // $NON-NLS-1$
         if (node != null) {
+            StringBuilder name = new StringBuilder();
             for (int i = 0; i < node.getChildCount(); i++) {
-                StringBuilder name = new StringBuilder();
+                name.setLength(0);
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
                 TestElement te = cur.getTestElement();
                 if (te instanceof AbstractThreadGroup) {
@@ -215,7 +216,7 @@ public class ModuleControllerGui extends AbstractControllerGui
                     name.append(cur.getName());
                     TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
                     nodesModel.addElement(tnw);
-                    name = new StringBuilder();
+                    name.setLength(0);
                     name.append(cur.getName());
                     name.append(seperator);
                     buildNodesModel(cur, name.toString(), level + 1);
