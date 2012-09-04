@@ -78,7 +78,7 @@ public final class HtmlParsingUtils {
         } catch (UnsupportedEncodingException e) {
             // UTF-8 unsupported? You must be joking!
             log.error("UTF-8 encoding not supported!");
-            throw new Error("Should not happen: " + e.toString());
+            throw new Error("Should not happen: " + e.toString(), e);
         }
 
         final Arguments arguments = config.getArguments();
@@ -242,7 +242,7 @@ public final class HtmlParsingUtils {
         } catch (UnsupportedEncodingException e) {
             log.error("getDOM1 : Unsupported encoding exception - " + e);
             log.debug("End : getDOM1");
-            throw new RuntimeException("UTF-8 encoding failed");
+            throw new RuntimeException("UTF-8 encoding failed", e);
         }
     }
 
@@ -372,8 +372,7 @@ public final class HtmlParsingUtils {
             throw new MalformedURLException();
         }
         String action = atts.getNamedItem("action").getNodeValue(); // $NON-NLS-1$
-        HTTPSamplerBase url = createUrlFromAnchor(action, context);
-        return url;
+        return createUrlFromAnchor(action, context);
     }
 
     public static void extractStyleURLs(final URL baseUrl, final URLCollection urls, String styleTagStr) {
