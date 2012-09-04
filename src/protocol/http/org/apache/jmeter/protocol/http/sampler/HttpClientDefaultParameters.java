@@ -114,7 +114,7 @@ public class HttpClientDefaultParameters {
             for (Map.Entry<Object, Object> me : props.entrySet()){
                 String key = (String) me.getKey();
                 String value = (String)me.getValue();
-                int typeSep = key.indexOf("$"); // $NON-NLS-1$
+                int typeSep = key.indexOf('$'); // $NON-NLS-1$
                 try {
                     if (typeSep > 0){
                         String type = key.substring(typeSep+1);// get past separator
