@@ -136,7 +136,7 @@ public class BeanShell extends AbstractFunction {
         try {
             bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE), log);
         } catch (ClassNotFoundException e) {
-            throw new InvalidVariableException("BeanShell not found");
+            throw new InvalidVariableException("BeanShell not found", e);
         }
     }
 
