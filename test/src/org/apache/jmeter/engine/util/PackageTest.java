@@ -37,10 +37,6 @@ import org.apache.jmeter.threads.JMeterVariables;
  * as it is needed to resolve the functions.
  */
 public class PackageTest extends JMeterTestCase {
-    private Map<String, String> variables;
-
-    private SampleResult result;
-
     private ReplaceStringWithFunctions transformer;
 
     public PackageTest(String arg0) {
@@ -52,10 +48,10 @@ public class PackageTest extends JMeterTestCase {
     @Override
     public void setUp() {
         jmctx = JMeterContextService.getContext();
-        variables = new HashMap<String, String>();
+        Map<String, String> variables = new HashMap<String, String>();
         variables.put("my_regex", ".*");
         variables.put("server", "jakarta.apache.org");
-        result = new SampleResult();
+        SampleResult result = new SampleResult();
         result.setResponseData("<html>hello world</html> costs: $3.47,$5.67", null);
         transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
         jmctx.setVariables(new JMeterVariables());
