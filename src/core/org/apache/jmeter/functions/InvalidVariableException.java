@@ -24,6 +24,14 @@ public class InvalidVariableException extends Exception {
     public InvalidVariableException() {
     }
 
+    public InvalidVariableException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public InvalidVariableException(Throwable cause) {
+        super(cause);
+    }
+
     public InvalidVariableException(String msg) {
         super(msg);
     }
