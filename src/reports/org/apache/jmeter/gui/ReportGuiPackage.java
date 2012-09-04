@@ -303,19 +303,19 @@ public final class ReportGuiPackage implements LocaleChangeListener {
             return node;
         } catch (NoClassDefFoundError e) {
             log.error("Problem retrieving gui for " + objClass, e);
-            throw new RuntimeException(e.toString()); // Probably a missing
+            throw new RuntimeException(e.toString(), e); // Probably a missing
                                                         // jar
         } catch (ClassNotFoundException e) {
             log.error("Problem retrieving gui for " + objClass, e);
-            throw new RuntimeException(e.toString()); // Programming error:
+            throw new RuntimeException(e.toString(), e); // Programming error:
                                                         // bail out.
         } catch (InstantiationException e) {
             log.error("Problem retrieving gui for " + objClass, e);
-            throw new RuntimeException(e.toString()); // Programming error:
+            throw new RuntimeException(e.toString(), e); // Programming error:
                                                         // bail out.
         } catch (IllegalAccessException e) {
             log.error("Problem retrieving gui for " + objClass, e);
-            throw new RuntimeException(e.toString()); // Programming error:
+            throw new RuntimeException(e.toString(), e); // Programming error:
                                                         // bail out.
         }
     }
