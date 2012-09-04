@@ -107,7 +107,7 @@ public class HttpMirrorThread implements Runnable {
             // Check if we have found a content-length header
             String contentLengthHeaderValue = getRequestHeaderValue(headerString, "Content-Length"); //$NON-NLS-1$
             if(contentLengthHeaderValue != null) {
-                contentLength = Integer.valueOf(contentLengthHeaderValue).intValue();
+                contentLength = Integer.parseInt(contentLengthHeaderValue);
             }
             // Look for special Sleep request
             String sleepHeaderValue = getRequestHeaderValue(headerString, "X-Sleep"); //$NON-NLS-1$
