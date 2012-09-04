@@ -66,43 +66,43 @@ public class Authorization extends AbstractTestElement implements Serializable {
     public void addConfigElement(ConfigElement config) {
     }
 
-    public synchronized String getURL() {
+    public String getURL() {
         return getPropertyAsString(URL);
     }
 
-    public synchronized void setURL(String url) {
+    public void setURL(String url) {
         setProperty(URL, url);
     }
 
-    public synchronized String getUser() {
+    public String getUser() {
         return getPropertyAsString(USERNAME);
     }
 
-    public synchronized void setUser(String user) {
+    public void setUser(String user) {
         setProperty(USERNAME, user);
     }
 
-    public synchronized String getPass() {
+    public String getPass() {
         return getPropertyAsString(PASSWORD);
     }
 
-    public synchronized void setPass(String pass) {
+    public void setPass(String pass) {
         setProperty(PASSWORD, pass);
     }
 
-    public synchronized String getDomain() {
+    public String getDomain() {
         return getPropertyAsString(DOMAIN);
     }
 
-    public synchronized void setDomain(String domain) {
+    public void setDomain(String domain) {
         setProperty(DOMAIN, domain);
     }
 
-    public synchronized String getRealm() {
+    public String getRealm() {
         return getPropertyAsString(REALM);
     }
 
-    public synchronized void setRealm(String realm) {
+    public void setRealm(String realm) {
         setProperty(REALM, realm);
     }
 
