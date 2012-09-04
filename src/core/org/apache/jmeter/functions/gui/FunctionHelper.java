@@ -56,8 +56,6 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private JLabeledTextField cutPasteFunction;
 
-    private JButton generateButton;
-
     public FunctionHelper() {
         super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
         init();
@@ -78,7 +76,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         JPanel resultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
         resultsPanel.add(cutPasteFunction);
-        generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
+        JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.addActionListener(this);
         resultsPanel.add(generateButton);
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
