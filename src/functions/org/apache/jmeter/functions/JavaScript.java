@@ -94,7 +94,7 @@ public class JavaScript extends AbstractFunction {
 
         } catch (RhinoException e) {
             log.error("Error processing Javascript: [" + script + "]\n", e);
-            throw new InvalidVariableException();
+            throw new InvalidVariableException("Error processing Javascript: [" + script + "]", e);
         } finally {
             Context.exit();
         }
