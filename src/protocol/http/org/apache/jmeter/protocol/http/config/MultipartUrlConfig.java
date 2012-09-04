@@ -128,14 +128,14 @@ public class MultipartUrlConfig implements Serializable {
                 // Get the form field name
                 final String namePrefix = "name=\""; //$NON-NLS-1$
                 int index = contentDisposition.indexOf(namePrefix) + namePrefix.length();
-                String name = contentDisposition.substring(index, contentDisposition.indexOf("\"", index)); //$NON-NLS-1$
+                String name = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
 
                 // Check if it is a file being uploaded
                 final String filenamePrefix = "filename=\""; //$NON-NLS-1$
                 if (contentDisposition.indexOf(filenamePrefix) > -1) {
                     // Get the filename
                     index = contentDisposition.indexOf(filenamePrefix) + filenamePrefix.length();
-                    String path = contentDisposition.substring(index, contentDisposition.indexOf("\"", index)); //$NON-NLS-1$
+                    String path = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
                     if(path != null && path.length() > 0) {
                         // Set the values retrieved for the file upload
                         files.addHTTPFileArg(path, name, contentType);
