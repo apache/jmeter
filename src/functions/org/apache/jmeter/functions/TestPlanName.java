@@ -48,8 +48,7 @@ public class TestPlanName extends AbstractFunction {
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
-    	String testPlanFile = FileServer.getFileServer().getScriptName();
-        return testPlanFile;
+    	return FileServer.getFileServer().getScriptName();
     }
 
     /** {@inheritDoc} */
