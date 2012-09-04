@@ -383,10 +383,12 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             AbstractThreadGroup group = iter.next();
             //ignore Setup and Post here.  We could have filtered the searcher. but then
             //future Thread Group objects wouldn't execute.
-            if (group instanceof SetupThreadGroup)
+            if (group instanceof SetupThreadGroup) {
                 continue;
-            if (group instanceof PostThreadGroup)
+            }
+            if (group instanceof PostThreadGroup) {
                 continue;
+            }
             groupCount++;
             String groupName = group.getName();
             log.info("Starting ThreadGroup: " + groupCount + " : " + groupName);
