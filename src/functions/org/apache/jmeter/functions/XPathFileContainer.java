@@ -59,7 +59,9 @@ public class XPathFileContainer {
 
     public XPathFileContainer(String file, String xpath) throws FileNotFoundException, IOException,
             ParserConfigurationException, SAXException, TransformerException {
-        log.debug("XPath(" + file + ") xpath " + xpath + "");
+        if(log.isDebugEnabled()) {
+            log.debug("XPath(" + file + ") xpath " + xpath);
+        }
         fileName = file;
         this.xpath = xpath;
         nextRow = 0;
