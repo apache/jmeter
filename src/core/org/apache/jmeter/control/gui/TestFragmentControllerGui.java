@@ -18,12 +18,12 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.util.Collection;
-import java.util.Arrays;
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
-import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.control.TestFragmentController;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
@@ -38,20 +38,6 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
 
     public TestFragmentControllerGui() {
         init();
-    }
-
-    /**
-     * A newly created component can be initialized with the contents of a Test
-     * Element object by calling this method. The component is responsible for
-     * querying the Test Element object for the relevant information to display
-     * in its GUI.
-     *
-     * @param element
-     *            the TestElement to configure
-     */
-    @Override
-    public void configure(TestElement element) {
-        super.configure(element);
     }
 
     /**
