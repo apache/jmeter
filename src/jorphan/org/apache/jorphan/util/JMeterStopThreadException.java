@@ -34,4 +34,12 @@ public class JMeterStopThreadException extends RuntimeException {
     public JMeterStopThreadException(String s) {
         super(s);
     }
+
+    public JMeterStopThreadException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public JMeterStopThreadException(Throwable cause) {
+        super(cause);
+    }
 }
