@@ -143,9 +143,9 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         String start = "";
         if (values.length >= PARAM_START) {
             start = ((CompoundVariable) values[PARAM_START - 1]).execute();
-            try {
+            if(StringUtils.isNumeric(start)) {
                 myStart = Integer.parseInt(start);
-            } catch (NumberFormatException e) {
+            } else {
                 myStart = COUNT_UNUSED;// Don't process invalid numbers
             }
         }
@@ -157,11 +157,11 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
         if (values.length >= PARAM_END) {
             String tmp = ((CompoundVariable) values[PARAM_END - 1]).execute();
-            try {
+            if(StringUtils.isNumeric(tmp)) {
                 myEnd = Integer.parseInt(tmp);
-            } catch (NumberFormatException e) {
+            } else {
                 myEnd = COUNT_UNUSED;// Don't process invalid numbers
-                                        // (including "")
+                                    // (including "")
             }
         }
 
