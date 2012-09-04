@@ -35,7 +35,7 @@ public class IncludeControllerGui extends AbstractControllerGui
 
     private static final long serialVersionUID = 240L;
 
-    private FilePanel includePanel =
+    private final FilePanel includePanel =
         new FilePanel(JMeterUtils.getResString("include_path"), ".jmx"); //$NON-NLS-1$ //$NON-NLS-2$
 
     /**
