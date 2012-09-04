@@ -200,7 +200,7 @@ public class HTTPSampleResult extends SampleResult {
             int tagstart=prefix.indexOf(METATAG);
             if (tagstart!=-1){
                 tagstart += METATAG.length();
-                int tagend = prefix.indexOf("\"", tagstart); // $NON-NLS-1$
+                int tagend = prefix.indexOf('\"', tagstart); // $NON-NLS-1$
                 if (tagend!=-1){
                     // TODO use fixed charset:
                     final String ct = new String(bytes,tagstart,tagend-tagstart); // TODO - charset?
