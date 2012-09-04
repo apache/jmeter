@@ -26,8 +26,7 @@ import org.apache.jmeter.testbeans.gui.TypeEditor;
 public class Example3BeanInfo extends BeanInfoSupport {
 
     private PropertyDescriptor getprop(String name) {
-        PropertyDescriptor p = property(name);
-        return p;
+        return property(name);
     }
 
     private PropertyDescriptor getprop(String name, Object deflt) {
