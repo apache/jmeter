@@ -93,7 +93,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                 localHost = InetAddress.getByName(host);
             }
         } catch (UnknownHostException e1) {
-            throw new RemoteException("Cannot start. Unable to get local host IP address.");
+            throw new RemoteException("Cannot start. Unable to get local host IP address.", e1);
         }
         log.info("IP address="+localHost.getHostAddress());
         String hostName = localHost.getHostName();
@@ -125,7 +125,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         } catch (Exception ex) {
             log.error("rmiregistry needs to be running to start JMeter in server " + "mode\n\t" + ex.toString());
             // Throw an Exception to ensure caller knows ...
-            throw new RemoteException("Cannot start. See server log file.");
+            throw new RemoteException("Cannot start. See server log file.", ex);
         }
     }
 
