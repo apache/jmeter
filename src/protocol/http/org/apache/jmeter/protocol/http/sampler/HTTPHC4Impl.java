@@ -541,10 +541,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else if (useStaticProxy) {
                 HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
                 clientParams.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-                if (PROXY_USER.length() > 0)
+                if (PROXY_USER.length() > 0) {
                     ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(
                             new AuthScope(PROXY_HOST, PROXY_PORT),
                             new UsernamePasswordCredentials(PROXY_USER, PROXY_PASS));
+                }
             }
 
             // Bug 52126 - we do our own cookie handling
