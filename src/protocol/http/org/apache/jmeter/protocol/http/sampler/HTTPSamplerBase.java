@@ -300,7 +300,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     // Bug 49083
     /** Whether to remove '/pathsegment/..' from redirects; default true */
-    private static boolean REMOVESLASHDOTDOT = JMeterUtils.getPropDefault("httpsampler.redirect.removeslashdotdot", true);
+    private static final boolean REMOVESLASHDOTDOT = JMeterUtils.getPropDefault("httpsampler.redirect.removeslashdotdot", true);
 
     ////////////////////// Code ///////////////////////////
 
@@ -1793,7 +1793,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *
      */
     private static class CleanerThread extends Thread {
-        private List<HTTPSamplerBase> samplersToNotify = new ArrayList<HTTPSamplerBase>();
+        private final List<HTTPSamplerBase> samplersToNotify = new ArrayList<HTTPSamplerBase>();
         /**
          * @param runnable Runnable
          */
@@ -1824,8 +1824,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * Holder of AsynSampler result
      */
     private static class AsynSamplerResultHolder {
-        private HTTPSampleResult result;
-        private CollectionProperty cookies;
+        private final HTTPSampleResult result;
+        private final CollectionProperty cookies;
         /**
          * @param result
          * @param cookies
