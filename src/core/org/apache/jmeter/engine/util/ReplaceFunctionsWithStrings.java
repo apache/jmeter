@@ -89,7 +89,6 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
                 input = StringUtilities.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
             }
         }
-        StringProperty newProp = new StringProperty(prop.getName(), input);
-        return newProp;
+        return new StringProperty(prop.getName(), input);
     }
 }
