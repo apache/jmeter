@@ -75,7 +75,7 @@ public class IterationCounter extends AbstractFunction {
 
         JMeterVariables vars = getVariables();
 
-        boolean perThread = Boolean.valueOf(((CompoundVariable) variables[0]).execute()).booleanValue();
+        boolean perThread = Boolean.parseBoolean(((CompoundVariable) variables[0]).execute());
 
         String varName = ""; //$NON-NLS-1$
         if (variables.length >=2) {// Ensure variable has been provided
