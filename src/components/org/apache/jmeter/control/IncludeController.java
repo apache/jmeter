@@ -26,13 +26,11 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.control.TestFragmentController;
-
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -51,8 +49,8 @@ public class IncludeController extends GenericController implements ReplaceableC
                 "includecontroller.prefix", //$NON-NLS-1$
                 ""); //$NON-NLS-1$
 
-    private HashTree SUBTREE = null;
-    private TestElement SUB = null;
+    private HashTree subtree = null;
+    private TestElement sub = null;
 
     /**
      * No-arg constructor
@@ -70,15 +68,15 @@ public class IncludeController extends GenericController implements ReplaceableC
         this.resolveReplacementSubTree(null);
         IncludeController clone = (IncludeController) super.clone();
         clone.setIncludePath(this.getIncludePath());
-        if (this.SUBTREE != null) {
-            if (this.SUBTREE.keySet().size() == 1) {
-                Iterator<Object> itr = this.SUBTREE.keySet().iterator();
+        if (this.subtree != null) {
+            if (this.subtree.keySet().size() == 1) {
+                Iterator<Object> itr = this.subtree.keySet().iterator();
                 while (itr.hasNext()) {
-                    this.SUB = (TestElement) itr.next();
+                    this.sub = (TestElement) itr.next();
                 }
             }
-            clone.SUBTREE = (HashTree)this.SUBTREE.clone();
-            clone.SUB = this.SUB==null ? null : (TestElement) this.SUB.clone();
+            clone.subtree = (HashTree)this.subtree.clone();
+            clone.sub = this.sub==null ? null : (TestElement) this.sub.clone();
         }
         return clone;
     }
@@ -105,15 +103,15 @@ public class IncludeController extends GenericController implements ReplaceableC
      * followed by replace(HashTree) and finally getReplacement().
      */
     public HashTree getReplacementSubTree() {
-        return SUBTREE;
+        return subtree;
     }
 
     public TestElement getReplacementElement() {
-        return SUB;
+        return sub;
     }
 
     public void resolveReplacementSubTree(JMeterTreeNode context) {
-        this.SUBTREE = this.loadIncludedElements();
+        this.subtree = this.loadIncludedElements();
     }
 
     /**
