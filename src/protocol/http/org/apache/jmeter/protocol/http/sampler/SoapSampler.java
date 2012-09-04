@@ -193,7 +193,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
                         case -1:
                             return -1;
                         case 0: // No header provided
-                            return (new File(xmlFile)).length();
+                            return new File(xmlFile).length();
                         default:
                             return length;
                         }
