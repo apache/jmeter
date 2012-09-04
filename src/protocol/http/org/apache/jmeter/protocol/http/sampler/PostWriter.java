@@ -385,7 +385,7 @@ public class PostWriter {
         write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
         write(out, nameField);
         write(out, "\"; filename=\"");// $NON-NLS-1$
-        write(out, (new File(filename).getName()));
+        write(out, new File(filename).getName());
         writeln(out, "\""); // $NON-NLS-1$
         writeln(out, "Content-Type: " + mimetype); // $NON-NLS-1$
         writeln(out, "Content-Transfer-Encoding: binary"); // $NON-NLS-1$
