@@ -89,7 +89,7 @@ public class ReportMainFrame extends JFrame {
     //private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
 
     /** An image which is displayed when a test is not currently running. */
-    private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
+    private final ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
 
     /** The x coordinate of the last location where a component was dragged. */
     private int previousDragXLocation = 0;
@@ -116,14 +116,12 @@ public class ReportMainFrame extends JFrame {
     /**
      * Create a new JMeter frame.
      *
-     * @param actionHandler
-     *            this parameter is not used
      * @param treeModel
      *            the model for the test tree
      * @param treeListener
      *            the listener for the test tree
      */
-    public ReportMainFrame(ActionListener actionHandler, TreeModel treeModel,
+    public ReportMainFrame(TreeModel treeModel,
             ReportTreeListener treeListener) {
         runningIndicator = new JButton(stoppedIcon);
         runningIndicator.setMargin(new Insets(0, 0, 0, 0));
