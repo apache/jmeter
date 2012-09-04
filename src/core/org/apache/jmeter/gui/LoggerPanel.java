@@ -42,7 +42,7 @@ public class LoggerPanel extends JPanel implements LogTarget {
 
     private JTextArea textArea;
 
-    private PatternFormatter format;
+    private final PatternFormatter format;
 
     // Limit length of log content
     private static final int LOGGER_PANEL_MAX_LENGTH =

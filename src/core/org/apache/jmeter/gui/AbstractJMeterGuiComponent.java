@@ -69,7 +69,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     protected NamePanel namePanel;
     // used by AbstractReportGui
 
-    private CommentPanel commentPanel;
+    private final CommentPanel commentPanel;
 
     /**
      * When constructing a new component, this takes care of basic tasks like

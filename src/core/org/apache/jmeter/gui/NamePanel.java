@@ -35,10 +35,8 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     private static final long serialVersionUID = 240L;
 
     /** A text field containing the name. */
-    private JTextField nameField = new JTextField(15);
+    private final JTextField nameField = new JTextField(15);
 
-    /** The label for the text field. */
-    private JLabel nameLabel;
 
    /**
      * Create a new NamePanel with the default name.
@@ -53,8 +51,8 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      */
     private void init() {
         setLayout(new BorderLayout(5, 0));
-
-        nameLabel = new JLabel(JMeterUtils.getResString("name")); // $NON-NLS-1$
+        /** The label for the text field. */
+        JLabel nameLabel = new JLabel(JMeterUtils.getResString("name")); // $NON-NLS-1$
         nameLabel.setName("name");
         nameLabel.setLabelFor(nameField);
 
