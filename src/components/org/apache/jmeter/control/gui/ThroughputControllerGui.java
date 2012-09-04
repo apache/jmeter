@@ -81,7 +81,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
                 ((ThroughputController) tc).setMaxThroughput(Integer.parseInt(throughput.getText().trim()));
             } catch (NumberFormatException e) {
                 // In case we are converting back from floating point, drop the decimal fraction
-                ((ThroughputController) tc).setMaxThroughput((throughput.getText().trim().split("\\.")[0])); // $NON-NLS-1$
+                ((ThroughputController) tc).setMaxThroughput(throughput.getText().trim().split("\\.")[0]); // $NON-NLS-1$
             }
         } else {
             try {
