@@ -194,7 +194,7 @@ public class JMeterReport implements JMeterPlugin {
         treeLis.setActionHandler(ReportActionRouter.getInstance());
         ReportGuiPackage.getInstance(treeLis, treeModel);
         org.apache.jmeter.gui.ReportMainFrame main =
-            new org.apache.jmeter.gui.ReportMainFrame(ReportActionRouter.getInstance(),
+            new org.apache.jmeter.gui.ReportMainFrame(
                 treeModel, treeLis);
         ComponentUtil.centerComponentInWindow(main, 80);
         main.setVisible(true);
