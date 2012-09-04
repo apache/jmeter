@@ -88,7 +88,9 @@ public class RegexFunction extends AbstractFunction {
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
-        String valueIndex = "", defaultValue = "", between = ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        String valueIndex = ""; //$NON-NLS-1$
+        String defaultValue = ""; //$NON-NLS-1$
+        String between = ""; //$NON-NLS-1$ 
         String name = ""; //$NON-NLS-1$
         String inputVariable = ""; //$NON-NLS-1$
         Pattern searchPattern;
@@ -124,7 +126,8 @@ public class RegexFunction extends AbstractFunction {
                 inputVariable = ((CompoundVariable) values[6]).execute();
             }
         } catch (MalformedCachePatternException e) {
-            throw new InvalidVariableException(e.toString());
+            log.error("Malformed cache pattern:"+values[0], e);
+            throw new InvalidVariableException("Malformed cache pattern:"+values[0], e);
         }
 
         // Relatively expensive operation, so do it once
@@ -158,12 +161,9 @@ public class RegexFunction extends AbstractFunction {
                 MatchResult match = matcher.getMatch();
                 collectAllMatches.add(match);
             }
-        } catch (NumberFormatException e) {//TODO: can this occur?
-            log.error("", e); //$NON-NLS-1$
-            return defaultValue;
         } finally {
             if (name.length() > 0){
-                vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
+                vars.put(name + "_matchNr", Integer.toString(collectAllMatches.size())); //$NON-NLS-1$
             }
         }
 
