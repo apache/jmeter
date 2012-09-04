@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -142,10 +143,10 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         String start = "";
         if (values.length >= PARAM_START) {
             start = ((CompoundVariable) values[PARAM_START - 1]).execute();
-            try {
-                myStart = Integer.valueOf(start).intValue();
-            } catch (NumberFormatException e) {
-                myStart = COUNT_UNUSED;// Don't process invalid numbers
+            if(StringUtils.isNumeric(start)) {
+                myStart = Integer.parseInt(start);
+            } else {
+                myStart = COUNT_UNUSED;// Don't process invalid numbers                    
             }
         }
         // Have we used myCurrent yet?
@@ -156,13 +157,12 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
         if (values.length >= PARAM_END) {
             String tmp = ((CompoundVariable) values[PARAM_END - 1]).execute();
-            try {
-                myEnd = Integer.valueOf(tmp).intValue();
-            } catch (NumberFormatException e) {
+            if(StringUtils.isNumeric(start)) {
+                myEnd = Integer.parseInt(tmp);
+            } else {
                 myEnd = COUNT_UNUSED;// Don't process invalid numbers
-                                        // (including "")
+                // (including "")
             }
-
         }
 
         if (values.length >= PARAM_START) {
