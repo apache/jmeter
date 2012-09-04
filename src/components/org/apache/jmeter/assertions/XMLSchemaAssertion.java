@@ -175,9 +175,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         public void error(SAXParseException exception) throws SAXParseException {
 
             String msg = "error: " + errorDetails(exception);
-            if(log.isDebugEnabled()) {
-                log.debug(msg);
-            }
+            log.debug(msg);
             result.setFailureMessage(msg);
             result.setError(true);
             throw exception;
@@ -190,9 +188,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         public void fatalError(SAXParseException exception) throws SAXParseException {
 
             String msg = "fatal: " + errorDetails(exception);
-            if(log.isDebugEnabled()) {
-                log.debug(msg);
-            }
+            log.debug(msg);
             result.setFailureMessage(msg);
             result.setError(true);
             throw exception;
@@ -204,9 +200,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         public void warning(SAXParseException exception) throws SAXParseException {
 
             String msg = "warning: " + errorDetails(exception);
-            if(log.isDebugEnabled()) {
-                log.debug(msg);
-            }
+            log.debug(msg);
             result.setFailureMessage(msg);
             // result.setError(true); // TODO is this the correct strategy?
             // throw exception; // allow assertion to pass
