@@ -27,4 +27,20 @@ package org.apache.jmeter.control;
 public class NextIsNullException extends Exception {
     private static final long serialVersionUID = 240L;
 
+    public NextIsNullException() {
+        super();
+    }
+
+    public NextIsNullException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NextIsNullException(String message) {
+        super(message);
+    }
+
+    public NextIsNullException(Throwable cause) {
+        super(cause);
+    }
+    
 }

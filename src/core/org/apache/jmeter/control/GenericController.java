@@ -173,6 +173,7 @@ public class GenericController extends AbstractTestElement implements Controller
                 }
             }
         } catch (NextIsNullException e) {
+            // NOOP
         }
         return returnValue;
     }
@@ -212,7 +213,7 @@ public class GenericController extends AbstractTestElement implements Controller
             // See bug 50618  Catches a StackOverflowError when a condition returns 
             // always false (after at least one iteration with return true)
             log.warn("StackOverflowError detected"); // $NON-NLS-1$
-            throw new NextIsNullException();
+            throw new NextIsNullException("StackOverflowError detected", soe);
         }
         if (sampler == null) {
             currentReturnedNull(controller);
@@ -272,6 +273,7 @@ public class GenericController extends AbstractTestElement implements Controller
                 }
             }
         } catch (NextIsNullException e) {
+            // NOOP
         } finally {
             if (wasFlagSet) {
                 getThreadContext().unsetIsReinitializingSubControllers();
