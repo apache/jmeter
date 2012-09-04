@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -67,10 +68,9 @@ public class LongSum extends AbstractFunction {
             sum += Long.parseLong(((CompoundVariable) values[i]).execute());
         }
 
-        try {
+        if(StringUtils.isNumeric(varName)) {
             sum += Long.parseLong(varName);
             varName = null; // there is no variable name
-        } catch (NumberFormatException ignored) {
         }
 
         String totalString = Long.toString(sum);
