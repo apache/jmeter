@@ -30,7 +30,7 @@ import java.util.Properties;
  */
 public final class NullURLConnection extends URLConnection {
 
-    private Properties data = new Properties();
+    private final Properties data = new Properties();
 
     public NullURLConnection() throws MalformedURLException {
         this(new URL("http://localhost"));
