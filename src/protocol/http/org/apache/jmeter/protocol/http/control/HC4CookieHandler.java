@@ -48,7 +48,7 @@ import org.apache.log.Logger;
 public class HC4CookieHandler implements CookieHandler {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private transient CookieSpec cookieSpec;
+    private final transient CookieSpec cookieSpec;
     
     private static CookieSpecRegistry registry  = new CookieSpecRegistry();
 

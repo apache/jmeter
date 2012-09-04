@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 public class HC3CookieHandler implements CookieHandler {
    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private transient CookieSpec cookieSpec;
+	private final transient CookieSpec cookieSpec;
 	 
 	/**
 	 * 
