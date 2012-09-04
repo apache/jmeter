@@ -139,13 +139,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private JTree tree;
 
     /** An image which is displayed when a test is running. */
-    private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");// $NON-NLS-1$
+    private final ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");// $NON-NLS-1$
 
     /** An image which is displayed when a test is not currently running. */
-    private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
+    private final ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
 
     /** An image which is displayed to indicate FATAL, ERROR or WARNING. */
-    private ImageIcon warningIcon = JMeterUtils.getImage("warning.png");// $NON-NLS-1$
+    private final ImageIcon warningIcon = JMeterUtils.getImage("warning.png");// $NON-NLS-1$
 
     /** The button used to display the running/stopped image. */
     private JButton runningIndicator;
@@ -157,7 +157,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private int previousDragYLocation = 0;
 
     /** The set of currently running hosts. */
-    private Set<String> hosts = new HashSet<String>();
+    private final Set<String> hosts = new HashSet<String>();
 
     /** A message dialog shown while JMeter threads are stopping. */
     private JDialog stoppingMessage;
@@ -190,7 +190,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @param treeListener
      *            the listener for the test tree
      */
-    public MainFrame(ActionListener actionHandler, TreeModel treeModel, JMeterTreeListener treeListener) {
+    public MainFrame(TreeModel treeModel, JMeterTreeListener treeListener) {
         // TODO: actionHandler isn't used -- remove it from the parameter list
         // this.actionHandler = actionHandler;
 
@@ -512,7 +512,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         // allow for windows / chars in filename
         String temp = fname.replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
-        String simpleName = temp.substring(temp.lastIndexOf("/") + 1);// $NON-NLS-1$
+        String simpleName = temp.substring(temp.lastIndexOf('/') + 1);// $NON-NLS-1$
         setTitle(simpleName + " (" + fname + ") - " + DEFAULT_TITLE); // $NON-NLS-1$ // $NON-NLS-2$
     }
 
