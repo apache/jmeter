@@ -362,7 +362,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         int headerSize = httpMethod.getStatusLine().toString().length()+2; // add a \r\n
         Header[] rh = httpMethod.getResponseHeaders();
         for (int i = 0; i < rh.length; i++) {
-            headerSize += (rh[i]).toString().length(); // already include the \r\n
+            headerSize += rh[i].toString().length(); // already include the \r\n
         }
         headerSize += 2; // last \r\n before response data
         return headerSize;
