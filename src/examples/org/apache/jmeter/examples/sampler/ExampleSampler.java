@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.examples.sampler;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -47,12 +49,12 @@ public class ExampleSampler extends AbstractSampler {
     // The name of the property used to hold our data
     public static final String DATA = "ExampleSampler.data"; //$NON-NLS-1$
 
-    private static int classCount = 0; // keep track of classes created
+    private static AtomicInteger classCount = new AtomicInteger(0); // keep track of classes created
 
     // (for instructional purposes only!)
 
     public ExampleSampler() {
-        classCount++;
+        classCount.incrementAndGet();
         trace("ExampleSampler()");
     }
 
@@ -120,6 +122,6 @@ public class ExampleSampler extends AbstractSampler {
         String tl = getTitle();
         String tn = Thread.currentThread().getName();
         String th = this.toString();
-        log.debug(tn + " (" + classCount + ") " + tl + " " + s + " " + th);
+        log.debug(tn + " (" + classCount.get() + ") " + tl + " " + s + " " + th);
     }
 }
