@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -38,7 +39,7 @@ public class FileRowColContainer {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final ArrayList<ArrayList<String>> fileData; // Lines in the file, split into columns
+    private final List<List<String>> fileData; // Lines in the file, split into columns
 
     private final String fileName; // name of the file
 
@@ -57,7 +58,7 @@ public class FileRowColContainer {
         fileName = file;
         delimiter = delim;
         nextRow = 0;
-        fileData = new ArrayList<ArrayList<String>>();
+        fileData = new ArrayList<List<String>>();
         load();
     }
 
@@ -66,7 +67,7 @@ public class FileRowColContainer {
         fileName = file;
         delimiter = DELIMITER;
         nextRow = 0;
-        fileData = new ArrayList<ArrayList<String>>();
+        fileData = new ArrayList<List<String>>();
         load();
     }
 
@@ -142,7 +143,7 @@ public class FileRowColContainer {
      * @return an ArrayList of Strings containing one element for each value in
      *         the line
      */
-    private static ArrayList<String> splitLine(String theLine, String delim) {
+    private static List<String> splitLine(String theLine, String delim) {
         ArrayList<String> result = new ArrayList<String>();
         StringTokenizer tokener = new StringTokenizer(theLine, delim, true);
         /*
