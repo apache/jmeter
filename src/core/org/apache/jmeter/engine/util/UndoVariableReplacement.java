@@ -42,7 +42,6 @@ public class UndoVariableReplacement extends AbstractTransformer {
             String value = entry.getValue();
             input = StringUtilities.substitute(input, "${" + key + "}", value);
         }
-        StringProperty newProp = new StringProperty(prop.getName(), input);
-        return newProp;
+        return new StringProperty(prop.getName(), input);
     }
 }
