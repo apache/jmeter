@@ -66,7 +66,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
     private JMeterTreeNode[] draggedNodes;
 
-    private JLabel dragIcon = new JLabel(JMeterUtils.getImage("leafnode.gif")); // $NON-NLS-1$
+    private final JLabel dragIcon = new JLabel(JMeterUtils.getImage("leafnode.gif")); // $NON-NLS-1$
 
     /**
      * Constructor for the JMeterTreeListener object.
