@@ -82,7 +82,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
             StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
             while (s.hasMoreTokens()){
                 String t = s.nextToken();
-                if (t.indexOf("*") ==0){// e.g. *.apache.org // $NON-NLS-1$
+                if (t.indexOf('*') ==0){// e.g. *.apache.org // $NON-NLS-1$
                     nonProxyHostSuffix.add(t.substring(1));
                 } else {
                     nonProxyHostFull.add(t);// e.g. www.apache.org
