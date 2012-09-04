@@ -219,6 +219,6 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
      */
     private void setState(long secsCount) {
         seconds.setEnabled(true);
-        seconds.setText(Long.toString(secsCount)); // $NON-NLS-1$
+        seconds.setText(Long.toString(secsCount));
     }
 }
