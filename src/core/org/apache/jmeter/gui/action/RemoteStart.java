@@ -184,7 +184,7 @@ public class RemoteStart extends AbstractAction {
         } else {
             engine.reset();
         }
-        initEngine(engine, name);
+        initEngine(engine);
     }
 
     @Override
@@ -197,10 +197,8 @@ public class RemoteStart extends AbstractAction {
      *
      * @param engine
      *            remote engine object
-     * @param host
-     *            host the engine will run on
      */
-    private void initEngine(JMeterEngine engine, String host) {
+    private void initEngine(JMeterEngine engine) {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
