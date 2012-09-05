@@ -54,7 +54,7 @@ public class ReportGui extends AbstractReportGui {
     private JTextField commentPanel;
 
     private final DirectoryPanel baseDir =
-        new DirectoryPanel(JMeterUtils.getResString("report_base_directory"), "",
+        new DirectoryPanel(JMeterUtils.getResString("report_base_directory"), 
                 Color.white);
 
     /** A panel allowing the user to define variables. */
