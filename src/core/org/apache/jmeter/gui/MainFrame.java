@@ -183,16 +183,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /**
      * Create a new JMeter frame.
      *
-     * @param actionHandler
-     *            this parameter is not used
      * @param treeModel
      *            the model for the test tree
      * @param treeListener
      *            the listener for the test tree
      */
     public MainFrame(TreeModel treeModel, JMeterTreeListener treeListener) {
-        // TODO: actionHandler isn't used -- remove it from the parameter list
-        // this.actionHandler = actionHandler;
 
         // TODO: Make the running indicator its own class instead of a JButton
         runningIndicator = new JButton(stoppedIcon);
