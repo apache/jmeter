@@ -42,7 +42,7 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
     /**
      * Preference size for the health icon
      */
-    private Dimension prefsize = new Dimension(25, 75);
+    private final Dimension prefsize = new Dimension(25, 75);
 
     private JLabel healthIcon;
 
