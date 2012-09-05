@@ -371,9 +371,7 @@ public class AxisGraph extends JPanel {
             clusteredBarChartProperties.addPostRenderEventListener(valueLabelRenderer);
 
             Paint[] paints = new Paint[_color.length];
-            for (int i = 0; i < _color.length; i++) {
-                paints[i] =  _color[i];
-            }
+            System.arraycopy(_color, 0, paints, 0, paints.length);
             
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet(
