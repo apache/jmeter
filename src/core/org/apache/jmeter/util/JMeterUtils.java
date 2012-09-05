@@ -318,9 +318,7 @@ public class JMeterUtils implements UnitTestManager {
         if (p != null) {
             String[] paths = p.split(";"); // $NON-NLS-1$
             result = new String[paths.length + 1];
-            for (int i = 1; i < result.length; i++) {
-                result[i] = paths[i - 1];
-            }
+            System.arraycopy(paths, 0, result, 1, paths.length);
         }
         result[0] = getJMeterHome() + "/lib/ext"; // $NON-NLS-1$
         return result;
