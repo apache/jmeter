@@ -148,9 +148,7 @@ public class TestOnceOnlyController extends JMeterTestCase {
         int expectedNoSamples = 2 + (1 + (3 + 1) * innerLoopCount) * outerLoopCount;
         String[] expectedSamples = new String[expectedNoSamples];
         // The only once samples
-        for(int i = 0; i < onlyOnceOrder.length; i++) {
-            expectedSamples[i] = onlyOnceOrder[i];
-        }
+        System.arraycopy(onlyOnceOrder, 0, expectedSamples, 0, onlyOnceOrder.length);
         // The outer sample and the inner loop samples
         final int onceOnlySamples = onlyOnceOrder.length;
         for(int i = 0; i < order.length * outerLoopCount; i++) {
@@ -211,9 +209,8 @@ public class TestOnceOnlyController extends JMeterTestCase {
         int expectedNoSamples = 2 + (1 + 2 + (1 + 1) * innerLoopCount) * outerLoopCount;
         String[] expectedSamples = new String[expectedNoSamples];
         // The only once samples
-        for(int i = 0; i < onlyOnceOrder.length; i++) {
-            expectedSamples[i] = onlyOnceOrder[i];
-        }
+        System.arraycopy(onlyOnceOrder, 0, expectedSamples, 0, onlyOnceOrder.length);
+
         // The outer sample and the inner loop samples
         final int onceOnlySamples = onlyOnceOrder.length;
         for(int i = 0; i < order.length * outerLoopCount; i++) {
@@ -300,9 +297,8 @@ public class TestOnceOnlyController extends JMeterTestCase {
         int expectedNoSamples = 2 + (1 + 2 + 1 + (1 + 1 + 1) * innerLoopCount) * outerLoopCount;
         String[] expectedSamples = new String[expectedNoSamples];
         // The only once samples
-        for (int i = 0; i < onlyOnceOrder.length; i++) {
-            expectedSamples[i] = onlyOnceOrder[i];
-        }
+        System.arraycopy(onlyOnceOrder, 0, expectedSamples, 0, onlyOnceOrder.length);
+
         // The outer sample and the inner loop samples
         final int onceOnlySamples = onlyOnceOrder.length;
         for (int i = 0; i < order.length * outerLoopCount; i++) {
