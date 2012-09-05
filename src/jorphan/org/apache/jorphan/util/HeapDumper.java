@@ -19,7 +19,6 @@
 package org.apache.jorphan.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
