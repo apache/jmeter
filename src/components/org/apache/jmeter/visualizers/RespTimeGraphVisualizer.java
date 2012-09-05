@@ -96,8 +96,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private RespTimeGraphChart graphPanel = null;
 
-    private JPanel settingsPane = null;
-
     private final JTabbedPane tabbedGraph = new JTabbedPane(SwingConstants.TOP);
     
     private boolean saveGraphToFile = false;
@@ -118,7 +116,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final JButton displayButton =
             new JButton(JMeterUtils.getResString("aggregate_graph_display")); //$NON-NLS-1$
     
-    private JButton saveGraph =
+    private final JButton saveGraph =
             new JButton(JMeterUtils.getResString("aggregate_graph_save")); //$NON-NLS-1$
 
     private final JCheckBox samplerSelection = new JCheckBox(JMeterUtils.getResString("graph_resp_time_series_selection"), false); //$NON-NLS-1$
@@ -195,7 +193,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final List<Color> listColors = Colors.getColors();
 
     // Use implementation instead of Interface as we need it to be cloneable
-    private HashMap<Long, Long> internalMap = new HashMap<Long, Long>(); // internal list of all results
+    private final HashMap<Long, Long> internalMap = new HashMap<Long, Long>(); // internal list of all results
 
     public RespTimeGraphVisualizer() {
         init();
@@ -379,7 +377,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.add(makeTitlePanel());
 
-        settingsPane = new VerticalPanel();
+        JPanel settingsPane = new VerticalPanel();
         settingsPane.setBorder(margin2);
 
         graphPanel = new RespTimeGraphChart();
