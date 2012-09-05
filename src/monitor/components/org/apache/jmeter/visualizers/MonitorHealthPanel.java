@@ -19,17 +19,17 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import java.util.HashMap;
-
 import javax.swing.JScrollPane;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The health panel is responsible for showing the health of the servers. It
@@ -38,7 +38,7 @@ import org.apache.jmeter.samplers.Clearable;
 public class MonitorHealthPanel extends JPanel implements MonitorListener, Clearable {
     private static final long serialVersionUID = 240L;
 
-    private final HashMap<String, ServerPanel> serverPanelMap = new HashMap<String, ServerPanel>();
+    private final Map<String, ServerPanel> serverPanelMap = new HashMap<String, ServerPanel>();
 
     private JPanel servers = null;
 

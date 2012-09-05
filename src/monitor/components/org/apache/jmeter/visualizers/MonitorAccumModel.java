@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jmeter.monitor.model.ObjectFactory;
 import org.apache.jmeter.monitor.model.Status;
@@ -34,7 +35,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
 
     private static final long serialVersionUID = 240L;
 
-    private final HashMap<String, List<MonitorModel>> serverListMap;
+    private final Map<String, List<MonitorModel>> serverListMap;
 
     /**
      * we use this to set the current monitorModel so that we can save the stats
