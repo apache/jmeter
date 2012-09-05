@@ -250,7 +250,7 @@ public class TestHTMLParser extends JMeterTestCase {
                 boolean orderMatters) // Does the order matter?
                 throws Exception {
             String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser.".length());
-            String fname = file.substring(file.indexOf("/")+1);
+            String fname = file.substring(file.indexOf('/')+1);
             log.debug("file   " + file);
             File f = findTestFile(file);
             byte[] buffer = new byte[(int) f.length()];

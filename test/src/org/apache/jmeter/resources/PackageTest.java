@@ -130,9 +130,9 @@ public class PackageTest extends TestCase {
 	                 * parameters and check if there is a { in the output. A bit
 	                 * crude, but should be enough for now.
 	                 */
-	                if (val.indexOf("{0}") > 0 && val.indexOf("'") > 0) {
+	                if (val.indexOf("{0}") > 0 && val.indexOf('\'') > 0) {
 	                    String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
-	                    if (m.indexOf("{") > 0) {
+	                    if (m.indexOf('{') > 0) {
 	                        fails++;
 	                        System.out.println("Incorrect message format ? (input/output) for: "+key);
 	                        System.out.println(val);
@@ -257,7 +257,7 @@ public class PackageTest extends TestCase {
 			} else {
 				String absPath2 = file2.getAbsolutePath().replace('\\', '/'); // Fix up Windows paths
                 int indexOfOrg = absPath2.indexOf("/org");
-				int lastIndex = absPath2.lastIndexOf(".");
+				int lastIndex = absPath2.lastIndexOf('.');
 				set.add(absPath2.substring(indexOfOrg, lastIndex));
 			}
 		}
