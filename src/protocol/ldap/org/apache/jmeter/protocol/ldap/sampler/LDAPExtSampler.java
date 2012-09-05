@@ -846,7 +846,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
             if (indexOfLDAPErrCode >= 0) {
                 res.setResponseMessage(returnData.substring(indexOfLDAPErrCode + 21, returnData
-                        .indexOf("]"))); // $NON-NLS-1$
+                        .indexOf(']'))); // $NON-NLS-1$
                 res.setResponseCode(returnData.substring(indexOfLDAPErrCode + 17, indexOfLDAPErrCode + 19));
             } else {
                 res.setResponseMessage(returnData);
