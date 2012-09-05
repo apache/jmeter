@@ -102,7 +102,7 @@ public final class ClassFinder {
             if (notContains!=null && s.indexOf(notContains) != -1){
                 return false; // It contains a banned string
             }
-            if ((s.indexOf("$") == -1) || inner) { // $NON-NLS-1$
+            if ((s.indexOf('$') == -1) || inner) { // $NON-NLS-1$
                 if (isChildOf(parents,s, contextClassLoader)) {
                     return super.add(s);
                 }
@@ -138,7 +138,7 @@ public final class ClassFinder {
             if (contains(s)) {
                 return false;// No need to check it again
             }
-            if ((s.indexOf("$") == -1) || inner) { // $NON-NLS-1$
+            if ((s.indexOf('$') == -1) || inner) { // $NON-NLS-1$
                 if (hasAnnotationOnMethod(annotations,s, contextClassLoader)) {
                     return super.add(s);
                 }
@@ -558,7 +558,7 @@ public final class ClassFinder {
             } else if (list[i].endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
                 final String path = file.getPath();
                 listClasses.add(path.substring(strPathElement.length() + 1,
-                        path.lastIndexOf(".")) // $NON-NLS-1$
+                        path.lastIndexOf('.')) // $NON-NLS-1$
                         .replace(File.separator.charAt(0), '.')); // $NON-NLS-1$
             }
         }
