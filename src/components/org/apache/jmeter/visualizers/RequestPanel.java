@@ -42,11 +42,9 @@ public class RequestPanel {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private LinkedList<RequestView> listRequestView;
+    private final LinkedList<RequestView> listRequestView;
 
-    private JTabbedPane tabbedRequest;
-
-    private JPanel panel;
+    private final JPanel panel;
 
     /**
      * Find and instanciate all class that extend RequestView
@@ -81,7 +79,7 @@ public class RequestPanel {
         }
         
         // Prepare the Request tabbed pane
-        tabbedRequest = new JTabbedPane(SwingConstants.BOTTOM);
+        JTabbedPane tabbedRequest = new JTabbedPane(SwingConstants.BOTTOM);
         for (RequestView requestView : listRequestView) {
             requestView.init();
             tabbedRequest.addTab(requestView.getLabel(), requestView.getPanel());

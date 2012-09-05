@@ -71,10 +71,11 @@ public class PropertyControlGui extends AbstractConfigGui
 
     private static final String JMETER = "jmeter"; // $NON-NLS-1$
 
-    private JCheckBox systemButton = new JCheckBox("System");
-    private JCheckBox jmeterButton = new JCheckBox("JMeter");
+    private final JCheckBox systemButton = new JCheckBox("System");
+    
+    private final JCheckBox jmeterButton = new JCheckBox("JMeter");
 
-    private JLabel tableLabel = new JLabel("Properties");
+    private final JLabel tableLabel = new JLabel("Properties");
 
     /** The table containing the list of arguments. */
     private transient JTable table;
