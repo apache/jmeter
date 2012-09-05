@@ -343,7 +343,7 @@ public class TCLogParser implements LogParser {
         // if the string contains atleast one double
         // quote and checkMethod is true, go ahead
         // and tokenize the string.
-        if (entry.indexOf("\"") > -1 && checkMethod(entry)) {
+        if (entry.indexOf('"') > -1 && checkMethod(entry)) {
             StringTokenizer tokens = null;
             // we tokenize using double quotes. this means
             // for tomcat we should have 3 tokens if there
@@ -413,7 +413,7 @@ public class TCLogParser implements LogParser {
      * @return String parameters
      */
     public String stripFile(String url, TestElement el) {
-        if (url.indexOf("?") > -1) {
+        if (url.indexOf('?') > -1) {
             StringTokenizer tokens = this.tokenize(url, "?");
             this.URL_PATH = tokens.nextToken();
             el.setProperty(HTTPSamplerBase.PATH, URL_PATH);
@@ -431,7 +431,7 @@ public class TCLogParser implements LogParser {
      * @return boolean
      */
     public boolean checkURL(String url) {
-        if (url.indexOf("?") > -1) {
+        if (url.indexOf('?') > -1) {
             return true;
         }
         return false;
@@ -445,7 +445,7 @@ public class TCLogParser implements LogParser {
      * @return boolean
      */
     public boolean checkParamFormat(String text) {
-        if (text.indexOf("&") > -1 && text.indexOf("=") > -1) {
+        if (text.indexOf('&') > -1 && text.indexOf('=') > -1) {
             return true;
         }
         return false;

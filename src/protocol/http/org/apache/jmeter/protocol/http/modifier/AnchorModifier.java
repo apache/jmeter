@@ -78,7 +78,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         String responseText = ""; // $NON-NLS-1$
         responseText = result.getResponseDataAsString();
         Document html;
-        int index = responseText.indexOf("<"); // $NON-NLS-1$
+        int index = responseText.indexOf('<'); // $NON-NLS-1$
         if (index == -1) {
             index = 0;
         }

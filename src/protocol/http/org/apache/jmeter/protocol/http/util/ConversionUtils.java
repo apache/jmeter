@@ -63,7 +63,7 @@ public class ConversionUtils {
                     charSet = charSet.trim();
                     if (charSet.length() > 0) {
                         // See Bug 44784
-                        int semi = charSet.indexOf(";");
+                        int semi = charSet.indexOf(';');
                         if (semi == 0){
                             return null;
                         }

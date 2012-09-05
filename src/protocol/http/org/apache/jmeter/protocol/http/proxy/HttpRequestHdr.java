@@ -251,12 +251,12 @@ public class HttpRequestHdr {
             str = str.substring(i + 2);
         }
         // chop to server.name:xx
-        i = str.indexOf("/"); // $NON-NLS-1$
+        i = str.indexOf('/'); // $NON-NLS-1$
         if (0 < i) {
             str = str.substring(0, i);
         }
         // chop to server.name
-        i = str.lastIndexOf(":"); // $NON-NLS-1$
+        i = str.lastIndexOf(':'); // $NON-NLS-1$
         if (0 < i) {
             str = str.substring(0, i);
         }
@@ -282,12 +282,12 @@ public class HttpRequestHdr {
             str = str.substring(i + 2);
         }
         // chop to server.name:xx
-        i = str.indexOf("/");
+        i = str.indexOf('/');
         if (0 < i) {
             str = str.substring(0, i);
         }
         // chop to server.name
-        i = str.lastIndexOf(":");
+        i = str.lastIndexOf(':');
         if (0 < i) {
             return Integer.parseInt(str.substring(i + 1).trim());
         }
@@ -305,7 +305,7 @@ public class HttpRequestHdr {
         if (i > 0) {
             str = str.substring(i + 2);
         }
-        i = str.indexOf("/");
+        i = str.indexOf('/');
         if (i < 0) {
             return "";
         }
@@ -394,7 +394,7 @@ public class HttpRequestHdr {
      */
     public String getProtocol(HTTPSamplerBase sampler) {
         if (url.indexOf("//") > -1) {
-            String protocol = url.substring(0, url.indexOf(":"));
+            String protocol = url.substring(0, url.indexOf(':'));
             if (log.isDebugEnabled()) {
                 log.debug("Proxy: setting protocol to : " + protocol);
             }
