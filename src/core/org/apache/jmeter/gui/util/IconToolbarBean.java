@@ -21,7 +21,6 @@ package org.apache.jmeter.gui.util;
 
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 public final class IconToolbarBean {
