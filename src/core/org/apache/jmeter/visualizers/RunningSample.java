@@ -184,9 +184,7 @@ public class RunningSample {
             unit = "hour";
         }
 
-        String rval = rateFormatter.format(rate) + "/" + unit;
-
-        return (rval);
+        return rateFormatter.format(rate) + "/" + unit;
     }
 
     public String getLabel() {
@@ -264,7 +262,7 @@ public class RunningSample {
         if (min != Long.MAX_VALUE) {
             rval = min;
         }
-        return (rval);
+        return rval;
     }
 
     /**
@@ -278,7 +276,7 @@ public class RunningSample {
         if (max != Long.MIN_VALUE) {
             rval = max;
         }
-        return (rval);
+        return rval;
     }
 
     /**
@@ -288,9 +286,9 @@ public class RunningSample {
      */
     public long getAverage() {
         if (counter == 0) {
-            return (0);
+            return 0;
         }
-        return (runningSum / counter);
+        return runningSum / counter;
     }
 
     /**
@@ -301,7 +299,7 @@ public class RunningSample {
      *         the RunningSample class.
      */
     public long getNumSamples() {
-        return (counter);
+        return counter;
     }
 
     /**
@@ -316,10 +314,10 @@ public class RunningSample {
         double rval = 0.0;
 
         if (counter == 0) {
-            return (rval);
+            return rval;
         }
         rval = (double) errorCount / (double) counter;
-        return (rval);
+        return rval;
     }
 
     /**
@@ -332,7 +330,7 @@ public class RunningSample {
     public String getErrorPercentageString() {
         double myErrorPercentage = this.getErrorPercentage();
 
-        return (errorFormatter.format(myErrorPercentage));
+        return errorFormatter.format(myErrorPercentage);
     }
 
     /**
@@ -348,7 +346,7 @@ public class RunningSample {
         mySB.append("Max: " + this.getMax() + "  ");
         mySB.append("Error Rate: " + this.getErrorPercentageString() + "  ");
         mySB.append("Sample Rate: " + this.getRateString());
-        return (mySB.toString());
+        return mySB.toString();
     }
 
     /**
