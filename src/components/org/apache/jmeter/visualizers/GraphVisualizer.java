@@ -60,9 +60,9 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     private static final String ZERO = "0";  //$NON-NLS-1$
 
-    private NumberFormat nf = NumberFormat.getInstance(); // OK, because used in synchronised method
+    private final NumberFormat nf = NumberFormat.getInstance(); // OK, because used in synchronised method
 
-    private CachingStatCalculator model;
+    private final CachingStatCalculator model;
 
     private JTextField maxYField = null;
 
@@ -70,9 +70,9 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     private JTextField noSamplesField = null;
 
-    private String minute = JMeterUtils.getResString("minute"); // $NON-NLS-1$
+    private final String minute = JMeterUtils.getResString("minute"); // $NON-NLS-1$
 
-    private Graph graph;
+    private final Graph graph;
 
     private JCheckBox data;
 
