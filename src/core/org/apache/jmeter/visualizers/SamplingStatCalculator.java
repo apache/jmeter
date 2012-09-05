@@ -206,10 +206,10 @@ public class SamplingStatCalculator {
         double rval = 0.0;
 
         if (calculator.getCount() == 0) {
-            return (rval);
+            return rval;
         }
         rval = (double) getCurrentSample().getErrorCount() / (double) calculator.getCount();
-        return (rval);
+        return rval;
     }
 
     /**
@@ -225,7 +225,7 @@ public class SamplingStatCalculator {
         mySB.append("Max: " + this.getMax() + "  ");
         mySB.append("Error Rate: " + this.getErrorPercentage() + "  ");
         mySB.append("Sample Rate: " + this.getRate());
-        return (mySB.toString());
+        return mySB.toString();
     }
 
     /**
