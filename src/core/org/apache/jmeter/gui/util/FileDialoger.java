@@ -129,7 +129,7 @@ public final class FileDialoger {
                     new File(filename) :
                     new File(lastJFCDirectory, filename));
             int i = -1;
-            if ((i = filename.lastIndexOf(".")) > -1) {//$NON-NLS-1$
+            if ((i = filename.lastIndexOf('.')) > -1) {//$NON-NLS-1$
                 ext = filename.substring(i);
             }
         }

@@ -213,9 +213,9 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
         if (!skipSuffix){
             sb.append('.');
             if (contentType != null) {
-                int i = contentType.indexOf("/"); // $NON-NLS-1$
+                int i = contentType.indexOf('/'); // $NON-NLS-1$
                 if (i != -1) {
-                    int j = contentType.indexOf(";"); // $NON-NLS-1$
+                    int j = contentType.indexOf(';'); // $NON-NLS-1$
                     if (j != -1) {
                         sb.append(contentType.substring(i + 1, j));
                     } else {

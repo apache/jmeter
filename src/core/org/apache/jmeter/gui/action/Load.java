@@ -170,7 +170,7 @@ public class Load implements Command {
                 if (!ok){
                     String name = te.getName();
                     String className = te.getClass().getName();
-                    className = className.substring(className.lastIndexOf(".")+1);
+                    className = className.substring(className.lastIndexOf('.')+1);
                     throw new IllegalUserActionException("Can't merge "+name+" ("+className+") here");
                 }
             }
