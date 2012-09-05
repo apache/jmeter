@@ -118,9 +118,7 @@ public class Spline3 {
         this._m = n;
         // grab the nodes
         this._r = new float[n];
-        for (int i = 0; i < n; i++) {
-            _r[i] = r[i];
-        }
+        System.arraycopy(r, 0, _r, 0, _r.length);
         // the number of non extreme nodes is the number of intervals
         // minus 1, i.e. the length of r minus 2
         this._n = n - 2;

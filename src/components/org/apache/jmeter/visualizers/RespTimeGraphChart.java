@@ -287,9 +287,7 @@ public class RespTimeGraphChart extends JPanel {
 
             // Lines colors
             Paint[] paints = new Paint[_color.length];
-            for (int i = 0; i < _color.length; i++) {
-                paints[i] =  _color[i] ;
-            }
+            System.arraycopy(_color, 0, paints, 0, _color.length);
             
             // Define chart type (line)
             AxisChartDataSet axisChartDataSet =
