@@ -113,15 +113,13 @@ public abstract class AbstractVisualizer
     private static final String[] EXTS = { ".jtl", ".csv" }; // $NON-NLS-1$ $NON-NLS-2$
 
     /** A panel allowing results to be saved. */
-    private FilePanel filePanel;
+    private final FilePanel filePanel;
 
     /** A checkbox choosing whether or not only errors should be logged. */
-    private JCheckBox errorLogging;
+    private final JCheckBox errorLogging;
 
     /* A checkbox choosing whether or not only successes should be logged. */
-    private JCheckBox successOnlyLogging;
-
-    private JButton saveConfigButton;
+    private final JCheckBox successOnlyLogging;
 
     protected ResultCollector collector = new ResultCollector();
 
@@ -147,7 +145,7 @@ public abstract class AbstractVisualizer
                 }
             }
         });
-        saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
+        JButton saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
         saveConfigButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SavePropertyDialog d = new SavePropertyDialog(
