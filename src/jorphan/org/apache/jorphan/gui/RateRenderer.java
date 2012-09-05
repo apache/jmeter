@@ -40,7 +40,7 @@ public class RateRenderer extends NumberRenderer{
 
     @Override
     public void setValue(Object value) {
-        if (value == null || ! (value instanceof Double)) {
+        if (!(value instanceof Double)) {
             setText("#N/A"); // TODO: should this just call super()?
             return;
         }
