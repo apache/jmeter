@@ -18,9 +18,8 @@
 
 package org.apache.jmeter.visualizers;
 
-import static org.junit.Assert.*;
-
 import org.apache.jmeter.samplers.SampleResult;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +33,7 @@ public class TestSamplingStatCalculator {
 
     @Test
     public void testGetCurrentSample() {
-        assertNotNull(ssc.getCurrentSample()); // probably needed to avoid NPEs with GUIs
+        Assert.assertNotNull(ssc.getCurrentSample()); // probably needed to avoid NPEs with GUIs
     }
 
 //    @Test
@@ -60,14 +59,14 @@ public class TestSamplingStatCalculator {
     @Test
     public void testGetAvgPageBytes() {
         SampleResult res = new SampleResult();
-        assertEquals(0,ssc.getAvgPageBytes(),0);
+        Assert.assertEquals(0,ssc.getAvgPageBytes(),0);
         res.setResponseData("abcdef", "UTF-8");
         ssc.addSample(res);
         res.setResponseData("abcde", "UTF-8");
         ssc.addSample(res);
         res.setResponseData("abcd", "UTF-8");
         ssc.addSample(res);
-        assertEquals(5,ssc.getAvgPageBytes(),0);
+        Assert.assertEquals(5,ssc.getAvgPageBytes(),0);
     }
 
 //    @Test
