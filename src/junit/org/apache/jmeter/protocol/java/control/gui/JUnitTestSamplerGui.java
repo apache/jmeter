@@ -80,9 +80,7 @@ implements ChangeListener, ActionListener, ItemListener
             String parts[] = ucp.split(File.pathSeparator);
             paths = new String[parts.length+1];
             paths[0] = JMeterUtils.getJMeterHome() + "/lib/junit/"; //$NON-NLS-1$
-            for(int i=0; i < parts.length; i++){
-                paths[i+1]=parts[i];
-            }
+            System.arraycopy(parts, 0, paths, 1, parts.length);
         } else {
             paths = new String[]{
                 JMeterUtils.getJMeterHome() + "/lib/junit/" //$NON-NLS-1$
