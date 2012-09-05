@@ -242,7 +242,7 @@ public final class LoggingManager {
      * @return Logger
      */
     public static Logger getLoggerForClass() {
-        String className = (new Exception()).getStackTrace()[1].getClassName();
+        String className = new Exception().getStackTrace()[1].getClassName();
         return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(className));
     }
 
