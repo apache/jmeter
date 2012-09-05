@@ -119,7 +119,7 @@ public final class ReportFileDialoger {
         if (filename != null) {
             jfc.setSelectedFile(new File(lastJFCDirectory, filename));
             int i = -1;
-            if ((i = filename.lastIndexOf(".")) > -1) {
+            if ((i = filename.lastIndexOf('.')) > -1) {
                 ext = filename.substring(i);
             }
         }
