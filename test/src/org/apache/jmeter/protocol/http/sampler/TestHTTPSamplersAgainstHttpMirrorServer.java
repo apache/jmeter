@@ -1021,15 +1021,15 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             throws IOException {
         // Check the Request URI sent to the mirror server, and
         // sent back by the mirror server
-        int indexFirstSpace = headersSent.indexOf(" ");
-        int indexSecondSpace = headersSent.indexOf(" ", headersSent.length() > indexFirstSpace ? indexFirstSpace + 1 : indexFirstSpace);
+        int indexFirstSpace = headersSent.indexOf(' ');
+        int indexSecondSpace = headersSent.indexOf(' ', headersSent.length() > indexFirstSpace ? indexFirstSpace + 1 : indexFirstSpace);
         if(indexFirstSpace <= 0 && indexSecondSpace <= 0 || indexFirstSpace == indexSecondSpace) {
             fail("Could not find method and URI sent");
         }
         String methodSent = headersSent.substring(0, indexFirstSpace);
         assertEquals(expectedMethod, methodSent);
         String uriSent = headersSent.substring(indexFirstSpace + 1, indexSecondSpace);
-        int indexQueryStart = uriSent.indexOf("?");
+        int indexQueryStart = uriSent.indexOf('?');
         if(expectedQueryString != null && expectedQueryString.length() > 0) {
             // We should have a query string part
             if(indexQueryStart <= 0 || (indexQueryStart == uriSent.length() - 1)) {
@@ -1154,7 +1154,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             MatchResult match = localMatcher.getMatch();
             String matchString =  match.group(1);
             // Header may contain ;charset= , regexp extracts it so computed boundary is wrong
-            int indexOf = matchString.indexOf(";");
+            int indexOf = matchString.indexOf(';');
             if(indexOf>=0) {
                 return matchString.substring(0, indexOf);
             } else {
