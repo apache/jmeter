@@ -919,8 +919,12 @@ public class JMeter implements JMeterPlugin {
 
         private final List<JMeterEngine> engines;
 
-        public ListenToTest(JMeter parent, List<JMeterEngine> engines) {
-            //_parent = parent;
+        /**
+         * @param unused JMeter unused for now
+         * @param engines List<JMeterEngine>
+         */
+        public ListenToTest(JMeter unused, List<JMeterEngine> engines) {
+            //_parent = unused;
             this.engines=engines;
         }
 
