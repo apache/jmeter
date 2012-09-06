@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -592,8 +593,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      * @return The BasicAttribute
      **************************************************************************/
     private BasicAttribute getBasicAttribute(String name, String value) {
-        BasicAttribute attr = new BasicAttribute(name, value);
-        return attr;
+        return new BasicAttribute(name, value);
     }
 
     /**
@@ -652,7 +652,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      * the whole context
      *
      **************************************************************************/
-    private void bindOp(DirContext dirContext, SampleResult res) throws NamingException {
+    private void bindOp(SampleResult res) throws NamingException {
         DirContext ctx = ldapContexts.remove(getThreadName());
         if (ctx != null) {
             log.warn("Closing previous context for thread: " + getThreadName());
@@ -744,7 +744,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
                 xmlBuffer.tag("binddn",getUserDN()); // $NON-NLS-1$
                 xmlBuffer.tag("connectionTO",getConnTimeOut()); // $NON-NLS-1$
-                bindOp(dirContext, res);
+                bindOp(res);
             } else if (testType.equals(SBIND)) {
                 res.setSamplerData("SingleBind as "+getUserDN());
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
@@ -964,7 +964,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    private void sortAttributes(final ArrayList<Attribute> sortedAttrs) {
+    private void sortAttributes(final List<Attribute> sortedAttrs) {
         Collections.sort(sortedAttrs, new Comparator<Attribute>()
         {
             public int compare(Attribute o1, Attribute o2)
@@ -977,7 +977,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         });
     }
 
-    private void sortResults(final ArrayList<SearchResult> sortedResults) {
+    private void sortResults(final List<SearchResult> sortedResults) {
         Collections.sort(sortedResults, new Comparator<SearchResult>()
         {
             private int compareToReverse(final String s1, final String s2)
