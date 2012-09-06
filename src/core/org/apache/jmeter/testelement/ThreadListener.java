@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.testelement;
 
-import org.apache.jmeter.engine.event.LoopIterationListener;
-
 /**
  * Allow threads to perform startup and closedown if necessary
  *
