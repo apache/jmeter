@@ -50,11 +50,11 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Connection CONN;
+    private final Connection connection;
 
-    private final Session SESSION;
+    private final Session session;
 
-    private final MessageConsumer SUBSCRIBER;
+    private final MessageConsumer subscriber;
 
     /*
      * We use a LinkedBlockingQueue (rather than a ConcurrentLinkedQueue) because it has a
@@ -157,20 +157,20 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
         try{
             Context ctx = InitialContextFactory.getContext(useProps, 
                     initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
-            CONN = Utils.getConnection(ctx, connfactory);
+            connection = Utils.getConnection(ctx, connfactory);
             if(!isEmpty(clientId)) {
-                CONN.setClientID(clientId);
+                connection.setClientID(clientId);
             }
-            SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Destination dest = Utils.lookupDestination(ctx, destinationName);
-            SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId, jmsSelector);
+            subscriber = createSubscriber(session, dest, durableSubscriptionId, jmsSelector);
             if(useMessageListener) {
                 if (queueSize <=0) {
                     queue = new LinkedBlockingQueue<Message>();
                 } else {
                     queue = new LinkedBlockingQueue<Message>(queueSize);            
                 }
-                SUBSCRIBER.setMessageListener(this);
+                subscriber.setMessageListener(this);
             } else {
                 queue = null;
             }
@@ -221,7 +221,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public void start() throws JMSException {
         log.debug("start()");
-        CONN.start();
+        connection.start();
     }
 
     /**
@@ -230,7 +230,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public void stop() throws JMSException {
         log.debug("stop()");
-        CONN.stop();
+        connection.stop();
     }
 
     /**
@@ -257,9 +257,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             return message;
         }
         if (timeout < 10) { // Allow for short/negative times
-            message = SUBSCRIBER.receiveNoWait();                
+            message = subscriber.receiveNoWait();                
         } else {
-            message = SUBSCRIBER.receive(timeout);
+            message = subscriber.receive(timeout);
         }
         return message;
     }
@@ -270,15 +270,15 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     public void close() { // called from threadFinished() thread
         log.debug("close()");
         try {
-            if(CONN != null) {
-                CONN.stop();
+            if(connection != null) {
+                connection.stop();
             }
         } catch (JMSException e) {
             log.error(e.getMessage());
         }
-        Utils.close(SUBSCRIBER, log);
-        Utils.close(SESSION, log);
-        Utils.close(CONN, log);
+        Utils.close(subscriber, log);
+        Utils.close(session, log);
+        Utils.close(connection, log);
     }
 
 
