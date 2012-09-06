@@ -28,6 +28,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Provides a longSum function that adds two or more long values.
@@ -35,6 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 2.3.2
  */
 public class LongSum extends AbstractFunction {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final List<String> desc = new LinkedList<String>();
 
@@ -68,9 +71,19 @@ public class LongSum extends AbstractFunction {
             sum += Long.parseLong(((CompoundVariable) values[i]).execute());
         }
 
-        if(StringUtils.isNumeric(varName)) {
-            sum += Long.parseLong(varName);
-            varName = null; // there is no variable name
+        try {
+            // Has chances to be a var
+            if(StringUtils.isNumeric(varName)) {
+                sum += Long.parseLong(varName);
+                varName = null; // there is no variable name
+            }
+        } catch(NumberFormatException ignored) {
+            // Should this be a warning ?
+            if(log.isDebugEnabled()) {
+                if(StringUtils.isNumeric(varName)) {
+                    log.debug("Exception parsing "+varName + " as long, value will be considered a variable name and not included in sum");
+                }
+            }
         }
 
         String totalString = Long.toString(sum);
