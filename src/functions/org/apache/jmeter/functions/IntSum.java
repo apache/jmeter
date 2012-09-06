@@ -28,6 +28,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Provides an intSum function that adds two or more integer values.
@@ -36,7 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 1.8.1
  */
 public class IntSum extends AbstractFunction {
-
+    private static final Logger log = LoggingManager.getLoggerForClass();
     private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__intSum"; //$NON-NLS-1$
@@ -69,9 +71,19 @@ public class IntSum extends AbstractFunction {
             sum += Integer.parseInt(((CompoundVariable) values[i]).execute());
         }
 
-        if(StringUtils.isNumeric(varName)) {
-            sum += Integer.parseInt(varName);        
-            varName = null; // there is no variable name
+        try {
+            // Has chances to be a var
+            if(StringUtils.isNumeric(varName)) {
+                sum += Integer.parseInt(varName);        
+                varName = null; // there is no variable name
+            }
+        } catch(NumberFormatException ignored) {
+            // TODO Should this be a warning ?
+            if(log.isDebugEnabled()) {
+                if(StringUtils.isNumeric(varName)) {
+                    log.debug("Exception parsing "+varName + " as int, value will be considered a variable name and not included in sum");
+                }
+            }
         }
 
         String totalString = Integer.toString(sum);
