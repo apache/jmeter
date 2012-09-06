@@ -63,7 +63,10 @@ public class AxisGraph extends JPanel {
     private static final int ELLIPSIS_LEN = ELLIPSIS.length();
 
     protected double[][] data = null;
-    protected String title, xAxisTitle, yAxisTitle, yAxisLabel;
+    protected String title;
+    protected String xAxisTitle;
+    protected String yAxisTitle;
+    protected String yAxisLabel;
     protected int maxLength;
     protected String[] xAxisLabels;
     protected int width, height;
@@ -303,10 +306,10 @@ public class AxisGraph extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         if (data != null && this.title != null && this.xAxisLabels != null &&
-                this.xAxisTitle != null && this.yAxisLabel != null &&
+                this.yAxisLabel != null &&
                 this.yAxisTitle != null) {
-            drawSample(this.title, this.maxLength, this.xAxisLabels,
-                    this.xAxisTitle, this.yAxisTitle, this.legendLabels,
+            drawSample(this.title, this.maxLength, this.xAxisLabels, 
+                    this.yAxisTitle, this.legendLabels,
                     this.data, this.width, this.height, this.color,
                     this.legendFont, graphics);
         }
@@ -332,8 +335,10 @@ public class AxisGraph extends JPanel {
         return input;
     }
 
-    private void drawSample(String _title, int _maxLength, String[] _xAxisLabels, String _xAxisTitle,
-            String _yAxisTitle, String[] _legendLabels, double[][] _data, int _width, int _height, Color[] _color, Font font, Graphics g) {
+    private void drawSample(String _title, int _maxLength, String[] _xAxisLabels,
+            String _yAxisTitle, String[] _legendLabels, double[][] _data,
+            int _width, int _height, Color[] _color,
+            Font legendFont, Graphics g) {
         double max = maxYAxisScale > 0 ? maxYAxisScale : findMax(_data); // define max scale y axis
         try {
             /** These controls are already done in StatGraphVisualizer
