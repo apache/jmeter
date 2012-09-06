@@ -143,10 +143,17 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         String start = "";
         if (values.length >= PARAM_START) {
             start = ((CompoundVariable) values[PARAM_START - 1]).execute();
-            if(StringUtils.isNumeric(start)) {
+            try {
+                // Low chances to be non numeric, we parse
                 myStart = Integer.parseInt(start);
-            } else {
+            } catch(NumberFormatException e) {
                 myStart = COUNT_UNUSED;// Don't process invalid numbers
+                // TODO Should this be a warning ?
+                if(log.isDebugEnabled()) {
+                    if(StringUtils.isNumeric(start)) {
+                        log.debug("Exception parsing "+start + " as int, value will not be considered as Start Number sequence");
+                    }
+                }
             }
         }
         // Have we used myCurrent yet?
@@ -157,11 +164,17 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
         if (values.length >= PARAM_END) {
             String tmp = ((CompoundVariable) values[PARAM_END - 1]).execute();
-            if(StringUtils.isNumeric(tmp)) {
+            try {
+                // Low chances to be non numeric, we parse
                 myEnd = Integer.parseInt(tmp);
-            } else {
-                myEnd = COUNT_UNUSED;// Don't process invalid numbers
-                                    // (including "")
+            } catch(NumberFormatException e) {
+                myEnd = COUNT_UNUSED;// Don't process invalid numbers (including "")
+                // TODO Should this be a warning ?
+                if(log.isDebugEnabled()) {
+                    if(StringUtils.isNumeric(tmp)) {
+                        log.debug("Exception parsing "+tmp + " as int, value will not be considered as End Number sequence");
+                    }
+                }
             }
         }
 
