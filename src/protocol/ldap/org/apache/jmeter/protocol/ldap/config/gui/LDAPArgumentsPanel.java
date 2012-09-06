@@ -67,9 +67,6 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     // needs to be accessible from test code
     transient ObjectTableModel tableModel; // Only contains LDAPArgument entries
 
-    /** A button for adding new arguments to the table. */
-    private JButton add;
-
     /** A button for removing arguments from the table. */
     private JButton delete;
 
@@ -306,14 +303,14 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * Functor("setAlwaysEncoded"), new Functor("setUseEquals") }, new Class[] {
      * String.class, String.class, Boolean.class, Boolean.class }); }
      */
-    /**
-     * Resize the table columns to appropriate widths.
-     *
-     * @param _table
-     *            the table to resize columns for
-     */
-    private void sizeColumns(JTable _table) {
-    }
+//    /**
+//     * Resize the table columns to appropriate widths.
+//     *
+//     * @param _table
+//     *            the table to resize columns for
+//     */
+//    private void sizeColumns(JTable _table) {
+//    }
 
     /**
      * Create the main GUI panel which contains the argument table.
@@ -345,7 +342,8 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * @return a GUI panel containing the buttons
      */
     private JPanel makeButtonPanel() {
-        add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
+        /** A button for adding new arguments to the table. */
+        JButton add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
         add.setActionCommand(ADD);
         add.setEnabled(true);
 
@@ -376,6 +374,6 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
         add(makeButtonPanel(), BorderLayout.SOUTH);
 
         table.revalidate();
-        sizeColumns(table);
+        //sizeColumns(table);
     }
 }
