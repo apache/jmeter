@@ -18,7 +18,6 @@
 package org.apache.jmeter.engine.util;
 
 import org.apache.jmeter.threads.TestCompiler;
-import org.apache.jmeter.samplers.Sampler;
 
 /**
  * Implement this method-less interface to indicate that this ConfigElement should not be merged. 
