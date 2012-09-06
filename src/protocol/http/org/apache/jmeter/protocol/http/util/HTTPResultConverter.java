@@ -97,7 +97,7 @@ public class HTTPResultConverter extends SampleResultConverter {
             reader.moveDown();
             Object subItem = readItem(reader, context, res);
             if (!retrieveItem(reader, context, res, subItem)) {
-                retrieveHTTPItem(reader, context, res, subItem);
+                retrieveHTTPItem(reader, res, subItem);
             }
             reader.moveUp();
         }
@@ -111,18 +111,21 @@ public class HTTPResultConverter extends SampleResultConverter {
         return res;
     }
 
-    private void retrieveHTTPItem(HierarchicalStreamReader reader, UnmarshallingContext context,
+    private void retrieveHTTPItem(HierarchicalStreamReader reader, 
             HTTPSampleResult res, Object subItem) {
         if (subItem instanceof URL) {
             res.setURL((URL) subItem);
-        } else if (reader.getNodeName().equals(TAG_COOKIES)) {
-            res.setCookies((String) subItem);
-        } else if (reader.getNodeName().equals(TAG_METHOD)) {
-            res.setHTTPMethod((String) subItem);
-        } else if (reader.getNodeName().equals(TAG_QUERY_STRING)) {
-            res.setQueryString((String) subItem);
-        } else if (reader.getNodeName().equals(TAG_REDIRECT_LOCATION)) {
-            res.setRedirectLocation((String) subItem);
+        } else {
+            String nodeName = reader.getNodeName();
+            if (nodeName.equals(TAG_COOKIES)) {
+                res.setCookies((String) subItem);
+            } else if (nodeName.equals(TAG_METHOD)) {
+                res.setHTTPMethod((String) subItem);
+            } else if (nodeName.equals(TAG_QUERY_STRING)) {
+                res.setQueryString((String) subItem);
+            } else if (nodeName.equals(TAG_REDIRECT_LOCATION)) {
+                res.setRedirectLocation((String) subItem);
+            }
         }
     }
 }
