@@ -131,6 +131,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <li><bugzilla>53501</bugzilla> - Synchronization timer blocks test end.</li>
 <li><bugzilla>53750</bugzilla> - TestCompiler saves unnecessary entries in pairing collection</li>
 <li><bugzilla>52266</bugzilla> - Code:Inconsistent synchronization</li>
+<li><bugzilla>53841</bugzilla> - CSVSaveService reads file using JVM default file encoding instead of using the one configured in saveservice.properties</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

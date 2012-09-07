@@ -20,9 +20,10 @@ package org.apache.jmeter.save;
 
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -128,7 +129,8 @@ public final class CSVSaveService {
         final boolean errorsOnly = resultCollector.isErrorLogging();
         final boolean successOnly = resultCollector.isSuccessOnlyLogging();
         try {
-            dataReader = new BufferedReader(new FileReader(filename)); // TODO Charset ?
+            dataReader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(filename), SaveService.getFileEncoding("UTF-8"))); 
             dataReader.mark(400);// Enough to read the header column names
             // Get the first line, and see if it is the header
             String line = dataReader.readLine();
