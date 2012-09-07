@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -73,17 +72,11 @@ public class IntSum extends AbstractFunction {
 
         try {
             // Has chances to be a var
-            if(StringUtils.isNumeric(varName)) {
-                sum += Integer.parseInt(varName);        
-                varName = null; // there is no variable name
-            }
+            sum += Integer.parseInt(varName);        
+            varName = null; // there is no variable name
         } catch(NumberFormatException ignored) {
-            // TODO Should this be a warning ?
-            if(log.isDebugEnabled()) {
-                if(StringUtils.isNumeric(varName)) {
-                    log.debug("Exception parsing "+varName + " as int, value will be considered a variable name and not included in sum");
-                }
-            }
+            // varName keeps its value and sum has not taken 
+            // into account non numeric or overflowing number
         }
 
         String totalString = Integer.toString(sum);

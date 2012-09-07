@@ -927,6 +927,7 @@ public class PackageTest extends JMeterTestCase {
         checkSumNoVar(is,"3", new String[]{"1","2"});
         checkSum(is,"1", new String[]{"-1","1","1","1","-2","1"});
         checkSumNoVar(is,"1", new String[]{"-1","1","1","1","-2","1"});
+        checkSumNoVar(is,"-1", new String[]{"-1","1","1","1","-2","-1"});
         checkSum(is,maxIntVal, new String[]{maxIntVal,"0"});
         checkSum(is,minIntVal, new String[]{maxIntVal,"1"}); // wrap-round check
         }
@@ -937,6 +938,7 @@ public class PackageTest extends JMeterTestCase {
         checkSum(ls,"1", new String[]{"-1","1","1","1","-1","0"});
         checkSumNoVar(ls,"3", new String[]{"1","2"});
         checkSumNoVar(ls,"1", new String[]{"-1","1","1","1","-1","0"});
+        checkSumNoVar(ls,"0", new String[]{"-1","1","1","1","-1","-1"});
         String maxIntVal_1 = Long.toString(1+(long)Integer.MAX_VALUE);
         checkSum(ls,maxIntVal, new String[]{maxIntVal,"0"});
         checkSum(ls,maxIntVal_1, new String[]{maxIntVal,"1"}); // no wrap-round check
