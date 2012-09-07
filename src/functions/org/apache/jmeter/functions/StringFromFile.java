@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -148,12 +147,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
                 myStart = Integer.parseInt(start);
             } catch(NumberFormatException e) {
                 myStart = COUNT_UNUSED;// Don't process invalid numbers
-                // TODO Should this be a warning ?
-                if(log.isDebugEnabled()) {
-                    if(StringUtils.isNumeric(start)) {
-                        log.debug("Exception parsing "+start + " as int, value will not be considered as Start Number sequence");
-                    }
-                }
+                log.warn("Exception parsing "+start + " as int, value will not be considered as Start Number sequence");
             }
         }
         // Have we used myCurrent yet?
@@ -169,12 +163,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
                 myEnd = Integer.parseInt(tmp);
             } catch(NumberFormatException e) {
                 myEnd = COUNT_UNUSED;// Don't process invalid numbers (including "")
-                // TODO Should this be a warning ?
-                if(log.isDebugEnabled()) {
-                    if(StringUtils.isNumeric(tmp)) {
-                        log.debug("Exception parsing "+tmp + " as int, value will not be considered as End Number sequence");
-                    }
-                }
+                log.warn("Exception parsing "+tmp + " as int, value will not be considered as End Number sequence");
             }
         }
 
