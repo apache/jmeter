@@ -34,6 +34,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -75,6 +76,9 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
         Connection conn = null;
 
         try {
+            if(JOrphanUtils.isBlank(getDataSource())) {
+                throw new IllegalArgumentException("Variable Name must not be null in "+getName());
+            }
 
             try {
                 conn = DataSourceElement.getConnection(getDataSource());
