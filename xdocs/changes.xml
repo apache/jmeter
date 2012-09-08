@@ -49,6 +49,14 @@ For example a Test Action sampler with 0 wait time (which doesn't generate a sam
 or a Debug Sampler with all fields set to False (to reduce the sample size).
 </p>
 
+<p>
+Changing language can break part of the configuration of the following elements (see <bugzilla>53679</bugzilla>):
+<ul>
+    <li>CSV Data Set Config (sharing mode will be lost)</li>
+    <li>Constant Throughput Timer (Calculate throughput based on will be lost)</li>
+</ul>
+</p>
+
 <!-- =================== Incompatible changes =================== -->
 
 <h2>Incompatible changes</h2>
