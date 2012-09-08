@@ -3526,7 +3526,7 @@ instead. (see figures 12 and 13).</p>
 </component>
 
 <component name="JDBC Connection Configuration" index="&sect-num;.4.8" 
-                 width="369" height="443" screenshot="jdbc-config/jdbc-conn-config.png">
+                 width="474" height="458" screenshot="jdbc-config/jdbc-conn-config.png">
 	<description>Creates a database connection (used by <complink name="JDBC Request"/>Sampler)
 	 from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
      Otherwise each thread gets its own connection.
