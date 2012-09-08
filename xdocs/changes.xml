@@ -149,6 +149,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <li><bugzilla>53318</bugzilla> - Add Embedded URL Filter to HTTP Request Defaults Control </li>
 <li><bugzilla>53782</bugzilla> - Enhance JavaSampler handling of JavaSamplerClient cleanup to use less memory</li>
 <li><bugzilla>53168</bugzilla> - OS Process - allow specification of stdout/stderr/stdin</li>
+<li><bugzilla>53844</bugzilla> - JDBC related elements should check class of Variable Name supposed to contain JDBC Connection Configuration to avoid ClassCastException </li>
 </ul>
 
 <h3>Controllers</h3>

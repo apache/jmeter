@@ -38,6 +38,7 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class DataSourceElement extends AbstractTestElement
@@ -91,7 +92,9 @@ public class DataSourceElement extends AbstractTestElement
         TestBeanHelper.prepare(this);
         JMeterVariables variables = getThreadContext().getVariables();
         String poolName = getDataSource();
-        if (variables.getObject(poolName) != null) {
+        if(JOrphanUtils.isBlank(poolName)) {
+            throw new IllegalArgumentException("Variable Name must not be empty for element:"+getName());
+        } else if (variables.getObject(poolName) != null) {
             log.error("JDBC data source already defined for: "+poolName);
         } else {
             String maxPool = getPoolMax();
@@ -129,12 +132,21 @@ public class DataSourceElement extends AbstractTestElement
      * - allows the pool storage mechanism to be changed if necessary
      */
     public static Connection getConnection(String poolName) throws SQLException{
-        DataSourceComponent pool = (DataSourceComponent)
-            JMeterContextService.getContext().getVariables().getObject(poolName);
-        if (pool == null) {
-            throw new SQLException("No pool found named: '" + poolName + "'");
+        Object poolObject = 
+                JMeterContextService.getContext().getVariables().getObject(poolName);
+        if (poolObject == null) {
+            throw new SQLException("No pool found named: '" + poolName + "', ensure Variable Name matches Variable Name of JDBC Connection Configuration");
+        } else {
+            if(poolObject instanceof DataSourceComponent) {
+                DataSourceComponent pool = (DataSourceComponent) poolObject;
+                return pool.getConnection();    
+            } else {
+                String errorMsg = "Found object stored under variable:'"+poolName
+                        +"' with class:"+poolObject.getClass().getName()+" and value: '"+poolObject+" but it's not a DataSourceComponent, check you're not already using this name as another variable";
+                log.error(errorMsg);
+                throw new SQLException(errorMsg); 
+            }
         }
-        return pool.getConnection();
     }
 
     /*

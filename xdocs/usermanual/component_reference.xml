@@ -546,6 +546,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <complink name="JDBC Connection Configuration"/>
 </links>
 <note>Versions of JMeter after 2.3.2 use UTF-8 as the character encoding. Previously the platform default was used.</note>
+<note>Ensure Variable Name is unique accross Test Plan.</note>
 </component>
 
 <component name="Java Request" index="&sect-num;.1.4"  width="563" height="347" screenshot="java_request.png">
@@ -4704,6 +4705,7 @@ For details, see <complink name="BSF PreProcessor"/>.
 <p>
 The JDBC PreProcessor enables you to run some SQL statement just before a sample runs.
 This can be useful if your JDBC Sample requires some data to be in DataBase and you cannot compute this in a setup Thread group.
+For details, see <complink name="JDBC Request"/>.
 </p>
 <p>
 See the following Test plan:
