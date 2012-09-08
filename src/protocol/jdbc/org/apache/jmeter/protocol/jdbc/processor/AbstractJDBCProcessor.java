@@ -25,10 +25,11 @@ import java.sql.SQLException;
 import org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement;
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * As pre- and post-processors essentially do the same this class provides the implmentation.
+ * As pre- and post-processors essentially do the same this class provides the implementation.
  */
 public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
     
@@ -41,6 +42,9 @@ public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
      */
     protected void process() {
         Connection conn = null;
+        if(JOrphanUtils.isBlank(getDataSource())) {
+            throw new IllegalArgumentException("Variable Name must not be null in "+getName());
+        }
         try {
             conn = DataSourceElement.getConnection(getDataSource());
             execute(conn);
