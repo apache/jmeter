@@ -18,10 +18,12 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
@@ -42,6 +44,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.soap.Envelope;
 import org.apache.soap.SOAPException;
@@ -416,12 +419,12 @@ public class WebServiceSampler extends HTTPSamplerBase  {
                 TextFile tfile = new TextFile(file);
                 fileContents = tfile.getText();
             }
-            FileInputStream fileInputStream = null;
+            InputStream fileInputStream = null;
             try {
-                fileInputStream = new FileInputStream(file);
+                fileInputStream = new BufferedInputStream(new FileInputStream(file));
                 doc = XDB.parse(fileInputStream);
             } finally {
-                IOUtils.closeQuietly(fileInputStream);
+                JOrphanUtils.closeQuietly(fileInputStream);
             }
         } else {// must be a "here" document
             fileContents = getXmlData();

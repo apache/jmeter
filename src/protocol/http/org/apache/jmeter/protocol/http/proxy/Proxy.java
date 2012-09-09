@@ -406,7 +406,7 @@ public class Proxy extends Thread {
         final String certPath = certFile.getAbsolutePath();
         if (certFile.exists() && certFile.canRead()) {
             try {
-                in = new FileInputStream(certFile);
+                in = new BufferedInputStream(new FileInputStream(certFile));
                 log.info("Opened Keystore file: "+certPath);
             } catch (FileNotFoundException e) {
                 log.error("No server cert file found: "+certPath, e);
