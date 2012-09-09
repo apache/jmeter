@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.smtp.sampler.protocol;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -174,7 +175,7 @@ public class SendMailCommand {
         Message message;
 
         if (sendEmlMessage) {
-            message = new MimeMessage(session, new FileInputStream(emlMessage));
+            message = new MimeMessage(session, new BufferedInputStream(new FileInputStream(emlMessage)));
         } else {
             message = new MimeMessage(session);
             // handle body and attachments
@@ -186,7 +187,7 @@ public class SendMailCommand {
                     File first = attachments.get(0);
                     InputStream is = null;
                     try {
-                        is = new FileInputStream(first);
+                        is = new BufferedInputStream(new FileInputStream(first));
                         message.setText(IOUtils.toString(is));
                     } finally {
                         IOUtils.closeQuietly(is);

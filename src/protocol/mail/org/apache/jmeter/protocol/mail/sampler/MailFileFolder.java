@@ -18,10 +18,12 @@
 
 package org.apache.jmeter.protocol.mail.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 
 import javax.mail.Flags;
 import javax.mail.Folder;
@@ -112,7 +114,7 @@ public class MailFileFolder extends Folder {
             f = new File(folderPath,String.format(FILENAME_FORMAT, Integer.valueOf(index)));
         }
         try {
-            FileInputStream fis = new FileInputStream(f);
+            InputStream fis = new BufferedInputStream(new FileInputStream(f));
             try {
                 Message m = new MailFileMessage(this, fis, index);
                 return m;
