@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -180,7 +181,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
                 public void writeRequest(OutputStream out) throws IOException {
                     InputStream in = null;
                     try{
-                        in = new FileInputStream(xmlFile);
+                        in = new BufferedInputStream(new FileInputStream(xmlFile));
                         IOUtils.copy(in, out);
                         out.flush();
                     } finally {
