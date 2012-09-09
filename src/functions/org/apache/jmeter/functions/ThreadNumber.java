@@ -39,7 +39,8 @@ public class ThreadNumber extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-        return Thread.currentThread().getName().substring(Thread.currentThread().getName().lastIndexOf("-") + 1); //$NON-NLS-1$
+        String threadName = Thread.currentThread().getName();
+        return threadName.substring(threadName.lastIndexOf('-') + 1);
     }
 
     /** {@inheritDoc} */
