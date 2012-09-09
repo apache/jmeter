@@ -16,6 +16,7 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,6 +40,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -131,12 +133,15 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     public void threadFinished() {
         if(channel != null) {
             try {
-            channel.close();
+                channel.close();
             } catch(IOException iex) {
             log.debug("Error closing channel",iex);
             }
         }
         channel = null;
+        if(body != null) {
+            JOrphanUtils.closeQuietly(body);
+        }
         body = null;
         stringBody = null;
     }
@@ -260,7 +265,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 String fn = fa.getName();
                 File input = new File(fn);
                 cl = (int)input.length();
-                body = new FileInputStream(input);
+                body = new BufferedInputStream(new FileInputStream(input));
                 setString(HTTPConstants.HEADER_CONTENT_DISPOSITION);
                 setString("form-data; name=\""+encode(fa.getParamName())+
                       "\"; filename=\"" + encode(fn) +"\""); //$NON-NLS-1$ //$NON-NLS-2$
