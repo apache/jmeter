@@ -97,6 +97,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <ul>
 <li><bugzilla>53521</bugzilla> - Cache Manager should cache content with Cache-control=private</li>
 <li><bugzilla>53522</bugzilla> - Cache Manager should not store at all response with header "no-cache" and store other types of Cache-Control having max-age value</li>
+<li><bugzilla>53838</bugzilla> - Pressing "Stop" does not interrupt the TCP sampler</li>
 </ul>
 
 <h3>Other Samplers</h3>
