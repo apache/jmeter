@@ -18,8 +18,10 @@
 
 package org.apache.jmeter.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.security.KeyStore;
 import java.security.Provider;
@@ -115,12 +117,12 @@ public abstract class SSLManager {
                 this.keyStore = null;
                 throw new RuntimeException("Could not create keystore: "+e.getMessage(), e);
             }
-            FileInputStream fileInputStream = null;
+            InputStream fileInputStream = null;
             try {
                 File initStore = new File(fileName);
 
                 if (fileName.length() >0 && initStore.exists()) {
-                    fileInputStream = new FileInputStream(initStore);
+                    fileInputStream = new BufferedInputStream(new FileInputStream(initStore));
                     this.keyStore.load(fileInputStream, getPassword());
                     if (log.isInfoEnabled()) {
                         log.info("Total of " + keyStore.getAliasCount() + " aliases loaded OK from keystore");
@@ -206,12 +208,12 @@ public abstract class SSLManager {
                 throw new RuntimeException("Problem creating truststore: "+e.getMessage(), e);
             }
 
-            FileInputStream fileInputStream = null;
+            InputStream fileInputStream = null;
             try {
                 File initStore = new File(fileName);
 
                 if (initStore.exists()) {
-                    fileInputStream = new FileInputStream(initStore);
+                    fileInputStream = new BufferedInputStream(new FileInputStream(initStore));
                     this.trustStore.load(fileInputStream, null);
                     log.info("Truststore loaded OK from file");
                 } else {
