@@ -18,11 +18,13 @@
 
 package org.apache.jmeter.save.converters;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
@@ -36,12 +38,12 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
  * XStream Converter for the SampleResult class
@@ -391,10 +393,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 
     protected void readFile(String resultFileName, SampleResult res) {
         File in = null;
-        FileInputStream fis = null;
+        InputStream fis = null;
         try {
             in = new File(resultFileName);
-            fis = new FileInputStream(in);
+            fis = new BufferedInputStream(new FileInputStream(in));
             ByteArrayOutputStream outstream = new ByteArrayOutputStream(res.getBytes());
             byte[] buffer = new byte[4096];
             int len;
