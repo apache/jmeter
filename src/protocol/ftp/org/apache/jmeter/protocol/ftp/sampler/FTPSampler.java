@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.ftp.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -211,7 +212,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                         } else {
                             File infile = new File(local);
                             res.setBytes((int)infile.length());
-                            input = new FileInputStream(infile);
+                            input = new BufferedInputStream(new FileInputStream(infile));
                         }
                         ftpOK = ftp.storeFile(remote, input);
                     } else {
