@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -295,7 +296,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
       Serializable readObject = null;
       InputStream inputStream = null;
       try {
-          inputStream = new FileInputStream(path);
+          inputStream = new BufferedInputStream(new FileInputStream(path));
           XStream xstream = new XStream();
         readObject = (Serializable) xstream.fromXML(inputStream, readObject);
       } catch (Exception e) {
