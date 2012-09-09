@@ -18,7 +18,9 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -74,7 +76,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
         log.debug(label + " " + fileName);
         SampleResult res = new SampleResult();
         res.setSampleLabel(label);
-        FileInputStream is = null;
+        InputStream is = null;
         BSFEngine bsfEngine = null;
         // There's little point saving the manager between invocations
         // as we need to reset most of the beans anyway
@@ -104,7 +106,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
             Object bsfOut = null;
             if (fileName.length()>0) {
                 res.setSamplerData("File: "+fileName);
-                is = new FileInputStream(fileName);
+                is = new BufferedInputStream(new FileInputStream(fileName));
                 bsfOut = bsfEngine.eval(fileName, 0, 0, IOUtils.toString(is));
             } else {
                 res.setSamplerData(request);
