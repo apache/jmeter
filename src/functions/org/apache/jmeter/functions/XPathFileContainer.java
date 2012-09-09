@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.functions;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -75,10 +76,11 @@ public class XPathFileContainer {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-            fis = new FileInputStream(fileName);
+            fis = new BufferedInputStream(new FileInputStream(fileName));
             nl = XPathUtil.selectNodeList(builder.parse(fis), xpath);
-            log.debug("found " + nl.getLength());
-
+            if(log.isDebugEnabled()) {
+                log.debug("found " + nl.getLength());
+            }
         } catch (FileNotFoundException e) {
             log.warn(e.toString());
             throw e;
