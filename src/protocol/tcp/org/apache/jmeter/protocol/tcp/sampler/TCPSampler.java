@@ -40,6 +40,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
@@ -52,8 +53,8 @@ import org.apache.log.Logger;
  * A sampler which understands Tcp requests.
  *
  */
-public class TCPSampler extends AbstractSampler implements ThreadListener {
-    private static final long serialVersionUID = 233L;
+public class TCPSampler extends AbstractSampler implements ThreadListener, Interruptible {
+    private static final long serialVersionUID = 280L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -140,6 +141,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     private transient TCPClient protocolHandler;
     
     private transient boolean firstSample; // Are we processing the first sample?
+
+    private transient volatile Socket currentSocket; // used for handling interrupt
 
     public TCPSampler() {
         log.debug("Created " + this); //$NON-NLS-1$
@@ -351,6 +354,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 res.setResponseCode("500"); //$NON-NLS-1$
                 res.setResponseMessage("Protocol handler not found");
             } else {
+                currentSocket = sock;
                 InputStream is = sock.getInputStream();
                 OutputStream os = sock.getOutputStream();
                 String req = getRequestData();
@@ -369,6 +373,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
             isSuccessful=setupSampleResult(res, "", ex, protocolHandler.getCharset());
             closeSocket(socketKey);
         } finally {
+            currentSocket = null;
             // Calculate response time
             res.sampleEnd();
 
@@ -507,5 +512,18 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+
+    public boolean interrupt() {
+        Socket sock = currentSocket; // fetch in case gets nulled later
+        if (sock != null) {
+            try {
+                sock.close();
+            } catch (IOException e) {
+                // ignored
+            }
+            return true;
+        }
+        return false;
     }
 }
