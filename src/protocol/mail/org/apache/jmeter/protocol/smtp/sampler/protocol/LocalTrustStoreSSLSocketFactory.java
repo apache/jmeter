@@ -18,9 +18,11 @@
 
 package org.apache.jmeter.protocol.smtp.sampler.protocol;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyStore;
@@ -44,9 +46,9 @@ public class LocalTrustStoreSSLSocketFactory extends SSLSocketFactory  {
         SSLContext sslcontext = null;
         try {
             KeyStore ks = KeyStore.getInstance("JKS"); // $NON-NLS-1$
-            FileInputStream stream = null;
+            InputStream stream = null;
             try {
-                stream = new FileInputStream(truststore);
+                stream = new BufferedInputStream(new FileInputStream(truststore));
                 ks.load(stream, null);
             } finally {
                 IOUtils.closeQuietly(stream);
