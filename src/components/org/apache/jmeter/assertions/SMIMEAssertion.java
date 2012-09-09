@@ -18,10 +18,12 @@
 
 package org.apache.jmeter.assertions;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.Security;
@@ -230,9 +232,9 @@ class SMIMEAssertion {
                         CertificateFactory cf = CertificateFactory
                                 .getInstance("X.509");
                         X509Certificate certFromFile;
-                        FileInputStream inStream = null;
+                        InputStream inStream = null;
                         try {
-                            inStream = new FileInputStream(testElement.getSignerCertFile());
+                            inStream = new BufferedInputStream(new FileInputStream(testElement.getSignerCertFile()));
                             certFromFile = (X509Certificate) cf.generateCertificate(inStream);
                         } finally {
                             IOUtils.closeQuietly(inStream);
