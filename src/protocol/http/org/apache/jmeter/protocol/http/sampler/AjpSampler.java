@@ -139,9 +139,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             }
         }
         channel = null;
-        if(body != null) {
-            JOrphanUtils.closeQuietly(body);
-        }
+        JOrphanUtils.closeQuietly(body);
         body = null;
         stringBody = null;
     }
