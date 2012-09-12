@@ -678,6 +678,7 @@ public class JMeter implements JMeterPlugin {
         if (sample_variables != null){
             remoteProps.put(SampleEvent.SAMPLE_VARIABLES, sample_variables);
         }
+        jmeterProps.put("jmeter.version", JMeterUtils.getJMeterVersion());
     }
 
     /*
