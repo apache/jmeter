@@ -175,7 +175,10 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private int maxStartTime = Integer.MIN_VALUE;
 
-    private final Map<String, RespTimeGraphLineBean> seriesNames = new HashMap<String, RespTimeGraphLineBean>();
+    /**
+     * We want to retain insertion order, so LinkedHashMap is necessary
+     */
+    private final Map<String, RespTimeGraphLineBean> seriesNames = new LinkedHashMap<String, RespTimeGraphLineBean>();
 
     /**
      * We want to retain insertion order, so LinkedHashMap is necessary
