@@ -57,6 +57,17 @@ Changing language can break part of the configuration of the following elements 
 </ul>
 </p>
 
+<p>
+Note that there is a bug in Java on some Linux systems that manifests
+itself as the following error when running the test cases or JMeter itself:
+<pre>
+ [java] WARNING: Couldn't flush user prefs:
+ java.util.prefs.BackingStoreException:
+ java.lang.IllegalArgumentException: Not supported: indent-number
+</pre>
+This does not affect JMeter operation.
+</p>
+
 <!-- =================== Incompatible changes =================== -->
 
 <h2>Incompatible changes</h2>
