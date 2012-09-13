@@ -997,14 +997,13 @@ public final class CSVSaveService {
      * <p>
      * Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
      * <p>
-     * N.B. a blank line is returned as a zero length array, whereas "" is
-     * returned as an empty string. This is inconsistent.
-     * 
+     * A blank line - or a quoted blank line - both return an array containing
+     * a single empty String.
      * @param infile
      *            input file - must support mark(1)
      * @param delim
      *            delimiter (e.g. comma)
-     * @return array of strings
+     * @return array of strings, will be empty if there is no data, i.e. if the input is at EOF.
      * @throws IOException
      *             also for unexpected quote characters
      */
