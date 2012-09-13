@@ -343,6 +343,51 @@ public class FileServer {
         throw new IOException("File never reserved: "+filename);
     }
 
+    /**
+     * Get the buffered reader; <b>must be called holding a lock on the file server</b>
+     * <p>
+     * Note: only recycles the file if at EOF initially, as does not make sense for
+     * entries to span file boundaries.
+     * <p>
+     * <b>N.B.</b> only intended for use by CSVDataSet as the API may change.
+     */
+    public BufferedReader getReader(String alias, boolean recycle, boolean firstLineIsNames) throws IOException {
+        FileEntry fileEntry = files.get(alias);
+        if (fileEntry != null) {
+            BufferedReader reader;
+            if (fileEntry.inputOutputObject == null) {
+                reader = createBufferedReader(fileEntry);
+                fileEntry.inputOutputObject = reader;
+                if (firstLineIsNames) {
+                    // read first line and forget
+                    reader.readLine();
+                }                
+            } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
+                throw new IOException("File " + alias + " already in use");
+            } else {
+                reader = (BufferedReader) fileEntry.inputOutputObject;
+                if (recycle) { // need to check if we are at EOF already
+                    reader.mark(1);
+                    int peek = reader.read();
+                    if (peek == -1) { // already at EOF
+                        reader.close();
+                        reader = createBufferedReader(fileEntry);
+                        fileEntry.inputOutputObject = reader;
+                        if (firstLineIsNames) {
+                            // read first line and forget
+                            reader.readLine();
+                        }                
+                    } else { // OK, we still have some data, restore it
+                        reader.reset();
+                    }
+                }
+            }
+            return reader;
+        } else {
+            throw new IOException("File never reserved: "+alias);
+        }
+    }
+
     private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
         FileInputStream fis = new FileInputStream(fileEntry.file);
         InputStreamReader isr = null;

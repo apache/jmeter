@@ -215,6 +215,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 <li><bugzilla>53673</bugzilla> - Add JMeter version in the jmx file</li>
 <li>Add support for HeapDump to the JMeter non-GUI and GUI client</li>
 <li><bugzilla>53862</bugzilla> - Would be nice to have the JMeter Version available as a property</li>
+<li><bugzilla>53806</bugzilla> - FileServer should provide direct access to the BufferedReader</li>
 </ul>
 
 <h2>Non-functional changes</h2>
