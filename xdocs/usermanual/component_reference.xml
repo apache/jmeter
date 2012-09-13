@@ -3141,6 +3141,9 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
 	Versions of JMeter after 2.3.4 support CSV files which have a header line defining the column names.
 	To enable this, leave the "Variable Names" field empty. The correct delimiter must be provided.
 	</p>
+    <p>
+    Versions of JMeter after 2.7 support CSV files with quoted data that includes new-lines.
+    </p>
 	<p>
 	By default, the file is only opened once, and each thread will use a different line from the file.
 	However the order in which lines are passed to threads depends on the order in which they execute,
