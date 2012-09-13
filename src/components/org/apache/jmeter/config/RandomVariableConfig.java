@@ -39,6 +39,11 @@ public class RandomVariableConfig extends ConfigTestElement
 
     private static final long serialVersionUID = 233L;
 
+    /*
+     *  N.B. this class is shared between threads (NoThreadClone) so all access to variables
+     *  needs to be protected by a lock (either sync. or volatile) to ensure safe publication.
+     */
+
     private String minimumValue;
 
     private String maximumValue;
