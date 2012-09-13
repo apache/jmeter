@@ -29,6 +29,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.JMeterStopThreadException;
 
 public class TestCVSDataSet extends JMeterTestCase {
 
@@ -164,6 +165,41 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("b1",threadVars.get("B"));
         assertEquals("c1",threadVars.get("C"));
         assertEquals("d1",threadVars.get("D|1"));
+    }
+    
+    // Test CSV file with a header line
+    public void testHeaderQuotes(){
+        CSVDataSet csv = new CSVDataSet();
+        csv.setFilename(findTestPath("testfiles/testquoted.csv"));
+        csv.setDelimiter("|");
+        csv.setQuotedData(true);
+        csv.setRecycle(false);
+        csv.setStopThread(true);
+        assertNull(csv.getVariableNames());
+        csv.iterationStart(null);
+        assertNull(threadVars.get("a"));
+        assertEquals("a1",threadVars.get("A"));
+        assertEquals("b1",threadVars.get("B"));
+        assertEquals("c1",threadVars.get("C"));
+        assertEquals("d1",threadVars.get("D|1"));
+        csv.iterationStart(null);
+        assertNull(threadVars.get("a"));
+        assertEquals("a2",threadVars.get("A"));
+        assertEquals("b2",threadVars.get("B"));
+        assertEquals("c2",threadVars.get("C"));
+        assertEquals("d2",threadVars.get("D|1"));
+        csv.iterationStart(null);
+        assertNull(threadVars.get("a"));
+        assertEquals("a3",threadVars.get("A"));
+        assertEquals("b3",threadVars.get("B"));
+        assertEquals("c3",threadVars.get("C"));
+        assertEquals("d3",threadVars.get("D|1"));
+        try {
+            csv.iterationStart(null);
+            fail("Expected JMeterStopThreadException");
+        } catch (JMeterStopThreadException expected) {
+            
+        }
     }
     
     private CSVDataSet initCSV(){

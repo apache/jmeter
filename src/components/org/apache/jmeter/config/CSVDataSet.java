@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.config;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -144,26 +145,24 @@ public class CSVDataSet extends ConfigTestElement
            
         // TODO: fetch this once as per vars above?
         JMeterVariables threadVars = context.getVariables();
-        String line = null;
+        String[] lineValues = {};
         try {
-            line = server.readLine(alias, getRecycle(), firstLineIsNames);
+            if (getQuotedData()) {
+                synchronized(server) {
+                    BufferedReader infile = server.getReader(alias, recycle, firstLineIsNames);
+                    lineValues = CSVSaveService.csvReadFile(infile, delim.charAt(0));
+                }
+            } else {
+                String line = server.readLine(alias, recycle, firstLineIsNames);
+                lineValues = JOrphanUtils.split(line, delim, false);
+            }
+            for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+                threadVars.put(vars[a], lineValues[a]);
+            }
         } catch (IOException e) { // treat the same as EOF
             log.error(e.toString());
         }
-        if (line!=null) {// i.e. not EOF
-            try {
-                String[] lineValues = getQuotedData() ?
-                        CSVSaveService.csvSplitString(line, delim.charAt(0))
-                        : JOrphanUtils.split(line, delim, false);
-                for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-                    threadVars.put(vars[a], lineValues[a]);
-                }
-            } catch (IOException e) { // Should only happen for quoting errors
-               log.error("Unexpected error splitting '"+line+"' on '"+delim.charAt(0)+"'");
-            }
-            // TODO - report unused columns?
-            // TODO - provide option to set unused variables ?
-        } else {
+        if (lineValues.length == 0) {// i.e. EOF
             if (getStopThread()) {
                 throw new JMeterStopThreadException("End of file detected");
             }
