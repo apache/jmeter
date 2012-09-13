@@ -94,18 +94,48 @@ public class TestCSVSaveService extends JMeterTestCase {
     }
     
     public void testSplitMultiLine() throws Exception  {
-        String line="a,,\"c\nd\",e\n,,f,g,";
+        String line="a,,\"c\nd\",e\n,,f,g,\n\n";
         String[] out;
         BufferedReader br = new BufferedReader(new StringReader(line));
         out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{"a","","c\nd","e"}, out);
         out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{"","","f","g",""}, out);
+        out = CSVSaveService.csvReadFile(br, ',');
+        checkStrings(new String[]{""}, out); // Blank line
         assertEquals("Expected to be at EOF",-1,br.read());
         // Empty strings at EOF
         out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{}, out);
         out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{}, out);
+    }
+
+    public void testBlankLine() throws Exception  {
+        BufferedReader br = new BufferedReader(new StringReader("\n"));
+        String[] out = CSVSaveService.csvReadFile(br, ',');
+        checkStrings(new String[]{""}, out);
+        assertEquals("Expected to be at EOF",-1,br.read());
+    }
+
+    public void testBlankLineQuoted() throws Exception  {
+        BufferedReader br = new BufferedReader(new StringReader("\"\"\n"));
+        String[] out = CSVSaveService.csvReadFile(br, ',');
+        checkStrings(new String[]{""}, out);
+        assertEquals("Expected to be at EOF",-1,br.read());
+    }
+
+    public void testEmptyFile() throws Exception  {
+        BufferedReader br = new BufferedReader(new StringReader(""));
+        String[] out = CSVSaveService.csvReadFile(br, ',');
+        checkStrings(new String[]{}, out);
+        assertEquals("Expected to be at EOF",-1,br.read());
+    }
+
+    public void testShortFile() throws Exception  {
+        BufferedReader br = new BufferedReader(new StringReader("a"));
+        String[] out = CSVSaveService.csvReadFile(br, ',');
+        checkStrings(new String[]{"a"}, out);
+        assertEquals("Expected to be at EOF",-1,br.read());
     }
 }
