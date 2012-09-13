@@ -63,7 +63,7 @@ public final class JOrphanUtils {
      * @param truncate
      *            Should adjacent and leading/trailing splitChars be removed?
      *
-     * @return Array of all the tokens.
+     * @return Array of all the tokens; empty if the input string is null or the splitChar is null
      *
      * @see #split(String, String, String)
      *
