@@ -32,8 +32,6 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,8 +193,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final List<Color> listColors = Colors.getColors();
 
-    // Use implementation instead of Interface as we need it to be cloneable
-    private final HashMap<Long, Long> internalMap = new HashMap<Long, Long>(); // internal list of all results
+    private final List<RespTimeGraphDataBean> internalList = new ArrayList<RespTimeGraphDataBean>(); // internal list of all results
 
     public RespTimeGraphVisualizer() {
         init();
@@ -206,7 +203,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         final String sampleLabel = sampleResult.getSampleLabel();
         // Make a internal list of all results to allow reload data with filter or interval
         synchronized (lockInterval) {
-            internalMap.put(Long.valueOf(sampleResult.getStartTime()), Long.valueOf(sampleResult.getTime()));
+            internalList.add(new RespTimeGraphDataBean(sampleResult.getStartTime(), sampleResult.getTime(), sampleLabel));
         }
 
         // Sampler selection
@@ -355,7 +352,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     public void clearData() {
         synchronized (lock) {
-            internalMap.clear();
+            internalList.clear();
             seriesNames.clear();
             pList.clear();
             minStartTime = Integer.MAX_VALUE;
@@ -476,15 +473,15 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 filePanel.actionPerformed(event);
             } else {
                 // Reload data form internal list of results
-                if (internalMap.size() >= 2) {
+                if (internalList.size() >= 2) {
                     synchronized (lockInterval) {
-                        @SuppressWarnings("unchecked")
-                        HashMap<Long, Long> tempMap = (HashMap<Long, Long>) internalMap.clone();
+                        List<RespTimeGraphDataBean> tempList = new ArrayList<RespTimeGraphDataBean>();
+                        tempList.addAll(internalList);
                         this.clearData();
-                        for (Iterator<Map.Entry<Long, Long>> iterator = tempMap.entrySet().iterator(); iterator
-                                .hasNext();) {
-                            Map.Entry<Long, Long> entry = iterator.next();
-                            this.add(new SampleResult(entry.getKey().longValue(), entry.getValue().longValue()));
+                        for (RespTimeGraphDataBean data : tempList) {
+                            SampleResult sr = new SampleResult(data.getStartTime(), data.getTime());
+                            sr.setSampleLabel(data.getSamplerLabel());
+                            this.add(sr);
                         }
                     }
                 }
