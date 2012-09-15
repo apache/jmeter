@@ -269,7 +269,7 @@ public class Proxy extends Thread {
                     "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server\">HTTP Proxy Server documentation</a>"));
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
         } catch (IOException ioe) {
-            log.error("Problem with SSL certificate? Ensure browser is set to accept the JMeter proxy cert: "+ioe.getLocalizedMessage());
+            log.error("Problem with SSL certificate? Ensure browser is set to accept the JMeter proxy cert: "+ioe.getLocalizedMessage(), ioe);
             // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
             if (result == null) {
                 result = new SampleResult();
