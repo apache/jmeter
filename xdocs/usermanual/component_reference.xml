@@ -273,8 +273,15 @@ In this case, the server, port and protocol are ignored; parameters are also ign
         <b>See below for some further information on parameter handling.</b>
         <p>
         Additionally, you can specify whether each parameter should be URL encoded.  If you are not sure what this
-        means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or
-        question marks, then encoding is usually required.</p></property>
+        means, it is probably best to select it.  If your values contain characters such as the following then encoding is usually required.:
+        <ul>
+            <li>ASCII Control Chars</li>
+            <li>Non-ASCII characters</li>
+            <li>Reserved characters:URLs use some characters for special use in defining their syntax. When these characters are not used in their special role inside a URL, they need to be encoded, example : '$', '&amp;', '+', ',' , '/', ':', ';', '=', '?', '@'</li>
+            <li>Unsafe characters: Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should also always be encoded, example : ' ', '&lt;', '&gt;', '#', '%', ...</li>
+        </ul>
+        </p>
+        </property>
         <property name="File Path:" required="No">Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
