@@ -264,10 +264,13 @@ public class RequestViewHTTP implements RequestView {
         if (query != null && query.length() > 0) {
             try {
                 query = URLDecoder.decode(query, CHARSET_DECODE); // better ISO-8859-1 than UTF-8
-            } catch (UnsupportedEncodingException uee) {
-                log.warn("Error in parse query:" + query, uee);
+            } catch(IllegalArgumentException e) {
+                log.warn("Error decoding query, maybe your request parameters should be encoded:" + query, e);
                 return null;
-            }
+            } catch (UnsupportedEncodingException uee) {
+                log.warn("Error decoding query, maybe your request parameters should be encoded:" + query, uee);
+                return null;
+            } 
             return query;
         }
         return null;
