@@ -39,6 +39,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -83,7 +84,7 @@ public class AboutCommand implements Command {
     void about() {
         JFrame mainFrame = GuiPackage.getInstance().getMainFrame();
         if (about == null) {
-            about = new JDialog(mainFrame, "About Apache JMeter...", false);
+            about = new EscapeDialog(mainFrame, "About Apache JMeter...", false);
             about.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
