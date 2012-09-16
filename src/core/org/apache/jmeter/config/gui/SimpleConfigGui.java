@@ -260,7 +260,14 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
     }
 
-
+    /**
+     * Stop any editing that is currently being done on the table. This will
+     * save any changes that have already been made.
+     */
+    protected void stopTableEditing() {
+        GuiUtils.stopTableEditing(table);
+    }
+    
     /**
      * Remove the currently selected argument from the table.
      */
