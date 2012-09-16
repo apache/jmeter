@@ -52,6 +52,7 @@ import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
@@ -218,7 +219,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement args) {
-        stopTableEditing();
+        GuiUtils.stopTableEditing(table);
         Arguments arguments = null;
         if (args instanceof Arguments) {
             arguments = (Arguments) args;
@@ -324,7 +325,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Clear all rows from the table. T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void clear() {
-        stopTableEditing();
+        GuiUtils.stopTableEditing(table);
         tableModel.clearData();
     }
 
@@ -455,7 +456,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     protected void addArgument() {
         // If a table cell is being edited, we should accept the current value
         // and stop the editing before adding a new row.
-        stopTableEditing();
+        GuiUtils.stopTableEditing(table);
 
         tableModel.addRow(makeNewArgument());
 
@@ -474,7 +475,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Add values from the clipboard
      */
     protected void addFromClipboard() {
-        stopTableEditing();
+        GuiUtils.stopTableEditing(table);
         int rowCount = table.getRowCount();
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable trans = clipboard.getContents(null);
@@ -525,17 +526,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     protected Argument makeNewArgument() {
         return new Argument("", ""); // $NON-NLS-1$ // $NON-NLS-2$
-    }
-
-    /**
-     * Stop any editing that is currently being done on the table. This will
-     * save any changes that have already been made.
-     */
-    protected void stopTableEditing() {
-        if (table.isEditing()) {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-            cellEditor.stopCellEditing();
-        }
     }
 
     /**
