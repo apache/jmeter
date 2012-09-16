@@ -529,6 +529,15 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     }
 
     /**
+     * Stop any editing that is currently being done on the table. This will
+     * save any changes that have already been made.
+     * Needed for subclasses
+     */
+    protected void stopTableEditing() {
+        GuiUtils.stopTableEditing(table);
+    }
+    
+    /**
      * Initialize the table model used for the arguments table.
      */
     protected void initializeTableModel() {

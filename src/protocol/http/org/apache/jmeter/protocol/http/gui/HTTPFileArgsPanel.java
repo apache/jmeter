@@ -317,6 +317,14 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     }
 
     /**
+     * Stop any editing that is currently being done on the table. This will
+     * save any changes that have already been made.
+     */
+    protected void stopTableEditing() {
+        GuiUtils.stopTableEditing(table);
+    }
+    
+    /**
      * Create the main GUI panel which contains the file table.
      *
      * @return the main GUI panel
