@@ -19,6 +19,8 @@
 package org.apache.jmeter.modifiers.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,13 +36,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.FontMetrics;
-import java.awt.Component;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -51,6 +51,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -124,9 +125,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement params) {
-        if (paramTable.isEditing()) {
-            paramTable.getCellEditor().stopCellEditing();
-        }
+        GuiUtils.stopTableEditing(paramTable);
         UserParameters userParams = ((UserParameters) params);
         userParams.setNames(new CollectionProperty(UserParameters.NAMES, tableModel.getColumnData(NAME_COL_RESOURCE)));
         CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES, new ArrayList<Object>());
@@ -289,12 +288,8 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     
     private class AddParamAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (paramTable.isEditing()) {
-                TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
-                        .getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
-
+            GuiUtils.stopTableEditing(paramTable);
+            
             tableModel.addNewRow();
             tableModel.fireTableDataChanged();
 
@@ -309,12 +304,8 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
     private class AddUserAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-
-            if (paramTable.isEditing()) {
-                TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
-                        .getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
+            
+            GuiUtils.stopTableEditing(paramTable);
 
             tableModel.addNewColumn(getUserColName(tableModel.getColumnCount()), String.class);
             tableModel.fireTableDataChanged();
