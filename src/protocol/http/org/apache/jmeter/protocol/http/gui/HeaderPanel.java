@@ -41,6 +41,7 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -94,9 +95,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el) {
-        if (headerTable.isEditing()) {// Bug 41905
-            headerTable.getCellEditor().stopCellEditing();
-        }
+        GuiUtils.stopTableEditing(headerTable);
         el.clear();
         el.addTestElement(headerManager);
         configureTestElement(el);
@@ -179,11 +178,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         } else if (action.equals(ADD_COMMAND)) {
             // If a table cell is being edited, we should accept the current
             // value and stop the editing before adding a new row.
-            if (headerTable.isEditing()) {
-                TableCellEditor cellEditor = headerTable.getCellEditor(headerTable.getEditingRow(),
-                        headerTable.getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
+            GuiUtils.stopTableEditing(headerTable);
 
             tableModel.addNewRow();
             tableModel.fireTableDataChanged();

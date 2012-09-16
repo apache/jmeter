@@ -66,6 +66,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -217,12 +218,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     /** {@inheritDoc} */
     @Override
     public void modifyTestElement(TestElement el) {
-        if (excludeTable.isEditing()) {// Bug 42948
-            excludeTable.getCellEditor().stopCellEditing();
-        }
-        if (includeTable.isEditing()) {// Bug 42948
-            includeTable.getCellEditor().stopCellEditing();
-        }
+        GuiUtils.stopTableEditing(excludeTable);
+        GuiUtils.stopTableEditing(includeTable);
         configureTestElement(el);
         if (el instanceof ProxyControl) {
             model = (ProxyControl) el;
@@ -706,7 +703,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
         return panel;
     }
-
+    
     private JPanel createTableButtonPanel(String addCommand, String deleteCommand) {
         JPanel buttonPanel = new JPanel();
 
