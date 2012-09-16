@@ -28,14 +28,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
@@ -73,28 +78,34 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 	 * Store last search
 	 */
 	private transient String lastSearch = null;
-
-	/**
-	 * Hide Window on ESC
-	 */
-	private transient ActionListener enterActionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent actionEvent) {
-			doSearch(actionEvent);
-		}	
-	};
-	
-	/**
-	 * Do search on Enter
-	 */
-	private transient ActionListener escapeActionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent actionEvent) {
-			setVisible(false);
-		}	
-	};
 	
 	public SearchTreeDialog() {
         super((JFrame) null, JMeterUtils.getResString("search_tree_title"), true); //$NON-NLS-1$
         init();
+    }
+	
+    @Override
+    protected JRootPane createRootPane() {
+        JRootPane rootPane = new JRootPane();
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);  
+        ActionMap actionMap = rootPane.getActionMap();
+        inputMap.put(KeyStrokes.ESC, "ESCAPE");
+        inputMap.put(KeyStrokes.ENTER, "ENTER");
+        // Hide Window on ESC
+        Action escapeAction = new AbstractAction() { 
+            public void actionPerformed(ActionEvent actionEvent) { 
+                setVisible(false);
+            } 
+        };
+        actionMap.put("ESCAPE", escapeAction);
+        // Do search on Enter
+        Action enterAction = new AbstractAction() { 
+            public void actionPerformed(ActionEvent actionEvent) { 
+                doSearch(actionEvent);
+            } 
+        };
+        actionMap.put("ENTER", enterAction);
+        return rootPane;
     }
 
     private void init() {
@@ -129,8 +140,6 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         buttonsPanel.add(cancelButton);
         searchPanel.add(buttonsPanel, BorderLayout.SOUTH);
         this.getContentPane().add(searchPanel);
-        searchPanel.registerKeyboardAction(enterActionListener, KeyStrokes.ENTER, JComponent.WHEN_IN_FOCUSED_WINDOW);
-        searchPanel.registerKeyboardAction(escapeActionListener, KeyStrokes.ESC, JComponent.WHEN_IN_FOCUSED_WINDOW);
     	searchTF.requestFocusInWindow();
 
         this.pack();
