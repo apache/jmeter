@@ -28,10 +28,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class GuiUtils {
+public final class GuiUtils {
 
     /**
      * Create a scroll panel that sets its preferred size to its minimum size.
@@ -87,4 +88,14 @@ public class GuiUtils {
         return labelCombo;
     }
 
+    /**
+     * Stop any editing that is currently being done on the table. This will
+     * save any changes that have already been made.
+     */
+    public static void stopTableEditing(JTable table) {
+        if (table.isEditing()) {
+            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+            cellEditor.stopCellEditing();
+        }
+    }
 }
