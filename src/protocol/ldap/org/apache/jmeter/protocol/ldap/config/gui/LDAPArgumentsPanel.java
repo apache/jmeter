@@ -40,6 +40,7 @@ import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
@@ -128,7 +129,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement args) {
-        stopTableEditing();
+        GuiUtils.stopTableEditing(table);
         LDAPArguments arguments = null;
         if (args instanceof LDAPArguments) {
             arguments = (LDAPArguments) args;
@@ -244,7 +245,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     private void addArgument() {
         // If a table cell is being edited, we should accept the current value
         // and stop the editing before adding a new row.
-        stopTableEditing();
+        GuiUtils.stopTableEditing(table);
 
         tableModel.addRow(makeNewLDAPArgument());
 
@@ -263,17 +264,6 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      */
     private LDAPArgument makeNewLDAPArgument() {
         return new LDAPArgument("", "", "");
-    }
-
-    /**
-     * Stop any editing that is currently being done on the table. This will
-     * save any changes that have already been made.
-     */
-    private void stopTableEditing() {
-        if (table.isEditing()) {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-            cellEditor.stopCellEditing();
-        }
     }
 
     /**
