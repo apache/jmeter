@@ -24,13 +24,18 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.util.JMeterUtils;
@@ -76,24 +81,6 @@ public class RowDetailDialog extends JDialog implements ActionListener {
     public RowDetailDialog() {
         super();
     }
-	/**
-	 * Hide Window on ESC
-	 */
-	private final transient ActionListener enterActionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent actionEvent) {
-			doUpdate(actionEvent);
-			setVisible(false);
-		}	
-	};
-	
-	/**
-	 * Do search on Enter
-	 */
-	private final transient ActionListener escapeActionListener = new ActionListener() {
-		public void actionPerformed(ActionEvent actionEvent) {
-			setVisible(false);
-		}	
-	};
 	
 	public RowDetailDialog(ObjectTableModel tableModel, int selectedRow) {
         super((JFrame) null, JMeterUtils.getResString("detail"), true); //$NON-NLS-1$
@@ -102,6 +89,31 @@ public class RowDetailDialog extends JDialog implements ActionListener {
         init();
     }
 
+	@Override
+    protected JRootPane createRootPane() {
+        JRootPane rootPane = new JRootPane();
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);  
+        ActionMap actionMap = rootPane.getActionMap();
+        inputMap.put(KeyStrokes.ESC, "ESCAPE");
+        inputMap.put(KeyStrokes.ENTER, "ENTER");
+        // Hide Window on ESC
+        Action escapeAction = new AbstractAction() { 
+            public void actionPerformed(ActionEvent actionEvent) { 
+                setVisible(false);
+            } 
+        };
+        actionMap.put("ESCAPE", escapeAction);
+        // Do update on Enter
+        Action enterAction = new AbstractAction() { 
+            public void actionPerformed(ActionEvent actionEvent) {
+                doUpdate(actionEvent);
+                setVisible(false);
+            }
+        };
+        actionMap.put("ENTER", enterAction);
+        return rootPane;
+    }
+	
     private void init() {
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
@@ -143,8 +155,6 @@ public class RowDetailDialog extends JDialog implements ActionListener {
         buttonsPanel.add(closeButton);
         mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
         this.getContentPane().add(mainPanel);
-        mainPanel.registerKeyboardAction(enterActionListener, KeyStrokes.ENTER, JComponent.WHEN_IN_FOCUSED_WINDOW);
-        mainPanel.registerKeyboardAction(escapeActionListener, KeyStrokes.ESC, JComponent.WHEN_IN_FOCUSED_WINDOW);
     	nameTF.requestFocusInWindow();
 
         this.pack();

@@ -25,10 +25,16 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -39,6 +45,7 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Help;
+import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
@@ -61,7 +68,30 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         init();
         JMeterUtils.addLocaleChangeListener(this);
     }
+    
+    /**
+     * Allow Dialog to be closed by ESC key
+     */
+    @Override
+    protected JRootPane createRootPane() {
+        JRootPane rootPane = new JRootPane();
+        KeyStroke stroke = KeyStrokes.ESC;
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        javax.swing.Action actionListener = new AbstractAction() { 
+            /**
+             * 
+             */
+            private static final long serialVersionUID = -4036804004190858925L;
 
+            public void actionPerformed(ActionEvent actionEvent) { 
+                setVisible(false);
+            } 
+        };
+        inputMap.put(stroke, "ESCAPE");
+        rootPane.getActionMap().put("ESCAPE", actionListener);
+        return rootPane;
+    }
+    
     private void init() {
         parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params"), false); //$NON-NLS-1$
         initializeFunctionList();
@@ -80,6 +110,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         generateButton.addActionListener(this);
         resultsPanel.add(generateButton);
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
+        
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
     }
