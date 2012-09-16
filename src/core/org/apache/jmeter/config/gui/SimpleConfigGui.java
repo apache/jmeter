@@ -39,6 +39,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
+import org.apache.jorphan.gui.GuiUtils;
 
 /**
  * Default config gui for Configuration Element.
@@ -144,9 +145,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      *            the TestElement to modify
      */
     public void modifyTestElement(TestElement el) {
-        if (table.isEditing()) {
-            table.getCellEditor().stopCellEditing();
-        }
+        GuiUtils.stopTableEditing(table);
         Data model = tableModel.getData();
         model.reset();
         while (model.next()) {
@@ -248,7 +247,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     protected void addArgument() {
         // If a table cell is being edited, we should accept the current value
         // and stop the editing before adding a new row.
-        stopTableEditing();
+        GuiUtils.stopTableEditing(table);
 
         tableModel.addNewRow();
         tableModel.fireTableDataChanged();
@@ -261,16 +260,6 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
     }
 
-    /**
-     * Stop any editing that is currently being done on the table. This will
-     * save any changes that have already been made.
-     */
-    protected void stopTableEditing() {
-        if (table.isEditing()) {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-            cellEditor.stopCellEditing();
-        }
-    }
 
     /**
      * Remove the currently selected argument from the table.
