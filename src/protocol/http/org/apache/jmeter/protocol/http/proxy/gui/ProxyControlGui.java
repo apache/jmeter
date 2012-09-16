@@ -20,6 +20,11 @@ package org.apache.jmeter.protocol.http.proxy.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -28,8 +33,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.BindException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -185,6 +192,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String DELETE_INCLUDE = "delete_include"; // $NON-NLS-1$
 
     private static final String DELETE_EXCLUDE = "delete_exclude"; // $NON-NLS-1$
+
+    private static final String ADD_TO_INCLUDE_FROM_CLIPBOARD = "include_clipboard"; // $NON-NLS-1$
+
+    private static final String ADD_TO_EXCLUDE_FROM_CLIPBOARD = "exclude_clipboard"; // $NON-NLS-1$
     //- action names
 
     // Resource names for column headers
@@ -370,6 +381,53 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
             model.setTarget(nw.getTreeNode());
             enableRestart();
+        } else if (command.equals(ADD_TO_INCLUDE_FROM_CLIPBOARD)) {
+            addFromClipboard(includeTable);
+            includeModel.fireTableDataChanged();
+            enableRestart();
+        } else if (command.equals(ADD_TO_EXCLUDE_FROM_CLIPBOARD)) {
+            addFromClipboard(excludeTable);
+            excludeModel.fireTableDataChanged();
+            enableRestart();
+        }
+    }
+
+    /**
+     * Add values from the clipboard to table
+     * @param table {@link JTable}
+     */
+    protected void addFromClipboard(JTable table) {
+        GuiUtils.stopTableEditing(table);
+        int rowCount = table.getRowCount();
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable trans = clipboard.getContents(null);
+        DataFlavor[] flavourList = trans.getTransferDataFlavors();
+        PowerTableModel model = null;
+        Collection<DataFlavor> flavours = new ArrayList<DataFlavor>(flavourList.length);
+        if (Collections.addAll(flavours, flavourList) && flavours.contains(DataFlavor.stringFlavor)) {
+            try {
+                String clipboardContent = (String) trans.getTransferData(DataFlavor.stringFlavor);
+                String[] clipboardLines = clipboardContent.split("\n");
+                for (String clipboardLine : clipboardLines) {
+                    model = (PowerTableModel) table.getModel();
+                    model.addRow(new Object[] {clipboardLine});
+                }
+            } catch (IOException ioe) {
+                JOptionPane.showMessageDialog(this,
+                        "Could not add read arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (UnsupportedFlavorException ufe) {
+                JOptionPane.showMessageDialog(this,
+                        "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
+                                + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (table.getRowCount() > rowCount) {
+                if(model != null) {
+                    // Highlight (select) the appropriate rows.
+                    int rowToSelect = model.getRowCount() - 1;
+                    table.setRowSelectionInterval(rowCount, rowToSelect);
+                }
+            }
         }
     }
 
@@ -683,7 +741,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 .getResString("patterns_to_include"))); // $NON-NLS-1$
 
         panel.add(new JScrollPane(includeTable), BorderLayout.CENTER);
-        panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE), BorderLayout.SOUTH);
+        panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE, ADD_TO_INCLUDE_FROM_CLIPBOARD), BorderLayout.SOUTH);
 
         return panel;
     }
@@ -699,12 +757,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 .getResString("patterns_to_exclude"))); // $NON-NLS-1$
 
         panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
-        panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE), BorderLayout.SOUTH);
+        panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE, ADD_TO_EXCLUDE_FROM_CLIPBOARD), BorderLayout.SOUTH);
 
         return panel;
     }
     
-    private JPanel createTableButtonPanel(String addCommand, String deleteCommand) {
+    private JPanel createTableButtonPanel(String addCommand, String deleteCommand, String copyFromClipboard) {
         JPanel buttonPanel = new JPanel();
 
         JButton addButton = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
@@ -717,6 +775,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         deleteButton.addActionListener(this);
         buttonPanel.add(deleteButton);
 
+        /** A button for adding new excludes/includes to the table from the clipboard. */
+        JButton addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
+        addFromClipboard.setActionCommand(copyFromClipboard);
+        addFromClipboard.addActionListener(this);
+        buttonPanel.add(addFromClipboard);
+        
         return buttonPanel;
     }
 
