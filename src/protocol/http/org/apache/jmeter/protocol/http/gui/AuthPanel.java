@@ -47,6 +47,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -103,9 +104,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el) {
-        if (authTable.isEditing()) {
-            authTable.getCellEditor().stopCellEditing();
-        }
+        GuiUtils.stopTableEditing(authTable);
         el.clear();
         el.addTestElement((TestElement) tableModel.manager.clone());
         configureTestElement(el);
@@ -191,11 +190,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         } else if (action.equals(ADD_COMMAND)) {
             // If a table cell is being edited, we should accept the current
             // value and stop the editing before adding a new row.
-            if (authTable.isEditing()) {
-                TableCellEditor cellEditor = authTable.getCellEditor(authTable.getEditingRow(), authTable
-                        .getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
+            GuiUtils.stopTableEditing(authTable);
 
             tableModel.addNewRow();
             tableModel.fireTableDataChanged();
