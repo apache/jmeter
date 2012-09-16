@@ -186,11 +186,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         } else if (action.equals(ADD_COMMAND)) {
             // If a table cell is being edited, we should accept the current
             // value and stop the editing before adding a new row.
-            if (cookieTable.isEditing()) {
-                TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(),
-                        cookieTable.getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
+            GuiUtils.stopTableEditing(cookieTable);
 
             tableModel.addNewRow();
             tableModel.fireTableDataChanged();
@@ -250,9 +246,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement cm) {
-        if (cookieTable.isEditing()) {
-            cookieTable.getCellEditor().stopCellEditing();
-        }
+        GuiUtils.stopTableEditing(cookieTable);
         cm.clear();
         configureTestElement(cm);
         if (cm instanceof CookieManager) {
