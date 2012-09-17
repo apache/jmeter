@@ -41,7 +41,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -49,6 +48,7 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 
+import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -199,7 +199,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         // when Enter is pressed, search start
         InputMap im = textToFindField
                 .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        im.put(KeyStroke.getKeyStroke("ENTER"), SEARCH_TEXT_COMMAND);
+        im.put(KeyStrokes.ENTER, SEARCH_TEXT_COMMAND);
         ActionMap am = textToFindField.getActionMap();
         am.put(SEARCH_TEXT_COMMAND, new EnterAction());
 
