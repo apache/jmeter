@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.config;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -148,10 +147,7 @@ public class CSVDataSet extends ConfigTestElement
         String[] lineValues = {};
         try {
             if (getQuotedData()) {
-                synchronized(server) {
-                    BufferedReader infile = server.getReader(alias, recycle, firstLineIsNames);
-                    lineValues = CSVSaveService.csvReadFile(infile, delim.charAt(0));
-                }
+                lineValues = server.getParsedLine(alias, recycle, firstLineIsNames, delim.charAt(0));
             } else {
                 String line = server.readLine(alias, recycle, firstLineIsNames);
                 lineValues = JOrphanUtils.split(line, delim, false);

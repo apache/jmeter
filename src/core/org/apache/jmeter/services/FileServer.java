@@ -38,6 +38,7 @@ import java.util.Random;
 
 import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -344,14 +345,19 @@ public class FileServer {
     }
 
     /**
-     * Get the buffered reader; <b>must be called holding a lock on the file server</b>
-     * <p>
-     * Note: only recycles the file if at EOF initially, as does not make sense for
-     * entries to span file boundaries.
-     * <p>
-     * <b>N.B.</b> only intended for use by CSVDataSet as the API may change.
+     * 
+     * @param alias the file name or alias
+     * @param recycle whether the file should be re-started on EOF
+     * @param firstLineIsNames whether the file contains a file header
+     * @param delim the delimiter to use for parsing
+     * @return the parsed line, will be empty if the file is at EOF
      */
-    public BufferedReader getReader(String alias, boolean recycle, boolean firstLineIsNames) throws IOException {
+    public synchronized String[] getParsedLine(String alias, boolean recycle, boolean firstLineIsNames, char delim) throws IOException {
+        BufferedReader reader = getReader(alias, recycle, firstLineIsNames);
+        return CSVSaveService.csvReadFile(reader, delim);
+    }
+
+    private BufferedReader getReader(String alias, boolean recycle, boolean firstLineIsNames) throws IOException {
         FileEntry fileEntry = files.get(alias);
         if (fileEntry != null) {
             BufferedReader reader;
