@@ -1080,8 +1080,7 @@ public final class CSVSaveService {
         } // while not EOF
         if (ch == -1) {// EOF (or end of string) so collect any remaining data
             if (state == QUOTED) {
-                throw new IOException(state
-                        + " Missing trailing quote-char in quoted field:[\""
+                throw new IOException("Missing trailing quote-char in quoted field:[\""
                         + baos.toString() + "]");
             }
             // Do we have some data, or a trailing empty field?
