@@ -27,6 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -76,8 +77,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
         KeyStroke stroke = KeyStrokes.ESC;
-        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        javax.swing.Action actionListener = new AbstractAction() { 
+        javax.swing.Action escapeAction = new AbstractAction("ESCAPE") { 
             /**
              * 
              */
@@ -87,8 +87,9 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
                 setVisible(false);
             } 
         };
-        inputMap.put(stroke, "ESCAPE");
-        rootPane.getActionMap().put("ESCAPE", actionListener);
+        rootPane.getActionMap().put(escapeAction.getValue(Action.NAME), escapeAction);
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(stroke, escapeAction.getValue(Action.NAME));
         return rootPane;
     }
     

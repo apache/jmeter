@@ -45,7 +45,7 @@ public class EscapeDialog extends JDialog {
     
     protected JRootPane createRootPane() { 
         JRootPane rootPane = new JRootPane();
-        Action actionListener = new AbstractAction() {    
+        Action escapeAction = new AbstractAction("ESCAPE") {    
             /**
              * 
              */
@@ -56,8 +56,8 @@ public class EscapeDialog extends JDialog {
             }
         };
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap.put(KeyStrokes.ESC, "ESCAPE");
-        rootPane.getActionMap().put("ESCAPE", actionListener);
+        inputMap.put(KeyStrokes.ESC, escapeAction.getValue(Action.NAME));
+        rootPane.getActionMap().put(escapeAction.getValue(Action.NAME), escapeAction);
         return rootPane;
     } 
 } 
