@@ -226,7 +226,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 <ul>
 <li><bugzilla>53311</bugzilla> - JMeterUtils#runSafe should not throw Error when interrupted</li>
 <li>Updated to commons-net-3.1 (from 3.0.1)</li>
-<li>Updated to HttpComponents Core 4.2.1 (from 4.1.4) and HttpComponents Client 4.2.1 (from 4.1.3)</li>
+<li>Updated to HttpComponents Core 4.2.2 (from 4.1.4) and HttpComponents Client 4.2.1 (from 4.1.3)</li>
 <li><bugzilla>53765</bugzilla> - Switch to commons-lang3-3.1</li>
 <li><bugzilla>53884</bugzilla> - wrong Maven groupId for commons-lang</li>
 </ul>
