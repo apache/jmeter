@@ -162,6 +162,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <h3>HTTP Samplers</h3>
 <ul>
 <li><bugzilla>53675</bugzilla> - Add PATCH verb to HTTP sampler</li>
+<li><bugzilla>53931</bugzilla> - Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests). Before the default, it was the HTTP Java Sampler</li>
 </ul>
 
 <h3>Other samplers</h3>
