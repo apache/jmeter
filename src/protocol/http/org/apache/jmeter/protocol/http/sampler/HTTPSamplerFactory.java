@@ -45,7 +45,7 @@ public final class HTTPSamplerFactory {
     //- JMX
 
     public static final String DEFAULT_CLASSNAME =
-        JMeterUtils.getPropDefault("jmeter.httpsampler", HTTP_SAMPLER_JAVA); //$NON-NLS-1$
+        JMeterUtils.getPropDefault("jmeter.httpsampler", IMPL_HTTP_CLIENT4); //$NON-NLS-1$
 
     private HTTPSamplerFactory() {
         // Not intended to be instantiated
@@ -84,7 +84,7 @@ public final class HTTPSamplerFactory {
     }
 
     public static String[] getImplementations(){
-        return new String[]{IMPL_JAVA, IMPL_HTTP_CLIENT3_1, IMPL_HTTP_CLIENT4};
+        return new String[]{IMPL_HTTP_CLIENT4,IMPL_HTTP_CLIENT3_1,IMPL_JAVA};
     }
 
     public static HTTPAbstractImpl getImplementation(String impl, HTTPSamplerBase base){
