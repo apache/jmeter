@@ -77,7 +77,7 @@
           <boolProp name="HTTPSampler.image_parser">true</boolProp>
           <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
           <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.embedded_url_re">.*jmeter.apache.org.*</stringProp>
           <stringProp name="HTTPSampler.ipSource">${IP_ADDR}</stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
@@ -101,7 +101,7 @@
           <boolProp name="HTTPSampler.image_parser">true</boolProp>
           <boolProp name="HTTPSampler.concurrentDwn">true</boolProp>
           <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.embedded_url_re">.*jmeter.apache.org.*</stringProp>
           <stringProp name="HTTPSampler.ipSource">${IP_ADDR}</stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
