@@ -719,6 +719,9 @@ If this is zero, then the request is marked as failed.
         <property name="Port Number" required="No">Proxy host port</property>
         </properties>
 
+<note>
+Webservice Soap Sampler assumes that empty response means failure.
+</note>
 </component>
 
 <component name="LDAP Request" index="&sect-num;.1.7" width="621" height="462" screenshot="ldap_request.png">
