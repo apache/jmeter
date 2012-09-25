@@ -133,17 +133,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      */
     private JCheckBox samplerDownloadImages;
 
-    /*
-     * Spoof the client into thinking that it is communicating with http
-     * even if it is really https.
-     */
-    private JCheckBox httpsSpoof;
-
-    /*
-     * Only spoof the URLs that match (optional)
-     */
-    private JTextField httpsMatch;
-
     /**
      * Regular expression to include results based on content type
      */
@@ -246,8 +235,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setUseKeepAlive(useKeepAlive.isSelected());
             model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
             model.setRegexMatch(regexMatch.isSelected());
-            model.setHttpsSpoof(httpsSpoof.isSelected());
-            model.setHttpsSpoofMatch(httpsMatch.getText());
             model.setContentTypeInclude(contentTypeInclude.getText());
             model.setContentTypeExclude(contentTypeExclude.getText());
             TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
@@ -306,9 +293,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         useKeepAlive.setSelected(model.getUseKeepalive());
         samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
         regexMatch.setSelected(model.getRegexMatch());
-        httpsSpoof.setSelected(model.getHttpsSpoof());
-        httpsMatch.setText(model.getHttpsSpoofMatch());
-        httpsMatch.setEnabled(httpsSpoof.isSelected()); // Only valid if Spoof is selected
         contentTypeInclude.setText(model.getContentTypeInclude());
         contentTypeExclude.setText(model.getContentTypeExclude());
 
@@ -358,7 +342,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             startProxy();
         } else if (command.equals(ENABLE_RESTART)){
             enableRestart();
-            httpsMatch.setEnabled(httpsSpoof.isSelected()); // Only valid if Spoof is selected
         } else if (command.equals(ADD_EXCLUDE)) {
             excludeModel.addNewRow();
             excludeModel.fireTableDataChanged();
@@ -555,34 +538,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
         label.setLabelFor(portField);
 
-        httpsSpoof = new JCheckBox(JMeterUtils.getResString("proxy_httpsspoofing")); // $NON-NLS-1$
-        httpsSpoof.setSelected(false);
-        httpsSpoof.addActionListener(this);
-        httpsSpoof.setActionCommand(ENABLE_RESTART);
-
-        httpsMatch = new JTextField(40);
-        httpsMatch.addKeyListener(this);
-        httpsMatch.setName(ENABLE_RESTART);
-        httpsMatch.setEnabled(false); // Only valid if Spoof is selected
-
-        JLabel matchlabel = new JLabel(JMeterUtils.getResString("proxy_httpsspoofing_match")); // $NON-NLS-1$
-        matchlabel.setLabelFor(httpsMatch);
-
-        
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        JPanel gPane = new JPanel(new BorderLayout());
+        gPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_general_settings"))); // $NON-NLS-1$
 
+        HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
 
-        panel.add(Box.createHorizontalStrut(10));
-        panel.add(httpsSpoof);
-
-        panel.add(matchlabel);
-        panel.add(httpsMatch);
-
-        return panel;
+        gPane.add(panel, BorderLayout.WEST);
+        gPane.add(Box.createHorizontalStrut(10));
+        return gPane;
     }
 
     private JPanel createTestPlanContentPanel() {
