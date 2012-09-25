@@ -240,7 +240,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setCaptureHttpHeaders(httpHeaders.isSelected());
             model.setGroupingMode(groupingMode.getSelectedIndex());
             model.setAssertions(addAssertions.isSelected());
-            model.setSamplerTypeName(samplerTypeName.getSelectedIndex());
+            model.setSamplerTypeName(HTTPSamplerFactory.getImplementations()[samplerTypeName.getSelectedIndex()]);
             model.setSamplerRedirectAutomatically(samplerRedirectAutomatically.isSelected());
             model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
             model.setUseKeepAlive(useKeepAlive.isSelected());
