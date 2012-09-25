@@ -38,7 +38,6 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -112,8 +111,6 @@ public class Proxy extends Thread {
 
     private static final SamplerCreatorFactory factory = new SamplerCreatorFactory();
 
-    private static final Pattern COOKIE_SECURE_PATTERN = Pattern.compile("\\bsecure\\b", Pattern.CASE_INSENSITIVE);
-
     // Use with SSL connection
     private OutputStream outStreamClient = null;
 
@@ -131,11 +128,6 @@ public class Proxy extends Thread {
 
     /** Whether or not to capture the HTTP headers. */
     private boolean captureHttpHeaders;
-
-    /** Whether to try to spoof as https **/
-    private boolean httpsSpoof;
-
-    private String httpsSpoofMatch; // if non-empty, then URLs must match in order to be spoofed
 
     /** Reference to Deamon's Map of url string to page character encoding of that page */
     private Map<String, String> pageEncodings;
@@ -167,8 +159,6 @@ public class Proxy extends Thread {
         this.target = _target;
         this.clientSocket = _clientSocket;
         this.captureHttpHeaders = _target.getCaptureHttpHeaders();
-        this.httpsSpoof = _target.getHttpsSpoof();
-        this.httpsSpoofMatch = _target.getHttpsSpoofMatch();
         this.pageEncodings = _pageEncodings;
         this.formEncodings = _formEncodings;
     }
@@ -218,46 +208,15 @@ public class Proxy extends Thread {
             headers = request.getHeaderManager();
             sampler.setHeaderManager(headers);
 
-            /*
-             * If we are trying to spoof https, change the protocol
-             */
-            boolean forcedHTTPS = false; // so we know when to revert
-            if (httpsSpoof) {
-                if (httpsSpoofMatch.length() > 0){
-                    String url = request.getUrl();
-                    if (url.matches(httpsSpoofMatch)){
-                        sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
-                        forcedHTTPS = true;
-                    }
-                } else {
-                    sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
-                    forcedHTTPS = true;
-                }
-            }
             sampler.threadStarted(); // Needed for HTTPSampler2
             result = sampler.sample();
-
-            /*
-             * If we're dealing with text data, and if we're spoofing https,
-             * replace all occurences of "https://" with "http://" for the client.
-             * TODO - also check the match string to restrict the changes further?
-             */
-            if (httpsSpoof && SampleResult.TEXT.equals(result.getDataType()))
-            {
-                final String enc = result.getDataEncodingWithDefault();
-                String noHttpsResult = new String(result.getResponseData(),enc);
-                final String HTTPS_HOST = // match https://host[:port]/ and drop default port if present
-                    "https://([^:/]+)(:"+HTTPConstants.DEFAULT_HTTPS_PORT_STRING+")?"; // $NON-NLS-1$ $NON-NLS-2$
-                noHttpsResult = noHttpsResult.replaceAll(HTTPS_HOST, "http://$1"); // $NON-NLS-1$
-                result.setResponseData(noHttpsResult.getBytes(enc));
-            }
 
             // Find the page encoding and possibly encodings for forms in the page
             // in the response from the web server
             String pageEncoding = addPageEncoding(result);
             addFormEncodings(result, pageEncoding);
 
-            writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()), forcedHTTPS);
+            writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()));
         } catch (UnknownHostException uhe) {
             log.warn("Server Not Found.", uhe);
             writeErrorToClient(HttpReplyHdr.formServerNotFound());
@@ -437,9 +396,9 @@ public class Proxy extends Thread {
      * @throws IOException
      *             if an IOException occurs while writing
      */
-    private void writeToClient(SampleResult res, OutputStream out, boolean forcedHTTPS) throws IOException {
+    private void writeToClient(SampleResult res, OutputStream out) throws IOException {
         try {
-            String responseHeaders = messageResponseHeaders(res, forcedHTTPS);
+            String responseHeaders = messageResponseHeaders(res);
             out.write(responseHeaders.getBytes(SampleResult.DEFAULT_HTTP_ENCODING));
             out.write(CRLF_BYTES);
             out.write(res.getResponseData());
@@ -464,15 +423,14 @@ public class Proxy extends Thread {
      * The Transfer-Encoding header is also removed.
      * If the protocol was changed to HTTPS then change any Location header back to http
      * @param res - response
-     * @param forcedHTTPS  if we changed the protocol to https
      *
      * @return updated headers to be sent to client
      */
-    private String messageResponseHeaders(SampleResult res, boolean forcedHTTPS) {
+    private String messageResponseHeaders(SampleResult res) {
         String headers = res.getResponseHeaders();
         String [] headerLines=headers.split(NEW_LINE, 0); // drop empty trailing content
         int contentLengthIndex=-1;
-        boolean fixContentLength = forcedHTTPS;
+        boolean fixContentLength = false;
         for (int i=0;i<headerLines.length;i++){
             String line=headerLines[i];
             String[] parts=line.split(":\\s+",2); // $NON-NLS-1$
@@ -492,16 +450,6 @@ public class Proxy extends Thread {
                 if (HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(parts[0])){
                     contentLengthIndex=i;
                     continue;
-                }
-                final String HTTPS_PREFIX = "https://";
-                if (forcedHTTPS && HTTPConstants.HEADER_LOCATION.equalsIgnoreCase(parts[0])
-                        && parts[1].substring(0, HTTPS_PREFIX.length()).equalsIgnoreCase(HTTPS_PREFIX)){
-                    headerLines[i]=headerLines[i].replaceFirst(parts[1].substring(0,HTTPS_PREFIX.length()), "http://");
-                    continue;
-                }
-                if (forcedHTTPS && (HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0])))
-                {
-                    headerLines[i]=COOKIE_SECURE_PATTERN.matcher(headerLines[i]).replaceAll("").trim(); //in forced https cookies need to be unsecured...
                 }
             }
         }

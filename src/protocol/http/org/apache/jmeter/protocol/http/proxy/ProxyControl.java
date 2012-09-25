@@ -125,10 +125,6 @@ public class ProxyControl extends GenericController {
 
     private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
-    private static final String HTTPS_SPOOF = "ProxyControlGui.https_spoof"; // $NON-NLS-1$
-
-    private static final String HTTPS_SPOOF_MATCH = "ProxyControlGui.https_spoof_match"; // $NON-NLS-1$
-
     private static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
 
     private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
@@ -250,14 +246,6 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(REGEX_MATCH, b));
     }
 
-    public void setHttpsSpoof(boolean b) {
-        setProperty(new BooleanProperty(HTTPS_SPOOF, b));
-    }
-
-    public void setHttpsSpoofMatch(String s) {
-        setProperty(new StringProperty(HTTPS_SPOOF_MATCH, s));
-    }
-
     public void setContentTypeExclude(String contentTypeExclude) {
         setProperty(new StringProperty(CONTENT_TYPE_EXCLUDE, contentTypeExclude));
     }
@@ -321,14 +309,6 @@ public class ProxyControl extends GenericController {
 
     public boolean getRegexMatch() {
         return getPropertyAsBoolean(REGEX_MATCH, false);
-    }
-
-    public boolean getHttpsSpoof() {
-        return getPropertyAsBoolean(HTTPS_SPOOF, false);
-    }
-
-    public String getHttpsSpoofMatch() {
-        return getPropertyAsString(HTTPS_SPOOF_MATCH, "");
     }
 
     public String getContentTypeExclude() {

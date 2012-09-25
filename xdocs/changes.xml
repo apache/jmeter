@@ -221,6 +221,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 <li><bugzilla>53807</bugzilla> - CSV Dataset does not handle embedded new lines in quoted data</li>
 <li><bugzilla>53879</bugzilla> - GUI : Allow Popups to be closed with ESC key</li>
 <li><bugzilla>53876</bugzilla> - Allow URL Filters (HTTP Proxy) to be pasted from clipboard</li>
+<li><bugzilla>53934</bugzilla> - Removes HTTPS spoofing options in JMeter HTTP Proxy Server. Since JMeter 2.4, the HTTPS protocol is directly supported by the proxy</li>
 </ul>
 
 <h2>Non-functional changes</h2>
