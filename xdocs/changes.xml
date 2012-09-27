@@ -109,6 +109,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <li><bugzilla>53521</bugzilla> - Cache Manager should cache content with Cache-control=private</li>
 <li><bugzilla>53522</bugzilla> - Cache Manager should not store at all response with header "no-cache" and store other types of Cache-Control having max-age value</li>
 <li><bugzilla>53838</bugzilla> - Pressing "Stop" does not interrupt the TCP sampler</li>
+<li><bugzilla>Bug 53911</bugzilla> - JmeterKeystore does not allow for key down the list of certificate</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -163,6 +164,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <ul>
 <li><bugzilla>53675</bugzilla> - Add PATCH verb to HTTP sampler</li>
 <li><bugzilla>53931</bugzilla> - Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests). Before the default, it was the HTTP Java Sampler</li>
+<li><bugzilla>53934</bugzilla> - Removes HTTPS spoofing options in JMeter HTTP Proxy Server. Since JMeter 2.4, the HTTPS protocol is directly supported by the proxy</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -221,7 +223,6 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 <li><bugzilla>53807</bugzilla> - CSV Dataset does not handle embedded new lines in quoted data</li>
 <li><bugzilla>53879</bugzilla> - GUI : Allow Popups to be closed with ESC key</li>
 <li><bugzilla>53876</bugzilla> - Allow URL Filters (HTTP Proxy) to be pasted from clipboard</li>
-<li><bugzilla>53934</bugzilla> - Removes HTTPS spoofing options in JMeter HTTP Proxy Server. Since JMeter 2.4, the HTTPS protocol is directly supported by the proxy</li>
 </ul>
 
 <h2>Non-functional changes</h2>
