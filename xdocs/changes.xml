@@ -191,6 +191,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <li><bugzilla>53749</bugzilla> - TestListener interface could perhaps be split up. 
 This should reduce per-thread memory requirements and processing, 
 as only test elements that actually use testIterationStart functionality now need to be handled.</li>
+<li><bugzilla>53941</bugzilla> - Add latency to View Result table listener</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
