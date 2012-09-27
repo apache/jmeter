@@ -93,15 +93,15 @@ public final class JmeterKeyStore {
                         }
                         v_certChains.add(x509certs);
                     }
+                    index++;
                 }
-                index++;
             }
     
             if (null == _key) {
                 throw new Exception("No key(s) found");
             }
             if (index <= endIndex-startIndex) {
-                LOG.warn("Did not find all requested aliases. Start="+startIndex+", end="+endIndex+", found="+index);
+                LOG.warn("Did not find all requested aliases. Start="+startIndex+", end="+endIndex+", found="+v_certChains.size());
             }
         }
     
