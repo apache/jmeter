@@ -44,17 +44,19 @@ public class TableSample implements Serializable, Comparable<TableSample> {
 
     private final long bytes;
 
+    private final long latency;
+
     /**
      * @deprecated for unit test code only
      */
     @Deprecated
     public TableSample() {
-        this(0, 1, 0, "", "", 0, true, 0);
+        this(0, 1, 0, "", "", 0, true, 0, 0);
     }
 
     public TableSample(long totalSamples, int sampleCount, long startTime, String threadName,
             String label,
-            long elapsed, boolean success, long bytes) {
+            long elapsed, boolean success, long bytes, long latency) {
         this.totalSamples = totalSamples;
         this.sampleCount = sampleCount;
         this.startTime = startTime;
@@ -63,6 +65,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
         this.elapsed = elapsed/sampleCount;
         this.success = success;
         this.bytes = bytes/sampleCount;
+        this.latency = latency;
     }
 
     // The following getters may appear not to be used - however they are invoked via the Functor class
@@ -127,6 +130,13 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     @Override
     public int hashCode(){
         return (int)(totalSamples ^ (totalSamples >>> 32));
+    }
+
+    /**
+     * @return the latency
+     */
+    public long getLatency() {
+        return latency;
     }
 
 }
