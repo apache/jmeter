@@ -43,7 +43,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <p>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</p>
 
-<p>Listeners don't show iteration counts when a If Controller has a condition which is always false from the first iteration (see Bug 52496).  
+<p>Listeners don't show iteration counts when a If Controller has a condition which is always false from the first iteration (see <bugzilla>52496</bugzilla>).  
 A workaround is to add a sampler at the same level as (or superior to) the If Controller.
 For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
 or a Debug Sampler with all fields set to False (to reduce the sample size).
@@ -93,13 +93,16 @@ Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F
 
 <p>
 By default, the TestCompiler now stores details of which pairs it has seen in Controller instances rather than in a static Set.
-[Bug 53796]
+[<bugzilla>53796</bugzilla>]
 This gives much better memory behaviour for delayed start test plans, as memory used is proportional to the number of concurrent threads.
 With the static Set memory usage was proportional to the total thread count.
 This change is very unlikely to cause a problem.
 The original behaviour can be restored by setting the property <code>TestCompiler.useStaticSet=true</code>
 </p>
 
+<p>
+HTTPS Spoofing options have been removed from Proxy as HTTPS recording is directly available since JMeter 2.4.
+</p>
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -109,7 +112,7 @@ The original behaviour can be restored by setting the property <code>TestCompile
 <li><bugzilla>53521</bugzilla> - Cache Manager should cache content with Cache-control=private</li>
 <li><bugzilla>53522</bugzilla> - Cache Manager should not store at all response with header "no-cache" and store other types of Cache-Control having max-age value</li>
 <li><bugzilla>53838</bugzilla> - Pressing "Stop" does not interrupt the TCP sampler</li>
-<li><bugzilla>Bug 53911</bugzilla> - JmeterKeystore does not allow for key down the list of certificate</li>
+<li><bugzilla>53911</bugzilla> - JmeterKeystore does not allow for key down the list of certificate</li>
 </ul>
 
 <h3>Other Samplers</h3>
