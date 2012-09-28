@@ -167,4 +167,22 @@ public class TestTimeFunction extends JMeterTestCase {
             Locale.setDefault(locale);
             assertEquals("AD",value);
         }
+
+        public void testDivisor() throws Exception {
+            params.add(new CompoundVariable("/1000"));
+            variable.setParameters(params);
+            long before = System.currentTimeMillis()/1000;
+            value = variable.execute(result, null);
+            long now= Long.parseLong(value);
+            long after = System.currentTimeMillis()/1000;
+            assertTrue(now >= before && now <= after);
+        }
+
+        public void testDivisorNoMatch() throws Exception {
+            params.add(new CompoundVariable("/1000 ")); // trailing space
+            variable.setParameters(params);
+            value = variable.execute(result, null);
+            assertEquals("/1000 ", value);
+        }
+        
 }

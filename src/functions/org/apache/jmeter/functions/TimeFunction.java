@@ -85,8 +85,13 @@ public class TimeFunction extends AbstractFunction {
             if (fmt == null) {
                 fmt = format;// Not found
             }
-            SimpleDateFormat df = new SimpleDateFormat(fmt);// Not synchronised, so can't be shared
-            datetime = df.format(new Date());
+            if (fmt.matches("/\\d+")) { // divisor is a positive number
+                long div = Long.parseLong(fmt.substring(1)); // should never case NFE
+                datetime = Long.toString((System.currentTimeMillis() / div));
+            } else {
+                SimpleDateFormat df = new SimpleDateFormat(fmt);// Not synchronised, so can't be shared
+                datetime = df.format(new Date());
+            }
         }
 
         if (variable.length() > 0) {
