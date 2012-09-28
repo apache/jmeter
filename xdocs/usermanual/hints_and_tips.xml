@@ -87,10 +87,10 @@ It provides search with following options:
 </ul>
 </p>
 
-<figure width="950" height="802" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
-<figure width="948" height="706" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
-<figure width="948" height="706" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
-<figure width="948" height="706" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
+<figure width="663" height="300" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
+<figure width="667" height="319" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
+<figure width="642" height="307" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
+<figure width="596" height="328" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
 
 </subsection>
 </section>
