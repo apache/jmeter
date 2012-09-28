@@ -205,6 +205,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 
 <h3>Functions</h3>
 <ul>
+<li><bugzilla>51527</bugzilla> - __time() function : add another option to __time() to provide *seconds* since epoch</li>
 </ul>
 
 <h3>I18N</h3>

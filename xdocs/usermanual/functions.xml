@@ -898,12 +898,16 @@ If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <
 
 <properties>
         <property name="Format" required="No">
-        The format to be passed to SimpleDateFormat. 
+        The format to be passed to SimpleDateFormat.
         The function supports various shorthand aliases, see below.
+        If ommitted, the function returns the current time in milliseconds since the epoch.
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
-<p>If the format string is omitted, then the function returns the current time in milliseconds.
+<p>If the format string is omitted, then the function returns the current time in milliseconds since the epoch.
+In versions of JMeter after 2.7, if the format matches "/ddd" (where ddd are decimal digits),
+then the function returns the current time in milliseconds divided by the value of ddd.
+For example, "/1000" returns the current time in seconds since the epoch.
 Otherwise, the current time is passed to SimpleDateFormat.
 The following shorthand aliases are provided:
 </p>
