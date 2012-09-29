@@ -2700,7 +2700,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 </div>
 </component>
 
-<component name="View Results in Table" index="&sect-num;.3.8"  width="658" height="700" screenshot="table_results.png">
+<component name="View Results in Table" index="&sect-num;.3.8"  width="966" height="683" screenshot="table_results.png">
 <description>This visualizer creates a row for every sample result.  
 Like the <complink name="View Results Tree"/>, this visualizer uses a lot of memory.
 <p>
