@@ -36,6 +36,75 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h2>New and Noteworthy</h2>
 
+<h3>Thread Group: New Option <i>Delay thread creation until needed</i></h3>
+<p>New Option "Delay thread creation until needed" that will create and start threads when needed instead of creating them on Test startup<br></br>
+Allow to make tests with a huge number of threads.
+<figure width="817" height="296" image="changes/2.8/12_delay_thread_creation.png"></figure>
+</p>
+
+<h3>HTTP Request: HTTPClient 4 is now the default implementation</h3>
+<p>Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests). Before the default was the HTTP Java Sampler.
+<figure width="558" height="288" image="changes/2.8/02_http_default_hc4.png"></figure>
+</p>
+
+<h3>HTTP Request: PATCH verb</h3>
+<p>Add PATCH verb to HTTP sampler
+<figure width="615" height="340" image="changes/2.8/01_http_patch_verb.png"></figure>
+</p>
+
+<h3>HTTP Request</h3>
+<p>Add Embedded URL Filter to HTTP Request Defaults Control
+<figure width="586" height="682" image="changes/2.8/05_http_defaults_url_filter.png"></figure>
+</p>
+
+<h3>OS Process Sampler</h3>
+<p>Allow define files for stdout/stderr/stdin. 
+<figure width="820" height="531" image="changes/2.8/06_os_sampler_stdout-err-in.png"></figure>
+</p>
+
+<h3>HTTP Cookie Manager</h3>
+<p>Add HTTPClient 4 cookie implementation in JMeter. Cookie Manager has now the default HC3.1 implementation and a new choice HC4 implementation (compliant with IPv6 address) 
+<figure width="635" height="239" image="changes/2.8/11_hc4_cookie.png"></figure>
+</p>
+
+<h3>Response Time Graph</h3>
+<p>Add a new visualizer Response Time Graph to draw a line graph showing the evolution of response time for a test
+<figure width="993" height="549" image="changes/2.8/09_resp_time_graph.png"></figure>
+</p>
+<p>Settings for Response Time Graph
+<figure width="989" height="602" image="changes/2.8/08_resp_time_graph_settings.png"></figure>
+</p>
+
+<h3>View Results in Table</h3>
+<p>Add latency to View Result in Table listener
+<figure width="998" height="324" image="changes/2.8/10_latency_view_results_table.png"></figure>
+</p>
+
+<h3>Aggregate Graph</h3>
+<p>Small improvements: legend at left or right is now on 1 column (instead of 1 large line), ...
+<figure width="989" height="418" image="changes/2.8/07_aggregate_graph_legend_left_right.png"></figure>
+</p>
+
+<h3>HTTP Proxy Server</h3>
+<p>HTTPS Spoofing options have been removed from Proxy as HTTPS recording is directly available since JMeter 2.4.
+<figure width="940" height="277" image="changes/2.8/03_remove_https_spoofing1.png"></figure>
+</p>
+
+<h3>HTTP Proxy Server</h3>
+<p>Allow URL Filters to be pasted from clipboard 
+<figure width="707" height="614" image="changes/2.8/15_add_from_clipboard_filter.png"></figure>
+</p>
+
+<h3>Find in JMeter</h3>
+<p>CTRL + F for the new Find feature 
+<figure width="477" height="157" image="changes/2.8/14_ctrl_F_shortcut.png"></figure>
+</p>
+
+<h3>User Interface in GNOME 3</h3>
+<p>Display 'Apache JMeter' title in app title bar in Gnome 3
+<figure width="441" height="253" image="changes/2.8/13_gnome3_title.png"></figure>
+</p>
+
 <!--  =================== Known bugs =================== -->
 
 <h2>Known bugs</h2>
