@@ -2711,7 +2711,7 @@ If this is selected, then the sub-samples are displayed instead of the main samp
 </description>
 </component>
 
-<component name="Simple Data Writer" index="&sect-num;.3.9"  width="786" height="145" screenshot="simpledatawriter.png">
+<component name="Simple Data Writer" index="&sect-num;.3.9"  width="741" height="141" screenshot="simpledatawriter.png">
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.
