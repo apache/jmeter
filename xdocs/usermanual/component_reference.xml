@@ -2552,7 +2552,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component name="View Results Tree" index="&sect-num;.3.6" width="869" height="654" screenshot="view_results_tree.png">
+<component name="View Results Tree" index="&sect-num;.3.6" width="878" height="659" screenshot="view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
