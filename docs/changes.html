@@ -85,6 +85,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="./usermanual/index.html">User Manual</a>
 </li>
+<li><a href="./usermanual/best-practices.html">Best Practices</a>
+</li>
 <li><a href="./usermanual/component_reference.html">Component Reference</a>
 </li>
 <li><a href="./usermanual/functions.html">Functions Reference</a>
@@ -163,220 +165,242 @@ History of Previous Changes
 </table>
 </p>
 <h1>
-Version 2.7
+Version 2.8
 </h1>
 <h2>
 New and Noteworthy
 </h2>
 <h3>
-OS Process Sampler
+Core Improvements:
 </h3>
+<h4>
+Thread Group: New Option 
+<i>
+Delay thread creation until needed
+</i>
+</h4>
 <p>
-A new System Sampler that can be used to execute commands on the local machine.
+New Option "Delay thread creation until needed" that will create and start threads when needed instead of creating them on Test startup
+<br>
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='629' height='497' src="./images/screenshots/changes/2.7/01_os_process_sampler.png"><br>
+
+
+<b>
+This new feature allows running tests with a huge number of short lived threads.
+</b>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='817' height='296' src="./images/screenshots/changes/2.8/12_delay_thread_creation.png"><br>
 <font size="-1"></font></td></tr></table></p>
 
 
 </p>
+<h4>
+HTTP Cookie Manager (IPv6 support)
+</h4>
 <p>
-OS Process Sampler results example with DNS lookup command 'dig'
+Add HTTPClient 4 cookie implementation in JMeter. 
+<br>
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='877' height='470' src="./images/screenshots/changes/2.7/02_os_process_example_results.png"><br>
+
+Cookie Manager has now the default HC3.1 implementation and a new choice HC4 implementation (compliant with IPv6 address) 
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='635' height='239' src="./images/screenshots/changes/2.8/11_hc4_cookie.png"><br>
 <font size="-1"></font></td></tr></table></p>
 
 
 </p>
-<h3>
-JMS Samplers improvements
-</h3>
+<h4>
+Memory and performance improvements
+</h4>
 <p>
-Addition of a "Non Persistent Delivery" option to send "Non-Persistent" (Guaranteed to be delivered at most once. Message loss is not a concern.) JMS messages
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='336' src="./images/screenshots/changes/2.7/11_jms_non_persistent_delivery_mode.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
+Significant improvements have been done in this version on memory usage of JMeterThread
 </p>
 <p>
-Support sending of JMS Object Messages to enable sending Objects unmarshalled from XML by XStream
+JSR223 Elements (enable using Groovy, scala... as scripting languages) have been improved to enable:
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='808' height='726' src="./images/screenshots/changes/2.7/12_jms_sending_objects.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<p>
-Enable setting JMS Properties through JMS Publisher sampler
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1029' height='470' src="./images/screenshots/changes/2.7/13_jms_properties.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<h3>
-Test Action sampler
-</h3>
-<p>
-Allow premature exit from a loop
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='862' height='167' src="./images/screenshots/changes/2.7/07_test_action_next_iter.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<h3>
-Webservice Sampler improvements
-</h3>
-<p>
-Add a jmeter property soap.document_cache to control size of Document Cache
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='270' height='59' src="./images/screenshots/changes/2.7/14_ws_document_cache.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<p>
-Make Maintain HTTP Session configurable
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='833' height='505' src="./images/screenshots/changes/2.7/15_ws_maintain_session.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<h3>
-Aggregate graph: Clustered Bar char with average, median, 90% line, min and max columns
-</h3>
-<p>
-Aggregate graph changes to Clustered Bar chart, add more columns (median, 90% line, min, max) and options, fixed some bugs.
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1177' height='503' src="./images/screenshots/changes/2.7/03_aggregate_graph_with_new_cols.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<p>
-New settings for aggregate graph
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1173' height='433' src="./images/screenshots/changes/2.7/04_aggregate_graph_parameters.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<h3>
-Improvements of HTML report design generated by JMeter Ant task in extras folder
-</h3>
-<p>
-HTML report example 
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1264' height='506' src="./images/screenshots/changes/2.7/05_jmeter_ant_task_report_success.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<p>
-HTML report example with some assertion errors
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1267' height='550' src="./images/screenshots/changes/2.7/06_jmeter_ant_task_report_errors.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<h3>
-Mailer Visualizer
-</h3>
-<p>
 <ul>
 
-
+    
 <li>
-Enable authentication, and connection security with SSL or TLS
+usage of Compilable interface when available to boost CPU usage
 </li>
 
-
+    
 <li>
-Improve GUI design
-</li>
-
-
-<li>
-Add internationalisation (i18n) support
+caching of Compilation when scripts are used as Files
 </li>
 
 
 </ul>
 
+See 
+<a href="http://wiki.apache.org/jmeter/JMeterPerformance">
+JMeter Performances accross versions
+</a>
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='860' height='403' src="./images/screenshots/changes/2.7/10_mailer_visualizer_gui.png"><br>
+
+</p>
+<h4>
+OS Process Sampler
+</h4>
+<p>
+Allow defining files for stdout/stderr/stdin. 
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='820' height='531' src="./images/screenshots/changes/2.8/06_os_sampler_stdout-err-in.png"><br>
 <font size="-1"></font></td></tr></table></p>
 
 
 </p>
-<h3>
-New Visual Indicator of number of ERROR/FATAL messages in logs
-</h3>
+<h4>
+HTTP Request: PATCH verb
+</h4>
 <p>
-Indicator shows number of ERROR/FATAL messsages in logs, it can be clicked to toggle Log Viewer panel
+Add PATCH verb to HTTP sampler
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='815' height='633' src="./images/screenshots/changes/2.7/16_log_errors_counter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='615' height='340' src="./images/screenshots/changes/2.8/01_http_patch_verb.png"><br>
 <font size="-1"></font></td></tr></table></p>
 
 
 </p>
-<h3>
-Dialog box to show detail of a parameter row
-</h3>
+<h4>
+HTTP Request: HTTPClient 4 is now the default implementation
+</h4>
 <p>
-Add a detail button on parameters table to show detail of a Row 
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='824' height='165' src="./images/screenshots/changes/2.7/08_param_button_detail.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<p>
-Detail box example
-
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='702' height='454' src="./images/screenshots/changes/2.7/09_detail_box.png"><br>
-<font size="-1"></font></td></tr></table></p>
-
-
-</p>
-<h3>
-Plugin writers
-</h3>
-<p>
-
-New interface org.apache.jmeter.engine.util.ConfigMergabilityIndicator has been introduced to tell whether a ConfigTestElement can be merged in Sampler (see Bug 53042):
+Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests).
 <br>
 
 
+Before the HTTP Java Sampler was the default one.
 
-<pre>
-public boolean applies(ConfigTestElement configElement);
-</pre>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='558' height='288' src="./images/screenshots/changes/2.8/02_http_default_hc4.png"><br>
+<font size="-1"></font></td></tr></table></p>
 
 
 </p>
+<h4>
+HTTP Request
+</h4>
 <p>
-New interface org.apache.jmeter.protocol.http.proxy.SamplerCreator to allow plugging HTTP based samplers that differ from default HTTP Samplers through Proxy during Recording Phase (see Bug 52674):
-<br>
+Add Embedded URL Filter to HTTP Request Defaults Control
 
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='586' height='682' src="./images/screenshots/changes/2.8/05_http_defaults_url_filter.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+Miscellanous
+</h4>
+<ul>
+
+    
+<li>
+CSV Dataset : Embedded new lines are now supported in quoted data
+</li>
+ 
+    
+<li>
+JMX files now contain the version of JMeter that created the file
+</li>
+ 
+    
+<li>
+JMeter Version is now available as property "jmeter.version"
+</li>
  
 
-<pre>
-public String[] getManagedContentTypes();
-</pre>
+</ul>
+<h3>
+Reporting Improvements:
+</h3>
+<h4>
+Response Time Graph
+</h4>
+<p>
+Add a new visualizer Response Time Graph to draw a line graph showing the evolution of response time for a test
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='993' height='549' src="./images/screenshots/changes/2.8/09_resp_time_graph.png"><br>
+<font size="-1"></font></td></tr></table></p>
 
 
-<pre>
-public HTTPSamplerBase createSampler(HttpRequestHdr request, Map<String, String> pageEncodings, Map<String, String> formEncodings);
-</pre>
+</p>
+<p>
+Settings for Response Time Graph
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='989' height='602' src="./images/screenshots/changes/2.8/08_resp_time_graph_settings.png"><br>
+<font size="-1"></font></td></tr></table></p>
 
 
-<pre>
-public void populateSampler(HTTPSamplerBase sampler, HttpRequestHdr request, Map<String, String> pageEncodings, Map<String, String> formEncodings) throws Exception;
-</pre>
+</p>
+<h4>
+View Results in Table
+</h4>
+<p>
+Add latency to View Result in Table listener
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='998' height='324' src="./images/screenshots/changes/2.8/10_latency_view_results_table.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+Aggregate Graph
+</h4>
+<p>
+Small improvements: legend at left or right is now on 1 column (instead of 1 large line), ...
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='989' height='418' src="./images/screenshots/changes/2.8/07_aggregate_graph_legend_left_right.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+GUI and ergonomy Improvements:
+</h3>
+<h4>
+HTTP Proxy Server simplifications
+</h4>
+<p>
+HTTPS Spoofing options have been removed from Proxy as HTTPS recording is directly available since JMeter 2.4.
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='940' height='277' src="./images/screenshots/changes/2.8/03_remove_https_spoofing1.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+HTTP Proxy Server
+</h4>
+<p>
+Allow URL Filters to be pasted from clipboard 
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='707' height='614' src="./images/screenshots/changes/2.8/15_add_from_clipboard_filter.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+Find in JMeter
+</h4>
+<p>
+CTRL + F for the new Find feature 
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='477' height='157' src="./images/screenshots/changes/2.8/14_ctrl_F_shortcut.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+ESC key now closes popups.
+
+</p>
+<h4>
+User Interface in GNOME 3
+</h4>
+<p>
+Display 'Apache JMeter' title in app title bar in Gnome 3
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='441' height='253' src="./images/screenshots/changes/2.8/13_gnome3_title.png"><br>
+<font size="-1"></font></td></tr></table></p>
 
 
 </p>
@@ -388,10 +412,51 @@ The Once Only controller behaves correctly under a Thread Group or Loop Controll
 but otherwise its behaviour is not consistent (or clearly specified).
 </p>
 <p>
-Listeners don't show iteration counts when a If Controller has a condition which is always false from the first iteration (see Bug 52496).  
+Listeners don't show iteration counts when a If Controller has a condition which is always false from the first iteration (see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=52496">Bug 52496</a>
+).  
 A workaround is to add a sampler at the same level as (or superior to) the If Controller.
 For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
 or a Debug Sampler with all fields set to False (to reduce the sample size).
+
+</p>
+<p>
+
+Changing language can break part of the configuration of the following elements (see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53679">Bug 53679</a>
+):
+
+<ul>
+
+    
+<li>
+CSV Data Set Config (sharing mode will be lost)
+</li>
+
+    
+<li>
+Constant Throughput Timer (Calculate throughput based on will be lost)
+</li>
+
+
+</ul>
+
+
+</p>
+<p>
+
+Note that there is a bug in Java on some Linux systems that manifests
+itself as the following error when running the test cases or JMeter itself:
+
+<pre>
+
+ [java] WARNING: Couldn't flush user prefs:
+ java.util.prefs.BackingStoreException:
+ java.lang.IllegalArgumentException: Not supported: indent-number
+
+</pre>
+
+This does not affect JMeter operation.
 
 </p>
 <h2>
@@ -399,28 +464,54 @@ Incompatible changes
 </h2>
 <p>
 
-When doing replacement of User Defined Variables, Proxy will not substitute partial values anymore when "Regexp matching" is used. It will use Perl 5 word matching ("\b")
+When using CacheManager, JMeter now caches responses for GET queries provided header Cache-Control is different from "no-cache" as described in specification.
+Furthermore it doesn't put anymore in Cache deprecated entries for "no-cache" responses. See 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53521">Bug 53521</a>
+ and 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53522">Bug 53522</a>
+ 
 
 </p>
 <p>
 
-In User Defined Variables, Test Plan, HTTP Sampler Arguments Table, Java Request Defaults, JMS Sampler and Publisher, LDAP Request Defaults and LDAP Extended Request Defaults, rows with
-empty Name and Value are no more saved.
+A major change has occured on JSR223 Test Elements, previously variables set up before script execution where stored in ScriptEngineManager which was created once per execution, 
+now ScriptEngineManager is a singleton shared by all JSR223 elements and only ScriptEngine is created once per execution, variables set up before script execution are now stored 
+in Bindings created on each execution, see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53365">Bug 53365</a>
+.
 
 </p>
 <p>
 
-JMeter now expands the Test Plan tree to the testplan level and no further and selects the root of the tree. Furthermore default value of onload.expandtree is false.
+JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports this feature, see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53520">Bug 53520</a>
+.
 
 </p>
 <p>
 
-Graph Full Results Listener has been removed.
+Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F (CMD+F1 for Mac OS) now opens Search Dialog.
 
 </p>
 <p>
 
-When calling "Clear All" command, if Log Viewer is displayed its content will be cleared.
+By default, the TestCompiler now stores details of which pairs it has seen in Controller instances rather than in a static Set.
+[
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53796">Bug 53796</a>
+]
+This gives much better memory behaviour for delayed start test plans, as memory used is proportional to the number of concurrent threads.
+With the static Set memory usage was proportional to the total thread count.
+This change is very unlikely to cause a problem.
+The original behaviour can be restored by setting the property 
+<code>
+TestCompiler.useStaticSet=true
+</code>
+
+
+</p>
+<p>
+
+HTTPS Spoofing options have been removed from Proxy as HTTPS recording is directly available since JMeter 2.4.
 
 </p>
 <h2>
@@ -433,42 +524,26 @@ HTTP Samplers and Proxy
 
 
 <li>
-Bug 52613 - Using Raw Post Body option, text gets encoded
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53521">Bug 53521</a>
+ - Cache Manager should cache content with Cache-control=private
 </li>
 
 
 <li>
-Bug 52781 - Content-Disposition header garbled even if browser compatible headers is checked (HC4) 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53522">Bug 53522</a>
+ - Cache Manager should not store at all response with header "no-cache" and store other types of Cache-Control having max-age value
 </li>
 
 
 <li>
-Bug 52796 - MonitorHandler fails to clear variables when starting a new parse
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53838">Bug 53838</a>
+ - Pressing "Stop" does not interrupt the TCP sampler
 </li>
 
 
 <li>
-Bug 52871 - Multiple Certificates not working with HTTP Client 4
-</li>
-
-
-<li>
-Bug 52885 - Proxy : Recording issues with HTTPS, cookies starting with secure are partly truncated
-</li>
-
-
-<li>
-Bug 52886 - Proxy : Recording issues with HTTPS when spoofing is on, secure cookies are not always changed
-</li>
-
-
-<li>
-Bug 52897 - HTTPSampler : Using PUT method with HTTPClient4 and empty Content Encoding and sending files leads to NullPointerException
-</li>
-
-
-<li>
-Bug 53145 - HTTP Sampler - function in path evaluated too early
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53911">Bug 53911</a>
+ - JmeterKeystore does not allow for key down the list of certificate
 </li>
 
 
@@ -480,42 +555,32 @@ Other Samplers
 
 
 <li>
-Bug 51737 - TCPSampler : Packet gets converted/corrupted
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53348">Bug 53348</a>
+ - JMeter JMS Point-to-Point Request-Response sampler doesn't work when Request-queue and Receive-queue are different
 </li>
 
 
 <li>
-Bug 52868 - BSF language list should be sorted
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53357">Bug 53357</a>
+ - JMS Point to Point reports too high response times in Request Response Mode
 </li>
 
 
 <li>
-Bug 52869 - JSR223 language list currently uses BSF list which is wrong
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53440">Bug 53440</a>
+ - SSL connection leads to ArrayStoreException on JDK 6 with some KeyManagerFactory SPI
 </li>
 
 
 <li>
-Bug 52932 - JDBC Sampler : Sampler is not marked in error in an Exception which is not of class IOException, SQLException, IOException occurs
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53511">Bug 53511</a>
+ - access log sampler SessionFilter throws NullPointerException - cookie manager not initialized properly
 </li>
 
 
 <li>
-Bug 52916 - JDBC Exception if there is an empty user defined variable
-</li>
-
-
-<li>
-Bug 52937 - Webservice Sampler : Clear Soap Documents Cache at end of Test 
-</li>
-
-
-<li>
-Bug 53027 - Jmeter starts throwing exceptions while using SMTP Sample in a test plan with HTTP Cookie Mngr or HTTP Request Defaults
-</li>
-
-
-<li>
-Bug 53072 - JDBC PREPARED SELECT statements should return results in variables like non prepared SELECT
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53715">Bug 53715</a>
+ - JMeter does not load WSDL
 </li>
 
 
@@ -526,16 +591,6 @@ Controllers
 <ul>
 
 
-<li>
-Bug 52968 - Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs
-</li>
-
-
-<li>
-Bug 50898 - IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name
-</li>
-
-
 </ul>
 <h3>
 Listeners
@@ -544,19 +599,39 @@ Listeners
 
 
 <li>
-Bug 43450 - Listeners/Savers assume SampleResult count is always 1; fixed Generate Summary Results
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53742">Bug 53742</a>
+ - When jmeter.save.saveservice.sample_count is set to true, elapsed time read by listener is always equal to 0
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53774">Bug 53774</a>
+ - RequestViewRaw does not show headers unless samplerData is non-null
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53802">Bug 53802</a>
+ - IdleTime values are not saved to CSV log
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53874">Bug 53874</a>
+ - View Results Tree : If some parameter containing special characters like % is not encoded, RequestViewHTTP fails with java.lang.IllegalArgumentException: URLDecoder: Illegal hex characters in escape (%) pattern and Response is not displayed
 </li>
 
 
 </ul>
 <h3>
-Assertions
+Timers, Assertions, Config, Pre- & Post-Processors
 </h3>
 <ul>
 
 
 <li>
-Bug 52848 - NullPointer in "XPath Assertion"
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=51512">Bug 51512</a>
+ - Cookies aren't inserted into HTTP request with IPv6 Host header
 </li>
 
 
@@ -574,16 +649,6 @@ I18N
 <ul>
 
 
-<li>
-Bug 52551 - Function Helper Dialog does not switch language correctly
-</li>
-
-
-<li>
-Bug 52552 - Help reference only works in English
-</li>
-
-
 </ul>
 <h3>
 General
@@ -592,82 +657,38 @@ General
 
 
 <li>
-Bug 52639 - JSplitPane divider for log panel should be hidden if log is not activated
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53365">Bug 53365</a>
+ - JSR223TestElement should cache ScriptEngineManager
 </li>
 
 
 <li>
-Bug 52672 - Change Controller action deletes all but one child samplers
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53520">Bug 53520</a>
+ - JSR223 Elements : Use Compilable interface to improve performances on File scripts
 </li>
 
 
 <li>
-Bug 52694 - Deadlock in GUI related to non AWT Threads updating GUI
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53501">Bug 53501</a>
+ - Synchronization timer blocks test end.
 </li>
 
 
 <li>
-Bug 52678 - Proxy : When doing replacement of UserDefinedVariables, partial values should not be substituted
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53750">Bug 53750</a>
+ - TestCompiler saves unnecessary entries in pairing collection
 </li>
 
 
 <li>
-Bug 52728 - CSV Data Set Config element cannot coexist with BSF Sampler in same Thread Plan
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=52266">Bug 52266</a>
+ - Code:Inconsistent synchronization
 </li>
 
 
 <li>
-Bug 52762 - Problem with multiples certificates: first index not used until indexes are restarted
-</li>
-
-
-<li>
-Bug 52741 - TestBeanGUI default values do not work at second time or later
-</li>
-
-
-<li>
-Bug 52783 - oro.patterncache.size property never used due to early init
-</li>
-
-
-<li>
-Bug 52789 - Proxy with Regexp Matching can fail with NullPointerException in Value Replacement if value is null
-</li>
-
-
-<li>
-Bug 52645 - Recording with Proxy leads to OutOfMemory
-</li>
-
-
-<li>
-Bug 52679 - User Parameters columns narrow
-</li>
-
-
-<li>
-Bug 52843 - Sample headerSize and bodySize not being accumulated for subsamples
-</li>
-
-
-<li>
-Bug 52967 - The function __P() couldn't use default value when running with remote server in GUI mode.
-</li>
-
-
-<li>
-Bug 50799 - Having a non-HTTP sampler in a http test plan prevents multiple header managers from working
-</li>
-
-
-<li>
-Bug 52997 - Jmeter should not exit without saving Test Plan if saving before exit fails
-</li>
-
-
-<li>
-Bug 53136 - Catching Throwable needs to be carefully handled
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53841">Bug 53841</a>
+ - CSVSaveService reads file using JVM default file encoding instead of using the one configured in saveservice.properties
 </li>
 
 
@@ -681,6 +702,24 @@ HTTP Samplers
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53675">Bug 53675</a>
+ - Add PATCH verb to HTTP sampler
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53931">Bug 53931</a>
+ - Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests). Before the default, it was the HTTP Java Sampler
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53934">Bug 53934</a>
+ - Removes HTTPS spoofing options in JMeter HTTP Proxy Server. Since JMeter 2.4, the HTTPS protocol is directly supported by the proxy
+</li>
+
+
 </ul>
 <h3>
 Other samplers
@@ -689,42 +728,32 @@ Other samplers
 
 
 <li>
-Bug 52775 - JMS Publisher : Add Non Persistent Delivery option
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55310">Bug 55310</a>
+ - TestAction should implement Interruptible
 </li>
 
 
 <li>
-Bug 52810 - Enable setting JMS Properties through JMS Publisher sampler
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53318">Bug 53318</a>
+ - Add Embedded URL Filter to HTTP Request Defaults Control 
 </li>
 
 
 <li>
-Bug 52938 - Webservice Sampler : Add a jmeter property soap.document_cache to control size of Document Cache
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53782">Bug 53782</a>
+ - Enhance JavaSampler handling of JavaSamplerClient cleanup to use less memory
 </li>
 
 
 <li>
-Bug 52939 - Webservice Sampler : Make MaintainSession configurable
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53168">Bug 53168</a>
+ - OS Process - allow specification of stdout/stderr/stdin
 </li>
 
 
 <li>
-Bug 53073 - Allow to assign the OUT result of a JDBC CALLABLE to JMeter variables
-</li>
-
-
-<li>
-Bug 53164 - New System Sampler
-</li>
-
-
-<li>
-Bug 53172 - OS Process Sampler - allow specification of Environment Variables
-</li>
-
-
-<li>
-Bug 52936 - JMS Publisher : Support sending of JMS Object Messages
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53844">Bug 53844</a>
+ - JDBC related elements should check class of Variable Name supposed to contain JDBC Connection Configuration to avoid ClassCastException 
 </li>
 
 
@@ -735,6 +764,12 @@ Controllers
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53671">Bug 53671</a>
+ - tearDown thread group to run even if shutdown test happens
+</li>
+
+
 </ul>
 <h3>
 Listeners
@@ -743,22 +778,46 @@ Listeners
 
 
 <li>
-Bug 52603 - MailerVisualizer : Enable SSL , TLS and Authentication
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53566">Bug 53566</a>
+ - Don't log partial responses to the jmeter log
 </li>
 
 
 <li>
-Bug 52698 - Remove Graph Full Results Listener
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53716">Bug 53716</a>
+ - Small improvements in aggregate graph: legend at left or right is now on 1 column (instead of 1 large line), no border to the reference's square color, reduce width on some fields
 </li>
 
 
 <li>
-Bug 53070 - Change Aggregate graph to Clustered Bar chart, add more columns (median, 90% line, min, max) and options, fixed some bugs
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53718">Bug 53718</a>
+ - Add a new visualizer 'Response Time Graph' to draw a line graph showing the evolution of response time for a test
 </li>
 
 
 <li>
-Bug 53246 - Mailer Visualizer: improve GUI design and I18N
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53738">Bug 53738</a>
+ - Keep track of number of threads started and finished
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53753">Bug 53753</a>
+ -  Summariser: no point displaying fractional time in most cases
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53749">Bug 53749</a>
+ - TestListener interface could perhaps be split up. 
+This should reduce per-thread memory requirements and processing, 
+as only test elements that actually use testIterationStart functionality now need to be handled.
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53941">Bug 53941</a>
+ - Add latency to View Result table listener
 </li>
 
 
@@ -769,6 +828,13 @@ Timers, Assertions, Config, Pre- & Post-Processors
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53755">Bug 53755</a>
+ - Adding a HttpClient 4 cookie implementation in JMeter. 
+Cookie Manager has now the default HC3.1 implementation and a new choice HC4 implementation (compliant with IPv6 address)
+</li>
+
+
 </ul>
 <h3>
 Functions
@@ -776,16 +842,17 @@ Functions
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=51527">Bug 51527</a>
+ - __time() function : add another option to __time() to provide *seconds* since epoch
+</li>
+
+
 </ul>
 <h3>
 I18N
 </h3>
 <ul>
-
-
-<li>
-Mailer Visualizer has been internationalized. French translation added. (see Bug 53246)
-</li>
 
 
 </ul>
@@ -796,57 +863,85 @@ General
 
 
 <li>
-Bug 45839 - Test Action : Allow premature exit from a loop
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53364">Bug 53364</a>
+ - Sort list of Functions in Function Helper Dialog
 </li>
 
 
 <li>
-Bug 52614 - MailerModel.sendMail has strange way to calculate debug setting
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53418">Bug 53418</a>
+ - New Option "Delay thread creation until needed" that will create and start threads when needed instead of creating them on Test startup
 </li>
 
 
 <li>
-Bug 52782 - Add a detail button on parameters table to show detail of a Row
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=42245">Bug 42245</a>
+ - Show clear passwords in HTTP Authorization Manager
 </li>
 
 
 <li>
-Bug 52674 - Proxy : Add a Sampler Creator to allow plugging HTTP based samplers using potentially non textual POST Body (AMF, Silverlight...) and customizing them for others
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53616">Bug 53616</a>
+ - Display 'Apache JMeter' title in app title bar in Gnome 3
 </li>
 
 
 <li>
-Bug 52934 - GUI : Open Test plan with the tree expanded to the testplan level and no further and select the root of the tree
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53759">Bug 53759</a>
+ - ClientJMeterEngine perfoms unnecessary traverse using SearchByClass(TestListener)
 </li>
 
 
 <li>
-Bug 52941 - Improvements of HTML report design generated by JMeter Ant task extra
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=52601">Bug 52601</a>
+ - CTRL + F for the new Find feature
 </li>
 
 
 <li>
-Bug 53042 - Introduce a new method in Sampler interface to allow Sampler to decide wether a config element applies to Sampler
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53796">Bug 53796</a>
+ - TestCompiler uses static Set which can grow huge
 </li>
 
 
 <li>
-Bug 52771 - Documentation : Added RSS feed on JMeter Home page under link "Subscribe to What's New"
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53673">Bug 53673</a>
+ - Add JMeter version in the jmx file
 </li>
 
 
 <li>
-Bug 42784 - Show the number of errors logged in the GUI
+Add support for HeapDump to the JMeter non-GUI and GUI client
 </li>
 
 
 <li>
-Bug 53256 - Make Clear All command clean LogViewer content
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53862">Bug 53862</a>
+ - Would be nice to have the JMeter Version available as a property
 </li>
 
 
 <li>
-Bug 53261 - Make "Error/fatal" counter added in Bug 42784 open Log Viewer panel when Warn Indicator is clicked
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53806">Bug 53806</a>
+ -  FileServer should provide thread-safe parsing
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53807">Bug 53807</a>
+ - CSV Dataset does not handle embedded new lines in quoted data
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53879">Bug 53879</a>
+ - GUI : Allow Popups to be closed with ESC key
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53876">Bug 53876</a>
+ - Allow URL Filters (HTTP Proxy) to be pasted from clipboard
 </li>
 
 
@@ -858,51 +953,30 @@ Non-functional changes
 
 
 <li>
-Upgraded to rhino 1.7R3 (was js-1.7R2.jar). 
-Note: the Maven coordinates for the jar were changed from rhino:js to org.mozilla:rhino.
-This does not affect JMeter directly, but might cause problems if using JMeter in a Maven project
-with other code that depends on an earlier version of the Rhino Javascript jar.
-
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53311">Bug 53311</a>
+ - JMeterUtils#runSafe should not throw Error when interrupted
 </li>
 
 
 <li>
-Bug 52675 - Refactor Proxy and HttpRequestHdr to allow Sampler Creation by Proxy
+Updated to commons-net-3.1 (from 3.0.1)
 </li>
 
 
 <li>
-Bug 52680 - Mention version in which function was introduced
+Updated to HttpComponents Core 4.2.2 (from 4.1.4) and HttpComponents Client 4.2.1 (from 4.1.3)
 </li>
 
 
 <li>
-Bug 52788 - HttpRequestHdr : Optimize code to avoid useless work
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53765">Bug 53765</a>
+ - Switch to commons-lang3-3.1
 </li>
 
 
 <li>
-JMeter Ant (ant-jmeter-1.1.1.jar) task was upgraded from 1.0.9 to 1.1.1
-</li>
-
-
-<li>
-Updated to commons-io 2.2 (from 2.1)
-</li>
-
-
-<li>
-Bug 53129 - Upgrade XStream from 1.3.1 to 1.4.2
-</li>
-
-
-<li>
-Updated to httpcomponents-client 4.1.3 (from 4.1.2)
-</li>
-
-
-<li>
-Updated JMeter distributed testing guide (jmeter_distributed_testing_step_by_step.pdf). Changes source format to OpenOffice odt (from sxw)
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53884">Bug 53884</a>
+ - wrong Maven groupId for commons-lang
 </li>
 
 

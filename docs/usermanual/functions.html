@@ -83,6 +83,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="../usermanual/index.html">User Manual</a>
 </li>
+<li><a href="../usermanual/best-practices.html">Best Practices</a>
+</li>
 <li><a href="../usermanual/component_reference.html">Component Reference</a>
 </li>
 <li><a href="../usermanual/functions.html">Functions Reference</a>
@@ -225,6 +227,20 @@ ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTER
 Properties are not the same as variables.
 Variables are local to a thread; properties are common to all threads,
 and need to be referenced using the __P or __property function.
+
+</td></tr>
+</table>
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+When using \ before a variable for a windows path for example C:\test\${test}, ensure you escape the \ otherwise JMeter will not interpret the variable, example:
+C:\\test\\${test}.
+
+<br>
+
+ 
+Alternatively, just use / instead for the path separator - e.g. C:/test/${test} - Windows JVMs will convert the separators as necessary.
 
 </td></tr>
 </table>
@@ -3231,8 +3247,9 @@ The time function returns the current time in various formats.
 <tr>
 <td>Format</td>
 <td>
-        The format to be passed to SimpleDateFormat. 
+        The format to be passed to SimpleDateFormat.
         The function supports various shorthand aliases, see below.
+        If ommitted, the function returns the current time in milliseconds since the epoch.
         
 </td>
 <td>
@@ -3250,7 +3267,10 @@ No
 </table>
 </p>
 <p>
-If the format string is omitted, then the function returns the current time in milliseconds.
+If the format string is omitted, then the function returns the current time in milliseconds since the epoch.
+In versions of JMeter after 2.7, if the format matches "/ddd" (where ddd are decimal digits),
+then the function returns the current time in milliseconds divided by the value of ddd.
+For example, "/1000" returns the current time in seconds since the epoch.
 Otherwise, the current time is passed to SimpleDateFormat.
 The following shorthand aliases are provided:
 
