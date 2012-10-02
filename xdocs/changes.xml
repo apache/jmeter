@@ -57,7 +57,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
     <li>usage of Compilable interface when available to boost CPU usage</li>
     <li>caching of Compilation when scripts are used as Files</li>
 </ul>
-See <a href="http://wiki.apache.org/jmeter/JMeterPerformance">JMeter Performances accross versions</a>
+See <a href="http://wiki.apache.org/jmeter/JMeterPerformance">JMeter Performances across versions</a>
 </p>
 
 <h4>OS Process Sampler</h4>
@@ -71,13 +71,13 @@ See <a href="http://wiki.apache.org/jmeter/JMeterPerformance">JMeter Performance
 </p>
 
 <h4>HTTP Request: HTTPClient 4 is now the default implementation</h4>
-<p>Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests).<br/>
-Before the HTTP Java Sampler was the default one.
+<p>HTTPClient 4 is now the default HTTP Request implementation (and for Proxy element when generating HTTP requests).<br/>
+Previously the default was the HTTP Java implementation (i.e. the implementation provided by the JVM) 
 <figure width="558" height="288" image="changes/2.8/02_http_default_hc4.png"></figure>
 </p>
 
 <h4>HTTP Request</h4>
-<p>Add Embedded URL Filter to HTTP Request Defaults Control
+<p>Add Embedded URL Filter to HTTP Request Defaults Control (it was already present for HTTP Requests)
 <figure width="586" height="682" image="changes/2.8/05_http_defaults_url_filter.png"></figure>
 </p>
 
