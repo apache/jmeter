@@ -1203,6 +1203,7 @@ run JMeter unless all the JMeter jars are added.
 
   <!-- Source files also needed at runtime -->
   <patternset id="dist.common.non.native">
+    <include name="${dest.jar.jmeter}/heapdump.*"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <exclude name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/mirror-server.*"/>
