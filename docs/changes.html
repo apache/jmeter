@@ -236,7 +236,7 @@ caching of Compilation when scripts are used as Files
 
 See 
 <a href="http://wiki.apache.org/jmeter/JMeterPerformance">
-JMeter Performances accross versions
+JMeter Performances across versions
 </a>
 
 
@@ -267,11 +267,11 @@ Add PATCH verb to HTTP sampler
 HTTP Request: HTTPClient 4 is now the default implementation
 </h4>
 <p>
-Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests).
+HTTPClient 4 is now the default HTTP Request implementation (and for Proxy element when generating HTTP requests).
 <br>
 
 
-Before the HTTP Java Sampler was the default one.
+Previously the default was the HTTP Java implementation (i.e. the implementation provided by the JVM) 
 
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='558' height='288' src="./images/screenshots/changes/2.8/02_http_default_hc4.png"><br>
 <font size="-1"></font></td></tr></table></p>
@@ -282,7 +282,7 @@ Before the HTTP Java Sampler was the default one.
 HTTP Request
 </h4>
 <p>
-Add Embedded URL Filter to HTTP Request Defaults Control
+Add Embedded URL Filter to HTTP Request Defaults Control (it was already present for HTTP Requests)
 
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='586' height='682' src="./images/screenshots/changes/2.8/05_http_defaults_url_filter.png"><br>
 <font size="-1"></font></td></tr></table></p>
@@ -689,6 +689,12 @@ General
 <li>
 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53841">Bug 53841</a>
  - CSVSaveService reads file using JVM default file encoding instead of using the one configured in saveservice.properties
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53953">Bug 53953</a>
+ New: Typo in monitor test plan documentation
 </li>
 
 
