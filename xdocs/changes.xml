@@ -251,6 +251,7 @@ HTTPS Spoofing options have been removed from Proxy as HTTPS recording is direct
 <li><bugzilla>53750</bugzilla> - TestCompiler saves unnecessary entries in pairing collection</li>
 <li><bugzilla>52266</bugzilla> - Code:Inconsistent synchronization</li>
 <li><bugzilla>53841</bugzilla> - CSVSaveService reads file using JVM default file encoding instead of using the one configured in saveservice.properties</li>
+<li><bugzilla>53953</bugzilla> New: Typo in monitor test plan documentation</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

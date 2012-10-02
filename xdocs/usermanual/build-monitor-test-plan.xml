@@ -145,7 +145,7 @@ the current implementation uses 50/50 to be conservative. A container that is mo
 efficient with thread management might not see any performance degradation, but
 the used memory definitely will show an impact.</p>
 <figure image="monitor_screencap.png"/>
-<p>The performance graph shows for different lines. The free memory line shows how
+<p>The performance graph shows four different lines. The free memory line shows how
 much free memory is left in the current allocated block. Tomcat 5 returns the maximum
 memory, but it is not graphed. In a well tuned environment, the server should never
 reach the maximum memory.</p>
