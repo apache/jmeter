@@ -521,11 +521,14 @@ public class ThreadGroup extends AbstractThreadGroup {
             this.notifier = notifier;
             this.threadGroupTree = threadGroupTree;
             this.engine = engine;
+            // Store context from Root Thread to pass it to created threads
             this.context = JMeterContextService.getContext();
+            
         }
         
         public void run() {
-            
+            // Copy in ThreadStarter thread context from calling Thread
+            JMeterContextService.getContext().setVariables(this.context.getVariables());
             long now = System.currentTimeMillis(); // needs to be constant for all threads
             long endtime = 0;
             final boolean usingScheduler = getScheduler();

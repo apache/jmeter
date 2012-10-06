@@ -30,6 +30,310 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <p><b>Changes sections are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>  
 
+<!--  =================== 2.8 =================== -->
+
+<h1>Version 2.8</h1>
+
+<h2>New and Noteworthy</h2>
+
+<h3>Core Improvements:</h3>
+
+<h4>Thread Group: New Option <i>Delay thread creation until needed</i></h4>
+<p>New Option "Delay thread creation until needed" that will create and start threads when needed instead of creating them on Test startup<br></br>
+<b>This new feature allows running tests with a huge number of short lived threads.</b>
+<figure width="817" height="296" image="changes/2.8/12_delay_thread_creation.png"></figure>
+</p>
+
+<h4>HTTP Cookie Manager (IPv6 support)</h4>
+<p>Add HTTPClient 4 cookie implementation in JMeter. <br/>
+Cookie Manager has now the default HC3.1 implementation and a new choice HC4 implementation (compliant with IPv6 address) 
+<figure width="635" height="239" image="changes/2.8/11_hc4_cookie.png"></figure>
+</p>
+
+<h4>Memory and performance improvements</h4>
+<p>Significant improvements have been done in this version on memory usage of JMeterThread</p>
+<p>JSR223 Elements (enable using Groovy, scala... as scripting languages) have been improved to enable:
+<ul>
+    <li>usage of Compilable interface when available to boost CPU usage</li>
+    <li>caching of Compilation when scripts are used as Files</li>
+</ul>
+See <a href="http://wiki.apache.org/jmeter/JMeterPerformance">JMeter Performances across versions</a>
+</p>
+
+<h4>OS Process Sampler</h4>
+<p>Allow defining files for stdout/stderr/stdin. 
+<figure width="820" height="531" image="changes/2.8/06_os_sampler_stdout-err-in.png"></figure>
+</p>
+
+<h4>HTTP Request: PATCH verb</h4>
+<p>Add PATCH verb to HTTP sampler
+<figure width="615" height="340" image="changes/2.8/01_http_patch_verb.png"></figure>
+</p>
+
+<h4>HTTP Request: HTTPClient 4 is now the default implementation</h4>
+<p>HTTPClient 4 is now the default HTTP Request implementation (and for Proxy element when generating HTTP requests).<br/>
+Previously the default was the HTTP Java implementation (i.e. the implementation provided by the JVM) 
+<figure width="558" height="288" image="changes/2.8/02_http_default_hc4.png"></figure>
+</p>
+
+<h4>HTTP Request</h4>
+<p>Add Embedded URL Filter to HTTP Request Defaults Control (it was already present for HTTP Requests)
+<figure width="586" height="682" image="changes/2.8/05_http_defaults_url_filter.png"></figure>
+</p>
+
+<h4>Miscellanous</h4>
+<ul>
+    <li>CSV Dataset : Embedded new lines are now supported in quoted data</li> 
+    <li>JMX files now contain the version of JMeter that created the file</li> 
+    <li>JMeter Version is now available as property "jmeter.version"</li> 
+</ul>
+<h3>Reporting Improvements:</h3>
+
+<h4>Response Time Graph</h4>
+<p>Add a new visualizer Response Time Graph to draw a line graph showing the evolution of response time for a test
+<figure width="993" height="549" image="changes/2.8/09_resp_time_graph.png"></figure>
+</p>
+<p>Settings for Response Time Graph
+<figure width="989" height="602" image="changes/2.8/08_resp_time_graph_settings.png"></figure>
+</p>
+
+<h4>View Results in Table</h4>
+<p>Add latency to View Result in Table listener
+<figure width="998" height="324" image="changes/2.8/10_latency_view_results_table.png"></figure>
+</p>
+
+<h4>Aggregate Graph</h4>
+<p>Small improvements: legend at left or right is now on 1 column (instead of 1 large line), ...
+<figure width="989" height="418" image="changes/2.8/07_aggregate_graph_legend_left_right.png"></figure>
+</p>
+
+<h3>GUI and ergonomy Improvements:</h3>
+<h4>HTTP Proxy Server simplifications</h4>
+<p>HTTPS Spoofing options have been removed from Proxy as HTTPS recording is directly available since JMeter 2.4.
+<figure width="940" height="277" image="changes/2.8/03_remove_https_spoofing1.png"></figure>
+</p>
+
+<h4>HTTP Proxy Server</h4>
+<p>Allow URL Filters to be pasted from clipboard 
+<figure width="707" height="614" image="changes/2.8/15_add_from_clipboard_filter.png"></figure>
+</p>
+
+<h4>Find in JMeter</h4>
+<p>CTRL + F for the new Find feature 
+<figure width="477" height="157" image="changes/2.8/14_ctrl_F_shortcut.png"></figure>
+
+ESC key now closes popups.
+</p>
+
+<h4>User Interface in GNOME 3</h4>
+<p>Display 'Apache JMeter' title in app title bar in Gnome 3
+<figure width="441" height="253" image="changes/2.8/13_gnome3_title.png"></figure>
+</p>
+
+<!--  =================== Known bugs =================== -->
+
+<h2>Known bugs</h2>
+
+<p>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</p>
+
+<p>Listeners don't show iteration counts when a If Controller has a condition which is always false from the first iteration (see <bugzilla>52496</bugzilla>).  
+A workaround is to add a sampler at the same level as (or superior to) the If Controller.
+For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
+or a Debug Sampler with all fields set to False (to reduce the sample size).
+</p>
+
+<p>
+Changing language can break part of the configuration of the following elements (see <bugzilla>53679</bugzilla>):
+<ul>
+    <li>CSV Data Set Config (sharing mode will be lost)</li>
+    <li>Constant Throughput Timer (Calculate throughput based on will be lost)</li>
+</ul>
+</p>
+
+<p>
+Note that there is a bug in Java on some Linux systems that manifests
+itself as the following error when running the test cases or JMeter itself:
+<pre>
+ [java] WARNING: Couldn't flush user prefs:
+ java.util.prefs.BackingStoreException:
+ java.lang.IllegalArgumentException: Not supported: indent-number
+</pre>
+This does not affect JMeter operation.
+</p>
+
+<!-- =================== Incompatible changes =================== -->
+
+<h2>Incompatible changes</h2>
+
+<p>
+When using CacheManager, JMeter now caches responses for GET queries provided header Cache-Control is different from "no-cache" as described in specification.
+Furthermore it doesn't put anymore in Cache deprecated entries for "no-cache" responses. See <bugzilla>53521</bugzilla> and <bugzilla>53522</bugzilla> 
+</p>
+
+<p>
+A major change has occured on JSR223 Test Elements, previously variables set up before script execution where stored in ScriptEngineManager which was created once per execution, 
+now ScriptEngineManager is a singleton shared by all JSR223 elements and only ScriptEngine is created once per execution, variables set up before script execution are now stored 
+in Bindings created on each execution, see <bugzilla>53365</bugzilla>.
+</p>
+
+<p>
+JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports this feature, see <bugzilla>53520</bugzilla>.
+</p>
+
+<p>
+Shortcut for Function Helper Dialog is now CTRL+F1 (CMD + F1 for Mac OS), CTRL+F (CMD+F1 for Mac OS) now opens Search Dialog.
+</p>
+
+<p>
+By default, the TestCompiler now stores details of which pairs it has seen in Controller instances rather than in a static Set.
+[<bugzilla>53796</bugzilla>]
+This gives much better memory behaviour for delayed start test plans, as memory used is proportional to the number of concurrent threads.
+With the static Set memory usage was proportional to the total thread count.
+This change is very unlikely to cause a problem.
+The original behaviour can be restored by setting the property <code>TestCompiler.useStaticSet=true</code>
+</p>
+
+<p>
+HTTPS Spoofing options have been removed from Proxy as HTTPS recording is directly available since JMeter 2.4.
+</p>
+<!-- =================== Bug fixes =================== -->
+
+<h2>Bug fixes</h2>
+
+<h3>HTTP Samplers and Proxy</h3>
+<ul>
+<li><bugzilla>53521</bugzilla> - Cache Manager should cache content with Cache-control=private</li>
+<li><bugzilla>53522</bugzilla> - Cache Manager should not store at all response with header "no-cache" and store other types of Cache-Control having max-age value</li>
+<li><bugzilla>53838</bugzilla> - Pressing "Stop" does not interrupt the TCP sampler</li>
+<li><bugzilla>53911</bugzilla> - JmeterKeystore does not allow for key down the list of certificate</li>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+<li><bugzilla>53348</bugzilla> - JMeter JMS Point-to-Point Request-Response sampler doesn't work when Request-queue and Receive-queue are different</li>
+<li><bugzilla>53357</bugzilla> - JMS Point to Point reports too high response times in Request Response Mode</li>
+<li><bugzilla>53440</bugzilla> - SSL connection leads to ArrayStoreException on JDK 6 with some KeyManagerFactory SPI</li>
+<li><bugzilla>53511</bugzilla> - access log sampler SessionFilter throws NullPointerException - cookie manager not initialized properly</li>
+<li><bugzilla>53715</bugzilla> - JMeter does not load WSDL</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li><bugzilla>53742</bugzilla> - When jmeter.save.saveservice.sample_count is set to true, elapsed time read by listener is always equal to 0</li>
+<li><bugzilla>53774</bugzilla> - RequestViewRaw does not show headers unless samplerData is non-null</li>
+<li><bugzilla>53802</bugzilla> - IdleTime values are not saved to CSV log</li>
+<li><bugzilla>53874</bugzilla> - View Results Tree : If some parameter containing special characters like % is not encoded, RequestViewHTTP fails with java.lang.IllegalArgumentException: URLDecoder: Illegal hex characters in escape (%) pattern and Response is not displayed</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+<li><bugzilla>51512</bugzilla> - Cookies aren't inserted into HTTP request with IPv6 Host header</li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li><bugzilla>53365</bugzilla> - JSR223TestElement should cache ScriptEngineManager</li>
+<li><bugzilla>53520</bugzilla> - JSR223 Elements : Use Compilable interface to improve performances on File scripts</li>
+<li><bugzilla>53501</bugzilla> - Synchronization timer blocks test end.</li>
+<li><bugzilla>53750</bugzilla> - TestCompiler saves unnecessary entries in pairing collection</li>
+<li><bugzilla>52266</bugzilla> - Code:Inconsistent synchronization</li>
+<li><bugzilla>53841</bugzilla> - CSVSaveService reads file using JVM default file encoding instead of using the one configured in saveservice.properties</li>
+<li><bugzilla>53953</bugzilla> New: Typo in monitor test plan documentation</li>
+</ul>
+
+<!-- =================== Improvements =================== -->
+
+<h2>Improvements</h2>
+
+<h3>HTTP Samplers</h3>
+<ul>
+<li><bugzilla>53675</bugzilla> - Add PATCH verb to HTTP sampler</li>
+<li><bugzilla>53931</bugzilla> - Define HTTPClient 4 for the default HTTP Request (and Proxy element to generate the HTTP requests). Before the default, it was the HTTP Java Sampler</li>
+<li><bugzilla>53934</bugzilla> - Removes HTTPS spoofing options in JMeter HTTP Proxy Server. Since JMeter 2.4, the HTTPS protocol is directly supported by the proxy</li>
+</ul>
+
+<h3>Other samplers</h3>
+<ul>
+<li><bugzilla>55310</bugzilla> - TestAction should implement Interruptible</li>
+<li><bugzilla>53318</bugzilla> - Add Embedded URL Filter to HTTP Request Defaults Control </li>
+<li><bugzilla>53782</bugzilla> - Enhance JavaSampler handling of JavaSamplerClient cleanup to use less memory</li>
+<li><bugzilla>53168</bugzilla> - OS Process - allow specification of stdout/stderr/stdin</li>
+<li><bugzilla>53844</bugzilla> - JDBC related elements should check class of Variable Name supposed to contain JDBC Connection Configuration to avoid ClassCastException </li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+<li><bugzilla>53671</bugzilla> - tearDown thread group to run even if shutdown test happens</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li><bugzilla>53566</bugzilla> - Don't log partial responses to the jmeter log</li>
+<li><bugzilla>53716</bugzilla> - Small improvements in aggregate graph: legend at left or right is now on 1 column (instead of 1 large line), no border to the reference's square color, reduce width on some fields</li>
+<li><bugzilla>53718</bugzilla> - Add a new visualizer 'Response Time Graph' to draw a line graph showing the evolution of response time for a test</li>
+<li><bugzilla>53738</bugzilla> - Keep track of number of threads started and finished</li>
+<li><bugzilla>53753</bugzilla> -  Summariser: no point displaying fractional time in most cases</li>
+<li><bugzilla>53749</bugzilla> - TestListener interface could perhaps be split up. 
+This should reduce per-thread memory requirements and processing, 
+as only test elements that actually use testIterationStart functionality now need to be handled.</li>
+<li><bugzilla>53941</bugzilla> - Add latency to View Result table listener</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+<li><bugzilla>53755</bugzilla> - Adding a HttpClient 4 cookie implementation in JMeter. 
+Cookie Manager has now the default HC3.1 implementation and a new choice HC4 implementation (compliant with IPv6 address)</li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+<li><bugzilla>51527</bugzilla> - __time() function : add another option to __time() to provide *seconds* since epoch</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li><bugzilla>53364</bugzilla> - Sort list of Functions in Function Helper Dialog</li>
+<li><bugzilla>53418</bugzilla> - New Option "Delay thread creation until needed" that will create and start threads when needed instead of creating them on Test startup</li>
+<li><bugzilla>42245</bugzilla> - Show clear passwords in HTTP Authorization Manager</li>
+<li><bugzilla>53616</bugzilla> - Display 'Apache JMeter' title in app title bar in Gnome 3</li>
+<li><bugzilla>53759</bugzilla> - ClientJMeterEngine perfoms unnecessary traverse using SearchByClass(TestListener)</li>
+<li><bugzilla>52601</bugzilla> - CTRL + F for the new Find feature</li>
+<li><bugzilla>53796</bugzilla> - TestCompiler uses static Set which can grow huge</li>
+<li><bugzilla>53673</bugzilla> - Add JMeter version in the jmx file</li>
+<li>Add support for HeapDump to the JMeter non-GUI and GUI client</li>
+<li><bugzilla>53862</bugzilla> - Would be nice to have the JMeter Version available as a property</li>
+<li><bugzilla>53806</bugzilla> -  FileServer should provide thread-safe parsing</li>
+<li><bugzilla>53807</bugzilla> - CSV Dataset does not handle embedded new lines in quoted data</li>
+<li><bugzilla>53879</bugzilla> - GUI : Allow Popups to be closed with ESC key</li>
+<li><bugzilla>53876</bugzilla> - Allow URL Filters (HTTP Proxy) to be pasted from clipboard</li>
+</ul>
+
+<h2>Non-functional changes</h2>
+<ul>
+<li><bugzilla>53311</bugzilla> - JMeterUtils#runSafe should not throw Error when interrupted</li>
+<li>Updated to commons-net-3.1 (from 3.0.1)</li>
+<li>Updated to HttpComponents Core 4.2.2 (from 4.1.4) and HttpComponents Client 4.2.1 (from 4.1.3)</li>
+<li><bugzilla>53765</bugzilla> - Switch to commons-lang3-3.1</li>
+<li><bugzilla>53884</bugzilla> - wrong Maven groupId for commons-lang</li>
+</ul>
+
 <!--  =================== 2.7 =================== -->
 
 <h1>Version 2.7</h1>
