@@ -754,6 +754,65 @@ public final class CSVSaveService {
         return resultToDelimitedString(event, event.getResult().getSaveConfig()
                 .getDelimiter());
     }
+    
+    /*
+     * Class to handle generating the delimited string. - adds the delimiter
+     * if not the first call - quotes any strings that require it
+     */
+    static final class StringQuoter {
+        private final StringBuilder sb;
+        private final char[] specials;
+        private boolean addDelim;
+
+        public StringQuoter(char delim) {
+            sb = new StringBuilder(100);
+            specials = new char[] { delim, QUOTING_CHAR, CharUtils.CR,
+                    CharUtils.LF };
+            addDelim = false; // Don't add delimiter first time round
+        }
+
+        private void addDelim() {
+            if (addDelim) {
+                sb.append(specials[0]);
+            } else {
+                addDelim = true;
+            }
+        }
+
+        // These methods handle parameters that could contain delimiters or
+        // quotes:
+        public void append(String s) {
+            addDelim();
+            // if (s == null) return;
+            sb.append(quoteDelimiters(s, specials));
+        }
+
+        public void append(Object obj) {
+            append(String.valueOf(obj));
+        }
+
+        // These methods handle parameters that cannot contain delimiters or
+        // quotes
+        public void append(int i) {
+            addDelim();
+            sb.append(i);
+        }
+
+        public void append(long l) {
+            addDelim();
+            sb.append(l);
+        }
+
+        public void append(boolean b) {
+            addDelim();
+            sb.append(b);
+        }
+
+        @Override
+        public String toString() {
+            return sb.toString();
+        }
+    }
 
     /**
      * Convert a result into a string, where the fields of the result are
@@ -767,65 +826,6 @@ public final class CSVSaveService {
      */
     public static String resultToDelimitedString(SampleEvent event,
             final String delimiter) {
-
-        /*
-         * Class to handle generating the delimited string. - adds the delimiter
-         * if not the first call - quotes any strings that require it
-         */
-        final class StringQuoter {
-            final StringBuilder sb = new StringBuilder();
-            private final char[] specials;
-            private boolean addDelim;
-
-            public StringQuoter(char delim) {
-                specials = new char[] { delim, QUOTING_CHAR, CharUtils.CR,
-                        CharUtils.LF };
-                addDelim = false; // Don't add delimiter first time round
-            }
-
-            private void addDelim() {
-                if (addDelim) {
-                    sb.append(specials[0]);
-                } else {
-                    addDelim = true;
-                }
-            }
-
-            // These methods handle parameters that could contain delimiters or
-            // quotes:
-            public void append(String s) {
-                addDelim();
-                // if (s == null) return;
-                sb.append(quoteDelimiters(s, specials));
-            }
-
-            public void append(Object obj) {
-                append(String.valueOf(obj));
-            }
-
-            // These methods handle parameters that cannot contain delimiters or
-            // quotes
-            public void append(int i) {
-                addDelim();
-                sb.append(i);
-            }
-
-            public void append(long l) {
-                addDelim();
-                sb.append(l);
-            }
-
-            public void append(boolean b) {
-                addDelim();
-                sb.append(b);
-            }
-
-            @Override
-            public String toString() {
-                return sb.toString();
-            }
-        }
-
         StringQuoter text = new StringQuoter(delimiter.charAt(0));
 
         SampleResult sample = event.getResult();
