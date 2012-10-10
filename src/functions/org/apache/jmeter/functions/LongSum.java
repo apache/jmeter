@@ -27,8 +27,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * Provides a longSum function that adds two or more long values.
@@ -36,7 +34,6 @@ import org.apache.log.Logger;
  * @since 2.3.2
  */
 public class LongSum extends AbstractFunction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final List<String> desc = new LinkedList<String>();
 
