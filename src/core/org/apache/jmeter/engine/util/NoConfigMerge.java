@@ -23,7 +23,7 @@ import org.apache.jmeter.threads.TestCompiler;
  * Implement this method-less interface to indicate that this ConfigElement should not be merged. 
  * Otherwise, the default behavior is to merge the element with every sampler in scope.
  * 
- * @see TestCompiler#configureSampler(Sampler)
+ * @see TestCompiler#configureSampler(org.apache.jmeter.samplers.Sampler)
  * @version $Revision$
  * @since 2.7
  */

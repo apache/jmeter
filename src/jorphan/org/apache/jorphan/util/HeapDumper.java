@@ -125,7 +125,6 @@ public class HeapDumper {
      * <p>
      * @see #dumpHeap(boolean)
      * @return the name of the dump file that was created
-     * @throws IOException
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static String dumpHeap() throws Exception{
@@ -142,7 +141,6 @@ public class HeapDumper {
      * @param live true id only live objects are to be dumped.
      *
      * @return the name of the dump file that was created
-     * @throws IOException
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static String dumpHeap(boolean live) throws Exception {
@@ -160,7 +158,6 @@ public class HeapDumper {
      * @param live true id only live objects are to be dumped.
      *
      * @return the name of the dump file that was created
-     * @throws IOException
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static String dumpHeap(File basedir, boolean live) throws Exception {
