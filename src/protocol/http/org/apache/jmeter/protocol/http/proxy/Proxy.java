@@ -200,7 +200,7 @@ public class Proxy extends Thread {
             SamplerCreator samplerCreator = factory.getSamplerCreator(request, pageEncodings, formEncodings);
             sampler = samplerCreator.createSampler(request, pageEncodings, formEncodings);
             samplerCreator.populateSampler(sampler, request, pageEncodings, formEncodings);
-            
+
             /*
              * Create a Header Manager to ensure that the browsers headers are
              * captured and sent to the server
@@ -240,9 +240,8 @@ public class Proxy extends Thread {
             writeErrorToClient(HttpReplyHdr.formInternalError());
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
         } finally {
-            boolean samplerAvailable = sampler != null;
             if (log.isDebugEnabled()) {
-                if(samplerAvailable) {
+                if(sampler != null) {
                     log.debug("Will deliver sample " + sampler.getName());
                 }
             }
@@ -257,7 +256,7 @@ public class Proxy extends Thread {
                     headers.removeHeaderNamed(hdr);
                 }
             }
-            if(samplerAvailable) {
+            if(sampler != null) {
                 target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
             }
             try {
@@ -265,7 +264,7 @@ public class Proxy extends Thread {
             } catch (Exception e) {
                 log.error("", e);
             }
-            if(samplerAvailable) {
+            if(sampler != null) {
                 sampler.threadFinished(); // Needed for HTTPSampler2
             }
         }
