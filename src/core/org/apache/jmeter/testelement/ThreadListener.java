@@ -36,7 +36,7 @@ public interface ThreadListener {
     /**
      * Called for each thread after all samples have been processed.
      *
-     * @see org.apache.jmeter.threads.JMeterThread#threadFinished(LoopIterationListener)
+     * @see org.apache.jmeter.threads.JMeterThread#threadFinished(org.apache.jmeter.engine.event.LoopIterationListener)
      *
      */
     void threadFinished();
