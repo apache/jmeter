@@ -2078,6 +2078,12 @@ setting is reset when a parent Loop Controller restarts.
 		If you need access to such variables, then select "Interpret Condition as Variable Expression?" and use
 		a __javaScript() function call. You can then use the objects "vars", "log", "ctx" etc. in the script.
 		</note>
+		<note>
+		To test a variable for nullity do the following, suppose var is named myVar, expression will be:
+		<ul>
+		 <li>"${myVar}" == "\${myVar}"</li>
+		 </ul>
+		</note>
 	</description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
