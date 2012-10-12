@@ -2079,10 +2079,15 @@ setting is reset when a parent Loop Controller restarts.
 		a __javaScript() function call. You can then use the objects "vars", "log", "ctx" etc. in the script.
 		</note>
 		<note>
-		To test a variable for nullity do the following, suppose var is named myVar, expression will be:
-		<ul>
-		 <li>"${myVar}" == "\${myVar}"</li>
-		 </ul>
+		To test if a variable is undefined (or null) do the following, suppose var is named myVar, expression will be:
+        <br></br>
+        <code>"${myVar}" == "\${myVar}"</code>
+        <br></br>
+        Or use:
+        <br></br>
+        <code>"${myVar}" != "\${myVar}"</code>
+        <br></br>
+        to test if a variable is defined and is not null.
 		</note>
 	</description>
 <properties>
