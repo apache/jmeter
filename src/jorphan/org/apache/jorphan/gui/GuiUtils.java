@@ -20,6 +20,15 @@ package org.apache.jorphan.gui;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -96,6 +105,24 @@ public final class GuiUtils {
         if (table.isEditing()) {
             TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
             cellEditor.stopCellEditing();
+        }
+    }
+    
+    /**
+     * Get pasted text from clipboard
+     * @return String Pasted text
+     * @throws UnsupportedFlavorException
+     * @throws IOException
+     */
+    public static String getPastedText() throws UnsupportedFlavorException, IOException {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable trans = clipboard.getContents(null);
+        DataFlavor[] flavourList = trans.getTransferDataFlavors();
+        Collection<DataFlavor> flavours = new ArrayList<DataFlavor>(flavourList.length);
+        if (Collections.addAll(flavours, flavourList) && flavours.contains(DataFlavor.stringFlavor)) {
+            return (String) trans.getTransferData(DataFlavor.stringFlavor);
+        } else {
+            return null;
         }
     }
 }
