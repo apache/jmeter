@@ -20,10 +20,7 @@ package org.apache.jmeter.protocol.http.proxy.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,10 +30,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.BindException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -382,35 +377,31 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     protected void addFromClipboard(JTable table) {
         GuiUtils.stopTableEditing(table);
         int rowCount = table.getRowCount();
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        Transferable trans = clipboard.getContents(null);
-        DataFlavor[] flavourList = trans.getTransferDataFlavors();
         PowerTableModel model = null;
-        Collection<DataFlavor> flavours = new ArrayList<DataFlavor>(flavourList.length);
-        if (Collections.addAll(flavours, flavourList) && flavours.contains(DataFlavor.stringFlavor)) {
-            try {
-                String clipboardContent = (String) trans.getTransferData(DataFlavor.stringFlavor);
+        try {
+            String clipboardContent = GuiUtils.getPastedText();
+            if (clipboardContent != null) {
                 String[] clipboardLines = clipboardContent.split("\n");
                 for (String clipboardLine : clipboardLines) {
                     model = (PowerTableModel) table.getModel();
                     model.addRow(new Object[] {clipboardLine});
                 }
-            } catch (IOException ioe) {
-                JOptionPane.showMessageDialog(this,
-                        "Could not add read arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            } catch (UnsupportedFlavorException ufe) {
-                JOptionPane.showMessageDialog(this,
-                        "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
-                                + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (table.getRowCount() > rowCount) {
-                if(model != null) {
-                    // Highlight (select) the appropriate rows.
-                    int rowToSelect = model.getRowCount() - 1;
-                    table.setRowSelectionInterval(rowCount, rowToSelect);
+                if (table.getRowCount() > rowCount) {
+                    if(model != null) {
+                        // Highlight (select) the appropriate rows.
+                        int rowToSelect = model.getRowCount() - 1;
+                        table.setRowSelectionInterval(rowCount, rowToSelect);
+                    }
                 }
             }
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not add read arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (UnsupportedFlavorException ufe) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
+                            + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
