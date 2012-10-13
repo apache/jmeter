@@ -22,17 +22,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -477,36 +472,22 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     protected void addFromClipboard() {
         GuiUtils.stopTableEditing(table);
         int rowCount = table.getRowCount();
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        Transferable trans = clipboard.getContents(null);
-        DataFlavor[] flavourList = trans.getTransferDataFlavors();
-        Collection<DataFlavor> flavours = new ArrayList<DataFlavor>(flavourList.length);
-        if (Collections.addAll(flavours, flavourList) && flavours.contains(DataFlavor.stringFlavor)) {
-            try {
-                String clipboardContent = (String) trans.getTransferData(DataFlavor.stringFlavor);
-                String[] clipboardLines = clipboardContent.split("\n");
-                for (String clipboardLine : clipboardLines) {
-                    String[] clipboardCols = clipboardLine.split("\t");
-                    if (clipboardCols.length > 0) {
-                        Argument argument = makeNewArgument();
-                        argument.setName(clipboardCols[0]);
-                        if (clipboardCols.length > 1) {
-                            argument.setValue(clipboardCols[1]);
-                            if (clipboardCols.length > 2) {
-                                argument.setDescription(clipboardCols[2]);
-                            }
+        try {
+            String clipboardContent = GuiUtils.getPastedText();
+            String[] clipboardLines = clipboardContent.split("\n");
+            for (String clipboardLine : clipboardLines) {
+                String[] clipboardCols = clipboardLine.split("\t");
+                if (clipboardCols.length > 0) {
+                    Argument argument = makeNewArgument();
+                    argument.setName(clipboardCols[0]);
+                    if (clipboardCols.length > 1) {
+                        argument.setValue(clipboardCols[1]);
+                        if (clipboardCols.length > 2) {
+                            argument.setDescription(clipboardCols[2]);
                         }
-                        tableModel.addRow(argument);
                     }
+                    tableModel.addRow(argument);
                 }
-            } catch (IOException ioe) {
-                JOptionPane.showMessageDialog(this,
-                        "Could not add read arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            } catch (UnsupportedFlavorException ufe) {
-                JOptionPane.showMessageDialog(this,
-                        "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
-                                + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             if (table.getRowCount() > rowCount) {
                 // Enable DELETE (which may already be enabled, but it won't hurt)
@@ -516,6 +497,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 int rowToSelect = tableModel.getRowCount() - 1;
                 table.setRowSelectionInterval(rowCount, rowToSelect);
             }
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not add read arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (UnsupportedFlavorException ufe) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
+                            + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
