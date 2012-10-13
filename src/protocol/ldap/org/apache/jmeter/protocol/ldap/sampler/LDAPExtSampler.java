@@ -800,7 +800,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 final String countLimit = getCountlim();
 
                 res.setSamplerData("Search with filter " + searchFilter);
-                xmlBuffer.tag("searchfilter",searchFilter); // $NON-NLS-1$
+                xmlBuffer.tag("searchfilter", escapeXMLSpecialChar(searchFilter)); // $NON-NLS-1$
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
                 xmlBuffer.tag("searchbase",searchBase);// $NON-NLS-1$
                 xmlBuffer.tag("scope" , scopeStr); // $NON-NLS-1$
@@ -1089,5 +1089,14 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+    
+    /**
+     * Escape special XML character
+     * @param text
+     * @return a escape XML string
+     */
+    private String escapeXMLSpecialChar(String text) {
+        return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;"); // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$ $NON-NLS-4$ $NON-NLS-5$ $NON-NLS-6$
     }
 }
