@@ -36,6 +36,55 @@
    <release>
       <Version>
         <name>Apache Jakarta JMeter</name>
+        <created>2003-08-07</created>
+        <revision>1.9</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2004-04-04</created>
+        <revision>2.0.0</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2004-05-24</created>
+        <revision>2.0.1</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2004-11-19</created>
+        <revision>2.0.2</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2005-03-23</created>
+        <revision>2.0.3</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2005-08-24</created>
+        <revision>2.1</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2005-10-04</created>
+        <revision>2.1.1</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
         <created>2006-06-14</created>
         <revision>2.2</revision>
       </Version>
