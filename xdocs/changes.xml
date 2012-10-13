@@ -36,6 +36,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h2>New and Noteworthy</h2>
 
+<h3>GUI and ergonomy Improvements:</h3>
+<h4>Allow copy from clipboard to HeaderPanel, headers are supposed to be separated by new line and have the following form name:value</h4>
+
 <!--  =================== Known bugs =================== -->
 
 <h2>Known bugs</h2>
@@ -149,6 +152,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 
 <h2>Non-functional changes</h2>
 <ul>
+<li><bugzilla>53956</bugzilla> - Add ability to paste (a list of values) from clipboard for Header Manager</li>
 </ul>
 
 </section> 
