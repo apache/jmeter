@@ -3503,7 +3503,7 @@ but if the button is on, a later element cannot set it off.
 </note>
 </component>
 
-<component name="HTTP Header Manager" index="&sect-num;.4.6"  width="342" height="256" screenshot="http-config/http-header-manager.png">
+<component name="HTTP Header Manager" index="&sect-num;.4.6"  width="767" height="239" screenshot="http-config/http-header-manager.png">
 <description>
 <p>The Header Manager lets you add or override HTTP request headers.</p>
 <p>
@@ -5258,7 +5258,7 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 </p>
 </component>
 
-<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="939" height="599" screenshot="proxy_control.png">
+<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="957" height="593" screenshot="proxy_control.png">
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
