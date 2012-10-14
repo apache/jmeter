@@ -55,6 +55,10 @@ For example a Test Action sampler with 0 wait time (which doesn't generate a sam
 or a Debug Sampler with all fields set to False (to reduce the sample size).
 </p>
 
+<p>Webservice sampler does not consider the HTTP response status to compute the status of a response, thus a response 500 containing a non empty body will be considered as successful, see <bugzilla>54006</bugzilla>.
+To workaround this issue, ensure you always read the response and add a Response Assertion checking text inside the response.
+</p>
+
 <p>
 Changing language can break part of the configuration of the following elements (see <bugzilla>53679</bugzilla>):
 <ul>
