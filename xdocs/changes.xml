@@ -36,6 +36,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h2>New and Noteworthy</h2>
 
+<h3>Core Improvements:</h3>
+<h4>Webservice sampler now adds to request the headers that are set through Header Manager</h4>
+
 <h3>GUI and ergonomy Improvements:</h3>
 <h4>Allow copy from clipboard to HeaderPanel, headers are supposed to be separated by new line and have the following form name:value</h4>
 
@@ -74,6 +77,8 @@ This does not affect JMeter operation.
 <!-- =================== Incompatible changes =================== -->
 
 <h2>Incompatible changes</h2>
+
+<h3>Webservice sampler now adds to request the headers that are set through Header Manager, these were previously ignored</h3>
 
 <!-- =================== Bug fixes =================== -->
 
@@ -124,6 +129,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 
 <h3>Other samplers</h3>
 <ul>
+<li><bugzilla>54004</bugzilla> - Webservice Sampler : Allow adding headers to request with Header Manager</li>
 </ul>
 
 <h3>Controllers</h3>
