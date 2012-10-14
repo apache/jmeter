@@ -78,6 +78,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final long serialVersionUID = 232L;
 
+    private static final String SUGGESTED_EXCLUSIONS =
+            JMeterUtils.getPropDefault("proxy.excludes.suggested", ".*\\.js;.*\\.css;.*\\.swf;.*\\.gif;.*\\.png;.*\\.jpg;.*\\.bmp"); // $NON-NLS-1$
+    
     private JTextField portField;
 
     /**
@@ -180,6 +183,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String ADD_TO_INCLUDE_FROM_CLIPBOARD = "include_clipboard"; // $NON-NLS-1$
 
     private static final String ADD_TO_EXCLUDE_FROM_CLIPBOARD = "exclude_clipboard"; // $NON-NLS-1$
+
+    private static final String ADD_SUGGESTED_EXCLUDES = "exclude_suggested";
     //- action names
 
     // Resource names for column headers
@@ -367,9 +372,37 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             addFromClipboard(excludeTable);
             excludeModel.fireTableDataChanged();
             enableRestart();
+        } else if (command.equals(ADD_SUGGESTED_EXCLUDES)) {
+            addSuggestedExcludes(excludeTable);
+            excludeModel.fireTableDataChanged();
+            enableRestart();
         }
     }
 
+    /**
+     * Add suggested excludes to exclude table
+     * @param table {@link JTable}
+     */
+    protected void addSuggestedExcludes(JTable table) {
+        GuiUtils.stopTableEditing(table);
+        int rowCount = table.getRowCount();
+        PowerTableModel model = null;
+        String[] exclusions = SUGGESTED_EXCLUSIONS.split(";");
+        if (exclusions.length>0) {
+            model = (PowerTableModel) table.getModel();
+            if(model != null) {
+                for (String clipboardLine : exclusions) {
+                    model.addRow(new Object[] {clipboardLine});
+                }
+                if (table.getRowCount() > rowCount) {   
+                    // Highlight (select) the appropriate rows.
+                    int rowToSelect = model.getRowCount() - 1;
+                    table.setRowSelectionInterval(rowCount, rowToSelect);
+                }
+            }
+        }
+    }
+    
     /**
      * Add values from the clipboard to table
      * @param table {@link JTable}
@@ -698,7 +731,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 .getResString("patterns_to_include"))); // $NON-NLS-1$
 
         panel.add(new JScrollPane(includeTable), BorderLayout.CENTER);
-        panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE, ADD_TO_INCLUDE_FROM_CLIPBOARD), BorderLayout.SOUTH);
+        panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE, ADD_TO_INCLUDE_FROM_CLIPBOARD, null), BorderLayout.SOUTH);
 
         return panel;
     }
@@ -714,12 +747,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 .getResString("patterns_to_exclude"))); // $NON-NLS-1$
 
         panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
-        panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE, ADD_TO_EXCLUDE_FROM_CLIPBOARD), BorderLayout.SOUTH);
+        panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE, ADD_TO_EXCLUDE_FROM_CLIPBOARD, ADD_SUGGESTED_EXCLUDES), BorderLayout.SOUTH);
 
         return panel;
     }
     
-    private JPanel createTableButtonPanel(String addCommand, String deleteCommand, String copyFromClipboard) {
+    private JPanel createTableButtonPanel(String addCommand, String deleteCommand, String copyFromClipboard, String addSuggestedExcludes) {
         JPanel buttonPanel = new JPanel();
 
         JButton addButton = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
@@ -738,6 +771,13 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         addFromClipboard.addActionListener(this);
         buttonPanel.add(addFromClipboard);
         
+        if(addSuggestedExcludes != null) {
+            /** A button for adding suggested excludes. */
+            JButton addFromSuggestedExcludes = new JButton(JMeterUtils.getResString("add_from_suggested_excludes")); // $NON-NLS-1$
+            addFromSuggestedExcludes.setActionCommand(addSuggestedExcludes);
+            addFromSuggestedExcludes.addActionListener(this);
+            buttonPanel.add(addFromSuggestedExcludes);
+        }
         return buttonPanel;
     }
 
