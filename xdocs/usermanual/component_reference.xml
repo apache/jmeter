@@ -5514,10 +5514,14 @@ It uses default port 8081 since 2.6.
         be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than 0. Defaults to 25</property>
 </properties>
 <note>
-Note that you can make simulate requests response time by adding an HTTP Header Manager with the following name/value pair:
-<ul>
-<li>X-Sleep=Time to sleep in ms </li>
-</ul>
+Note that you can get more control on responses by adding an HTTP Header Manager with the following name/value pairs:
+<properties>
+        <property name="X-Sleep" required="No">Time to sleep in ms before sending response</property>
+        <property name="X-SetCookie" required="No">Cookies to be set on response</property>
+        <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Stauts responses</a>, example 200 OK, 500 Internal Server Error ....</property>
+        <property name="X-ResponseLength" required="No">Size of response, this enable returning only a substring of Request content</property>
+</properties>
+
 </note>
 </component>
 
