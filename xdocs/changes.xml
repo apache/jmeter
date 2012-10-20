@@ -162,6 +162,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <ul>
 <li><bugzilla>54005</bugzilla> - HTTP Mirror Server : Add special headers "X-" to control Response status and response content</li>
 <li><bugzilla>53875</bugzilla> - Include suggested defaults for URL filters on HTTP Proxy</li>
+<li><bugzilla>54031</bugzilla> - Add tooltip to running/total threads indicator </li>
 </ul>
 
 <h2>Non-functional changes</h2>

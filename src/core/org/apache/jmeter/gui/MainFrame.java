@@ -197,8 +197,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         runningIndicator.setBorder(BorderFactory.createEmptyBorder());
 
         totalThreads = new JLabel("0"); // $NON-NLS-1$
+        totalThreads.setToolTipText(JMeterUtils.getResString("total_threads_tooltip")); // $NON-NLS-1$
         activeThreads = new JLabel("0"); // $NON-NLS-1$
-
+        activeThreads.setToolTipText(JMeterUtils.getResString("active_threads_tooltip")); // $NON-NLS-1$
+        
         warnIndicator = new JButton(warningIcon);
         warnIndicator.setMargin(new Insets(0, 0, 0, 0));
         // Transparent JButton with no border
