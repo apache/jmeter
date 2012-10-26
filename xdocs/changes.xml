@@ -124,6 +124,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <h3>General</h3>
 <ul>
 <li><bugzilla>53975</bugzilla> - Variables replacement doesn't work with option "Delay thread creation until needed"</li>
+<li><bugzilla>54055</bugzilla> - View Results tree: = signs are stripped from parameter values at HTTP tab</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -246,7 +246,8 @@ public class RequestViewHTTP implements RequestView {
             }
             String value = ""; // empty init // $NON-NLS-1$
             if (paramSplit.length > 1) {
-                value = paramSplit[1];
+                // We use substring to keep = sign (Bug 54055), we are sure = is present
+                value = param.substring(param.indexOf("=")+1); // $NON-NLS-1$
             }
             map.put(name, value);
         }
