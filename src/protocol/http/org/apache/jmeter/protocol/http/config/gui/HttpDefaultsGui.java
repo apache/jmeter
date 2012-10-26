@@ -87,14 +87,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         if (imageParser.isSelected()) {
             config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
             enableConcurrentDwn(true);
-            if(!StringUtils.isEmpty(embeddedRE.getText())) {
-                config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_RE, embeddedRE.getText()));            
-            } else {
-                config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
-            }
         } else {
             config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
-            config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
             enableConcurrentDwn(false);
             
         }
@@ -111,6 +105,12 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         } else {
         	config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
         			String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE)));
+        }
+        if (!StringUtils.isEmpty(embeddedRE.getText())) {
+            config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_RE,
+                    embeddedRE.getText()));
+        } else {
+            config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
         }
     }
 
