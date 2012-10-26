@@ -754,7 +754,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void setAuthManager(AuthManager value) {
         AuthManager mgr = getAuthManager();
         if (log.isDebugEnabled() && mgr != null) {
-            log.warn("Existing AuthManager " + mgr.getName() + " superseded by " + value.getName());
+            log.debug("Existing AuthManager " + mgr.getName() + " superseded by " + value.getName());
         }
         setProperty(new TestElementProperty(AUTH_MANAGER, value));
     }
