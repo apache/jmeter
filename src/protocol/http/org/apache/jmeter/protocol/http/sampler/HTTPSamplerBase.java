@@ -753,7 +753,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public void setAuthManager(AuthManager value) {
         AuthManager mgr = getAuthManager();
-        if (mgr != null) {
+        if (log.isDebugEnabled() && mgr != null) {
             log.warn("Existing AuthManager " + mgr.getName() + " superseded by " + value.getName());
         }
         setProperty(new TestElementProperty(AUTH_MANAGER, value));
@@ -783,7 +783,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public void setCookieManager(CookieManager value) {
         CookieManager mgr = getCookieManager();
-        if (mgr != null) {
+        if (log.isDebugEnabled() && mgr != null) {
             log.warn("Existing CookieManager " + mgr.getName() + " superseded by " + value.getName());
         }
         setProperty(new TestElementProperty(COOKIE_MANAGER, value));
@@ -795,7 +795,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public void setCacheManager(CacheManager value) {
         CacheManager mgr = getCacheManager();
-        if (mgr != null) {
+        if (log.isDebugEnabled() && mgr != null) {
             log.warn("Existing CacheManager " + mgr.getName() + " superseded by " + value.getName());
         }
         setProperty(new TestElementProperty(CACHE_MANAGER, value));
