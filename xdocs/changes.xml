@@ -114,8 +114,8 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<li><bugzilla>54058</bugzilla> - In HTTP Request Defaults, the value of field "Embedded URLs must match: is not saved if the check box "Retrieve All  Embedded Resources" is not checked.</li>
 <ul>
+<li><bugzilla>54058</bugzilla> - In HTTP Request Defaults, the value of field "Embedded URLs must match: is not saved if the check box "Retrieve All  Embedded Resources" is not checked.</li>
 </ul>
 
 <h3>Functions</h3>
