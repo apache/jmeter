@@ -86,6 +86,10 @@ This does not affect JMeter operation.
 
 <h3>Webservice sampler now adds to request the headers that are set through Header Manager, these were previously ignored</h3>
 
+<h3>jdbcsampler.cachesize property has been removed, it previously limited the size of a per connection cache of Map<String, PreparedStatement>>, it also limited the size of this
+map which held the PreparedStatement for SQL queries. This limitation provoked a bug <bugzilla>53995</bugzilla>. 
+It has been removed so now size of these 2 maps is not limited anymore. This change changes behaviour as starting from this version no PreparedStatement will be closed during the test.</h3>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -98,6 +102,7 @@ This does not affect JMeter operation.
 <ul>
 <li><bugzilla>53997</bugzilla> - LDAP Extended Request: Escape ampersand (&amp;), left angle bracket (&lt;) 
 and right angle bracket (&gt;) in search filter tag in XML response data</li>
+<li><bugzilla>53995</bugzilla> - AbstractJDBCTestElement shares PreparedStatement between multi-threads
 </ul>
 
 <h3>Controllers</h3>
