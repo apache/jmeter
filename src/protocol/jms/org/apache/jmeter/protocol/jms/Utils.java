@@ -131,7 +131,7 @@ public final class Utils {
         if (o instanceof Destination){
             return (Destination) o;
         }
-        throw new NamingException("Found: "+name+"; expected Destination, but was: "+o.getClass().getName());
+        throw new NamingException("Found: "+name+"; expected Destination, but was: "+(o!=null ? o.getClass().getName() : "null"));
     }
 
     /**
@@ -162,7 +162,7 @@ public final class Utils {
                 return ((javax.jms.ConnectionFactory) objfac).createConnection();
             }
         }
-        throw new NamingException("Expected javax.jms.ConnectionFactory, found "+objfac.getClass().getName());
+        throw new NamingException("Expected javax.jms.ConnectionFactory, found "+(objfac != null ? objfac.getClass().getName(): "null"));
     }
     
     /**
