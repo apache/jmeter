@@ -50,7 +50,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpRequestRetryHandler;
@@ -506,7 +505,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (proxyUser.length() > 0) {
                     ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(
                             new AuthScope(proxyHost, proxyPort),
-                            new UsernamePasswordCredentials(proxyUser, getProxyPass()));
+                            new NTCredentials(proxyUser, getProxyPass(), localHost, PROXY_DOMAIN));
                 }
             } else if (useStaticProxy) {
                 HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
@@ -514,7 +513,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (PROXY_USER.length() > 0) {
                     ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(
                             new AuthScope(PROXY_HOST, PROXY_PORT),
-                            new UsernamePasswordCredentials(PROXY_USER, PROXY_PASS));
+                            new NTCredentials(PROXY_USER, PROXY_PASS, localHost, PROXY_DOMAIN));
                 }
             }
 
