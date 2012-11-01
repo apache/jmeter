@@ -760,6 +760,11 @@ public class SampleResult implements Serializable {
         "video/",       //$NON-NLS-1$
         };
 
+    // List of types that are known to be ascii, although they may appear to be binary
+    private static final String[] NON_BINARY_TYPES = {
+        "video/f4m",       //$NON-NLS-1$ (Flash Media Manifest)
+        };
+
     /*
      * Determine if content-type is known to be binary, i.e. not displayable as text.
      *
@@ -767,6 +772,11 @@ public class SampleResult implements Serializable {
      * @return true if content-type is of type binary.
      */
     private static boolean isBinaryType(String ct){
+        for (String entry : NON_BINARY_TYPES){
+            if (ct.startsWith(entry)){
+                return false;
+            }
+        }
         for (int i = 0; i < BINARY_TYPES.length; i++){
             if (ct.startsWith(BINARY_TYPES[i])){
                 return true;
