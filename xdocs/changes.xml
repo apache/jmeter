@@ -97,6 +97,7 @@ It has been removed so now size of these 2 maps is not limited anymore. This cha
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li>Don't log spurious warning messages when using concurrent pool embedded downloads with Cache Manager or CookieManager</li>
+<li><bugzilla>54057</bugzilla>- Proxy option to set user and password at startup (-u and -a) not working with HTTPClient 4</li>
 </ul>
 
 <h3>Other Samplers</h3>
