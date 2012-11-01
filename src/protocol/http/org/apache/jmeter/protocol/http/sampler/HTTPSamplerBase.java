@@ -753,8 +753,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public void setAuthManager(AuthManager value) {
         AuthManager mgr = getAuthManager();
-        if (log.isDebugEnabled() && mgr != null) {
-            log.debug("Existing AuthManager " + mgr.getName() + " superseded by " + value.getName());
+        if (mgr != null) {
+            log.warn("Existing AuthManager " + mgr.getName() + " superseded by " + value.getName());
         }
         setProperty(new TestElementProperty(AUTH_MANAGER, value));
     }
@@ -781,24 +781,34 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return (HeaderManager) getProperty(HEADER_MANAGER).getObjectValue();
     }
 
+    // private method to allow AsyncSample to reset the value without performing checks
+    private void setCookieManagerProperty(CookieManager value) {
+        setProperty(new TestElementProperty(COOKIE_MANAGER, value));        
+    }
+
     public void setCookieManager(CookieManager value) {
         CookieManager mgr = getCookieManager();
-        if (log.isDebugEnabled() && mgr != null) {
+        if (mgr != null) {
             log.warn("Existing CookieManager " + mgr.getName() + " superseded by " + value.getName());
         }
-        setProperty(new TestElementProperty(COOKIE_MANAGER, value));
+        setCookieManagerProperty(value);
     }
 
     public CookieManager getCookieManager() {
         return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
     }
 
+    // private method to allow AsyncSample to reset the value without performing checks
+    private void setCacheManagerProperty(CacheManager value) {
+        setProperty(new TestElementProperty(CACHE_MANAGER, value));
+    }
+
     public void setCacheManager(CacheManager value) {
         CacheManager mgr = getCacheManager();
-        if (log.isDebugEnabled() && mgr != null) {
+        if (mgr != null) {
             log.warn("Existing CacheManager " + mgr.getName() + " superseded by " + value.getName());
         }
-        setProperty(new TestElementProperty(CACHE_MANAGER, value));
+        setCacheManagerProperty(value);
     }
 
     public CacheManager getCacheManager() {
@@ -1765,12 +1775,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // We don't want to use CacheManager clone but the parent one, and CacheManager is Thread Safe
             CacheManager cacheManager = base.getCacheManager();
             if (cacheManager != null) {
-                this.sampler.setCacheManager(cacheManager);
+                this.sampler.setCacheManagerProperty(cacheManager);
             }
             
             if(cookieManager != null) {
                 CookieManager clonedCookieManager = (CookieManager) cookieManager.clone();
-                this.sampler.setCookieManager(clonedCookieManager);
+                this.sampler.setCookieManagerProperty(clonedCookieManager);
             } 
             this.jmeterContextOfParentThread = JMeterContextService.getContext();
         }
