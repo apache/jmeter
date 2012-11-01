@@ -30,9 +30,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 2.8 =================== -->
+<!--  =================== 2.9 =================== -->
 
-<h1>Version 2.8</h1>
+<h1>Version 2.9</h1>
 
 <h2>New and Noteworthy</h2>
 
@@ -96,6 +96,7 @@ It has been removed so now size of these 2 maps is not limited anymore. This cha
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
+<li>Don't log spurious warning messages when using concurrent pool embedded downloads with Cache Manager or CookieManager</li>
 </ul>
 
 <h3>Other Samplers</h3>
