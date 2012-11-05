@@ -98,6 +98,11 @@ htmllexer-2.1
 http://htmlparser.sourceforge.net/
 - http: parsing html
 
+tika-core-1.2
+tika-parsers-1.2
+----------------------
+- Extract text from various documents
+
 jCharts-0.7.5 (org.jCharts)
 -------------
 http://jcharts.sourceforge.net/downloads.html
