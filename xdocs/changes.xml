@@ -178,6 +178,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <h2>Non-functional changes</h2>
 <ul>
 <li><bugzilla>53956</bugzilla> - Add ability to paste (a list of values) from clipboard for Header Manager</li>
+<li>Updated to HttpComponents Client 4.2.2 (from 4.2.1)</li>
 </ul>
 
 </section> 
