@@ -350,9 +350,8 @@
     <include name="${lib.dir}/${activation.jar}"/>
     <include name="${lib.dir}/${apache-bsf.jar}"/>
     <include name="${lib.dir}/${apache-jsr223-api.jar}"/>
-    <include name="${lib.dir}/${beanshell.jar}"/>
     <include name="${lib.dir}/${avalon-framework.jar}"/>
-    <include name="${lib.dir}/${xmlgraphics-commons.jar}"/>
+    <include name="${lib.dir}/${beanshell.jar}"/>
     <include name="${lib.dir}/${commons-codec.jar}"/>
     <include name="${lib.dir}/${commons-collections.jar}"/>
     <include name="${lib.dir}/${commons-httpclient.jar}"/>
@@ -370,8 +369,8 @@
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
-    <include name="${lib.dir}/${httpmime.jar}"/>
     <include name="${lib.dir}/${httpcore.jar}"/>
+    <include name="${lib.dir}/${httpmime.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
     <include name="${lib.dir}/${jcharts.jar}"/>
@@ -386,9 +385,10 @@
     <include name="${lib.dir}/${xalan.jar}"/>
     <include name="${lib.dir}/${xerces.jar}"/>
     <include name="${lib.dir}/${xml-apis.jar}"/>
+    <include name="${lib.dir}/${xmlgraphics-commons.jar}"/>
+    <include name="${lib.dir}/${xmlpull.jar}"/>
     <include name="${lib.dir}/${xpp3.jar}"/>
     <include name="${lib.dir}/${xstream.jar}"/>
-  	<include name="${lib.dir}/${xmlpull.jar}"/>
   </patternset>
 
   <!--
@@ -413,9 +413,8 @@
     <pathelement location="${lib.dir}/${activation.jar}"/>
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
     <pathelement location="${lib.dir}/${apache-jsr223-api.jar}"/>
-    <pathelement location="${lib.dir}/${beanshell.jar}"/>
     <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
-    <pathelement location="${lib.dir}/${xmlgraphics-commons.jar}"/>
+    <pathelement location="${lib.dir}/${beanshell.jar}"/>
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
     <pathelement location="${lib.dir}/${commons-collections.jar}"/>
     <pathelement location="${lib.dir}/${commons-httpclient.jar}"/>
@@ -432,8 +431,8 @@
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
-    <pathelement location="${lib.dir}/${httpmime.jar}"/>
     <pathelement location="${lib.dir}/${httpcore.jar}"/>
+    <pathelement location="${lib.dir}/${httpmime.jar}"/>
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
     <pathelement location="${lib.dir}/${javamail.jar}"/>
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
@@ -448,9 +447,10 @@
     <pathelement location="${lib.dir}/${xalan.jar}"/>
     <pathelement location="${lib.dir}/${xerces.jar}"/>
     <pathelement location="${lib.dir}/${xml-apis.jar}"/>
+    <pathelement location="${lib.dir}/${xmlgraphics-commons.jar}"/>
+    <pathelement location="${lib.dir}/${xmlpull.jar}"/>
     <pathelement location="${lib.dir}/${xpp3.jar}"/>
     <pathelement location="${lib.dir}/${xstream.jar}"/>
-  	<pathelement location="${lib.dir}/${xmlpull.jar}"/>
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     <!-- API-only jars-->
@@ -2455,6 +2455,7 @@ run JMeter unless all the JMeter jars are added.
     -->
     <target name="_process_all_jars">
         <process_jarfile jarname="apache-bsf"/>
+        <process_jarfile jarname="activation"/>
         <process_jarfile jarname="apache-jsr223-api"/>
         <process_jarfile jarname="avalon-framework"/>
         <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
@@ -2477,28 +2478,27 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
-        <process_jarfile jarname="httpmime"/>
         <process_jarfile jarname="httpcore"/>
+        <process_jarfile jarname="httpmime"/>
         <process_jarfile jarname="jakarta-oro"/>
+        <process_jarfile jarname="javamail"/>
+        <process_jarfile jarname="jcharts"/>
         <process_jarfile jarname="jdom"/>
+        <process_jarfile jarname="jms"/>
         <process_jarfile jarname="js_rhino"/>
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
+        <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="soap"/>
         <process_jarfile jarname="tidy"/>
-        <process_jarfile jarname="xstream"/>
-    	<process_jarfile jarname="xmlpull"/>
-    	<process_jarfile jarname="xpp3"/>
-        <process_jarfile jarname="serializer"/>
+        <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
         <process_jarfile jarname="xalan"/>
         <process_jarfile jarname="xerces"/>
         <process_jarfile jarname="xml-apis"/>
         <process_jarfile jarname="xmlgraphics-commons"/>
-        <process_jarfile jarname="activation"/>
-        <process_jarfile jarname="javamail"/>
-        <process_jarfile jarname="jms"/>
-        <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
-        <process_jarfile jarname="jcharts"/>
+        <process_jarfile jarname="xmlpull"/>
+        <process_jarfile jarname="xpp3"/>
+        <process_jarfile jarname="xstream"/>
     </target>
 
     <target name="_process_doc_jars">
