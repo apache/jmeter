@@ -54,12 +54,13 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
     protected JSR223BeanInfoSupport(Class<?> beanClass) {
         super(beanClass, LANGUAGE_TAGS);
         
-        createPropertyGroup(CACHE_KEY_GROUP, new String[] { 
-                CACHE_KEY });
-
         PropertyDescriptor p = property(CACHE_KEY);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
+
+        createPropertyGroup(CACHE_KEY_GROUP, new String[] { 
+                CACHE_KEY });
+
     }
 
 }
