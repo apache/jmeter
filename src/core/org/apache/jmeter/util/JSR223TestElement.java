@@ -36,6 +36,7 @@ import javax.script.ScriptException;
 
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -171,42 +172,48 @@ public abstract class JSR223TestElement extends AbstractTestElement
         // Hack as in bsh-2.0b5.jar BshScriptEngine implements Compilable but throws new Error
         boolean supportsCompilable = scriptEngine instanceof Compilable 
                 && !(scriptEngine.getClass().getName().equals("bsh.engine.BshScriptEngine"));
-        if (scriptFile.exists()) {
-            BufferedReader fileReader = null;
-            try {
-                if(supportsCompilable) {
-                    String cacheKey = 
-                            getScriptLanguage()+"#"+
-                            scriptFile.getAbsolutePath()+"#"+
-                                    scriptFile.lastModified();
-                    CompiledScript compiledScript = 
-                            compiledScriptsCache.get(cacheKey);
-                    if(compiledScript==null) {
-                        synchronized (compiledScriptsCache) {
-                            compiledScript = 
-                                    compiledScriptsCache.get(cacheKey);
-                            if(compiledScript==null) {
-                                // TODO Charset ?
-                                fileReader = new BufferedReader(new FileReader(scriptFile), 
-                                        (int)scriptFile.length()); 
+        if (!StringUtils.isEmpty(getFilename())) {
+            if(scriptFile.exists() && scriptFile.canRead()) {
+                BufferedReader fileReader = null;
+                try {
+                    if(supportsCompilable) {
+                        String cacheKey = 
+                                getScriptLanguage()+"#"+
+                                scriptFile.getAbsolutePath()+"#"+
+                                        scriptFile.lastModified();
+                        CompiledScript compiledScript = 
+                                compiledScriptsCache.get(cacheKey);
+                        if(compiledScript==null) {
+                            synchronized (compiledScriptsCache) {
                                 compiledScript = 
-                                        ((Compilable) scriptEngine).compile(fileReader);
-                                compiledScriptsCache.put(cacheKey, compiledScript);
+                                        compiledScriptsCache.get(cacheKey);
+                                if(compiledScript==null) {
+                                    // TODO Charset ?
+                                    fileReader = new BufferedReader(new FileReader(scriptFile), 
+                                            (int)scriptFile.length()); 
+                                    compiledScript = 
+                                            ((Compilable) scriptEngine).compile(fileReader);
+                                    compiledScriptsCache.put(cacheKey, compiledScript);
+                                }
                             }
                         }
+                        return compiledScript.eval(bindings);
+                    } else {
+                        // TODO Charset ?
+                        fileReader = new BufferedReader(new FileReader(scriptFile), 
+                                (int)scriptFile.length()); 
+                        return scriptEngine.eval(fileReader, bindings);                    
                     }
-                    return compiledScript.eval(bindings);
-                } else {
-                    // TODO Charset ?
-                    fileReader = new BufferedReader(new FileReader(scriptFile), 
-                            (int)scriptFile.length()); 
-                    return scriptEngine.eval(fileReader, bindings);                    
+                } finally {
+                    IOUtils.closeQuietly(fileReader);
                 }
-            } finally {
-                IOUtils.closeQuietly(fileReader);
+            }  else {
+                throw new ScriptException("Script file '"+scriptFile.getAbsolutePath()+"' does not exist or is unreadable for element:"+getName());
             }
-        } else {
+        } else if(!StringUtils.isEmpty(getScript())){
             return scriptEngine.eval(getScript(), bindings);
+        } else {
+            throw new ScriptException("Both script file and script text are empty for element:"+getName());            
         }
     }
 
