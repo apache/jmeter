@@ -167,7 +167,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
      * @throws ScriptException
      */
     protected Object processFileOrScript(ScriptEngine scriptEngine, Bindings bindings) throws IOException, ScriptException {
-        if(bindings == null) {
+        if (bindings == null) {
             bindings = scriptEngine.createBindings();
         }
         populateBindings(bindings);
@@ -186,11 +186,11 @@ public abstract class JSR223TestElement extends AbstractTestElement
                                         scriptFile.lastModified();
                         CompiledScript compiledScript = 
                                 compiledScriptsCache.get(cacheKey);
-                        if(compiledScript==null) {
+                        if (compiledScript==null) {
                             synchronized (compiledScriptsCache) {
                                 compiledScript = 
                                         compiledScriptsCache.get(cacheKey);
-                                if(compiledScript==null) {
+                                if (compiledScript==null) {
                                     // TODO Charset ?
                                     fileReader = new BufferedReader(new FileReader(scriptFile), 
                                             (int)scriptFile.length()); 
@@ -217,11 +217,11 @@ public abstract class JSR223TestElement extends AbstractTestElement
             if (supportsCompilable && !StringUtils.isEmpty(cacheKey)) {
                 CompiledScript compiledScript = 
                         compiledScriptsCache.get(cacheKey);
-                if(compiledScript==null) {
+                if (compiledScript==null) {
                     synchronized (compiledScriptsCache) {
                         compiledScript = 
                                 compiledScriptsCache.get(cacheKey);
-                        if(compiledScript==null) {
+                        if (compiledScript==null) {
                             compiledScript = 
                                     ((Compilable) scriptEngine).compile(getScript());
                             compiledScriptsCache.put(cacheKey, compiledScript);
