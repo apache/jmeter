@@ -40,6 +40,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -48,7 +49,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public abstract class JSR223TestElement extends AbstractTestElement
-    implements Serializable, Cloneable
+    implements Serializable, Cloneable, TestStateListener
 {
     /**
      * Initialization On Demand Holder pattern
@@ -75,6 +76,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
 
     private String scriptLanguage; // JSR223 language to use
 
+    private String cacheKey = ""; // If not empty then script in ScriptText will be compiled and cached
     /**
      * Cache of compiled scripts
      */
@@ -94,6 +96,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
         filename="";
         script="";
         scriptLanguage="";
+        cacheKey = "";
     }
 
     protected Object readResolve() {
@@ -211,7 +214,24 @@ public abstract class JSR223TestElement extends AbstractTestElement
                 throw new ScriptException("Script file '"+scriptFile.getAbsolutePath()+"' does not exist or is unreadable for element:"+getName());
             }
         } else if (!StringUtils.isEmpty(getScript())){
-            return scriptEngine.eval(getScript(), bindings);
+            if (supportsCompilable && !StringUtils.isEmpty(cacheKey)) {
+                CompiledScript compiledScript = 
+                        compiledScriptsCache.get(cacheKey);
+                if(compiledScript==null) {
+                    synchronized (compiledScriptsCache) {
+                        compiledScript = 
+                                compiledScriptsCache.get(cacheKey);
+                        if(compiledScript==null) {
+                            compiledScript = 
+                                    ((Compilable) scriptEngine).compile(getScript());
+                            compiledScriptsCache.put(cacheKey, compiledScript);
+                        }
+                    }
+                }
+                return compiledScript.eval(bindings);
+            } else {
+                return scriptEngine.eval(getScript(), bindings);
+            }
         } else {
             throw new ScriptException("Both script file and script text are empty for element:"+getName());            
         }
@@ -262,5 +282,47 @@ public abstract class JSR223TestElement extends AbstractTestElement
 
     public void setScriptLanguage(String s) {
         scriptLanguage = s;
+    }
+
+    /**
+     * @return the cacheKey
+     */
+    public String getCacheKey() {
+        return cacheKey;
+    }
+
+    /**
+     * @param cacheKey the cacheKey to set
+     */
+    public void setCacheKey(String cacheKey) {
+        this.cacheKey = cacheKey;
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
+     */
+    public void testStarted() {
+        // NOOP
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.TestStateListener#testStarted(java.lang.String)
+     */
+    public void testStarted(String host) {
+        // NOOP   
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.TestStateListener#testEnded()
+     */
+    public void testEnded() {
+        testEnded("");
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.TestStateListener#testEnded(java.lang.String)
+     */
+    public void testEnded(String host) {
+        compiledScriptsCache.clear();
     }
 }
