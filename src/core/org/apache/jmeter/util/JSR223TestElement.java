@@ -173,10 +173,10 @@ public abstract class JSR223TestElement extends AbstractTestElement
         boolean supportsCompilable = scriptEngine instanceof Compilable 
                 && !(scriptEngine.getClass().getName().equals("bsh.engine.BshScriptEngine"));
         if (!StringUtils.isEmpty(getFilename())) {
-            if(scriptFile.exists() && scriptFile.canRead()) {
+            if (scriptFile.exists() && scriptFile.canRead()) {
                 BufferedReader fileReader = null;
                 try {
-                    if(supportsCompilable) {
+                    if (supportsCompilable) {
                         String cacheKey = 
                                 getScriptLanguage()+"#"+
                                 scriptFile.getAbsolutePath()+"#"+
@@ -210,7 +210,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
             }  else {
                 throw new ScriptException("Script file '"+scriptFile.getAbsolutePath()+"' does not exist or is unreadable for element:"+getName());
             }
-        } else if(!StringUtils.isEmpty(getScript())){
+        } else if (!StringUtils.isEmpty(getScript())){
             return scriptEngine.eval(getScript(), bindings);
         } else {
             throw new ScriptException("Both script file and script text are empty for element:"+getName());            
