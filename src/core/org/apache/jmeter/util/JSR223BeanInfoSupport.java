@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.util;
 
-import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,8 +29,6 @@ import javax.script.ScriptEngineManager;
  * Parent class to handle common GUI design for JSR223 test elements
  */
 public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
-    private static final String CACHE_KEY = "cacheKey";
-    private static final String CACHE_KEY_GROUP = "cacheKey_group";
 
     private static final String[] LANGUAGE_TAGS;
 
@@ -53,14 +50,6 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
 
     protected JSR223BeanInfoSupport(Class<?> beanClass) {
         super(beanClass, LANGUAGE_TAGS);
-        
-        PropertyDescriptor p = property(CACHE_KEY);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, ""); // $NON-NLS-1$
-
-        createPropertyGroup(CACHE_KEY_GROUP, new String[] { 
-                CACHE_KEY });
-
     }
 
 }
