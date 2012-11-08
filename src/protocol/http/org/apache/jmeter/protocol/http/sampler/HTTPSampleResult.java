@@ -101,6 +101,11 @@ public class HTTPSampleResult extends SampleResult {
                 return true;
             }
         }
+        // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+        // If the 307 status code is received in response to a request other than GET or HEAD, 
+        // the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
+        // since this might change the conditions under which the request was issued.
+        // See Bug 54119
         if ("307".equals(code) && 
                 ("GET".equals(getHTTPMethod()) || "HEAD".equals(getHTTPMethod()))) {
             return true;
