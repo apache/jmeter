@@ -30,7 +30,6 @@ import org.apache.bsf.BSFManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -38,7 +37,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-public abstract class BSFTestElement extends AbstractTestElement
+public abstract class BSFTestElement extends ScriptingTestElement
     implements Serializable, Cloneable
 {
     private static final long serialVersionUID = 233L;
@@ -55,38 +54,8 @@ public abstract class BSFTestElement extends AbstractTestElement
                 new String[]{"js"}); //$NON-NLS-1$
     }
 
-    //++ For TestBean implementations only
-    private String parameters; // passed to file or script
-
-    private String filename; // file to source (overrides script)
-
-    private String script; // script (if file not provided)
-
-    private String scriptLanguage; // BSF language to use
-    //-- For TestBean implementations only
-
     public BSFTestElement() {
         super();
-        init();
-    }
-
-    private void init() {
-        parameters=""; // ensure variables are not null
-        filename="";
-        script="";
-        scriptLanguage="";
-    }
-
-    protected Object readResolve() {
-        init();
-        return this;
-    }
-
-    @Override
-    public Object clone() {
-        BSFTestElement o = (BSFTestElement) super.clone();
-        o.init();
-       return o;
     }
 
     protected BSFManager getManager() throws BSFException {
@@ -155,52 +124,6 @@ public abstract class BSFTestElement extends AbstractTestElement
                 throw new BSFException(BSFException.REASON_IO_ERROR,"Problem reading script file",e);
             }
         }
-    }
-
-    /**
-     * Return the script (TestBean version).
-     * Must be overridden for subclasses that don't implement TestBean
-     * otherwise the clone() method won't work.
-     *
-     * @return the script to execute
-     */
-    public String getScript(){
-        return script;
-    }
-
-    /**
-     * Set the script (TestBean version).
-     * Must be overridden for subclasses that don't implement TestBean
-     * otherwise the clone() method won't work.
-     *
-     * @param s the script to execute (may be blank)
-     */
-    public void setScript(String s){
-        script=s;
-    }
-
-    public String getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(String s) {
-        parameters = s;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String s) {
-        filename = s;
-    }
-
-    public String getScriptLanguage() {
-        return scriptLanguage;
-    }
-
-    public void setScriptLanguage(String s) {
-        scriptLanguage = s;
     }
 
 }
