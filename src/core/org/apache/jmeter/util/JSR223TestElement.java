@@ -39,7 +39,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -48,7 +47,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-public abstract class JSR223TestElement extends AbstractTestElement
+public abstract class JSR223TestElement extends ScriptingTestElement
     implements Serializable, Cloneable, TestStateListener
 {
     /**
@@ -67,16 +66,8 @@ public abstract class JSR223TestElement extends AbstractTestElement
     
     private static final long serialVersionUID = 233L;
 
-    //++ For TestBean implementations only
-    private String parameters; // passed to file or script
-
-    private String filename; // file to source (overrides script)
-
-    private String script; // script (if file not provided)
-
-    private String scriptLanguage; // JSR223 language to use
-
     private String cacheKey = ""; // If not empty then script in ScriptText will be compiled and cached
+
     /**
      * Cache of compiled scripts
      */
@@ -84,31 +75,9 @@ public abstract class JSR223TestElement extends AbstractTestElement
     private static final Map<String, CompiledScript> compiledScriptsCache = 
             Collections.synchronizedMap(
                     new LRUMap(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
-    //-- For TestBean implementations only
 
     public JSR223TestElement() {
         super();
-        init();
-    }
-
-    private void init() {
-        parameters=""; // ensure variables are not null
-        filename="";
-        script="";
-        scriptLanguage="";
-        cacheKey = "";
-    }
-
-    protected Object readResolve() {
-        init();
-        return this;
-    }
-
-    @Override
-    public Object clone() {
-        JSR223TestElement o = (JSR223TestElement) super.clone();
-        o.init();
-       return o;
     }
 
     protected ScriptEngine getScriptEngine() throws ScriptException {
@@ -237,52 +206,6 @@ public abstract class JSR223TestElement extends AbstractTestElement
         }
     }
 
-
-    /**
-     * Return the script (TestBean version).
-     * Must be overridden for subclasses that don't implement TestBean
-     * otherwise the clone() method won't work.
-     *
-     * @return the script to execute
-     */
-    public String getScript(){
-        return script;
-    }
-
-    /**
-     * Set the script (TestBean version).
-     * Must be overridden for subclasses that don't implement TestBean
-     * otherwise the clone() method won't work.
-     *
-     * @param s the script to execute (may be blank)
-     */
-    public void setScript(String s){
-        script=s;
-    }
-
-    public String getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(String s) {
-        parameters = s;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String s) {
-        filename = s;
-    }
-
-    public String getScriptLanguage() {
-        return scriptLanguage;
-    }
-
-    public void setScriptLanguage(String s) {
-        scriptLanguage = s;
-    }
 
     /**
      * @return the cacheKey
