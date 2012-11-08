@@ -101,6 +101,10 @@ public class HTTPSampleResult extends SampleResult {
                 return true;
             }
         }
+        if ("307".equals(code) && 
+                ("GET".equals(getHTTPMethod()) || "HEAD".equals(getHTTPMethod()))) {
+            return true;
+        }
         return false;
     }
 
