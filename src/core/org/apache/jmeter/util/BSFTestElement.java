@@ -38,7 +38,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public abstract class BSFTestElement extends ScriptingTestElement
-    implements Serializable, Cloneable
+    implements Serializable
 {
     private static final long serialVersionUID = 233L;
 

@@ -48,7 +48,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public abstract class JSR223TestElement extends ScriptingTestElement
-    implements Serializable, Cloneable, TestStateListener
+    implements Serializable, TestStateListener
 {
     /**
      * Initialization On Demand Holder pattern
