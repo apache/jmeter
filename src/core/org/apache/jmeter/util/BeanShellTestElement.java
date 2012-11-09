@@ -273,14 +273,4 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     public void setResetInterpreter(boolean b) {
         resetInterpreter = b;
     }
-    
-    /** 
-     * {@inheritDoc}}
-     */
-    @Override
-    public List<String> getSearchableTokens() throws Exception {
-        List<String> result = super.getSearchableTokens();
-        result.add(getScript());
-        return result;
-    }
 }

@@ -561,25 +561,6 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         this.resultVariable = resultVariable;
     }    
 
-    /** 
-     * {@inheritDoc}}
-	 */
-	@Override
-	public List<String> getSearchableTokens() throws Exception {
-		List<String> result = super.getSearchableTokens();
-		Set<String> properties = new HashSet<String>();
-		properties.addAll(Arrays.asList(new String[]{
-			"dataSource",
-			"query",
-			"queryArguments",
-			"queryArgumentsTypes",
-			"queryType",
-			"resultVariable",
-			"variableNames"
-		}));
-		addPropertiesValues(result, properties);
-        return result;
-	}
 
 	/** 
 	 * {@inheritDoc}
