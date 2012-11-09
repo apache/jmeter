@@ -563,9 +563,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * {@inheritDoc}}
      */
     public List<String> getSearchableTokens() throws Exception {
-        List<String> result = new ArrayList<String>(2);
-        result.add(getComment());
-        result.add(getName());
+        List<String> result = new ArrayList<String>(25);
+        PropertyIterator iterator = propertyIterator();
+        while(iterator.hasNext()) {
+            JMeterProperty jMeterProperty = iterator.next();    
+            result.add(jMeterProperty.getName());
+            result.add(jMeterProperty.getStringValue());
+        }
         return result;
     }
     

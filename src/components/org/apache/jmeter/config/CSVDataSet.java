@@ -19,7 +19,6 @@
 package org.apache.jmeter.config;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
@@ -251,15 +250,5 @@ public class CSVDataSet extends ConfigTestElement
 
     public void setShareMode(String value) {
         this.shareMode = value;
-    }
-    
-    /** 
-     * {@inheritDoc}}
-     */
-    @Override
-    public List<String> getSearchableTokens() throws Exception {
-        List<String> result = super.getSearchableTokens();
-        result.add(getPropertyAsString("variableNames"));
-        return result;
     }
 }

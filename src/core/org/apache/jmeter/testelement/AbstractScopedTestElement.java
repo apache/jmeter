@@ -156,14 +156,4 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
         }
         return sampleList;
     }
-    
-    /** 
-     * {@inheritDoc}}
-     */
-    @Override
-    public List<String> getSearchableTokens() throws Exception {
-        List<String> result = super.getSearchableTokens();
-        result.add(getVariableName());
-        return result;
-    }
 }
