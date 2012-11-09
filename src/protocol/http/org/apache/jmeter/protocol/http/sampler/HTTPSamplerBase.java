@@ -1859,26 +1859,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
     }
     
-    
-    /** 
-     * We search in URL and arguments
-     * {@inheritDoc}}
-     */
-    @Override
-    public List<String> getSearchableTokens() throws Exception {
-        List<String> result = super.getSearchableTokens();
-        result.add(getUrl().toExternalForm());
-        Arguments arguments = getArguments();
-        if(arguments != null) {
-            for (int i = 0; i < arguments.getArgumentCount(); i++) {
-                Argument argument = arguments.getArgument(i);
-                result.add(argument.getName());
-                result.add(argument.getValue());
-            }
-        }
-        return result;
-    }
-    
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */

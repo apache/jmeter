@@ -453,16 +453,4 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public void setUseField(String actionCommand) {
         setProperty(MATCH_AGAINST,actionCommand);
     }
-    
-    /** 
-     * {@inheritDoc}}
-     */
-    @Override
-    public List<String> getSearchableTokens() throws Exception {
-        List<String> result = super.getSearchableTokens();
-        result.add(getRefName());
-        result.add(getDefaultValue());
-        result.add(getRegex());
-        return result;
-    }
 }
