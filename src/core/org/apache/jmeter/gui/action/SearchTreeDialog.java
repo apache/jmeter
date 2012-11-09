@@ -54,7 +54,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * 
+ * FIXME Why is searchTF not getting focus correctly after having been setVisible(false) once
  */
 public class SearchTreeDialog extends JDialog implements ActionListener {
     /**
@@ -163,6 +163,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
     	if(e.getSource()==cancelButton) {
+    	    searchTF.requestFocusInWindow();
     		this.setVisible(false);
     		return;
     	} 
@@ -212,6 +213,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
             jMeterTreeNode.setMarkedBySearch(true);
         }
         GuiPackage.getInstance().getMainFrame().repaint();
+        searchTF.requestFocusInWindow();
         this.setVisible(false);
 	}
 }
