@@ -107,7 +107,7 @@ public class HTTPSampleResult extends SampleResult {
         // since this might change the conditions under which the request was issued.
         // See Bug 54119
         if ("307".equals(code) && 
-                ("GET".equals(getHTTPMethod()) || "HEAD".equals(getHTTPMethod()))) {
+                (HTTPConstants.GET.equals(getHTTPMethod()) || HTTPConstants.HEAD.equals(getHTTPMethod()))) {
             return true;
         }
         return false;
