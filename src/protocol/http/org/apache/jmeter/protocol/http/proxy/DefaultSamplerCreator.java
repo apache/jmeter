@@ -170,7 +170,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 // Set the file uploads
                 sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
-            } else if (postData.trim().startsWith("<?") || "PUT".equals(sampler.getMethod())) {
+            } else if (postData.trim().startsWith("<?") || HTTPConstants.PUT.equals(sampler.getMethod())) {
                 sampler.addNonEncodedArgument("", postData, "");
             } else if (contentType == null || contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) ){
                 // It is the most common post request, with parameter name and values
