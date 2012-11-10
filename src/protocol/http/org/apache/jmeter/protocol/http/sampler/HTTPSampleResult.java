@@ -94,7 +94,13 @@ public class HTTPSampleResult extends SampleResult {
      * @return true iif res is an HTTP redirect response
      */
     public boolean isRedirect() {
-        final String[] REDIRECT_CODES = { "301", "302", "303" }; // NOT 304!
+        /*
+         * Don't redirect the following:
+         * 304 = Not Modified
+         * 305 = Use Proxy
+         * 306 = (Unused)
+         */
+        final String[] REDIRECT_CODES = { "301", "302", "303" };
         String code = getResponseCode();
         for (int i = 0; i < REDIRECT_CODES.length; i++) {
             if (REDIRECT_CODES[i].equals(code)) {
