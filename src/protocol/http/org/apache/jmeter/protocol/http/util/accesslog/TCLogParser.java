@@ -79,6 +79,15 @@ import org.apache.log.Logger;
 public class TCLogParser implements LogParser {
     protected static final Logger log = LoggingManager.getLoggerForClass();
 
+    /*
+     * TODO should these fields be public?
+     * They don't appear to be used externally.
+     * 
+     * Also, are they any different from HTTPConstants.GET etc. ?
+     * In some cases they seem to be used as the method name from the Tomcat log.
+     * However the RMETHOD field is used as the value for HTTPSamplerBase.METHOD,
+     * for which HTTPConstants is most approriate.
+     */
     public static final String GET = "GET";
 
     public static final String POST = "POST";
