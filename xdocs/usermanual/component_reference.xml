@@ -3209,6 +3209,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="Filename" required="Yes">Name of the file to be read. 
   <b>Relative file names are resolved with respect to the path of the active test plan.</b>
+  <b>For distributed testing, the CSV file must be stored on the server host system in the correct relative directory to where the jmeter server is started.</b>
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
   unless the remote server has the same directory structure.
   If the same physical file is referenced in two different ways - e.g. csvdata.txt and ./csvdata.txt -
