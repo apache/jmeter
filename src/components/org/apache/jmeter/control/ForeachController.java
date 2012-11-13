@@ -63,7 +63,8 @@ public class ForeachController extends GenericController implements Serializable
     /**
      * @return start index of loop
      */
-    public int getStartIndex() {
+    private int getStartIndex() {
+        // Although the default is not the same as for the string value, it is only used internally
         return getPropertyAsInt(START_INDEX, 0);
     }
 
@@ -85,7 +86,8 @@ public class ForeachController extends GenericController implements Serializable
     /**
      * @return end index of loop
      */
-    public int getEndIndex() {
+    private int getEndIndex() {
+        // Although the default is not the same as for the string value, it is only used internally
         return getPropertyAsInt(END_INDEX, Integer.MAX_VALUE);
     }
     
