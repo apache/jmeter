@@ -135,27 +135,12 @@ public class ForeachControlPanel extends AbstractControllerGui {
     public void modifyTestElement(TestElement lc) {
         configureTestElement(lc);
         if (lc instanceof ForeachController) {
-            if (inputVal.getText().length() > 0) {
-                ((ForeachController) lc).setInputVal(inputVal.getText());
-            } else {
-                ((ForeachController) lc).setInputVal(""); // $NON-NLS-1$
-            }
-            if (startIndex.getText().length() > 0) {
-                ((ForeachController) lc).setStartIndex(startIndex.getText());
-            } else {
-                ((ForeachController) lc).setStartIndex(null); // $NON-NLS-1$
-            }
-            if (endIndex.getText().length() > 0) {
-                ((ForeachController) lc).setEndIndex(endIndex.getText());
-            } else {
-                ((ForeachController) lc).setEndIndex(null); // $NON-NLS-1$
-            }
-            if (returnVal.getText().length() > 0) {
-                ((ForeachController) lc).setReturnVal(returnVal.getText());
-            } else {
-                ((ForeachController) lc).setReturnVal(""); // $NON-NLS-1$
-            }
-            ((ForeachController) lc).setUseSeparator(useSeparator.isSelected());
+            ForeachController fec = (ForeachController) lc;
+            fec.setInputVal(inputVal.getText());
+            fec.setStartIndex(startIndex.getText());
+            fec.setEndIndex(endIndex.getText());
+            fec.setReturnVal(returnVal.getText());
+            fec.setUseSeparator(useSeparator.isSelected());
         }
     }
 

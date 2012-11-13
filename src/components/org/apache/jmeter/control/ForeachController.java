@@ -55,7 +55,7 @@ public class ForeachController extends GenericController implements Serializable
      * @param startIndex Start index  of loop
      */
     public void setStartIndex(String startIndex) {
-        setProperty(START_INDEX, startIndex != null ? startIndex : "", "");
+        setProperty(START_INDEX, startIndex, "");
     }
 
     /**
@@ -77,7 +77,7 @@ public class ForeachController extends GenericController implements Serializable
      * @param endIndex End index  of loop
      */
     public void setEndIndex(String endIndex) {
-        setProperty(END_INDEX, endIndex != null ? endIndex : "", "");
+        setProperty(END_INDEX, endIndex, "");
     }
 
     /**
