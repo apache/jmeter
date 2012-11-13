@@ -50,6 +50,28 @@ public class ModuleControllerGui extends AbstractControllerGui
 // implements UnsharedComponent
 {
 
+    private static final class TreeNodeWrapper {
+    
+        private final JMeterTreeNode tn;
+    
+        private final String label;
+    
+        public TreeNodeWrapper(JMeterTreeNode tn, String label) {
+            this.tn = tn;
+            this.label = label;
+        }
+    
+        public JMeterTreeNode getTreeNode() {
+            return tn;
+        }
+    
+        /** {@inheritDoc}} */
+        @Override
+        public String toString() {
+            return label;
+        }
+    
+    }
     private static final long serialVersionUID = 240L;
 
     private JMeterTreeNode selected = null;
@@ -198,7 +220,7 @@ public class ModuleControllerGui extends AbstractControllerGui
         if (level == 0 && (parent_name == null || parent_name.length() == 0)) {
             nodesModel.addElement(new TreeNodeWrapper(null, "")); // $NON-NLS-1$
         }
-        String seperator = " > "; // $NON-NLS-1$
+        String separator = " > "; // $NON-NLS-1$
         if (node != null) {
             StringBuilder name = new StringBuilder();
             for (int i = 0; i < node.getChildCount(); i++) {
@@ -208,56 +230,21 @@ public class ModuleControllerGui extends AbstractControllerGui
                 if (te instanceof AbstractThreadGroup) {
                     name.append(parent_name);
                     name.append(cur.getName());
-                    name.append(seperator);
+                    name.append(separator);
                     buildNodesModel(cur, name.toString(), level);
                 } else if (te instanceof Controller && !(te instanceof ModuleController)) {
-                    name.append(spaces(level));
                     name.append(parent_name);
                     name.append(cur.getName());
                     TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
                     nodesModel.addElement(tnw);
-                    name.setLength(0);
-                    name.append(cur.getName());
-                    name.append(seperator);
+                    name.append(separator);
                     buildNodesModel(cur, name.toString(), level + 1);
                 } else if (te instanceof TestPlan || te instanceof WorkBench) {
                     name.append(cur.getName());
-                    name.append(seperator);
+                    name.append(separator);
                     buildNodesModel(cur, name.toString(), 0);
                 }
             }
         }
     }
-
-    private String spaces(int level) {
-        int multi = 4;
-        StringBuilder spaces = new StringBuilder(level * multi);
-        for (int i = 0; i < level * multi; i++) {
-            spaces.append(" "); // $NON-NLS-1$
-        }
-        return spaces.toString();
-    }
-}
-
-class TreeNodeWrapper {
-
-    private final JMeterTreeNode tn;
-
-    private final String label;
-
-    public TreeNodeWrapper(JMeterTreeNode tn, String label) {
-        this.tn = tn;
-        this.label = label;
-    }
-
-    public JMeterTreeNode getTreeNode() {
-        return tn;
-    }
-
-    /** {@inheritDoc}} */
-    @Override
-    public String toString() {
-        return label;
-    }
-
 }

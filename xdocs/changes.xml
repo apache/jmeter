@@ -156,6 +156,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <h3>Controllers</h3>
 <ul>
 <li><bugzilla>54131</bugzilla> - ForEach Controller : Add start and end index for looping over variables</li>
+<li><bugzilla>54132</bugzilla> - Module Controller GUI : Improve rendering of referenced controller</li>
 </ul>
 
 <h3>Listeners</h3>
