@@ -43,6 +43,8 @@ public class ForeachController extends GenericController implements Serializable
 
     private static final String USE_SEPARATOR = "ForeachController.useSeparator";// $NON-NLS-1$
 
+    private static final String INDEX_DEFAULT_VALUE = ""; // start/end index default value for string getters and setters
+
     private int loopCount = 0;
 
     private static final String DEFAULT_SEPARATOR = "_";// $NON-NLS-1$
@@ -55,7 +57,7 @@ public class ForeachController extends GenericController implements Serializable
      * @param startIndex Start index  of loop
      */
     public void setStartIndex(String startIndex) {
-        setProperty(START_INDEX, startIndex, "");
+        setProperty(START_INDEX, startIndex, INDEX_DEFAULT_VALUE);
     }
 
     /**
@@ -70,14 +72,14 @@ public class ForeachController extends GenericController implements Serializable
      * @return start index of loop as String
      */
     public String getStartIndexAsString() {
-        return getPropertyAsString(START_INDEX, "");
+        return getPropertyAsString(START_INDEX, INDEX_DEFAULT_VALUE);
     }
     
     /**
      * @param endIndex End index  of loop
      */
     public void setEndIndex(String endIndex) {
-        setProperty(END_INDEX, endIndex, "");
+        setProperty(END_INDEX, endIndex, INDEX_DEFAULT_VALUE);
     }
 
     /**
@@ -91,7 +93,7 @@ public class ForeachController extends GenericController implements Serializable
      * @return end index of loop
      */
     public String getEndIndexAsString() {
-        return getPropertyAsString(END_INDEX, "");
+        return getPropertyAsString(END_INDEX, INDEX_DEFAULT_VALUE);
     }
     
     public void setInputVal(String inputValue) {
