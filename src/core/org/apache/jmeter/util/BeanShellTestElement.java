@@ -19,7 +19,6 @@
 package org.apache.jmeter.util;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
