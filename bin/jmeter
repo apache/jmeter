@@ -87,4 +87,4 @@ SERVER="-server"
 
 ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM"
 
-java $ARGS $JVM_ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
+java $ARGS $JVM_ARGS -jar "`dirname "$0"`/ApacheJMeter.jar" "$@"
