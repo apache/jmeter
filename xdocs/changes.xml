@@ -141,6 +141,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>53975</bugzilla> - Variables replacement doesn't work with option "Delay thread creation until needed"</li>
 <li><bugzilla>54055</bugzilla> - View Results tree: = signs are stripped from parameter values at HTTP tab</li>
 <li><bugzilla>54129</bugzilla> - Search Feature does not find text although existing in elements </li>
+<li><bugzilla>54023</bugzilla> - Unable to start JMeter from a root directory and if the full path of JMeter installation contains one or more spaces (Unix/linux)</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
