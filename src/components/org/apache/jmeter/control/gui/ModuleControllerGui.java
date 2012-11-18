@@ -50,28 +50,6 @@ public class ModuleControllerGui extends AbstractControllerGui
 // implements UnsharedComponent
 {
 
-    private static final class TreeNodeWrapper {
-    
-        private final JMeterTreeNode tn;
-    
-        private final String label;
-    
-        public TreeNodeWrapper(JMeterTreeNode tn, String label) {
-            this.tn = tn;
-            this.label = label;
-        }
-    
-        public JMeterTreeNode getTreeNode() {
-            return tn;
-        }
-    
-        /** {@inheritDoc}} */
-        @Override
-        public String toString() {
-            return label;
-        }
-    
-    }
     private static final long serialVersionUID = 240L;
 
     private JMeterTreeNode selected = null;
