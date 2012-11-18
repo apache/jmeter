@@ -69,7 +69,7 @@ public final class HTTPSamplerFactory {
      */
     public static HTTPSamplerBase newInstance(String alias) {
         if (alias ==null || alias.length() == 0) {
-            alias = DEFAULT_CLASSNAME;
+            return new HTTPSamplerProxy();
         }
         if (alias.equals(HTTP_SAMPLER_JAVA) || alias.equals(IMPL_JAVA)) {
             return new HTTPSamplerProxy(IMPL_JAVA);
