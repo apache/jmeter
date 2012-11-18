@@ -42,7 +42,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
-    
+
     private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -50,6 +50,10 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
     public SampleResult sample(Entry entry) {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
+        result.setSuccessful(true);
+        result.setResponseCodeOK();
+        result.setResponseMessageOK();
+
         final String filename = getFilename();
         if (filename.length() > 0){
             result.setSamplerData("File: "+filename);
@@ -63,10 +67,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
             Bindings bindings = scriptEngine.createBindings();
             bindings.put("SampleResult",result);
             Object ret = processFileOrScript(scriptEngine, bindings);
-            result.setSuccessful(true);
-            result.setResponseCodeOK();
-            result.setResponseMessageOK();
-            if (ret != null){
+            if (ret != null && (result.getResponseData() == null || result.getResponseData()==SampleResult.EMPTY_BA)){
                 result.setResponseData(ret.toString(), null);
             }
         } catch (IOException e) {

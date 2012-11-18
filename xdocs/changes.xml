@@ -95,7 +95,14 @@ This does not affect JMeter operation.
 map which held the PreparedStatement for SQL queries. This limitation provoked a bug <bugzilla>53995</bugzilla>. 
 It has been removed so now size of these 2 maps is not limited anymore. This change changes behaviour as starting from this version no PreparedStatement will be closed during the test.</p>
 
-<p>Starting with this version JSR223 Test Elements that have an invalid filename (not existing or unreadable) will make test fail instead of making the element silently work</p>
+<p>Starting with this version, there are some important changes on JSR223 Test Elements:
+<ul>
+    <li>JSR223 Test Elements that have an invalid filename (not existing or unreadable) will make test fail instead of making the element silently work</li>
+    <li>In JSR223 Test Elements: responseCodeOk, responseMessageOK and successful are set before script is executed, if responseData is set it will not be overriden anymore by a toString() on script return value</li>
+</ul>
+</p>
+
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -157,6 +164,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>54004</bugzilla> - Webservice Sampler : Allow adding headers to request with Header Manager</li>
 <li><bugzilla>54106</bugzilla> - JSR223TestElement should check for file existence when a filename is set instead of using Text Area content </li>
 <li><bugzilla>54107</bugzilla> - JSR223TestElement : Enable compilation and caching of Script Text</li>
+<li><bugzilla>54109</bugzilla> - JSR223TestElement : SampleResult properties should be set before entering script to allow user setting different code</li>
 </ul>
 
 <h3>Controllers</h3>
