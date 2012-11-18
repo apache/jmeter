@@ -138,6 +138,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         <li>HTTPClient3.1 - uses Apache Commons HttpClient 3.1. 
         This is no longer being developed, and support for this may be dropped in a future JMeter release.</li>
         <li>HTTPClient4 - uses Apache HttpComponents HttpClient 4.x.</li>
+        <li>Blank Value - does not set implementationon HTTP Samplers, so relies on HTTP Request Defaults if present or on jmeter.httpsampler property defined in jmeter.properties</li>
         </ul>
         </ul>
          </p>
