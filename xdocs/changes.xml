@@ -187,6 +187,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>53875</bugzilla> - Include suggested defaults for URL filters on HTTP Proxy</li>
 <li><bugzilla>54031</bugzilla> - Add tooltip to running/total threads indicator </li>
 <li>Webservice (SOAP) Request has been deprecated</li>
+<li><bugzilla>54161</bugzilla> - Proxy : be able to create binary sampler for x-www-form-urlencoded POST request</li>
 </ul>
 
 <h2>Non-functional changes</h2>
