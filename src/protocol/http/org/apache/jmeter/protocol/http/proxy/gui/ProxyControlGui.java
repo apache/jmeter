@@ -50,6 +50,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.LogicControllerGui;
+import org.apache.jmeter.control.gui.TreeNodeWrapper;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
@@ -825,7 +826,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private void buildNodesModel(JMeterTreeNode node, String parent_name, int level) {
-        String seperator = " > ";
+        String separator = " > ";
         if (node != null) {
             for (int i = 0; i < node.getChildCount(); i++) {
                 StringBuilder name = new StringBuilder();
@@ -841,53 +842,19 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                  * buildNodesModel(cur, name.toString(), level); } else
                  */
                 if (te instanceof Controller) {
-                    name.append(spaces(level));
                     name.append(parent_name);
                     name.append(cur.getName());
                     TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
                     targetNodesModel.addElement(tnw);
-                    name = new StringBuilder();
-                    name.append(cur.getName());
-                    name.append(seperator);
+                    name.append(separator);
                     buildNodesModel(cur, name.toString(), level + 1);
                 } else if (te instanceof TestPlan || te instanceof WorkBench) {
                     name.append(cur.getName());
-                    name.append(seperator);
+                    name.append(separator);
                     buildNodesModel(cur, name.toString(), 0);
                 }
                 // Ignore everything else
             }
         }
-    }
-
-    private String spaces(int level) {
-        int multi = 4;
-        StringBuilder spaces = new StringBuilder(level * multi);
-        for (int i = 0; i < level * multi; i++) {
-            spaces.append(" "); // $NON-NLS-1$
-        }
-        return spaces.toString();
-    }
-
-}
-
-class TreeNodeWrapper {
-    private final JMeterTreeNode tn;
-
-    private final String label;
-
-    public TreeNodeWrapper(JMeterTreeNode tn, String label) {
-        this.tn = tn;
-        this.label = label;
-    }
-
-    public JMeterTreeNode getTreeNode() {
-        return tn;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String toString() {
-        return label;
     }
 }
