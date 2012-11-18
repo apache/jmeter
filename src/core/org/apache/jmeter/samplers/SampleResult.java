@@ -88,7 +88,7 @@ public class SampleResult implements Serializable {
     public static final String BINARY = "bin"; // $NON-NLS-1$
 
     /* empty arrays which can be returned instead of null */
-    private static final byte[] EMPTY_BA = new byte[0];
+    public static final byte[] EMPTY_BA = new byte[0];
 
     private static final SampleResult[] EMPTY_SR = new SampleResult[0];
 
