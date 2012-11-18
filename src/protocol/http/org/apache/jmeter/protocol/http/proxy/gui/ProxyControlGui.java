@@ -78,6 +78,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final long serialVersionUID = 232L;
 
+    /**
+     * This choice means don't explicitly set Implementation and rely on default, see Bug 54154
+     */
+    private static final String USE_DEFAULT_HTTP_IMPL = ""; // $NON-NLS-1$
+
     private static final String SUGGESTED_EXCLUSIONS =
             JMeterUtils.getPropDefault("proxy.excludes.suggested", ".*\\.js;.*\\.css;.*\\.swf;.*\\.gif;.*\\.png;.*\\.jpg;.*\\.bmp"); // $NON-NLS-1$
     
@@ -229,7 +234,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setCaptureHttpHeaders(httpHeaders.isSelected());
             model.setGroupingMode(groupingMode.getSelectedIndex());
             model.setAssertions(addAssertions.isSelected());
-            model.setSamplerTypeName(HTTPSamplerFactory.getImplementations()[samplerTypeName.getSelectedIndex()]);
+            if(samplerTypeName.getSelectedIndex()< HTTPSamplerFactory.getImplementations().length) {
+                model.setSamplerTypeName(HTTPSamplerFactory.getImplementations()[samplerTypeName.getSelectedIndex()]);
+            } else {
+                model.setSamplerTypeName(USE_DEFAULT_HTTP_IMPL);               
+            }
             model.setSamplerRedirectAutomatically(samplerRedirectAutomatically.isSelected());
             model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
             model.setUseKeepAlive(useKeepAlive.isSelected());
@@ -614,6 +623,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         for (String s : HTTPSamplerFactory.getImplementations()){
             m.addElement(s);
         }
+        m.addElement(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName = new JComboBox(m);
         samplerTypeName.setSelectedItem(HTTPSamplerFactory.DEFAULT_CLASSNAME);
         samplerTypeName.addItemListener(this);
