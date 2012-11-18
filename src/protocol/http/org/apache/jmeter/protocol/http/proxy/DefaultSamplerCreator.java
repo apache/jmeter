@@ -172,7 +172,9 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
             } else if (postData.trim().startsWith("<?") || HTTPConstants.PUT.equals(sampler.getMethod())) {
                 sampler.addNonEncodedArgument("", postData, "");
-            } else if (contentType == null || contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) ){
+            } else if (contentType == null || 
+                    (contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) && 
+                            !isBinaryContent(contentType))) {
                 // It is the most common post request, with parameter name and values
                 // We also assume this if no content type is present, to be most backwards compatible,
                 // but maybe we should only parse arguments if the content type is as expected
