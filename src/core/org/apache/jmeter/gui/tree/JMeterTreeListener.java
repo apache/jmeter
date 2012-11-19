@@ -284,18 +284,19 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         if (KeyStrokes.matches(e,KeyStrokes.COPY)) {
             ActionRouter actionRouter = ActionRouter.getInstance();
             actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.COPY));
+            e.consume();
         } else if (KeyStrokes.matches(e,KeyStrokes.PASTE)) {
             ActionRouter actionRouter = ActionRouter.getInstance();
             actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.PASTE));
+            e.consume();
         } else if (KeyStrokes.matches(e,KeyStrokes.CUT)) {
             ActionRouter actionRouter = ActionRouter.getInstance();
             actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CUT));
-// If the following lines are included, then pressing the DUPLICATE key results in calling the action twice.
-// Without the code below, it still works.
-// Odd, the other keypresses do need to be handled above or they do not work at all...
-//        } else if (KeyStrokes.matches(e,KeyStrokes.DUPLICATE)) {
-//            ActionRouter actionRouter = ActionRouter.getInstance();
-//            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.DUPLICATE));
+            e.consume();
+        } else if (KeyStrokes.matches(e,KeyStrokes.DUPLICATE)) {
+            ActionRouter actionRouter = ActionRouter.getInstance();
+            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.DUPLICATE));
+            e.consume();
         }
     }
 
