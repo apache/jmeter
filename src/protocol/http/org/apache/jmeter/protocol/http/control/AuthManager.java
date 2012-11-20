@@ -155,11 +155,11 @@ public class AuthManager extends ConfigTestElement implements Serializable {
         try {
             if (url.getPort() == -1) {
                 // Obtain another URL with an explicit port:
-                int port = url.getProtocol().equalsIgnoreCase("http") ? 80 : 443;
+                int port = url.getProtocol().equalsIgnoreCase("http") ? HTTPConstants.DEFAULT_HTTP_PORT : HTTPConstants.DEFAULT_HTTPS_PORT;
                 // only http and https are supported
                 url2 = new URL(url.getProtocol(), url.getHost(), port, url.getPath());
-            } else if ((url.getPort() == 80 && url.getProtocol().equalsIgnoreCase("http"))
-                    || (url.getPort() == 443 && url.getProtocol().equalsIgnoreCase("https"))) {
+            } else if ((url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT && url.getProtocol().equalsIgnoreCase("http"))
+                    || (url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT && url.getProtocol().equalsIgnoreCase("https"))) {
                 url2 = new URL(url.getProtocol(), url.getHost(), url.getPath());
             }
         } catch (MalformedURLException e) {
