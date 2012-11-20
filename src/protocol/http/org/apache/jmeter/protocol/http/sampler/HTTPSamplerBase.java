@@ -1388,13 +1388,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         int redirect;
         for (redirect = 0; redirect < MAX_REDIRECTS; redirect++) {
             boolean invalidRedirectUrl = false;
-            // Browsers seem to tolerate Location headers with spaces,
-            // replacing them automatically with %20. We want to emulate
-            // this behaviour.
             String location = lastRes.getRedirectLocation(); 
             if (REMOVESLASHDOTDOT) {
                 location = ConversionUtils.removeSlashDotDot(location);
             }
+            // Browsers seem to tolerate Location headers with spaces,
+            // replacing them automatically with %20. We want to emulate
+            // this behaviour.
             location = encodeSpaces(location);
             try {
                 lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), HTTPConstants.GET, true, frameDepth);
