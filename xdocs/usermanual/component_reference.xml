@@ -4637,7 +4637,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
         should update its variables only once per iteration.  if you embed functions into the UP, then you may need greater
         control over how often the values of the variables are updated.  Keep this box checked to ensure the values are
         updated each time through the UP's parent controller.  Uncheck the box, and the UP will update the parameters for 
-        every sample request made within its <a href="build-test-plan.html#scoping_rules">scope</a>.</property>
+        every sample request made within its <a href="test_plan.html#scoping_rules">scope</a>.</property>
         
 </properties>
 </component>
