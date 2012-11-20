@@ -215,9 +215,9 @@ No
 
 #macro (scope $scope)
 #if ($scope.getText() == "")
-<a href="build-test-plan.html#scoping_rules">scope</a>
+<a href="test_plan.html#scoping_rules">scope</a>
 #else
-<a href="build-test-plan.html#scoping_rules">$scope.getText()</a>
+<a href="test_plan.html#scoping_rules">$scope.getText()</a>
 #end
 #end
 
