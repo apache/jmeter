@@ -339,10 +339,14 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             return res;
         } catch (IllegalArgumentException e) { // e.g. some kinds of invalid URL
             res.sampleEnd();
+            // pick up headers if failed to execute the request
+            res.setRequestHeaders(getConnectionHeaders(httpMethod));
             errorResult(e, res);
             return res;
         } catch (IOException e) {
             res.sampleEnd();
+            // pick up headers if failed to execute the request
+            res.setRequestHeaders(getConnectionHeaders(httpMethod));
             errorResult(e, res);
             return res;
         } finally {
