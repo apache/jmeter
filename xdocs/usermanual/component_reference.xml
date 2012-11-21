@@ -1066,6 +1066,14 @@ This can be used to define common methods and variables.
 There is a sample init file in the bin directory: BeanShellSampler.bshrc.
 </p><p>
 If a script file is supplied, that will be used, otherwise the script will be used.</p>
+<note>
+JMeter processes function and variable references before passing the script field to the interpreter,
+so the references will only be resolved once.
+Variable and function references in script files will be passed
+verbatim to the interpreter, which is likely to cause a syntax error.
+In order to use runtime variables, please use the appropriate props methods,
+e.g. props.get("START.HMS"); props.put("PROP1","1234");
+</note>
 		<p>Before invoking the script, some variables are set up in the BeanShell interpreter:
 			</p>
 				<p>The contents of the Parameters field is put into the variable "Parameters".
@@ -1155,6 +1163,14 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </properties>
 <p>
 If a script file is supplied, that will be used, otherwise the script will be used.</p>
+<note>
+JMeter processes function and variable references before passing the script field to the interpreter,
+so the references will only be resolved once.
+Variable and function references in script files will be passed
+verbatim to the interpreter, which is likely to cause a syntax error.
+In order to use runtime variables, please use the appropriate props methods,
+e.g. props.get("START.HMS"); props.put("PROP1","1234");
+</note>
 <p>
 Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
@@ -1218,6 +1234,14 @@ For details, see <complink name="BSF Sampler"/>.
 Since JMeter 2.8, JSR223 Test Elements using Script file or Script text + cache key are now Compiled if ScriptEngine supports this feature, this enables great performance enhancements.
 </note>
 </description>
+<note>
+JMeter processes function and variable references before passing the script field to the interpreter,
+so the references will only be resolved once.
+Variable and function references in script files will be passed
+verbatim to the interpreter, which is likely to cause a syntax error.
+In order to use runtime variables, please use the appropriate props methods,
+e.g. props.get("START.HMS"); props.put("PROP1","1234");
+</note>
 </component>
 
 <component name="TCP Sampler" index="&sect-num;.1.12"  width="743" height="357" screenshot="tcpsampler.png">
