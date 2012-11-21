@@ -44,6 +44,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -116,7 +117,12 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         PatternMatcherInput input = new PatternMatcherInput(textToParse);
 
         PatternCacheLRU pcLRU = new PatternCacheLRU();
-        Pattern pattern = pcLRU.getPattern(regexpField.getText(), Perl5Compiler.READ_ONLY_MASK);
+        Pattern pattern;
+        try {
+            pattern = pcLRU.getPattern(regexpField.getText(), Perl5Compiler.READ_ONLY_MASK);
+        } catch (MalformedCachePatternException e) {
+            return e.toString();
+        }
         List<MatchResult> matches = new LinkedList<MatchResult>();
         while (matcher.contains(input, pattern)) {
             matches.add(matcher.getMatch());
