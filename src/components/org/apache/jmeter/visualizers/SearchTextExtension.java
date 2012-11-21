@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -150,6 +151,11 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                             .getResString("search_text_button_find"));// $NON-NLS-1$
                     results.setCaretPosition(0);
                 }
+            } catch (PatternSyntaxException pse) {
+                JOptionPane.showMessageDialog(null, 
+                        pse.toString(),// $NON-NLS-1$
+                        JMeterUtils.getResString("error_title"), // $NON-NLS-1$
+                        JOptionPane.WARNING_MESSAGE);
             } catch (BadLocationException ble) {
                 log.error("Location exception in text find", ble);// $NON-NLS-1$
             }
