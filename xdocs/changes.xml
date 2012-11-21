@@ -159,6 +159,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 
 <h3>HTTP Samplers</h3>
 <ul>
+<li><bugzilla>54185</bugzilla> - Allow query strings in paths that start with HTTP or HTTPS</li>
 </ul>
 
 <h3>Other samplers</h3>
