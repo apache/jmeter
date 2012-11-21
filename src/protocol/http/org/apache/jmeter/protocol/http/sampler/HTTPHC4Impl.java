@@ -356,6 +356,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         } catch (IOException e) {
             res.sampleEnd();
+           // pick up headers if failed to execute the request
+            res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
             errorResult(e, res);
             return res;
         } catch (RuntimeException e) {
