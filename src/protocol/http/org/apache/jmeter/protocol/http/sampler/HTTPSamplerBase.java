@@ -395,8 +395,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * Sets the PATH property; also calls {@link #parseArguments(String, String)}
-     * to extract and store any query arguments if the request is a GET or DELETE.
+     * Sets the PATH property; if the request is a GET or DELETE (and the path
+     * does not start with http[s]://) it also calls {@link #parseArguments(String, String)}
+     * to extract and store any query arguments.
      *
      * @param path
      *            The new Path value
@@ -404,7 +405,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *            The encoding used for the querystring parameter values
      */
     public void setPath(String path, String contentEncoding) {
-        if (HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod())) {
+        boolean fullUrl = path.startsWith(HTTP_PREFIX) || path.startsWith(HTTPS_PREFIX); 
+        if (!fullUrl && (HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod()))) {
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
                 setProperty(PATH, path.substring(0, index));
