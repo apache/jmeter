@@ -1196,7 +1196,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 </description>
 </component>
 
-<component index="&sect-num;.5.29" name="__escapeHtml">
+<component index="&sect-num;.5.29" name="__escapeOroRegexpChars">
 <description>
     <p>
 Function which escapes the ORO Regexp meta characters, it is the equivalent of \Q \E in Java Regexp Engine.
