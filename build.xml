@@ -1563,7 +1563,7 @@ run JMeter unless all the JMeter jars are added.
         Usage:
               ant maven_upload [-DrepoType=snapshots|releases]
   -->
-  <target name="maven_upload" description="Upload jars and poms (and sigs if present).">
+  <target name="maven_upload" description="Upload Maven jars and poms (and sigs if present) to Nexus.">
 
     <property environment="env"/>
     <!-- According to http://maven.apache.org/download.html#Installation M2_HOME applies to Maven 2.2.1 and 3.0.x -->
