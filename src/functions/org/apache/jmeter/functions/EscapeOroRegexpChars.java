@@ -53,8 +53,6 @@ public class EscapeOroRegexpChars extends AbstractFunction {
 
     private static final int MIN_PARAM_COUNT = 1;
     
-    private static final int CHARS = 1;
-
     private static final int PARAM_NAME = 2;
 
     /**
@@ -69,35 +67,29 @@ public class EscapeOroRegexpChars extends AbstractFunction {
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
-        String charsToUse = null;//means no restriction
-        if (values.length >= CHARS) {
-            charsToUse = (values[CHARS - 1]).execute().trim();
-            if (charsToUse.length() <= 0) { // empty chars, return to null
-                charsToUse = null;
-            }
-        }
-
-        String myName = "";//$NON-NLS-1$
+        String valueToEscape = values[0].execute().trim();       
+        
+        String varName = "";//$NON-NLS-1$
         if (values.length >= PARAM_NAME) {
-            myName = (values[PARAM_NAME - 1]).execute().trim();
+            varName = values[PARAM_NAME - 1].execute().trim();
         }
 
-        String myValue = Perl5Compiler.quotemeta(charsToUse);
+        String escapedValue = Perl5Compiler.quotemeta(valueToEscape);
          
-        if (myName.length() > 0) {
+        if (varName.length() > 0) {
             JMeterVariables vars = getVariables();
             if (vars != null) {// Can be null if called from Config item testEnded() method
-                vars.put(myName, myValue);
+                vars.put(varName, escapedValue);
             }
         }
 
         if (log.isDebugEnabled()) {
             String tn = Thread.currentThread().getName();
             log.debug(tn + " name:" //$NON-NLS-1$
-                    + myName + " value:" + myValue);//$NON-NLS-1$
+                    + varName + " value:" + escapedValue);//$NON-NLS-1$
         }
 
-        return myValue;
+        return escapedValue;
     }
 
     /** {@inheritDoc} */
