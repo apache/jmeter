@@ -187,6 +187,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 
 <h3>Functions</h3>
 <ul>
+<li><bugzilla>54189</bugzilla> - Add a function to quote ORO regexp meta characters</li>
 </ul>
 
 <h3>I18N</h3>
