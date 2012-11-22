@@ -120,6 +120,7 @@ Alternatively, just use / instead for the path separator - e.g. C:/test/${test} 
         <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td><td>2.3.1</td></tr>
         <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td><td>2.3.1</td></tr>
         <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
         <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
@@ -1194,6 +1195,32 @@ A reference name - refName - for reusing the value created by this function. Sto
     </p>
 </description>
 </component>
+
+<component index="&sect-num;.5.29" name="__escapeHtml">
+<description>
+    <p>
+Function which escapes the ORO Regexp meta characters, it is the equivalent of \Q \E in Java Regexp Engine.
+</p>
+<p>
+For example,<code>[^&quot;].+?</code>
+becomes:
+<code>\[\^\&quot;\]\.\+\?</code>.
+</p>
+    <p>
+    Uses Perl5Compiler#quotemeta(String) from ORO.
+    </p>
+    </description>
+
+<properties>
+        <property name="String to escape" required="Yes">
+        The string to be escaped.
+        </property>
+        <property name="Variable Name" required="No">
+A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
+        </property>
+</properties>
+</component>
+
 </subsection>
 
 <subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
