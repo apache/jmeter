@@ -179,6 +179,8 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 
 <h3>Listeners</h3>
 <ul>
+<li><bugzilla>54200</bugzilla> - Add support of several document types (like Apache OpenOffice's files, MS Office's files, PDF's files, etc.) 
+to the elements View Results Tree, Assertion Response and Regular Expression Extractor (in using Apache Tika)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

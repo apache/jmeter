@@ -57,6 +57,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
     private JRadioButton useUnescapedBody;
 
+    private JRadioButton useBodyAsDocument;
+
     private JRadioButton useHeaders;
 
     private JRadioButton useURL;
@@ -85,6 +87,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
             useHeaders.setSelected(re.useHeaders());
             useBody.setSelected(re.useBody());
             useUnescapedBody.setSelected(re.useUnescapedBody());
+            useBodyAsDocument.setSelected(re.useBodyAsDocument());
             useURL.setSelected(re.useUrl());
             useCode.setSelected(re.useCode());
             useMessage.setSelected(re.useMessage());
@@ -158,6 +161,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
         useBody = new JRadioButton(JMeterUtils.getResString("regex_src_body")); //$NON-NLS-1$
         useUnescapedBody = new JRadioButton(JMeterUtils.getResString("regex_src_body_unescaped")); //$NON-NLS-1$
+        useBodyAsDocument = new JRadioButton(JMeterUtils.getResString("regex_src_body_as_document")); //$NON-NLS-1$
         useHeaders = new JRadioButton(JMeterUtils.getResString("regex_src_hdrs")); //$NON-NLS-1$
         useURL = new JRadioButton(JMeterUtils.getResString("regex_src_url")); //$NON-NLS-1$
         useCode = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
@@ -166,6 +170,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         group = new ButtonGroup();
         group.add(useBody);
         group.add(useUnescapedBody);
+        group.add(useBodyAsDocument);
         group.add(useHeaders);
         group.add(useURL);
         group.add(useCode);
@@ -173,6 +178,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
         panel.add(useBody);
         panel.add(useUnescapedBody);
+        panel.add(useBodyAsDocument);
         panel.add(useHeaders);
         panel.add(useURL);
         panel.add(useCode);
@@ -183,6 +189,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         // So we know which button is selected
         useBody.setActionCommand(RegexExtractor.USE_BODY);
         useUnescapedBody.setActionCommand(RegexExtractor.USE_BODY_UNESCAPED);
+        useBodyAsDocument.setActionCommand(RegexExtractor.USE_BODY_AS_DOCUMENT);
         useHeaders.setActionCommand(RegexExtractor.USE_HDRS);
         useURL.setActionCommand(RegexExtractor.USE_URL);
         useCode.setActionCommand(RegexExtractor.USE_CODE);

@@ -55,6 +55,9 @@ public class AssertionGui extends AbstractAssertionGui {
     /** Radio button indicating that the text response should be tested. */
     private JRadioButton responseStringButton;
 
+    /** Radio button indicating that the text of a document should be tested. */
+    private JRadioButton responseAsDocumentButton;
+
     /** Radio button indicating that the URL should be tested. */
     private JRadioButton urlButton;
 
@@ -144,6 +147,8 @@ public class AssertionGui extends AbstractAssertionGui {
 
             if (responseStringButton.isSelected()) {
                 ra.setTestFieldResponseData();
+            } else if (responseAsDocumentButton.isSelected()) {
+                ra.setTestFieldResponseDataAsDocument();
             } else if (responseCodeButton.isSelected()) {
                 ra.setTestFieldResponseCode();
             } else if (responseMessageButton.isSelected()) {
@@ -224,6 +229,8 @@ public class AssertionGui extends AbstractAssertionGui {
 
         if (model.isTestFieldResponseData()) {
             responseStringButton.setSelected(true);
+        } else if (model.isTestFieldResponseDataAsDocument()) {
+            responseAsDocumentButton.setSelected(true);
         } else if (model.isTestFieldResponseCode()) {
             responseCodeButton.setSelected(true);
         } else if (model.isTestFieldResponseMessage()) {
@@ -279,6 +286,7 @@ public class AssertionGui extends AbstractAssertionGui {
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field"))); //$NON-NLS-1$
 
         responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp")); //$NON-NLS-1$
+        responseAsDocumentButton = new JRadioButton(JMeterUtils.getResString("assertion_text_document")); //$NON-NLS-1$
         urlButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp")); //$NON-NLS-1$
         responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
         responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
@@ -286,12 +294,14 @@ public class AssertionGui extends AbstractAssertionGui {
 
         ButtonGroup group = new ButtonGroup();
         group.add(responseStringButton);
+        group.add(responseAsDocumentButton);
         group.add(urlButton);
         group.add(responseCodeButton);
         group.add(responseMessageButton);
         group.add(responseHeadersButton);
 
         panel.add(responseStringButton);
+        panel.add(responseAsDocumentButton);
         panel.add(urlButton);
         panel.add(responseCodeButton);
         panel.add(responseMessageButton);
