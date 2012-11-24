@@ -91,6 +91,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @see #add(HashTree)
      * @see java.util.Map#putAll(Map)
      */
+    @Override
     public void putAll(Map<? extends Object, ? extends HashTree> map) {
         if (map instanceof HashTree) {
             this.add((HashTree) map);
@@ -104,6 +105,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @see java.util.Map#entrySet()
      */
+    @Override
     public Set<Entry<Object, HashTree>> entrySet() {
         return data.entrySet();
     }
@@ -117,6 +119,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @return True if the HashTree contains the value, false otherwise.
      * @see java.util.Map#containsValue(Object)
      */
+    @Override
     public boolean containsValue(Object value) {
         return data.containsValue(value);
     }
@@ -130,6 +133,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            to store against key
      * @see java.util.Map#put(Object, Object)
      */
+    @Override
     public HashTree put(Object key, HashTree value) {
         HashTree previous = data.get(key);
         add(key, value);
@@ -141,6 +145,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @see java.util.Map#clear()
      */
+    @Override
     public void clear() {
         data.clear();
     }
@@ -150,6 +155,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @see java.util.Map#values()
      */
+    @Override
     public Collection<HashTree> values() {
         return data.values();
     }
@@ -215,6 +221,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @return True if the HashTree contains the key, false otherwise.
      * @see java.util.Map#containsKey(Object)
      */
+    @Override
     public boolean containsKey(Object o) {
         return data.containsKey(o);
     }
@@ -224,6 +231,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @return True if HashTree is empty, false otherwise.
      */
+    @Override
     public boolean isEmpty() {
         return data.isEmpty();
     }
@@ -575,6 +583,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @see java.util.Map#get(Object)
      */
+    @Override
     public HashTree get(Object key) {
         return getTree(key);
     }
@@ -700,6 +709,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @see java.util.Map#remove(Object)
      */
+    @Override
     public HashTree remove(Object key) {
         return data.remove(key);
     }
@@ -896,6 +906,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @see java.util.Map#keySet()
      */
+    @Override
     public Set<Object> keySet() {
         return data.keySet();
     }
@@ -942,6 +953,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @see java.util.Map#size()
      */
+    @Override
     public int size() {
         return data.size();
     }
@@ -1009,6 +1021,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         }
 
         /** {@inheritDoc} */
+        @Override
         public void addNode(Object node, HashTree subTree) {
             result = subTree.getTree(target);
             if (result != null) {
@@ -1018,11 +1031,13 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         }
 
         /** {@inheritDoc} */
+        @Override
         public void processPath() {
             // Not used
         }
 
         /** {@inheritDoc} */
+        @Override
         public void subtractNode() {
             // Not used
         }
@@ -1035,17 +1050,20 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
         private int depth = 0;
 
+        @Override
         public void addNode(Object key, HashTree subTree) {
             depth++;
             string.append("\n").append(getSpaces()).append(key);
             string.append(" {");
         }
 
+        @Override
         public void subtractNode() {
             string.append("\n" + getSpaces() + "}");
             depth--;
         }
 
+        @Override
         public void processPath() {
         }
 

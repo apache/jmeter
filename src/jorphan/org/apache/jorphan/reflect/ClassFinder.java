@@ -170,6 +170,7 @@ public final class ClassFinder {
                 File dir = new File(path);
                 if (dir.exists() && dir.isDirectory()) {
                     String[] jars = dir.list(new FilenameFilter() {
+                        @Override
                         public boolean accept(File f, String name) {
                             return name.endsWith(DOT_JAR);
                         }

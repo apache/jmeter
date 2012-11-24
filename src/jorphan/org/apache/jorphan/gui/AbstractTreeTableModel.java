@@ -74,6 +74,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getValueAt(Object node, int col) {
         return null;
     }
@@ -81,6 +82,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCellEditable(Object node, int col) {
         return false;
     }
@@ -88,6 +90,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setValueAt(Object val, Object node, int column) {
     }
 

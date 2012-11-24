@@ -35,6 +35,7 @@ public abstract class AbstractParserControl implements ParserControl {
      * @return return true to halt, false to continue parsing
      * @see ParserControl#isFinished(int)
      */
+    @Override
     public boolean isFinished(int lastOptionCode) {
         return false;
     }

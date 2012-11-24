@@ -93,6 +93,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     /**
      * Get the label {@link JLabel} followed by the combo-box @link {@link JComboBox}.
      */
+    @Override
     public List<JComponent> getComponentList() {
         List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
@@ -134,6 +135,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
              * @param e
              *            The focus event that occured.
              */
+            @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     notifyChangeListeners();
@@ -163,6 +165,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      * @param pLabel
      *            The new label text.
      */
+    @Override
     public void setLabel(String pLabel) {
         mLabel.setText(pLabel);
     }
@@ -173,6 +176,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      * @param pText
      *            The new text to display in the text field.
      */
+    @Override
     public void setText(String pText) {
         choiceList.setSelectedItem(pText);
     }
@@ -185,6 +189,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      *
      * @return The text in the Text Field. Never returns null.
      */
+    @Override
     public String getText() {
         Object item = choiceList.getSelectedItem();
         if (item == null) {
@@ -251,6 +256,7 @@ public String getToolTipText() {
      * @param pChangeListener
      *            The listener to add
      */
+   @Override
     public void addChangeListener(ChangeListener pChangeListener) {
         mChangeListeners.add(pChangeListener);
     }
@@ -277,7 +283,7 @@ public String getToolTipText() {
     }
 
     private class AddListener implements ActionListener {
-
+        @Override
         public void actionPerformed(ActionEvent e) {
             Object item = choiceList.getSelectedItem();
             int index = choiceList.getSelectedIndex();
@@ -290,7 +296,7 @@ public String getToolTipText() {
     }
 
     private class DeleteListener implements ActionListener {
-
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (choiceList.getItemCount() > 1) {
                 choiceList.removeItemAt(choiceList.getSelectedIndex());
