@@ -99,6 +99,7 @@ public class LongSum extends AbstractFunction {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return desc;
     }
