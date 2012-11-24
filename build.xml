@@ -382,6 +382,8 @@
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${soap.jar}"/>
     <include name="${lib.dir}/${tidy.jar}"/>
+    <include name="${lib.dir}/${tika-core.jar}"/>
+    <include name="${lib.dir}/${tika-parsers.jar}"/>
     <include name="${lib.dir}/${xalan.jar}"/>
     <include name="${lib.dir}/${xerces.jar}"/>
     <include name="${lib.dir}/${xml-apis.jar}"/>
@@ -444,6 +446,8 @@
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${soap.jar}"/>
     <pathelement location="${lib.dir}/${tidy.jar}"/>
+    <pathelement location="${lib.dir}/${tika-core.jar}"/>
+    <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
     <pathelement location="${lib.dir}/${xalan.jar}"/>
     <pathelement location="${lib.dir}/${xerces.jar}"/>
     <pathelement location="${lib.dir}/${xml-apis.jar}"/>
@@ -2491,6 +2495,8 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="soap"/>
         <process_jarfile jarname="tidy"/>
+        <process_jarfile jarname="tika-core"/>
+        <process_jarfile jarname="tika-parsers"/>
         <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
         <process_jarfile jarname="xalan"/>
         <process_jarfile jarname="xerces"/>

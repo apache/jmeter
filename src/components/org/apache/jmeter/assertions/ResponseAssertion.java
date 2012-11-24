@@ -30,6 +30,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.Document;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -55,6 +56,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String SAMPLE_URL = "Assertion.sample_label"; // $NON-NLS-1$
 
     private static final String RESPONSE_DATA = "Assertion.response_data"; // $NON-NLS-1$
+
+    private static final String RESPONSE_DATA_AS_DOCUMENT = "Assertion.response_data_as_document"; // $NON-NLS-1$
 
     private static final String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
 
@@ -124,6 +127,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         setTestField(RESPONSE_DATA);
     }
 
+    public void setTestFieldResponseDataAsDocument(){
+        setTestField(RESPONSE_DATA_AS_DOCUMENT);
+    }
+
     public void setTestFieldResponseMessage(){
         setTestField(RESPONSE_MESSAGE);
     }
@@ -142,6 +149,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     public boolean isTestFieldResponseData(){
         return RESPONSE_DATA.equals(getTestField());
+    }
+
+    public boolean isTestFieldResponseDataAsDocument() {
+        return RESPONSE_DATA_AS_DOCUMENT.equals(getTestField());
     }
 
     public boolean isTestFieldResponseMessage(){
@@ -295,6 +306,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             toCheck = getThreadContext().getVariables().get(getVariableName());
         } else if (isTestFieldResponseData()) {
             toCheck = response.getResponseDataAsString(); // (bug25052)
+        } else if (isTestFieldResponseDataAsDocument()) {
+            toCheck = Document.getTextFromDocument(response.getResponseData()); 
         } else if (isTestFieldResponseCode()) {
             toCheck = response.getResponseCode();
         } else if (isTestFieldResponseMessage()) {
@@ -387,6 +400,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             sb.append("message");
         } else if (isTestFieldResponseHeaders()) {
             sb.append("headers");
+        } else if (isTestFieldResponseDataAsDocument()) {
+            sb.append("document");
         } else // Assume it is the URL
         {
             sb.append("URL");
