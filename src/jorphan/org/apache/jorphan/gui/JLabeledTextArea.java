@@ -91,6 +91,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
     /**
      * Get the label {@link JLabel} followed by the text field @link {@link JTextArea}.
      */
+    @Override
     public List<JComponent> getComponentList() {
         List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
@@ -128,6 +129,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      * @param pFocusEvent
      *            The focus event that occured.
      */
+    @Override
     public void focusLost(FocusEvent pFocusEvent) {
         // Compare if the value has changed, since we received focus.
         if (!oldValue.equals(mTextArea.getText())) {
@@ -138,6 +140,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
     /**
      * Catch what the value was when focus was gained.
      */
+    @Override
     public void focusGained(FocusEvent pFocusEvent) {
         oldValue = mTextArea.getText();
     }
@@ -148,6 +151,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      * @param pLabel
      *            The new label text.
      */
+    @Override
     public void setLabel(String pLabel) {
         mLabel.setText(pLabel);
     }
@@ -158,6 +162,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      * @param pText
      *            The new text to display in the text field.
      */
+    @Override
     public void setText(String pText) {
         mTextArea.setText(pText);
     }
@@ -167,6 +172,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      *
      * @return The text in the Text Field.
      */
+    @Override
     public String getText() {
         return mTextArea.getText();
     }
@@ -216,6 +222,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      * @param pChangeListener
      *            The listener to add
      */
+    @Override
     public void addChangeListener(ChangeListener pChangeListener) {
         mChangeListeners.add(pChangeListener);
     }

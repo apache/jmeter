@@ -148,6 +148,7 @@ public class VerticalLayout implements LayoutManager, Serializable {
     /**
      * Lays out the container.
      */
+    @Override
     public void layoutContainer(Container parent) {
         Insets insets = parent.getInsets();
         // NOTUSED Dimension dim = layoutSize(parent, false);
@@ -189,10 +190,12 @@ public class VerticalLayout implements LayoutManager, Serializable {
         }
     }
 
+    @Override
     public Dimension minimumLayoutSize(Container parent) {
         return layoutSize(parent, true);
     }
 
+    @Override
     public Dimension preferredLayoutSize(Container parent) {
         return layoutSize(parent, false);
     }
@@ -200,12 +203,14 @@ public class VerticalLayout implements LayoutManager, Serializable {
     /**
      * Not used by this class.
      */
+    @Override
     public void addLayoutComponent(String name, Component comp) {
     }
 
     /**
      * Not used by this class.
      */
+    @Override
     public void removeLayoutComponent(Component comp) {
     }
 
