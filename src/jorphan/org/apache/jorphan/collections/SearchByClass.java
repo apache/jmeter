@@ -92,6 +92,7 @@ public class SearchByClass<T> implements HashTreeTraverser {
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
+    @Override
     public void addNode(Object node, HashTree subTree) {
         if (searchClass.isAssignableFrom(node.getClass())) {
             objectsOfClass.add((T) node);
@@ -102,10 +103,12 @@ public class SearchByClass<T> implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void subtractNode() {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void processPath() {
     }
 }
