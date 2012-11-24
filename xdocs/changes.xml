@@ -205,6 +205,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <li><bugzilla>54161</bugzilla> - Proxy : be able to create binary sampler for x-www-form-urlencoded POST request</li>
 <li><bugzilla>54154</bugzilla> - HTTP Proxy Server should not force user to select the type of Sampler in HTTP Sampler Settings</li>
 <li><bugzilla>54165</bugzilla> - Proxy Server: Improve rendering of target controller</li>
+<li><bugzilla>46677</bugzilla> - Copying Test Elements between test plans</li>
 </ul>
 
 <h2>Non-functional changes</h2>

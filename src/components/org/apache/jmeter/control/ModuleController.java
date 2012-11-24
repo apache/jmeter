@@ -52,7 +52,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
 
     private static final String NODE_PATH = "ModuleController.node_path";// $NON-NLS-1$
 
-    private JMeterTreeNode selectedNode = null;
+    private transient JMeterTreeNode selectedNode = null;
 
     /**
      * No-arg constructor
