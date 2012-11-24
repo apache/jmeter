@@ -147,6 +147,7 @@ implements ChangeListener, ActionListener, ItemListener
         init();
     }
 
+    @Override
     public String getLabelResource()
     {
         return "junit_request"; //$NON-NLS-1$
@@ -261,6 +262,7 @@ implements ChangeListener, ActionListener, ItemListener
     }
 
     /** {@inheritDoc} */
+    @Override
     public TestElement createTestElement()
     {
         JUnitSampler sampler = new JUnitSampler();
@@ -269,6 +271,7 @@ implements ChangeListener, ActionListener, ItemListener
     }
 
     /** {@inheritDoc} */
+    @Override
     public void modifyTestElement(TestElement el)
     {
         JUnitSampler sampler = (JUnitSampler)el;
@@ -400,6 +403,7 @@ implements ChangeListener, ActionListener, ItemListener
      *
      * @param evt  the ActionEvent to be handled
      */
+    @Override
     public void actionPerformed(ActionEvent evt)
     {
         if (evt.getSource() == classnameCombo)
@@ -412,6 +416,7 @@ implements ChangeListener, ActionListener, ItemListener
      * Handle change events: currently handles events for the JUnit4
      * checkbox, and sets up the relevant class names.
      */
+    @Override
     public void itemStateChanged(ItemEvent event) {
         if (event.getItem() == junit4){
             setupClasslist();
@@ -422,6 +427,7 @@ implements ChangeListener, ActionListener, ItemListener
      * the current implementation checks to see if the source
      * of the event is the filterpkg field.
      */
+    @Override
     public void stateChanged(ChangeEvent event) {
         if ( event.getSource() == filterpkg) {
             setupClasslist();

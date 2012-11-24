@@ -35,6 +35,7 @@ public class Example1 extends AbstractSampler implements TestBean {
 
     private static final long serialVersionUID = 240L;
 
+    @Override
     public SampleResult sample(Entry e) {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());

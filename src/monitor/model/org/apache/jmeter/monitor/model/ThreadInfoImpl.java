@@ -38,42 +38,52 @@ public class ThreadInfoImpl implements ThreadInfo {
         super();
     }
 
+    @Override
     public int getMaxSpareThreads() {
         return this.maxSpareThreads;
     }
 
+    @Override
     public void setMaxSpareThreads(int value) {
         this.maxSpareThreads = value;
     }
 
+    @Override
     public int getMinSpareThreads() {
         return this.minSpareThreads;
     }
 
+    @Override
     public void setMinSpareThreads(int value) {
         this.minSpareThreads = value;
     }
 
+    @Override
     public int getMaxThreads() {
         return this.maxThreads;
     }
 
+    @Override
     public void setMaxThreads(int value) {
         this.maxThreads = value;
     }
 
+    @Override
     public int getCurrentThreadsBusy() {
         return this.currentThreadsBusy;
     }
 
+    @Override
     public void setCurrentThreadsBusy(int value) {
         this.currentThreadsBusy = value;
     }
 
+    @Override
     public int getCurrentThreadCount() {
         return this.currentThreadCount;
     }
 
+    @Override
     public void setCurrentThreadCount(int value) {
         this.currentThreadCount = value;
     }

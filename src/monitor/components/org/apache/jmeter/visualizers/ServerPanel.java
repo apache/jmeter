@@ -184,6 +184,7 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
      * Method will update the ServerPanel's health, load, and timestamp. For
      * efficiency, it uses the static method to lookup the images.
      */
+    @Override
     public void updateGui(MonitorModel stat) {
         // this.DATA = null;
         // this.DATA = stat;
@@ -196,6 +197,7 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
     /**
      * update the gui
      */
+    @Override
     public void updateGui() {
         this.repaint();
     }

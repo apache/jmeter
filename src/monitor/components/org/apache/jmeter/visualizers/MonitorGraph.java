@@ -87,6 +87,7 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
      * The method will first check to see if the graph is visible. If it is, it
      * will repaint the graph.
      */
+    @Override
     public void updateGui(final MonitorModel model) {
         if (this.isShowing()) {
             this.current = model;
@@ -130,6 +131,7 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
     /**
      * updateGui() will call repaint
      */
+    @Override
     public void updateGui() {
         repaint();
     }
@@ -137,6 +139,7 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
     /**
      * clear will repaint the graph
      */
+    @Override
     public void clearData() {
         paintComponent(getGraphics());
         this.repaint();

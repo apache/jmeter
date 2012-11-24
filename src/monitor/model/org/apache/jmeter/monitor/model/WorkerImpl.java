@@ -47,82 +47,102 @@ public class WorkerImpl implements Worker {
         super();
     }
 
+    @Override
     public int getRequestProcessingTime() {
         return this.requestProcessingTime;
     }
 
+    @Override
     public void setRequestProcessingTime(int value) {
         this.requestProcessingTime = value;
     }
 
+    @Override
     public long getRequestBytesSent() {
         return this.requestBytesSent;
     }
 
+    @Override
     public void setRequestBytesSent(long value) {
         this.requestBytesSent = value;
     }
 
+    @Override
     public String getCurrentQueryString() {
         return this.currentQueryString;
     }
 
+    @Override
     public void setCurrentQueryString(String value) {
         this.currentQueryString = value;
     }
 
+    @Override
     public String getRemoteAddr() {
         return this.remoteAddr;
     }
 
+    @Override
     public void setRemoteAddr(String value) {
         this.remoteAddr = value;
     }
 
+    @Override
     public String getCurrentUri() {
         return this.currentUri;
     }
 
+    @Override
     public void setCurrentUri(String value) {
         this.currentUri = value;
     }
 
+    @Override
     public String getStage() {
         return this.stage;
     }
 
+    @Override
     public void setStage(String value) {
         this.stage = value;
     }
 
+    @Override
     public String getVirtualHost() {
         return this.virtualHost;
     }
 
+    @Override
     public void setVirtualHost(String value) {
         this.virtualHost = value;
     }
 
+    @Override
     public String getProtocol() {
         return this.protocol;
     }
 
+    @Override
     public void setProtocol(String value) {
         this.protocol = value;
     }
 
+    @Override
     public long getRequestBytesReceived() {
         return this.requestBytesReceived;
     }
 
+    @Override
     public void setRequestBytesReceived(long value) {
         this.requestBytesReceived = value;
     }
 
+    @Override
     public String getMethod() {
         return this.method;
     }
 
+    @Override
     public void setMethod(String value) {
         this.method = value;
     }

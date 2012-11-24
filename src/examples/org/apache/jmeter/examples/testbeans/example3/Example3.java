@@ -43,6 +43,7 @@ public class Example3 extends AbstractSampler implements TestBean {
     private File myFile1;
     private String myFile2;
 
+    @Override
     public SampleResult sample(Entry ignored) {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());

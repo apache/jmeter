@@ -34,26 +34,32 @@ public class MemoryImpl implements Memory {
         super();
     }
 
+    @Override
     public long getMax() {
         return this.max;
     }
 
+    @Override
     public void setMax(long value) {
         this.max = value;
     }
 
+    @Override
     public long getFree() {
         return this.free;
     }
 
+    @Override
     public void setFree(long value) {
         this.free = value;
     }
 
+    @Override
     public long getTotal() {
         return this.total;
     }
 
+    @Override
     public void setTotal(long value) {
         this.total = value;
     }

@@ -61,6 +61,7 @@ public class ExampleSampler extends AbstractSampler {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SampleResult sample(Entry e) {
         trace("sample()");
         SampleResult res = new SampleResult();
