@@ -70,6 +70,7 @@ public abstract class ParserImpl implements Parser {
      * @param bytes
      * @return Status
      */
+    @Override
     public Status parseBytes(byte[] bytes) {
         try {
             InputSource is = new InputSource();
@@ -91,6 +92,7 @@ public abstract class ParserImpl implements Parser {
      * @param content
      * @return Status
      */
+    @Override
     public Status parseString(String content) {
         try {
             InputSource is = new InputSource();
@@ -112,6 +114,7 @@ public abstract class ParserImpl implements Parser {
      * @param result
      * @return Status
      */
+    @Override
     public Status parseSampleResult(SampleResult result) {
         return parseBytes(result.getResponseData());
     }

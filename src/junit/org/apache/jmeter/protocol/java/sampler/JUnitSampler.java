@@ -358,6 +358,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public SampleResult sample(Entry entry) {
         if(getCreateOneInstancePerSample()) {
             initializeTestObject();
@@ -616,12 +617,14 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
+    @Override
     public void threadFinished() {
     }
 
     /**
      * Set up all variables that don't change between samples.
      */
+    @Override
     public void threadStarted() {
         testObject = null;
         testCase = null;
@@ -658,6 +661,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                 final AnnotatedTestCase at = new AnnotatedTestCase(m, expectedException, timeout);
                 testCase = at;
                 protectable = new Protectable() {
+                    @Override
                     public void protect() throws Throwable {
                         at.runTest();
                     }
@@ -666,6 +670,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                 this.testCase = (TestCase) this.testObject;
                 final Object theClazz = this.testObject; // Must be final to create instance
                 protectable = new Protectable() {
+                    @Override
                     public void protect() throws Throwable {
                         try {
                             m.invoke(theClazz,new Object[0]);

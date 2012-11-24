@@ -31,11 +31,13 @@ public class JvmImpl implements Jvm {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Memory getMemory() {
         return this.memory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setMemory(Memory mem) {
         this.memory = mem;
     }

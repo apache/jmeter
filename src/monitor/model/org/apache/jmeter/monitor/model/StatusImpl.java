@@ -39,28 +39,34 @@ public class StatusImpl implements Status {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Jvm getJvm() {
         return jvm;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setJvm(Jvm vm) {
         this.jvm = vm;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Connector> getConnector() {
         return this.connectors;
     }
 
+    @Override
     public void addConnector(Connector conn) {
         this.connectors.add(conn);
     }
 
+    @Override
     public void setConnectorPrefix(String prefix) {
         connectorPrefix = prefix;
     }
 
+    @Override
     public String getConnectorPrefix(){
         return connectorPrefix;
     }

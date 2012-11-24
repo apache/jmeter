@@ -36,34 +36,42 @@ public class ConnectorImpl implements Connector {
         super();
     }
 
+    @Override
     public ThreadInfo getThreadInfo() {
         return this.threadinfo;
     }
 
+    @Override
     public void setThreadInfo(ThreadInfo value) {
         this.threadinfo = value;
     }
 
+    @Override
     public RequestInfo getRequestInfo() {
         return this.requestinfo;
     }
 
+    @Override
     public void setRequestInfo(RequestInfo value) {
         this.requestinfo = value;
     }
 
+    @Override
     public Workers getWorkers() {
         return this.workers;
     }
 
+    @Override
     public void setWorkers(Workers value) {
         this.workers = value;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public void setName(String value) {
         this.name = value;
     }

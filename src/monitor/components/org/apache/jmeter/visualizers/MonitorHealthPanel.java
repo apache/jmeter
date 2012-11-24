@@ -113,6 +113,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
      *
      * @param model
      */
+    @Override
     public void addSample(MonitorModel model) {
         if (serverPanelMap.containsKey(model.getURL())) {
             ServerPanel pane = null;
@@ -136,6 +137,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
      * clear will clear the hashmap, remove all ServerPanels from the servers
      * pane, and update the ui.
      */
+    @Override
     public void clearData() {
         this.serverPanelMap.clear();
         this.servers.removeAll();

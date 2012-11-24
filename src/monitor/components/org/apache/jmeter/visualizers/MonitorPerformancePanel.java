@@ -253,6 +253,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      * MonitorAccumModel will call this method to notify the component data has
      * changed.
      */
+    @Override
     public synchronized void addSample(MonitorModel model) {
         if (!SERVERMAP.containsKey(model.getURL())) {
             DefaultMutableTreeNode newnode = new DefaultMutableTreeNode(model);
@@ -275,6 +276,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      * node. From the node, we get the UserObject used to create the treenode in
      * the constructor.
      */
+    @Override
     public void valueChanged(TreeSelectionEvent e) {
         // we check to see if the lastSelectedPath is null
         // after we clear, it would return null
@@ -294,6 +296,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      * clear will remove all child nodes from the ROOTNODE, clear the HashMap,
      * update the graph and jpanel for the server tree.
      */
+    @Override
     public void clearData() {
         this.SERVERMAP.clear();
         ROOTNODE.removeAllChildren();
