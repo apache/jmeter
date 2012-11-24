@@ -15,32 +15,29 @@
  * limitations under the License.
  *
  */
-
-/*
- * Created on Apr 9, 2003
- *
- * Clones a JMeterTreeNode
- */
 package org.apache.jmeter.gui.action;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterTreeNodeTransferable;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Implements the Copy menu command
  */
 public class Copy extends AbstractAction {
-    private static JMeterTreeNode copiedNode = null;
-
-    private static JMeterTreeNode copiedNodes[] = null;
-
+    
     private static final HashSet<String> commands = new HashSet<String>();
 
     static {
@@ -59,30 +56,20 @@ public class Copy extends AbstractAction {
     public void doAction(ActionEvent e) {
         JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
         JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
+        nodes = cloneTreeNodes(nodes);
         setCopiedNodes(nodes);
     }
 
     public static JMeterTreeNode[] getCopiedNodes() {
-        if (copiedNodes == null) { // can be null if Copy has yet to be used
-            return null;
-        }
-        for (int i = 0; i < copiedNodes.length; i++) {
-            if (copiedNodes[i] == null) {
-                return null;
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        if (clipboard.isDataFlavorAvailable(JMeterTreeNodeTransferable.JMETER_TREE_NODE_ARRAY_DATA_FLAVOR)) {
+            try {
+                return (JMeterTreeNode[]) clipboard.getData(JMeterTreeNodeTransferable.JMETER_TREE_NODE_ARRAY_DATA_FLAVOR);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE);
             }
         }
-        return cloneTreeNodes(copiedNodes);
-    }
-
-    public static JMeterTreeNode getCopiedNode() {
-        if (copiedNode == null) {
-            return null;
-        }
-        return cloneTreeNode(copiedNode);
-    }
-
-    public static void setCopiedNode(JMeterTreeNode node) {
-        copiedNode = cloneTreeNode(node);
+        return null;
     }
 
     public static JMeterTreeNode cloneTreeNode(JMeterTreeNode node) {
@@ -93,9 +80,13 @@ public class Copy extends AbstractAction {
     }
 
     public static void setCopiedNodes(JMeterTreeNode nodes[]) {
-        copiedNodes = new JMeterTreeNode[nodes.length];
-        for (int i = 0; i < nodes.length; i++) {
-            copiedNodes[i] = cloneTreeNode(nodes[i]);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        try {
+            JMeterTreeNodeTransferable transferable = new JMeterTreeNodeTransferable();
+            transferable.setTransferData(nodes);
+            clipboard.setContents(transferable, null);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
