@@ -29,6 +29,7 @@ import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.Document;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -62,6 +63,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public static final String USE_HDRS = "true"; // $NON-NLS-1$
     public static final String USE_BODY = "false"; // $NON-NLS-1$
     public static final String USE_BODY_UNESCAPED = "unescaped"; // $NON-NLS-1$
+    public static final String USE_BODY_AS_DOCUMENT = "as_document"; // $NON-NLS-1$
     public static final String USE_URL = "URL"; // $NON-NLS-1$
     public static final String USE_CODE = "code"; // $NON-NLS-1$
     public static final String USE_MESSAGE = "message"; // $NON-NLS-1$
@@ -89,6 +91,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *
      * @see org.apache.jmeter.processor.PostProcessor#process()
      */
+    @Override
     public void process() {
         initTemplate();
         JMeterContext context = getThreadContext();
@@ -168,6 +171,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 : useCode() ? result.getResponseCode() // Bug 43451
                 : useMessage() ? result.getResponseMessage() // Bug 43451
                 : useUnescapedBody() ? StringEscapeUtils.unescapeHtml4(result.getResponseDataAsString())
+                : useBodyAsDocument() ? Document.getTextFromDocument(result.getResponseData())
                 : result.getResponseDataAsString() // Bug 36898
                 ;
        if (log.isDebugEnabled()) {
@@ -433,6 +437,11 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public boolean useUnescapedBody() {
         String prop = getPropertyAsString(MATCH_AGAINST);
         return USE_BODY_UNESCAPED.equalsIgnoreCase(prop);// $NON-NLS-1$
+    }
+
+    public boolean useBodyAsDocument() {
+        String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_BODY_AS_DOCUMENT.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
     public boolean useUrl() {
