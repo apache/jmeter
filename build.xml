@@ -327,8 +327,8 @@
   <!-- Compilation parameters -->
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
-  <property name="target.java.version" value="1.5"/>
-  <property name="src.java.version" value="1.5"/>
+  <property name="target.java.version" value="1.6"/>
+  <property name="src.java.version" value="1.6"/>
   <property name="encoding" value="UTF-8"/>
   <!-- Set test encoding to the same default, but allow override -->
   <property name="test.encoding" value="${encoding}"/>
@@ -1938,7 +1938,7 @@ run JMeter unless all the JMeter jars are added.
       packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
       excludepackagenames="org.apache.jorphan.timer">
       <classpath refid="classpath"/>
-      <link href="http://download.oracle.com/javase/1.5.0/docs/api/"/>
+      <link href="http://docs.oracle.com/javase/6/docs/api/"/>
     </javadoc>
   </target>
 

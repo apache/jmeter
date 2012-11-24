@@ -210,6 +210,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>53956</bugzilla> - Add ability to paste (a list of values) from clipboard for Header Manager</li>
 <li>Updated to HttpComponents Client 4.2.2 (from 4.2.1)</li>
 <li><bugzilla>54110</bugzilla> - BSFTestElement and JSR223TestElement should use shared super-class for common fields</li>
+<li><bugzilla>54199</bugzilla> - Move to Java 6</li>
 </ul>
 
 </section> 
