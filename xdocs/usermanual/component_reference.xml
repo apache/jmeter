@@ -526,7 +526,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE) or integer values of Constants when for example you use custom database types proposed by driver (-10 for OracleTypes.CURSOR for example).<br/>
         These are defined as fields in the class java.sql.Types, see for example:<br/>
-        <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
+        <a href="http://docs.oracle.com/javase/6/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
         [Note: JMeter will use whatever types are defined by the runtime JVM, 
         so if you are running on a different JVM, be sure to check the appropriate document]<br/>
         <b>If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
