@@ -56,6 +56,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabelResource() {
         return "example_title"; // $NON-NLS-1$
     }
@@ -72,6 +73,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
     /**
      * {@inheritDoc}
      */
+    @Override
     public TestElement createTestElement() {
         ExampleSampler sampler = new ExampleSampler();
         modifyTestElement(sampler);
@@ -81,6 +83,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void modifyTestElement(TestElement te) {
         te.clear();
         configureTestElement(te);

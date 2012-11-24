@@ -40,50 +40,62 @@ public class RequestInfoImpl implements RequestInfo {
         super();
     }
 
+    @Override
     public long getBytesReceived() {
         return this.bytesReceived;
     }
 
+    @Override
     public void setBytesReceived(long value) {
         this.bytesReceived = value;
     }
 
+    @Override
     public long getBytesSent() {
         return this.bytesSent;
     }
 
+    @Override
     public void setBytesSent(long value) {
         this.bytesSent = value;
     }
 
+    @Override
     public long getRequestCount() {
         return requestCount;
     }
 
+    @Override
     public void setRequestCount(long value) {
         this.requestCount = value;
     }
 
+    @Override
     public long getErrorCount() {
         return this.errorCount;
     }
 
+    @Override
     public void setErrorCount(long value) {
         this.errorCount = value;
     }
 
+    @Override
     public int getMaxTime() {
         return this.maxTime;
     }
 
+    @Override
     public void setMaxTime(int value) {
         this.maxTime = value;
     }
 
+    @Override
     public int getProcessingTime() {
         return this.processingTime;
     }
 
+    @Override
     public void setProcessingTime(int value) {
         this.processingTime = value;
     }

@@ -95,6 +95,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
         model.setBufferSize(JMeterUtils.getPropDefault(BUFFER, 800));
     }
 
+    @Override
     public String getLabelResource() {
         return "monitor_health_title"; // $NON-NLS-1$
     }
@@ -104,6 +105,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
      * results differently than normal GUI components. A monitor should be able
      * to run for a very long time without eating up all the memory.
      */
+    @Override
     public void add(SampleResult res) {
         model.addSample(res);
         try {
@@ -114,6 +116,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
         }
     }
 
+    @Override
     public Image getImage() {
         Image result = graph.createImage(this.getWidth(), this.getHeight());
         Graphics image = result.getGraphics();
@@ -121,13 +124,16 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
         return result;
     }
 
+    @Override
     public void itemStateChanged(ItemEvent e) {
     }
 
+    @Override
     public synchronized void updateGui() {
         this.repaint();
     }
 
+    @Override
     public synchronized void updateGui(Sample s) {
         this.repaint();
     }
@@ -179,6 +185,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
     /**
      * Clears the MonitorAccumModel.
      */
+    @Override
     public void clearData() {
         this.model.clearData();
         this.healthPane.clearData();
