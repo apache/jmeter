@@ -100,6 +100,7 @@ public class Property extends AbstractFunction {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return desc;
     }

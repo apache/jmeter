@@ -307,26 +307,31 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return desc;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testStarted() {
         //
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testStarted(String host) {
         //
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testEnded() {
         this.testEnded(""); //$NON-NLS-1$
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testEnded(String host) {
     	closeFile();
     }

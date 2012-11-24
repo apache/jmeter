@@ -117,6 +117,7 @@ public class JavaScript extends AbstractFunction {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return desc;
     }

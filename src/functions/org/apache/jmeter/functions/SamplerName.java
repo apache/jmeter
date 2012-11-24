@@ -82,6 +82,7 @@ public class SamplerName extends AbstractFunction {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return desc;
     }

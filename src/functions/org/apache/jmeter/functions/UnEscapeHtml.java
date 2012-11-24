@@ -82,6 +82,7 @@ public class UnEscapeHtml extends AbstractFunction {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return desc;
     }

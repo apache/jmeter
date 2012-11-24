@@ -77,6 +77,7 @@ abstract class AbstractHostIPName extends AbstractFunction {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return desc;
     }
