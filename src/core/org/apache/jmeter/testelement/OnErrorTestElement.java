@@ -39,6 +39,8 @@ public abstract class OnErrorTestElement extends AbstractTestElement {
 
     public static final int ON_ERROR_STOPTEST_NOW = 3;
 
+    public static final int ON_ERROR_START_NEXT_THREAD_LOOP = 4;
+
     /* Property name */
     public static final String ON_ERROR_ACTION = "OnError.action";
 
@@ -68,5 +70,9 @@ public abstract class OnErrorTestElement extends AbstractTestElement {
 
     public boolean isStopTestNow() {
         return getErrorAction() == ON_ERROR_STOPTEST_NOW;
+    }
+    
+    public boolean isStartNextThreadLoop() {
+        return getErrorAction() == ON_ERROR_START_NEXT_THREAD_LOOP;
     }
 }

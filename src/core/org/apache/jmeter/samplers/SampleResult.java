@@ -174,6 +174,9 @@ public class SampleResult implements Serializable {
 
     /** time to first response */
     private long latency = 0;
+    
+    /** Should thread start next iteration ? */
+    private boolean startNextThreadLoop = false;
 
     /** Should thread terminate? */
     private boolean stopThread = false;
@@ -305,6 +308,7 @@ public class SampleResult implements Serializable {
         stopTest = res.stopTest;
         stopTestNow = res.stopTestNow;
         stopThread = res.stopThread;
+        startNextThreadLoop = res.startNextThreadLoop;
         subResults = res.subResults; // TODO ??
         success = res.success;//OK
         threadName = res.threadName;//OK
@@ -1307,5 +1311,19 @@ public class SampleResult implements Serializable {
             }
         }
         
+    }
+
+    /**
+     * @return the startNextThreadLoop
+     */
+    public boolean isStartNextThreadLoop() {
+        return startNextThreadLoop;
+    }
+
+    /**
+     * @param startNextThreadLoop the startNextLoop to set
+     */
+    public void setStartNextThreadLoop(boolean startNextThreadLoop) {
+        this.startNextThreadLoop = startNextThreadLoop;
     }
 }
