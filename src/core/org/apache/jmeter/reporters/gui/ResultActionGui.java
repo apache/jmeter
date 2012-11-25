@@ -46,6 +46,7 @@ public class ResultActionGui extends AbstractPostProcessorGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
+    @Override
     public String getLabelResource() {
         return "resultaction_title"; //$NON-NLS-1$
     }
@@ -62,6 +63,7 @@ public class ResultActionGui extends AbstractPostProcessorGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         ResultAction resultAction = new ResultAction();
         modifyTestElement(resultAction);
@@ -73,6 +75,7 @@ public class ResultActionGui extends AbstractPostProcessorGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement te) {
         super.configureTestElement(te);
         ((OnErrorTestElement) te).setErrorAction(errorPanel.getOnErrorSetting());

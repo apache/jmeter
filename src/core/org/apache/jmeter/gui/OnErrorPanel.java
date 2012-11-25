@@ -34,6 +34,8 @@ public class OnErrorPanel extends JPanel {
     // Sampler error action buttons
     private JRadioButton continueBox;
 
+    private JRadioButton startNextThreadLoopBox;
+
     private JRadioButton stopThrdBox;
 
     private JRadioButton stopTestBox;
@@ -50,6 +52,10 @@ public class OnErrorPanel extends JPanel {
         group.add(continueBox);
         continueBox.setSelected(true);
         panel.add(continueBox);
+
+        startNextThreadLoopBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_start_next_loop")); //$NON-NLS-1$
+        group.add(startNextThreadLoopBox);
+        panel.add(startNextThreadLoopBox);
 
         stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); //$NON-NLS-1$
         group.add(stopThrdBox);
@@ -83,6 +89,7 @@ public class OnErrorPanel extends JPanel {
 
     public void configure(int errorAction) {
         stopTestNowBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST_NOW);
+        startNextThreadLoopBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_START_NEXT_THREAD_LOOP);
         stopTestBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST);
         stopThrdBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTHREAD);
         continueBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_CONTINUE);
@@ -97,6 +104,9 @@ public class OnErrorPanel extends JPanel {
         }
         if (stopThrdBox.isSelected()) {
             return OnErrorTestElement.ON_ERROR_STOPTHREAD;
+        }
+        if (startNextThreadLoopBox.isSelected()) {
+            return OnErrorTestElement.ON_ERROR_START_NEXT_THREAD_LOOP;
         }
 
         // Defaults to continue
