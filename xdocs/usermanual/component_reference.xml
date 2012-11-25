@@ -4992,7 +4992,7 @@ generate the template string, and store the result into the given variable name.
  
 </component>
 
-<component name="Result Status Action Handler" index="&sect-num;.8.3"  width="493" height="140" screenshot="resultstatusactionhandler.png">
+<component name="Result Status Action Handler" index="&sect-num;.8.3"  width="613" height="133" screenshot="resultstatusactionhandler.png">
    <description>This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    </description>
    <properties>
@@ -5002,6 +5002,7 @@ generate the template string, and store the result into the given variable name.
    The possible choices are:
    <ul>
    <li>Continue - ignore the error and continue with the test</li>
+   <li>Start next thread loop - does not execute samplers following the sampler in error for the current iteration and restarts the loop on next iteration</li>
    <li>Stop Thread - current thread exits</li>
    <li>Stop Test - the entire test is stopped at the end of any current samples.</li>
    <li>Stop Test Now - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
