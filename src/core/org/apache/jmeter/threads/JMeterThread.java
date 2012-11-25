@@ -454,6 +454,9 @@ public class JMeterThread implements Runnable, Interruptible {
                     if (result.isStopTestNow() || (!result.isSuccessful() && onErrorStopTestNow)) {
                         stopTestNow();
                     }
+                    if(result.isStartNextThreadLoop()) {
+                        threadContext.setRestartNextLoop(true);
+                    }
                 } else {
                     compiler.done(pack); // Finish up
                 }

@@ -55,6 +55,7 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
      *
      * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
      */
+    @Override
     public void sampleOccurred(SampleEvent e) {
         SampleResult s = e.getResult();
         log.debug(s.getSampleLabel() + " OK? " + s.isSuccessful());
@@ -68,12 +69,16 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
             if (isStopThread()) {
                 s.setStopThread(true);
             }
+            if (isStartNextThreadLoop()) {
+               s.setStartNextThreadLoop(true);
+            }
         }
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void sampleStarted(SampleEvent e) {
         // not used
     }
@@ -81,6 +86,7 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
     /**
      * {@inheritDoc}
      */
+    @Override
     public void sampleStopped(SampleEvent e) {
         // not used
     }
