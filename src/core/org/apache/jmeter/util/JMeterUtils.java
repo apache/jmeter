@@ -533,10 +533,8 @@ public class JMeterUtils implements UnitTestManager {
     public static String getLocaleString(String locale){
         // All keys in messages.properties are lowercase (historical reasons?)
         String resKey = locale.toLowerCase(java.util.Locale.ENGLISH);
-        // TODO When migrating to JAVA 6, use resources#containsKey instead of try/catch
-        try {
+        if (resources.containsKey(resKey)) {
             return resources.getString(resKey);
-        } catch (MissingResourceException e) {
         }
         return locale;
     }
