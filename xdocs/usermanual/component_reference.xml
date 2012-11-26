@@ -1201,7 +1201,7 @@ methods in the SampleResult. For example, the script has access to the methods
 setStopThread(boolean) and setStopTest(boolean).
 </p>
 <p>
-Unlike the Beanshell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
+Unlike the BeanShell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
 Currently the only way to changes these is via the SampleResult methods:
 <ul>
 <li>SampleResult.setSuccessful(true/false)</li>
