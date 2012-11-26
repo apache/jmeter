@@ -29,7 +29,6 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
@@ -436,6 +435,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param map must be an instance of Map&lt;String, Object&gt;
      */
     @SuppressWarnings("unchecked")
+    @Override
     public void setObject(Object map) {
         propertyMap = (Map<String, Object>) map;
 
@@ -618,13 +618,14 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Obtain a group's display name
      */
     private String groupDisplayName(String group) {
-        try {
-            ResourceBundle b = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(RESOURCE_BUNDLE);
-            if (b == null) {
-                return group;
-            }
-            return b.getString(group + ".displayName");
-        } catch (MissingResourceException e) {
+        ResourceBundle b = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(RESOURCE_BUNDLE);
+        if (b == null) {
+            return group;
+        }
+        String key = new StringBuilder(group).append(".displayName").toString();
+        if (b.containsKey(key)) {
+            return b.getString(key);
+        } else {
             return group;
         }
     }
@@ -640,6 +641,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             this.beanInfo = beanInfo;
         }
 
+        @Override
         public int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
             int result;
 
