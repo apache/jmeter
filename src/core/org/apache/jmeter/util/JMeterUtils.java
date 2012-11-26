@@ -496,7 +496,12 @@ public class JMeterUtils implements UnitTestManager {
             if(forcedLocale != null) {
                 bundle = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", forcedLocale); // $NON-NLS-1$
             }
-            resString = bundle.getString(resKey);
+            if (bundle.containsKey(resKey)) {
+                resString = bundle.getString(resKey);
+            } else {
+                log.warn("ERROR! Resource string not found: [" + resKey + "]");
+                resString = defaultValue;                
+            }
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "["+key+"]";
             }
