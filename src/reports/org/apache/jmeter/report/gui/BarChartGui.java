@@ -121,12 +121,14 @@ public class BarChartGui extends AbstractReportGui {
         add(options,BorderLayout.CENTER);
     }
 
+    @Override
     public TestElement createTestElement() {
         BarChart element = new BarChart();
         modifyTestElement(element);
         return element;
     }
 
+    @Override
     public void modifyTestElement(TestElement element) {
         this.configureTestElement(element);
         BarChart bc = (BarChart)element;

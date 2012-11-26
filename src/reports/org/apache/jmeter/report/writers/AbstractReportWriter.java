@@ -43,6 +43,7 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
      * Subclasses need to implement this method and provide the necessary
      * logic to produce a ReportSummary object and write the report
      */
+    @Override
     public abstract ReportSummary writeReport(TestElement element);
 
     /**
@@ -50,6 +51,7 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
      * validate it. the abstract class expects some other class will
      * validate the target directory.
      */
+    @Override
     public String getTargetDirectory() {
         return getPropertyAsString(TARGET_DIRECTORY);
     }
@@ -57,6 +59,7 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
     /**
      * Set the target directory where the report should be saved
      */
+    @Override
     public void setTargetDirectory(String directory) {
         setProperty(TARGET_DIRECTORY,directory);
     }

@@ -50,6 +50,7 @@ public class ReportExitCommand implements Command {
      *
      * @return The ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
@@ -60,6 +61,7 @@ public class ReportExitCommand implements Command {
      * @param e
      *            Description of Parameter
      */
+    @Override
     public void doAction(ActionEvent e) {
         ReportActionRouter.getInstance().doActionNow(
                 new ActionEvent(e.getSource(), e.getID(),

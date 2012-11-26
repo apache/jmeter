@@ -77,6 +77,7 @@ public class HTMLReportWriterGui extends AbstractReportGui {
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         HTMLReportWriter element = new HTMLReportWriter();
         modifyTestElement(element);
@@ -86,6 +87,7 @@ public class HTMLReportWriterGui extends AbstractReportGui {
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement element) {
         this.configureTestElement(element);
         HTMLReportWriter wr = (HTMLReportWriter)element;

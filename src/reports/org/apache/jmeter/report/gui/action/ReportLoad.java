@@ -55,10 +55,12 @@ public class ReportLoad implements Command {
         super();
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         boolean merging = e.getActionCommand().equals("merge");
 

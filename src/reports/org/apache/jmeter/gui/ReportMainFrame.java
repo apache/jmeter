@@ -241,6 +241,7 @@ public class ReportMainFrame extends JFrame {
         stoppingMessage.pack();
         ComponentUtil.centerComponentInComponent(this, stoppingMessage);
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 if (stoppingMessage != null) {
                     stoppingMessage.setVisible(true);

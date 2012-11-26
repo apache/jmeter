@@ -48,10 +48,12 @@ public class ReportRemove implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         ReportActionRouter.getInstance().actionPerformed(
                 new ActionEvent(e.getSource(), e.getID(),

@@ -461,6 +461,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
      * Processes a locale change notification. Changes the texts in all menus to
      * the new language.
      */
+    @Override
     public void localeChanged(LocaleChangeEvent event) {
         updateMenuElement(fileMenu);
         updateMenuElement(editMenu);
