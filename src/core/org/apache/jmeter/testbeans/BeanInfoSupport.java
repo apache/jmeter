@@ -115,10 +115,10 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
             // Store the resource bundle as an attribute of the BeanDescriptor:
             getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
             // Localize the bean name
-            try {
+            if (resourceBundle.containsKey("displayName")) { // $NON-NLS-1$
                 getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName")); // $NON-NLS-1$
-            } catch (MissingResourceException e) {
-                log.debug("Localized display name not available for bean " + beanClass);
+            } else {
+                log.debug("Localized display name not available for bean " + beanClass);                    
             }
             // Localize the property names and descriptions:
             PropertyDescriptor[] properties = getPropertyDescriptors();
