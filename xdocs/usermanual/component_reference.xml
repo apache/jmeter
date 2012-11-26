@@ -1073,6 +1073,8 @@ Variable and function references in script files will be passed
 verbatim to the interpreter, which is likely to cause a syntax error.
 In order to use runtime variables, please use the appropriate props methods,
 e.g. props.get("START.HMS"); props.put("PROP1","1234");
+<br/>
+BeanShell does not currently support Java 5 syntax such as generics and the enhanced for loop.
 </note>
 		<p>Before invoking the script, some variables are set up in the BeanShell interpreter:
 			</p>
