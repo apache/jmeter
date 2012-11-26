@@ -48,6 +48,7 @@ public class ReportAddToTree implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return allJMeterComponentCommands.keySet();
     }
@@ -55,6 +56,7 @@ public class ReportAddToTree implements Command {
     /**
      * Adds the specified class to the current node of the tree.
      */
+    @Override
     public void doAction(ActionEvent e) {
         try {
             TestElement node = ReportGuiPackage.getInstance()

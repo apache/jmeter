@@ -145,16 +145,19 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setName(String name) {
         ((TestElement) getUserObject()).setName(name);
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getName() {
         return ((TestElement) getUserObject()).getName();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void nameChanged() {
         treeModel.nodeChanged(this);
     }

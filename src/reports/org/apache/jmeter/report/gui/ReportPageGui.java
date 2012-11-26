@@ -112,6 +112,7 @@ public class ReportPageGui extends AbstractReportGui {
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         ReportPage element = new ReportPage();
         modifyTestElement(element);
@@ -121,6 +122,7 @@ public class ReportPageGui extends AbstractReportGui {
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
         ReportPage page = (ReportPage)element;

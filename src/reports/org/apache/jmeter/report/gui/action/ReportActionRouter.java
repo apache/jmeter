@@ -57,8 +57,10 @@ public final class ReportActionRouter implements ActionListener {
     private ReportActionRouter() {
     }
 
+    @Override
     public void actionPerformed(final ActionEvent e) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 performAction(e);
             }

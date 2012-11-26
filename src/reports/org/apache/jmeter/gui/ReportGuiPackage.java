@@ -564,6 +564,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
      *
      * @see org.apache.jmeter.util.LocaleChangeListener#localeChanged(org.apache.jmeter.util.LocaleChangeEvent)
      */
+    @Override
     public void localeChanged(LocaleChangeEvent event) {
         // FIrst make sure we save the content of the current GUI (since we
         // will flush it away):

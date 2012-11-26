@@ -52,6 +52,7 @@ public class ReportClose implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
@@ -62,6 +63,7 @@ public class ReportClose implements Command {
      * @param e
      *            the generic UI action event
      */
+    @Override
     public void doAction(ActionEvent e) {
         ReportActionRouter.getInstance().doActionNow(
                 new ActionEvent(e.getSource(), e.getID(),

@@ -40,6 +40,7 @@ public class DefaultReportSummary implements ReportSummary {
     /**
      * Add a PageSummary to the report
      */
+    @Override
     public void addPageSummary(PageSummary summary) {
         this.pages.add(summary);
     }
@@ -48,6 +49,7 @@ public class DefaultReportSummary implements ReportSummary {
      * current implementation simply iterates over the Page summaries
      * and adds the times.
      */
+    @Override
     public long getElapsedTime() {
         long elpasedTime = 0;
         Iterator<PageSummary> itr = this.pages.iterator();
@@ -60,6 +62,7 @@ public class DefaultReportSummary implements ReportSummary {
     /**
      * The current implementation calls ArrayList.toArray(Object[])
      */
+    @Override
     public PageSummary[] getPagesSummaries() {
         PageSummary[] ps = new PageSummary[this.pages.size()];
         return this.pages.toArray(ps);
@@ -68,6 +71,7 @@ public class DefaultReportSummary implements ReportSummary {
     /**
      * remove a PageSummary
      */
+    @Override
     public void removePageSummary(PageSummary summary) {
         this.pages.remove(summary);
     }

@@ -75,6 +75,7 @@ public class ReportHelp implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         if (helpWindow == null) {
             helpWindow = new JDialog(new Frame(),// independent frame to
@@ -115,6 +116,7 @@ public class ReportHelp implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

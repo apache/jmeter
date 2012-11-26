@@ -89,6 +89,7 @@ public class ReportGui extends AbstractReportGui {
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         ReportPlan tp = new ReportPlan();
         modifyTestElement(tp);
@@ -96,6 +97,7 @@ public class ReportGui extends AbstractReportGui {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement plan) {
         super.configureTestElement(plan);
         if (plan instanceof ReportPlan) {

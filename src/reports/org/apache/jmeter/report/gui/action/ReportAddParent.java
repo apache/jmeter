@@ -41,6 +41,7 @@ public class ReportAddParent implements Command {
     public ReportAddParent() {
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         String name = ((Component) e.getSource()).getName();
         try {
@@ -53,6 +54,7 @@ public class ReportAddParent implements Command {
 
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

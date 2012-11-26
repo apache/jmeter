@@ -44,6 +44,7 @@ public class ReportEnableComponent implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         ReportTreeNode[] nodes = ReportGuiPackage.getInstance().getTreeListener().getSelectedNodes();
 
@@ -67,6 +68,7 @@ public class ReportEnableComponent implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

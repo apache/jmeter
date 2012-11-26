@@ -38,10 +38,12 @@ public class DefaultPageSummary implements PageSummary {
     /**
      * Returns the elapsed time in milliseconds
      */
+    @Override
     public long getElapsedTime() {
         return END - START;
     }
 
+    @Override
     public long getEndTimeStamp() {
         return END;
     }
@@ -49,6 +51,7 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#getFileName()
      */
+    @Override
     public String getFileName() {
         return fileName;
     }
@@ -56,10 +59,12 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#getPageTitle()
      */
+    @Override
     public String getPageTitle() {
         return title;
     }
 
+    @Override
     public long getStartTimeStamp() {
         return START;
     }
@@ -67,6 +72,7 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#isSuccessful()
      */
+    @Override
     public boolean isSuccessful() {
         return success;
     }
@@ -74,6 +80,7 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#pageStarted()
      */
+    @Override
     public void pageStarted() {
         START = System.currentTimeMillis();
     }
@@ -81,6 +88,7 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#pageEnded()
      */
+    @Override
     public void pageEnded() {
         END = System.currentTimeMillis();
     }
@@ -88,6 +96,7 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#setFileName(java.lang.String)
      */
+    @Override
     public void setFileName(String file) {
         this.fileName = file;
     }
@@ -95,6 +104,7 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#setPageTitle(java.lang.String)
      */
+    @Override
     public void setPageTitle(String title) {
         this.title = title;
     }
@@ -102,6 +112,7 @@ public class DefaultPageSummary implements PageSummary {
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#setSuccessful(boolean)
      */
+    @Override
     public void setSuccessful(boolean success) {
         this.success = success;
     }

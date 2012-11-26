@@ -108,12 +108,14 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         return pop;
     }
 
+    @Override
     public TestElement createTestElement() {
         Table element = new Table();
         modifyTestElement(element);
         return element;
     }
 
+    @Override
     public void modifyTestElement(TestElement element) {
         this.configureTestElement(element);
         Table tb = (Table)element;
@@ -143,6 +145,7 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         transferRateCheck.setSelected(tb.getTransferRate());
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         modifyTestElement(ReportGuiPackage.getInstance().getCurrentElement());
     }
