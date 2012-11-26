@@ -1543,6 +1543,164 @@ run JMeter unless all the JMeter jars are added.
     </jar>
   </target>
 
+  <!--
+      Beanshell script to create the svnmucc scripts for upload, delete and publish.
+
+      The generated script assumes svnmucc is invoked with a root URL of
+      https://dist.apache.org/repos/dist/
+      This means that the jmeter files are at:
+      dev/jmeter/[binaries|source]
+      and
+      release/jmeter/[binaries|source]
+  -->
+  <scriptdef name="svnmuccScript" language="beanshell">
+    <classpath>
+      <pathelement location="${lib.dir}/${beanshell.jar}"/>
+      <!-- Needed to work with Java 1.5 -->
+      <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
+      <pathelement location="${lib.dir}/${commons-logging.jar}"/>
+    </classpath>
+    <!-- type of script to create: upload, publish or delete -->
+    <attribute name="type"/>
+    <!-- Name of file to create -->
+    <attribute name="tempfile"/>
+    <![CDATA[
+    void upload(source) {
+      self.log("Will upload " + source + " to " + RCdir);
+      outstream.println("put");
+      outstream.println(source); // source
+      outstream.print("dev/jmeter/");
+      outstream.print(RCdir);
+      outstream.println(source); // dest
+      outstream.println();
+    }
+    void publish(source, targetDir) {
+      self.log("Will publish " + source + " to " + targetDir);
+      outstream.println("mv");
+      outstream.print("dev/jmeter/");
+      outstream.print(RCdir);
+      outstream.println(source); // source
+      outstream.print("release/jmeter/");
+      outstream.print(targetDir);
+      outstream.println(source); // source
+      outstream.println();
+    }
+    void processFiles(basename, targetDir) {
+      // combine all the extensions in one list
+      extensions = new String[]{".zip", ".zip.asc", ".zip.md5", ".zip.sha", ".tgz", ".tgz.asc", ".tgz.md5", ".tgz.sha"};
+      for (i = 0; i < extensions.length; ++i) {
+        extension = extensions[i];
+        srcFile = basename + extension;
+
+        if ("upload".equals(type)) {
+            upload(srcFile);
+        } else if ("publish".equals(type)) {
+            publish(srcFile, targetDir);
+        }
+      }
+    }
+      RC = project.getProperty("RC");
+      if (RC == null) {
+        self.fail("RC property must be defined!");
+      }
+      type = attributes.get("type");
+      version = project.getProperty("jmeter.version");
+      RCdir = "v"+version+"_"+RC+"/";
+      tempfile = attributes.get("tempfile");
+      self.log("Writing " + type + " script for version " + version + " " + RC + " into " + tempfile);
+      distname = project.getProperty("dist.name");
+      outstream = new PrintStream(new File(tempfile));
+      if ("upload".equals(type)) { // make the initial directory
+        outstream.println("mkdir");
+        outstream.print("dev/jmeter/");    
+        outstream.println(RCdir);
+        outstream.println();
+      }
+      processFiles(distname, "binaries/");
+      processFiles(distname+"_src", "source/");
+      // TODO could remove RCdir, but safer to do that manually after checking it is empty
+      outstream.close();
+    ]]>
+  </scriptdef>
+
+  <!--
+      Run svnnmucc against the svnpubsub distribution area 
+  -->
+  <macrodef name="svnmucc">
+    <attribute name="tempfile"/>
+    <attribute name="message"/>
+    <sequential>
+      <property name="repoType" value="test"/>
+      <condition property="repo" 
+            value="https://dist.apache.org/repos/dist/"
+            else="https://svn.apache.org/repos/asf/jmeter/test/" >
+        <equals arg1="live" arg2="${repoType}"/>
+      </condition>
+      <echo level="info">Processing @{tempfile} using svnmucc on repo: ${repoType}</echo>
+      <echo level="info">${repo}</echo>
+      <echo level="info">@{message}</echo>
+      <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
+        <arg value="-n"/>
+        <arg value="-m"/>
+        <arg value="@{message}"/>
+        <arg value="-U"/>
+        <arg value="${repo}"/>
+        <arg value="-X"/>
+        <arg value="@{tempfile}"/>
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <!-- 
+        Targets for deploying release candidates via svnpubsub.
+        
+        By default, deploys the artifacts under the JMeter test repo:
+        https://svn.apache.org/repos/asf/jmeter/test/
+        
+        The live repo is:
+        https://dist.apache.org/repos/dist/
+        
+        The JMeter files are to be found under:
+        
+        dev/jmeter/[source|binaries]
+        and
+        release/jmeter/[source|binaries]
+
+        Files that are expected to be present:
+        apache-jmeter-<version>.[tgz|zip] + [.asc|.md5|.sha]
+        apache-jmeter-<version>_src.[tgz|zip] + [.asc|.md5|.sha]
+
+        Must have SVN installed, in particular the svnmucc command-line client.
+
+
+        Pre-requisites:
+        username/password need to have been saved in the appropriate svn configuration file.
+        The distribution files must have been built and signed and placed in the dist/ directory.
+        If any required files are missing, then upload will fail.
+
+        Usage:
+              ant RC_upload  [-DrepoType=test|live] [-Djmeter.version=2.9] -DRC=RCn
+              ant RC_publish [-DrepoType=test|live] [-Djmeter.version=2.9] -DRC=RCn
+  -->
+
+  
+  <target name="RC_upload" description="Upload release candidate to svnpubsub area" depends="init-version">
+    <fail message="RC property must be defined!" unless="RC"/>
+    <echo>Version = ${jmeter.version} ${RC}</echo>
+    <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
+    <property name="tempfile" value="svnmucc_upload.tmp"/>
+    <svnmuccScript type="upload" tempfile="${dist.dir}/${tempfile}"/>
+    <svnmucc tempfile="${tempfile}" message="Uploading release candidate ${dist.name} to dev area"/>
+  </target>
+
+  <target name="RC_publish" description="Publish release candidate from svnpubsub area" depends="init-version">
+    <echo>Version = ${jmeter.version} ${RC}</echo>
+    <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
+    <property name="tempfile" value="svnmucc_publish.tmp"/>
+    <svnmuccScript type="publish" tempfile="${dist.dir}/${tempfile}"/>
+    <svnmucc tempfile="${tempfile}" message="Publishing ${dist.name} ${RC}"/>
+  </target>
+
   <!-- 
         Upload jars/poms/sigs to local (/target), snapshots or releases repos; default is local.
         By default, deploys the artifacts to target/deploy under JMeter home.
