@@ -145,6 +145,7 @@ public abstract class AbstractTable extends AbstractTestElement
      * The statistics should be like the aggregate listener.
      */
     @SuppressWarnings("rawtypes") // TODO fix this when there is a real implementation
+    @Override
     public abstract String[][] getTableData(List data);
 
 }

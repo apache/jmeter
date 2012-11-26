@@ -35,6 +35,7 @@ public class ReportEditCommand implements Command {
     public ReportEditCommand() {
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
         guiPackage.getMainFrame().setMainPanel((javax.swing.JComponent) guiPackage.getCurrentGui());
@@ -51,6 +52,7 @@ public class ReportEditCommand implements Command {
         }
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

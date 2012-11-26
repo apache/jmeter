@@ -121,12 +121,14 @@ public class LineGraphGui extends AbstractReportGui {
         add(options,BorderLayout.CENTER);
     }
 
+    @Override
     public TestElement createTestElement() {
         LineChart element = new LineChart();
         modifyTestElement(element);
         return element;
     }
 
+    @Override
     public void modifyTestElement(TestElement element) {
         this.configureTestElement(element);
         LineChart bc = (LineChart)element;

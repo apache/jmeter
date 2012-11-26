@@ -55,6 +55,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
      */
+    @Override
     public String getLabelResource() {
         return "report_page";
     }
@@ -67,6 +68,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
@@ -81,6 +83,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
      */
+    @Override
     public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { ReportMenuFactory.TABLES });
     }

@@ -66,10 +66,12 @@ public class ReportSaveGraphics implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
         JMeterGUIComponent component = null;
         JComponent comp = null;

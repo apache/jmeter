@@ -190,6 +190,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * 3. pass the data to the chart library
      * 4. return the generated chart
      */
+    @Override
     public abstract JComponent renderChart(List<DataSet> data);
 
     /**

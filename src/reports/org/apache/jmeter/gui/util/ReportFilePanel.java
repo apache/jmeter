@@ -129,6 +129,7 @@ public class ReportFilePanel extends HorizontalPanel implements ActionListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("browse")) {
             JFileChooser chooser = ReportFileDialoger.promptToOpenFile(new String[] { filetype });

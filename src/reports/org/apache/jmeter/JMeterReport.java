@@ -153,6 +153,7 @@ public class JMeterReport implements JMeterPlugin {
     };
 
     /** {@inheritDoc} */
+    @Override
     public String[][] getIconMappings() {
         String iconProp = JMeterUtils.getPropDefault("jmeter.icons", "org/apache/jmeter/images/icon.properties");
         Properties p = JMeterUtils.loadProperties(iconProp);
@@ -178,6 +179,7 @@ public class JMeterReport implements JMeterPlugin {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String[][] getResourceBundles() {
         return new String[0][];
     }
