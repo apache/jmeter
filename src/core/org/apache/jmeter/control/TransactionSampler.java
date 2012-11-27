@@ -80,6 +80,7 @@ public class TransactionSampler extends AbstractSampler {
     /**
      * One cannot sample the TransactionSampler directly.
      */
+    @Override
     public SampleResult sample(Entry e) {
         throw new RuntimeException("Cannot sample TransactionSampler directly");
         // It is the JMeterThread which knows how to sample a real sampler

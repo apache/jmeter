@@ -50,6 +50,7 @@ public class CustomX509TrustManager implements X509TrustManager
     /**
      * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],String)
      */
+    @Override
     public void checkClientTrusted(X509Certificate[] certificates,String authType) throws CertificateException {
         if (certificates != null && log.isDebugEnabled()) {
             for (int c = 0; c < certificates.length; c++) {
@@ -72,6 +73,7 @@ public class CustomX509TrustManager implements X509TrustManager
     /**
      * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],String)
      */
+    @Override
     public void checkServerTrusted(X509Certificate[] certificates,String authType) throws CertificateException {
         if (certificates != null && log.isDebugEnabled()) {
             for (int c = 0; c < certificates.length; c++) {
@@ -94,6 +96,7 @@ public class CustomX509TrustManager implements X509TrustManager
     /**
      * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
      */
+    @Override
     public X509Certificate[] getAcceptedIssuers() {
         return this.defaultTrustManager.getAcceptedIssuers();
     }

@@ -44,7 +44,8 @@ public abstract class AbstractSampleSender implements SampleSender {
 		super();
 	}
 
-	public void testEnded() {
+	@Override
+    public void testEnded() {
         // Not used
     }
 

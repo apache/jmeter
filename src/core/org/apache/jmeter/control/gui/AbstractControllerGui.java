@@ -44,6 +44,7 @@ public abstract class AbstractControllerGui extends AbstractJMeterGuiComponent {
      *
      * @return a JPopupMenu appropriate for the component.
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         return MenuFactory.getDefaultControllerMenu();
     }
@@ -57,6 +58,7 @@ public abstract class AbstractControllerGui extends AbstractJMeterGuiComponent {
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.CONTROLLERS });
     }

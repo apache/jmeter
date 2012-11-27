@@ -44,6 +44,7 @@ public class AddParent implements Command {
     public AddParent() {
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
@@ -57,6 +58,7 @@ public class AddParent implements Command {
 
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

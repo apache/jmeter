@@ -67,6 +67,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
+    @Override
     public String getLabelResource() {
         return "resultsaver_title"; // $NON-NLS-1$
     }
@@ -90,6 +91,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         ResultSaver resultSaver = new ResultSaver();
         modifyTestElement(resultSaver);
@@ -101,6 +103,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement te) {
         super.configureTestElement(te);
         te.setProperty(ResultSaver.FILENAME, filename.getText());
@@ -183,6 +186,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     }
 
     // Needed to avoid Class cast error in Clear.java
+    @Override
     public void clearData() {
     }
 

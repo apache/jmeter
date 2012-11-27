@@ -59,6 +59,7 @@ public class PreCompiler implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addNode(Object node, HashTree subTree) {
         if(isRemote && node instanceof ResultCollector)
         {
@@ -97,10 +98,12 @@ public class PreCompiler implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void subtractNode() {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void processPath() {
     }
 }

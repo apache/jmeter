@@ -34,6 +34,7 @@ public class ReplaceStringWithFunctions extends AbstractTransformer {
         setVariables(variables);
     }
 
+    @Override
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
         JMeterProperty newValue = prop;
         getMasterFunction().clear();

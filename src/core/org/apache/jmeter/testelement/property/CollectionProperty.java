@@ -94,6 +94,7 @@ public class CollectionProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setObjectValue(Object v) {
         if (v instanceof Collection<?>) {
             setCollection((Collection<?>) v);
@@ -112,6 +113,7 @@ public class CollectionProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStringValue() {
         return value.toString();
     }
@@ -119,6 +121,7 @@ public class CollectionProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getObjectValue() {
         return value;
     }
@@ -193,6 +196,7 @@ public class CollectionProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
             value = savedValue;

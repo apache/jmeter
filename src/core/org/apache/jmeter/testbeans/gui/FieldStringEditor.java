@@ -113,6 +113,7 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         firePropertyChange();
     }
@@ -120,12 +121,14 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void focusGained(FocusEvent e) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void focusLost(FocusEvent e) {
         firePropertyChange();
     }

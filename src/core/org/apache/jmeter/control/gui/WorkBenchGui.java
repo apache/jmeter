@@ -55,11 +55,13 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection<String> getMenuCategories() {
         return null;
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         WorkBench wb = new WorkBench();
         modifyTestElement(wb);
@@ -67,6 +69,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement wb) {
         super.configureTestElement(wb);
     }
@@ -81,6 +84,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
      *
      * @return a JPopupMenu appropriate for the component.
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
         JMenu addMenu = MenuFactory.makeMenus(new String[] {
@@ -102,6 +106,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
         return menu;
     }
 
+    @Override
     public String getLabelResource() {
         return "workbench_title"; // $NON-NLS-1$
     }

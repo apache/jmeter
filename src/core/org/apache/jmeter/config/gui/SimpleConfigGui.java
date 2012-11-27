@@ -102,6 +102,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "simple_config_element"; // $NON-NLS-1$
     }
@@ -131,6 +132,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         TestElement el = new ConfigTestElement();
         modifyTestElement(el);
@@ -144,6 +146,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      * @param el
      *            the TestElement to modify
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         GuiUtils.stopTableEditing(table);
         Data model = tableModel.getData();
@@ -179,6 +182,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      * @param e
      *            the event that has occurred
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(DELETE)) {

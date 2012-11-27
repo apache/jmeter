@@ -154,6 +154,7 @@ public class ScopePanel extends JPanel implements ActionListener {
         return variableButton.isSelected();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         variableName.setEnabled(variableButton.isSelected());
     }

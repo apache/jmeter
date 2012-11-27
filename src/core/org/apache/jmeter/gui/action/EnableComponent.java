@@ -44,6 +44,7 @@ public class EnableComponent implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
 
@@ -79,6 +80,7 @@ public class EnableComponent implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

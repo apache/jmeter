@@ -49,10 +49,12 @@ public class Clear implements Command {
     public Clear() {
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         final String actionCommand = e.getActionCommand();

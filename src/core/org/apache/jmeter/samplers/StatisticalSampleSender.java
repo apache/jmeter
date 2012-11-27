@@ -120,6 +120,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      *
      * @param host the hostname that the test has ended on.
      */
+    @Override
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
         try {
@@ -141,6 +142,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      *
      * @param e a Sample Event
      */
+    @Override
     public void sampleOccurred(SampleEvent e) {
     	synchronized (sampleStore) {
             // Locate the statistical sample colector

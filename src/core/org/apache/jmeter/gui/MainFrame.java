@@ -351,6 +351,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         stoppingMessage.pack();
         ComponentUtil.centerComponentInComponent(this, stoppingMessage);
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 if (stoppingMessage != null) {// TODO - how can this be null?
                     stoppingMessage.setVisible(true);
@@ -361,6 +362,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     public void updateCounts() {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
                 totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
@@ -383,6 +385,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * sets the running indicator and ensures that the menubar is enabled and in
      * the running state.
      */
+    @Override
     public void testStarted() {
         testStarted(LOCAL);
         menuBar.setEnabled(true);
@@ -396,6 +399,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @param host
      *            the host where the test is starting
      */
+    @Override
     public void testStarted(String host) {
         hosts.add(host);
         runningIndicator.setIcon(runningIcon);
@@ -410,6 +414,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * disables the menubar, stops the running indicator, and closes the
      * stopping message dialog.
      */
+    @Override
     public void testEnded() {
         testEnded(LOCAL);
         menuBar.setEnabled(false);
@@ -422,6 +427,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @param host
      *            the host where the test is ending
      */
+    @Override
     public void testEnded(String host) {
         hosts.remove(host);
         if (hosts.size() == 0) {
@@ -676,14 +682,17 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         }
     }
 
+    @Override
     public void dragEnter(DropTargetDragEvent dtde) {
         // NOOP        
     }
 
+    @Override
     public void dragExit(DropTargetEvent dte) {
         // NOOP        
     }
 
+    @Override
     public void dragOver(DropTargetDragEvent dtde) {
         // NOOP
     }
@@ -691,6 +700,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /**
      * Handler of Top level Dnd
      */
+    @Override
     public void drop(DropTargetDropEvent dtde) {
         try {
             Transferable tr = dtde.getTransferable();
@@ -728,6 +738,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         
     }
 
+    @Override
     public void dropActionChanged(DropTargetDragEvent dtde) {
         // NOOP
     }
@@ -738,11 +749,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     public final class ErrorsAndFatalsCounterLogTarget implements LogTarget, Clearable {
         public AtomicInteger errorOrFatal = new AtomicInteger(0);
 
+        @Override
         public void processEvent(LogEvent event) {
             if(event.getPriority().equals(Priority.ERROR) ||
                     event.getPriority().equals(Priority.FATAL_ERROR)) {
                 final int newValue = errorOrFatal.incrementAndGet();
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         errorsOrFatalsLabel.setText(Integer.toString(newValue));
                     }
@@ -750,9 +763,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             }
         }  
         
+        @Override
         public void clearData() {
             errorOrFatal.set(0);
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
                 }
@@ -761,6 +776,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     }
 
     
+    @Override
     public void clearData() {
         logPanel.clear();
         if(DISPLAY_ERROR_FATAL_COUNTER) {
@@ -771,6 +787,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /**
      * Handles click on warnIndicator
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         if(event.getSource()==warnIndicator) {
             ActionRouter.getInstance().doActionNow(new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));

@@ -55,8 +55,10 @@ public final class ActionRouter implements ActionListener {
     private ActionRouter() {
     }
 
+    @Override
     public void actionPerformed(final ActionEvent e) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 performAction(e);
             }

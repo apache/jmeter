@@ -201,11 +201,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         return null;
     }
 
+    @Override
     public String getLabelResource() {
         return "user_defined_variables"; // $NON-NLS-1$
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         Arguments args = new Arguments();
         modifyTestElement(args);
@@ -213,6 +215,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement args) {
         GuiUtils.stopTableEditing(table);
         Arguments arguments = null;
@@ -331,6 +334,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param e
      *            the event that has occurred
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(DELETE)) {

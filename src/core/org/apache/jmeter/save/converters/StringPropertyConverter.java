@@ -37,11 +37,13 @@ public class StringPropertyConverter implements Converter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
         return StringProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
         StringProperty prop = (StringProperty) obj;
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
@@ -49,6 +51,7 @@ public class StringPropertyConverter implements Converter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         final String name = ConversionHelp.getPropertyName(reader, context);
         if (name == null) {

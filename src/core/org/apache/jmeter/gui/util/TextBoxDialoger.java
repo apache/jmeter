@@ -150,6 +150,7 @@ public class TextBoxDialoger implements ActionListener {
         dialog.setVisible(false);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 

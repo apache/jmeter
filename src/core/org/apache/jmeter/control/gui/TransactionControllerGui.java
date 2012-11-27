@@ -45,6 +45,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         TransactionController lc = new TransactionController();
         configureTestElement(lc);
@@ -59,6 +60,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         ((TransactionController) el).setParent(parent.isSelected());
@@ -67,6 +69,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
         tc.setIncludeTimers(includeTimers.isSelected());
     }
 
+    @Override
     public String getLabelResource() {
         return "transaction_controller_title"; // $NON-NLS-1$
     }

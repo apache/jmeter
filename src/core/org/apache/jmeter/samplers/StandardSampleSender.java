@@ -51,6 +51,7 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
         log.info("Using StandardSampleSender for this test run");        
     }
 
+    @Override
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
         try {
@@ -60,6 +61,7 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
         }
     }
 
+    @Override
     public void sampleOccurred(SampleEvent e) {
         try {
             listener.sampleOccurred(e);

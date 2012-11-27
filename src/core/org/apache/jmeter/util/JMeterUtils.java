@@ -284,6 +284,7 @@ public class JMeterUtils implements UnitTestManager {
         return LazyPatternCacheHolder.INSTANCE.getPattern(expression, options);
     }
 
+    @Override
     public void initializeProperties(String file) {
         System.out.println("Initializing Properties: " + file);
         getProperties(file);

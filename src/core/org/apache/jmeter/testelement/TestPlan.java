@@ -220,6 +220,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded() {
         try {
             FileServer.getFileServer().closeFiles();
@@ -231,6 +232,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded(String host) {
         testEnded();
 
@@ -239,6 +241,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted() {
         if (getBasedir() != null && getBasedir().length() > 0) {
             try {
@@ -258,6 +261,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted(String host) {
         testStarted();
     }

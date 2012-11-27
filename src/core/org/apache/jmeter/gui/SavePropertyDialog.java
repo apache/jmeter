@@ -124,12 +124,14 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         JButton exit = new JButton(JMeterUtils.getResString("done")); // $NON-NLS-1$
         this.getContentPane().add(exit, BorderLayout.SOUTH);
         exit.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         Functor f = functors.get(action);

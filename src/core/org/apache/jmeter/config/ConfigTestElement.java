@@ -43,6 +43,7 @@ public class ConfigTestElement extends AbstractTestElement implements Serializab
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addConfigElement(ConfigElement config) {
         mergeIn((TestElement) config);
     }
@@ -50,6 +51,7 @@ public class ConfigTestElement extends AbstractTestElement implements Serializab
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean expectsModification() {
         return false;
     }

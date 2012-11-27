@@ -106,6 +106,7 @@ public class XPathUtil {
         builder.setErrorHandler(new MyErrorHandler(validate, false));
         if (!downloadDTDs){
             EntityResolver er = new EntityResolver(){
+                @Override
                 public InputSource resolveEntity(String publicId, String systemId)
                         throws SAXException, IOException {
                     return new InputSource(new ByteArrayInputStream(new byte[]{}));
@@ -238,6 +239,7 @@ public class XPathUtil {
             type = "Val=" + val + " Tol=" + tol;
         }
 
+        @Override
         public void warning(SAXParseException ex) throws SAXException {
             log.info("Type=" + type + " " + ex);
             if (val && !tol){
@@ -245,6 +247,7 @@ public class XPathUtil {
             }
         }
 
+        @Override
         public void error(SAXParseException ex) throws SAXException {
             log.warn("Type=" + type + " " + ex);
             if (val && !tol) {
@@ -252,6 +255,7 @@ public class XPathUtil {
             }
         }
 
+        @Override
         public void fatalError(SAXParseException ex) throws SAXException {
             log.error("Type=" + type + " " + ex);
             if (val && !tol) {

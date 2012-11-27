@@ -210,7 +210,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     /**
      * {@inheritDoc}
      */
-   public TestElement createTestElement() {
+   @Override
+public TestElement createTestElement() {
         try {
             TestElement element = (TestElement) testBeanClass.newInstance();
             // In other GUI component, clearGUI resets the value to defaults one as there is one GUI per Element
@@ -239,6 +240,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
    /**
     * {@inheritDoc}
     */
+    @Override
     public void modifyTestElement(TestElement element) {
         // Fetch data from screen fields
         if (customizer instanceof GenericTestBeanCustomizer) {
@@ -277,6 +279,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     /**
      * {@inheritDoc}
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         if (Timer.class.isAssignableFrom(testBeanClass))
         {
@@ -358,6 +361,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     }
 
     /** {@inheritDoc} */
+    @Override
     public Collection<String> getMenuCategories() {
         List<String> menuCategories = new LinkedList<String>();
         BeanDescriptor bd = beanInfo.getBeanDescriptor();
@@ -460,6 +464,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabelResource() {
         // @see getStaticLabel
         return null;
@@ -490,7 +495,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * Handle Locale Change by reloading BeanInfo
 	 * @param event {@link LocaleChangeEvent}
 	 */
-	public void localeChanged(LocaleChangeEvent event) {
+	@Override
+    public void localeChanged(LocaleChangeEvent event) {
 		try {
             beanInfo = Introspector.getBeanInfo(testBeanClass);
             setupGuiClasses();

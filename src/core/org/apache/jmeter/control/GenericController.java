@@ -93,6 +93,7 @@ public class GenericController extends AbstractTestElement implements Controller
     public GenericController() {
     }
 
+    @Override
     public void initialize() {
         resetCurrent();
         resetIterCount();
@@ -150,6 +151,7 @@ public class GenericController extends AbstractTestElement implements Controller
      *
      * @return the next sampler or null
      */
+    @Override
     public Sampler next() {
         fireIterEvents();
         if (log.isDebugEnabled()) {
@@ -181,6 +183,7 @@ public class GenericController extends AbstractTestElement implements Controller
     /**
      * @see org.apache.jmeter.control.Controller#isDone()
      */
+    @Override
     public boolean isDone() {
         return done;
     }
@@ -251,6 +254,7 @@ public class GenericController extends AbstractTestElement implements Controller
     /**
      * {@inheritDoc}
      */
+    @Override
     public void triggerEndOfLoop() {
         reInitialize();
     }
@@ -366,6 +370,7 @@ public class GenericController extends AbstractTestElement implements Controller
     /**
      * {@inheritDoc}
      */
+    @Override
     public final boolean addTestElementOnce(TestElement child){
         if (children.putIfAbsent(child, DUMMY) == null) {
             addTestElement(child);
@@ -374,6 +379,7 @@ public class GenericController extends AbstractTestElement implements Controller
         return false;
     }
 
+    @Override
     public void addIterationListener(LoopIterationListener lis) {
         /*
          * A little hack - add each listener to the start of the list - this
@@ -386,6 +392,7 @@ public class GenericController extends AbstractTestElement implements Controller
     /**
      * Remove listener
      */
+    @Override
     public void removeIterationListener(LoopIterationListener iterationListener) {
         for (Iterator<LoopIterationListener> iterator = iterationListeners.iterator(); iterator.hasNext();) {
             LoopIterationListener listener = iterator.next();

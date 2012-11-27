@@ -54,6 +54,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
         log.info("Using HoldSampleSender for this test run"); // client        
     }
 
+    @Override
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
         try {
@@ -74,6 +75,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     }
 
+    @Override
     public void sampleOccurred(SampleEvent e) {
         synchronized (sampleStore) {
             sampleStore.add(e);

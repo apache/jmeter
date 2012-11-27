@@ -103,6 +103,7 @@ public class IfControllerPanel extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         IfController controller = new IfController();
         modifyTestElement(controller);
@@ -112,6 +113,7 @@ public class IfControllerPanel extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement controller) {
         configureTestElement(controller);
         if (controller instanceof IfController) {
@@ -132,6 +134,7 @@ public class IfControllerPanel extends AbstractControllerGui {
         evaluateAll.setSelected(false);
     }
 
+    @Override
     public String getLabelResource() {
         return "if_controller_title"; // $NON-NLS-1$
     }

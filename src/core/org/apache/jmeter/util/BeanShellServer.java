@@ -59,6 +59,7 @@ public class BeanShellServer implements Runnable {
         JMeterUtils.getJMeterProperties().setProperty(s, v);
     }
 
+    @Override
     public void run() {
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();

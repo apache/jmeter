@@ -166,6 +166,7 @@ public class Summariser extends AbstractTestElement
      *
      * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
      */
+    @Override
     public void sampleOccurred(SampleEvent e) {
         SampleResult s = e.getResult();
 
@@ -288,11 +289,13 @@ public class Summariser extends AbstractTestElement
     }
 
     /** {@inheritDoc} */
+    @Override
     public void sampleStarted(SampleEvent e) {
         // not used
     }
 
     /** {@inheritDoc} */
+    @Override
     public void sampleStopped(SampleEvent e) {
         // not used
     }
@@ -309,11 +312,13 @@ public class Summariser extends AbstractTestElement
 
 
     /** {@inheritDoc} */
+    @Override
     public void testStarted() {
         testStarted("local");
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testEnded() {
         testEnded("local");
     }
@@ -329,6 +334,7 @@ public class Summariser extends AbstractTestElement
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void testStarted(String host) {
         synchronized (lock) {
             myName = getName();
@@ -347,6 +353,7 @@ public class Summariser extends AbstractTestElement
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void testEnded(String host) {
         Set<Entry<String, Totals>> totals = null;
         synchronized (lock) {

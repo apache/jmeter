@@ -44,6 +44,7 @@ public class ChangeLanguage implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         String locale = ((Component) e.getSource()).getName();
         Locale loc;
@@ -65,6 +66,7 @@ public class ChangeLanguage implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

@@ -56,6 +56,7 @@ public class What implements Command {
     }
 
 
+    @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
         JMeterTreeNode node= GuiPackage.getInstance().getTreeListener().getCurrentNode();
         TestElement te = (TestElement)node.getUserObject();
@@ -81,6 +82,7 @@ public class What implements Command {
     /**
      * Provide the list of Action names that are available in this command.
      */
+    @Override
     public Set<String> getActionNames() {
         return commandSet;
     }

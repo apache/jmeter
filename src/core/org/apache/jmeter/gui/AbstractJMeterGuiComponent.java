@@ -187,6 +187,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         setName(element.getName());
         if (element.getProperty(TestElement.ENABLED) instanceof NullProperty) {
@@ -203,6 +204,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * cleared, in which case you should override, clear the extra fields, and
      * still call super.clearGui().
      */
+    @Override
     public void clearGui() {
         initGui();
         enabled = true;
@@ -311,6 +313,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         return pane;
     }
 
+    @Override
     public String getStaticLabel() {
         return JMeterUtils.getResString(getLabelResource());
     }
@@ -319,6 +322,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * Compute Anchor value to find reference in documentation for a particular component
      * @return String anchor
      */
+    @Override
     public String getDocAnchor() {
         // Ensure we use default bundle
         String label =  JMeterUtils.getResString(getLabelResource(), new Locale("",""));
@@ -331,6 +335,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      *
      * @return this object
      */
+    @Override
     public JComponent getPrintableComponent() {
         return this;
     }

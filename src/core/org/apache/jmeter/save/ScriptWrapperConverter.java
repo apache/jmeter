@@ -57,6 +57,7 @@ public class ScriptWrapperConverter implements Converter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass is not typed
         return arg0.equals(ScriptWrapper.class);
     }
@@ -64,6 +65,7 @@ public class ScriptWrapperConverter implements Converter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         ScriptWrapper wrap = (ScriptWrapper) arg0;
         String version = SaveService.getVERSION();
@@ -79,6 +81,7 @@ public class ScriptWrapperConverter implements Converter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         ScriptWrapper wrap = new ScriptWrapper();
         wrap.version = reader.getAttribute(ATT_VERSION);

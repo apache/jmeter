@@ -63,6 +63,7 @@ public class TestElementProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStringValue() {
         return value.toString();
     }
@@ -70,6 +71,7 @@ public class TestElementProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setObjectValue(Object v) {
         if (v instanceof TestElement) {
             value = (TestElement) v;
@@ -79,6 +81,7 @@ public class TestElementProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getObjectValue() {
         return value;
     }
@@ -114,6 +117,7 @@ public class TestElementProperty extends MultiProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
             value = savedValue;

@@ -302,6 +302,7 @@ public class JMeter implements JMeterPlugin {
             }
 
             Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {                
+                @Override
                 public void uncaughtException(Thread t, Throwable e) {
                     if (!(e instanceof ThreadDeath)) {
                         log.error("Uncaught exception: ", e);
@@ -929,6 +930,7 @@ public class JMeter implements JMeterPlugin {
             this.engines=engines;
         }
 
+        @Override
         public void testEnded(String host) {
             long now=System.currentTimeMillis();
             log.info("Finished remote host: " + host + " ("+now+")");
@@ -938,6 +940,7 @@ public class JMeter implements JMeterPlugin {
             }
         }
 
+        @Override
         public void testEnded() {
             long now = System.currentTimeMillis();
             println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
@@ -945,12 +948,14 @@ public class JMeter implements JMeterPlugin {
             checkForRemainingThreads();
         }
 
+        @Override
         public void testStarted(String host) {
             started.incrementAndGet();
             long now=System.currentTimeMillis();
             log.info("Started remote host:  " + host + " ("+now+")");
         }
 
+        @Override
         public void testStarted() {
             long now=System.currentTimeMillis();
             log.info(JMeterUtils.getResString("running_test")+" ("+now+")");//$NON-NLS-1$
@@ -963,6 +968,7 @@ public class JMeter implements JMeterPlugin {
          * been delivered. Should also improve performance of remote JMeter
          * testing.
          */
+        @Override
         public void run() {
             long now = System.currentTimeMillis();
             println("Tidying up remote @ "+new Date(now)+" ("+now+")");
@@ -1032,6 +1038,7 @@ public class JMeter implements JMeterPlugin {
         { "org.apache.jmeter.assertions.gui.AbstractAssertionGui",   "org/apache/jmeter/images/question.gif"}     //$NON-NLS-1$ $NON-NLS-2$
     };
 
+    @Override
     public String[][] getIconMappings() {
         final String defaultIconProp = "org/apache/jmeter/images/icon.properties"; //$NON-NLS-1$
         String iconProp = JMeterUtils.getPropDefault("jmeter.icons", defaultIconProp);//$NON-NLS-1$
@@ -1062,6 +1069,7 @@ public class JMeter implements JMeterPlugin {
         return iconlist;
     }
 
+    @Override
     public String[][] getResourceBundles() {
         return new String[0][];
     }

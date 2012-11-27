@@ -69,10 +69,12 @@ public class Load implements Command {
         super();
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" }); //$NON-NLS-1$
         if (chooser == null) {

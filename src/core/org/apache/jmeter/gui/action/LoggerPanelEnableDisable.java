@@ -50,6 +50,7 @@ public class LoggerPanelEnableDisable implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
@@ -60,6 +61,7 @@ public class LoggerPanelEnableDisable implements Command {
      * @param e
      *            the generic UI action event
      */
+    @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiInstance = GuiPackage.getInstance();
         JSplitPane splitPane = ((JSplitPane)guiInstance.getLoggerPanel().getParent());

@@ -47,6 +47,7 @@ public class ChangeParent implements Command {
     public ChangeParent() {
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
@@ -66,6 +67,7 @@ public class ChangeParent implements Command {
 
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

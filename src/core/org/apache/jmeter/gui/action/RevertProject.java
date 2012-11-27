@@ -42,10 +42,12 @@ public class RevertProject implements Command {
         super();
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         // Get the file name of the current project
         String projectFile = GuiPackage.getInstance().getTestPlanFile();
