@@ -231,7 +231,8 @@ public class PackageTest extends TestCase {
     public static final String[] getResources(File srcFiledir) {
     	Set<String> set = new TreeSet<String>();
 		findFile(srcFiledir, set, new FilenameFilter() {
-			public boolean accept(File dir, String name) {
+			@Override
+            public boolean accept(File dir, String name) {
 				return new File(dir, name).isDirectory() 
 						|| (
 								name.equals("messages.properties") ||

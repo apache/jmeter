@@ -27,6 +27,7 @@ public class NullSampler extends AbstractSampler {
 
     private static final long serialVersionUID = 240L;
 
+    @Override
     public SampleResult sample(Entry e) {
         return new SampleResult();
     }

@@ -47,6 +47,7 @@ public class TestFunctor extends JMeterTestCase {
         public Test1(String s){
             name=s;
         }
+        @Override
         public String getName(){
             return name;
         }
@@ -74,9 +75,11 @@ public class TestFunctor extends JMeterTestCase {
         public Test2(String s){
             name=s;
         }
+        @Override
         public String getName(){
             return name;
         }
+        @Override
         public String getString(String s){
             return s;
         }
