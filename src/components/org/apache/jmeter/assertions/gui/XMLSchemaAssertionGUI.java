@@ -57,6 +57,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
     /**
      * Returns the label to be shown within the JTree-Component.
      */
+    @Override
     public String getLabelResource() {
         return "xmlschema_assertion_title"; //$NON-NLS-1$
     }
@@ -64,6 +65,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
     /**
      * create Test Element
      */
+    @Override
     public TestElement createTestElement() {
         log.debug("XMLSchemaAssertionGui.createTestElement() called");
         XMLSchemaAssertion el = new XMLSchemaAssertion();
@@ -76,6 +78,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement inElement) {
 
         log.debug("XMLSchemaAssertionGui.modifyTestElement() called");
