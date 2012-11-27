@@ -111,6 +111,7 @@ public class URLCollection {
             iter = i;
         }
 
+        @Override
         public boolean hasNext() {
             return iter.hasNext();
         }
@@ -118,10 +119,12 @@ public class URLCollection {
         /*
          * Unwraps the URLString class to return the URL
          */
+        @Override
         public URL next() {
             return iter.next().getURL();
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }

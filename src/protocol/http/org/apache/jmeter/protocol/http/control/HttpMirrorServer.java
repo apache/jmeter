@@ -150,6 +150,7 @@ public class HttpMirrorServer extends Thread implements Stoppable {
         }
     }
 
+    @Override
     public void stopServer() {
         running = false;
     }

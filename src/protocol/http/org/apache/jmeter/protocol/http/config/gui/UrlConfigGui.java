@@ -694,6 +694,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         }   
     }
     // autoRedirects and followRedirects cannot both be selected
+    @Override
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == autoRedirects){
             if (autoRedirects.isSelected()) {

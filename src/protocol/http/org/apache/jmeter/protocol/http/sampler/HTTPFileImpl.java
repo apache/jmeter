@@ -36,6 +36,7 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
         super(base);
     }
 
+    @Override
     public boolean interrupt() {
         return false;
     }

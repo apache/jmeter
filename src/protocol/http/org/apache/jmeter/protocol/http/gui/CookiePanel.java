@@ -140,10 +140,12 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "cookie_manager_title"; //$NON-NLS-1$
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
 
@@ -245,6 +247,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement cm) {
         GuiUtils.stopTableEditing(cookieTable);
         cm.clear();
@@ -296,6 +299,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         }
     }
 
+    @Override
     public TestElement createTestElement() {
         CookieManager cookieManager = new CookieManager();
         modifyTestElement(cookieManager);

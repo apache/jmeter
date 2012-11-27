@@ -92,6 +92,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         init();
     }
 
+    @Override
     public TestElement createTestElement() {
         AuthManager authMan = tableModel.manager;
         configureTestElement(authMan);
@@ -103,6 +104,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         GuiUtils.stopTableEditing(authTable);
         el.clear();
@@ -133,6 +135,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         }
     }
 
+    @Override
     public String getLabelResource() {
         return "auth_manager_title"; //$NON-NLS-1$
     }
@@ -148,6 +151,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         add(createAuthTablePanel(), BorderLayout.CENTER);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
 
@@ -314,6 +318,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         /**
          * Required by table model interface.
          */
+        @Override
         public int getRowCount() {
             return manager.getAuthObjects().size();
         }
@@ -321,6 +326,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         /**
          * Required by table model interface.
          */
+        @Override
         public int getColumnCount() {
             return manager.getColumnCount();
         }
@@ -336,6 +342,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         /**
          * Required by table model interface.
          */
+        @Override
         public Object getValueAt(int row, int column) {
             Authorization auth = manager.getAuthObjectAt(row);
 
@@ -392,6 +399,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
             setBorder(myBorder);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                 boolean hasFocus, int row, int column) {
             setText((String) value);

@@ -125,6 +125,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack, to be removed later
 
     private static final HttpResponseInterceptor METRICS_SAVER = new HttpResponseInterceptor(){
+        @Override
         public void process(HttpResponse response, HttpContext context)
                 throws HttpException, IOException {
             HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
@@ -133,7 +134,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
     private static final HttpRequestInterceptor METRICS_RESETTER = new HttpRequestInterceptor() {
-		public void process(HttpRequest request, HttpContext context)
+		@Override
+        public void process(HttpRequest request, HttpContext context)
 				throws HttpException, IOException {
             HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
 			HttpConnectionMetrics metrics = conn.getMetrics();
@@ -1109,6 +1111,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
+    @Override
     public boolean interrupt() {
         HttpUriRequest request = currentRequest;
         if (request != null) {

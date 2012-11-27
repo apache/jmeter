@@ -144,6 +144,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "webservice_sampler_title"; // $NON-NLS-1$
     }
@@ -151,6 +152,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         WebServiceSampler sampler = new WebServiceSampler();
         this.configureTestElement(sampler);
@@ -163,6 +165,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement s) {
         WebServiceSampler sampler = (WebServiceSampler) s;
         this.configureTestElement(sampler);
@@ -476,6 +479,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
      * @param event
      *            that occurred
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         final Object eventSource = event.getSource();
         if (eventSource == selectButton) {

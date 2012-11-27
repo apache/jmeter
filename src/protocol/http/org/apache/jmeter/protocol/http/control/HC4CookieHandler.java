@@ -69,6 +69,7 @@ public class HC4CookieHandler implements CookieHandler {
         this.cookieSpec = registry.getCookieSpec(policy);
     }
 
+    @Override
     public void addCookieFromHeader(CookieManager cookieManager,
             boolean checkCookies, String cookieHeader, URL url) {
             boolean debugEnabled = log.isDebugEnabled();
@@ -131,6 +132,7 @@ public class HC4CookieHandler implements CookieHandler {
             }
     }
 
+    @Override
     public String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
             boolean allowVariableCookie) {
         List<org.apache.http.cookie.Cookie> c = 

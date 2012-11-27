@@ -31,10 +31,12 @@ public class AnchorModifierGui extends AbstractPreProcessorGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "anchor_modifier_title"; //$NON-NLS-1$
     }
 
+    @Override
     public TestElement createTestElement() {
         AnchorModifier modifier = new AnchorModifier();
         modifyTestElement(modifier);
@@ -46,6 +48,7 @@ public class AnchorModifierGui extends AbstractPreProcessorGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement modifier) {
         configureTestElement(modifier);
     }

@@ -119,6 +119,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         JOrphanUtils.closeQuietly(OUTPUT);
         JOrphanUtils.closeQuietly(WRITER);
@@ -127,6 +128,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setHost(String host) {
         SAMPLE.setDomain(host);
     }
@@ -134,6 +136,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setLabel(String label) {
 
     }
@@ -141,6 +144,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMethod(String post_get) {
         SAMPLE.setMethod(post_get);
     }
@@ -148,6 +152,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setParams(NVPair[] params) {
         for (int idx = 0; idx < params.length; idx++) {
             SAMPLE.addArgument(params[idx].getName(), params[idx].getValue());
@@ -157,6 +162,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPath(String path) {
         SAMPLE.setPath(path);
     }
@@ -164,6 +170,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setPort(int port) {
         SAMPLE.setPort(port);
     }
@@ -171,6 +178,7 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setQueryString(String querystring) {
         SAMPLE.parseArguments(querystring);
     }
@@ -178,18 +186,21 @@ public class StandardGenerator implements Generator, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSourceLogs(String sourcefile) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTarget(Object target) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object generateRequest() {
         SAMPLE = HTTPSamplerFactory.newInstance();
         return SAMPLE;
@@ -199,6 +210,7 @@ public class StandardGenerator implements Generator, Serializable {
      * save must be called to write the jmx file, otherwise it will not be
      * saved.
      */
+    @Override
     public void save() {
         // no implementation at this time, since
         // we bypass the idea of having a console
@@ -212,6 +224,7 @@ public class StandardGenerator implements Generator, Serializable {
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void reset() {
         SAMPLE = null;
         generateRequest();

@@ -67,6 +67,7 @@ public class URLString implements Comparable<URLString> {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(URLString o) {
         return urlAsString.compareTo(o.toString());
     }

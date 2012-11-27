@@ -137,6 +137,7 @@ public class RequestViewHTTP implements RequestView {
     /* (non-Javadoc)
      * @see org.apache.jmeter.visualizers.request.RequestView#init()
      */
+    @Override
     public void init() {
         paneParsed = new JPanel(new BorderLayout(0, 5));
         paneParsed.add(createRequestPane());
@@ -145,6 +146,7 @@ public class RequestViewHTTP implements RequestView {
     /* (non-Javadoc)
      * @see org.apache.jmeter.visualizers.request.RequestView#clearData()
      */
+    @Override
     public void clearData() {
         requestModel.clearData();
         paramsModel.clearData();
@@ -154,6 +156,7 @@ public class RequestViewHTTP implements RequestView {
     /* (non-Javadoc)
      * @see org.apache.jmeter.visualizers.request.RequestView#setSamplerResult(java.lang.Object)
      */
+    @Override
     public void setSamplerResult(Object objectResult) {
 
         if (objectResult instanceof HTTPSampleResult) {
@@ -277,6 +280,7 @@ public class RequestViewHTTP implements RequestView {
         return null;
     }
 
+    @Override
     public JPanel getPanel() {
         return paneParsed;
     }
@@ -342,6 +346,7 @@ public class RequestViewHTTP implements RequestView {
     /* (non-Javadoc)
      * @see org.apache.jmeter.visualizers.request.RequestView#getLabel()
      */
+    @Override
     public String getLabel() {
         return JMeterUtils.getResString(KEY_LABEL);
     }
