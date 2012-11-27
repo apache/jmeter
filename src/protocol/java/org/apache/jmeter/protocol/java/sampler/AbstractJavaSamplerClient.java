@@ -55,16 +55,19 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
+    @Override
     public void setupTest(JavaSamplerContext context) {
         log.debug(getClass().getName() + ": setupTest");
     }
 
     /* Implements JavaSamplerClient.teardownTest(JavaSamplerContext) */
+    @Override
     public void teardownTest(JavaSamplerContext context) {
         log.debug(getClass().getName() + ": teardownTest");
     }
 
     /* Implements JavaSamplerClient.getDefaultParameters() */
+    @Override
     public Arguments getDefaultParameters() {
         return null;
     }

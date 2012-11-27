@@ -265,6 +265,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
      *
      * @return a SampleResult giving the results of this sample.
      */
+    @Override
     public SampleResult runTest(JavaSamplerContext context) {
         setupValues(context);
 

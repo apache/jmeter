@@ -75,6 +75,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SampleResult sample(Entry e) {
         return this.sample();
     }

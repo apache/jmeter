@@ -113,6 +113,7 @@ public class SmtpSampler extends AbstractSampler {
      * @return sampleresult Result of the sample
      * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
      */
+    @Override
     public SampleResult sample(Entry e) {
         Message message = null;
         SampleResult res = new SampleResult();

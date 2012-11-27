@@ -90,6 +90,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getLabelResource() {
         return "java_request_defaults"; // $NON-NLS-1$
     }
@@ -156,6 +157,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
      * @param evt
      *            the ActionEvent to be handled
      */
+    @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == classnameCombo) {
             String className = ((String) classnameCombo.getSelectedItem()).trim();
@@ -227,6 +229,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public TestElement createTestElement() {
         JavaConfig config = new JavaConfig();
         modifyTestElement(config);
@@ -234,6 +237,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void modifyTestElement(TestElement config) {
         configureTestElement(config);
         ((JavaConfig) config).setArguments((Arguments) argsPanel.createTestElement());

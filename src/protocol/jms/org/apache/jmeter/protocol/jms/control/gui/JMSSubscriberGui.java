@@ -119,6 +119,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "jms_subscriber_title"; // $NON-NLS-1$
     }
@@ -126,6 +127,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         SubscriberSampler sampler = new SubscriberSampler();
         modifyTestElement(sampler);
@@ -137,6 +139,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement s) {
         SubscriberSampler sampler = (SubscriberSampler) s;
         this.configureTestElement(sampler);
@@ -260,6 +263,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
      * When the state of a widget changes, it will notify the gui. the method
      * then enables or disables certain parameters.
      */
+    @Override
     public void stateChanged(ChangeEvent event) {
         if (event.getSource() == useProperties) {
             jndiICF.setEnabled(!useProperties.isSelected());

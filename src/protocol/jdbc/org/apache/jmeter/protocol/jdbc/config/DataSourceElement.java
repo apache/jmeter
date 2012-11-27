@@ -66,6 +66,7 @@ public class DataSourceElement extends AbstractTestElement
     public DataSourceElement() {
     }
 
+    @Override
     public void testEnded() {
         synchronized (this) {
             if (excaliburSource != null) {
@@ -82,10 +83,12 @@ public class DataSourceElement extends AbstractTestElement
         }
     }
 
+    @Override
     public void testEnded(String host) {
         testEnded();
     }
 
+    @Override
     @SuppressWarnings("deprecation") // call to TestBeanHelper.prepare() is intentional
     public void testStarted() {
         this.setRunningVersion(true);
@@ -111,6 +114,7 @@ public class DataSourceElement extends AbstractTestElement
         }
     }
 
+    @Override
     public void testStarted(String host) {
         testStarted();
     }
@@ -262,6 +266,7 @@ public class DataSourceElement extends AbstractTestElement
             sharedDSC=p_dsc;
         }
 
+        @Override
         public Connection getConnection() throws SQLException {
             Connection conn = null;
             ResourceLimitingJdbcDataSource dsc = null;
@@ -295,14 +300,17 @@ public class DataSourceElement extends AbstractTestElement
             return conn;
         }
 
+        @Override
         public void configure(Configuration arg0) throws ConfigurationException {
         }
 
     }
 
+    @Override
     public void addConfigElement(ConfigElement config) {
     }
 
+    @Override
     public boolean expectsModification() {
         return false;
     }

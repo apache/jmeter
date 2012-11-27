@@ -45,6 +45,7 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "java_request"; // $NON-NLS-1$
     }
@@ -64,6 +65,7 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
     }
 
     /* Implements JMeterGuiComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         JavaSampler sampler = new JavaSampler();
         modifyTestElement(sampler);
@@ -71,6 +73,7 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
     }
 
     /* Implements JMeterGuiComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
         JavaConfig config = (JavaConfig) javaPanel.createTestElement();

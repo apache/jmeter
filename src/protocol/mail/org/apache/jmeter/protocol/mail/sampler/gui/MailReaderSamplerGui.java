@@ -105,6 +105,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         initGui();
     }
 
+    @Override
     public String getLabelResource() {
         return "mail_reader_title"; // $NON-NLS-1$
     }
@@ -137,6 +138,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
     /**
      * {@inheritDoc}
      */
+    @Override
     public TestElement createTestElement() {
         MailReaderSampler sampler = new MailReaderSampler();
         modifyTestElement(sampler);
@@ -146,6 +148,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
     /**
      * {@inheritDoc}
      */
+    @Override
     public void modifyTestElement(TestElement te) {
         te.clear();
         configureTestElement(te);
@@ -205,6 +208,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         ButtonGroup nmbg = new ButtonGroup();
         allMessagesButton = new JRadioButton(AllMessagesLabel);
         allMessagesButton.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (allMessagesButton.isSelected()) {
                     someMessagesField.setEnabled(false);
@@ -213,6 +217,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         });
         someMessagesButton = new JRadioButton();
         someMessagesButton.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (someMessagesButton.isSelected()) {
                     someMessagesField.setEnabled(true);
@@ -296,6 +301,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         usernameBox.setText("");// $NON-NLS-1$
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         final String item = serverTypeBox.getText();
         if (item.equals("pop3")||item.equals("pop3s")) {
@@ -308,9 +314,11 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         }
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         actionPerformed(null);
     }

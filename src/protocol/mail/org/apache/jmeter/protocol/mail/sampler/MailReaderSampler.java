@@ -132,6 +132,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     /**
      * {@inheritDoc}
      */
+    @Override
     public SampleResult sample(Entry e) {
         SampleResult parent = new SampleResult();
         boolean isOK = false; // Did sample succeed?
@@ -564,6 +565,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean interrupt() {
         boolean wasbusy = busy;
         busy = false;

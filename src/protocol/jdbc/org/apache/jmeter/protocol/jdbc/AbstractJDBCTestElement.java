@@ -563,7 +563,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
 	 */
-	public void testStarted() {
+	@Override
+    public void testStarted() {
 		testStarted("");
 	}
 
@@ -571,7 +572,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestStateListener#testStarted(java.lang.String)
 	 */
-	public void testStarted(String host) {
+	@Override
+    public void testStarted(String host) {
 		cleanCache();
 	}
 
@@ -579,7 +581,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestStateListener#testEnded()
 	 */
-	public void testEnded() {
+	@Override
+    public void testEnded() {
 		testEnded("");
 	}
 
@@ -587,7 +590,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestStateListener#testEnded(java.lang.String)
 	 */
-	public void testEnded(String host) {
+	@Override
+    public void testEnded(String host) {
 		cleanCache();		
 	}
 	

@@ -717,6 +717,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *            !ToDo (Parameter description)
      * @return !ToDo (Return description)
      **************************************************************************/
+    @Override
     public SampleResult sample(Entry e) {
         XMLBuffer xmlBuffer = new XMLBuffer();
         xmlBuffer.openTag("ldapanswer"); // $NON-NLS-1$
@@ -967,6 +968,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private void sortAttributes(final List<Attribute> sortedAttrs) {
         Collections.sort(sortedAttrs, new Comparator<Attribute>()
         {
+            @Override
             public int compare(Attribute o1, Attribute o2)
             {
                 String      nm1 = o1.getID();
@@ -999,6 +1001,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 return len1 - len2;
             }
 
+            @Override
             public int compare(SearchResult o1, SearchResult o2)
             {
                 String      nm1 = o1.getName();
@@ -1056,19 +1059,23 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return StringEscapeUtils.escapeXml(value.toString());
     }
 
+    @Override
     public void testStarted() {
         testStarted(""); // $NON-NLS-1$
     }
 
+    @Override
     public void testEnded() {
         testEnded(""); // $NON-NLS-1$
     }
 
+    @Override
     public void testStarted(String host) {
         // ignored
     }
 
     // Ensure any remaining contexts are closed
+    @Override
     public void testEnded(String host) {
         for (Map.Entry<String, DirContext> entry : ldapContexts.entrySet()) {
             DirContext dc = entry.getValue();

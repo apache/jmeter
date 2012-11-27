@@ -42,6 +42,7 @@ public class MailFileFolder extends Folder {
     private final File folderPath;// Parent folder (or single message file)
     private final boolean isFile;
     private static final FilenameFilter FILENAME_FILTER = new FilenameFilter(){
+        @Override
         public boolean accept(File dir, String name) {
             return name.matches(FILENAME_REGEX);
         }

@@ -62,6 +62,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "tcp_config_title"; // $NON-NLS-1$
     }
@@ -82,6 +83,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         requestData.setText(element.getPropertyAsString(TCPSampler.REQUEST));
     }
 
+    @Override
     public TestElement createTestElement() {
         ConfigTestElement element = new ConfigTestElement();
         modifyTestElement(element);
@@ -93,6 +95,7 @@ public class TCPConfigGui extends AbstractConfigGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
         // N.B. this will be a config element, so we cannot use the setXXX() methods

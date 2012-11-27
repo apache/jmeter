@@ -52,6 +52,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
      * @return Null-String
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
      */
+    @Override
     public String getLabelResource() {
         return "smtp_sampler_title";
     }
@@ -108,6 +109,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
      * @return Test-element for JMeter
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         SmtpSampler sampler = new SmtpSampler();
         modifyTestElement(sampler);
@@ -119,6 +121,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
      * @param te TestElement for JMeter
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement te) {
         te.clear();
         super.configureTestElement(te);
