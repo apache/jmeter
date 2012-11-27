@@ -59,6 +59,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
         super.configure(element);
     }
 
+    @Override
     public TestElement createTestElement() {
         BeanShellSampler sampler = new BeanShellSampler();
         modifyTestElement(sampler);
@@ -70,6 +71,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement te) {
         te.clear();
         this.configureTestElement(te);
@@ -92,6 +94,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
         resetInterpreter.setSelected(false);
     }
 
+    @Override
     public String getLabelResource() {
         return "bsh_sampler_title"; // $NON-NLS-1$
     }

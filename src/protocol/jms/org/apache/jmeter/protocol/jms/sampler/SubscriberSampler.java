@@ -267,6 +267,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * <br/>
      * {@inheritDoc}
      */
+    @Override
     public void threadStarted() {
         // Disabled thread start if listen on sample choice
         if (isDestinationStatic() || START_ON_SAMPLE) {
@@ -316,6 +317,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * <br/>
      * {@inheritDoc}
      */
+    @Override
     public void threadFinished() {
         if (SUBSCRIBER != null){ // Can be null if init fails
             SUBSCRIBER.close();
@@ -332,6 +334,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * Handle an interrupt of the test.
      */
+    @Override
     public boolean interrupt() {
         boolean oldvalue = interrupted;
         interrupted = true;   // so we break the loops in SampleWithListener and SampleWithReceive
@@ -440,6 +443,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded() {
         InitialContextFactory.close();
     }
@@ -447,6 +451,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded(String host) {
         testEnded();
     }
@@ -454,6 +459,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted() {
     	testStarted("");
     }
@@ -461,6 +467,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted(String host) {
     	// NOOP
     }

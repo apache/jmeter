@@ -102,6 +102,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         jndiPropertiesPanel.clear();
     }
 
+    @Override
     public TestElement createTestElement() {
         JMSSampler sampler = new JMSSampler();
         this.configureTestElement(sampler);
@@ -138,6 +139,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
      *
      * @param element
      */
+    @Override
     public void modifyTestElement(TestElement element) {
         this.configureTestElement(element);
         if (!(element instanceof JMSSampler)) return;
@@ -277,6 +279,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         return jndiPanel;
     }
 
+    @Override
     public String getLabelResource() {
         return "jms_point_to_point"; //$NON-NLS-1$ // TODO - probably wrong
     }

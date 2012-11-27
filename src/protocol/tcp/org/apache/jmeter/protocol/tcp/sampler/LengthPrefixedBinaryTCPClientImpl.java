@@ -55,6 +55,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void write(OutputStream os, String s)  throws IOException{
         os.write(intToByteArray(s.length()/2,lengthPrefixLen));
         if(log.isDebugEnabled()) {
@@ -66,6 +67,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void write(OutputStream os, InputStream is) throws IOException {
         this.tcpClient.write(os, is);
     }
@@ -73,6 +75,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String read(InputStream is) throws ReadException{
         byte[] msg = new byte[0];
         int msgLen = 0;

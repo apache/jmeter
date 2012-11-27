@@ -86,6 +86,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
         return getPropertyAsBoolean(RESET_INTERPRETER);
     }
 
+    @Override
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
     {
         // log.info(getLabel()+" "+getFilename());
@@ -163,6 +164,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
         return res;
     }
 
+    @Override
     public boolean interrupt() {
         if (savedBsh != null) {
             try {
@@ -178,6 +180,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
+    @Override
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);

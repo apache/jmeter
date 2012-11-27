@@ -127,6 +127,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
@@ -291,6 +292,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return getQueueConnectionFactory() + ", queue: " + getSendQueue();
     }
 
+    @Override
     public void threadStarted() {
         logThreadStart();
 
@@ -445,6 +447,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void threadFinished() {
         LOGGER.debug("Thread ended " + new Date());
 

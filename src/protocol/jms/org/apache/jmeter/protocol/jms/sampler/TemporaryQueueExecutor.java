@@ -53,6 +53,7 @@ public class TemporaryQueueExecutor implements QueueExecutor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Message sendAndReceive(Message request) throws JMSException {
         return requestor.request(request);
     }

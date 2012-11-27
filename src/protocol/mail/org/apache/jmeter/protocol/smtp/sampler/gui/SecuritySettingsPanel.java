@@ -117,16 +117,19 @@ public class SecuritySettingsPanel extends JPanel{
         this.add(rbUseStartTLS, gridBagConstraints);
 
         rbUseNone.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(ItemEvent evt) {
                 rbSecuritySettingsItemStateChanged(evt);
             }
         });
         rbUseSSL.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(ItemEvent evt) {
                 rbSecuritySettingsItemStateChanged(evt);
             }
         });
         rbUseStartTLS.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(ItemEvent evt) {
                 rbSecuritySettingsItemStateChanged(evt);
             }
@@ -137,6 +140,7 @@ public class SecuritySettingsPanel extends JPanel{
         cbTrustAllCerts.setEnabled(false);
         cbTrustAllCerts.setToolTipText(JMeterUtils.getResString("smtp_trustall_tooltip")); // $NON-NLS-1$
         cbTrustAllCerts.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 cbTrustAllCertsActionPerformed(evt);
             }
@@ -150,6 +154,7 @@ public class SecuritySettingsPanel extends JPanel{
         cbEnforceStartTLS.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbEnforceStartTLS.setEnabled(false);
         cbEnforceStartTLS.addActionListener(new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent evt) {
                         cbEnforceStartTLSActionPerformed(evt);
                     }
@@ -164,6 +169,7 @@ public class SecuritySettingsPanel extends JPanel{
         cbUseLocalTrustStore.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbUseLocalTrustStore.setEnabled(false);
         cbUseLocalTrustStore.addActionListener(new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent evt) {
                         cbUseLocalTrustStoreActionPerformed(evt);
                     }

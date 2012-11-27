@@ -48,6 +48,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
         ftpDefaultPanel.configure(element);
     }
 
+    @Override
     public TestElement createTestElement() {
         FTPSampler sampler = new FTPSampler();
         modifyTestElement(sampler);
@@ -59,6 +60,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
         ftpDefaultPanel.modifyTestElement(sampler);
@@ -77,6 +79,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
         loginPanel.clearGui();
     }
 
+    @Override
     public String getLabelResource() {
         return "ftp_testing_title"; // $NON-NLS-1$
     }

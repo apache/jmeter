@@ -94,6 +94,7 @@ public class SystemSampler extends AbstractSampler {
      *            the Entry for this sample
      * @return test SampleResult
      */
+    @Override
     public SampleResult sample(Entry entry) {
         SampleResult results = new SampleResult();
         results.setDataType(SampleResult.TEXT);

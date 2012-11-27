@@ -220,6 +220,7 @@ public class Publisher implements Closeable {
     /**
      * Close will close the session
      */
+    @Override
     public void close() {
         Utils.close(producer, log);
         Utils.close(session, log);

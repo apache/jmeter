@@ -176,6 +176,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      *            the Entry for this sample
      * @return test SampleResult
      */
+    @Override
     public SampleResult sample(Entry entry) {        
         Arguments args = getArguments();
         args.addArgument(TestElement.NAME, getName()); // Allow Sampler access
@@ -256,12 +257,14 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
 
     // TestStateListener implementation
     /* Implements TestStateListener.testStarted() */
+    @Override
     public void testStarted() {
         log.debug(whoAmI() + "\ttestStarted");
         initClass();
     }
 
     /* Implements TestStateListener.testStarted(String) */
+    @Override
     public void testStarted(String host) {
         log.debug(whoAmI() + "\ttestStarted(" + host + ")");
         initClass();
@@ -274,6 +277,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * constructor) and notify them that the test has ended, allowing the
      * JavaSamplerClients to cleanup.
      */
+    @Override
     public void testEnded() {
         log.debug(whoAmI() + "\ttestEnded");
         synchronized (TEAR_DOWN_SET) {
@@ -288,6 +292,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     }
 
     /* Implements TestStateListener.testEnded(String) */
+    @Override
     public void testEnded(String host) {
         testEnded();
     }
@@ -305,6 +310,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
          *
          * @see JavaSamplerClient#runTest(JavaSamplerContext)
          */
+        @Override
         public SampleResult runTest(JavaSamplerContext p_context) {
             log.debug(whoAmI() + "\trunTest");
             Thread.yield();

@@ -122,6 +122,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     /**
      * the name of the property for the JMSPublisherGui is jms_publisher.
      */
+    @Override
     public String getLabelResource() {
         return "jms_publisher"; //$NON-NLS-1$
     }
@@ -129,6 +130,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
       PublisherSampler sampler = new PublisherSampler();
       setupSamplerProperties(sampler);
@@ -140,6 +142,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement s) {
         PublisherSampler sampler = (PublisherSampler) s;
         setupSamplerProperties(sampler);
@@ -270,6 +273,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
      * When a widget state changes, it will notify this class so we can
      * enable/disable the correct items.
      */
+    @Override
     public void stateChanged(ChangeEvent event) {
         if (event.getSource() == configChoice) {
             updateConfig(configChoice.getText());
