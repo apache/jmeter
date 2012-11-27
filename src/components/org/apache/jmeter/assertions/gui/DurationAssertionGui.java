@@ -43,6 +43,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "duration_assertion_title"; // $NON-NLS-1$
     }
@@ -51,6 +52,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
         return JMeterUtils.getResString("duration_assertion_duration_test"); // $NON-NLS-1$
     }
 
+    @Override
     public TestElement createTestElement() {
         DurationAssertion el = new DurationAssertion();
         modifyTestElement(el);
@@ -62,6 +64,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         if (el instanceof DurationAssertion) {

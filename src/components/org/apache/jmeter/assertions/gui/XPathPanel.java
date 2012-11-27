@@ -136,6 +136,7 @@ public class XPathPanel extends JPanel {
         if (checkXPath == null) {
             checkXPath = new JButton(JMeterUtils.getResString("xpath_assertion_button")); //$NON-NLS-1$
             checkXPath.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     validXPath(xpath.getText(), true);
                 }

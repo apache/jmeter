@@ -71,6 +71,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         init();
     }
  
+    @Override
     public String getLabelResource() {
         return "smime_assertion_title";
     }
@@ -110,6 +111,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
             .getResString("smime_assertion_signature"))); // $NON-NLS-1$
         notSigned.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 verifySignature.setEnabled(!notSigned.isSelected());
             }
@@ -137,6 +139,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  
         panel.add(signerCheckConstraints);
         signerCheckConstraints.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 signerDnField.setEnabled(signerCheckConstraints.isSelected());
                 signerSerialNumberField.setEnabled(signerCheckConstraints.isSelected());
@@ -170,6 +173,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  
         // panel.add(signerCheckByFile);
         signerCheckByFile.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 signerCertFile.setEnabled(signerCheckByFile.isSelected());
             }
@@ -216,6 +220,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         messagePositionTf.setText(smimeAssertion.getSpecificMessagePosition());
     }
  
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         SMIMEAssertionTestElement smimeAssertion = (SMIMEAssertionTestElement) el;
@@ -235,6 +240,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         smimeAssertion.setSpecificMessagePosition(messagePositionTf.getText());
     }
  
+    @Override
     public TestElement createTestElement() {
         SMIMEAssertionTestElement smimeAssertion = new SMIMEAssertionTestElement();
         modifyTestElement(smimeAssertion);

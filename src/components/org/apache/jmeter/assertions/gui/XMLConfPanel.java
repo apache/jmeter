@@ -60,6 +60,7 @@ public class XMLConfPanel extends JPanel {
         validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
         tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
         tolerant.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e) {
                 tolerant();
             }

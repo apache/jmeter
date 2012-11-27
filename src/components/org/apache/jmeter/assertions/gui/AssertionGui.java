@@ -120,11 +120,13 @@ public class AssertionGui extends AbstractAssertionGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "assertion_title"; // $NON-NLS-1$
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         ResponseAssertion el = new ResponseAssertion();
         modifyTestElement(el);
@@ -132,6 +134,7 @@ public class AssertionGui extends AbstractAssertionGui {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         if (el instanceof ResponseAssertion) {
@@ -401,6 +404,7 @@ public class AssertionGui extends AbstractAssertionGui {
      *
      */
     private class ClearPatternsListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             int index = stringTable.getSelectedRow();
             if (index > -1) {
@@ -419,6 +423,7 @@ public class AssertionGui extends AbstractAssertionGui {
      *
      */
     private class AddPatternListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             tableModel.addNewRow();
             deletePattern.setEnabled(true);

@@ -43,6 +43,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
     /**
      * Returns the label to be shown within the JTree-Component.
      */
+    @Override
     public String getLabelResource() {
         return "xpath_assertion_title"; //$NON-NLS-1$
     }
@@ -50,6 +51,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
     /**
      * Create test element
      */
+    @Override
     public TestElement createTestElement() {
         XPathAssertion el = new XPathAssertion();
         modifyTestElement(el);
@@ -97,6 +99,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         super.configureTestElement(el);
         if (el instanceof XPathAssertion) {
