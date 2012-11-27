@@ -66,6 +66,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
      * XML, and that the XPath expression is matched (or not, as the case may
      * be)
      */
+    @Override
     public AssertionResult getResult(SampleResult response) {
         // no error as default
         AssertionResult result = new AssertionResult(getName());

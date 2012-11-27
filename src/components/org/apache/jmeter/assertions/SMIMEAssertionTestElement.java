@@ -47,6 +47,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
         super();
     }
 
+    @Override
     public AssertionResult getResult(SampleResult response) {
         try {
             return SMIMEAssertion.getResult(this, response, getName());
