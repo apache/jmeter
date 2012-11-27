@@ -49,6 +49,7 @@ public class TestLoad extends JMeterTestCase {
     }
 
     private static final FilenameFilter jmxFilter = new FilenameFilter() {
+        @Override
         public boolean accept(File dir, String name) {
             return name.endsWith(".jmx");
         }

@@ -72,6 +72,7 @@ public class GenerateTreeGui extends AbstractConfigGui
         init();
     }
 
+    @Override
     public String getLabelResource() {
         new Throwable().printStackTrace();
         return "test_plan"; // $NON-NLS-1$
@@ -94,6 +95,7 @@ public class GenerateTreeGui extends AbstractConfigGui
         return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
     }
 
+    @Override
     public void actionPerformed(ActionEvent action) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
@@ -128,12 +130,14 @@ public class GenerateTreeGui extends AbstractConfigGui
         }
     }
 
+    @Override
     public TestElement createTestElement() {
         TestElement el = new ConfigTestElement();
         modifyTestElement(el);
         return el;
     }
 
+    @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
     }
@@ -205,6 +209,7 @@ public class GenerateTreeGui extends AbstractConfigGui
 
         volatile JMeterTreeNode newNode;
         
+        @Override
         public void run() {
             try {
                 newNode = model.addComponent(testElement, node);

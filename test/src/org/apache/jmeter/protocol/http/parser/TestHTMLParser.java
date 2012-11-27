@@ -279,6 +279,7 @@ public class TestHTMLParser extends JMeterTestCase {
                 // Convert both to Sets
                 expected = new TreeSet<String>(getFile(resultFile)).iterator();
                 TreeSet<URL> temp = new TreeSet<URL>(new Comparator<Object>() {
+                    @Override
                     public int compare(Object o1, Object o2) {
                         return (o1.toString().compareTo(o2.toString()));
                     }
