@@ -83,6 +83,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
              */
             private static final long serialVersionUID = -4036804004190858925L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) { 
                 setVisible(false);
             } 
@@ -119,6 +120,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private void initializeFunctionList() {
         String[] functionNames = CompoundVariable.getFunctionNames();
         Arrays.sort(functionNames, new Comparator<String>() {
+            @Override
             public int compare(String o1, String o2) {
                 return o1.compareToIgnoreCase(o2);
             }
@@ -127,6 +129,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         functionList.addChangeListener(this);
     }
 
+    @Override
     public void stateChanged(ChangeEvent event) {
         try {
             Arguments args = new Arguments();
@@ -148,6 +151,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         StringBuilder functionCall = new StringBuilder("${");
         functionCall.append(functionList.getText());
@@ -171,6 +175,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     }
 
     private class HelpListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             String[] source = new String[] { Help.HELP_FUNCTIONS, functionList.getText() };
             ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help"); //$NON-NLS-1$
@@ -178,6 +183,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         }
     }
 
+    @Override
     public void localeChanged(LocaleChangeEvent event) {
         setTitle(JMeterUtils.getResString("function_helper_title"));
         this.getContentPane().removeAll(); // so we can add them again in init

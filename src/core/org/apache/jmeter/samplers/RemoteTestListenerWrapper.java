@@ -45,6 +45,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         listener = l;
     }
 
+    @Override
     public void testStarted() {
         try {
             listener.testStarted();
@@ -54,6 +55,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
 
     }
 
+    @Override
     public void testEnded() {
         try {
             listener.testEnded();
@@ -62,6 +64,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         }
     }
 
+    @Override
     public void testStarted(String host) {
         try {
             listener.testStarted(host);
@@ -70,6 +73,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         }
     }
 
+    @Override
     public void testEnded(String host) {
         try {
             listener.testEnded(host);

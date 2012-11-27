@@ -44,6 +44,7 @@ public class FunctionProperty extends AbstractProperty {
         super();
     }
 
+    @Override
     public void setObjectValue(Object v) {
         if (v instanceof CompoundVariable && !isRunningVersion()) {
             function = (CompoundVariable) v;
@@ -78,6 +79,7 @@ public class FunctionProperty extends AbstractProperty {
      *
      * @see JMeterProperty#getStringValue()
      */
+    @Override
     public String getStringValue() {
         JMeterContext ctx = JMeterContextService.getContext();// Expensive, so
                                                                 // do
@@ -105,6 +107,7 @@ public class FunctionProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getObjectValue()
      */
+    @Override
     public Object getObjectValue() {
         return function;
     }
@@ -121,6 +124,7 @@ public class FunctionProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         cacheValue = null;
     }

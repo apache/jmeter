@@ -43,6 +43,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         TestFragmentController controller = new TestFragmentController();
         modifyTestElement(controller);
@@ -52,10 +53,12 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement controller) {
         configureTestElement(controller);
     }
 
+    @Override
     public String getLabelResource() {
         return "test_fragment_title"; // $NON-NLS-1$
     }

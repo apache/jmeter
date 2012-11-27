@@ -187,9 +187,11 @@ public class JDateField extends JTextField {
         FocusClass() {
         }
 
+        @Override
         public void focusGained(FocusEvent e) {
         }
 
+        @Override
         public void focusLost(FocusEvent e) {
             try {
                 dateFormat.parse(getText());

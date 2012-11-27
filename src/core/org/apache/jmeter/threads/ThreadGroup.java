@@ -361,6 +361,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     /**
      * Called by JMeterThread when it finishes
      */
+    @Override
     public void threadFinished(JMeterThread thread) {
         log.debug("Ending thread " + thread.getThreadName());
         allThreads.remove(thread);
@@ -526,6 +527,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             
         }
         
+        @Override
         public void run() {
             // Copy in ThreadStarter thread context from calling Thread
             JMeterContextService.getContext().setVariables(this.context.getVariables());

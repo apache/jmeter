@@ -61,6 +61,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStringValue() {
         return Double.toString(value);
     }
@@ -68,6 +69,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getObjectValue() {
         return Double.valueOf(value);
     }
@@ -134,6 +136,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;
     }

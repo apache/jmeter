@@ -53,24 +53,28 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
         }
     }
 
+    @Override
     public void testStarted() {
         if (testListener != null) {
             testListener.testStarted();
         }
     }
 
+    @Override
     public void testStarted(String host) {
         if (testListener != null) {
             testListener.testStarted(host);
         }
     }
 
+    @Override
     public void testEnded() {
         if (testListener != null) {
             testListener.testEnded();
         }
     }
 
+    @Override
     public void testEnded(String host) {
         if (testListener != null) {
             testListener.testEnded(host);
@@ -85,6 +89,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
      * @param samples
      *            the list of sample events to be fired locally
      */
+    @Override
     public void processBatch(List<SampleEvent> samples) {
         if (samples != null && sampleListener != null) {
             for (SampleEvent e : samples) {
@@ -93,6 +98,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
         }
     }
 
+    @Override
     public void sampleOccurred(SampleEvent e) {
         if (sampleListener != null) {
             sampleListener.sampleOccurred(e);
@@ -102,6 +108,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
     /**
      * A sample has started.
      */
+    @Override
     public void sampleStarted(SampleEvent e) {
         if (sampleListener != null) {
             sampleListener.sampleStarted(e);
@@ -111,6 +118,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
     /**
      * A sample has stopped.
      */
+    @Override
     public void sampleStopped(SampleEvent e) {
         if (sampleListener != null) {
             sampleListener.sampleStopped(e);

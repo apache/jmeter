@@ -90,6 +90,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     			clientConfiguredCapacity : serverConfiguredCapacity;
     }
     
+    @Override
     public void testEnded(String host) {
         log.debug("Test Ended on " + host);
         try {
@@ -103,6 +104,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
         }
     }
 
+    @Override
     public void sampleOccurred(SampleEvent e) {
         try {
             if (!queue.offer(e)){ // we failed to add the element first time

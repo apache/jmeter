@@ -62,11 +62,13 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         log.info("Using DataStrippingSampleSender for this run");
     }
 
+    @Override
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
         if(decoratedSender != null) decoratedSender.testEnded(host);
     }
 
+    @Override
     public void sampleOccurred(SampleEvent event) {
         //Strip the response data before writing, but only for a successful request.
         SampleResult result = event.getResult();

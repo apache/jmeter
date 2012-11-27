@@ -37,6 +37,7 @@ public class SummariserGui extends AbstractListenerGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "summariser_title"; //$NON-NLS-1$
     }
@@ -49,6 +50,7 @@ public class SummariserGui extends AbstractListenerGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         Summariser summariser = new Summariser();
         modifyTestElement(summariser);
@@ -60,6 +62,7 @@ public class SummariserGui extends AbstractListenerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement summariser) {
         super.configureTestElement(summariser);
     }

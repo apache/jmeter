@@ -77,11 +77,13 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     private final AtomicInteger numberOfThreads = new AtomicInteger(0); // Number of active threads in this group
 
     /** {@inheritDoc} */
+    @Override
     public boolean isDone() {
         return getSamplerController().isDone();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Sampler next() {
         return getSamplerController().next();
     }
@@ -120,6 +122,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     /**
      * {@inheritDoc}
      */
+    @Override
     public final boolean addTestElementOnce(TestElement child){
         if (children.putIfAbsent(child, DUMMY) == null) {
             addTestElement(child);
@@ -129,16 +132,19 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addIterationListener(LoopIterationListener lis) {
         getSamplerController().addIterationListener(lis);
     }
     
     /** {@inheritDoc} */
+    @Override
     public void removeIterationListener(LoopIterationListener iterationListener) {
         getSamplerController().removeIterationListener(iterationListener);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void initialize() {
         Controller c = getSamplerController();
         JMeterProperty property = c.getProperty(TestElement.NAME);
@@ -157,6 +163,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     /**
      * NOOP
      */
+    @Override
     public void triggerEndOfLoop() {
         // NOOP
     }

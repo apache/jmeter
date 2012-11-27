@@ -39,6 +39,7 @@ public abstract class AbstractFunction implements Function {
      * </b></p>
      * @see Function#execute(SampleResult, Sampler)
      */
+    @Override
     abstract public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException;
 
     public String execute() throws InvalidVariableException {
@@ -60,11 +61,13 @@ public abstract class AbstractFunction implements Function {
      * Note: This is always called even if no parameters are provided
      * (versions of JMeter after 2.3.1)
      */
+    @Override
     abstract public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException;
 
     /**
      * @see Function#getReferenceKey()
      */
+    @Override
     abstract public String getReferenceKey();
 
     /**

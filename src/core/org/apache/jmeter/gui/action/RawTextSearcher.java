@@ -48,7 +48,8 @@ public class RawTextSearcher implements Searcher {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean search(List<String> textTokens) {
+	@Override
+    public boolean search(List<String> textTokens) {
 		boolean result = false;
 		for (String searchableToken : textTokens) {
 			if(!StringUtils.isEmpty(searchableToken)) {

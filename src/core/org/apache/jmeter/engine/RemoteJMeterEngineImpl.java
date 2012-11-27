@@ -136,6 +136,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
      */
+    @Override
     public void rconfigure(HashTree testTree, String host, File jmxBase, String scriptName) throws RemoteException {
         log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
         synchronized(LOCK) { // close window where another remote client might jump in
@@ -151,12 +152,14 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         FileServer.getFileServer().setBase(jmxBase);
     }
 
+    @Override
     public void rrunTest() throws RemoteException, JMeterEngineException, IllegalStateException {
         log.info("Running test");
         checkOwner("runTest");
         backingEngine.runTest();
     }
 
+    @Override
     public void rreset() throws RemoteException, IllegalStateException {
         // Mail on userlist reported NPE here - looks like only happens if there are network errors, but check anyway
         if (backingEngine != null) {
@@ -168,6 +171,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         }
     }
 
+    @Override
     public void rstopTest(boolean now) throws RemoteException {
         if (now) {
             log.info("Stopping test ...");
@@ -182,6 +186,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      * Called by:
      * - ClientJMeterEngine.exe() which is called on remoteStop 
      */
+    @Override
     public void rexit() throws RemoteException {
         log.info("Exitting");
         backingEngine.exit();
@@ -197,6 +202,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         JMeterUtils.helpGC();
     }
 
+    @Override
     public void rsetProperties(Properties p) throws RemoteException, IllegalStateException {
         checkOwner("setProperties");
         if(remotelySetProperties != null) {

@@ -86,6 +86,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
      *
      * @return a JPopupMenu appropriate for the component.
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
@@ -104,6 +105,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         TestPlan tp = new TestPlan();
         modifyTestElement(tp);
@@ -111,6 +113,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement plan) {
         super.configureTestElement(plan);
         if (plan instanceof TestPlan) {
@@ -123,6 +126,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         }
     }
 
+    @Override
     public String getLabelResource() {
         return "test_plan"; // $NON-NLS-1$
     }
@@ -135,6 +139,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection<String> getMenuCategories() {
         return null;
     }

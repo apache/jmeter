@@ -59,6 +59,7 @@ public class TreeCloner implements HashTreeTraverser {
      * @param node
      * @param subTree {@link HashTree}
      */
+    @Override
     public final void addNode(Object node, HashTree subTree) {
         node = addNodeToTree(node);
         addLast(node);
@@ -89,6 +90,7 @@ public class TreeCloner implements HashTreeTraverser {
         objects.addLast(node);
     }
 
+    @Override
     public void subtractNode() {
         objects.removeLast();
     }
@@ -97,6 +99,7 @@ public class TreeCloner implements HashTreeTraverser {
         return newTree;
     }
 
+    @Override
     public void processPath() {
     }
 

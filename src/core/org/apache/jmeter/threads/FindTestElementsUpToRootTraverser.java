@@ -55,6 +55,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addNode(Object node, HashTree subTree) {
         if(stopRecording) {
             return;
@@ -66,6 +67,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void subtractNode() {
         if(stopRecording) {
             return;
@@ -77,6 +79,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void processPath() {
         //NOOP
     }

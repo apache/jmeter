@@ -94,6 +94,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
              */
             private static final long serialVersionUID = -6543764044868772971L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) { 
                 setVisible(false);
             } 
@@ -105,6 +106,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
              */
             private static final long serialVersionUID = -3661361497864527363L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) { 
                 doSearch(actionEvent);
             } 
@@ -161,6 +163,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
      * Do search
      * @param e {@link ActionEvent}
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
     	if(e.getSource()==cancelButton) {
     	    searchTF.requestFocusInWindow();

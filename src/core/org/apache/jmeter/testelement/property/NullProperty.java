@@ -40,6 +40,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getStringValue()
      */
+    @Override
     public String getStringValue() {
         if (tempValue != null) {
             return tempValue.getStringValue();
@@ -47,6 +48,7 @@ public final class NullProperty extends AbstractProperty {
         return "";
     }
 
+    @Override
     public void setObjectValue(Object v) {
         // NOOP
     }
@@ -54,6 +56,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getObjectValue()
      */
+    @Override
     public Object getObjectValue() {
         return null;
     }
@@ -129,6 +132,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         tempValue = null;
     }

@@ -37,6 +37,7 @@ public abstract class AbstractPostProcessorGui extends AbstractScopedJMeterGuiCo
 
     private static final long serialVersionUID = 240L;
 
+    @Override
     public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.POST_PROCESSORS });
     }

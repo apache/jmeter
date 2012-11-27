@@ -38,6 +38,7 @@ public class LogicControllerGui extends AbstractControllerGui {
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         GenericController lc = new GenericController();
         configureTestElement(lc);
@@ -45,10 +46,12 @@ public class LogicControllerGui extends AbstractControllerGui {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
     }
 
+    @Override
     public String getLabelResource() {
         return "logic_controller_title"; // $NON-NLS-1$
     }

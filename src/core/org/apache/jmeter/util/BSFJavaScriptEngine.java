@@ -60,6 +60,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
      * passed to the extension, which may be either
      * Vectors of Nodes, or Strings.
      */
+    @Override
     public Object call(Object object, String method, Object[] args)
         throws BSFException {
 
@@ -120,6 +121,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
      * This is used by an application to evaluate a string containing
      * some expression.
      */
+    @Override
     public Object eval(String source, int lineNo, int columnNo, Object oscript)
         throws BSFException {
 

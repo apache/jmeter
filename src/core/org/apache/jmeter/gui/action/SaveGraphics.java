@@ -66,10 +66,12 @@ public class SaveGraphics implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
         if (!commands.contains(e.getActionCommand())) {
             throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());

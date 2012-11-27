@@ -80,6 +80,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         initGui();
     }
 
+    @Override
     public TestElement createTestElement() {
         ThreadGroup tg = new ThreadGroup();
         modifyTestElement(tg);
@@ -91,6 +92,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement tg) {
         super.configureTestElement(tg);
         if (tg instanceof ThreadGroup) {
@@ -139,6 +141,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
     }
 
+    @Override
     public void itemStateChanged(ItemEvent ie) {
         if (ie.getItem().equals(scheduler)) {
             if (scheduler.isSelected()) {
@@ -214,6 +217,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         return panel;
     }
 
+    @Override
     public String getLabelResource() {
         return "threadgroup"; // $NON-NLS-1$
     }

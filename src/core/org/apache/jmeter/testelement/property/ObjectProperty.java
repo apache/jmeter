@@ -33,6 +33,7 @@ public class ObjectProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
             value = savedValue;
@@ -85,6 +86,7 @@ public class ObjectProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStringValue() {
         return value.toString();
     }
@@ -92,6 +94,7 @@ public class ObjectProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getObjectValue() {
         return value;
     }
@@ -99,6 +102,7 @@ public class ObjectProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setObjectValue(Object value) {
         this.value = value;
 

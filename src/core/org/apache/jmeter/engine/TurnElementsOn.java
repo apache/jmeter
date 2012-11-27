@@ -31,6 +31,7 @@ public class TurnElementsOn implements HashTreeTraverser {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addNode(Object node, HashTree subTree) {
         if (node instanceof TestElement && !(node instanceof TestPlan)) {
             ((TestElement) node).setRunningVersion(true);
@@ -41,12 +42,14 @@ public class TurnElementsOn implements HashTreeTraverser {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void subtractNode() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void processPath() {
     }
 

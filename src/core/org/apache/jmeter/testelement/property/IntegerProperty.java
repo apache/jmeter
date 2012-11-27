@@ -47,6 +47,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;
     }
@@ -82,6 +83,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getStringValue()
      */
+    @Override
     public String getStringValue() {
         return Integer.toString(value);
     }
@@ -89,6 +91,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getObjectValue()
      */
+    @Override
     public Object getObjectValue() {
         return Integer.valueOf(value);
     }

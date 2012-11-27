@@ -47,6 +47,7 @@ public abstract class AbstractAssertionGui extends AbstractScopedJMeterGuiCompon
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.ASSERTIONS });
     }

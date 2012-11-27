@@ -174,6 +174,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void localeChanged(LocaleChangeEvent event) {
         this.removeAll();
         setupToolbarContent(this);

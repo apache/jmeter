@@ -131,6 +131,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(ACTION_BROWSE)) {
             JFileChooser chooser;

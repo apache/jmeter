@@ -34,12 +34,14 @@ public abstract class AbstractAction implements Command {
     /**
      * @see Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
     }
 
     /**
      * @see Command#getActionNames()
      */
+    @Override
     abstract public Set<String> getActionNames();
 
     /**

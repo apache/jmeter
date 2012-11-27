@@ -30,6 +30,7 @@ abstract class AbstractTransformer implements ValueTransformer {
     private Map<String, String> variables;
 
     /** {@inheritDoc} */
+    @Override
     public void setMasterFunction(CompoundVariable variable) {
         masterFunction = variable;
     }
@@ -43,6 +44,7 @@ abstract class AbstractTransformer implements ValueTransformer {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setVariables(Map<String, String> map) {
         variables = map;
     }

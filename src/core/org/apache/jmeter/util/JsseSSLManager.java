@@ -120,6 +120,7 @@ public class JsseSSLManager extends SSLManager {
 
             HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this));
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
                 }
@@ -321,6 +322,7 @@ public class JsseSSLManager extends SSLManager {
          * 
          * @return the array of aliases; may be empty
          */
+        @Override
         public String[] getClientAliases(String keyType, Principal[] issuers) {
             log.debug("WrappedX509Manager: getClientAliases: ");
             // implementation moved to JmeterKeystore as only that has the keyType info
@@ -338,6 +340,7 @@ public class JsseSSLManager extends SSLManager {
          *            the CA certificates we are narrowing our selection on.
          * @return the ServerAliases value
          */
+        @Override
         public String[] getServerAliases(String keyType, Principal[] issuers) {
             log.debug("WrappedX509Manager: getServerAliases: ");
             return this.manager.getServerAliases(keyType, issuers);
@@ -350,6 +353,7 @@ public class JsseSSLManager extends SSLManager {
          *            The client alias
          * @return The CertificateChain value
          */
+        @Override
         public X509Certificate[] getCertificateChain(String alias) {
             log.debug("WrappedX509Manager: getCertificateChain(" + alias + ")");
             return this.store.getCertificateChain(alias);
@@ -362,6 +366,7 @@ public class JsseSSLManager extends SSLManager {
          *            The client alias
          * @return The PrivateKey value
          */
+        @Override
         public PrivateKey getPrivateKey(String alias) {
             PrivateKey privateKey = this.store.getPrivateKey(alias);
             log.debug("WrappedX509Manager: getPrivateKey: " + privateKey);
@@ -386,6 +391,7 @@ public class JsseSSLManager extends SSLManager {
          * 
          * @see javax.net.ssl.X509KeyManager#chooseClientAlias(String[], Principal[], Socket)
          */
+        @Override
         public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
             log.debug("keyType: " + keyType[0]);
             String alias = this.store.getAlias();
@@ -401,6 +407,7 @@ public class JsseSSLManager extends SSLManager {
          *
          * @see javax.net.ssl.X509KeyManager#chooseServerAlias(String, Principal[], Socket)
          */
+        @Override
         public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
             return this.manager.chooseServerAlias(arg0, arg1, arg2);
         }

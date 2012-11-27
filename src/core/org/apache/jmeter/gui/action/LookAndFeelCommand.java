@@ -132,6 +132,7 @@ public class LookAndFeelCommand implements Command {
     public LookAndFeelCommand() {
     }
 
+    @Override
     public void doAction(ActionEvent ev) {
         try {
             String className = ev.getActionCommand().substring(ActionNames.LAF_PREFIX.length()).replace('/', '.');
@@ -149,6 +150,7 @@ public class LookAndFeelCommand implements Command {
         }
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

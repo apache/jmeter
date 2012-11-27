@@ -28,6 +28,7 @@ public abstract class AbstractSampler extends AbstractTestElement implements Sam
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean applies(ConfigTestElement configElement) {
         return true;
     }

@@ -54,6 +54,7 @@ public class AddToTree implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commandSet;
     }
@@ -61,6 +62,7 @@ public class AddToTree implements Command {
     /**
      * Adds the specified class to the current node of the tree.
      */
+    @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         try {

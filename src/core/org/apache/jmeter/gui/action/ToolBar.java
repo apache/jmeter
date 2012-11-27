@@ -47,6 +47,7 @@ public class ToolBar implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
@@ -57,6 +58,7 @@ public class ToolBar implements Command {
      * @param e
      *            the generic UI action event
      */
+    @Override
     public void doAction(ActionEvent e) {
         if (ActionNames.TOOLBAR.equals(e.getActionCommand())) {
             GuiPackage guiInstance = GuiPackage.getInstance();

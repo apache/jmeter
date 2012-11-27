@@ -45,6 +45,7 @@ public class RemoteSampleListenerWrapper extends AbstractTestElement implements 
     public RemoteSampleListenerWrapper() {
     }
 
+    @Override
     public void sampleOccurred(SampleEvent e) {
         try {
             listener.sampleOccurred(e);
@@ -53,6 +54,7 @@ public class RemoteSampleListenerWrapper extends AbstractTestElement implements 
         }
     }
 
+    @Override
     public void sampleStarted(SampleEvent e) {
         try {
             listener.sampleStarted(e);
@@ -61,6 +63,7 @@ public class RemoteSampleListenerWrapper extends AbstractTestElement implements 
         }
     }
 
+    @Override
     public void sampleStopped(SampleEvent e) {
         try {
             listener.sampleStopped(e);

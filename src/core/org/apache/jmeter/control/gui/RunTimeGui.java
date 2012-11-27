@@ -97,6 +97,7 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         RunTime lc = new RunTime();
         modifyTestElement(lc);
@@ -104,6 +105,7 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement lc) {
         configureTestElement(lc);
         if (lc instanceof RunTime) {
@@ -132,10 +134,12 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
      * @param event
      *            the event that has occurred
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         seconds.setEnabled(true);
     }
 
+    @Override
     public String getLabelResource() {
         return "runtime_controller_title"; // $NON-NLS-1$
     }

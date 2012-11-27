@@ -56,6 +56,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         sender = null;
     }
 
+    @Override
     public void testStarted() {
         log.debug("Test Started()");
         try {
@@ -72,10 +73,12 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
 
     }
 
+    @Override
     public void testEnded() {
         sender.testEnded();
     }
 
+    @Override
     public void testStarted(String host) {
         log.debug("Test Started on " + host);
         try {
@@ -91,10 +94,12 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         }
     }
 
+    @Override
     public void testEnded(String host) {
         sender.testEnded(host);
     }
 
+    @Override
     public void sampleOccurred(SampleEvent e) {
         sender.sampleOccurred(e);
     }
@@ -107,6 +112,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
     // in the right order. Each stored event must then be tagged with something
     // that lets you distinguish between occured, started and ended.
 
+    @Override
     public void sampleStarted(SampleEvent e) {
         log.debug("Sample started");
         try {
@@ -116,6 +122,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         }
     }
 
+    @Override
     public void sampleStopped(SampleEvent e) {
         log.debug("Sample stopped");
         try {

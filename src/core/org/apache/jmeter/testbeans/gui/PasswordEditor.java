@@ -109,6 +109,7 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
     /**
      * {@inheritDoc}
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         firePropertyChange();
     }
@@ -116,12 +117,14 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
     /**
      * {@inheritDoc}
      */
+    @Override
     public void focusGained(FocusEvent e) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void focusLost(FocusEvent e) {
         firePropertyChange();
     }

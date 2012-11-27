@@ -575,6 +575,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void localeChanged(LocaleChangeEvent event) {
         updateMenuElement(fileMenu);
         updateMenuElement(editMenu);
