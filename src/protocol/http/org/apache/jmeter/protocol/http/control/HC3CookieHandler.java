@@ -106,6 +106,7 @@ public class HC3CookieHandler implements CookieHandler {
      *            URL of the request to which the returned header will be added.
      * @return the value string for the cookie header (goes after "Cookie: ").
      */
+    @Override
     public String getCookieHeaderForURL(
     		CollectionProperty cookiesCP,
     		URL url,
@@ -130,6 +131,7 @@ public class HC3CookieHandler implements CookieHandler {
 	/**
 	 * {@inheritDoc}
 	 */
+    @Override
     public void addCookieFromHeader(CookieManager cookieManager,
     		boolean checkCookies,String cookieHeader, URL url){
         boolean debugEnabled = log.isDebugEnabled();

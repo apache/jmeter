@@ -121,6 +121,7 @@ public class LogFilter implements Filter, Serializable {
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#setReplaceExtension(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public void setReplaceExtension(String oldext, String newext) {
         if (oldext != null && newext != null) {
             this.CHANGEEXT = true;
@@ -140,6 +141,7 @@ public class LogFilter implements Filter, Serializable {
      * @param filenames
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includeFiles(java.lang.String[])
      */
+    @Override
     public void includeFiles(String[] filenames) {
         if (filenames != null && filenames.length > 0) {
             INCFILE = filenames;
@@ -153,6 +155,7 @@ public class LogFilter implements Filter, Serializable {
      * @param filenames
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludeFiles(java.lang.String[])
      */
+    @Override
     public void excludeFiles(String[] filenames) {
         if (filenames != null && filenames.length > 0) {
             EXCFILE = filenames;
@@ -168,6 +171,7 @@ public class LogFilter implements Filter, Serializable {
      * @param regexp
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includePattern(String[])
      */
+    @Override
     public void includePattern(String[] regexp) {
         if (regexp != null && regexp.length > 0) {
             INCPTRN = regexp;
@@ -189,6 +193,7 @@ public class LogFilter implements Filter, Serializable {
      *
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludePattern(String[])
      */
+    @Override
     public void excludePattern(String[] regexp) {
         if (regexp != null && regexp.length > 0) {
             EXCPTRN = regexp;
@@ -214,6 +219,7 @@ public class LogFilter implements Filter, Serializable {
      * @param path
      * @return boolean
      */
+    @Override
     public boolean isFiltered(String path,TestElement el) {
         // we do a quick check to see if any
         // filters are set. If not we just
@@ -387,6 +393,7 @@ public class LogFilter implements Filter, Serializable {
      *
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#filter(java.lang.String)
      */
+    @Override
     public String filter(String text) {
         if (this.CHANGEEXT) {
             if (replaceExtension(text)) {
@@ -420,6 +427,7 @@ public class LogFilter implements Filter, Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reset() {
 
     }

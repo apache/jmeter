@@ -53,6 +53,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     /**
      * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#getManagedContentTypes()
      */
+    @Override
     public String[] getManagedContentTypes() {
         return new String[0];
     }
@@ -61,6 +62,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * 
      * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#createSampler(org.apache.jmeter.protocol.http.proxy.HttpRequestHdr, java.util.Map, java.util.Map)
      */
+    @Override
     public HTTPSamplerBase createSampler(HttpRequestHdr request,
             Map<String, String> pageEncodings, Map<String, String> formEncodings) {
         // Instantiate the sampler
@@ -81,6 +83,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     /**
      * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#populateSampler(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase, org.apache.jmeter.protocol.http.proxy.HttpRequestHdr, java.util.Map, java.util.Map)
      */
+    @Override
     public final void populateSampler(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings) throws Exception{

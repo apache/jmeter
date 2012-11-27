@@ -648,6 +648,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean interrupt() {
         HttpURLConnection conn = savedConn;
         if (conn != null) {

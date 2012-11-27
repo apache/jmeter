@@ -174,10 +174,12 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
             postedBody.append("Filename: ").append(xmlFile).append("\n");
             postedBody.append("<actual file content, not shown here>");
             post.setRequestEntity(new RequestEntity() {
+                @Override
                 public boolean isRepeatable() {
                     return true;
                 }
 
+                @Override
                 public void writeRequest(OutputStream out) throws IOException {
                     InputStream in = null;
                     try{
@@ -189,6 +191,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
                     }
                 }
 
+                @Override
                 public long getContentLength() {
                     switch(length){
                         case -1:
@@ -200,6 +203,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
                         }
                 }
 
+                @Override
                 public String getContentType() {
                     // TODO do we need to add a charset for the file contents?
                     return DEFAULT_CONTENT_TYPE; // $NON-NLS-1$
@@ -208,16 +212,19 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         } else {
             postedBody.append(getXmlData());
             post.setRequestEntity(new RequestEntity() {
+                @Override
                 public boolean isRepeatable() {
                     return true;
                 }
 
+                @Override
                 public void writeRequest(OutputStream out) throws IOException {
                     // charset must agree with content-type below
                     IOUtils.write(getXmlData(), out, ENCODING); // $NON-NLS-1$
                     out.flush();
                 }
 
+                @Override
                 public long getContentLength() {
                     try {
                         return getXmlData().getBytes(ENCODING).length; // so we don't generate chunked encoding
@@ -227,6 +234,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
                     }
                 }
 
+                @Override
                 public String getContentType() {
                     return DEFAULT_CONTENT_TYPE+"; charset="+ENCODING; // $NON-NLS-1$
                 }

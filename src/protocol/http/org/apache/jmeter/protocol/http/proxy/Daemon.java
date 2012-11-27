@@ -152,6 +152,7 @@ public class Daemon extends Thread implements Stoppable {
      *
      * see #ACCEPT_TIMEOUT
      */
+    @Override
     public void stopServer() {
         running = false;
     }

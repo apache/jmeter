@@ -42,16 +42,19 @@ public class LoopbackHttpClientSocketFactory implements ProtocolSocketFactory {
         super();
     }
 
+    @Override
     public Socket createSocket(String host, int port, InetAddress clientHost,
             int clientPort) throws IOException, UnknownHostException {
         return new LoopbackHTTPSocket(host,port,clientHost,clientPort);
     }
 
+    @Override
     public Socket createSocket(String host, int port) throws IOException,
             UnknownHostException {
         return new LoopbackHTTPSocket(host,port);
     }
 
+    @Override
     public Socket createSocket(String host, int port, InetAddress localAddress, int localPort,
             HttpConnectionParams params)
     throws IOException, UnknownHostException, ConnectTimeoutException {
@@ -77,6 +80,7 @@ public class LoopbackHttpClientSocketFactory implements ProtocolSocketFactory {
 
         // Now allow the URL handling to work.
         URLStreamHandlerFactory ushf = new URLStreamHandlerFactory(){
+            @Override
             public URLStreamHandler createURLStreamHandler(String protocol) {
                 if (protocol.equalsIgnoreCase(LOOPBACK)){
                     return new URLStreamHandler(){

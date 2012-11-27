@@ -61,6 +61,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
     /**
      * Modifies an Entry object based on HTML response text.
      */
+    @Override
     public void process() {
         JMeterContext context = getThreadContext();
         Sampler sam = context.getCurrentSampler();

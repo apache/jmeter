@@ -405,18 +405,23 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         };
     }
 
+    @Override
     public void testStarted() {
     }
 
+    @Override
     public void testEnded() {
     }
 
+    @Override
     public void testStarted(String host) {
     }
 
+    @Override
     public void testEnded(String host) {
     }
 
+    @Override
     public void testIterationStart(LoopIterationEvent event) {
         if (getClearEachIteration()) {
             clearCache();

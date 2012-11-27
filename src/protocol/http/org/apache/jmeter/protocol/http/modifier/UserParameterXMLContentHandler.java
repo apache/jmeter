@@ -59,21 +59,27 @@ public class UserParameterXMLContentHandler implements ContentHandler {
     /*-------------------------------------------------------------------------
      * Methods implemented from org.xml.sax.ContentHandler
      *----------------------------------------------------------------------- */
+    @Override
     public void setDocumentLocator(Locator locator) {
     }
 
+    @Override
     public void startDocument() throws SAXException {
     }
 
+    @Override
     public void endDocument() throws SAXException {
     }
 
+    @Override
     public void startPrefixMapping(String prefix, String uri) throws SAXException {
     }
 
+    @Override
     public void endPrefixMapping(String prefix) throws SAXException {
     }
 
+    @Override
     public void startElement(String namespaceURL, String localName, String qName, Attributes atts) throws SAXException {
 
         contents.reset();
@@ -93,6 +99,7 @@ public class UserParameterXMLContentHandler implements ContentHandler {
 
     }
 
+    @Override
     public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
         if (qName.equals("paramname")) {
             paramname = contents.toString();
@@ -108,16 +115,20 @@ public class UserParameterXMLContentHandler implements ContentHandler {
         }
     }
 
+    @Override
     public void characters(char ch[], int start, int length) throws SAXException {
         contents.write(ch, start, length);
     }
 
+    @Override
     public void ignorableWhitespace(char ch[], int start, int length) throws SAXException {
     }
 
+    @Override
     public void processingInstruction(String target, String date) throws SAXException {
     }
 
+    @Override
     public void skippedEntity(String name) throws SAXException {
     }
 

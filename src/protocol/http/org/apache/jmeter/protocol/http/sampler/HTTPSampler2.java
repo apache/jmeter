@@ -42,6 +42,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         hc = new HTTPHC3Impl(this);
     }
 
+    @Override
     public boolean interrupt() {
         return hc.interrupt();
     }

@@ -31,18 +31,21 @@ import org.xml.sax.SAXParseException;
 public class UserParameterXMLErrorHandler implements ErrorHandler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    @Override
     public void warning(SAXParseException exception) throws SAXException {
         log.warn("**Parsing Warning**\n" + "  line:    " + exception.getLineNumber() + "\n" + "  URI:    :"
                 + exception.getSystemId() + "\n" + "  Message: " + exception.getMessage());
         throw new SAXException("Warning encountered");
     }
 
+    @Override
     public void error(SAXParseException exception) throws SAXException {
         log.error("**Parsing Warning**\n" + "  line:    " + exception.getLineNumber() + "\n" + "  URI:    :"
                 + exception.getSystemId() + "\n" + "  Message: " + exception.getMessage());
         throw new SAXException("Error encountered");
     }
 
+    @Override
     public void fatalError(SAXParseException exception) throws SAXException {
         log.error("**Parsing Warning**\n" + "  line:    " + exception.getLineNumber() + "\n" + "  URI:    :"
                 + exception.getSystemId() + "\n" + "  Message: " + exception.getMessage());

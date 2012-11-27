@@ -116,6 +116,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
     }
 
 
+    @Override
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
 
