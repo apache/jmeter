@@ -131,6 +131,7 @@ public abstract class AbstractVisualizer
         // errorLogging and successOnlyLogging are mutually exclusive
         errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only")); // $NON-NLS-1$
         errorLogging.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (errorLogging.isSelected()) {
                     successOnlyLogging.setSelected(false);
@@ -139,6 +140,7 @@ public abstract class AbstractVisualizer
         });
         successOnlyLogging = new JCheckBox(JMeterUtils.getResString("log_success_only")); // $NON-NLS-1$
         successOnlyLogging.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (successOnlyLogging.isSelected()) {
                     errorLogging.setSelected(false);
@@ -147,6 +149,7 @@ public abstract class AbstractVisualizer
         });
         JButton saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
         saveConfigButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 SavePropertyDialog d = new SavePropertyDialog(
                         GuiPackage.getInstance().getMainFrame(),
@@ -167,6 +170,7 @@ public abstract class AbstractVisualizer
 
     }
 
+    @Override
     public boolean isStats() {
         return isStats;
     }
@@ -246,6 +250,7 @@ public abstract class AbstractVisualizer
      * @param e
      *            the event that has occurred
      */
+    @Override
     public void stateChanged(ChangeEvent e) {
         log.debug("getting new collector");
         collector = (ResultCollector) createTestElement();
@@ -253,6 +258,7 @@ public abstract class AbstractVisualizer
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         if (collector == null) {
             collector = new ResultCollector();
@@ -262,6 +268,7 @@ public abstract class AbstractVisualizer
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement c) {
         configureTestElement((AbstractListenerElement) c);
         if (c instanceof ResultCollector) {

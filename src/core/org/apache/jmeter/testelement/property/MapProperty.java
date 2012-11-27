@@ -62,6 +62,7 @@ public class MapProperty extends MultiProperty {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setObjectValue(Object v) {
         if (v instanceof Map<?, ?>) {
             setMap((Map<?, ?>) v);
@@ -93,11 +94,13 @@ public class MapProperty extends MultiProperty {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getStringValue() {
         return value.toString();
     }
 
     /** {@inheritDoc} */
+    @Override
     public Object getObjectValue() {
         return value;
     }
@@ -141,6 +144,7 @@ public class MapProperty extends MultiProperty {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
             value = savedValue;

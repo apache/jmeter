@@ -30,10 +30,12 @@ public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent
 
     private static final long serialVersionUID = 240L;
 
+    @Override
     public JPopupMenu createPopupMenu() {
         return MenuFactory.getDefaultExtractorMenu();
     }
 
+    @Override
     public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.PRE_PROCESSORS });
     }

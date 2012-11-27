@@ -50,6 +50,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
      *
      * @return a JPopupMenu appropriate for the component.
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         return MenuFactory.getDefaultAssertionMenu();
     }

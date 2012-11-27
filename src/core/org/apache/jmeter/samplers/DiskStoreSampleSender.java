@@ -67,9 +67,11 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
         log.info("Using DiskStoreSampleSender for this test run"); // client log file
     }
 
+    @Override
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
         singleExecutor.submit(new Runnable(){
+            @Override
             public void run() {
                 try {
                     oos.close(); // ensure output is flushed
@@ -122,10 +124,12 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
         }
     }
 
+    @Override
     public void sampleOccurred(final SampleEvent e) {
         // sampleOccurred is called from multiple threads; not safe to write from multiple threads.
         // also decouples the file IO from sample generation
         singleExecutor.submit(new Runnable() {
+                @Override
                 public void run() {
                     try {
                         oos.writeObject(e);
@@ -150,6 +154,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             temporaryFile = File.createTempFile("SerialisedSampleSender", ".ser");
             temporaryFile.deleteOnExit();
             singleExecutor.submit(new Runnable(){
+                @Override
                 public void run() {
                     OutputStream anOutputStream;
                     try {

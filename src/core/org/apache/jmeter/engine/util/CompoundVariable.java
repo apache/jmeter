@@ -132,6 +132,7 @@ public class CompoundVariable implements Function {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) {
         if (compiledComponents == null || compiledComponents.size() == 0) {
             return ""; // $NON-NLS-1$
@@ -172,6 +173,7 @@ public class CompoundVariable implements Function {
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getArgumentDesc() {
         return new LinkedList<String>();
     }
@@ -223,11 +225,13 @@ public class CompoundVariable implements Function {
     // Dummy methods needed by Function interface
 
     /** {@inheritDoc} */
+    @Override
     public String getReferenceKey() {
         return ""; // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
     }
 }

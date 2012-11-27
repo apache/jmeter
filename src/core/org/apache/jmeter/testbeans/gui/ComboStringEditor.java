@@ -163,6 +163,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
             if (e.getItem() == EDIT) {

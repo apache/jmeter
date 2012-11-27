@@ -51,6 +51,7 @@ public class EscapeDialog extends JDialog {
              */
             private static final long serialVersionUID = 2208129319916921772L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
             }

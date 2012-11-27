@@ -238,6 +238,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         setFilenameProperty(f);
     }
 
+    @Override
     public void testEnded(String host) {
         synchronized(LOCK){
             instanceCount--;
@@ -252,6 +253,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
+    @Override
     public void testStarted(String host) {
         synchronized(LOCK){
             instanceCount++;
@@ -271,10 +273,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
+    @Override
     public void testEnded() {
         testEnded(TEST_IS_LOCAL);
     }
 
+    @Override
     public void testStarted() {
         testStarted(TEST_IS_LOCAL);
     }
@@ -475,9 +479,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         return true;
     }
 
+    @Override
     public void sampleStarted(SampleEvent e) {
     }
 
+    @Override
     public void sampleStopped(SampleEvent e) {
     }
 
@@ -487,6 +493,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * @param event
      *            the sample event that was received
      */
+    @Override
     public void sampleOccurred(SampleEvent event) {
         SampleResult result = event.getResult();
 
@@ -592,6 +599,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     // This is required so that
     // @see org.apache.jmeter.gui.tree.JMeterTreeModel.getNodesOfType()
     // can find the Clearable nodes - the userObject has to implement the interface.
+    @Override
     public void clearData() {
     }
 }

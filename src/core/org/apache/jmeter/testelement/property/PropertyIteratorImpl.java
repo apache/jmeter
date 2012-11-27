@@ -30,16 +30,19 @@ public class PropertyIteratorImpl implements PropertyIterator {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean hasNext() {
         return iter.hasNext();
     }
 
     /** {@inheritDoc} */
+    @Override
     public JMeterProperty next() {
         return iter.next();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void remove() {
         iter.remove();
     }

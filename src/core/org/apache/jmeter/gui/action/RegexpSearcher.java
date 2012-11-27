@@ -52,7 +52,8 @@ public class RegexpSearcher implements Searcher {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean search(List<String> textTokens) {
+	@Override
+    public boolean search(List<String> textTokens) {
 		for (String searchableToken : textTokens) {
 			if(!StringUtils.isEmpty(searchableToken)) {
 				Matcher matcher = null; 

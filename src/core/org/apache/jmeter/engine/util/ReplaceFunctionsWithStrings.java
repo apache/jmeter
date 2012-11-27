@@ -65,6 +65,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
         this.regexMatch = regexMatch;
     }
 
+    @Override
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
         PatternMatcher pm = JMeterUtils.getMatcher();
         Pattern pattern = null;

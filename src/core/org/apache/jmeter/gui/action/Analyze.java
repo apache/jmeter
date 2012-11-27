@@ -39,10 +39,12 @@ public class Analyze implements Command {
     public Analyze() {
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         FileReporter analyzer = new FileReporter();
         final JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jtl" }); //$NON-NLS-1$

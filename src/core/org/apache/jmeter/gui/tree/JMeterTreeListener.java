@@ -158,15 +158,18 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         return currentPath;
     }
 
+    @Override
     public void valueChanged(TreeSelectionEvent e) {
         log.debug("value changed, updating currentPath");
         currentPath = e.getNewLeadSelectionPath();
         actionHandler.actionPerformed(new ActionEvent(this, 3333, "edit")); // $NON-NLS-1$
     }
 
+    @Override
     public void mouseClicked(MouseEvent ev) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (dragging && isValidDragAction(draggedNodes, getCurrentNode())) {
             dragging = false;
@@ -214,6 +217,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         return isValid;
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
@@ -238,6 +242,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         return false;
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         // Get the Main Frame.
         MainFrame mainFrame = GuiPackage.getInstance().getMainFrame();
@@ -261,6 +266,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         }
     }
 
+    @Override
     public void mouseDragged(MouseEvent e) {
         if (!dragging) {
             dragging = true;
@@ -274,12 +280,15 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         changeSelectionIfDragging(e);
     }
 
+    @Override
     public void mouseMoved(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent ev) {
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         if (KeyStrokes.matches(e,KeyStrokes.COPY)) {
             ActionRouter actionRouter = ActionRouter.getInstance();
@@ -300,9 +309,11 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
     }
 

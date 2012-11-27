@@ -242,6 +242,7 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
+    @Override
     public void run() {
         // threadContext is not thread-safe, so keep within thread
         JMeterContext threadContext = JMeterContextService.getContext();
@@ -587,6 +588,7 @@ public class JMeterThread implements Runnable, Interruptible {
             isStart = start;
         }
 
+        @Override
         public void addNode(Object node, HashTree subTree) {
             if (node instanceof ThreadListener) {
                 ThreadListener tl = (ThreadListener) node;
@@ -598,9 +600,11 @@ public class JMeterThread implements Runnable, Interruptible {
             }
         }
 
+        @Override
         public void subtractNode() {
         }
 
+        @Override
         public void processPath() {
         }
     }
@@ -615,6 +619,7 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean interrupt(){
         try {
             interruptLock.lock();
@@ -842,6 +847,7 @@ public class JMeterThread implements Runnable, Interruptible {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void iterationStart(LoopIterationEvent iterEvent) {
             notifyTestListeners();
         }

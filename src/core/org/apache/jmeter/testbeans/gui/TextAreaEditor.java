@@ -37,10 +37,12 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     private JScrollPane scroller;
 
     /** {@inheritDoc} */
+    @Override
     public void focusGained(FocusEvent e) {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void focusLost(FocusEvent e) {
         firePropertyChange();
     }

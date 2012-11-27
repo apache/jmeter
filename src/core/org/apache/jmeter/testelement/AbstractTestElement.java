@@ -88,6 +88,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void clear() {
         propMap.clear();
     }
@@ -97,6 +98,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * <p>
      * Default implementation - does nothing
      */
+    @Override
     public void clearTestElementChildren(){
         // NOOP
     }
@@ -104,6 +106,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeProperty(String key) {
         propMap.remove(key);
     }
@@ -148,22 +151,27 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addTestElement(TestElement el) {
         mergeIn(el);
     }
 
+    @Override
     public void setName(String name) {
         setProperty(TestElement.NAME, name);
     }
 
+    @Override
     public String getName() {
         return getPropertyAsString(TestElement.NAME);
     }
 
+    @Override
     public void setComment(String comment){
         setProperty(new StringProperty(TestElement.COMMENTS, comment));
     }
 
+    @Override
     public String getComment(){
         return getProperty(TestElement.COMMENTS).getStringValue();
     }
@@ -172,6 +180,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * Get the named property. If it doesn't exist, a new NullProperty object is
      * created with the same name and returned.
      */
+    @Override
     public JMeterProperty getProperty(String key) {
         JMeterProperty prop = propMap.get(key);
         if (prop == null) {
@@ -180,6 +189,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         return prop;
     }
 
+    @Override
     public void traverse(TestElementTraverser traverser) {
         PropertyIterator iter = propertyIterator();
         traverser.startTestElement(this);
@@ -215,45 +225,55 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
+    @Override
     public int getPropertyAsInt(String key) {
         return getProperty(key).getIntValue();
     }
 
+    @Override
     public int getPropertyAsInt(String key, int defaultValue) {
         JMeterProperty jmp = getProperty(key);
         return jmp instanceof NullProperty ? defaultValue : jmp.getIntValue();
     }
 
+    @Override
     public boolean getPropertyAsBoolean(String key) {
         return getProperty(key).getBooleanValue();
     }
 
+    @Override
     public boolean getPropertyAsBoolean(String key, boolean defaultVal) {
         JMeterProperty jmp = getProperty(key);
         return jmp instanceof NullProperty ? defaultVal : jmp.getBooleanValue();
     }
 
+    @Override
     public float getPropertyAsFloat(String key) {
         return getProperty(key).getFloatValue();
     }
 
+    @Override
     public long getPropertyAsLong(String key) {
         return getProperty(key).getLongValue();
     }
 
+    @Override
     public long getPropertyAsLong(String key, long defaultValue) {
         JMeterProperty jmp = getProperty(key);
         return jmp instanceof NullProperty ? defaultValue : jmp.getLongValue();
     }
 
+    @Override
     public double getPropertyAsDouble(String key) {
         return getProperty(key).getDoubleValue();
     }
 
+    @Override
     public String getPropertyAsString(String key) {
         return getProperty(key).getStringValue();
     }
 
+    @Override
     public String getPropertyAsString(String key, String defaultValue) {
         JMeterProperty jmp = getProperty(key);
         return jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
@@ -317,6 +337,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
+    @Override
     public void setProperty(JMeterProperty property) {
         if (isRunningVersion()) {
             if (getProperty(property.getName()) instanceof NullProperty) {
@@ -329,6 +350,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
+    @Override
     public void setProperty(String name, String value) {
         setProperty(new StringProperty(name, value));
     }
@@ -344,6 +366,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param value current value
      * @param dflt default
      */
+    @Override
     public void setProperty(String name, String value, String dflt) {
         if (dflt.equals(value)) {
             removeProperty(name);
@@ -352,6 +375,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
+    @Override
     public void setProperty(String name, boolean value) {
         setProperty(new BooleanProperty(name, value));
     }
@@ -367,6 +391,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param value current value
      * @param dflt default
      */
+    @Override
     public void setProperty(String name, boolean value, boolean dflt) {
         if (value == dflt) {
             removeProperty(name);
@@ -375,6 +400,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
+    @Override
     public void setProperty(String name, int value) {
         setProperty(new IntegerProperty(name, value));
     }
@@ -390,6 +416,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param value current value
      * @param dflt default
      */
+    @Override
     public void setProperty(String name, int value, int dflt) {
         if (value == dflt) {
             removeProperty(name);
@@ -398,6 +425,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
+    @Override
     public PropertyIterator propertyIterator() {
         return new PropertyIteratorImpl(propMap.values());
     }
@@ -417,6 +445,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * Returns the runningVersion.
      */
+    @Override
     public boolean isRunningVersion() {
         return runningVersion;
     }
@@ -427,6 +456,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param runningVersion
      *            the runningVersion to set
      */
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         this.runningVersion = runningVersion;
         PropertyIterator iter = propertyIterator();
@@ -438,6 +468,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion() {
         Iterator<Map.Entry<String, JMeterProperty>>  iter = propMap.entrySet().iterator();
         while (iter.hasNext()) {
@@ -465,6 +496,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isTemporary(JMeterProperty property) {
         if (temporaryProperties == null) {
             return false;
@@ -476,6 +508,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setTemporary(JMeterProperty property) {
         if (temporaryProperties == null) {
             temporaryProperties = new LinkedHashSet<JMeterProperty>();
@@ -492,6 +525,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * @return Returns the threadContext.
      */
+    @Override
     public JMeterContext getThreadContext() {
         if (threadContext == null) {
             /*
@@ -510,6 +544,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param inthreadContext
      *            The threadContext to set.
      */
+    @Override
     public void setThreadContext(JMeterContext inthreadContext) {
         if (threadContext != null) {
             if (inthreadContext != threadContext) {
@@ -522,6 +557,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * @return Returns the threadName.
      */
+    @Override
     public String getThreadName() {
         return threadName;
     }
@@ -530,6 +566,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param inthreadName
      *            The threadName to set.
      */
+    @Override
     public void setThreadName(String inthreadName) {
         if (threadName != null) {
             if (!threadName.equals(inthreadName)) {
@@ -547,6 +584,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * {@inheritDoc}
      */
     // Default implementation
+    @Override
     public boolean canRemove() {
         return true;
     }
@@ -555,6 +593,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * {@inheritDoc}
      */
     // Moved from JMeter class
+    @Override
     public boolean isEnabled() {
         return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
     }
@@ -562,6 +601,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /** 
      * {@inheritDoc}}
      */
+    @Override
     public List<String> getSearchableTokens() throws Exception {
         List<String> result = new ArrayList<String>(25);
         PropertyIterator iterator = propertyIterator();

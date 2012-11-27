@@ -132,6 +132,7 @@ public class HttpSSLProtocolSocketFactory
      * @throws UnknownHostException if the IP address of the host cannot be
      * determined
      */
+    @Override
     public Socket createSocket(
         final String host,
         final int port,

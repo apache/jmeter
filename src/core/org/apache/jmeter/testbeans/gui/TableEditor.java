@@ -160,6 +160,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
      * For the table editor, the CLASSNAME attribute must simply be the name of the class of object it will hold
      * where each row holds one object.
      */
+    @Override
     public void setDescriptor(PropertyDescriptor descriptor) {
         this.descriptor = descriptor;
         String value = (String)descriptor.getValue(CLASSNAME);
@@ -241,14 +242,17 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         return null;
     }
 
+    @Override
     public void tableChanged(TableModelEvent e) {
         this.firePropertyChange();
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
 
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         final int editingRow = table.getEditingRow();
         final int editingColumn = table.getEditingColumn();
@@ -270,6 +274,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     private class AddListener implements ActionListener
     {
+        @Override
         public void actionPerformed(ActionEvent e)
         {
             try
@@ -284,6 +289,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     private class RemoveListener implements ActionListener
     {
+        @Override
         public void actionPerformed(ActionEvent e)
         {
             int row = table.getSelectedRow();
@@ -295,6 +301,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     private class ClearListener implements ActionListener
     {
+        @Override
         public void actionPerformed(ActionEvent e)
         {
             model.clearData();

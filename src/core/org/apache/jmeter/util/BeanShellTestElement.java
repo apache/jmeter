@@ -175,6 +175,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         script=s;
     }
 
+    @Override
     public void threadStarted() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
@@ -186,6 +187,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
+    @Override
     public void threadFinished() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
@@ -197,6 +199,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
+    @Override
     public void testEnded() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
@@ -208,6 +211,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
+    @Override
     public void testEnded(String host) {
         if (bshInterpreter == null || !hasInitFile) {
             return;
@@ -222,6 +226,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
+    @Override
     public void testStarted() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
@@ -233,6 +238,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
+    @Override
     public void testStarted(String host) {
         if (bshInterpreter == null || !hasInitFile) {
             return;

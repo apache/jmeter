@@ -135,11 +135,13 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addNode(Object node, HashTree subTree) {
         stack.addLast((TestElement) node);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void subtractNode() {
         LOG.debug("Subtracting node, stack size = " + stack.size());
         TestElement child = stack.getLast();
@@ -197,6 +199,7 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void processPath() {
     }
 

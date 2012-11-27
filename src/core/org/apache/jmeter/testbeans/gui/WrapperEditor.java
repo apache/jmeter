@@ -426,6 +426,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         guiEditor.setValue(value);
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent event) {
         String text = fixGetAsTextBug(guiEditor.getAsText());
         if (isValidValue(text)) {

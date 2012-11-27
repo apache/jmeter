@@ -42,6 +42,7 @@ public abstract class NumberProperty extends AbstractProperty {
      */
     protected abstract void setNumberValue(String n) throws NumberFormatException;
 
+    @Override
     public void setObjectValue(Object v) {
         if (v instanceof Number) {
             setNumberValue((Number) v);

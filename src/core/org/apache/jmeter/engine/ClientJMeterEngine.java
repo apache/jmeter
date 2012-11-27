@@ -69,6 +69,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void configure(HashTree testTree) {
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);
@@ -76,6 +77,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void stopTest(boolean now) {
         log.info("about to "+(now ? "stop" : "shutdown")+" remote test on "+host);
         try {
@@ -86,6 +88,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void reset() {
         try {
             try {
@@ -100,6 +103,7 @@ public class ClientJMeterEngine implements JMeterEngine {
         }
     }
 
+    @Override
     public void runTest() throws JMeterEngineException {
         log.info("running clientengine run method");
         HashTree testTree = test;
@@ -167,6 +171,7 @@ public class ClientJMeterEngine implements JMeterEngine {
 
     /** {@inheritDoc} */
     // Called by JMeter ListenToTest if remoteStop is true
+    @Override
     public void exit() {
         log.info("about to exit remote server on "+host);
         try {
@@ -178,11 +183,13 @@ public class ClientJMeterEngine implements JMeterEngine {
 
     private Properties savep;
     /** {@inheritDoc} */
+    @Override
     public void setProperties(Properties p) {
         savep = p;
         // Sent later
     }
 
+    @Override
     public boolean isActive() {
         return true;
     }

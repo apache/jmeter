@@ -53,6 +53,7 @@ public class Close implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
@@ -63,6 +64,7 @@ public class Close implements Command {
      * @param e
      *            the generic UI action event
      */
+    @Override
     public void doAction(ActionEvent e) {
         performAction(e);
     }

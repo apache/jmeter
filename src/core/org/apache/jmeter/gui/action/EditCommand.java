@@ -39,6 +39,7 @@ public class EditCommand implements Command {
     public EditCommand() {
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
@@ -56,6 +57,7 @@ public class EditCommand implements Command {
         }
     }
 
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }

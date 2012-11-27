@@ -255,6 +255,7 @@ public class TransactionController extends GenericController implements SampleLi
         }
     }
 
+    @Override
     public void sampleOccurred(SampleEvent se) {
         if (!isParent()) {
             // Check if we are still sampling our children
@@ -277,9 +278,11 @@ public class TransactionController extends GenericController implements SampleLi
         }
     }
 
+    @Override
     public void sampleStarted(SampleEvent e) {
     }
 
+    @Override
     public void sampleStopped(SampleEvent e) {
     }
 

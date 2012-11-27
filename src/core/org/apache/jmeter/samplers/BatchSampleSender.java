@@ -117,6 +117,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      * @param host
      *            the host that the test has ended on.
      */
+    @Override
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
         try {
@@ -140,6 +141,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      * @param e
      *            a Sample Event
      */
+    @Override
     public void sampleOccurred(SampleEvent e) {
         synchronized (sampleStore) {
             sampleStore.add(e);

@@ -45,6 +45,7 @@ public abstract class AbstractTimerGui extends AbstractJMeterGuiComponent {
      *
      * @return a JPopupMenu appropriate for the component.
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         return MenuFactory.getDefaultTimerMenu();
     }
@@ -58,6 +59,7 @@ public abstract class AbstractTimerGui extends AbstractJMeterGuiComponent {
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.TIMERS });
     }

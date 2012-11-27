@@ -111,6 +111,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         LoopController lc = new LoopController();
         modifyTestElement(lc);
@@ -118,6 +119,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement lc) {
         configureTestElement(lc);
         if (lc instanceof LoopController) {
@@ -147,6 +149,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
      * @param event
      *            the event that has occurred
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         if (infinite.isSelected()) {
             loops.setText(""); // $NON-NLS-1$
@@ -157,6 +160,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         }
     }
 
+    @Override
     public String getLabelResource() {
         return "loop_controller_title"; // $NON-NLS-1$
     }

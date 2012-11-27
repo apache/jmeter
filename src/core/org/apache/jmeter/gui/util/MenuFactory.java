@@ -678,6 +678,7 @@ public final class MenuFactory {
         MenuInfoComparator(boolean caseBlind){
             this.caseBlind = caseBlind;
         }
+        @Override
         public int compare(MenuInfo o1, MenuInfo o2) {
             String lab1 = o1.getLabel();
             String lab2 = o2.getLabel();

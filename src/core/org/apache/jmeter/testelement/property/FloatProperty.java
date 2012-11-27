@@ -50,6 +50,7 @@ public class FloatProperty extends NumberProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;
     }
@@ -77,6 +78,7 @@ public class FloatProperty extends NumberProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStringValue() {
         return Float.toString(value);
     }
@@ -84,6 +86,7 @@ public class FloatProperty extends NumberProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getObjectValue() {
         return Float.valueOf(value);
     }

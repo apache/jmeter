@@ -46,6 +46,7 @@ public class ExitCommand implements Command {
      *
      * @return The ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
@@ -56,6 +57,7 @@ public class ExitCommand implements Command {
      * @param e
      *            Description of Parameter
      */
+    @Override
     public void doAction(ActionEvent e) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
         if (GuiPackage.getInstance().isDirty()) {

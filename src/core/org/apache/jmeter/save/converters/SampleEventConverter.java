@@ -39,12 +39,14 @@ public class SampleEventConverter implements Converter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
         return SampleEvent.class.equals(arg0);
     }
 
     /** {@inheritDoc} */
     // TODO save hostname; save sample type (plain or http)
+    @Override
     public void marshal(Object source, HierarchicalStreamWriter writer,
             MarshallingContext context) {
         SampleEvent evt = (SampleEvent) source;
@@ -54,6 +56,7 @@ public class SampleEventConverter implements Converter {
 
     /** {@inheritDoc} */
     // TODO does not work yet; need to determine the sample type
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader,
             UnmarshallingContext context) {
         SampleEvent evt = new SampleEvent();

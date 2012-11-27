@@ -60,6 +60,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         add(nameField, BorderLayout.CENTER);
     }
 
+    @Override
     public void clearGui() {
         setName(getStaticLabel());
     }
@@ -85,31 +86,37 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void configure(TestElement testElement) {
         setName(testElement.getName());
     }
 
     /** {@inheritDoc} */
+    @Override
     public JPopupMenu createPopupMenu() {
         return null;
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getStaticLabel() {
         return JMeterUtils.getResString(getLabelResource());
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getLabelResource() {
         return "root"; // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
+    @Override
     public Collection<String> getMenuCategories() {
         return null;
     }
 
     /** {@inheritDoc} */
+    @Override
     public TestElement createTestElement() {
         WorkBench wb = new WorkBench();
         modifyTestElement(wb);
@@ -117,6 +124,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void modifyTestElement(TestElement wb) {
         wb.setName(getName());
         wb.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
@@ -126,6 +134,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDocAnchor() {
         return null;
     }

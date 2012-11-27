@@ -158,6 +158,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         engine = this;
     }
 
+    @Override
     public void configure(HashTree testTree) {
         // Is testplan serialised?
         SearchByClass<TestPlan> testPlan = new SearchByClass<TestPlan>(TestPlan.class);
@@ -173,6 +174,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         test = testTree;
     }
 
+    @Override
     public void runTest() throws JMeterEngineException {
         if (host != null){
             long now=System.currentTimeMillis();
@@ -241,6 +243,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         active=false;
     }
 
+    @Override
     public void reset() {
         if (running) {
             stopTest();
@@ -251,6 +254,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         stopTest(true);
     }
 
+    @Override
     public synchronized void stopTest(boolean now) {
         shutdown = !now;
         Thread stopThread = new Thread(new StopTest(now));
@@ -264,6 +268,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             now = b;
         }
 
+        @Override
         public void run() {
             running = false;
             engine = null;
@@ -294,6 +299,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
+    @Override
     public void run() {
         log.info("Running the test!");
         running = true;
@@ -532,6 +538,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     // and by notifyTestListenersOfEnd() iff exitAfterTest is true;
     // in turn that is called by the run() method and the StopTest class
     // also called
+    @Override
     public void exit() {
         ClientJMeterEngine.tidyRMI(log); // This should be enough to allow server to exit.
         if (REMOTE_SYSTEM_EXIT) { // default is false
@@ -557,11 +564,13 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
+    @Override
     public void setProperties(Properties p) {
         log.info("Applying properties "+p);
         JMeterUtils.getJMeterProperties().putAll(p);
     }
     
+    @Override
     public boolean isActive() {
         return active;
     }

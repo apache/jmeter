@@ -129,6 +129,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
      *
      * @see EditorDelegate#getCellEditorValue
      */
+    @Override
     public Object getCellEditorValue() {
         return delegate.getCellEditorValue();
     }
@@ -182,6 +183,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     //
 
     /** Implements the <code>TreeCellEditor</code> interface. */
+    @Override
     public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded,
             boolean leaf, int row) {
         String stringValue = tree.convertValueToText(value, isSelected, expanded, leaf, row, false);
@@ -194,6 +196,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     // Implementing the CellEditor Interface
     //
     /** Implements the <code>TableCellEditor</code> interface. */
+    @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         delegate.setValue(value);
         return new JScrollPane(editorComponent);
@@ -312,10 +315,12 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
             TextAreaTableCellEditor.this.stopCellEditing();
         }
 
+        @Override
         public void focusLost(FocusEvent ev) {
             TextAreaTableCellEditor.this.stopCellEditing();
         }
 
+        @Override
         public void focusGained(FocusEvent ev) {
         }
     }

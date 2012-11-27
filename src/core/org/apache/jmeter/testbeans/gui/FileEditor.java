@@ -97,6 +97,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         JFileChooser chooser = FileDialoger.promptToOpenFile();
 
@@ -110,6 +111,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @param listener
      */
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         editor.addPropertyChangeListener(listener);
     }
@@ -117,6 +119,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @return the text
      */
+    @Override
     public String getAsText() {
         return editor.getAsText();
     }
@@ -124,6 +127,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @return custom editor panel
      */
+    @Override
     public Component getCustomEditor() {
         return panel;
     }
@@ -131,6 +135,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @return the Java initialisation string
      */
+    @Override
     public String getJavaInitializationString() {
         return editor.getJavaInitializationString();
     }
@@ -138,6 +143,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @return the editor tags
      */
+    @Override
     public String[] getTags() {
         return editor.getTags();
     }
@@ -145,6 +151,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @return the value
      */
+    @Override
     public Object getValue() {
         return editor.getValue();
     }
@@ -152,6 +159,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @return true if the editor is paintable
      */
+    @Override
     public boolean isPaintable() {
         return editor.isPaintable();
     }
@@ -160,6 +168,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * @param gfx
      * @param box
      */
+    @Override
     public void paintValue(Graphics gfx, Rectangle box) {
         editor.paintValue(gfx, box);
     }
@@ -167,6 +176,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @param listener
      */
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         editor.removePropertyChangeListener(listener);
     }
@@ -175,6 +185,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * @param text
      * @throws java.lang.IllegalArgumentException
      */
+    @Override
     public void setAsText(String text) throws IllegalArgumentException {
         editor.setAsText(text);
     }
@@ -182,6 +193,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @param value
      */
+    @Override
     public void setValue(Object value) {
         editor.setValue(value);
     }
@@ -189,6 +201,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * @return true if supports a custom editor
      */
+    @Override
     public boolean supportsCustomEditor() {
         return editor.supportsCustomEditor();
     }

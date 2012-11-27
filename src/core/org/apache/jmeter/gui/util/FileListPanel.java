@@ -191,6 +191,7 @@ public class FileListPanel extends JPanel implements ActionListener {
                 new Class[] { String.class });
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == clear) {
             this.clearFiles();

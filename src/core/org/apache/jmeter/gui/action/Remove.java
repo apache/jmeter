@@ -55,10 +55,12 @@ public class Remove implements Command {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         
         int isConfirm = SKIP_CONFIRM ? JOptionPane.YES_OPTION : 

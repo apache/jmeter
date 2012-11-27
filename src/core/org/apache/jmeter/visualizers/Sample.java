@@ -172,6 +172,7 @@ public class Sample implements Serializable, Comparable<Sample> {
     }
 
     /** {@inheritDoc} */
+    @Override
     public int compareTo(Sample o) {
         Sample oo = o;
         return ((count - oo.count) < 0 ? -1 : (count == oo.count ? 0 : 1));

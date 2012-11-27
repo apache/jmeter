@@ -74,12 +74,14 @@ public class LoggerPanel extends JPanel implements LogTarget {
     /* (non-Javadoc)
      * @see org.apache.log.LogTarget#processEvent(org.apache.log.LogEvent)
      */
+    @Override
     public void processEvent(final LogEvent logEvent) {
         if(!GuiPackage.getInstance().getMenuItemLoggerPanel().getModel().isSelected()) {
             return;
         }
         
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 synchronized (textArea) {
                     textArea.append(format.format(logEvent));

@@ -67,6 +67,7 @@ public class SSLManagerCommand implements Command {
      * dialog box. The Dialog Box is NOT modal, because those should be avoided
      * if at all possible.
      */
+    @Override
     public void doAction(ActionEvent e) {
         if (e.getActionCommand().equals(ActionNames.SSL_MANAGER)) {
             this.sslManager();
@@ -76,6 +77,7 @@ public class SSLManagerCommand implements Command {
     /**
      * Provide the list of Action names that are available in this command.
      */
+    @Override
     public Set<String> getActionNames() {
         return SSLManagerCommand.commandSet;
     }

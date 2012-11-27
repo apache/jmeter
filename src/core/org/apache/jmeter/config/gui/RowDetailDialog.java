@@ -99,6 +99,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
              */
             private static final long serialVersionUID = -8699034338969407625L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) { 
                 setVisible(false);
             } 
@@ -110,6 +111,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
              */
             private static final long serialVersionUID = -1529005452976176873L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 doUpdate(actionEvent);
                 setVisible(false);
@@ -175,6 +177,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
      * Do search
      * @param e {@link ActionEvent}
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
     	if(action.equals(CLOSE)) {

@@ -39,6 +39,7 @@ public class BooleanProperty extends AbstractProperty {
         super();
     }
 
+    @Override
     public void setObjectValue(Object v) {
         if (v instanceof Boolean) {
             value = ((Boolean) v).booleanValue();
@@ -50,6 +51,7 @@ public class BooleanProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getStringValue() {
         return Boolean.toString(value);
     }
@@ -57,6 +59,7 @@ public class BooleanProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getObjectValue() {
         return Boolean.valueOf(value);
     }
@@ -88,6 +91,7 @@ public class BooleanProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;
     }

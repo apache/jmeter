@@ -55,6 +55,7 @@ public class StringProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setObjectValue(Object v) {
         value = v.toString();
     }
@@ -62,6 +63,7 @@ public class StringProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getStringValue()
      */
+    @Override
     public String getStringValue() {
         return value;
     }
@@ -69,6 +71,7 @@ public class StringProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getObjectValue()
      */
+    @Override
     public Object getObjectValue() {
         return value;
     }
@@ -96,6 +99,7 @@ public class StringProperty extends AbstractProperty {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
             value = savedValue;

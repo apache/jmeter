@@ -44,6 +44,7 @@ public class FocusRequester implements Runnable {
         }
     }
 
+    @Override
     public void run() {
         comp.requestFocus();
     }

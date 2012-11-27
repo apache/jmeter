@@ -71,6 +71,7 @@ public class WhileControllerGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         WhileController controller = new WhileController();
         modifyTestElement(controller);
@@ -80,6 +81,7 @@ public class WhileControllerGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement controller) {
         configureTestElement(controller);
         if (controller instanceof WhileController) {
@@ -100,6 +102,7 @@ public class WhileControllerGui extends AbstractControllerGui {
         theCondition.setText(""); // $NON-NLS-1$
     }
 
+    @Override
     public String getLabelResource() {
         return "while_controller_title"; // $NON-NLS-1$
     }
