@@ -32,6 +32,7 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
 
     private static final long serialVersionUID = 234L;
 
+    @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         BSFManager mgr =null;

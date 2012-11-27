@@ -61,6 +61,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
      * getResult
      * 
      */
+    @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         // Note: initialised with error = failure = false
@@ -172,6 +173,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         /*
          * Can be caused by: - failure to read XSD file - xml does not match XSD
          */
+        @Override
         public void error(SAXParseException exception) throws SAXParseException {
 
             String msg = "error: " + errorDetails(exception);
@@ -185,6 +187,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
          * Can be caused by: - premature end of file - non-whitespace content
          * after trailer
          */
+        @Override
         public void fatalError(SAXParseException exception) throws SAXParseException {
 
             String msg = "fatal: " + errorDetails(exception);
@@ -197,6 +200,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         /*
          * Not clear what can cause this ? conflicting versions perhaps
          */
+        @Override
         public void warning(SAXParseException exception) throws SAXParseException {
 
             String msg = "warning: " + errorDetails(exception);

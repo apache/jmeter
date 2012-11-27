@@ -42,6 +42,7 @@ public class DurationAssertion extends AbstractScopedAssertion implements Serial
      * containing a FailureMessage will be returned. Otherwise the returned
      * AssertionResult will reflect the success of the Sample.
      */
+    @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         result.setFailure(false);

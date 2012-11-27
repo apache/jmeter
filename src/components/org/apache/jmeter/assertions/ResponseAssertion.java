@@ -180,6 +180,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         getTestStrings().clear();
     }
 
+    @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result;
 

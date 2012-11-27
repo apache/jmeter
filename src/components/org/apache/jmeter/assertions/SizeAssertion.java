@@ -70,6 +70,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
      * Returns the result of the Assertion. 
      * Here it checks the Sample responseData length.
      */
+    @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         result.setFailure(false);

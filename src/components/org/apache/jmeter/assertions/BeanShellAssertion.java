@@ -72,6 +72,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
     /**
      * {@inheritDoc}
      */
+    @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
 

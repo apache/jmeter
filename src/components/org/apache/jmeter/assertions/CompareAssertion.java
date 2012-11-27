@@ -51,6 +51,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         super();
     }
 
+    @Override
     public AssertionResult getResult(SampleResult response) {
         responses.add(response);
         if (responses.size() > 1) {
@@ -154,6 +155,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         return content;
     }
 
+    @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
         responses = new LinkedList<SampleResult>();
     }
