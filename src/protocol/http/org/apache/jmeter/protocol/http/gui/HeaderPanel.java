@@ -86,6 +86,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         init();
     }
 
+    @Override
     public TestElement createTestElement() {
         configureTestElement(headerManager);
         return (TestElement) headerManager.clone();
@@ -96,6 +97,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         GuiUtils.stopTableEditing(headerTable);
         el.clear();
@@ -126,6 +128,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 
     }
 
+    @Override
     public String getLabelResource() {
         return "header_manager_title"; // $NON-NLS-1$
     }
@@ -138,6 +141,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         add(createHeaderTablePanel(), BorderLayout.CENTER);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
 
@@ -340,6 +344,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
             return getValueAt(0, column).getClass();
         }
 
+        @Override
         public int getRowCount() {
             return manager.getHeaders().size();
         }
@@ -347,6 +352,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         /**
          * Required by table model interface.
          */
+        @Override
         public int getColumnCount() {
             return manager.getColumnCount();
         }
@@ -362,6 +368,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         /**
          * Required by table model interface.
          */
+        @Override
         public Object getValueAt(int row, int column) {
             Header head = manager.getHeader(row);
             if (column == 0) {

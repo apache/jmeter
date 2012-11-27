@@ -77,6 +77,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     /**
      * {@inheritDoc}
      */
+    @Override
     public void reset() {
         cookieManagers.clear();
     }
@@ -109,18 +110,21 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     /**
      * {@inheritDoc}
      */
+    @Override
     public void excludeFiles(String[] filenames) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void excludePattern(String[] regexp) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String filter(String text) {
         return text;
     }
@@ -128,18 +132,21 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     /**
      * {@inheritDoc}
      */
+    @Override
     public void includeFiles(String[] filenames) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void includePattern(String[] regexp) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isFiltered(String path,TestElement sampler) {
         String ipAddr = getIpAddress(path);
         CookieManager cm = getCookieManager(ipAddr);
@@ -194,12 +201,14 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setReplaceExtension(String oldextension, String newextension) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void threadFinished() {
         synchronized(managersInUse)
         {
@@ -211,6 +220,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     /**
      * {@inheritDoc}
      */
+    @Override
     public void threadStarted() {
     }
 }

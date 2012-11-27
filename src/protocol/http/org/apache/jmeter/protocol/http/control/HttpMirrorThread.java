@@ -54,6 +54,7 @@ public class HttpMirrorThread implements Runnable {
     /**
      * Main processing method for the HttpMirror object
      */
+    @Override
     public void run() {
         log.debug("Starting thread");
         BufferedInputStream in = null;

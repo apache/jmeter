@@ -368,6 +368,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testStarted() {
         initialCookies = getCookies();
         try {
@@ -381,19 +382,23 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testEnded() {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testStarted(String host) {
         testStarted();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testEnded(String host) {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void testIterationStart(LoopIterationEvent event) {
         if (getClearEachIteration()) {
             log.debug("Initialise cookies from pre-defined list");

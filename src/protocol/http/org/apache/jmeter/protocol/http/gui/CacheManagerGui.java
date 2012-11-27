@@ -52,6 +52,7 @@ public class CacheManagerGui extends AbstractConfigGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "cache_manager_title"; // $NON-NLS-1$
     }
@@ -75,6 +76,7 @@ public class CacheManagerGui extends AbstractConfigGui {
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         CacheManager element = new CacheManager();
         modifyTestElement(element);
@@ -82,6 +84,7 @@ public class CacheManagerGui extends AbstractConfigGui {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
         final CacheManager cacheManager = (CacheManager)element;

@@ -219,6 +219,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      * @param e
      *  the event that has occurred
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(ADD)) {

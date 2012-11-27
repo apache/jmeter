@@ -537,7 +537,8 @@ public class ProxyControl extends GenericController {
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName("-------------------"); // $NON-NLS-1$
         JMeterUtils.runSafe(new Runnable() {
-			public void run() {
+			@Override
+            public void run() {
 				try {
 					model.addComponent(sc, node);
 				} catch (IllegalUserActionException e) {
@@ -566,7 +567,8 @@ public class ProxyControl extends GenericController {
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName(name);
         JMeterUtils.runSafe(new Runnable() {
-			public void run() {
+			@Override
+            public void run() {
 		        try {
 					model.addComponent(sc, node);
 				} catch (IllegalUserActionException e) {
@@ -595,7 +597,8 @@ public class ProxyControl extends GenericController {
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
         JMeterUtils.runSafe(new Runnable() {
-			public void run() {
+			@Override
+            public void run() {
 				 try {
 					model.addComponent(sc, node);
 				} catch (IllegalUserActionException e) {
@@ -832,7 +835,8 @@ public class ProxyControl extends GenericController {
             final boolean firstInBatchFinal = firstInBatch;
             final JMeterTreeNode myTargetFinal = myTarget;
             JMeterUtils.runSafe(new Runnable() {
-				public void run() {
+				@Override
+                public void run() {
 					try {
 			            final JMeterTreeNode newNode = treeModel.addComponent(sampler, myTargetFinal);
 			            if (firstInBatchFinal) {

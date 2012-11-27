@@ -66,6 +66,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     // PreProcessors are cloned per-thread, so this will be saved per-thread
     private transient String savedValue = ""; // $NON-NLS-1$
 
+    @Override
     public void process() {
         JMeterContext ctx = getThreadContext();
         Sampler sampler = ctx.getCurrentSampler();

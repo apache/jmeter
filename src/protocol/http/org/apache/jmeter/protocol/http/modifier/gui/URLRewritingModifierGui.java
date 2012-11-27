@@ -42,6 +42,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 
     private JCheckBox shouldCache;
 
+    @Override
     public String getLabelResource() {
         return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
     }
@@ -80,6 +81,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     /**
      * {@inheritDoc}
      */
+    @Override
     public TestElement createTestElement() {
         URLRewritingModifier modifier = new URLRewritingModifier();
         modifyTestElement(modifier);
@@ -91,6 +93,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void modifyTestElement(TestElement modifier) {
         this.configureTestElement(modifier);
         URLRewritingModifier rewritingModifier = ((URLRewritingModifier) modifier);

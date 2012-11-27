@@ -171,6 +171,7 @@ public class TCLogParser implements LogParser {
      *
      * @param filter
      */
+    @Override
     public void setFilter(Filter filter) {
         FILTER = filter;
     }
@@ -180,6 +181,7 @@ public class TCLogParser implements LogParser {
      *
      * @param source
      */
+    @Override
     public void setSourceFile(String source) {
         this.FILENAME = source;
     }
@@ -230,6 +232,7 @@ public class TCLogParser implements LogParser {
      * @param count
      * @return lines parsed
      */
+    @Override
     public int parseAndConfigure(int count, TestElement el) {
         return this.parse(el, count);
     }
@@ -555,6 +558,7 @@ public class TCLogParser implements LogParser {
         return new StringTokenizer(line, delim);
     }
 
+    @Override
     public void close() {
         try {
             this.READER.close();

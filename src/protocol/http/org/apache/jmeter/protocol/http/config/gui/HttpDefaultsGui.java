@@ -60,6 +60,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "url_config_title"; // $NON-NLS-1$
     }
@@ -67,6 +68,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         ConfigTestElement config = new ConfigTestElement();
         modifyTestElement(config);
@@ -78,6 +80,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement config) {
         ConfigTestElement cfg = (ConfigTestElement ) config;
         ConfigTestElement el = (ConfigTestElement) urlConfig.createTestElement();
@@ -155,6 +158,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
         checkBoxPanel.add(imageParser);
         imageParser.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(final ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) { enableConcurrentDwn(true); }
                 else { enableConcurrentDwn(false); }
@@ -163,6 +167,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         // Concurrent resources download
         concurrentDwn = new JCheckBox(JMeterUtils.getResString("web_testing_concurrent_download")); // $NON-NLS-1$
         concurrentDwn.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(final ItemEvent e) {
                 if (imageParser.isSelected() && e.getStateChange() == ItemEvent.SELECTED) { concurrentPool.setEnabled(true); }
                 else { concurrentPool.setEnabled(false); }

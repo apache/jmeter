@@ -81,6 +81,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "html_parameter_mask"; //$NON-NLS-1$
     }
@@ -92,6 +93,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         updateGui(model);
     }
 
+    @Override
     public TestElement createTestElement() {
         ParamModifier modifier = new ParamModifier();
         modifyTestElement(modifier);
@@ -103,6 +105,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement m) {
         configureTestElement(m);
         if (m instanceof ParamModifier) {
@@ -132,9 +135,11 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         _suffix.setText(""); //$NON-NLS-1$
     }
 
+    @Override
     public void focusGained(FocusEvent evt) {
     }
 
+    @Override
     public void focusLost(FocusEvent evt) {
         String name = ((Component) evt.getSource()).getName();
         if (evt.isTemporary()) {

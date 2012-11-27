@@ -1072,6 +1072,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *            <code>Entry</code> to be sampled
      * @return results of the sampling
      */
+    @Override
     public SampleResult sample(Entry e) {
         return sample();
     }
@@ -1230,8 +1231,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         poolSize, poolSize, KEEPALIVETIME, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(),
                         new ThreadFactory() {
+                            @Override
                             public Thread newThread(final Runnable r) {
                                 Thread t = new CleanerThread(new Runnable() {
+                                    @Override
                                     public void run() {
                                         try {
                                             r.run();
@@ -1315,12 +1318,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded(String host) {
         testEnded();
     }
@@ -1328,7 +1333,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	/**
 	 * {@inheritDoc}
 	 */
-	public void testIterationStart(LoopIterationEvent event) {
+	@Override
+    public void testIterationStart(LoopIterationEvent event) {
 		if (!USE_CACHED_SSL_CONTEXT) {
 			JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
 			sslMgr.resetContext();
@@ -1348,12 +1354,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted(String host) {
         testStarted();
     }
@@ -1592,9 +1600,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     // Implement these here, to avoid re-implementing for sub-classes
     // (previously these were implemented in all TestElements)
+    @Override
     public void threadStarted(){
     }
 
+    @Override
     public void threadFinished(){
     }
 
@@ -1787,6 +1797,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             this.jmeterContextOfParentThread = JMeterContextService.getContext();
         }
 
+        @Override
         public AsynSamplerResultHolder call() {
         	JMeterContextService.replaceContext(jmeterContextOfParentThread);
             ((CleanerThread) Thread.currentThread()).registerSamplerForEndNotification(sampler);

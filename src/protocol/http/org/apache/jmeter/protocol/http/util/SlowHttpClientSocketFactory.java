@@ -45,16 +45,19 @@ public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
         CPS = cps;
     }
 
+    @Override
     public Socket createSocket(String host, int port, InetAddress clientHost,
             int clientPort) throws IOException, UnknownHostException {
         return new SlowSocket(CPS,host,port,clientHost,clientPort);
     }
 
+    @Override
     public Socket createSocket(String host, int port) throws IOException,
             UnknownHostException {
         return new SlowSocket(CPS,host,port);
     }
 
+    @Override
     public Socket createSocket(String host, int port, InetAddress localAddress, int localPort,
             HttpConnectionParams params)
     throws IOException, UnknownHostException, ConnectTimeoutException {

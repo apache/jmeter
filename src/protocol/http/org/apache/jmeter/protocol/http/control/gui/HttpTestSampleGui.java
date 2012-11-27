@@ -99,6 +99,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
     /**
      * {@inheritDoc}
      */
+    @Override
     public TestElement createTestElement() {
         HTTPSamplerBase sampler = new HTTPSamplerProxy();
         modifyTestElement(sampler);
@@ -110,6 +111,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
         urlConfigGui.modifyTestElement(sampler);
@@ -130,6 +132,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getLabelResource() {
         return "web_testing_title"; // $NON-NLS-1$
     }
@@ -159,6 +162,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
         // add a listener to activate or not concurrent dwn.
         getImages.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(final ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) { enableConcurrentDwn(true); }
                 else { enableConcurrentDwn(false); }
@@ -167,6 +171,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         // Download concurrent resources
         concurrentDwn = new JCheckBox(JMeterUtils.getResString("web_testing_concurrent_download")); // $NON-NLS-1$
         concurrentDwn.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(final ItemEvent e) {
                 if (getImages.isSelected() && e.getStateChange() == ItemEvent.SELECTED) { concurrentPool.setEnabled(true); }
                 else { concurrentPool.setEnabled(false); }
@@ -238,6 +243,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         }
     }
 
+    @Override
     public void itemStateChanged(ItemEvent event) {
         if (event.getStateChange() == ItemEvent.SELECTED) {
             enableConcurrentDwn(true);

@@ -51,6 +51,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "soap_sampler_title"; //$NON-NLS-1$
     }
@@ -58,6 +59,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
     /**
      * {@inheritDoc}
      */
+    @Override
     public TestElement createTestElement() {
         SoapSampler sampler = new SoapSampler();
         modifyTestElement(sampler);
@@ -69,6 +71,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement s) {
         this.configureTestElement(s);
         if (s instanceof SoapSampler) {
@@ -140,6 +143,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         mainPanel.add(soapXmlFile, BorderLayout.SOUTH);
 
         sendSoapAction.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 soapAction.setEnabled(sendSoapAction.isSelected());
             }

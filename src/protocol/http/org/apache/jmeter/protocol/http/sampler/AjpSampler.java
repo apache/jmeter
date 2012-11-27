@@ -509,6 +509,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         return s;
     }
 
+    @Override
     public boolean interrupt() {
         Socket chan = activeChannel;
         if (chan != null) {

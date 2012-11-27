@@ -328,12 +328,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      * Also handles samplerTypeName
      */
     /** {@inheritDoc} */
+    @Override
     public void itemStateChanged(ItemEvent e) {
         // System.err.println(e.paramString());
         enableRestart();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
 
@@ -483,14 +485,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     /** {@inheritDoc} */
+    @Override
     public void keyPressed(KeyEvent e) {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void keyTyped(KeyEvent e) {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void keyReleased(KeyEvent e) {
         String fieldName = e.getComponent().getName();
 

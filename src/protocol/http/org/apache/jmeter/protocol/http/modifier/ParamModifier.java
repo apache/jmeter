@@ -79,17 +79,21 @@ public class ParamModifier extends AbstractTestElement implements TestStateListe
         return (ParamMask) getProperty(MASK).getObjectValue();
     }
 
+    @Override
     public void testStarted() {
         getMask().resetValue();
     }
 
+    @Override
     public void testStarted(String host) {
         getMask().resetValue();
     }
 
+    @Override
     public void testEnded() {
     }
 
+    @Override
     public void testEnded(String host) {
     }
 
@@ -104,6 +108,7 @@ public class ParamModifier extends AbstractTestElement implements TestStateListe
      * matches a defined mask.
      *
      */
+    @Override
     public void process() {
         Sampler sam = getThreadContext().getCurrentSampler();
         HTTPSamplerBase sampler = null;

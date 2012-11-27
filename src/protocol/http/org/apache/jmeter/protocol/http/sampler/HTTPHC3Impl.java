@@ -1113,6 +1113,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean interrupt() {
         HttpClient client = savedClient;
         if (client != null) {
