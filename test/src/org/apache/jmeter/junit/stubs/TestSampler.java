@@ -39,6 +39,7 @@ public class TestSampler extends AbstractSampler {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SampleResult sample(Entry e) {
         if (wait > 0) {
             try {
