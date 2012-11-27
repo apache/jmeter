@@ -29,6 +29,7 @@ public class OnceOnlyControllerGui extends AbstractControllerGui {
         init();
     }
 
+    @Override
     public TestElement createTestElement() {
         OnceOnlyController oc = new OnceOnlyController();
         modifyTestElement(oc);
@@ -40,10 +41,12 @@ public class OnceOnlyControllerGui extends AbstractControllerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement oc) {
         configureTestElement(oc);
     }
 
+    @Override
     public String getLabelResource() {
         return "once_only_controller_title"; // $NON-NLS-1$
     }

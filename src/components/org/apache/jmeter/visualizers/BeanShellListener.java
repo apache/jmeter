@@ -46,6 +46,7 @@ public class BeanShellListener extends BeanShellTestElement
         return INIT_FILE;
     }
 
+    @Override
     public void sampleOccurred(SampleEvent se) {
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
         if (bshInterpreter == null) {
@@ -63,18 +64,22 @@ public class BeanShellListener extends BeanShellTestElement
         }
     }
 
+    @Override
     public void sampleStarted(SampleEvent e) {
     	// NOOP
     }
 
+    @Override
     public void sampleStopped(SampleEvent e) {
     	// NOOP
     }
 
+    @Override
     public void add(SampleResult sample) {
     	// NOOP
     }
 
+    @Override
     public boolean isStats() { // Needed by Visualizer interface
         return false;
     }

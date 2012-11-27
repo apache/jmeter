@@ -25,6 +25,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class RenderAsText extends SamplerResultTab implements ResultRenderer {
 
     /** {@inheritDoc} */
+    @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         showTextResponse(response);

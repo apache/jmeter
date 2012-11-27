@@ -146,6 +146,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
     }
 
 
+    @Override
     public String getLabelResource() {
         return "view_results_in_table"; // $NON-NLS-1$
     }
@@ -157,8 +158,10 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         deviationField.setText(Long.toString((long) calc.getStandardDeviation()));
     }
 
+    @Override
     public void add(final SampleResult res) {
         JMeterUtils.runSafe(new Runnable() {
+            @Override
             public void run() {
                 if (childSamples.isSelected()) {
                     SampleResult[] subResults = res.getSubResults();
@@ -192,6 +195,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         });
     }
 
+    @Override
     public synchronized void clearData() {
         model.clearData();
         calc.clear();

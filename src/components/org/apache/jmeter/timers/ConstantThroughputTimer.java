@@ -119,6 +119,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      *
      * @see org.apache.jmeter.timers.Timer#delay()
      */
+    @Override
     public long delay() {
         long currentTime = System.currentTimeMillis();
 
@@ -226,6 +227,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public void testStarted()
     {
         log.debug("Test started - reset throughput calculation.");
@@ -235,6 +237,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded() {
     	//NOOP
     }
@@ -242,6 +245,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted(String host) {
         testStarted();
     }
@@ -249,6 +253,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded(String host) {
     	//NOOP
     }

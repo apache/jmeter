@@ -102,6 +102,7 @@ public class IncludeController extends GenericController implements ReplaceableC
      * The way ReplaceableController works is clone is called first,
      * followed by replace(HashTree) and finally getReplacement().
      */
+    @Override
     public HashTree getReplacementSubTree() {
         return subtree;
     }
@@ -110,6 +111,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         return sub;
     }
 
+    @Override
     public void resolveReplacementSubTree(JMeterTreeNode context) {
         this.subtree = this.loadIncludedElements();
     }

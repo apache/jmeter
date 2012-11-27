@@ -92,22 +92,27 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         setGUI();
     }
 
+    @Override
     public void add(final SampleResult res) {
         JMeterUtils.runSafe(new Runnable() {            
+            @Override
             public void run() {
                 model.add(res);
             }
         });
     }
 
+    @Override
     public String getLabelResource() {
         return "spline_visualizer_title"; //$NON-NLS-1$
     }
 
+    @Override
     public void updateGui(Sample s) {
         updateGui();
     }
 
+    @Override
     public void clearData() {
         model.clearData();
     }
@@ -203,6 +208,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         // add(infoPanel, BorderLayout.EAST);
     }
 
+    @Override
     public void updateGui() {
         repaint();
         synchronized (this) {
@@ -257,6 +263,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         return this;
     }
 
+    @Override
     public Image getImage() {
         Image result = graph.createImage(graph.getWidth(), graph.getHeight());
 

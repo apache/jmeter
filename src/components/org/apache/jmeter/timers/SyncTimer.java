@@ -131,6 +131,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public long delay() {
     	if(getGroupSize()>=0) {
     		int arrival = 0;
@@ -164,6 +165,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testEnded() {
         this.testEnded(null);        
     }
@@ -171,6 +173,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     /**
      * Reset timerCounter
      */
+    @Override
     public void testEnded(String host) {
     	createBarrier();
     }
@@ -178,6 +181,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     /**
      * {@inheritDoc}
      */
+    @Override
     public void testStarted() {
         testStarted(null);
     }
@@ -185,6 +189,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     /**
      * Reset timerCounter
      */
+    @Override
     public void testStarted(String host) {
         createBarrier();
     }
@@ -201,7 +206,8 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         }
 	}
 
-	public void threadStarted() {
+	@Override
+    public void threadStarted() {
 		if(getGroupSize() == 0) {
 	        int numThreadsInGroup = JMeterContextService.getContext().getThreadGroup().getNumThreads();
 			// Unique Barrier creation ensured by synchronized setup
@@ -209,7 +215,8 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         }
 	}
 
-	public void threadFinished() {
+	@Override
+    public void threadFinished() {
 		// NOOP
 	}
 }

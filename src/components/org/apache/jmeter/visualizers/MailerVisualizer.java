@@ -110,6 +110,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     /**
      * Clears any stored sampling-informations.
      */
+    @Override
     public synchronized void clearData() {
         if (getModel() != null) {
             MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
@@ -118,9 +119,11 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         }
     }
 
+    @Override
     public void add(final SampleResult res) {
         if (getModel() != null) {
             JMeterUtils.runSafe(new Runnable() {
+                @Override
                 public void run() {
                     MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
                     // method called by add is synchronized
@@ -295,6 +298,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         return settingsPane;
     }
 
+    @Override
     public String getLabelResource() {
         return "mailer_visualizer_title"; //$NON-NLS-1$
     }
@@ -322,6 +326,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
      *            The ActionEvent with information about the event and its
      *            source.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == testerButton) {
             ResultCollector testElement = getModel();

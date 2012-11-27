@@ -46,16 +46,19 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         setName(getStaticLabel());
     }
 
+    @Override
     public String getLabelResource() {
         return "assertion_visualizer_title"; // $NON-NLS-1$
     }
 
+    @Override
     public void add(SampleResult sample) {
         final StringBuilder sb = new StringBuilder(100);
         sb.append(sample.getSampleLabel());
         sb.append(getAssertionResult(sample));
         sb.append("\n"); // $NON-NLS-1$
         JMeterUtils.runSafe(new Runnable() {
+            @Override
             public void run() {
                 synchronized (textArea) {
                     textArea.append(sb.toString());
@@ -65,6 +68,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         });
     }
 
+    @Override
     public void clearData() {
         textArea.setText(""); // $NON-NLS-1$
     }

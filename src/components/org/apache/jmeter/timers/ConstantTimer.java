@@ -83,6 +83,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
      *
      * @return the delay.
      */
+    @Override
     public long delay() {
         return delay;
     }
@@ -102,6 +103,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
      *
      * @see LoopIterationListener#iterationStart(LoopIterationEvent)
      */
+    @Override
     public void iterationStart(LoopIterationEvent event) {
         delay = getPropertyAsLong(DELAY);
 

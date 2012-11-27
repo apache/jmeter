@@ -228,6 +228,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
      * @param e
      *            the ActionEvent being processed
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
@@ -239,22 +240,26 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private class EnterAction extends AbstractAction {
         private static final long serialVersionUID = 1L;
+        @Override
         public void actionPerformed(ActionEvent ev) {
             executeAndShowTextFind();
         }
     }
 
     // DocumentListener method
+    @Override
     public void changedUpdate(DocumentEvent e) {
         // do nothing
     }
 
     // DocumentListener method
+    @Override
     public void insertUpdate(DocumentEvent e) {
         resetTextToFind();
     }
 
     // DocumentListener method
+    @Override
     public void removeUpdate(DocumentEvent e) {
         resetTextToFind();
     }

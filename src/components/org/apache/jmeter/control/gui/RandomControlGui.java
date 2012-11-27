@@ -35,6 +35,7 @@ public class RandomControlGui extends AbstractControllerGui {
         init();
     }
 
+    @Override
     public TestElement createTestElement() {
         RandomController ic = new RandomController();
         modifyTestElement(ic);
@@ -46,6 +47,7 @@ public class RandomControlGui extends AbstractControllerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement ic) {
         configureTestElement(ic);
         if (style.isSelected()) {
@@ -74,6 +76,7 @@ public class RandomControlGui extends AbstractControllerGui {
         }
     }
 
+    @Override
     public String getLabelResource() {
         return "random_control_title"; // $NON-NLS-1$
     }

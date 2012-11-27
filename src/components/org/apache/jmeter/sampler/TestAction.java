@@ -74,6 +74,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
     /**
      * {@inheritDoc}
      */
+    @Override
     public SampleResult sample(Entry e) {
         JMeterContext context = JMeterContextService.getContext();
 
@@ -157,6 +158,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 
+    @Override
     public boolean interrupt() {
         Thread thrd = pauseThread; // take copy so cannot get NPE
         if (thrd!= null) {

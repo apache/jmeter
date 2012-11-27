@@ -44,6 +44,7 @@ public class BeanShellPreProcessor extends BeanShellTestElement
         return INIT_FILE;
     }
 
+    @Override
     public void process(){
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
         if (bshInterpreter == null) {

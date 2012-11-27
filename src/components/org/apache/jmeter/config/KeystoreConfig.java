@@ -46,19 +46,23 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
         super();
     }
 
+    @Override
     public void testEnded() {
         testEnded(null);
     }
 
+    @Override
     public void testEnded(String host) {
         log.info("Destroying Keystore");         
         SSLManager.getInstance().destroyKeystore();
     }
 
+    @Override
     public void testStarted() {
         testStarted(null);
     }
 
+    @Override
     public void testStarted(String host) {
         String reuseSSLContext = JMeterUtils.getProperty("https.use.cached.ssl.context");
         if(StringUtils.isEmpty(reuseSSLContext)||"true".equals(reuseSSLContext)) {

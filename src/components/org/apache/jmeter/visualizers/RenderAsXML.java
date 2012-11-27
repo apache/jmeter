@@ -56,6 +56,7 @@ public class RenderAsXML extends SamplerResultTab
     }
 
     /** {@inheritDoc} */
+    @Override
     public void renderResult(SampleResult sampleResult) {
         showRenderXMLResponse(sampleResult);
     }
