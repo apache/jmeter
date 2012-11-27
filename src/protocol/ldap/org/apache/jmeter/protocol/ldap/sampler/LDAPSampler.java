@@ -430,6 +430,7 @@ public class LDAPSampler extends AbstractSampler {
         }
     }
 
+    @Override
     public SampleResult sample(Entry e) {
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;

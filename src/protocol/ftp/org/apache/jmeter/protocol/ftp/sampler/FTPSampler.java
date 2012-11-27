@@ -166,6 +166,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         return sb.toString();
     }
 
+    @Override
     public SampleResult sample(Entry e) {
         SampleResult res = new SampleResult();
         res.setSuccessful(false); // Assume failure
@@ -294,6 +295,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean interrupt() {
         FTPClient client = savedClient;
         if (client != null) {

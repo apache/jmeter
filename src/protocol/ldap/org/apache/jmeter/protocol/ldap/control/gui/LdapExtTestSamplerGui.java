@@ -64,6 +64,7 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
         ldapDefaultPanel.configure(element);
     }
 
+    @Override
     public TestElement createTestElement() {
         LDAPExtSampler sampler = new LDAPExtSampler();
         modifyTestElement(sampler);
@@ -75,6 +76,7 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
         ((LDAPExtSampler) sampler).addTestElement(ldapDefaultPanel.createTestElement());
@@ -91,6 +93,7 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
         ldapDefaultPanel.clearGui();
     }
 
+    @Override
     public String getLabelResource() {
         return "ldapext_testing_title"; // $NON-NLS-1$
     }

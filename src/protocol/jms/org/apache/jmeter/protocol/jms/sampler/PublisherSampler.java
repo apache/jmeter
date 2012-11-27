@@ -92,6 +92,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * the implementation calls testStarted() without any parameters.
      */
+    @Override
     public void testStarted(String test) {
         testStarted();
     }
@@ -99,6 +100,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * the implementation calls testEnded() without any parameters.
      */
+    @Override
     public void testEnded(String host) {
         testEnded();
     }
@@ -106,12 +108,14 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * endTest cleans up the client
      */
+    @Override
     public void testEnded() {
         log.debug("PublisherSampler.testEnded called");
         ClientPool.clearClient();
         InitialContextFactory.close();
     }
 
+    @Override
     public void testStarted() {
     }
 

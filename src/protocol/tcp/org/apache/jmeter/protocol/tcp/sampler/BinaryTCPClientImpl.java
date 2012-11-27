@@ -91,6 +91,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * @param os output stream
      * @param hexEncodedBinary hex-encoded binary
      */
+    @Override
     public void write(OutputStream os, String hexEncodedBinary) throws IOException{
         os.write(hexStringToByteArray(hexEncodedBinary));
         os.flush();
@@ -102,6 +103,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void write(OutputStream os, InputStream is) {
         throw new UnsupportedOperationException(
                 "Method not supported for Length-Prefixed data.");
@@ -115,6 +117,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * @return hex-encoded binary string
      * @throws ReadException 
      */
+    @Override
     public String read(InputStream is) throws ReadException {
     	ByteArrayOutputStream w = new ByteArrayOutputStream();
         try {

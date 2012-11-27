@@ -125,6 +125,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      *
      * @return a SampleResult giving the results of this sample.
      */
+    @Override
     public SampleResult runTest(JavaSamplerContext context) {
         SampleResult results = new SampleResult();
 

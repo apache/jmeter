@@ -29,6 +29,7 @@ public abstract class AbstractTCPClient implements TCPClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public byte getEolByte() {
         return eolByte;
     }
@@ -36,6 +37,7 @@ public abstract class AbstractTCPClient implements TCPClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setEolByte(int eolInt) {
         if (eolInt >= Byte.MIN_VALUE && eolInt <= Byte.MAX_VALUE) {
             this.eolByte = (byte) eolInt;
@@ -48,18 +50,21 @@ public abstract class AbstractTCPClient implements TCPClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setupTest() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void teardownTest() {
     }
 
     /**
      * @return the charset
      */
+    @Override
     public String getCharset() {
         return charset;
     }

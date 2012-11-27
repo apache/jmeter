@@ -70,6 +70,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "system_sampler_title"; // $NON-NLS-1$
     }
@@ -96,12 +97,14 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     }
 
     /* Implements JMeterGuiComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         SystemSampler sampler = new SystemSampler();
         modifyTestElement(sampler);
         return sampler;
     }
 
+    @Override
     public void modifyTestElement(TestElement sampler) {
         super.configureTestElement(sampler);
         SystemSampler systemSampler = (SystemSampler)sampler;
@@ -240,6 +243,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         stderr.clearGui();
     }
 
+    @Override
     public void itemStateChanged(ItemEvent e) {
         if(e.getSource()==checkReturnCode) {
             desiredReturnCode.setEnabled(e.getStateChange() == ItemEvent.SELECTED);

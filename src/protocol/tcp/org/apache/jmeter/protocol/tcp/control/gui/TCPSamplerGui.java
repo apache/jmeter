@@ -48,6 +48,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
         tcpDefaultPanel.configure(element);
     }
 
+    @Override
     public TestElement createTestElement() {
         TCPSampler sampler = new TCPSampler();
         modifyTestElement(sampler);
@@ -59,6 +60,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
         sampler.addTestElement(tcpDefaultPanel.createTestElement());
@@ -77,6 +79,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
         loginPanel.clearGui();
     }
 
+    @Override
     public String getLabelResource() {
         return "tcp_sample_title"; // $NON-NLS-1$
     }

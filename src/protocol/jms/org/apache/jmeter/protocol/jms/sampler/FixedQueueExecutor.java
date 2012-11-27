@@ -67,6 +67,7 @@ public class FixedQueueExecutor implements QueueExecutor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Message sendAndReceive(Message request) throws JMSException {
         String id = request.getJMSCorrelationID();
         if(id == null && !useReqMsgIdAsCorrelId){

@@ -114,11 +114,13 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
         return null;
     }
 
+    @Override
     public String getLabelResource() {
         return "ldapext_sample_title"; // $NON-NLS-1$
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         LDAPArguments args = new LDAPArguments();
         modifyTestElement(args);
@@ -128,6 +130,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement args) {
         GuiUtils.stopTableEditing(table);
         LDAPArguments arguments = null;
@@ -195,6 +198,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * @param e
      *            the event that has occurred
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(DELETE)) {

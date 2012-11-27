@@ -525,6 +525,7 @@ public class SmtpPanel extends JPanel {
         
         cbSuppressSubject = new JCheckBox(JMeterUtils.getResString("smtp_suppresssubj")); // $NON-NLS-1$
         cbSuppressSubject.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent evt) {
                 emptySubjectActionPerformed(evt);
             }
@@ -545,12 +546,14 @@ public class SmtpPanel extends JPanel {
 
         attachmentFileChooser
                 .addActionListener(new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent evt) {
                         attachmentFolderFileChooserActionPerformed(evt);
                     }
                 });
 
         emlFileChooser.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 emlFileChooserActionPerformed(evt);
             }
@@ -669,6 +672,7 @@ public class SmtpPanel extends JPanel {
         cbUseAuth.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbUseAuth.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbUseAuth.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 cbUseAuthActionPerformed(evt);
             }
@@ -752,6 +756,7 @@ public class SmtpPanel extends JPanel {
 
         addHeaderFieldButton = new JButton(JMeterUtils.getResString("smtp_header_add"));
         addHeaderFieldButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 addHeaderActionPerformed(evt);
             }
@@ -809,6 +814,7 @@ public class SmtpPanel extends JPanel {
         tfAttachment.setToolTipText(JMeterUtils.getResString("smtp_attach_file_tooltip")); // $NON-NLS-1$
 
         browseButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 browseButtonActionPerformed(evt);
             }
@@ -821,6 +827,7 @@ public class SmtpPanel extends JPanel {
 
         cbUseEmlMessage.setSelected(false);
         cbUseEmlMessage.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 cbUseEmlMessageActionPerformed(evt);
             }
@@ -838,6 +845,7 @@ public class SmtpPanel extends JPanel {
         panelMessageSettings.add(tfEmlMessage, gridBagConstraints);
 
         emlBrowseButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 emlBrowseButtonActionPerformed(evt);
             }
@@ -1034,6 +1042,7 @@ public class SmtpPanel extends JPanel {
         removeButtons.put(removeButton, nameTF);
 
         removeButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 removeHeaderActionPerformed(evt);
             }

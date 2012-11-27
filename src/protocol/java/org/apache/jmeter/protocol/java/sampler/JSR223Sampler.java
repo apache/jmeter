@@ -47,6 +47,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    @Override
     public SampleResult sample(Entry entry) {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
@@ -88,6 +89,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
+    @Override
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);

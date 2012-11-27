@@ -332,6 +332,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return TCPClient;
     }
 
+    @Override
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
     {
         if (firstSample) { // Do stuff we cannot do as part of threadStarted()
@@ -445,6 +446,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return true;
     }
 
+    @Override
     public void threadStarted() {
         log.debug("Thread Started"); //$NON-NLS-1$
         firstSample = true;
@@ -479,6 +481,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     /**
      * {@inheritDoc}
      */
+    @Override
     public void threadFinished() {
         log.debug("Thread Finished"); //$NON-NLS-1$
         tearDown();
@@ -514,6 +517,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 
+    @Override
     public boolean interrupt() {
         Socket sock = currentSocket; // fetch in case gets nulled later
         if (sock != null) {

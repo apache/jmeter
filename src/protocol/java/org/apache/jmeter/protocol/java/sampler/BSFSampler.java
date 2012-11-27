@@ -68,6 +68,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
         return getName();
     }
 
+    @Override
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
     {
         final String label = getLabel();
@@ -142,6 +143,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
+    @Override
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);

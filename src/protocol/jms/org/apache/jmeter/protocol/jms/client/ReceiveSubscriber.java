@@ -267,6 +267,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * close() will stop the connection first. 
      * Then it closes the subscriber, session and connection.
      */
+    @Override
     public void close() { // called from threadFinished() thread
         log.debug("close()");
         try {
@@ -285,6 +286,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onMessage(Message message) {
         if (!queue.offer(message)){
             log.warn("Could not add message to queue");
