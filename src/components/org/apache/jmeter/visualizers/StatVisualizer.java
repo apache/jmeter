@@ -159,12 +159,15 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         return instance.model.checkFunctors(null,instance.getClass());
     }
 
+    @Override
     public String getLabelResource() {
         return "aggregate_report";  //$NON-NLS-1$
     }
 
+    @Override
     public void add(final SampleResult res) {
         JMeterUtils.runSafe(new Runnable() {
+            @Override
             public void run() {
                 SamplingStatCalculator row = null;
                 final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
@@ -194,6 +197,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     /**
      * Clears this visualizer and its model, and forces a repaint of the table.
      */
+    @Override
     public void clearData() {
         synchronized (lock) {
             model.clearData();
@@ -249,6 +253,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         saveHeaders.setSelected(el.getPropertyAsBoolean(SAVE_HEADERS, true));
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == saveTable) {
             JFileChooser chooser = FileDialoger.promptToSaveFile("aggregate.csv");//$NON-NLS-1$

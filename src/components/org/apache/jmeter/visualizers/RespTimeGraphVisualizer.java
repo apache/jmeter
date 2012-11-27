@@ -199,6 +199,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         init();
     }
 
+    @Override
     public void add(final SampleResult sampleResult) {
         final String sampleLabel = sampleResult.getSampleLabel();
         // Make a internal list of all results to allow reload data with filter or interval
@@ -214,6 +215,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             final long startTimeMS = sampleResult.getStartTime();
             final int startTimeInterval = (int) startTimeMS / intervalValue;
             JMeterUtils.runSafe(new Runnable() {
+                @Override
                 public void run() {
                     synchronized (lock) {
                         // Use for x-axis scale
@@ -346,10 +348,12 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         return data;
     }
 
+    @Override
     public String getLabelResource() {
         return "graph_resp_time_title"; // $NON-NLS-1$
     }
 
+    @Override
     public void clearData() {
         synchronized (lock) {
             internalList.clear();
@@ -399,6 +403,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         
         // If clic on the Graph tab, make the graph (without apply interval or filter)
         ChangeListener changeListener = new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 JTabbedPane srcTab = (JTabbedPane) changeEvent.getSource();
                 int index = srcTab.getSelectedIndex();
@@ -414,6 +419,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         boolean forceReloadData = false;
         final Object eventSource = event.getSource();

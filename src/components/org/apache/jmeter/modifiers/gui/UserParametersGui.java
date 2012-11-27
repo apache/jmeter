@@ -82,6 +82,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "user_parameters_title"; // $NON-NLS-1$
     }
@@ -113,6 +114,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         UserParameters params = new UserParameters();
         modifyTestElement(params);
@@ -124,6 +126,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement params) {
         GuiUtils.stopTableEditing(paramTable);
         UserParameters userParams = ((UserParameters) params);
@@ -287,6 +290,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     }
     
     private class AddParamAction implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             GuiUtils.stopTableEditing(paramTable);
             
@@ -303,6 +307,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     }
 
     private class AddUserAction implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             
             GuiUtils.stopTableEditing(paramTable);
@@ -321,6 +326,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     }
 
     private class DeleteRowAction implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (paramTable.isEditing()) {
                 TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
@@ -354,6 +360,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     }
 
     private class DeleteColumnAction implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (paramTable.isEditing()) {
                 TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable

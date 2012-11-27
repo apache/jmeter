@@ -36,6 +36,7 @@ public class BSFListener extends BSFTestElement
 
     private static final long serialVersionUID = 234L;
 
+    @Override
     public void sampleOccurred(SampleEvent event) {
         BSFManager mgr =null;
         try {
@@ -57,18 +58,22 @@ public class BSFListener extends BSFTestElement
         }
     }
 
+    @Override
     public void sampleStarted(SampleEvent e) {
     	// NOOP
     }
 
+    @Override
     public void sampleStopped(SampleEvent e) {
     	// NOOP
     }
 
+    @Override
     public void add(SampleResult sample) {
     	// NOOP
     }
 
+    @Override
     public boolean isStats() {
         return false;
     }

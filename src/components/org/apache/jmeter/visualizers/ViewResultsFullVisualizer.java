@@ -122,8 +122,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void add(final SampleResult sample) {
         JMeterUtils.runSafe(new Runnable() {
+            @Override
             public void run() {
                 updateGui(sample);
             }
@@ -189,6 +191,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public synchronized void clearData() {
         while (root.getChildCount() > 0) {
             // the child to be removed will always be 0 'cos as the nodes are
@@ -199,6 +202,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getLabelResource() {
         return "view_results_tree_title"; // $NON-NLS-1$
     }
@@ -225,6 +229,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void valueChanged(TreeSelectionEvent e) {
         lastSelectionEvent = e;
         DefaultMutableTreeNode node = null;
@@ -321,6 +326,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
         if (COMBO_CHANGE_COMMAND.equals(command)) {
@@ -404,6 +410,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     /**
      * Handler for Checkbox
      */
+    @Override
     public void itemStateChanged(ItemEvent e) {
         // NOOP state is held by component
     }

@@ -54,6 +54,7 @@ public interface ResultRenderer {
      *
      * @return the string to be displayed by the ComboBox
      */
+    @Override
     String toString();
 
     void setBackgroundColor(Color backGround);

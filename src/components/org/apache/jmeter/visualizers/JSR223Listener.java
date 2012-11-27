@@ -40,6 +40,7 @@ public class JSR223Listener extends JSR223TestElement
 
     private static final long serialVersionUID = 234L;
 
+    @Override
     public void sampleOccurred(SampleEvent event) {
         try {
             ScriptEngine scriptEngine = getScriptEngine();
@@ -54,18 +55,22 @@ public class JSR223Listener extends JSR223TestElement
         }
     }
 
+    @Override
     public void sampleStarted(SampleEvent e) {
     	// NOOP
     }
 
+    @Override
     public void sampleStopped(SampleEvent e) {
     	// NOOP
     }
 
+    @Override
     public void add(SampleResult sample) {
     	// NOOP
     }
 
+    @Override
     public boolean isStats() {
         return false;
     }

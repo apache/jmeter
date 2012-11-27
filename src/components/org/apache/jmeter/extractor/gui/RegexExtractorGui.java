@@ -74,6 +74,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "regex_extractor_title"; //$NON-NLS-1$
     }
@@ -102,6 +103,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         AbstractScopedTestElement extractor = new RegexExtractor();
         modifyTestElement(extractor);
@@ -113,6 +115,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement extractor) {
         super.configureTestElement(extractor);
         if (extractor instanceof RegexExtractor) {

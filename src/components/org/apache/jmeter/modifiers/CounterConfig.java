@@ -96,6 +96,7 @@ public class CounterConfig extends AbstractTestElement
     /**
      * @see LoopIterationListener#iterationStart(LoopIterationEvent)
      */
+    @Override
     public void iterationStart(LoopIterationEvent event) {
         // Cannot use getThreadContext() as not cloned per thread
         JMeterVariables variables = JMeterContextService.getContext().getVariables();

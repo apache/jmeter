@@ -285,10 +285,12 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         return instance.model.checkFunctors(null,instance.getClass());
     }
 
+    @Override
     public String getLabelResource() {
         return "aggregate_graph_title";                        //$NON-NLS-1$
     }
 
+    @Override
     public void add(final SampleResult res) {
         final String sampleLabel = res.getSampleLabel();
         // Sampler selection
@@ -297,6 +299,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         }
         if ((matcher == null) || (matcher.find())) {
             JMeterUtils.runSafe(new Runnable() {
+                @Override
                 public void run() {
                     SamplingStatCalculator row = null;
                     synchronized (lock) {
@@ -318,6 +321,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     /**
      * Clears this visualizer and its model, and forces a repaint of the table.
      */
+    @Override
     public void clearData() {
         synchronized (lock) {
 	        model.clearData();
@@ -368,6 +372,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
         // If clic on the Graph tab, make the graph (without apply interval or filter)
         ChangeListener changeListener = new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 JTabbedPane srcTab = (JTabbedPane) changeEvent.getSource();
                 int index = srcTab.getSelectedIndex();
@@ -539,6 +544,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         return data;
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         boolean forceReloadData = false;
         final Object eventSource = event.getSource();

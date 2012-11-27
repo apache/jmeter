@@ -53,6 +53,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
 
     private boolean displaySystemProperties;
 
+    @Override
     public SampleResult sample(Entry e) {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
@@ -92,6 +93,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
         @SuppressWarnings("unchecked")
         ArrayList<Map.Entry<Object, Object>> al = new ArrayList<Map.Entry<Object, Object>>(s);
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
+            @Override
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {
                 String m1,m2;
                 m1=(String)o1.getKey();

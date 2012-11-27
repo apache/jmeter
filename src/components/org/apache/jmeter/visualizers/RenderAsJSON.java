@@ -41,6 +41,7 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
     private static final Pattern VALUE_OR_PAIR_PATTERN = Pattern.compile(VALUE_OR_PAIR_REGEX);
 
     /** {@inheritDoc} */
+    @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         showRenderJSONResponse(response);

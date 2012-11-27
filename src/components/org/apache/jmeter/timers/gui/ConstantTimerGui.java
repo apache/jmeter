@@ -64,6 +64,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
         JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    @Override
     public String getLabelResource() {
         return "constant_timer_title"; // $NON-NLS-1$
     }
@@ -73,6 +74,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         ConstantTimer timer = new ConstantTimer();
         modifyTestElement(timer);
@@ -84,6 +86,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement timer) {
         this.configureTestElement(timer);
         ((ConstantTimer) timer).setDelay(delayField.getText());

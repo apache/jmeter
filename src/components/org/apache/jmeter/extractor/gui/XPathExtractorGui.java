@@ -59,6 +59,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private final XMLConfPanel xml = new XMLConfPanel();
 
+    @Override
     public String getLabelResource() {
         return "xpath_extractor_title"; //$NON-NLS-1$
     }
@@ -81,12 +82,14 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     }
 
 
+    @Override
     public TestElement createTestElement() {
         XPathExtractor extractor = new XPathExtractor();
         modifyTestElement(extractor);
         return extractor;
     }
 
+    @Override
     public void modifyTestElement(TestElement extractor) {
         super.configureTestElement(extractor);
         if ( extractor instanceof XPathExtractor){

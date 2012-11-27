@@ -44,6 +44,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
         }
     }
 
+    @Override
     public TestElement createTestElement() {
         InterleaveControl ic = new InterleaveControl();
         modifyTestElement(ic);
@@ -55,6 +56,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement ic) {
         configureTestElement(ic);
         if (style.isSelected()) {
@@ -73,6 +75,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
         style.setSelected(false);
     }
 
+    @Override
     public String getLabelResource() {
         return "interleave_control_title"; // $NON-NLS-1$
     }

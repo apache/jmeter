@@ -94,6 +94,7 @@ public class PropertyControlGui extends AbstractConfigGui
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "property_visualiser_title"; // $NON-NLS-1$
     }
@@ -103,6 +104,7 @@ public class PropertyControlGui extends AbstractConfigGui
         return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
     }
 
+    @Override
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
         if (ADD.equals(command)){
@@ -122,6 +124,7 @@ public class PropertyControlGui extends AbstractConfigGui
 
     }
 
+    @Override
     public TestElement createTestElement() {
         TestElement el = new ConfigTestElement();
         modifyTestElement(el);
@@ -148,6 +151,7 @@ public class PropertyControlGui extends AbstractConfigGui
         Set<Map.Entry<Object, Object>> s = p.entrySet();
         ArrayList<Map.Entry<Object, Object>> al = new ArrayList<Map.Entry<Object, Object>>(s);
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
+            @Override
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {
                 String m1,m2;
                 m1=(String)o1.getKey();
@@ -162,6 +166,7 @@ public class PropertyControlGui extends AbstractConfigGui
 
     }
 
+    @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
     }

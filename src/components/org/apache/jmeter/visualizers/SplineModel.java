@@ -97,6 +97,7 @@ public class SplineModel implements Clearable {
         clearData();
     }
 
+    @Override
     public synchronized void clearData() {
         // this.graph.clear();
         samples.clear();

@@ -104,6 +104,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
      * Return value as variable defined by REFNAME. Returns DEFAULT value
      * if not found.
      */
+    @Override
     public void process() {
         JMeterContext context = getThreadContext();
         final SampleResult previousResult = context.getPreviousResult();

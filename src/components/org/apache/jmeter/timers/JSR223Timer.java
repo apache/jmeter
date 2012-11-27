@@ -34,6 +34,7 @@ public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, 
     private static final long serialVersionUID = 4;
 
     /** {@inheritDoc} */
+    @Override
     public long delay() {
         long delay = 0;
         try {

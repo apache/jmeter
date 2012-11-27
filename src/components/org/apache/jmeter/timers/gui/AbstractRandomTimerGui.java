@@ -77,6 +77,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         RandomTimer timer = createRandomTimer();
         modifyTestElement(timer);
@@ -88,6 +89,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement timer) {
         this.configureTestElement(timer);
         ((RandomTimer) timer).setDelay(delayField.getText());
@@ -162,6 +164,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
     /**
      * {@inheritDoc}
      */
+    @Override
     abstract public String getLabelResource();
 
     /**

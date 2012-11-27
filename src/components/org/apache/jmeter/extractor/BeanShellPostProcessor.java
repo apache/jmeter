@@ -44,7 +44,8 @@ public class BeanShellPostProcessor extends BeanShellTestElement
         return INIT_FILE;
     }
 
-     public void process() {
+     @Override
+    public void process() {
         JMeterContext jmctx = JMeterContextService.getContext();
 
         SampleResult prev = jmctx.getPreviousResult();

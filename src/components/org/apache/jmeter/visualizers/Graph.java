@@ -81,6 +81,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
      *
      * @return the PreferredScrollableViewportSize value
      */
+    @Override
     public Dimension getPreferredScrollableViewportSize() {
         return this.getPreferredSize();
         // return new Dimension(width, 400);
@@ -91,6 +92,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
      *
      * @return the ScrollableUnitIncrement value
      */
+    @Override
     public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
         return 5;
     }
@@ -100,6 +102,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
      *
      * @return the ScrollableBlockIncrement value
      */
+    @Override
     public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
         return (int) (visibleRect.width * .9);
     }
@@ -109,6 +112,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
      *
      * @return the ScrollableTracksViewportWidth value
      */
+    @Override
     public boolean getScrollableTracksViewportWidth() {
         return false;
     }
@@ -118,6 +122,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
      *
      * @return the ScrollableTracksViewportHeight value
      */
+    @Override
     public boolean getScrollableTracksViewportHeight() {
         return true;
     }
@@ -125,6 +130,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
     /**
      * Clears this graph.
      */
+    @Override
     public void clearData() {
         graphMax = 1;
         throughputMax = 1;
@@ -172,6 +178,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
         final long xPos = model.getCount();
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 Graphics g = getGraphics();
 

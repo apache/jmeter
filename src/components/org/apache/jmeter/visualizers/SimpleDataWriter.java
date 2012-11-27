@@ -41,6 +41,7 @@ public class SimpleDataWriter extends AbstractVisualizer {
         setName(getStaticLabel());
     }
 
+    @Override
     public String getLabelResource() {
         return "simple_data_writer_title"; // $NON-NLS-1$
     }
@@ -60,6 +61,7 @@ public class SimpleDataWriter extends AbstractVisualizer {
      * Does nothing, but required by interface.
      */
 
+    @Override
     public void clearData() {
     }
 
@@ -70,6 +72,7 @@ public class SimpleDataWriter extends AbstractVisualizer {
      *            ignored
      */
 
+    @Override
     public void add(SampleResult sample) {
     }
 }

@@ -75,6 +75,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
      *
      * @return the ScrollableTracksViewportWidth value
      */
+    @Override
     public boolean getScrollableTracksViewportWidth() {
         return true;
     }
@@ -84,6 +85,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
      *
      * @return the ScrollableTracksViewportHeight value
      */
+    @Override
     public boolean getScrollableTracksViewportHeight() {
         return true;
     }
@@ -101,6 +103,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
      *
      * @return the PreferredScrollableViewportSize value
      */
+    @Override
     public Dimension getPreferredScrollableViewportSize() {
         return this.getPreferredSize();
     }
@@ -110,6 +113,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
      *
      * @return the ScrollableUnitIncrement value
      */
+    @Override
     public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
         return 5;
     }
@@ -119,6 +123,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
      *
      * @return the ScrollableBlockIncrement value
      */
+    @Override
     public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
         return (int) (visibleRect.width * .9);
     }
@@ -126,6 +131,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
     /**
      * Clears this graph.
      */
+    @Override
     public void clearData() {
         model.clear();
     }
