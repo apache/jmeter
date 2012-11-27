@@ -125,6 +125,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
+    @Override
     public TestElement createTestElement() {
         ForeachController lc = new ForeachController();
         modifyTestElement(lc);
@@ -132,6 +133,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    @Override
     public void modifyTestElement(TestElement lc) {
         configureTestElement(lc);
         if (lc instanceof ForeachController) {
@@ -159,6 +161,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
     }
 
 
+    @Override
     public String getLabelResource() {
         return "foreach_controller_title"; // $NON-NLS-1$
     }

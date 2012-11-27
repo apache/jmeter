@@ -91,6 +91,7 @@ public class TestActionGui extends AbstractSamplerGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "test_action_title"; // $NON-NLS-1$
     }
@@ -124,6 +125,7 @@ public class TestActionGui extends AbstractSamplerGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         TestAction ta = new TestAction();
         modifyTestElement(ta);
@@ -135,6 +137,7 @@ public class TestActionGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
         TestAction ta = (TestAction) element;
@@ -172,6 +175,7 @@ public class TestActionGui extends AbstractSamplerGui {
         targetModel.addElement(testTarget);
         targetBox = new JComboBox(targetModel);
         targetBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (((String) targetBox.getSelectedItem()).equals(threadTarget)) {
                     target = TestAction.THREAD;
@@ -188,6 +192,7 @@ public class TestActionGui extends AbstractSamplerGui {
         ButtonGroup actionButtons = new ButtonGroup();
         pauseButton = new JRadioButton(pauseAction, true);
         pauseButton.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (pauseButton.isSelected()) {
                     action = TestAction.PAUSE;
@@ -199,6 +204,7 @@ public class TestActionGui extends AbstractSamplerGui {
         });
         stopButton = new JRadioButton(stopAction, false);
         stopButton.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (stopButton.isSelected()) {
                     action = TestAction.STOP;
@@ -209,6 +215,7 @@ public class TestActionGui extends AbstractSamplerGui {
         });
         stopNowButton = new JRadioButton(stopNowAction, false);
         stopNowButton.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (stopNowButton.isSelected()) {
                     action = TestAction.STOP_NOW;
@@ -220,6 +227,7 @@ public class TestActionGui extends AbstractSamplerGui {
         
         restartNextLoopButton = new JRadioButton(restartNextLoopAction, false);
         restartNextLoopButton.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent e) {
                 if (restartNextLoopButton.isSelected()) {
                     action = TestAction.RESTART_NEXT_LOOP;
@@ -247,10 +255,12 @@ public class TestActionGui extends AbstractSamplerGui {
         durationField = new JTextField(15);
         durationField.setText("");
         durationField.addFocusListener(new FocusListener() {
+            @Override
             public void focusLost(FocusEvent e) {
                 durationString = durationField.getText();
             }
 
+            @Override
             public void focusGained(FocusEvent e) {
             }
         });

@@ -39,6 +39,7 @@ public class SwitchControllerGui extends AbstractControllerGui {
         init();
     }
 
+    @Override
     public TestElement createTestElement() {
         SwitchController ic = new SwitchController();
         modifyTestElement(ic);
@@ -50,6 +51,7 @@ public class SwitchControllerGui extends AbstractControllerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement ic) {
         configureTestElement(ic);
         ((SwitchController) ic).setSelection(switchValue.getText());
@@ -70,6 +72,7 @@ public class SwitchControllerGui extends AbstractControllerGui {
         switchValue.setText(((SwitchController) el).getSelection());
     }
 
+    @Override
     public String getLabelResource() {
         return "switch_controller_title"; // $NON-NLS-1$
     }

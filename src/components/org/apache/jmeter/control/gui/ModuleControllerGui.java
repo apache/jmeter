@@ -71,6 +71,7 @@ public class ModuleControllerGui extends AbstractControllerGui
     }
 
     /** {@inheritDoc}} */
+    @Override
     public String getLabelResource() {
         return "module_controller_title"; // $NON-NLS-1$
     }
@@ -108,6 +109,7 @@ public class ModuleControllerGui extends AbstractControllerGui
     }
 
     /** {@inheritDoc}} */
+    @Override
     public TestElement createTestElement() {
         ModuleController mc = new ModuleController();
         configureTestElement(mc);
@@ -118,6 +120,7 @@ public class ModuleControllerGui extends AbstractControllerGui
     }
 
     /** {@inheritDoc}} */
+    @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
         TreeNodeWrapper tnw = (TreeNodeWrapper) nodesModel.getSelectedItem();

@@ -32,6 +32,7 @@ public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostP
 
     private static final long serialVersionUID = 232L;
 
+    @Override
     public void process(){
         BSFManager mgr =null;
         try {

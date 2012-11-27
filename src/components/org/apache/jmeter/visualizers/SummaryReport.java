@@ -155,13 +155,16 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         return instance.model.checkFunctors(null,instance.getClass());
     }
 
+    @Override
     public String getLabelResource() {
         return "summary_report";  //$NON-NLS-1$
     }
 
+    @Override
     public void add(final SampleResult res) {
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
         JMeterUtils.runSafe(new Runnable() {
+            @Override
             public void run() {
                 Calculator row = null;
                 synchronized (lock) {
@@ -190,6 +193,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     /**
      * Clears this visualizer and its model, and forces a repaint of the table.
      */
+    @Override
     public void clearData() {
         //Synch is needed because a clear can occur while add occurs
         synchronized (lock) {
@@ -244,6 +248,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         saveHeaders.setSelected(el.getPropertyAsBoolean(SAVE_HEADERS, true));
     }
 
+    @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == saveTable) {
             JFileChooser chooser = FileDialoger.promptToSaveFile("summary.csv");//$NON-NLS-1$

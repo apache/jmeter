@@ -31,6 +31,7 @@ public class BSFTimer extends BSFTestElement implements Cloneable, Timer, TestBe
     private static final long serialVersionUID = 4;
 
     /** {@inheritDoc} */
+    @Override
     public long delay() {
         long delay = 0;
         BSFManager mgr = null;

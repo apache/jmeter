@@ -232,6 +232,7 @@ public class ThroughputController extends GenericController implements Serializa
         return clone;
     }
 
+    @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
         if (!isPerThread()) {
             synchronized (counterLock) {
@@ -250,6 +251,7 @@ public class ThroughputController extends GenericController implements Serializa
         }
     }
 
+    @Override
     public void testStarted() {
         synchronized (counterLock) {
             globalNumExecutions = new MutableInteger(0);
@@ -257,14 +259,17 @@ public class ThroughputController extends GenericController implements Serializa
         }
     }
 
+    @Override
     public void testStarted(String host) {
         testStarted();
     }
 
+    @Override
     public void testEnded() {
     	// NOOP
     }
 
+    @Override
     public void testEnded(String host) {
     	// NOOP
     }

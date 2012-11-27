@@ -32,6 +32,7 @@ public class BSFPreProcessor extends BSFTestElement implements Cloneable, PrePro
 
     private static final long serialVersionUID = 232L;
 
+    @Override
     public void process(){
         BSFManager mgr =null;
         try {

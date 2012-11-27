@@ -47,6 +47,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "counter_config_title";//$NON-NLS-1$
     }
@@ -54,6 +55,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         CounterConfig config = new CounterConfig();
         modifyTestElement(config);
@@ -65,6 +67,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement c) {
         if (c instanceof CounterConfig) {
             CounterConfig config = (CounterConfig) c;
@@ -143,7 +146,8 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
     /**
      * Disable/Enable resetCounterOnEachThreadGroupIteration when perUserField is disabled / enabled
      */
-	public void actionPerformed(ActionEvent e) {
+	@Override
+    public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == perUserField) {
 			resetCounterOnEachThreadGroupIteration.setEnabled(perUserField.isSelected());
 		}

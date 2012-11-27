@@ -41,6 +41,7 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
     /**
      * {@inheritDoc}
      */
+    @Override
     public long delay() {
         String ret="0";
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();

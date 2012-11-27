@@ -190,6 +190,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                         String.class, String.class }, false);
     }
 
+    @Override
     public void clearData() {
         results.setText("");// Response Data // $NON-NLS-1$
         requestPanel.clearData();// Request Data // $NON-NLS-1$
@@ -199,6 +200,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         resFieldsModel.clearData();
     }
 
+    @Override
     public void init() {
         rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
         // Create the panels for the other tabs
@@ -206,6 +208,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         resultsPane = createResponseDataPanel();
     }
 
+    @Override
     @SuppressWarnings("boxing")
     public void setupTabPane() {
         // Clear all data before display a new
@@ -470,18 +473,22 @@ public abstract class SamplerResultTab implements ResultRenderer {
         resultsScrollPane.setViewportView(imageLabel);
     }
 
+    @Override
     public synchronized void setSamplerResult(Object sample) {
         userObject = sample;
     }
 
+    @Override
     public synchronized void setRightSide(JTabbedPane side) {
         rightSide = side;
     }
 
+    @Override
     public void setLastSelectedTab(int index) {
         lastSelectedTab = index;
     }
 
+    @Override
     public void renderImage(SampleResult sampleResult) {
         byte[] responseBytes = sampleResult.getResponseData();
         if (responseBytes != null) {
@@ -489,6 +496,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         }
     }
 
+    @Override
     public void setBackgroundColor(Color backGround){
         this.backGround = backGround;
     }

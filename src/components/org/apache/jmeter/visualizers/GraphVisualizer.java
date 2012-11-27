@@ -108,6 +108,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      *
      * @return the Image value
      */
+    @Override
     public Image getImage() {
         Image result = graph.createImage(graph.getWidth(), graph.getHeight());
 
@@ -128,18 +129,22 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         updateYAxis();
     }
 
+    @Override
     public void add(final SampleResult res) {
         JMeterUtils.runSafe(new Runnable() {            
+            @Override
             public void run() {
                 updateGui(model.addSample(res));
             }
         });
     }
 
+    @Override
     public String getLabelResource() {
         return "graph_results_title"; // $NON-NLS-1$
     }
 
+    @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getItem() == data) {
             this.graph.enableData(e.getStateChange() == ItemEvent.SELECTED);
@@ -155,6 +160,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         this.graph.repaint();
     }
 
+    @Override
     public void clearData() {
         graph.clearData();
         model.clear();
