@@ -35,10 +35,12 @@ public class XMLAssertionGui extends AbstractAssertionGui {
     /**
      * Returns the label to be shown within the JTree-Component.
      */
+    @Override
     public String getLabelResource() {
         return "xml_assertion_title"; // $NON-NLS-1$
     }
 
+    @Override
     public TestElement createTestElement() {
         XMLAssertion el = new XMLAssertion();
         modifyTestElement(el);
@@ -50,6 +52,7 @@ public class XMLAssertionGui extends AbstractAssertionGui {
      * 
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
     }

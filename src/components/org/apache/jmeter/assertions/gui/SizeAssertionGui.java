@@ -67,10 +67,12 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "size_assertion_title"; //$NON-NLS-1$
     }
 
+    @Override
     public TestElement createTestElement() {
         SizeAssertion el = new SizeAssertion();
         modifyTestElement(el);
@@ -82,6 +84,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         SizeAssertion assertion = (SizeAssertion) el;
@@ -269,6 +272,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         return button;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         int comparator = Integer.parseInt(e.getActionCommand());
         execState = comparator;

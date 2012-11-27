@@ -76,6 +76,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
         this.md5HexInput.setText(String.valueOf(assertion.getAllowedMD5Hex()));
     }
 
+    @Override
     public String getLabelResource() {
         return "md5hex_assertion_title"; // $NON-NLS-1$
     }
@@ -83,6 +84,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
     /*
      * @return
      */
+    @Override
     public TestElement createTestElement() {
 
         MD5HexAssertion el = new MD5HexAssertion();
@@ -94,6 +96,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
     /*
      * @param element
      */
+    @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
         String md5HexString = this.md5HexInput.getText();

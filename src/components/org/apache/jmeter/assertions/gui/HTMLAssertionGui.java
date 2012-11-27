@@ -85,6 +85,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     /**
      * Returns the label to be shown within the JTree-Component.
      */
+    @Override
     public String getLabelResource() {
         return "html_assertion_title"; // $NON-NLS-1$
     }
@@ -92,6 +93,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         HTMLAssertion el = new HTMLAssertion();
         modifyTestElement(el);
@@ -103,6 +105,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement inElement) {
 
         log.debug("HTMLAssertionGui.modifyTestElement() called");
@@ -316,6 +319,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
      *
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (errorsOnly.isSelected()) {
             warningThresholdField.setEnabled(false);
@@ -326,10 +330,12 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
     	// NOOP
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         String fieldName = e.getComponent().getName();
 
@@ -356,6 +362,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
         }
 
     }
+    @Override
     public void keyTyped(KeyEvent e) {
     	// NOOP
     }

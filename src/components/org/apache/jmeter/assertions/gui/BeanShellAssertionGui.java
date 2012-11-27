@@ -58,6 +58,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
         super.configure(element);
     }
 
+    @Override
     public TestElement createTestElement() {
         BeanShellAssertion sampler = new BeanShellAssertion();
         modifyTestElement(sampler);
@@ -69,6 +70,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
      * 
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement te) {
         te.clear();
         this.configureTestElement(te);
@@ -78,6 +80,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
         te.setProperty(new BooleanProperty(BeanShellAssertion.RESET_INTERPRETER, resetInterpreter.isSelected()));
     }
 
+    @Override
     public String getLabelResource() {
         return "bsh_assertion_title"; // $NON-NLS-1$
     }
