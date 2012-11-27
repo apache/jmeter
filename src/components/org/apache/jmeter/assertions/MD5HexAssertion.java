@@ -50,6 +50,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
     /*
      * @param response @return
      */
+    @Override
     public AssertionResult getResult(SampleResult response) {
 
         AssertionResult result = new AssertionResult(getName());

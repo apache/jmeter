@@ -55,6 +55,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
      * containing a FailureMessage will be returned. Otherwise the returned
      * AssertionResult will reflect the success of the Sample.
      */
+    @Override
     public AssertionResult getResult(SampleResult response) {
         // no error as default
         AssertionResult result = new AssertionResult(getName());

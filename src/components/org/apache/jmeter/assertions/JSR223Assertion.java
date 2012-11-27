@@ -36,6 +36,7 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
 
     private static final long serialVersionUID = 234L;
 
+    @Override
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         try {

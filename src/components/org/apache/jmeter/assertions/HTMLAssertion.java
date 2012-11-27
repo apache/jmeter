@@ -74,6 +74,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      * a FailureMessage will be returned. Otherwise the returned AssertionResult
      * will reflect the success of the Sample.
      */
+    @Override
     public AssertionResult getResult(SampleResult inResponse) {
         log.debug("HTMLAssertions.getResult() called");
 
