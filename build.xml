@@ -349,7 +349,6 @@
   <patternset id="external.jars">
     <include name="${lib.dir}/${activation.jar}"/>
     <include name="${lib.dir}/${apache-bsf.jar}"/>
-    <include name="${lib.dir}/${apache-jsr223-api.jar}"/>
     <include name="${lib.dir}/${avalon-framework.jar}"/>
     <include name="${lib.dir}/${beanshell.jar}"/>
     <include name="${lib.dir}/${commons-codec.jar}"/>
@@ -414,7 +413,6 @@
     <!-- Externally produced jars -->
     <pathelement location="${lib.dir}/${activation.jar}"/>
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
-    <pathelement location="${lib.dir}/${apache-jsr223-api.jar}"/>
     <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
     <pathelement location="${lib.dir}/${beanshell.jar}"/>
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
