@@ -2616,7 +2616,6 @@ run JMeter unless all the JMeter jars are added.
     <target name="_process_all_jars">
         <process_jarfile jarname="apache-bsf"/>
         <process_jarfile jarname="activation"/>
-        <process_jarfile jarname="apache-jsr223-api"/>
         <process_jarfile jarname="avalon-framework"/>
         <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
         <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
