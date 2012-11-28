@@ -103,11 +103,6 @@ under the License.
         <version>${apache-bsf.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.bsf</groupId>
-        <artifactId>bsf-api</artifactId>
-        <version>${apache-jsr223-api.version}</version>
-      </dependency>
-      <dependency>
         <groupId>avalon-framework</groupId>
         <artifactId>avalon-framework</artifactId>
         <version>${avalon-framework.version}</version>
