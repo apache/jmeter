@@ -49,6 +49,7 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
@@ -259,7 +260,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         HttpContext localContext = new BasicHttpContext();
-
+        
         res.sampleStart();
 
         final CacheManager cacheManager = getCacheManager();
@@ -506,7 +507,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HttpHost proxy = new HttpHost(proxyHost, proxyPort);
                 clientParams.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
                 String proxyUser = getProxyUser();
-                if (proxyUser.length() > 0) {
+                
+                if (proxyUser.length() > 0) {                   
                     ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(
                             new AuthScope(proxyHost, proxyPort),
                             new NTCredentials(proxyUser, getProxyPass(), localHost, PROXY_DOMAIN));
@@ -537,7 +539,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // TODO - should this be done when the client is created?
         // If so, then the details need to be added as part of HttpClientKey
-        setConnectionAuthorization(httpClient, url, getAuthManager());
+        setConnectionAuthorization(httpClient, url, getAuthManager(), key);
 
         return httpClient;
     }
@@ -715,7 +717,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return hdrs.toString();
     }
 
-    private void setConnectionAuthorization(HttpClient client, URL url, AuthManager authManager) {
+    /**
+     * Setup credentials for url AuthScope but keeps Proxy AuthScope credentials
+     * @param client HttpClient
+     * @param url URL
+     * @param authManager {@link AuthManager}
+     * @param key key
+     */
+    private void setConnectionAuthorization(HttpClient client, URL url, AuthManager authManager, HttpClientKey key) {
         CredentialsProvider credentialsProvider = 
             ((AbstractHttpClient) client).getCredentialsProvider();
         if (authManager != null) {
@@ -734,7 +743,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 credentialsProvider.clear();
             }
         } else {
-            credentialsProvider.clear();            
+            Credentials credentials = null;
+            AuthScope authScope = null;
+            if(key.hasProxy && !StringUtils.isEmpty(key.proxyUser)) {
+                authScope = new AuthScope(key.proxyHost, key.proxyPort);
+                credentials = credentialsProvider.getCredentials(authScope);
+            }
+            credentialsProvider.clear(); 
+            if(credentials != null) {
+                credentialsProvider.setCredentials(authScope, credentials);
+            }
         }
     }
 
