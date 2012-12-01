@@ -51,6 +51,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
@@ -248,7 +249,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // display a SampleResult
             if (userObject instanceof SampleResult) {
                 SampleResult sampleResult = (SampleResult) userObject;
-                if ((SampleResult.TEXT).equals(sampleResult.getDataType())){
+                if (isTextDataType(sampleResult)){
                     resultsRender.renderResult(sampleResult);
                 } else {
                     byte[] responseBytes = sampleResult.getResponseData();
@@ -258,6 +259,15 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 }
             }
         }
+    }
+
+    /**
+     * @param sampleResult SampleResult
+     * @return true if sampleResult is text or has empty content type
+     */
+    protected static boolean isTextDataType(SampleResult sampleResult) {
+        return (SampleResult.TEXT).equals(sampleResult.getDataType())
+                || StringUtils.isEmpty(sampleResult.getDataType());
     }
 
     private synchronized Component createLeftPanel() {
@@ -356,7 +366,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     public static String getResponseAsString(SampleResult res) {
         String response = null;
-        if ((SampleResult.TEXT).equals(res.getDataType())) {
+        if (isTextDataType(res)) {
             // Showing large strings can be VERY costly, so we will avoid
             // doing so if the response
             // data is larger than 200K. TODO: instead, we could delay doing
