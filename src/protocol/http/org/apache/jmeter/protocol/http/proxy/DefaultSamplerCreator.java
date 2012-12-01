@@ -20,9 +20,14 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +42,11 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Default implementation that handles classical HTTP textual + Multipart requests
@@ -173,7 +183,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 // Set the file uploads
                 sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
-            } else if (postData.trim().startsWith("<?") || HTTPConstants.PUT.equals(sampler.getMethod())) {
+            } else if ((postData.trim().startsWith("<?") || isPotentialXml(postData)) || HTTPConstants.PUT.equals(sampler.getMethod())) {
                 sampler.addNonEncodedArgument("", postData, "");
             } else if (contentType == null || 
                     (contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) && 
@@ -201,6 +211,58 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         }
     }
 
+    /**
+     * Tries parsing to see if content is xml
+     * @param postData String
+     * @return boolean
+     */
+    private static final boolean isPotentialXml(String postData) {
+        try {
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            SAXParser saxParser = spf.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+            ErrorDetectionHandler detectionHandler =
+                    new ErrorDetectionHandler();
+            xmlReader.setContentHandler(detectionHandler);
+            xmlReader.parse(new InputSource(new StringReader(postData)));
+            return detectionHandler.isErrorDetected();
+        } catch (ParserConfigurationException e) {
+            return false;
+        } catch (SAXException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    
+    private static final class ErrorDetectionHandler extends DefaultHandler {
+        private boolean errorDetected = false;
+        public ErrorDetectionHandler() {
+            super();
+        }
+        /* (non-Javadoc)
+         * @see org.xml.sax.helpers.DefaultHandler#error(org.xml.sax.SAXParseException)
+         */
+        @Override
+        public void error(SAXParseException e) throws SAXException {
+            this.errorDetected = true;
+        }
+
+        /* (non-Javadoc)
+         * @see org.xml.sax.helpers.DefaultHandler#fatalError(org.xml.sax.SAXParseException)
+         */
+        @Override
+        public void fatalError(SAXParseException e) throws SAXException {
+            this.errorDetected = true;
+        }
+        /**
+         * @return the errorDetected
+         */
+        public boolean isErrorDetected() {
+            return errorDetected;
+        }
+        
+    }
     /**
      * Compute sampler name
      * @param sampler {@link HTTPSamplerBase}
