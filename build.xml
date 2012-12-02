@@ -1710,6 +1710,10 @@ run JMeter unless all the JMeter jars are added.
         
         If not using stored credentials, provide at least the ldap password.
         The ldap username defaults to the login name (i.e. the Java user.name property) but can also be provided.
+        
+        Note: svnmucc can only move or copy files where the target does not exist.
+        This is perfect for deploying an RC or new release as these use unique names.
+        However, any existing files such as HEADER.html will need to be handled separately.
   -->
 
   
