@@ -41,6 +41,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
@@ -78,6 +80,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 	 * Store last search
 	 */
 	private transient String lastSearch = null;
+
+    private JButton searchAndExpandButton;
 	
 	public SearchTreeDialog() {
         super((JFrame) null, JMeterUtils.getResString("search_tree_title"), true); //$NON-NLS-1$
@@ -147,9 +151,12 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         
         searchButton = new JButton(JMeterUtils.getResString("search")); //$NON-NLS-1$
         searchButton.addActionListener(this);
+        searchAndExpandButton = new JButton(JMeterUtils.getResString("search_expand")); //$NON-NLS-1$
+        searchAndExpandButton.addActionListener(this);
         cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
         cancelButton.addActionListener(this);
         buttonsPanel.add(searchButton);
+        buttonsPanel.add(searchAndExpandButton);
         buttonsPanel.add(cancelButton);
         searchPanel.add(buttonsPanel, BorderLayout.SOUTH);
         this.getContentPane().add(searchPanel);
@@ -177,6 +184,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 	 * @param e {@link ActionEvent}
 	 */
 	private void doSearch(ActionEvent e) {
+	    boolean expand = e.getSource()==searchAndExpandButton;
 		String wordToSearch = searchTF.getText();
     	if(StringUtils.isEmpty(wordToSearch)) {
             return;
@@ -211,9 +219,15 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
                 logger.error("Error occured searching for word:"+ wordToSearch, ex);
             }
         }
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        JTree jTree = guiInstance.getMainFrame().getTree();
+        
         for (Iterator<JMeterTreeNode> iterator = nodes.iterator(); iterator.hasNext();) {
             JMeterTreeNode jMeterTreeNode = iterator.next();
             jMeterTreeNode.setMarkedBySearch(true);
+            if (expand) {
+                jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
+            }
         }
         GuiPackage.getInstance().getMainFrame().repaint();
         searchTF.requestFocusInWindow();
