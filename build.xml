@@ -1660,6 +1660,8 @@ run JMeter unless all the JMeter jars are added.
       <echo level="info" message="Using provided credentials for user ${asf.ldap.username}"/>
       <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
         <arg value="-n"/>
+        <!-- we don't want to cache the provided credentials -->
+        <arg value="--no-auth-cache"/>
         <arg value="-m"/>
         <arg value="${message}"/>
         <arg value="-U"/>
