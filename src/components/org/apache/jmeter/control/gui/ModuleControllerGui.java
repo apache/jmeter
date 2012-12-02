@@ -18,16 +18,22 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
@@ -46,7 +52,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * ModuleController Gui.
  *
  */
-public class ModuleControllerGui extends AbstractControllerGui
+public class ModuleControllerGui extends AbstractControllerGui implements ActionListener
 // implements UnsharedComponent
 {
 
@@ -59,6 +65,8 @@ public class ModuleControllerGui extends AbstractControllerGui
     private final DefaultComboBoxModel nodesModel;
 
     private final JLabel warningLabel;
+
+    private JButton expandButton;
 
     /**
      * Initializes the gui panel for the ModuleController instance.
@@ -167,18 +175,22 @@ public class ModuleControllerGui extends AbstractControllerGui
         add(makeTitlePanel());
 
         // DROP-DOWN MENU
-        JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        JPanel modulesPanel = new JPanel();
+        modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
         JLabel nodesLabel = new JLabel(JMeterUtils.getResString("module_controller_module_to_run")); // $NON-NLS-1$
-        modulesPanel.add(nodesLabel);
+        modulesPanel.add(nodesLabel, BorderLayout.NORTH);
         nodesLabel.setLabelFor(nodes);
         reinitialize();
-        modulesPanel.add(nodes);
-        modulesPanel.add(warningLabel);
+        modulesPanel.add(nodes, BorderLayout.CENTER);
+        modulesPanel.add(warningLabel, BorderLayout.EAST);
+        
+        expandButton = new JButton(JMeterUtils.getResString("expand")); //$NON-NLS-1$
+        expandButton.addActionListener(this);
+        modulesPanel.add(expandButton, BorderLayout.SOUTH);
         add(modulesPanel);
     }
 
     private void reinitialize() {
-        TreeNodeWrapper current;
         nodesModel.removeAllElements();
         GuiPackage gp = GuiPackage.getInstance();
         JMeterTreeNode root;
@@ -187,6 +199,7 @@ public class ModuleControllerGui extends AbstractControllerGui
             buildNodesModel(root, "", 0); // $NON-NLS-1$
         }
         if (selected != null) {
+            TreeNodeWrapper current;
             for (int i = 0; i < nodesModel.getSize(); i++) {
                 current = (TreeNodeWrapper) nodesModel.getElementAt(i);
                 if (current.getTreeNode() != null && current.getTreeNode().equals(selected)) {
@@ -227,5 +240,30 @@ public class ModuleControllerGui extends AbstractControllerGui
                 }
             }
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==expandButton) {
+            JMeterTreeNode currentSelectedNode = null;
+            TreeNodeWrapper tnw = (TreeNodeWrapper) nodesModel.getSelectedItem();
+            if (tnw != null && tnw.getTreeNode() != null) {
+                currentSelectedNode = tnw.getTreeNode();
+            }
+            if (currentSelectedNode != null) {
+                expandToSelectNode(currentSelectedNode);
+            }
+            return;
+        } 
+    }
+
+    /**
+     * @param selected JMeterTreeNode tree node to expand
+     */
+    protected void expandToSelectNode(JMeterTreeNode selected) {
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        JTree jTree = guiInstance.getMainFrame().getTree();
+        jTree.expandPath(new TreePath(selected.getPath()));
+        selected.setMarkedBySearch(true);
     }
 }
