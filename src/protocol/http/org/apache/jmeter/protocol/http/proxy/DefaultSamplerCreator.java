@@ -183,7 +183,9 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 // Set the file uploads
                 sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
-            } else if ((postData.trim().startsWith("<?") || isPotentialXml(postData)) || HTTPConstants.PUT.equals(sampler.getMethod())) {
+            } else if (postData.trim().startsWith("<?") 
+                    || HTTPConstants.PUT.equals(sampler.getMethod())
+                    || isPotentialXml(postData)) {
                 sampler.addNonEncodedArgument("", postData, "");
             } else if (contentType == null || 
                     (contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) && 
@@ -224,6 +226,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             ErrorDetectionHandler detectionHandler =
                     new ErrorDetectionHandler();
             xmlReader.setContentHandler(detectionHandler);
+            xmlReader.setErrorHandler(detectionHandler);
             xmlReader.parse(new InputSource(new StringReader(postData)));
             return !detectionHandler.isErrorDetected();
         } catch (ParserConfigurationException e) {
@@ -261,7 +264,6 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         public boolean isErrorDetected() {
             return errorDetected;
         }
-        
     }
     /**
      * Compute sampler name
