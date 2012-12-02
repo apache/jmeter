@@ -1092,12 +1092,12 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
 			<li>ResponseCode = 200</li>
 			<li>ResponseMessage = "OK"</li>
 			<li>IsSuccess = true</li>
-			<li>ctx - JMeterContext</li>
-			<li>vars - <a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
+			<li>ctx - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
+			<li>vars - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
             <li>props - JMeterProperties (class java.util.Properties)- e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 		</ul>
 		<p>When the script completes, control is returned to the Sampler, and it copies the contents
-			of the following script variables into the corresponding variables in the SampleResult:</p>
+			of the following script variables into the corresponding variables in the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>:</p>
 			<ul>
 			<li>ResponseCode - for example 200</li>
 			<li>ResponseMessage - for example "OK"</li>
@@ -1132,7 +1132,7 @@ The following script will show the values of all the variables in the ResponseDa
 return getVariables();
 </pre>
 <p>
-For details on the methods available for the various classes (JMeterVariables, SampleResult etc) please check the Javadoc or the source code.
+For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> etc) please check the Javadoc or the source code.
 Beware however that misuse of any methods can cause subtle faults that may be difficult to find ...
 </p>
 </component>
@@ -1183,15 +1183,15 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>FileName - the file name, if any</li>
 <li>Parameters - text from the Parameters field</li>
 <li>args - the parameters, split as described above</li>
-<li>SampleResult - pointer to the current SampleResult</li>
+<li>SampleResult - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
 <li>sampler - pointer to current Sampler</li>
-<li>ctx - JMeterContext</li>
-<li>vars - <a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
+<li>ctx - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
+<li>vars - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
 <li>props - JMeterProperties  (class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>
-The SampleResult ResponseData is set from the return value of the script.
+The <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> ResponseData is set from the return value of the script.
 If the script returns null, it can set the response directly, by using the method 
 SampleResult.setResponseData(data), where data is either a String or a byte array.
 The data type defaults to "text", but can be set to binary by using the method
@@ -1204,7 +1204,7 @@ setStopThread(boolean) and setStopTest(boolean).
 </p>
 <p>
 Unlike the BeanShell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
-Currently the only way to changes these is via the SampleResult methods:
+Currently the only way to changes these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
 <ul>
 <li>SampleResult.setSuccessful(true/false)</li>
 <li>SampleResult.setResponseCode("code")</li>
@@ -2892,7 +2892,7 @@ The Response Time Graph draws a line chart showing the evolution of response tim
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
         Use Width and Height fields to define a custom size. The unit is pixel. </property>
         <property name="X Axis settings" required="No">Customize the date format of  X axis label.
-        The syntax is the Java <a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
+        The syntax is the Java <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
         <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis. Show or not the number grouping in Y Axis labels.</property>
         <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
 </properties>
@@ -2961,11 +2961,11 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampleResult, prev - (SampleResult) - gives access to the previous SampleResult</li>
-<li>sampleEvent (SampleEvent) gives access to the current sample event</li>
+<li>sampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
+<li>sampleEvent (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
@@ -3087,11 +3087,11 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>Filename - the script file name (if any)</li>
 <li>Parameters - the parameters (as a String)</li>
 <li>args[] - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampleResult, prev - (SampleResult) - gives access to the SampleResult</li>
-<li>sampleEvent - (SampleEvent) - gives access to the SampleEvent</li>
+<li>sampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</li>
+<li>sampleEvent - (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</li>
 <li>sampler - (Sampler)- gives access to the last sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
@@ -4117,7 +4117,7 @@ Before invoking the script, some variables are set up in the BeanShell interpret
 These are strings unless otherwise noted:
 <ul>
 <li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
-	<li>SampleResult - the SampleResult Object; read-write</li>
+	<li>SampleResult - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
 	<li>Response - the response Object; read-write</li>
 	<li>Failure - boolean; read-write; used to set the Assertion status</li>
 	<li>FailureMessage - String; read-write; used to set the Assertion message</li>
@@ -4128,8 +4128,8 @@ These are strings unless otherwise noted:
 	<li>RequestHeaders - contains the HTTP headers sent to the server</li>
 	<li>SampleLabel</li>
 	<li>SamplerData - data that was sent to the server</li>
-	<li>ctx - JMeterContext</li>
-	<li>vars - <a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());</li>
+	<li>ctx - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
+	<li>vars - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());</li>
     <li>props - JMeterProperties (class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 </ul>
 </p>
@@ -4244,16 +4244,16 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>Filename - the script file name (if any)</li>
 <li>Parameters - the parameters (as a String)</li>
 <li>args[] - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>SampleResult, prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>SampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 <li>AssertionResult - the assertion result</li>
 </ul>
 <p>
-The script can check various aspects of the SampleResult.
+The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
 If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
 </p>
 <p>For futher details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -4476,10 +4476,10 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
@@ -4515,8 +4515,8 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 <p>Before invoking the script, some variables are set up in the script interpreter:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>sampler - the current Sampler</li>
 <li>Label - the name of the Timer</li>
@@ -4729,10 +4729,10 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -4767,8 +4767,8 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>Filename - the script file name (if any)</li>
 <li>Parameters - the parameters (as a String)</li>
 <li>args[] - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
@@ -5076,10 +5076,10 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>The following BeanShell variables are set up for use by the script:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (SampleResult) - gives access to the previous SampleResult</li>
+<li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult</li>
 <li>data - (byte [])- gives access to the current sample data</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -5117,10 +5117,10 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>Filename - the script file name (if any)</li>
 <li>Parameters - the parameters (as a String)</li>
 <li>args[] - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
