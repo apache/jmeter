@@ -2753,9 +2753,6 @@ run JMeter unless all the JMeter jars are added.
       <scriptdef name="gpg" language="beanshell">
         <classpath>
           <pathelement location="${lib.dir}/${beanshell.jar}"/>
-          <!-- Needed to work with Java 1.5 -->
-          <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
-          <pathelement location="${lib.dir}/${commons-logging.jar}"/>
         </classpath>
         <element name="fileset" type="fileset"/>
         <![CDATA[
