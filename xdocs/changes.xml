@@ -212,6 +212,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <li><bugzilla>46677</bugzilla> - Copying Test Elements between test plans</li>
 <li><bugzilla>54204</bugzilla> - Result Status Action Handler : Add start next thread loop option</li>
 <li><bugzilla>54232</bugzilla> - Search Feature : Add a button to search and expand results</li>
+<li><bugzilla>54155</bugzilla> - ModuleController : Add a shortcut button to unfold the tree up to referenced controller and highlight it</li>
 </ul>
 
 <h2>Non-functional changes</h2>
