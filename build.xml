@@ -1624,30 +1624,54 @@ run JMeter unless all the JMeter jars are added.
   <!--
       Run svnnmucc against the svnpubsub distribution area 
   -->
-  <macrodef name="svnmucc">
-    <attribute name="tempfile"/>
-    <attribute name="message"/>
-    <sequential>
+  <target name="_svnmucc">
       <property name="repoType" value="test"/>
       <condition property="repo" 
             value="https://dist.apache.org/repos/dist/"
             else="https://svn.apache.org/repos/asf/jmeter/test/" >
         <equals arg1="live" arg2="${repoType}"/>
       </condition>
-      <echo level="info">Processing @{tempfile} using svnmucc on repo: ${repoType}</echo>
+      <echo level="info">Processing ${tempfile} using svnmucc on repo: ${repoType}</echo>
       <echo level="info">${repo}</echo>
-      <echo level="info">@{message}</echo>
+      <echo level="info">${message}</echo>
+      <!-- Only one of the following will execute -->
+      <antcall target="_svnmucc_storedPass"/>
+      <antcall target="_svnmucc_providedPass"/>
+    </target>
+
+    <!-- run svnmucc using stored credentials -->
+    <target name="_svnmucc_storedPass" unless="asf.ldap.password">
+      <echo level="info" message="Using stored credentials"/>
       <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
         <arg value="-n"/>
         <arg value="-m"/>
-        <arg value="@{message}"/>
+        <arg value="${message}"/>
         <arg value="-U"/>
         <arg value="${repo}"/>
         <arg value="-X"/>
-        <arg value="@{tempfile}"/>
+        <arg value="${tempfile}"/>
       </exec>
-    </sequential>
-  </macrodef>
+    </target>
+
+    <!-- run svnmucc using password provided as a property -->
+    <target name="_svnmucc_providedPass" if="asf.ldap.password">
+      <!-- provide default user name -->
+      <property name="asf.ldap.username" value="${user.name}"/>
+      <echo level="info" message="Using provided credentials for user ${asf.ldap.username}"/>
+      <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
+        <arg value="-n"/>
+        <arg value="-m"/>
+        <arg value="${message}"/>
+        <arg value="-U"/>
+        <arg value="${repo}"/>
+        <arg value="-X"/>
+        <arg value="${tempfile}"/>
+        <arg value="-u"/>
+        <arg value="${asf.ldap.username}"/>
+        <arg value="-p"/>
+        <arg value="${asf.ldap.password}"/>    
+      </exec>
+    </target>
 
   <!-- 
         Targets for deploying release candidates via svnpubsub.
@@ -1672,13 +1696,18 @@ run JMeter unless all the JMeter jars are added.
 
 
         Pre-requisites:
-        username/password need to have been saved in the appropriate svn configuration file.
         The distribution files must have been built and signed and placed in the dist/ directory.
         If any required files are missing, then upload will fail.
 
         Usage:
-              ant RC_upload  [-DrepoType=test|live] [-Djmeter.version=2.9] -DRC=RCn
-              ant RC_publish [-DrepoType=test|live] [-Djmeter.version=2.9] -DRC=RCn
+          ant RC_upload  [-DrepoType=test|live] [-Djmeter.version=2.9] -DRC=RCn [-Dasf.ldap.password=secret [-Dasf.ldap.usermame=user] ]
+          ant RC_publish [-DrepoType=test|live] [-Djmeter.version=2.9] -DRC=RCn [-Dasf.ldap.password=secret [-Dasf.ldap.usermame=user] ]
+          
+        If the ldap password is not provided, svnmucc is invoked without the username (-u) and password (-p) parameters.
+        In this case, svnmucc will use whatever stored credentials are present for the svn host.
+        
+        If not using stored credentials, provide at least the ldap password.
+        The ldap username defaults to the login name (i.e. the Java user.name property) but can also be provided.
   -->
 
   
@@ -1688,7 +1717,9 @@ run JMeter unless all the JMeter jars are added.
     <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
     <property name="tempfile" value="svnmucc_upload.tmp"/>
     <svnmuccScript type="upload" tempfile="${dist.dir}/${tempfile}"/>
-    <svnmucc tempfile="${tempfile}" message="Uploading release candidate ${dist.name} to dev area"/>
+    <antcall target="_svnmucc">
+      <param name="message" value="Uploading release candidate ${dist.name} to dev area"/>
+    </antcall>
   </target>
 
   <target name="RC_publish" description="Publish release candidate from svnpubsub area" depends="init-version">
@@ -1696,7 +1727,9 @@ run JMeter unless all the JMeter jars are added.
     <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
     <property name="tempfile" value="svnmucc_publish.tmp"/>
     <svnmuccScript type="publish" tempfile="${dist.dir}/${tempfile}"/>
-    <svnmucc tempfile="${tempfile}" message="Publishing ${dist.name} ${RC}"/>
+    <antcall target="_svnmucc">
+      <param name="message" value="Publishing ${dist.name} ${RC}"/>
+    </antcall>
   </target>
 
   <!-- 
