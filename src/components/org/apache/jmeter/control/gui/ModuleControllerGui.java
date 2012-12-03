@@ -18,12 +18,13 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -176,17 +177,19 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
 
         // DROP-DOWN MENU
         JPanel modulesPanel = new JPanel();
-        modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
+        modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.X_AXIS));
         JLabel nodesLabel = new JLabel(JMeterUtils.getResString("module_controller_module_to_run")); // $NON-NLS-1$
-        modulesPanel.add(nodesLabel, BorderLayout.NORTH);
+        modulesPanel.add(nodesLabel);
+        modulesPanel.add(Box.createRigidArea(new Dimension(5,0)));
         nodesLabel.setLabelFor(nodes);
         reinitialize();
-        modulesPanel.add(nodes, BorderLayout.CENTER);
-        modulesPanel.add(warningLabel, BorderLayout.EAST);
-        
+        modulesPanel.add(nodes);
+        modulesPanel.add(warningLabel);
+
+        modulesPanel.add(Box.createRigidArea(new Dimension(5,0)));
         expandButton = new JButton(JMeterUtils.getResString("expand")); //$NON-NLS-1$
         expandButton.addActionListener(this);
-        modulesPanel.add(expandButton, BorderLayout.SOUTH);
+        modulesPanel.add(expandButton);
         add(modulesPanel);
     }
 
