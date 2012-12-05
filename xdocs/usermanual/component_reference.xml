@@ -3483,7 +3483,7 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
  <property name="Implementation" required="Yes">HC3CookieHandler (HttpClient 3.1 API) or HC4CookieHandler (HttpClient 4 API). 
   Default is HC3CookieHandler.
   <br></br>
-  <i>[Note: If your have a website to test with IPv6 address, choose HC4CookieHandler (IPv6 compliant)]</i></property>
+  <i>[Note: If you have a website to test with IPv6 address, choose HC4CookieHandler (IPv6 compliant)]</i></property>
   <property name="User-Defined Cookies" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.
   <br></br>
