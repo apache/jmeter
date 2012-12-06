@@ -61,12 +61,21 @@ public final class TristateCheckBox extends JCheckBox {
         this(text, null, TristateState.DESELECTED);
     }
 
-    public TristateCheckBox(String text, Icon icon,
-            TristateState initial) {
+    // For testing only at present
+    TristateCheckBox(String text, boolean original) {
+        this(text, null, TristateState.DESELECTED, original);
+    }
+
+    public TristateCheckBox(String text, Icon icon, TristateState initial) {
+        this(text, icon, initial, false);
+    }
+
+    // For testing only at present
+    TristateCheckBox(String text, Icon icon, TristateState initial, boolean original) {
         super(text, icon);
 
         //Set default single model
-        setModel(new TristateButtonModel(initial, this));
+        setModel(new TristateButtonModel(initial, this, original));
 
         // override action behaviour
         super.addMouseListener(new MouseAdapter() {
@@ -148,12 +157,14 @@ public final class TristateCheckBox extends JCheckBox {
         private TristateState state = TristateState.DESELECTED;
         private final TristateCheckBox tristateCheckBox;
         private final Icon icon;
+        private final boolean original;
 
         public TristateButtonModel(TristateState initial,
-                TristateCheckBox tristateCheckBox) {
+                TristateCheckBox tristateCheckBox, boolean original) {
             setState(TristateState.DESELECTED);
             this.tristateCheckBox = tristateCheckBox;
             icon = new TristateCheckBoxIcon(tristateCheckBox);
+            this.original = original;
         }
 
         public void setIndeterminate() {
@@ -211,15 +222,17 @@ public final class TristateCheckBox extends JCheckBox {
 
         private void displayState() {
             super.setSelected(state != TristateState.DESELECTED);
-            //    original used:
-//            super.setArmed(state == TristateState.INDETERMINATE);
-            if (state == TristateState.INDETERMINATE) {
-                tristateCheckBox.setIcon(icon); // Needed for all but Nimbus
-                tristateCheckBox.setSelectedIcon(icon); // Nimbus works - after a fashion - with this
-            } else { // reset
-                if (tristateCheckBox!= null){
-                    tristateCheckBox.setIcon(null);
-                    tristateCheckBox.setSelectedIcon(null);
+            if (original) {
+                super.setArmed(state == TristateState.INDETERMINATE);
+            } else {
+                if (state == TristateState.INDETERMINATE) {
+                    tristateCheckBox.setIcon(icon); // Needed for all but Nimbus
+                    tristateCheckBox.setSelectedIcon(icon); // Nimbus works - after a fashion - with this
+                } else { // reset
+                    if (tristateCheckBox!= null){
+                        tristateCheckBox.setIcon(null);
+                        tristateCheckBox.setSelectedIcon(null);
+                    }
                 }
             }
             super.setPressed(state == TristateState.INDETERMINATE);
