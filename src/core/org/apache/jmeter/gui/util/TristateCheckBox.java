@@ -36,13 +36,13 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-
-import sun.swing.plaf.synth.SynthUI;
 
 // derived from: http://www.javaspecialists.eu/archive/Issue145.html
 
@@ -163,7 +163,7 @@ public final class TristateCheckBox extends JCheckBox {
                 TristateCheckBox tristateCheckBox, boolean original) {
             setState(TristateState.DESELECTED);
             this.tristateCheckBox = tristateCheckBox;
-            icon = new TristateCheckBoxIcon(tristateCheckBox);
+            icon = new TristateCheckBoxIcon();
             this.original = original;
         }
 
@@ -252,48 +252,54 @@ public final class TristateCheckBox extends JCheckBox {
 
         private static final long serialVersionUID = 290L;
 
-        private final TristateCheckBox tristateCheckBox;
+        private final int iconHeight;
+        private final int iconWidth;
 
-        public TristateCheckBoxIcon(TristateCheckBox tristateCheckBox) {
-            this.tristateCheckBox = tristateCheckBox;
-            System.out.println(tristateCheckBox.getUI());
+        public TristateCheckBoxIcon() {
+            // Assume that the UI has not changed since the checkbos was created
+            UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+            final Icon icon = (Icon) defaults.get("CheckBox.icon");
+            iconHeight = icon.getIconHeight();
+            iconWidth = icon.getIconWidth();
         }
 
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             JCheckBox cb = (JCheckBox) c;
             ButtonModel model = cb.getModel();
-            int controlSize = getControlSize();
 
             // TODO fix up for Nimbus LAF
             if (model.isEnabled()) {
                 if (model.isPressed() && model.isArmed()) {
                     g.setColor(MetalLookAndFeel.getControlShadow());
-                    g.fillRect(x, y, controlSize - 1, controlSize - 1);
-                    drawPressed3DBorder(g, x, y, controlSize, controlSize);
+                    g.fillRect(x, y, iconWidth - 1, iconHeight - 1);
+                    drawPressed3DBorder(g, x, y, iconWidth, iconHeight);
                 } else {
-                    drawFlush3DBorder(g, x, y, controlSize, controlSize);
+                    drawFlush3DBorder(g, x, y, iconWidth, iconHeight);
                 }
                 g.setColor(MetalLookAndFeel.getControlInfo());
             } else {
                 g.setColor(MetalLookAndFeel.getControlShadow());
-                g.drawRect(x, y, controlSize - 1, controlSize - 1);
+                g.drawRect(x, y, iconWidth - 1, iconHeight - 1);
             }
 
-            drawCross(c, g, x, y);
+            drawLine(g, x, y);
+//            drawCross(g, x, y);
 
         }// paintIcon
 
-        private void drawCross(Component c, Graphics g, int x, int y) {
-            int controlSize = getControlSize();
-            g.drawLine(x + (controlSize - 4), y + 2, x + 3, y
-                    + (controlSize - 5));
-            g.drawLine(x + (controlSize - 4), y + 3, x + 3, y
-                    + (controlSize - 4));
-            g.drawLine(x + 3, y + 2, x + (controlSize - 4), y
-                    + (controlSize - 5));
-            g.drawLine(x + 3, y + 3, x + (controlSize - 4), y
-                    + (controlSize - 4));
+//        private void drawCross(Graphics g, int x, int y) {
+//            g.drawLine(x + (iconWidth - 4), y + 2, x + 3, y + (iconHeight - 5));
+//            g.drawLine(x + (iconWidth - 4), y + 3, x + 3, y + (iconHeight - 4));
+//            g.drawLine(x + 3, y + 2, x + (iconWidth - 4), y + (iconHeight - 5));
+//            g.drawLine(x + 3, y + 3, x + (iconWidth - 4), y + (iconHeight - 4));
+//        }
+
+        private void drawLine(Graphics g, int x, int y) {
+            final int left = x + 2, right =  x + (iconWidth - 4);
+            int height = y + iconHeight/2;
+            g.drawLine(left, height, right, height);
+            g.drawLine(left, height - 1, right, height - 1);
         }
 
         private void drawFlush3DBorder(Graphics g, int x, int y, int w, int h) {
@@ -319,19 +325,12 @@ public final class TristateCheckBox extends JCheckBox {
 
         @Override
         public int getIconWidth() {
-            return getControlSize();
+            return iconWidth;
         }
 
         @Override
         public int getIconHeight() {
-            return getControlSize();
-        }
-
-        private int getControlSize() {
-            if (tristateCheckBox.getUI() instanceof SynthUI) {
-                return 18; // see http://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html
-            }
-            return 13;
+            return iconHeight;
         }
     }
 }
