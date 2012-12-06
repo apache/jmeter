@@ -228,10 +228,12 @@ public final class TristateCheckBox extends JCheckBox {
                 if (state == TristateState.INDETERMINATE) {
                     tristateCheckBox.setIcon(icon); // Needed for all but Nimbus
                     tristateCheckBox.setSelectedIcon(icon); // Nimbus works - after a fashion - with this
+                    tristateCheckBox.setDisabledSelectedIcon(icon); // Nimbus works - after a fashion - with this
                 } else { // reset
                     if (tristateCheckBox!= null){
                         tristateCheckBox.setIcon(null);
                         tristateCheckBox.setSelectedIcon(null);
+                        tristateCheckBox.setDisabledSelectedIcon(null); // Nimbus works - after a fashion - with this
                     }
                 }
             }
