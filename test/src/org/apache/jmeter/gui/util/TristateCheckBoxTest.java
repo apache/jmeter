@@ -34,7 +34,6 @@ import javax.swing.UIManager;
 
 public class TristateCheckBoxTest {
     public static void main(String args[]) throws Exception {
-//        UIManager.get
         JFrame frame = new JFrame("TristateCheckBoxTest");
         frame.setLayout(new GridLayout(0, 1, 15, 15));
         UIManager.LookAndFeelInfo[] lfs =
