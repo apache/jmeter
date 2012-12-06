@@ -16,12 +16,6 @@
  * 
  */
 
-/*
- * Created on Apr 30, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package org.apache.jmeter.junit.stubs;
 
 import org.apache.jmeter.samplers.AbstractSampler;
