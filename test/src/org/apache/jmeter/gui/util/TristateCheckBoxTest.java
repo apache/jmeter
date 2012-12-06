@@ -50,7 +50,38 @@ public class TristateCheckBoxTest {
     }
 
     private static JPanel makePanel(String name) {
-        final TristateCheckBox tristateBox = new TristateCheckBox("Tristate checkbox");
+        final TristateCheckBox tristateBox = new TristateCheckBox("Tristate checkbox (icon)", false);
+        createTristate(tristateBox);
+        final TristateCheckBox tristateBoxorig = new TristateCheckBox("Tristate checkbox (original)", true);
+        createTristate(tristateBoxorig);
+        final JCheckBox normalBox = new JCheckBox("Normal checkbox");
+        normalBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e);
+            }
+        });
+
+        final JCheckBox enabledBox = new JCheckBox("Enable", true);
+        enabledBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                tristateBox.setEnabled(enabledBox.isSelected());
+                normalBox.setEnabled(enabledBox.isSelected());
+            }
+        });
+
+        JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
+        panel.add(new JLabel(name));
+        panel.add(tristateBox);
+        panel.add(tristateBoxorig);
+        panel.add(normalBox);
+        panel.add(enabledBox);
+        return panel;
+    }
+
+    private static void createTristate(final TristateCheckBox tristateBox) {
+        tristateBox.setIndeterminate(); // start in new state
         tristateBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -79,28 +110,5 @@ public class TristateCheckBoxTest {
                 }
             }
         });
-        final JCheckBox normalBox = new JCheckBox("Normal checkbox");
-        normalBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(e);
-            }
-        });
-
-        final JCheckBox enabledBox = new JCheckBox("Enable", true);
-        enabledBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                tristateBox.setEnabled(enabledBox.isSelected());
-                normalBox.setEnabled(enabledBox.isSelected());
-            }
-        });
-
-        JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
-        panel.add(new JLabel(name));
-        panel.add(tristateBox);
-        panel.add(normalBox);
-        panel.add(enabledBox);
-        return panel;
     }
 }
