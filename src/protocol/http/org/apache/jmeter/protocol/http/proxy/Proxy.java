@@ -198,8 +198,7 @@ public class Proxy extends Thread {
             }
 
             SamplerCreator samplerCreator = factory.getSamplerCreator(request, pageEncodings, formEncodings);
-            sampler = samplerCreator.createSampler(request, pageEncodings, formEncodings);
-            samplerCreator.populateSampler(sampler, request, pageEncodings, formEncodings);
+            sampler = samplerCreator.createAndPopulateSampler(request, pageEncodings, formEncodings);
 
             /*
              * Create a Header Manager to ensure that the browsers headers are
@@ -217,6 +216,7 @@ public class Proxy extends Thread {
             addFormEncodings(result, pageEncoding);
 
             writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()));
+            samplerCreator.postProcessSampler(sampler, result);
         } catch (UnknownHostException uhe) {
             log.warn("Server Not Found.", uhe);
             writeErrorToClient(HttpReplyHdr.formServerNotFound());
