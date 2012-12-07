@@ -31,6 +31,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -102,6 +103,10 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         computeFromPostBody(sampler, request);
         if (log.isDebugEnabled()) {
             log.debug("sampler path = " + sampler.getPath());
+        }
+        Arguments arguments = sampler.getArguments();
+        if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().length()==0) {
+            sampler.setPostBodyRaw(true);
         }
     }
 
