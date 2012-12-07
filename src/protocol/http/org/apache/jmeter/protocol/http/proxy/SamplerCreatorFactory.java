@@ -69,7 +69,11 @@ public class SamplerCreatorFactory {
                                 if(log.isDebugEnabled()) {
                                     log.debug("Registering samplerCreator "+commandClass.getName()+" for content type:"+contentType);
                                 }
-                                samplerCreatorMap.put(contentType, creator);
+                                SamplerCreator oldSamplerCreator = samplerCreatorMap.put(contentType, creator);
+                                if(oldSamplerCreator!=null) {
+                                    log.warn("A sampler creator was already registered for:"+contentType+", class:"+oldSamplerCreator.getClass()
+                                            + ", it will be replaced");
+                                }
                             }                        
                     }
                 } catch (Exception e) {
