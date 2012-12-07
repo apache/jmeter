@@ -57,13 +57,16 @@ public final class TristateCheckBox extends JCheckBox {
         }
     };
 
+    public TristateCheckBox() {
+        this(null, null, TristateState.DESELECTED);
+    }
+
     public TristateCheckBox(String text) {
         this(text, null, TristateState.DESELECTED);
     }
 
-    // For testing only at present
-    TristateCheckBox(String text, boolean original) {
-        this(text, null, TristateState.DESELECTED, original);
+    public TristateCheckBox(String text, boolean selected) {
+        this(text, null, selected ? TristateState.SELECTED : TristateState.DESELECTED);
     }
 
     public TristateCheckBox(String text, Icon icon, TristateState initial) {
