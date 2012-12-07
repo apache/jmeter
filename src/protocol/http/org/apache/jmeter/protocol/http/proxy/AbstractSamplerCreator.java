@@ -19,9 +19,12 @@
 package org.apache.jmeter.protocol.http.proxy;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -119,5 +122,24 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      */
     protected String getBinaryDirectory() {
         return binaryDirectory;
+    }
+
+    /**
+     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#postProcessSampler(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase, org.apache.jmeter.samplers.SampleResult)
+     */
+    @Override
+    public void postProcessSampler(HTTPSamplerBase sampler, SampleResult result) {
+        // NOOP
+    }
+
+    /**
+     * @see org.apache.jmeter.protocol.http.proxy.SamplerCreator#createAndPopulateSampler(org.apache.jmeter.protocol.http.proxy.HttpRequestHdr, java.util.Map, java.util.Map)
+     */
+    @Override
+    public HTTPSamplerBase createAndPopulateSampler(HttpRequestHdr request,
+            Map<String, String> pageEncodings, Map<String, String> formEncodings) throws Exception {
+        HTTPSamplerBase sampler = createSampler(request, pageEncodings, formEncodings);
+        populateSampler(sampler, request, pageEncodings, formEncodings);
+        return sampler;
     }
 }
