@@ -182,7 +182,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     private JPanel createCloseConnectionPanel() {
         JLabel label = new JLabel(JMeterUtils.getResString("closeconnection")); // $NON-NLS-1$
 
-        closeConnection = new JCheckBox("", false);
+        closeConnection = new JCheckBox("", TCPSampler.CLOSE_CONNECTION_DEFAULT);
         label.setLabelFor(closeConnection);
 
         JPanel closeConnectionPanel = new JPanel(new FlowLayout());
