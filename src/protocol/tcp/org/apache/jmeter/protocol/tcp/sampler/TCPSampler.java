@@ -82,6 +82,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     public static final String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
 
     public static final String RE_USE_CONNECTION = "TCPSampler.reUseConnection"; //$NON-NLS-1$
+
+    public static final String CLOSE_CONNECTION = "TCPSampler.closeConnection"; //$NON-NLS-1$
+    public static final boolean CLOSE_CONNECTION_DEFAULT = false;
+
+    public static final String SO_LINGER = "TCPSampler.soLinger"; //$NON-NLS-1$
+
+    public static final String EOL_BYTE = "TCPSampler.EolByte"; //$NON-NLS-1$
+
     //-- JMX file constants - do not change
 
     private static final String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
@@ -168,6 +176,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 closeSocket(socketKey); // Bug 44910 - close previous socket (if any)
                 SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
                 con = new Socket();
+                if (getPropertyAsString(SO_LINGER,"").length() > 0){
+                	con.setSoLinger(true, getSoLinger());
+                }
                 con.connect(sockaddr, getConnectTimeout());
                 if(log.isDebugEnabled()) {
                     log.debug("Created new connection " + con); //$NON-NLS-1$
@@ -227,6 +238,31 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     public boolean isReUseConnection() {
         return getPropertyAsBoolean(RE_USE_CONNECTION);
     }
+
+    public void setCloseConnection(String close) {
+    	this.setProperty(CLOSE_CONNECTION, close, "");
+    }
+
+    public boolean isCloseConnection() {
+    	return getPropertyAsBoolean(CLOSE_CONNECTION, CLOSE_CONNECTION_DEFAULT);
+    }
+
+    public void setSoLinger(String soLinger) {
+    	this.setProperty(SO_LINGER, soLinger, "");
+    }
+
+    public int getSoLinger() {
+    	return getPropertyAsInt(SO_LINGER);
+    }
+    
+    public void setEolByte(String eol) {
+        this.setProperty(EOL_BYTE, eol, "");
+    }
+    
+    public int getEolByte() {
+        return getPropertyAsInt(EOL_BYTE);
+    }
+    
 
     public void setPort(String newFilename) {
         this.setProperty(PORT, newFilename);
@@ -323,6 +359,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         }
         try {
             TCPClient = (TCPClient) javaClass.newInstance();
+            if (getPropertyAsString(EOL_BYTE, "").length()>0){
+                TCPClient.setEolByte(getEolByte());
+                log.info("Using eolByte=" + getEolByte());
+            }
+
             if (log.isDebugEnabled()) {
                 log.debug(this + "Created: " + getClassname() + "@" + Integer.toHexString(TCPClient.hashCode())); //$NON-NLS-1$
             }
@@ -381,7 +422,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             // Set if we were successful or not
             res.setSuccessful(isSuccessful);
 
-            if (!isReUseConnection()) {
+            if (!isReUseConnection() || isCloseConnection()) {
                 closeSocket(socketKey);
             }
         }
