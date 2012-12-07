@@ -576,11 +576,7 @@ public class SampleResult implements Serializable {
      * @param subResult
      */
     public void addRawSubResult(SampleResult subResult){
-        if (subResults == null) {
-            subResults = new ArrayList<SampleResult>();
-        }
-        subResults.add(subResult);
-        subResult.setParent(this);
+        storeSubResult(subResult);
     }
 
     /**
