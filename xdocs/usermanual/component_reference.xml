@@ -1255,6 +1255,8 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
 		If "Re-use connection" is selected, connections are shared between Samplers in the same thread,
 		provided that the exact same host name string and port are used. 
 		Different hosts/port combinations will use different connections, as will different threads. 
+		If both of "Re-use connection" and "Close connetion" are selected, the socket will be closed after running the sampler. 
+		On the next sampler, another socket will be created. You may want to close a socket at the end of each thread loop.
 		<br></br>
 		If an error is detected - or "Re-use connection" is not selected - the socket is closed. 
 		Another socket will be reopened on the next sample.
@@ -1329,6 +1331,9 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
   <property name="ServerName or IP" required="Yes">Name or IP of TCP server</property>
   <property name="Port Number" required="Yes">Port to be used</property>
   <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
+  <property name="Close connection" required="Yes">If selected, the connection will be closed after running the sampler.</property>
+  <property name="SO_LINGER" required="No">Enable/disable SO_LINGER with the specified linger time in seconds when a socket is created. If you set "SO_LINGER" value as 0, you may prevent large numbers of sockets sitting around with a TIME_WAIT status.</property>
+  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range -128 to +127 to skip eol checking. You may set this in jmeter.properties file as well with eolByte property. If you set this in TCP Sampler Config and in jmeter.properties file at the same time, the setting value in the TCP Sampler Config will be used.</property>
   <property name="Connect Timeout" required="No">Connect Timeout (milliseconds, 0 disables).</property>
   <property name="Response Timeout" required="No">Response Timeout (milliseconds, 0 disables).</property>
   <property name="Set Nodelay" required="Yes">See java.net.Socket.setTcpNoDelay().
@@ -3740,6 +3745,9 @@ To make JMeter use more than one certificate you need to ensure that:
   <property name="ServerName or IP" required="">Name or IP of TCP server</property>
   <property name="Port Number" required="">Port to be used</property>
   <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
+  <property name="Close connection" required="Yes">If selected, the connection will be closed after running the sampler.</property>  
+  <property name="SO_LINGER" required="No">Enable/disable SO_LINGER with the specified linger time in seconds when a socket is created. If you set "SO_LINGER" value as 0, you may prevent large numbers of sockets sitting around with a TIME_WAIT status.</property>
+  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range -128 to +127 to skip eol checking. You may set this in jmeter.properties file as well with eolByte property. If you set this in TCP Sampler Config and in jmeter.properties file at the same time, the setting value in the TCP Sampler Config will be used.</property>
   <property name="Connect Timeout" required="No">Connect Timeout (milliseconds, 0 disables).</property>
   <property name="Response Timeout" required="No">Response Timeout (milliseconds, 0 disables).</property>
   <property name="Set Nodelay" required="">Should the nodelay property be set?</property>

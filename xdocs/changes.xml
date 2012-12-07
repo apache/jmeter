@@ -172,6 +172,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>54106</bugzilla> - JSR223TestElement should check for file existence when a filename is set instead of using Text Area content </li>
 <li><bugzilla>54107</bugzilla> - JSR223TestElement : Enable compilation and caching of Script Text</li>
 <li><bugzilla>54109</bugzilla> - JSR223TestElement : SampleResult properties should be set before entering script to allow user setting different code</li>
+<li><bugzilla>54230</bugzilla> - TCP Sampler, additions of "Close Connection", "SO_LINGER" and "End of line(EOL) byte value" options</li>
 </ul>
 
 <h3>Controllers</h3>
