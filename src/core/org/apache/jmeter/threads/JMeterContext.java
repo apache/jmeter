@@ -205,4 +205,13 @@ public class JMeterContext {
     public boolean isRestartNextLoop() {
         return restartNextLoop;
     }
+
+    /**
+     * Clean cached data after sample
+     */
+    public void cleanAfterSample() {
+        if(previousResult != null) {
+            previousResult.cleanAfterSample();
+        }
+    }
 }

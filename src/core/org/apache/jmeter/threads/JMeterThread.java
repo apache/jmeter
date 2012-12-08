@@ -254,6 +254,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 Sampler sam = controller.next();
                 while (running && sam != null) {
                 	process_sampler(sam, null, threadContext);
+                	threadContext.cleanAfterSample();
                 	if(onErrorStartNextLoop || threadContext.isRestartNextLoop()) {
                 	    if(threadContext.isRestartNextLoop()) {
                             triggerEndOfLoopOnParentControllers(sam, threadContext);
