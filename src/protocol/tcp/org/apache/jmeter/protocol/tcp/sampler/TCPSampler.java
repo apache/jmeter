@@ -301,10 +301,6 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return getPropertyAsInt(TIMEOUT_CONNECT, 0);
     }
 
-    public void setNoDelay(String newNoDelay) {
-        this.setProperty(NODELAY, newNoDelay);
-    }
-
     public boolean getNoDelay() {
         return getPropertyAsBoolean(NODELAY);
     }
