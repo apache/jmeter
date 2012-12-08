@@ -380,12 +380,24 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             initSampling();
             firstSample=false;
         }
+        final boolean reUseConnection = isReUseConnection();
+        final boolean closeConnection = isCloseConnection();
         String socketKey = getSocketKey();
         log.debug(getLabel() + " " + getFilename() + " " + getUsername() + " " + getPassword());
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
         res.setSampleLabel(getName());// Use the test element name for the label
-        res.setSamplerData("Host: " + getServer() + " Port: " + getPort()); //$NON-NLS-1$ $NON-NLS-2$
+        StringBuilder sb = new StringBuilder();
+        sb.append("Host: ").append(getServer()); // $NON-NLS-1$
+        sb.append(" Port: ").append(getPort()); // $NON-NLS-1$
+        sb.append("\n"); // $NON-NLS-1$
+        sb.append("Reuse: ").append(reUseConnection); // $NON-NLS-1$
+        sb.append(" Close: ").append(closeConnection); // $NON-NLS-1$
+        sb.append("\n["); // $NON-NLS-1$
+        sb.append("SOLINGER: ").append(getSoLinger()); // $NON-NLS-1$
+        sb.append(" EOL: ").append(getEolByte()); // $NON-NLS-1$
+        sb.append("]"); // $NON-NLS-1$
+        res.setSamplerData(sb.toString()); 
         res.sampleStart();
         try {
             Socket sock = getSocket(socketKey);
@@ -422,7 +434,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             // Set if we were successful or not
             res.setSuccessful(isSuccessful);
 
-            if (!isReUseConnection() || isCloseConnection()) {
+            if (!reUseConnection || closeConnection) {
                 closeSocket(socketKey);
             }
         }
