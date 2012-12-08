@@ -34,9 +34,12 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.ServerPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.TristateCheckBox;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
@@ -52,9 +55,9 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     // NOTUSED yet private JTextField filename;
 
-    private JCheckBox setNoDelay;
+    private TristateCheckBox setNoDelay;
 
-    private JCheckBox closeConnection;
+    private TristateCheckBox closeConnection;
 
     private JTextField soLinger;
 
@@ -90,9 +93,11 @@ public class TCPConfigGui extends AbstractConfigGui {
         // filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
         serverPanel.setResponseTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT));
         serverPanel.setConnectTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT_CONNECT));
-        setNoDelay.setSelected(element.getPropertyAsBoolean(TCPSampler.NODELAY));
+        setTristateFromProperty(element, setNoDelay, TCPSampler.NODELAY);
+//        setNoDelay.setSelected(element.getPropertyAsBoolean(TCPSampler.NODELAY));
         requestData.setText(element.getPropertyAsString(TCPSampler.REQUEST));
-        closeConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.CLOSE_CONNECTION, TCPSampler.CLOSE_CONNECTION_DEFAULT));
+        setTristateFromProperty(element, closeConnection, TCPSampler.CLOSE_CONNECTION);
+//        closeConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.CLOSE_CONNECTION, TCPSampler.CLOSE_CONNECTION_DEFAULT));
         soLinger.setText(element.getPropertyAsString(TCPSampler.SO_LINGER));
         eolByte.setText(element.getPropertyAsString(TCPSampler.EOL_BYTE));
     }
@@ -118,11 +123,13 @@ public class TCPConfigGui extends AbstractConfigGui {
         element.setProperty(TCPSampler.RE_USE_CONNECTION, reUseConnection.isSelected());
         element.setProperty(TCPSampler.PORT, serverPanel.getPort());
         // element.setProperty(TCPSampler.FILENAME, filename.getText());
-        element.setProperty(TCPSampler.NODELAY, setNoDelay.isSelected());
+        setPropertyFromTristate(element, setNoDelay, TCPSampler.NODELAY);
+//        element.setProperty(TCPSampler.NODELAY, setNoDelay.isSelected());
         element.setProperty(TCPSampler.TIMEOUT, serverPanel.getResponseTimeout());
         element.setProperty(TCPSampler.TIMEOUT_CONNECT, serverPanel.getConnectTimeout(),"");
         element.setProperty(TCPSampler.REQUEST, requestData.getText());
-        element.setProperty(TCPSampler.CLOSE_CONNECTION, closeConnection.isSelected(), TCPSampler.CLOSE_CONNECTION_DEFAULT);
+        setPropertyFromTristate(element, closeConnection, TCPSampler.CLOSE_CONNECTION, TCPSampler.CLOSE_CONNECTION_DEFAULT);
+//        element.setProperty(TCPSampler.CLOSE_CONNECTION, closeConnection.isSelected(), TCPSampler.CLOSE_CONNECTION_DEFAULT);
         element.setProperty(TCPSampler.SO_LINGER, soLinger.getText(), "");
         element.setProperty(TCPSampler.EOL_BYTE, eolByte.getText(), "");
     }
@@ -138,8 +145,8 @@ public class TCPConfigGui extends AbstractConfigGui {
         classname.setText(""); //$NON-NLS-1$
         requestData.setText(""); //$NON-NLS-1$
         reUseConnection.setSelected(true);
-        setNoDelay.setSelected(false);
-        closeConnection.setSelected(TCPSampler.CLOSE_CONNECTION_DEFAULT);
+        setNoDelay.setSelected(false); // TODO should this be indeterminate?
+        closeConnection.setSelected(TCPSampler.CLOSE_CONNECTION_DEFAULT); // TODO should this be indeterminate?
         soLinger.setText(""); //$NON-NLS-1$
         eolByte.setText(""); //$NON-NLS-1$
     }
@@ -148,7 +155,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     private JPanel createNoDelayPanel() {
         JLabel label = new JLabel(JMeterUtils.getResString("tcp_nodelay")); // $NON-NLS-1$
 
-        setNoDelay = new JCheckBox();
+        setNoDelay = new TristateCheckBox();
         label.setLabelFor(setNoDelay);
 
         JPanel nodelayPanel = new JPanel(new FlowLayout());
@@ -182,7 +189,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     private JPanel createCloseConnectionPanel() {
         JLabel label = new JLabel(JMeterUtils.getResString("closeconnection")); // $NON-NLS-1$
 
-        closeConnection = new JCheckBox("", TCPSampler.CLOSE_CONNECTION_DEFAULT);
+        closeConnection = new TristateCheckBox("", TCPSampler.CLOSE_CONNECTION_DEFAULT);
         label.setLabelFor(closeConnection);
 
         JPanel closeConnectionPanel = new JPanel(new FlowLayout());
@@ -271,4 +278,48 @@ public class TCPConfigGui extends AbstractConfigGui {
         // mainPanel.add(createFilenamePanel());
         add(mainPanel, BorderLayout.CENTER);
     }
+
+    // TODO should be moved somewhere shared
+    private void setTristateFromProperty(TestElement element, TristateCheckBox checkBox, String propName) {
+        JMeterProperty jmp = element.getProperty(propName);
+        if (jmp instanceof NullProperty) {
+            checkBox.setIndeterminate();
+        } else {
+            checkBox.setSelected(jmp.getBooleanValue());
+        }
+    }
+
+    // TODO should be moved somewhere shared
+    /**
+     * Sets a boolean property from a tristate checkbox.
+     * 
+     * @param element the test element
+     * @param checkBox the tristate checkbox
+     * @param propName the property name
+     */
+    private void setPropertyFromTristate(TestElement element, TristateCheckBox checkBox, String propName) {
+        if (checkBox.isIndeterminate()) {
+            element.removeProperty(propName);
+        } else {
+            element.setProperty(propName, checkBox.isSelected());
+        }
+    }
+
+    // TODO should be moved somewhere shared
+    /**
+     * Sets a boolean property from a tristate checkbox, with default.
+     * 
+     * @param element the test element
+     * @param checkBox the tristate checkbox
+     * @param propName the property name
+     * @param dflt the default (if default, the property is removed)
+     */
+    private void setPropertyFromTristate(TestElement element, TristateCheckBox checkBox, String propName, boolean dflt) {
+        if (checkBox.isIndeterminate()) {
+            element.removeProperty(propName);
+        } else {
+            element.setProperty(propName, checkBox.isSelected(), dflt);
+        }
+    }
+
 }
