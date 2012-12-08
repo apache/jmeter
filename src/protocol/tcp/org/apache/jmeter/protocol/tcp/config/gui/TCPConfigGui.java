@@ -128,7 +128,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         element.setProperty(TCPSampler.TIMEOUT, serverPanel.getResponseTimeout());
         element.setProperty(TCPSampler.TIMEOUT_CONNECT, serverPanel.getConnectTimeout(),"");
         element.setProperty(TCPSampler.REQUEST, requestData.getText());
-        setPropertyFromTristate(element, closeConnection, TCPSampler.CLOSE_CONNECTION, TCPSampler.CLOSE_CONNECTION_DEFAULT);
+        setPropertyFromTristate(element, closeConnection, TCPSampler.CLOSE_CONNECTION); // Don't use default for saving tristates
 //        element.setProperty(TCPSampler.CLOSE_CONNECTION, closeConnection.isSelected(), TCPSampler.CLOSE_CONNECTION_DEFAULT);
         element.setProperty(TCPSampler.SO_LINGER, soLinger.getText(), "");
         element.setProperty(TCPSampler.EOL_BYTE, eolByte.getText(), "");
@@ -279,7 +279,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    // TODO should be moved somewhere shared
+    // TODO should be moved somewhere shared, perhaps TristateCheckBox?
     private void setTristateFromProperty(TestElement element, TristateCheckBox checkBox, String propName) {
         JMeterProperty jmp = element.getProperty(propName);
         if (jmp instanceof NullProperty) {
@@ -289,7 +289,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         }
     }
 
-    // TODO should be moved somewhere shared
+    // TODO should be moved somewhere shared, perhaps TristateCheckBox?
     /**
      * Sets a boolean property from a tristate checkbox.
      * 
@@ -302,23 +302,6 @@ public class TCPConfigGui extends AbstractConfigGui {
             element.removeProperty(propName);
         } else {
             element.setProperty(propName, checkBox.isSelected());
-        }
-    }
-
-    // TODO should be moved somewhere shared
-    /**
-     * Sets a boolean property from a tristate checkbox, with default.
-     * 
-     * @param element the test element
-     * @param checkBox the tristate checkbox
-     * @param propName the property name
-     * @param dflt the default (if default, the property is removed)
-     */
-    private void setPropertyFromTristate(TestElement element, TristateCheckBox checkBox, String propName, boolean dflt) {
-        if (checkBox.isIndeterminate()) {
-            element.removeProperty(propName);
-        } else {
-            element.setProperty(propName, checkBox.isSelected(), dflt);
         }
     }
 
