@@ -185,9 +185,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             runningThread.start();
         } catch (Exception err) {
             stopTest();
-            StringWriter string = new StringWriter();
-            PrintWriter writer = new PrintWriter(string);
-            err.printStackTrace(writer);
             throw new JMeterEngineException(err);
         }
     }
