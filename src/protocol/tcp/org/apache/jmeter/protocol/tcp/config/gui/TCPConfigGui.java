@@ -85,7 +85,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         classname.setText(element.getPropertyAsString(TCPSampler.CLASSNAME));
         serverPanel.setServer(element.getPropertyAsString(TCPSampler.SERVER));
         // Default to original behaviour, i.e. re-use connection
-        reUseConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.RE_USE_CONNECTION,true));
+        reUseConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.RE_USE_CONNECTION, TCPSampler.RE_USE_CONNECTION_DEFAULT));
         serverPanel.setPort(element.getPropertyAsString(TCPSampler.PORT));
         // filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
         serverPanel.setResponseTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT));
