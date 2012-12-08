@@ -232,10 +232,6 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return getPropertyAsString(SERVER);
     }
 
-    public void setReUseConnection(String reuse) {
-        this.setProperty(RE_USE_CONNECTION, reuse);
-    }
-
     public boolean isReUseConnection() {
         return getPropertyAsBoolean(RE_USE_CONNECTION, RE_USE_CONNECTION_DEFAULT);
     }
