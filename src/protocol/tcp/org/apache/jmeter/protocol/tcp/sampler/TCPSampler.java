@@ -82,6 +82,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     public static final String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
 
     public static final String RE_USE_CONNECTION = "TCPSampler.reUseConnection"; //$NON-NLS-1$
+    public static final boolean RE_USE_CONNECTION_DEFAULT = true;
 
     public static final String CLOSE_CONNECTION = "TCPSampler.closeConnection"; //$NON-NLS-1$
     public static final boolean CLOSE_CONNECTION_DEFAULT = false;
@@ -236,7 +237,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     }
 
     public boolean isReUseConnection() {
-        return getPropertyAsBoolean(RE_USE_CONNECTION);
+        return getPropertyAsBoolean(RE_USE_CONNECTION, RE_USE_CONNECTION_DEFAULT);
     }
 
     public void setCloseConnection(String close) {
