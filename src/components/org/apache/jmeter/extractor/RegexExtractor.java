@@ -110,11 +110,11 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         if (defaultValue.length() > 0){// Only replace default if it is provided
             vars.put(refName, defaultValue);
         }
-
-
+        Perl5Matcher matcher = JMeterUtils.getMatcher();
         String regex = getRegex();
+        Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
         try {
-            List<MatchResult> matches = processMatches(regex, previousResult, matchNumber, vars);
+            List<MatchResult> matches = processMatches(pattern, regex, previousResult, matchNumber, vars);
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
@@ -162,6 +162,22 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             }
         } catch (MalformedCachePatternException e) {
             log.warn("Error in pattern: " + regex);
+        } finally {
+            clearMatcherMemory(matcher, pattern);
+        }
+    }
+
+    /**
+     * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
+     * the unzipped page size
+     * @param matcher {@link Perl5Matcher}
+     * @param pattern Pattern
+     */
+    private final void clearMatcherMemory(Perl5Matcher matcher, Pattern pattern) {
+        try {
+            matcher.matches("", pattern); // $NON-NLS-1$
+        } catch (Exception e) {
+            // NOOP
         }
     }
 
@@ -180,13 +196,12 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
        return inputString;
     }
 
-    private List<MatchResult> processMatches(String regex, SampleResult result, int matchNumber, JMeterVariables vars) {
+    private List<MatchResult> processMatches(Pattern pattern, String regex, SampleResult result, int matchNumber, JMeterVariables vars) {
         if (log.isDebugEnabled()) {
             log.debug("Regex = " + regex);
         }
 
         Perl5Matcher matcher = JMeterUtils.getMatcher();
-        Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
         List<MatchResult> matches = new ArrayList<MatchResult>();
         int found = 0;
 
