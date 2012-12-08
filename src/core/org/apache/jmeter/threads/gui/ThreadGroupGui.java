@@ -95,8 +95,8 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     @Override
     public void modifyTestElement(TestElement tg) {
         super.configureTestElement(tg);
-        if (tg instanceof ThreadGroup) {
-            ((ThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
+        if (tg instanceof AbstractThreadGroup) {
+            ((AbstractThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
         }
 
         tg.setProperty(AbstractThreadGroup.NUM_THREADS, threadInput.getText());

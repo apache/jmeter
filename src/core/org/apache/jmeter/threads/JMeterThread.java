@@ -337,8 +337,8 @@ public class JMeterThread implements Runnable, Interruptible {
         for (Iterator<Controller> iterator = controllersToReinit
                 .iterator(); iterator.hasNext();) {
             Controller parentController =  iterator.next();
-            if(parentController instanceof ThreadGroup) {
-                ThreadGroup tg = (ThreadGroup) parentController;
+            if(parentController instanceof AbstractThreadGroup) {
+                AbstractThreadGroup tg = (AbstractThreadGroup) parentController;
                 tg.startNextLoop();
             } else {
                 parentController.triggerEndOfLoop();
