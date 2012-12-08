@@ -383,7 +383,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         final boolean reUseConnection = isReUseConnection();
         final boolean closeConnection = isCloseConnection();
         String socketKey = getSocketKey();
-        log.debug(getLabel() + " " + getFilename() + " " + getUsername() + " " + getPassword());
+        if (log.isDebugEnabled()){
+            log.debug(getLabel() + " " + getFilename() + " " + getUsername() + " " + getPassword());
+        }
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
         res.setSampleLabel(getName());// Use the test element name for the label
