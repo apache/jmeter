@@ -245,6 +245,11 @@ public class SampleResult implements Serializable {
     
     final long nanoThreadSleep;
     
+    /**
+     * Cache for responseData as string to avoid multiple computations
+     */
+    private String responseDataAsString;
+    
     private long initOffset(){
         if (useNanoTime){
             return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : System.currentTimeMillis() - sampleNsClockInMs();
@@ -298,6 +303,7 @@ public class SampleResult implements Serializable {
         requestHeaders = res.requestHeaders;//OK
         responseCode = res.responseCode;//OK
         responseData = res.responseData;//OK
+        responseDataAsString = null;
         responseHeaders = res.responseHeaders;//OK
         responseMessage = res.responseMessage;//OK
         // Don't copy this; it is per instance resultFileName = res.resultFileName;
@@ -617,6 +623,7 @@ public class SampleResult implements Serializable {
      *            the new responseData value
      */
     public void setResponseData(byte[] response) {
+        responseDataAsString = null;
         responseData = response == null ? EMPTY_BA : response;
     }
 
@@ -631,6 +638,7 @@ public class SampleResult implements Serializable {
      */
     @Deprecated
     public void setResponseData(String response) {
+        responseDataAsString = null;
         try {
             responseData = response.getBytes(getDataEncodingWithDefault());
         } catch (UnsupportedEncodingException e) {
@@ -647,6 +655,7 @@ public class SampleResult implements Serializable {
      *
      */
     public void setResponseData(final String response, final String encoding) {
+        responseDataAsString = null;
         String encodeUsing = encoding != null? encoding : DEFAULT_CHARSET;
         try {
             responseData = response.getBytes(encodeUsing);
@@ -680,7 +689,10 @@ public class SampleResult implements Serializable {
      */
     public String getResponseDataAsString() {
         try {
-            return new String(responseData,getDataEncodingWithDefault());
+            if(responseDataAsString == null) {
+                responseDataAsString= new String(responseData,getDataEncodingWithDefault());
+            }
+            return responseDataAsString;
         } catch (UnsupportedEncodingException e) {
             log.warn("Using platform default as "+getDataEncodingWithDefault()+" caused "+e);
             return new String(responseData); // N.B. default charset is used deliberately here
@@ -1321,5 +1333,12 @@ public class SampleResult implements Serializable {
      */
     public void setStartNextThreadLoop(boolean startNextThreadLoop) {
         this.startNextThreadLoop = startNextThreadLoop;
+    }
+
+    /**
+     * Clean up cached data
+     */
+    public void cleanAfterSample() {
+        this.responseDataAsString = null;
     }
 }
