@@ -391,6 +391,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         sb.append("\n["); // $NON-NLS-1$
         sb.append("SOLINGER: ").append(getSoLinger()); // $NON-NLS-1$
         sb.append(" EOL: ").append(getEolByte()); // $NON-NLS-1$
+        sb.append(" noDelay: ").append(getNoDelay()); // $NON-NLS-1$
         sb.append("]"); // $NON-NLS-1$
         res.setSamplerData(sb.toString()); 
         res.sampleStart();
