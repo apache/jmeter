@@ -248,7 +248,7 @@ public class SampleResult implements Serializable {
     /**
      * Cache for responseData as string to avoid multiple computations
      */
-    private String responseDataAsString;
+    private volatile transient String responseDataAsString;
     
     private long initOffset(){
         if (useNanoTime){
