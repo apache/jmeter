@@ -169,9 +169,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private final JLabeledTextField graphHeight =
             new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"), 6); //$NON-NLS-1$
 
-    private int minStartTime = Integer.MAX_VALUE;
+    private long minStartTime = Long.MAX_VALUE;
 
-    private int maxStartTime = Integer.MIN_VALUE;
+    private long maxStartTime = Long.MIN_VALUE;
 
     /**
      * We want to retain insertion order, so LinkedHashMap is necessary
@@ -181,9 +181,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     /**
      * We want to retain insertion order, so LinkedHashMap is necessary
      */
-    private final Map<String, Map<Integer, Long>> pList = new LinkedHashMap<String, Map<Integer, Long>>();
+    private final Map<String, Map<Long, Long>> pList = new LinkedHashMap<String, Map<Long, Long>>();
 
-    private int durationTest = 0;
+    private long durationTest = 0;
     
     private int colorIdx = 0;
 
@@ -213,7 +213,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         }
         if ((matcher == null) || (matcher.find())) {
             final long startTimeMS = sampleResult.getStartTime();
-            final int startTimeInterval = (int) startTimeMS / intervalValue;
+            final long startTimeInterval = startTimeMS / intervalValue;
             JMeterUtils.runSafe(new Runnable() {
                 @Override
                 public void run() {
@@ -234,18 +234,18 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                             }
                         }
                         // List of value by sampler
-                        Map<Integer, Long> subList = pList.get(sampleLabel);
+                        Map<Long, Long> subList = pList.get(sampleLabel);
                         if (subList != null) {
                             long respTime = sampleResult.getTime();
-                            Long value = subList.get(Integer.valueOf(startTimeInterval));
+                            Long value = subList.get(startTimeInterval);
                             if (value!=null) {
                                 respTime = (value.longValue() + respTime) / 2;
                             }
-                            subList.put(Integer.valueOf(startTimeInterval), Long.valueOf(respTime));
+                            subList.put(startTimeInterval, Long.valueOf(respTime));
                         } else {
                             // We want to retain insertion order, so LinkedHashMap is necessary
-                            Map<Integer, Long> newSubList = new LinkedHashMap<Integer, Long>();
-                            newSubList.put(Integer.valueOf(startTimeInterval), Long.valueOf(sampleResult.getTime()));
+                            Map<Long, Long> newSubList = new LinkedHashMap<Long, Long>();
+                            newSubList.put(startTimeInterval, Long.valueOf(sampleResult.getTime()));
                             pList.put(sampleLabel, newSubList);
                         }
                     }
@@ -307,7 +307,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
      */
     public double[][] getData() {
         int size = pList.size();
-        int max = durationTest;
+        int max = (int) durationTest; // Test can't have a duration more than 2^31 secs (cast from long to int)
 
         double[][] data = new double[size][max];
 
@@ -315,11 +315,11 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         double nanBegin = 0;
         List<Double> nanList = new ArrayList<Double>();
         int s = 0;
-        for (Map<Integer, Long> subList : pList.values()) {
+        for (Map<Long, Long> subList : pList.values()) {
             int idx = 0;
             while (idx < durationTest) {
-                int keyShift = minStartTime + idx;
-                Long value = subList.get(Integer.valueOf(keyShift));
+                long keyShift = minStartTime + idx;
+                Long value = subList.get(keyShift);
                 if (value != null) {
                     nanLast = value.doubleValue();
                     data[s][idx] = nanLast;
@@ -541,7 +541,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     public String[] getXAxisLabels() {
         SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$ 
-        String[] xAxisLabels = new String[durationTest];
+        String[] xAxisLabels = new String[(int) durationTest]; // Test can't have a duration more than 2^31 secs (cast from long to int)
         for (int j = 0; j < durationTest; j++) {
             xAxisLabels[j] = formatter.format(new Date((minStartTime + j) * intervalValue));
         }

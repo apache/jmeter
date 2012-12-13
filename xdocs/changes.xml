@@ -132,6 +132,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <ul>
 <li><bugzilla>54088</bugzilla> - The type video/f4m is text, not binary</li>
 <li><bugzilla>54166</bugzilla> - ViewResultsTree could not render the HTML response: handle failure to parse HTML</li>
+<li><bugzilla>54287</bugzilla> - Incorrect Timestamp in Response Time Graph when using a date with time in Date format field</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
