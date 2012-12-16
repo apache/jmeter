@@ -34,7 +34,7 @@ public interface Extractor extends Serializable {
      * @param inputString Page or excerpt
      * @param result List<String> results
      * @param found current matches found
-     * @param cacheIfPossible Cache analysis if possibler
+     * @param cacheKey If not null, the implementation is encouraged to cache parsing result and use this key as part of cache key
      * @return match found updated
      */
     int extract(
@@ -44,5 +44,5 @@ public interface Extractor extends Serializable {
             String inputString, 
             List<String> result,
             int found,
-            boolean cacheIfPossible);
+            String cacheKey);
 }
