@@ -179,13 +179,14 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         List<String> result = new ArrayList<String>();
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
-            getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, true);
+            getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, "-1");
         } else {
             List<SampleResult> sampleList = getSampleList(previousResult);
             int i=0;
             for (SampleResult sr : sampleList) {
                 String inputString = sr.getResponseDataAsString();
-                found = getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, i==0);
+                found = getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found,
+                        i>0 ? null : Integer.toString(i));
                 i++;
                 if (matchNumber > 0 && found == matchNumber){// no need to process further
                     break;

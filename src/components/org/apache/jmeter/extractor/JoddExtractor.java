@@ -25,6 +25,7 @@ import jodd.lagarto.dom.LagartoDOMBuilder;
 import jodd.lagarto.dom.Node;
 import jodd.lagarto.dom.NodeSelector;
 
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -39,6 +40,7 @@ public class JoddExtractor implements Extractor {
      */
     private static final long serialVersionUID = -7235814605293262972L;
 
+    private static final String CACHE_KEY_PREFIX = JoddExtractor.class.getName()+"_PARSED_BODY";
 
     /**
      * 
@@ -53,10 +55,22 @@ public class JoddExtractor implements Extractor {
     @Override
     public int extract(String expression, String attribute, int matchNumber,
             String inputString, List<String> result, int found,
-            boolean cacheIfPossible) {
-        LagartoDOMBuilder domBuilder = new LagartoDOMBuilder();
-        jodd.lagarto.dom.Document doc = domBuilder.parse(inputString);
-        NodeSelector nodeSelector = new NodeSelector(doc);
+            String cacheKey) {
+        NodeSelector nodeSelector = null;
+        if (cacheKey != null) {
+            nodeSelector = (NodeSelector) 
+                    JMeterContextService.getContext().getSamplerContext().get(CACHE_KEY_PREFIX+cacheKey);
+            if(nodeSelector==null) {
+                LagartoDOMBuilder domBuilder = new LagartoDOMBuilder();
+                jodd.lagarto.dom.Document doc = domBuilder.parse(inputString);
+                nodeSelector = new NodeSelector(doc);
+                JMeterContextService.getContext().getSamplerContext().put(CACHE_KEY_PREFIX+cacheKey, nodeSelector);
+            }
+        } else {
+            LagartoDOMBuilder domBuilder = new LagartoDOMBuilder();
+            jodd.lagarto.dom.Document doc = domBuilder.parse(inputString);
+            nodeSelector = new NodeSelector(doc);
+        }
         LinkedList<Node> elements = nodeSelector.select(expression);
         int size = elements.size();
         for (int i = 0; i < size; i++) {
