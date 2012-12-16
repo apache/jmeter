@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.threads;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -51,6 +54,8 @@ public class JMeterContext {
 
     private boolean restartNextLoop = false;
 
+    private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<String, Object>(5);
+
     JMeterContext() {
         clear0();
     }
@@ -68,6 +73,7 @@ public class JMeterContext {
         threadNum = 0;
         thread = null;
         isReinitSubControllers = false;
+        samplerContext.clear();
     }
 
     /**
@@ -213,5 +219,14 @@ public class JMeterContext {
         if(previousResult != null) {
             previousResult.cleanAfterSample();
         }
+        samplerContext.clear();
+    }
+
+    /**
+     * Sampler context is cleaned up as soon as Post-Processor have ended
+     * @return Context to use within PostProcessors to cache data
+     */
+    public Map<String, Object> getSamplerContext() {
+        return samplerContext;
     }
 }
