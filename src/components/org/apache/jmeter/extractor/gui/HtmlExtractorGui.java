@@ -164,7 +164,7 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
         m.addElement(USE_DEFAULT_EXTRACTOR_IMPL);
         extractorImplName = new JComboBox(m);
         extractorImplName.setSelectedItem(HtmlExtractor.DEFAULT_EXTRACTOR);
-        JLabel label2 = new JLabel(JMeterUtils.getResString("extractor_type")); // $NON-NLS-1$
+        JLabel label2 = new JLabel(JMeterUtils.getResString("html_extractor_type")); // $NON-NLS-1$
         label2.setLabelFor(extractorImplName);
         panel.add(label2);
         panel.add(extractorImplName);
