@@ -20,6 +20,7 @@ package org.apache.jmeter.extractor;
 
 import java.util.List;
 
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,6 +39,7 @@ public class JSoupExtractor implements Extractor {
      */
     private static final long serialVersionUID = -6308012192067714191L;
 
+    private static final String CACHE_KEY_PREFIX = JSoupExtractor.class.getName()+"_PARSED_BODY";
 
     /**
      * 
@@ -47,13 +49,23 @@ public class JSoupExtractor implements Extractor {
     }
 
     /**
-     * @see org.apache.jmeter.extractor.Extractor#extract(java.lang.String, java.lang.String, int, java.lang.String, java.util.List, int, boolean)
+     * @see org.apache.jmeter.extractor.Extractor#extract(java.lang.String, java.lang.String, int, java.lang.String, java.util.List, int, String)
      */
     @Override
     public int extract(String expression, String attribute, int matchNumber,
             String inputString, List<String> result, int found,
-            boolean cacheIfPossible) {
-        Document document = Jsoup.parse(inputString);
+            String cacheKey) {
+        Document document = null;
+        if (cacheKey != null) {
+            document = (Document) 
+                    JMeterContextService.getContext().getSamplerContext().get(CACHE_KEY_PREFIX+cacheKey);
+            if(document==null) {
+                document = Jsoup.parse(inputString);
+                JMeterContextService.getContext().getSamplerContext().put(CACHE_KEY_PREFIX+cacheKey, document);
+            }
+        } else {
+            document = Jsoup.parse(inputString);
+        }
         Elements elements = document.select(expression);
         int size = elements.size();
         for (int i = 0; i < size; i++) {
