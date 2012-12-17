@@ -3806,7 +3806,7 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 </properties>
 </component>
 
-<component name="Random Variable" index="&sect-num;.4.15"  width="411" height="306" screenshot="random_variable.png">
+<component name="Random Variable" index="&sect-num;.4.15"  width="495" height="286" screenshot="random_variable.png">
 <description>
 <p>
 The Random Variable Config Element is used to generate random numeric strings and store them in variable for use later.
@@ -3831,7 +3831,10 @@ however the minimum and maximum values can be any long values so long as the ran
   If not specified, the default is to generate the number using Long.toString()</property>
   <property name="Minimum Value" required="Yes">The minimum value (long) of the generated random number.</property>
   <property name="Maximum Value" required="Yes">The maximum value (long) of the generated random number.</property>
-  <property name="Random Seed" required="No">The seed for the random number generator. Default is the current time in milliseconds.</property>
+  <property name="Random Seed" required="No">The seed for the random number generator. Default is the current time in milliseconds. 
+  If you use the same seed value with Per Thread set to true, you will get the same value for earch Thread as per 
+  <a href="http://docs.oracle.com/javase/6/docs/api/java/util/Random.html" >Random</a> class.
+  </property>
   <property name="Per Thread(User)?" required="Yes">If False, the generator is shared between all threads in the thread group.
   If True, then each thread has its own random generator.</property>
 </properties>
