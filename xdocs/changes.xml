@@ -220,6 +220,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <li><bugzilla>54251</bugzilla> - Add tristate checkbox implementation</li>
 <li><bugzilla>54257</bugzilla> - Enhance SamplerCreator interface to meet new requirements</li>
 <li><bugzilla>54258</bugzilla> - Proxy : Use Raw Post Body when Sampler has one unnamed argument, useful for Samplers using POST method by of type JSON, XML, GWT body</li>
+<li><bugzilla>54268</bugzilla> - Improve CPU and memory usage</li>
 </ul>
 
 <h2>Non-functional changes</h2>
