@@ -4875,15 +4875,17 @@ generate the template string, and store the result into the given variable name.
         <li>Body (unescaped) - the body of the response, with all Html escape codes replaced.
         Note that Html escapes are processed without regard to context, so some incorrect substitutions
         may be made.
+        <note>Note that this option highly impacts performances, so use it only when absolutely necessary and be aware of its impacts</note>
         </li>
-        <li>Body as a Document - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).</li>
+        <li>Body as a Document - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).
+        <note>Note that Body as a Document option can impact performances, so ensure it is Ok for your test</note>
+        </li>
         <li>Headers - may not be present for non-HTTP samples</li>
         <li>URL</li>
         <li>Response Code - e.g. 200</li>
         <li>Response Message - e.g. OK</li>
         </ul>
         Headers can be useful for HTTP samples; it may not be present for other sample types.
-		<note>Note that Body (unescaped) and Body as a Document options highly impact performances, so use them only when absolutely necessary</note>
         </property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
