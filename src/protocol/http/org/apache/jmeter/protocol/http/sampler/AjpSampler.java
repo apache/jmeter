@@ -126,6 +126,8 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             return errorResult(iex, res);
         } finally {
             activeChannel = null;
+            JOrphanUtils.closeQuietly(body);
+            body = null;
         }
     }
 
@@ -260,9 +262,13 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             HTTPFileArg[] hfa = getHTTPFiles();
             if(hfa.length > 0) {
                 HTTPFileArg fa = hfa[0];
-                String fn = fa.getName();
+                String fn = fa.getPath();
                 File input = new File(fn);
                 cl = (int)input.length();
+                if(body != null) {
+                    JOrphanUtils.closeQuietly(body);
+                    body = null;
+                }
                 body = new BufferedInputStream(new FileInputStream(input));
                 setString(HTTPConstants.HEADER_CONTENT_DISPOSITION);
                 setString("form-data; name=\""+encode(fa.getParamName())+
