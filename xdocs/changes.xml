@@ -37,12 +37,38 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h2>New and Noteworthy</h2>
 
 <h3>Core Improvements:</h3>
-<h4>Webservice sampler now adds to request the headers that are set through Header Manager</h4>
+<h4>A new Extractor that uses CSS or jquery-like selector syntax has been introduced, it allows using either JODD or JSOUP implementations</h4>
+<h4>JMeter can now handle different types of documents (PDF, MsOffice files, Apache OpenOffice's files...) within different elements 
+<ul>
+    <li>Regular Expression Extractor</li>
+    <li>Assertion Response</li>
+    <li>View Results Tree</li>
+</ul>
+</h4>
+<h4>TCP Sampler has been enhanced with new options to allow setting "Close Connection", "SO_LINGER" and "End of line(EOL) byte value"</h4>
+<h4>A new function has been introduced quote ORO regexp meta characters</h4>
+<h4>ForEach Controller has now 2 new fields to control start and end of loop</h4>
+<h4>Result Status Action Handler now has a new option to "Start next thread loop"</h4>
+
+<h4>Memory and performance improvements</h4>
+<p>Significant improvements have been done in this version on memory usage per Thread and CPU when more than one Post Processor is used Sampler</p>
+<p>JSR223 Elements (enable using Groovy, scala... as scripting languages) have been improved to enable caching of Compilation when scripts are passed Text area</p>
+
 
 <h3>GUI and ergonomy Improvements:</h3>
+<h4>Search feature has been imrpoved to search within more internal fields of elements and expand search results</h4>
+<h4>Copy/paste is now possible between 2 JMeter instances &gt;= 2.9 version</h4>
 <h4>Allow copy from clipboard to HeaderPanel, headers are supposed to be separated by new line and have the following form name:value</h4>
+<h4>Module Controller has been improved to better render referenced controller and expand it by clicking on a new button</h4>
+<h4>HTTP Proxy Server now has a button to add a set of default exclusions for URL patterns, this list can be configured through property : proxy.excludes.suggested</h4>
+<h4>Rendering of target controller has been improved in HTTP Proxy Server</h4>
 
-<h4>Proxy now has a button to add a set of default exclusions for URL patterns, this list can be configured through property : proxy.excludes.suggested</h4>
+
+<h3>HTTP Proxy Server recording:</h3>
+<h4>HTTP Proxy Server now automatically uses Raw Post Body mode for samples that only have one unnamed argument (JSON, XML, GWT...)</h4>
+<h4>HTTP Proxy Server does not force user to select the type of Sampler in HTTP Sampler Settings, this allows easier switch between implementations as Sampler do not have this information set anymore</h4>
+<h4>SamplerCreator interface to meet new requirements for plugin providers</h4>
+<h4>It is now possible to create binary sampler for x-www-form-urlencoded POST request by modifying proxy.binary.types property to add application/x-www-form-urlencoded </h4>
 
 <!--  =================== Known bugs =================== -->
 
@@ -183,12 +209,13 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <ul>
 <li><bugzilla>54131</bugzilla> - ForEach Controller : Add start and end index for looping over variables</li>
 <li><bugzilla>54132</bugzilla> - Module Controller GUI : Improve rendering of referenced controller</li>
+<li><bugzilla>54155</bugzilla> - ModuleController : Add a shortcut button to unfold the tree up to referenced controller and highlight it</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
 <li><bugzilla>54200</bugzilla> - Add support of several document types (like Apache OpenOffice's files, MS Office's files, PDF's files, etc.) 
-to the elements View Results Tree, Assertion Response and Regular Expression Extractor (in using Apache Tika)</li>
+to the elements View Results Tree, Assertion Response and Regular Expression Extractor (using Apache Tika)</li>
 <li><bugzilla>54226</bugzilla> - View Results Tree : Show response even when server does not return ContentType header</li>
 </ul>
 
@@ -218,7 +245,6 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <li><bugzilla>46677</bugzilla> - Copying Test Elements between test plans</li>
 <li><bugzilla>54204</bugzilla> - Result Status Action Handler : Add start next thread loop option</li>
 <li><bugzilla>54232</bugzilla> - Search Feature : Add a button to search and expand results</li>
-<li><bugzilla>54155</bugzilla> - ModuleController : Add a shortcut button to unfold the tree up to referenced controller and highlight it</li>
 <li><bugzilla>54251</bugzilla> - Add tristate checkbox implementation</li>
 <li><bugzilla>54257</bugzilla> - Enhance SamplerCreator interface to meet new requirements</li>
 <li><bugzilla>54258</bugzilla> - Proxy : Use Raw Post Body when Sampler has one unnamed argument, useful for Samplers using POST method by of type JSON, XML, GWT body</li>
