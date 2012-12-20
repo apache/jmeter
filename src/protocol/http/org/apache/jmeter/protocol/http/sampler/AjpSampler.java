@@ -419,16 +419,20 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     }
 
     private void setNextBodyChunk() throws IOException {
-        int len = body.available();
-        if(len < 0) {
-            len = 0;
-        } else if(len > MAX_SEND_SIZE) {
-            len = MAX_SEND_SIZE;
-        }
-        outpos = 4;
         int nr = 0;
-        if(len > 0) {
-            nr = body.read(outbuf, outpos+2, len);
+        if(body != null) {
+            int len = body.available();
+            if(len < 0) {
+                len = 0;
+            } else if(len > MAX_SEND_SIZE) {
+                len = MAX_SEND_SIZE;
+            }
+            outpos = 4;
+            if(len > 0) {
+                nr = body.read(outbuf, outpos+2, len);
+            }
+        } else {
+            outpos = 4;
         }
         setInt(nr);
         outpos += nr;
