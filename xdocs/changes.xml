@@ -123,6 +123,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>53995</bugzilla> - AbstractJDBCTestElement shares PreparedStatement between multi-threads</li>
 <li><bugzilla>54119</bugzilla> - HTTP 307 response is not redirected</li>
 <li><bugzilla>54326</bugzilla> - AjpSampler send file in post throws FileNotFoundException</li>
+<li><bugzilla>54331</bugzilla> - AjpSampler throws null pointer on GET request that are protected</li>
 </ul>
 
 <h3>Controllers</h3>
