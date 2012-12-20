@@ -113,7 +113,7 @@ It has been removed so now size of these 2 maps is not limited anymore. This cha
 <li>Don't log spurious warning messages when using concurrent pool embedded downloads with Cache Manager or CookieManager</li>
 <li><bugzilla>54057</bugzilla>- Proxy option to set user and password at startup (-u and -a) not working with HTTPClient 4</li>
 <li><bugzilla>54187</bugzilla> - Request tab does not show headers if request fails</li>
-<li>Bug 53840 - Proxy Recording : Response message: URLDecoder: Illegal hex characters in escape (%) pattern - For input string: "" "</li>
+<li><bugzilla>53840</bugzilla> - Proxy Recording : Response message: URLDecoder: Illegal hex characters in escape (%) pattern - For input string: "" "</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -194,7 +194,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-<li><bugzilla>54259</bugzilla> - Introduce a CSS or jquery-like based Extractor</li>
+<li><bugzilla>54259</bugzilla> - Introduce a new Extractor that uses CSS or jquery-like selector syntax</li>
 </ul>
 
 <h3>Functions</h3>
