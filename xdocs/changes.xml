@@ -52,11 +52,11 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h4>Memory and performance improvements</h4>
 <p>Significant improvements have been done in this version on memory usage per Thread and CPU when more than one Post Processor is used Sampler</p>
-<p>JSR223 Elements (enable using Groovy, scala... as scripting languages) have been improved to enable caching of Compilation when scripts are passed Text area</p>
+<p>JSR223 Elements (enable using Groovy, Scala... as scripting languages) have been improved to enable caching of Compilation when scripts are passed Text area</p>
 
 
 <h3>GUI and ergonomy Improvements:</h3>
-<h4>Search feature has been imrpoved to search within more internal fields of elements and expand search results</h4>
+<h4>Search feature has been improved to search within more internal fields of elements and expand search results</h4>
 <h4>Copy/paste is now possible between 2 JMeter instances &gt;= 2.9 version</h4>
 <h4>Allow copy from clipboard to HeaderPanel, headers are supposed to be separated by new line and have the following form name:value</h4>
 <h4>Module Controller has been improved to better render referenced controller and expand it by clicking on a new button</h4>
@@ -67,7 +67,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h3>HTTP Proxy Server recording:</h3>
 <h4>HTTP Proxy Server now automatically uses Raw Post Body mode for samples that only have one unnamed argument (JSON, XML, GWT...)</h4>
 <h4>HTTP Proxy Server does not force user to select the type of Sampler in HTTP Sampler Settings, this allows easier switch between implementations as Sampler do not have this information set anymore</h4>
-<h4>SamplerCreator interface to meet new requirements for plugin providers</h4>
+<h4>SamplerCreator interface to meet new requirements for plug-in providers</h4>
 <h4>It is now possible to create binary sampler for x-www-form-urlencoded POST request by modifying proxy.binary.types property to add application/x-www-form-urlencoded </h4>
 
 <!--  =================== Known bugs =================== -->
