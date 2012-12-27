@@ -49,9 +49,9 @@ public class JSR223Listener extends JSR223TestElement
             bindings.put("sampleResult", event.getResult());
             processFileOrScript(scriptEngine, bindings);
         } catch (ScriptException e) {
-            log.warn("Problem in JSR223 script ", e);
+            log.error("Problem in JSR223 script ", e);
         } catch (IOException e) {
-            log.warn("Problem in JSR223 script ", e);
+            log.error("Problem in JSR223 script ", e);
         }
     }
 
