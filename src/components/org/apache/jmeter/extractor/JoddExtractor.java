@@ -30,7 +30,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Jodd-Lagerto based CSS/JQuery extractor
- * @see http://jodd.org/doc/csselly/
+ * see http://jodd.org/doc/csselly/
  * @since 2.9
  */
 public class JoddExtractor implements Extractor {
@@ -50,7 +50,7 @@ public class JoddExtractor implements Extractor {
     }
 
     /**
-     * @see org.apache.jmeter.extractor.Extractor#extract(java.lang.String, java.lang.String, int, java.lang.String, java.util.List, int, boolean)
+     * @see org.apache.jmeter.extractor.Extractor#extract(String, String, int, String, List, int, String)
      */
     @Override
     public int extract(String expression, String attribute, int matchNumber,
