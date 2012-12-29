@@ -29,7 +29,7 @@ import org.jsoup.select.Elements;
 
 /**
  * JSoup based CSS/JQuery extractor
- * @see http://jsoup.org/cookbook/extracting-data/selector-syntax
+ * see http://jsoup.org/cookbook/extracting-data/selector-syntax
  * @since 2.9
  */
 public class JSoupExtractor implements Extractor {
@@ -49,7 +49,7 @@ public class JSoupExtractor implements Extractor {
     }
 
     /**
-     * @see org.apache.jmeter.extractor.Extractor#extract(java.lang.String, java.lang.String, int, java.lang.String, java.util.List, int, String)
+     * @see org.apache.jmeter.extractor.Extractor#extract(String, String, int, String, List, int, String)
      */
     @Override
     public int extract(String expression, String attribute, int matchNumber,
