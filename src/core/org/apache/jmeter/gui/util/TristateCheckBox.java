@@ -44,6 +44,10 @@ import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
+
 // derived from: http://www.javaspecialists.eu/archive/Issue145.html
 
 public final class TristateCheckBox extends JCheckBox {
@@ -99,6 +103,34 @@ public final class TristateCheckBox extends JCheckBox {
         SwingUtilities.replaceUIActionMap(this, actions);
     }
 
+    /**
+     * Set state depending on property
+     * @param element TestElement
+     * @param propName String property name
+     */
+    public void setTristateFromProperty(TestElement element,String propName) {
+        JMeterProperty jmp = element.getProperty(propName);
+        if (jmp instanceof NullProperty) {
+            this.setIndeterminate();
+        } else {
+            this.setSelected(jmp.getBooleanValue());
+        }
+    }
+    
+    /**
+     * Sets a boolean property from a tristate checkbox.
+     * 
+     * @param element the test element
+     * @param propName the property name
+     */
+    public void setPropertyFromTristate(TestElement element, String propName) {
+        if (isIndeterminate()) {
+            element.removeProperty(propName);
+        } else {
+            element.setProperty(propName, isSelected());
+        }
+    }
+    
     // Next two methods implement new API by delegation to model
     public void setIndeterminate() {
         getTristateModel().setIndeterminate();
