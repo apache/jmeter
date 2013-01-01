@@ -4820,6 +4820,46 @@ this one will be used by "Calculate Price cut off".
 </description>
 </component>
 
+<component name="RegEx User Parameters" index="&sect-num;.7.10"  width="727" height="138" screenshot="regex_user_params.png">
+    <description><p>Allows to specify dynamic values for HTTP parameters extracted from another HTTP Request using regular expressions.
+            RegEx User Parameters are specific to individual threads.</p>
+        <p>This component allows you to specify reference name of a regular expression that extracts names and values of HTTP request parameters. 
+            Regular expression group numbers must be specified for parameter's name and also for parameter's value.
+            Replacement will only occur for parameters in the Sampler that uses this RegEx User Parameters which name matches </p>
+    </description>
+    
+    <properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Regular Expression Reference Name" required="Yes">Name of a reference to a regular expression</property>
+        <property name="Parameter names regexp group number" required="Yes">Group number of regular expression used to extract parameter names</property>
+        <property name="Parameter values regex group number" required="Yes">Group number of regular expression used to extract parameter values</property>
+    </properties>
+    
+    <p>Example:</p>
+    <p>Suppose we have a request which returns a form with 3 input parameters and we want to extract the value of 2 of them to inject them in next request</p>
+    <p>1. - Create Post Processor Regular Expression for first HTTP Request</p>
+    <ul>
+        <li>refName - set name of a regular expression Ex. (listParams)</li>
+        <li>regular expression - expression that will extract input names and input values attributes
+            <br/>
+            Ex: input name="([^"]+?)" value="([^"]+?)"</li>
+        <li>template would be empty</li>
+        <li>match nr - -1 (in order to iterate through all the possible matches)</li>
+    </ul>
+    
+    <p>2. - Create Pre Processor RegEx User Parameters for second HTTP Request</p>
+    <ul>
+        <li>refName - set the same reference name of a regular expression, would be listParams in our example</li>
+        <li>parameter names group number - group number of regular expression for parameter names, would be 1 in our example</li>
+        <li>parameter values group number - group number of regular expression for parameter values, would be 2 in our example</li>
+    </ul>
+    
+    <p>See also the <complink name="Regular Expression Extractor"/> element, which is used to extract parametes names and values</p>
+</component>
+<links>
+        <link href="../demos/RegEx-User-Parameters.jmx">Test Plan showing how to use RegEx User Parameters</link>
+</links>
+
 <a href="#">^</a>
 
 </section>
