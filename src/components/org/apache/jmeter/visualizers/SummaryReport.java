@@ -120,7 +120,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Max
             new NumberRenderer("#0.00"), // Std Dev.
             new NumberRenderer("#0.00%"), // Error %age
-            new RateRenderer("#.0"),      // Throughpur
+            new RateRenderer("#.0"),      // Throughput
             new NumberRenderer("#0.00"),  // kB/sec
             new NumberRenderer("#.0"),    // avg. pageSize
         };
