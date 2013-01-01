@@ -38,8 +38,6 @@ import org.apache.jmeter.gui.util.TristateCheckBox;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
@@ -93,10 +91,10 @@ public class TCPConfigGui extends AbstractConfigGui {
         // filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
         serverPanel.setResponseTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT));
         serverPanel.setConnectTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT_CONNECT));
-        setTristateFromProperty(element, setNoDelay, TCPSampler.NODELAY);
+        setNoDelay.setTristateFromProperty(element, TCPSampler.NODELAY);
 //        setNoDelay.setSelected(element.getPropertyAsBoolean(TCPSampler.NODELAY));
         requestData.setText(element.getPropertyAsString(TCPSampler.REQUEST));
-        setTristateFromProperty(element, closeConnection, TCPSampler.CLOSE_CONNECTION);
+        closeConnection.setTristateFromProperty(element, TCPSampler.CLOSE_CONNECTION);
 //        closeConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.CLOSE_CONNECTION, TCPSampler.CLOSE_CONNECTION_DEFAULT));
         soLinger.setText(element.getPropertyAsString(TCPSampler.SO_LINGER));
         eolByte.setText(element.getPropertyAsString(TCPSampler.EOL_BYTE));
@@ -123,12 +121,12 @@ public class TCPConfigGui extends AbstractConfigGui {
         element.setProperty(TCPSampler.RE_USE_CONNECTION, reUseConnection.isSelected());
         element.setProperty(TCPSampler.PORT, serverPanel.getPort());
         // element.setProperty(TCPSampler.FILENAME, filename.getText());
-        setPropertyFromTristate(element, setNoDelay, TCPSampler.NODELAY);
+        setNoDelay.setPropertyFromTristate(element, TCPSampler.NODELAY);
 //        element.setProperty(TCPSampler.NODELAY, setNoDelay.isSelected());
         element.setProperty(TCPSampler.TIMEOUT, serverPanel.getResponseTimeout());
         element.setProperty(TCPSampler.TIMEOUT_CONNECT, serverPanel.getConnectTimeout(),"");
         element.setProperty(TCPSampler.REQUEST, requestData.getText());
-        setPropertyFromTristate(element, closeConnection, TCPSampler.CLOSE_CONNECTION); // Don't use default for saving tristates
+        closeConnection.setPropertyFromTristate(element, TCPSampler.CLOSE_CONNECTION); // Don't use default for saving tristates
 //        element.setProperty(TCPSampler.CLOSE_CONNECTION, closeConnection.isSelected(), TCPSampler.CLOSE_CONNECTION_DEFAULT);
         element.setProperty(TCPSampler.SO_LINGER, soLinger.getText(), "");
         element.setProperty(TCPSampler.EOL_BYTE, eolByte.getText(), "");
@@ -278,31 +276,4 @@ public class TCPConfigGui extends AbstractConfigGui {
         // mainPanel.add(createFilenamePanel());
         add(mainPanel, BorderLayout.CENTER);
     }
-
-    // TODO should be moved somewhere shared, perhaps TristateCheckBox?
-    private void setTristateFromProperty(TestElement element, TristateCheckBox checkBox, String propName) {
-        JMeterProperty jmp = element.getProperty(propName);
-        if (jmp instanceof NullProperty) {
-            checkBox.setIndeterminate();
-        } else {
-            checkBox.setSelected(jmp.getBooleanValue());
-        }
-    }
-
-    // TODO should be moved somewhere shared, perhaps TristateCheckBox?
-    /**
-     * Sets a boolean property from a tristate checkbox.
-     * 
-     * @param element the test element
-     * @param checkBox the tristate checkbox
-     * @param propName the property name
-     */
-    private void setPropertyFromTristate(TestElement element, TristateCheckBox checkBox, String propName) {
-        if (checkBox.isIndeterminate()) {
-            element.removeProperty(propName);
-        } else {
-            element.setProperty(propName, checkBox.isSelected());
-        }
-    }
-
 }
