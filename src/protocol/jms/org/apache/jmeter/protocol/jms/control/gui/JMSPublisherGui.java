@@ -97,7 +97,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
 
-    private final JLabeledTextArea textMessage = new JLabeledTextArea(JMeterUtils.getResString("jms_text_message"));
+    private final JLabeledTextArea textMessage = new JLabeledTextArea(JMeterUtils.getResString("jms_text_area"));
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
@@ -285,7 +285,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             jmsPwd.setEnabled(useAuth.isSelected());
         }
     }
-
     /**
      * Update config contains the actual logic for enabling or disabling text
      * message, file or random path.
