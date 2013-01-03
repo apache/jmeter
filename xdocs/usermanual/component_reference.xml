@@ -1404,11 +1404,11 @@ This is a very simple implementation; it is not intended to support all possible
 <note> 
 The Object message is implemented since 2.7 and works as follow:
 <ul>
-<li>Put the JAR that contain you object and its dependencies in jmeter_home/lib/ folder </li>
+<li>Put the JAR that contains your object and its dependencies in jmeter_home/lib/ folder</li>
 <li>Serialize your object as XML using XStream</li>
 <li>Either put result in a file suffixed with .txt or .obj or put XML content direclty in Text Area</li>  
 </ul>
-Note that if message is in an file, replacement of properties will not occur while it will happen if you use Text Area.
+Note that if message is in a file, replacement of properties will not occur while it will if you use Text Area.
 </note>
 
 </p>
