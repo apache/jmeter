@@ -1370,8 +1370,14 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
-  <property name="Message source" required="Yes">Where to obtain the message</property>
-  <property name="Message type" required="Yes">Text, Map or Object message</property>
+  <property name="Message source" required="Yes">Where to obtain the message:
+  <ul>
+    <li>From File : means the referenced file will be read and reused by all samples</li>
+    <li>Random File from folder specified below : means a random file will be selected from folder specified below, this folder must contain either files with extension .dat for Bytes Messages, or files with extension .txt or .obj for Object or Text messages</li>
+    <li>Text area : The Message to use either for Text or Object message</li>
+  </ul>  
+  </property>
+  <property name="Message type" required="Yes">Text, Map, Object message or Bytes Message</property>
   <property name="Use non-persistent delivery mode?" required="No">
       Whether to set DeliveryMode.NON_PERSISTENT (defaults to false)
   </property>
