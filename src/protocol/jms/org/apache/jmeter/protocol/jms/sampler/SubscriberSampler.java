@@ -19,9 +19,11 @@ package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Enumeration;
 
+import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
+import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
 
@@ -236,6 +238,16 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             try {
                 if (msg instanceof TextMessage){
                     buffer.append(((TextMessage) msg).getText());
+                } else if (msg instanceof ObjectMessage){
+                    ObjectMessage objectMessage = (ObjectMessage) msg;
+                    if(objectMessage.getObject() != null) {
+                        buffer.append(objectMessage.getObject().getClass());
+                    } else {
+                        buffer.append("object is null");
+                    }
+                } else if (msg instanceof BytesMessage){
+                    BytesMessage bytesMessage = (BytesMessage) msg;
+                    buffer.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
                 } else if (msg instanceof MapMessage){
                     MapMessage mapm = (MapMessage) msg;
                     @SuppressWarnings("unchecked") // MapNames are Strings

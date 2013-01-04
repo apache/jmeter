@@ -42,8 +42,7 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * This is the GUI for JMS Publisher <br>
- * Created on: October 13, 2003
+ * This is the GUI for JMS Publisher
  *
  */
 public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListener {
@@ -66,12 +65,17 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     public static final String MAP_MSG_RSC = "jms_map_message"; //$NON-NLS-1$
     /** Create an ObjectMessage */
     public static final String OBJECT_MSG_RSC = "jms_object_message"; //$NON-NLS-1$
+    /** Create a BytesMessage */
+    public static final String BYTES_MSG_RSC = "jms_bytes_message"; //$NON-NLS-1$
     //-- End of names used in JMX files
+
+    // Button group resources when Bytes Message is selected
+    private static final String[] CONFIG_ITEMS_BYTES_MSG = { USE_FILE_RSC, USE_RANDOM_RSC};
 
     // Button group resources
     private static final String[] CONFIG_ITEMS = { USE_FILE_RSC, USE_RANDOM_RSC, USE_TEXT_RSC };
 
-    private static final String[] MSGTYPES_ITEMS = { TEXT_MSG_RSC, MAP_MSG_RSC, OBJECT_MSG_RSC };
+    private static final String[] MSGTYPES_ITEMS = { TEXT_MSG_RSC, MAP_MSG_RSC, OBJECT_MSG_RSC, BYTES_MSG_RSC };
 
     private final JCheckBox useProperties = new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); //$NON-NLS-1$
 
@@ -267,6 +271,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
         useNonPersistentDelivery.setSelected(sampler.getUseNonPersistentDelivery());
         jmsPropertiesPanel.configure(sampler.getJMSProperties());
+        updateChoice(msgChoice.getText());
     }
 
     /**
@@ -277,6 +282,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     public void stateChanged(ChangeEvent event) {
         if (event.getSource() == configChoice) {
             updateConfig(configChoice.getText());
+        } else if (event.getSource() == msgChoice) {
+            updateChoice(msgChoice.getText());
         } else if (event.getSource() == useProperties) {
             jndiICF.setEnabled(!useProperties.isSelected());
             urlField.setEnabled(!useProperties.isSelected());
@@ -284,6 +291,26 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             jmsUser.setEnabled(useAuth.isSelected());
             jmsPwd.setEnabled(useAuth.isSelected());
         }
+    }
+    /**
+     * Update choice contains the actual logic for hiding or showing Textarea if Bytes message
+     * is selected
+     *
+     * @param command
+     * @since 2.9
+     */
+    private void updateChoice(String command) {
+        String oldChoice = configChoice.getText();
+        if (BYTES_MSG_RSC.equals(command)) {
+            String newChoice = USE_TEXT_RSC.equals(oldChoice) ? 
+                    USE_FILE_RSC : oldChoice;
+            configChoice.resetButtons(CONFIG_ITEMS_BYTES_MSG, newChoice);
+            textMessage.setEnabled(false);
+        } else {
+            configChoice.resetButtons(CONFIG_ITEMS, oldChoice);
+            textMessage.setEnabled(true);
+        }
+        validate();
     }
     /**
      * Update config contains the actual logic for enabling or disabling text

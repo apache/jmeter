@@ -23,11 +23,13 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.jms.BytesMessage;
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
+import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
@@ -145,58 +147,56 @@ public class Publisher implements Closeable {
         }
     }
 
-    public TextMessage publish(String text) throws JMSException,
+    public Message publish(String text) throws JMSException,
             NamingException {
         return publish(text, null, null);
     }
     
-    public TextMessage publish(String text, String destinationName)
+    public Message publish(String text, String destinationName)
             throws JMSException, NamingException {
         return publish(text, destinationName, null);
     }
     
-    public TextMessage publish(String text, String destinationName, Map<String, String> properties)
+    public Message publish(String text, String destinationName, Map<String, String> properties)
             throws JMSException, NamingException {
         TextMessage msg = session.createTextMessage(text);
-        Utils.addJMSProperties(msg, properties);
-        if (staticDest || destinationName == null) {
-            producer.send(msg);
-        } else {
-            Destination dest = Utils.lookupDestination(ctx, destinationName);
-            producer.send(dest, msg);
-        }
-        return msg;
+        return setPropertiesAndSend(destinationName, properties, msg);
     }
     
-    public ObjectMessage publish(Serializable contents) throws JMSException,
+    public Message publish(Serializable contents) throws JMSException,
             NamingException {
         return publish(contents, null);
     }
 
-    public ObjectMessage publish(Serializable contents, String destinationName) 
+    public Message publish(Serializable contents, String destinationName) 
             throws JMSException, NamingException {
         return publish(contents, destinationName, null);
     }
     
-    public ObjectMessage publish(Serializable contents, String destinationName, Map<String, String> properties)
+    public Message publish(Serializable contents, String destinationName, Map<String, String> properties)
             throws JMSException, NamingException {
         ObjectMessage msg = session.createObjectMessage(contents);
-        Utils.addJMSProperties(msg, properties);
-        if (staticDest || destinationName == null) {
-            producer.send(msg);
-        } else {
-            Destination dest = Utils.lookupDestination(ctx, destinationName);
-            producer.send(dest, msg);
-        }
-        return msg;
+        return setPropertiesAndSend(destinationName, properties, msg);
+    }
+    
+    public BytesMessage publish(byte[] bytes, String destinationName)
+            throws JMSException, NamingException {
+        return publish(bytes, destinationName);
+    }
+    
+    public Message publish(byte[] bytes, String destinationName, Map<String, String> properties)
+            throws JMSException, NamingException {
+        BytesMessage msg = session.createBytesMessage();
+        msg.writeBytes(bytes);
+        return setPropertiesAndSend(destinationName, properties, msg);
     }
 
-    public MapMessage publish(Map<String, Object> map) throws JMSException,
+    public Message publish(Map<String, Object> map) throws JMSException,
             NamingException {
         return publish(map, null, null);
     }
     
-    public MapMessage publish(Map<String, Object> map, String destinationName)
+    public Message publish(Map<String, Object> map, String destinationName)
             throws JMSException, NamingException {
         return publish(map, destinationName, null);
     }
@@ -204,10 +204,24 @@ public class Publisher implements Closeable {
     public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, String> properties)
             throws JMSException, NamingException {
         MapMessage msg = session.createMapMessage();
-        Utils.addJMSProperties(msg, properties);
         for (Entry<String, Object> me : map.entrySet()) {
             msg.setObject(me.getKey(), me.getValue());
         }
+        return (MapMessage)setPropertiesAndSend(destinationName, properties, msg);
+    }
+
+    /**
+     * @param destinationName 
+     * @param properties Map<String, String>
+     * @param msg Message
+     * @return Message
+     * @throws JMSException
+     * @throws NamingException
+     */
+    private Message setPropertiesAndSend(String destinationName,
+            Map<String, String> properties, Message msg)
+            throws JMSException, NamingException {
+        Utils.addJMSProperties(msg, properties);
         if (staticDest || destinationName == null) {
             producer.send(msg);
         } else {

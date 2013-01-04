@@ -78,7 +78,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      * the ButtonGroup.
      *
      * The resource name is used as the action command for the button model,
-     * and the reource value is used to set the button label.
+     * and the resource value is used to set the button label.
      *
      * @param resouces list of resource names
      * @param selected initially selected resource (if not null)
@@ -86,6 +86,21 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      */
     private void init(String[] resouces, String selected) {
         this.add(mLabel);
+        initButtonGroup(resouces, selected);
+    }
+
+    /**
+     * Method is responsible for creating the JRadioButtons and adding them to
+     * the ButtonGroup.
+     *
+     * The resource name is used as the action command for the button model,
+     * and the resource value is used to set the button label.
+     *
+     * @param resouces list of resource names
+     * @param selected initially selected resource (if not null)
+     *
+     */
+    private void initButtonGroup(String[] resouces, String selected) {
         for (int idx = 0; idx < resouces.length; idx++) {
             JRadioButton btn = new JRadioButton(JMeterUtils.getResString(resouces[idx]));
             btn.setActionCommand(resouces[idx]);
@@ -98,6 +113,36 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
                 btn.setSelected(true);
             }
         }
+    }
+    
+    /**
+     * Method is responsible for removing current JRadioButtons of ButtonGroup and
+     * add creating the JRadioButtons and adding them to
+     * the ButtonGroup.
+     *
+     * The resource name is used as the action command for the button model,
+     * and the resource value is used to set the button label.
+     *
+     * @param resouces list of resource names
+     * @param selected initially selected resource (if not null)
+     *
+     */
+    public void resetButtons(String[] resouces, String selected) {
+        Enumeration<AbstractButton> buttons = bGroup.getElements();
+        List<AbstractButton> buttonsToRemove = new ArrayList<AbstractButton>(this.bGroup.getButtonCount());
+        while (buttons.hasMoreElements()) {
+            AbstractButton abstractButton = buttons
+                    .nextElement();
+            buttonsToRemove.add(abstractButton);
+        }
+        for (AbstractButton abstractButton : buttonsToRemove) {
+            abstractButton.removeActionListener(this);
+            bGroup.remove(abstractButton);
+        }
+        for (AbstractButton abstractButton : buttonsToRemove) {
+            this.remove(abstractButton);
+        }
+        initButtonGroup(resouces, selected);
     }
 
     /**
