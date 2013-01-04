@@ -112,8 +112,9 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         }
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         String regex = getRegex();
-        Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
+        Pattern pattern = null;
         try {
+            pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
             List<MatchResult> matches = processMatches(pattern, regex, previousResult, matchNumber, vars);
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
@@ -161,7 +162,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 log.warn("Error while generating result");
             }
         } catch (MalformedCachePatternException e) {
-            log.warn("Error in pattern: " + regex);
+            log.error("Error in pattern: " + regex);
         } finally {
             clearMatcherMemory(matcher, pattern);
         }
@@ -175,7 +176,9 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      */
     private final void clearMatcherMemory(Perl5Matcher matcher, Pattern pattern) {
         try {
-            matcher.matches("", pattern); // $NON-NLS-1$
+            if(pattern != null) {
+                matcher.matches("", pattern); // $NON-NLS-1$
+            }
         } catch (Exception e) {
             // NOOP
         }
