@@ -235,6 +235,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         msgChoice.setText(""); // $NON-NLS-1$
         configChoice.setText(USE_TEXT_RSC);
         updateConfig(USE_TEXT_RSC);
+        msgChoice.setText(TEXT_MSG_RSC);
         iterations.setText("1"); // $NON-NLS-1$
         useAuth.setSelected(false);
         jmsUser.setEnabled(false);
