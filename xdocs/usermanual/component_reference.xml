@@ -1344,7 +1344,7 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13" width="802" height="735" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" width="790" height="702" screenshot="jmspublisher.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
