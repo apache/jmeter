@@ -235,17 +235,18 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         }
                         // List of value by sampler
                         Map<Long, Long> subList = pList.get(sampleLabel);
+                        final Long startTimeIntervalLong = Long.valueOf(startTimeInterval);
                         if (subList != null) {
                             long respTime = sampleResult.getTime();
-                            Long value = subList.get(startTimeInterval);
+                            Long value = subList.get(startTimeIntervalLong);
                             if (value!=null) {
                                 respTime = (value.longValue() + respTime) / 2;
                             }
-                            subList.put(startTimeInterval, Long.valueOf(respTime));
+                            subList.put(startTimeIntervalLong, Long.valueOf(respTime));
                         } else {
                             // We want to retain insertion order, so LinkedHashMap is necessary
                             Map<Long, Long> newSubList = new LinkedHashMap<Long, Long>();
-                            newSubList.put(startTimeInterval, Long.valueOf(sampleResult.getTime()));
+                            newSubList.put(startTimeIntervalLong, Long.valueOf(sampleResult.getTime()));
                             pList.put(sampleLabel, newSubList);
                         }
                     }
@@ -319,7 +320,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             int idx = 0;
             while (idx < durationTest) {
                 long keyShift = minStartTime + idx;
-                Long value = subList.get(keyShift);
+                Long value = subList.get(Long.valueOf(keyShift));
                 if (value != null) {
                     nanLast = value.doubleValue();
                     data[s][idx] = nanLast;
