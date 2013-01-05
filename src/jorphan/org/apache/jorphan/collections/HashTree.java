@@ -87,7 +87,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @param _map
      * @param key
      */
-    public HashTree(Map<Object, HashTree> _map, Object key) {
+    private HashTree(Map<Object, HashTree> _map, Object key) {
         if(_map != null) {
             data = _map;
         } else {
