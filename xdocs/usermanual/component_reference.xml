@@ -4039,7 +4039,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
 
 </component>
 
-<component name="Duration Assertion" index="&sect-num;.5.2"  width="535" height="200" screenshot="duration_assertion.png">
+<component name="Duration Assertion" index="&sect-num;.5.2"  width="606" height="187" screenshot="duration_assertion.png">
 <description><p>The Duration Assertion tests that each response was received within a given amount
 of time.  Any response that takes longer than the given number of milliseconds (specified by the
 user) is marked as a failed response.</p></description>
@@ -4184,7 +4184,7 @@ These are strings unless otherwise noted:
 
 </properties>
 </component>
-<component name="XPath Assertion" index="&sect-num;.5.8"  width="692" height="293" screenshot="xpath_assertion.png">
+<component name="XPath Assertion" index="&sect-num;.5.8"  width="800" height="317" screenshot="xpath_assertion.png">
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
 XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
