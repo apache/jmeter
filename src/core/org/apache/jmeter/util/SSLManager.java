@@ -108,7 +108,7 @@ public abstract class SSLManager {
         if (null == this.keyStore) {
             String fileName = System.getProperty(JAVAX_NET_SSL_KEY_STORE,""); // empty if not provided
             String fileType = System.getProperty(JAVAX_NET_SSL_KEY_STORE_TYPE, // use the system property to determine the type
-                    fileName.toLowerCase(Locale.UK).endsWith(".p12") ? PKCS12 : "JKS"); // otherwise use the name
+                    fileName.toLowerCase(Locale.ENGLISH).endsWith(".p12") ? PKCS12 : "JKS"); // otherwise use the name
             log.info("JmeterKeyStore Location: " + fileName + " type " + fileType);
             try {
                 this.keyStore = JmeterKeyStore.getInstance(fileType, keystoreAliasStartIndex, keystoreAliasEndIndex);
