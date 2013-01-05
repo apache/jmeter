@@ -70,7 +70,18 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
      * @return the scope settings panel
      */
     protected JPanel createScopePanel(boolean enableVariable) {
-        scopePanel = new ScopePanel(enableVariable);
+        return createScopePanel(enableVariable, true, true);
+    }
+    
+    /**
+     * Create the scope settings panel.
+     * @param enableVariable set true to enable the variable panel
+     * @param enableParentAndSubsamples set true to enable the parent and sub-samples
+     * @param enableSubsamplesOnly set true to enable the sub-samples only
+     * @return the scope settings panel
+     */
+    protected JPanel createScopePanel(boolean enableVariable, boolean enableParentAndSubsamples, boolean enableSubsamplesOnly) {
+        scopePanel = new ScopePanel(enableVariable, enableParentAndSubsamples, enableSubsamplesOnly);
         return scopePanel;
     }
 

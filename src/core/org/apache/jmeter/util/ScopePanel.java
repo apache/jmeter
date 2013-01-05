@@ -50,9 +50,21 @@ public class ScopePanel extends JPanel implements ActionListener {
     }
 
     public ScopePanel(boolean enableVariableButton) {
-        allButton = new JRadioButton(JMeterUtils.getResString("sample_scope_all")); //$NON-NLS-1$
+        this(enableVariableButton, true, true);
+    }
+    
+    public ScopePanel(boolean enableVariableButton, boolean enableParentAndSubsamples, boolean enableSubsamplesOnly) {
         parentButton = new JRadioButton(JMeterUtils.getResString("sample_scope_parent")); //$NON-NLS-1$
-        childButton = new JRadioButton(JMeterUtils.getResString("sample_scope_children")); //$NON-NLS-1$
+        if(enableParentAndSubsamples) {
+            allButton = new JRadioButton(JMeterUtils.getResString("sample_scope_all")); //$NON-NLS-1$
+        } else {
+            allButton = null;
+        }
+        if(enableSubsamplesOnly) {
+            childButton = new JRadioButton(JMeterUtils.getResString("sample_scope_children")); //$NON-NLS-1$
+        } else {
+            childButton = null;
+        }
         if (enableVariableButton) {
             variableButton = new JRadioButton(JMeterUtils.getResString("sample_scope_variable")); //$NON-NLS-1$
             variableName = new JTextField(10);
@@ -74,12 +86,17 @@ public class ScopePanel extends JPanel implements ActionListener {
 
         JPanel buttonPanel = new HorizontalPanel();
         ButtonGroup group = new ButtonGroup();
-        group.add(allButton);
+        if(allButton != null) {
+            group.add(allButton);
+            buttonPanel.add(allButton);
+        }
         group.add(parentButton);
-        group.add(childButton);
         buttonPanel.add(parentButton);
-        buttonPanel.add(childButton);
-        buttonPanel.add(allButton);
+        if(childButton != null) {
+            group.add(childButton);
+            buttonPanel.add(childButton);
+        }
+        
         if (variableButton != null){
             variableButton.addActionListener(this);
             group.add(variableButton);
@@ -143,15 +160,15 @@ public class ScopePanel extends JPanel implements ActionListener {
     }
 
     public boolean isScopeChildren() {
-        return childButton.isSelected();
+        return childButton != null && childButton.isSelected();
     }
 
     public boolean isScopeAll() {
-        return allButton.isSelected();
+        return allButton != null && allButton.isSelected();
     }
 
     public boolean isScopeVariable() {
-        return variableButton.isSelected();
+        return variableButton != null && variableButton.isSelected();
     }
 
     @Override
