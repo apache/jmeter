@@ -225,6 +225,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <ul>
 <li><bugzilla>54259</bugzilla> - Introduce a new Extractor that uses CSS or jquery-like selector syntax</li>
 <li><bugzilla>45772</bugzilla> - RegEx User Parameters Post Processor</li>
+<li><bugzilla>54160</bugzilla> - Add support for xpath assertion to apply to a JMeter variable.</li>
 </ul>
 
 <h3>Functions</h3>
