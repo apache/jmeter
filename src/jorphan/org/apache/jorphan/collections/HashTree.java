@@ -63,14 +63,14 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * Creates an empty new HashTree.
      */
     public HashTree() {
-        data = new HashMap<Object, HashTree>();
+        this(null, null);
     }
 
     /**
      * Allow subclasses to provide their own Map.
      */
     protected HashTree(Map<Object, HashTree> _map) {
-        data = _map;
+        this(_map, null);
     }
 
     /**
@@ -79,8 +79,23 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @param key
      */
     public HashTree(Object key) {
-        data = new HashMap<Object, HashTree>();
-        data.put(key, new HashTree());
+        this(new HashMap<Object, HashTree>(), key);
+    }
+    
+    /**
+     * Uses the new HashTree if not null and adds the given object as a top-level node if not null
+     * @param _map
+     * @param key
+     */
+    public HashTree(Map<Object, HashTree> _map, Object key) {
+        if(_map != null) {
+            data = _map;
+        } else {
+            data = new HashMap<Object, HashTree>();
+        }
+        if(key != null) {
+            data.put(key, new HashTree());
+        }
     }
 
     /**
