@@ -122,7 +122,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
-        box.add(createScopePanel(true, false, false));
+        box.add(createScopePanel(true, true, true));
         xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("xpath_assertion_option"))); //$NON-NLS-1$
         box.add(xml);
