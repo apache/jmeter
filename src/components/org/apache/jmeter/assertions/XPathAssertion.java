@@ -25,7 +25,7 @@ import java.io.Serializable;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.TidyException;
@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
  * XPath
  *
  */
-public class XPathAssertion extends AbstractTestElement implements Serializable, Assertion {
+public class XPathAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
@@ -70,24 +70,32 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
     public AssertionResult getResult(SampleResult response) {
         // no error as default
         AssertionResult result = new AssertionResult(getName());
-        byte[] responseData = response.getResponseData();
-        if (responseData.length == 0) {
-            return result.setResultForNull();
-        }
         result.setFailure(false);
         result.setFailureMessage("");
 
-        if (log.isDebugEnabled()) {
-            log.debug(new StringBuilder("Validation is set to ").append(isValidating()).toString());
-            log.debug(new StringBuilder("Whitespace is set to ").append(isWhitespace()).toString());
-            log.debug(new StringBuilder("Tolerant is set to ").append(isTolerant()).toString());
-        }
-
+        byte[] responseData = null;
         Document doc = null;
 
-        boolean isXML = JOrphanUtils.isXML(responseData);
-
         try {
+            if (isScopeVariable()){
+                responseData = getThreadContext().getVariables().get(getVariableName()).getBytes("UTF-8");
+            } else {
+                responseData = response.getResponseData();
+            }
+            
+            if (responseData.length == 0) {
+                return result.setResultForNull();
+            }
+    
+            if (log.isDebugEnabled()) {
+                log.debug(new StringBuilder("Validation is set to ").append(isValidating()).toString());
+                log.debug(new StringBuilder("Whitespace is set to ").append(isWhitespace()).toString());
+                log.debug(new StringBuilder("Tolerant is set to ").append(isTolerant()).toString());
+            }
+    
+    
+            boolean isXML = JOrphanUtils.isXML(responseData);
+
             doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
                     isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), isXML
                     , isDownloadDTDs());
