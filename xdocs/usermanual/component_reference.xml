@@ -2559,7 +2559,12 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 </component>
 
 <component name="Graph Results" index="&sect-num;.3.3" width="915" height="686" screenshot="graph_results.png">
-<description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
+<description>
+<note>
+Graph Results MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+</note>
+<p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
 <p>The throughput number represents the actual number of requests/minute the server handled.  This calculation
@@ -2585,6 +2590,10 @@ Further details on the precise meaning of the statistical terms can be found on 
 </component>
 
 <component name="Spline Visualizer" index="&sect-num;.3.4"  width="581" height="440" screenshot="spline_visualizer.png">
+<note>
+Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+</note>
 <description>
 <p>
 The Spline Visualizer provides a view of all sample times from the start
@@ -2600,7 +2609,12 @@ This needs to be borne in mind when comparing graphs.
 </component>
 
 <component name="Assertion Results" index="&sect-num;.3.5"  width="658" height="277" screenshot="assertion_results.png">
-<description><p>The Assertion Results visualizer shows the Label of each sample taken.
+<description>
+<note>
+Assertion Results MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+</note>
+<p>The Assertion Results visualizer shows the Label of each sample taken.
 It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
 are part of the test plan.</p></description>
 
@@ -2610,7 +2624,12 @@ are part of the test plan.</p></description>
 </component>
 
 <component name="View Results Tree" index="&sect-num;.3.6" width="901" height="646" screenshot="view_results_tree.png">
-<description>The View Results Tree shows a tree of all sample responses, allowing you to view the
+<description>
+<note>
+View Results Tree MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+</note>
+The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
 Note that the Request panel only shows the headers added by JMeter.
@@ -2834,6 +2853,11 @@ For a detailed description of how to use the monitor, please refer to
 
 <component name="Distribution Graph (alpha)" index="&sect-num;.3.11"  width="819" height="626" screenshot="distribution_graph.png">
 <description>
+<note>
+Distribution Graph MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+</note>
+
 <p>The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
 within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
@@ -4288,6 +4312,11 @@ For details, see <complink name="BSF Assertion"/>.
 
 <component name="Compare Assertion" index="&sect-num;.5.12"  width="292" height="296" screenshot="assertion/compare.png">
 <description>
+<note>
+Compare Assertion MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+</note>
+
 The Compare Assertion can be used to compare sample results within its scope.
 Either the contents or the elapsed time can be compared, and the contents can be filtered before comparison.
 The assertion comparisons can be seen in the <complink name="Comparison Assertion Visualizer"/>.
