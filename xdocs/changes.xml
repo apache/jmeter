@@ -193,6 +193,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>54172</bugzilla> - Duplicate shortcut key not working and CTRL+C / CTRL+V / CTRL+V do not cancel default event</li>
 <li><bugzilla>54057</bugzilla> - Proxy option to set user and password at startup (-u and -a) not working with HTTPClient 4</li>
 <li><bugzilla>54267</bugzilla> - Start Next Thread Loop setting doesn't work in custom thread groups</li>
+<li><bugzilla>54413</bugzilla> - DataStrippingSampleSender returns 0 for number of bytes of any response</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
