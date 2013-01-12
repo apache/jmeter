@@ -53,6 +53,12 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h4>Memory and performance improvements</h4>
 <p>Significant improvements have been done in this version on memory usage per Thread and CPU when more than one Post Processor is used Sampler</p>
 <p>JSR223 Elements (enable using Groovy, Scala... as scripting languages) have been improved to enable caching of Compilation when scripts are passed Text area</p>
+<p>Some configuration defaults have changed to improve performances by default(see <bugzilla>54412</bugzilla>), see description in New and Noteworthy section.
+<ul>
+    <li>Distributed testing now uses MODE_STRIPPED_BATCH, which returns samples in batch mode (every 100 samples or every minute by default). Note also that MODE_STRIPPED_BATCH strips response data from SampleResult, so if you need it change to another mode (mode property in jmeter.properties)</li>
+    <li>Result data are now saved to CSV by default (jmeter.save.saveservice.output_format in jmeter.properties)</li>
+</ul>
+</p>
 
 
 <h3>GUI and ergonomy Improvements:</h3>
@@ -114,6 +120,7 @@ This does not affect JMeter operation.
 <!-- =================== Incompatible changes =================== -->
 
 <h2>Incompatible changes</h2>
+<p>Some configuration defaults have changed to improve performances by default(see <bugzilla>54412</bugzilla>), see description in New and Noteworthy section.</p>
 
 <p>Webservice sampler now adds to request the headers that are set through Header Manager, these were previously ignored</p>
 
@@ -254,6 +261,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <li><bugzilla>54258</bugzilla> - Proxy : Use Raw Post Body when Sampler has one unnamed argument, useful for Samplers using POST method by of type JSON, XML, GWT body</li>
 <li><bugzilla>54268</bugzilla> - Improve CPU and memory usage</li>
 <li><bugzilla>54376</bugzilla> - ScopePanel : Allow configuring more precisely scopes</li>
+<li><bugzilla>54412</bugzilla> - Changing JMeter defaults to ensure better performances by default</li>
 </ul>
 
 <h2>Non-functional changes</h2>
