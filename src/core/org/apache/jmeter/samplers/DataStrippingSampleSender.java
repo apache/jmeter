@@ -73,6 +73,8 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         //Strip the response data before writing, but only for a successful request.
         SampleResult result = event.getResult();
         if(result.isSuccessful()) {
+            // Compute bytes before stripping
+            result.setBytes(result.getBytes());
             result.setResponseData(new byte[0]);
         }
         if(decoratedSender == null)
