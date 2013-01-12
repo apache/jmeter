@@ -71,7 +71,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final String XML = "xml"; // $NON_NLS-1$
 
     /** Indicates that the results file should be in CSV format. * */
-    //NOTUSED private static final String CSV = "csv"; // $NON_NLS-1$
+    private static final String CSV = "csv"; // $NON_NLS-1$
 
     /** Indicates that the results should be stored in a database. * */
     //NOTUSED private static final String DATABASE = "db"; // $NON_NLS-1$
@@ -378,7 +378,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             _assertionsResultsToSave = 0;
         }
 
-        String howToSave = props.getProperty(OUTPUT_FORMAT_PROP, XML);
+        String howToSave = props.getProperty(OUTPUT_FORMAT_PROP, CSV);
 
         if (XML.equals(howToSave)) {
             _xml = true;
