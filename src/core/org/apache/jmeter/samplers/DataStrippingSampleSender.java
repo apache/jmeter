@@ -33,7 +33,9 @@ import org.apache.log.Logger;
  *
  */
 public class DataStrippingSampleSender extends AbstractSampleSender implements Serializable {
-    private static final long serialVersionUID = 1;
+
+    private static final long serialVersionUID = -5556040298982085715L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final RemoteSampleListener listener;
