@@ -263,6 +263,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <li><bugzilla>54268</bugzilla> - Improve CPU and memory usage</li>
 <li><bugzilla>54376</bugzilla> - ScopePanel : Allow configuring more precisely scopes</li>
 <li><bugzilla>54412</bugzilla> - Changing JMeter defaults to ensure better performances by default</li>
+<li><bugzilla>54414</bugzilla> - Remote Test should not start if one of the engines fails to start correctly</li>
 </ul>
 
 <h2>Non-functional changes</h2>

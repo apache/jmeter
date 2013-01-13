@@ -31,6 +31,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -789,6 +790,7 @@ public class JMeter implements JMeterPlugin {
                 engines.add(engine);
             } else {
                 java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");//$NON-NLS-1$
+                List<String> failingEngines = new ArrayList<String>(st.countTokens());
                 while (st.hasMoreElements()) {
                     String el = (String) st.nextElement();
                     println("Configuring remote engine for " + el);
@@ -797,12 +799,16 @@ public class JMeter implements JMeterPlugin {
                     if (null != eng) {
                         engines.add(eng);
                     } else {
+                        failingEngines.add(el);
                         println("Failed to configure "+el);
                     }
                 }
                 if (engines.isEmpty()) {
                     println("No remote engines were started.");
                     return;
+                }
+                if(failingEngines.size()>0) {
+                    throw new IllegalArgumentException("The following remote engines did not start correclty:"+failingEngines);
                 }
                 println("Starting remote engines");
                 log.info("Starting remote engines");
