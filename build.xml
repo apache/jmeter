@@ -2309,6 +2309,7 @@ run JMeter unless all the JMeter jars are added.
             <antcall target="batchtest">
                 <param name="remote" value="-Rlocalhost:${rmi_port}"/>
                 <param name="taskname" value="client"/>
+            	<param name="batchtest.name" value="BatchTestLocalRemote"/>
             </antcall>
         </sequential>
     </parallel>
