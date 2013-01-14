@@ -808,7 +808,7 @@ public class JMeter implements JMeterPlugin {
                     return;
                 }
                 if(failingEngines.size()>0) {
-                    throw new IllegalArgumentException("The following remote engines did not start correclty:"+failingEngines);
+                    throw new IllegalArgumentException("The following remote engines could not be configured:"+failingEngines);
                 }
                 println("Starting remote engines");
                 log.info("Starting remote engines");
