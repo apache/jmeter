@@ -137,7 +137,7 @@ It has been removed so now size of these 2 maps is not limited anymore. This cha
 
 <p>View Results Tree now considers response with missing content type as text.</p>
 
-<p>In remote Test mode, JMeter now exits in error if one of the remote engines fails to start correctly, previously it started the test with available engines.</p>
+<p>In remote Test mode, JMeter now exits in error if one of the remote engines cannot be configured, previously it started the test with available engines.</p>
 
 <!-- =================== Bug fixes =================== -->
 
