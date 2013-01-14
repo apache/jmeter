@@ -109,6 +109,7 @@ Alternatively, just use / instead for the path separator - e.g. C:/test/${test} 
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
         <tr><td>Calculation</td><td> <a href="#__RandomString">RandomString</a></td><td>generate a random string</td><td>2.6</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__UUID">UUID</a></td><td>generate a random type 4 UUID</td><td>2.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td><td>1.X</td></tr>
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td><td>1.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl">jexl, jexl2</a></td><td>evaluate a Commons Jexl expression</td><td>jexl(2.2), jexl2(2.6)</td></tr>
@@ -575,6 +576,14 @@ the comma after 7 is escaped.</note>
         <property name="Characters to use" required="No">Chars used to generate String</property>
         <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.8" name="__UUID">
+<description>
+<p>The UUID function returns a pseudo random type 4 Universally Unique IDentifier (UUID).</p>
+</description>
+<properties>
 </properties>
 </component>
 
