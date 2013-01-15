@@ -149,6 +149,7 @@ It has been removed so now size of these 2 maps is not limited anymore. This cha
 <li><bugzilla>54057</bugzilla>- Proxy option to set user and password at startup (-u and -a) not working with HTTPClient 4</li>
 <li><bugzilla>54187</bugzilla> - Request tab does not show headers if request fails</li>
 <li><bugzilla>53840</bugzilla> - Proxy Recording : Response message: URLDecoder: Illegal hex characters in escape (%) pattern - For input string: "" "</li>
+<li><bugzilla>54351</bugzilla> - HC4 and URI fragments is failing</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -272,7 +273,7 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <h2>Non-functional changes</h2>
 <ul>
 <li><bugzilla>53956</bugzilla> - Add ability to paste (a list of values) from clipboard for Header Manager</li>
-<li>Updated to HttpComponents Client 4.2.2 (from 4.2.1)</li>
+<li>Updated to HttpComponents Client 4.2.3 (from 4.2.1)</li>
 <li>Updated to HttpComponents Core 4.2.3 (from 4.2.2)</li>
 <li><bugzilla>54110</bugzilla> - BSFTestElement and JSR223TestElement should use shared super-class for common fields</li>
 <li><bugzilla>54199</bugzilla> - Move to Java 6</li>
