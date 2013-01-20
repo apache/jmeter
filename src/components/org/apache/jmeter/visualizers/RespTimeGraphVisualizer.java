@@ -69,6 +69,7 @@ import org.apache.jmeter.visualizers.utils.Colors;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.math.StatCalculatorLong;
 import org.apache.log.Logger;
 
 public class RespTimeGraphVisualizer extends AbstractVisualizer implements ActionListener, Clearable {
@@ -181,7 +182,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     /**
      * We want to retain insertion order, so LinkedHashMap is necessary
      */
-    private final Map<String, Map<Long, Long>> pList = new LinkedHashMap<String, Map<Long, Long>>();
+    private final Map<String, Map<Long, StatCalculatorLong>> pList = new LinkedHashMap<String, Map<Long, StatCalculatorLong>>();
 
     private long durationTest = 0;
     
@@ -234,19 +235,22 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                             }
                         }
                         // List of value by sampler
-                        Map<Long, Long> subList = pList.get(sampleLabel);
+                        Map<Long, StatCalculatorLong> subList = pList.get(sampleLabel);
                         final Long startTimeIntervalLong = Long.valueOf(startTimeInterval);
                         if (subList != null) {
                             long respTime = sampleResult.getTime();
-                            Long value = subList.get(startTimeIntervalLong);
-                            if (value!=null) {
-                                respTime = (value.longValue() + respTime) / 2;
+                            StatCalculatorLong value = subList.get(startTimeIntervalLong);
+                            if (value==null) {
+                                value = new StatCalculatorLong();
+                                subList.put(startTimeIntervalLong, value);
                             }
-                            subList.put(startTimeIntervalLong, Long.valueOf(respTime));
+                            value.addValue(respTime, 1);
                         } else {
                             // We want to retain insertion order, so LinkedHashMap is necessary
-                            Map<Long, Long> newSubList = new LinkedHashMap<Long, Long>();
-                            newSubList.put(startTimeIntervalLong, Long.valueOf(sampleResult.getTime()));
+                            Map<Long, StatCalculatorLong> newSubList = new LinkedHashMap<Long, StatCalculatorLong>(5);
+                            StatCalculatorLong helper = new StatCalculatorLong();
+                            helper.addValue(Long.valueOf(sampleResult.getTime()),1);
+                            newSubList.put(startTimeIntervalLong,  helper);
                             pList.put(sampleLabel, newSubList);
                         }
                     }
@@ -316,13 +320,13 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         double nanBegin = 0;
         List<Double> nanList = new ArrayList<Double>();
         int s = 0;
-        for (Map<Long, Long> subList : pList.values()) {
+        for (Map<Long, StatCalculatorLong> subList : pList.values()) {
             int idx = 0;
             while (idx < durationTest) {
                 long keyShift = minStartTime + idx;
-                Long value = subList.get(Long.valueOf(keyShift));
+                StatCalculatorLong value = subList.get(Long.valueOf(keyShift));
                 if (value != null) {
-                    nanLast = value.doubleValue();
+                    nanLast = value.getMean();
                     data[s][idx] = nanLast;
                     // Calculate intermediate values (if needed)
                     int nlsize = nanList.size();
@@ -360,8 +364,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             internalList.clear();
             seriesNames.clear();
             pList.clear();
-            minStartTime = Integer.MAX_VALUE;
-            maxStartTime = Integer.MIN_VALUE;
+            minStartTime = Long.MAX_VALUE;
+            maxStartTime = Long.MIN_VALUE;
             durationTest = 0;
             colorIdx = 0;
         }
