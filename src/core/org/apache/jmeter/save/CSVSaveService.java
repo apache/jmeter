@@ -765,7 +765,7 @@ public final class CSVSaveService {
         private boolean addDelim;
 
         public StringQuoter(char delim) {
-            sb = new StringBuilder(100);
+            sb = new StringBuilder(150);
             specials = new char[] { delim, QUOTING_CHAR, CharUtils.CR,
                     CharUtils.LF };
             addDelim = false; // Don't add delimiter first time round
