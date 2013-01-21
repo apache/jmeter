@@ -164,7 +164,10 @@ public class SampleResult implements Serializable {
 
     //@GuardedBy("this"")
     /** files that this sample has been saved in */
-    private final Set<String> files = new HashSet<String>();
+    /** In Non GUI mode and when best config is used, size never exceeds 1, 
+     * but as a compromise set it to 3 
+     */
+    private final Set<String> files = new HashSet<String>(3);
 
     private String dataEncoding;// (is this really the character set?) e.g.
                                 // ISO-8895-1, UTF-8
