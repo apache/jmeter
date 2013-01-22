@@ -1909,7 +1909,9 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
                 through a test run.
                 <p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
                 element behaves slightly differently.  Unless set to forever, it stops the test after
-                the given number of iterations have been done.</p></property>
+                the given number of iterations have been done.</p>
+                <note>When using a function in this field, be aware it may be evaluated multiple times. 
+                Example using __Random will evaluate it to a different value for each child samplers of Loop Controller and result into unwanted behaviour.</note></property>
 </properties>
 
 <example title="Looping Example" anchor="loop_example">
