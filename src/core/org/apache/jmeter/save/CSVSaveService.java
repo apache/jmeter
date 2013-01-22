@@ -99,9 +99,15 @@ public final class CSVSaveService {
     static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration
             .staticConfig();
 
-    // Date format to try if the time format does not parse as milliseconds
-    // (this is the suggested value in jmeter.properties)
-    private static final String DEFAULT_DATE_FORMAT_STRING = "MM/dd/yy HH:mm:ss"; // $NON-NLS-1$
+    // Date formats to try if the time format does not parse as milliseconds
+    private static final String DATE_FORMAT_STRINGS[] = {
+        "yyyy/MM/dd HH:mm:ss.SSSS",  // $NON-NLS-1$
+        "yyyy/MM/dd HH:mm:ss",  // $NON-NLS-1$
+        "yyyy-MM-dd HH:mm:ss.SSSS",  // $NON-NLS-1$
+        "yyyy-MM-dd HH:mm:ss",  // $NON-NLS-1$
+
+        "MM/dd/yy HH:mm:ss"  // $NON-NLS-1$ (for compatibility, this is the original default)
+        };
 
     private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
 
@@ -199,17 +205,29 @@ public final class CSVSaveService {
                 text = parts[i++];
                 if (saveConfig.printMilliseconds()) {
                     try {
-                        timeStamp = Long.parseLong(text);
-                    } catch (NumberFormatException e) {// see if this works
+                        timeStamp = Long.parseLong(text); // see if this works
+                    } catch (NumberFormatException e) { // it did not, let's try some other formats
                         log.warn(e.toString());
-                        // method is only ever called from one thread at a time
-                        // so it's OK to use a static DateFormat
-                        SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
-                        Date stamp = dateFormat.parse(text);
-                        timeStamp = stamp.getTime();
-                        log.warn("Setting date format to: "
-                                + DEFAULT_DATE_FORMAT_STRING);
-                        saveConfig.setFormatter(dateFormat);
+                        boolean foundMatch = false;
+                        for(String fmt : DATE_FORMAT_STRINGS) {
+                            SimpleDateFormat dateFormat = new SimpleDateFormat(fmt);
+                            dateFormat.setLenient(false);
+                            try {
+                                Date stamp = dateFormat.parse(text);
+                                timeStamp = stamp.getTime();
+                                // method is only ever called from one thread at a time
+                                // so it's OK to use a static DateFormat
+                                log.warn("Setting date format to: " + fmt);
+                                saveConfig.setFormatter(dateFormat);
+                                foundMatch = true;
+                                break;
+                            } catch (ParseException e1) {
+                                log.info(text+" did not match "+fmt);
+                            }
+                        }
+                        if (!foundMatch) {
+                            throw new ParseException("No date-time format found matching "+text,-1);
+                        }
                     }
                 } else if (saveConfig.formatter() != null) {
                     Date stamp = saveConfig.formatter().parse(text);
