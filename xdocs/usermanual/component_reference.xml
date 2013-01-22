@@ -2909,6 +2909,7 @@ the graph as a PNG file.</description>
 <component name="Response Time Graph" index="&sect-num;.3.13"  width="869" height="620" screenshot="response_time_graph.png">
 <description>
 The Response Time Graph draws a line chart showing the evolution of response time during the test, for each labelled request. 
+If many samples exist for the same timestamp, the mean value is displayed.
 </description>
 <div align="center">
 <p>
@@ -2918,7 +2919,7 @@ The Response Time Graph draws a line chart showing the evolution of response tim
 </div>
 <p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
 <properties>
-        <property name="Interval (ms)" required="Yes">The time in milli-seconds for X axis interval. 
+        <property name="Interval (ms)" required="Yes">The time in milli-seconds for X axis interval. Samples are grouped according to this value.
         Before display the graph, click on <b>Apply interval</b> button to refresh internal data.</property>
         <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex.<i>.*Transaction.*</i>. 
         Before display the graph, click on <b>Apply filter</b> button to refresh internal data.</property>
