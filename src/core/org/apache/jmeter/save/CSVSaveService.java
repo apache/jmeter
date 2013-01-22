@@ -25,7 +25,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -177,8 +176,7 @@ public final class CSVSaveService {
      *            tokens parsed from the input
      * @param saveConfig
      *            the save configuration (may be updated)
-     * @param lineNumber
-     * @param dateFormat
+     * @param lineNumber the line number (for error reporting)
      * @return the sample result
      * 
      * @throws JMeterError
