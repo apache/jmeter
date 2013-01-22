@@ -78,7 +78,7 @@ public class ThroughputController extends GenericController implements Serializa
 
     private transient MutableInteger globalIteration;
 
-    private String counterLock = ""; // ensure counts are updated correctly
+    private Byte counterLock = new Byte("0"); // ensure counts are updated correctly
     // Need to use something that is serializable, so Object is no use
 
     /**
