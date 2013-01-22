@@ -154,12 +154,9 @@ public final class CSVSaveService {
             // CSV output files should never contain empty lines, so probably
             // not
             // If so, then need to check whether the reader is at EOF
-            SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
             while ((parts = csvReadFile(dataReader, delim)).length != 0) {
                 lineNumber++;
-                SampleEvent event = CSVSaveService
-                        .makeResultFromDelimitedString(parts, saveConfig,
-                                lineNumber, dateFormat);
+                SampleEvent event = CSVSaveService.makeResultFromDelimitedString(parts, saveConfig, lineNumber);
                 if (event != null) {
                     final SampleResult result = event.getResult();
                     if (ResultCollector.isSampleWanted(result.isSuccessful(),
@@ -189,7 +186,7 @@ public final class CSVSaveService {
     private static SampleEvent makeResultFromDelimitedString(
             final String[] parts, 
             final SampleSaveConfiguration saveConfig, // may be updated
-            final long lineNumber, DateFormat dateFormat) {
+            final long lineNumber) {
 
         SampleResult result = null;
         String hostname = "";// $NON-NLS-1$
@@ -209,6 +206,7 @@ public final class CSVSaveService {
                         log.warn(e.toString());
                         // method is only ever called from one thread at a time
                         // so it's OK to use a static DateFormat
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
                         Date stamp = dateFormat.parse(text);
                         timeStamp = stamp.getTime();
                         log.warn("Setting date format to: "
