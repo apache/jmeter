@@ -152,7 +152,7 @@ The full set of properties that affect result file output is shown below.
 # Timestamp format
 # legitimate values: none, ms, or a format suitable for SimpleDateFormat
 #jmeter.save.saveservice.timestamp_format=ms
-#jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
+#jmeter.save.saveservice.timestamp_format=yyyy/MM/dd HH:mm:ss.SSS
 
 # Put the start time stamp in logs instead of the end
 sampleresult.timestamp.start=true
@@ -195,9 +195,19 @@ sampleresult.timestamp.start=true
 The date format to be used for the timestamp_format is described in <a
 HREF="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">
 <b>SimpleDateFormat</b></a>.
-Bear in mind that choosing a date format other than "ms" is likely to
-make it impossible for JMeter to interpret the value when it is read
-in later for viewing purposes.</p>
+The timestamp format is used for both writing and reading files.
+If the format is set to "ms", and the column does not parse as a long integer,
+JMeter (2.9+) will try the following formats:
+<ul>
+<li>yyyy/MM/dd HH:mm:ss.SSSS</li>
+<li>yyyy/MM/dd HH:mm:ss</li>
+<li>yyyy-MM-dd HH:mm:ss.SSSS</li>
+<li>yyyy-MM-dd HH:mm:ss</li>
+<li>MM/dd/yy HH:mm:ss (this is for compatibility with previous versions; it is not recommended as a format)</li>
+</ul> 
+Matching is now also strict (non-lenient).
+JMeter 2.8 and earlier used lenient mode which could result in timestamps with incorrect dates 
+(times were usually correct).</p>
 <subsection name="&sect-num;.1.1 Sample Variables" anchor="sample_variables">
 <p>
 Versions of JMeter after 2.3.1 allow one to use the <b>sample_variables</b> 
