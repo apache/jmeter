@@ -75,6 +75,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h4>HTTP Proxy Server does not force user to select the type of Sampler in HTTP Sampler Settings, this allows easier switch between implementations as Sampler do not have this information set anymore</h4>
 <h4>SamplerCreator interface to meet new requirements for plug-in providers</h4>
 <h4>It is now possible to create binary sampler for x-www-form-urlencoded POST request by modifying proxy.binary.types property to add application/x-www-form-urlencoded </h4>
+<h4>Improved timestamp format auto-detection when reading CSV files</h4>
 
 <!--  =================== Known bugs =================== -->
 
@@ -172,6 +173,7 @@ and right angle bracket (&gt;) in search filter tag in XML response data</li>
 <li><bugzilla>54166</bugzilla> - ViewResultsTree could not render the HTML response: handle failure to parse HTML</li>
 <li><bugzilla>54287</bugzilla> - Incorrect Timestamp in Response Time Graph when using a date with time in Date format field</li>
 <li><bugzilla>54451</bugzilla> - Response Time Graph reports wrong times when the are many samples for same time</li>
+<li><bugzilla>54459</bugzilla> - CSVSaveService does not handle date parsing very well</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
