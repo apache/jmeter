@@ -54,7 +54,9 @@ public class WhileController extends GenericController implements Serializable {
      */
     private boolean endOfLoop(boolean loopEnd) {
         String cnd = getCondition().trim();
-        log.debug("Condition string:" + cnd+".");
+        if(log.isDebugEnabled()) {
+            log.debug("Condition string:" + cnd+".");
+        }
         boolean res;
         // If blank, only check previous sample when at end of loop
         if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
@@ -64,7 +66,9 @@ public class WhileController extends GenericController implements Serializable {
             // cnd may be null if next() called us
             res = "false".equalsIgnoreCase(cnd);// $NON-NLS-1$
         }
-        log.debug("Condition value: " + res);
+        if(log.isDebugEnabled()) {
+            log.debug("Condition value: " + res);
+        }
         return res;
     }
 
@@ -111,7 +115,9 @@ public class WhileController extends GenericController implements Serializable {
      *            the condition to save
      */
     public void setCondition(String string) {
-        log.debug("setCondition(" + string + ")");
+        if(log.isDebugEnabled()) {
+            log.debug("setCondition(" + string + ")");
+        }
         setProperty(new StringProperty(CONDITION, string));
     }
 
@@ -119,10 +125,8 @@ public class WhileController extends GenericController implements Serializable {
      * @return the condition
      */
     public String getCondition() {
-        String cnd;
         JMeterProperty prop=getProperty(CONDITION);
         prop.recoverRunningVersion(this);
-        cnd = prop.getStringValue();
-        return cnd;
+        return prop.getStringValue();
     }
 }
