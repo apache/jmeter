@@ -85,6 +85,8 @@ under the License.
       <slf4j.version>1.7.2</slf4j.version>
       <soap.version>2.3.1</soap.version>
       <tidy.version>r938</tidy.version>
+      <tika-core.version>1.3</tika-core.version>
+      <tika-parsers>1.3</tika-parsers.version>
       <xmlpull.version>1.1.3.1</xmlpull.version>
       <xstream.version>1.4.2</xstream.version>
       <xpp3.version>1.1.4c</xpp3.version>
@@ -261,6 +263,16 @@ under the License.
         <groupId>net.sf.jtidy</groupId>
         <artifactId>jtidy</artifactId>
         <version>${tidy.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-core</artifactId>
+        <version>${tika-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-parsers</artifactId>
+        <version>${tika-parsers.version}</version>
       </dependency>
       <dependency>
         <groupId>com.thoughtworks.xstream</groupId>
