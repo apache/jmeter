@@ -109,12 +109,12 @@ http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-jodd-core-3.4.0
+jodd-core-3.4.1
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.4.0
+jodd-lagarto-3.4.1
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
@@ -168,6 +168,11 @@ http://www.slf4j.org/
 soap-2.3.1
 ----------
 - WebServiceSampler ONLY
+
+tika-1.3
+--------------
+http://tika.apache.org/
+- Regular Expression Extractor
 
 velocity-1.7
 --------------
