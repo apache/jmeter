@@ -631,7 +631,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
         m.addElement(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName = new JComboBox(m);
-        samplerTypeName.setSelectedItem(HTTPSamplerFactory.DEFAULT_CLASSNAME);
+        samplerTypeName.setSelectedItem(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName.addItemListener(this);
         JLabel label2 = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
         label2.setLabelFor(samplerTypeName);
