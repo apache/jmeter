@@ -60,6 +60,12 @@ it allows using either JODD or JSOUP implementations</h4>
 <figure width="761" height="345" image="changes/2.9/02_document_render_view_results_tree.png"></figure>
 </p>
 
+<h4>&#149; A new Regex User Parameters Pre-Processor that enables injecting input parameter names and values 
+using a reference extracted by Regular Expression Extractor from a previous response</h4>
+<p>
+<figure width="727" height="138" image="changes/2.9/13_regex_user_params.png"></figure>
+</p>
+
 <h4>&#149; TCP Sampler: new options</h4>
 <p>TCP Sampler has been enhanced with new options to allow setting <b>Close Connection</b>, 
  <b>SO_LINGER</b> and  <b>End of line(EOL) byte value</b>
@@ -75,11 +81,17 @@ it allows using either JODD or JSOUP implementations</h4>
 <figure width="722" height="132" image="changes/2.9/05_result_status_action_handler.png"></figure>
 </p>
 
+<h4>&#149; JMS Publisher: new option</h4>
+<p>JMS Publisher can now send Bytes Messages</p>
+<figure width="833" height="701" image="changes/2.9/11_jms_publisher_bytes.png"></figure>
+
 <h4>&#149; Memory and performance improvements</h4>
 <p>Significant improvements have been done in this version on memory usage per Thread and CPU when more 
-than one Post Processor is used Sampler</p>
+than one Post Processor is used as child of a Sampler</p>
 <p>JSR223 Elements (enable using Groovy, Scala... as scripting languages) have been improved to enable caching 
-of Compilation when scripts are passed Text area</p>
+of Compilation results when scripts are passed in Text area</p>
+<figure width="841" height="470" image="changes/2.9/12_jsr223_sampler.png"></figure>
+
 <p>Some configuration defaults have changed to improve performances by default(see <bugzilla>54412</bugzilla>), 
 see description in New and Noteworthy section.
 <ul>
@@ -88,6 +100,11 @@ see description in New and Noteworthy section.
      so if you need it change to another mode (mode property in jmeter.properties)</li>
     <li>Result data are now saved to CSV by default (jmeter.save.saveservice.output_format in jmeter.properties)</li>
 </ul>
+</p>
+
+<h4>&#149; XPath Assertion now enables using a JMeter variable as input</h4>
+<p>
+<figure width="800" height="317" image="changes/2.9/14_xpath_assertion.png"></figure>
 </p>
 
 <h3><u>GUI and ergonomy Improvements:</u></h3>
@@ -123,7 +140,7 @@ samples that only have one unnamed argument (JSON, XML, GWT...)</p>
  <p>
 <figure width="484" height="307" image="changes/2.9/10_http_proxy_dont_force_http_type.png"></figure>
 </p>
-<p>&#149; SamplerCreator interface to meet new requirements for plug-in providers</p>
+<p>&#149; SamplerCreator interface has been enriched to meet new requirements for plug-in providers</p>
 <p>&#149; It is now possible to create binary sampler for x-www-form-urlencoded POST request by 
 modifying <i>proxy.binary.types</i> property to add application/x-www-form-urlencoded </p>
 <p>&#149; Improved timestamp format auto-detection when reading CSV files</p>
