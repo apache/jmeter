@@ -158,7 +158,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#JDBC_Request">JDBC Request</a></li>
 <li><a href="#Java_Request">Java Request</a></li>
 <li><a href="#SOAP/XML-RPC_Request">SOAP/XML-RPC Request</a></li>
-<li><a href="#WebService(SOAP)_Request">WebService(SOAP) Request</a></li>
+<li><a href="#WebService(SOAP)_Request_(DEPRECATED)">WebService(SOAP) Request (DEPRECATED)</a></li>
 <li><a href="#LDAP_Request">LDAP Request</a></li>
 <li><a href="#LDAP_Extended_Request">LDAP Extended Request</a></li>
 <li><a href="#Access_Log_Sampler">Access Log Sampler</a></li>
@@ -276,10 +276,12 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#BSF_PreProcessor">BSF PreProcessor</a></li>
 <li><a href="#JSR223_PreProcessor">JSR223 PreProcessor</a></li>
 <li><a href="#JDBC_PreProcessor">JDBC PreProcessor</a></li>
+<li><a href="#RegEx_User_Parameters">RegEx User Parameters</a></li>
 </ul>
 <li><a href="#postprocessors">18.8 Post-Processors</a></li>
 <ul>
 <li><a href="#Regular_Expression_Extractor">Regular Expression Extractor</a></li>
+<li><a href="#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li>
 <li><a href="#XPath_Extractor">XPath Extractor</a></li>
 <li><a href="#Result_Status_Action_Handler">Result Status Action Handler</a></li>
 <li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li>
@@ -629,6 +631,11 @@ HTTPClient3.1 - uses Apache Commons HttpClient 3.1.
         
 <li>
 HTTPClient4 - uses Apache HttpComponents HttpClient 4.x.
+</li>
+
+        
+<li>
+Blank Value - does not set implementationon HTTP Samplers, so relies on HTTP Request Defaults if present or on jmeter.httpsampler property defined in jmeter.properties
 </li>
 
         
@@ -1706,7 +1713,14 @@ Yes
 "Dbl-Quote: "" and Comma: ,"
 </pre>
 
-        There must be as many values as there are placeholders in the statement.
+        
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>There must be as many values as there are placeholders in the statement even if your parameters are OUT ones, be sure to set a value even if the value will not be used (for example in a CallableStatement).
+</td></tr>
+</table>
+</p>
+
         
 </td>
 <td>
@@ -1716,24 +1730,43 @@ Yes, if a prepared or callable statement has parameters
 <tr>
 <td>Parameter types</td>
 <td>
-        Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
+        Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE) or integer values of Constants when for example you use custom database types proposed by driver (-10 for OracleTypes.CURSOR for example).
+<br>
+
+
         These are defined as fields in the class java.sql.Types, see for example:
+<br>
+
+
         
-<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/sql/Types.html">
+<a href="http://docs.oracle.com/javase/6/docs/api/java/sql/Types.html">
 Javadoc for java.sql.Types
 </a>
 .
+<br>
+
+
         [Note: JMeter will use whatever types are defined by the runtime JVM, 
         so if you are running on a different JVM, be sure to check the appropriate document]
-        If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
+<br>
+
+
+        
+<b>
+If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
         appropriate parameter types, e.g. instead of "INTEGER", use "INOUT INTEGER".
+</b>
+ 
+<br>
+
+
         If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
         
 <br>
 
 
         If the type is not one of the fields found in java.sql.Types, versions of JMeter after 2.3.2 also
-        accept the corresponding integer number, e.g. since INTEGER == 4, you can use "INOUT 4".
+        accept the corresponding integer number, e.g. since OracleTypes.CURSOR == -10, you can use "INOUT -10".
         
 <br>
 
@@ -2118,10 +2151,11 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="WebService(SOAP)_Request">18.1.6 WebService(SOAP) Request</a>
-<a class="sectionlink" href="#WebService(SOAP)_Request" title="Link to here">&para;</a></h3>
+<a name="WebService(SOAP)_Request_(DEPRECATED)">18.1.6 WebService(SOAP) Request (DEPRECATED)</a>
+<a class="sectionlink" href="#WebService(SOAP)_Request_(DEPRECATED)" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
+<tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="../usermanual/component_reference.html#HTTP_Request">HTTP_Request</a> instead ***</b></div></td></tr>
 <tr><td>
 <p>
 This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
@@ -2203,8 +2237,8 @@ If this is zero, then the request is marked as failed.
 <div align="center"><img width='943' height='648' src="../images/screenshots/webservice_sampler.png"></div>
 <p>
 <b>Parameters</b>
-<a name="WebService(SOAP)_Request_parms"/>
-<a class="sectionlink" href="#WebService(SOAP)_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<a name="WebService(SOAP)_Request_(DEPRECATED)_parms"/>
+<a class="sectionlink" href="#WebService(SOAP)_Request_(DEPRECATED)_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -3545,6 +3579,24 @@ There is a sample init file in the bin directory: BeanShellSampler.bshrc.
 If a script file is supplied, that will be used, otherwise the script will be used.
 </p>
 <p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+JMeter processes function and variable references before passing the script field to the interpreter,
+so the references will only be resolved once.
+Variable and function references in script files will be passed
+verbatim to the interpreter, which is likely to cause a syntax error.
+In order to use runtime variables, please use the appropriate props methods,
+e.g. props.get("START.HMS"); props.put("PROP1","1234");
+
+<br>
+
+
+BeanShell does not currently support Java 5 syntax such as generics and the enhanced for loop.
+
+</td></tr>
+</table>
+</p>
+<p>
 Before invoking the script, some variables are set up in the BeanShell interpreter:
 			
 </p>
@@ -3605,13 +3657,16 @@ IsSuccess = true
 
 			
 <li>
-ctx - JMeterContext
+ctx - 
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
 </li>
 
 			
 <li>
 vars - 
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
   - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
@@ -3626,7 +3681,11 @@ props - JMeterProperties (class java.util.Properties)- e.g. props.get("START.HMS
 </ul>
 <p>
 When the script completes, control is returned to the Sampler, and it copies the contents
-			of the following script variables into the corresponding variables in the SampleResult:
+			of the following script variables into the corresponding variables in the 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+:
 </p>
 <ul>
 
@@ -3693,7 +3752,15 @@ return getVariables();
 </pre>
 <p>
 
-For details on the methods available for the various classes (JMeterVariables, SampleResult etc) please check the Javadoc or the source code.
+For details on the methods available for the various classes (
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
+JMeterVariables
+</a>
+, 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+ etc) please check the Javadoc or the source code.
 Beware however that misuse of any methods can cause subtle faults that may be difficult to find ...
 
 </p>
@@ -3793,7 +3860,7 @@ Yes
 </tr>
 <tr>
 <td>Script File</td>
-<td>Name of a file to be used as a BSF script
+<td>Name of a file to be used as a BSF script, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
 </td>
 <td>
 No
@@ -3820,6 +3887,19 @@ Yes (unless script file is provided)
 <p>
 
 If a script file is supplied, that will be used, otherwise the script will be used.
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+JMeter processes function and variable references before passing the script field to the interpreter,
+so the references will only be resolved once.
+Variable and function references in script files will be passed
+verbatim to the interpreter, which is likely to cause a syntax error.
+In order to use runtime variables, please use the appropriate props methods,
+e.g. props.get("START.HMS"); props.put("PROP1","1234");
+
+</td></tr>
+</table>
 </p>
 <p>
 
@@ -3856,7 +3936,10 @@ args - the parameters, split as described above
 
 
 <li>
-SampleResult - pointer to the current SampleResult
+SampleResult - pointer to the current 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
 </li>
 
 
@@ -3866,13 +3949,16 @@ sampler - pointer to current Sampler
 
 
 <li>
-ctx - JMeterContext
+ctx - 
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
 </li>
 
 
 <li>
 vars - 
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
   - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
@@ -3892,7 +3978,11 @@ OUT - System.out - e.g. OUT.println("message")
 </ul>
 <p>
 
-The SampleResult ResponseData is set from the return value of the script.
+The 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+ ResponseData is set from the return value of the script.
 If the script returns null, it can set the response directly, by using the method 
 SampleResult.setResponseData(data), where data is either a String or a byte array.
 The data type defaults to "text", but can be set to binary by using the method
@@ -3908,8 +3998,12 @@ setStopThread(boolean) and setStopTest(boolean).
 </p>
 <p>
 
-Unlike the Beanshell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
-Currently the only way to changes these is via the SampleResult methods:
+Unlike the BeanShell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
+Currently the only way to changes these is via the 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+ methods:
 
 <ul>
 
@@ -3952,8 +4046,32 @@ SampleResult.setResponseMessage("message")
 
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
 JSR223 related elements have a feature that increases highly their performances.
-To benefit from this feature use Script files instead of inlining them. This will make JMeter compile them if this
-feature is available on ScriptEngine and cache them.
+To benefit from this feature:
+
+<ul>
+
+    
+<li>
+Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.
+</li>
+
+    
+<li>
+Use Script Text and fill in script cache key property, ensure it is unique accross Test Plan as JMeter will use it to cache result of compilation.
+    
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>When using this feature, ensure you script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.
+</td></tr>
+</table>
+</p>
+
+    
+</li>
+
+
+</ul>
+
 Cache size is controlled by the following jmeter property (jmeter.properties):
 
 <ul>
@@ -3984,13 +4102,26 @@ For details, see
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>
-Since JMeter 2.8, JSR223 Test Elements using Script file are now Compiled if ScriptEngine supports this feature, this enables great performance enhancements.
+Since JMeter 2.8, JSR223 Test Elements using Script file or Script text + cache key are now Compiled if ScriptEngine supports this feature, this enables great performance enhancements.
 
 </td></tr>
 </table>
 </p>
 
 
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+JMeter processes function and variable references before passing the script field to the interpreter,
+so the references will only be resolved once.
+Variable and function references in script files will be passed
+verbatim to the interpreter, which is likely to cause a syntax error.
+In order to use runtime variables, please use the appropriate props methods,
+e.g. props.get("START.HMS"); props.put("PROP1","1234");
+
+</td></tr>
+</table>
+</p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -4017,6 +4148,8 @@ Since JMeter 2.8, JSR223 Test Elements using Script file are now Compiled if Scr
 		If "Re-use connection" is selected, connections are shared between Samplers in the same thread,
 		provided that the exact same host name string and port are used. 
 		Different hosts/port combinations will use different connections, as will different threads. 
+		If both of "Re-use connection" and "Close connetion" are selected, the socket will be closed after running the sampler. 
+		On the next sampler, another socket will be created. You may want to close a socket at the end of each thread loop.
 		
 <br>
 
@@ -4220,7 +4353,7 @@ Response handling
 		Sockets are disconnected at the end of a test run.
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='743' height='357' src="../images/screenshots/tcpsampler.png"></div>
+<div align="center"><img width='826' height='336' src="../images/screenshots/tcpsampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="TCP_Sampler_parms"/>
@@ -4264,6 +4397,30 @@ Yes
 </td>
 <td>
 Yes
+</td>
+</tr>
+<tr>
+<td>Close connection</td>
+<td>If selected, the connection will be closed after running the sampler.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>SO_LINGER</td>
+<td>Enable/disable SO_LINGER with the specified linger time in seconds when a socket is created. If you set "SO_LINGER" value as 0, you may prevent large numbers of sockets sitting around with a TIME_WAIT status.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>End of line(EOL) byte value</td>
+<td>Byte value for end of line, set this to a value outside the range -128 to +127 to skip eol checking. You may set this in jmeter.properties file as well with eolByte property. If you set this in TCP Sampler Config and in jmeter.properties file at the same time, the setting value in the TCP Sampler Config will be used.
+</td>
+<td>
+No
 </td>
 </tr>
 <tr>
@@ -4360,7 +4517,7 @@ No
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='802' height='735' src="../images/screenshots/jmspublisher.png"></div>
+<div align="center"><img width='790' height='702' src="../images/screenshots/jmspublisher.png"></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Publisher_parms"/>
@@ -4452,7 +4609,29 @@ Yes
 </tr>
 <tr>
 <td>Message source</td>
-<td>Where to obtain the message
+<td>Where to obtain the message:
+  
+<ul>
+
+    
+<li>
+From File : means the referenced file will be read and reused by all samples
+</li>
+
+    
+<li>
+Random File from folder specified below : means a random file will be selected from folder specified below, this folder must contain either files with extension .dat for Bytes Messages, or files with extension .txt or .obj for Object or Text messages
+</li>
+
+    
+<li>
+Text area : The Message to use either for Text or Object message
+</li>
+
+  
+</ul>
+  
+  
 </td>
 <td>
 Yes
@@ -4460,7 +4639,7 @@ Yes
 </tr>
 <tr>
 <td>Message type</td>
-<td>Text, Map or Object message
+<td>Text, Map, Object message or Bytes Message
 </td>
 <td>
 Yes
@@ -4542,7 +4721,7 @@ The Object message is implemented since 2.7 and works as follow:
 
 
 <li>
-Put the JAR that contain you object and its dependencies in jmeter_home/lib/ folder 
+Put the JAR that contains your object and its dependencies in jmeter_home/lib/ folder
 </li>
 
 
@@ -4558,7 +4737,7 @@ Either put result in a file suffixed with .txt or .obj or put XML content direcl
 
 </ul>
 
-Note that if message is in an file, replacement of properties will not occur while it will happen if you use Text Area.
+Note that if message is in a file, replacement of properties will not occur while it will if you use Text Area.
 
 </td></tr>
 </table>
@@ -6428,6 +6607,15 @@ Thread Group
                 element behaves slightly differently.  Unless set to forever, it stops the test after
                 the given number of iterations have been done.
 </p>
+
+                
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>When using a function in this field, be aware it may be evaluated multiple times. 
+                Example using __Random will evaluate it to a different value for each child samplers of Loop Controller and result into unwanted behaviour.
+</td></tr>
+</table>
+</p>
 </td>
 <td>
 Yes, unless "Forever" is checked
@@ -7090,6 +7278,44 @@ ${__jexl(${VAR} == 23)}
 </table>
 </p>
 
+		
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+		To test if a variable is undefined (or null) do the following, suppose var is named myVar, expression will be:
+        
+<br>
+
+
+        
+<code>
+"${myVar}" == "\${myVar}"
+</code>
+
+        
+<br>
+
+
+        Or use:
+        
+<br>
+
+
+        
+<code>
+"${myVar}" != "\${myVar}"
+</code>
+
+        
+<br>
+
+
+        to test if a variable is defined and is not null.
+		
+</td></tr>
+</table>
+</p>
+
 	
 <p><b>Control Panel</b></p>
 <div align="center"><img width='497' height='131' src="../images/screenshots/ifcontroller.png"></div>
@@ -7511,6 +7737,22 @@ Yes
 </td>
 </tr>
 <tr>
+<td>Start index for loop</td>
+<td>Start index (inclusive) for loop over variables
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>End index for loop</td>
+<td>End index (exclusive) for loop over variables
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
 <td>Output variable</td>
 <td>
                 The name of the variable which can be used in the loop for replacement in the samplers
@@ -7689,6 +7931,14 @@ For this reason it is best to ensure that the Controller name is changed from th
 - as shown in the example above -
 otherwise a duplicate may be accidentally created when new elements are added to the test plan. 
 
+</p>
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Renaming any element used in ModuleController implies updating Module to Run field
+</td></tr>
+</table>
 </p>
 
 
@@ -8353,6 +8603,19 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 </font>
 </td></tr>
 <tr><td>
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Graph Results MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+
+</td></tr>
+</table>
+</p>
+
+
 <p>
 The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
@@ -8431,6 +8694,15 @@ The individual figures at the bottom of the display are the current values.
 </font>
 </td></tr>
 <tr><td>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+
+</td></tr>
+</table>
+</p>
 
 
 <p>
@@ -8466,6 +8738,19 @@ This needs to be borne in mind when comparing graphs.
 </font>
 </td></tr>
 <tr><td>
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Assertion Results MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+
+</td></tr>
+</table>
+</p>
+
+
 <p>
 The Assertion Results visualizer shows the Label of each sample taken.
 It also reports failures of any 
@@ -8496,6 +8781,18 @@ are part of the test plan.
 </font>
 </td></tr>
 <tr><td>
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+View Results Tree MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+
+</td></tr>
+</table>
+</p>
+
 The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
@@ -8508,79 +8805,185 @@ There are several ways to view the response, selectable by a drop-down box at th
 </p>
 
 
-<ul>
 
+<table>
+<tr>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>Renderer</b>
+</font>
+</td>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>Description</b>
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>Document</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+The <i>Document view</i> will show the extract text from various type of documents like Microsoft Office
+(Word, Excel, PowerPoint 97-2003, 2007-2010 (openxml), Apache OpenOffice (writer, calc, impress), HTML,
+gzip, jar/zip files (list of content), and some meta-data on "multimedia" files like mp3, mp4, flv, etc. The complete list of 
+support format is available on <a href="http://tika.apache.org/1.2/formats.html">Apache Tika format page.</a>
+<br /><br />
+<b>Note:</b> A requirement to the <i>Document view</i> is to download the <a href="http://tika.apache.org/download.html">
+Apache Tika binary package</a> (tika-app-x.x.jar) and put this in JMETER_HOME/lib directory.
+<br /><br />
+If the document is larger than 10 MB, then it won't be displayed.
+To change this limit, set the JMeter property <b>document.max_size</b> (unit is byte) or set to 0 to remove the limit.
+<br />
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>HTML</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+The <i>HTML view</i> attempts to render the response as
+HTML.  The rendered HTML is likely to compare poorly to the view one
+would get in any web browser; however, it does provide a quick
+approximation that is helpful for initial result evaluation.<br />
+Images, style-sheets, etc. aren't downloaded. 
+<br />
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>HTML (download resources)</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+If the <i>HTML (download resources) view</i> option is selected, the renderer
+may download images, style-sheets, etc. referenced by the HTML code. 
+<br />
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>JSON</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+The <i>JSON view</i> will show the response in tree style (also handles JSON embedded in JavaScript).
+<br />
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>Regexp Tester</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
+The "Test" button allows the user to apply the Regular Expression to the upper panel and the results
+will be displayed in the lower panel.<br />
+The engine of regular expression is the same that the Regular Expression Extractor.<br />
+For example, the RE <b>(JMeter\w*).*</b> applied to the current JMeter home page gives the following output:
+<br />
+<pre>
+Match count: 26
+Match[1][0]=JMeter - Apache JMeter&amp;lt;/title&gt;
+Match[1][1]=JMeter
+Match[2][0]=JMeter" title="JMeter" border="0"/&gt;&amp;lt;/a&gt;
+Match[2][1]=JMeter
+Match[3][0]=JMeterCommitters"&gt;Contributors&amp;lt;/a&gt;
+Match[3][1]=JMeterCommitters
+... and so on ...
+</pre>
+<br />
+The first number in [] is the match number; the second number is the group. 
+Group [0] is whatever matched the whole RE.
+Group [1] is whatever matched the 1st group, i.e. (JMeter\w*) in this case.
+See Figure 9b (below).
+<br />
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>Text</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
 
-<li>
-HTML
-</li>
-
-
-<li>
-HTML (download resources)
-</li>
-
-
-<li>
-JSON
-</li>
-
-
-<li>
-Regexp Tester
-</li>
-
-
-<li>
-Text
-</li>
-
-
-<li>
-XML
-</li>
-
-
-</ul>
-
-
-<p>
-Scroll automatically? option permit to have last node display in tree selection
-</p>
-
-
-<p>
-
-Additional renderers can be created.
-The class must implement the interface 
-<code>
-org.apache.jmeter.visualizers.ResultRenderer
-</code>
-
-and/or extend the abstract class 
-<code>
-org.apache.jmeter.visualizers.SamplerResultTab
-</code>
-, and the
-compiled code must be available to JMeter (e.g. by adding it to the lib/ext directory).
-
-</p>
-
-
-<p>
-
-The default "Text" view shows all of the text contained in the response. 
+The default <i>Text view</i> shows all of the text contained in the response. 
 Note that this will only work if the response content-type is considered to be text.
 If the content-type begins with any of the following, it is considered as binary,
 otherwise it is considered to be text.
-
 <pre>
-
 image/
 audio/
 video/
-
 </pre>
+<br />
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>XML</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+The <i>XML view</i> will show response in tree style. 
+Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
+<br />
+</font>
+</td>
+</tr>
+</table>
+
+
+<p>
+<i>
+Scroll automatically?
+</i>
+ option permit to have last node display in tree selection
+</p>
+
+
+<p>
+
+With 
+<i>
+Search
+</i>
+ option, most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
+in the display above. For example the Control panel screenshot below shows one result of searching for "Java".
+Note that the search operates on the visible text, so you may get different results when searching
+the Text and HTML views.
+
+<br>
+
+Note: The regular expression uses the Java engine (not ORO engine like the Regular Expression Extractor or Regexp Tester view).
+
+</p>
+
+
+<p>
 
 If there is no content-type provided, then the content
 will not be displayed in the any of the Response Data panels.
@@ -8609,82 +9012,43 @@ You can also use save the entire response to a file using
 
 
 <p>
-The HTML view attempts to render the response as
-HTML.  The rendered HTML is likely to compare poorly to the view one
-would get in any web browser; however, it does provide a quick
-approximation that is helpful for initial result evaluation.
-No images etc are downloaded. 
-If the HTML (download embedded resources) option is selected, the renderer
-may download images and style-sheets etc referenced by the HTML. 
 
-</p>
+Additional renderers can be created.
+The class must implement the interface 
+<code>
+org.apache.jmeter.visualizers.ResultRenderer
+</code>
 
-
-<p>
-The XML view will show response in tree style. 
-Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
-
-</p>
-
-
-<p>
-The JSON view will show the response in tree style (also handles JSON embedded in JavaScript).
-</p>
-
-
-<p>
-
-Most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
-in the display above. For example the Control panel screenshot below shows one result of searching for "Java".
-Note that the search operates on the visible text, so you may get different results when searching
-the Text and HTML views.
-
-</p>
-
-
-<p>
-The "Regexp Tester" view only works for text responses. It shows the plain text in the upper panel.
-The "Test" button allows the user to apply the Regular Expression to the upper panel and the results
-will be displayed in the lower panel.
-For example, the RE 
-<b>
-(JMeter\w*).*
-</b>
- applied to the current JMeter home page gives the following output:
-
-</p>
-
-
-<pre>
-
-Match count: 26
-Match[1][0]=JMeter - Apache JMeter&lt;/title>
-Match[1][1]=JMeter
-Match[2][0]=JMeter" title="JMeter" border="0"/>&lt;/a>
-Match[2][1]=JMeter
-Match[3][0]=JMeterCommitters">Contributors&lt;/a>
-Match[3][1]=JMeterCommitters
-... and so on ...
-
-</pre>
-
-
-<p>
-
-The first number in [] is the match number; the second number is the group. 
-Group [0] is whatever matched the whole RE.
-Group [1] is whatever matched the 1st group, i.e. (JMeter\w*) in this case.
-See Figure 9b (below).
+and/or extend the abstract class 
+<code>
+org.apache.jmeter.visualizers.SamplerResultTab
+</code>
+, and the
+compiled code must be available to JMeter (e.g. by adding it to the lib/ext directory).
 
 </p>
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='878' height='659' src="../images/screenshots/view_results_tree.png"></div>
+<div align="center"><img width='901' height='646' src="../images/screenshots/view_results_tree.png"></div>
 <p>
 
 	The Control Panel (above) shows an example of an HTML display.
+<br>
+
+
 	Figure 9 (below) shows an example of an XML display.
+<br>
+
+
+	Figure 9a (below) shows an example of an Regexp tester display.
+<br>
+
+
+	Figure 9b (below) shows an example of an Document display.
+<br>
+
+
 	
 <div align="center">
 
@@ -8696,6 +9060,11 @@ See Figure 9b (below).
 
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='858' height='643' src="../images/screenshots/view_results_tree_regex.png"><br>
 <font size="-1">Figure 9a Sample Regexp Test display
+</font></td></tr></table></p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='961' height='623' src="../images/screenshots/view_results_tree_document.png"><br>
+<font size="-1">Figure 9b Sample Document (here PDF) display
 </font></td></tr></table></p>
 
 
@@ -9002,6 +9371,18 @@ Building a Monitor Test Plan
 
 
 <p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Distribution Graph MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+
+</td></tr>
+</table>
+</p>
+
+
+
+<p>
 The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
 within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
@@ -9216,6 +9597,7 @@ Yes
 <tr><td>
 
 The Response Time Graph draws a line chart showing the evolution of response time during the test, for each labelled request. 
+If many samples exist for the same timestamp, the mean value is displayed.
 
 <p><b>Control Panel</b></p>
 <div align="center"><img width='869' height='620' src="../images/screenshots/response_time_graph.png"></div>
@@ -9251,7 +9633,7 @@ aren't
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Interval (ms)</td>
-<td>The time in milli-seconds for X axis interval. 
+<td>The time in milli-seconds for X axis interval. Samples are grouped according to this value.
         Before display the graph, click on 
 <b>
 Apply interval
@@ -9317,7 +9699,7 @@ No
 <td>X Axis settings</td>
 <td>Customize the date format of  X axis label.
         The syntax is the Java 
-<a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/text/SimpleDateFormat.html">
+<a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">
 SimpleDateFormat API
 </a>
 .
@@ -9623,13 +10005,17 @@ log - (Logger) - can be used to write to the log file
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
@@ -9642,12 +10028,23 @@ props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.
 
 
 <li>
-sampleResult, prev - (SampleResult) - gives access to the previous SampleResult
+sampleResult, prev - (
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+) - gives access to the previous 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
 </li>
 
 
 <li>
-sampleEvent (SampleEvent) gives access to the current sample event
+sampleEvent (
+<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">
+SampleEvent
+</a>
+) gives access to the current sample event
 </li>
 
 
@@ -9978,7 +10375,7 @@ No
 </tr>
 <tr>
 <td>Script file</td>
-<td>A file containing the script to run.
+<td>A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
 </td>
 <td>
 No
@@ -10034,13 +10431,17 @@ args[] - the parameters as a String array (split on whitespace)
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
@@ -10053,12 +10454,20 @@ props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.
 
 
 <li>
-sampleResult, prev - (SampleResult) - gives access to the SampleResult
+sampleResult, prev - (
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+) - gives access to the SampleResult
 </li>
 
 
 <li>
-sampleEvent - (SampleEvent) - gives access to the SampleEvent
+sampleEvent - (
+<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">
+SampleEvent
+</a>
+) - gives access to the SampleEvent
 </li>
 
 
@@ -10428,6 +10837,11 @@ No
   
 <b>
 Relative file names are resolved with respect to the path of the active test plan.
+</b>
+
+  
+<b>
+For distributed testing, the CSV file must be stored on the server host system in the correct relative directory to where the jmeter server is started.
 </b>
 
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
@@ -11033,7 +11447,7 @@ Yes
 
   
 <i>
-[Note: If your have a website to test with IPv6 address, choose HC4CookieHandler (IPv6 compliant)]
+[Note: If you have a website to test with IPv6 address, choose HC4CookieHandler (IPv6 compliant)]
 </i>
 </td>
 <td>
@@ -11364,7 +11778,7 @@ This allows one to set up a default set of headers, and apply adjustments to par
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='342' height='256' src="../images/screenshots/http-config/http-header-manager.png"></div>
+<div align="center"><img width='767' height='239' src="../images/screenshots/http-config/http-header-manager.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Header_Manager_parms"/>
@@ -11566,7 +11980,11 @@ Yes
 </tr>
 <tr>
 <td>Idle Cleanup Interval (ms)</td>
-<td>Uncertain what exactly this does.
+<td>This is used to specify how long idle connections will be maintained in the pool before being closed. For a complete explanation on how this works, see 
+<a href="http://excalibur.apache.org/apidocs/org/apache/avalon/excalibur/pool/ResourceLimitingPool.html#trim%28%29">
+ResourceLimitingPool.trim()
+</a>
+ (Defaults to "60000", 1 minute)
 </td>
 <td>
 Yes
@@ -12054,7 +12472,7 @@ The LDAP Extended Request Defaults component lets you set default values for ext
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='747' height='251' src="../images/screenshots/tcpsamplerconfig.png"></div>
+<div align="center"><img width='823' height='260' src="../images/screenshots/tcpsamplerconfig.png"></div>
 <p>
 <b>Parameters</b>
 <a name="TCP_Sampler_Config_parms"/>
@@ -12098,6 +12516,30 @@ No
 </td>
 <td>
 Yes
+</td>
+</tr>
+<tr>
+<td>Close connection</td>
+<td>If selected, the connection will be closed after running the sampler.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>SO_LINGER</td>
+<td>Enable/disable SO_LINGER with the specified linger time in seconds when a socket is created. If you set "SO_LINGER" value as 0, you may prevent large numbers of sockets sitting around with a TIME_WAIT status.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>End of line(EOL) byte value</td>
+<td>Byte value for end of line, set this to a value outside the range -128 to +127 to skip eol checking. You may set this in jmeter.properties file as well with eolByte property. If you set this in TCP Sampler Config and in jmeter.properties file at the same time, the setting value in the TCP Sampler Config will be used.
+</td>
+<td>
+No
 </td>
 </tr>
 <tr>
@@ -12305,7 +12747,7 @@ however the minimum and maximum values can be any long values so long as the ran
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='411' height='306' src="../images/screenshots/random_variable.png"></div>
+<div align="center"><img width='495' height='286' src="../images/screenshots/random_variable.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Random_Variable_parms"/>
@@ -12356,7 +12798,14 @@ Yes
 </tr>
 <tr>
 <td>Random Seed</td>
-<td>The seed for the random number generator. Default is the current time in milliseconds.
+<td>The seed for the random number generator. Default is the current time in milliseconds. 
+  If you use the same seed value with Per Thread set to true, you will get the same value for earch Thread as per 
+  
+<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Random.html">
+Random
+</a>
+ class.
+  
 </td>
 <td>
 No
@@ -12674,7 +13123,7 @@ Equals, Substring: plain text, case-sensitive
 
 	A summary of the pattern matching characters can be found at 
 <a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">
-http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html
+ORO Perl5 regular expressions.
 </a>
 
 	
@@ -12741,7 +13190,7 @@ extended regular expression
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='762' height='417' src="../images/screenshots/assertion/assertion.png"></div>
+<div align="center"><img width='921' height='423' src="../images/screenshots/assertion/assertion.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Response_Assertion_parms"/>
@@ -12800,7 +13249,14 @@ Yes
 
         
 <li>
-Text Response - the response text from the server, i.e. the body, excluing any HTTP headers.
+Text Response - the response text from the server, i.e. the body, excluding any HTTP headers.
+</li>
+
+        
+<li>
+Document (text) - the extract text from various type of documents via Apache Tika (see 
+<a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
+ Document view section).
 </li>
 
         
@@ -12926,24 +13382,30 @@ Yes
 <a class="sectionlink" href="#assertion_examples" title="Link to here">&para;</a><p><b>Assertion Examples</b></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1a.png"><br>
+<center>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='242' height='123' src="../images/screenshots/assertion/example1a.png"><br>
 <font size="-1">Figure 14 - Test Plan
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1b.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='920' height='451' src="../images/screenshots/assertion/example1b.png"><br>
 <font size="-1">Figure 15 - Assertion Control Panel with Pattern
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1c-pass.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='801' height='230' src="../images/screenshots/assertion/example1c-pass.png"><br>
 <font size="-1">Figure 16 - Assertion Listener Results (Pass)
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1c-fail.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='800' height='233' src="../images/screenshots/assertion/example1c-fail.png"><br>
 <font size="-1">Figure 17 - Assertion Listener Results (Fail)
 </font></td></tr></table></p>
+
+
+</center>
 
 
 </td></tr>
@@ -12965,7 +13427,7 @@ of time.  Any response that takes longer than the given number of milliseconds (
 user) is marked as a failed response.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='535' height='200' src="../images/screenshots/duration_assertion.png"></div>
+<div align="center"><img width='606' height='187' src="../images/screenshots/duration_assertion.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Duration_Assertion_parms"/>
@@ -13283,7 +13745,11 @@ log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])
 
 	
 <li>
-SampleResult - the SampleResult Object; read-write
+SampleResult - the 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+ Object; read-write
 </li>
 
 	
@@ -13338,13 +13804,16 @@ SamplerData - data that was sent to the server
 
 	
 <li>
-ctx - JMeterContext
+ctx - 
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
 </li>
 
 	
 <li>
 vars - 
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
   - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());
@@ -13538,7 +14007,7 @@ on XPath.
 
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='692' height='293' src="../images/screenshots/xpath_assertion.png"></div>
+<div align="center"><img width='800' height='317' src="../images/screenshots/xpath_assertion.png"></div>
 <p>
 <b>Parameters</b>
 <a name="XPath_Assertion_parms"/>
@@ -13797,7 +14266,7 @@ No
 </tr>
 <tr>
 <td>Script file</td>
-<td>A file containing the script to run.
+<td>A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
 </td>
 <td>
 No
@@ -13850,13 +14319,17 @@ args[] - the parameters as a String array (split on whitespace)
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
@@ -13869,7 +14342,11 @@ props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.
 
 
 <li>
-SampleResult, prev - (SampleResult) - gives access to the previous SampleResult (if any)
+SampleResult, prev - (
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+) - gives access to the previous SampleResult (if any)
 </li>
 
 
@@ -13891,7 +14368,11 @@ AssertionResult - the assertion result
 </ul>
 <p>
 
-The script can check various aspects of the SampleResult.
+The script can check various aspects of the 
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+.
 If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
 
 </p>
@@ -13936,6 +14417,18 @@ For details, see
 </font>
 </td></tr>
 <tr><td>
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Compare Assertion MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+during Test Plan debugging and Validation.
+
+</td></tr>
+</table>
+</p>
+
 
 The Compare Assertion can be used to compare sample results within its scope.
 Either the contents or the elapsed time can be compared, and the contents can be filtered before comparison.
@@ -14619,13 +15112,17 @@ log - (Logger) - can be used to write to the log file
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
@@ -14638,7 +15135,11 @@ props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.
 
 
 <li>
-prev - (SampleResult) - gives access to the previous SampleResult (if any)
+prev - (
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+) - gives access to the previous SampleResult (if any)
 </li>
 
 
@@ -14729,7 +15230,7 @@ No
 <tr>
 <td>Script file</td>
 <td>
-    A file containing the script to run.
+    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
      The return value is converted to a long integer and used as the number of milliseconds to wait.
      
 </td>
@@ -14761,13 +15262,17 @@ log - (Logger) - can be used to write to the log file
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
@@ -15296,7 +15801,7 @@ No
         control over how often the values of the variables are updated.  Keep this box checked to ensure the values are
         updated each time through the UP's parent controller.  Uncheck the box, and the UP will update the parameters for 
         every sample request made within its 
-<a href="build-test-plan.html#scoping_rules">
+<a href="test_plan.html#scoping_rules">
 scope
 </a>
 .
@@ -15439,13 +15944,17 @@ log - (Logger) - can be used to write to the log file
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
@@ -15458,7 +15967,11 @@ props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.
 
 
 <li>
-prev - (SampleResult) - gives access to the previous SampleResult (if any)
+prev - (
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+) - gives access to the previous SampleResult (if any)
 </li>
 
 
@@ -15549,7 +16062,7 @@ No
 </tr>
 <tr>
 <td>Script file</td>
-<td>A file containing the script to run.
+<td>A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
 </td>
 <td>
 No
@@ -15602,13 +16115,17 @@ args[] - the parameters as a String array (split on whitespace)
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
@@ -15718,6 +16235,143 @@ this one will be used by "Calculate Price cut off".
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="RegEx_User_Parameters">18.7.10 RegEx User Parameters</a>
+<a class="sectionlink" href="#RegEx_User_Parameters" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+<p>
+Allows to specify dynamic values for HTTP parameters extracted from another HTTP Request using regular expressions.
+            RegEx User Parameters are specific to individual threads.
+</p>
+
+        
+<p>
+This component allows you to specify reference name of a regular expression that extracts names and values of HTTP request parameters. 
+            Regular expression group numbers must be specified for parameter's name and also for parameter's value.
+            Replacement will only occur for parameters in the Sampler that uses this RegEx User Parameters which name matches 
+</p>
+
+    
+<p><b>Control Panel</b></p>
+<div align="center"><img width='727' height='138' src="../images/screenshots/regex_user_params.png"></div>
+<p>
+<b>Parameters</b>
+<a name="RegEx_User_Parameters_parms"/>
+<a class="sectionlink" href="#RegEx_User_Parameters_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Regular Expression Reference Name</td>
+<td>Name of a reference to a regular expression
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Parameter names regexp group number</td>
+<td>Group number of regular expression used to extract parameter names
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Parameter values regex group number</td>
+<td>Group number of regular expression used to extract parameter values
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
+<p>
+Example:
+</p>
+<p>
+Suppose we have a request which returns a form with 3 input parameters and we want to extract the value of 2 of them to inject them in next request
+</p>
+<p>
+1. - Create Post Processor Regular Expression for first HTTP Request
+</p>
+<ul>
+
+        
+<li>
+refName - set name of a regular expression Ex. (listParams)
+</li>
+
+        
+<li>
+regular expression - expression that will extract input names and input values attributes
+            
+<br>
+
+
+            Ex: input name="([^"]+?)" value="([^"]+?)"
+</li>
+
+        
+<li>
+template would be empty
+</li>
+
+        
+<li>
+match nr - -1 (in order to iterate through all the possible matches)
+</li>
+
+    
+</ul>
+<p>
+2. - Create Pre Processor RegEx User Parameters for second HTTP Request
+</p>
+<ul>
+
+        
+<li>
+refName - set the same reference name of a regular expression, would be listParams in our example
+</li>
+
+        
+<li>
+parameter names group number - group number of regular expression for parameter names, would be 1 in our example
+</li>
+
+        
+<li>
+parameter values group number - group number of regular expression for parameter values, would be 2 in our example
+</li>
+
+    
+</ul>
+<p>
+See also the 
+<a href="../usermanual/component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a>
+ element, which is used to extract parametes names and values
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<p><b>See Also:</b>
+<ul>
+<li><a href="../demos/RegEx-User-Parameters.jmx">Test Plan showing how to use RegEx User Parameters</a></li>
+</ul>
+</p>
 <a href="#">
 ^
 </a>
@@ -15790,7 +16444,7 @@ this element will execute after each Sample request in its scope, applying the r
 generate the template string, and store the result into the given variable name.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='728' height='301' src="../images/screenshots/regex_extractor.png"></div>
+<div align="center"><img width='790' height='276' src="../images/screenshots/regex_extractor.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Regular_Expression_Extractor_parms"/>
@@ -15866,6 +16520,30 @@ Body (unescaped) - the body of the response, with all Html escape codes replaced
         Note that Html escapes are processed without regard to context, so some incorrect substitutions
         may be made.
         
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Note that this option highly impacts performances, so use it only when absolutely necessary and be aware of its impacts
+</td></tr>
+</table>
+</p>
+
+        
+</li>
+
+        
+<li>
+Body as a Document - the extract text from various type of documents via Apache Tika (see 
+<a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
+ Document view section).
+        
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Note that Body as a Document option can impact performances, so ensure it is Ok for your test
+</td></tr>
+</table>
+</p>
+
+        
 </li>
 
         
@@ -15892,6 +16570,7 @@ Response Message - e.g. OK
 </ul>
 
         Headers can be useful for HTTP samples; it may not be present for other sample types.
+        
 </td>
 <td>
 Yes
@@ -16087,7 +16766,322 @@ See also
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="XPath_Extractor">18.8.2 XPath Extractor</a>
+<a name="CSS/JQuery_Extractor">18.8.2 CSS/JQuery Extractor</a>
+<a class="sectionlink" href="#CSS/JQuery_Extractor" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+<p>
+Allows the user to extract values from a server response using a CSS/JQuery selector like syntax.  As a post-processor,
+this element will execute after each Sample request in its scope, applying the CSS/JQuery expression, extracting the requested nodes,
+extracting the node as text or attribute value and store the result into the given variable name.
+</p>
+<p><b>Control Panel</b></p>
+<div align="center"><img width='826' height='276' src="../images/screenshots/css_extractor_attr.png"></div>
+<p>
+<b>Parameters</b>
+<a name="CSS/JQuery_Extractor_parms"/>
+<a class="sectionlink" href="#CSS/JQuery_Extractor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Apply to:</td>
+<td>
+        This is for use with samplers that can generate sub-samples, 
+        e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
+        
+<ul>
+
+        
+<li>
+Main sample only - only applies to the main sample
+</li>
+
+        
+<li>
+Sub-samples only - only applies to the sub-samples
+</li>
+
+        
+<li>
+Main sample and sub-samples - applies to both.
+</li>
+
+        
+<li>
+JMeter Variable - assertion is to be applied to the contents of the named variable
+</li>
+
+        
+</ul>
+
+        Matching is applied to all qualifying samples in turn.
+        For example if there is a main sample and 3 sub-samples, each of which contains a single match for the regex,
+        (i.e. 4 matches in total).
+        For match number = 3, Sub-samples only, the extractor will match the 3rd sub-sample.
+        For match number = 3, Main sample and sub-samples, the extractor will match the 2nd sub-sample (1st match is main sample).
+        For match number = 0 or negative, all qualifying samples will be processed.
+        For match number > 0, matching will stop as soon as enough matches have been found.
+        
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>CSS/JQuery extractor Implementation</td>
+<td>
+        As of JMeter 2.9, 2 implementations for CSS/JQuery based syntax are supported:
+        
+<ul>
+
+                
+<li>
+<a href="http://jsoup.org/">
+JSoup
+</a>
+</li>
+
+                
+<li>
+<a href="http://jodd.org/doc/lagarto/index.html">
+Jodd-Lagerto (CSSelly)
+</a>
+</li>
+
+        
+</ul>
+
+        If selector is set to empty, default implementation(JSoup) will be used.
+        
+</td>
+<td>
+False
+</td>
+</tr>
+<tr>
+<td>Reference Name</td>
+<td>The name of the JMeter variable in which to store the result.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>CSS/JQuery expression</td>
+<td>The CSS/JQuery selector used to select nodes from the response data. 
+        Selector, selectors combination and pseudo-selectors are supported, examples:
+        
+<ul>
+
+            
+<li>
+E[foo] an E element with a "foo" attribute
+</li>
+
+            
+<li>
+ancestor child:child elements that descend from ancestor, e.g. .body p finds p elements anywhere under a block with class "body"
+</li>
+
+            
+<li>
+:lt(n): find elements whose sibling index (i.e. its position in the DOM tree relative to its parent) is less than n; e.g. td:lt(3)
+</li>
+
+            
+<li>
+:contains(text): find elements that contain the given text. The search is case-insensitive; e.g. p:contains(jsoup)
+</li>
+
+            
+<li>
+...
+</li>
+
+        
+</ul>
+
+        For more details on syntax, see:
+            
+<ul>
+
+                
+<li>
+<a href="http://jsoup.org/cookbook/extracting-data/selector-syntax">
+JSoup
+</a>
+</li>
+
+                
+<li>
+<a href="http://jodd.org/doc/csselly/">
+Jodd-Lagerto (CSSelly)
+</a>
+</li>
+
+            
+</ul>
+
+        
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Attribute</td>
+<td>
+            Name of attribute (as per HTML syntax) to extract from nodes that matched the selector. If empty, then the combined text of this element and all its children will be returned.
+<br>
+
+
+            This is the equivalent 
+<a href="http://jsoup.org/apidocs/org/jsoup/nodes/Node.html#attr%28java.lang.String%29">
+Element#attr(name)
+</a>
+ function for JSoup if an atttribute is set.
+<br>
+
+
+            
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='826' height='275' src="../images/screenshots/css_extractor_attr.png"><br>
+<font size="-1">CSS Extractor with attribute value set
+</font></td></tr></table></p>
+<br>
+
+
+            If empty this is the equivalent of 
+<a href="http://jsoup.org/apidocs/org/jsoup/nodes/Element.html#text%28%29">
+Element#text()
+</a>
+ function for JSoup if not value is set for attribute.
+            
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='825' height='275' src="../images/screenshots/css_extractor_noattr.png"><br>
+<font size="-1">CSS Extractor with no attribute set
+</font></td></tr></table></p>
+
+        
+</td>
+<td>
+false
+</td>
+</tr>
+<tr>
+<td>Match No.</td>
+<td>Indicates which match to use.  The CSS/JQuery selector may match multiple times.  
+            
+<ul>
+
+                
+<li>
+Use a value of zero to indicate JMeter should choose a match at random.
+</li>
+
+                
+<li>
+A positive number N means to select the nth match.
+</li>
+
+                
+<li>
+ Negative numbers are used in conjunction with the ForEach controller - see below.
+</li>
+
+            
+</ul>
+
+        
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Default Value</td>
+<td>
+        If the expression does not match, then the reference variable will be set to the default value.
+        This is particularly useful for debugging tests. If no default is provided, then it is difficult to tell
+        whether the expression did not match, or the CSS/JQuery element was not processed or maybe the wrong variable
+        is being used.
+        
+<p>
+
+        However, if you have several test elements that set the same variable, 
+        you may wish to leave the variable unchanged if the expression does not match.
+        In this case, remove the default value once debugging is complete.
+        
+</p>
+ 
+        
+</td>
+<td>
+No, but recommended
+</td>
+</tr>
+</table>
+</p>
+<p>
+
+    If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
+    
+<ul>
+
+        
+<li>
+refName - the value of the template
+</li>
+
+    
+</ul>
+
+    If no match occurs, then the refName variable is set to the default (unless this is absent). 
+
+</p>
+<p>
+
+    If the match number is set to a negative number, then all the possible matches in the sampler data are processed.
+    The variables are set as follows:
+    
+<ul>
+
+        
+<li>
+refName_matchNr - the number of matches found; could be 0
+</li>
+
+        
+<li>
+refName_n, where n = 1,2,3 etc - the strings as generated by the template
+</li>
+
+        
+<li>
+refName - always set to the default value
+</li>
+
+    
+</ul>
+
+    Note that the refName variable is always set to the default value in this case.
+
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="XPath_Extractor">18.8.3 XPath Extractor</a>
 <a class="sectionlink" href="#XPath_Extractor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -16432,7 +17426,7 @@ Tidy homepage
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="Result_Status_Action_Handler">18.8.3 Result Status Action Handler</a>
+<a name="Result_Status_Action_Handler">18.8.4 Result Status Action Handler</a>
 <a class="sectionlink" href="#Result_Status_Action_Handler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -16440,7 +17434,7 @@ Tidy homepage
 This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    
 <p><b>Control Panel</b></p>
-<div align="center"><img width='493' height='140' src="../images/screenshots/resultstatusactionhandler.png"></div>
+<div align="center"><img width='613' height='133' src="../images/screenshots/resultstatusactionhandler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Result_Status_Action_Handler_parms"/>
@@ -16465,6 +17459,11 @@ No
    
 <li>
 Continue - ignore the error and continue with the test
+</li>
+
+   
+<li>
+Start next thread loop - does not execute samplers following the sampler in error for the current iteration and restarts the loop on next iteration
 </li>
 
    
@@ -16501,7 +17500,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="BeanShell_PostProcessor">18.8.4 BeanShell PostProcessor</a>
+<a name="BeanShell_PostProcessor">18.8.5 BeanShell PostProcessor</a>
 <a class="sectionlink" href="#BeanShell_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -16630,13 +17629,17 @@ log - (Logger) - can be used to write to the log file
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
@@ -16649,7 +17652,11 @@ props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.
 
 
 <li>
-prev - (SampleResult) - gives access to the previous SampleResult
+prev - (
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+) - gives access to the previous SampleResult
 </li>
 
 
@@ -16677,7 +17684,7 @@ beanshell.postprocessor.init
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="BSF_PostProcessor">18.8.5 BSF PostProcessor</a>
+<a name="BSF_PostProcessor">18.8.6 BSF PostProcessor</a>
 <a class="sectionlink" href="#BSF_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -16740,7 +17747,7 @@ No
 </tr>
 <tr>
 <td>Script file</td>
-<td>A file containing the script to run.
+<td>A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
 </td>
 <td>
 No
@@ -16796,13 +17803,17 @@ args[] - the parameters as a String array (split on whitespace)
 
 
 <li>
-ctx - (JMeterContext) - gives access to the context
+ctx - (
+<a href="../api/org/apache/jmeter/threads/JMeterContext.html">
+JMeterContext
+</a>
+) - gives access to the context
 </li>
 
 
 <li>
 vars - (
-<a href="../../docs/api/org/apache/jmeter/threads/JMeterVariables.html">
+<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">
 JMeterVariables
 </a>
 ) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");
@@ -16815,7 +17826,11 @@ props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.
 
 
 <li>
-prev - (SampleResult) - gives access to the previous SampleResult (if any)
+prev - (
+<a href="../api/org/apache/jmeter/samplers/SampleResult.html">
+SampleResult
+</a>
+) - gives access to the previous SampleResult (if any)
 </li>
 
 
@@ -16841,7 +17856,7 @@ For details of all the methods available on each of the above variables, please 
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="JSR223_PostProcessor">18.8.6 JSR223 PostProcessor</a>
+<a name="JSR223_PostProcessor">18.8.7 JSR223 PostProcessor</a>
 <a class="sectionlink" href="#JSR223_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -16866,7 +17881,7 @@ For details, see the
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="JDBC_PostProcessor">18.8.7 JDBC PostProcessor</a>
+<a name="JDBC_PostProcessor">18.8.8 JDBC PostProcessor</a>
 <a class="sectionlink" href="#JDBC_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -17466,7 +18481,7 @@ This setting will also be needed when running the generated test plan.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='939' height='599' src="../images/screenshots/proxy_control.png"></div>
+<div align="center"><img width='957' height='593' src="../images/screenshots/proxy_control.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Proxy_Server_parms"/>
@@ -18064,17 +19079,51 @@ No
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>
-Note that you can make simulate requests response time by adding an HTTP Header Manager with the following name/value pair:
+Note that you can get more control on responses by adding an HTTP Header Manager with the following name/value pairs:
 
-<ul>
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>X-Sleep</td>
+<td>Time to sleep in ms before sending response
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>X-SetCookie</td>
+<td>Cookies to be set on response
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>X-ResponseStatus</td>
+<td>Response status, see 
+<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">
+HTTP Stauts responses
+</a>
+, example 200 OK, 500 Internal Server Error ....
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>X-ResponseLength</td>
+<td>Size of response, this enable returning only a substring of Request content
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
 
-
-<li>
-X-Sleep=Time to sleep in ms 
-</li>
-
-
-</ul>
 
 
 </td></tr>
@@ -18406,7 +19455,7 @@ Yes
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2012, Apache Software Foundation
+Copyright &copy; 1999-2013, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

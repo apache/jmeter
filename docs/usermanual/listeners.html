@@ -337,7 +337,7 @@ The full set of properties that affect result file output is shown below.
 # Timestamp format
 # legitimate values: none, ms, or a format suitable for SimpleDateFormat
 #jmeter.save.saveservice.timestamp_format=ms
-#jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
+#jmeter.save.saveservice.timestamp_format=yyyy/MM/dd HH:mm:ss.SSS
 
 # Put the start time stamp in logs instead of the end
 sampleresult.timestamp.start=true
@@ -383,7 +383,7 @@ sampleresult.timestamp.start=true
 <p>
 
 The date format to be used for the timestamp_format is described in 
-<a HREF="http://download.oracle.com/javase/1.5.0/docs/api/java/text/SimpleDateFormat.html">
+<a HREF="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">
 
 
 <b>
@@ -391,9 +391,43 @@ SimpleDateFormat
 </b>
 </a>
 .
-Bear in mind that choosing a date format other than "ms" is likely to
-make it impossible for JMeter to interpret the value when it is read
-in later for viewing purposes.
+The timestamp format is used for both writing and reading files.
+If the format is set to "ms", and the column does not parse as a long integer,
+JMeter (2.9+) will try the following formats:
+
+<ul>
+
+
+<li>
+yyyy/MM/dd HH:mm:ss.SSSS
+</li>
+
+
+<li>
+yyyy/MM/dd HH:mm:ss
+</li>
+
+
+<li>
+yyyy-MM-dd HH:mm:ss.SSSS
+</li>
+
+
+<li>
+yyyy-MM-dd HH:mm:ss
+</li>
+
+
+<li>
+MM/dd/yy HH:mm:ss (this is for compatibility with previous versions; it is not recommended as a format)
+</li>
+
+
+</ul>
+ 
+Matching is now also strict (non-lenient).
+JMeter 2.8 and earlier used lenient mode which could result in timestamps with incorrect dates 
+(times were usually correct).
 </p>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#828DA6">
@@ -1232,7 +1266,7 @@ e.g. a spreadsheet or text editor.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2012, Apache Software Foundation
+Copyright &copy; 1999-2013, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
