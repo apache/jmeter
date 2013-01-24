@@ -1213,7 +1213,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
 </p>
 </component>
 
-<component name="JSR223 Sampler" index="&sect-num;.1.11.1">
+<component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="752" height="507" screenshot="jsr223-sampler.png">
 <description>
 <p>
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
@@ -1221,8 +1221,9 @@ JSR223 related elements have a feature that increases highly their performances.
 To benefit from this feature:
 <ul>
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
-    <li>Use Script Text and fill in script cache key property, ensure it is unique accross Test Plan as JMeter will use it to cache result of compilation.
+    <li>Or Use Script Text and fill in script cache key property, ensure it is unique accross Test Plan as JMeter will use it to cache result of compilation.
     <note>When using this feature, ensure you script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
+    <note>To benefit fomr Caching and compilation, language engine used for scripting must implement JSR223 Compilable interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
 </ul>
 Cache size is controlled by the following jmeter property (jmeter.properties):
@@ -2234,7 +2235,7 @@ If there is no default, then no element is selected, and the controller will not
 </properties>
 </component>
 
-<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop" width="380" height="152" screenshot="logic-controller/foreach-controller.png">
+<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop" width="342" height="193" screenshot="logic-controller/foreach-controller.png">
 <description><p>A ForEach controller loops through the values of a set of related variables. 
 When you add samplers (or controllers) to a ForEach controller, every sample sample (or controller)
 is executed one or more times, where during every loop the variable has a new value.
