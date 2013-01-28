@@ -41,7 +41,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3><u>Core Improvements:</u></h3>
 
-<h4>&#149; A new Extractor that uses CSS or jquery-like selector syntax has been introduced, 
+<h4>* A new Extractor that uses CSS or jquery-like selector syntax has been introduced, 
 it allows using either JODD or JSOUP implementations</h4>
 <p>
 <figure width="762" height="277" image="changes/2.9/01_css_jquery_extractor.png"></figure>
@@ -49,7 +49,7 @@ it allows using either JODD or JSOUP implementations</h4>
 <p>Result: the title of the page in a JMeter variable
 <figure width="719" height="171" image="changes/2.9/01_css_jquery_extractor_resul.png"></figure>
 </p>
-<h4>&#149; JMeter can now handle different types of documents (PDF, MsOffice files, Apache OpenOffice's files...)
+<h4>* JMeter can now handle different types of documents (PDF, MsOffice files, Apache OpenOffice's files...)
  within different elements </h4>
 <ul>
     <li>Regular Expression Extractor, extract text from documents</li>
@@ -60,32 +60,32 @@ it allows using either JODD or JSOUP implementations</h4>
 <figure width="761" height="345" image="changes/2.9/02_document_render_view_results_tree.png"></figure>
 </p>
 
-<h4>&#149; A new Regex User Parameters Pre-Processor that enables injecting input parameter names and values 
+<h4>* A new Regex User Parameters Pre-Processor that enables injecting input parameter names and values 
 using a reference extracted by Regular Expression Extractor from a previous response</h4>
 <p>
 <figure width="727" height="138" image="changes/2.9/13_regex_user_params.png"></figure>
 </p>
 
-<h4>&#149; TCP Sampler: new options</h4>
+<h4>* TCP Sampler: new options</h4>
 <p>TCP Sampler has been enhanced with new options to allow setting <b>Close Connection</b>, 
  <b>SO_LINGER</b> and  <b>End of line(EOL) byte value</b>
 <figure width="1147" height="302" image="changes/2.9/03_new_options_tcp_sampler.png"></figure>
 </p>
-<h4>&#149; A new function <i>__escapeOroRegexpChars(,)</i> has been introduced quote ORO regexp meta characters</h4>
-<h4>&#149; ForEach Controller: new fields</h4>
+<h4>* A new function <i>__escapeOroRegexpChars(,)</i> has been introduced quote ORO regexp meta characters</h4>
+<h4>* ForEach Controller: new fields</h4>
 <p>ForEach Controller has now 2 new fields to control start and end of loop
 <figure width="320" height="203" image="changes/2.9/04_for_each_new_fields.png"></figure>
 </p>
-<h4>&#149; Result Status Action Handler now has a new option to "Start next thread loop"</h4>
+<h4>* Result Status Action Handler now has a new option to "Start next thread loop"</h4>
 <p>
 <figure width="722" height="132" image="changes/2.9/05_result_status_action_handler.png"></figure>
 </p>
 
-<h4>&#149; JMS Publisher: new option</h4>
+<h4>* JMS Publisher: new option</h4>
 <p>JMS Publisher can now send Bytes Messages</p>
 <figure width="833" height="701" image="changes/2.9/11_jms_publisher_bytes.png"></figure>
 
-<h4>&#149; Memory and performance improvements</h4>
+<h4>* Memory and performance improvements</h4>
 <p>Significant improvements have been done in this version on memory usage per Thread and CPU when more 
 than one Post Processor is used as child of a Sampler</p>
 <p>JSR223 Elements (enable using Groovy, Scala... as scripting languages) have been improved to enable caching 
@@ -102,48 +102,48 @@ see description in New and Noteworthy section.
 </ul>
 </p>
 
-<h4>&#149; XPath Assertion now enables using a JMeter variable as input</h4>
+<h4>* XPath Assertion now enables using a JMeter variable as input</h4>
 <p>
 <figure width="800" height="317" image="changes/2.9/14_xpath_assertion.png"></figure>
 </p>
 
 <h3><u>GUI and ergonomy Improvements:</u></h3>
-<h4>&#149; Search feature has been improved to search within more internal fields of elements and expand search results</h4>
-<h4>&#149; Copy/paste is now possible between 2 JMeter instances &gt;= 2.9 version</h4>
+<h4>* Search feature has been improved to search within more internal fields of elements and expand search results</h4>
+<h4>* Copy/paste is now possible between 2 JMeter instances &gt;= 2.9 version</h4>
 <p>Copy element(s) from one JMeter instance:
 <figure width="618" height="262" image="changes/2.9/06_copy_paste_between_2_jmeter1.png"></figure>
 </p>
 <p>Paste element(s) into a second JMeter instance:
 <figure width="617" height="278" image="changes/2.9/06_copy_paste_between_2_jmeter2.png"></figure>
 </p>
-<h4>&#149; HTTP Header Manager</h4>
+<h4>* HTTP Header Manager</h4>
 <p>Allow copy from clipboard to HeaderPanel, headers are supposed to be separated by new line
  and have the following form <i>name:value</i>
 <figure width="661" height="263" image="changes/2.9/07_header_panel_add_from_clipboard.png"></figure>
 </p>
-<h4>&#149; Module Controller</h4>
+<h4>* Module Controller</h4>
 <p>Module Controller has been improved to better render referenced controller and expand it by clicking on a new button
 <figure width="832" height="274" image="changes/2.9/08_module_controller_improvements.png"></figure>
 </p>
-<h4>&#149; HTTP Proxy Server</h4>
+<h4>* HTTP Proxy Server</h4>
 <p>HTTP Proxy Server now has a button to add a set of default exclusions for URL patterns, 
 this list can be configured through property : <i>proxy.excludes.suggested</i>
 <figure width="811" height="214" image="changes/2.9/09_proxy_excludes_suggested.png"></figure>
 </p>
-<h4>&#149; Rendering of target controller has been improved in HTTP Proxy Server</h4>
+<h4>* Rendering of target controller has been improved in HTTP Proxy Server</h4>
 
 <h3><u>HTTP Proxy Server recording:</u></h3>
-<p>&#149; HTTP Proxy Server now automatically uses HTTP Request with Raw Post Body mode for 
+<p>* HTTP Proxy Server now automatically uses HTTP Request with Raw Post Body mode for 
 samples that only have one unnamed argument (JSON, XML, GWT...)</p>
-<p>&#149; HTTP Proxy Server does not force user to select the type of Sampler in HTTP Sampler Settings,
+<p>* HTTP Proxy Server does not force user to select the type of Sampler in HTTP Sampler Settings,
  this allows easier switch between implementations as Sampler do not have this information set anymore</p>
  <p>
 <figure width="484" height="307" image="changes/2.9/10_http_proxy_dont_force_http_type.png"></figure>
 </p>
-<p>&#149; SamplerCreator interface has been enriched to meet new requirements for plug-in providers</p>
-<p>&#149; It is now possible to create binary sampler for x-www-form-urlencoded POST request by 
+<p>* SamplerCreator interface has been enriched to meet new requirements for plug-in providers</p>
+<p>* It is now possible to create binary sampler for x-www-form-urlencoded POST request by 
 modifying <i>proxy.binary.types</i> property to add application/x-www-form-urlencoded </p>
-<p>&#149; Improved timestamp format auto-detection when reading CSV files</p>
+<p>* Improved timestamp format auto-detection when reading CSV files</p>
 
 <!--  =================== Known bugs =================== -->
 
