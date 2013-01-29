@@ -104,7 +104,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
                 try {
                     name = name.substring(NAME_SAVE_PFX_LEN);
                     JCheckBox check = new JCheckBox(
-                            JMeterUtils.getResString(RESOURCE_PREFIX + name)// $NON-NLS-1$
+                            JMeterUtils.getResString(RESOURCE_PREFIX + name)
                             ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
                     checkPanel.add(check, BorderLayout.NORTH);
                     check.addActionListener(this);
