@@ -73,7 +73,7 @@ public class ReportClose implements Command {
             if (JOptionPane.showConfirmDialog(ReportGuiPackage.getInstance()
                     .getMainFrame(), JMeterUtils
                     .getResString("cancel_new_to_save"), JMeterUtils // $NON-NLS-1$
-                    .getResString("Save?"), JOptionPane.YES_NO_OPTION, // $NON-NLS-1$
+                    .getResString("save?"), JOptionPane.YES_NO_OPTION, // $NON-NLS-1$
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 ReportActionRouter.getInstance().doActionNow(
                         new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
