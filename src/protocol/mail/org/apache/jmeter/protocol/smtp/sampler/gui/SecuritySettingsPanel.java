@@ -185,12 +185,12 @@ public class SecuritySettingsPanel extends JPanel{
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 1;
-        jlTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip"));
+        jlTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip")); // $NON-NLS-1$
         this.add(jlTrustStoreToUse, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        tfTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip"));
+        tfTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip")); // $NON-NLS-1$
         this.add(tfTrustStoreToUse, gridBagConstraints);
     }
 

@@ -115,8 +115,8 @@ public class CacheManagerGui extends AbstractConfigGui {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
-        clearEachIteration = new JCheckBox(JMeterUtils.getResString("clear_cache_per_iter"), false);
-        useExpires = new JCheckBox(JMeterUtils.getResString("use_expires"), false);
+        clearEachIteration = new JCheckBox(JMeterUtils.getResString("clear_cache_per_iter"), false); // $NON-NLS-1$
+        useExpires = new JCheckBox(JMeterUtils.getResString("use_expires"), false); // $NON-NLS-1$
 
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));

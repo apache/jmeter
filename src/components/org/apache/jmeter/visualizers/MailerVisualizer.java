@@ -280,7 +280,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         authPane.add(smtpPasswordPane, BorderLayout.EAST);
 
         JPanel authTypePane = new JPanel(new BorderLayout());
-        authTypePane.add(new JLabel(JMeterUtils.getResString("mailer_connection_security")), BorderLayout.WEST);
+        authTypePane.add(new JLabel(JMeterUtils.getResString("mailer_connection_security")), BorderLayout.WEST); // $NON-NLS-1$
         authTypeCombo = new JComboBox(new Object[] { 
                 MailerModel.MailAuthType.NONE.toString(), 
                 MailerModel.MailAuthType.SSL.toString(),
@@ -435,7 +435,8 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
             type = JOptionPane.INFORMATION_MESSAGE;
         }
         JOptionPane.showMessageDialog(null, message, isError ? 
-                JMeterUtils.getResString("mailer_msg_title_error") : JMeterUtils.getResString("mailer_msg_title_information"), type);
+                JMeterUtils.getResString("mailer_msg_title_error") :  // $NON-NLS-1$
+                    JMeterUtils.getResString("mailer_msg_title_information"), type); // $NON-NLS-1$
     }
 
     /**
