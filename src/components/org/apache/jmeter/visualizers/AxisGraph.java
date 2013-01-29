@@ -71,7 +71,7 @@ public class AxisGraph extends JPanel {
     protected String[] xAxisLabels;
     protected int width, height;
     
-    protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") };
+    protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") }; // $NON-NLS-1$
     
     protected int maxYAxisScale;
 
