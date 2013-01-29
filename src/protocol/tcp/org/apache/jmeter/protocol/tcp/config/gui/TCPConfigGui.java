@@ -260,7 +260,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         }
 
         VerticalPanel mainPanel = new VerticalPanel();
-        classname = new JLabeledTextField(JMeterUtils.getResString("tcp_classname"));
+        classname = new JLabeledTextField(JMeterUtils.getResString("tcp_classname")); // $NON-NLS-1$
         mainPanel.add(classname);
         mainPanel.add(serverPanel);
         

@@ -87,7 +87,7 @@ public class BarChartGui extends AbstractReportGui {
         xAxisLabel.setBackground(Color.white);
         yAxisLabel.setBackground(Color.white);
 
-        JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
+        JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis")); // $NON-NLS-1$
         HorizontalPanel xpanel = new HorizontalPanel(Color.white); // $NON-NLS-1$
         xLabel.setBorder(new EmptyBorder(5,2,5,2));
         xItems.setBackground(Color.white);

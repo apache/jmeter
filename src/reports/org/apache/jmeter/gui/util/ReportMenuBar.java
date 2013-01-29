@@ -212,7 +212,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeHelpMenu() {
         // HELP MENU
-        helpMenu = new JMenu(JMeterUtils.getResString("help"));
+        helpMenu = new JMenu(JMeterUtils.getResString("help")); // $NON-NLS-1$
         helpMenu.setMnemonic('H');
         JMenuItem contextHelp = new JMenuItem(JMeterUtils.getResString("help"), 'H'); // $NON-NLS-1$
         contextHelp.setActionCommand("help");
@@ -280,7 +280,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         run_start.setAccelerator(KeyStrokes.ACTION_START);
         run_start.addActionListener(ReportActionRouter.getInstance());
         run_start.setActionCommand(ACTION_START);
-        run_stop = new JMenuItem(JMeterUtils.getResString("stop"), 'T');
+        run_stop = new JMenuItem(JMeterUtils.getResString("stop"), 'T'); // $NON-NLS-1$
         run_stop.setAccelerator(KeyStrokes.ACTION_STOP);
         run_stop.setEnabled(false);
         run_stop.addActionListener(ReportActionRouter.getInstance());

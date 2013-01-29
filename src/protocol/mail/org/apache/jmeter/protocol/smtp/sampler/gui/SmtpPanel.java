@@ -754,15 +754,15 @@ public class SmtpPanel extends JPanel {
          * Add the header panel
          */
 
-        addHeaderFieldButton = new JButton(JMeterUtils.getResString("smtp_header_add"));
+        addHeaderFieldButton = new JButton(JMeterUtils.getResString("smtp_header_add")); // $NON-NLS-1$
         addHeaderFieldButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 addHeaderActionPerformed(evt);
             }
         });
-        headerFieldName = new JLabel(JMeterUtils.getResString("smtp_header_name"));
-        headerFieldValue = new JLabel(JMeterUtils.getResString("smtp_header_value"));
+        headerFieldName = new JLabel(JMeterUtils.getResString("smtp_header_name")); // $NON-NLS-1$
+        headerFieldValue = new JLabel(JMeterUtils.getResString("smtp_header_value")); // $NON-NLS-1$
         headerFieldsPanel = new JPanel(new GridBagLayout());
 
         headerFieldName.setVisible(false);
@@ -1037,7 +1037,7 @@ public class SmtpPanel extends JPanel {
         }
         JTextField nameTF = new JTextField();
         JTextField valueTF = new JTextField();
-        JButton removeButton = new JButton(JMeterUtils.getResString("smtp_header_remove"));
+        JButton removeButton = new JButton(JMeterUtils.getResString("smtp_header_remove")); // $NON-NLS-1$
         headerFields.put(nameTF, valueTF);
         removeButtons.put(removeButton, nameTF);
 

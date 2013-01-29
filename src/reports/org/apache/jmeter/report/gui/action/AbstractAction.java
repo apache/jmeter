@@ -56,7 +56,7 @@ public abstract class AbstractAction implements Command {
         if (ReportGuiPackage.getInstance().getReportPlanFile() == null) {
             if (JOptionPane.showConfirmDialog(ReportGuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("should_save"),  // $NON-NLS-1$ // $NON-NLS-2$ 
-                    JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
+                    JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION, // $NON-NLS-1$
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 ReportActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ReportSave.SAVE));
             }

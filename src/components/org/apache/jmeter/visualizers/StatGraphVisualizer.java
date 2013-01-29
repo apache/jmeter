@@ -114,7 +114,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
 
-    private Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10);
+    private Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10); // $NON-NLS-1$
 
     private JTable myJTable;
 
@@ -774,7 +774,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         titleFontSizeList.setSelectedItem(StatGraphProperties.fontSize[6]); // default: 16
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 titleFontStyleList));
-        titleFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.bold")); // default: bold
+        titleFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.bold"));  // $NON-NLS-1$ // default: bold
 
         JPanel titlePane = new JPanel(new BorderLayout());
         titlePane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -860,7 +860,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$
                 legendPlacementList));
-        legendPlacementList.setSelectedItem(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom")); // default: bottom
+        legendPlacementList.setSelectedItem(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"));  // $NON-NLS-1$ // default: bottom
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
                 fontNameList));
         fontNameList.setSelectedIndex(0); // default: sans serif
@@ -869,7 +869,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         fontSizeList.setSelectedItem(StatGraphProperties.fontSize[2]); // default: 10
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 fontStyleList));
-        fontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal")); // default: normal
+        fontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal"));  // $NON-NLS-1$ // default: normal
 
         return legendPanel;
     }
