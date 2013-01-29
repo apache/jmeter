@@ -107,8 +107,8 @@ public class Start extends AbstractAction {
         try {
             engine.runTest();
         } catch (JMeterEngineException e) {
-            JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), JMeterUtils
-                    .getResString("Error Occurred"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), 
+                    JMeterUtils.getResString("error_occurred"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
         }
         log.debug("test plan after cloning and running test is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
