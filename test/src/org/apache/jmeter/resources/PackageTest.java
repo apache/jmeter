@@ -20,6 +20,7 @@ package org.apache.jmeter.resources;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +39,9 @@ import java.util.PropertyResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -73,7 +77,9 @@ public class PackageTest extends TestCase {
 
     private static final String MESSAGES = "messages";
 
-    private static PropertyResourceBundle defaultPRB;
+    private static PropertyResourceBundle defaultPRB; // current default language properties file
+
+    private static PropertyResourceBundle messagePRB; // messages.properties
 
     private static final CharsetEncoder ASCII_ENCODER = 
         Charset.forName("US-ASCII").newEncoder(); // Ensure properties files don't use special characters
@@ -193,6 +199,9 @@ public class PackageTest extends TestCase {
             if (defaultPRB == null){
                 throw new IOException("Could not find required file: "+res);
             }
+            if (resourcePrefix.endsWith(MESSAGES)) {
+                messagePRB = defaultPRB;
+            }
         } else if (checkUnexpected) {
             // Check all the keys are in the default props file
             PropertyResourceBundle prb = getRAS(res); 
@@ -252,6 +261,10 @@ public class PackageTest extends TestCase {
     private static void findFile(File file, Set<String> set,
 			FilenameFilter filenameFilter) {
     	File[] foundFiles = file.listFiles(filenameFilter);
+    	if (foundFiles == null) { // Better error than NPE
+    	    System.err.println("Not a directory: "+file);
+    	    return;
+    	}
     	for (File file2 : foundFiles) {
 			if(file2.isDirectory()) {
 				findFile(file2, set, filenameFilter);
@@ -262,7 +275,6 @@ public class PackageTest extends TestCase {
 				set.add(absPath2.substring(indexOfOrg, lastIndex));
 			}
 		}
-    	
 	}
     
     /*
@@ -290,6 +302,7 @@ public class PackageTest extends TestCase {
 //        ts.addTest(new PackageTest("checkI18n", Locale.JAPANESE.toString()));
 //        ts.addTest(new PackageTest("checkI18n", Locale.SIMPLIFIED_CHINESE.toString()));
 //        ts.addTest(new PackageTest("checkI18n", Locale.TRADITIONAL_CHINESE.toString()));
+        ts.addTest(new PackageTest("checkResourceReferences", ""));
         return ts;
     }
    
@@ -298,7 +311,7 @@ public class PackageTest extends TestCase {
 
     private final String lang;
     
-    private final String resourcePrefix; // e.g. "messages"
+    private final String resourcePrefix; // e.g. "/org/apache/jmeter/resources/messages"
 
     public PackageTest(String testName, String _lang) {
         this(testName, _lang, MESSAGES);
@@ -385,4 +398,53 @@ public class PackageTest extends TestCase {
 		}
     	return builder.toString();
 	}
+
+    // Check that calls to getResString use a valid property key name
+    public void checkResourceReferences() {
+        final AtomicInteger errors = new AtomicInteger(0);
+        findFile(srcFiledir, null, new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                final File file = new File(dir, name);
+                // Look for calls to JMeterUtils.getResString()
+                final Pattern pat = Pattern.compile(".*getResString\\(\"([^\"]+)\"\\).*");
+                if (name.endsWith(".java")) {
+                  BufferedReader fileReader;
+                  try {
+                    fileReader = new BufferedReader(new FileReader(file));
+                    String s;
+                    while ((s = fileReader.readLine()) != null) {
+                        if (s.matches("\\s*//.*")) { // leading comment
+                            continue;
+                        }
+                        Matcher m = pat.matcher(s);
+                        if (m.matches()) {
+                            final String key = m.group(1);
+                            // Resource keys cannot contain spaces, and are forced to lower case
+                            String resKey = key.replace(' ', '_'); // $NON-NLS-1$ // $NON-NLS-2$
+                            resKey = resKey.toLowerCase(java.util.Locale.ENGLISH);
+                            if (!key.equals(resKey)) {
+                                System.out.println(file+": non-standard message key: '"+key+"'");
+                            }
+                            try {
+                                messagePRB.getString(resKey);
+                            } catch (MissingResourceException e) {
+                                System.out.println(file+": missing message key: '"+key+"'");
+                                errors.incrementAndGet();
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                 
+                }
+                return file.isDirectory();
+            }
+        });
+        int errs = errors.get();
+        if (errs > 0) {
+            fail("Detected "+errs+" missing message property keys");
+        }
+    }
 }
