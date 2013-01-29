@@ -32,12 +32,15 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterTreeNodeTransferable;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Implements the Copy menu command
  */
 public class Copy extends AbstractAction {
-    
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
     private static final HashSet<String> commands = new HashSet<String>();
 
     static {
@@ -66,6 +69,7 @@ public class Copy extends AbstractAction {
             try {
                 return (JMeterTreeNode[]) clipboard.getData(JMeterTreeNodeTransferable.JMETER_TREE_NODE_ARRAY_DATA_FLAVOR);
             } catch (Exception ex) {
+                log.error("Clipboard node read error:" + ex.getMessage(), ex);
                 JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
                         JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(),  //$NON-NLS-1$  //$NON-NLS-2$
                         JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
@@ -88,6 +92,7 @@ public class Copy extends AbstractAction {
             transferable.setTransferData(nodes);
             clipboard.setContents(transferable, null);
         } catch (Exception ex) {
+            log.error("Clipboard node read error:" + ex.getMessage(), ex);
             JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
                     JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), //$NON-NLS-1$ //$NON-NLS-2$ 
                     JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
