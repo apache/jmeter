@@ -93,7 +93,7 @@ public class ReportPageGui extends AbstractReportGui {
     @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
-        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add")); // $NON-NLS-1$
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addMenu.add(ReportMenuFactory.makeMenuItem(new TableGui().getStaticLabel(),
                 TableGui.class.getName(),
                 "Add"));

@@ -172,20 +172,20 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
         if (dragging && isValidDragAction(draggedNodes, getCurrentNode())) {
             dragging = false;
             JPopupMenu dragNdrop = new JPopupMenu();
-            JMenuItem item = new JMenuItem(JMeterUtils.getResString("Insert Before")); // $NON-NLS-1$
+            JMenuItem item = new JMenuItem(JMeterUtils.getResString("insert_before")); // $NON-NLS-1$
             item.addActionListener(actionHandler);
             item.setActionCommand(ReportDragNDrop.INSERT_BEFORE);
             dragNdrop.add(item);
-            item = new JMenuItem(JMeterUtils.getResString("Insert After")); // $NON-NLS-1$
+            item = new JMenuItem(JMeterUtils.getResString("insert_after")); // $NON-NLS-1$
             item.addActionListener(actionHandler);
             item.setActionCommand(ReportDragNDrop.INSERT_AFTER);
             dragNdrop.add(item);
-            item = new JMenuItem(JMeterUtils.getResString("Add as Child")); // $NON-NLS-1$
+            item = new JMenuItem(JMeterUtils.getResString("add_as_child")); // $NON-NLS-1$
             item.addActionListener(actionHandler);
             item.setActionCommand(ReportDragNDrop.ADD);
             dragNdrop.add(item);
             dragNdrop.addSeparator();
-            item = new JMenuItem(JMeterUtils.getResString("Cancel")); // $NON-NLS-1$
+            item = new JMenuItem(JMeterUtils.getResString("cancel")); // $NON-NLS-1$
             dragNdrop.add(item);
             displayPopUp(e, dragNdrop);
         } else {

@@ -70,7 +70,7 @@ public class ReportExitCommand implements Command {
             int chosenOption = JOptionPane.showConfirmDialog(ReportGuiPackage
                     .getInstance().getMainFrame(), 
                     JMeterUtils.getResString("cancel_exit_to_save"),  // $NON-NLS-1$ 
-                    JMeterUtils.getResString("Save?"),  // $NON-NLS-1$ 
+                    JMeterUtils.getResString("save?"),  // $NON-NLS-1$ 
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (chosenOption == JOptionPane.NO_OPTION) {
