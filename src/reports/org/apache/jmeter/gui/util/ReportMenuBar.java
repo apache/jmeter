@@ -214,11 +214,11 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         // HELP MENU
         helpMenu = new JMenu(JMeterUtils.getResString("help"));
         helpMenu.setMnemonic('H');
-        JMenuItem contextHelp = new JMenuItem(JMeterUtils.getResString("help"), 'H');
+        JMenuItem contextHelp = new JMenuItem(JMeterUtils.getResString("help"), 'H'); // $NON-NLS-1$
         contextHelp.setActionCommand("help");
         contextHelp.setAccelerator(KeyStrokes.HELP);
         contextHelp.addActionListener(ReportActionRouter.getInstance());
-        help_about = new JMenuItem(JMeterUtils.getResString("about"), 'A');
+        help_about = new JMenuItem(JMeterUtils.getResString("about"), 'A'); // $NON-NLS-1$
         help_about.setActionCommand("about");
         help_about.addActionListener(ReportActionRouter.getInstance());
         helpMenu.add(contextHelp);
@@ -227,12 +227,12 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeOptionsMenu() {
         // OPTIONS MENU
-        optionsMenu = new JMenu(JMeterUtils.getResString("option"));
-        JMenuItem functionHelper = new JMenuItem(JMeterUtils.getResString("function_dialog_menu_item"), 'F');
+        optionsMenu = new JMenu(JMeterUtils.getResString("option")); // $NON-NLS-1$
+        JMenuItem functionHelper = new JMenuItem(JMeterUtils.getResString("function_dialog_menu_item"), 'F'); // $NON-NLS-1$
         functionHelper.addActionListener(ReportActionRouter.getInstance());
-        functionHelper.setActionCommand("functions");
+        functionHelper.setActionCommand("functions"); // $NON-NLS-1$
         functionHelper.setAccelerator(KeyStrokes.FUNCTIONS);
-        lafMenu = new JMenu(JMeterUtils.getResString("appearance"));
+        lafMenu = new JMenu(JMeterUtils.getResString("appearance")); // $NON-NLS-1$
         UIManager.LookAndFeelInfo lafs[] = UIManager.getInstalledLookAndFeels();
         for (int i = 0; i < lafs.length; ++i) {
             JMenuItem laf = new JMenuItem(lafs[i].getName());
@@ -245,9 +245,9 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         optionsMenu.add(functionHelper);
         optionsMenu.add(lafMenu);
         if (SSLManager.isSSLSupported()) {
-            sslManager = new JMenuItem(JMeterUtils.getResString("sslManager"));
+            sslManager = new JMenuItem(JMeterUtils.getResString("sslManager")); // $NON-NLS-1$
             sslManager.addActionListener(ReportActionRouter.getInstance());
-            sslManager.setActionCommand("sslManager");
+            sslManager.setActionCommand("sslManager"); // $NON-NLS-1$
             sslManager.setMnemonic('S');
             sslManager.setAccelerator(KeyStrokes.SSL_MANAGER);
             optionsMenu.add(sslManager);
@@ -266,17 +266,17 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
      * Strings used to set up and process actions in this menu The strings need
      * to agree with the those in the Action routines
      */
-    public static final String ACTION_SHUTDOWN = "shutdown";
+    public static final String ACTION_SHUTDOWN = "shutdown"; // $NON-NLS-1$
 
-    public static final String ACTION_STOP = "stop";
+    public static final String ACTION_STOP = "stop"; // $NON-NLS-1$
 
-    public static final String ACTION_START = "start";
+    public static final String ACTION_START = "start"; // $NON-NLS-1$
 
     private void makeRunMenu() {
         // RUN MENU
-        runMenu = new JMenu(JMeterUtils.getResString("run"));
+        runMenu = new JMenu(JMeterUtils.getResString("run")); // $NON-NLS-1$
         runMenu.setMnemonic('R');
-        run_start = new JMenuItem(JMeterUtils.getResString("start"), 'S');
+        run_start = new JMenuItem(JMeterUtils.getResString("start"), 'S'); // $NON-NLS-1$
         run_start.setAccelerator(KeyStrokes.ACTION_START);
         run_start.addActionListener(ReportActionRouter.getInstance());
         run_start.setActionCommand(ACTION_START);
@@ -286,16 +286,16 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         run_stop.addActionListener(ReportActionRouter.getInstance());
         run_stop.setActionCommand(ACTION_STOP);
 
-        run_shut = new JMenuItem(JMeterUtils.getResString("shutdown"), 'Y');
+        run_shut = new JMenuItem(JMeterUtils.getResString("shutdown"), 'Y'); // $NON-NLS-1$
         run_shut.setAccelerator(KeyStrokes.ACTION_SHUTDOWN);
         run_shut.setEnabled(false);
         run_shut.addActionListener(ReportActionRouter.getInstance());
         run_shut.setActionCommand(ACTION_SHUTDOWN);
 
-        run_clear = new JMenuItem(JMeterUtils.getResString("clear"), 'C');
+        run_clear = new JMenuItem(JMeterUtils.getResString("clear"), 'C'); // $NON-NLS-1$
         run_clear.addActionListener(ReportActionRouter.getInstance());
         run_clear.setActionCommand(ActionNames.CLEAR);
-        run_clearAll = new JMenuItem(JMeterUtils.getResString("clear_all"), 'a');
+        run_clearAll = new JMenuItem(JMeterUtils.getResString("clear_all"), 'a'); // $NON-NLS-1$
         run_clearAll.addActionListener(ReportActionRouter.getInstance());
         run_clearAll.setActionCommand(ActionNames.CLEAR_ALL);
         run_clearAll.setAccelerator(KeyStrokes.CLEAR_ALL);
@@ -303,7 +303,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         if (remote_start != null) {
             runMenu.add(remote_start);
         }
-        remote_start_all = new JMenuItem(JMeterUtils.getResString("remote_start_all"), 'Z');
+        remote_start_all = new JMenuItem(JMeterUtils.getResString("remote_start_all"), 'Z'); // $NON-NLS-1$
         remote_start_all.setName("remote_start_all");
         remote_start_all.setAccelerator(KeyStrokes.REMOTE_START_ALL);
         remote_start_all.addActionListener(ReportActionRouter.getInstance());
@@ -314,7 +314,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         if (remote_stop != null) {
             runMenu.add(remote_stop);
         }
-        remote_stop_all = new JMenuItem(JMeterUtils.getResString("remote_stop_all"), 'X');
+        remote_stop_all = new JMenuItem(JMeterUtils.getResString("remote_stop_all"), 'X'); // $NON-NLS-1$
         remote_stop_all.setAccelerator(KeyStrokes.REMOTE_STOP_ALL);
         remote_stop_all.addActionListener(ReportActionRouter.getInstance());
         remote_stop_all.setActionCommand("remote_stop_all");
@@ -323,7 +323,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         if (remote_exit != null) {
             runMenu.add(remote_exit);
         }
-        remote_exit_all = new JMenuItem(JMeterUtils.getResString("remote_exit_all"));
+        remote_exit_all = new JMenuItem(JMeterUtils.getResString("remote_exit_all")); // $NON-NLS-1$
         remote_exit_all.addActionListener(ReportActionRouter.getInstance());
         remote_exit_all.setActionCommand("remote_exit_all");
         runMenu.add(remote_exit_all);
@@ -335,7 +335,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeEditMenu() {
         // EDIT MENU
-        editMenu = new JMenu(JMeterUtils.getResString("edit"));
+        editMenu = new JMenu(JMeterUtils.getResString("edit")); // $NON-NLS-1$
         // From the Java Look and Feel Guidelines: If all items in a menu
         // are disabled, then disable the menu. Makes sense.
         editMenu.setEnabled(false);
@@ -343,46 +343,46 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeFileMenu() {
         // FILE MENU
-        fileMenu = new JMenu(JMeterUtils.getResString("file"));
+        fileMenu = new JMenu(JMeterUtils.getResString("file")); // $NON-NLS-1$
         fileMenu.setMnemonic('F');
-        JMenuItem file_save = new JMenuItem(JMeterUtils.getResString("save"), 'S');
+        JMenuItem file_save = new JMenuItem(JMeterUtils.getResString("save"), 'S'); // $NON-NLS-1$
         file_save.setAccelerator(KeyStrokes.SAVE);
-        file_save.setActionCommand("save");
+        file_save.setActionCommand("save"); // $NON-NLS-1$
         file_save.addActionListener(ReportActionRouter.getInstance());
         file_save.setEnabled(true);
 
-        file_save_as = new JMenuItem(JMeterUtils.getResString("save_all_as"), 'A');
+        file_save_as = new JMenuItem(JMeterUtils.getResString("save_all_as"), 'A'); // $NON-NLS-1$
         file_save_as.setAccelerator(KeyStrokes.SAVE_ALL_AS);
-        file_save_as.setActionCommand("save_all_as");
+        file_save_as.setActionCommand("save_all_as"); // $NON-NLS-1$
         file_save_as.addActionListener(ReportActionRouter.getInstance());
         file_save_as.setEnabled(true);
 
-        file_load = new JMenuItem(JMeterUtils.getResString("menu_open"), 'O');
+        file_load = new JMenuItem(JMeterUtils.getResString("menu_open"), 'O'); // $NON-NLS-1$
         file_load.setAccelerator(KeyStrokes.OPEN);
         file_load.addActionListener(ReportActionRouter.getInstance());
         // Set default SAVE menu item to disabled since the default node that
         // is selected is ROOT, which does not allow items to be inserted.
         file_load.setEnabled(false);
-        file_load.setActionCommand("open");
+        file_load.setActionCommand("open"); // $NON-NLS-1$
 
-        file_close = new JMenuItem(JMeterUtils.getResString("menu_close"), 'C');
+        file_close = new JMenuItem(JMeterUtils.getResString("menu_close"), 'C'); // $NON-NLS-1$
         file_close.setAccelerator(KeyStrokes.CLOSE);
-        file_close.setActionCommand("close");
+        file_close.setActionCommand("close"); // $NON-NLS-1$
         file_close.addActionListener(ReportActionRouter.getInstance());
 
-        file_exit = new JMenuItem(JMeterUtils.getResString("exit"), 'X');
+        file_exit = new JMenuItem(JMeterUtils.getResString("exit"), 'X'); // $NON-NLS-1$
         file_exit.setAccelerator(KeyStrokes.EXIT);
-        file_exit.setActionCommand("exit");
+        file_exit.setActionCommand("exit"); // $NON-NLS-1$
         file_exit.addActionListener(ReportActionRouter.getInstance());
 
-        file_merge = new JMenuItem(JMeterUtils.getResString("menu_merge"), 'M');
+        file_merge = new JMenuItem(JMeterUtils.getResString("menu_merge"), 'M'); // $NON-NLS-1$
         // file_merge.setAccelerator(
         // KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
         file_merge.addActionListener(ReportActionRouter.getInstance());
         // Set default SAVE menu item to disabled since the default node that
         // is selected is ROOT, which does not allow items to be inserted.
         file_merge.setEnabled(false);
-        file_merge.setActionCommand("merge");
+        file_merge.setActionCommand("merge"); // $NON-NLS-1$
 
         fileMenu.add(file_close);
         fileMenu.add(file_load);
@@ -427,27 +427,27 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void getRemoteItems() {
         if (remoteHosts.length > 0) {
-            remote_start = new JMenu(JMeterUtils.getResString("remote_start"));
-            remote_stop = new JMenu(JMeterUtils.getResString("remote_stop"));
-            remote_exit = new JMenu(JMeterUtils.getResString("remote_exit"));
+            remote_start = new JMenu(JMeterUtils.getResString("remote_start")); // $NON-NLS-1$
+            remote_stop = new JMenu(JMeterUtils.getResString("remote_stop")); // $NON-NLS-1$
+            remote_exit = new JMenu(JMeterUtils.getResString("remote_exit")); // $NON-NLS-1$
 
             for (int i = 0; i < remoteHosts.length; i++) {
                 remoteHosts[i] = remoteHosts[i].trim();
                 JMenuItem item = new JMenuItem(remoteHosts[i]);
-                item.setActionCommand("remote_start");
+                item.setActionCommand("remote_start"); // $NON-NLS-1$
                 item.setName(remoteHosts[i]);
                 item.addActionListener(ReportActionRouter.getInstance());
                 remote_engine_start.add(item);
                 remote_start.add(item);
                 item = new JMenuItem(remoteHosts[i]);
-                item.setActionCommand("remote_stop");
+                item.setActionCommand("remote_stop"); // $NON-NLS-1$
                 item.setName(remoteHosts[i]);
                 item.addActionListener(ReportActionRouter.getInstance());
                 item.setEnabled(false);
                 remote_engine_stop.add(item);
                 remote_stop.add(item);
                 item = new JMenuItem(remoteHosts[i]);
-                item.setActionCommand("remote_exit");
+                item.setActionCommand("remote_exit"); // $NON-NLS-1$
                 item.setName(remoteHosts[i]);
                 item.addActionListener(ReportActionRouter.getInstance());
                 item.setEnabled(false);

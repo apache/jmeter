@@ -37,20 +37,20 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
 
     private static final long serialVersionUID = 240L;
 
-    private JCheckBox meanCheck = new JCheckBox(JMeterUtils.getResString("average"));
-    private JCheckBox medianCheck = new JCheckBox(JMeterUtils.getResString("graph_results_median"));
-    private JCheckBox maxCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_max"));
-    private JCheckBox minCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_min"));
+    private JCheckBox meanCheck = new JCheckBox(JMeterUtils.getResString("average")); // $NON-NLS-1$
+    private JCheckBox medianCheck = new JCheckBox(JMeterUtils.getResString("graph_results_median")); // $NON-NLS-1$
+    private JCheckBox maxCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_max")); // $NON-NLS-1$
+    private JCheckBox minCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_min")); // $NON-NLS-1$
     private JCheckBox responseRateCheck =
-        new JCheckBox(JMeterUtils.getResString("aggregate_report_rate"));
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_rate")); // $NON-NLS-1$
     private JCheckBox transferRateCheck =
-        new JCheckBox(JMeterUtils.getResString("aggregate_report_bandwidth"));
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_bandwidth")); // $NON-NLS-1$
     private JCheckBox fiftypercentCheck =
-        new JCheckBox(JMeterUtils.getResString("monitor_label_left_middle"));
+        new JCheckBox(JMeterUtils.getResString("monitor_label_left_middle")); // $NON-NLS-1$
     private JCheckBox nintypercentCheck =
-        new JCheckBox(JMeterUtils.getResString("aggregate_report_90"));
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_90")); // $NON-NLS-1$
     private JCheckBox errorRateCheck =
-        new JCheckBox(JMeterUtils.getResString("aggregate_report_error"));
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_error")); // $NON-NLS-1$
 
     public TableGui() {
         super();

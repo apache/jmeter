@@ -42,15 +42,15 @@ public final class DirectoryDialoger {
     public static JFileChooser promptToOpenFile() {
 
         if (lastJFCDirectory == null) {
-            String start = System.getProperty("user.dir", "");
+            String start = System.getProperty("user.dir", ""); // $NON-NLS-1$  // $NON-NLS-2$
 
-            if (!start.equals("")) {
+            if (!start.equals("")) { // $NON-NLS-1$
                 jfc.setCurrentDirectory(new File(start));
             }
         }
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int retVal = jfc.showDialog(ReportGuiPackage.getInstance().getMainFrame(),
-                JMeterUtils.getResString("report_select"));
+                JMeterUtils.getResString("report_select")); // $NON-NLS-1$
         lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
         if (retVal == JFileChooser.APPROVE_OPTION) {

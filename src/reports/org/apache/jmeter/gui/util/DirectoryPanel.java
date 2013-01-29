@@ -43,7 +43,7 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
 
     private final JTextField filename = new JTextField(20);
 
-    private final JButton browse = new JButton(JMeterUtils.getResString("browse"));
+    private final JButton browse = new JButton(JMeterUtils.getResString("browse")); // $NON-NLS-1$
 
     private final List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
@@ -55,7 +55,7 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
      * Constructor for the FilePanel object.
      */
     public DirectoryPanel() {
-        this("", null);
+        this("", null); // $NON-NLS-1$
     }
 
     public DirectoryPanel(String title) {

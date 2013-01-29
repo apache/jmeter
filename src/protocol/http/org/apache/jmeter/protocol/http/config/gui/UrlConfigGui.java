@@ -660,11 +660,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                         // warn the user that the Parameter data will be lost.
                         if(canConvertParameters()) {
                             Object[] options = {
-                                    JMeterUtils.getResString("confirm"),
-                                    JMeterUtils.getResString("cancel")};
+                                    JMeterUtils.getResString("confirm"), // $NON-NLS-1$
+                                    JMeterUtils.getResString("cancel")}; // $NON-NLS-1$
                             int n = JOptionPane.showOptionDialog(this,
-                                JMeterUtils.getResString("web_parameters_lost_message"),
-                                JMeterUtils.getResString("warning"),
+                                JMeterUtils.getResString("web_parameters_lost_message"), // $NON-NLS-1$
+                                JMeterUtils.getResString("warning"), // $NON-NLS-1$
                                 JOptionPane.YES_NO_CANCEL_OPTION,
                                 JOptionPane.QUESTION_MESSAGE,
                                 null,

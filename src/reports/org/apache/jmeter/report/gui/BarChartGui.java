@@ -43,13 +43,13 @@ public class BarChartGui extends AbstractReportGui {
     private JLabeledChoice xAxisLabel = new JLabeledChoice();
 
     private JLabeledTextField yAxisLabel =
-        new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label"));
+        new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label")); // $NON-NLS-1$
 
     private JLabeledTextField caption =
-        new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"),
+        new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"), // $NON-NLS-1$
                 Color.white);
     private JLabeledTextField url =
-        new JLabeledTextField(JMeterUtils.getResString("report_bar_graph_url"),
+        new JLabeledTextField(JMeterUtils.getResString("report_bar_graph_url"), // $NON-NLS-1$
                 Color.white);
 
     private JLabeledChoice yItems = new JLabeledChoice();
@@ -88,7 +88,7 @@ public class BarChartGui extends AbstractReportGui {
         yAxisLabel.setBackground(Color.white);
 
         JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
-        HorizontalPanel xpanel = new HorizontalPanel(Color.white);
+        HorizontalPanel xpanel = new HorizontalPanel(Color.white); // $NON-NLS-1$
         xLabel.setBorder(new EmptyBorder(5,2,5,2));
         xItems.setBackground(Color.white);
         xItems.setValues(AbstractTable.xitems);
@@ -96,7 +96,7 @@ public class BarChartGui extends AbstractReportGui {
         xpanel.add(xItems);
         options.add(xpanel);
 
-        JLabel xALabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis_label"));
+        JLabel xALabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis_label")); // $NON-NLS-1$
         HorizontalPanel xApanel = new HorizontalPanel(Color.white);
         xALabel.setBorder(new EmptyBorder(5,2,5,2));
         xAxisLabel.setBackground(Color.white);
@@ -105,7 +105,7 @@ public class BarChartGui extends AbstractReportGui {
         xApanel.add(xAxisLabel);
         options.add(xApanel);
 
-        JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
+        JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis")); // $NON-NLS-1$
         HorizontalPanel ypanel = new HorizontalPanel(Color.white);
         yLabel.setBorder(new EmptyBorder(5,2,5,2));
         yItems.setBackground(Color.white);

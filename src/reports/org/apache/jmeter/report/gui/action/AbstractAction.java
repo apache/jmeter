@@ -54,8 +54,9 @@ public abstract class AbstractAction implements Command {
     protected void popupShouldSave(ActionEvent e) {
         log.debug("popupShouldSave");
         if (ReportGuiPackage.getInstance().getReportPlanFile() == null) {
-            if (JOptionPane.showConfirmDialog(ReportGuiPackage.getInstance().getMainFrame(), JMeterUtils
-                    .getResString("should_save"), JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
+            if (JOptionPane.showConfirmDialog(ReportGuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("should_save"),  // $NON-NLS-1$ // $NON-NLS-2$ 
+                    JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 ReportActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ReportSave.SAVE));
             }
