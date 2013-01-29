@@ -245,7 +245,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         optionsMenu.add(functionHelper);
         optionsMenu.add(lafMenu);
         if (SSLManager.isSSLSupported()) {
-            sslManager = new JMenuItem(JMeterUtils.getResString("sslManager")); // $NON-NLS-1$
+            sslManager = new JMenuItem(JMeterUtils.getResString("sslmanager")); // $NON-NLS-1$
             sslManager.addActionListener(ReportActionRouter.getInstance());
             sslManager.setActionCommand("sslManager"); // $NON-NLS-1$
             sslManager.setMnemonic('S');

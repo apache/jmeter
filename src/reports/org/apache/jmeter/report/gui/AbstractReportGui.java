@@ -71,7 +71,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
     @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
-        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add")); // $NON-NLS-1$
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add")); // $NON-NLS-1$
         addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.PRE_PROCESSORS, "Add")); // $NON-NLS-1$
         addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.POST_PROCESSORS, "Add")); // $NON-NLS-1$
