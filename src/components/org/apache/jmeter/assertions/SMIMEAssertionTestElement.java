@@ -55,7 +55,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
             AssertionResult assertionResult = new AssertionResult(getName());
             assertionResult.setError(true);
             assertionResult.setResultForFailure(JMeterUtils
-                .getResString("bouncy_castle_unavailable_message"));
+                .getResString("bouncy_castle_unavailable_message")); //$NON-NLS-1$
             return assertionResult;
         }
     }

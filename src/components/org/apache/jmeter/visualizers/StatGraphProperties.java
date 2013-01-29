@@ -37,38 +37,38 @@ public class StatGraphProperties {
 
     public static Map<String, String> getFontNameMap() {
         Map<String, String> fontNameMap = new HashMap<String, String>(2);
-        fontNameMap.put(JMeterUtils.getResString("font.sansserif"), "SansSerif");
-        fontNameMap.put(JMeterUtils.getResString("font.serif"), "Serif");
+        fontNameMap.put(JMeterUtils.getResString("font.sansserif"), "SansSerif"); //$NON-NLS-1$ //$NON-NLS-1$
+        fontNameMap.put(JMeterUtils.getResString("font.serif"), "Serif"); //$NON-NLS-1$
         return fontNameMap;
     }
 
     @SuppressWarnings("boxing")
     public static Map<String, Integer> getFontStyleMap() {
         Map<String, Integer> fontStyleMap = new HashMap<String, Integer>(3);
-        fontStyleMap.put(JMeterUtils.getResString("fontstyle.normal"), Font.PLAIN);
-        fontStyleMap.put(JMeterUtils.getResString("fontstyle.bold"), Font.BOLD);
-        fontStyleMap.put(JMeterUtils.getResString("fontstyle.italic"), Font.ITALIC);
+        fontStyleMap.put(JMeterUtils.getResString("fontstyle.normal"), Font.PLAIN); //$NON-NLS-1$
+        fontStyleMap.put(JMeterUtils.getResString("fontstyle.bold"), Font.BOLD); //$NON-NLS-1$
+        fontStyleMap.put(JMeterUtils.getResString("fontstyle.italic"), Font.ITALIC); //$NON-NLS-1$
         return fontStyleMap;
     }
 
     @SuppressWarnings("boxing")
     public static Map<String, Integer> getPlacementNameMap() {
         Map<String, Integer> placementNameMap = new HashMap<String, Integer>(4);
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"), LegendAreaProperties.BOTTOM);
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.right"), LegendAreaProperties.RIGHT);
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.left"), LegendAreaProperties.LEFT);
-        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.top"), LegendAreaProperties.TOP);
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"), LegendAreaProperties.BOTTOM); //$NON-NLS-1$
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.right"), LegendAreaProperties.RIGHT); //$NON-NLS-1$
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.left"), LegendAreaProperties.LEFT); //$NON-NLS-1$
+        placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.top"), LegendAreaProperties.TOP); //$NON-NLS-1$
         return placementNameMap;
     }
     
     public static Map<String, Shape> getPointShapeMap() {
         // We want to retain insertion order, so LinkedHashMap is necessary
         Map<String, Shape> pointShapeMap = new LinkedHashMap<String, Shape>(5);
-        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_circle"), PointChartProperties.SHAPE_CIRCLE);
-        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_diamond"), PointChartProperties.SHAPE_DIAMOND);
-        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_square"), PointChartProperties.SHAPE_SQUARE);
-        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_triangle"), PointChartProperties.SHAPE_TRIANGLE);
-        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_none"), null);
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_circle"), PointChartProperties.SHAPE_CIRCLE); //$NON-NLS-1$
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_diamond"), PointChartProperties.SHAPE_DIAMOND); //$NON-NLS-1$
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_square"), PointChartProperties.SHAPE_SQUARE); //$NON-NLS-1$
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_triangle"), PointChartProperties.SHAPE_TRIANGLE); //$NON-NLS-1$
+        pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_none"), null); //$NON-NLS-1$
         return pointShapeMap;
     }
 }

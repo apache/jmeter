@@ -63,7 +63,7 @@ public class UniformRandomTimerGui extends AbstractRandomTimerGui {
      */
 	@Override
 	protected String getTimerDelayLabelKey() {
-		return JMeterUtils.getResString("uniform_timer_delay");
+		return JMeterUtils.getResString("uniform_timer_delay"); //$NON-NLS-1$
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class UniformRandomTimerGui extends AbstractRandomTimerGui {
      */
 	@Override
 	protected String getTimerRangeLabelKey() {
-		return JMeterUtils.getResString("uniform_timer_range");
+		return JMeterUtils.getResString("uniform_timer_range"); //$NON-NLS-1$
 	}
 
 	/**

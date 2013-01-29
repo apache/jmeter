@@ -37,19 +37,19 @@ public class FilePanel extends FilePanelEntry {
     }
 
     public FilePanel(String title, String filetype) {
-        super(JMeterUtils.getResString("file_visualizer_filename"), filetype);
+        super(JMeterUtils.getResString("file_visualizer_filename"), filetype); // $NON-NLS-1$
         this.title = title;
         init();
     }
 
     public FilePanel(ChangeListener l, String title) {
-        super(JMeterUtils.getResString("file_visualizer_filename"), l);
+        super(JMeterUtils.getResString("file_visualizer_filename"), l); // $NON-NLS-1$
         this.title = title;
         init();        
     }
 
     public FilePanel(String resString, String[] exts) {
-        super(JMeterUtils.getResString("file_visualizer_filename"), exts);
+        super(JMeterUtils.getResString("file_visualizer_filename"), exts); // $NON-NLS-1$
         title = resString;
         init();
     }

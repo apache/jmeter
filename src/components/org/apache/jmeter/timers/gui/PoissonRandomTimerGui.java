@@ -49,12 +49,12 @@ public class PoissonRandomTimerGui extends AbstractRandomTimerGui {
 
 	@Override
 	protected String getTimerDelayLabelKey() {
-		return JMeterUtils.getResString("poisson_timer_delay");
+		return JMeterUtils.getResString("poisson_timer_delay"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected String getTimerRangeLabelKey() {
-		return JMeterUtils.getResString("poisson_timer_range");
+		return JMeterUtils.getResString("poisson_timer_range"); //$NON-NLS-1$
 	}
 
 	@Override
