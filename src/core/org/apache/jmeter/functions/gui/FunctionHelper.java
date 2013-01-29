@@ -185,7 +185,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     @Override
     public void localeChanged(LocaleChangeEvent event) {
-        setTitle(JMeterUtils.getResString("function_helper_title"));
+        setTitle(JMeterUtils.getResString("function_helper_title")); //$NON-NLS-1$
         this.getContentPane().removeAll(); // so we can add them again in init
         init();
     }

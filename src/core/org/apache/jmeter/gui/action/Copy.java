@@ -66,7 +66,9 @@ public class Copy extends AbstractAction {
             try {
                 return (JMeterTreeNode[]) clipboard.getData(JMeterTreeNodeTransferable.JMETER_TREE_NODE_ARRAY_DATA_FLAVOR);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
+                        JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(),  //$NON-NLS-1$  //$NON-NLS-2$
+                        JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
             }
         }
         return null;
@@ -86,7 +88,9 @@ public class Copy extends AbstractAction {
             transferable.setTransferData(nodes);
             clipboard.setContents(transferable, null);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), 
+                    JMeterUtils.getResString("clipboard_node_read_error")+":\n" + ex.getLocalizedMessage(), //$NON-NLS-1$ //$NON-NLS-2$ 
+                    JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
         }
     }
 

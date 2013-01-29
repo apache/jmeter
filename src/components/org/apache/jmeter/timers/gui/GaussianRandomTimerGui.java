@@ -62,7 +62,7 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
      */
 	@Override
 	protected String getTimerDelayLabelKey() {
-		return JMeterUtils.getResString("gaussian_timer_delay");
+		return JMeterUtils.getResString("gaussian_timer_delay"); //$NON-NLS-1$
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
      */
 	@Override
 	protected String getTimerRangeLabelKey() {
-		return JMeterUtils.getResString("gaussian_timer_range");
+		return JMeterUtils.getResString("gaussian_timer_range"); //$NON-NLS-1$
 	}
 
 	/**
