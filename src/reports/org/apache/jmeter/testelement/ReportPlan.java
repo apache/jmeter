@@ -60,11 +60,11 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     private static volatile boolean functionalMode = false;
 
     static {
-        itemsCanAdd.add(JMeterUtils.getResString("report_page"));
+        itemsCanAdd.add(JMeterUtils.getResString("report_page")); // $NON-NLS-1$
     }
 
     public ReportPlan() {
-        this(JMeterUtils.getResString("report_plan"));
+        this(JMeterUtils.getResString("report_plan")); // $NON-NLS-1$
     }
 
     public ReportPlan(String name) {

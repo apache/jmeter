@@ -290,7 +290,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         leftPane.add(treePane, BorderLayout.CENTER);
         VerticalPanel leftDownPane = new VerticalPanel();
         leftDownPane.add(createComboRender(), BorderLayout.NORTH);
-        autoScrollCB = new JCheckBox(JMeterUtils.getResString("view_results_autoscroll"));
+        autoScrollCB = new JCheckBox(JMeterUtils.getResString("view_results_autoscroll")); // $NON-NLS-1$
         autoScrollCB.setSelected(false);
         autoScrollCB.addItemListener(this);
         leftDownPane.add(autoScrollCB, BorderLayout.SOUTH);
@@ -380,7 +380,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE+100);
                 builder.append(JMeterUtils.getResString("view_results_response_too_large_message")) //$NON-NLS-1$
                     .append(len).append(" > Max: ").append(MAX_DISPLAY_SIZE)
-                    .append(", ").append(JMeterUtils.getResString("view_results_response_partial_message"))
+                    .append(", ").append(JMeterUtils.getResString("view_results_response_partial_message")) // $NON-NLS-1$
                     .append("\n").append(res.getResponseDataAsString().substring(0, MAX_DISPLAY_SIZE)).append("\n...");
                 response = builder.toString();
             } else {

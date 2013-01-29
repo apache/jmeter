@@ -35,7 +35,7 @@ public class HTMLReportWriterGui extends AbstractReportGui {
     private static final long serialVersionUID = 240L;
 
     private ReportFilePanel outputDirectory = new ReportFilePanel(
-            JMeterUtils.getResString("report_output_directory"), "*");
+            JMeterUtils.getResString("report_output_directory"), "*"); // $NON-NLS-1$  // $NON-NLS-2$
 
     public HTMLReportWriterGui() {
         super();

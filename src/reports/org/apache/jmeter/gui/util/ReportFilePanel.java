@@ -40,9 +40,9 @@ public class ReportFilePanel extends HorizontalPanel implements ActionListener {
 
     private final JTextField filename = new JTextField(20);
 
-    private final JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename"));
+    private final JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename")); // $NON-NLS-1$
 
-    private final JButton browse = new JButton(JMeterUtils.getResString("browse"));
+    private final JButton browse = new JButton(JMeterUtils.getResString("browse")); // $NON-NLS-1$
 
     private final List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
@@ -54,7 +54,7 @@ public class ReportFilePanel extends HorizontalPanel implements ActionListener {
      * Constructor for the FilePanel object.
      */
     public ReportFilePanel() {
-        this("");
+        this(""); // $NON-NLS-1$
     }
 
     public ReportFilePanel(String title) {
