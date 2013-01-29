@@ -731,7 +731,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$
                 legendPlacementList));
-        legendPlacementList.setSelectedItem(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom")); // default: bottom
+        legendPlacementList.setSelectedItem(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"));  //$NON-NLS-1$ default: bottom
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
                 fontNameList));
         fontNameList.setSelectedIndex(0); // default: sans serif
@@ -740,7 +740,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         fontSizeList.setSelectedItem(StatGraphProperties.fontSize[2]); // default: 10
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 fontStyleList));
-        fontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal")); // default: normal
+        fontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal"));  //$NON-NLS-1$ default: normal
 
         return legendPanel;
     }

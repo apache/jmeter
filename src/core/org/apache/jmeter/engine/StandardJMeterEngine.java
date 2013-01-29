@@ -274,7 +274,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
                         // TODO should we call test listeners? That might hang too ...
-                        log.fatalError(JMeterUtils.getResString("stopping_test_failed"));
+                        log.fatalError(JMeterUtils.getResString("stopping_test_failed")); //$NON-NLS-1$
                         if (SYSTEM_EXIT_ON_STOP_FAIL) { // default is true
                             log.fatalError("Exitting");
                             System.out.println("Fatal error, could not stop test, exitting");
@@ -284,8 +284,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                         }
                     } else {
                         JMeterUtils.reportErrorToUser(
-                                JMeterUtils.getResString("stopping_test_failed"),
-                                JMeterUtils.getResString("stopping_test_title"));
+                                JMeterUtils.getResString("stopping_test_failed"), //$NON-NLS-1$
+                                JMeterUtils.getResString("stopping_test_title")); //$NON-NLS-1$
                     }
                 } // else will be done by threadFinished()
             } else {
