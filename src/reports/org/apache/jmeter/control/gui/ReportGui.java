@@ -54,7 +54,7 @@ public class ReportGui extends AbstractReportGui {
     private JTextField commentPanel;
 
     private final DirectoryPanel baseDir =
-        new DirectoryPanel(JMeterUtils.getResString("report_base_directory"), 
+        new DirectoryPanel(JMeterUtils.getResString("report_base_directory"),  // $NON-NLS-1$
                 Color.white);
 
     /** A panel allowing the user to define variables. */
@@ -77,11 +77,11 @@ public class ReportGui extends AbstractReportGui {
         JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
         addMenu.add(ReportMenuFactory.makeMenuItem(new ReportPageGui().getStaticLabel(),
                 ReportPageGui.class.getName(),
-                "Add"));
+                "Add")); // $NON-NLS-1$
         addMenu.add(ReportMenuFactory.makeMenuItem(new HTMLReportWriterGui().getStaticLabel(),
                 HTMLReportWriterGui.class.getName(),
-                "Add"));
-        addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
+                "Add")); // $NON-NLS-1$
+        addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add")); // $NON-NLS-1$
         pop.add(addMenu);
         ReportMenuFactory.addFileMenu(pop);
         ReportMenuFactory.addEditMenu(pop,true);
@@ -110,7 +110,7 @@ public class ReportGui extends AbstractReportGui {
 
     @Override
     public String getLabelResource() {
-        return "report_plan";
+        return "report_plan"; // $NON-NLS-1$
     }
 
     /**
@@ -153,7 +153,7 @@ public class ReportGui extends AbstractReportGui {
      */
     private JPanel createVariablePanel() {
         argsPanel =
-            new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables"),
+            new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables"), // $NON-NLS-1$
                     Color.white);
         return argsPanel;
     }
@@ -165,7 +165,7 @@ public class ReportGui extends AbstractReportGui {
         Container title = makeTitlePanel();
         commentPanel = new JTextField();
         commentPanel.setBackground(Color.white);
-        JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments"));
+        JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments")); // $NON-NLS-1$
         label.setBackground(Color.white);
         label.setLabelFor(commentPanel);
         title.add(label);

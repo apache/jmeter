@@ -107,26 +107,26 @@ public final class ReportMenuFactory {
     public static void addEditMenu(JPopupMenu menu, boolean removable) {
         addSeparator(menu);
         if (removable) {
-            menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove", "remove", KeyStrokes.REMOVE));
+            menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove", "remove", KeyStrokes.REMOVE)); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
         }
-        menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut", KeyStrokes.CUT));
-        menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy", KeyStrokes.COPY));
-        menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste", KeyStrokes.PASTE));
-        menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), "Paste Insert", "Paste Insert"));
+        menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut", KeyStrokes.CUT)); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
+        menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy", KeyStrokes.COPY)); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
+        menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste", KeyStrokes.PASTE)); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
+        menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), "Paste Insert", "Paste Insert")); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
     }
 
     public static void addFileMenu(JPopupMenu menu) {
         addSeparator(menu);
-        menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
-        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
-        JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"), "Save Image", "save_graphics",
+        menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open")); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
+        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as")); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
+        JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"), "Save Image", "save_graphics", // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
                 KeyStrokes.SAVE_GRAPHICS);
         menu.add(savePicture);
         if (!(ReportGuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
             savePicture.setEnabled(false);
         }
-        JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"), "Disable", "disable");
-        JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"), "Enable", "enable");
+        JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"), "Disable", "disable"); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
+        JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"), "Enable", "enable"); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
         boolean isEnabled = ReportGuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
         if (isEnabled) {
             disabled.setEnabled(true);
@@ -138,7 +138,7 @@ public final class ReportMenuFactory {
         menu.add(enabled);
         menu.add(disabled);
         addSeparator(menu);
-        menu.add(makeMenuItem(JMeterUtils.getResString("help"), "Help", "help"));
+        menu.add(makeMenuItem(JMeterUtils.getResString("help"), "Help", "help")); // $NON-NLS-1$ // $NON-NLS-2$ $NON-NLS-3$
     }
 
     public static JMenu makeMenus(String[] categories, String label, String actionCommand) {

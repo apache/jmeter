@@ -37,21 +37,21 @@ public class ReportPageGui extends AbstractReportGui {
 
     private static final long serialVersionUID = 240L;
 
-    private JLabeledTextField pageTitle = new JLabeledTextField(JMeterUtils.getResString("report_page_title"));
+    private JLabeledTextField pageTitle = new JLabeledTextField(JMeterUtils.getResString("report_page_title")); // $NON-NLS-1$
 
-    private JCheckBox makeIndex = new JCheckBox(JMeterUtils.getResString("report_page_index"));
+    private JCheckBox makeIndex = new JCheckBox(JMeterUtils.getResString("report_page_index")); // $NON-NLS-1$
 
     private JLabeledTextField cssURL =
-        new JLabeledTextField(JMeterUtils.getResString("report_page_style_url"));
+        new JLabeledTextField(JMeterUtils.getResString("report_page_style_url")); // $NON-NLS-1$
 
     private JLabeledTextField headerURL =
-        new JLabeledTextField(JMeterUtils.getResString("report_page_header"));
+        new JLabeledTextField(JMeterUtils.getResString("report_page_header")); // $NON-NLS-1$
 
     private JLabeledTextField footerURL =
-        new JLabeledTextField(JMeterUtils.getResString("report_page_footer"));
+        new JLabeledTextField(JMeterUtils.getResString("report_page_footer")); // $NON-NLS-1$
 
     private JLabeledTextArea introduction =
-        new JLabeledTextArea(JMeterUtils.getResString("report_page_intro"));
+        new JLabeledTextArea(JMeterUtils.getResString("report_page_intro")); // $NON-NLS-1$
 
     /**
      *
@@ -93,7 +93,7 @@ public class ReportPageGui extends AbstractReportGui {
     @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
-        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add")); // $NON-NLS-1$
         addMenu.add(ReportMenuFactory.makeMenuItem(new TableGui().getStaticLabel(),
                 TableGui.class.getName(),
                 "Add"));
