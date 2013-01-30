@@ -179,11 +179,6 @@ public class Publisher implements Closeable {
         return setPropertiesAndSend(destinationName, properties, msg);
     }
     
-    public BytesMessage publish(byte[] bytes, String destinationName)
-            throws JMSException, NamingException {
-        return publish(bytes, destinationName);
-    }
-    
     public Message publish(byte[] bytes, String destinationName, Map<String, String> properties)
             throws JMSException, NamingException {
         BytesMessage msg = session.createBytesMessage();
