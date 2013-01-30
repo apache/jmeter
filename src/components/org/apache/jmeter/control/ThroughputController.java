@@ -77,7 +77,7 @@ public class ThroughputController extends GenericController implements Serializa
     private transient MutableInteger globalNumExecutions;
 
     private transient MutableInteger globalIteration;
-
+    // FIXME Sync on byte is wrong, stupid of me
     private Byte counterLock = new Byte("0"); // ensure counts are updated correctly
     // Need to use something that is serializable, so Object is no use
 
