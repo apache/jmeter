@@ -80,6 +80,7 @@ public class ThroughputController extends GenericController implements Serializa
     // FIXME Sync on byte is wrong, stupid of me
     private Byte counterLock = new Byte("0"); // ensure counts are updated correctly
     // Need to use something that is serializable, so Object is no use
+    // TODO does it need to be serializable? If not, we can use transient Object
 
     /**
      * Number of iterations on which we've chosen to deliver samplers.
