@@ -69,6 +69,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.ResponseContentEncoding;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -231,7 +232,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
         HttpRequestBase httpRequest = null;
         try {
-            URI uri = url.toURI();
+            URIBuilder builder = 
+                    new URIBuilder()
+                .setScheme(url.getProtocol())
+                .setHost(url.getHost())
+                .setPort(url.getPort())
+                .setUserInfo(url.getUserInfo())
+                .setPath(url.getPath())
+                .setQuery(url.getQuery());
+            URI uri = builder.build();
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
             } else if (method.equals(HTTPConstants.PUT)) {

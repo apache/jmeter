@@ -90,6 +90,7 @@ This does not affect JMeter operation.
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
+<li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars</li>
 </ul>
 
 <h3>Other Samplers</h3>
