@@ -221,5 +221,8 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         return getPropertyAsBoolean(SHOULD_CACHE,true);
     }
 
-
+    protected Object readResolve(){
+        savedValue = "";
+        return this;
+    }
 }
