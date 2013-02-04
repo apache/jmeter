@@ -275,7 +275,7 @@ public class SendMailCommand {
 
         tr.sendMessage(message, message.getAllRecipients());
 
-        if (synchronousMode) {
+        if (listener != null /*synchronousMode==true*/) {
             listener.attend(); // listener cannot be null here
         }
 
