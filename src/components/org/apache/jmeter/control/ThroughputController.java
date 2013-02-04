@@ -77,10 +77,8 @@ public class ThroughputController extends GenericController implements Serializa
     private transient MutableInteger globalNumExecutions;
 
     private transient MutableInteger globalIteration;
-    // FIXME Sync on byte is wrong, stupid of me
-    private Byte counterLock = new Byte("0"); // ensure counts are updated correctly
-    // Need to use something that is serializable, so Object is no use
-    // TODO does it need to be serializable? If not, we can use transient Object
+
+    private transient Object counterLock = new Object(); // ensure counts are updated correctly
 
     /**
      * Number of iterations on which we've chosen to deliver samplers.
@@ -273,6 +271,13 @@ public class ThroughputController extends GenericController implements Serializa
     @Override
     public void testEnded(String host) {
     	// NOOP
+    }
+    
+    @Override
+    protected Object readResolve(){
+        super.readResolve();
+        counterLock = new Object();
+        return this;
     }
 
 }

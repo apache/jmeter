@@ -58,7 +58,7 @@ public class GenericController extends AbstractTestElement implements Controller
         new LinkedList<LoopIterationListener>();
 
     // Only create the map if it is required
-    private transient final ConcurrentMap<TestElement, Object> children = 
+    private transient ConcurrentMap<TestElement, Object> children = 
             TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
 
     private static final Object DUMMY = new Object();
@@ -428,5 +428,17 @@ public class GenericController extends AbstractTestElement implements Controller
 
     protected void resetIterCount() {
         iterCount = 0;
+    }
+    
+    protected Object readResolve(){
+        iterationListeners =
+                new LinkedList<LoopIterationListener>();
+        children = 
+                TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
+        
+        subControllersAndSamplers =
+                new ArrayList<TestElement>();
+
+        return this;
     }
 }
