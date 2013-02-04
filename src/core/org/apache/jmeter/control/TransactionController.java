@@ -97,7 +97,9 @@ public class TransactionController extends GenericController implements SampleLi
         lnf = new ListenerNotifier();
     }
 
-    private Object readResolve(){
+    @Override
+    protected Object readResolve(){
+        super.readResolve();
         lnf = new ListenerNotifier();
         return this;
     }
