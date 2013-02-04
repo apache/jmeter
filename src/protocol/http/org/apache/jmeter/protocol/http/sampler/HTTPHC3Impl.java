@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -203,23 +206,25 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
         res.sampleStart(); // Count the retries as well in the time
         try {
+            URI uri = ConversionUtils.sanitizeUrl(url);
+            String uriAsString = uri.toString();
             // May generate IllegalArgumentException
             if (method.equals(HTTPConstants.POST)) {
-                httpMethod = new PostMethod(urlStr);
+                httpMethod = new PostMethod(uriAsString);
             } else if (method.equals(HTTPConstants.PUT)){
-                httpMethod = new PutMethod(urlStr);
+                httpMethod = new PutMethod(uriAsString);
             } else if (method.equals(HTTPConstants.HEAD)){
-                httpMethod = new HeadMethod(urlStr);
+                httpMethod = new HeadMethod(uriAsString);
             } else if (method.equals(HTTPConstants.TRACE)){
-                httpMethod = new TraceMethod(urlStr);
+                httpMethod = new TraceMethod(uriAsString);
             } else if (method.equals(HTTPConstants.OPTIONS)){
-                httpMethod = new OptionsMethod(urlStr);
+                httpMethod = new OptionsMethod(uriAsString);
             } else if (method.equals(HTTPConstants.DELETE)){
-                httpMethod = new DeleteMethod(urlStr);
+                httpMethod = new DeleteMethod(uriAsString);
             } else if (method.equals(HTTPConstants.GET)){
-                httpMethod = new GetMethod(urlStr);
+                httpMethod = new GetMethod(uriAsString);
             } else if (method.equals(HTTPConstants.PATCH)){
-                httpMethod = new EntityEnclosingMethod(urlStr) {
+                httpMethod = new EntityEnclosingMethod(uriAsString) {
                     @Override
                     public String getName() { // HC3.1 does not have the method
                         return "PATCH";
@@ -344,6 +349,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             if(httpMethod != null) {
                 res.setRequestHeaders(getConnectionHeaders(httpMethod));
             }
+            errorResult(e, res);
+            return res;
+        } catch (URISyntaxException e) { // e.g. some kinds of invalid URL
+            res.sampleEnd();
             errorResult(e, res);
             return res;
         } catch (IOException e) {

@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.http.util;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.jorphan.util.JOrphanUtils;
 
 // @see TestHTTPUtils for unit tests
@@ -109,6 +112,26 @@ public class ConversionUtils {
             }
         }
         return initial;
+    }
+    
+
+    /**
+     * Escapes reserved chars in URL
+     * @param url URL
+     * @return URI
+     * @throws URISyntaxException
+     */
+    public static final URI sanitizeUrl(URL url) throws URISyntaxException {
+        URIBuilder builder = 
+                new URIBuilder()
+            .setScheme(url.getProtocol())
+            .setHost(url.getHost())
+            .setPort(url.getPort())
+            .setUserInfo(url.getUserInfo())
+            .setPath(url.getPath())
+            .setQuery(url.getQuery());
+        URI uri = builder.build();
+        return uri;
     }
 
     /**

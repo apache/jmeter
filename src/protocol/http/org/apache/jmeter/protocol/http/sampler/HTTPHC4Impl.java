@@ -69,7 +69,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.ResponseContentEncoding;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -99,6 +98,7 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -232,15 +232,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
         HttpRequestBase httpRequest = null;
         try {
-            URIBuilder builder = 
-                    new URIBuilder()
-                .setScheme(url.getProtocol())
-                .setHost(url.getHost())
-                .setPort(url.getPort())
-                .setUserInfo(url.getUserInfo())
-                .setPath(url.getPath())
-                .setQuery(url.getQuery());
-            URI uri = builder.build();
+            URI uri = ConversionUtils.sanitizeUrl(url);
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
             } else if (method.equals(HTTPConstants.PUT)) {
