@@ -91,6 +91,7 @@ This does not affect JMeter operation.
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars</li>
+<li><bugzilla>54293</bugzilla> - JMeter rejects html tags '&lt;' in query params as invalid when they are accepted by the browser</li>
 </ul>
 
 <h3>Other Samplers</h3>
