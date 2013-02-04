@@ -493,4 +493,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 		separator = separator.replace("\\n", "\n");
 		separator = separator.replace("\\r", "\r");
 	}
+	
+    private Object readResolve(){
+        setupSeparator();
+        exceptionDuringInit=null;
+        return this;
+    }
 }
