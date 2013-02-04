@@ -217,4 +217,10 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     public void testStarted(String host) {
         testStarted();
     }
+    
+    protected Object readResolve(){
+        reportPages = new LinkedList<AbstractThreadGroup>();
+        configs = new LinkedList<ConfigElement>();
+        return this;
+    }
 }
