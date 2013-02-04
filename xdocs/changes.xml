@@ -92,6 +92,7 @@ This does not affect JMeter operation.
 <ul>
 <li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars</li>
 <li><bugzilla>54293</bugzilla> - JMeter rejects html tags '&lt;' in query params as invalid when they are accepted by the browser</li>
+<li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character </li>
 </ul>
 
 <h3>Other Samplers</h3>
