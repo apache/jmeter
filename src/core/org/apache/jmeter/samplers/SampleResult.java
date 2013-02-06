@@ -173,7 +173,7 @@ public class SampleResult implements Serializable {
                                 // ISO-8895-1, UTF-8
 
     /** elapsed time */
-    private long time = 0;
+    private long elapsedTime = 0;
 
     /** time to first response */
     private long latency = 0;
@@ -272,7 +272,7 @@ public class SampleResult implements Serializable {
 
     // Allow test code to change the default useNanoTime and nanoThreadSleep settings
     SampleResult(boolean nanoTime, long nanoThreadSleep) {
-        this.time = 0;
+        this.elapsedTime = 0;
         this.useNanoTime = nanoTime;
         this.nanoThreadSleep = nanoThreadSleep;
         this.nanoTimeOffset = initOffset();
@@ -321,7 +321,7 @@ public class SampleResult implements Serializable {
         subResults = res.subResults; // TODO ??
         success = res.success;//OK
         threadName = res.threadName;//OK
-        time = res.time;
+        elapsedTime = res.elapsedTime;
         timeStamp = res.timeStamp;
     }
 
@@ -420,7 +420,7 @@ public class SampleResult implements Serializable {
             endTime = stamp;
         }
         timeStamp = stamp;
-        time = elapsed;
+        elapsedTime = elapsed;
     }
 
     /*
@@ -717,7 +717,7 @@ public class SampleResult implements Serializable {
      *
      */
     public long getTime() {
-        return time;
+        return elapsedTime;
     }
 
     public boolean isSuccessful() {
@@ -991,7 +991,7 @@ public class SampleResult implements Serializable {
             log.error("setEndTime must be called after setStartTime", new Throwable("Invalid call sequence"));
             // TODO should this throw an error?
         } else {
-            time = endTime - startTime - idleTime;
+            elapsedTime = endTime - startTime - idleTime;
         }
     }
 
