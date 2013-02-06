@@ -293,8 +293,6 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      * @return an instance of AssertionResult
      */
     private AssertionResult evaluateResponse(SampleResult response) {
-        boolean pass = true;
-        boolean notTest = (NOT & getTestType()) > 0;
         AssertionResult result = new AssertionResult(getName());
         String toCheck = ""; // The string to check (Url or data)
 
@@ -326,13 +324,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         result.setFailure(false);
         result.setError(false);
 
-        if (toCheck.length() == 0) {
-            if (notTest) {
-                return result;
-            }
-            return result.setResultForNull();
-        }
-
+        boolean notTest = (NOT & getTestType()) > 0;
         boolean contains = isContainsType(); // do it once outside loop
         boolean equals = isEqualsType();
         boolean substring = isSubstringType();
@@ -342,6 +334,17 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             log.debug("Type:" + (contains?"Contains":"Match") + (notTest? "(not)": ""));
         }
 
+        if (toCheck.length() == 0) {
+            if (notTest) { // Not should always succeed against an empty result
+                return result;
+            }
+            if (debugEnabled){
+                log.debug("Not checking empty response field in: "+response.getSampleLabel());
+            }
+            return result.setResultForNull();
+        }
+
+        boolean pass = true;
         try {
             // Get the Matcher for this thread
             Perl5Matcher localMatcher = JMeterUtils.getMatcher();
