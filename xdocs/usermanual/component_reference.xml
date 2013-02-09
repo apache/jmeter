@@ -2909,7 +2909,7 @@ the graph as a PNG file.</description>
 </properties>
 </component>
 
-<component name="Response Time Graph" index="&sect-num;.3.13"  width="869" height="620" screenshot="response_time_graph.png">
+<component name="Response Time Graph" index="&sect-num;.3.13"  width="921" height="616" screenshot="response_time_graph.png">
 <description>
 The Response Time Graph draws a line chart showing the evolution of response time during the test, for each labelled request. 
 If many samples exist for the same timestamp, the mean value is displayed.
@@ -2917,7 +2917,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
-<figure width="871" height="489" image="response_time_graph_settings.png">Response time graph settings</figure>
+<figure width="919" height="481" image="response_time_graph_settings.png">Response time graph settings</figure>
 </p>
 </div>
 <p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
@@ -2933,7 +2933,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
         Use Width and Height fields to define a custom size. The unit is pixel. </property>
         <property name="X Axis settings" required="No">Customize the date format of  X axis label.
         The syntax is the Java <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
-        <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis. Show or not the number grouping in Y Axis labels.</property>
+        <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis in milli-seconds. Define the increment for the scale (in ms) Show or not the number grouping in Y Axis labels.</property>
         <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
 </properties>
 </component>
