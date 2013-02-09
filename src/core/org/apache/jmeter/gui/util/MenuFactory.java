@@ -238,10 +238,10 @@ public final class MenuFactory {
 
     public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
         JMenu addMenu = new JMenu(label);
-        GuiUtils.makeMenuScrollable(addMenu);
         for (int i = 0; i < categories.length; i++) {
             addMenu.add(makeMenu(categories[i], actionCommand));
         }
+        GuiUtils.makeScrollableMenu(addMenu);
         return addMenu;
     }
 
@@ -339,10 +339,10 @@ public final class MenuFactory {
      */
     public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
         JMenu menu = new JMenu(menuName);
-        GuiUtils.makeMenuScrollable(menu);
         for (MenuInfo info : menuInfo) {
             menu.add(makeMenuItem(info, actionCommand));
         }
+        GuiUtils.makeScrollableMenu(menu);
         return menu;
     }
 

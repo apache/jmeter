@@ -19,6 +19,7 @@
 package org.apache.jorphan.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -131,7 +132,13 @@ public final class GuiUtils {
      * Make menu scrollable
      * @param menu {@link JMenu}
      */
-    public static void makeMenuScrollable(JMenu menu) {
-        MenuScroller.setScrollerFor(menu, 15, 200);
+    public static void makeScrollableMenu(JMenu menu) { 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        if(menu.getItemCount()>0) {
+            // We use 80% of height
+            int maxItems = (int)Math.round(
+                    screenSize.getHeight()*0.8/menu.getMenuComponent(0).getPreferredSize().getHeight());
+            MenuScroller.setScrollerFor(menu, maxItems, 200);
+        }
     }
 }
