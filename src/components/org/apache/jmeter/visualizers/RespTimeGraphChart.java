@@ -74,6 +74,8 @@ public class RespTimeGraphChart extends JPanel {
     
     protected int height;
 
+    protected int incrYAxisScale;
+
     protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") }; // $NON-NLS-1$
 
     protected int maxYAxisScale;
@@ -148,6 +150,13 @@ public class RespTimeGraphChart extends JPanel {
 
     public void setHeight(int h) {
         this.height = h;
+    }
+
+    /**
+     * @param incrYAxisScale the incrYAxisScale to set
+     */
+    public void setIncrYAxisScale(int incrYAxisScale) {
+        this.incrYAxisScale = incrYAxisScale;
     }
 
     /**
@@ -264,10 +273,10 @@ public class RespTimeGraphChart extends JPanel {
 
     private void drawSample(String _title, String[] _xAxisLabels,
             String _yAxisTitle, String[] _legendLabels, 
-            double[][] _data, int _width, int _height, 
+            double[][] _data, int _width, int _height, int _incrScaleYAxis,
             Color[] _color, Font legendFont, Graphics g) {
         
-        double max = maxYAxisScale > 0 ? maxYAxisScale : findMax(_data); // define max scale y axis
+        double max = maxYAxisScale > 0 ? maxYAxisScale : getTopValue(findMax(_data), BigDecimal.ROUND_UP); // define max scale y axis
         try {
             // if the title graph is empty, we can assume some default
             if (_title.length() == 0 ) {
@@ -313,11 +322,17 @@ public class RespTimeGraphChart extends JPanel {
 
             // Y Axis ruler
             try {
-                BigDecimal round = new BigDecimal(max / 1000d);
-                round = round.setScale(0, BigDecimal.ROUND_UP);
-                double topValue = round.doubleValue() * 1000;
-                yaxis.setUserDefinedScale(0, 500);
-                yaxis.setNumItems((int) (topValue / 500)+1);
+                double numInterval = _height / 50; // ~a tic every 50 px
+                double incrYAxis = new Double(max / numInterval);
+                double incrTopValue = _incrScaleYAxis;
+                if (_incrScaleYAxis == 0) {
+                    incrTopValue = getTopValue(incrYAxis, BigDecimal.ROUND_HALF_UP);
+                }
+                if (incrTopValue < 1) { 
+                    incrTopValue = 1.0d; // Increment cannot be < 1
+                }
+                yaxis.setUserDefinedScale(0, incrTopValue);
+                yaxis.setNumItems(new Double(max / incrTopValue).intValue() + 1);
                 yaxis.setShowGridLines(1);
             } catch (PropertyException e) {
                 log.warn("",e);
@@ -350,13 +365,26 @@ public class RespTimeGraphChart extends JPanel {
         }
     }
 
+    private int getTopValue(double value, int roundMode) {
+        String maxStr = String.valueOf(Math.round(value));
+        String divValueStr = "1"; //$NON-NLS-1$
+        for (int i = 1; i < maxStr.length(); i++) {
+            divValueStr += "0"; //$NON-NLS-1$
+        }
+        int divValueInt = Integer.parseInt(divValueStr);
+        BigDecimal round = new BigDecimal(value / divValueInt);
+        round = round.setScale(0, roundMode);
+        int topValue = round.intValue() * divValueInt;
+        return topValue;
+    }
+
     @Override
     public void paintComponent(Graphics graphics) {
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.yAxisLabel != null && this.yAxisTitle != null) {
             drawSample(this.title, this.xAxisLabels, 
                     this.yAxisTitle, this.legendLabels,
-                    this.data, this.width, this.height, this.color,
+                    this.data, this.width, this.height, this.incrYAxisScale, this.color,
                     this.legendFont, graphics);
         }
     }

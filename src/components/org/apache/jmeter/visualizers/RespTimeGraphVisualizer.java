@@ -158,7 +158,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_xaxis_time_format"), 10); //$NON-NLS-1$ $NON-NLS-2$
 
     private final JLabeledTextField maxValueYAxisLabel =
-            new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_yaxis_max_value"), 8); //$NON-NLS-1$
+            new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_yaxis_max_value"), 5); //$NON-NLS-1$
 
     /**
      * checkbox for use dynamic graph size
@@ -169,6 +169,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"), 6); //$NON-NLS-1$
     private final JLabeledTextField graphHeight =
             new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"), 6); //$NON-NLS-1$
+
+    private final JLabeledTextField incrScaleYAxis =
+            new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_increment_scale"), 5); //$NON-NLS-1$
 
     private long minStartTime = Long.MAX_VALUE;
 
@@ -302,6 +305,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
         graphPanel.setHeight(height);
         graphPanel.setWidth(width);
+        graphPanel.setIncrYAxisScale(getIncrScaleYAxis());
         // Draw the graph
         graphPanel.repaint();
     }
@@ -575,6 +579,15 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         return linesColors;
     }
 
+    private int getIncrScaleYAxis() {
+        int incrYAxisScale = 0;
+        String iyas = incrScaleYAxis.getText();
+        if (iyas.length() != 0) {
+            incrYAxisScale = Integer.parseInt(iyas);
+        }
+        return incrYAxisScale;
+    }
+
     private JPanel createGraphSettingsPane() {
         JPanel settingsPane = new JPanel(new BorderLayout());
         settingsPane.setBorder(BorderFactory.createTitledBorder(
@@ -713,7 +726,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_yaxis_group"))); // $NON-NLS-1$
         yAxisPane.add(maxValueYAxisLabel);
-
+        yAxisPane.add(incrScaleYAxis);
         yAxisPane.add(numberShowGrouping);
         return yAxisPane;
     }
