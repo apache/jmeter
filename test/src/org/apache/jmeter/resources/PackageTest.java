@@ -409,7 +409,7 @@ public class PackageTest extends TestCase {
                 // Look for calls to JMeterUtils.getResString()
                 final Pattern pat = Pattern.compile(".*getResString\\(\"([^\"]+)\"\\).*");
                 if (name.endsWith(".java")) {
-                  BufferedReader fileReader;
+                  BufferedReader fileReader = null;
                   try {
                     fileReader = new BufferedReader(new FileReader(file));
                     String s;
@@ -436,6 +436,8 @@ public class PackageTest extends TestCase {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    JOrphanUtils.closeQuietly(fileReader);
                 }
                  
                 }
