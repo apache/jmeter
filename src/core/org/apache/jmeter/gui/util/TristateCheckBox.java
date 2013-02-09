@@ -53,13 +53,19 @@ import org.apache.jmeter.testelement.property.NullProperty;
 public final class TristateCheckBox extends JCheckBox {
     private static final long serialVersionUID = 1L;
     // Listener on model changes to maintain correct focusability
-    private final ChangeListener enableListener = new ChangeListener() {
+    private final class TSCBChangeListener implements ChangeListener, Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -3718373200229708535L;
+
         @Override
         public void stateChanged(ChangeEvent e) {
             TristateCheckBox.this.setFocusable(
                     getModel().isEnabled());
         }
-    };
+    }
+    private final ChangeListener enableListener = new TSCBChangeListener();
 
     public TristateCheckBox() {
         this(null, null, TristateState.DESELECTED);
