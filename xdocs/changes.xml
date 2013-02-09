@@ -122,6 +122,7 @@ This does not affect JMeter operation.
 <h3>General</h3>
 <ul>
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]</li>
+<li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

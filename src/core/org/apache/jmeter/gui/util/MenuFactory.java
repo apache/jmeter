@@ -54,6 +54,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -237,6 +238,7 @@ public final class MenuFactory {
 
     public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
         JMenu addMenu = new JMenu(label);
+        GuiUtils.makeMenuScrollable(addMenu);
         for (int i = 0; i < categories.length; i++) {
             addMenu.add(makeMenu(categories[i], actionCommand));
         }
@@ -337,6 +339,7 @@ public final class MenuFactory {
      */
     public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
         JMenu menu = new JMenu(menuName);
+        GuiUtils.makeMenuScrollable(menu);
         for (MenuInfo info : menuInfo) {
             menu.add(makeMenuItem(info, actionCommand));
         }

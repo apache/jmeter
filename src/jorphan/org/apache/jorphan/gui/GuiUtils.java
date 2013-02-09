@@ -33,6 +33,7 @@ import java.util.Collections;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -124,5 +125,13 @@ public final class GuiUtils {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Make menu scrollable
+     * @param menu {@link JMenu}
+     */
+    public static void makeMenuScrollable(JMenu menu) {
+        MenuScroller.setScrollerFor(menu, 15, 200);
     }
 }
