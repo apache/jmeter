@@ -82,7 +82,7 @@ public class TestLoopController extends JMeterTestCase {
 
         public void testInfiniteLoop() throws Exception {
             LoopController loop = new LoopController();
-            loop.setLoops(-1);
+            loop.setLoops(LoopController.INFINITE_LOOP_COUNT);
             loop.addTestElement(new TestSampler("never run"));
             loop.setRunningVersion(true);
             loop.initialize();
