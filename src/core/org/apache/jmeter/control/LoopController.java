@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class LoopController extends GenericController implements Serializable {
 
-    private static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
+    public static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
     private static final long serialVersionUID = 7833960784370272300L;
 
@@ -67,12 +67,15 @@ public class LoopController extends GenericController implements Serializable {
     }
 
     public int getLoops() {
-        try {
-            JMeterProperty prop = getProperty(LOOPS);
-            return Integer.parseInt(prop.getStringValue());
-        } catch (NumberFormatException e) {
-            return 0;
+        if(nbLoops==null || nbLoops.intValue()==-1) {
+            try {
+                JMeterProperty prop = getProperty(LOOPS);
+                nbLoops = Integer.valueOf(prop.getStringValue());
+            } catch (NumberFormatException e) {
+                nbLoops = 0;
+            }
         }
+        return nbLoops.intValue();
     }
 
     public String getLoopString() {
@@ -112,11 +115,7 @@ public class LoopController extends GenericController implements Serializable {
     }
 
     private boolean endOfLoop() {
-        if(nbLoops==null) {
-            // Ensure we compute it only once per parent iteration, see Bug 54467
-            nbLoops = Integer.valueOf(getLoops());
-        }
-        final int loops = nbLoops.intValue();
+        final int loops = getLoops();
         return (loops > -1) && (loopCount >= loops);
     }
 
