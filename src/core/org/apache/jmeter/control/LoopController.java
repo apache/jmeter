@@ -33,7 +33,7 @@ public class LoopController extends GenericController implements Serializable {
 
     private static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 7833960784370272300L;
 
     /*
      * In spite of the name, this is actually used to determine if the loop controller is repeatable.
@@ -50,6 +50,9 @@ public class LoopController extends GenericController implements Serializable {
     private static final String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
 
     private transient int loopCount = 0;
+
+    // Cache loop value, see Bug 54467
+    private Integer nbLoops;
 
     public LoopController() {
         setContinueForever_private(true);
@@ -109,10 +112,20 @@ public class LoopController extends GenericController implements Serializable {
     }
 
     private boolean endOfLoop() {
-        final int loops = getLoops();
+        if(nbLoops==null) {
+            // Ensure we compute it only once per parent iteration, see Bug 54467
+            nbLoops = Integer.valueOf(getLoops());
+        }
+        final int loops = nbLoops.intValue();
         return (loops > -1) && (loopCount >= loops);
     }
 
+    @Override
+    protected void setDone(boolean done) {
+        nbLoops = null;
+        super.setDone(true);
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -145,6 +158,7 @@ public class LoopController extends GenericController implements Serializable {
 
     protected void resetLoopCount() {
         loopCount = 0;
+        nbLoops = null;
     }
 
     /**
