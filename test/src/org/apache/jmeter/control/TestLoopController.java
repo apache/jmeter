@@ -18,9 +18,20 @@
 
 package org.apache.jmeter.control;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.engine.util.ReplaceStringWithFunctions;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestLoopController extends JMeterTestCase {
         public TestLoopController(String name) {
@@ -78,5 +89,28 @@ public class TestLoopController extends JMeterTestCase {
             for (int i = 0; i < 42; i++) {
                 assertNotNull(loop.next());
             }
+        }
+            
+        public void testBug54467() throws Exception {
+            JMeterContext jmctx = JMeterContextService.getContext();
+            LoopController loop = new LoopController();
+            Map<String, String> variables = new HashMap<String, String>();
+            ReplaceStringWithFunctions transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
+            jmctx.setVariables(new JMeterVariables());
+
+            StringProperty prop = new StringProperty(LoopController.LOOPS,"${__Random(1,12,)}");
+            JMeterProperty newProp = transformer.transformValue(prop);
+            newProp.setRunningVersion(true);
+            
+            loop.setProperty(newProp);
+            loop.addTestElement(new TestSampler("random run"));
+            loop.setRunningVersion(true);
+            loop.initialize();
+            int loops = loop.getLoops();
+            for (int i = 0; i < loops; i++) {
+                Sampler s = loop.next();
+                assertNotNull(s);
+            }
+            assertNull(loop.next());    
         }
 }
