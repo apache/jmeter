@@ -4692,7 +4692,7 @@ Clever users will even determine that this modifier can be used to grab values t
 </properties>
 </component>
 
-<component name="HTML Parameter Mask" index="&sect-num;.7.3" useinstead="Counter"  width="624" height="209" screenshot="parameter_mask.png">
+<component name="HTML Parameter Mask (DEPRECATED)" index="&sect-num;.7.3" useinstead="Counter"  width="624" height="209" screenshot="parameter_mask.png">
 <description><p>The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
 specifying the name of the parameter, a value prefix and suffix, and counter parameters, this
 modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
