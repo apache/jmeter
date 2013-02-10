@@ -123,7 +123,7 @@ public class LoopController extends GenericController implements Serializable {
     @Override
     protected void setDone(boolean done) {
         nbLoops = null;
-        super.setDone(true);
+        super.setDone(done);
     }
     
     /**
