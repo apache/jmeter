@@ -126,7 +126,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
             if (loops.getText().length() > 0) {
                 ((LoopController) lc).setLoops(loops.getText());
             } else {
-                ((LoopController) lc).setLoops(-1);
+                ((LoopController) lc).setLoops(LoopController.INFINITE_LOOP_COUNT);
             }
         }
     }
@@ -238,7 +238,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
      */
     private void setState(String loopCount) {
         if (loopCount.startsWith("-")) { // $NON-NLS-1$
-            setState(-1);
+            setState(LoopController.INFINITE_LOOP_COUNT);
         } else {
             loops.setText(loopCount);
             infinite.setSelected(false);
@@ -255,7 +255,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
      *            the number of loops
      */
     private void setState(int loopCount) {
-        if (loopCount <= -1) {
+        if (loopCount <= LoopController.INFINITE_LOOP_COUNT) {
             infinite.setSelected(true);
             loops.setEnabled(false);
             loops.setText(""); // $NON-NLS-1$

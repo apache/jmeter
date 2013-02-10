@@ -31,6 +31,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class LoopController extends GenericController implements Serializable {
 
+    public static final int INFINITE_LOOP_COUNT = -1; // $NON-NLS-1$
+    
     public static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
     private static final long serialVersionUID = 7833960784370272300L;
@@ -67,7 +69,9 @@ public class LoopController extends GenericController implements Serializable {
     }
 
     public int getLoops() {
-        if(nbLoops==null || nbLoops.intValue()==-1) {
+        // Evaluation occurs when nbLoops is not yet evaluated 
+        // or when nbLoops is equal to special value INFINITE_LOOP_COUNT
+        if(nbLoops==null || nbLoops.intValue()==INFINITE_LOOP_COUNT) {
             try {
                 JMeterProperty prop = getProperty(LOOPS);
                 nbLoops = Integer.valueOf(prop.getStringValue());
@@ -116,7 +120,7 @@ public class LoopController extends GenericController implements Serializable {
 
     private boolean endOfLoop() {
         final int loops = getLoops();
-        return (loops > -1) && (loopCount >= loops);
+        return (loops > INFINITE_LOOP_COUNT) && (loopCount >= loops);
     }
 
     @Override
