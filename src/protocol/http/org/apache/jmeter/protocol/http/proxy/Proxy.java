@@ -175,6 +175,7 @@ public class Proxy extends Thread {
         SampleResult result = null;
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;
+        String[] param = null;
         try {
             // Now, parse only first line
             request.parse(new BufferedInputStream(clientSocket.getInputStream()));
@@ -186,7 +187,7 @@ public class Proxy extends Thread {
                 outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes(SampleResult.DEFAULT_HTTP_ENCODING)); // $NON-NLS-1$
                 outStreamClient.flush();
                // With ssl request, url is host:port (without https:// or path)
-                String[] param = request.getUrl().split(":");  // $NON-NLS-1$
+                param = request.getUrl().split(":");  // $NON-NLS-1$
                 if (param.length == 2) {
                     log.debug("Start to negotiate SSL connection, host: " + param[0]);
                     clientSocket = startSSL(clientSocket, param[0]);
@@ -228,7 +229,8 @@ public class Proxy extends Thread {
                     "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server\">HTTP Proxy Server documentation</a>"));
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
         } catch (IOException ioe) {
-            log.error("Problem with SSL certificate? Ensure browser is set to accept the JMeter proxy cert: "+ioe.getLocalizedMessage(), ioe);
+            log.error("Problem with SSL certificate? Ensure browser is set to accept the JMeter proxy cert: "+ioe.getLocalizedMessage()+" for url:" +
+                    (param != null && param.length>0 ?  param[0] : ""), ioe);
             // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
             if (result == null) {
                 result = new SampleResult();
