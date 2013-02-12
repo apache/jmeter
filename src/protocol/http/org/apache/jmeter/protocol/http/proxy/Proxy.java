@@ -175,7 +175,7 @@ public class Proxy extends Thread {
         SampleResult result = null;
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;
-        String[] param = null;
+        String[] param = new String[0];
         try {
             // Now, parse only first line
             request.parse(new BufferedInputStream(clientSocket.getInputStream()));
@@ -230,7 +230,7 @@ public class Proxy extends Thread {
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
         } catch (IOException ioe) {
             log.error("Problem with SSL certificate? Ensure browser is set to accept the JMeter proxy cert: "+ioe.getLocalizedMessage()+" for url:" +
-                    (param != null && param.length>0 ?  param[0] : ""), ioe);
+                    (param.length>0 ?  param[0] : ""), ioe);
             // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
             if (result == null) {
                 result = new SampleResult();
