@@ -54,7 +54,7 @@ public class LoopController extends GenericController implements Serializable {
     private transient int loopCount = 0;
 
     // Cache loop value, see Bug 54467
-    private Integer nbLoops;
+    private transient Integer nbLoops;
 
     public LoopController() {
         setContinueForever_private(true);
@@ -76,7 +76,7 @@ public class LoopController extends GenericController implements Serializable {
                 JMeterProperty prop = getProperty(LOOPS);
                 nbLoops = Integer.valueOf(prop.getStringValue());
             } catch (NumberFormatException e) {
-                nbLoops = 0;
+                nbLoops = Integer.valueOf(0);
             }
         }
         return nbLoops.intValue();
