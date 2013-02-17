@@ -57,8 +57,8 @@ server, you need to be mindful of the fact that this will be adding processing
 overhead on the application server and thus your testing results will be 
 somewhat tainted.  The recommended approach is to have one or more machines on
 the same Ethernet segment as your application server that you configure to run
-the JMeter Engine.  This will minimize the impact of the network on the test 
-results without impacting the performance of the application serer 
+the JMeter Engine.  This will minimise the impact of the network on the test 
+results without impacting the performance of the application server 
 itself.
 </p>
 
