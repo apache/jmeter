@@ -25,6 +25,8 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -187,25 +189,42 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
      * @return CssJquery task pane
      */
     private JPanel createCssJqueryTasksPanel() {
-        JPanel cssJqueryActionPanel = new JPanel(new BorderLayout(0, 5));
+        GridBagLayout g = new GridBagLayout();
+        GridBagConstraints c = new GridBagConstraints();
+        
+        JPanel cssJqueryActionPanel = new JPanel();
+        cssJqueryActionPanel.setLayout(g);
         Border margin = new EmptyBorder(5, 5, 0, 5);
         cssJqueryActionPanel.setBorder(margin);
         cssJqueryField = new JLabeledTextField(JMeterUtils.getResString("cssjquery_tester_field")); // $NON-NLS-1$
-        cssJqueryActionPanel.add(cssJqueryField, BorderLayout.WEST);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx=0;
+        c.gridy=0;
+        cssJqueryActionPanel.add(cssJqueryField, c);
         
         cssJqueryLabeledChoice = new JLabeledChoice(
                 JMeterUtils.getResString("cssjquery_impl"), // $NON-NLS-1$
                 getImplementations()); 
-        cssJqueryActionPanel.add(cssJqueryLabeledChoice, BorderLayout.NORTH);
-        
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx=1;
+        c.gridy=0;
+        cssJqueryActionPanel.add(cssJqueryLabeledChoice, c);
+                
+        attributeField = new JLabeledTextField(JMeterUtils.getResString("cssjquery_attribute")); // $NON-NLS-1$
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx=0;
+        c.gridy=1;
+        cssJqueryActionPanel.add(attributeField, c);
+
         JButton cssJqueryTester = new JButton(JMeterUtils.getResString("cssjquery_tester_button_test")); // $NON-NLS-1$
         cssJqueryTester.setActionCommand(CSSJQUEY_TESTER_COMMAND);
         cssJqueryTester.addActionListener(this);
-        cssJqueryActionPanel.add(cssJqueryTester, BorderLayout.EAST);
-        
-        attributeField = new JLabeledTextField(JMeterUtils.getResString("cssjquery_attribute")); // $NON-NLS-1$
-        cssJqueryActionPanel.add(attributeField, BorderLayout.SOUTH);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx=1;
+        c.gridy=1;
+        cssJqueryActionPanel.add(cssJqueryTester, c);
 
+        
         cssJqueryResultField = new JTextArea();
         cssJqueryResultField.setEditable(false);
         cssJqueryResultField.setLineWrap(true);
