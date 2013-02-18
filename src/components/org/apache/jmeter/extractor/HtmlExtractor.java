@@ -197,19 +197,27 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     }
     
     /**
+     * @param impl Extractor implementation
+     * @return Extractor
+     */
+    public static final Extractor getExtractorImpl(String impl) {
+        boolean useDefaultExtractor = DEFAULT_EXTRACTOR.equals(impl);
+        if (useDefaultExtractor || EXTRACTOR_JSOUP.equals(impl)) {
+            return new JSoupExtractor();
+        } else if (EXTRACTOR_JODD.equals(impl)) {
+            return new JoddExtractor();
+        } else {
+            throw new IllegalArgumentException("Extractor implementation:"+ impl+" is unknown");
+        }
+    }
+    
+    /**
      * 
      * @return Extractor
      */
     private Extractor getExtractorImpl() {
         if (extractor == null) {
-            boolean useDefaultExtractor = DEFAULT_EXTRACTOR.equals(getExtractor());
-            if (useDefaultExtractor || EXTRACTOR_JSOUP.equals(getExtractor())) {
-                extractor = new JSoupExtractor();
-            } else if (EXTRACTOR_JODD.equals(getExtractor())) {
-                extractor = new JoddExtractor();
-            } else {
-                throw new IllegalArgumentException("Extractor implementation:"+ getExtractor()+" is unknown");
-            }
+            extractor = getExtractorImpl(getExtractor());
         }
         return extractor;
     }
