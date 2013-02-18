@@ -206,7 +206,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
             if (useDefaultExtractor || EXTRACTOR_JSOUP.equals(getExtractor())) {
                 extractor = new JSoupExtractor();
             } else if (EXTRACTOR_JODD.equals(getExtractor())) {
-                extractor = new JSoupExtractor();
+                extractor = new JoddExtractor();
             } else {
                 throw new IllegalArgumentException("Extractor implementation:"+ getExtractor()+" is unknown");
             }
