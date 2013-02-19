@@ -168,6 +168,7 @@ This does not affect JMeter operation.
 
 <h2>Non-functional changes</h2>
 <ul>
+<li>Updated to jsoup-1.7.2</li>
 </ul>
 
 </section> 
