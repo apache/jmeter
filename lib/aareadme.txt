@@ -119,7 +119,7 @@ jodd-lagarto-3.4.1
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jsoup-1.7.1
+jsoup-1.7.2
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
