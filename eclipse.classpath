@@ -69,7 +69,7 @@
 	<classpathentry kind="lib" path="lib/rhino-1.7R4.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-core-3.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-lagarto-3.4.1.jar"/>
-	<classpathentry kind="lib" path="lib/jsoup-1.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.7.2.jar"/>
     <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
     <classpathentry kind="lib" path="lib/junit-4.10.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>

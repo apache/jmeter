@@ -78,7 +78,7 @@ under the License.
       <jcharts.version>0.7.5</jcharts.version>
       <jdom.version>1.1.2</jdom.version>
       <jodd.version>3.4.1</jodd.version>
-      <jsoup.version>1.7.1</jsoup.version>
+      <jsoup.version>1.7.2</jsoup.version>
       <js_rhino.version>1.7R4</js_rhino.version>
       <junit.version>4.10</junit.version>
       <logkit.version>2.0</logkit.version>
