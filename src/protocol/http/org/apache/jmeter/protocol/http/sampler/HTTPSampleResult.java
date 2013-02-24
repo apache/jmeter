@@ -223,7 +223,7 @@ public class HTTPSampleResult extends SampleResult {
                 }
             }
         }
-        return super.getDataEncodingWithDefault(DEFAULT_HTTP_ENCODING);
+        return super.getDataEncodingWithDefault(DEFAULT_ENCODING);
     }
 
     public void setResponseNoContent(){

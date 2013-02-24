@@ -64,7 +64,7 @@ public class SampleResult implements Serializable {
      * The value is defined by the property "sampleresult.default.encoding"
      * with a default of DEFAULT_HTTP_ENCODING if that is not defined.
      */
-    static final String DEFAULT_ENCODING
+    protected static final String DEFAULT_ENCODING
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
             DEFAULT_HTTP_ENCODING);
 
