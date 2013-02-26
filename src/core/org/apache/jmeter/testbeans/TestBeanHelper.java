@@ -95,6 +95,9 @@ public class TestBeanHelper {
             }
         } catch (IntrospectionException e) {
             log.error("Couldn't set properties for " + el.getClass().getName(), e);
+        } catch (UnsatisfiedLinkError ule) { // Can occur running headless on Jenkins
+            log.error("Couldn't set properties for " + el.getClass().getName());
+            throw ule;
         }
     }
 
