@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
@@ -195,6 +196,7 @@ public class HTTPSampleResult extends SampleResult {
             queryString = string;
         }
     }
+
     /**
      * Overrides the method from SampleResult - so the encoding can be extracted from
      * the Meta content-type if necessary.
@@ -204,12 +206,13 @@ public class HTTPSampleResult extends SampleResult {
      * @return the dataEncoding value as a String
      */
     @Override
-    public String getDataEncodingWithDefault() {
-        if (getDataEncodingNoDefault() == null && getContentType().startsWith("text/html")){ // $NON-NLS-1$
+    public String getDataEncodingNoDefault() {
+        if (super.getDataEncodingNoDefault() == null && getContentType().startsWith("text/html")){ // $NON-NLS-1$
             byte[] bytes=getResponseData();
             // get the start of the file
-            // TODO - charset?
-            String prefix = new String(bytes,0,Math.min(bytes.length, 2000)).toLowerCase(java.util.Locale.ENGLISH);
+            String prefix = new String(bytes, 0, Math.min(bytes.length, 2000), 
+                                       Charset.forName(DEFAULT_HTTP_ENCODING))
+                                .toLowerCase(java.util.Locale.ENGLISH);
             // Extract the content-type if present
             final String METATAG = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
             int tagstart=prefix.indexOf(METATAG);
@@ -217,13 +220,12 @@ public class HTTPSampleResult extends SampleResult {
                 tagstart += METATAG.length();
                 int tagend = prefix.indexOf('\"', tagstart); // $NON-NLS-1$
                 if (tagend!=-1){
-                    // TODO use fixed charset:
-                    final String ct = new String(bytes,tagstart,tagend-tagstart); // TODO - charset?
+                    final String ct = prefix.substring(tagstart,tagend);
                     setEncodingAndType(ct);// Update the dataEncoding
                 }
             }
         }
-        return super.getDataEncodingWithDefault(DEFAULT_ENCODING);
+        return super.getDataEncodingNoDefault();
     }
 
     public void setResponseNoContent(){
