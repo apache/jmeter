@@ -611,13 +611,13 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 JMeterUtils.getResString("proxy_test_plan_content"))); // $NON-NLS-1$
 
         HorizontalPanel nodeCreationPanel = new HorizontalPanel();
+        nodeCreationPanel.add(createGroupingPanel());
         nodeCreationPanel.add(httpHeaders);
         nodeCreationPanel.add(addAssertions);
         nodeCreationPanel.add(regexMatch);
 
         HorizontalPanel targetPanel = new HorizontalPanel();
         targetPanel.add(createTargetPanel());
-        targetPanel.add(createGroupingPanel());
         mainPanel.add(targetPanel);
         mainPanel.add(nodeCreationPanel);
 
@@ -631,6 +631,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
         m.addElement(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName = new JComboBox(m);
+        samplerTypeName.setPreferredSize(new Dimension(150, 20));
         samplerTypeName.setSelectedItem(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName.addItemListener(this);
         JLabel label2 = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
@@ -695,6 +696,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         m.addElement(JMeterUtils.getResString("grouping_store_first_only")); // $NON-NLS-1$
         m.addElement(JMeterUtils.getResString("grouping_in_transaction_controllers")); // $NON-NLS-1$
         groupingMode = new JComboBox(m);
+        groupingMode.setPreferredSize(new Dimension(150, 20));
         groupingMode.setSelectedIndex(0);
         groupingMode.addItemListener(this);
 
