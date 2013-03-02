@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -119,6 +120,20 @@ class JTidyHTMLParser extends HTMLParser {
                 urls.addURL(getValue(attrs, "code"), baseUrl);
                 break;
             }
+            
+            if (name.equalsIgnoreCase(TAG_OBJECT)) {
+                String data = getValue(attrs, "codebase");
+                if(!StringUtils.isEmpty(data)) {
+                    urls.addURL(data, baseUrl);                    
+                }
+                
+                data = getValue(attrs, "data");
+                if(!StringUtils.isEmpty(data)) {
+                    urls.addURL(data, baseUrl);                    
+                }
+                break;
+            }
+            
             if (name.equalsIgnoreCase(TAG_INPUT)) {
                 String src = getValue(attrs, ATT_SRC);
                 String typ = getValue(attrs, ATT_TYPE);
