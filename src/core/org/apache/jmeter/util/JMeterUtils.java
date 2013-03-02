@@ -1309,4 +1309,20 @@ public class JMeterUtils implements UnitTestManager {
         System.gc();
         System.runFinalization();
     }
+    
+    /**
+     * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
+     * the unzipped page size
+     * @param matcher {@link Perl5Matcher}
+     * @param pattern Pattern
+     */
+    public static final void clearMatcherMemory(Perl5Matcher matcher, Pattern pattern) {
+        try {
+            if(pattern != null) {
+                matcher.matches("", pattern); // $NON-NLS-1$
+            }
+        } catch (Exception e) {
+            // NOOP
+        }
+    }
 }
