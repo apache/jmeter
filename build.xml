@@ -141,6 +141,7 @@
       <class location="${dest.jar}/ApacheJMeter_mail.jar"/>
       <class location="${dest.jar}/ApacheJMeter_monitors.jar"/>
       <class location="${dest.jar}/ApacheJMeter_native.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_mongodb.jar"/>
       <class location="${dest.jar}/ApacheJMeter_report.jar"/>
       <class location="${dest.jar}/ApacheJMeter_tcp.jar"/>
       <class location="${dest.jar.jmeter}/ApacheJMeter.jar" />
@@ -148,6 +149,7 @@
       <sourcePath path="${src.tcp}" />
       <sourcePath path="${src.jms}" />
       <sourcePath path="${src.native}" />
+      <sourcePath path="${src.mongodb}" />
       <sourcePath path="${src.report}" />
       		
       <auxClasspath>
@@ -211,6 +213,7 @@
   <property name="src.monitor.model" value="src/monitor/model"/>
   <property name="src.jms" value="src/protocol/jms"/>
   <property name="src.native" value="src/protocol/native"/>
+  <property name="src.mongodb" value="src/protocol/mongodb"/>
   <property name="src.report" value="src/reports"/>
 
   <!-- Where the documentation sources live -->
@@ -260,6 +263,7 @@
   <property name="build.monitor.model" value="build/monitor/model"/>
   <property name="build.jms" value="build/protocol/jms"/>
   <property name="build.native" value="build/protocol/native"/>
+  <property name="build.mongodb" value="build/protocol/mongodb"/>
   <property name="build.report" value="build/reports"/>
   <property name="build.test" value="build/test"/>
   <property name="build.res" value="build/res"/>
@@ -448,6 +452,7 @@
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
     <pathelement location="${lib.dir}/${junit.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
+    <pathelement location="${lib.dir}/${mongo-java-driver.jar}"/>
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${soap.jar}"/>
@@ -839,9 +844,23 @@
       </classpath>
     </javac>
   </target>
+	
+  <target name="compile-mongodb" depends="compile-jorphan,compile-core,compile-components"
+        description="Compile components specific to MongoDB sampling.">
+    <mkdir dir="${build.mongodb}"/>
+    <javac srcdir="${src.mongodb}" destdir="${build.mongodb}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
+      </classpath>
+    </javac>
+  </target>
 
   <target name="compile"
-  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-native, compile-report"
+  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb, compile-report"
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
@@ -1117,6 +1136,18 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${src.native}" includes="**/*.properties" />
     </jar>
 
+    <!-- mongodb -->
+    <!-- Ensure that build dir exists, even if MongoDB has not been built -->
+    <mkdir dir="${build.mongodb}"/>
+    <jar jarfile="${dest.jar}/ApacheJMeter_mongodb.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
+      <zipfileset file="${resources.meta-inf}/default.notice"
+        fullpath="META-INF/NOTICE" />
+      <zipfileset file="${resources.meta-inf}/default.license"
+        fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.mongodb}" includes="**/*.class" />
+      <fileset dir="${src.mongodb}" includes="**/*.properties" />
+    </jar>
+      	
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
         <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
@@ -2728,6 +2759,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="jsoup"/>
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
+        <process_jarfile jarname="mongo-java-driver"/>
         <process_jarfile jarname="serializer"/>
     	<process_jarfile jarname="slf4j-api"/>
         <process_jarfile jarname="soap"/>

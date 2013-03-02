@@ -1862,6 +1862,17 @@ If omitted, output is captured and returned as the response data.</property>
 <property name="Expected Return Code" required="No">Expected return code for System Call, required if "Check Return Code" is checked.</property>
 </component>
 
+<component name="MongoDB Script" index="&sect-num;.1.21" width="519" height="289" screenshot="mongodb-sampler.png">
+<description>
+TODO</description>
+<properties>
+        
+</properties>
+<links>
+</links>
+
+</component>
+
 <a href="#">^</a>
 
 </section>
@@ -3921,6 +3932,16 @@ GUI that they can use while developing new JMeter components.</p>
 
 </component>
 
+<component name="MongoDB Source Config" index="&sect-num;.4.18" width="519" height="289" screenshot="mongodb-config.png">
+<description>
+TODO</description>
+<properties>
+        
+</properties>
+<links>
+</links>
+
+</component>
 
 <a href="#">^</a>
 
