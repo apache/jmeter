@@ -98,7 +98,7 @@ class RegexpHTMLParser extends HTMLParser {
             + "|BASE" + SEP + "HREF" + VALUE
             + "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND)" + SEP + "SRC" + VALUE
             + "|APPLET" + SEP + "CODE(?:BASE)?" + VALUE
-            + "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE
+            + "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE|DATA)" + VALUE
             + "|(?:BODY|TABLE|TR|TD)" + SEP + "BACKGROUND" + VALUE
             + "|[^<]+?STYLE\\s*=['\"].*?URL\\(\\s*['\"](.+?)['\"]\\s*\\)"
             + "|INPUT(?:" + SEP + "(?:SRC" + VALUE
