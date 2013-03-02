@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -35,6 +36,7 @@ import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.FrameTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.InputTag;
+import org.htmlparser.tags.ObjectTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -146,6 +148,19 @@ class HtmlParserHTMLParser extends HTMLParser {
                 // and archives (.jar and .zip) files as well.
                 AppletTag applet = (AppletTag) tag;
                 binUrlStr = applet.getAppletClass();
+            } else if (tag instanceof ObjectTag) {
+                // look for Objects
+                ObjectTag applet = (ObjectTag) tag; 
+                String data = applet.getAttribute("codebase");
+                if(!StringUtils.isEmpty(data)) {
+                    binUrlStr = data;               
+                }
+                
+                data = applet.getAttribute("data");
+                if(!StringUtils.isEmpty(data)) {
+                    binUrlStr = data;                    
+                }
+                
             } else if (tag instanceof InputTag) {
                 // we check the input tag type for image
                 if (ATT_IS_IMAGE.equalsIgnoreCase(tag.getAttribute(ATT_TYPE))) {
