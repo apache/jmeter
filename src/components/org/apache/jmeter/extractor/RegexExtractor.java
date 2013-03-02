@@ -164,23 +164,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         } catch (MalformedCachePatternException e) {
             log.error("Error in pattern: " + regex);
         } finally {
-            clearMatcherMemory(matcher, pattern);
-        }
-    }
-
-    /**
-     * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
-     * the unzipped page size
-     * @param matcher {@link Perl5Matcher}
-     * @param pattern Pattern
-     */
-    private final void clearMatcherMemory(Perl5Matcher matcher, Pattern pattern) {
-        try {
-            if(pattern != null) {
-                matcher.matches("", pattern); // $NON-NLS-1$
-            }
-        } catch (Exception e) {
-            // NOOP
+            JMeterUtils.clearMatcherMemory(matcher, pattern);
         }
     }
 
