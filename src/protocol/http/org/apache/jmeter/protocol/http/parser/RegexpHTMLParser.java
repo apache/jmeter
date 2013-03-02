@@ -27,11 +27,6 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-
-// NOTE: Also looked at using Java 1.4 regexp instead of ORO. The change was
-// trivial. Performance did not improve -- at least not significantly.
-// Finally decided for ORO following advise from Stefan Bodewig (message
-// to jmeter-dev dated 25 Nov 2003 8:52 CET) [Jordi]
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -146,15 +141,16 @@ class RegexpHTMLParser extends HTMLParser {
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
-
+        Pattern pattern= null;
+        Perl5Matcher matcher = null;
         try {
-			Perl5Matcher matcher = JMeterUtils.getMatcher();
+            matcher = JMeterUtils.getMatcher();
 			PatternMatcherInput input = localInput.get();
 			// TODO: find a way to avoid the cost of creating a String here --
 			// probably a new PatternMatcherInput working on a byte[] would do
 			// better.
 			input.setInput(new String(html, encoding)); 
-			Pattern pattern=JMeterUtils.getPatternCache().getPattern(
+			pattern=JMeterUtils.getPatternCache().getPattern(
 			        REGEXP,
 			        Perl5Compiler.CASE_INSENSITIVE_MASK
 			        | Perl5Compiler.SINGLELINE_MASK
@@ -199,6 +195,8 @@ class RegexpHTMLParser extends HTMLParser {
 			throw new HTMLParseException(e.getMessage(), e);
 		} catch (MalformedCachePatternException e) {
 			throw new HTMLParseException(e.getMessage(), e);
-		}
+		} finally {
+            JMeterUtils.clearMatcherMemory(matcher, pattern);
+        }
     }
 }
