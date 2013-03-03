@@ -36,6 +36,8 @@ public class MongoScriptSampler
     extends AbstractSampler
         implements TestBean {
 
+    private static final long serialVersionUID = -7789012234636439896L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public final static String SOURCE = "MongoScriptSampler.source"; //$NON-NLS-1$
@@ -43,10 +45,8 @@ public class MongoScriptSampler
     public final static String DATABASE = "MongoScriptSampler.database"; //$NON-NLS-1$
     public final static String USERNAME = "MongoScriptSampler.username"; //$NON-NLS-1$
     public final static String PASSWORD = "MongoScriptSampler.password"; //$NON-NLS-1$
-
     public final static String SCRIPT = "MongoScriptSampler.script"; //$NON-NLS-1$
 
-    private static final long serialVersionUID = -7789012234636439896L;
 
     public MongoScriptSampler() {
         trace("MongoScriptSampler()");
@@ -61,7 +61,7 @@ public class MongoScriptSampler
 
         res.setSampleLabel(getTitle());
         res.setResponseCodeOK();
-        res.setResponseCode("200");
+        res.setResponseCode("200"); // $NON-NLS-1$
         res.setSuccessful(true);
         res.setResponseMessageOK();
         res.setSamplerData(data);
@@ -82,8 +82,7 @@ public class MongoScriptSampler
         }
         catch (Exception ex) {
             res.sampleEnd();
-            log.warn("", ex);
-            res.setResponseCode("500");// $NON-NLS-1$
+            res.setResponseCode("500"); // $NON-NLS-1$
             res.setSuccessful(false);
             res.setResponseMessage(ex.toString());
             res.setResponseData(ex.getMessage().getBytes());
