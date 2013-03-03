@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.mongodb.config;
 
+import java.net.UnknownHostException;
+
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.protocol.mongodb.mongo.MongoDB;
 import org.apache.jmeter.protocol.mongodb.mongo.MongoUtils;
@@ -240,7 +242,11 @@ public class MongoSourceElement
             if(log.isDebugEnabled()) {
                 log.debug(getSource() + "  is being defined.");
             }
-            getThreadContext().getVariables().putObject(getSource(), new MongoDB(MongoUtils.toServerAddresses(getConnection()), mongoOptions));
+            try {
+                getThreadContext().getVariables().putObject(getSource(), new MongoDB(MongoUtils.toServerAddresses(getConnection()), mongoOptions));
+            } catch (UnknownHostException e) {
+                throw new IllegalStateException(e);
+            }
         }
     }
 

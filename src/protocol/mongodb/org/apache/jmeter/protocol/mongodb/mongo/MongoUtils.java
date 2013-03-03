@@ -21,9 +21,7 @@ package org.apache.jmeter.protocol.mongodb.mongo;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import java.util.List;
 
 import com.mongodb.ServerAddress;
 
@@ -31,25 +29,16 @@ import com.mongodb.ServerAddress;
  */
 public class MongoUtils {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    public static List<ServerAddress> toServerAddresses(String connections) throws UnknownHostException {
 
-    public static ArrayList<ServerAddress> toServerAddresses(String connections) {
-
-        ArrayList<ServerAddress> addresses = new ArrayList<ServerAddress>();
-        try {
-            for(String connection : Arrays.asList(connections.split(","))) {
-                int port = 27017;
-                String[] hostPort = connection.split(":");
-                if(hostPort.length > 1 && hostPort[1] != null) {
-                    port = Integer.parseInt(hostPort[1].trim());
-                }
-                addresses.add(new ServerAddress(hostPort[0], port));
+        List<ServerAddress> addresses = new ArrayList<ServerAddress>();
+        for(String connection : Arrays.asList(connections.split(","))) {
+            int port = 27017;
+            String[] hostPort = connection.split(":");
+            if(hostPort.length > 1 && hostPort[1] != null) {
+                port = Integer.parseInt(hostPort[1].trim());
             }
-        }
-        catch(UnknownHostException uhe) {
-            if(log.isWarnEnabled()) {
-                log.warn("", uhe);
-            }
+            addresses.add(new ServerAddress(hostPort[0], port));
         }
         return addresses;
     }
