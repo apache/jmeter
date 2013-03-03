@@ -27,6 +27,10 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+//NOTE: Also looked at using Java 1.4 regexp instead of ORO. The change was
+//trivial. Performance did not improve -- at least not significantly.
+//Finally decided for ORO following advise from Stefan Bodewig (message
+//to jmeter-dev dated 25 Nov 2003 8:52 CET) [Jordi]
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
