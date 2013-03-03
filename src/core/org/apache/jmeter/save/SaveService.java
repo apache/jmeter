@@ -174,7 +174,7 @@ public class SaveService {
     
     // Must match _version property value in saveservice.properties
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    private static final String PROPVERSION = "2.4";// Expected version $NON-NLS-1$
+    private static final String PROPVERSION = "2.5";// Expected version $NON-NLS-1$
 
     // Internal information only
     private static String fileVersion = ""; // read from saveservice.properties file// $NON-NLS-1$
