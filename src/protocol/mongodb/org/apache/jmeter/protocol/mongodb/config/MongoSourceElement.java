@@ -38,6 +38,11 @@ public class MongoSourceElement
     extends AbstractTestElement
         implements ConfigElement, TestStateListener, TestBean {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2100L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public final static String CONNECTION = "MongoSourceElement.connection"; //$NON-NLS-1$
