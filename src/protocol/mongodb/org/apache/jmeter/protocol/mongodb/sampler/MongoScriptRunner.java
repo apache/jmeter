@@ -37,7 +37,7 @@ public class MongoScriptRunner {
      * 
      * @param db
      * @param script
-     * @return
+     * @return Object
      * @throws Exception
      */
     public Object evaluate(DB db, String script)
