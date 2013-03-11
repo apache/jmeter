@@ -86,6 +86,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     /** Whether to call System.exit(1) if threads won't stop */
     private static final boolean SYSTEM_EXIT_ON_STOP_FAIL = JMeterUtils.getPropDefault("jmeterengine.stopfail.system.exit", true);
     
+    /** Whether to call System.exit(0) unconditionally at end of non-GUI test */
+    private static final boolean SYSTEM_EXIT_FORCED = JMeterUtils.getPropDefault("jmeterengine.force.system.exit", false);
+
     /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
 
@@ -435,6 +438,11 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
 
         notifyTestListenersOfEnd(testListeners);
+
+        if (JMeter.isNonGUI() && SYSTEM_EXIT_FORCED) {
+            log.info("Forced JVM shutdown requested at end of test");
+            System.exit(0);
+        }
     }
 
     /**

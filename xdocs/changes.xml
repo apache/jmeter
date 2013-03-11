@@ -168,6 +168,7 @@ This does not affect JMeter operation.
 <h3>General</h3>
 <ul>
 <li><bugzilla>54584</bugzilla> - MongoDB plugin</li>
+<li><bugzilla>54669</bugzilla> - Add flag forcing non-GUI JVM to exit after test</li>
 </ul>
 
 <h2>Non-functional changes</h2>
