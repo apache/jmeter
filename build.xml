@@ -385,6 +385,7 @@
     <include name="${lib.dir}/${jsoup.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>
+  	<include name="${lib.dir}/${mongo-java-driver.jar}"/>
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
     <include name="${lib.dir}/${soap.jar}"/>
