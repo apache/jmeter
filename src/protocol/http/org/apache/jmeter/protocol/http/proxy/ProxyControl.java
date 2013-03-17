@@ -320,7 +320,7 @@ public class ProxyControl extends GenericController {
     }
 
     public void addConfigElement(ConfigElement config) {
-    	// NOOP
+        // NOOP
     }
 
     public void startProxy() throws IOException {
@@ -413,7 +413,7 @@ public class ProxyControl extends GenericController {
             try {
                 server.join(1000); // wait for server to stop
             } catch (InterruptedException e) {
-            	//NOOP
+                //NOOP
             }
             notifyTestListenersOfEnd();
             server = null;
@@ -521,7 +521,7 @@ public class ProxyControl extends GenericController {
      * Called from AWT Event thread
      */
     private void addAssertion(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
-    	ResponseAssertion ra = new ResponseAssertion();
+        ResponseAssertion ra = new ResponseAssertion();
         ra.setProperty(TestElement.GUI_CLASS, ASSERTION_GUI);
         ra.setName(JMeterUtils.getResString("assertion_title")); // $NON-NLS-1$
         ra.setTestFieldResponseData();
@@ -537,16 +537,16 @@ public class ProxyControl extends GenericController {
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName("-------------------"); // $NON-NLS-1$
         JMeterUtils.runSafe(new Runnable() {
-			@Override
+            @Override
             public void run() {
-				try {
-					model.addComponent(sc, node);
-				} catch (IllegalUserActionException e) {
-					log.error("Program error", e);
-			        throw new Error(e);
-				}		
-			}
-		});
+                try {
+                    model.addComponent(sc, node);
+                } catch (IllegalUserActionException e) {
+                    log.error("Program error", e);
+                    throw new Error(e);
+                }
+            }
+        });
     }
 
     /**
@@ -563,20 +563,20 @@ public class ProxyControl extends GenericController {
      */
     private void addSimpleController(final JMeterTreeModel model, final JMeterTreeNode node, String name)
             throws InterruptedException, InvocationTargetException {
-    	final GenericController sc = new GenericController();
+        final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName(name);
         JMeterUtils.runSafe(new Runnable() {
-			@Override
+            @Override
             public void run() {
-		        try {
-					model.addComponent(sc, node);
-				} catch (IllegalUserActionException e) {
-					 log.error("Program error", e);
-					 throw new Error(e);
-				}				
-			}
-		});
+                try {
+                    model.addComponent(sc, node);
+                } catch (IllegalUserActionException e) {
+                     log.error("Program error", e);
+                     throw new Error(e);
+                }
+            }
+        });
     }
 
     /**
@@ -597,16 +597,16 @@ public class ProxyControl extends GenericController {
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
         JMeterUtils.runSafe(new Runnable() {
-			@Override
+            @Override
             public void run() {
-				 try {
-					model.addComponent(sc, node);
-				} catch (IllegalUserActionException e) {
-					log.error("Program error", e);
+                 try {
+                    model.addComponent(sc, node);
+                } catch (IllegalUserActionException e) {
+                    log.error("Program error", e);
                     throw new Error(e);
-				}
-			}
-		});
+                }
+            }
+        });
     }
     /**
      * Helpler method to replicate any timers found within the Proxy Controller
@@ -783,7 +783,7 @@ public class ProxyControl extends GenericController {
     }
 
     private void placeSampler(final HTTPSamplerBase sampler, final TestElement[] subConfigs, 
-    		JMeterTreeNode myTarget) {
+            JMeterTreeNode myTarget) {
         try {
             final JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
 
@@ -835,29 +835,29 @@ public class ProxyControl extends GenericController {
             final boolean firstInBatchFinal = firstInBatch;
             final JMeterTreeNode myTargetFinal = myTarget;
             JMeterUtils.runSafe(new Runnable() {
-				@Override
+                @Override
                 public void run() {
-					try {
-			            final JMeterTreeNode newNode = treeModel.addComponent(sampler, myTargetFinal);
-			            if (firstInBatchFinal) {
-			                if (addAssertions.get()) {
-			                    addAssertion(treeModel, newNode);
-			                }
-			                addTimers(treeModel, newNode, deltaTFinal);
-			            }
-	
-			            for (int i = 0; subConfigs != null && i < subConfigs.length; i++) {
-			                if (subConfigs[i] instanceof HeaderManager) {
-			                	final TestElement headerManager = subConfigs[i];
-			                	headerManager.setProperty(TestElement.GUI_CLASS, HEADER_PANEL);
-			                    treeModel.addComponent(headerManager, newNode);
-			                }
-			            }
-					} catch (IllegalUserActionException e) {
-			            JMeterUtils.reportErrorToUser(e.getMessage());
-			        }
-				}
-			});
+                    try {
+                        final JMeterTreeNode newNode = treeModel.addComponent(sampler, myTargetFinal);
+                        if (firstInBatchFinal) {
+                            if (addAssertions.get()) {
+                                addAssertion(treeModel, newNode);
+                            }
+                            addTimers(treeModel, newNode, deltaTFinal);
+                        }
+
+                        for (int i = 0; subConfigs != null && i < subConfigs.length; i++) {
+                            if (subConfigs[i] instanceof HeaderManager) {
+                                final TestElement headerManager = subConfigs[i];
+                                headerManager.setProperty(TestElement.GUI_CLASS, HEADER_PANEL);
+                                treeModel.addComponent(headerManager, newNode);
+                            }
+                        }
+                    } catch (IllegalUserActionException e) {
+                        JMeterUtils.reportErrorToUser(e.getMessage());
+                    }
+                }
+            });
         } catch (Exception e) {
             JMeterUtils.reportErrorToUser(e.getMessage());
         } 

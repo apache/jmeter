@@ -77,8 +77,8 @@ public final class JMeterContextService {
      * @param context {@link JMeterContext}
      */
     public static void replaceContext(JMeterContext context) {
-    	threadContext.remove();
-    	threadContext.set(context);
+        threadContext.remove();
+        threadContext.set(context);
     }
     /**
      * Method is called by the JMeterEngine class when a test run is started.

@@ -174,36 +174,36 @@ public class TextFile extends File {
         encoding = string;
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((encoding == null) ? 0 : encoding.hashCode());
-		return result;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result
+                + ((encoding == null) ? 0 : encoding.hashCode());
+        return result;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (!(obj instanceof TextFile)) {
-			return false;
-		}
-		TextFile other = (TextFile) obj;
-		if (encoding == null) {
-		    return other.encoding == null;
-		} 
-		return encoding.equals(other.encoding);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof TextFile)) {
+            return false;
+        }
+        TextFile other = (TextFile) obj;
+        if (encoding == null) {
+            return other.encoding == null;
+        } 
+        return encoding.equals(other.encoding);
+    }
 }

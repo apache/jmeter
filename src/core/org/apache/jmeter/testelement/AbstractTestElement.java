@@ -285,19 +285,19 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param clone clone property
      */
     protected void addProperty(JMeterProperty property, boolean clone) {
-    	JMeterProperty propertyToPut = property;
-    	if(clone) {
-    		propertyToPut = property.clone();
-    	}
+        JMeterProperty propertyToPut = property;
+        if(clone) {
+            propertyToPut = property.clone();
+        }
         if (isRunningVersion()) {
-        	setTemporary(propertyToPut);
+            setTemporary(propertyToPut);
         } else {
             clearTemporary(property);
         }
         JMeterProperty prop = getProperty(property.getName());
 
         if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals(""))) {
-        	propMap.put(property.getName(), propertyToPut);
+            propMap.put(property.getName(), propertyToPut);
         } else {
             prop.mergeIn(propertyToPut);
         }
@@ -613,18 +613,18 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         return result;
     }
     
-	/**
-	 * Add to result the values of propertyNames
-	 * @param result List<String> values of propertyNames
-	 * @param propertyNames Set<String> properties to extract
-	 */
-	protected final void addPropertiesValues(List<String> result, Set<String> propertyNames) {
-		PropertyIterator iterator = propertyIterator();
-		while(iterator.hasNext()) {
-			JMeterProperty jMeterProperty = iterator.next();	
-			if(propertyNames.contains(jMeterProperty.getName())) {
-				result.add(jMeterProperty.getStringValue());
-			}
-		}
-	} 
+    /**
+     * Add to result the values of propertyNames
+     * @param result List<String> values of propertyNames
+     * @param propertyNames Set<String> properties to extract
+     */
+    protected final void addPropertiesValues(List<String> result, Set<String> propertyNames) {
+        PropertyIterator iterator = propertyIterator();
+        while(iterator.hasNext()) {
+            JMeterProperty jMeterProperty = iterator.next();
+            if(propertyNames.contains(jMeterProperty.getName())) {
+                result.add(jMeterProperty.getStringValue());
+            }
+        }
+    } 
 }

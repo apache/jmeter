@@ -187,32 +187,32 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     /**
      * Return a simple MessageConsumer or a TopicSubscriber (as a durable subscription)
      * @param session
-     * 				JMS session	
+     *                 JMS session
      * @param destination
-     * 				JMS destination, can be either topic or queue
+     *                 JMS destination, can be either topic or queue
      * @param durableSubscriptionId 
-     * 				If neither empty nor null, this means that a durable 
-     * 				subscription will be used
+     *                 If neither empty nor null, this means that a durable 
+     *                 subscription will be used
      * @param jmsSelector JMS Selector
      * @return
      * @throws JMSException
      */
     private MessageConsumer createSubscriber(Session session, 
-    		Destination destination, String durableSubscriptionId, 
-    		String jmsSelector) throws JMSException {
-    	if (isEmpty(durableSubscriptionId)) {
-    	    if(isEmpty(jmsSelector)) {
-    	        return session.createConsumer(destination);
-    	    } else {
-    	        return session.createConsumer(destination, jmsSelector);
-    	    }
+            Destination destination, String durableSubscriptionId, 
+            String jmsSelector) throws JMSException {
+        if (isEmpty(durableSubscriptionId)) {
+            if(isEmpty(jmsSelector)) {
+                return session.createConsumer(destination);
+            } else {
+                return session.createConsumer(destination, jmsSelector);
+            }
         } else {
             if(isEmpty(jmsSelector)) {
                 return session.createDurableSubscriber((Topic) destination, durableSubscriptionId); 
             } else {
                 return session.createDurableSubscriber((Topic) destination, durableSubscriptionId, jmsSelector, false);                 
             }
-        }	
+        }
     }
 
     /**
@@ -298,10 +298,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * Checks whether string is empty
      * 
      * @param s1
-     * @return True if input is null, an empty string, 
-     * 				or a white space-only string
+     * @return True if input is null, an empty string, or a white space-only string
      */
     private boolean isEmpty(String s1) {
-    	return (s1 == null || s1.trim().equals(""));
+        return (s1 == null || s1.trim().equals(""));
     }
 }

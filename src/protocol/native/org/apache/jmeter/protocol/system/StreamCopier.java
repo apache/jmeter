@@ -37,22 +37,22 @@ class StreamCopier extends Thread {
     private final InputStream is;
     private final OutputStream os;
 
-	/**
+    /**
      * @param is {@link InputStream}
-	 * @param is {@link OutputStream}
-	 * @throws IOException 
-	 */
-	StreamCopier(InputStream is, OutputStream os) throws IOException {
-		this.is = is;
-		this.os = os;
-	}
+     * @param is {@link OutputStream}
+     * @throws IOException 
+     */
+    StreamCopier(InputStream is, OutputStream os) throws IOException {
+        this.is = is;
+        this.os = os;
+    }
 
-	/**
-	 * @see java.lang.Thread#run()
-	 */
-	@Override
+    /**
+     * @see java.lang.Thread#run()
+     */
+    @Override
     public void run() {
-	    try {
+        try {
             IOUtils.copyLarge(is, os);
             os.close();
             is.close();
@@ -62,6 +62,6 @@ class StreamCopier extends Thread {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
-	}
-	
+    }
+    
 }

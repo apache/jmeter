@@ -149,57 +149,57 @@ class RegexpHTMLParser extends HTMLParser {
         Perl5Matcher matcher = null;
         try {
             matcher = JMeterUtils.getMatcher();
-			PatternMatcherInput input = localInput.get();
-			// TODO: find a way to avoid the cost of creating a String here --
-			// probably a new PatternMatcherInput working on a byte[] would do
-			// better.
-			input.setInput(new String(html, encoding)); 
-			pattern=JMeterUtils.getPatternCache().getPattern(
-			        REGEXP,
-			        Perl5Compiler.CASE_INSENSITIVE_MASK
-			        | Perl5Compiler.SINGLELINE_MASK
-			        | Perl5Compiler.READ_ONLY_MASK);
+            PatternMatcherInput input = localInput.get();
+            // TODO: find a way to avoid the cost of creating a String here --
+            // probably a new PatternMatcherInput working on a byte[] would do
+            // better.
+            input.setInput(new String(html, encoding)); 
+            pattern=JMeterUtils.getPatternCache().getPattern(
+                    REGEXP,
+                    Perl5Compiler.CASE_INSENSITIVE_MASK
+                    | Perl5Compiler.SINGLELINE_MASK
+                    | Perl5Compiler.READ_ONLY_MASK);
 
-			while (matcher.contains(input, pattern)) {
-			    MatchResult match = matcher.getMatch();
-			    String s;
-			    if (log.isDebugEnabled()) {
-			        log.debug("match groups " + match.groups() + " " + match.toString());
-			    }
-			    // Check for a BASE HREF:
-			    for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
-			        s = match.group(g);
-			        if (s != null) {
-			            if (log.isDebugEnabled()) {
-			                log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
-			            }
-			            try {
-			                baseUrl = ConversionUtils.makeRelativeURL(baseUrl, s);
-			            } catch (MalformedURLException e) {
-			                // Doesn't even look like a URL?
-			                // Maybe it isn't: Ignore the exception.
-			                if (log.isDebugEnabled()) {
-			                    log.debug("Can't build base URL from RL " + s + " in page " + baseUrl, e);
-			                }
-			            }
-			        }
-			    }
-			    for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
-			        s = match.group(g);
-			        if (s != null) {
-			            if (log.isDebugEnabled()) {
-			                log.debug("group " + g + " - " + match.group(g));
-			            }
-			            urls.addURL(s, baseUrl);
-			        }
-			    }
-			}
-			return urls.iterator();
-		} catch (UnsupportedEncodingException e) {
-			throw new HTMLParseException(e.getMessage(), e);
-		} catch (MalformedCachePatternException e) {
-			throw new HTMLParseException(e.getMessage(), e);
-		} finally {
+            while (matcher.contains(input, pattern)) {
+                MatchResult match = matcher.getMatch();
+                String s;
+                if (log.isDebugEnabled()) {
+                    log.debug("match groups " + match.groups() + " " + match.toString());
+                }
+                // Check for a BASE HREF:
+                for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
+                    s = match.group(g);
+                    if (s != null) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
+                        }
+                        try {
+                            baseUrl = ConversionUtils.makeRelativeURL(baseUrl, s);
+                        } catch (MalformedURLException e) {
+                            // Doesn't even look like a URL?
+                            // Maybe it isn't: Ignore the exception.
+                            if (log.isDebugEnabled()) {
+                                log.debug("Can't build base URL from RL " + s + " in page " + baseUrl, e);
+                            }
+                        }
+                    }
+                }
+                for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
+                    s = match.group(g);
+                    if (s != null) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("group " + g + " - " + match.group(g));
+                        }
+                        urls.addURL(s, baseUrl);
+                    }
+                }
+            }
+            return urls.iterator();
+        } catch (UnsupportedEncodingException e) {
+            throw new HTMLParseException(e.getMessage(), e);
+        } catch (MalformedCachePatternException e) {
+            throw new HTMLParseException(e.getMessage(), e);
+        } finally {
             JMeterUtils.clearMatcherMemory(matcher, pattern);
         }
     }

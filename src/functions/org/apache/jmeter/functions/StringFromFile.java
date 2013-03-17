@@ -210,7 +210,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String myValue = ERR_IND;
-    	String myName = "StringFromFile_";//$NON-NLS-1$
+        String myName = "StringFromFile_";//$NON-NLS-1$
         if (values.length >= PARAM_NAME) {
             myName = ((CompoundVariable) values[PARAM_NAME - 1]).execute().trim();
         }
@@ -333,7 +333,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     /** {@inheritDoc} */
     @Override
     public void testEnded(String host) {
-    	closeFile();
+        closeFile();
     }
 
 }

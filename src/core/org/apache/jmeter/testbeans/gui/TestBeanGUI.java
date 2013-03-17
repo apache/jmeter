@@ -387,7 +387,7 @@ public TestElement createTestElement() {
      * @return number of matches
      */
     public int setupGuiClasses() {
-    	return setupGuiClasses(new ArrayList<String>());
+        return setupGuiClasses(new ArrayList<String>());
     }
     
     /**
@@ -396,10 +396,10 @@ public TestElement createTestElement() {
      * @return number of matches
      */
     private int setupGuiClasses(List<String> menuCategories ) {
-    	int matches = 0;// How many classes can we assign from?
+        int matches = 0;// How many classes can we assign from?
         // TODO: there must be a nicer way...
         BeanDescriptor bd = beanInfo.getBeanDescriptor();
-    	if (Assertion.class.isAssignableFrom(testBeanClass)) {
+        if (Assertion.class.isAssignableFrom(testBeanClass)) {
             menuCategories.add(MenuFactory.ASSERTIONS);
             bd.setValue(TestElement.GUI_CLASS, AbstractAssertionGui.class.getName());
             matches++;
@@ -491,20 +491,20 @@ public TestElement createTestElement() {
         return beanInfo.getBeanDescriptor().isExpert();
     }
 
-	/**
-	 * Handle Locale Change by reloading BeanInfo
-	 * @param event {@link LocaleChangeEvent}
-	 */
-	@Override
+    /**
+     * Handle Locale Change by reloading BeanInfo
+     * @param event {@link LocaleChangeEvent}
+     */
+    @Override
     public void localeChanged(LocaleChangeEvent event) {
-		try {
+        try {
             beanInfo = Introspector.getBeanInfo(testBeanClass);
             setupGuiClasses();
         } catch (IntrospectionException e) {
             log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
             JMeterUtils.reportErrorToUser("Can't get beanInfo for " + testBeanClass.getName());
         }
-	}
+    }
 
     /**
      * {@inheritDoc}}

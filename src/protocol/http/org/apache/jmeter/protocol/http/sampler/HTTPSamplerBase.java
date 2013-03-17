@@ -264,9 +264,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final String RESPONSE_PARSERS= // list of parsers
         JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
 
-	// Control reuse of cached SSL Context in subsequent iterations
-	private static final boolean USE_CACHED_SSL_CONTEXT = 
-	        JMeterUtils.getPropDefault("https.use.cached.ssl.context", true);//$NON-NLS-1$
+    // Control reuse of cached SSL Context in subsequent iterations
+    private static final boolean USE_CACHED_SSL_CONTEXT = 
+            JMeterUtils.getPropDefault("https.use.cached.ssl.context", true);//$NON-NLS-1$
     
     static{
         String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
@@ -294,8 +294,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             log.info("No response parsers defined: text/html only will be scanned for embedded resources");
         }
         
-		log.info("Reuse SSL session context on subsequent iterations: "
-				+ USE_CACHED_SSL_CONTEXT);
+        log.info("Reuse SSL session context on subsequent iterations: "
+                + USE_CACHED_SSL_CONTEXT);
     }
 
     // Bug 49083
@@ -1296,12 +1296,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param initialValue boolean
      */
     private void setParentSampleSuccess(HTTPSampleResult res, boolean initialValue) {
-		if(!IGNORE_FAILED_EMBEDDED_RESOURCES) {
-			res.setSuccessful(initialValue);
-		}
-	}
+        if(!IGNORE_FAILED_EMBEDDED_RESOURCES) {
+            res.setSuccessful(initialValue);
+        }
+    }
 
-	/*
+    /*
      * @param res HTTPSampleResult to check
      * @return parser class name (may be "") or null if entry does not exist
      */
@@ -1330,26 +1330,26 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         testEnded();
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void testIterationStart(LoopIterationEvent event) {
-		if (!USE_CACHED_SSL_CONTEXT) {
-			JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
-			sslMgr.resetContext();
-			notifySSLContextWasReset();
-		}
-	}
+        if (!USE_CACHED_SSL_CONTEXT) {
+            JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
+            sslMgr.resetContext();
+            notifySSLContextWasReset();
+        }
+    }
 
-	/**
-	 * Called by testIterationStart if the SSL Context was reset.
-	 * 
-	 * This implementation does nothing.
-	 */
-	protected void notifySSLContextWasReset() {
-		// NOOP
-	}
+    /**
+     * Called by testIterationStart if the SSL Context was reset.
+     * 
+     * This implementation does nothing.
+     */
+    protected void notifySSLContextWasReset() {
+        // NOOP
+    }
 
     /**
      * {@inheritDoc}
@@ -1775,7 +1775,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         final private boolean areFollowingRedirect;
         final private int depth;
         private final HTTPSamplerBase sampler;
-		private final JMeterContext jmeterContextOfParentThread;
+        private final JMeterContext jmeterContextOfParentThread;
 
         ASyncSample(URL url, String method,
                 boolean areFollowingRedirect, int depth,  CookieManager cookieManager, HTTPSamplerBase base){
@@ -1799,7 +1799,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
         @Override
         public AsynSamplerResultHolder call() {
-        	JMeterContextService.replaceContext(jmeterContextOfParentThread);
+            JMeterContextService.replaceContext(jmeterContextOfParentThread);
             ((CleanerThread) Thread.currentThread()).registerSamplerForEndNotification(sampler);
             HTTPSampleResult httpSampleResult = sampler.sample(url, method, areFollowingRedirect, depth);
             if(sampler.getCookieManager() != null) {

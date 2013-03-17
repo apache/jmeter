@@ -33,7 +33,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class NativeCommand {
 
-	private StreamGobbler outputGobbler;
+    private StreamGobbler outputGobbler;
     private final File directory;
     private final Map<String, String> env;
     private Map<String, String> executionEnvironment;
@@ -41,22 +41,22 @@ public class NativeCommand {
     private final String stdout;
     private final String stderr;
 
-	/**
-	 * @param env Environment variables appended to environment
-	 * @param directory File working directory
-	 */
-	public NativeCommand(File directory, Map<String, String> env) {
-	    this(directory, env, null, null, null);
-	}
-
-	/**
-	 * 
+    /**
      * @param env Environment variables appended to environment
      * @param directory File working directory
-	 * @param stdin File name that will contain data to be input to process
-	 * @param stdout File name that will contain out stream
-	 * @param stderr File name that will contain err stream
-	 */
+     */
+    public NativeCommand(File directory, Map<String, String> env) {
+        this(directory, env, null, null, null);
+    }
+
+    /**
+     * 
+     * @param env Environment variables appended to environment
+     * @param directory File working directory
+     * @param stdin File name that will contain data to be input to process
+     * @param stdout File name that will contain out stream
+     * @param stderr File name that will contain err stream
+     */
     public NativeCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
         super();
         this.directory = directory;
@@ -66,23 +66,23 @@ public class NativeCommand {
         this.stderr = JOrphanUtils.nullifyIfEmptyTrimmed(stderr);
     }
 
-	/**
-	 * @param arguments List<String>
-	 * @return return code
-	 * @throws InterruptedException
-	 * @throws IOException
-	 */
-	public int run(List<String> arguments) throws InterruptedException, IOException {
-		Process proc = null;
-		try
-		{
-		    ProcessBuilder procBuild = new ProcessBuilder(arguments);
-		    procBuild.environment().putAll(env);
-		    this.executionEnvironment = Collections.unmodifiableMap(procBuild.environment());
-		    procBuild.directory(directory);
-		    if (stderr == null || stderr.equals(stdout)) { // we're not redirecting stderr separately
-		        procBuild.redirectErrorStream(true);
-		    }
+    /**
+     * @param arguments List<String>
+     * @return return code
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    public int run(List<String> arguments) throws InterruptedException, IOException {
+        Process proc = null;
+        try
+        {
+            ProcessBuilder procBuild = new ProcessBuilder(arguments);
+            procBuild.environment().putAll(env);
+            this.executionEnvironment = Collections.unmodifiableMap(procBuild.environment());
+            procBuild.directory(directory);
+            if (stderr == null || stderr.equals(stdout)) { // we're not redirecting stderr separately
+                procBuild.redirectErrorStream(true);
+            }
             proc = procBuild.start();
             StreamCopier swerr = null;
             if (!procBuild.redirectErrorStream()) { // stderr has separate output file
@@ -100,50 +100,50 @@ public class NativeCommand {
             }
             
             StreamCopier swin = null;
-	        if (stdin != null) {
-	            swin = new StreamCopier(new FileInputStream(stdin), proc.getOutputStream());
-	            swin.start();
-	        }
-			int exitVal = proc.waitFor();
+            if (stdin != null) {
+                swin = new StreamCopier(new FileInputStream(stdin), proc.getOutputStream());
+                swin.start();
+            }
+            int exitVal = proc.waitFor();
 
-			if (outputGobbler != null) {
-			    outputGobbler.join();
-			}
-			if (swout != null) {
-			    swout.join();
-			}
-			if (swerr != null) {
-			    swerr.join();
-			}
-			if (swin != null) {
-			    swin.interrupt(); // the copying thread won't generally detect EOF
-			    swin.join();
-			}
-			return exitVal;
-		}
-		finally
-		{
-			if(proc != null)
-			{
-				try {
-					proc.destroy();
-				} catch (Exception ignored) {
-					// Ignored
-				}
-			}
-		}
-	}
+            if (outputGobbler != null) {
+                outputGobbler.join();
+            }
+            if (swout != null) {
+                swout.join();
+            }
+            if (swerr != null) {
+                swerr.join();
+            }
+            if (swin != null) {
+                swin.interrupt(); // the copying thread won't generally detect EOF
+                swin.join();
+            }
+            return exitVal;
+        }
+        finally
+        {
+            if(proc != null)
+            {
+                try {
+                    proc.destroy();
+                } catch (Exception ignored) {
+                    // Ignored
+                }
+            }
+        }
+    }
 
-	/**
-	 * @return Out/Err stream contents
-	 */
-	public String getOutResult() {
-	    if(outputGobbler != null) {    
-	        return outputGobbler.getResult();
-	    } else {
-	        return "";
-	    }
-	}
+    /**
+     * @return Out/Err stream contents
+     */
+    public String getOutResult() {
+        if(outputGobbler != null) {    
+            return outputGobbler.getResult();
+        } else {
+            return "";
+        }
+    }
 
     /**
      * @return the executionEnvironment

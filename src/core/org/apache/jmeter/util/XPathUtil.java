@@ -264,12 +264,12 @@ public class XPathUtil {
         }
     }
     
-	/**
-	 * Return value for node
-	 * @param node Node
-	 * @return String
-	 */
-	private static String getValueForNode(Node node) {
+    /**
+     * Return value for node
+     * @param node Node
+     * @return String
+     */
+    private static String getValueForNode(Node node) {
         StringWriter sw = new StringWriter();
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
@@ -288,23 +288,23 @@ public class XPathUtil {
      * @return {@link NodeList}
      * @throws TransformerException 
      */
-	public static NodeList selectNodeList(Document document, String xPathExpression) throws TransformerException {
-		XObject xObject = XPathAPI.eval(document, xPathExpression, getPrefixResolver(document));
-		return xObject.nodelist();
-	}
+    public static NodeList selectNodeList(Document document, String xPathExpression) throws TransformerException {
+        XObject xObject = XPathAPI.eval(document, xPathExpression, getPrefixResolver(document));
+        return xObject.nodelist();
+    }
 
-	/**
-	 * Put in matchStrings results of evaluation
-	 * @param document XML document
-	 * @param xPathQuery XPath Query
-	 * @param matchStrings List<String> that will be filled
-	 * @param fragment return fragment
-	 * @throws TransformerException
-	 */
-	public static void putValuesForXPathInList(Document document, 
-			String xPathQuery,
-			List<String> matchStrings, boolean fragment) throws TransformerException {
-		String val = null;
+    /**
+     * Put in matchStrings results of evaluation
+     * @param document XML document
+     * @param xPathQuery XPath Query
+     * @param matchStrings List<String> that will be filled
+     * @param fragment return fragment
+     * @throws TransformerException
+     */
+    public static void putValuesForXPathInList(Document document, 
+            String xPathQuery,
+            List<String> matchStrings, boolean fragment) throws TransformerException {
+        String val = null;
         XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
         final int objectType = xObject.getType();
         if (objectType == XObject.CLASS_NODESET) {
@@ -337,51 +337,51 @@ public class XPathUtil {
             val = xObject.toString();
             matchStrings.add(val);
       }
-	}
+    }
 
-	/**
-	 * 
-	 * @param document XML Document
-	 * @return {@link PrefixResolver}
-	 */
-	private static PrefixResolver getPrefixResolver(Document document) {
-		PropertiesBasedPrefixResolver propertiesBasedPrefixResolver =
-				new PropertiesBasedPrefixResolver(document.getDocumentElement());
-		return propertiesBasedPrefixResolver;
-	}
+    /**
+     * 
+     * @param document XML Document
+     * @return {@link PrefixResolver}
+     */
+    private static PrefixResolver getPrefixResolver(Document document) {
+        PropertiesBasedPrefixResolver propertiesBasedPrefixResolver =
+                new PropertiesBasedPrefixResolver(document.getDocumentElement());
+        return propertiesBasedPrefixResolver;
+    }
 
-	/**
-	 * Validate xpathString is a valid XPath expression
-	 * @param document XML Document
-	 * @param xpathString XPATH String
-	 * @throws TransformerException if expression fails to evaluate
-	 */
-	public static void validateXPath(Document document, String xpathString) throws TransformerException {
-		if (XPathAPI.eval(document, xpathString, getPrefixResolver(document)) == null) {
+    /**
+     * Validate xpathString is a valid XPath expression
+     * @param document XML Document
+     * @param xpathString XPATH String
+     * @throws TransformerException if expression fails to evaluate
+     */
+    public static void validateXPath(Document document, String xpathString) throws TransformerException {
+        if (XPathAPI.eval(document, xpathString, getPrefixResolver(document)) == null) {
             // We really should never get here
             // because eval will throw an exception
             // if xpath is invalid, but whatever, better
             // safe
-			throw new IllegalArgumentException("xpath eval of '" + xpathString + "' was null");
+            throw new IllegalArgumentException("xpath eval of '" + xpathString + "' was null");
         }
-	}
-	
-	/**
-	 * Fills result
-	 * @param result {@link AssertionResult}
-	 * @param doc XML Document
-	 * @param xPathExpression XPath expression
-	 * @param isNegated
-	 */
-	public static void computeAssertionResult(AssertionResult result,
-			Document doc, 
-			String xPathExpression,
-			boolean isNegated) {
+    }
+
+    /**
+     * Fills result
+     * @param result {@link AssertionResult}
+     * @param doc XML Document
+     * @param xPathExpression XPath expression
+     * @param isNegated
+     */
+    public static void computeAssertionResult(AssertionResult result,
+            Document doc, 
+            String xPathExpression,
+            boolean isNegated) {
         try {
             XObject xObject = XPathAPI.eval(doc, xPathExpression, getPrefixResolver(doc));
             switch (xObject.getType()) {
                 case XObject.CLASS_NODESET:
-                	NodeList nodeList = xObject.nodelist();
+                    NodeList nodeList = xObject.nodelist();
                     if (nodeList == null || nodeList.getLength() == 0) {
                         if (log.isDebugEnabled()) {
                             log.debug(new StringBuilder("nodeList null no match  ").append(xPathExpression).toString());
@@ -423,5 +423,5 @@ public class XPathUtil {
                     .append(xPathExpression)
                     .toString());
         }
-	}
+    }
 }

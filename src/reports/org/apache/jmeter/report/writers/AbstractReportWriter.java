@@ -68,7 +68,7 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
         File output = new File(getTargetDirectory());
         if (!output.exists() || !output.isDirectory()) {
             if(!output.mkdir()) {
-            	throw new IllegalStateException("Could not create directory:"+output.getAbsolutePath());
+                throw new IllegalStateException("Could not create directory:"+output.getAbsolutePath());
             }
         }
     }
@@ -82,8 +82,8 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
             // if the directory already exists and is a directory,
             // we just renamed to "archive.date"
             if(!output.renameTo(new File("archive." + getDayString()))) {
-            	throw new IllegalStateException("Could not rename directory:"+output.getAbsolutePath()+
-            			" to archive." + getDayString());
+                throw new IllegalStateException("Could not rename directory:"+output.getAbsolutePath()+
+                        " to archive." + getDayString());
             }
         }
     }

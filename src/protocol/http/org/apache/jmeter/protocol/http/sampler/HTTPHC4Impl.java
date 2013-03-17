@@ -136,14 +136,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
     private static final HttpRequestInterceptor METRICS_RESETTER = new HttpRequestInterceptor() {
-		@Override
+        @Override
         public void process(HttpRequest request, HttpContext context)
-				throws HttpException, IOException {
+                throws HttpException, IOException {
             HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
-			HttpConnectionMetrics metrics = conn.getMetrics();
-			metrics.reset();
-		}
-	};
+            HttpConnectionMetrics metrics = conn.getMetrics();
+            metrics.reset();
+        }
+    };
 
     private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS = 
         new ThreadLocal<Map<HttpClientKey, HttpClient>>(){
@@ -1122,8 +1122,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         Map<HttpClientKey, HttpClient> map = HTTPCLIENTS.get();
         if ( map != null ) {
             for ( HttpClient cl : map.values() ) {
-            	((AbstractHttpClient) cl).clearRequestInterceptors(); 
-            	((AbstractHttpClient) cl).clearResponseInterceptors(); 
+                ((AbstractHttpClient) cl).clearRequestInterceptors(); 
+                ((AbstractHttpClient) cl).clearResponseInterceptors(); 
                 cl.getConnectionManager().shutdown();
             }
             map.clear();

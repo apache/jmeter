@@ -239,7 +239,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
             String varnames[] = getVariableNames().split(COMMA);
             if(varnames.length > 0) {
-        	JMeterVariables jmvars = getThreadContext().getVariables();
+            JMeterVariables jmvars = getThreadContext().getVariables();
                 for(int i = 0; i < varnames.length && i < outputValues.size(); i++) {
                     String name = varnames[i].trim();
                     if (name.length()>0){ // Save the value in the variable if present
@@ -559,50 +559,50 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     }    
 
 
-	/** 
-	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
-	 */
-	@Override
+    /** 
+     * {@inheritDoc}
+     * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
+     */
+    @Override
     public void testStarted() {
-		testStarted("");
-	}
+        testStarted("");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestStateListener#testStarted(java.lang.String)
-	 */
-	@Override
+    /**
+     * {@inheritDoc}
+     * @see org.apache.jmeter.testelement.TestStateListener#testStarted(java.lang.String)
+     */
+    @Override
     public void testStarted(String host) {
-		cleanCache();
-	}
+        cleanCache();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestStateListener#testEnded()
-	 */
-	@Override
+    /**
+     * {@inheritDoc}
+     * @see org.apache.jmeter.testelement.TestStateListener#testEnded()
+     */
+    @Override
     public void testEnded() {
-		testEnded("");
-	}
+        testEnded("");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @see org.apache.jmeter.testelement.TestStateListener#testEnded(java.lang.String)
-	 */
-	@Override
+    /**
+     * {@inheritDoc}
+     * @see org.apache.jmeter.testelement.TestStateListener#testEnded(java.lang.String)
+     */
+    @Override
     public void testEnded(String host) {
-		cleanCache();		
-	}
-	
-	/**
-	 * Clean cache of PreparedStatements
-	 */
-	private static final void cleanCache() {
-		for (Map<String, PreparedStatement> element : perConnCache.values()) {
-			closeAllStatements(element.values());
-		}
-		perConnCache.clear();
-	}
+        cleanCache();
+    }
+    
+    /**
+     * Clean cache of PreparedStatements
+     */
+    private static final void cleanCache() {
+        for (Map<String, PreparedStatement> element : perConnCache.values()) {
+            closeAllStatements(element.values());
+        }
+        perConnCache.clear();
+    }
 
 }

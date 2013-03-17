@@ -485,13 +485,13 @@ public final class JOrphanUtils {
         for(Map.Entry<Thread, StackTraceElement[]> e : m.entrySet()) {
             boolean daemon = e.getKey().isDaemon();
             if (includeDaemons || !daemon){
-            	builder.setLength(0);
-            	StackTraceElement[] ste = e.getValue();
-            	for (StackTraceElement stackTraceElement : ste) {
-            		int lineNumber = stackTraceElement.getLineNumber();
-					builder.append(stackTraceElement.getClassName()+"#"+stackTraceElement.getMethodName()+
-							(lineNumber >=0 ? " at line:"+ stackTraceElement.getLineNumber() : "")+lineSeparator);
-				}
+                builder.setLength(0);
+                StackTraceElement[] ste = e.getValue();
+                for (StackTraceElement stackTraceElement : ste) {
+                    int lineNumber = stackTraceElement.getLineNumber();
+                    builder.append(stackTraceElement.getClassName()+"#"+stackTraceElement.getMethodName()+
+                            (lineNumber >=0 ? " at line:"+ stackTraceElement.getLineNumber() : "")+lineSeparator);
+                }
                 System.out.println(e.getKey().toString()+((daemon ? " (daemon)" : ""))+", stackTrace:"+ builder.toString());
             }
         }

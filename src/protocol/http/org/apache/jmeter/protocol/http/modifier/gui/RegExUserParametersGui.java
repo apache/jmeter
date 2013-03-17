@@ -37,64 +37,64 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * GUI for {@link RegExUserParameters}
  */
 public class RegExUserParametersGui extends AbstractPreProcessorGui {
-	
-	/**
+
+    /**
      * 
      */
     private static final long serialVersionUID = 3080808672311046276L;
 
-	private JLabeledTextField refRegExRefNameField;
-	
-	private JLabeledTextField paramNamesGrNrField;
+    private JLabeledTextField refRegExRefNameField;
 
-	private JLabeledTextField paramValuesGrNrField;
+    private JLabeledTextField paramNamesGrNrField;
 
-	public RegExUserParametersGui() {
-		super();
-		init();
-	}
+    private JLabeledTextField paramValuesGrNrField;
 
-	@Override
-	public String getLabelResource() {
-		return "regex_params_title"; //$NON-NLS-1$
-	}
+    public RegExUserParametersGui() {
+        super();
+        init();
+    }
 
     @Override
-	public void configure(TestElement el) {
-		super.configure(el);
-		if (el instanceof RegExUserParameters){
-			RegExUserParameters re = (RegExUserParameters) el;
-			paramNamesGrNrField.setText(re.getRegParamNamesGrNr());
-			paramValuesGrNrField.setText(re.getRegExParamValuesGrNr());
-			refRegExRefNameField.setText(re.getRegExRefName());
-		}
-	}
+    public String getLabelResource() {
+        return "regex_params_title"; //$NON-NLS-1$
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
     @Override
-	public TestElement createTestElement() {
-		RegExUserParameters regExUserParams = new RegExUserParameters();
-		modifyTestElement(regExUserParams);
-		return regExUserParams;
-	}
+    public void configure(TestElement el) {
+        super.configure(el);
+        if (el instanceof RegExUserParameters){
+            RegExUserParameters re = (RegExUserParameters) el;
+            paramNamesGrNrField.setText(re.getRegParamNamesGrNr());
+            paramValuesGrNrField.setText(re.getRegExParamValuesGrNr());
+            refRegExRefNameField.setText(re.getRegExRefName());
+        }
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
     @Override
-	public void modifyTestElement(TestElement extractor) {
-		super.configureTestElement(extractor);
-		if (extractor instanceof RegExUserParameters) {
-			RegExUserParameters regExUserParams = (RegExUserParameters) extractor;		
-			regExUserParams.setRegExRefName(refRegExRefNameField.getText());
-			regExUserParams.setRegExParamNamesGrNr(paramNamesGrNrField.getText());
-			regExUserParams.setRegExParamValuesGrNr(paramValuesGrNrField.getText());
-		}
-	}
+    public TestElement createTestElement() {
+        RegExUserParameters regExUserParams = new RegExUserParameters();
+        modifyTestElement(regExUserParams);
+        return regExUserParams;
+    }
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    @Override
+    public void modifyTestElement(TestElement extractor) {
+        super.configureTestElement(extractor);
+        if (extractor instanceof RegExUserParameters) {
+            RegExUserParameters regExUserParams = (RegExUserParameters) extractor;
+            regExUserParams.setRegExRefName(refRegExRefNameField.getText());
+            regExUserParams.setRegExParamNamesGrNr(paramNamesGrNrField.getText());
+            regExUserParams.setRegExParamValuesGrNr(paramValuesGrNrField.getText());
+        }
+    }
     
     /**
      * Implements JMeterGUIComponent.clearGui
@@ -108,58 +108,58 @@ public class RegExUserParametersGui extends AbstractPreProcessorGui {
         refRegExRefNameField.setText(""); //$NON-NLS-1$
     }    
 
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
 
-		Box box = Box.createVerticalBox();
-		box.add(makeTitlePanel());
-		add(box, BorderLayout.NORTH);
-		add(makeParameterPanel(), BorderLayout.CENTER);
-	}
+        Box box = Box.createVerticalBox();
+        box.add(makeTitlePanel());
+        add(box, BorderLayout.NORTH);
+        add(makeParameterPanel(), BorderLayout.CENTER);
+    }
 
-	private JPanel makeParameterPanel() {
-		refRegExRefNameField = new JLabeledTextField(JMeterUtils.getResString("regex_params_ref_name_field")); //$NON-NLS-1$
-		paramNamesGrNrField = new JLabeledTextField(JMeterUtils.getResString("regex_params_names_field")); //$NON-NLS-1$
-		paramValuesGrNrField = new JLabeledTextField(JMeterUtils.getResString("regex_params_values_field")); //$NON-NLS-1$
+    private JPanel makeParameterPanel() {
+        refRegExRefNameField = new JLabeledTextField(JMeterUtils.getResString("regex_params_ref_name_field")); //$NON-NLS-1$
+        paramNamesGrNrField = new JLabeledTextField(JMeterUtils.getResString("regex_params_names_field")); //$NON-NLS-1$
+        paramValuesGrNrField = new JLabeledTextField(JMeterUtils.getResString("regex_params_values_field")); //$NON-NLS-1$
 
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		initConstraints(gbc);
-		addField(panel, refRegExRefNameField, gbc);
-		resetContraints(gbc);
-		addField(panel, paramNamesGrNrField, gbc);
-		resetContraints(gbc);
-		gbc.weighty = 1;
-		addField(panel, paramValuesGrNrField, gbc);
-		return panel;
-	}
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        initConstraints(gbc);
+        addField(panel, refRegExRefNameField, gbc);
+        resetContraints(gbc);
+        addField(panel, paramNamesGrNrField, gbc);
+        resetContraints(gbc);
+        gbc.weighty = 1;
+        addField(panel, paramValuesGrNrField, gbc);
+        return panel;
+    }
 
-	private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
-		List<JComponent> item = field.getComponentList();
-		panel.add(item.get(0), gbc.clone());
-		gbc.gridx++;
-		gbc.weightx = 1;
-		gbc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(item.get(1), gbc.clone());
-	}
+    private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
+        List<JComponent> item = field.getComponentList();
+        panel.add(item.get(0), gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 1;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(item.get(1), gbc.clone());
+    }
 
-	// Next line
-	private void resetContraints(GridBagConstraints gbc) {
-		gbc.gridx = 0;
-		gbc.gridy++;
-		gbc.weightx = 0;
+    // Next line
+    private void resetContraints(GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.weightx = 0;
         gbc.fill=GridBagConstraints.NONE;
-	}
+    }
 
-	private void initConstraints(GridBagConstraints gbc) {
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.gridheight = 1;
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 0;
-		gbc.weighty = 0;
-	}
+    private void initConstraints(GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+    }
 }
