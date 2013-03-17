@@ -341,7 +341,7 @@ To do so, use the following options:</p>
 <p>-G[propertyfile] - defines a file containing JMeter properties to be sent to all remote servers.</p>
 <p>-L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.</p>
 <p>The -L flag can also be used without the category name to set the root logging level.</p>
-	<p><b>Examples</b>:
+    <p><b>Examples</b>:
 <pre>
 jmeter -Duser.dir=/home/mstover/jmeter_stuff \
     -Jremote_hosts=127.0.0.1 -Ljmeter.engine=DEBUG
@@ -350,9 +350,9 @@ jmeter -LDEBUG</pre>
 </p>
 <p>
 <b>N.B.<br/>
-	The command line properties are processed early in startup, but after the logging system has been set up.
-	Attempts to use the -J flag to update log_level or log_file properties will have no effect.</b>
-	</p>
+    The command line properties are processed early in startup, but after the logging system has been set up.
+    Attempts to use the -J flag to update log_level or log_file properties will have no effect.</b>
+    </p>
 </subsection>
 <subsection name="&sect-num;.4.6 Logging and error messages" anchor="logging">
     <note>
@@ -360,30 +360,30 @@ jmeter -LDEBUG</pre>
     running tests. Nor does it report any error for a mis-spelt variable or function; instead the
     reference is just used as is. See <a href="functions.html">Functions and Variables for more information</a>.
     </note>
-	<p>If JMeter detects an error during a test, a message will be written to the log file. 
-		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
-		It defaults to <b>jmeter.log</b>, and will be found in the directory from which JMeter was launched.
-		</p>
-		<p>
-		Since JMeter 2.6, menu <b>Options > Log Viewer</b> displays the log file in a bottom pane on main JMeter window. 
-		</p>
-		<p>
-		Since JMeter 2.7 (GUI mode), the number of error/fatal messages logged in the log file is displayed at top-right. 
-		</p>
-		<figure image="log_errors_counter.png">Error/fatal counter</figure>
-		<p>
-		JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
-		This is processed after the initial properties file is read,
-		and before any further properties are processed. 
-		It therefore allows the default of jmeter.log to be overridden.
-		The jmeter scripts that take a test plan name as a parameter (e.g. jmeter-n.cmd) have been updated
-		to define the log file using the test plan name,
-		e.g. for the test plan Test27.jmx the log file is set to Test27.log.
-		</p>
-		<p>When running on Windows, the file may appear as just <b>jmeter</b> unless you have set Windows to show file extensions.
-		[Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
-		</p>
-		<p>As well as recording errors, the jmeter.log file records some information about the test run. For example:</p>
+    <p>If JMeter detects an error during a test, a message will be written to the log file. 
+        The log file name is defined in the jmeter.properties file (or using the -j option, see below).
+        It defaults to <b>jmeter.log</b>, and will be found in the directory from which JMeter was launched.
+        </p>
+        <p>
+        Since JMeter 2.6, menu <b>Options > Log Viewer</b> displays the log file in a bottom pane on main JMeter window. 
+        </p>
+        <p>
+        Since JMeter 2.7 (GUI mode), the number of error/fatal messages logged in the log file is displayed at top-right. 
+        </p>
+        <figure image="log_errors_counter.png">Error/fatal counter</figure>
+        <p>
+        JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
+        This is processed after the initial properties file is read,
+        and before any further properties are processed. 
+        It therefore allows the default of jmeter.log to be overridden.
+        The jmeter scripts that take a test plan name as a parameter (e.g. jmeter-n.cmd) have been updated
+        to define the log file using the test plan name,
+        e.g. for the test plan Test27.jmx the log file is set to Test27.log.
+        </p>
+        <p>When running on Windows, the file may appear as just <b>jmeter</b> unless you have set Windows to show file extensions.
+        [Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
+        </p>
+        <p>As well as recording errors, the jmeter.log file records some information about the test run. For example:</p>
 <div overflow="scroll">
 <pre>
 10/17/2003 12:19:20 PM INFO  - jmeter.JMeter: Version 1.9.20031002 
@@ -393,11 +393,11 @@ jmeter -LDEBUG</pre>
 10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Continue on error 
 10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 started 
 10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 is done 
-10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Test has ended 	
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Test has ended
 </pre>
 </div>
 <p>The log file can be helpful in determining the cause of an error,
-	as JMeter does not interrupt a test to display an error dialogue.</p>
+    as JMeter does not interrupt a test to display an error dialogue.</p>
 </subsection>
 <subsection name="&sect-num;.4.7 Full list of command-line options" anchor="options">
 <p>Invoking JMeter as "jmeter -?" will print a list of all the command-line options. 
@@ -494,17 +494,17 @@ If set to 0, then JMeter does not start the daemon thread.
   Similarly, <b>system.properties</b> is used to update system properties.
   </note>
   <properties>
-	<property name="ssl.provider">You can specify the class for your SSL
-	implementation if you don't want to use the built-in Java implementation.
-	</property>
-	<property name="xml.parser">You can specify an implementation as your XML
-	parser.  The default value is: org.apache.xerces.parsers.SAXParser</property>
+    <property name="ssl.provider">You can specify the class for your SSL
+    implementation if you don't want to use the built-in Java implementation.
+    </property>
+    <property name="xml.parser">You can specify an implementation as your XML
+    parser.  The default value is: org.apache.xerces.parsers.SAXParser</property>
   <property name="remote_hosts">Comma-delimited list of remote JMeter hosts (or host:port if required).
-	If you are running JMeter in a distributed environment, list the machines where
+    If you are running JMeter in a distributed environment, list the machines where
   you have JMeter remote servers running.  This will allow you to control those
-	servers from this machine's GUI</property>
+    servers from this machine's GUI</property>
   <property name="not_in_menu">A list of components you do not want to see in
-	JMeter's menus.  As JMeter has more and more components added, you may wish to
+    JMeter's menus.  As JMeter has more and more components added, you may wish to
   customize your JMeter to show only those components you are interested in.
   You may list their classname or their class label (the string that appears
   in JMeter's UI) here, and they will no longer appear in the menus.</property>

@@ -84,7 +84,7 @@ output results like:.</p>
 timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
 02/06/03 08:21:42|1187|Home|200|Thread Group-1|text|true|
 02/06/03 08:21:42|47|Login|200|Thread Group-1|text|false|Test Failed: 
-	expected to contain: password etc.
+    expected to contain: password etc.
 </pre>
 </code></p>
 <p>

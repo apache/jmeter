@@ -95,7 +95,7 @@ If this is non-zero, it will be used as the local port number for the server eng
 add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.</p>
 <p>Note that you can use the -R <a href="get-started.html#override">command line option</a>
 instead to specify the remote host(s) to use. This has the same effect as using -r and -Jremote_hosts={serverlist}.
-	E.g. jmeter -Rhost1,127.0.0.1,host2</p>
+    E.g. jmeter -Rhost1,127.0.0.1,host2</p>
 <p>If you define the JMeter property server.exitaftertest=true, then the server will exit after it runs a single test.
 See also the -X flag (described below)
 </p>
@@ -137,9 +137,9 @@ and follow the instructions below.
 to run the RMI Registry application (which is named, "rmiregistry") that comes with the JDK and is located in the "bin" 
 directory.  Before running rmiregistry, make sure that the following jars are in your system claspath:
 <ul>
-	<li>JMETER_HOME/lib/ext/ApacheJMeter_core.jar</li>
-	<li>JMETER_HOME/lib/jorphan.jar</li>
-	<li>JMETER_HOME/lib/logkit-1.2.jar</li>
+    <li>JMETER_HOME/lib/ext/ApacheJMeter_core.jar</li>
+    <li>JMETER_HOME/lib/jorphan.jar</li>
+    <li>JMETER_HOME/lib/logkit-1.2.jar</li>
 </ul>
 The 
 rmiregistry application needs access to certain JMeter classes.  Run rmiregistry with no parameters.  By default the 

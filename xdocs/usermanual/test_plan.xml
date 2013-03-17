@@ -74,13 +74,13 @@ Start with Ramp-up = number of threads and adjust up or down as needed.
 <p>By default, the thread group is configured to loop once through its elements.</p>
 
 <p>Version 1.9 introduces a test run <b>scheduler</b>. 
-	Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
-	 in which you can enter the start and end times of the run. 
-	 When the test is started, JMeter will wait if necessary until the start-time has been reached.
-	 At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
-	 otherwise the test is allowed to continue until the iteration limit is reached.</p>
-	 <p>Alternatively, one can use the relative delay and duration fields. 
-	 Note that delay overrides start-time, and duration over-rides end-time.</p>
+    Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
+     in which you can enter the start and end times of the run. 
+     When the test is started, JMeter will wait if necessary until the start-time has been reached.
+     At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
+     otherwise the test is allowed to continue until the iteration limit is reached.</p>
+     <p>Alternatively, one can use the relative delay and duration fields. 
+     Note that delay overrides start-time, and duration over-rides end-time.</p>
 </subsection>
 
 <subsection name="&sect-num;.2 Controllers" anchor="controllers">
@@ -114,13 +114,13 @@ Controllers can be used to modify the number of repetitions of a sampler.
 <p>
 JMeter samplers include:
 <ul>
-	<li>FTP Request</li>
-	<li>HTTP Request</li>
-	<li>JDBC Request</li>
-	<li>Java object request</li>
-	<li>LDAP Request</li>
-	<li>SOAP/XML-RPC Request</li>
-	<li>WebService (SOAP) Request</li>
+    <li>FTP Request</li>
+    <li>HTTP Request</li>
+    <li>JDBC Request</li>
+    <li>Java object request</li>
+    <li>LDAP Request</li>
+    <li>SOAP/XML-RPC Request</li>
+    <li>WebService (SOAP) Request</li>
 </ul>
 Each sampler has several properties you can set.
 You can further customize a sampler by adding one or more Configuration Elements to the Test Plan.
@@ -158,24 +158,24 @@ following test tree:</p>
 <p>
 <ul>
 <li>Test Plan</li>
-	<ul>
-	<li>Thread Group</li>
-		<ul>
-		<li>Once Only Controller</li>
-			<ul>
-			<li>Login Request (an <complink name="HTTP Request"/>)</li>
-			</ul>
-		<li>Load Search Page (HTTP Sampler)</li>
-		<li>Interleave Controller</li>
-			<ul>
-			<li>Search "A" (HTTP Sampler)</li>
-			<li>Search "B" (HTTP Sampler)</li>
-			<li>HTTP default request (Configuration Element)</li>
-			</ul>
-		<li>HTTP default request (Configuration Element)</li>
-		<li>Cookie Manager (Configuration Element)</li>
-		</ul>
-	</ul>
+    <ul>
+    <li>Thread Group</li>
+        <ul>
+        <li>Once Only Controller</li>
+            <ul>
+            <li>Login Request (an <complink name="HTTP Request"/>)</li>
+            </ul>
+        <li>Load Search Page (HTTP Sampler)</li>
+        <li>Interleave Controller</li>
+            <ul>
+            <li>Search "A" (HTTP Sampler)</li>
+            <li>Search "B" (HTTP Sampler)</li>
+            <li>HTTP default request (Configuration Element)</li>
+            </ul>
+        <li>HTTP default request (Configuration Element)</li>
+        <li>Cookie Manager (Configuration Element)</li>
+        </ul>
+    </ul>
 </ul>
 </p>
 
@@ -320,8 +320,8 @@ Since we placed "Web Defaults 1" inside a Loop Controller, only "Web Page 2" can
 requests will use "Web Defaults 2", since we placed it in the Thread Group (the "parent" of all other branches).</p>
 
 <figure image="http-config/http-config-example.png">Figure 1 -
-	Test Plan Showing Accessability of Configuration Elements</figure>
-	
+    Test Plan Showing Accessability of Configuration Elements</figure>
+
 <note>
 The <complink name="User Defined Variables"/> Configuration element is different. 
 It is processed at the start of a test, no matter where it is placed.
