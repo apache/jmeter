@@ -17,26 +17,26 @@
 -->
 <document>   
 <properties>     
-	<title>Nightly builds for developers</title>   
+    <title>Nightly builds for developers</title>   
 </properties> 
 <body> 
 <section name="Nightly builds for developers">
-	<p></p>
-	<h2>What are the nightly builds?</h2>
-	<p>
-	The nightly builds are interim builds that are <b>untested and unsupported</b>.
-	<i>Use at your own risk!</i>
-	<br/>
-	These unreleased builds may not even load, may have undocumented features, 
-	known defects, and any number of other issues.
-	<br/>
-	They are intended for use by developers and others wishing to help with resolving JMeter bugs.
-	</p>
-	<p>
-	<span style="font-size : x-large"><b>These builds should not be used in production.</b></span>
-	</p>
-	<h2>Where are the nightly builds?</h2>
-	<p>JMeter CI builds are currently run by Jenkins and Buildbot</p>
+    <p></p>
+    <h2>What are the nightly builds?</h2>
+    <p>
+    The nightly builds are interim builds that are <b>untested and unsupported</b>.
+    <i>Use at your own risk!</i>
+    <br/>
+    These unreleased builds may not even load, may have undocumented features, 
+    known defects, and any number of other issues.
+    <br/>
+    They are intended for use by developers and others wishing to help with resolving JMeter bugs.
+    </p>
+    <p>
+    <span style="font-size : x-large"><b>These builds should not be used in production.</b></span>
+    </p>
+    <h2>Where are the nightly builds?</h2>
+    <p>JMeter CI builds are currently run by Jenkins and Buildbot</p>
     <p>These are located at:
     <ul>
     <li><a href="https://builds.apache.org/job/JMeter-trunk/lastSuccessfulBuild/artifact/trunk/dist/">Last Successful Jenkins build for JMeter-trunk</a></li>
@@ -44,7 +44,7 @@
     <li><a href="https://repository.apache.org/content/repositories/snapshots/org/apache/jmeter/">Maven Snapshots (Buildbot nightly builds)</a></li>
     </ul>
     </p>
-	<h2>What do they consist of?</h2>
+    <h2>What do they consist of?</h2>
 <p>
 JMeter is distributed as a set of zip (or tar-gz) archive files.
 
@@ -71,12 +71,12 @@ Unpack all the archives into the <b>same directory structure</b>.
 
 <h2>Warning - please note!</h2>
 <p>
-	<span style="font-size : large">
-	<b>The nightly builds may or may not work properly - or at all.</b>
-	</span>
+    <span style="font-size : large">
+    <b>The nightly builds may or may not work properly - or at all.</b>
+    </span>
 </p>
 <p>
-	If there is a problem with a particular version, 
+    If there is a problem with a particular version, 
     it may be worth reporting this on the JMeter-dev mailing list and/or trying again in a day or two.
 </p>
 </section> 
