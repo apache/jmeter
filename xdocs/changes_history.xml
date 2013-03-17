@@ -17,8 +17,8 @@
 -->
 <document>   
 <properties>     
-	<author email="dev AT jmeter.apache.org">JMeter developers</author>     
-	<title>History of Previous Changes</title>   
+    <author email="dev AT jmeter.apache.org">JMeter developers</author>     
+    <title>History of Previous Changes</title>   
 </properties> 
 <body> 
 <section name="History of Previous Changes"> 
@@ -3427,8 +3427,8 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li><bugzilla>39677</bugzilla> - allow for space in JMETER_BIN variable</li>
 <li>Use Commons HttpClient cookie parsing and management. Fix various problems with cookie handling.</li>
 <li><bugzilla>39773</bugzilla> - NTCredentials needs host name</li>
-</ul>	
-	
+</ul>
+
 <h4>Other changes</h4>
 <ul>
 <li>Updated to HTTPClient 3.0 (from 2.0)</li>
@@ -3464,8 +3464,8 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li><bugzilla>36642</bugzilla> - Summariser stopped working in 2.1</li>
 <li><bugzilla>36618</bugzilla> - CSV header line did not match saved data</li>
 <li>JMeter should now run under JVM 1.3 (but does not build with 1.3)</li>
-</ul>	
-	
+</ul>
+
 
 <!--  ===================  -->
 
@@ -3527,7 +3527,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li><bugzilla>31184</bugzilla> - make sure encoding is specified in JDBC sampler</li>
 <li>TCP sampler - only share sockets with same host:port details; correct the manual</li>
 <li>Extract src attribute for embed tags in JTidy and Html Parsers</li>
-</ul>	
+</ul>
 
 <!--  ===================  -->
 
@@ -3617,7 +3617,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <p>Bug fix release. TBA.</p>
 <h3>Version 2.0</h3>
 <ul>
-	<li>HTML parsing improved; now has choice of 3 parsers, and most embedded elements can now be detected and downloaded.</li>
+    <li>HTML parsing improved; now has choice of 3 parsers, and most embedded elements can now be detected and downloaded.</li>
 <li>Redirects can now be delegated to URLConnection by defining the JMeter property HTTPSamper.delegateRedirects=true (default is false) </li>
 <li>Stop Thread and Stop Test methods added for Samplers and Assertions etc. Samplers can call setStopThread(true) or setStopTest(true) if they detect an error that needs to stop the thread of the test after the sample has been processed </li>
 <li>Thread Group Gui now has an extra pane to specify what happens after a Sampler error: Continue (as now), Stop Thread or Stop Test. 
@@ -3635,30 +3635,30 @@ Create all samplers with keep-alive disabled
 Add Separator markers between sets of samples 
 Add Response Assertion to first sampler in each set </li>
 <li>Test Plan has a comment field</li>
-	
-	<li>Help Page can now be pushed to background</li>
-	<li>Separate Function help page</li>
-	<li>New / amended functions</li>
-	<ul>
-	  <li>__property() and __P() functions</li>
-	  <li>__log() and __logn() - for writing to the log file</li>
+
+    <li>Help Page can now be pushed to background</li>
+    <li>Separate Function help page</li>
+    <li>New / amended functions</li>
+    <ul>
+      <li>__property() and __P() functions</li>
+      <li>__log() and __logn() - for writing to the log file</li>
       <li>_StringFromFile can now process a sequence of files, e.g. dir/file01.txt, dir/file02.txt etc </li>
       <li>_StringFromFile() funtion can now use a variable or function for the file name </li>
-	</ul>
-	<li>New / amended Assertions</li>
-	<ul>
+    </ul>
+    <li>New / amended Assertions</li>
+    <ul>
         <li>Response Assertion now works for URLs, and it handles null data better </li>
         <li>Response Assertion can now match on Response Code and Response message as well </li>
-		<li>HTML Assertion using JTidy to check for well-formed HTML</li>
-	</ul>
-	<li>If Controller (not fully functional yet)</li>
-	<li>Transaction Controller (aggregates the times of its children)</li>
-	<li>New Samplers</li>
-		<ul>
-			<li>Basic BSF Sampler (optional)</li>
-			<li>BeanShell Sampler (optional, needs to be downloaded from www.beanshell.org</li>
-			<li>Basic TCP Sampler</li>
-		</ul>
+        <li>HTML Assertion using JTidy to check for well-formed HTML</li>
+    </ul>
+    <li>If Controller (not fully functional yet)</li>
+    <li>Transaction Controller (aggregates the times of its children)</li>
+    <li>New Samplers</li>
+        <ul>
+            <li>Basic BSF Sampler (optional)</li>
+            <li>BeanShell Sampler (optional, needs to be downloaded from www.beanshell.org</li>
+            <li>Basic TCP Sampler</li>
+        </ul>
      <li>Optionally start BeanShell server (allows remote access to JMeter variables and methods) </li>
 </ul>
 <h3>Version 1.9.1</h3>
@@ -3775,84 +3775,84 @@ test engine code.</li>
 
 <h3>Version 1.7Beta</h3> 
 <ul> 
-	<li>Better XML support for special characters (Tushar Bhatia) </li> 
-	<li>Non-GUI functioning  &amp; Non-GUI test plan execution  (Tushar Bhatia)</li> 
-	<li>Removing Swing dependence from base JMeter classes</li> 
-	<li>Internationalization (Takashi Okamoto)</li> 
-	<li>AllTests bug fix (neth6@atozasia.com)</li> 
-	<li>ClassFinder bug fix (neth6@atozasia.com)</li> 
-	<li>New Loop Controller</li> 
-	<li>Proxy Server records HTTP samples from browser 
-		(and documented in the user manual)</li> <li>Multipart Form support</li> 
-	<li>HTTP Header class for Header customization</li> 
-	<li>Extracting HTTP Header information from responses (Jamie Davidson)</li> 
-	<li>Mailer Visualizer re-added to JMeter</li> 
-	<li>JMeter now url encodes parameter names and values</li> 
-	<li>listeners no longer give exceptions if their gui's haven't been initialized</li> 
-	<li>HTTPS and Authorization working together</li> 
-	<li>New Http sampling that automatically parses HTML response 
-		for images to download, and includes the downloading of these 
-		images in total time for request (Neth neth6@atozasia.com) </li> 
-	<li>HTTP responses from server can be parsed for links and forms, 
-		and dynamic data can be extracted and added to test samples 
-		at run-time (documented)</li>  
-	<li>New Ramp-up feature (Jonathan O'Keefe)</li> 
-	<li>New visualizers (Neth)</li> 
-	<li>New Assertions for functional testing</li> 
+    <li>Better XML support for special characters (Tushar Bhatia) </li> 
+    <li>Non-GUI functioning  &amp; Non-GUI test plan execution  (Tushar Bhatia)</li> 
+    <li>Removing Swing dependence from base JMeter classes</li> 
+    <li>Internationalization (Takashi Okamoto)</li> 
+    <li>AllTests bug fix (neth6@atozasia.com)</li> 
+    <li>ClassFinder bug fix (neth6@atozasia.com)</li> 
+    <li>New Loop Controller</li> 
+    <li>Proxy Server records HTTP samples from browser 
+        (and documented in the user manual)</li> <li>Multipart Form support</li> 
+    <li>HTTP Header class for Header customization</li> 
+    <li>Extracting HTTP Header information from responses (Jamie Davidson)</li> 
+    <li>Mailer Visualizer re-added to JMeter</li> 
+    <li>JMeter now url encodes parameter names and values</li> 
+    <li>listeners no longer give exceptions if their gui's haven't been initialized</li> 
+    <li>HTTPS and Authorization working together</li> 
+    <li>New Http sampling that automatically parses HTML response 
+        for images to download, and includes the downloading of these 
+        images in total time for request (Neth neth6@atozasia.com) </li> 
+    <li>HTTP responses from server can be parsed for links and forms, 
+        and dynamic data can be extracted and added to test samples 
+        at run-time (documented)</li>  
+    <li>New Ramp-up feature (Jonathan O'Keefe)</li> 
+    <li>New visualizers (Neth)</li> 
+    <li>New Assertions for functional testing</li> 
 </ul>  
 
 <h3>Version 1.6.1</h3> 
 <ul> 
-	<li>Fixed saving and loading of test scripts (no more extra lines)</li> 
-	<li>Can save and load special characters (such as &quot;&amp;&quot; and &quot;&lt;&quot;).</li> 
-	<li>Can save and load timers and listeners.</li> 
-	<li>Minor bug fix for cookies (if you cookie value 
-		contained an &quot;=&quot;, then it broke).</li> 
-	<li>URL's can sample ports other than 80, and can test HTTPS, 
-		provided you have the necessary jars (JSSE)</li> 
+    <li>Fixed saving and loading of test scripts (no more extra lines)</li> 
+    <li>Can save and load special characters (such as &quot;&amp;&quot; and &quot;&lt;&quot;).</li> 
+    <li>Can save and load timers and listeners.</li> 
+    <li>Minor bug fix for cookies (if you cookie value 
+        contained an &quot;=&quot;, then it broke).</li> 
+    <li>URL's can sample ports other than 80, and can test HTTPS, 
+        provided you have the necessary jars (JSSE)</li> 
 </ul> 
 
 <h3>Version 1.6 Alpha</h3> 
 <ul> 
-	<li>New UI</li> 
-	<li>Separation of GUI and Logic code</li> 	
-	<li>New Plug-in framework for new modules</li> 
-	<li>Enhanced performance</li> 
-	<li>Layering of test logic for greater flexibility</li> 
-	<li>Added support for saving of test elements</li> 
-	<li>Added support for distributed testing using a single client</li> 
+    <li>New UI</li> 
+    <li>Separation of GUI and Logic code</li>
+    <li>New Plug-in framework for new modules</li> 
+    <li>Enhanced performance</li> 
+    <li>Layering of test logic for greater flexibility</li> 
+    <li>Added support for saving of test elements</li> 
+    <li>Added support for distributed testing using a single client</li> 
 
 </ul> 
 <h3>Version 1.5.1</h3> 
 <ul> 
-	<li>Fixed bug that caused cookies not to be read if header name case not as expected.</li> 
-	<li>Clone entries before sending to sampler - prevents relocations from messing up 
-		information across threads</li> 
-	<li>Minor bug fix to convenience dialog for adding paramters to test sample.  
-		Bug prevented entries in dialog from appearing in test sample.</li> 
-	<li>Added xerces.jar to distribution</li> 
-	<li>Added junit.jar to distribution and created a few tests.</li> 
-	<li>Started work on new framework.  New files in cvs, but do not effect program yet.</li> 
-	<li>Fixed bug that prevent HTTPJMeterThread from delaying according to chosen timer.</li> 
+    <li>Fixed bug that caused cookies not to be read if header name case not as expected.</li> 
+    <li>Clone entries before sending to sampler - prevents relocations from messing up 
+        information across threads</li> 
+    <li>Minor bug fix to convenience dialog for adding paramters to test sample.  
+        Bug prevented entries in dialog from appearing in test sample.</li> 
+    <li>Added xerces.jar to distribution</li> 
+    <li>Added junit.jar to distribution and created a few tests.</li> 
+    <li>Started work on new framework.  New files in cvs, but do not effect program yet.</li> 
+    <li>Fixed bug that prevent HTTPJMeterThread from delaying according to chosen timer.</li> 
 </ul>  
 <p> 
 <h3>Version 1.5</h3> 
 <ul>   
-	<li>Abstracted out the concept of the Sampler, SamplerController, and TestSample.   
-		A Sampler represents code that understands a protocol (such as HTTP, 
-		or FTP, RMI,   SMTP, etc..).  It is the code that actually makes the 
-		connection to whatever is   being tested.   A SamplerController 
-		represents code that understands how to organize and run a group   
-		of test samples.  It is what binds together a Sampler and its test 
-		samples and runs them.   A TestSample represents code that understands 
-		how to gather information from the   user about a particular test.  
-		For a website, it would represent a URL and any   information to be sent 
-		with the URL.</li>   
-	<li>The UI has been updated to make entering test samples more convenient.</li>   
-	<li>Thread groups have been added, allowing a user to setup multiple test to run   
-		concurrently, and to allow sharing of test samples between those tests.</li>   
-	<li>It is now possible to save and load test samples.</li>   
-	<li>....and many more minor changes/improvements...</li> 
+    <li>Abstracted out the concept of the Sampler, SamplerController, and TestSample.   
+        A Sampler represents code that understands a protocol (such as HTTP, 
+        or FTP, RMI,   SMTP, etc..).  It is the code that actually makes the 
+        connection to whatever is   being tested.   A SamplerController 
+        represents code that understands how to organize and run a group   
+        of test samples.  It is what binds together a Sampler and its test 
+        samples and runs them.   A TestSample represents code that understands 
+        how to gather information from the   user about a particular test.  
+        For a website, it would represent a URL and any   information to be sent 
+        with the URL.</li>   
+    <li>The UI has been updated to make entering test samples more convenient.</li>   
+    <li>Thread groups have been added, allowing a user to setup multiple test to run   
+        concurrently, and to allow sharing of test samples between those tests.</li>   
+    <li>It is now possible to save and load test samples.</li>   
+    <li>....and many more minor changes/improvements...</li> 
 </ul> 
 </p> 
 <p> 
