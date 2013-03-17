@@ -79,7 +79,6 @@ public class MongoScriptSampler
             String resultAsString = handler.handle(result);
             res.setResponseData(resultAsString.getBytes());
         } catch (Exception ex) {
-            res.sampleEnd();
             res.setResponseCode("500"); // $NON-NLS-1$
             res.setSuccessful(false);
             res.setResponseMessage(ex.toString());
