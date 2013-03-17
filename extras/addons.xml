@@ -53,7 +53,7 @@
    <target name="package" depends="compile">
     <mkdir dir="${jar.dest}"/>
     <jar jarfile="${jar.dest}/${jar.file}" basedir="${build.addons}">
-    	<fileset dir="${src.addons}" includes="**/*.properties"/>
+        <fileset dir="${src.addons}" includes="**/*.properties"/>
     </jar>
   </target>
 

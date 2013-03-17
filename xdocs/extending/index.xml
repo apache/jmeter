@@ -19,7 +19,7 @@
 
   <properties>
 
-	 <title>Extending JMeter</title>
+     <title>Extending JMeter</title>
 
   </properties>
 
@@ -38,23 +38,23 @@ to make this task easier.
 </p>
 
 <ul>
-	<li><a href="JMeter Extension Scenario.html">A good overview of the process of extending JMeter</a></li>
+    <li><a href="JMeter Extension Scenario.html">A good overview of the process of extending JMeter</a></li>
 <p/>
-	<li><a href="#timer">Creating your own Timer</a></li>
+    <li><a href="#timer">Creating your own Timer</a></li>
 
-	<li><a href="#listener">Creating your own SampleListener (such as a visualizer, or reporter)</a></li>
+    <li><a href="#listener">Creating your own SampleListener (such as a visualizer, or reporter)</a></li>
 
-	<li><a href="#config">Creating your own Config Element</a></li>
+    <li><a href="#config">Creating your own Config Element</a></li>
 
-	<li><a href="#logical">Creating your own logic SamplerController</a></li>
+    <li><a href="#logical">Creating your own logic SamplerController</a></li>
 
-	<li><a href="#testsample">Creating your own test sample SamplerController</a></li>
+    <li><a href="#testsample">Creating your own test sample SamplerController</a></li>
 
-	<li><a href="#sampler">Creating your own Sampler</a></li>
+    <li><a href="#sampler">Creating your own Sampler</a></li>
 
-	<li><a href="#uicomponent">Making your custom elements play nice as a JMeter UI component</a></li>
+    <li><a href="#uicomponent">Making your custom elements play nice as a JMeter UI component</a></li>
 
-	<li><a href="#saveable">Making your custom elements saveable and loadable from within JMeter</a></li>
+    <li><a href="#saveable">Making your custom elements saveable and loadable from within JMeter</a></li>
 
 </ul>
 
@@ -68,7 +68,7 @@ to make this task easier.
 
 <pre>
 
-	  public long delay();
+      public long delay();
 
 </pre>
 
@@ -90,11 +90,11 @@ same number every time it's called.  A random timer returns a different number e
 
 <pre>
 
-	  public void sampleOccurred(SampleEvent e);
+      public void sampleOccurred(SampleEvent e);
 
-	  public void sampleStarted(SampleEvent e);
+      public void sampleStarted(SampleEvent e);
 
-	  public void sampleStopped(SampleEvent e);
+      public void sampleStopped(SampleEvent e);
 
 </pre>
 
@@ -130,11 +130,11 @@ to begin again).
 
 <pre>
 
-	  public void addConfigElement(ConfigElement config);
+      public void addConfigElement(ConfigElement config);
 
-	  public boolean expectsModification();
+      public boolean expectsModification();
 
-	  public Object clone();
+      public Object clone();
 
 </pre>
 
@@ -228,15 +228,15 @@ for this possibility to avoid exceptions.
 
 <pre>
 
-	  Entry nextEntry();
+      Entry nextEntry();
 
-	  Collection getListeners();
+      Collection getListeners();
 
-	  void addSamplerController(SamplerController controller);
+      void addSamplerController(SamplerController controller);
 
-	  void addConfigElement(ConfigElement config);
+      void addConfigElement(ConfigElement config);
 
-	  Object clone();
+      Object clone();
 
 </pre>
 
@@ -350,7 +350,7 @@ reference.</p>
 
 <pre>
 
-	  public SampleResult sample(Entry e)
+      public SampleResult sample(Entry e)
 
 </pre>
 
@@ -380,17 +380,17 @@ JMeterComponentModel interface:</p>
 
 <pre>
 
-	  Class getGuiClass();
+      Class getGuiClass();
 
-	  public String getName();
+      public String getName();
 
-	  public void setName(String name);
+      public void setName(String name);
 
-	  public Collection getAddList();
+      public Collection getAddList();
 
-	  public String getClassLabel();
+      public String getClassLabel();
 
-	  public void uncompile();
+      public void uncompile();
 
 </pre>
 
@@ -440,9 +440,9 @@ that implements the <b>ModelSupported</b> interface:</p>
 
 <pre>
 
-	  void setModel(Object model);
+      void setModel(Object model);
 
-	  public void updateGui();
+      public void updateGui();
 
 </pre>
 
@@ -484,7 +484,7 @@ detected, and the Gui will not make them available to the user.</p>
 
 <pre>
 
-	  public Class getTagHandlerClass()
+      public Class getTagHandlerClass()
 
 </pre>
 
@@ -504,11 +504,11 @@ the Map from AbstractConfigElement.</p>
 
 <pre>
 
-	  public abstract void setAtts(Attributes atts) throws Exception
+      public abstract void setAtts(Attributes atts) throws Exception
 
-	  public String getPrimaryTagName()
+      public String getPrimaryTagName()
 
-	  public void save(Saveable objectToSave,Writer out) throws IOException
+      public void save(Saveable objectToSave,Writer out) throws IOException
 
 </pre>
 
@@ -574,211 +574,211 @@ public class AbstractConfigElementHandler extends TagHandler
 
 {
 
-	private AbstractConfigElement config;
+    private AbstractConfigElement config;
 
-	private String currentProperty;
+    private String currentProperty;
 
 
 
-	public AbstractConfigElementHandler()
+    public AbstractConfigElementHandler()
 
-	{
+    {
 
-	}
+    }
 
 
 
-	<font color="blue">/**
+    <font color="blue">/**
 
-	 * Returns the AbstractConfigElement object parsed from the XML.  This method
+     * Returns the AbstractConfigElement object parsed from the XML.  This method
 
-	 * is required to fulfill the SaveHandler interface.  It is used by the XML
+     * is required to fulfill the SaveHandler interface.  It is used by the XML
 
-	 * routines to gather all the saved objects.
+     * routines to gather all the saved objects.
 
-	 */</font>
+     */</font>
 
-	public Object getModel()
+    public Object getModel()
 
-	{
+    {
 
-		return config;
+        return config;
 
-	}
+    }
 
 
 
-	<font color="blue">/**
+    <font color="blue">/**
 
-	 * This is called when a tag is first encountered for this handler class to handle.
+     * This is called when a tag is first encountered for this handler class to handle.
 
-	 * The attributes of the tag are passed, and the SaveHandler object is expected
+     * The attributes of the tag are passed, and the SaveHandler object is expected
 
-	 * to instantiate a new object.
+     * to instantiate a new object.
 
-	 */</font>
+     */</font>
 
-	public void setAtts(Attributes atts) throws Exception
+    public void setAtts(Attributes atts) throws Exception
 
-	{
+    {
 
-		String className = atts.getValue("type");
+        String className = atts.getValue("type");
 
-		config = (AbstractConfigElement)Class.forName(className).newInstance();
+        config = (AbstractConfigElement)Class.forName(className).newInstance();
 
-	}
+    }
 
 
 
-	<font color="blue">/**
+    <font color="blue">/**
 
-	 * Called by reflection when a &lt;property&gt; tag is encountered.  Again, the
+     * Called by reflection when a &lt;property&gt; tag is encountered.  Again, the
 
-	 * attributes are passed.
+     * attributes are passed.
 
-	 */</font>
+     */</font>
 
-	public void property(Attributes atts)
+    public void property(Attributes atts)
 
-	{
+    {
 
-		currentProperty = atts.getValue("name");
+        currentProperty = atts.getValue("name");
 
-	}
+    }
 
 
 
-	<font color="blue">/**
+    <font color="blue">/**
 
-	 * Called by reflection when text between the begin and end &lt;property&gt;
+     * Called by reflection when text between the begin and end &lt;property&gt;
 
-	 * tag is encountered.
+     * tag is encountered.
 
-	 */</font>
+     */</font>
 
-	public void property(String data)
+    public void property(String data)
 
-	{
+    {
 
 
 
-		if(data != null &amp;&amp; data.trim().length() &gt; 0)
+        if(data != null &amp;&amp; data.trim().length() &gt; 0)
 
-		{
+        {
 
-			config.putProperty(currentProperty,data);
+            config.putProperty(currentProperty,data);
 
-			currentProperty = null;
+            currentProperty = null;
 
-		}
+        }
 
-	}
+    }
 
 
 
-	<font color="blue">/**
+    <font color="blue">/**
 
-	 * Called by reflection when the &lt;property&gt; tag is ended.
+     * Called by reflection when the &lt;property&gt; tag is ended.
 
-	 */</font>
+     */</font>
 
-	public void propertyTagEnd()
+    public void propertyTagEnd()
 
-	{
+    {
 
-		<font color="blue">// Here's a tricky bit.  See below for explanation.</font>
+        <font color="blue">// Here's a tricky bit.  See below for explanation.</font>
 
-		List children = xmlParent.takeChildObjects(this);
+        List children = xmlParent.takeChildObjects(this);
 
-		if(children.size() == 1)
+        if(children.size() == 1)
 
-		{
+        {
 
-			config.putProperty(currentProperty,((TagHandler)children.get(0)).getModel());
+            config.putProperty(currentProperty,((TagHandler)children.get(0)).getModel());
 
-		}
+        }
 
-	}
+    }
 
 
 
 
 
-	  <font color="blue">/**
+      <font color="blue">/**
 
-	* Gets the tag name that will trigger the use of this object's TagHandler.
+    * Gets the tag name that will trigger the use of this object's TagHandler.
 
-	*/</font>
+    */</font>
 
-	public String getPrimaryTagName()
+    public String getPrimaryTagName()
 
-	{
+    {
 
-		return "ConfigElement";
+        return "ConfigElement";
 
-	}
+    }
 
 
 
   <font color="blue">/**
 
-	* Tells the object to save itself to the given output stream.
+    * Tells the object to save itself to the given output stream.
 
-	*/</font>
+    */</font>
 
-	public void save(Saveable obj,Writer out) throws IOException
+    public void save(Saveable obj,Writer out) throws IOException
 
-	{
+    {
 
-		AbstractConfigElement saved = (AbstractConfigElement)obj;
+        AbstractConfigElement saved = (AbstractConfigElement)obj;
 
-		out.write("&lt;ConfigElement type=\"");
+        out.write("&lt;ConfigElement type=\"");
 
-		out.write(saved.getClass().getName());
+        out.write(saved.getClass().getName());
 
-		out.write("\">\n");
+        out.write("\">\n");
 
-		Iterator iter = saved.getPropertyNames().iterator();
+        Iterator iter = saved.getPropertyNames().iterator();
 
-		while (iter.hasNext())
+        while (iter.hasNext())
 
-		{
+        {
 
-			String key = (String)iter.next();
+            String key = (String)iter.next();
 
-			Object value = saved.getProperty(key);
+            Object value = saved.getProperty(key);
 
-			writeProperty(out,key,value);
+            writeProperty(out,key,value);
 
-		}
+        }
 
-		out.write(&lt;/ConfigElement&gt;");
+        out.write(&lt;/ConfigElement&gt;");
 
-	}
+    }
 
 
 
-	<font color="blue">/**
+    <font color="blue">/**
 
-	 * Routine to write each property to xml.
+     * Routine to write each property to xml.
 
-	 */</font>
+     */</font>
 
-	private void writeProperty(Writer out,String key,Object value) throws IOException
+    private void writeProperty(Writer out,String key,Object value) throws IOException
 
-	{
+    {
 
-		out.write("&lt;property name=\"");
+        out.write("&lt;property name=\"");
 
-		out.write(key);
+        out.write(key);
 
-		out.write("\">\n");
+        out.write("\">\n");
 
-		JMeterHandler.writeObject(value,out);
+        JMeterHandler.writeObject(value,out);
 
-		out.write("\n&lt;/property&gt;\n");
+        out.write("\n&lt;/property&gt;\n");
 
-	}
+    }
 
 </pre>
 
