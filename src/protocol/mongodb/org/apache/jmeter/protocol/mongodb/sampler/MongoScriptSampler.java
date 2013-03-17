@@ -75,22 +75,18 @@ public class MongoScriptSampler
             DB db = mongoDB.getDB(getDatabase(), getUsername(), getPassword());
             res.latencyEnd();
             Object result = runner.evaluate(db, data);
-            res.sampleEnd();
             EvalResultHandler handler = new EvalResultHandler();
             String resultAsString = handler.handle(result);
             res.setResponseData(resultAsString.getBytes());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             res.sampleEnd();
             res.setResponseCode("500"); // $NON-NLS-1$
             res.setSuccessful(false);
             res.setResponseMessage(ex.toString());
             res.setResponseData(ex.getMessage().getBytes());
-        }
-        finally {
+        } finally {
             res.sampleEnd();
         }
-
         return res;
     }
 
