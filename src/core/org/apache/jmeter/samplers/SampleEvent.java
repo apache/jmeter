@@ -43,10 +43,8 @@ public class SampleEvent implements Serializable {
 
     // List of variable names to be saved in JTL files
     private static final String[] variableNames;
-    // Number of variable names
-    private static final int varCount;
 
-    // The values. Entries be null, but there will be the correct number.
+    // The values. Entries may be null, but there will be the correct number.
     private final String[] values;
 
     static {
@@ -60,7 +58,7 @@ public class SampleEvent implements Serializable {
 
         String vars = JMeterUtils.getProperty(SAMPLE_VARIABLES);
            variableNames=vars != null ? vars.split(",") : new String[0];
-           varCount=variableNames.length;
+           int varCount=variableNames.length;
         if (varCount>0){
             log.info(varCount + " sample_variables have been declared: "+vars);
         }
@@ -143,7 +141,7 @@ public class SampleEvent implements Serializable {
 
     /** Return the number of variables defined */
     public static int getVarCount(){
-        return varCount;
+        return variableNames.length;
     }
 
     /** Get the nth variable name (zero-based) */
