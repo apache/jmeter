@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 /**
  * Provides a counter per-thread(user) or per-thread group.
  */
-public class CounterConfig extends AbstractTestElement 
+public class CounterConfig extends AbstractTestElement
     implements Serializable, LoopIterationListener, NoThreadClone {
 
     private static final long serialVersionUID = 233L;
@@ -54,10 +54,10 @@ public class CounterConfig extends AbstractTestElement
 
     private static final String RESET_ON_THREAD_GROUP_ITERATION = "CounterConfig.reset_on_tg_iteration"; // $NON-NLS-1$
 
-	private static final boolean RESET_ON_THREAD_GROUP_ITERATION_DEFAULT = false;
+    private static final boolean RESET_ON_THREAD_GROUP_ITERATION_DEFAULT = false;
 
     // This class is not cloned per thread, so this is shared
-	//@GuardedBy("this")
+    //@GuardedBy("this")
     private long globalCounter = Long.MIN_VALUE;
 
     // Used for per-thread/user numbers
@@ -66,7 +66,7 @@ public class CounterConfig extends AbstractTestElement
     // Used for per-thread/user storage of increment in Thread Group Main loop
     private transient ThreadLocal<Long> perTheadLastIterationNumber;
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private void init() {
         perTheadNumber = new ThreadLocal<Long>() {
@@ -104,24 +104,24 @@ public class CounterConfig extends AbstractTestElement
         long end = getEnd();
         long increment = getIncrement();
         if (!isPerUser()) {
-        	synchronized (this) {
+            synchronized (this) {
                 if (globalCounter == Long.MIN_VALUE || globalCounter > end) {
                     globalCounter = start;
                 }
                 variables.put(getVarName(), formatNumber(globalCounter));
-                globalCounter += increment;				
-			}
+                globalCounter += increment;
+            }
         } else {
-        	long current = perTheadNumber.get().longValue();
-        	if(isResetOnThreadGroupIteration()) {
-            	int iteration = variables.getIteration();
-	        	Long lastIterationNumber = perTheadLastIterationNumber.get();
-	        	if(iteration != lastIterationNumber.longValue()) {
-	        		// reset 
-	        		current = getStart();
-	        	} 
-	        	perTheadLastIterationNumber.set(Long.valueOf(iteration));
-        	}
+            long current = perTheadNumber.get().longValue();
+            if(isResetOnThreadGroupIteration()) {
+                int iteration = variables.getIteration();
+                Long lastIterationNumber = perTheadLastIterationNumber.get();
+                if(iteration != lastIterationNumber.longValue()) {
+                    // reset
+                    current = getStart();
+                }
+                perTheadLastIterationNumber.set(Long.valueOf(iteration));
+            }
             variables.put(getVarName(), formatNumber(current));
             current += increment;
             if (current > end) {
@@ -139,9 +139,9 @@ public class CounterConfig extends AbstractTestElement
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);
             } catch (NumberFormatException ignored) {
-            	log.warn("Error formating "+value + " at format:"+format+", using default");
+                log.warn("Error formating "+value + " at format:"+format+", using default");
             } catch (IllegalArgumentException ignored) {
-            	log.warn("Error formating "+value + " at format:"+format+", using default");
+                log.warn("Error formating "+value + " at format:"+format+", using default");
             }
         }
         return Long.toString(value);
@@ -170,19 +170,19 @@ public class CounterConfig extends AbstractTestElement
     public void setEnd(String end) {
         setProperty(END, end);
     }
-    
+
     /**
      * @param value boolean indicating if counter must be reset on Thread Group Iteration
      */
     public void setResetOnThreadGroupIteration(boolean value) {
-    	setProperty(RESET_ON_THREAD_GROUP_ITERATION, value, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
+        setProperty(RESET_ON_THREAD_GROUP_ITERATION, value, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
     }
-    
+
     /**
      * @return true if counter must be reset on Thread Group Iteration
      */
     public boolean isResetOnThreadGroupIteration() {
-    	return getPropertyAsBoolean(RESET_ON_THREAD_GROUP_ITERATION, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
+        return getPropertyAsBoolean(RESET_ON_THREAD_GROUP_ITERATION, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
     }
 
     /**

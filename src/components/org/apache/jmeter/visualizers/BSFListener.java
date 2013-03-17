@@ -60,17 +60,17 @@ public class BSFListener extends BSFTestElement
 
     @Override
     public void sampleStarted(SampleEvent e) {
-    	// NOOP
+        // NOOP
     }
 
     @Override
     public void sampleStopped(SampleEvent e) {
-    	// NOOP
+        // NOOP
     }
 
     @Override
     public void add(SampleResult sample) {
-    	// NOOP
+        // NOOP
     }
 
     @Override

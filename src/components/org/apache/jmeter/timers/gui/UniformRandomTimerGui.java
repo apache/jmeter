@@ -41,52 +41,52 @@ public class UniformRandomTimerGui extends AbstractRandomTimerGui {
         super();
     }
 
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String getLabelResource() {
-    	return "uniform_timer_title";//$NON-NLS-1$
+        return "uniform_timer_title";//$NON-NLS-1$
     }
 
     /**
      * {@inheritDoc}
      */
-	@Override
-	protected RandomTimer createRandomTimer() {
-		return new UniformRandomTimer();
-	}
+    @Override
+    protected RandomTimer createRandomTimer() {
+        return new UniformRandomTimer();
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getTimerDelayLabelKey() {
-		return JMeterUtils.getResString("uniform_timer_delay"); //$NON-NLS-1$
-	}
+    @Override
+    protected String getTimerDelayLabelKey() {
+        return JMeterUtils.getResString("uniform_timer_delay"); //$NON-NLS-1$
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getTimerRangeLabelKey() {
-		return JMeterUtils.getResString("uniform_timer_range"); //$NON-NLS-1$
-	}
+    @Override
+    protected String getTimerRangeLabelKey() {
+        return JMeterUtils.getResString("uniform_timer_range"); //$NON-NLS-1$
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getDefaultDelay() {
-		return DEFAULT_DELAY;
-	}
+    @Override
+    protected String getDefaultDelay() {
+        return DEFAULT_DELAY;
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getDefaultRange() {
-		return DEFAULT_RANGE;
-	}
+    @Override
+    protected String getDefaultRange() {
+        return DEFAULT_RANGE;
+    }
 }

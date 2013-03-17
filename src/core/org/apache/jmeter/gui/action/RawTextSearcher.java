@@ -26,47 +26,47 @@ import org.apache.commons.lang3.StringUtils;
  * Searcher implementation that searches text as is
  */
 public class RawTextSearcher implements Searcher {
-	private boolean caseSensitive;
-	private String textToSearch;
-	
+    private boolean caseSensitive;
+    private String textToSearch;
 
-	/**
-	 * Constructor
-	 * @param caseSensitive is search case sensitive
-	 * @param textToSearch Text to search
-	 */
-	public RawTextSearcher(boolean caseSensitive, String textToSearch) {
-		super();
-		this.caseSensitive = caseSensitive;
-		if(caseSensitive) {
-			this.textToSearch = textToSearch;
-		} else {
-			this.textToSearch = textToSearch.toLowerCase();
-		}
-	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
+    /**
+     * Constructor
+     * @param caseSensitive is search case sensitive
+     * @param textToSearch Text to search
+     */
+    public RawTextSearcher(boolean caseSensitive, String textToSearch) {
+        super();
+        this.caseSensitive = caseSensitive;
+        if(caseSensitive) {
+            this.textToSearch = textToSearch;
+        } else {
+            this.textToSearch = textToSearch.toLowerCase();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean search(List<String> textTokens) {
-		boolean result = false;
-		for (String searchableToken : textTokens) {
-			if(!StringUtils.isEmpty(searchableToken)) {
-				if(caseSensitive) {
-					result = searchableToken.indexOf(textToSearch)>=0;
-				} else {
-					result = searchableToken.toLowerCase().indexOf(textToSearch)>=0;
-				}
-				if (result) {
-					return result;
-				}
-			}
-		}
-		return false;
-	}
+        boolean result = false;
+        for (String searchableToken : textTokens) {
+            if(!StringUtils.isEmpty(searchableToken)) {
+                if(caseSensitive) {
+                    result = searchableToken.indexOf(textToSearch)>=0;
+                } else {
+                    result = searchableToken.toLowerCase().indexOf(textToSearch)>=0;
+                }
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return false;
+    }
 
-	/**
+    /**
      * Returns true if searchedTextLowerCase is in value
      * @param value
      * @param searchedTextLowerCase

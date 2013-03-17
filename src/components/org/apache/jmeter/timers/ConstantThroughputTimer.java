@@ -133,7 +133,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             previousTime = currentTime;
             return 0;
         }
-        previousTime = currentTarget;            
+        previousTime = currentTarget;
         return currentTarget - currentTime;
     }
 
@@ -202,7 +202,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     private void reset() {
         synchronized (allThreadsInfo.MUTEX) {
-            allThreadsInfo.lastScheduledTime = 0;            
+            allThreadsInfo.lastScheduledTime = 0;
         }
         threadGroupsInfoMap.clear();
         // no need to sync as one per instance
@@ -239,7 +239,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      */
     @Override
     public void testEnded() {
-    	//NOOP
+        //NOOP
     }
 
     /**
@@ -255,7 +255,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      */
     @Override
     public void testEnded(String host) {
-    	//NOOP
+        //NOOP
     }
 
 }

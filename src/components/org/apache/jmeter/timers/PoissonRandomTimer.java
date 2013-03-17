@@ -29,14 +29,14 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class PoissonRandomTimer extends RandomTimer implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3514708226113231004L;
-	/**
-	 * 
-	 */
-	private static final double[] LOG_FACTORIAL = 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3514708226113231004L;
+    /**
+     *
+     */
+    private static final double[] LOG_FACTORIAL =
         {
             0.000000000000000,
             0.000000000000000,
@@ -294,11 +294,11 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
             1150.633503306223700,
             1156.170837573242400,
         };
-	
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long delay() {
         return Math.abs(randomPoisson((int)Math.round(getRange())) + super.delay());
@@ -311,70 +311,70 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
     public String toString() {
         return JMeterUtils.getResString("poisson_timer_memo"); //$NON-NLS-1$
     }
-    
+
     /**
-     * Generate Poisson random based using 
+     * Generate Poisson random based using
      * @param lambda Lambda in Poisson
      * @return random
      */
     private static int randomPoisson(int lambda) {
-    	if(lambda <= 30) {
-    		return poissonRandomNumberLowEq30(lambda);
-    	} else {
-    		return poissonRandomNumberSup30(lambda);
-    	}
+        if(lambda <= 30) {
+            return poissonRandomNumberLowEq30(lambda);
+        } else {
+            return poissonRandomNumberSup30(lambda);
+        }
     }
-	/**
-	 * see http://en.wikipedia.org/wiki/Poisson_distribution
+    /**
+     * see http://en.wikipedia.org/wiki/Poisson_distribution
      * @param lambda Lambda in Poisson
      * @return random
-	 */
-	private static final int poissonRandomNumberLowEq30(int lambda) {
-		double L = Math.exp(-lambda);
-		int k = 0;
-		double p = 1;
-		do {
-			k = k + 1;
-			double u = Math.random();
-			p = p * u;
-		} while (p > L);
-		return k - 1;
-	}
-	
-	/**
-	 * http://www.johndcook.com/blog/2010/06/14/generating-poisson-random-values/
+     */
+    private static final int poissonRandomNumberLowEq30(int lambda) {
+        double L = Math.exp(-lambda);
+        int k = 0;
+        double p = 1;
+        do {
+            k = k + 1;
+            double u = Math.random();
+            p = p * u;
+        } while (p > L);
+        return k - 1;
+    }
+
+    /**
+     * http://www.johndcook.com/blog/2010/06/14/generating-poisson-random-values/
      * @param lambda Lambda in Poisson
      * @return random
-	 */
-	private static final int poissonRandomNumberSup30(int lambda) {
-		double c = 0.767 - 3.36/lambda;
-		double beta = Math.PI/Math.sqrt(3.0*lambda);
-		double alpha = beta*lambda;
-		double k = Math.log(c) - lambda - Math.log(beta);
-		while(true) {
-			double u = Math.random();
-			double x = (alpha - Math.log((1.0 - u)/u))/beta;
-			int n = (int)Math.floor(x + 0.5);
-			if (n < 0){
-				continue;
-			}
-			double v = Math.random();
-			double y = alpha - beta*x;
-			double lhs = y + Math.log(v/Math.pow((1.0 + Math.exp(y)),2));
-			double rhs = k + n*Math.log(lambda) -logFactorial(n);
-			if (lhs <= rhs) {
-				return n;
-			}
-		}
-	}
-	
-	/**
-	 * Compute log factorial
-	 * http://www.johndcook.com/blog/2010/08/16/how-to-compute-log-factorial/
-	 * @param n Number for which we want log(n!)
-	 * @return Log factorial
-	 */
-	private static final double logFactorial(int n)
+     */
+    private static final int poissonRandomNumberSup30(int lambda) {
+        double c = 0.767 - 3.36/lambda;
+        double beta = Math.PI/Math.sqrt(3.0*lambda);
+        double alpha = beta*lambda;
+        double k = Math.log(c) - lambda - Math.log(beta);
+        while(true) {
+            double u = Math.random();
+            double x = (alpha - Math.log((1.0 - u)/u))/beta;
+            int n = (int)Math.floor(x + 0.5);
+            if (n < 0){
+                continue;
+            }
+            double v = Math.random();
+            double y = alpha - beta*x;
+            double lhs = y + Math.log(v/Math.pow((1.0 + Math.exp(y)),2));
+            double rhs = k + n*Math.log(lambda) -logFactorial(n);
+            if (lhs <= rhs) {
+                return n;
+            }
+        }
+    }
+
+    /**
+     * Compute log factorial
+     * http://www.johndcook.com/blog/2010/08/16/how-to-compute-log-factorial/
+     * @param n Number for which we want log(n!)
+     * @return Log factorial
+     */
+    private static final double logFactorial(int n)
     {
         if (n < 0) {
             throw new IllegalArgumentException();
@@ -383,7 +383,7 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
             double x = n + 1;
             return (x - 0.5)*Math.log(x) - x + 0.5*Math.log(2*Math.PI) + 1.0/(12.0*x);
         }
-        else {   
+        else {
             return LOG_FACTORIAL[n];
         }
     }

@@ -72,28 +72,28 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
         int endIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
         
         if(!StringUtils.isEmpty(this.startIndex)) {
-        	try {
-        		startIndexAsInt = Integer.parseInt(this.startIndex);
-        	} catch(NumberFormatException e) {
-        		log.warn("Failed parsing startIndex :'"+this.startIndex+"', will default to:'"+startIndexAsInt+"', error message:"+ e.getMessage(), e);
-        	}
+            try {
+                startIndexAsInt = Integer.parseInt(this.startIndex);
+            } catch(NumberFormatException e) {
+                log.warn("Failed parsing startIndex :'"+this.startIndex+"', will default to:'"+startIndexAsInt+"', error message:"+ e.getMessage(), e);
+            }
         } 
         
         if(!StringUtils.isEmpty(this.endIndex)) {
-        	try {
-        		endIndexAsInt = Integer.parseInt(this.endIndex);
-        	} catch(NumberFormatException e) {
-        		log.warn("Failed parsing endIndex :'"+this.endIndex+"', will default to:'"+endIndexAsInt+"', error message:"+ e.getMessage(), e);
-        	}
+            try {
+                endIndexAsInt = Integer.parseInt(this.endIndex);
+            } catch(NumberFormatException e) {
+                log.warn("Failed parsing endIndex :'"+this.endIndex+"', will default to:'"+endIndexAsInt+"', error message:"+ e.getMessage(), e);
+            }
         } 
         if(startIndexAsInt>endIndexAsInt) {
-        	throw new JMeterStopTestException("Keystore Config error : Alias start index must be lower than Alias end index");
+            throw new JMeterStopTestException("Keystore Config error : Alias start index must be lower than Alias end index");
         }
         log.info("Configuring Keystore with (preload:"+preload+", startIndex:"+
                 startIndexAsInt+", endIndex:"+endIndexAsInt+")");
 
         SSLManager.getInstance().configureKeystore(Boolean.parseBoolean(preload),
-        		startIndexAsInt, 
+                startIndexAsInt, 
                 endIndexAsInt);
     }
 

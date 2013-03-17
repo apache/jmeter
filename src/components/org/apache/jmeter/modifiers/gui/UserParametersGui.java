@@ -74,7 +74,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     private JButton addParameterButton, addUserButton, deleteRowButton, deleteColumnButton;
 
     private JCheckBox perIterationCheck;
-    
+
     private JPanel paramPanel;
 
     public UserParametersGui() {
@@ -243,20 +243,20 @@ public class UserParametersGui extends AbstractPreProcessorGui {
      * Set Column size
      */
     private void setColumnWidths() {
-		int margin = 10;
-		int minwidth = 150;
-		
-		JTableHeader tableHeader = paramTable.getTableHeader();
-		FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
-	    
-	    for (int i = 0; i < tableModel.getColumnCount(); i++) {
-			int headerWidth = headerFontMetrics.stringWidth(paramTable.getColumnName(i));
-			int maxWidth = getMaximalRequiredColumnWidth(i, headerWidth);
-			
-			paramTable.getColumnModel().getColumn(i).setPreferredWidth(Math.max(maxWidth + margin, minwidth));
+        int margin = 10;
+        int minwidth = 150;
+
+        JTableHeader tableHeader = paramTable.getTableHeader();
+        FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
+
+        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+            int headerWidth = headerFontMetrics.stringWidth(paramTable.getColumnName(i));
+            int maxWidth = getMaximalRequiredColumnWidth(i, headerWidth);
+
+            paramTable.getColumnModel().getColumn(i).setPreferredWidth(Math.max(maxWidth + margin, minwidth));
         }
     }
-    
+
     /**
      * Compute max width between width of the largest column at columnIndex and headerWidth
      * @param columnIndex Column index
@@ -288,12 +288,12 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
         return maxWidth;
     }
-    
+
     private class AddParamAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             GuiUtils.stopTableEditing(paramTable);
-            
+
             tableModel.addNewRow();
             tableModel.fireTableDataChanged();
 
@@ -309,7 +309,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     private class AddUserAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             GuiUtils.stopTableEditing(paramTable);
 
             tableModel.addNewColumn(getUserColName(tableModel.getColumnCount()), String.class);

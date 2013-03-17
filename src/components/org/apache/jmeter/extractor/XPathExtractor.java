@@ -307,7 +307,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
      */
     private void getValuesForXPath(Document d,String query, List<String> matchStrings)
         throws TransformerException {
-    	XPathUtil.putValuesForXPathInList(d, query, matchStrings, getFragment());
+        XPathUtil.putValuesForXPathInList(d, query, matchStrings, getFragment());
     }
 
     public void setWhitespace(boolean selected) {
