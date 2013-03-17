@@ -93,7 +93,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      */
     @Deprecated
     public StatisticalSampleSender(){
-    	this(null);
+        this(null);
         log.warn("Constructor only intended for use in testing");
     }
 
@@ -144,7 +144,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      */
     @Override
     public void sampleOccurred(SampleEvent e) {
-    	synchronized (sampleStore) {
+        synchronized (sampleStore) {
             // Locate the statistical sample colector
             String key = StatisticalSampleResult.getKey(e, keyOnThreadName);
             StatisticalSampleResult statResult = sampleTable.get(key);

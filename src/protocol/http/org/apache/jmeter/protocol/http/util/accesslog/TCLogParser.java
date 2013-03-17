@@ -537,7 +537,7 @@ public class TCLogParser implements LogParser {
      * @return List<String>
      */
     protected List<String> parseParameters(String parameters) {
-    	List<String> parsedParams = new ArrayList<String>();
+        List<String> parsedParams = new ArrayList<String>();
         StringTokenizer paramtokens = this.tokenize(parameters, "&");
         while (paramtokens.hasMoreElements()) {
             parsedParams.add(paramtokens.nextToken());

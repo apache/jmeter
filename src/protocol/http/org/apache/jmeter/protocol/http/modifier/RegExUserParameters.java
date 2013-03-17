@@ -38,7 +38,7 @@ import org.apache.log.Logger;
  * Replacement will only occur for parameters in the Sampler that uses this RegEx User Parameters which name matches
  */
 public class RegExUserParameters extends AbstractTestElement implements Serializable, PreProcessor {
-	private static final String REGEX_GROUP_SUFFIX = "_g";
+    private static final String REGEX_GROUP_SUFFIX = "_g";
 
     private static final String MATCH_NR = "matchNr";
 
@@ -49,14 +49,14 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String REG_EX_REF_NAME = "RegExUserParameters.regex_ref_name";// $NON-NLS-1$
+    public static final String REG_EX_REF_NAME = "RegExUserParameters.regex_ref_name";// $NON-NLS-1$
 
-	public static final String REG_EX_PARAM_NAMES_GR_NR = "RegExUserParameters.param_names_gr_nr";// $NON-NLS-1$
+    public static final String REG_EX_PARAM_NAMES_GR_NR = "RegExUserParameters.param_names_gr_nr";// $NON-NLS-1$
 
-	public static final String REG_EX_PARAM_VALUES_GR_NR = "RegExUserParameters.param_values_gr_nr";// $NON-NLS-1$
+    public static final String REG_EX_PARAM_VALUES_GR_NR = "RegExUserParameters.param_values_gr_nr";// $NON-NLS-1$
 
     @Override
-	public void process() {
+    public void process() {
         if (log.isDebugEnabled()) {
             log.debug(Thread.currentThread().getName() + " Running up named: " + getName());//$NON-NLS-1$
         }
@@ -87,40 +87,40 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
             }
         }
     }
-	
-	private Map<String, String> buildParamsMap(){		
-		String regExRefName = getRegExRefName()+"_";
-		String grNames = getRegParamNamesGrNr();
-		String grValues = getRegExParamValuesGrNr();
-		JMeterVariables jmvars = getThreadContext().getVariables();	
-		// verify if regex groups exists
-		if(jmvars.get(regExRefName + MATCH_NR) == null
-				|| jmvars.get(regExRefName + 1 + REGEX_GROUP_SUFFIX + grNames) == null 
-				|| jmvars.get(regExRefName + 1 + REGEX_GROUP_SUFFIX + grValues) == null){
-			return null;
-		}
-		int n = Integer.parseInt(jmvars.get(regExRefName + MATCH_NR));	
-		Map<String, String> map = new HashMap<String, String>(n);
-		for(int i=1; i<=n; i++){
-			map.put(jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grNames), 
-					jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grValues));
-		}
-		return map;
-	}
 
-	/**
-	 * A new instance is created for each thread group, and the
-	 * clone() method is then called to create copies for each thread in a
-	 * thread group.
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
-	@Override
-	public Object clone() {
-		RegExUserParameters up = (RegExUserParameters) super.clone();
-		return up;
-	}
-	
+    private Map<String, String> buildParamsMap(){
+        String regExRefName = getRegExRefName()+"_";
+        String grNames = getRegParamNamesGrNr();
+        String grValues = getRegExParamValuesGrNr();
+        JMeterVariables jmvars = getThreadContext().getVariables();
+        // verify if regex groups exists
+        if(jmvars.get(regExRefName + MATCH_NR) == null
+                || jmvars.get(regExRefName + 1 + REGEX_GROUP_SUFFIX + grNames) == null 
+                || jmvars.get(regExRefName + 1 + REGEX_GROUP_SUFFIX + grValues) == null){
+            return null;
+        }
+        int n = Integer.parseInt(jmvars.get(regExRefName + MATCH_NR));
+        Map<String, String> map = new HashMap<String, String>(n);
+        for(int i=1; i<=n; i++){
+            map.put(jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grNames), 
+                    jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grValues));
+        }
+        return map;
+    }
+
+    /**
+     * A new instance is created for each thread group, and the
+     * clone() method is then called to create copies for each thread in a
+     * thread group.
+     * 
+     * @see java.lang.Object#clone()
+     */
+    @Override
+    public Object clone() {
+        RegExUserParameters up = (RegExUserParameters) super.clone();
+        return up;
+    }
+    
     public void setRegExRefName(String str) {
         setProperty(REG_EX_REF_NAME, str);
     }

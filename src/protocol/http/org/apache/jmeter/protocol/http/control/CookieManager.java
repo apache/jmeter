@@ -325,12 +325,12 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
      * @return the value string for the cookie header (goes after "Cookie: ").
      */
     public String getCookieHeaderForURL(URL url) {
-    	return cookieHandler.getCookieHeaderForURL(getCookies(), url, ALLOW_VARIABLE_COOKIES);
+        return cookieHandler.getCookieHeaderForURL(getCookies(), url, ALLOW_VARIABLE_COOKIES);
     }
 
 
     public void addCookieFromHeader(String cookieHeader, URL url){
-    	cookieHandler.addCookieFromHeader(this, CHECK_COOKIES, cookieHeader, url);
+        cookieHandler.addCookieFromHeader(this, CHECK_COOKIES, cookieHeader, url);
     }
     /**
      * Check if cookies match, i.e. name, path and domain are equal.
@@ -407,11 +407,11 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
         }
     }
 
-	/**
-	 * Package protected for tests
-	 * @return the cookieHandler
-	 */
-	CookieHandler getCookieHandler() {
-		return cookieHandler;
-	}
+    /**
+     * Package protected for tests
+     * @return the cookieHandler
+     */
+    CookieHandler getCookieHandler() {
+        return cookieHandler;
+    }
 }

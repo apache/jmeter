@@ -85,7 +85,7 @@ public class FileServer {
     private final Random random = new Random();
 
     // volatile needed to ensure safe publication
-	private volatile String scriptName;
+    private volatile String scriptName;
 
     // Cannot be instantiated
     private FileServer() {
@@ -163,20 +163,20 @@ public class FileServer {
         log.info("Set new base='"+base+"'");
     }
 
-	/**
-	 * Check if there are entries in use.
-	 * <p>
-	 * Caller must ensure that access to the files map is single-threaded as
-	 * there is a window between checking the files Map and clearing it.
-	 * 
-	 * @throws IllegalStateException if there are any entries still in use
-	 */
-	private void checkForOpenFiles() throws IllegalStateException {
-		if (filesOpen()) { // checks for entries in use
+    /**
+     * Check if there are entries in use.
+     * <p>
+     * Caller must ensure that access to the files map is single-threaded as
+     * there is a window between checking the files Map and clearing it.
+     * 
+     * @throws IllegalStateException if there are any entries still in use
+     */
+    private void checkForOpenFiles() throws IllegalStateException {
+        if (filesOpen()) { // checks for entries in use
             throw new IllegalStateException("Files are still open, cannot change base directory");
         }
         files.clear(); // tidy up any unused entries
-	}
+    }
 
     public synchronized String getBaseDir() {
         return base.getAbsolutePath();
@@ -523,15 +523,15 @@ public class FileServer {
      * @return JMX Script name
      * @since 2.6
      */
-	public String getScriptName() {
-		return scriptName;
-	}
+    public String getScriptName() {
+        return scriptName;
+    }
 
-	/**
-	 * @param scriptName Script name
-	 * @since 2.6
-	 */
-	public void setScriptName(String scriptName) {
-		this.scriptName = scriptName;
-	}
+    /**
+     * @param scriptName Script name
+     * @since 2.6
+     */
+    public void setScriptName(String scriptName) {
+        this.scriptName = scriptName;
+    }
 }

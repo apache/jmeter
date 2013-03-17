@@ -31,43 +31,43 @@ import org.apache.jorphan.util.JOrphanUtils;
  * http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html
  */
 class StreamGobbler extends Thread {
-	private final InputStream is;
-	private final StringBuilder buffer = new StringBuilder();
-	/**
-	 * @param is {@link InputStream}
-	 */
-	StreamGobbler(InputStream is) {
-		this.is = is;
-	}
+    private final InputStream is;
+    private final StringBuilder buffer = new StringBuilder();
+    /**
+     * @param is {@link InputStream}
+     */
+    StreamGobbler(InputStream is) {
+        this.is = is;
+    }
 
-	/**
-	 * @see java.lang.Thread#run()
-	 */
-	@Override
+    /**
+     * @see java.lang.Thread#run()
+     */
+    @Override
     public void run() {
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(is));
-			String line = null;
-			while ((line = br.readLine()) != null)
-			{
-				buffer.append(line);
-				buffer.append("\r\n");
-			}
-		} catch (IOException e) {
-			buffer.append(e.getMessage());
-		}
-		finally
-		{
-		    JOrphanUtils.closeQuietly(br);
-		}
-	}
-	
-	/**
-	 * @return Output
-	 */
-	public String getResult()
-	{
-		return buffer.toString();
-	}
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(is));
+            String line = null;
+            while ((line = br.readLine()) != null)
+            {
+                buffer.append(line);
+                buffer.append("\r\n");
+            }
+        } catch (IOException e) {
+            buffer.append(e.getMessage());
+        }
+        finally
+        {
+            JOrphanUtils.closeQuietly(br);
+        }
+    }
+
+    /**
+     * @return Output
+     */
+    public String getResult()
+    {
+        return buffer.toString();
+    }
 }

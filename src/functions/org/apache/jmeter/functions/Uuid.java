@@ -39,31 +39,31 @@ import java.util.UUID;
  */
 public class Uuid extends AbstractFunction {
 
-	private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<String>();
 
-	private static final String KEY = "__UUID"; //$NON-NLS-1$
+    private static final String KEY = "__UUID"; //$NON-NLS-1$
 
-	public Uuid() {
-	}
+    public Uuid() {
+    }
 
-	@Override
-	public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-		return UUID.randomUUID().toString();
-	}
+    @Override
+    public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
+        return UUID.randomUUID().toString();
+    }
 
-	@Override
-	public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, 0, 0);
-	}
+    @Override
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, 0, 0);
+    }
 
-	@Override
-	public String getReferenceKey() {
-		return KEY;
-	}
+    @Override
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-	@Override
-	public List<String> getArgumentDesc() {
-		return desc;
-	}
+    @Override
+    public List<String> getArgumentDesc() {
+        return desc;
+    }
 
 }

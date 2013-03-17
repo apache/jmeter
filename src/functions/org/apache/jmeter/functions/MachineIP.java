@@ -31,11 +31,11 @@ public class MachineIP extends AbstractHostIPName {
     public MachineIP() {
     }
 
-	@Override
-	protected String compute() {
-		return JMeterUtils.getLocalHostIP();
-	}
-	
+    @Override
+    protected String compute() {
+        return JMeterUtils.getLocalHostIP();
+    }
+
     /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {

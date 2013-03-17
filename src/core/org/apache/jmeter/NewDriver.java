@@ -52,7 +52,7 @@ public final class NewDriver {
     private static final String jmDir;
 
     static {
-    	final List<URL> jars = new LinkedList<URL>();
+        final List<URL> jars = new LinkedList<URL>();
         final String initial_classpath = System.getProperty(JAVA_CLASS_PATH);
 
         // Find JMeter home dir from the initial classpath
@@ -125,12 +125,12 @@ public final class NewDriver {
         // ClassFinder needs the classpath
         System.setProperty(JAVA_CLASS_PATH, initial_classpath + classpath.toString());
         loader = AccessController.doPrivileged(
-        		new java.security.PrivilegedAction<DynamicClassLoader>() {
-        	        @Override
+                new java.security.PrivilegedAction<DynamicClassLoader>() {
+                    @Override
                     public DynamicClassLoader run() {
-        	        	return new DynamicClassLoader(jars.toArray(new URL[jars.size()]));
-        	        }
-        	    }
+                        return new DynamicClassLoader(jars.toArray(new URL[jars.size()]));
+                    }
+                }
         );
     }
 

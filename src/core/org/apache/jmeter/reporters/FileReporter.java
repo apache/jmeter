@@ -102,7 +102,7 @@ public class FileReporter extends JPanel {
                 }
             }
         } finally {
-        	JOrphanUtils.closeQuietly(reader);
+            JOrphanUtils.closeQuietly(reader);
         }
         showPanel();
     }

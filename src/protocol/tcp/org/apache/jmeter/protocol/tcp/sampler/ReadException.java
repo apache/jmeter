@@ -22,32 +22,32 @@ package org.apache.jmeter.protocol.tcp.sampler;
  */
 public class ReadException extends Exception {
 
-	private static final long serialVersionUID = -2770054697780959330L;
-	private final String partialResponse;
+    private static final long serialVersionUID = -2770054697780959330L;
+    private final String partialResponse;
 
-	/**
-	 * @deprecated For use by test code only (serialisation tests)
-	 */
-	@Deprecated
-	public ReadException() {
-	    this(null, null, null);
-	}
+    /**
+     * @deprecated For use by test code only (serialisation tests)
+     */
+    @Deprecated
+    public ReadException() {
+        this(null, null, null);
+    }
 
-	/**
-	 * Constructor
-	 * @param message Message
-	 * @param cause Source cause
-	 * @param partialResponse  Text read until error occured
-	 */
-	public ReadException(String message, Throwable cause, String partialResponse) {
-		super(message, cause);
-		this.partialResponse = partialResponse;
-	}
+    /**
+     * Constructor
+     * @param message Message
+     * @param cause Source cause
+     * @param partialResponse  Text read until error occured
+     */
+    public ReadException(String message, Throwable cause, String partialResponse) {
+        super(message, cause);
+        this.partialResponse = partialResponse;
+    }
 
-	/**
-	 * @return the partialResponse Text read until error occured
-	 */
-	public String getPartialResponse() {
-		return partialResponse;
-	}
+    /**
+     * @return the partialResponse Text read until error occured
+     */
+    public String getPartialResponse() {
+        return partialResponse;
+    }
 }

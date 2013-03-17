@@ -27,15 +27,15 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
  */
 public interface CookieHandler {
 
-	/**
-	 * Add cookie to CookieManager from cookieHeader and URL
-	 * @param cookieManager CookieManager on which cookies are added
-	 * @param checkCookies boolean to indicate if cookies must be validated against spec
-	 * @param cookieHeader String cookie Header
-	 * @param url URL 
-	 */
-	void addCookieFromHeader(CookieManager cookieManager, boolean checkCookies,
-			String cookieHeader, URL url);
+    /**
+     * Add cookie to CookieManager from cookieHeader and URL
+     * @param cookieManager CookieManager on which cookies are added
+     * @param checkCookies boolean to indicate if cookies must be validated against spec
+     * @param cookieHeader String cookie Header
+     * @param url URL 
+     */
+    void addCookieFromHeader(CookieManager cookieManager, boolean checkCookies,
+            String cookieHeader, URL url);
 
     /**
      * Find cookies applicable to the given URL and build the Cookie header from
@@ -45,7 +45,7 @@ public interface CookieHandler {
      *            URL of the request to which the returned header will be added.
      * @return the value string for the cookie header (goes after "Cookie: ").
      */
-	String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
-			boolean allowVariableCookie);
+    String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
+            boolean allowVariableCookie);
 
 }

@@ -50,8 +50,8 @@ import org.apache.log.Logger;
 /**
  * HashTreeTraverser implementation that traverses the Test Tree to build:
  * <ul>
- * 	<li>A map with key Sampler and as value the associated SamplePackage</li>
- * 	<li>A map with key TransactionController and as value the associated SamplePackage</li>
+ *  <li>A map with key Sampler and as value the associated SamplePackage</li>
+ *  <li>A map with key TransactionController and as value the associated SamplePackage</li>
  * </ul>
  */
 public class TestCompiler implements HashTreeTraverser {

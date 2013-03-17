@@ -69,7 +69,7 @@ abstract class AbstractHostIPName extends AbstractFunction {
 
     abstract protected String compute();
 
-	/** {@inheritDoc} */
+    /** {@inheritDoc} */
     @Override
     public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 0, 1);
