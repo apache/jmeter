@@ -16,11 +16,11 @@
    limitations under the License.
 -->
 <project name="Apache JMeter"
-		  href="http://jmeter.apache.org/">
+          href="http://jmeter.apache.org/">
 
-	 <title>Apache JMeter</title>
-	 <logo width="221" height="102" href="../docs/images/logo.jpg">Apache JMeter</logo>
-	 <body>
+     <title>Apache JMeter</title>
+     <logo width="221" height="102" href="../docs/images/logo.jpg">Apache JMeter</logo>
+     <body>
 
-	 </body>
+     </body>
 </project>

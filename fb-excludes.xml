@@ -15,21 +15,21 @@
    limitations under the License.
 -->
 <FindBugsFilter>
-	 <Match classregex=".*\.PackageTest">
-	 	<BugCode name="OS"/>
-	 </Match>
-	 <Match classregex=".*\$Test">
-	 	<BugCode name="OS"/>
-	 </Match> 
+     <Match classregex=".*\.PackageTest">
+        <BugCode name="OS"/>
+     </Match>
+     <Match classregex=".*\$Test">
+        <BugCode name="OS"/>
+     </Match> 
      <Match classregex=".*" >
-     	<!-- 
-     	EI,EI2 - may expose internal representation
-     	IS2 - Inconsistent synchronisation
-     	MS - mutable static field
-     	Se - serialisation
-     	SIC - should be static inner class?
-		HE - hashcode/equals
-     	-->  
+        <!--
+        EI,EI2 - may expose internal representation
+        IS2 - Inconsistent synchronisation
+        MS - mutable static field
+        Se - serialisation
+        SIC - should be static inner class?
+        HE - hashcode/equals
+        -->  
        <BugCode name="EI,EI2,HE" />
      </Match>
    
@@ -54,9 +54,9 @@
           <Bug pattern="NN_NAKED_NOTIFY" />
      </Match>
      <Match>
-	      <Class name="org.apache.jmeter.JMeter" />
-	      <Method name="start" />
-	      <Bug pattern="DM_EXIT" />
+          <Class name="org.apache.jmeter.JMeter" />
+          <Method name="start" />
+          <Bug pattern="DM_EXIT" />
     </Match>
      <Match>
           <Class name="org.apache.jmeter.JMeterReport" />

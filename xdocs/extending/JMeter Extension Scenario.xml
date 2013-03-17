@@ -19,7 +19,7 @@
 
   <properties>
 
-	 <title>Extending JMeter</title>
+     <title>Extending JMeter</title>
 
   </properties>
 
@@ -81,11 +81,11 @@ needed to effectively interact with JMeter.
   step, define the appropriate accessor methods. The implementation of these
   accessors should usually delegate to <TT>AbstractConfigElement</TT>. For
   example: <PRE>   public void setHostname(String hostname)
-	{ setProperty(HOST_NAME, hostname); }
+    { setProperty(HOST_NAME, hostname); }
 
-	public String getHostname()
-	{ return (String)getProperty(HOST_NAME); }
-	</PRE>Some accessor implementations may be more complex. See the
+    public String getHostname()
+    { return (String)getProperty(HOST_NAME); }
+    </PRE>Some accessor implementations may be more complex. See the
   <TT>UrlConfig</TT> object for a more involved example.</LI>
   <LI><B><TT>String getClassLabel()</TT></B> - This is the label that will
   display in the drop-down menu for adding your configuration element.</LI>
@@ -93,9 +93,9 @@ needed to effectively interact with JMeter.
   cloneable.</LI>
   <LI><B><TT>addConfigElement(ConfigElement)</TT></B> - A typical implementation
   of this method looks like <PRE>   public void addConfigElement(ConfigElement config) {
-		if (config instanceof MyConfig)
-			updatePropertyIfAbsent((MyConfig)config);
-	}</PRE>where <TT>updatePropertyIfAbsent</TT> is handled by the super class.</LI>
+        if (config instanceof MyConfig)
+            updatePropertyIfAbsent((MyConfig)config);
+    }</PRE>where <TT>updatePropertyIfAbsent</TT> is handled by the super class.</LI>
   <LI><B><TT>getGuiClass</TT></B> - return the name of the this class's <A
   href="#config-gui">corresponding GUI class</A>.
   </LI></OL>
@@ -176,12 +176,12 @@ extension.
   will soon be called) to debug, you will probably see way more than you need to
   know. You can filter the JMeter stuff by making the following modifications to
   <TT>log4j.conf</TT> in the JMeter's <TT>bin</TT> directory. The <B>bold</B>
-  text is added/modified <PRE>	# Set the appenders for the categories
-	log4j.rootCategory=<B>info</B>,Root_Appender
-	<B>log4j.category.com.myfirm.jmeter=debug,</B>
-	log4j.category.org.apache.jmeter.control=debug
-	log4j.category.org.apache.jmeter.gui.tree.NonGuiTree=INFO,File_Appender
-	</PRE>Note that the root (default) debugging has been set to <B>info</B>.
+  text is added/modified <PRE>    # Set the appenders for the categories
+    log4j.rootCategory=<B>info</B>,Root_Appender
+    <B>log4j.category.com.myfirm.jmeter=debug,</B>
+    log4j.category.org.apache.jmeter.control=debug
+    log4j.category.org.apache.jmeter.gui.tree.NonGuiTree=INFO,File_Appender
+    </PRE>Note that the root (default) debugging has been set to <B>info</B>.
   This eliminates most log4j output from JMeter. The new line specifies the name
   of the package containing JMeter extensions. (<TT>com.yourfirm.jmeter</TT>) in
   this example. Note that it is not necessary to specify a particular class
