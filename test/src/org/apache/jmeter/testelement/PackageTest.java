@@ -53,10 +53,10 @@ public class PackageTest extends TestCase {
         assertTrue(debugSampler.getProperty("HeaderManager.headers") instanceof NullProperty);
         debugSampler.addTestElement(headerManager);
         assertFalse(debugSampler.getProperty("HeaderManager.headers") instanceof NullProperty);
-        assertEquals(debugSampler.getProperty("HeaderManager.headers").getStringValue() ,"[1stLevelTestHeader	testValue1]");
+        assertEquals(debugSampler.getProperty("HeaderManager.headers").getStringValue() ,"[1stLevelTestHeader\ttestValue1]");
 
         debugSampler.addTestElement(headerManager2);
-        assertEquals(debugSampler.getProperty("HeaderManager.headers").getStringValue() ,"[1stLevelTestHeader	testValue1, 2ndLevelTestHeader	testValue2]");
+        assertEquals(debugSampler.getProperty("HeaderManager.headers").getStringValue() ,"[1stLevelTestHeader\ttestValue1, 2ndLevelTestHeader\ttestValue2]");
         assertEquals(2, ((CollectionProperty)debugSampler.getProperty("HeaderManager.headers")).size());
         
         headerManager.recoverRunningVersion();
