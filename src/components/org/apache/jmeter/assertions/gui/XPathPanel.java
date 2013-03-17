@@ -187,7 +187,7 @@ public class XPathPanel extends JPanel {
             testDoc.appendChild(el);
             XPathUtil.validateXPath(testDoc, xpathString);
         } catch (IllegalArgumentException e) {
-        	log.warn(e.getLocalizedMessage());
+            log.warn(e.getLocalizedMessage());
             success = false;
             ret = e.getLocalizedMessage();
         } catch (ParserConfigurationException e) {

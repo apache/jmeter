@@ -60,65 +60,65 @@ import org.apache.log.Logger;
  */
 public class SearchTreeDialog extends JDialog implements ActionListener {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -4436834972710248247L;
+     *
+     */
+    private static final long serialVersionUID = -4436834972710248247L;
 
-	private static final Logger logger = LoggingManager.getLoggerForClass();
+    private static final Logger logger = LoggingManager.getLoggerForClass();
 
     private JButton searchButton;
-    
-	private JLabeledTextField searchTF;
-	
-	private JCheckBox isRegexpCB;
 
-	private JCheckBox isCaseSensitiveCB;
+    private JLabeledTextField searchTF;
 
-	private JButton cancelButton;
+    private JCheckBox isRegexpCB;
 
-	/**
-	 * Store last search
-	 */
-	private transient String lastSearch = null;
+    private JCheckBox isCaseSensitiveCB;
+
+    private JButton cancelButton;
+
+    /**
+     * Store last search
+     */
+    private transient String lastSearch = null;
 
     private JButton searchAndExpandButton;
-	
-	public SearchTreeDialog() {
+
+    public SearchTreeDialog() {
         super((JFrame) null, JMeterUtils.getResString("search_tree_title"), true); //$NON-NLS-1$
         init();
     }
-	
+
     @Override
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
         // Hide Window on ESC
-        Action escapeAction = new AbstractAction("ESCAPE") { 
+        Action escapeAction = new AbstractAction("ESCAPE") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = -6543764044868772971L;
 
             @Override
-            public void actionPerformed(ActionEvent actionEvent) { 
+            public void actionPerformed(ActionEvent actionEvent) {
                 setVisible(false);
-            } 
+            }
         };
         // Do search on Enter
-        Action enterAction = new AbstractAction("ENTER") { 
+        Action enterAction = new AbstractAction("ENTER") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = -3661361497864527363L;
 
             @Override
-            public void actionPerformed(ActionEvent actionEvent) { 
+            public void actionPerformed(ActionEvent actionEvent) {
                 doSearch(actionEvent);
-            } 
+            }
         };
         ActionMap actionMap = rootPane.getActionMap();
         actionMap.put(escapeAction.getValue(Action.NAME), escapeAction);
         actionMap.put(enterAction.getValue(Action.NAME), enterAction);
-        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);  
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStrokes.ESC, escapeAction.getValue(Action.NAME));
         inputMap.put(KeyStrokes.ENTER, enterAction.getValue(Action.NAME));
 
@@ -130,7 +130,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 
         searchTF = new JLabeledTextField(JMeterUtils.getResString("search_text_field"), 20); //$NON-NLS-1$
         if(!StringUtils.isEmpty(lastSearch)) {
-        	searchTF.setText(lastSearch);
+            searchTF.setText(lastSearch);
         }
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); //$NON-NLS-1$
@@ -141,14 +141,14 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         JPanel searchCriterionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchCriterionPanel.add(isCaseSensitiveCB);
         searchCriterionPanel.add(isRegexpCB);
-        
+
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(7, 3, 3, 3));
         searchPanel.add(searchTF, BorderLayout.NORTH);
         searchPanel.add(searchCriterionPanel, BorderLayout.CENTER);
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        
+
         searchButton = new JButton(JMeterUtils.getResString("search")); //$NON-NLS-1$
         searchButton.addActionListener(this);
         searchAndExpandButton = new JButton(JMeterUtils.getResString("search_expand")); //$NON-NLS-1$
@@ -160,7 +160,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         buttonsPanel.add(cancelButton);
         searchPanel.add(buttonsPanel, BorderLayout.SOUTH);
         this.getContentPane().add(searchPanel);
-    	searchTF.requestFocusInWindow();
+        searchTF.requestFocusInWindow();
 
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
@@ -172,35 +172,35 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-    	if(e.getSource()==cancelButton) {
-    	    searchTF.requestFocusInWindow();
-    		this.setVisible(false);
-    		return;
-    	} 
-    	doSearch(e);
+        if(e.getSource()==cancelButton) {
+            searchTF.requestFocusInWindow();
+            this.setVisible(false);
+            return;
+        }
+        doSearch(e);
     }
 
-	/**
-	 * @param e {@link ActionEvent}
-	 */
-	private void doSearch(ActionEvent e) {
-	    boolean expand = e.getSource()==searchAndExpandButton;
-		String wordToSearch = searchTF.getText();
-    	if(StringUtils.isEmpty(wordToSearch)) {
+    /**
+     * @param e {@link ActionEvent}
+     */
+    private void doSearch(ActionEvent e) {
+        boolean expand = e.getSource()==searchAndExpandButton;
+        String wordToSearch = searchTF.getText();
+        if(StringUtils.isEmpty(wordToSearch)) {
             return;
         } else {
-        	this.lastSearch = wordToSearch;
+            this.lastSearch = wordToSearch;
         }
-    	
-    	// reset previous result
-    	ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
+
+        // reset previous result
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
         // do search
-    	Searcher searcher = null; 
-    	if(isRegexpCB.isSelected()) {
-    		searcher = new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
-    	} else {
-    		searcher = new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
-    	}
+        Searcher searcher = null;
+        if(isRegexpCB.isSelected()) {
+            searcher = new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
+        } else {
+            searcher = new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
+        }
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
         Set<JMeterTreeNode> nodes = new HashSet<JMeterTreeNode>();
@@ -221,7 +221,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         }
         GuiPackage guiInstance = GuiPackage.getInstance();
         JTree jTree = guiInstance.getMainFrame().getTree();
-        
+
         for (Iterator<JMeterTreeNode> iterator = nodes.iterator(); iterator.hasNext();) {
             JMeterTreeNode jMeterTreeNode = iterator.next();
             jMeterTreeNode.setMarkedBySearch(true);
@@ -232,5 +232,5 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         GuiPackage.getInstance().getMainFrame().repaint();
         searchTF.requestFocusInWindow();
         this.setVisible(false);
-	}
+    }
 }

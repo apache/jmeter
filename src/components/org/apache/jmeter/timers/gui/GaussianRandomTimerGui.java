@@ -52,40 +52,40 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
     /**
      * {@inheritDoc}
      */
-	@Override
-	protected RandomTimer createRandomTimer() {
-		return new GaussianRandomTimer();
-	}
+    @Override
+    protected RandomTimer createRandomTimer() {
+        return new GaussianRandomTimer();
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getTimerDelayLabelKey() {
-		return JMeterUtils.getResString("gaussian_timer_delay"); //$NON-NLS-1$
-	}
+    @Override
+    protected String getTimerDelayLabelKey() {
+        return JMeterUtils.getResString("gaussian_timer_delay"); //$NON-NLS-1$
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getTimerRangeLabelKey() {
-		return JMeterUtils.getResString("gaussian_timer_range"); //$NON-NLS-1$
-	}
+    @Override
+    protected String getTimerRangeLabelKey() {
+        return JMeterUtils.getResString("gaussian_timer_range"); //$NON-NLS-1$
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getDefaultDelay() {
-		return DEFAULT_DELAY;
-	}
+    @Override
+    protected String getDefaultDelay() {
+        return DEFAULT_DELAY;
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	protected String getDefaultRange() {
-		return DEFAULT_RANGE;
-	}
+    @Override
+    protected String getDefaultRange() {
+        return DEFAULT_RANGE;
+    }
 }

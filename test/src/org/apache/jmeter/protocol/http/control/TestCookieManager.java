@@ -286,8 +286,8 @@ public class TestCookieManager extends JMeterTestCase {
             assertNotNull(s);
             HC3CookieHandler hc3CookieHandler = (HC3CookieHandler) man.getCookieHandler();
             org.apache.commons.httpclient.Cookie[] c = 
-            		hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
-            		CookieManager.ALLOW_VARIABLE_COOKIES);
+                    hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c[0].getPath());
             assertFalse(c[0].isPathAttributeSpecified());
             assertEquals("/sub1",c[1].getPath());
@@ -311,8 +311,8 @@ public class TestCookieManager extends JMeterTestCase {
             assertNotNull(s);
             HC3CookieHandler hc3CookieHandler = (HC3CookieHandler) man.getCookieHandler();
             org.apache.commons.httpclient.Cookie[] c = 
-            		hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
-            		CookieManager.ALLOW_VARIABLE_COOKIES);
+                    hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c[0].getPath());
             assertFalse(c[0].isPathAttributeSpecified());
             assertEquals("/sub1",c[1].getPath());
@@ -338,8 +338,8 @@ public class TestCookieManager extends JMeterTestCase {
             HC3CookieHandler hc3CookieHandler = (HC3CookieHandler) man.getCookieHandler();
            
             org.apache.commons.httpclient.Cookie[] c = 
-            		hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
-            		CookieManager.ALLOW_VARIABLE_COOKIES);
+                    hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c[0].getPath());
             assertFalse(c[0].isPathAttributeSpecified());
             assertEquals("/sub1",c[1].getPath());
@@ -372,8 +372,8 @@ public class TestCookieManager extends JMeterTestCase {
             assertNull(s);
             HC3CookieHandler hc3CookieHandler = (HC3CookieHandler) man.getCookieHandler();
             org.apache.commons.httpclient.Cookie[] c = 
-            		hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
-            		CookieManager.ALLOW_VARIABLE_COOKIES);
+                    hc3CookieHandler.getCookiesForUrl(man.getCookies(), url, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals(0,c.length); // Cookies again ignored
         }
 

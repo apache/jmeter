@@ -41,11 +41,11 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -322164502276145504L;
+     *
+     */
+    private static final long serialVersionUID = -322164502276145504L;
 
-	private static final String DELAY_FIELD = "Delay Field";
+    private static final String DELAY_FIELD = "Delay Field";
 
     private static final String RANGE_FIELD = "Range Field";
 
@@ -84,7 +84,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
         return timer;
     }
 
-	/**
+    /**
      * Modifies a given TestElement to mirror the data in the gui components.
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
@@ -108,7 +108,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
         rangeField.setText(el.getPropertyAsString(RandomTimer.RANGE));
     }
 
-    
+
     /**
      * Initialize this component.
      */
@@ -150,7 +150,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
                 threadDelayPropsPanel.getPreferredSize().height));
         add(threadDelayPropsPanel);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -169,7 +169,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
 
     /**
      * Create implementation of RandomTimer
-     * @return {@link RandomTimer} 
+     * @return {@link RandomTimer}
      */
     protected abstract RandomTimer createRandomTimer();
 

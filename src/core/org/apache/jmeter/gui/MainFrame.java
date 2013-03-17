@@ -105,11 +105,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     // The application name
     private static final String DEFAULT_APP_NAME = "Apache JMeter"; // $NON-NLS-1$
-    
+
     // The default title for the Menu bar
     private static final String DEFAULT_TITLE = DEFAULT_APP_NAME +
             " (" + JMeterUtils.getJMeterVersion() + ")"; // $NON-NLS-1$ $NON-NLS-2$
-    
+
     // Allow display/hide toolbar
     private static final boolean DISPLAY_TOOLBAR =
             JMeterUtils.getPropDefault("jmeter.toolbar.display", true); // $NON-NLS-1$
@@ -200,14 +200,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         totalThreads.setToolTipText(JMeterUtils.getResString("total_threads_tooltip")); // $NON-NLS-1$
         activeThreads = new JLabel("0"); // $NON-NLS-1$
         activeThreads.setToolTipText(JMeterUtils.getResString("active_threads_tooltip")); // $NON-NLS-1$
-        
+
         warnIndicator = new JButton(warningIcon);
         warnIndicator.setMargin(new Insets(0, 0, 0, 0));
         // Transparent JButton with no border
         warnIndicator.setOpaque(false);
         warnIndicator.setContentAreaFilled(false);
         warnIndicator.setBorderPainted(false);
-        
+
         warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
         warnIndicator.addActionListener(this);
         errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
@@ -369,7 +369,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             }
         });
     }
-    
+
     public void setMainPanel(JComponent comp) {
         mainPanel.setViewportView(comp);
     }
@@ -477,12 +477,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         } else {
             LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
                     logPanel
-                     });            
+                     });
         }
-        
+
         topAndDown.setTopComponent(mainPanel);
         topAndDown.setBottomComponent(logPanel);
-        
+
         treeAndMain.setRightComponent(topAndDown);
 
         treeAndMain.setResizeWeight(.2);
@@ -496,7 +496,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         setTitle(DEFAULT_TITLE);
         setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
-        setWindowTitle(); // define AWT WM_CLASS string 
+        setWindowTitle(); // define AWT WM_CLASS string
     }
 
 
@@ -504,10 +504,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * Support for Test Plan Dnd
      * see BUG 52281 (when JDK6 will be minimum JDK target)
      */
-	public void initTopLevelDndHandler() {
-	    new DropTarget(this, this);
+    public void initTopLevelDndHandler() {
+        new DropTarget(this, this);
     }
-    
+
     public void setExtendedFrameTitle(String fname) {
         // file New operation may set to null, so just return app name
         if (fname == null) {
@@ -537,7 +537,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
         toolPanel.add(Box.createGlue());
-        
+
         if (DISPLAY_ERROR_FATAL_COUNTER) {
             toolPanel.add(errorsOrFatalsLabel);
             toolPanel.add(warnIndicator);
@@ -571,7 +571,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private JScrollPane createMainPanel() {
         return new JScrollPane();
     }
-    
+
     /**
      * Create at the down of the left a Console for Log events
      * @return {@link LoggerPanel}
@@ -684,12 +684,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {
-        // NOOP        
+        // NOOP
     }
 
     @Override
     public void dragExit(DropTargetEvent dte) {
-        // NOOP        
+        // NOOP
     }
 
     @Override
@@ -711,7 +711,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                     try {
                         @SuppressWarnings("unchecked")
-                        List<File> files = (List<File>) 
+                        List<File> files = (List<File>)
                                 tr.getTransferData(DataFlavor.javaFileListFlavor);
                         if(files.isEmpty()) {
                             return;
@@ -721,7 +721,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                             log.warn("Importing file:" + file.getName()+ "from DnD failed because file extension does not end with .jmx");
                             return;
                         }
-                        
+
                         ActionEvent fakeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ActionNames.OPEN);
                         LoadDraggedFile.loadProject(fakeEvent, file);
                     } finally {
@@ -735,16 +735,16 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         } catch (IOException e) {
             log.warn("Dnd failed" , e);
         }
-        
+
     }
 
     @Override
     public void dropActionChanged(DropTargetDragEvent dtde) {
         // NOOP
     }
-    
+
     /**
-     * 
+     *
      */
     public final class ErrorsAndFatalsCounterLogTarget implements LogTarget, Clearable {
         public AtomicInteger errorOrFatal = new AtomicInteger(0);
@@ -761,8 +761,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                     }
                 });
             }
-        }  
-        
+        }
+
         @Override
         public void clearData() {
             errorOrFatal.set(0);
@@ -775,7 +775,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         }
     }
 
-    
+
     @Override
     public void clearData() {
         logPanel.clear();

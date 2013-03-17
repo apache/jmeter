@@ -86,7 +86,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
             if (target == THREAD) {
                 if(action == STOP || action == STOP_NOW) {
                     log.info("Stopping current thread");
-                    context.getThread().stop();                    
+                    context.getThread().stop();
                 } else {
                     log.info("Restarting next loop");
                     context.setRestartNextLoop(true);
@@ -119,7 +119,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
             pauseThread = Thread.currentThread();
             Thread.sleep(milis);
         } catch (InterruptedException e) {
-        	// NOOP
+            // NOOP
         } finally {
             pauseThread = null;
         }
