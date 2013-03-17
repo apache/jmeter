@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,14 +30,14 @@
 <body>
 <section name="&sect-num;. Building an Extended LDAP Test Plan" anchor="ldapexttest">
 <p>
-In this section, you will learn how to create a basic Test Plan to test an LDAP 
+In this section, you will learn how to create a basic Test Plan to test an LDAP
 server.</p>
 <p>
-As the Extended LDAP Sampler is highly configurable, this also means that it takes 
-some time to build a correct testplan. You can however tune it exactly up to your 
+As the Extended LDAP Sampler is highly configurable, this also means that it takes
+some time to build a correct testplan. You can however tune it exactly up to your
 needs.
 </p>
-	
+
 <p>
 You will create four users that send requests for four tests on the LDAP server.Also, you will tell
 the users to run their tests twice. So,  the total number of requests is (4 users) x (4 requests) x
@@ -51,14 +51,14 @@ repeat 2 times) = 32 LDAP requests. To construct the Test Plan, you will use the
 This example assumes that the LDAP Server is installed in your Local machine.
 </p>
 <p>
-For the less experienced LDAP users, I build a <a href="ldapops_tutor.html">small 
-LDAP tutorial</a> which shortly explains 
+For the less experienced LDAP users, I build a <a href="ldapops_tutor.html">small
+LDAP tutorial</a> which shortly explains
 the several LDAP operations that can be used in building a complex testplan.
 </p>
 <p>
-Take care when using LDAP special characters in the distinghuished name, in that case (eg, you want to use a + sign in a 
+Take care when using LDAP special characters in the distinghuished name, in that case (eg, you want to use a + sign in a
 distinghuished name) you need to escape the character by adding an "\" sign before that character.
-extra exeption: if you want to add a \ character in a distinguished name (in an add or rename operation), you need to use 4 backslashes. 
+extra exeption: if you want to add a \ character in a distinguished name (in an add or rename operation), you need to use 4 backslashes.
 examples:
 cn=dolf\+smits to add/search an entry with the name like cn=dolf+smits
 cn=dolf \\ smits to search an entry with the name cn=dolf \ smits
@@ -66,7 +66,7 @@ cn=c:\\\\log.txt to add an entry with a name like cn=c:\log.txt
 </p>
 
 
-	<subsection name="&sect-num;.1 Adding Users" anchor="ext_adding_users">
+    <subsection name="&sect-num;.1 Adding Users" anchor="ext_adding_users">
 <p>
 The first step you want to do with every JMeter Test Plan is to add a Thread Group element.
 The Thread Group tells JMeter the number of users you want to simulate, how often the users should send
@@ -84,7 +84,7 @@ Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 </p>
 </subsection>
-	<subsection name="&sect-num;.2 Adding LDAP Extended Request Defaults" anchor="add_ldapext_defaults">
+    <subsection name="&sect-num;.2 Adding LDAP Extended Request Defaults" anchor="add_ldapext_defaults">
 <p>
 Begin by selecting the Thread Group element. Click your right mouse button
 to get the Add menu, and then select Add --> Config Element -->LDAP Extended Request Defaults. Then,
@@ -94,16 +94,16 @@ select this new element to view its Control Panel.
 Like most JMeter elements, the LDAP Extended Request Defaults Control Panel has a name
 field that you can modify. In this example, leave this field with the default value.
 </p>
-<p><figure image="ldaptest/extrequestdefaults.png"><br/>						
+<p><figure image="ldaptest/extrequestdefaults.png"><br/>
   Figure &sect-num;.2 LDAP Defaults for our Test Plan</figure>
 </p>
 <p>
-			For each of the different operations, some default values can be filled in.
-			In All cases, when a default is filled in, this is used for the LDAP extended requests.
-			For each requst, you can override the defaults by filling in the values in the LDAP extended request sampler.
-			When no valueis entered which is necesarry for a test, the test will fail in an unpredictable way!
-			</p>
-			We will not enter any default values here, as we will build a very small testplan, so we will explain all the different fields when we add the LDAP Extended samplers.
+            For each of the different operations, some default values can be filled in.
+            In All cases, when a default is filled in, this is used for the LDAP extended requests.
+            For each requst, you can override the defaults by filling in the values in the LDAP extended request sampler.
+            When no valueis entered which is necesarry for a test, the test will fail in an unpredictable way!
+            </p>
+            We will not enter any default values here, as we will build a very small testplan, so we will explain all the different fields when we add the LDAP Extended samplers.
 </subsection>
 <subsection name="&sect-num;.3 Adding LDAP Requests" anchor="add_extrequests">
 <p>
@@ -178,7 +178,7 @@ When this field is kept empty, an anonymous bind will be established.
 <p>
 <figure image="ldaptest/extthreadbind.png">
 Figure &sect-num;.3.1. Thread Bind example</figure>
-</p> 
+</p>
 </subsection>
 
 <subsection name="&sect-num;.3.2 Adding a search Request" anchor="add_searchreq">
@@ -205,7 +205,7 @@ Enter the searchfilter, any decent LDAP serach filter will do, but for now, use 
      </li></ol>
 </li>
 <li>
-(Optional) Sizelimit, specifies the maximun number of returned entries, 
+(Optional) Sizelimit, specifies the maximun number of returned entries,
 </li>
 <li>
 (optional) Timelimit, psecifies the maximum number of miliseconds, the SERVER can use for performing the search. it is NOT the maximun time the application will wait!<br/>
@@ -420,7 +420,7 @@ The request gives a short description of the request that was made, in practice 
 is contained here.
 </li>
 <li>
-The response data contains the full details of the sent request, as well the full details of the received answer, 
+The response data contains the full details of the sent request, as well the full details of the received answer,
 this is given in a (self defined) xml-style.
 <a href="ldapanswer_xml.html">The full description can be found here.</a>
 </li>
