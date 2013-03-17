@@ -103,11 +103,11 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             config.removeProperty(HTTPSamplerBase.CONCURRENT_DWN);
         }
         if(!StringUtils.isEmpty(concurrentPool.getText())) {
-        	config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
-        			concurrentPool.getText()));
+            config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
+                    concurrentPool.getText()));
         } else {
-        	config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
-        			String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE)));
+            config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
+                    String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE)));
         }
         if (!StringUtils.isEmpty(embeddedRE.getText())) {
             config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_RE,

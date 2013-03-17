@@ -34,13 +34,13 @@ import org.apache.jmeter.timers.Timer;
  * Packages methods related to sample handling.<br/>
  * A SamplePackage contains all elements associated to a Sampler:
  * <ul>
- * 	<li>SampleListener(s)</li>
- * 	<li>Timer(s)</li>
- * 	<li>Assertion(s)</li>
- * 	<li>PreProcessor(s)</li>
- * 	<li>PostProcessor(s)</li>
- * 	<li>ConfigTestElement(s)</li>
- * 	<li>Controller(s)</li>
+ *  <li>SampleListener(s)</li>
+ *  <li>Timer(s)</li>
+ *  <li>Assertion(s)</li>
+ *  <li>PreProcessor(s)</li>
+ *  <li>PostProcessor(s)</li>
+ *  <li>ConfigTestElement(s)</li>
+ *  <li>Controller(s)</li>
  * </ul>
  */
 public class SamplePackage {
@@ -114,7 +114,7 @@ public class SamplePackage {
 
     /**
      * Recover each member of SamplePackage to the state before the call of setRunningVersion(true)
- 	 * @see TestElement#recoverRunningVersion()
+     * @see TestElement#recoverRunningVersion()
      */
     public void recoverRunningVersion() {
         recoverRunningVersion(configs);

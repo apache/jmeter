@@ -58,7 +58,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
      * @throws ObjectStreamException  
      */
     private Object readResolve() throws ObjectStreamException{
-    	int capacity = getCapacity();
+        int capacity = getCapacity();
         log.info("Using batch queue size (asynch.batch.queue.size): " + capacity); // server log file
         queue = new ArrayBlockingQueue<SampleEvent>(capacity);        
         Worker worker = new Worker(queue, listener);
@@ -72,7 +72,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
      */
     @Deprecated
     public AsynchSampleSender(){
-    	this(null);
+        this(null);
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
 
@@ -86,8 +86,8 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
      * @return capacity
      */
     private int getCapacity() {
-    	return isClientConfigured() ? 
-    			clientConfiguredCapacity : serverConfiguredCapacity;
+        return isClientConfigured() ? 
+                clientConfiguredCapacity : serverConfiguredCapacity;
     }
     
     @Override

@@ -46,7 +46,7 @@ public final class ReportActionRouter implements ActionListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final Object LOCK = new Object();
+    private static final Object LOCK = new Object();
 
     private Map<String, HashSet<ActionListener>> preActionListeners =
         new HashMap<String, HashSet<ActionListener>>();
@@ -303,12 +303,12 @@ public final class ReportActionRouter implements ActionListener {
      */
     public static ReportActionRouter getInstance() {
         if (router == null) {
-        	synchronized (LOCK) {
-        		if(router == null) {
-	                router = new ReportActionRouter();
-	                router.populateCommandMap();				
-        		}
-			}
+            synchronized (LOCK) {
+                if(router == null) {
+                    router = new ReportActionRouter();
+                    router.populateCommandMap();
+                }
+            }
         }
         return router;
     }

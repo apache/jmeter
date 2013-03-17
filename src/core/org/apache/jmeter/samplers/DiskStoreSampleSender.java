@@ -119,7 +119,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             }
             IOUtils.closeQuietly(ois);
             if(!temporaryFile.delete()) {
-            	log.warn("Could not delete file:"+temporaryFile.getAbsolutePath());
+                log.warn("Could not delete file:"+temporaryFile.getAbsolutePath());
             }
         }
     }

@@ -253,31 +253,31 @@ public class JMeterThread implements Runnable, Interruptible {
             while (running) {
                 Sampler sam = controller.next();
                 while (running && sam != null) {
-                	process_sampler(sam, null, threadContext);
-                	threadContext.cleanAfterSample();
-                	if(onErrorStartNextLoop || threadContext.isRestartNextLoop()) {
-                	    if(threadContext.isRestartNextLoop()) {
+                    process_sampler(sam, null, threadContext);
+                    threadContext.cleanAfterSample();
+                    if(onErrorStartNextLoop || threadContext.isRestartNextLoop()) {
+                        if(threadContext.isRestartNextLoop()) {
                             triggerEndOfLoopOnParentControllers(sam, threadContext);
                             sam = null;
                             threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
                             threadContext.setRestartNextLoop(false);
-                	    } else {
-                    		boolean lastSampleFailed = !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK));
-                    		if(lastSampleFailed) {
-    	                		if(log.isDebugEnabled()) {
-    	                    		log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
-    	                    	}
-    	                    	triggerEndOfLoopOnParentControllers(sam, threadContext);
-    	                        sam = null;
-    	                        threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
-                    		} else {
-                    			sam = controller.next();
-                    		}
-                	    }
-                	} 
-                	else {
-                		sam = controller.next();
-                	}
+                        } else {
+                            boolean lastSampleFailed = !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK));
+                            if(lastSampleFailed) {
+                                if(log.isDebugEnabled()) {
+                                    log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
+                                }
+                                triggerEndOfLoopOnParentControllers(sam, threadContext);
+                                sam = null;
+                                threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
+                            } else {
+                                sam = controller.next();
+                            }
+                        }
+                    } 
+                    else {
+                        sam = controller.next();
+                    }
                 }
                 if (controller.isDone()) {
                     running = false;
@@ -333,7 +333,7 @@ public class JMeterThread implements Runnable, Interruptible {
         }
         testTree.traverse(pathToRootTraverser);
         List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
-  	
+
         // Trigger end of loop condition on all parent controllers of current sampler
         for (Iterator<Controller> iterator = controllersToReinit
                 .iterator(); iterator.hasNext();) {

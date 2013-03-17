@@ -36,20 +36,20 @@ import org.apache.log.Logger;
 public class HC3CookieHandler implements CookieHandler {
    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final transient CookieSpec cookieSpec;
-	 
-	/**
-	 * 
-	 */
-	public HC3CookieHandler(String policy) {
-		super();
-		this.cookieSpec = CookiePolicy.getCookieSpec(policy);
-	}
+    private final transient CookieSpec cookieSpec;
+
+    /**
+     * 
+     */
+    public HC3CookieHandler(String policy) {
+        super();
+        this.cookieSpec = CookiePolicy.getCookieSpec(policy);
+    }
 
     /**
      * Create an HttpClient cookie from a JMeter cookie
      */
-	private org.apache.commons.httpclient.Cookie makeCookie(Cookie jmc){
+    private org.apache.commons.httpclient.Cookie makeCookie(Cookie jmc){
         long exp = jmc.getExpiresMillis();
         org.apache.commons.httpclient.Cookie ret=
             new org.apache.commons.httpclient.Cookie(
@@ -65,17 +65,17 @@ public class HC3CookieHandler implements CookieHandler {
         ret.setVersion(jmc.getVersion());
         return ret;
     }
-	/**
+    /**
      * Get array of valid HttpClient cookies for the URL
      *
      * @param url the target URL
      * @return array of HttpClient cookies
      *
      */
-	org.apache.commons.httpclient.Cookie[] getCookiesForUrl(
-    		CollectionProperty cookiesCP,
-    		URL url, 
-    		boolean allowVariableCookie){
+    org.apache.commons.httpclient.Cookie[] getCookiesForUrl(
+            CollectionProperty cookiesCP,
+            URL url, 
+            boolean allowVariableCookie){
         org.apache.commons.httpclient.Cookie cookies[]=
             new org.apache.commons.httpclient.Cookie[cookiesCP.size()];
         int i=0;
@@ -108,11 +108,11 @@ public class HC3CookieHandler implements CookieHandler {
      */
     @Override
     public String getCookieHeaderForURL(
-    		CollectionProperty cookiesCP,
-    		URL url,
-    		boolean allowVariableCookie) {
+            CollectionProperty cookiesCP,
+            URL url,
+            boolean allowVariableCookie) {
         org.apache.commons.httpclient.Cookie[] c = 
-        		getCookiesForUrl(cookiesCP, url, allowVariableCookie);
+                getCookiesForUrl(cookiesCP, url, allowVariableCookie);
         int count = c.length;
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled){
@@ -128,12 +128,12 @@ public class HC3CookieHandler implements CookieHandler {
         return hdr;
     }
     
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addCookieFromHeader(CookieManager cookieManager,
-    		boolean checkCookies,String cookieHeader, URL url){
+            boolean checkCookies,String cookieHeader, URL url){
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled) {
             log.debug("Received Cookie: " + cookieHeader + " From: " + url.toExternalForm());
@@ -180,7 +180,7 @@ public class HC3CookieHandler implements CookieHandler {
                     newCookie.setVersion(cookie.getVersion());
                     cookieManager.add(newCookie); // Has its own debug log; removes matching cookies
                 } else {
-                	cookieManager.removeMatchingCookies(newCookie);
+                    cookieManager.removeMatchingCookies(newCookie);
                     if (debugEnabled){
                         log.debug("Dropping expired Cookie: "+newCookie.toString());
                     }

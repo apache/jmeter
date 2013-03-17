@@ -119,26 +119,26 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      */
     @Override
     public String read(InputStream is) throws ReadException {
-    	ByteArrayOutputStream w = new ByteArrayOutputStream();
+        ByteArrayOutputStream w = new ByteArrayOutputStream();
         try {
-			byte[] buffer = new byte[4096];
-			int x = 0;
-			while ((x = is.read(buffer)) > -1) {
-			    w.write(buffer, 0, x);
-			    if (useEolByte && (buffer[x - 1] == eolByte)) {
-			        break;
-			    }
-			}
+            byte[] buffer = new byte[4096];
+            int x = 0;
+            while ((x = is.read(buffer)) > -1) {
+                w.write(buffer, 0, x);
+                if (useEolByte && (buffer[x - 1] == eolByte)) {
+                    break;
+                }
+            }
 
-			IOUtils.closeQuietly(w); // For completeness
-			final String hexString = JOrphanUtils.baToHexString(w.toByteArray());
-			if(log.isDebugEnabled()) {
-			    log.debug("Read: " + w.size() + "\n" + hexString);
-			}
-			return hexString;
-		} catch (IOException e) {
-			throw new ReadException("", e, JOrphanUtils.baToHexString(w.toByteArray()));
-		}
+            IOUtils.closeQuietly(w); // For completeness
+            final String hexString = JOrphanUtils.baToHexString(w.toByteArray());
+            if(log.isDebugEnabled()) {
+                log.debug("Read: " + w.size() + "\n" + hexString);
+            }
+            return hexString;
+        } catch (IOException e) {
+            throw new ReadException("", e, JOrphanUtils.baToHexString(w.toByteArray()));
+        }
     }
 
 }

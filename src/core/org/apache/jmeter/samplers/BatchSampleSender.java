@@ -73,7 +73,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      */
     @Deprecated
     public BatchSampleSender(){
-    	this(null);
+        this(null);
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
     /**

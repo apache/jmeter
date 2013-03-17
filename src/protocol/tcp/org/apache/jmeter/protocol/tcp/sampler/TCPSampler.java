@@ -178,7 +178,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
                 con = new Socket();
                 if (getPropertyAsString(SO_LINGER,"").length() > 0){
-                	con.setSoLinger(true, getSoLinger());
+                    con.setSoLinger(true, getSoLinger());
                 }
                 con.connect(sockaddr, getConnectTimeout());
                 if(log.isDebugEnabled()) {
@@ -213,10 +213,10 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @return String socket key in cache Map
      */
     private final String getSocketKey() {
-		return TCPKEY+"#"+getServer()+"#"+getPort()+"#"+getUsername()+"#"+getPassword();
-	}
+        return TCPKEY+"#"+getServer()+"#"+getPort()+"#"+getUsername()+"#"+getPassword();
+    }
 
-	public String getUsername() {
+    public String getUsername() {
         return getPropertyAsString(ConfigTestElement.USERNAME);
     }
 
@@ -237,19 +237,19 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     }
 
     public void setCloseConnection(String close) {
-    	this.setProperty(CLOSE_CONNECTION, close, "");
+        this.setProperty(CLOSE_CONNECTION, close, "");
     }
 
     public boolean isCloseConnection() {
-    	return getPropertyAsBoolean(CLOSE_CONNECTION, CLOSE_CONNECTION_DEFAULT);
+        return getPropertyAsBoolean(CLOSE_CONNECTION, CLOSE_CONNECTION_DEFAULT);
     }
 
     public void setSoLinger(String soLinger) {
-    	this.setProperty(SO_LINGER, soLinger, "");
+        this.setProperty(SO_LINGER, soLinger, "");
     }
 
     public int getSoLinger() {
-    	return getPropertyAsInt(SO_LINGER);
+        return getPropertyAsInt(SO_LINGER);
     }
     
     public void setEolByte(String eol) {
@@ -437,49 +437,49 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return res;
     }
 
-	/**
-	 * Fills SampleResult object
-	 * @param sampleResult {@link SampleResult}
-	 * @param readResponse Response read until error occured
-	 * @param exception Source exception
+    /**
+     * Fills SampleResult object
+     * @param sampleResult {@link SampleResult}
+     * @param readResponse Response read until error occured
+     * @param exception Source exception
      * @param encoding sample encoding
-	 * @return boolean if sample is considered as successful
-	 */
-	private boolean setupSampleResult(SampleResult sampleResult,
-			String readResponse, 
-			Exception exception,
-			String encoding) {
-		sampleResult.setResponseData(readResponse, encoding);
-		sampleResult.setDataType(SampleResult.TEXT);
-		if(exception==null) {
-			sampleResult.setResponseCodeOK();
-			sampleResult.setResponseMessage("OK"); //$NON-NLS-1$
-		} else {
-			sampleResult.setResponseCode("500"); //$NON-NLS-1$
-			sampleResult.setResponseMessage(exception.toString()); //$NON-NLS-1$
-		}
-		boolean isSuccessful = exception == null;
-		// Reset the status code if the message contains one
-		if (!StringUtils.isEmpty(readResponse) && STATUS_PREFIX.length() > 0) {
-		    int i = readResponse.indexOf(STATUS_PREFIX);
-		    int j = readResponse.indexOf(STATUS_SUFFIX, i + STATUS_PREFIX.length());
-		    if (i != -1 && j > i) {
-		        String rc = readResponse.substring(i + STATUS_PREFIX.length(), j);
-		        sampleResult.setResponseCode(rc);
-		        isSuccessful = isSuccessful && checkResponseCode(rc);
-		        if (haveStatusProps) {
-		            sampleResult.setResponseMessage(statusProps.getProperty(rc, "Status code not found in properties")); //$NON-NLS-1$
-		        } else {
-		            sampleResult.setResponseMessage("No status property file");
-		        }
-		    } else {
-		        sampleResult.setResponseCode("999"); //$NON-NLS-1$
-		        sampleResult.setResponseMessage("Status value not found");
-		        isSuccessful = false;
-		    }
-		}
-		return isSuccessful;
-	}
+     * @return boolean if sample is considered as successful
+     */
+    private boolean setupSampleResult(SampleResult sampleResult,
+            String readResponse, 
+            Exception exception,
+            String encoding) {
+        sampleResult.setResponseData(readResponse, encoding);
+        sampleResult.setDataType(SampleResult.TEXT);
+        if(exception==null) {
+            sampleResult.setResponseCodeOK();
+            sampleResult.setResponseMessage("OK"); //$NON-NLS-1$
+        } else {
+            sampleResult.setResponseCode("500"); //$NON-NLS-1$
+            sampleResult.setResponseMessage(exception.toString()); //$NON-NLS-1$
+        }
+        boolean isSuccessful = exception == null;
+        // Reset the status code if the message contains one
+        if (!StringUtils.isEmpty(readResponse) && STATUS_PREFIX.length() > 0) {
+            int i = readResponse.indexOf(STATUS_PREFIX);
+            int j = readResponse.indexOf(STATUS_SUFFIX, i + STATUS_PREFIX.length());
+            if (i != -1 && j > i) {
+                String rc = readResponse.substring(i + STATUS_PREFIX.length(), j);
+                sampleResult.setResponseCode(rc);
+                isSuccessful = isSuccessful && checkResponseCode(rc);
+                if (haveStatusProps) {
+                    sampleResult.setResponseMessage(statusProps.getProperty(rc, "Status code not found in properties")); //$NON-NLS-1$
+                } else {
+                    sampleResult.setResponseMessage("No status property file");
+                }
+            } else {
+                sampleResult.setResponseCode("999"); //$NON-NLS-1$
+                sampleResult.setResponseMessage("Status value not found");
+                isSuccessful = false;
+            }
+        }
+        return isSuccessful;
+    }
 
     /**
      * @param rc response code
@@ -542,25 +542,25 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     /**
      * Closes all connections, clears Map and remove thread local Map
      */
-	private void tearDown() {
-		Map<String, Object> cp = tp.get();
-		for (Map.Entry<String, Object> element : cp.entrySet()) {
-			if(element.getKey().startsWith(TCPKEY)) {
-				try {
-					((Socket)element.getValue()).close();
-				} catch (IOException e) {
-					// NOOP
-				}
-			}
-		}
-		cp.clear();
-		tp.remove();
-	}
+    private void tearDown() {
+        Map<String, Object> cp = tp.get();
+        for (Map.Entry<String, Object> element : cp.entrySet()) {
+            if(element.getKey().startsWith(TCPKEY)) {
+                try {
+                    ((Socket)element.getValue()).close();
+                } catch (IOException e) {
+                    // NOOP
+                }
+            }
+        }
+        cp.clear();
+        tp.remove();
+    }
     
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
      */
-	@Override
+    @Override
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);

@@ -95,7 +95,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     
     private transient boolean START_ON_SAMPLE = false;
 
-	private transient String separator;
+    private transient String separator;
 
     public SubscriberSampler() {
         super();
@@ -265,8 +265,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 }
                 Utils.messageProperties(propBuffer, msg);
                 if(!isLast && !StringUtils.isEmpty(separator)) {
-                	propBuffer.append(separator);
-                	buffer.append(separator);
+                    propBuffer.append(separator);
+                    buffer.append(separator);
                 }
             } catch (JMSException e) {
                 log.error(e.getMessage());
@@ -473,7 +473,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     @Override
     public void testStarted() {
-    	testStarted("");
+        testStarted("");
     }
 
     /**
@@ -481,19 +481,19 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     @Override
     public void testStarted(String host) {
-    	// NOOP
+        // NOOP
     }
 
-	/**
-	 * 
-	 */
-	private void setupSeparator() {
-		separator = getSeparator();
-		separator = separator.replace("\\t", "\t");
-		separator = separator.replace("\\n", "\n");
-		separator = separator.replace("\\r", "\r");
-	}
-	
+    /**
+     * 
+     */
+    private void setupSeparator() {
+        separator = getSeparator();
+        separator = separator.replace("\\t", "\t");
+        separator = separator.replace("\\n", "\n");
+        separator = separator.replace("\\r", "\r");
+    }
+
     private Object readResolve(){
         setupSeparator();
         exceptionDuringInit=null;
