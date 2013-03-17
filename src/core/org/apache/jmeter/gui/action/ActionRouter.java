@@ -40,7 +40,7 @@ import org.apache.log.Logger;
 public final class ActionRouter implements ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final Object LOCK = new Object();
+    private static final Object LOCK = new Object();
 
     private static volatile ActionRouter router;
 
@@ -93,7 +93,7 @@ public final class ActionRouter implements ActionListener {
                         }
                         msg = msg + "\n" + cause;
                     }
-                    JMeterUtils.reportErrorToUser(msg);                        
+                    JMeterUtils.reportErrorToUser(msg);
                 } catch (Exception err) {
                     log.error("Error processing "+c.toString(), err);
                 }
@@ -257,11 +257,11 @@ public final class ActionRouter implements ActionListener {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(), // strPathsOrJars - pathnames or jarfiles to search for classes
                     // classNames - required parent class(es) or annotations
-                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }, // $NON-NLS-1$ 
+                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }, // $NON-NLS-1$
                     false, // innerClasses - should we include inner classes?
                     // contains - classname should contain this string
                     // This was added in r325814 as part of changes for the reporting tool
-                    "org.apache.jmeter.gui",  // $NON-NLS-1$ 
+                    "org.apache.jmeter.gui",  // $NON-NLS-1$
                     null, // notContains - classname should not contain this string
                     false); // annotations - true if classnames are annotations
             commands = new HashMap<String, Set<Command>>(listClasses.size());
@@ -295,12 +295,12 @@ public final class ActionRouter implements ActionListener {
      */
     public static ActionRouter getInstance() {
         if (router == null) {
-        	synchronized (LOCK) {
-        		if(router == null) {
-	                router = new ActionRouter();
-	                router.populateCommandMap();
-        		}				
-			}
+            synchronized (LOCK) {
+                if(router == null) {
+                    router = new ActionRouter();
+                    router.populateCommandMap();
+                }
+            }
         }
         return router;
     }

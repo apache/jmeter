@@ -73,7 +73,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 public class PackageTest extends TestCase {
     private static final String basedir = new File(System.getProperty("user.dir")).getParent();
 
-	private static final File srcFiledir = new File(basedir,"src");
+    private static final File srcFiledir = new File(basedir,"src");
 
     private static final String MESSAGES = "messages";
 
@@ -112,50 +112,50 @@ public class PackageTest extends TestCase {
         }
         BufferedReader fileReader = null;
         try {
-        	fileReader = new BufferedReader(new InputStreamReader(ras));
-	        String s;
-	        while ((s = fileReader.readLine()) != null) {
-	            if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
-	                int equ = s.indexOf('=');
-	                String key = s.substring(0, equ);
-	                if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
-	                    /*
-	                     * JMeterUtils.getResString() converts space to _ and lowercases
-	                     * the key, so make sure all keys pass the test
-	                     */
-	                    if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
-	                        System.out.println("Invalid key for JMeterUtils " + key);
-	                        fails++;
-	                    }
-	                }
-	                String val = s.substring(equ + 1);
-	                l.add(key); // Store the key
-	                /*
-	                 * Now check for invalid message format: if string contains {0}
-	                 * and ' there may be a problem, so do a format with dummy
-	                 * parameters and check if there is a { in the output. A bit
-	                 * crude, but should be enough for now.
-	                 */
-	                if (val.indexOf("{0}") > 0 && val.indexOf('\'') > 0) {
-	                    String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
-	                    if (m.indexOf('{') > 0) {
-	                        fails++;
-	                        System.out.println("Incorrect message format ? (input/output) for: "+key);
-	                        System.out.println(val);
-	                        System.out.println(m);
-	                    }
-	                }
-	
-	                if (!isPureAscii(val)) {
-	                    fails++;
-	                    System.out.println("Incorrect char value in: "+s);                    
-	                }
-	            }
-	        }
-	        return fails;
+            fileReader = new BufferedReader(new InputStreamReader(ras));
+            String s;
+            while ((s = fileReader.readLine()) != null) {
+                if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
+                    int equ = s.indexOf('=');
+                    String key = s.substring(0, equ);
+                    if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
+                        /*
+                         * JMeterUtils.getResString() converts space to _ and lowercases
+                         * the key, so make sure all keys pass the test
+                         */
+                        if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
+                            System.out.println("Invalid key for JMeterUtils " + key);
+                            fails++;
+                        }
+                    }
+                    String val = s.substring(equ + 1);
+                    l.add(key); // Store the key
+                    /*
+                     * Now check for invalid message format: if string contains {0}
+                     * and ' there may be a problem, so do a format with dummy
+                     * parameters and check if there is a { in the output. A bit
+                     * crude, but should be enough for now.
+                     */
+                    if (val.indexOf("{0}") > 0 && val.indexOf('\'') > 0) {
+                        String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
+                        if (m.indexOf('{') > 0) {
+                            fails++;
+                            System.out.println("Incorrect message format ? (input/output) for: "+key);
+                            System.out.println(val);
+                            System.out.println(m);
+                        }
+                    }
+
+                    if (!isPureAscii(val)) {
+                        fails++;
+                        System.out.println("Incorrect char value in: "+s);                    
+                    }
+                }
+            }
+            return fails;
         }
         finally {
-        	JOrphanUtils.closeQuietly(fileReader);
+            JOrphanUtils.closeQuietly(fileReader);
         }
     }
 
@@ -238,19 +238,19 @@ public class PackageTest extends TestCase {
      * @return list of properties files subject to I18N
      */
     public static final String[] getResources(File srcFiledir) {
-    	Set<String> set = new TreeSet<String>();
-		findFile(srcFiledir, set, new FilenameFilter() {
-			@Override
+        Set<String> set = new TreeSet<String>();
+        findFile(srcFiledir, set, new FilenameFilter() {
+            @Override
             public boolean accept(File dir, String name) {
-				return new File(dir, name).isDirectory() 
-						|| (
-								name.equals("messages.properties") ||
-								(name.endsWith("Resources.properties")
-								&& !name.matches("Example\\d+Resources\\.properties")));
-			}
-		});
-		return set.toArray(new String[set.size()]);
-	}
+                return new File(dir, name).isDirectory() 
+                        || (
+                                name.equals("messages.properties") ||
+                                (name.endsWith("Resources.properties")
+                                && !name.matches("Example\\d+Resources\\.properties")));
+            }
+        });
+        return set.toArray(new String[set.size()]);
+    }
     
     /**
      * Find resources matching filenamefiler and adds them to set removing everything before "/org"
@@ -259,23 +259,23 @@ public class PackageTest extends TestCase {
      * @param filenameFilter
      */
     private static void findFile(File file, Set<String> set,
-			FilenameFilter filenameFilter) {
-    	File[] foundFiles = file.listFiles(filenameFilter);
-    	if (foundFiles == null) { // Better error than NPE
-    	    System.err.println("Not a directory: "+file);
-    	    return;
-    	}
-    	for (File file2 : foundFiles) {
-			if(file2.isDirectory()) {
-				findFile(file2, set, filenameFilter);
-			} else {
-				String absPath2 = file2.getAbsolutePath().replace('\\', '/'); // Fix up Windows paths
+            FilenameFilter filenameFilter) {
+        File[] foundFiles = file.listFiles(filenameFilter);
+        if (foundFiles == null) { // Better error than NPE
+            System.err.println("Not a directory: "+file);
+            return;
+        }
+        for (File file2 : foundFiles) {
+            if(file2.isDirectory()) {
+                findFile(file2, set, filenameFilter);
+            } else {
+                String absPath2 = file2.getAbsolutePath().replace('\\', '/'); // Fix up Windows paths
                 int indexOfOrg = absPath2.indexOf("/org");
-				int lastIndex = absPath2.lastIndexOf('.');
-				set.add(absPath2.substring(indexOfOrg, lastIndex));
-			}
-		}
-	}
+                int lastIndex = absPath2.lastIndexOf('.');
+                set.add(absPath2.substring(indexOfOrg, lastIndex));
+            }
+        }
+    }
     
     /*
      * Use a suite to ensure that the default is done first
@@ -333,71 +333,71 @@ public class PackageTest extends TestCase {
      * @throws Exception
      */
     public void checkI18n() throws Exception {
-    	Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();
-    	for (String prefix : prefixList) {
-        	Properties messages = new Properties();
-        	messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefix.substring(1)+".properties"));
-        	checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), lang);
-		}
-    	
-    	assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
+        Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();
+        for (String prefix : prefixList) {
+            Properties messages = new Properties();
+            messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefix.substring(1)+".properties"));
+            checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), lang);
+        }
+        
+        assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
     }
 
-	/**
-	 * Check messages are available in language
-	 * @param missingLabelsPerBundle2 
-	 * @param missingLabelsPerBundle 
-	 * @param messages Properties messages in english
-	 * @param language Language 
-	 * @throws IOException
-	 */
-	private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle, Map<String, Map<String, String>> missingLabelsPerBundle2, Properties messages, String bundlePath,String language)
-			throws IOException {
-		Properties messagesFr = new Properties();
-		String languageBundle = bundlePath+"_"+language+ ".properties";
-		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle);
-		if(inputStream == null) {
-			Map<String, String> messagesAsProperties = new HashMap<String, String>();
-			for (Iterator<Map.Entry<Object, Object>> iterator = messages.entrySet().iterator(); iterator.hasNext();) {
-				Map.Entry<Object, Object> entry = iterator.next();
-				messagesAsProperties.put((String) entry.getKey(), (String) entry.getValue()); 
-			}
-			missingLabelsPerBundle.put(languageBundle, messagesAsProperties);
-			return;
-		}
-    	messagesFr.load(inputStream);
+    /**
+     * Check messages are available in language
+     * @param missingLabelsPerBundle2 
+     * @param missingLabelsPerBundle 
+     * @param messages Properties messages in english
+     * @param language Language 
+     * @throws IOException
+     */
+    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle, Map<String, Map<String, String>> missingLabelsPerBundle2, Properties messages, String bundlePath,String language)
+            throws IOException {
+        Properties messagesFr = new Properties();
+        String languageBundle = bundlePath+"_"+language+ ".properties";
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle);
+        if(inputStream == null) {
+            Map<String, String> messagesAsProperties = new HashMap<String, String>();
+            for (Iterator<Map.Entry<Object, Object>> iterator = messages.entrySet().iterator(); iterator.hasNext();) {
+                Map.Entry<Object, Object> entry = iterator.next();
+                messagesAsProperties.put((String) entry.getKey(), (String) entry.getValue()); 
+            }
+            missingLabelsPerBundle.put(languageBundle, messagesAsProperties);
+            return;
+        }
+        messagesFr.load(inputStream);
     
-    	Map<String, String> missingLabels = new TreeMap<String,String>();
-    	for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
-    		Map.Entry<Object,Object> entry = iterator.next();
-			String key = (String)entry.getKey();
-			if(!messagesFr.containsKey(key)) {
-				missingLabels.put(key,(String) entry.getValue());
-			}
-		}
-    	if(!missingLabels.isEmpty()) {
-    		missingLabelsPerBundle.put(languageBundle, missingLabels);
-    	}
-	}
+        Map<String, String> missingLabels = new TreeMap<String,String>();
+        for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry<Object,Object> entry = iterator.next();
+            String key = (String)entry.getKey();
+            if(!messagesFr.containsKey(key)) {
+                missingLabels.put(key,(String) entry.getValue());
+            }
+        }
+        if(!missingLabels.isEmpty()) {
+            missingLabelsPerBundle.put(languageBundle, missingLabels);
+        }
+    }
 
-	/**
-	 * Build message with misssing labels per bundle
-	 * @param missingLabelsPerBundle
-	 * @return String
-	 */
+    /**
+     * Build message with misssing labels per bundle
+     * @param missingLabelsPerBundle
+     * @return String
+     */
     private String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
-    	StringBuilder builder = new StringBuilder();
-    	for (Iterator<Map.Entry<String,Map<String, String>>> iterator =  missingLabelsPerBundle.entrySet().iterator(); iterator.hasNext();) {
-    		Map.Entry<String,Map<String, String>> entry = iterator.next();
-    		builder.append("Missing labels in bundle:"+entry.getKey()+"\r\n");
-        	for (Iterator<Map.Entry<String,String>> it2 =  entry.getValue().entrySet().iterator(); it2.hasNext();) {
-        		Map.Entry<String,String> entry2 = it2.next();
-    			builder.append(entry2.getKey()+"="+entry2.getValue()+"\r\n");
-    		}
-    		builder.append("======================================================\r\n");
-		}
-    	return builder.toString();
-	}
+        StringBuilder builder = new StringBuilder();
+        for (Iterator<Map.Entry<String,Map<String, String>>> iterator =  missingLabelsPerBundle.entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry<String,Map<String, String>> entry = iterator.next();
+            builder.append("Missing labels in bundle:"+entry.getKey()+"\r\n");
+            for (Iterator<Map.Entry<String,String>> it2 =  entry.getValue().entrySet().iterator(); it2.hasNext();) {
+                Map.Entry<String,String> entry2 = it2.next();
+                builder.append(entry2.getKey()+"="+entry2.getValue()+"\r\n");
+            }
+            builder.append("======================================================\r\n");
+        }
+        return builder.toString();
+    }
 
     // Check that calls to getResString use a valid property key name
     public void checkResourceReferences() {

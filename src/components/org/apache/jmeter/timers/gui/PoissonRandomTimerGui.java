@@ -27,9 +27,9 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class PoissonRandomTimerGui extends AbstractRandomTimerGui {
 
-	private static final long serialVersionUID = -3218002787832805275L;
+    private static final long serialVersionUID = -3218002787832805275L;
 
-	private static final String DEFAULT_DELAY = "300"; // $NON-NLS-1$
+    private static final String DEFAULT_DELAY = "300"; // $NON-NLS-1$
 
     private static final String DEFAULT_RANGE = "100"; // $NON-NLS-1$
 
@@ -42,28 +42,28 @@ public class PoissonRandomTimerGui extends AbstractRandomTimerGui {
         return "poisson_timer_title";//$NON-NLS-1$
     }
 
-	@Override
-	protected RandomTimer createRandomTimer() {
-		return new PoissonRandomTimer();
-	}
+    @Override
+    protected RandomTimer createRandomTimer() {
+        return new PoissonRandomTimer();
+    }
 
-	@Override
-	protected String getTimerDelayLabelKey() {
-		return JMeterUtils.getResString("poisson_timer_delay"); //$NON-NLS-1$
-	}
+    @Override
+    protected String getTimerDelayLabelKey() {
+        return JMeterUtils.getResString("poisson_timer_delay"); //$NON-NLS-1$
+    }
 
-	@Override
-	protected String getTimerRangeLabelKey() {
-		return JMeterUtils.getResString("poisson_timer_range"); //$NON-NLS-1$
-	}
+    @Override
+    protected String getTimerRangeLabelKey() {
+        return JMeterUtils.getResString("poisson_timer_range"); //$NON-NLS-1$
+    }
 
-	@Override
-	protected String getDefaultDelay() {
-		return DEFAULT_DELAY;
-	}
+    @Override
+    protected String getDefaultDelay() {
+        return DEFAULT_DELAY;
+    }
 
-	@Override
-	protected String getDefaultRange() {
-		return DEFAULT_RANGE;
-	}
+    @Override
+    protected String getDefaultRange() {
+        return DEFAULT_RANGE;
+    }
 }

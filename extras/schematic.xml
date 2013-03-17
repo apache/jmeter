@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,24 +16,24 @@
    limitations under the License.
 -->
 <project name="schematic" default="all">
-	<description>
-	To create the schematic report:
-		ant -Dtest=script
+    <description>
+    To create the schematic report:
+        ant -Dtest=script
 
-	</description>
+    </description>
 
-	<property name="testpath" value="${user.dir}"/>
+    <property name="testpath" value="${user.dir}"/>
 
-	<!-- Name of test (without .jmx) -->
-	<property name="test" value="Test"/>
+    <!-- Name of test (without .jmx) -->
+    <property name="test" value="Test"/>
 
-	<target name="all">
-		<xslt
-			force="true"
-		    in="${testpath}/${test}.jmx"
-		    out="${testpath}/${test}.html"
-		    style="${basedir}/schematic.xsl">
-		</xslt>
-	</target>
+    <target name="all">
+        <xslt
+            force="true"
+            in="${testpath}/${test}.jmx"
+            out="${testpath}/${test}.html"
+            style="${basedir}/schematic.xsl">
+        </xslt>
+    </target>
 
 </project>

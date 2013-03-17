@@ -268,7 +268,7 @@ public final class AllTests {
             InputStream inputStream = null;
             try {
                 System.out.println("Setting up logging props using file: " + args[1]);
-            	inputStream = new FileInputStream(args[1]);
+                inputStream = new FileInputStream(args[1]);
                 props.load(inputStream);
                 LoggingManager.initializeLogging(props);
             } catch (FileNotFoundException e) {
@@ -276,7 +276,7 @@ public final class AllTests {
             } catch (IOException e) {
                 System.out.println(e.getLocalizedMessage());
             } finally {
-            	JOrphanUtils.closeQuietly(inputStream);
+                JOrphanUtils.closeQuietly(inputStream);
             }
         }
     }

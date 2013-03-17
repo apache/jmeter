@@ -324,10 +324,10 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     @Override
     public void clearData() {
         synchronized (lock) {
-	        model.clearData();
-	        tableRows.clear();
-	        tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
-	        model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+            model.clearData();
+            tableRows.clear();
+            tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
+            model.addRow(tableRows.get(TOTAL_ROW_LABEL));
         }
     }
 

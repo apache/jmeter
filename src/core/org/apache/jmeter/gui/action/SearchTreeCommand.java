@@ -40,7 +40,7 @@ public class SearchTreeCommand extends AbstractAction {
      */
     @Override
     public void doAction(ActionEvent e) {
-    	dialog.setVisible(true);
+        dialog.setVisible(true);
     }
 
 

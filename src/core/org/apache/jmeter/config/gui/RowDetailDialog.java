@@ -45,12 +45,12 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.ObjectTableModel;
 
 /**
- * Show detail of a Row 
+ * Show detail of a Row
  */
 public class RowDetailDialog extends JDialog implements ActionListener {
 
-	/**
-     * 
+    /**
+     *
      */
     private static final long serialVersionUID = 6578889215615435475L;
 
@@ -64,8 +64,8 @@ public class RowDetailDialog extends JDialog implements ActionListener {
     private static final String CLOSE = "close"; // $NON-NLS-1$
 
     private static final String UPDATE = "update"; // $NON-NLS-1$
-    
-	private JLabeledTextField nameTF;
+
+    private JLabeledTextField nameTF;
 
     private JLabeledTextArea valueTA;
 
@@ -77,37 +77,37 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 
     private int selectedRow;
 
-    
+
     public RowDetailDialog() {
         super();
     }
-	
-	public RowDetailDialog(ObjectTableModel tableModel, int selectedRow) {
+
+    public RowDetailDialog(ObjectTableModel tableModel, int selectedRow) {
         super((JFrame) null, JMeterUtils.getResString("detail"), true); //$NON-NLS-1$
         this.tableModel = tableModel;
         this.selectedRow = selectedRow;
         init();
     }
 
-	@Override
+    @Override
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
         // Hide Window on ESC
-        Action escapeAction = new AbstractAction("ESCAPE") { 
+        Action escapeAction = new AbstractAction("ESCAPE") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = -8699034338969407625L;
 
             @Override
-            public void actionPerformed(ActionEvent actionEvent) { 
+            public void actionPerformed(ActionEvent actionEvent) {
                 setVisible(false);
-            } 
+            }
         };
         // Do update on Enter
-        Action enterAction = new AbstractAction("ENTER") { 
+        Action enterAction = new AbstractAction("ENTER") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = -1529005452976176873L;
 
@@ -120,12 +120,12 @@ public class RowDetailDialog extends JDialog implements ActionListener {
         ActionMap actionMap = rootPane.getActionMap();
         actionMap.put(escapeAction.getValue(Action.NAME), escapeAction);
         actionMap.put(enterAction.getValue(Action.NAME), enterAction);
-        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);  
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStrokes.ESC, escapeAction.getValue(Action.NAME));
         inputMap.put(KeyStrokes.ENTER, enterAction.getValue(Action.NAME));
         return rootPane;
     }
-	
+
     private void init() {
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
@@ -138,14 +138,14 @@ public class RowDetailDialog extends JDialog implements ActionListener {
         //detailPanel.setBorder(BorderFactory.createEmptyBorder(7, 3, 3, 3));
         detailPanel.add(nameTF, BorderLayout.NORTH);
         detailPanel.add(valueTA, BorderLayout.CENTER);
-        
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(7, 3, 3, 3));
         mainPanel.add(detailPanel, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        
+
         JButton updateButton = new JButton(JMeterUtils.getResString("update")); //$NON-NLS-1$
         updateButton.setActionCommand(UPDATE);
         updateButton.addActionListener(this);
@@ -167,7 +167,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
         buttonsPanel.add(closeButton);
         mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
         this.getContentPane().add(mainPanel);
-    	nameTF.requestFocusInWindow();
+        nameTF.requestFocusInWindow();
 
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
@@ -180,39 +180,39 @@ public class RowDetailDialog extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
-    	if(action.equals(CLOSE)) {
-    		this.setVisible(false);
-    	} 
-    	else if(action.equals(NEXT)) {
-    	    selectedRow++;
+        if(action.equals(CLOSE)) {
+            this.setVisible(false);
+        }
+        else if(action.equals(NEXT)) {
+            selectedRow++;
             previousButton.setEnabled(true);
-    	    nextButton.setEnabled(selectedRow < tableModel.getRowCount()-1);
-    	    setValues(selectedRow);
-    	} 
-    	else if(action.equals(PREVIOUS)) {
+            nextButton.setEnabled(selectedRow < tableModel.getRowCount()-1);
+            setValues(selectedRow);
+        }
+        else if(action.equals(PREVIOUS)) {
             selectedRow--;
             nextButton.setEnabled(true);
             previousButton.setEnabled(selectedRow > 0);
             setValues(selectedRow);
-        } 
-    	else if(action.equals(UPDATE)) { 	   
+        }
+        else if(action.equals(UPDATE)) {
             doUpdate(e);
-    	}
+        }
     }
 
     /**
      * Set TextField and TA values from model
      * @param selectedRow Selected row
      */
-	private void setValues(int selectedRow) {
+    private void setValues(int selectedRow) {
         nameTF.setText((String)tableModel.getValueAt(selectedRow, 0));
         valueTA.setText((String)tableModel.getValueAt(selectedRow, 1));
     }
-	
-	/**
-	 * Update model values
-	 * @param actionEvent
-	 */
+
+    /**
+     * Update model values
+     * @param actionEvent
+     */
     protected void doUpdate(ActionEvent actionEvent) {
         tableModel.setValueAt(nameTF.getText(), selectedRow, 0);
         tableModel.setValueAt(valueTA.getText(), selectedRow, 1);

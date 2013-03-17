@@ -70,11 +70,11 @@ public class PostWriterTest extends TestCase {
         temporaryFile = File.createTempFile("foo", "txt");
         OutputStream output = null;
         try {
-	        output = new FileOutputStream(temporaryFile);
-	        output.write(TEST_FILE_CONTENT);
-	        output.flush();
+            output = new FileOutputStream(temporaryFile);
+            output.write(TEST_FILE_CONTENT);
+            output.flush();
         } finally {
-        	JOrphanUtils.closeQuietly(output);
+            JOrphanUtils.closeQuietly(output);
         }
     }
 
@@ -82,7 +82,7 @@ public class PostWriterTest extends TestCase {
     protected void tearDown() throws Exception {
         // delete temporay file
         if(!temporaryFile.delete()) {
-        	fail("Could not delete file:"+temporaryFile.getAbsolutePath());
+            fail("Could not delete file:"+temporaryFile.getAbsolutePath());
         }
     }
 
@@ -420,7 +420,7 @@ public class PostWriterTest extends TestCase {
         
         checkContentTypeUrlEncoded(connection);
         expectedUrl = new StringBuilder("title=").append(titleValue).append("&description=")
-        		.append(descriptionValue).toString().getBytes("US-ASCII");
+                .append(descriptionValue).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
@@ -512,7 +512,7 @@ public class PostWriterTest extends TestCase {
         checkContentTypeUrlEncoded(connection);
         StringBuilder sb = new StringBuilder();
         expectedUrl = (sb.append("title=").append(titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5"))
-        		.append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5"))).toString().getBytes("US-ASCII");
+                .append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5"))).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
@@ -530,7 +530,7 @@ public class PostWriterTest extends TestCase {
         checkContentTypeUrlEncoded(connection);
         sb = new StringBuilder();
         expectedUrl = (sb.append("title=").append(titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5"))
-        		.append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5"))).toString().getBytes("US-ASCII");
+                .append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5"))).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(

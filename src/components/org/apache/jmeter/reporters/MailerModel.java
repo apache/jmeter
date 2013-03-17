@@ -50,10 +50,10 @@ import org.apache.log.Logger;
 public class MailerModel extends AbstractTestElement implements Serializable {
     public static enum MailAuthType {
         SSL,
-        TLS, 
+        TLS,
         NONE;
     }
-    
+
     private static final long serialVersionUID = 270L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -65,9 +65,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
     private static final String MAIL_SMTP_AUTH = "mail.smtp.auth"; //$NON-NLS-1$
 
     private static final String MAIL_SMTP_SOCKETFACTORY_CLASS = "mail.smtp.socketFactory.class"; //$NON-NLS-1$
-    
+
     private static final String MAIL_SMTP_STARTTLS = "mail.smtp.starttls.enable"; //$NON-NLS-1$
-    
+
     private long failureCount = 0;
 
     private long successCount = 0;
@@ -162,7 +162,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                 String theToken = next.nextToken().trim();
 
                 if (theToken.indexOf('@') > 0) { //$NON-NLS-1$
-                	addressList.add(theToken);
+                    addressList.add(theToken);
                 } else {
                     log.warn("Ignored unexpected e-mail address: "+theToken);
                 }
@@ -251,7 +251,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         notifyChangeListeners();
     }
 
-    
+
 
     /**
      * Resets the state of this object to its default. But: This method does not
@@ -295,14 +295,14 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      *            the message-body.
      * @param smtpHost
      *            the smtp-server used to send the mail.
-     * @throws MessagingException 
-     * @throws AddressException 
+     * @throws MessagingException
+     * @throws AddressException
      */
-    public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost) 
+    public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
             throws AddressException, MessagingException {
-        sendMail(from, vEmails, subject, attText, smtpHost, DEFAULT_SMTP_PORT, null, null, null, false);   
+        sendMail(from, vEmails, subject, attText, smtpHost, DEFAULT_SMTP_PORT, null, null, null, false);
     }
-    
+
     /**
      * Sends a mail with the given parameters using SMTP.
      *
@@ -325,7 +325,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @throws MessagingException If building MimeMessage fails
      */
     public void sendMail(String from, List<String> vEmails, String subject,
-            String attText, String smtpHost, 
+            String attText, String smtpHost,
             String smtpPort,
             final String user,
             final String password,
@@ -349,21 +349,21 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             props.put(MAIL_SMTP_AUTH, "true");
             switch (mailAuthType) {
                 case SSL:
-                    props.put(MAIL_SMTP_SOCKETFACTORY_CLASS, 
+                    props.put(MAIL_SMTP_SOCKETFACTORY_CLASS,
                             "javax.net.ssl.SSLSocketFactory");
                     break;
                 case TLS:
-                    props.put(MAIL_SMTP_STARTTLS, 
+                    props.put(MAIL_SMTP_STARTTLS,
                             "true");
                     break;
-    
+
                 default:
                     break;
                 }
         }
-        
+
         if(!StringUtils.isEmpty(user)) {
-            authenticator = 
+            authenticator =
                     new javax.mail.Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -400,8 +400,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         log.info(attText);
 
         sendMail(from, getAddressList(), subject, attText, smtpHost,
-                getSmtpPort(), 
-                getLogin(), 
+                getSmtpPort(),
+                getLogin(),
                 getPassword(),
                 getMailAuthType(),
                 true);
@@ -432,19 +432,19 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         }
         setProperty(PORT_KEY, value, DEFAULT_SMTP_PORT);
     }
-    
+
     public void setLogin(String login) {
         setProperty(LOGIN, login, DEFAULT_LOGIN_VALUE);
     }
-    
+
     public void setPassword(String password) {
         setProperty(PASSWORD, password, DEFAULT_PASSWORD_VALUE);
     }
-    
+
     public void setMailAuthType(String value) {
         setProperty(MAIL_AUTH_TYPE, value, DEFAULT_MAIL_AUTH_TYPE_VALUE);
     }
-    
+
     public void setFailureSubject(String str) {
         setProperty(FAILURE_SUBJECT, str);
     }

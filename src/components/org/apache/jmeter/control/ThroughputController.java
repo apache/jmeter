@@ -140,7 +140,7 @@ public class ThroughputController extends GenericController implements Serializa
             try {
                 retVal = Integer.parseInt(prop.getStringValue());
             } catch (NumberFormatException e) {
-            	log.warn("Error parsing "+prop.getStringValue(),e);
+                log.warn("Error parsing "+prop.getStringValue(),e);
             }
         }
         return retVal;
@@ -167,7 +167,7 @@ public class ThroughputController extends GenericController implements Serializa
             try {
                 retVal = Float.parseFloat(prop.getStringValue());
             } catch (NumberFormatException e) {
-            	log.warn("Error parsing "+prop.getStringValue(),e);
+                log.warn("Error parsing "+prop.getStringValue(),e);
             }
         }
         return retVal;
@@ -265,12 +265,12 @@ public class ThroughputController extends GenericController implements Serializa
 
     @Override
     public void testEnded() {
-    	// NOOP
+        // NOOP
     }
 
     @Override
     public void testEnded(String host) {
-    	// NOOP
+        // NOOP
     }
     
     @Override

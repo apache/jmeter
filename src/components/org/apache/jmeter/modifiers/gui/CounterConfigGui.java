@@ -80,8 +80,8 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
             config.setVarName(varNameField.getText());
             config.setFormat(formatField.getText());
             config.setIsPerUser(perUserField.isSelected());
-            config.setResetOnThreadGroupIteration(resetCounterOnEachThreadGroupIteration.isEnabled() 
-            		&& resetCounterOnEachThreadGroupIteration.isSelected());
+            config.setResetOnThreadGroupIteration(resetCounterOnEachThreadGroupIteration.isEnabled()
+                    && resetCounterOnEachThreadGroupIteration.isSelected());
         }
         super.configureTestElement(c);
     }
@@ -113,10 +113,10 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         varNameField.setText(config.getVarName());
         perUserField.setSelected(config.isPerUser());
         if(config.isPerUser()) {
-        	resetCounterOnEachThreadGroupIteration.setEnabled(true);
-        	resetCounterOnEachThreadGroupIteration.setSelected(config.isResetOnThreadGroupIteration());
+            resetCounterOnEachThreadGroupIteration.setEnabled(true);
+            resetCounterOnEachThreadGroupIteration.setSelected(config.isResetOnThreadGroupIteration());
         } else {
-        	resetCounterOnEachThreadGroupIteration.setEnabled(false);
+            resetCounterOnEachThreadGroupIteration.setEnabled(false);
         }
     }
 
@@ -139,17 +139,17 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         add(varNameField);
         add(perUserField);
         add(resetCounterOnEachThreadGroupIteration);
-        
+
         perUserField.addActionListener(this);
     }
 
     /**
      * Disable/Enable resetCounterOnEachThreadGroupIteration when perUserField is disabled / enabled
      */
-	@Override
+    @Override
     public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == perUserField) {
-			resetCounterOnEachThreadGroupIteration.setEnabled(perUserField.isSelected());
-		}
-	}
+        if(e.getSource() == perUserField) {
+            resetCounterOnEachThreadGroupIteration.setEnabled(perUserField.isSelected());
+        }
+    }
 }

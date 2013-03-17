@@ -318,7 +318,7 @@ public class JMeterTest extends JMeterTestCase {
         return suite;
     }
 
-	/*
+    /*
      * Test GUI elements - create the suite of tests
      */
     private static Test suiteBeanComponents() throws Exception {
@@ -398,7 +398,7 @@ public class JMeterTest extends JMeterTestCase {
     }
     
 
-	/*
+    /*
      * Check that function descriptions are OK
      */
     public void runFunction2() throws Exception {

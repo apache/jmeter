@@ -134,9 +134,9 @@ public class RandomVariableConfig extends ConfigTestElement
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);
             } catch (NumberFormatException ignored) {
-            	log.warn("Exception formatting value:"+value + " at format:"+format+", using default");
+                log.warn("Exception formatting value:"+value + " at format:"+format+", using default");
             } catch (IllegalArgumentException ignored) {
-            	log.warn("Exception formatting value:"+value + " at format:"+format+", using default");
+                log.warn("Exception formatting value:"+value + " at format:"+format+", using default");
             }
         }
         return Long.toString(value);
