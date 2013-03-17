@@ -17,33 +17,33 @@
 -->
 <document>   
 <properties>     
-	<title>User's Manual: LDAP answer XML description</title>   
+    <title>User's Manual: LDAP answer XML description</title>   
     <author email="Dolf.Smits@Siemens.com">Dolf Smits</author>
   </properties> 
 <body> 
 
 <section name="description of the ldapanswer XML definition" anchor="ldapans_xml">
 <p>
-	The extended LDAP sampler was built to support testing for very complex testpurposes.
-	It was aimed at supporting the LDAP operations as close as possible.
-	As the results are not passed back in a user-readable form, I invented my own xml definition to 
-	construct an answer in xml encoding, so the results may be parsed with regextracter or alike functions.
+    The extended LDAP sampler was built to support testing for very complex testpurposes.
+    It was aimed at supporting the LDAP operations as close as possible.
+    As the results are not passed back in a user-readable form, I invented my own xml definition to 
+    construct an answer in xml encoding, so the results may be parsed with regextracter or alike functions.
 </p>
 
 <subsection name="1 Global overview" anchor="overview">
 <p>
-	The global structure is as follows:<br/>
+    The global structure is as follows:<br/>
 <!--
 <ol>
 <li>
-	&lt;ldapanswer&gt; and &lt;ldapanswer/&gt; are the begin and endtags which are used to define the beginning ands end of the answer.
+    &lt;ldapanswer&gt; and &lt;ldapanswer/&gt; are the begin and endtags which are used to define the beginning ands end of the answer.
 
 </li>
 <li>
-	each ldapanswer contains 4 sections, an "operation" section (enclosed by 
-	&lt;operation&gt; tags) a respons code section (enclosed by &lt;responsecode&gt; tags), a 
-	response message (enclosed by &lt;responsemessage&gt; tags and (only with a search 
-	request) a searchresult section (enclosed with &ltsearchresult&gt tags>
+    each ldapanswer contains 4 sections, an "operation" section (enclosed by 
+    &lt;operation&gt; tags) a respons code section (enclosed by &lt;responsecode&gt; tags), a 
+    response message (enclosed by &lt;responsemessage&gt; tags and (only with a search 
+    request) a searchresult section (enclosed with &ltsearchresult&gt tags>
 </li>
 </ol>
 -->
@@ -55,35 +55,35 @@ following tags (with a short explanation) are used
 <!--
 <ol>
 <li>
-	&lt;opertype&gt;<br>
-	Thise describes which kind of operation was sent, it can have the following values:
-	<ol>
-	<li>
-	bind<br>
-	(this code is used for both a thread bind as a single bind/unbind operation)
-	</li>
-	<li>
-	unbind
-	</li>
-	<li>
-	compare
-	</li>
-	<li>
-	add
-	</li>
-	<li>
-	delete
-	</li>
-	<li>
-	modfy
-	</li>
-	<li>
-	rename
-	</li>
-	<li>
-	search
-	</li>
-	</ol>
+    &lt;opertype&gt;<br>
+    Thise describes which kind of operation was sent, it can have the following values:
+    <ol>
+    <li>
+    bind<br>
+    (this code is used for both a thread bind as a single bind/unbind operation)
+    </li>
+    <li>
+    unbind
+    </li>
+    <li>
+    compare
+    </li>
+    <li>
+    add
+    </li>
+    <li>
+    delete
+    </li>
+    <li>
+    modfy
+    </li>
+    <li>
+    rename
+    </li>
+    <li>
+    search
+    </li>
+    </ol>
 </li>
 <li>
 &lt;attributes&gt;
