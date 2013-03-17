@@ -622,6 +622,8 @@ public class MenuScroller {
 
     private class MenuScrollTimer extends Timer {
 
+        private static final long serialVersionUID = 1;
+
         public MenuScrollTimer(final int increment, int interval) {
             super(interval, new ActionListener() {
 
@@ -635,6 +637,8 @@ public class MenuScroller {
     }
 
     private class MenuScrollItem extends JMenuItem implements ChangeListener {
+
+        private static final long serialVersionUID = 1;
 
         private MenuScrollTimer timer;
 
