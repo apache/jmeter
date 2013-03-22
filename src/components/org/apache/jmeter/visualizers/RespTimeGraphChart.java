@@ -323,7 +323,7 @@ public class RespTimeGraphChart extends JPanel {
             // Y Axis ruler
             try {
                 double numInterval = _height / 50; // ~a tic every 50 px
-                double incrYAxis = new Double(max / numInterval);
+                double incrYAxis = max / numInterval;
                 double incrTopValue = _incrScaleYAxis;
                 if (_incrScaleYAxis == 0) {
                     incrTopValue = getTopValue(incrYAxis, BigDecimal.ROUND_HALF_UP);
