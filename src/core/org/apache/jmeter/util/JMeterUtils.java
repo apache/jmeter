@@ -187,7 +187,7 @@ public class JMeterUtils implements UnitTestManager {
                 is =
                     ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
                 if (is == null) {
-                    throw new RuntimeException("Could not read JMeter properties file");
+                    throw new RuntimeException("Could not read JMeter properties file:"+file);
                 }
                 p.load(is);
             } catch (IOException ex) {
