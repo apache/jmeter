@@ -2480,13 +2480,16 @@ run JMeter unless all the JMeter jars are added.
           <param name="batchtest.name" value="HTMLParserTestFile_2"/>
       </antcall>
       <antcall target="batchtest">
+          <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
           <param name="batchtest.name" value="Bug52310"/>
       </antcall>
       <antcall target="batchtest">
+          <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
           <param name="batchtest.name" value="Bug52968"/>
       </antcall>
 
       <antcall target="batchtest">
+          <!-- IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name -->
           <param name="batchtest.name" value="Bug50898"/>
       </antcall>
   </target>
