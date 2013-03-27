@@ -118,7 +118,7 @@ public class SampleEvent implements Serializable {
         this.result = result;
         this.threadGroup = threadGroup;
         this.hostname = hostname;
-        values = new String[variableNames.length];
+        this.values = new String[variableNames.length];
         this.isTransactionSampleEvent = isTransactionSampleEvent;
     }
 
