@@ -56,19 +56,28 @@ public class StatisticalSampleResult extends SampleResult implements
      * Create a statistical sample result from an ordinary sample result.
      * 
      * @param res the sample result 
-     * @param keyOnThreadName true if key includes threadName, false if threadGroup
      */
-    public StatisticalSampleResult(SampleResult res, boolean keyOnThreadName) {
+    public StatisticalSampleResult(SampleResult res) {
         // Copy data that is shared between samples (i.e. the key items):
         setSampleLabel(res.getSampleLabel());
         
-        if (keyOnThreadName) {
-            setThreadName(res.getThreadName());
-        }
+        setThreadName(res.getThreadName());
 
         setSuccessful(true); // Assume result is OK
         setSampleCount(0); // because we add the sample count in later
         elapsed = 0;
+    }
+
+    /**
+     * Create a statistical sample result from an ordinary sample result.
+     * 
+     * @param res the sample result 
+     * @param unused no longer used
+     * @deprecated no longer necessary; use {@link #StatisticalSampleResult(SampleResult)} instead
+     */
+    @Deprecated
+    public StatisticalSampleResult(SampleResult res, boolean unused) {
+        this(res);
     }
 
     public void add(SampleResult res) {
