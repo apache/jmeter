@@ -149,7 +149,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
             String key = StatisticalSampleResult.getKey(e, keyOnThreadName);
             StatisticalSampleResult statResult = sampleTable.get(key);
             if (statResult == null) {
-                statResult = new StatisticalSampleResult(e.getResult(), keyOnThreadName);
+                statResult = new StatisticalSampleResult(e.getResult());
                 // store the new statistical result collector
                 sampleTable.put(key, statResult);
                 // add a new wrapper samplevent
