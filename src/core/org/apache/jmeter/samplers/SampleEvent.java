@@ -21,6 +21,7 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -37,16 +38,18 @@ public class SampleEvent implements Serializable {
 
     private static final long serialVersionUID = 232L;
 
+    /** The property {@value} is used to define additional variables to be saved */
     public static final String SAMPLE_VARIABLES = "sample_variables"; // $NON-NLS-1$
 
     public static final String HOSTNAME;
 
     // List of variable names to be saved in JTL files
-    private static final String[] variableNames;
+    private static volatile String[] variableNames = new String[0];
 
     // The values. Entries may be null, but there will be the correct number.
     private final String[] values;
 
+    // The hostname cannot change during a run, so safe to cache it just once
     static {
         String hn="";
         try {
@@ -55,15 +58,18 @@ public class SampleEvent implements Serializable {
             log.error("Cannot obtain local host name "+e);
         }
         HOSTNAME=hn;
-
-        String vars = JMeterUtils.getProperty(SAMPLE_VARIABLES);
-           variableNames=vars != null ? vars.split(",") : new String[0];
-           int varCount=variableNames.length;
-        if (varCount>0){
-            log.info(varCount + " sample_variables have been declared: "+vars);
-        }
+        initSampleVariables();
     }
 
+    /**
+     * Set up the additional variable names to be saved
+     * from the value in the {@link #SAMPLE_VARIABLES} property
+     */
+    public static void initSampleVariables() {
+        String vars = JMeterUtils.getProperty(SAMPLE_VARIABLES);
+        variableNames=vars != null ? vars.split(",") : new String[0];
+        log.info("List of sample_variables: " + Arrays.toString(variableNames));
+    }
 
     private final SampleResult result;
 

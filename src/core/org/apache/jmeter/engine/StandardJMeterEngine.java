@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.jmeter.JMeter;
+import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
@@ -301,6 +302,12 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     public void run() {
         log.info("Running the test!");
         running = true;
+
+        /*
+         * Ensure that the sample variables are correctly initialised for each run.
+         * TODO is this the best way to do this? should it be done elsewhere ?
+         */
+        SampleEvent.initSampleVariables();
 
         JMeterContextService.startTest();
         try {

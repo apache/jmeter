@@ -2341,7 +2341,7 @@ run JMeter unless all the JMeter jars are added.
             <antcall target="batchtest">
                 <param name="remote" value="-Rlocalhost:${rmi_port}"/>
                 <param name="taskname" value="client"/>
-                <param name="batchtest.name" value="BatchTestLocalRemote"/>
+                <!-- Default the test name so we can override with a parameter -->
             </antcall>
         </sequential>
     </parallel>
@@ -2373,6 +2373,12 @@ run JMeter unless all the JMeter jars are added.
     <property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
     <property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
+    <!--
+         Allow variable to be set on the command line
+         Cannot omit value because that causes a warning message
+     -->
+    <property name="batchtest.variable" value="dummy"/>
+    <property name="batchtest.value" value="dummy"/>
 
     <!-- Fix the EOL in case the file was derived from the "wrong" archive type -->
     <fixcrlf srcdir="${batchtest.inp}" includes="${batchtest.name}.csv"/>
@@ -2429,6 +2435,7 @@ run JMeter unless all the JMeter jars are added.
         <arg value="-Gmodule=Module"/>
         <!-- Check property can be used for filenames in local/remote tests (no need to defined as -G) -->
         <arg value="-JCSVFILE=${batchtest.name}.csv"/>
+        <arg value="-J${batchtest.variable}=${batchtest.value}"/>
      </java>
 
     <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.csv"/>
@@ -2481,6 +2488,7 @@ run JMeter unless all the JMeter jars are added.
       </antcall>
       <antcall target="batchtest">
           <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
+          <!-- N.B. requires access to jmeter.apache.org -->
           <param name="batchtest.name" value="Bug52310"/>
       </antcall>
       <antcall target="batchtest">
@@ -2491,6 +2499,22 @@ run JMeter unless all the JMeter jars are added.
       <antcall target="batchtest">
           <!-- IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name -->
           <param name="batchtest.name" value="Bug50898"/>
+      </antcall>
+
+      <antcall target="batchtest">
+          <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
+          <!-- This is unaffected by the bug; it just checks the script works OK in local mode -->
+          <param name="batchtest.name" value="Bug54685"/>
+          <param name="batchtest.variable" value="sample_variables"/>
+          <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
+      </antcall>
+
+      <antcall target="batchtestserver">
+          <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
+          <!-- This is the actual test -->
+          <param name="batchtest.name" value="Bug54685"/>
+          <param name="batchtest.variable" value="sample_variables"/>
+          <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
       </antcall>
   </target>
 
