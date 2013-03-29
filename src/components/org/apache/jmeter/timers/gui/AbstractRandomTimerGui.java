@@ -128,7 +128,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
         delayDevPanel.add(new JLabel(getTimerRangeLabelKey()));//$NON-NLS-1$
         delayDevPanel.add(Box.createHorizontalStrut(5));
 
-        rangeField = new JTextField(6);
+        rangeField = new JTextField(20);
         rangeField.setText(getDefaultRange());
         rangeField.setName(RANGE_FIELD);
         delayDevPanel.add(rangeField);
@@ -140,7 +140,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
         avgDelayPanel.add(new JLabel(getTimerDelayLabelKey()));//$NON-NLS-1$
         avgDelayPanel.add(Box.createHorizontalStrut(5));
 
-        delayField = new JTextField(6);
+        delayField = new JTextField(20);
         delayField.setText(getDefaultDelay());
         delayField.setName(DELAY_FIELD);
         avgDelayPanel.add(delayField);
