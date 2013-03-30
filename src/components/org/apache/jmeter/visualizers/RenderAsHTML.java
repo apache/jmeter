@@ -32,8 +32,11 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String TEXT_HTML = "text/html"; // $NON-NLS-1$
 
@@ -104,7 +107,14 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
             results.setText("Failed to parse HTML: " + rte.getMessage());
         }
         results.setCaretPosition(0);
-        resultsScrollPane.setViewportView(results);
+        try {
+            resultsScrollPane.setViewportView(results);
+        } catch (NumberFormatException e) {
+            // Java Bug : http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=9001188.
+            // See https://issues.apache.org/bugzilla/show_bug.cgi?id=54586
+            log.warn("An error occured rendering html code", e);
+            results.setText("Failed to render HTML: " + e.getMessage() +", use Text renderer");            
+        }
     }
 
     private static class LocalHTMLEditorKit extends HTMLEditorKit {
