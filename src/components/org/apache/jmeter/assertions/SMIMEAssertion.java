@@ -52,6 +52,7 @@ import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
+import org.bouncycastle.cms.jcajce.JcaX509CertSelectorConverter;
 import org.bouncycastle.jce.PrincipalUtil;
 import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -152,7 +153,8 @@ class SMIMEAssertion {
             if (signerIt.hasNext()) {
 
                 SignerInformation signer = (SignerInformation) signerIt.next();
-                Iterator<?> certIt = certs.getCertificates(signer.getSID()).iterator();
+                Iterator<?> certIt = certs.getCertificates(
+                        (new JcaX509CertSelectorConverter()).getCertSelector(signer.getSID())).iterator();
 
                 if (certIt.hasNext()) {
                     // the signer certificate
