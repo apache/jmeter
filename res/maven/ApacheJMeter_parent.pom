@@ -56,8 +56,9 @@ under the License.
       <apache-jsr223-api.version>3.1</apache-jsr223-api.version>
       <avalon-framework.version>4.1.4</avalon-framework.version>
       <beanshell.version>2.0b5</beanshell.version>
-      <bcmail.version>1.45</bcmail.version>
-      <bcprov.version>1.45</bcprov.version>
+      <bcmail.version>1.48</bcmail.version>
+      <bcprov.version>1.48</bcprov.version>
+      <bcpkix.version>1.48</bcpkix.version>
       <commons-codec.version>1.6</commons-codec.version>
       <commons-collections.version>3.2.1</commons-collections.version>
       <commons-httpclient.version>3.1</commons-httpclient.version>
@@ -120,13 +121,18 @@ under the License.
       </dependency>
       <dependency>
         <groupId>org.bouncycastle</groupId>
-        <artifactId>bcmail-jdk15</artifactId>
+        <artifactId>bcmail-jdk15on</artifactId>
         <version>${bcmail.version}</version>
       </dependency>
       <dependency>
         <groupId>org.bouncycastle</groupId>
-        <artifactId>bcprov-jdk15</artifactId>
+        <artifactId>bcprov-jdk15on</artifactId>
         <version>${bcprov.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcpkix-jdk15on</artifactId>
+        <version>${bcpkix.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
