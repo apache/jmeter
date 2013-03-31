@@ -176,6 +176,7 @@ This does not affect JMeter operation.
 <h2>Non-functional changes</h2>
 <ul>
 <li>Updated to jsoup-1.7.2</li>
+<li><bugzilla>54776</bugzilla> - Update the dependency on Bouncy Castle to 1.48</li>
 </ul>
 
 </section> 
