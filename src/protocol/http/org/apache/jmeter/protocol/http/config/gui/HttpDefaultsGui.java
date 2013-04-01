@@ -174,6 +174,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             }
         });
         concurrentPool = new JTextField(2); // 2 columns size
+        concurrentPool.setMinimumSize(new Dimension(10,20));
         concurrentPool.setMaximumSize(new Dimension(30,20));
         checkBoxPanel.add(concurrentDwn);
         checkBoxPanel.add(concurrentPool);
