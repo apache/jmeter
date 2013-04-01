@@ -420,7 +420,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-                    trimmed)), SaveService.getFileEncoding("UTF-8")), true); // $NON-NLS-1$
+                    trimmed)), SaveService.getFileEncoding("UTF-8")), false); // $NON-NLS-1$
             log.debug("Opened file: "+filename);
             files.put(filename, new FileEntry(writer, saveConfig));
         } else {
