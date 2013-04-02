@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.jms.control.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -206,8 +207,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         jmsQueueingPanel.add(sendQueuePanel, BorderLayout.CENTER);
 
         JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
-        receiveQueuePanel.add(jmsSelector,BorderLayout.EAST);
-        receiveQueuePanel.add(receiveQueue,BorderLayout.WEST);
+        receiveQueuePanel.add(jmsSelector,BorderLayout.SOUTH);
+        receiveQueuePanel.add(receiveQueue,BorderLayout.NORTH);
         jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
 
         JPanel messagePanel = new JPanel(new BorderLayout());
@@ -242,6 +243,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         JPanel soapXmlPanel = new JPanel(new BorderLayout());
         soapXmlPanel.add(soapXml);
+		Dimension pref = new Dimension(400, 150);
+        soapXml.setPreferredSize(pref);
         messagePanel.add(soapXmlPanel, BorderLayout.CENTER);
 
         jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
