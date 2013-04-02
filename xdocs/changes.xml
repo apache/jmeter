@@ -143,6 +143,7 @@ This does not affect JMeter operation.
 
 <h3>Other samplers</h3>
 <ul>
+<li><bugzilla>54788</bugzilla> - JMS Point-to-Point Sampler - GUI enhancements to increase readability and ease of use</li>
 </ul>
 
 <h3>Controllers</h3>
