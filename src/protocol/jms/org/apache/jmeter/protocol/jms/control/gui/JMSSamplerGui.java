@@ -243,7 +243,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         JPanel soapXmlPanel = new JPanel(new BorderLayout());
         soapXmlPanel.add(soapXml);
-		Dimension pref = new Dimension(400, 150);
+        Dimension pref = new Dimension(400, 150);
         soapXml.setPreferredSize(pref);
         messagePanel.add(soapXmlPanel, BorderLayout.CENTER);
 
