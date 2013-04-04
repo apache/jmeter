@@ -97,7 +97,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
 
     /** AutoFlush on each line */
-    private static final boolean SAVING_AUTOFLUSH = JMeterUtils.getPropDefault("saving.autoflush", false); //$NON-NLS-1$
+    private static final boolean SAVING_AUTOFLUSH = JMeterUtils.getPropDefault("jmeter.save.saveservice.autoflush", false); //$NON-NLS-1$
 
     // Static variables
 
