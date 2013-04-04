@@ -51,6 +51,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.ObjectProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
@@ -94,6 +95,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
     private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
+
+    /** AutoFlush on each line */
+    private static final boolean SAVING_AUTOFLUSH = JMeterUtils.getPropDefault("saving.autoflush", false); //$NON-NLS-1$
 
     // Static variables
 
@@ -420,7 +424,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-                    trimmed)), SaveService.getFileEncoding("UTF-8")), false); // $NON-NLS-1$
+                    trimmed)), SaveService.getFileEncoding("UTF-8")), SAVING_AUTOFLUSH); // $NON-NLS-1$
             log.debug("Opened file: "+filename);
             files.put(filename, new FileEntry(writer, saveConfig));
         } else {
