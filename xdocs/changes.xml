@@ -88,7 +88,7 @@ This does not affect JMeter operation.
 
 <p>With this version autoFlush has been turned off on PrintWriter in charge of writing test results. 
 This results in improved throughput for intensive tests but can result in more test data loss in case
-of JMeter crash (very rare). To revert to previous behaviour set saving.autoflush property to true. </p>
+of JMeter crash (very rare). To revert to previous behaviour set jmeter.save.saveservice.autoflush property to true. </p>
 
 <!-- =================== Bug fixes =================== -->
 
