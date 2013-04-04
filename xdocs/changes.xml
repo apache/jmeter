@@ -84,6 +84,8 @@ This does not affect JMeter operation.
 
 <h2>Incompatible changes</h2>
 
+<p>SMTP Sampler now uses eml file subject if subject field is empty</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -144,6 +146,7 @@ This does not affect JMeter operation.
 <h3>Other samplers</h3>
 <ul>
 <li><bugzilla>54788</bugzilla> - JMS Point-to-Point Sampler - GUI enhancements to increase readability and ease of use</li>
+<li><bugzilla>54798</bugzilla> - Using subject from EML-file for SMTP Sampler</li>
 </ul>
 
 <h3>Controllers</h3>
