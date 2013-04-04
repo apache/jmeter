@@ -219,8 +219,10 @@ public class SendMailCommand {
             message.setReplyTo(replyTo.toArray(to));
         }
 
-        message.setSubject(subject);
-
+        if(null != subject) {
+            message.setSubject(subject);
+        }
+        
         if (receiverTo != null) {
             InternetAddress[] to = new InternetAddress[receiverTo.size()];
             receiverTo.toArray(to);
