@@ -21,12 +21,14 @@ package org.apache.jmeter.control.gui;
 import java.awt.BorderLayout;
 import java.util.Collection;
 
+import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
@@ -38,6 +40,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
+    // This check-box defines whether to save  WorkBench content or not
+    private JCheckBox saveWorkBench;
 
     /**
      * Create a new WorkbenchGui.
@@ -72,8 +76,33 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
     @Override
     public void modifyTestElement(TestElement wb) {
         super.configureTestElement(wb);
+        ((WorkBench)wb).setSaveWorkBench(saveWorkBench.isSelected());
     }
 
+    /**
+     * A newly created component can be initialized with the contents of a Test
+     * Element object by calling this method. The component is responsible for
+     * querying the Test Element object for the relevant information to display
+     * in its GUI.
+     *
+     * @param el
+     *            the TestElement to configure
+     */
+    @Override
+    public void configure(TestElement el) {
+        super.configure(el);
+        if (el instanceof WorkBench) {
+            WorkBench tp = (WorkBench) el;
+            saveWorkBench.setSelected(tp.getSaveWorkBench());
+        }
+    }
+    
+    @Override
+    public void clearGui() {
+        super.clearGui();
+        saveWorkBench.setSelected(false);
+    }
+    
     /**
      * When a user right-clicks on the component in the test tree, or selects
      * the edit menu when the component is selected, the component will be asked
@@ -115,9 +144,15 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
      * Initialize the components and layout of this component.
      */
     private void init() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 5));
+
         setBorder(makeBorder());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
+        VerticalPanel workBenchPropsPanel = new VerticalPanel(5, 0);
+
+        saveWorkBench = new JCheckBox(JMeterUtils.getResString("save_workbench"));
+        workBenchPropsPanel.add(saveWorkBench);
+        add(workBenchPropsPanel, BorderLayout.CENTER);
     }
 }

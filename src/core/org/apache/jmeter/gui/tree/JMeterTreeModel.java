@@ -195,6 +195,10 @@ public class JMeterTreeModel extends DefaultTreeModel {
         return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
     }
 
+    public HashTree getWorkBench() {
+        return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(1));
+    }
+
     /**
      * Clear the test plan, and use default node for test plan and workbench.
      *
