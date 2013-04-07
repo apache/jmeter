@@ -36,6 +36,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -95,7 +96,14 @@ public class Save implements Command {
             subTree = GuiPackage.getInstance().getCurrentSubTree();
         } else {
             fullSave = true;
-            subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+            HashTree testPlan = GuiPackage.getInstance().getTreeModel().getTestPlan();
+            // If saveWorkBench 
+            JMeterTreeNode workbenchNode = (JMeterTreeNode) ((JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot()).getChildAt(1);
+            if (((WorkBench)workbenchNode.getUserObject()).getSaveWorkBench()) {
+                HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
+                testPlan.add(workbench);
+            }
+            subTree = testPlan;
         }
 
         String updateFile = GuiPackage.getInstance().getTestPlanFile();
