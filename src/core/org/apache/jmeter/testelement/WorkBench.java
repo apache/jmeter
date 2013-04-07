@@ -21,9 +21,11 @@ package org.apache.jmeter.testelement;
 public class WorkBench extends AbstractTestElement {
 
     private static final long serialVersionUID = 240L;
-    // Used in Save.java to define whether to save WorkBench content or not.
-    public static final String SAVE_WORKBENCH = "WorkBench.save";
 
+    // JMX property name: do not change
+    private static final String SAVE_WORKBENCH = "WorkBench.save";
+
+    private static final boolean SAVE_WORKBENCH_DEFAULT = false;
 
     /**
      * Constructor for the WorkBench object.
@@ -36,10 +38,10 @@ public class WorkBench extends AbstractTestElement {
     }
 
     public boolean getSaveWorkBench() {
-        return getPropertyAsBoolean(SAVE_WORKBENCH, false);
+        return getPropertyAsBoolean(SAVE_WORKBENCH, SAVE_WORKBENCH_DEFAULT);
     }
 
     public void setSaveWorkBench(boolean saveWorkBench) {
-        setProperty(SAVE_WORKBENCH, saveWorkBench, false);
+        setProperty(SAVE_WORKBENCH, saveWorkBench, SAVE_WORKBENCH_DEFAULT);
     }
 }
