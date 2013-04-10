@@ -181,6 +181,7 @@ of JMeter crash (very rare). To revert to previous behaviour set jmeter.save.sav
 <li><bugzilla>54584</bugzilla> - MongoDB plugin</li>
 <li><bugzilla>54669</bugzilla> - Add flag forcing non-GUI JVM to exit after test</li>
 <li><bugzilla>42428</bugzilla> - Workbench not saved with Test Plan</li>
+<li><bugzilla>54825</bugzilla> - Add shortcuts to move elements in the tree</li>
 </ul>
 
 <h2>Non-functional changes</h2>
