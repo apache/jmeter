@@ -70,6 +70,10 @@ public final class KeyStrokes {
     public static final KeyStroke COLLAPSE_ALL      = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL_MASK);
     // VK_PLUS + CTRL_DOWN_MASK did not work...
     public static final KeyStroke EXPAND_ALL        = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke ALT_UP_ARROW      = KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK);
+    public static final KeyStroke ALT_DOWN_ARROW    = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK);
+    public static final KeyStroke ALT_LEFT_ARROW    = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK);
+    public static final KeyStroke ALT_RIGHT_ARROW   = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK);
 
     /**
      * Check if an event matches the KeyStroke definition.
