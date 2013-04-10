@@ -92,6 +92,10 @@ public final class ActionNames {
     public static final String WHAT_CLASS       = "what_class"; // $NON-NLS-1$
     public static final String SEARCH_TREE      = "search_tree"; // $NON-NLS-1$
     public static final String SEARCH_RESET      = "search_reset"; // $NON-NLS-1$
+    public static final String MOVE_UP          = "move_up"; // $NON-NLS-1$
+    public static final String MOVE_DOWN        = "move_down"; // $NON-NLS-1$
+    public static final String MOVE_LEFT        = "move_left"; // $NON-NLS-1$
+    public static final String MOVE_RIGHT       = "move_right"; // $NON-NLS-1$
 
     // Prevent instantiation
     private ActionNames(){
