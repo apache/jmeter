@@ -96,9 +96,6 @@ of JMeter crash (very rare). To revert to previous behaviour set jmeter.save.sav
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
-<li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars</li>
-<li><bugzilla>54293</bugzilla> - JMeter rejects html tags '&lt;' in query params as invalid when they are accepted by the browser</li>
-<li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character </li>
 <li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler settings takes the whole screen with when there are samplers with long name</li>
 <li><bugzilla>54629</bugzilla> - HTMLParser does not extract &lt;object&gt; tag urls</li>
 </ul>
