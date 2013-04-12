@@ -2687,6 +2687,21 @@ run JMeter unless all the JMeter jars are added.
                 <isset property="${zipprop}"/>
             </not>
         </condition>
+        <!-- Delete all but the desired version of the file -->
+        <loadresource property="wildCard">
+          <propertyresource name="jar"/>
+          <filterchain>
+            <tokenfilter>
+              <filetokenizer/>
+              <replaceregex pattern="-\d+\.\d+.*(\.jar|\.zip)" replace="-*\1"/>
+            </tokenfilter>
+          </filterchain>
+        </loadresource>
+        <echo level="info" message="Deleting ${wildCard} (excluding ${jar})"/>
+        <delete verbose="true">
+          <!-- Unfortunately commons-jexl jars don't have unique prefixes -->
+          <fileset dir="${path}" includes="${wildCard}" excludes="${jar} commons-jexl-*"/>
+        </delete>
         <!-- Emulate conditional execution; targets use if/unless to suppress execution -->
         <antcall target="_get_jarfile"/>
         <antcall target="_get_zipfile"/>
