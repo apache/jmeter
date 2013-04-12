@@ -350,8 +350,8 @@ to the elements View Results Tree, Assertion Response and Regular Expression Ext
 <h2>Non-functional changes</h2>
 <ul>
 <li><bugzilla>53956</bugzilla> - Add ability to paste (a list of values) from clipboard for Header Manager</li>
-<li>Updated to HttpComponents Client 4.2.4 (from 4.2.1)</li>
-<li>Updated to HttpComponents Core 4.2.4 (from 4.2.2)</li>
+<li>Updated to HttpComponents Client 4.2.3 (from 4.2.1)</li>
+<li>Updated to HttpComponents Core 4.2.3 (from 4.2.2)</li>
 <li><bugzilla>54110</bugzilla> - BSFTestElement and JSR223TestElement should use shared super-class for common fields</li>
 <li><bugzilla>54199</bugzilla> - Move to Java 6</li>
 <li>Upgraded to rhino 1.7R4</li>
