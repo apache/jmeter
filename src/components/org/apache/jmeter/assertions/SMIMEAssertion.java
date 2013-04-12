@@ -58,6 +58,8 @@ import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.mail.smime.SMIMEException;
 import org.bouncycastle.mail.smime.SMIMESignedParser;
+import org.bouncycastle.operator.DigestCalculatorProvider;
+import org.bouncycastle.operator.bc.BcDigestCalculatorProvider;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 /**
@@ -94,10 +96,10 @@ class SMIMEAssertion {
             }
             if (msg.isMimeType("multipart/signed")) { // $NON-NLS-1$
                 MimeMultipart multipart = (MimeMultipart) msg.getContent();
-                s = new SMIMESignedParser(multipart);
+                s = new SMIMESignedParser(new BcDigestCalculatorProvider(), multipart);
             } else if (msg.isMimeType("application/pkcs7-mime") // $NON-NLS-1$
                     || msg.isMimeType("application/x-pkcs7-mime")) { // $NON-NLS-1$
-                s = new SMIMESignedParser(msg);
+                s = new SMIMESignedParser(new BcDigestCalculatorProvider(), msg);
             }
 
             if (null != s) {
