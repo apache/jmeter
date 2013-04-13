@@ -27,5 +27,12 @@
 ##
 ##   ==============================================
 
-# Add Mac-specific property - should be ignored elsewhere (Bug 47064)
-java $JVM_ARGS -Dapple.laf.useScreenMenuBar=true -jar `dirname $0`/ApacheJMeter.jar "$@"
+JMETER_OPTS=""
+case $(uname) in
+   Darwin*)
+   # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
+   JMETER_OPTS="-Xdock:name=JMeter -Dapple.laf.useScreenMenuBar=true"
+   ;;
+esac
+
+java $JVM_ARGS $JMETER_OPTS -jar `dirname $0`/ApacheJMeter.jar "$@"
