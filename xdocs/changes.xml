@@ -138,7 +138,6 @@ Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for M
 <ul>
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]</li>
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
-<li><bugzilla>54581</bugzilla> - CTRL+F1 for function dialog open does not work for JMeter 2.9, changed to CTRL + SHIFT + F1</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -184,6 +183,8 @@ Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for M
 <li><bugzilla>54669</bugzilla> - Add flag forcing non-GUI JVM to exit after test</li>
 <li><bugzilla>42428</bugzilla> - Workbench not saved with Test Plan</li>
 <li><bugzilla>54825</bugzilla> - Add shortcuts to move elements in the tree</li>
+<li><bugzilla>54834</bugzilla> - Improve Drag & Drop in the jmeter tree</li>
+<li><bugzilla>54839</bugzilla> - Set the application name on Mac</li>
 </ul>
 
 <h2>Non-functional changes</h2>
