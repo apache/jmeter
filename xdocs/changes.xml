@@ -90,6 +90,10 @@ This does not affect JMeter operation.
 This results in improved throughput for intensive tests but can result in more test data loss in case
 of JMeter crash (very rare). To revert to previous behaviour set jmeter.save.saveservice.autoflush property to true. </p>
 
+<p>
+Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for Mac OS).
+</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -134,6 +138,7 @@ of JMeter crash (very rare). To revert to previous behaviour set jmeter.save.sav
 <ul>
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]</li>
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
+<li><bugzilla>54581</bugzilla> - CTRL+F1 for function dialog open does not work for JMeter 2.9, changed to CTRL + SHIFT + F1</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
