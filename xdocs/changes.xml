@@ -152,6 +152,7 @@ Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for M
 <ul>
 <li><bugzilla>54788</bugzilla> - JMS Point-to-Point Sampler - GUI enhancements to increase readability and ease of use</li>
 <li><bugzilla>54798</bugzilla> - Using subject from EML-file for SMTP Sampler</li>
+<li><bugzilla>54759</bugzilla> - SSLPeerUnverifiedException using HTTPS , property documented</li>
 </ul>
 
 <h3>Controllers</h3>
