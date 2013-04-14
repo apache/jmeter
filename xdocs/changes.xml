@@ -185,6 +185,7 @@ Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for M
 <li><bugzilla>54825</bugzilla> - Add shortcuts to move elements in the tree</li>
 <li><bugzilla>54834</bugzilla> - Improve Drag & Drop in the jmeter tree</li>
 <li><bugzilla>54839</bugzilla> - Set the application name on Mac</li>
+<li><bugzilla>54841</bugzilla> - Correctly handle the quit shortcut on Mac Os (CMD-Q) </li>
 </ul>
 
 <h2>Non-functional changes</h2>

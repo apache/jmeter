@@ -31,7 +31,7 @@ JMETER_OPTS=""
 case $(uname) in
    Darwin*)
    # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
-   JMETER_OPTS="-Xdock:name=JMeter -Dapple.laf.useScreenMenuBar=true"
+   JMETER_OPTS="-Xdock:name=JMeter -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
    ;;
 esac
 
