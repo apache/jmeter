@@ -20,8 +20,10 @@ package org.apache.jmeter.gui.action;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -59,6 +61,7 @@ public class Copy extends AbstractAction {
     public void doAction(ActionEvent e) {
         JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
         JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
+        nodes = filterNodes(nodes);
         nodes = cloneTreeNodes(nodes);
         setCopiedNodes(nodes);
     }
@@ -83,6 +86,30 @@ public class Copy extends AbstractAction {
         treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
         cloneChildren(treeNode, node);
         return treeNode;
+    }
+    
+    /**
+     * If a child and one of its ancestors are selected : only keep the ancestor
+     * @param currentNodes JMeterTreeNode[]
+     * @return JMeterTreeNode[]
+     */
+    public static JMeterTreeNode[] filterNodes(JMeterTreeNode[] currentNodes) {
+        List<JMeterTreeNode> nodes = new ArrayList<JMeterTreeNode>();
+        for (int i = 0; i < currentNodes.length; i++) {
+            boolean exclude = false;
+            for (int j = 0; j < currentNodes.length; j++) {
+                if(i!=j && currentNodes[i].isNodeAncestor(currentNodes[j])) {
+                    exclude = true;
+                    break;
+                }
+            }
+            
+            if(!exclude) {
+                nodes.add(currentNodes[i]);
+            }
+        }
+
+        return nodes.toArray(new JMeterTreeNode[nodes.size()]);
     }
 
     public static void setCopiedNodes(JMeterTreeNode nodes[]) {

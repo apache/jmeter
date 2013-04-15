@@ -138,6 +138,7 @@ Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for M
 <ul>
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]</li>
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
+<li><bugzilla>54847</bugzilla> - Cut & Paste is broken with tree multi-selection</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
