@@ -61,7 +61,7 @@ public class Copy extends AbstractAction {
     public void doAction(ActionEvent e) {
         JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
         JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
-        nodes = filterNodes(nodes);
+        nodes = keepOnlyAncestors(nodes);
         nodes = cloneTreeNodes(nodes);
         setCopiedNodes(nodes);
     }
@@ -93,7 +93,7 @@ public class Copy extends AbstractAction {
      * @param currentNodes JMeterTreeNode[]
      * @return JMeterTreeNode[]
      */
-    public static JMeterTreeNode[] filterNodes(JMeterTreeNode[] currentNodes) {
+    static JMeterTreeNode[] keepOnlyAncestors(JMeterTreeNode[] currentNodes) {
         List<JMeterTreeNode> nodes = new ArrayList<JMeterTreeNode>();
         for (int i = 0; i < currentNodes.length; i++) {
             boolean exclude = false;

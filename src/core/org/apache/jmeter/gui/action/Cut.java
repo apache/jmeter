@@ -51,7 +51,7 @@ public class Cut extends AbstractAction {
         GuiPackage guiPack = GuiPackage.getInstance();
         JMeterTreeNode[] currentNodes = guiPack.getTreeListener().getSelectedNodes();
 
-        currentNodes = Copy.filterNodes(currentNodes);
+        currentNodes = Copy.keepOnlyAncestors(currentNodes);
         Copy.setCopiedNodes(currentNodes);
         for (int i = 0; i < currentNodes.length; i++) {
             guiPack.getTreeModel().removeNodeFromParent(currentNodes[i]);
