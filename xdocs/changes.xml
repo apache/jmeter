@@ -92,6 +92,8 @@ of JMeter crash (very rare). To revert to previous behaviour set jmeter.save.sav
 
 <p>
 Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for Mac OS).
+The original key sequence (Ctrl+F1) did not work in some locations (it is consumed by the Java Swing ToolTipManager).
+It was therefore necessary to change the shortcut.
 </p>
 
 <!-- =================== Bug fixes =================== -->
