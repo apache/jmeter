@@ -89,6 +89,7 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
@@ -167,10 +168,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     static {
         log.info("HTTP request retry count = "+RETRY_COUNT);
         
-        // TODO use new setDefaultHttpParams(HttpParams params) static method when 4.1 is available
-        final DefaultHttpClient dhc = new DefaultHttpClient();
-        DEFAULT_HTTP_PARAMS = dhc.getParams(); // Get the default params
-        dhc.getConnectionManager().shutdown(); // Tidy up
+        DEFAULT_HTTP_PARAMS = new SyncBasicHttpParams(); // Could we drop the Sync here?
+        DefaultHttpClient.setDefaultHttpParams(DEFAULT_HTTP_PARAMS);
         
         // Process Apache HttpClient parameters file
         String file=JMeterUtils.getProperty("hc.parameters.file"); // $NON-NLS-1$
