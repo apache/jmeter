@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.net.URI;
 import java.net.URL;
 
 import junit.framework.TestCase;
@@ -79,5 +80,17 @@ public class TestHTTPUtils extends TestCase {
         assertEquals("http://host/one/two", ConversionUtils.removeSlashDotDot("http://host/one/two/../../one/two"));
         assertEquals("http://host/..", ConversionUtils.removeSlashDotDot("http://host/.."));
         assertEquals("http://host/../abc", ConversionUtils.removeSlashDotDot("http://host/../abc"));
+    }
+    
+    public void testsanitizeUrl() throws Exception {
+        testSanitizeUrl("http://localhost/", "http://localhost/");
+        testSanitizeUrl("http://localhost/a/b/c%7Cd", "http://localhost/a/b/c|d");
+        // TODO more tests needed
+    }
+    
+    private void testSanitizeUrl(String expected, String input) throws Exception {
+        final URL url = new URL(input);
+        final URI uri = new URI(expected);
+        assertEquals(uri, ConversionUtils.sanitizeUrl(url));
     }
 }
