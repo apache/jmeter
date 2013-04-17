@@ -150,7 +150,7 @@ logkit-2.0
 - logging
 - Anakia
 
-mongo-java-driver 2.10.1
+mongo-java-driver 2.11.1
 ------------------------
 http://www.mongodb.org/
 - MongoDB sampler
