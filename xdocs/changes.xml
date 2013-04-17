@@ -140,7 +140,7 @@ It was therefore necessary to change the shortcut.
 <ul>
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]</li>
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
-<li><bugzilla>54847</bugzilla> - Cut & Paste is broken with tree multi-selection</li>
+<li><bugzilla>54847</bugzilla> - Cut &amp; Paste is broken with tree multi-selection</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -191,6 +191,7 @@ It was therefore necessary to change the shortcut.
 <li><bugzilla>54839</bugzilla> - Set the application name on Mac</li>
 <li><bugzilla>54841</bugzilla> - Correctly handle the quit shortcut on Mac Os (CMD-Q)</li>
 <li><bugzilla>54844</bugzilla> - Set the application icon on Mac Os</li>
+<li><bugzilla>54834</bugzilla> - Improve Drag & Drop in the jmeter tree </li>
 </ul>
 
 <h2>Non-functional changes</h2>
