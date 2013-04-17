@@ -83,7 +83,7 @@ under the License.
       <js_rhino.version>1.7R4</js_rhino.version>
       <junit.version>4.10</junit.version>
       <logkit.version>2.0</logkit.version>
-      <mongo-java-driver.version>2.10.1</mongo-java-driver.version>
+      <mongo-java-driver.version>2.11.1</mongo-java-driver.version>
       <slf4j.version>1.7.2</slf4j.version>
       <soap.version>2.3.1</soap.version>
       <tidy.version>r938</tidy.version>
