@@ -49,6 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -74,6 +75,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.LoadDraggedFile;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
+import org.apache.jmeter.gui.tree.JMeterTreeTransferHandler;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.gui.util.JMeterToolBar;
@@ -150,12 +152,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     /** The button used to display the running/stopped image. */
     private JButton runningIndicator;
-
-    /** The x coordinate of the last location where a component was dragged. */
-    private int previousDragXLocation = 0;
-
-    /** The y coordinate of the last location where a component was dragged. */
-    private int previousDragYLocation = 0;
 
     /** The set of currently running hosts. */
     private final Set<String> hosts = new HashSet<String>();
@@ -619,7 +615,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 return null;
                 }
             };
-           treevar.setToolTipText("");
+        treevar.setToolTipText("");
         treevar.setCellRenderer(getCellRenderer());
         treevar.setRootVisible(false);
         treevar.setShowsRootHandles(true);
@@ -627,8 +623,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         treeListener.setJTree(treevar);
         treevar.addTreeSelectionListener(treeListener);
         treevar.addMouseListener(treeListener);
-        treevar.addMouseMotionListener(treeListener);
         treevar.addKeyListener(treeListener);
+        
+        // enable drag&drop, install a custom transfer handler
+        treevar.setDragEnabled(true);
+        treevar.setDropMode(DropMode.ON_OR_INSERT);
+        treevar.setTransferHandler(new JMeterTreeTransferHandler());
 
         return treevar;
     }
@@ -642,26 +642,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         DefaultTreeCellRenderer rend = new JMeterCellRenderer();
         rend.setFont(new Font("Dialog", Font.PLAIN, 11));
         return rend;
-    }
-
-    /**
-     * Repaint pieces of the GUI as needed while dragging. This method should
-     * only be called from the Swing event thread.
-     *
-     * @param dragIcon
-     *            the component being dragged
-     * @param x
-     *            the current mouse x coordinate
-     * @param y
-     *            the current mouse y coordinate
-     */
-    public void drawDraggedComponent(Component dragIcon, int x, int y) {
-        Dimension size = dragIcon.getPreferredSize();
-        treePanel.paintImmediately(previousDragXLocation, previousDragYLocation, size.width, size.height);
-        this.getLayeredPane().setLayer(dragIcon, 400);
-        SwingUtilities.paintComponent(treePanel.getGraphics(), dragIcon, treePanel, x, y, size.width, size.height);
-        previousDragXLocation = x;
-        previousDragYLocation = y;
     }
 
     /**
@@ -710,20 +690,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 if (flavors[i].isFlavorJavaFileListType()) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                     try {
-                        @SuppressWarnings("unchecked")
-                        List<File> files = (List<File>)
-                                tr.getTransferData(DataFlavor.javaFileListFlavor);
-                        if(files.isEmpty()) {
-                            return;
-                        }
-                        File file = files.get(0);
-                        if(!file.getName().endsWith(".jmx")) {
-                            log.warn("Importing file:" + file.getName()+ "from DnD failed because file extension does not end with .jmx");
-                            return;
-                        }
-
-                        ActionEvent fakeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ActionNames.OPEN);
-                        LoadDraggedFile.loadProject(fakeEvent, file);
+                        openJmxFilesFromDragAndDrop(tr);
                     } finally {
                         dtde.dropComplete(true);
                     }
@@ -736,6 +703,25 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             log.warn("Dnd failed" , e);
         }
 
+    }
+
+    public boolean openJmxFilesFromDragAndDrop(Transferable tr) throws UnsupportedFlavorException, IOException {
+        @SuppressWarnings("unchecked")
+        List<File> files = (List<File>)
+                tr.getTransferData(DataFlavor.javaFileListFlavor);
+        if(files.isEmpty()) {
+            return false;
+        }
+        File file = files.get(0);
+        if(!file.getName().endsWith(".jmx")) {
+            log.warn("Importing file:" + file.getName()+ "from DnD failed because file extension does not end with .jmx");
+            return false;
+        }
+
+        ActionEvent fakeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ActionNames.OPEN);
+        LoadDraggedFile.loadProject(fakeEvent, file);
+        
+        return true;
     }
 
     @Override

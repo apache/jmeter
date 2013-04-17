@@ -48,7 +48,6 @@ public final class ActionNames {
     public static final String DEBUG_ON         = "debug_on"; // $NON-NLS-1$
     public static final String DEBUG_OFF        = "debug_off"; // $NON-NLS-1$
     public static final String DISABLE          = "disable"; // $NON-NLS-1$
-    public static final String DRAG_ADD         = "drag_n_drop.add";//$NON-NLS-1$
     /** Copy, then paste afterwards */
     public static final String DUPLICATE        = "duplicate"; // $NON-NLS-1$
     public static final String EDIT             = "edit"; // $NON-NLS-1$
@@ -58,8 +57,6 @@ public final class ActionNames {
     public static final String FUNCTIONS        = "functions"; // $NON-NLS-1$
     public static final String HELP             = "help"; // $NON-NLS-1$
     public static final String HEAP_DUMP        = "heap_dump"; // $NON-NLS-1$
-    public static final String INSERT_AFTER     = "drag_n_drop.insert_after";//$NON-NLS-1$
-    public static final String INSERT_BEFORE    = "drag_n_drop.insert_before";//$NON-NLS-1$
     public static final String LAF_PREFIX       = "laf:"; // Look and Feel prefix
     public static final String LOGGER_PANEL_ENABLE_DISABLE     = "logger_panel_enable_disable"; // $NON-NLS-1$
     public static final String MERGE            = "merge"; // $NON-NLS-1$
