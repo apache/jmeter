@@ -21,6 +21,11 @@ package org.apache.jmeter.gui.tree;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -40,11 +45,15 @@ public class JMeterTreeTransferHandler extends TransferHandler {
   
     private DataFlavor nodeFlavor;
     private DataFlavor[] jMeterTreeNodeDataFlavors = new DataFlavor[1];
+    
+    // hold the nodes that should be removed on drop
+    private List<JMeterTreeNode> nodesForRemoval = null;
 
     public JMeterTreeTransferHandler() {
         try {
-            String mimeType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\"" + JMeterTreeNode[].class.getName() + "\"";
-            nodeFlavor = new DataFlavor(mimeType);
+            // only allow a drag&drop inside the current jvm
+            String jvmLocalFlavor = DataFlavor.javaJVMLocalObjectMimeType + ";class=\"" + JMeterTreeNode[].class.getName() + "\"";
+            nodeFlavor = new DataFlavor(jvmLocalFlavor);
             jMeterTreeNodeDataFlavors[0] = nodeFlavor;
         }
         catch (ClassNotFoundException e) {
@@ -61,21 +70,72 @@ public class JMeterTreeTransferHandler extends TransferHandler {
 
     @Override
     protected Transferable createTransferable(JComponent c) {
+        this.nodesForRemoval = null;
         JTree tree = (JTree) c;
         TreePath[] paths = tree.getSelectionPaths();
         if (paths != null) {
-           
-            //TODO : deal with all the selected nodes
-            JMeterTreeNode node = (JMeterTreeNode) paths[0].getLastPathComponent();
             
-            return new NodesTransferable(new JMeterTreeNode[] {node});
+            // sort the selected tree path by row
+            sortTreePathByRow(paths, tree);
+            
+            // if child and a parent are selected : only keep the parent
+            boolean[] toRemove = new boolean[paths.length];
+            int size = paths.length;
+            for (int i = 0; i < paths.length; i++) {
+                for (int j = 0; j < paths.length; j++) {
+                    if(i!=j && ((JMeterTreeNode)paths[i].getLastPathComponent()).isNodeAncestor((JMeterTreeNode)paths[j].getLastPathComponent())) {
+                        toRemove[i] = true;
+                        size--;
+                        break;
+                    }
+                }
+            }
+
+            // remove unneeded nodes
+            JMeterTreeNode[] nodes = new JMeterTreeNode[size];
+            size = 0;
+            for (int i = 0; i < paths.length; i++) {
+                if(!toRemove[i]) {
+                    JMeterTreeNode node = (JMeterTreeNode) paths[i].getLastPathComponent();
+                    nodes[size++] = node;
+                }
+            }
+            
+            return new NodesTransferable(nodes);
         }
         
         return null;
     }
-   
+    
+
+    private static void sortTreePathByRow(TreePath[] paths, final JTree tree) {
+        Comparator<TreePath> cp = new Comparator<TreePath>() {
+
+            @Override
+            public int compare(TreePath o1, TreePath o2) {
+                int row1 = tree.getRowForPath(o1);
+                int row2 = tree.getRowForPath(o2);
+                
+                return (row1<row2 ? -1 : (row1==row2 ? 0 : 1));
+            }
+        };
+        
+        Arrays.sort(paths, cp);
+    }
+
+
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
+        
+        if(this.nodesForRemoval != null
+                && ((action & MOVE) == MOVE))  {
+            GuiPackage guiInstance = GuiPackage.getInstance();
+            for (JMeterTreeNode jMeterTreeNode : nodesForRemoval) {
+                guiInstance.getTreeModel().removeNodeFromParent(jMeterTreeNode);
+            }
+            
+            nodesForRemoval = null;
+        }
     }
 
     @Override
@@ -108,14 +168,6 @@ public class JMeterTreeTransferHandler extends TransferHandler {
 
         // Do not allow a drop on the drag source selections.
         JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
-        JTree tree = (JTree) support.getComponent();
-        int dropRow = tree.getRowForPath(dl.getPath());
-        int[] selRows = tree.getSelectionRows();
-        for (int i = 0; i < selRows.length; i++) {
-            if (selRows[i] == dropRow) {
-                return false;
-            }
-        }
         
         TreePath dest = dl.getPath();
         JMeterTreeNode target = (JMeterTreeNode) dest.getLastPathComponent();
@@ -125,17 +177,25 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             return false;
         }
         
-        TreePath path = tree.getPathForRow(selRows[0]);
-        JMeterTreeNode draggedNode = (JMeterTreeNode) path.getLastPathComponent();
-        
-        // Do not allow a non-leaf node to be moved into one of its children
-        if (draggedNode.getChildCount() > 0
-                && target.isNodeAncestor(draggedNode)) {
+        JMeterTreeNode[] nodes = getDraggedNodes(support.getTransferable());
+        if(nodes == null || nodes.length == 0) {
             return false;
         }
         
+        for (int i = 0; i < nodes.length; i++) {
+            if(target == nodes[i]) {
+                return false;
+            }
+            
+            // Do not allow a non-leaf node to be moved into one of its children
+            if (nodes[i].getChildCount() > 0
+                    && target.isNodeAncestor(nodes[i])) {
+                return false;
+            }
+        }
+        
         // re-use node association logic
-        return MenuFactory.canAddTo(target, new JMeterTreeNode[] { draggedNode });
+        return MenuFactory.canAddTo(target, nodes);
     }
 
 
@@ -163,13 +223,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         }
         
         // Extract transfer data.
-        JMeterTreeNode[] nodes = null;
-        try {
-            nodes = (JMeterTreeNode[]) t.getTransferData(nodeFlavor);
-        }
-        catch (Exception e) {
-            LOG.error("Unsupported Flavor in Transferable", e);
-        }
+        JMeterTreeNode[] nodes = getDraggedNodes(t);
 
         if(nodes == null || nodes.length == 0) {
             return false;
@@ -180,28 +234,27 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         TreePath dest = dl.getPath();
         JMeterTreeNode target = (JMeterTreeNode) dest.getLastPathComponent();
        
-        //TODO : deal with all the selected nodes
-        JMeterTreeNode draggedNode = nodes[0];
-        
+        nodesForRemoval = new ArrayList<JMeterTreeNode>();
         int index = dl.getChildIndex();
-        if (index == -1) { // drop mode is ON
-            index = target.getChildCount();
-            if(draggedNode.getParent() == target) {
-                //when the target is the current parent of the node being dragged
-                // re-add it as the last child
-                index--;
-            }
-        }
-        else if(draggedNode.getParent() == target) { // insert mode
-            if(guiInstance.getTreeModel().getIndexOfChild(target, draggedNode) < index) {
-                index--;
-            }
-        }
-        
-        // remove - add the nodes
         for (int i = 0; i < nodes.length; i++) {
-            guiInstance.getTreeModel().removeNodeFromParent(nodes[i]);
-            guiInstance.getTreeModel().insertNodeInto(nodes[i], target, index);
+            
+            if (index == -1) { // drop mode == DropMode.ON
+                index = target.getChildCount();
+            }
+
+            // Insert a clone of the node, the original one will be removed by the exportDone method
+            // the children are not cloned but moved to the cloned node
+            // working on the original node would be harder as 
+            //    you'll have to deal with the insertion index offset if you re-order a node inside a parent
+            JMeterTreeNode copy = (JMeterTreeNode) nodes[i].clone();
+            Enumeration<?> enumFrom = nodes[i].children();
+            while (enumFrom.hasMoreElements()) {
+                JMeterTreeNode child = (JMeterTreeNode) enumFrom.nextElement();
+                copy.add(child);
+            }
+            
+            guiInstance.getTreeModel().insertNodeInto(copy, target, index++);
+            nodesForRemoval.add(nodes[i]);
         }
         
         // expand the destination node
@@ -211,6 +264,19 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         return true;
     }
 
+
+    private JMeterTreeNode[] getDraggedNodes(Transferable t) {
+        JMeterTreeNode[] nodes = null;
+        try {
+            nodes = (JMeterTreeNode[]) t.getTransferData(nodeFlavor);
+        }
+        catch (Exception e) {
+            LOG.error("Unsupported Flavor in Transferable", e);
+        }
+        return nodes;
+    }
+
+    
     private class NodesTransferable implements Transferable {
         JMeterTreeNode[] nodes;
 
