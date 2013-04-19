@@ -247,12 +247,18 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             // working on the original node would be harder as 
             //    you'll have to deal with the insertion index offset if you re-order a node inside a parent
             JMeterTreeNode copy = (JMeterTreeNode) nodes[i].clone();
+            
+            // first copy the children as the call to copy.add will modify the collection we're iterating on
             Enumeration<?> enumFrom = nodes[i].children();
+            List<JMeterTreeNode> tmp = new ArrayList<JMeterTreeNode>();
             while (enumFrom.hasMoreElements()) {
                 JMeterTreeNode child = (JMeterTreeNode) enumFrom.nextElement();
-                copy.add(child);
+                tmp.add(child);
             }
             
+            for (JMeterTreeNode jMeterTreeNode : tmp) {
+                copy.add(jMeterTreeNode);
+            }
             guiInstance.getTreeModel().insertNodeInto(copy, target, index++);
             nodesForRemoval.add(nodes[i]);
         }
