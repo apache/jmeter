@@ -141,6 +141,7 @@ It was therefore necessary to change the shortcut.
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]</li>
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
 <li><bugzilla>54847</bugzilla> - Cut &amp; Paste is broken with tree multi-selection</li>
+<li><bugzilla>54870</bugzilla> - Tree D&D may lost leaf nodes (affected nightly build)</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
