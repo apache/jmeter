@@ -141,7 +141,7 @@ It was therefore necessary to change the shortcut.
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]</li>
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
 <li><bugzilla>54847</bugzilla> - Cut &amp; Paste is broken with tree multi-selection</li>
-<li><bugzilla>54870</bugzilla> - Tree D&D may lost leaf nodes (affected nightly build)</li>
+<li><bugzilla>54870</bugzilla> - Tree D&amp;D may lost leaf nodes (affected nightly build)</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -157,6 +157,7 @@ It was therefore necessary to change the shortcut.
 <li><bugzilla>54788</bugzilla> - JMS Point-to-Point Sampler - GUI enhancements to increase readability and ease of use</li>
 <li><bugzilla>54798</bugzilla> - Using subject from EML-file for SMTP Sampler</li>
 <li><bugzilla>54759</bugzilla> - SSLPeerUnverifiedException using HTTPS , property documented</li>
+<li><bugzilla>54896</bugzilla> - JUnit sampler gives only “failed to create an instance of the class” message with constructor problems</li>
 </ul>
 
 <h3>Controllers</h3>
