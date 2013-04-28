@@ -459,7 +459,10 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
             // we should log a warning, but allow the test to keep running
             sresult.setSuccessful(false);
             // this should be externalized to the properties
-            sresult.setResponseMessage("failed to create an instance of the class");
+            sresult.setResponseMessage("Failed to create an instance of the class:"+getClassname()
+                    +", reasons may be missing both empty constructor and one " 
+                    + "String constructor or failure to instanciate constructor," 
+                    + " check warning messages in jmeter log file");
             sresult.setResponseCode(getErrorCode());
         }
         return sresult;
@@ -504,7 +507,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                         strCon = null;
                     }
                 } catch (NoSuchMethodException e) {
-                    log.info("String constructor:: " + e.getMessage());
+                    log.info("Trying to find constructor with one String parameter returned error: " + e.getMessage());
                 }
                 try {
                     con = theclazz.getDeclaredConstructor(new Class[0]);
@@ -512,7 +515,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                         params = new Object[]{};
                     }
                 } catch (NoSuchMethodException e) {
-                    log.info("Empty constructor:: " + e.getMessage());
+                    log.info("Trying to find empty constructor returned error: " + e.getMessage());
                 }
                 try {
                     // if the string constructor is not null, we use it.
@@ -522,13 +525,15 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                         testclass = strCon.newInstance(strParams);
                     } else if (con != null){
                         testclass = con.newInstance(params);
+                    } else {
+                        log.error("No empty constructor nor string constructor found for class:"+theclazz);
                     }
                 } catch (InvocationTargetException e) {
-                    log.warn(e.getMessage());
+                    log.error("Error instanciating class:"+theclazz+":"+e.getMessage(), e);
                 } catch (InstantiationException e) {
-                    log.info(e.getMessage());
+                    log.error("Error instanciating class:"+theclazz+":"+e.getMessage(), e);
                 } catch (IllegalAccessException e) {
-                    log.info(e.getMessage());
+                    log.error("Error instanciating class:"+theclazz+":"+e.getMessage(), e);
                 }
             }
         }
