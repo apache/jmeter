@@ -41,6 +41,7 @@ import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 
 /**
  * GUI interface for a {@link ResponseAssertion}.
@@ -136,6 +137,7 @@ public class AssertionGui extends AbstractAssertionGui {
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     @Override
     public void modifyTestElement(TestElement el) {
+        GuiUtils.stopTableEditing(stringTable);
         configureTestElement(el);
         if (el instanceof ResponseAssertion) {
             ResponseAssertion ra = (ResponseAssertion) el;
@@ -188,7 +190,7 @@ public class AssertionGui extends AbstractAssertionGui {
     @Override
     public void clearGui() {
         super.clearGui();
-
+        GuiUtils.stopTableEditing(stringTable);
         tableModel.clearData();
 
         responseStringButton.setSelected(true);
