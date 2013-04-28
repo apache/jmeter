@@ -461,7 +461,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
             // this should be externalized to the properties
             sresult.setResponseMessage("Failed to create an instance of the class:"+getClassname()
                     +", reasons may be missing both empty constructor and one " 
-                    + "String constructor or failure to instanciate constructor," 
+                    + "String constructor or failure to instantiate constructor," 
                     + " check warning messages in jmeter log file");
             sresult.setResponseCode(getErrorCode());
         }
@@ -529,11 +529,11 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                         log.error("No empty constructor nor string constructor found for class:"+theclazz);
                     }
                 } catch (InvocationTargetException e) {
-                    log.error("Error instanciating class:"+theclazz+":"+e.getMessage(), e);
+                    log.error("Error instantiating class:"+theclazz+":"+e.getMessage(), e);
                 } catch (InstantiationException e) {
-                    log.error("Error instanciating class:"+theclazz+":"+e.getMessage(), e);
+                    log.error("Error instantiating class:"+theclazz+":"+e.getMessage(), e);
                 } catch (IllegalAccessException e) {
-                    log.error("Error instanciating class:"+theclazz+":"+e.getMessage(), e);
+                    log.error("Error instantiating class:"+theclazz+":"+e.getMessage(), e);
                 }
             }
         }
