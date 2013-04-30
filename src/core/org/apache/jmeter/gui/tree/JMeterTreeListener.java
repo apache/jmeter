@@ -144,7 +144,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
     public void valueChanged(TreeSelectionEvent e) {
         log.debug("value changed, updating currentPath");
         currentPath = e.getNewLeadSelectionPath();
-        actionHandler.actionPerformed(new ActionEvent(this, 3333, "edit")); // $NON-NLS-1$
+        actionHandler.actionPerformed(new ActionEvent(this, 3333, ActionNames.EDIT)); // $NON-NLS-1$
     }
 
     @Override
