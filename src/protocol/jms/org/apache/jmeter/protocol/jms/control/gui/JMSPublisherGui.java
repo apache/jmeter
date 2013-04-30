@@ -264,7 +264,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         randomFile.setFilename(sampler.getRandomPath());
         configChoice.setText(sampler.getConfigChoice());
         msgChoice.setText(sampler.getMessageChoice());
-        updateConfig(sampler.getConfigChoice());
         iterations.setText(sampler.getIterations());
         useAuth.setSelected(sampler.isUseAuth());
         jmsUser.setEnabled(useAuth.isSelected());
@@ -273,6 +272,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         useNonPersistentDelivery.setSelected(sampler.getUseNonPersistentDelivery());
         jmsPropertiesPanel.configure(sampler.getJMSProperties());
         updateChoice(msgChoice.getText());
+        updateConfig(sampler.getConfigChoice());
     }
 
     /**
