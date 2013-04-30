@@ -555,7 +555,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             try {
                 ActionRouter.getInstance().getAction(
                         ActionNames.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
-                                new ActionEvent(this,1,ActionNames.SAVE_GRAPHICS));
+                                new ActionEvent(this,event.getID(),ActionNames.SAVE_GRAPHICS));
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
