@@ -21,22 +21,23 @@ package org.apache.jmeter.protocol.mongodb.config;
 import java.net.UnknownHostException;
 
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.mongodb.mongo.MongoDB;
 import org.apache.jmeter.protocol.mongodb.mongo.MongoUtils;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import com.mongodb.MongoOptions;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.WriteConcern;
 
 /**
  */
 public class MongoSourceElement
-    extends AbstractTestElement
-        implements ConfigElement, TestStateListener, TestBean {
+    extends ConfigTestElement
+        implements TestStateListener, TestBean {
 
     /**
      * 
@@ -45,147 +46,63 @@ public class MongoSourceElement
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public final static String CONNECTION = "MongoSourceElement.connection"; //$NON-NLS-1$
-    public final static String SOURCE = "MongoSourceElement.source"; //$NON-NLS-1$
-
-    public final static String AUTO_CONNECT_RETRY = "MongoSourceElement.autoConnectRetry"; //$NON-NLS-1$
-    public final static String CONNECTIONS_PER_HOST = "MongoSourceElement.connectionsPerHost"; //$NON-NLS-1$
-    public final static String CONNECT_TIMEOUT = "MongoSourceElement.connectTimeout"; //$NON-NLS-1$
-    public final static String MAX_AUTO_CONNECT_RETRY_TIME = "MongoSourceElement.maxAutoConnectRetryTime"; //$NON-NLS-1$
-    public final static String MAX_WAIT_TIME = "MongoSourceElement.maxWaitTime"; //$NON-NLS-1$
-    public final static String SOCKET_TIMEOUT = "MongoSourceElement.socketTimeout"; //$NON-NLS-1$
-    public final static String SOCKET_KEEP_ALIVE = "MongoSourceElement.socketKeepAlive"; //$NON-NLS-1$
-    public final static String THREADS_ALLOWED_TO_BLOCK_MULTIPLIER = "MongoSourceElement.threadsAllowedToBlockForConnectionMultiplier"; //$NON-NLS-1$
-
-    public final static String FSYNC = "MongoSourceElement.fsync"; //$NON-NLS-1$
-    public final static String SAFE = "MongoSourceElement.safe"; //$NON-NLS-1$
-    public final static String WAIT_FOR_JOURNALING = "MongoSourceElement.waitForJournaling"; //$NON-NLS-1$
-    public final static String WRITE_OPERATION_NUMBER_OF_SERVERS = "MongoSourceElement.writeOperationNumberOfServers"; //$NON-NLS-1$
-    public final static String WRITE_OPERATION_TIMEOUT = "MongoSourceElement.writeOperationTimeout"; //$NON-NLS-1$
+    private String connection;
+    private String source;
+    private boolean autoConnectRetry;
+    private int connectionsPerHost;
+    private int connectTimeout;
+    private long maxAutoConnectRetryTime;
+    private int maxWaitTime;
+    private int socketTimeout;
+    private boolean socketKeepAlive;
+    private int threadsAllowedToBlockForConnectionMultiplier;
+    private boolean fsync;
+    private boolean safe;
+    private boolean waitForJournaling;
+    private int writeOperationNumberOfServers;
+    private int writeOperationTimeout;
+    private boolean continueOnInsertError;
+    
+//    public final static String CONNECTION = "MongoSourceElement.connection"; //$NON-NLS-1$
+//    public final static String SOURCE = "MongoSourceElement.source"; //$NON-NLS-1$
+//
+//    public final static String AUTO_CONNECT_RETRY = "MongoSourceElement.autoConnectRetry"; //$NON-NLS-1$
+//    public final static String CONNECTIONS_PER_HOST = "MongoSourceElement.connectionsPerHost"; //$NON-NLS-1$
+//    public final static String CONNECT_TIMEOUT = "MongoSourceElement.connectTimeout"; //$NON-NLS-1$
+//    public final static String CONTINUE_ON_INSERT_ERROR = "MongoSourceElement.continueOnInsertError"; //$NON-NLS-1$
+//    public final static String MAX_AUTO_CONNECT_RETRY_TIME = "MongoSourceElement.maxAutoConnectRetryTime"; //$NON-NLS-1$
+//    public final static String MAX_WAIT_TIME = "MongoSourceElement.maxWaitTime"; //$NON-NLS-1$
+//    public final static String SOCKET_TIMEOUT = "MongoSourceElement.socketTimeout"; //$NON-NLS-1$
+//    public final static String SOCKET_KEEP_ALIVE = "MongoSourceElement.socketKeepAlive"; //$NON-NLS-1$
+//    public final static String THREADS_ALLOWED_TO_BLOCK_MULTIPLIER = "MongoSourceElement.threadsAllowedToBlockForConnectionMultiplier"; //$NON-NLS-1$
+//
+//    public final static String FSYNC = "MongoSourceElement.fsync"; //$NON-NLS-1$
+//    public final static String SAFE = "MongoSourceElement.safe"; //$NON-NLS-1$
+//    public final static String WAIT_FOR_JOURNALING = "MongoSourceElement.waitForJournaling"; //$NON-NLS-1$
+//    public final static String WRITE_OPERATION_NUMBER_OF_SERVERS = "MongoSourceElement.writeOperationNumberOfServers"; //$NON-NLS-1$
+//    public final static String WRITE_OPERATION_TIMEOUT = "MongoSourceElement.writeOperationTimeout"; //$NON-NLS-1$
 
     public String getTitle() {
         return this.getName();
     }
 
     public String getConnection() {
-        return getPropertyAsString(CONNECTION);
+        return connection;
     }
 
     public void setConnection(String connection) {
-        setProperty(CONNECTION, connection);
+        this.connection = connection;
     }
 
     public String getSource() {
-        return getPropertyAsString(SOURCE);
+        return source;
     }
 
     public void setSource(String source) {
-        setProperty(SOURCE, source);
+        this.source = source;
     }
 
-    public String getAutoConnectRetry() {
-        return getPropertyAsString(AUTO_CONNECT_RETRY);
-    }
 
-    public void setAutoConnectRetry(String autoConnectRetry) {
-        setProperty(AUTO_CONNECT_RETRY, autoConnectRetry);
-    }
-
-    public String getConnectionsPerHost() {
-        return getPropertyAsString(CONNECTIONS_PER_HOST);
-    }
-
-    public void setConnectionsPerHost(String connectionsPerHost) {
-        setProperty(CONNECTIONS_PER_HOST, connectionsPerHost);
-    }
-
-    public String getConnectTimeout() {
-        return getPropertyAsString(CONNECT_TIMEOUT);
-    }
-
-    public void setConnectTimeout(String connectTimeout) {
-        setProperty(CONNECT_TIMEOUT, connectTimeout);
-    }
-
-    public String getMaxAutoConnectRetryTime() {
-        return getPropertyAsString(MAX_AUTO_CONNECT_RETRY_TIME);
-    }
-
-    public void setMaxAutoConnectRetryTime(String maxAutoConnectRetryTime) {
-        setProperty(MAX_AUTO_CONNECT_RETRY_TIME, maxAutoConnectRetryTime);
-    }
-
-    public String getMaxWaitTime() {
-        return getPropertyAsString(MAX_WAIT_TIME);
-    }
-
-    public void setMaxWaitTime(String maxWaitTime) {
-        setProperty(MAX_WAIT_TIME, maxWaitTime);
-    }
-
-    public String getSocketTimeout() {
-        return getPropertyAsString(SOCKET_TIMEOUT);
-    }
-
-    public void setSocketTimeout(String socketTimeout) {
-        setProperty(SOCKET_TIMEOUT, socketTimeout);
-    }
-
-    public String getSocketKeepAlive() {
-        return getPropertyAsString(SOCKET_KEEP_ALIVE);
-    }
-
-    public void setSocketKeepAlive(String socketKeepAlive) {
-        setProperty(SOCKET_KEEP_ALIVE, socketKeepAlive);
-    }
-
-    public String getThreadsAllowedToBlockForConnectionMultiplier() {
-        return getPropertyAsString(THREADS_ALLOWED_TO_BLOCK_MULTIPLIER);
-    }
-
-    public void setThreadsAllowedToBlockForConnectionMultiplier(String threadsAllowed) {
-        setProperty(THREADS_ALLOWED_TO_BLOCK_MULTIPLIER, threadsAllowed);
-    }
-
-    public String getFsync() {
-        return getPropertyAsString(FSYNC);
-    }
-
-    public void setFsync(String fsync) {
-        setProperty(FSYNC, fsync);
-    }
-
-    public String getSafe() {
-        return getPropertyAsString(SAFE);
-    }
-
-    public void setSafe(String safe) {
-        setProperty(SAFE, safe);
-    }
-
-    public String getWaitForJournaling() {
-        return getPropertyAsString(WAIT_FOR_JOURNALING);
-    }
-
-    public void setWaitForJournaling(String waitForJournaling) {
-        setProperty(WAIT_FOR_JOURNALING, waitForJournaling);
-    }
-
-    public String getWriteOperationNumberOfServers() {
-        return getPropertyAsString(WRITE_OPERATION_NUMBER_OF_SERVERS);
-    }
-
-    public void setWriteOperationNumberOfServers(String writeOperationNumberOfServers) {
-        setProperty(WRITE_OPERATION_NUMBER_OF_SERVERS, writeOperationNumberOfServers);
-    }
-
-    public String getWriteOperationTimeout() {
-        return getPropertyAsString(WRITE_OPERATION_TIMEOUT);
-    }
-
-    public void setWriteOperationTimeout(String writeOperationTimeout) {
-        setProperty(WRITE_OPERATION_TIMEOUT, writeOperationTimeout);
-    }
 
     public static MongoDB getMongoDB(String source) {
 
@@ -219,20 +136,29 @@ public class MongoSourceElement
             log.debug(getTitle() + " testStarted");
         }
 
-        MongoOptions mongoOptions = new MongoOptions();
-        mongoOptions.autoConnectRetry = Boolean.parseBoolean(getAutoConnectRetry());
-        mongoOptions.connectTimeout = Integer.parseInt(getConnectTimeout());
-        mongoOptions.connectionsPerHost = Integer.parseInt(getConnectionsPerHost());
-        mongoOptions.fsync = Boolean.parseBoolean(getFsync());
-        mongoOptions.j = Boolean.parseBoolean(getWaitForJournaling());
-        mongoOptions.maxAutoConnectRetryTime = Integer.parseInt(getMaxAutoConnectRetryTime());
-        mongoOptions.maxWaitTime = Integer.parseInt(getMaxWaitTime());
-        mongoOptions.safe = Boolean.parseBoolean(getSafe());
-        mongoOptions.socketKeepAlive = Boolean.parseBoolean(getSocketKeepAlive());
-        mongoOptions.socketTimeout = Integer.parseInt(getSocketTimeout());
-        mongoOptions.threadsAllowedToBlockForConnectionMultiplier = Integer.parseInt(getThreadsAllowedToBlockForConnectionMultiplier());
-        mongoOptions.w = Integer.parseInt(getWriteOperationNumberOfServers());
-        mongoOptions.wtimeout = Integer.parseInt(getWriteOperationTimeout());
+        MongoClientOptions.Builder builder = MongoClientOptions.builder()
+                .autoConnectRetry(getAutoConnectRetry())
+                .connectTimeout(getConnectTimeout())
+                .connectionsPerHost(getConnectionsPerHost())
+                .maxAutoConnectRetryTime(getMaxAutoConnectRetryTime())
+                .maxWaitTime(getMaxWaitTime())
+                .socketKeepAlive(getSocketKeepAlive())
+                .socketTimeout(getSocketTimeout())
+                .threadsAllowedToBlockForConnectionMultiplier(
+                        getThreadsAllowedToBlockForConnectionMultiplier());
+     
+        if(getSafe()) {
+            builder.writeConcern(WriteConcern.SAFE);
+        } else {
+            builder.writeConcern(new WriteConcern(
+                    getWriteOperationNumberOfServers(),
+                    getWriteOperationTimeout(),
+                    getFsync(),
+                    getWaitForJournaling(),
+                    getContinueOnInsertError()
+                    ));
+        }
+        MongoClientOptions mongoOptions = builder.build();
 
         if(log.isDebugEnabled()) {
             log.debug("options : " + mongoOptions.toString());
@@ -271,5 +197,202 @@ public class MongoSourceElement
     @Override
     public void testEnded(String s) {
         testEnded();
+    }
+
+    /**
+     * @return the autoConnectRetry
+     */
+    public boolean getAutoConnectRetry() {
+        return autoConnectRetry;
+    }
+
+    /**
+     * @param autoConnectRetry the autoConnectRetry to set
+     */
+    public void setAutoConnectRetry(boolean autoConnectRetry) {
+        this.autoConnectRetry = autoConnectRetry;
+    }
+
+    /**
+     * @return the connectionsPerHost
+     */
+    public int getConnectionsPerHost() {
+        return connectionsPerHost;
+    }
+
+    /**
+     * @param connectionsPerHost the connectionsPerHost to set
+     */
+    public void setConnectionsPerHost(int connectionsPerHost) {
+        this.connectionsPerHost = connectionsPerHost;
+    }
+
+    /**
+     * @return the connectTimeout
+     */
+    public int getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    /**
+     * @param connectTimeout the connectTimeout to set
+     */
+    public void setConnectTimeout(int connectTimeout) {
+        this.connectTimeout = connectTimeout;
+    }
+
+    /**
+     * @return the maxAutoConnectRetryTime
+     */
+    public long getMaxAutoConnectRetryTime() {
+        return maxAutoConnectRetryTime;
+    }
+
+    /**
+     * @param maxAutoConnectRetryTime the maxAutoConnectRetryTime to set
+     */
+    public void setMaxAutoConnectRetryTime(long maxAutoConnectRetryTime) {
+        this.maxAutoConnectRetryTime = maxAutoConnectRetryTime;
+    }
+
+    /**
+     * @return the maxWaitTime
+     */
+    public int getMaxWaitTime() {
+        return maxWaitTime;
+    }
+
+    /**
+     * @param maxWaitTime the maxWaitTime to set
+     */
+    public void setMaxWaitTime(int maxWaitTime) {
+        this.maxWaitTime = maxWaitTime;
+    }
+
+    /**
+     * @return the socketTimeout
+     */
+    public int getSocketTimeout() {
+        return socketTimeout;
+    }
+
+    /**
+     * @param socketTimeout the socketTimeout to set
+     */
+    public void setSocketTimeout(int socketTimeout) {
+        this.socketTimeout = socketTimeout;
+    }
+
+    /**
+     * @return the socketKeepAlive
+     */
+    public boolean getSocketKeepAlive() {
+        return socketKeepAlive;
+    }
+
+    /**
+     * @param socketKeepAlive the socketKeepAlive to set
+     */
+    public void setSocketKeepAlive(boolean socketKeepAlive) {
+        this.socketKeepAlive = socketKeepAlive;
+    }
+
+    /**
+     * @return the threadsAllowedToBlockForConnectionMultiplier
+     */
+    public int getThreadsAllowedToBlockForConnectionMultiplier() {
+        return threadsAllowedToBlockForConnectionMultiplier;
+    }
+
+    /**
+     * @param threadsAllowedToBlockForConnectionMultiplier the threadsAllowedToBlockForConnectionMultiplier to set
+     */
+    public void setThreadsAllowedToBlockForConnectionMultiplier(
+            int threadsAllowedToBlockForConnectionMultiplier) {
+        this.threadsAllowedToBlockForConnectionMultiplier = threadsAllowedToBlockForConnectionMultiplier;
+    }
+
+    /**
+     * @return the fsync
+     */
+    public boolean getFsync() {
+        return fsync;
+    }
+
+    /**
+     * @param fsync the fsync to set
+     */
+    public void setFsync(boolean fsync) {
+        this.fsync = fsync;
+    }
+
+    /**
+     * @return the safe
+     */
+    public boolean getSafe() {
+        return safe;
+    }
+
+    /**
+     * @param safe the safe to set
+     */
+    public void setSafe(boolean safe) {
+        this.safe = safe;
+    }
+
+    /**
+     * @return the waitForJournaling
+     */
+    public boolean getWaitForJournaling() {
+        return waitForJournaling;
+    }
+
+    /**
+     * @param waitForJournaling the waitForJournaling to set
+     */
+    public void setWaitForJournaling(boolean waitForJournaling) {
+        this.waitForJournaling = waitForJournaling;
+    }
+
+    /**
+     * @return the writeOperationNumberOfServers
+     */
+    public int getWriteOperationNumberOfServers() {
+        return writeOperationNumberOfServers;
+    }
+
+    /**
+     * @param writeOperationNumberOfServers the writeOperationNumberOfServers to set
+     */
+    public void setWriteOperationNumberOfServers(int writeOperationNumberOfServers) {
+        this.writeOperationNumberOfServers = writeOperationNumberOfServers;
+    }
+
+    /**
+     * @return the writeOperationTimeout
+     */
+    public int getWriteOperationTimeout() {
+        return writeOperationTimeout;
+    }
+
+    /**
+     * @param writeOperationTimeout the writeOperationTimeout to set
+     */
+    public void setWriteOperationTimeout(int writeOperationTimeout) {
+        this.writeOperationTimeout = writeOperationTimeout;
+    }
+
+    /**
+     * @return the continueOnInsertError
+     */
+    public boolean getContinueOnInsertError() {
+        return continueOnInsertError;
+    }
+
+    /**
+     * @param continueOnInsertError the continueOnInsertError to set
+     */
+    public void setContinueOnInsertError(boolean continueOnInsertError) {
+        this.continueOnInsertError = continueOnInsertError;
     }
 }
