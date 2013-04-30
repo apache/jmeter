@@ -108,6 +108,7 @@ It was therefore necessary to change the shortcut.
 
 <h3>Other Samplers</h3>
 <ul>
+<li><bugzilla>54913</bugzilla> - JMSPublisherGui incorrectly restore its state</li>
 </ul>
 
 <h3>Controllers</h3>
