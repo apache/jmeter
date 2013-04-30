@@ -52,11 +52,12 @@ public class MongoSourceElementBeanInfo
 
         //http://api.mongodb.org/java/2.7.2/com/mongodb/MongoOptions.html/
         createPropertyGroup("writeConcern", new String[] {
-                "fsync",
                 "safe",
+                "fsync",
                 "waitForJournaling",
                 "writeOperationNumberOfServers",
-                "writeOperationTimeout" });
+                "writeOperationTimeout",
+                "continueOnInsertError"});
 
         PropertyDescriptor p = property("connection");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -105,6 +106,9 @@ public class MongoSourceElementBeanInfo
         p = property("writeOperationTimeout");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "0");
+        p = property("continueOnInsertError");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
 
         if(log.isDebugEnabled()) {
             for (PropertyDescriptor pd : getPropertyDescriptors()) {

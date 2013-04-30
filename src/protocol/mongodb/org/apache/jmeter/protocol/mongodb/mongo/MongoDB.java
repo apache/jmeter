@@ -25,7 +25,8 @@ import org.apache.log.Logger;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
-import com.mongodb.MongoOptions;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.ServerAddress;
 
 /**
@@ -39,8 +40,8 @@ public class MongoDB {
 
     public MongoDB(
             List<ServerAddress> serverAddresses,
-            MongoOptions mongoOptions) {
-        mongo = new Mongo(serverAddresses, mongoOptions);   
+            MongoClientOptions mongoOptions) {
+        mongo = new MongoClient(serverAddresses, mongoOptions);   
     }
 
     public DB getDB(String database, String username, String password) {
