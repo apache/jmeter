@@ -205,6 +205,7 @@ It was therefore necessary to change the shortcut.
 <li>Updated to commons-logging 1.1.2 (from 1.1.1)</li>
 <li>Updated to HttpComponents Client 4.2.5 (from 4.2.3)</li>
 <li>Updated to HttpComponents Core 4.2.4 (from 4.2.3)</li>
+<li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants</li>
 </ul>
 
 </section> 
