@@ -24,8 +24,8 @@ import java.io.StringReader;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -34,12 +34,10 @@ import org.jdom.input.SAXBuilder;
  * Checks if the result is a well-formed XML content using jdom
  * 
  */
-public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion {
+public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
-
-    private static final char NEW_LINE = '\n'; // $NON-NLS-1$
 
     // one builder for all requests in a thread
     private static final ThreadLocal<SAXBuilder> myBuilder = new ThreadLocal<SAXBuilder>() {
@@ -59,15 +57,11 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
     public AssertionResult getResult(SampleResult response) {
         // no error as default
         AssertionResult result = new AssertionResult(getName());
-        byte[] responseData = response.getResponseData();
-        if (responseData.length == 0) {
+        String resultData = response.getResponseDataAsString();
+        if (resultData.length() == 0) {
             return result.setResultForNull();
         }
         result.setFailure(false);
-
-        // the result data
-        String resultData = new String(getResultBody(responseData)); // TODO - charset?
-
         SAXBuilder builder = myBuilder.get();
 
         try {
@@ -85,15 +79,12 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         return result;
     }
 
-    /**
-     * Return the body of the http return.
-     */
-    private byte[] getResultBody(byte[] resultData) {
-        for (int i = 0; i < (resultData.length - 1); i++) {
-            if (resultData[i] == NEW_LINE && resultData[i + 1] == NEW_LINE) {
-                return JOrphanUtils.getByteArraySlice(resultData, (i + 2), resultData.length - 1);
-            }
-        }
-        return resultData;
+    @Override
+    public void threadStarted() {
+    }
+
+    @Override
+    public void threadFinished() {
+        myBuilder.set(null);
     }
 }
