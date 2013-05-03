@@ -128,6 +128,7 @@ It was therefore necessary to change the shortcut.
 <li><bugzilla>54540</bugzilla> - "HTML Parameter Mask" are not marked deprecated in the IHM</li>
 <li><bugzilla>54575</bugzilla> - CSS/JQuery Extractor : Choosing JODD Implementation always uses JSOUP</li>
 <li><bugzilla>54901</bugzilla> - Response Assertion GUI behaves weirdly</li>
+<li><bugzilla>54924</bugzilla> - XMLAssertion uses JMeter JVM file.encoding instead of response encoding and does not clean threadlocal variable</li>
 </ul>
 
 <h3>Functions</h3>
