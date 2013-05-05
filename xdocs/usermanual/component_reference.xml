@@ -1862,15 +1862,38 @@ If omitted, output is captured and returned as the response data.</property>
 <property name="Expected Return Code" required="No">Expected return code for System Call, required if "Check Return Code" is checked.</property>
 </component>
 
-<component name="MongoDB Script" index="&sect-num;.1.21" width="519" height="289" screenshot="mongodb-sampler.png">
-<description>
-TODO</description>
-<properties>
-        
-</properties>
-<links>
-</links>
+<component name="MongoDB Script" index="&sect-num;.1.21" width="1213" height="320" screenshot="mongodb-script.png">
 
+<description><p>This sampler lets you send an Request to a MongoDB.</p>
+<p>Before using this you need to set up a
+<complink name="MongoDB Source Config"/> Configuration element
+</p>
+<p>
+<b>Note:</b> The latency time is set from the time it took to acquire a connection.
+</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+        <property name="MongoDB Source" required="Yes">
+        Name of the JMeter variable that the MongoDB connection is bound to.
+        This must agree with the 'MongoDB Source' field of a MongoDB Source Config.
+        </property>
+        <property name="Database Name" required="Yes">Database Name, will be used in your script
+        </property>
+        <property name="Username" required="No">
+        </property>
+        <property name="Password" required="No">
+        </property>        
+        <property name="Script" required="Yes">
+        Mongo script as it would be used in MongoDB shell
+        </property>        
+</properties>
+
+<links>
+        <complink name="MongoDB Source Config"/>
+</links>
+<note>Ensure Variable Name is unique accross Test Plan.</note>
 </component>
 
 <a href="#">^</a>
@@ -3932,15 +3955,36 @@ GUI that they can use while developing new JMeter components.</p>
 
 </component>
 
-<component name="MongoDB Source Config" index="&sect-num;.4.18" width="519" height="289" screenshot="mongodb-config.png">
-<description>
-TODO</description>
-<properties>
-        
-</properties>
-<links>
-</links>
 
+<component name="MongoDB Source Config" index="&sect-num;.4.18" 
+                 width="1233" height="618" screenshot="mongodb-source-config.png">
+    <description>Creates a MongoDB connection (used by <complink name="MongoDB Script"/>Sampler)
+     from the supplied Connection settings. Each thread gets its own connection.
+     The connection configuration name is used by the JDBC Sampler to select the appropriate
+     connection.
+    </description>
+    <properties>
+        <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
+        <property name="Server Address List" required="Yes">Mongo DB Servers</property>
+        <property name="MongoDB Source required="Yes">The name of the variable the connection is tied to.  
+        <b>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</b>
+        </property>
+        
+        <property name="Keep Trying" required="No">
+        </property>
+        <property name="Maximum connections per host" required="No"></property>
+        <property name="Connection timeout" required="No"></property>
+        <property name="Maximum retry time" required="No"></property>
+        <property name="Maximum wait time" required="No"></property>
+        <property name="Socket timeout" required="No"></property>
+        <property name="Socket keep alive" required="No"></property>
+        <property name="Write Concern : Safe" required="No"></property>
+        <property name="Write Concern : Fsync" required="No"></property>
+        <property name="Write Concern : Wait for Journal" required="No"></property>
+        <property name="Write Concern : Wait for servers" required="No"></property>
+        <property name="Write Concern : Wait timeout" required="No"></property>
+        <property name="Write Concern : Continue on error" required="No"></property>
+    </properties>
 </component>
 
 <a href="#">^</a>
