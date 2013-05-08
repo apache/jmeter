@@ -3966,7 +3966,7 @@ GUI that they can use while developing new JMeter components.</p>
     <properties>
         <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
         <property name="Server Address List" required="Yes">Mongo DB Servers</property>
-        <property name="MongoDB Source required="Yes">The name of the variable the connection is tied to.  
+        <property name="MongoDB Source" required="Yes">The name of the variable the connection is tied to.  
         <b>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</b>
         </property>
         
