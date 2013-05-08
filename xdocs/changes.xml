@@ -96,6 +96,10 @@ The original key sequence (Ctrl+F1) did not work in some locations (it is consum
 It was therefore necessary to change the shortcut.
 </p>
 
+<p>
+Webservice (SOAP) Request has been removed by default from GUI as Element is deprecated (use HTTP Sampler with Raw Post body), if you need to show it, see property not_in_menu in jmeter.properties
+</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
