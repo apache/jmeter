@@ -207,6 +207,15 @@ It was therefore necessary to change the shortcut.
 <li>Updated to commons-logging 1.1.2 (from 1.1.1)</li>
 <li>Updated to HttpComponents Client 4.2.5 (from 4.2.3)</li>
 <li>Updated to HttpComponents Core 4.2.4 (from 4.2.3)</li>
+<li>Updated to commons-codec 1.8 (from 1.6)</li>
+<li>Updated to commons-io 2.4 (from 2.2)</li>
+<li>Updated to commons-net 3.2 (from 3.1)</li>
+<li>Updated to jdom-1.1.3 (from 1.1.2)</li>
+<li>Updated to jodd-lagarto and jodd-core 3.4.3 (from 3.4.1)</li>
+<li>Updated to junit 4.11 (from 4.10)</li>
+<li>Updated to slf4j-api 1.7.5 (from 1.7.2)</li>
+<li>Updated to xmlgraphics-commons 1.5 (from 1.3.1)</li>
+<li>Updated to xstream 1.4.4 (from 1.4.2)</li>
 <li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants</li>
 </ul>
 

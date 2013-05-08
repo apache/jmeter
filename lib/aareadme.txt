@@ -28,7 +28,7 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
-commons-codec-1.6
+commons-codec-1.8
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - used by commons-httpclient-3.1
@@ -46,7 +46,7 @@ http://hc.apache.org/downloads.cgi
 - httpclient version of HTTP sampler
 - Cookie manager implementation
 
-commons-io-2.2
+commons-io-2.4
 --------------
 http://commons.apache.org/downloads/download_io.cgi
 - FTPSampler
@@ -66,12 +66,12 @@ commons-lang3-3.1
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
 
-commons-logging-1.1.1
+commons-logging-1.1.2
 ---------------------
 http://commons.apache.org/downloads/download_logging.cgi
 - httpclient
 
-commons-net-3.1
+commons-net-3.2
 -----------------
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
@@ -103,18 +103,18 @@ jCharts-0.7.5 (org.jCharts)
 http://jcharts.sourceforge.net/downloads.html
 - AxisGraph,LineGraph,LineChart
 
-jdom-1.1.2
+jdom-1.1.3
 --------
 http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-jodd-core-3.4.1
+jodd-core-3.4.3
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.4.1
+jodd-lagarto-3.4.3
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
@@ -136,7 +136,7 @@ jTidy-r938
 - org.xml.sax - various
 - XPathUtil (XPath assertion)
 
-junit 4.10
+junit 4.11
 -----------
 - unit tests, JUnit sampler
 
@@ -165,7 +165,7 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.2
+slf4j-api-1.7.5
 ----------------
 http://www.slf4j.org/
 - jodd-core
@@ -204,7 +204,7 @@ http://xerces.apache.org/xerces2-j/download.cgi
 
 The x* jars above are used for XML handling
 
-xmlgraphics-commons-1.3.1 (org.apache.xmlgraphics.image.codec)
+xmlgraphics-commons-1.5 (org.apache.xmlgraphics.image.codec)
 ------------------
 http://xmlgraphics.apache.org/commons/download.html
 - SaveGraphicsService
@@ -222,7 +222,7 @@ or
 http://www.extreme.indiana.edu/dist/java-repository/xpp3/distributions/
 - xstream
 
-xstream-1.4.2
+xstream-1.4.4
 -------------
 http://xstream.codehaus.org/download.html
 - SaveService
