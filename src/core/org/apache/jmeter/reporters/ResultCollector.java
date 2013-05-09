@@ -107,6 +107,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     //@GuardedBy("LOCK")
     private static final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
+    /**
+     * Shutdown Hook that ensures PrintWriter is flushed is CTRL+C or kill is called during a test
+     */
+    //@GuardedBy("LOCK")
+    private static Thread shutdownHook;
+
     /*
      * Keep track of the file writer and the configuration,
      * as the instance used to close them is not the same as the instance that creates
@@ -141,27 +147,13 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     /** the summarizer to which this result collector will forward the samples */
     private volatile Summariser summariser;
 
-    /**
-     * Shutdown Hook that ensures PrintWriter is flushed is CTRL+C or kill is called during a test
-     */
-    private Thread shutdownHook;
-    
-    private static final class JMeterShutdownHook implements Runnable {
-        private static final Logger log = LoggingManager.getLoggerFor(JMeterShutdownHook.class.getName());
-        private ResultCollector collector;
-
-        public JMeterShutdownHook(ResultCollector collector) {
-            this.collector = collector;
-        }
+    private static final class ShutdownHook implements Runnable {
 
         @Override
         public void run() {
             log.warn("Shutdown hook started");
-            if(collector.inTest) {
-                synchronized (LOCK) {
-                    collector.flushFileOutput();                    
-                }
-                log.warn("Shutdown hook flushed file");
+            synchronized (LOCK) {
+                flushFileOutput();                    
             }
             log.warn("Shutdown hook ended");
         }     
@@ -179,7 +171,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         setSuccessOnlyLogging(false);
         setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
         summariser = summer;
-        this.shutdownHook = new Thread(new JMeterShutdownHook(this));
     }
 
     // Ensure that the sample save config is not shared between copied nodes
@@ -274,8 +265,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         synchronized(LOCK){
             instanceCount--;
             if (instanceCount <= 0) {
-                finalizeFileOutput();
+                // No need for the hook now
                 Runtime.getRuntime().removeShutdownHook(shutdownHook);
+                finalizeFileOutput();
                 inTest = false;
             }
         }
@@ -287,8 +279,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     @Override
     public void testStarted(String host) {
-        Runtime.getRuntime().addShutdownHook(shutdownHook);
         synchronized(LOCK){
+            if (instanceCount == 0) { // Only add the hook once
+                shutdownHook = new Thread(new ShutdownHook());
+                Runtime.getRuntime().addShutdownHook(shutdownHook);
+            }
             instanceCount++;
             try {
                 initializeFileOutput();
@@ -599,7 +594,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     /**
      * Flush PrintWriter, called by Shutdown Hook to ensure no data is lost
      */
-    private void flushFileOutput() {
+    private static void flushFileOutput() {
         for(Map.Entry<String,ResultCollector.FileEntry> me : files.entrySet()){
             log.debug("Flushing: "+me.getKey());
             FileEntry fe = me.getValue();
