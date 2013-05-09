@@ -202,6 +202,7 @@ Webservice (SOAP) Request has been removed by default from GUI as Element is dep
 <li><bugzilla>54844</bugzilla> - Set the application icon on Mac Os</li>
 <li><bugzilla>54834</bugzilla> - Improve Drag &amp; Drop in the jmeter tree</li>
 <li><bugzilla>54864</bugzilla> - Enable multi selection drag &amp; drop in the tree without having to start dragging before releasing Shift or Control </li>
+<li><bugzilla>54945</bugzilla> - Add Shutdown Hook to enable trapping kill or CTRL+C signals</li>
 </ul>
 
 <h2>Non-functional changes</h2>
