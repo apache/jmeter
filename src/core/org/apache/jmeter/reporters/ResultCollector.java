@@ -142,6 +142,32 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private volatile Summariser summariser;
 
     /**
+     * Shutdown Hook that ensures PrintWriter is flushed is CTRL+C or kill is called during a test
+     */
+    private Thread shutdownHook;
+    
+    private static final class JMeterShutdownHook implements Runnable {
+        private static final Logger log = LoggingManager.getLoggerFor(JMeterShutdownHook.class.getName());
+        private ResultCollector collector;
+
+        public JMeterShutdownHook(ResultCollector collector) {
+            this.collector = collector;
+        }
+
+        @Override
+        public void run() {
+            log.warn("Shutdown hook started");
+            if(collector.inTest) {
+                synchronized (LOCK) {
+                    collector.flushFileOutput();                    
+                }
+                log.warn("Shutdown hook flushed file");
+            }
+            log.warn("Shutdown hook ended");
+        }     
+    }
+    
+    /**
      * No-arg constructor.
      */
     public ResultCollector() {
@@ -153,6 +179,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         setSuccessOnlyLogging(false);
         setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
         summariser = summer;
+        this.shutdownHook = new Thread(new JMeterShutdownHook(this));
     }
 
     // Ensure that the sample save config is not shared between copied nodes
@@ -248,6 +275,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             instanceCount--;
             if (instanceCount <= 0) {
                 finalizeFileOutput();
+                Runtime.getRuntime().removeShutdownHook(shutdownHook);
                 inTest = false;
             }
         }
@@ -259,6 +287,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     @Override
     public void testStarted(String host) {
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
         synchronized(LOCK){
             instanceCount++;
             try {
@@ -567,6 +596,20 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
+    /**
+     * Flush PrintWriter, called by Shutdown Hook to ensure no data is lost
+     */
+    private void flushFileOutput() {
+        for(Map.Entry<String,ResultCollector.FileEntry> me : files.entrySet()){
+            log.debug("Flushing: "+me.getKey());
+            FileEntry fe = me.getValue();
+            fe.pw.flush();
+            if (fe.pw.checkError()){
+                log.warn("Problem detected during use of "+me.getKey());
+            }
+        }
+    }
+    
     private void finalizeFileOutput() {
         for(Map.Entry<String,ResultCollector.FileEntry> me : files.entrySet()){
             log.debug("Closing: "+me.getKey());
