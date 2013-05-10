@@ -5586,17 +5586,28 @@ You also need to set up your browser to use the JMeter proxy port as the proxy f
 Do not use JMeter as the proxy for any other request types - FTP, etc. - as the JMeter proxy cannot handle them.
 </p>
 <p>
-When recording HTTPS, the JMeter proxy server uses a dummy certificate to enable it to accept the SSL connection from
+<b>HTTPS recording</b><br/>
+JMeter proxy server uses a dummy certificate to enable it to accept the SSL connection from
 the browser. This certificate is not one of the certificates that browsers normally trust, and will not be for the
-correct host, so the browser should display a dialogue asking if you want to accept the certificate or not. For example:
+correct host. <br/>
+As a consequence: 
+<ul>
+<li>If the browser hasn't already registered a certificate for the domain of your URL, it should display a dialogue asking if you want to accept the certificate or not. For example:<br/>
 <code>
 1) The server's name "www.example.com" does not match the certificate's name
-   "JMeter Proxy". Somebody may be trying to eavesdrop on you.
+   "JMeter Proxy". Somebody may be trying to eavesdrop on you.<br/>
 2) The certificate for "JMeter Proxy" is signed by the unknown Certificate Authority
-   "JMeter Proxy". It is not possible to verify that this is a valid certificate.
-</code> 
+   "JMeter Proxy". It is not possible to verify that this is a valid certificate.<br/>
+</code> <br/>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it. You should only accept the certificate temporarily.
+Browsers only prompt this dialogue for the certificate of the main url, not for the resources loaded in the page, such as images, css or javascript files hosted on a secured external CDN. 
+If you have such resources (gmail has for example), you'll have to first browse manually to these other domains in order to accept JMeter's certificate for them. 
+Check in jmeter.log for secure domains that you need to register certificate for.
+</li>
+<li>If the browser has already registered a validated certificate for this domain, the browser will detect JMeter as a security breach and will refuse to load the page. If so, you have to remove the trusted certificate from your browser's keystore.
+</li>
+</ul>
 </p>
 <p>
 The following properties can be used to change the certificate that is used:
