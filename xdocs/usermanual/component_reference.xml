@@ -1868,9 +1868,6 @@ If omitted, output is captured and returned as the response data.</property>
 <p>Before using this you need to set up a
 <complink name="MongoDB Source Config"/> Configuration element
 </p>
-<p>
-<b>Note:</b> The latency time is set from the time it took to acquire a connection.
-</p>
 </description>
 
 <properties>
@@ -3971,19 +3968,60 @@ GUI that they can use while developing new JMeter components.</p>
         </property>
         
         <property name="Keep Trying" required="No">
+            If true, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
+            There is maximum amount of time to keep retrying, which is 15s by default.<br/>This can be useful to avoid some exceptions being thrown when a server is down temporarily by blocking the operations.
+            <br/>It also can be useful to smooth the transition to a new master (so that a new master is elected within the retry time).<br/>
+            Note that when using this flag\:
+            <br/>- for a replica set, the driver will trying to connect to the old master for that time, instead of failing over to the new one right away 
+            <br/>- this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.<br/>
+            Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations. <br/>
+            Default is false.
         </property>
         <property name="Maximum connections per host" required="No"></property>
-        <property name="Connection timeout" required="No"></property>
-        <property name="Maximum retry time" required="No"></property>
-        <property name="Maximum wait time" required="No"></property>
-        <property name="Socket timeout" required="No"></property>
-        <property name="Socket keep alive" required="No"></property>
-        <property name="Write Concern : Safe" required="No"></property>
-        <property name="Write Concern : Fsync" required="No"></property>
-        <property name="Write Concern : Wait for Journal" required="No"></property>
-        <property name="Write Concern : Wait for servers" required="No"></property>
-        <property name="Write Concern : Wait timeout" required="No"></property>
-        <property name="Write Concern : Continue on error" required="No"></property>
+        <property name="Connection timeout" required="No">
+            The connection timeout in milliseconds.<br/>It is used solely when establishing a new connection Socket.connect(java.net.SocketAddress, int)<br/>Default is 0 and means no timeout.
+        </property>
+        <property name="Maximum retry time" required="No">
+            The maximum amount of time in MS to spend retrying to open connection to the same server.<br/>Default is 0, which means to use the default 15s if autoConnectRetry is on.
+        </property>
+        <property name="Maximum wait time" required="No">
+            The maximum wait time in ms that a thread may wait for a connection to become available.<br/>Default is 120,000.
+        </property>
+        <property name="Socket timeout" required="No">
+            The socket timeout in milliseconds It is used for I/O socket read and write operations Socket.setSoTimeout(int)<br/>Default is 0 and means no timeout.
+        </property>
+        <property name="Socket keep alive" required="No">
+            This flag controls the socket keep alive feature that keeps a connection alive through firewalls Socket.setKeepAlive(boolean)<br/>
+            Default is false.
+        </property>
+        <property name="ThreadsAllowedToBlockForConnectionMultiplier" required="No">
+        This multiplier, multiplied with the connectionsPerHost setting, gives the maximum number of threads that may be waiting for a connection to become available from the pool.<br/>
+        All further threads will get an exception right away.<br/>
+        For example if connectionsPerHost is 10 and threadsAllowedToBlockForConnectionMultiplier is 5, then up to 50 threads can wait for a connection.<br/>
+        Default is 5.
+        </property>
+        <property name="Write Concern : Safe" required="No">
+            If true the driver will use a WriteConcern of WriteConcern.SAFE for all operations.<br/>
+            If w, wtimeout, fsync or j are specified, this setting is ignored.<br/>
+            Default is false.
+        </property>
+        <property name="Write Concern : Fsync" required="No">
+            The fsync value of the global WriteConcern.<br/>
+            Default is false.
+        </property>
+        <property name="Write Concern : Wait for Journal" required="No">
+            The j value of the global WriteConcern.<br/>
+            Default is false.
+        </property>
+        <property name="Write Concern : Wait for servers" required="No">
+            The w value of the global WriteConcern.<br/>Default is 0.
+        </property>
+        <property name="Write Concern : Wait timeout" required="No">
+            The wtimeout value of the global WriteConcern.<br/>Default is 0.
+        </property>
+        <property name="Write Concern : Continue on error" required="No">
+            If batch inserts should continue after the first error
+        </property>
     </properties>
 </component>
 
