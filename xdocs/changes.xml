@@ -185,6 +185,7 @@ Webservice (SOAP) Request has been removed by default from GUI as Element is dep
 
 <h3>Functions</h3>
 <ul>
+<li><bugzilla>54991</bugzilla> - Add functions to encode/decode URL encoded chars (__urlencode and __urldecode)</li>
 </ul>
 
 <h3>I18N</h3>
