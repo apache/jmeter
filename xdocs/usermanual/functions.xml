@@ -126,6 +126,8 @@ Alternatively, just use / instead for the path separator - e.g. C:/test/${test} 
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__urldecode">urldecode</a></td><td>Decode a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
+        <tr><td>String</td><td> <a href="#__urlencode">urlencode</a></td><td>Encode a string to a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
 </table>
 <p></p>
@@ -1149,7 +1151,50 @@ becomes:
 </properties>
 </component>
 
-<component index="&sect-num;.5.26" name="__FileToString">
+<component index="&sect-num;.5.26" name="__urldecode">
+<description>
+    <p>
+Function to decode a application/x-www-form-urlencoded string.
+Note: use UTF-8 as the encoding scheme.
+</p>
+<p>
+For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code> would get converted to
+ <code>Word &quot;school&quot; is &quot;&#233;cole&quot; in french</code>.
+</p>
+    <p>
+    Uses Java class <a href="http://docs.oracle.com/javase/6/docs/api/java/net/URLDecoder.html">URLDecoder</a>.
+    </p>
+    </description>
+
+<properties>
+        <property name="String to decode" required="Yes">
+        The string with URL encoded chars to decode.
+        </property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.27" name="__urlencode">
+<description>
+    <p>
+Function to encode a string to a application/x-www-form-urlencoded string.
+</p>
+<p>
+For example, the string <code>Word &quot;school&quot; is &quot;&#233;cole&quot; in french</code> would get converted to
+ <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code>.
+</p>
+    <p>
+    Uses Java class <a href="http://docs.oracle.com/javase/6/docs/api/java/net/URLEncoder.html">URLEncoder</a>.
+    </p>
+    </description>
+
+<properties>
+        <property name="String to encode" required="Yes">
+        String to encode in URL encoded chars.
+        </property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.28" name="__FileToString">
 
 <description>
     <p>
@@ -1173,7 +1218,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 <p>The file name, encoding and reference name parameters are resolved every time the function is executed.</p>
 </component>
 
-<component index="&sect-num;.5.27" name="__samplerName">
+<component index="&sect-num;.5.29" name="__samplerName">
 
 <description>
     <p>
@@ -1196,7 +1241,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 </properties>
 </component>
 
-<component index="&sect-num;.5.28" name="__TestPlanName">
+<component index="&sect-num;.5.30" name="__TestPlanName">
 
 <description>
     <p>
@@ -1205,7 +1250,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 </description>
 </component>
 
-<component index="&sect-num;.5.29" name="__escapeOroRegexpChars">
+<component index="&sect-num;.5.31" name="__escapeOroRegexpChars">
 <description>
     <p>
 Function which escapes the ORO Regexp meta characters, it is the equivalent of \Q \E in Java Regexp Engine.
