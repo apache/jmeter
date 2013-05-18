@@ -34,24 +34,25 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
-import org.apache.jorphan.gui.JLabeledTextArea;
-import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.ObjectTableModel;
 
 /**
  * Show detail of a Row
  */
-public class RowDetailDialog extends JDialog implements ActionListener {
+public class RowDetailDialog extends JDialog implements ActionListener, DocumentListener {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 6578889215615435475L;
 
     /** Command for moving a row up in the table. */
@@ -65,17 +66,25 @@ public class RowDetailDialog extends JDialog implements ActionListener {
 
     private static final String UPDATE = "update"; // $NON-NLS-1$
 
-    private JLabeledTextField nameTF;
+    private JLabel nameLabel;
 
-    private JLabeledTextArea valueTA;
+    private JTextField nameTF;
+
+    private JLabel valueLabel;
+
+    private JTextArea valueTA;
 
     private JButton nextButton;
 
     private JButton previousButton;
+    
+    private JButton closeButton;
 
     private ObjectTableModel tableModel;
 
     private int selectedRow;
+    
+    private boolean textChanged = true; // change to false after the first insert
 
 
     public RowDetailDialog() {
@@ -129,15 +138,27 @@ public class RowDetailDialog extends JDialog implements ActionListener {
     private void init() {
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
-        nameTF = new JLabeledTextField(JMeterUtils.getResString("name"), 20); //$NON-NLS-1$
-        valueTA = new JLabeledTextArea(JMeterUtils.getResString("value")); //$NON-NLS-1$
+        nameLabel = new JLabel(JMeterUtils.getResString("name")); //$NON-NLS-1$
+        nameTF = new JTextField(JMeterUtils.getResString("name"), 20); //$NON-NLS-1$
+        nameTF.getDocument().addDocumentListener(this);
+        JPanel namePane = new JPanel(new BorderLayout());
+        namePane.add(nameLabel, BorderLayout.WEST);
+        namePane.add(nameTF, BorderLayout.CENTER);
+
+        valueLabel = new JLabel(JMeterUtils.getResString("value")); //$NON-NLS-1$
+        valueTA = new JTextArea();
+        valueTA.setLineWrap(true);
+        valueTA.setWrapStyleWord(true);
+        valueTA.getDocument().addDocumentListener(this);
         valueTA.setPreferredSize(new Dimension(450, 300));
         setValues(selectedRow);
-        JPanel detailPanel = new JPanel();
-        detailPanel.setLayout(new BorderLayout());
-        //detailPanel.setBorder(BorderFactory.createEmptyBorder(7, 3, 3, 3));
-        detailPanel.add(nameTF, BorderLayout.NORTH);
-        detailPanel.add(valueTA, BorderLayout.CENTER);
+        JPanel valuePane = new JPanel(new BorderLayout());
+        valuePane.add(valueLabel, BorderLayout.NORTH);
+        valuePane.add(new JScrollPane(valueTA), BorderLayout.CENTER);
+
+        JPanel detailPanel = new JPanel(new BorderLayout());
+        detailPanel.add(namePane, BorderLayout.NORTH);
+        detailPanel.add(valuePane, BorderLayout.CENTER);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -149,7 +170,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
         JButton updateButton = new JButton(JMeterUtils.getResString("update")); //$NON-NLS-1$
         updateButton.setActionCommand(UPDATE);
         updateButton.addActionListener(this);
-        JButton closeButton = new JButton(JMeterUtils.getResString("close")); //$NON-NLS-1$
+        closeButton = new JButton(JMeterUtils.getResString("close")); //$NON-NLS-1$
         closeButton.setActionCommand(CLOSE);
         closeButton.addActionListener(this);
         nextButton = new JButton(JMeterUtils.getResString("next")); //$NON-NLS-1$
@@ -207,6 +228,7 @@ public class RowDetailDialog extends JDialog implements ActionListener {
     private void setValues(int selectedRow) {
         nameTF.setText((String)tableModel.getValueAt(selectedRow, 0));
         valueTA.setText((String)tableModel.getValueAt(selectedRow, 1));
+        textChanged = false;
     }
 
     /**
@@ -216,5 +238,34 @@ public class RowDetailDialog extends JDialog implements ActionListener {
     protected void doUpdate(ActionEvent actionEvent) {
         tableModel.setValueAt(nameTF.getText(), selectedRow, 0);
         tableModel.setValueAt(valueTA.getText(), selectedRow, 1);
+        // Change Cancel label to Close
+        closeButton.setText(JMeterUtils.getResString("close")); //$NON-NLS-1$
+        textChanged = false;
     }
+
+    /**
+     * Change the label of Close button to Cancel (after the first text changes)
+     */
+    private void changeLabelButton() {
+        if (!textChanged) {
+            closeButton.setText(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
+            textChanged = true;
+        }
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        changeLabelButton();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        changeLabelButton();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        changeLabelButton();
+    }
+    
 }
