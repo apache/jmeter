@@ -186,7 +186,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
         FileOutputStream pw = null;
         try {
             pw = new FileOutputStream(out);
-            pw.write(s.getResponseData());
+            JOrphanUtils.write(s.getResponseData(), pw); // chunk the output if necessary
         } catch (FileNotFoundException e1) {
             log.error("Error creating sample file for " + s.getSampleLabel(), e1);
         } catch (IOException e1) {

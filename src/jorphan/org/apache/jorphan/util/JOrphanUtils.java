@@ -21,6 +21,7 @@ package org.apache.jorphan.util;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -520,5 +521,28 @@ public final class JOrphanUtils {
      */
     public static boolean isBlank(final String value) {
         return StringUtils.isBlank(value);
+    }
+
+    private static final int DEFAULT_CHUNK_SIZE = 4096;
+
+    /**
+     * Write data to an output stream in chunks with a maximum size of 4K.
+     * This is to avoid OutOfMemory issues if the data buffer is very large
+     * and the JVM needs to copy the buffer for use by native code.
+     * 
+     * @param data the buffer to be written
+     * @param output the output stream to use
+     * @throws IOException if there is a problem writing the data
+     */
+    // Bugzilla 54990
+    public static void write(byte[] data, OutputStream output) throws IOException {
+        int bytes = data.length;
+        int offset = 0;
+        while(bytes > 0) {
+            int chunk = Math.min(bytes, DEFAULT_CHUNK_SIZE);
+            output.write(data, offset, chunk);
+            bytes -= chunk;
+            offset += chunk;
+        }
     }
 }
