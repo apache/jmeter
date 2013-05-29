@@ -18,6 +18,7 @@
 
 package org.apache.jorphan.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -523,8 +525,6 @@ public final class JOrphanUtils {
         return StringUtils.isBlank(value);
     }
 
-    private static final int DEFAULT_CHUNK_SIZE = 4096;
-
     /**
      * Write data to an output stream in chunks with a maximum size of 4K.
      * This is to avoid OutOfMemory issues if the data buffer is very large
@@ -536,13 +536,6 @@ public final class JOrphanUtils {
      */
     // Bugzilla 54990
     public static void write(byte[] data, OutputStream output) throws IOException {
-        int bytes = data.length;
-        int offset = 0;
-        while(bytes > 0) {
-            int chunk = Math.min(bytes, DEFAULT_CHUNK_SIZE);
-            output.write(data, offset, chunk);
-            bytes -= chunk;
-            offset += chunk;
-        }
+        IOUtils.copyLarge(new ByteArrayInputStream(data), output);
     }
 }
