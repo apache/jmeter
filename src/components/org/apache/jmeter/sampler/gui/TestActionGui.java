@@ -20,8 +20,6 @@ package org.apache.jmeter.sampler.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -61,8 +59,6 @@ public class TestActionGui extends AbstractSamplerGui {
 
     private int action;
 
-    private String durationString;
-
     // String in the panel
     // Do not make these static, otherwise language changes don't work
     private final String targetLabel = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
@@ -87,7 +83,6 @@ public class TestActionGui extends AbstractSamplerGui {
         super();
         target = TestAction.THREAD;
         action = TestAction.PAUSE;
-        durationString = ""; // $NON-NLS-1$
         init();
     }
 
@@ -118,8 +113,7 @@ public class TestActionGui extends AbstractSamplerGui {
             restartNextLoopButton.setSelected(true);
         }
 
-        durationString = ta.getDurationAsString();
-        durationField.setText(durationString);
+        durationField.setText(ta.getDurationAsString());
     }
 
     /**
@@ -143,7 +137,7 @@ public class TestActionGui extends AbstractSamplerGui {
         TestAction ta = (TestAction) element;
         ta.setAction(action);
         ta.setTarget(target);
-        ta.setDuration(durationString);
+        ta.setDuration(durationField.getText());
     }
 
     /**
@@ -154,7 +148,6 @@ public class TestActionGui extends AbstractSamplerGui {
         super.clearGui();
 
         targetBox.setSelectedIndex(0);
-        durationString = ""; //$NON-NLS-1$
         durationField.setText(""); //$NON-NLS-1$
         pauseButton.setSelected(true);
         action = TestAction.PAUSE;
@@ -253,17 +246,7 @@ public class TestActionGui extends AbstractSamplerGui {
         // Duration
         HorizontalPanel durationPanel = new HorizontalPanel();
         durationField = new JTextField(15);
-        durationField.setText("");
-        durationField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                durationString = durationField.getText();
-            }
-
-            @Override
-            public void focusGained(FocusEvent e) {
-            }
-        });
+        durationField.setText(""); // $NON-NLS-1$
         durationPanel.add(new JLabel(durationLabel));
         durationPanel.add(durationField);
         add(durationPanel);
