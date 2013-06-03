@@ -100,6 +100,10 @@ It was therefore necessary to change the shortcut.
 Webservice (SOAP) Request has been removed by default from GUI as Element is deprecated (use HTTP Sampler with Raw Post body), if you need to show it, see property not_in_menu in jmeter.properties
 </p>
 
+<p>
+Transaction Controller now sets Response Code of Generated Parent Sampler (if Generate Parent Sampler is checked) to response code of first failing child in case of failure of one of the children, in previous versions Response Code was empty.
+</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -119,6 +123,7 @@ Webservice (SOAP) Request has been removed by default from GUI as Element is dep
 <h3>Controllers</h3>
 <ul>
 <li><bugzilla>54467</bugzilla> - Loop controller Controller check conditions each request</li>
+<li><bugzilla>54985</bugzilla> - Make Transaction Controller set Response Code of Generated Parent Sampler to response code of first failing child in case of failure of one of its children</li>
 </ul>
 
 <h3>Listeners</h3>
