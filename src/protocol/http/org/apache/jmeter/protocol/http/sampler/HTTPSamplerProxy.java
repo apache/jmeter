@@ -80,14 +80,4 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     * This implementation forwards to the implementation class.
-     */
-    @Override
-    protected void notifySSLContextWasReset() {
-        if (impl != null) {
-            impl.notifySSLContextWasReset();
-        }
-    }
 }

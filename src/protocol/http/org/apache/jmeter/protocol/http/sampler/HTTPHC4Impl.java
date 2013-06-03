@@ -94,6 +94,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -110,6 +111,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.JsseSSLManager;
+import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -210,6 +213,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
+
+    private volatile boolean resetSSLContext;
 
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
@@ -475,6 +480,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 useDynamicProxy ? getProxyPass() : PROXY_PASS);
         
         HttpClient httpClient = map.get(key);
+
+        if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
+            ((AbstractHttpClient) httpClient).clearRequestInterceptors(); 
+            ((AbstractHttpClient) httpClient).clearResponseInterceptors(); 
+            httpClient.getConnectionManager().shutdown();
+            httpClient = null;
+            JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
+            sslMgr.resetContext();
+            resetSSLContext = false;
+        }
 
         if (httpClient == null){ // One-time init for this client
 
@@ -1107,7 +1122,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     @Override
-    public void threadFinished() {
+    protected void testIterationStart(LoopIterationEvent event) {
+        log.debug("TtestIterationStart");
+        resetSSLContext = !USE_CACHED_SSL_CONTEXT;
+    }
+
+    @Override
+    protected void threadFinished() {
         log.debug("Thread Finished");
         closeThreadLocalConnections();
     }
@@ -1142,10 +1163,4 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return request != null;
     }
     
-    /** {@inheritDoc} */
-    @Override
-    protected void notifySSLContextWasReset() {
-        log.debug("closeThreadLocalConnections called");
-        closeThreadLocalConnections();
-    }
 }

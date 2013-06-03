@@ -65,6 +65,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.io.input.CountingInputStream;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -79,6 +80,7 @@ import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -108,6 +110,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     // Needs to be accessible by HTTPSampler2
     volatile HttpClient savedClient;
+
+    private volatile boolean resetSSLContext;
 
     static {
         log.info("HTTP request retry count = "+RETRY_COUNT);
@@ -403,7 +407,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             schema = HTTPConstants.PROTOCOL_HTTP;
         }
 
-        if (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(schema)){
+        final boolean isHTTPS = HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(schema);
+        if (isHTTPS){
             SSLManager.getInstance(); // ensure the manager is initialised
             // we don't currently need to do anything further, as this sets the default https protocol
         }
@@ -453,6 +458,14 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         Map<HostConfiguration, HttpClient> map = httpClients.get();
         // N.B. HostConfiguration.equals() includes proxy settings in the compare.
         HttpClient httpClient = map.get(hc);
+
+        if (httpClient != null && resetSSLContext && isHTTPS) {
+            httpClient.getHttpConnectionManager().closeIdleConnections(-1000);
+            httpClient = null;
+            JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
+            sslMgr.resetContext();
+            resetSSLContext = false;
+        }
 
         if ( httpClient == null )
         {
@@ -1086,12 +1099,17 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
 
     @Override
-    public void threadFinished() {
+    protected void threadFinished() {
         log.debug("Thread Finished");
 
         closeThreadLocalConnections();
     }
 
+    @Override
+    protected void testIterationStart(LoopIterationEvent event) {
+        log.debug("TtestIterationStart");
+        resetSSLContext = !USE_CACHED_SSL_CONTEXT;
+    }
 
     /**
      * 
@@ -1127,13 +1145,4 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         return client != null;
     }
 
-    /** 
-     * {@inheritDoc}
-     * This implementation closes all local connections.
-     */
-    @Override
-    protected void notifySSLContextWasReset() {
-        log.debug("freeThreadConnections called");
-        closeThreadLocalConnections();
-    }
 }

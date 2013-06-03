@@ -76,12 +76,4 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         hc.savedClient = savedClient;
     }
 
-    /**
-     * {@inheritDoc}
-     * This implementation forwards to the implementation class.
-     */
-    @Override
-    protected void notifySSLContextWasReset() {
-        hc.notifySSLContextWasReset();
-    }
 }
