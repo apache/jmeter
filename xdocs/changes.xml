@@ -112,6 +112,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <ul>
 <li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler settings takes the whole screen with when there are samplers with long name</li>
 <li><bugzilla>54629</bugzilla> - HTMLParser does not extract &lt;object&gt; tag urls</li>
+<li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput</li>
 </ul>
 
 <h3>Other Samplers</h3>
