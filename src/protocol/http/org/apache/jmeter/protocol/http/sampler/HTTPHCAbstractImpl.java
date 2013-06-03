@@ -77,6 +77,10 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     // -1 means not defined
     protected static final int SO_TIMEOUT = JMeterUtils.getPropDefault("httpclient.timeout", -1);
 
+    // Control reuse of cached SSL Context in subsequent iterations
+    protected static final boolean USE_CACHED_SSL_CONTEXT = 
+            JMeterUtils.getPropDefault("https.use.cached.ssl.context", true);//$NON-NLS-1$
+
     static {
         if (NONPROXY_HOSTS.length() > 0){
             StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$

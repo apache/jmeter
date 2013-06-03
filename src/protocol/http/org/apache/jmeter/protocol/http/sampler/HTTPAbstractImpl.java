@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -48,6 +49,10 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     // Allows HTTPSamplerProxy to call threadFinished; subclasses can override if necessary
     protected void threadFinished() {
+    }
+
+    // Allows HTTPSamplerProxy to call testIterationStart; subclasses can override if necessary
+    protected void testIterationStart(LoopIterationEvent event) {
     }
 
     // Provide access to HTTPSamplerBase methods
