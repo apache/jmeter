@@ -156,6 +156,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big</li>
 <li><bugzilla>54847</bugzilla> - Cut &amp; Paste is broken with tree multi-selection</li>
 <li><bugzilla>54870</bugzilla> - Tree D&amp;D may lost leaf nodes (affected nightly build)</li>
+<li><bugzilla>55056</bugzilla> - wasted work in Data.append()</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
