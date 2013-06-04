@@ -16,6 +16,7 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.Interruptible;
 
 /**
@@ -42,5 +43,13 @@ class HTTPSampler3 extends HTTPSamplerBase implements Interruptible {
     protected HTTPSampleResult sample(java.net.URL u, String method,
             boolean areFollowingRedirect, int depth) {
         return hc.sample(u, method, areFollowingRedirect, depth);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+     */
+    @Override
+    public void testIterationStart(LoopIterationEvent event) {
+        hc.testIterationStart(event);
     }
 }

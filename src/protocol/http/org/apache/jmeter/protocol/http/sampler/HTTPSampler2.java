@@ -23,6 +23,7 @@ import java.net.URL;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.samplers.Interruptible;
 
@@ -76,4 +77,11 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         hc.savedClient = savedClient;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+     */
+    @Override
+    public void testIterationStart(LoopIterationEvent event) {
+        hc.testIterationStart(event);
+    }
 }
