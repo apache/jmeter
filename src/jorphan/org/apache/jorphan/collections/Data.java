@@ -95,6 +95,7 @@ public class Data implements Serializable {
             for (int count = 0; count < dHeaders.length; count++) {
                 if (!header.contains(dHeaders[count])) {
                     valid = false;
+                    break;
                 }
             }
         }
