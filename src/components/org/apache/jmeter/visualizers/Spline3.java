@@ -271,6 +271,7 @@ public class Spline3 {
                 lineSum = lineSum - Math.abs(_A[i][i]);
                 if (lineSum > Math.abs(_A[i][i])) {
                     converge = false;
+                    break;
                 }
             }
         }
