@@ -234,6 +234,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li>Updated to xstream 1.4.4 (from 1.4.2)</li>
 <li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants</li>
 <li><bugzilla>55065</bugzilla> - wasted work in Spline3.converge()</li>
+<li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction()</li>
 </ul>
 
 </section> 

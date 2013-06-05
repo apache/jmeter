@@ -208,6 +208,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
         for (int i = 0; i < path.length; i++) {
             if (contains(source, path[i])) {
                 isValid = false;
+                break;
             }
         }
         return isValid;
