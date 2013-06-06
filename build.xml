@@ -2438,6 +2438,11 @@ run JMeter unless all the JMeter jars are added.
         <arg value="-J${batchtest.variable}=${batchtest.value}"/>
      </java>
 
+    <!-- Show the log file -->
+    <concat>
+      <filelist dir="${batchtest.out}" files="${batchtest.name}.log" />
+    </concat>
+
     <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.csv"/>
     <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.xml"/>
     <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.jtl"/>
@@ -2463,11 +2468,6 @@ run JMeter unless all the JMeter jars are added.
     </fail>
 
     <echo level="info">${batchtest.name} output files compared OK</echo>
-
-    <!-- Show the log file -->
-    <concat>
-      <filelist dir="${batchtest.out}" files="${batchtest.name}.log" />
-    </concat>
 
     <local         name="BatchTestLocal.len"/>
     <condition property="BatchTestLocal.len">
