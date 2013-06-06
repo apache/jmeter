@@ -36,8 +36,6 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
 
     private transient HTTPAbstractImpl impl;
     
-    private transient Exception initException;
-
     public HTTPSamplerProxy(){
         super();
     }
@@ -55,11 +53,14 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
     /** {@inheritDoc} */
     @Override
     protected HTTPSampleResult sample(URL u, String method, boolean areFollowingRedirect, int depth) {
-        if(impl != null) {
-            return impl.sample(u, method, areFollowingRedirect, depth);
-        } else {
-            return errorResult(initException, new HTTPSampleResult());
+        if (impl == null) { // Not called from multiple threads, so this is OK
+            try {
+                impl = HTTPSamplerFactory.getImplementation(getImplementation(), this);
+            } catch (Exception ex) {
+                return errorResult(ex, new HTTPSampleResult());
+            }
         }
+        return impl.sample(u, method, areFollowingRedirect, depth);
     }
 
     // N.B. It's not possible to forward threadStarted() to the implementation class.
@@ -85,17 +86,13 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
      */
     @Override
     public void testIterationStart(LoopIterationEvent event) {
-        if (impl == null) { // Not called from multiple threads, so this is OK
-            try {
-                impl = HTTPSamplerFactory.getImplementation(getImplementation(), this);
-                initException=null;
-            } catch (Exception ex) {
-                initException = ex;
-            }
-        } 
-        if(impl != null) {
+        try {
+            // This class is cloned per thread, and testIterationStart is called from a different thread from samplers
+            // so we need to fetch the implementation separately
+            HTTPAbstractImpl temp = HTTPSamplerFactory.getImplementation(getImplementation(), this);
             // see https://issues.apache.org/bugzilla/show_bug.cgi?id=51380
-            impl.testIterationStart(event);
+            temp.testIterationStart(event);
+        } catch (Exception ex) {
         }
     }
 }
