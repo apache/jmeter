@@ -42,28 +42,33 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 "queryArgumentsTypes", // $NON-NLS-1$
                 "variableNames", // $NON-NLS-1$
                 "resultVariable", // $NON-NLS-1$
+                "queryTimeout" // $NON-NLS-1$
                 });
 
         PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("queryArguments"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("queryArgumentsTypes"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("variableNames"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("resultVariable"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
+        p = property("queryTimeout"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
+        
         p = property("queryType"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, AbstractJDBCTestElement.SELECT);
@@ -82,7 +87,7 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
 
         p = property("query"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
         p.setPropertyEditorClass(TextAreaEditor.class);
 
     }
