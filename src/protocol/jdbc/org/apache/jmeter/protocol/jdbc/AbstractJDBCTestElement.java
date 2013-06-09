@@ -475,7 +475,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     public int getIntegerQueryTimeout() {
         int timeout = 0;
         try {
-            if(StringUtils.isNumeric(query)) {
+            if(StringUtils.isNumeric(queryTimeout)) {
                 timeout = Integer.parseInt(queryTimeout);
             }
         } catch (NumberFormatException nfe) {
