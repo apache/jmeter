@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -475,9 +474,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     public int getIntegerQueryTimeout() {
         int timeout = 0;
         try {
-            if(StringUtils.isNumeric(queryTimeout)) {
-                timeout = Integer.parseInt(queryTimeout);
-            }
+            timeout = Integer.parseInt(queryTimeout);
         } catch (NumberFormatException nfe) {
             timeout = 0;
         }
