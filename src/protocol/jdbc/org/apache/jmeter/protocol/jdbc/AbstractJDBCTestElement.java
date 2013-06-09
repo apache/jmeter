@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -111,7 +112,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private String queryArguments = ""; // $NON-NLS-1$
     private String queryArgumentsTypes = ""; // $NON-NLS-1$
     private String variableNames = ""; // $NON-NLS-1$
-    private String resultVariable = "";
+    private String resultVariable = ""; // $NON-NLS-1$
+    private String queryTimeout = ""; // $NON-NLS-1$
 
     /**
      *  Cache of PreparedStatements stored in a per-connection basis. Each entry of this
@@ -142,6 +144,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             String _queryType = getQueryType();
             if (SELECT.equals(_queryType)) {
                 stmt = conn.createStatement();
+                stmt.setQueryTimeout(getIntegerQueryTimeout());
                 ResultSet rs = null;
                 try {
                     rs = stmt.executeQuery(getQuery());
@@ -159,6 +162,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 return sb.getBytes(ENCODING);
             } else if (UPDATE.equals(_queryType)) {
                 stmt = conn.createStatement();
+                stmt.setQueryTimeout(getIntegerQueryTimeout());
                 stmt.executeUpdate(getQuery());
                 int updateCount = stmt.getUpdateCount();
                 String results = updateCount + " updates";
@@ -332,9 +336,15 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             } else {
                 pstmt = conn.prepareStatement(getQuery());
             }
+            pstmt.setQueryTimeout(getIntegerQueryTimeout());
             // PreparedStatementMap is associated to one connection so 
             //  2 threads cannot use the same PreparedStatement map at the same time
             preparedStatementMap.put(getQuery(), pstmt);
+        } else {
+            int timeoutInS = getIntegerQueryTimeout();
+            if(pstmt.getQueryTimeout() != timeoutInS) {
+                pstmt.setQueryTimeout(getIntegerQueryTimeout());
+            }
         }
         pstmt.clearParameters();
         return pstmt;
@@ -457,6 +467,35 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         } catch (SQLException e) {
             log.warn("Error closing ResultSet", e);
         }
+    }    
+    
+    /**
+     * @return the integer representation queryTimeout
+     */
+    public int getIntegerQueryTimeout() {
+        int timeout = 0;
+        try {
+            if(StringUtils.isNumeric(query)) {
+                timeout = Integer.parseInt(queryTimeout);
+            }
+        } catch (NumberFormatException nfe) {
+            timeout = 0;
+        }
+        return timeout;
+    }
+
+    /**
+     * @return the queryTimeout
+     */
+    public String getQueryTimeout() {
+        return queryTimeout ;
+    }
+
+    /**
+     * @param resultVariable the variable name in which results will be stored
+     */
+    public void setQueryTimeout(String queryTimeout) {
+        this.queryTimeout = queryTimeout;
     }
 
     public String getQuery() {
