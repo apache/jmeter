@@ -492,7 +492,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     }
 
     /**
-     * @param resultVariable the variable name in which results will be stored
+     * @param queryTimeout query timeout in seconds
      */
     public void setQueryTimeout(String queryTimeout) {
         this.queryTimeout = queryTimeout;
