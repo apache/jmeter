@@ -1696,6 +1696,8 @@ run JMeter unless all the JMeter jars are added.
       <echo level="info" message="Using stored credentials"/>
       <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
         <arg value="-n"/>
+        <!-- not strictly necessary, but does no harm and agrees with password version -->
+        <arg value="--no-auth-cache"/>
         <arg value="-m"/>
         <arg value="${message}"/>
         <arg value="-U"/>
@@ -1720,6 +1722,7 @@ run JMeter unless all the JMeter jars are added.
         <arg value="${repo}"/>
         <arg value="-X"/>
         <arg value="${tempfile}"/>
+        <!-- Add credentials provided on command-line -->
         <arg value="-u"/>
         <arg value="${asf.ldap.username}"/>
         <arg value="-p"/>
