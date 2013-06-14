@@ -1695,14 +1695,14 @@ run JMeter unless all the JMeter jars are added.
     <target name="_svnmucc_storedPass" unless="asf.ldap.password">
       <echo level="info" message="Using stored credentials"/>
       <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
-        <arg value="-n"/>
+        <arg value="--non-interactive"/> <!-- -n alias was removed in svnmucc 1.8.0 -->
         <!-- not strictly necessary, but does no harm and agrees with password version -->
         <arg value="--no-auth-cache"/>
-        <arg value="-m"/>
+        <arg value="--message"/> <!-- -m -->
         <arg value="${message}"/>
-        <arg value="-U"/>
+        <arg value="--root-url"/> <!-- -U -->
         <arg value="${repo}"/>
-        <arg value="-X"/>
+        <arg value="--extra-args"/> <!-- -X -->
         <arg value="${tempfile}"/>
       </exec>
     </target>
@@ -1713,19 +1713,19 @@ run JMeter unless all the JMeter jars are added.
       <property name="asf.ldap.username" value="${user.name}"/>
       <echo level="info" message="Using provided credentials for user ${asf.ldap.username}"/>
       <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
-        <arg value="-n"/>
+        <arg value="--non-interactive"/>
         <!-- we don't want to cache the provided credentials -->
         <arg value="--no-auth-cache"/>
-        <arg value="-m"/>
+        <arg value="--message"/> <!-- -m -->
         <arg value="${message}"/>
-        <arg value="-U"/>
+        <arg value="--root-url"/> <!-- -U -->
         <arg value="${repo}"/>
-        <arg value="-X"/>
+        <arg value="--extra-args"/> <!-- -X -->
         <arg value="${tempfile}"/>
         <!-- Add credentials provided on command-line -->
-        <arg value="-u"/>
+        <arg value="--username"/> <!-- -u -->
         <arg value="${asf.ldap.username}"/>
-        <arg value="-p"/>
+        <arg value="--password"/> <!-- -p -->
         <arg value="${asf.ldap.password}"/>    
       </exec>
     </target>
