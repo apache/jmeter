@@ -237,6 +237,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants</li>
 <li><bugzilla>55065</bugzilla> - Useless processing in Spline3.converge()</li>
 <li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction()</li>
+<li><bugzilla>54903</bugzilla> - Remove the dependency on the Activation Framework</li>
 </ul>
 
 </section> 
