@@ -47,15 +47,6 @@ public class URLString implements Comparable<URLString> {
         hashCode = urlAsString.hashCode();
     }
 
-    /*
-     * Parsers can return the URL as a string if it does not parse properly
-     */
-    public URLString(String s) {
-        url = null;
-        urlAsString = s;
-        hashCode = urlAsString.hashCode();
-    }
-
     /** {@inheritDoc} */
     @Override
     public String toString() {

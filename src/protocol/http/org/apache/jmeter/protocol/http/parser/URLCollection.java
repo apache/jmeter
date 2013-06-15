@@ -25,6 +25,8 @@ import java.util.Iterator;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Collection class designed for handling URLs
@@ -37,6 +39,7 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
  *
  */
 public class URLCollection {
+    private static final Logger log = LoggingManager.getLoggerForClass();
     private final Collection<URLString> coll;
 
     /**
@@ -59,20 +62,9 @@ public class URLCollection {
         return coll.add(new URLString(u));
     }
 
-    /*
-     * Adds the string to the Collection, first wrapping it in the URLString
-     * class
-     *
-     * @param s string to add @return boolean condition returned by the add()
-     * method of the underlying collection
-     */
-    private boolean add(String s) {
-        return coll.add(new URLString(s));
-    }
-
     /**
      * Convenience method for adding URLs to the collection If the url parameter
-     * is null or empty, nothing is done
+     * is null, empty or URL is malformed, nothing is done
      *
      * @param url
      *            String, may be null or empty
@@ -90,8 +82,14 @@ public class URLCollection {
         try {
             b = this.add(ConversionUtils.makeRelativeURL(baseUrl, url));
         } catch (MalformedURLException mfue) {
-            // TODO log a warning message?
-            b = this.add(url);// Add the string if cannot create the URL
+            // No WARN message to avoid performance impact
+            if(log.isDebugEnabled()) {
+                log.debug("Error occured building relative url for:"+url+", message:"+mfue.getMessage());
+            }
+            // No point in adding the URL as String as it will result in null 
+            // returned during iteration, see URLString
+            // See https://issues.apache.org/bugzilla/show_bug.cgi?id=55092
+            return false;
         }
         return b;
     }
