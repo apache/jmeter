@@ -66,12 +66,12 @@ commons-lang3-3.1
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
 
-commons-logging-1.1.2
+commons-logging-1.1.3
 ---------------------
 http://commons.apache.org/downloads/download_logging.cgi
 - httpclient
 
-commons-net-3.2
+commons-net-3.3
 -----------------
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
@@ -109,12 +109,12 @@ http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-jodd-core-3.4.3
+jodd-core-3.4.4
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.4.3
+jodd-lagarto-3.4.4
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
@@ -150,7 +150,7 @@ logkit-2.0
 - logging
 - Anakia
 
-mongo-java-driver 2.11.1
+mongo-java-driver 2.11.2
 ------------------------
 http://www.mongodb.org/
 - MongoDB sampler
