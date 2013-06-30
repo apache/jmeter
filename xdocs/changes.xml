@@ -126,7 +126,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <ul>
 <li><bugzilla>54467</bugzilla> - Loop controller Controller check conditions each request</li>
 <li><bugzilla>54985</bugzilla> - Make Transaction Controller set Response Code of Generated Parent Sampler to response code of first failing child in case of failure of one of its children</li>
-<li><bugzilla>54950</bugzilla> - ModuleController : Changes to referenced Module are not taken into accound if changes occur after first run and referenced node is disabled</li>
+<li><bugzilla>54950</bugzilla> - ModuleController : Changes to referenced Module are not taken into account if changes occur after first run and referenced node is disabled</li>
 </ul>
 
 <h3>Listeners</h3>
