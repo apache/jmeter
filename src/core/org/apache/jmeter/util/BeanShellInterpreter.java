@@ -94,9 +94,7 @@ public class BeanShellInterpreter {
     private final Logger logger; // Logger to use during initialization and script run
 
     public BeanShellInterpreter() throws ClassNotFoundException {
-        initFile = null;
-        logger = null;
-        init();
+        this(null, null);
     }
 
     /**
