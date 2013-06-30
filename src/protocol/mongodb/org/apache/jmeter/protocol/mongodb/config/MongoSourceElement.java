@@ -116,7 +116,7 @@ public class MongoSourceElement
                 return (MongoDB)mongoSource;
             }
             else {
-                throw new IllegalStateException("Variable:"+ source +" is not a MongoDB instance, class:"+(mongoSource != null ? mongoSource.getClass():"null"));
+                throw new IllegalStateException("Variable:"+ source +" is not a MongoDB instance, class:"+mongoSource.getClass());
             }
         }
     }
