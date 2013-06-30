@@ -163,12 +163,15 @@ public class ModuleController extends GenericController implements ReplaceableCo
     public HashTree getReplacementSubTree() {
         HashTree tree = new ListedHashTree();
         if (selectedNode != null) {
-            if (!selectedNode.isEnabled()) {
-                selectedNode = cloneTreeNode(selectedNode);
-                selectedNode.setEnabled(true);
+            // Use a local variable to avoid replacing reference by modified clone (see Bug 54950)
+            JMeterTreeNode nodeToReplace = selectedNode;
+            // We clone to avoid enabling existing node
+            if (!nodeToReplace.isEnabled()) {
+                nodeToReplace = cloneTreeNode(selectedNode);
+                nodeToReplace.setEnabled(true);
             }
-            HashTree subtree = tree.add(selectedNode);
-            createSubTree(subtree, selectedNode);
+            HashTree subtree = tree.add(nodeToReplace);
+            createSubTree(subtree, nodeToReplace);
         }
         return tree;
     }
@@ -199,5 +202,4 @@ public class ModuleController extends GenericController implements ReplaceableCo
             cloneChildren((JMeterTreeNode) to.getLastChild(), child);
         }
     }
-
 }
