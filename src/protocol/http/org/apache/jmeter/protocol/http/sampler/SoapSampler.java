@@ -141,6 +141,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
                 Header hd = mngr.getHeader(idx);
                 if (HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(hd.getName())) {// Use this to override file length
                     length = Integer.parseInt(hd.getValue());
+                    break;
                 }
                 // All the other headers are set up by HTTPSampler2.setupConnection()
             }
