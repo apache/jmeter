@@ -120,6 +120,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <ul>
 <li><bugzilla>54913</bugzilla> - JMSPublisherGui incorrectly restore its state</li>
 <li><bugzilla>55027</bugzilla> - Test Action regression, duration value are not record (nightly build)</li>
+<li><bugzilla>55163</bugzilla> - BeanShellTestElement faiils to quote string when calling testStarted(String)/testEnded(String)</li>
 </ul>
 
 <h3>Controllers</h3>
