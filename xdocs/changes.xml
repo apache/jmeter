@@ -221,6 +221,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>54945</bugzilla> - Add Shutdown Hook to enable trapping kill or CTRL+C signals</li>
 <li><bugzilla>54990</bugzilla> - Download large files avoiding outOfMemory</li>
 <li><bugzilla>55085</bugzilla> - UX Improvement : Ability to create New Test Plan from Templates</li>
+<li><bugzilla>55172</bugzilla> - Provide plugins a way to add Top Menu and menu items</li>
 </ul>
 
 <h2>Non-functional changes</h2>
