@@ -20,6 +20,8 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -43,11 +45,14 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.LoadRecentProject;
+import org.apache.jmeter.gui.plugin.MenuCreator;
+import org.apache.jmeter.gui.plugin.MenuCreator.MENU_LOCATION;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -133,6 +138,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private Collection<JMenuItem> remote_engine_exit;
 
     private JMenu searchMenu;
+
+    private ArrayList<MenuCreator> menuCreators;
 
     public static final String SYSTEM_LAF = "System"; // $NON-NLS-1$
 
@@ -229,6 +236,32 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
      * should be defined in a file somewhere, but that is for later.
      */
     public void createMenuBar() {
+        this.menuCreators = new ArrayList<MenuCreator>();
+        try {
+            List<String> listClasses = ClassFinder.findClassesThatExtend(
+                    JMeterUtils.getSearchPaths(), 
+                    new Class[] {MenuCreator.class }); 
+            for (String strClassName : listClasses) {
+                try {
+                    if(log.isDebugEnabled()) {
+                        log.debug("Loading menu creator class: "+ strClassName);
+                    }
+                    Class<?> commandClass = Class.forName(strClassName);
+                    if (!Modifier.isAbstract(commandClass.getModifiers())) {
+                        if(log.isDebugEnabled()) {
+                            log.debug("Instantiating: "+ commandClass.getName());
+                        }
+                        MenuCreator creator = (MenuCreator) commandClass.newInstance();
+                        menuCreators.add(creator);                  
+                    }
+                } catch (Exception e) {
+                    log.error("Exception registering "+MenuCreator.class.getName() + " with implementation:"+strClassName, e);
+                }
+            }
+        } catch (IOException e) {
+            log.error("Exception finding implementations of "+MenuCreator.class, e);
+        }
+
         makeFileMenu();
         makeEditMenu();
         makeRunMenu();
@@ -240,6 +273,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         this.add(searchMenu);
         this.add(runMenu);
         this.add(optionsMenu);
+        for (Iterator iterator = menuCreators.iterator(); iterator.hasNext();) {
+            MenuCreator menuCreator = (MenuCreator) iterator.next();
+            JMenu[] topLevelMenus = menuCreator.getTopLevelMenus();
+            for (JMenu topLevelMenu : topLevelMenus) {
+                this.add(topLevelMenu);                
+            }
+        }
         this.add(helpMenu);
     }
 
@@ -265,6 +305,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         helpMenu.add(setDebug);
         helpMenu.add(resetDebug);
         helpMenu.add(heapDump);
+
+        addPluginsMenuItems(helpMenu, menuCreators, MENU_LOCATION.HELP);
+
         helpMenu.addSeparator();
         helpMenu.add(help_about);
     }
@@ -307,6 +350,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         JMenuItem expand = makeMenuItemRes("menu_expand_all", ActionNames.EXPAND_ALL, KeyStrokes.EXPAND_ALL); //$NON-NLS-1$
         optionsMenu.add(expand);
+
+        addPluginsMenuItems(optionsMenu, menuCreators, MENU_LOCATION.OPTIONS);
     }
 
     private static class LangMenuHelper{
@@ -430,6 +475,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         runMenu.addSeparator();
         runMenu.add(run_clear);
         runMenu.add(run_clearAll);
+
+        addPluginsMenuItems(runMenu, menuCreators, MENU_LOCATION.RUN);
     }
 
     private void makeEditMenu() {
@@ -439,6 +486,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // From the Java Look and Feel Guidelines: If all items in a menu
         // are disabled, then disable the menu. Makes sense.
         editMenu.setEnabled(false);
+
+        addPluginsMenuItems(editMenu, menuCreators, MENU_LOCATION.EDIT);
     }
 
     private void makeFileMenu() {
@@ -492,6 +541,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         for(JComponent jc : file_load_recent_files){
             fileMenu.add(jc);
         }
+
+        addPluginsMenuItems(fileMenu, menuCreators, MENU_LOCATION.FILE);
+
         fileMenu.add(file_exit);
     }
 
@@ -501,11 +553,32 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         JMenuItem search = makeMenuItemRes("menu_search", 'F', ActionNames.SEARCH_TREE, KeyStrokes.SEARCH_TREE); //$NON-NLS-1$
         searchMenu.add(search);
-        searchMenu.setEnabled(true);
+        search.setEnabled(true);
 
         JMenuItem searchReset = makeMenuItemRes("menu_search_reset", ActionNames.SEARCH_RESET); //$NON-NLS-1$
         searchMenu.add(searchReset);
-        searchMenu.setEnabled(true);
+        searchReset.setEnabled(true);
+
+        addPluginsMenuItems(searchMenu, menuCreators, MENU_LOCATION.SEARCH);
+    }
+
+    /**
+     * @param menu 
+     * @param menuCreators
+     * @param location
+     */
+    protected void addPluginsMenuItems(JMenu menu, List<MenuCreator> menuCreators, MENU_LOCATION location) {
+        boolean addedSeparator = false;
+        for (MenuCreator menuCreator : menuCreators) {
+            JMenuItem[] menuItems = menuCreator.getMenuItemsAtLocation(location);
+            for (JMenuItem jMenuItem : menuItems) {
+                if(!addedSeparator) {
+                    menu.addSeparator();
+                    addedSeparator = true;
+                }
+                menu.add(jMenuItem);
+            }
+        }
     }
     
     public void setRunning(boolean running, String host) {
@@ -589,6 +662,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         updateMenuElement(runMenu);
         updateMenuElement(optionsMenu);
         updateMenuElement(helpMenu);
+        for (MenuCreator creator : menuCreators) {
+            creator.localeChanged();
+        }
     }
 
     /**
@@ -618,6 +694,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         Component component = menu.getComponent();
         final String compName = component.getName();
         if (compName != null) {
+            for (MenuCreator menuCreator : menuCreators) {
+                if(menuCreator.localeChanged(menu)) {
+                    return;
+                }
+            }
             if (component instanceof JMenu) {
                 final JMenu jMenu = (JMenu) component;
                 if (isResource(jMenu.getActionCommand())){
