@@ -56,10 +56,6 @@ public class TemplateManager {
 
     private XStream xstream = initXStream();
 
-    /**
-     * 
-     * @return
-     */
     public static final TemplateManager getInstance() {
         return SINGLETON;
     }
