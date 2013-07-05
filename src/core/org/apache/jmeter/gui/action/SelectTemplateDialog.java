@@ -56,9 +56,7 @@ import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 
 /**
  * Dialog used for Templates selection
@@ -70,7 +68,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
      */
     private static final long serialVersionUID = -4436834972710248247L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+//    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private JLabeledChoice templateList;
 
