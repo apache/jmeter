@@ -387,6 +387,7 @@
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>
     <include name="${lib.dir}/${mongo-java-driver.jar}"/>
+    <include name="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
     <include name="${lib.dir}/${soap.jar}"/>
@@ -454,6 +455,7 @@
     <pathelement location="${lib.dir}/${junit.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
     <pathelement location="${lib.dir}/${mongo-java-driver.jar}"/>
+    <pathelement location="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${soap.jar}"/>
@@ -2879,6 +2881,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
         <process_jarfile jarname="mongo-java-driver"/>
+        <process_jarfile jarname="rsyntaxtextarea"/>
         <process_jarfile jarname="serializer"/>
     	<process_jarfile jarname="slf4j-api"/>
         <process_jarfile jarname="soap"/>

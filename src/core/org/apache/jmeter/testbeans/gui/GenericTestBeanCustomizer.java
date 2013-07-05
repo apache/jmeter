@@ -203,6 +203,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
         // Obtain the propertyEditors:
         editors = new PropertyEditor[descriptors.length];
+        int scriptLanguageIndex = 0;
+        int textAreaEditorIndex = 0;
         for (int i = 0; i < descriptors.length; i++) { // Index is also used for accessing editors array
             PropertyDescriptor descriptor = descriptors[i];
             String name = descriptor.getName();
@@ -218,7 +220,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             PropertyEditor propertyEditor;
             Object guiType = descriptor.getValue(GUITYPE);
             if (guiType instanceof TypeEditor) {
-                propertyEditor = ((TypeEditor) guiType).getInstance(descriptor);            
+                propertyEditor = ((TypeEditor) guiType).getInstance(descriptor);
             } else {
                 Class<?> editorClass = descriptor.getPropertyEditorClass();
                 if (log.isDebugEnabled()) {
@@ -267,6 +269,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             {
                 ((TestBeanPropertyEditor)propertyEditor).setDescriptor(descriptor);
             }
+
+            if (propertyEditor instanceof TextAreaEditor) {
+                textAreaEditorIndex = i;
+            }
             if (propertyEditor.getCustomEditor() instanceof JScrollPane) {
                 scrollerCount++;
             }
@@ -276,6 +282,17 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             // Initialize the editor with the provided default value or null:
             setEditorValue(i, descriptor.getValue(DEFAULT));
 
+            if (name.equals("scriptLanguage")) {
+                scriptLanguageIndex = i;
+            }
+
+        }
+        // In case of BSF and JSR elements i want to add textAreaEditor as a listener to scriptLanguage ComboBox.
+        String beanName = this.beanInfo.getBeanDescriptor().getName();
+        if (beanName.startsWith("BSF") || beanName.startsWith("JSR223")) { // $NON-NLS-1$ $NON-NLS-2$
+            WrapperEditor we = (WrapperEditor) editors[scriptLanguageIndex];
+            TextAreaEditor tae = (TextAreaEditor) editors[textAreaEditorIndex];
+            we.addChangeListener(tae);
         }
 
         // Obtain message formats:
