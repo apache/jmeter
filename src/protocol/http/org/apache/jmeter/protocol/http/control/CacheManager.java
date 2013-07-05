@@ -67,7 +67,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private static final int DEFAULT_MAX_SIZE = 5000;
 
-    private static final long ONE_YEAR_MS = 365*86400*1000;
+    private static final long ONE_YEAR_MS = 365*24*60*60*1000L;
 
     public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
