@@ -24,7 +24,6 @@ import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -32,6 +31,9 @@ import org.apache.jmeter.assertions.BeanShellAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 public class BeanShellAssertionGui extends AbstractAssertionGui {
 
@@ -43,7 +45,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 
     private JTextField parameters;// parameters to pass to script file (or script)
 
-    private JTextArea scriptField;// script area
+    private RSyntaxTextArea scriptField; // script area
 
     public BeanShellAssertionGui() {
         init();
@@ -139,8 +141,10 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
     }
 
     private JPanel createScriptPanel() {
-        scriptField = new JTextArea();
-        scriptField.setRows(4);
+        scriptField = new RSyntaxTextArea(20,20);
+        scriptField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        scriptField.setCodeFoldingEnabled(true);
+        scriptField.setAntiAliasingEnabled(true);
         scriptField.setLineWrap(true);
         scriptField.setWrapStyleWord(true);
 
@@ -149,7 +153,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(label, BorderLayout.NORTH);
-        panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
+        panel.add(new RTextScrollPane(scriptField), BorderLayout.CENTER);
 
         JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_assertion_script_variables")); //$NON-NLS-1$
         explain.setLineWrap(true);

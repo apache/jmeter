@@ -84,6 +84,7 @@ under the License.
       <junit.version>4.11</junit.version>
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.2</mongo-java-driver.version>
+      <rsyntaxtextarea.version>2.0.7</rsyntaxtextarea.version>
       <slf4j.version>1.7.5</slf4j.version>
       <soap.version>2.3.1</soap.version>
       <tidy.version>r938</tidy.version>
@@ -355,6 +356,11 @@ under the License.
         <groupId>org.mongodb</groupId>
         <artifactId>mongo-java-driver</artifactId>
         <version>${mongo-java-driver.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fifesoft</groupId>
+        <artifactId>rsyntaxtextarea</artifactId>
+        <version>${rsyntaxtextarea.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
