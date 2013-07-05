@@ -445,4 +445,8 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
             guiEditor.setAsText(lastValidValue);
         }
     }
+
+    public void addChangeListener(PropertyChangeListener listener) {
+        guiEditor.addPropertyChangeListener(listener);
+    }
 }

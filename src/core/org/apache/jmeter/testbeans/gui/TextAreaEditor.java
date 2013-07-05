@@ -24,17 +24,23 @@ package org.apache.jmeter.testbeans.gui;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditorSupport;
+import java.util.Properties;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
+import org.apache.jmeter.util.JMeterUtils;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
-public class TextAreaEditor extends PropertyEditorSupport implements FocusListener {
+public class TextAreaEditor extends PropertyEditorSupport implements FocusListener, PropertyChangeListener {
 
-    private JTextArea textUI;
+    private RSyntaxTextArea textUI;
 
-    private JScrollPane scroller;
+    private RTextScrollPane scroller;
+
+    private Properties languageProperties;
 
     /** {@inheritDoc} */
     @Override
@@ -48,12 +54,17 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     }
 
     private final void init() {// called from ctor, so must not be overridable
-        textUI = new JTextArea();
+        textUI = new RSyntaxTextArea(20, 20);
+        textUI.discardAllEdits();
+        textUI.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        textUI.setCodeFoldingEnabled(true);
+        textUI.setAntiAliasingEnabled(true);
         textUI.addFocusListener(this);
         textUI.setWrapStyleWord(true);
         textUI.setLineWrap(true);
-        scroller = new JScrollPane(textUI, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller = new RTextScrollPane(textUI);
+        scroller.setFoldIndicatorEnabled(true);
+        languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/testbeans/gui/textarea.properties"); //$NON-NLS-1$
     }
 
     /**
@@ -111,5 +122,20 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     @Override
     public boolean supportsCustomEditor() {
         return true;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Object source = evt.getSource();
+        if (source instanceof ComboStringEditor && source != null) {
+            ComboStringEditor cse = (ComboStringEditor) source;
+            String lang = cse.getAsText().toLowerCase();
+            if (languageProperties.containsKey(lang)) {
+                textUI.setSyntaxEditingStyle(languageProperties.getProperty(lang));
+            } else {
+                textUI.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+            }
+
+        }
     }
 }
