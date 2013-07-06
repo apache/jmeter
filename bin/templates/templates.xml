@@ -7,8 +7,7 @@
         <h2>JMeter Configuration</h2>
         <p>
             <ul>
-                <li>JMeter Server Proxy port is set to 8888, you may want to change
-                
+                <li>JMeter Server Proxy port is set to 8888, you may want to change this</li>
             </ul>
         </p>
         <h2>Browser Configuration</h2>
@@ -47,7 +46,6 @@
                 <li><a href="http://jmeter.apache.org/usermanual/build-db-test-plan.html" >http://jmeter.apache.org/usermanual/build-db-test-plan.html</a></li>
             </ul>
         </p>
-        
         ]]></description>
     </template>
 </templates>
