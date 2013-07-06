@@ -43,7 +43,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public class TemplateManager {
     private class Templates {
-        private Map<String, Template> templates = new HashMap<String, Template>();
+        private final Map<String, Template> templates = new HashMap<String, Template>();
     }
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
             "/bin/templates/templates.xml");
@@ -52,9 +52,9 @@ public class TemplateManager {
     
     private static final TemplateManager SINGLETON = new TemplateManager();
     
-    private Map<String, Template> templates = new HashMap<String, Template>();
+    private final Map<String, Template> templates;
 
-    private XStream xstream = initXStream();
+    private final XStream xstream = initXStream();
 
     public static final TemplateManager getInstance() {
         return SINGLETON;
