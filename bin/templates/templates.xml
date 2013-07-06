@@ -28,7 +28,7 @@
             </ul>
         </p>
         <h2>Browser Configuration</h2>
-        <p>Configure your browser so that is uses the JMeter proxy, set:
+        <p>Configure your browser so that it uses the JMeter proxy, set:
             <ul>
                 <li>the host of the machine that runs JMeter</li>
                 <li>the port you setup in JMeter Server Proxy</li>
