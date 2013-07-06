@@ -45,9 +45,9 @@ import javax.swing.text.Document;
 public class JLabeledTextArea extends JPanel implements JLabeledField, FocusListener {
     private static final long serialVersionUID = 240L;
 
-    private JLabel mLabel;
+    private final JLabel mLabel;
 
-    private JTextArea mTextArea;
+    private final JTextArea mTextArea;
 
     // Maybe move to vector if MT problems occur
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
@@ -81,6 +81,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      */
     public JLabeledTextArea(String pLabel, Document docModel) {
         super();
+        mTextArea = new JTextArea();
         mLabel = new JLabel(pLabel);
         init();
         if (docModel != null) {
@@ -109,7 +110,6 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
     private void init() {
         setLayout(new BorderLayout());
 
-        mTextArea = new JTextArea();
         mTextArea.setRows(4);
         mTextArea.setLineWrap(true);
         mTextArea.setWrapStyleWord(true);
