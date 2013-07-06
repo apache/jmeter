@@ -22,11 +22,9 @@
         <description><![CDATA[
         <h1>Template showing how to record</h1>
         <h2>JMeter Configuration</h2>
-        <p>
             <ul>
                 <li>JMeter Server Proxy port is set to 8888, you may want to change this</li>
             </ul>
-        </p>
         <h2>Browser Configuration</h2>
         <p>Configure your browser so that it uses the JMeter proxy, set:
             <ul>
@@ -35,13 +33,10 @@
             </ul>
         </p>
         <h2>Useful links</h2>
-        <p>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf" >http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf</a></li>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
-            </ul>
-        </p>
-        
+            </ul>       
         ]]></description>
     </template>
     <template>
@@ -50,19 +45,15 @@
         <description>
         <![CDATA[<h1>Template showing how to Load Test an SQL query on Database</h1>
         <h2>JMeter Configuration</h2>
-        <p>
             <ul>
                 <li>Add the database driver to jmeter/lib folder</li>
                 <li>Configure the host, port, username and password in JDBC Configuration</li>
                 <li>Modify the SQL query to match your query</li>
             </ul>
-        </p>
         <h2>Useful links</h2>
-        <p>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-db-test-plan.html" >http://jmeter.apache.org/usermanual/build-db-test-plan.html</a></li>
             </ul>
-        </p>
         ]]></description>
     </template>
 </templates>
