@@ -60,6 +60,14 @@ For example:
 <pre>
 ${__time(EEE\, d MMM yyyy)}
 </pre>
+If the comma is not escaped - e.g. <code>${__javaScript(Math.max(2,5))}</code> - you will get an error such as:
+<pre>
+ERROR - jmeter.functions.JavaScript: Error processing Javascript: [Math.max(2]
+    org.mozilla.javascript.EvaluatorException: missing ) after argument list (&lt;cmd&gt;#1)
+ </pre>
+ This is because the string "Math.max(2,5)" is treated as being two parameters to the __javascript function:<br/>
+ <code>Math.max(2</code> and <code>5)</code><br/>
+ Other error messages are possible. 
 </p>
 <p>Variables are referenced as follows:
 <pre>
