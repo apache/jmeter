@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -43,6 +44,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
@@ -50,6 +52,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.template.Template;
 import org.apache.jmeter.gui.action.template.TemplateManager;
 import org.apache.jmeter.swing.HtmlPane;
@@ -108,8 +111,8 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
             private static final long serialVersionUID = -3661361497864527363L;
 
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                doOpen(actionEvent);
+            public void actionPerformed(final ActionEvent actionEvent) {
+                checkDirtyAndLoad(actionEvent);
             }
         };
         ActionMap actionMap = rootPane.getActionMap();
@@ -120,6 +123,34 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         inputMap.put(KeyStrokes.ENTER, enterAction.getValue(Action.NAME));
 
         return rootPane;
+    }
+    
+    /**
+     * Check if existing Test Plan has been modified and ask user 
+     * what he wants to do if test plan is dirty
+     * @param actionEvent {@link ActionEvent}
+     */
+    private void checkDirtyAndLoad(final ActionEvent actionEvent)
+            throws HeadlessException {
+        // Check if the user wants to drop any changes
+        ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (guiPackage.isDirty()) {
+            // Check if the user wants to create from template
+            int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("cancel_new_from_template"), // $NON-NLS-1$
+                    JMeterUtils.getResString("template_load?"),  // $NON-NLS-1$
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if(response == JOptionPane.YES_OPTION) {
+                ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.SAVE));
+            }
+            if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
+                return; // Don't clear the plan
+            }
+        }
+        ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.STOP_THREAD));
+        doOpen(actionEvent);
     }
 
     private void init() {
@@ -175,7 +206,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
             this.setVisible(false);
             return;
         }
-        doOpen(e);
+        checkDirtyAndLoad(e);
     }
     
     @Override
