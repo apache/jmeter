@@ -61,12 +61,7 @@ public class TemplateManager {
     }
     
     private TemplateManager()  {
-        try {
-            templates = readTemplates();            
-        } catch(IOException e) {
-            log.error("Error loading templates from files referenced in templates.files property:"+
-                    TEMPLATE_FILES, e);
-        }
+        templates = readTemplates();            
     }
     
     private XStream initXStream() {
@@ -98,7 +93,7 @@ public class TemplateManager {
     }
 
 
-    private Map<String, Template> readTemplates() throws FileNotFoundException {
+    private Map<String, Template> readTemplates() {
         Map<String, Template> templates = new HashMap<String, Template>();
        
         String[] templateFiles = TEMPLATE_FILES.split(",");
