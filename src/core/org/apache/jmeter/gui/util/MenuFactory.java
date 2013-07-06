@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
+import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -466,7 +467,9 @@ public final class MenuFactory {
                         throw (Error) e;
                     }
                     if (e instanceof RuntimeException){
-                        throw (RuntimeException) e;
+                        if (!(e instanceof HeadlessException)) { // Allow headless testing
+                            throw (RuntimeException) e;
+                        }
                     }
                     continue;
                 }
