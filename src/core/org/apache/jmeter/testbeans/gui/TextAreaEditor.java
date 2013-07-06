@@ -36,11 +36,11 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 
 public class TextAreaEditor extends PropertyEditorSupport implements FocusListener, PropertyChangeListener {
 
-    private RSyntaxTextArea textUI;
+    private final RSyntaxTextArea textUI;
 
-    private RTextScrollPane scroller;
+    private final RTextScrollPane scroller;
 
-    private Properties languageProperties;
+    private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/testbeans/gui/textarea.properties"); //$NON-NLS-1$;
 
     /** {@inheritDoc} */
     @Override
@@ -54,7 +54,6 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     }
 
     private final void init() {// called from ctor, so must not be overridable
-        textUI = new RSyntaxTextArea(20, 20);
         textUI.discardAllEdits();
         textUI.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         textUI.setCodeFoldingEnabled(true);
@@ -62,9 +61,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
         textUI.addFocusListener(this);
         textUI.setWrapStyleWord(true);
         textUI.setLineWrap(true);
-        scroller = new RTextScrollPane(textUI);
         scroller.setFoldIndicatorEnabled(true);
-        languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/testbeans/gui/textarea.properties"); //$NON-NLS-1$
     }
 
     /**
@@ -72,6 +69,8 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      */
     public TextAreaEditor() {
         super();
+        textUI = new RSyntaxTextArea(20, 20);
+        scroller = new RTextScrollPane(textUI);
         init();
     }
 
@@ -80,6 +79,8 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      */
     public TextAreaEditor(Object source) {
         super(source);
+        textUI = new RSyntaxTextArea(20, 20);
+        scroller = new RTextScrollPane(textUI);
         init();
         setValue(source);
     }
