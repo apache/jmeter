@@ -40,7 +40,8 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * @since 2.10
  */
 public class TemplateManager {
-    private class Templates {
+    // Created by XStream reading templates.xml
+    private static class Templates {
         private final Map<String, Template> templates = new HashMap<String, Template>();
     }
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
