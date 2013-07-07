@@ -23,6 +23,8 @@ import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
 import java.beans.PropertyDescriptor;
 
+// TODO - does not appear to be used currently
+
 /**
  * This is the BeanInfo object for the TestBean class. It acts as a "stopper"
  * for the introspector: we don't want it to look at properties defined at this
