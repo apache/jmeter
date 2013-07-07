@@ -21,6 +21,7 @@ package org.apache.jmeter.util;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  */
 public abstract class BeanShellBeanInfoSupport extends BeanInfoSupport {
 
-    protected BeanShellBeanInfoSupport(Class<?> beanClass) {
+    protected BeanShellBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass);
         PropertyDescriptor p;
 
