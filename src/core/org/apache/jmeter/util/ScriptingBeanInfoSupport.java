@@ -21,6 +21,7 @@ package org.apache.jmeter.util;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.FileEditor;
 import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
@@ -29,7 +30,7 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  */
 public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
-    protected ScriptingBeanInfoSupport(Class<?> beanClass, String[] LANGUAGE_TAGS) {
+    protected ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] LANGUAGE_TAGS) {
         super(beanClass);
         PropertyDescriptor p;
 
