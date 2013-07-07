@@ -65,18 +65,17 @@ public class TestBeanHelper {
         }
         try {
             BeanInfo beanInfo = Introspector.getBeanInfo(el.getClass());
-            PropertyDescriptor[] desc = beanInfo.getPropertyDescriptors();
-            Object[] param = new Object[1];
+            PropertyDescriptor[] descs = beanInfo.getPropertyDescriptors();
 
             if (log.isDebugEnabled()) {
                 log.debug("Preparing " + el.getClass());
             }
 
-            for (int x = 0; x < desc.length; x++) {
+            for (PropertyDescriptor desc : descs) {
                 // Obtain a value of the appropriate type for this property.
-                JMeterProperty jprop = el.getProperty(desc[x].getName());
-                Class<?> type = desc[x].getPropertyType();
-                Object value = unwrapProperty(desc[x], jprop, type);
+                JMeterProperty jprop = el.getProperty(desc.getName());
+                Class<?> type = desc.getPropertyType();
+                Object value = unwrapProperty(desc, jprop, type);
 
                 if (log.isDebugEnabled()) {
                     log.debug("Setting " + jprop.getName() + "=" + value);
@@ -86,10 +85,9 @@ public class TestBeanHelper {
                 if (value != null || !type.isPrimitive())
                 // We can't assign null to primitive types.
                 {
-                    param[0] = value;
-                    Method writeMethod = desc[x].getWriteMethod();
+                    Method writeMethod = desc.getWriteMethod();
                     if (writeMethod!=null) {
-                        invokeOrBailOut(el, writeMethod, param);
+                        invokeOrBailOut(el, writeMethod, new Object[] {value});
                     }
                 }
             }
