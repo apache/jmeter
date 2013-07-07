@@ -21,6 +21,8 @@ package org.apache.jmeter.util;
 import java.util.Arrays;
 import java.util.Properties;
 
+import org.apache.jmeter.testbeans.TestBean;
+
 /**
  * Parent class to handle common GUI design for BSF test elements
  */
@@ -39,7 +41,7 @@ public abstract class BSFBeanInfoSupport extends ScriptingBeanInfoSupport {
         Arrays.sort(LANGUAGE_TAGS);
     }
 
-    protected BSFBeanInfoSupport(Class<?> beanClass) {
+    protected BSFBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass, LANGUAGE_TAGS);
     }
 

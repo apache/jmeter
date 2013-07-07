@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.jdbc;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
@@ -28,7 +29,7 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
     /**
      *
      */
-    public JDBCTestElementBeanInfoSupport(Class<?> beanClass) {
+    public JDBCTestElementBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass);
 
         createPropertyGroup("varName", // $NON-NLS-1$

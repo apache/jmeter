@@ -25,6 +25,8 @@ import java.util.List;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 
+import org.apache.jmeter.testbeans.TestBean;
+
 /**
  * Parent class to handle common GUI design for JSR223 test elements
  */
@@ -46,7 +48,7 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
         Arrays.sort(LANGUAGE_TAGS);
     }
 
-    protected JSR223BeanInfoSupport(Class<?> beanClass) {
+    protected JSR223BeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass, LANGUAGE_TAGS);
     }
 
