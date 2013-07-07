@@ -233,8 +233,8 @@ public final class ActionRouter implements ActionListener {
             Set<ActionListener> listenerSet = preActionListeners.get(action.getName());
             if (listenerSet != null && listenerSet.size() > 0) {
                 ActionListener[] listeners = listenerSet.toArray(new ActionListener[listenerSet.size()]);
-                for (int i = 0; i < listeners.length; i++) {
-                    listeners[i].actionPerformed(e);
+                for (ActionListener listener : listeners) {
+                    listener.actionPerformed(e);
                 }
             }
         }
@@ -245,8 +245,8 @@ public final class ActionRouter implements ActionListener {
             Set<ActionListener> listenerSet = postActionListeners.get(action.getName());
             if (listenerSet != null && listenerSet.size() > 0) {
                 ActionListener[] listeners = listenerSet.toArray(new ActionListener[listenerSet.size()]);
-                for (int i = 0; i < listeners.length; i++) {
-                    listeners[i].actionPerformed(e);
+                for (ActionListener listener : listeners) {
+                    listener.actionPerformed(e);
                 }
             }
         }

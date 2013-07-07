@@ -80,8 +80,8 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         List<JMeterTreeNode> nodes = new ArrayList<JMeterTreeNode>();
         if(treeModel != null) {
             TreeNode[] nodesToRoot = treeModel.getPathToRoot(this);
-            for (int i = 0; i < nodesToRoot.length; i++) {
-                JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) nodesToRoot[i];
+            for (TreeNode node : nodesToRoot) {
+                JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) node;
                 int level = jMeterTreeNode.getLevel();
                 if(level<TEST_PLAN_LEVEL) {
                     continue;

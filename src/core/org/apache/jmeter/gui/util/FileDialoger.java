@@ -82,8 +82,8 @@ public final class FileDialoger {
 
     private static void clearFileFilters() {
         FileFilter[] filters = jfc.getChoosableFileFilters();
-        for (int x = 0; x < filters.length; x++) {
-            jfc.removeChoosableFileFilter(filters[x]);
+        for (FileFilter filter : filters) {
+            jfc.removeChoosableFileFilter(filter);
         }
     }
 

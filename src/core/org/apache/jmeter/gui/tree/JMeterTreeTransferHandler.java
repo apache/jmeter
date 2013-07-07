@@ -146,9 +146,9 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         
         // the tree accepts a jmx file 
         DataFlavor[] flavors = support.getDataFlavors();
-        for (int i = 0; i < flavors.length; i++) {
+        for (DataFlavor flavor : flavors) {
             // Check for file lists specifically
-            if (flavors[i].isFlavorJavaFileListType()) {
+            if (flavor.isFlavorJavaFileListType()) {
                 return true;
             }
         }
@@ -182,14 +182,14 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             return false;
         }
         
-        for (int i = 0; i < nodes.length; i++) {
-            if(target == nodes[i]) {
+        for (JMeterTreeNode node : nodes) {
+            if(target == node) {
                 return false;
             }
             
             // Do not allow a non-leaf node to be moved into one of its children
-            if (nodes[i].getChildCount() > 0
-                    && target.isNodeAncestor(nodes[i])) {
+            if (node.getChildCount() > 0
+                    && target.isNodeAncestor(node)) {
                 return false;
             }
         }
@@ -209,9 +209,9 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         GuiPackage guiInstance = GuiPackage.getInstance();
         DataFlavor[] flavors = support.getDataFlavors();
         Transferable t = support.getTransferable();
-        for (int i = 0; i < flavors.length; i++) {
+        for (DataFlavor flavor : flavors) {
             // Check for file lists specifically
-            if (flavors[i].isFlavorJavaFileListType()) {
+            if (flavor.isFlavorJavaFileListType()) {
                 try {
                     return guiInstance.getMainFrame().openJmxFilesFromDragAndDrop(t);
                 }
@@ -236,7 +236,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
        
         nodesForRemoval = new ArrayList<JMeterTreeNode>();
         int index = dl.getChildIndex();
-        for (int i = 0; i < nodes.length; i++) {
+        for (JMeterTreeNode node : nodes) {
             
             if (index == -1) { // drop mode == DropMode.ON
                 index = target.getChildCount();
@@ -246,10 +246,10 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             // the children are not cloned but moved to the cloned node
             // working on the original node would be harder as 
             //    you'll have to deal with the insertion index offset if you re-order a node inside a parent
-            JMeterTreeNode copy = (JMeterTreeNode) nodes[i].clone();
+            JMeterTreeNode copy = (JMeterTreeNode) node.clone();
             
             // first copy the children as the call to copy.add will modify the collection we're iterating on
-            Enumeration<?> enumFrom = nodes[i].children();
+            Enumeration<?> enumFrom = node.children();
             List<JMeterTreeNode> tmp = new ArrayList<JMeterTreeNode>();
             while (enumFrom.hasMoreElements()) {
                 JMeterTreeNode child = (JMeterTreeNode) enumFrom.nextElement();
@@ -260,7 +260,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
                 copy.add(jMeterTreeNode);
             }
             guiInstance.getTreeModel().insertNodeInto(copy, target, index++);
-            nodesForRemoval.add(nodes[i]);
+            nodesForRemoval.add(node);
         }
         
         // expand the destination node

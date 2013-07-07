@@ -53,8 +53,8 @@ public class Cut extends AbstractAction {
 
         currentNodes = Copy.keepOnlyAncestors(currentNodes);
         Copy.setCopiedNodes(currentNodes);
-        for (int i = 0; i < currentNodes.length; i++) {
-            guiPack.getTreeModel().removeNodeFromParent(currentNodes[i]);
+        for (JMeterTreeNode currentNode : currentNodes) {
+            guiPack.getTreeModel().removeNodeFromParent(currentNode);
         }
         guiPack.getMainFrame().repaint();
     }

@@ -71,8 +71,8 @@ public class AddParent implements Command {
         int index = parentNode.getIndex(currentNode);
         guiPackage.getTreeModel().insertNodeInto(newNode, parentNode, index);
         JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
-        for (int i = 0; i < nodes.length; i++) {
-            moveNode(guiPackage, nodes[i], newNode);
+        for (JMeterTreeNode node : nodes) {
+            moveNode(guiPackage, node, newNode);
         }
     }
 
