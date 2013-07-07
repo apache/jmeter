@@ -24,10 +24,8 @@ package org.apache.jmeter.protocol.http.sampler;
 import org.apache.jmeter.testelement.AbstractTestElementBeanInfo;
 
 /**
- * This class does not appear to be used.
- * However, without it, there are test errors for the AccessLog Sampler:
- * unable to find property autoRedirects.displayName.
- *
+ * This is the BeanInfo class for the TestBean HTTPSamplerBase.
+ * (every TestBean has to have a BeanInfo class)
  */
 public class HTTPSamplerBaseBeanInfo extends AbstractTestElementBeanInfo {
 
