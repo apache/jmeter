@@ -163,6 +163,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>55056</bugzilla> - wasted work in Data.append()</li>
 <li><bugzilla>55129</bugzilla> -  Change Javadoc generation per CVE-2013-1571, VU#225657</li>
 <li><bugzilla>55187</bugzilla> - Integer overflow when computing ONE_YEAR_MS in HTTP CacheManager</li>
+<li><bugzilla>55208</bugzilla> - JSR223 language entries are duplicated; fold to lower case</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

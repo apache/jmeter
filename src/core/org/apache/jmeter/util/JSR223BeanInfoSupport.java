@@ -18,9 +18,11 @@
 
 package org.apache.jmeter.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
@@ -35,13 +37,13 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
     private static final String[] LANGUAGE_TAGS;
 
     static {
-        List<String> shortNames = new ArrayList<String>();
+        Set<String> shortNames = new HashSet<String>();
         ScriptEngineManager sem = new ScriptEngineManager();
         final List<ScriptEngineFactory> engineFactories = sem.getEngineFactories();
         for(ScriptEngineFactory fact : engineFactories){
             List<String> names = fact.getNames();
             for(String shortName : names) {
-                shortNames.add(shortName);
+                shortNames.add(shortName.toLowerCase(Locale.ENGLISH));
             }
         }
         LANGUAGE_TAGS = shortNames.toArray(new String[shortNames.size()]);
