@@ -30,15 +30,14 @@ import java.beans.PropertyEditorSupport;
 import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rtextarea.RTextScrollPane;
+import org.apache.jorphan.gui.JSyntaxTextArea;
+import org.apache.jorphan.gui.JTextScrollPane;
 
 public class TextAreaEditor extends PropertyEditorSupport implements FocusListener, PropertyChangeListener {
 
-    private final RSyntaxTextArea textUI;
+    private final JSyntaxTextArea textUI;
 
-    private final RTextScrollPane scroller;
+    private final JTextScrollPane scroller;
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/testbeans/gui/textarea.properties"); //$NON-NLS-1$;
 
@@ -55,13 +54,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 
     private final void init() {// called from ctor, so must not be overridable
         textUI.discardAllEdits();
-        textUI.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        textUI.setCodeFoldingEnabled(true);
-        textUI.setAntiAliasingEnabled(true);
         textUI.addFocusListener(this);
-        textUI.setWrapStyleWord(true);
-        textUI.setLineWrap(true);
-        scroller.setFoldIndicatorEnabled(true);
     }
 
     /**
@@ -69,8 +62,8 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      */
     public TextAreaEditor() {
         super();
-        textUI = new RSyntaxTextArea(20, 20);
-        scroller = new RTextScrollPane(textUI);
+        textUI = new JSyntaxTextArea(20, 20);
+        scroller = new JTextScrollPane(textUI, true);
         init();
     }
 
@@ -79,8 +72,8 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      */
     public TextAreaEditor(Object source) {
         super(source);
-        textUI = new RSyntaxTextArea(20, 20);
-        scroller = new RTextScrollPane(textUI);
+        textUI = new JSyntaxTextArea(20, 20);
+        scroller = new JTextScrollPane(textUI, true);
         init();
         setValue(source);
     }
@@ -134,7 +127,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
             if (languageProperties.containsKey(lang)) {
                 textUI.setSyntaxEditingStyle(languageProperties.getProperty(lang));
             } else {
-                textUI.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+                textUI.setSyntaxEditingStyle(null);
             }
 
         }
