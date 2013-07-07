@@ -146,8 +146,8 @@ public class AssertionGui extends AbstractAssertionGui {
 
             ra.clearTestStrings();
             String[] testStrings = tableModel.getData().getColumn(COL_RESOURCE_NAME);
-            for (int i = 0; i < testStrings.length; i++) {
-                ra.addTestString(testStrings[i]);
+            for (String testString : testStrings) {
+                ra.addTestString(testString);
             }
 
             if (responseStringButton.isSelected()) {

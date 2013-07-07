@@ -154,8 +154,8 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     public void setFiles(String[] files) {
         this.clearFiles();
-        for (int idx=0; idx < files.length; idx++) {
-            addFilename(files[idx]);
+        for (String file : files) {
+            addFilename(file);
         }
     }
 
