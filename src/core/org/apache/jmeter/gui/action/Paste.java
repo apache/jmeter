@@ -67,9 +67,9 @@ public class Paste extends AbstractAction {
         JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
         JMeterTreeNode currentNode = treeListener.getCurrentNode();
         if (MenuFactory.canAddTo(currentNode, draggedNodes)) {
-            for (int i = 0; i < draggedNodes.length; i++) {
-                if (draggedNodes[i] != null) {
-                    addNode(currentNode, draggedNodes[i]);
+            for (JMeterTreeNode draggedNode : draggedNodes) {
+                if (draggedNode != null) {
+                    addNode(currentNode, draggedNode);
                 }
             }
         } else {

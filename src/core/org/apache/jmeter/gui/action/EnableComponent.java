@@ -62,9 +62,9 @@ public class EnableComponent implements Command {
 
     private void enableComponents(JMeterTreeNode[] nodes, boolean enable) {
         GuiPackage pack = GuiPackage.getInstance();
-        for (int i = 0; i < nodes.length; i++) {
-            nodes[i].setEnabled(enable);
-            pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
+        for (JMeterTreeNode node : nodes) {
+            node.setEnabled(enable);
+            pack.getGui(node.getTestElement()).setEnabled(enable);
         }
     }
 

@@ -162,8 +162,8 @@ public class CSVDataSet extends ConfigTestElement
             if (getStopThread()) {
                 throw new JMeterStopThreadException("End of file detected");
             }
-            for (int a = 0; a < vars.length ; a++) {
-                threadVars.put(vars[a], EOFVALUE);
+            for (String var :vars) {
+                threadVars.put(var, EOFVALUE);
             }
         }
     }

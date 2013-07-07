@@ -96,11 +96,11 @@ public class TemplateManager {
         Map<String, Template> templates = new HashMap<String, Template>();
        
         String[] templateFiles = TEMPLATE_FILES.split(",");
-        for (int i = 0; i < templateFiles.length; i++) {
-            if(!StringUtils.isEmpty(templateFiles[i])) {
+        for (String templateFile : templateFiles) {
+            if(!StringUtils.isEmpty(templateFile)) {
                 InputStream inputStream = null;
                 File f = new File(JMeterUtils.getJMeterHome(),
-                        templateFiles[i]); 
+                        templateFile); 
                 try {
                     if(f.exists() && f.canRead()) {
                         log.info("Reading templates from:"+f.getAbsolutePath());
