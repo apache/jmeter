@@ -18,7 +18,8 @@
 
 package org.apache.jorphan.gui;
 
-import org.apache.jmeter.util.JMeterUtils;
+// jorphan cannot call methods in core because it is built first
+//import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -29,9 +30,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private static final long serialVersionUID = 210L;
 
-    private final boolean WRAP_STYLE_WORD = JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);
-    private final boolean LINE_WRAP = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
-    private final boolean CODE_FOLDING = JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
+    private final boolean WRAP_STYLE_WORD = true;//JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);
+    private final boolean LINE_WRAP = true;//JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
+    private final boolean CODE_FOLDING = true;//JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
 
     /**
      * Creates the default syntax highlighting text area.
