@@ -2881,7 +2881,6 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
         <process_jarfile jarname="mongo-java-driver"/>
-        <process_jarfile jarname="rsyntaxtextarea"/>
         <process_jarfile jarname="serializer"/>
     	<process_jarfile jarname="slf4j-api"/>
         <process_jarfile jarname="soap"/>
@@ -2896,6 +2895,8 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="xmlpull"/>
         <process_jarfile jarname="xpp3"/>
         <process_jarfile jarname="xstream"/>
+    	<!-- special -->
+        <antcall target="_process_rsyntaxtextarea"/>
     </target>
 
     <target name="_process_doc_jars">
@@ -2938,6 +2939,41 @@ run JMeter unless all the JMeter jars are added.
         <antcall target="_process_all_jars">
             <param name="_check_exists" value="true"/>
         </antcall>
+    </target>
+
+	<!-- Special: process to get RSyntaxTextArea-->
+    <target name="_process_rsyntaxtextarea">
+        <available file="./lib/${rsyntaxtextarea.jar}" property="rsyntaxtextarea.exists"/>
+        <antcall target="_get_rsyntaxtextarea"/>
+    </target>
+
+    <!-- Get RSyntaxTextArea binary zip file, unpack it, pick up jar file and remove the zip -->
+    <target name="_get_rsyntaxtextarea" unless="rsyntaxtextarea.exists">
+        <property name="loc" value="${rsyntaxtextarea.loc}"/>
+        <property name="zip" value="${rsyntaxtextarea.name}_${rsyntaxtextarea.version}.zip"/>
+        <property name="jar" value="${rsyntaxtextarea.name}.jar"/>
+        <property name="md5" value="${rsyntaxtextarea.md5}"/>
+        <property name="path" value="./lib"/>
+        <get src="${loc}/${zip}"
+             dest="${build.dir}/${zip}"
+             usetimestamp="true" ignoreerrors="false"/>
+        <unzip dest="${build.dir}" src="${build.dir}/${zip}">
+            <patternset>
+                <include name="**/${jar}"/>
+            </patternset>
+            <mapper type="flatten"/>
+        </unzip>
+        <antcall target="_checkMD5">
+            <param name="file" value="${build.dir}/${jar}"/>
+            <param name="path" value="${build.dir}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+    	<delete>
+    	    <fileset dir="${path}" includes="${rsyntaxtextarea.name}-*.jar"/> 
+    	</delete>
+        <move preservelastmodified="true" overwrite="true"
+            file="${build.dir}/${jar}" tofile="${path}/${rsyntaxtextarea.jar}" verbose="true"/>
+        <delete file="${build.dir}/${zip}"/>
     </target>
 
     <target name="checkstyle">
