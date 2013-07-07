@@ -101,13 +101,6 @@ public class TestBeanHelper {
         }
     }
 
-    /**
-     * @param desc
-     * @param x
-     * @param jprop
-     * @param type
-     * @return
-     */
     private static Object unwrapProperty(PropertyDescriptor desc, JMeterProperty jprop, Class<?> type) {
         Object value;
         if(jprop instanceof TestElementProperty)
