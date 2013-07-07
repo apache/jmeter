@@ -40,8 +40,8 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
         final List<ScriptEngineFactory> engineFactories = sem.getEngineFactories();
         for(ScriptEngineFactory fact : engineFactories){
             List<String> names = fact.getNames();
-            for(String shorName : names) {
-                shortNames.add(shorName);
+            for(String shortName : names) {
+                shortNames.add(shortName);
             }
         }
         LANGUAGE_TAGS = shortNames.toArray(new String[shortNames.size()]);
