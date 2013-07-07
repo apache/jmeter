@@ -1020,7 +1020,7 @@ to configure this via the GUI, so it cannot really be used.
 </p>
 </component>
 
-<component name="BeanShell Sampler" index="&sect-num;.1.10"  width="1034" height="505" screenshot="beanshellsampler.png">
+<component name="BeanShell Sampler" index="&sect-num;.1.10"  width="848" height="566" screenshot="beanshellsampler.png">
     <description><p>This sampler allows you to write a sampler using the BeanShell scripting language.
 </p><p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
@@ -1138,7 +1138,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.11"  width="865" height="412" screenshot="bsfsampler.png">
+<component name="BSF Sampler" index="&sect-num;.1.11"  width="848" height="590" screenshot="bsfsampler.png">
     <description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
         See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
         website for details of the languages supported.
@@ -1213,7 +1213,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
 </p>
 </component>
 
-<component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="752" height="507" screenshot="jsr223-sampler.png">
+<component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="846" height="630" screenshot="jsr223-sampler.png">
 <description>
 <p>
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
@@ -1862,7 +1862,7 @@ If omitted, output is captured and returned as the response data.</property>
 <property name="Expected Return Code" required="No">Expected return code for System Call, required if "Check Return Code" is checked.</property>
 </component>
 
-<component name="MongoDB Script (alpha)" index="&sect-num;.1.21" width="1213" height="320" screenshot="mongodb-script.png">
+<component name="MongoDB Script (alpha)" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
 
 <description><p>This sampler lets you send an Request to a MongoDB.</p>
 <p>Before using this you need to set up a
@@ -2999,7 +2999,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component name="BeanShell Listener"  index="&sect-num;.3.15"  width="553" height="382" screenshot="beanshell_listener.png">
+<component name="BeanShell Listener"  index="&sect-num;.3.15"  width="844" height="633" screenshot="beanshell_listener.png">
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
@@ -3129,7 +3129,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
  </properties>
 </component>
 
-<component name="BSF Listener" index="&sect-num;.3.18"  width="736" height="369" screenshot="bsf_listener.png">
+<component name="BSF Listener" index="&sect-num;.3.18"  width="847" height="634" screenshot="bsf_listener.png">
 <description>
 <p>
 The BSF Listener allows BSF script code to be applied to sample results.
@@ -4220,7 +4220,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </properties>
 </component>
 
-<component name="BeanShell Assertion" index="&sect-num;.5.5"  width="597" height="303" screenshot="bsh_assertion.png">
+<component name="BeanShell Assertion" index="&sect-num;.5.5"  width="849" height="633" screenshot="beanshell_assertion.png">
 <description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
 </p>
 <p>
@@ -4368,7 +4368,7 @@ You reference this file in jmeter.properties file using the property:
 </properties>
 </component>
 
-<component name="BSF Assertion" index="&sect-num;.5.10"  width="805" height="382" screenshot="bsf_assertion.png">
+<component name="BSF Assertion" index="&sect-num;.5.10"  width="847" height="634" screenshot="bsf_assertion.png">
 <description>
 <p>
 The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
@@ -4593,7 +4593,7 @@ points of the test plan.
 
 </component>
 
-<component name="BeanShell Timer" index="&sect-num;.6.6"  width="553" height="382" screenshot="timers/beanshell_timer.png">
+<component name="BeanShell Timer" index="&sect-num;.6.6"  width="846" height="636" screenshot="timers/beanshell_timer.png">
 <description>
 <p>
 The BeanShell Timer can be used to generate a delay.
@@ -4644,7 +4644,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 </component>
 
 
-<component name="BSF Timer" index="&sect-num;.6.7"  width="548" height="350" screenshot="timers/bsf_timer.png">
+<component name="BSF Timer" index="&sect-num;.6.7"  width="844" height="636" screenshot="timers/bsf_timer.png">
 <description>
 <p>
 The BSF Timer can be used to generate a delay using a BSF scripting language.
@@ -4852,7 +4852,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 </properties>
 </component>
 
-<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="568" height="325" screenshot="beanshell_preprocessor.png">
+<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="845" height="633" screenshot="beanshell_preprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
@@ -4897,7 +4897,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="634" height="357" screenshot="bsf_preprocessor.png">
+<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
 <description>
 <p>
 The BSF PreProcessor allows BSF script code to be applied before taking a sample.
@@ -5334,7 +5334,7 @@ extracting the node as text or attribute value and store the result into the giv
    </properties>
 </component>
 
-<component name="BeanShell PostProcessor"  index="&sect-num;.8.5"  width="655" height="306" screenshot="beanshell_postprocessor.png">
+<component name="BeanShell PostProcessor"  index="&sect-num;.8.5"  width="847" height="633" screenshot="beanshell_postprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
@@ -5380,7 +5380,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PostProcessor" index="&sect-num;.8.6"  width="634" height="357" screenshot="bsf_postprocessor.png">
+<component name="BSF PostProcessor" index="&sect-num;.8.6"  width="844" height="633" screenshot="bsf_postprocessor.png">
 <description>
 <p>
 The BSF PostProcessor allows BSF script code to be applied after taking a sample.
