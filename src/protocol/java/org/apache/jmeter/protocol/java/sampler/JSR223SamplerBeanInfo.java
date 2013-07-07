@@ -18,9 +18,9 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
-import org.apache.jmeter.util.BSFBeanInfoSupport;
+import org.apache.jmeter.util.JSR223BeanInfoSupport;
 
-public class JSR223SamplerBeanInfo extends BSFBeanInfoSupport {
+public class JSR223SamplerBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223SamplerBeanInfo() {
         super(JSR223Sampler.class);
