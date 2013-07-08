@@ -224,12 +224,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected HTTPSampleResult sample(URL url, String method,
             boolean areFollowingRedirect, int frameDepth) {
 
-        HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(isMonitor());
-
-        res.setSampleLabel(url.toString()); // May be replaced later
-        res.setHTTPMethod(method);
-        res.setURL(url);
+        HTTPSampleResult res = createSampleResult(url, method);
 
         HttpClient httpClient = setupClient(url);
         
@@ -279,14 +274,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         try {
             currentRequest = httpRequest;
-            // Handle the various methods
-            if (method.equals(HTTPConstants.POST)) {
-                String postBody = sendPostData((HttpPost)httpRequest);
-                res.setQueryString(postBody);
-            } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
-                String entityBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
-                res.setQueryString(entityBody);
-            }
+            handleMethod(method, res, httpRequest, localContext);
             HttpResponse httpResponse = httpClient.execute(httpRequest, localContext); // perform the sample
 
             // Needs to be done after execute to pick up all the headers
@@ -374,6 +362,45 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         } finally {
             currentRequest = null;
         }
+        return res;
+    }
+
+    /**
+     * Calls sendPostData if method is POST and sendEntityData if method is PUT or PATCH
+     * Field HTTPSampleResult#queryString of result is modified in the 2 cases
+     * @param method String HTTP method
+     * @param result {@link HTTPSampleResult}
+     * @param httpRequest {@link HttpRequestBase}
+     * @param localContext {@link HttpContext}
+     * @throws IOException
+     */
+    protected void handleMethod(String method, HTTPSampleResult result,
+            HttpRequestBase httpRequest, HttpContext localContext) throws IOException {
+        // Handle the various methods
+        if (method.equals(HTTPConstants.POST)) {
+            String postBody = sendPostData((HttpPost)httpRequest);
+            result.setQueryString(postBody);
+        } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
+            String entityBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
+            result.setQueryString(entityBody);
+        }
+    }
+
+    /**
+     * Create HTTPSampleResult filling url, method and SampleLabel.
+     * Monitor field is computed calling isMonitor()
+     * @param url URL
+     * @param method HTTP Method
+     * @return {@link HTTPSampleResult}
+     */
+    protected HTTPSampleResult createSampleResult(URL url, String method) {
+        HTTPSampleResult res = new HTTPSampleResult();
+        res.setMonitor(isMonitor());
+
+        res.setSampleLabel(url.toString()); // May be replaced later
+        res.setHTTPMethod(method);
+        res.setURL(url);
+        
         return res;
     }
 
@@ -558,7 +585,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         return httpClient;
     }
 
-    private void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
+    /**
+     * Setup following elements on httpRequest:
+     * <ul>
+     * <li>ConnRoutePNames.LOCAL_ADDRESS enabling IP-SPOOFING</li>
+     * <li>Socket and connection timeout</li>
+     * <li>Redirect handling</li>
+     * <li>Keep Alive header or Connection Close</li>
+     * <li>Calls setConnectionHeaders to setup headers</li>
+     * <li>Calls setConnectionCookie to setup Cookie</li>
+     * </ul>
+     * @param url
+     * @param httpRequest
+     * @param res
+     * @throws IOException
+     */
+    protected void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
         throws IOException {
 
     HttpParams requestParams = httpRequest.getParams();
@@ -648,7 +690,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return a String containing the cookie details (for the response)
      * May be null
      */
-    private String setConnectionCookie(HttpRequest request, URL url, CookieManager cookieManager) {
+    protected String setConnectionCookie(HttpRequest request, URL url, CookieManager cookieManager) {
         String cookieHeader = null;
         if (cookieManager != null) {
             cookieHeader = cookieManager.getCookieHeaderForURL(url);
@@ -672,7 +714,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      *            for this <code>UrlConfig</code>
      * @param cacheManager the CacheManager (may be null)
      */
-    private void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
+    protected void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
         if (headerManager != null) {
             CollectionProperty headers = headerManager.getHeaders();
             if (headers != null) {
@@ -790,7 +832,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     // TODO needs cleaning up
-    private String sendPostData(HttpPost post)  throws IOException {
+    /**
+     * 
+     * @param post {@link HttpPost}
+     * @return String posted body if computable
+     * @throws IOException
+     */
+    protected String sendPostData(HttpPost post)  throws IOException {
         // Buffer to hold the post body, except file content
         StringBuilder postedBody = new StringBuilder(1000);
         HTTPFileArg files[] = getHTTPFiles();
@@ -1008,7 +1056,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @throws  UnsupportedEncodingException for invalid charset name
      * @throws IOException cannot really occur for ByteArrayOutputStream methods
      */
-    private String sendEntityData( HttpEntityEnclosingRequestBase entity) throws IOException {
+    protected String sendEntityData( HttpEntityEnclosingRequestBase entity) throws IOException {
         // Buffer to hold the entity body
         StringBuilder entityBody = new StringBuilder(1000);
         boolean hasEntityBody = false;
