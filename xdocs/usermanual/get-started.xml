@@ -62,6 +62,17 @@ The other specific Test Plan sections are:
 <p>Once you are comfortable with building and running JMeter Test Plans, you can look into the
 various configuration elements (timers, listeners, assertions, and others) which give you more control
 over your Test Plans.</p>
+
+<subsection name="&sect-num;.0.1 Create Test Plan from Template" anchor="template">
+<p>Starting with version 2.10, you have the ability to create a new Test Plan from existing template.</p>
+<p>To do so you use menu item "New from templates":
+<figure image="template_menu.png">New from Templates menu item</figure>
+</p>
+<p>A popup appears, you can then choose a template among the list:
+<figure image="template_wizard.png">Templates wizard</figure>
+</p>
+<p>A documentation for each template explains what to do once test plan is created from template.</p>
+</subsection>
 </section>
 
 <section name="&sect-num;.1 Requirements" anchor="requirements">
