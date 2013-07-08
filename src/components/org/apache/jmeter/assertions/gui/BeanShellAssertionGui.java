@@ -28,11 +28,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.BeanShellAssertion;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JSyntaxTextArea;
-import org.apache.jorphan.gui.JTextScrollPane;
 
 public class BeanShellAssertionGui extends AbstractAssertionGui {
 
@@ -44,7 +44,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 
     private JTextField parameters;// parameters to pass to script file (or script)
 
-    private JSyntaxTextArea scriptField; // script area
+    private org.apache.jmeter.gui.util.JSyntaxTextArea scriptField; // script area
 
     public BeanShellAssertionGui() {
         init();
