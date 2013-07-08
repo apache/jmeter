@@ -30,8 +30,8 @@ import java.beans.PropertyEditorSupport;
 import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JSyntaxTextArea;
-import org.apache.jorphan.gui.JTextScrollPane;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 
 public class TextAreaEditor extends PropertyEditorSupport implements FocusListener, PropertyChangeListener {
 
