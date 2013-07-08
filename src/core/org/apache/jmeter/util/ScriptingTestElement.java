@@ -35,7 +35,7 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
 
     private String script = ""; // script (if file not provided)
 
-    private String scriptLanguage = ""; // BSF/JSR223 language to use
+    protected String scriptLanguage = ""; // BSF/JSR223 language to use
     //-- For TestBean implementations only
 
     public ScriptingTestElement() {
@@ -80,12 +80,5 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
         filename = s;
     }
 
-    public String getScriptLanguage() {
-        return scriptLanguage;
-    }
-
-    public void setScriptLanguage(String s) {
-        scriptLanguage = s;
-    }
 
 }

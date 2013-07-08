@@ -252,4 +252,11 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     public void testEnded(String host) {
         compiledScriptsCache.clear();
     }
+    public String getScriptLanguage() {
+        return scriptLanguage;
+    }
+
+    public void setScriptLanguage(String s) {
+        scriptLanguage = s;
+    }
 }
