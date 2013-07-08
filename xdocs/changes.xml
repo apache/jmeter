@@ -226,6 +226,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>55085</bugzilla> - UX Improvement : Ability to create New Test Plan from Templates</li>
 <li><bugzilla>55172</bugzilla> - Provide plugins a way to add Top Menu and menu items</li>
 <li><bugzilla>55202</bugzilla> - Add syntax color for scripts elements (BeanShell, BSF, and JSR223) with RSyntaxTextArea</li>
+<li><bugzilla>55175</bugzilla> - HTTPHC4Impl refactoring to allow better inheritance</li>
 </ul>
 
 <h2>Non-functional changes</h2>
