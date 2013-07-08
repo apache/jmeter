@@ -110,7 +110,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
-<li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler settings takes the whole screen with when there are samplers with long name</li>
+<li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler setting takes the whole screen when there are samplers with long names</li>
 <li><bugzilla>54629</bugzilla> - HTMLParser does not extract &lt;object&gt; tag urls</li>
 <li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput</li>
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed</li>
@@ -118,14 +118,14 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 
 <h3>Other Samplers</h3>
 <ul>
-<li><bugzilla>54913</bugzilla> - JMSPublisherGui incorrectly restore its state</li>
-<li><bugzilla>55027</bugzilla> - Test Action regression, duration value are not record (nightly build)</li>
-<li><bugzilla>55163</bugzilla> - BeanShellTestElement faiils to quote string when calling testStarted(String)/testEnded(String)</li>
+<li><bugzilla>54913</bugzilla> - JMSPublisherGui incorrectly restores its state</li>
+<li><bugzilla>55027</bugzilla> - Test Action regression, duration value is not recorded (nightly build)</li>
+<li><bugzilla>55163</bugzilla> - BeanShellTestElement fails to quote string when calling testStarted(String)/testEnded(String)</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
-<li><bugzilla>54467</bugzilla> - Loop controller Controller check conditions each request</li>
+<li><bugzilla>54467</bugzilla> - Loop Controller: compute loop value only once per parent iteration</li>
 <li><bugzilla>54985</bugzilla> - Make Transaction Controller set Response Code of Generated Parent Sampler to response code of first failing child in case of failure of one of its children</li>
 <li><bugzilla>54950</bugzilla> - ModuleController : Changes to referenced Module are not taken into account if changes occur after first run and referenced node is disabled</li>
 <li><bugzilla>55201</bugzilla> - ForEach controller excludes start index and includes end index (clarified documentation)</li>
@@ -181,7 +181,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>54788</bugzilla> - JMS Point-to-Point Sampler - GUI enhancements to increase readability and ease of use</li>
 <li><bugzilla>54798</bugzilla> - Using subject from EML-file for SMTP Sampler</li>
 <li><bugzilla>54759</bugzilla> - SSLPeerUnverifiedException using HTTPS , property documented</li>
-<li><bugzilla>54896</bugzilla> - JUnit sampler gives only “failed to create an instance of the class” message with constructor problems</li>
+<li><bugzilla>54896</bugzilla> - JUnit sampler gives only "failed to create an instance of the class" message with constructor problems</li>
 <li><bugzilla>55084</bugzilla> - Add timeout support for JDBC Request</li>
 <li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders</li>
 </ul>
@@ -220,7 +220,6 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>54839</bugzilla> - Set the application name on Mac</li>
 <li><bugzilla>54841</bugzilla> - Correctly handle the quit shortcut on Mac Os (CMD-Q)</li>
 <li><bugzilla>54844</bugzilla> - Set the application icon on Mac Os</li>
-<li><bugzilla>54834</bugzilla> - Improve Drag &amp; Drop in the jmeter tree</li>
 <li><bugzilla>54864</bugzilla> - Enable multi selection drag &amp; drop in the tree without having to start dragging before releasing Shift or Control </li>
 <li><bugzilla>54945</bugzilla> - Add Shutdown Hook to enable trapping kill or CTRL+C signals</li>
 <li><bugzilla>54990</bugzilla> - Download large files avoiding outOfMemory</li>
