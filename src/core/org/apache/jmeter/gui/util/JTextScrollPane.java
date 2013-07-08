@@ -16,7 +16,7 @@
  * 
  */
 
-package org.apache.jorphan.gui;
+package org.apache.jmeter.gui.util;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
 

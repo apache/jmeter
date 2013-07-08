@@ -32,8 +32,8 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JSyntaxTextArea;
-import org.apache.jorphan.gui.JTextScrollPane;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 
 public class BeanShellSamplerGui extends AbstractSamplerGui {
 
