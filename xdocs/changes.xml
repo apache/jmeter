@@ -111,7 +111,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler setting takes the whole screen when there are samplers with long names</li>
-<li><bugzilla>54629</bugzilla> - HTMLParser does not extract &lt;object&gt; tag urls</li>
+<li><bugzilla>54629</bugzilla> - HTMLParser does not extract &amp;lt;object&amp;gt; tag urls</li>
 <li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput</li>
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed</li>
 </ul>
@@ -192,7 +192,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 
 <h3>Listeners</h3>
 <ul>
-<li><bugzilla>54532</bugzilla> - Improve Response Time Graph Y axis scale with huge values or small values (&lt; 1000ms). Add a new field to define increment scale</li>
+<li><bugzilla>54532</bugzilla> - Improve Response Time Graph Y axis scale with huge values or small values (&amp;lt; 1000ms). Add a new field to define increment scale</li>
 <li><bugzilla>54576</bugzilla> - View Results Tree : Add a CSS/JQuery Tester</li>
 <li><bugzilla>54777</bugzilla> - Improve Performance of default ResultCollector</li>
 </ul>
