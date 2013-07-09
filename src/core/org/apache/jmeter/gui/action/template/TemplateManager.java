@@ -66,6 +66,7 @@ public class TemplateManager {
         XStream xstream = new XStream(new DomDriver());
         xstream.alias("template", Template.class);
         xstream.alias("templates", Templates.class);
+        xstream.useAttributeFor(Template.class, "isTestPlan");
         
         // templates i
         xstream.addImplicitMap(Templates.class, 
