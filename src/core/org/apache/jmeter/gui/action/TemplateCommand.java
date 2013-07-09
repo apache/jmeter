@@ -34,7 +34,7 @@ public class TemplateCommand extends AbstractAction {
         commands.add(ActionNames.CREATE_FROM_TEMPLATE);
     }
 
-    private SelectTemplateDialog dialog = new SelectTemplateDialog();
+    private final SelectTemplateDialog dialog = new SelectTemplateDialog();
     /**
      * @see Command#doAction(ActionEvent)
      */
