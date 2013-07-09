@@ -63,6 +63,11 @@ import org.apache.jorphan.util.JOrphanUtils;
  * @since 2.10
  */
 public class SelectTemplateDialog extends JDialog implements ChangeListener, ActionListener {
+
+    // preferred dimensions for scroller
+    private static final int SCROLLER_HEIGHT = 400;
+    private static final int SCROLLER_WIDTH = 550;
+
     /**
      *
      */
@@ -72,13 +77,13 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
 
     private JLabeledChoice templateList;
 
-    private HtmlPane helpDoc = new HtmlPane();
+    private final HtmlPane helpDoc = new HtmlPane();
 
     private JButton createFromTemplateButton;
 
     private JButton cancelButton;
     
-    private JScrollPane scroller = new JScrollPane(helpDoc);
+    private final JScrollPane scroller = new JScrollPane(helpDoc);
 
     public SelectTemplateDialog() {
         super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$
@@ -160,8 +165,8 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         helpDoc.setEditable(false);
         fillDescription();
         JPanel jPanel = new JPanel(new GridLayout(1,1));
-        scroller.setPreferredSize(new Dimension(300, 400));
-        jPanel.setPreferredSize(new Dimension(310, 410));
+        scroller.setPreferredSize(new Dimension(SCROLLER_WIDTH, SCROLLER_HEIGHT));
+        jPanel.setPreferredSize(new Dimension(SCROLLER_WIDTH+10, SCROLLER_HEIGHT+10));
         jPanel.add(scroller);
         this.getContentPane().add(jPanel, BorderLayout.CENTER);
 
