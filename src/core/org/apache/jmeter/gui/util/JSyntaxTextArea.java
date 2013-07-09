@@ -49,11 +49,11 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      */
     public JSyntaxTextArea(int rows, int cols) {
         super(rows, cols);
-        setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        setCodeFoldingEnabled(CODE_FOLDING);
-        setAntiAliasingEnabled(true);
-        setLineWrap(LINE_WRAP);
-        setWrapStyleWord(WRAP_STYLE_WORD);
+        super.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        super.setCodeFoldingEnabled(CODE_FOLDING);
+        super.setAntiAliasingEnabled(true);
+        super.setLineWrap(LINE_WRAP);
+        super.setWrapStyleWord(WRAP_STYLE_WORD);
     }
 
     @Override
