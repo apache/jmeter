@@ -19,6 +19,8 @@
 <!ELEMENT templates (template+)>
 
 <!ELEMENT template (name, fileName, description)>
+<!-- Whether the template is a complete test plan or not -->
+<!ATTLIST template isTestPlan (true|false) #REQUIRED>
 
 <!ELEMENT name  (#PCDATA)  >
 
