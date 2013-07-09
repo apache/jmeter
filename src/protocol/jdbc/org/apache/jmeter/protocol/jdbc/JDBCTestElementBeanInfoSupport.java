@@ -22,7 +22,7 @@ import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testbeans.gui.TextAreaEditor;
+import org.apache.jmeter.testbeans.gui.TypeEditor;
 
 public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
 
@@ -86,10 +86,10 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 AbstractJDBCTestElement.AUTOCOMMIT_TRUE,
                 });
 
-        p = property("query"); // $NON-NLS-1$
+        p = property("query", TypeEditor.TextAreaEditor); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
-        p.setPropertyEditorClass(TextAreaEditor.class);
+        p.setValue(TEXT_LANGUAGE, "sql");  // $NON-NLS-1$
 
     }
 }
