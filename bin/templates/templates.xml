@@ -21,11 +21,6 @@
 <!--DOCTYPE templates SYSTEM "templates.dtd"-->
 <templates>
     <template>
-        <name>abcd</name>
-        <fileName/>
-        <description>desc</description>
-    </template>
-    <template>
         <name>Recording</name>
         <fileName>/bin/templates/recording.jmx</fileName>
         <description><![CDATA[
