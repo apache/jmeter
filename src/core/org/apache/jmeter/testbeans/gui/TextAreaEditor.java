@@ -26,6 +26,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
 import java.util.Properties;
 
@@ -70,12 +71,23 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     /**
      * @param source
      */
+    // TODO is this ever used?
     public TextAreaEditor(Object source) {
         super(source);
         textUI = new JSyntaxTextArea(20, 20);
         scroller = new JTextScrollPane(textUI, true);
         init();
         setValue(source);
+    }
+
+    /**
+     * @param descriptor
+     */
+    public TextAreaEditor(PropertyDescriptor descriptor) {
+        textUI = new JSyntaxTextArea(20, 20);
+        textUI.setSyntaxEditingStyle((String) descriptor.getValue(GenericTestBeanCustomizer.SYNTAX_TYPE));
+        scroller = new JTextScrollPane(textUI, true);
+        init();
     }
 
     /** {@inheritDoc} */
