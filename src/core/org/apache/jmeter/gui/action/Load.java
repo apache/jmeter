@@ -150,12 +150,18 @@ public class Load implements Command {
     }
 
     /**
-     * Returns a boolean indicating whether the loaded tree was a full test plan
+     * Inserts (or merges) the tree into the GUI.
+     * Clears the existing test plan if necessary.
+     * @param id the id for the ActionEvent that is created
+     * @param tree the tree to load
+     * @param merging true if the tree is to be merged; false if it is to replace the existing tree
+     * @return true if the loaded tree was a full test plan
+     * @throws IllegalUserActionException if the tree cannot be merged at the selected position or the tree is empty
      */
-    public static boolean insertLoadedTree(int id, HashTree tree, boolean merging) throws Exception, IllegalUserActionException {
+    public static boolean insertLoadedTree(int id, HashTree tree, boolean merging) throws IllegalUserActionException {
         // convertTree(tree);
         if (tree == null) {
-            throw new Exception("Error in TestPlan - see log file");
+            throw new IllegalUserActionException("Empty TestPlan - see log file");
         }
         boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
 
