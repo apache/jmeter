@@ -18,7 +18,7 @@
 <!-- 
     See the DTD for allowable elements and attributes.
  -->
-<!--DOCTYPE templates SYSTEM "templates.dtd"-->
+<!DOCTYPE templates SYSTEM "templates.dtd">
 <templates>
     <template>
         <name>Recording</name>
