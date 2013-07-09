@@ -63,7 +63,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
 
 //    private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private JLabeledChoice templateList;
+    private final JLabeledChoice templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), false); //$NON-NLS-1$;
 
     private final HtmlPane helpDoc = new HtmlPane();
 
@@ -152,7 +152,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     }
 
     private void init() {
-        initializeTemplateList();
+        templateList.addChangeListener(this);
         this.getContentPane().setLayout(new BorderLayout(10, 10));
         this.getContentPane().add(templateList, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
@@ -168,16 +168,20 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         buttonsPanel.add(cancelButton);
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
 
-        populateTemplatePage();
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
         ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
     }
-    
-    private void initializeTemplateList() {
-        String[] templateNames = TemplateManager.getInstance().getTemplateNames();
-        templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), templateNames); //$NON-NLS-1$
-        templateList.addChangeListener(this);
+
+    // This is called by TemplateCommand to display the dialog
+    @Override
+    public void setVisible(boolean visible){
+        if (visible) {
+            String[] templateNames = TemplateManager.getInstance().reset().getTemplateNames();
+            templateList.setValues(templateNames);            
+            populateTemplatePage();
+       }
+        super.setVisible(visible);
     }
 
     /**
