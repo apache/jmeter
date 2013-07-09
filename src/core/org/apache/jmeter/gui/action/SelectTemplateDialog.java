@@ -24,13 +24,7 @@ import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -47,7 +41,6 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.template.Template;
 import org.apache.jmeter.gui.action.template.TemplateManager;
@@ -55,7 +48,6 @@ import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Dialog used for Templates selection
@@ -128,25 +120,35 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
      */
     private void checkDirtyAndLoad(final ActionEvent actionEvent)
             throws HeadlessException {
+        final String selectedTemplate = templateList.getText();
+        final Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
+        if (template == null) {
+            return;
+        }
+        final boolean isTestPlan = template.isTestPlan();
         // Check if the user wants to drop any changes
-        ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        if (guiPackage.isDirty()) {
-            // Check if the user wants to create from template
-            int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-                    JMeterUtils.getResString("cancel_new_from_template"), // $NON-NLS-1$
-                    JMeterUtils.getResString("template_load?"),  // $NON-NLS-1$
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-            if(response == JOptionPane.YES_OPTION) {
-                ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.SAVE));
-            }
-            if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
-                return; // Don't clear the plan
+        if (isTestPlan) {
+            ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.CHECK_DIRTY));
+            GuiPackage guiPackage = GuiPackage.getInstance();
+            if (guiPackage.isDirty()) {
+                // Check if the user wants to create from template
+                int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                        JMeterUtils.getResString("cancel_new_from_template"), // $NON-NLS-1$
+                        JMeterUtils.getResString("template_load?"),  // $NON-NLS-1$
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if(response == JOptionPane.YES_OPTION) {
+                    ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.SAVE));
+                }
+                if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
+                    return; // Don't clear the plan
+                }
             }
         }
         ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.STOP_THREAD));
-        doOpen(actionEvent);
+        final File fileToCopy = new File(JMeterUtils.getJMeterHome(), template.getFileName());       
+        Load.loadProjectFile(actionEvent, fileToCopy, !isTestPlan, false);
+        this.setVisible(false);
     }
 
     private void init() {
@@ -205,30 +207,4 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
                 : JMeterUtils.getResString("template_merge_from") );
     }
 
-    /**
-     * @param e {@link ActionEvent}
-     */
-    private void doOpen(ActionEvent e) {
-        final String selectedTemplate = templateList.getText();
-        final Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);   
-        final String fileName = template.getFileName();
-        final File fileToCopy = new File(JMeterUtils.getJMeterHome(), fileName);
-        final File targetFile = new File( System.getProperty("user.dir"), 
-                fileName.substring(fileName.lastIndexOf("/")));
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {
-            inputStream = new BufferedInputStream(new FileInputStream(fileToCopy));
-            outputStream = new BufferedOutputStream(new FileOutputStream(targetFile));
-            IOUtils.copy(inputStream, outputStream);
-            outputStream.close();
-            Load.loadProjectFile(e, targetFile, false); 
-            this.setVisible(false);
-        } catch (Exception e1) {
-            throw new Error(e1);
-        } finally {
-            JOrphanUtils.closeQuietly(inputStream);
-            JOrphanUtils.closeQuietly(outputStream);
-        }
-    }
 }
