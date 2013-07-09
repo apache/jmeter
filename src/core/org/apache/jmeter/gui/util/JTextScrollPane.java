@@ -28,6 +28,11 @@ public class JTextScrollPane extends RTextScrollPane {
 
     private static final long serialVersionUID = 210L;
 
+    @Deprecated
+    public JTextScrollPane() {
+        // for use by test code only
+    }
+
     public JTextScrollPane(JSyntaxTextArea scriptField) {
         super(scriptField);
     }

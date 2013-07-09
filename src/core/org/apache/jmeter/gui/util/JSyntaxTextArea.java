@@ -38,6 +38,11 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
     private final boolean CODE_FOLDING    = JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
 
+    @Deprecated
+    public JSyntaxTextArea() {
+        // For use by test code only
+    }
+
     /**
      * Creates the default syntax highlighting text area.
      * The following are set:
