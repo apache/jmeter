@@ -85,7 +85,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      */
     public TextAreaEditor(PropertyDescriptor descriptor) {
         textUI = new JSyntaxTextArea(20, 20);
-        textUI.setSyntaxEditingStyle((String) descriptor.getValue(GenericTestBeanCustomizer.SYNTAX_TYPE));
+//        textUI.setSyntaxEditingStyle((String) descriptor.getValue(GenericTestBeanCustomizer.SYNTAX_TYPE));
         scroller = new JTextScrollPane(textUI, true);
         init();
     }
