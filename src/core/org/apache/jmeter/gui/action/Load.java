@@ -209,7 +209,7 @@ public class Load implements Command {
         }
         TreePath path = jTree.getPathForRow(1);
         jTree.setSelectionPath(path);
-        new FocusRequester(jTree);
+        FocusRequester.requestFocus(jTree);
         return isTestPlan;
     }
 

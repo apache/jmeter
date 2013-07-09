@@ -259,7 +259,7 @@ public class JMeter implements JMeterPlugin {
             JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
             TreePath path = jTree.getPathForRow(0);
             jTree.setSelectionPath(path);
-            new FocusRequester(jTree);
+            FocusRequester.requestFocus(jTree);
         }
     }
 
