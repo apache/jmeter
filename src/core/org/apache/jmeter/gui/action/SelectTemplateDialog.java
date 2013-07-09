@@ -21,7 +21,6 @@ package org.apache.jmeter.gui.action;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,14 +63,11 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class SelectTemplateDialog extends JDialog implements ChangeListener, ActionListener {
 
-    // preferred dimensions for scroller
-    private static final int SCROLLER_HEIGHT = 400;
-    private static final int SCROLLER_WIDTH = 550;
-
-    /**
-     *
-     */
     private static final long serialVersionUID = -4436834972710248247L;
+    
+    // Minimal dimensions for dialog box
+    private static final int MINIMAL_BOX_WIDTH = 500;
+    private static final int MINIMAL_BOX_HEIGHT = 300;
 
 //    private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -107,9 +103,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         };
         // Do search on Enter
         Action enterAction = new AbstractAction("ENTER") { //$NON-NLS-1$
-            /**
-             *
-             */
+
             private static final long serialVersionUID = -3661361497864527363L;
 
             @Override
@@ -158,17 +152,11 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     private void init() {
         initializeTemplateList();
         this.getContentPane().setLayout(new BorderLayout(10, 10));
-        JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        comboPanel.add(templateList);
-        this.getContentPane().add(comboPanel, BorderLayout.NORTH);
+        this.getContentPane().add(templateList, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
         helpDoc.setEditable(false);
         fillDescription();
-        JPanel jPanel = new JPanel(new GridLayout(1,1));
-        scroller.setPreferredSize(new Dimension(SCROLLER_WIDTH, SCROLLER_HEIGHT));
-        jPanel.setPreferredSize(new Dimension(SCROLLER_WIDTH+10, SCROLLER_HEIGHT+10));
-        jPanel.add(scroller);
-        this.getContentPane().add(jPanel, BorderLayout.CENTER);
+        this.getContentPane().add(scroller, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -182,7 +170,8 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
 
         this.pack();
-        ComponentUtil.centerComponentInWindow(this);
+        this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
+        ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
     }
     
     private void initializeTemplateList() {
@@ -197,7 +186,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==cancelButton) {
+        if (e.getSource() == cancelButton) {
             this.setVisible(false);
             return;
         }
