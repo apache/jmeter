@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.util.Properties;
+
 import org.apache.jmeter.util.JMeterUtils;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -29,6 +31,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private static final long serialVersionUID = 210L;
+
+    private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$;
 
     private final boolean WRAP_STYLE_WORD = JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);
     private final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
@@ -56,8 +60,12 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setWrapStyleWord(WRAP_STYLE_WORD);
     }
 
-    @Override
-    public void setSyntaxEditingStyle(String style) {
+    /**
+     * Sets the language of the text area.
+     * @param language
+     */
+    public void setLanguage(String language) {
+        final String style = languageProperties.getProperty(language);
         if (style == null) {
             super.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
         } else {
