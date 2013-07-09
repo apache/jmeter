@@ -93,6 +93,14 @@ public class Load implements Command {
         }
     }
 
+    /**
+     * Loads or merges a file into the current GUI, reporting any errors to the user.
+     * If the file is a complete test plan, sets the GUI test plan file name
+     *
+     * @param e the event that triggered the action
+     * @param f the file to load
+     * @param merging if true, then try to merge the file into the current GUI.
+     */
     static void loadProjectFile(ActionEvent e, File f, boolean merging) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.STOP_THREAD));
 
@@ -151,13 +159,15 @@ public class Load implements Command {
 
     /**
      * Inserts (or merges) the tree into the GUI.
-     * Clears the existing test plan if necessary.
+     * Does not check if the previous tree has been saved.
+     * Clears the existing GUI test plan if we are inserting a complete plan.
      * @param id the id for the ActionEvent that is created
      * @param tree the tree to load
      * @param merging true if the tree is to be merged; false if it is to replace the existing tree
      * @return true if the loaded tree was a full test plan
      * @throws IllegalUserActionException if the tree cannot be merged at the selected position or the tree is empty
      */
+    // Does not appear to be used externally; called by #loadProjectFile()
     public static boolean insertLoadedTree(int id, HashTree tree, boolean merging) throws IllegalUserActionException {
         // convertTree(tree);
         if (tree == null) {
@@ -168,6 +178,8 @@ public class Load implements Command {
         // If we are loading a new test plan, initialize the tree with the testplan node we are loading
         GuiPackage guiInstance = GuiPackage.getInstance();
         if(isTestPlan && !merging) {
+            // Why does this not call guiInstance.clearTestPlan() ?
+            // Is there a reason for not clearing everything?
             guiInstance.clearTestPlan((TestElement)tree.getArray()[0]);
         }
 
@@ -213,7 +225,17 @@ public class Load implements Command {
         return isTestPlan;
     }
 
-    public static boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
+    /**
+     * Inserts the tree into the GUI.
+     * Does not check if the previous tree has been saved.
+     * Clears the existing GUI test plan if we are inserting a complete plan.
+     * @param id the id for the ActionEvent that is created
+     * @param tree the tree to load
+     * @return true if the loaded tree was a full test plan
+     * @throws IllegalUserActionException if the tree cannot be merged at the selected position or the tree is empty
+     */
+    // Called by JMeter#startGui()
+    public static boolean insertLoadedTree(int id, HashTree tree) throws IllegalUserActionException {
         return insertLoadedTree(id, tree, false);
     }
 }
