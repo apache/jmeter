@@ -85,6 +85,17 @@ public class TemplateManager {
     }
 
     /**
+     * Resets the template Map by re-reading the template files.
+     *
+     * @return this
+     */
+    public TemplateManager reset() {
+        templates.clear();
+        templates.putAll(readTemplates());
+        return this;
+    }
+
+    /**
      * @return the templates names
      */
     public String[] getTemplateNames() {
