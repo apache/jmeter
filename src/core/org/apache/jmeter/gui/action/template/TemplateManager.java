@@ -18,17 +18,13 @@
 
 package org.apache.jmeter.gui.action.template;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
@@ -94,29 +90,22 @@ public class TemplateManager {
         return templates.keySet().toArray(new String[templates.size()]);
     }
 
-
     private Map<String, Template> readTemplates() {
         Map<String, Template> templates = new LinkedHashMap<String, Template>();
        
         String[] templateFiles = TEMPLATE_FILES.split(",");
         for (String templateFile : templateFiles) {
             if(!StringUtils.isEmpty(templateFile)) {
-                InputStream inputStream = null;
-                File f = new File(JMeterUtils.getJMeterHome(),
-                        templateFile); 
+                File f = new File(JMeterUtils.getJMeterHome(), templateFile); 
                 try {
                     if(f.exists() && f.canRead()) {
                         log.info("Reading templates from:"+f.getAbsolutePath());
-                        inputStream = new BufferedInputStream(new FileInputStream(f)); 
-                                
-                        templates.putAll(((Templates) xstream.fromXML(inputStream)).templates);
+                        templates.putAll(((Templates) xstream.fromXML(f)).templates);
                     } else {
                         log.warn("Ignoring template file:'"+f.getAbsolutePath()+"' as it does not exist or is not readable");
                     }
                 } catch(Exception ex) {                    
                     log.warn("Ignoring template file:'"+f.getAbsolutePath()+"', an error occured parsing the file", ex);
-                } finally {
-                    JOrphanUtils.closeQuietly(inputStream);
                 } 
             }
         }
