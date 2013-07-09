@@ -227,14 +227,15 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
      * @param e {@link ActionEvent}
      */
     private void doOpen(ActionEvent e) {
+        final String selectedTemplate = templateList.getText();
+        final Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);   
+        final String fileName = template.getFileName();
+        final File fileToCopy = new File(JMeterUtils.getJMeterHome(), fileName);
+        final File targetFile = new File( System.getProperty("user.dir"), 
+                fileName.substring(fileName.lastIndexOf("/")));
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            String selectedTemplate = templateList.getText();
-            Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);   
-            File fileToCopy = new File(JMeterUtils.getJMeterHome(), template.getFileName());
-            File targetFile = new File( System.getProperty("user.dir"), 
-                    template.getFileName().substring(template.getFileName().lastIndexOf("/")));
             inputStream = new BufferedInputStream(new FileInputStream(fileToCopy));
             outputStream = new BufferedOutputStream(new FileOutputStream(targetFile));
             IOUtils.copy(inputStream, outputStream);
