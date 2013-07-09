@@ -42,10 +42,10 @@
 
     To build all and package up the files for distribution
       ant distribution -Djmeter.version=vvvv [-Dsvn.revision=nnnnn]
-  	
+
     Add -Ddisable-svnCheck=true to disable svn check, if you build from src archive or offline
-  	Add -Ddisable-check-versions=true to disable matching current svn revision and JMeterVersion.java,
-  	  if you want build your own custom JMeter package.
+    Add -Ddisable-check-versions=true to disable matching current svn revision and JMeterVersion.java,
+      if you want build your own custom JMeter package.
 
     To create a nightly build (separate bin/src/lib jars):
       ant nightly [-Dsvn.revision=nnnnn]
@@ -151,7 +151,7 @@
       <sourcePath path="${src.native}" />
       <sourcePath path="${src.mongodb}" />
       <sourcePath path="${src.report}" />
-      		
+
       <auxClasspath>
           <fileset dir="${lib.dir}">
               <include name="*.jar"/>
@@ -344,7 +344,7 @@
   <property file="build.properties"/> <!-- defines the library version numbers -->
 
   <property name="resources.meta-inf"      value="${build.res}/META-INF"/>
-	
+
   <patternset id="external.jars.notices">
         <include name="LICENSE"/>
         <include name="NOTICE"/>
@@ -381,8 +381,8 @@
     <include name="${lib.dir}/${jdom.jar}"/>
     <include name="${lib.dir}/${jms.jar}"/>
     <include name="${lib.dir}/${js_rhino.jar}"/>
-  	<include name="${lib.dir}/${jodd-core.jar}"/>
-  	<include name="${lib.dir}/${jodd-lagarto.jar}"/>
+    <include name="${lib.dir}/${jodd-core.jar}"/>
+    <include name="${lib.dir}/${jodd-lagarto.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>
@@ -449,7 +449,7 @@
     <pathelement location="${lib.dir}/${jdom.jar}"/>
     <pathelement location="${lib.dir}/${jms.jar}"/>
     <pathelement location="${lib.dir}/${js_rhino.jar}"/>
-  	<pathelement location="${lib.dir}/${jodd-core.jar}"/>
+    <pathelement location="${lib.dir}/${jodd-core.jar}"/>
     <pathelement location="${lib.dir}/${jodd-lagarto.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
     <pathelement location="${lib.dir}/${junit.jar}"/>
@@ -494,7 +494,7 @@
   <filterset id="version.filters">
     <filter token="YEAR" value="${year}"/>
   </filterset>
-	
+
   <target name="init-version">
     <tstamp/>
     <!--
@@ -833,7 +833,7 @@
       </classpath>
     </javac>
   </target>
-	
+
   <target name="compile-native" depends="compile-jorphan,compile-core,compile-components"
         description="Compile components specific to Native sampling.">
     <mkdir dir="${build.native}"/>
@@ -847,7 +847,7 @@
       </classpath>
     </javac>
   </target>
-	
+
   <target name="compile-mongodb" depends="compile-jorphan,compile-core,compile-components"
         description="Compile components specific to MongoDB sampling.">
     <mkdir dir="${build.mongodb}"/>
@@ -882,7 +882,7 @@
   <target name="prepare-resources"
      description="Prepare some resources files, update date">
     <mkdir dir="${build.res}" />
-  	<mkdir dir="${resources.meta-inf}" />
+   <mkdir dir="${resources.meta-inf}" />
     <copy todir="${resources.meta-inf}" overwrite="yes" filtering="yes"
         encoding="${encoding}">
       <filterset refid="version.filters"/>
@@ -1150,7 +1150,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${build.mongodb}" includes="**/*.class" />
       <fileset dir="${src.mongodb}" includes="**/*.properties" />
     </jar>
-      	
+
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
         <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
@@ -1306,8 +1306,8 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="**/*.jpg"/>
     <exclude name="**/*.png"/>
     <include name="${src.docs}/**"/>
-  	<!-- Include some resources -->
-  	<include name="${res.dir}/**"/>
+    <!-- Include some resources -->
+    <include name="${res.dir}/**"/>
     <!-- Exclude binary types (and JMX/JTL, which are not OS-dependent) -->
     <exclude name="${src.docs}/images/**"/>
     <exclude name="${src.docs}/**/*.jmx"/>
@@ -1421,7 +1421,7 @@ run JMeter unless all the JMeter jars are added.
         <local         name="version.match"/>
         <condition property="version.match">
             <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
-            	substring='VERSION = "${jmeter.version}";'/>
+                substring='VERSION = "${jmeter.version}";'/>
         </condition>
         <fail message="jmeter.version must be same as JMeterVersion.VERSION" unless="version.match"/>
     </target>
@@ -2571,9 +2571,9 @@ run JMeter unless all the JMeter jars are added.
       </antcall>
       <antcall target="batchtest">
           <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
-  	      <param name="batchtest.name" value="Bug52968"/>
-  	  </antcall>
-  	
+          <param name="batchtest.name" value="Bug52968"/>
+      </antcall>
+
       <antcall target="batchtest">
           <!-- IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name -->
           <param name="batchtest.name" value="Bug50898"/>
@@ -2875,14 +2875,14 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="jdom"/>
         <process_jarfile jarname="jms"/>
         <process_jarfile jarname="js_rhino"/>
-    	<process_jarfile jarname="jodd-core"/>
+        <process_jarfile jarname="jodd-core"/>
         <process_jarfile jarname="jodd-lagarto"/>
         <process_jarfile jarname="jsoup"/>
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
         <process_jarfile jarname="mongo-java-driver"/>
         <process_jarfile jarname="serializer"/>
-    	<process_jarfile jarname="slf4j-api"/>
+        <process_jarfile jarname="slf4j-api"/>
         <process_jarfile jarname="soap"/>
         <process_jarfile jarname="tidy"/>
         <process_jarfile jarname="tika-core"/>
@@ -2895,7 +2895,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="xmlpull"/>
         <process_jarfile jarname="xpp3"/>
         <process_jarfile jarname="xstream"/>
-    	<!-- special -->
+        <!-- special -->
         <antcall target="_process_rsyntaxtextarea"/>
     </target>
 
@@ -2941,7 +2941,7 @@ run JMeter unless all the JMeter jars are added.
         </antcall>
     </target>
 
-	<!-- Special: process to get RSyntaxTextArea-->
+    <!-- Special: process to get RSyntaxTextArea-->
     <target name="_process_rsyntaxtextarea">
         <available file="./lib/${rsyntaxtextarea.jar}" property="rsyntaxtextarea.exists"/>
         <antcall target="_get_rsyntaxtextarea"/>
@@ -2968,9 +2968,9 @@ run JMeter unless all the JMeter jars are added.
             <param name="path" value="${build.dir}"/>
             <param name="md5"  value="${md5}"/>
         </antcall>
-    	<delete>
-    	    <fileset dir="${path}" includes="${rsyntaxtextarea.name}-*.jar"/> 
-    	</delete>
+        <delete>
+            <fileset dir="${path}" includes="${rsyntaxtextarea.name}-*.jar"/> 
+        </delete>
         <move preservelastmodified="true" overwrite="true"
             file="${build.dir}/${jar}" tofile="${path}/${rsyntaxtextarea.jar}" verbose="true"/>
         <delete file="${build.dir}/${zip}"/>
