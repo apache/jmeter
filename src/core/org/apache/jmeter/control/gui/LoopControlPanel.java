@@ -156,7 +156,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
             loops.setEnabled(false);
         } else {
             loops.setEnabled(true);
-            new FocusRequester(loops);
+            FocusRequester.requestFocus(loops);
         }
     }
 

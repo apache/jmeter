@@ -22,30 +22,19 @@ import java.awt.Component;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-
 /*
  * Note: This helper class appeared in JavaWorld in June 2001
- * (http://www.javaworld.com) and was written by Michael Daconta.
- *
+ * (http://www.javaworld.com) and was originally written by Michael Daconta.
+ * It has since been simplified.
  */
-public class FocusRequester implements Runnable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+public class FocusRequester {
 
-    private final Component comp;
-
-    public FocusRequester(Component comp) {
-        this.comp = comp;
-        try {
-            SwingUtilities.invokeLater(this);
-        } catch (Exception e) {
-            log.error("", e); // $NON-NLS-1$
-        }
-    }
-
-    @Override
-    public void run() {
-        comp.requestFocus();
+    public static void requestFocus(final Component comp) {
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                comp.requestFocus();
+            }            
+        });
     }
 }
