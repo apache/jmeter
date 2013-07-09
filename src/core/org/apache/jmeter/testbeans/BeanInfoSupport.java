@@ -79,6 +79,8 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
     public static final String RESOURCE_BUNDLE = GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
+    public static final String TEXT_LANGUAGE = GenericTestBeanCustomizer.TEXT_LANGUAGE;
+
     /** The BeanInfo for our class as obtained by the introspector. */
     private final BeanInfo rootBeanInfo;
 

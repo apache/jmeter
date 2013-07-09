@@ -138,6 +138,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /** Property editor override; must be an enum of type {@link TypeEditor} */
     public static final String GUITYPE = "guiType"; // $NON-NLS-$
 
+    /** TextEditor property */
+    public static final String TEXT_LANGUAGE = "textLanguage"; //$NON-NLS-1$
+
     public static final String ORDER(String group) {
         return "group." + group + ".order";
     }
