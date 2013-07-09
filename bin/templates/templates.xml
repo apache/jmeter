@@ -20,7 +20,7 @@
  -->
 <!DOCTYPE templates SYSTEM "templates.dtd">
 <templates>
-    <template>
+    <template isTestPlan="true">
         <name>Recording</name>
         <fileName>/bin/templates/recording.jmx</fileName>
         <description><![CDATA[
@@ -43,7 +43,7 @@
             </ul>       
         ]]></description>
     </template>
-    <template>
+    <template isTestPlan="true">
         <name>JDBC Load Test</name>
         <fileName>/bin/templates/jdbc.jmx</fileName>
         <description>
@@ -58,6 +58,13 @@
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-db-test-plan.html" >http://jmeter.apache.org/usermanual/build-db-test-plan.html</a></li>
             </ul>
+        ]]></description>
+    </template>
+    <template isTestPlan="false">
+        <name>BeanShell Sampler</name>
+        <fileName>/bin/templates/BeanShellSampler.jmx</fileName>
+        <description><![CDATA[
+        <h1>BeanShell Sampler with View Results Tree Listener</h1>
         ]]></description>
     </template>
 </templates>

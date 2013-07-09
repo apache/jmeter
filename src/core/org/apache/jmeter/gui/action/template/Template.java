@@ -23,6 +23,7 @@ package org.apache.jmeter.gui.action.template;
  * @since 2.10
  */
 public class Template {
+    private boolean isTestPlan;
     private String name;
     private String fileName;
     private String description;
@@ -61,5 +62,11 @@ public class Template {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    public boolean isTestPlan() {
+        return isTestPlan;
+    }
+    public void setTestPlan(boolean isTestPlan) {
+        this.isTestPlan = isTestPlan;
     }
 }
