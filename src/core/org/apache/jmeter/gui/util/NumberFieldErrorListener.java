@@ -52,7 +52,7 @@ public class NumberFieldErrorListener extends FocusAdapter {
                     JMeterUtils.getResString("you_must_enter_a_valid_number"), //$NON-NLS-1$
                     JMeterUtils.getResString("invalid_data"),  //$NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);
-            new FocusRequester(source);
+            FocusRequester.requestFocus(source);
         }
     }
 }

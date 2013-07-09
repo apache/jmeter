@@ -102,7 +102,7 @@ public class Close implements Command {
         guiPackage.clearTestPlan();
         JTree tree = guiPackage.getTreeListener().getJTree();
         tree.setSelectionRow(0);
-        new FocusRequester(tree);
+        FocusRequester.requestFocus(tree);
         ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
     }
 }
