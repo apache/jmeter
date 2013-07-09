@@ -28,9 +28,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
-import java.util.Properties;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 
@@ -39,8 +37,6 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     private final JSyntaxTextArea textUI;
 
     private final JTextScrollPane scroller;
-
-    private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/testbeans/gui/textarea.properties"); //$NON-NLS-1$;
 
     /** {@inheritDoc} */
     @Override
@@ -136,12 +132,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
         if (source instanceof ComboStringEditor) {
             ComboStringEditor cse = (ComboStringEditor) source;
             String lang = cse.getAsText().toLowerCase();
-            if (languageProperties.containsKey(lang)) {
-                textUI.setSyntaxEditingStyle(languageProperties.getProperty(lang));
-            } else {
-                textUI.setSyntaxEditingStyle(null);
-            }
-
+            textUI.setLanguage(lang);
         }
     }
 }
