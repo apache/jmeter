@@ -32,9 +32,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -184,14 +181,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     }
     
     private void initializeTemplateList() {
-        Set<String> templatesAsSet = TemplateManager.getInstance().getTemplateNames();
-        String[] templateNames =  templatesAsSet.toArray(new String[templatesAsSet.size()]);
-        Arrays.sort(templateNames, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareToIgnoreCase(o2);
-            }
-        });
+        String[] templateNames = TemplateManager.getInstance().getTemplateNames();
         templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), templateNames); //$NON-NLS-1$
         templateList.addChangeListener(this);
     }

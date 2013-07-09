@@ -22,9 +22,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
@@ -42,7 +41,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class TemplateManager {
     // Created by XStream reading templates.xml
     private static class Templates {
-        private final Map<String, Template> templates = new HashMap<String, Template>();
+        private final LinkedHashMap<String, Template> templates = new LinkedHashMap<String, Template>();
     }
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
             "/bin/templates/templates.xml");
@@ -85,15 +84,15 @@ public class TemplateManager {
     }
 
     /**
-     * @return Set<String> the templates names
+     * @return the templates names
      */
-    public Set<String> getTemplateNames() {
-        return templates.keySet();
+    public String[] getTemplateNames() {
+        return templates.keySet().toArray(new String[templates.size()]);
     }
 
 
     private Map<String, Template> readTemplates() {
-        Map<String, Template> templates = new HashMap<String, Template>();
+        Map<String, Template> templates = new LinkedHashMap<String, Template>();
        
         String[] templateFiles = TEMPLATE_FILES.split(",");
         for (String templateFile : templateFiles) {
