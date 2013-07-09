@@ -75,16 +75,16 @@ public class Load implements Command {
     }
 
     @Override
-    public void doAction(ActionEvent e) {
-        JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" }); //$NON-NLS-1$
+    public void doAction(final ActionEvent e) {
+        final JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" }); //$NON-NLS-1$
         if (chooser == null) {
             return;
         }
-        File selectedFile = chooser.getSelectedFile();
+        final File selectedFile = chooser.getSelectedFile();
         if(selectedFile != null) {
-            boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
+            final boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
             // We must ask the user if it is ok to close current project
-            if(!merging) {
+            if(!merging) { // i.e. it is OPEN
                 if (!Close.performAction(e)) {
                     return;
                 }
@@ -101,57 +101,42 @@ public class Load implements Command {
      * @param f the file to load
      * @param merging if true, then try to merge the file into the current GUI.
      */
-    static void loadProjectFile(ActionEvent e, File f, boolean merging) {
+    static void loadProjectFile(final ActionEvent e, final File f, final boolean merging) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.STOP_THREAD));
 
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        InputStream reader = null;
-        try {
-            if (f != null) {
-                boolean isTestPlan = false;
-
-                if (merging) {
-                    log.info("Merging file: " + f);
-                } else {
-                    log.info("Loading file: " + f);
-                    FileServer.getFileServer().setBaseForScript(f);
-                }
-                reader = new FileInputStream(f);
-                HashTree tree = SaveService.loadTree(reader);
-                isTestPlan = insertLoadedTree(e.getID(), tree, merging);
-
-                // don't change name if merging
-                if (!merging && isTestPlan) {
-                    guiPackage.setTestPlanFile(f.getAbsolutePath());
-                }
+        final GuiPackage guiPackage = GuiPackage.getInstance();
+        if (f != null) {
+            InputStream reader = null;
+            try {
+                    if (merging) {
+                        log.info("Merging file: " + f);
+                    } else {
+                        log.info("Loading file: " + f);
+                        // TODO should this be done even if not a full test plan?
+                        // and what if load fails?
+                        FileServer.getFileServer().setBaseForScript(f);
+                    }
+                    reader = new FileInputStream(f);
+                    final HashTree tree = SaveService.loadTree(reader);
+                    final boolean isTestPlan = insertLoadedTree(e.getID(), tree, merging);
+    
+                    // don't change name if merging
+                    if (!merging && isTestPlan) {
+                        // TODO should setBaseForScript be called here rather than above?
+                        guiPackage.setTestPlanFile(f.getAbsolutePath());
+                    }
+            } catch (NoClassDefFoundError ex) {// Allow for missing optional jars
+                reportError("Missing jar file", ex, true);
+            } catch (ConversionException ex) {
+                log.warn("Could not convert file "+ex);
+                JMeterUtils.reportErrorToUser(SaveService.CEtoString(ex));
+            } catch (IOException ex) {
+                reportError("Error reading file: ", ex, false);
+            } catch (Exception ex) {
+                reportError("Unexpected error", ex, true);
+            } finally {
+                JOrphanUtils.closeQuietly(reader);
             }
-        } catch (NoClassDefFoundError ex) // Allow for missing optional jars
-        {
-            log.warn("Missing jar file", ex);
-            String msg = ex.getMessage();
-            if (msg == null) {
-                msg = "Missing jar file - see log for details";
-            }
-            JMeterUtils.reportErrorToUser(msg);
-        } catch (ConversionException ex) {
-            log.warn("Could not convert file "+ex);
-            JMeterUtils.reportErrorToUser(SaveService.CEtoString(ex));
-        } catch (IOException ex) {
-            log.warn("Error reading file: "+ex);
-            String msg = ex.getMessage();
-            if (msg == null) {
-                msg = "Unexpected error - see log for details";
-            }
-            JMeterUtils.reportErrorToUser(msg);
-        } catch (Exception ex) {
-            log.warn("Unexpected error", ex);
-            String msg = ex.getMessage();
-            if (msg == null) {
-                msg = "Unexpected error - see log for details";
-            }
-            JMeterUtils.reportErrorToUser(msg);
-        } finally {
-            JOrphanUtils.closeQuietly(reader);
             guiPackage.updateCurrentGui();
             guiPackage.getMainFrame().repaint();
         }
@@ -168,15 +153,15 @@ public class Load implements Command {
      * @throws IllegalUserActionException if the tree cannot be merged at the selected position or the tree is empty
      */
     // Does not appear to be used externally; called by #loadProjectFile()
-    public static boolean insertLoadedTree(int id, HashTree tree, boolean merging) throws IllegalUserActionException {
+    public static boolean insertLoadedTree(final int id, final HashTree tree, final boolean merging) throws IllegalUserActionException {
         // convertTree(tree);
         if (tree == null) {
             throw new IllegalUserActionException("Empty TestPlan - see log file");
         }
-        boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
+        final boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
 
         // If we are loading a new test plan, initialize the tree with the testplan node we are loading
-        GuiPackage guiInstance = GuiPackage.getInstance();
+        final GuiPackage guiInstance = GuiPackage.getInstance();
         if(isTestPlan && !merging) {
             // Why does this not call guiInstance.clearTestPlan() ?
             // Is there a reason for not clearing everything?
@@ -184,9 +169,9 @@ public class Load implements Command {
         }
 
         if (merging){ // Check if target of merge is reasonable
-            TestElement te = (TestElement)tree.getArray()[0];
+            final TestElement te = (TestElement)tree.getArray()[0];
             if (!(te instanceof WorkBench || te instanceof TestPlan)){// These are handled specially by addToTree
-                boolean ok = MenuFactory.canAddTo(guiInstance.getCurrentNode(), te);
+                final boolean ok = MenuFactory.canAddTo(guiInstance.getCurrentNode(), te);
                 if (!ok){
                     String name = te.getName();
                     String className = te.getClass().getName();
@@ -195,23 +180,19 @@ public class Load implements Command {
                 }
             }
         }
-        HashTree newTree = guiInstance.addSubTree(tree);
+        final HashTree newTree = guiInstance.addSubTree(tree);
         guiInstance.updateCurrentGui();
         guiInstance.getMainFrame().getTree().setSelectionPath(
                 new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
-        tree = guiInstance.getCurrentSubTree();
+        final HashTree subTree = guiInstance.getCurrentSubTree();
         // Send different event wether we are merging a test plan into another test plan,
         // or loading a testplan from scratch
-        ActionEvent actionEvent = null;
-        if(!merging) {
-            actionEvent = new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, ActionNames.SUB_TREE_LOADED);
-        }
-        else {
-            actionEvent = new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, ActionNames.SUB_TREE_MERGED);
-        }
+        ActionEvent actionEvent =
+            new ActionEvent(subTree.get(subTree.getArray()[subTree.size() - 1]), id, 
+                    merging ? ActionNames.SUB_TREE_MERGED : ActionNames.SUB_TREE_LOADED);
 
         ActionRouter.getInstance().actionPerformed(actionEvent);
-        JTree jTree = guiInstance.getMainFrame().getTree();
+        final JTree jTree = guiInstance.getMainFrame().getTree();
         if (expandTree && !merging) { // don't automatically expand when merging
             for(int i = 0; i < jTree.getRowCount(); i++) {
                 jTree.expandRow(i);
@@ -219,8 +200,7 @@ public class Load implements Command {
         } else {
             jTree.expandRow(0);
         }
-        TreePath path = jTree.getPathForRow(1);
-        jTree.setSelectionPath(path);
+        jTree.setSelectionPath(jTree.getPathForRow(1));
         FocusRequester.requestFocus(jTree);
         return isTestPlan;
     }
@@ -235,7 +215,22 @@ public class Load implements Command {
      * @throws IllegalUserActionException if the tree cannot be merged at the selected position or the tree is empty
      */
     // Called by JMeter#startGui()
-    public static boolean insertLoadedTree(int id, HashTree tree) throws IllegalUserActionException {
+    public static boolean insertLoadedTree(final int id, final HashTree tree) throws IllegalUserActionException {
         return insertLoadedTree(id, tree, false);
     }
+
+    // Helper method to simplify code
+    private static void reportError(final String reason, final Throwable ex, final boolean stackTrace) {
+        if (stackTrace) {
+            log.warn(reason, ex);
+        } else {
+            log.warn(reason + ex);
+        }
+        String msg = ex.getMessage();
+        if (msg == null) {
+            msg = "Unexpected error - see log for details";
+        }
+        JMeterUtils.reportErrorToUser(msg);
+    }
+
 }
