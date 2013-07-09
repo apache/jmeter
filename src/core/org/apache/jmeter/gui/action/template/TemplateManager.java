@@ -41,6 +41,10 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class TemplateManager {
     // Created by XStream reading templates.xml
     private static class Templates {
+        /*
+         * N.B. Must use LinkedHashMap for field type
+         * XStream creates a plain HashMap if one uses Map as the field type.
+         */
         private final LinkedHashMap<String, Template> templates = new LinkedHashMap<String, Template>();
     }
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
