@@ -75,9 +75,9 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
 
     private final HtmlPane helpDoc = new HtmlPane();
 
-    private JButton createFromTemplateButton;
+    private final JButton applyTemplateButton = new JButton();
 
-    private JButton cancelButton;
+    private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$;
     
     private final JScrollPane scroller = new JScrollPane(helpDoc);
 
@@ -155,20 +155,18 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         this.getContentPane().add(templateList, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
         helpDoc.setEditable(false);
-        fillDescription();
         this.getContentPane().add(scroller, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        createFromTemplateButton = new JButton(JMeterUtils.getResString("template_create_from")); //$NON-NLS-1$
-        createFromTemplateButton.addActionListener(this);
-
-        cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
+        applyTemplateButton.addActionListener(this);
         cancelButton.addActionListener(this);
-        buttonsPanel.add(createFromTemplateButton);
+
+        buttonsPanel.add(applyTemplateButton);
         buttonsPanel.add(cancelButton);
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
 
+        populateTemplatePage();
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
         ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
@@ -195,16 +193,16 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     
     @Override
     public void stateChanged(ChangeEvent event) {
-        fillDescription();
+        populateTemplatePage();
     }
 
-    /**
-     * 
-     */
-    protected void fillDescription() {
+    private void populateTemplatePage() {
         String selectedTemplate = templateList.getText();
         Template template = TemplateManager.getInstance().getTemplateByName(selectedTemplate);
         helpDoc.setText(template.getDescription());
+        applyTemplateButton.setText(template.isTestPlan() 
+                ? JMeterUtils.getResString("template_create_from")
+                : JMeterUtils.getResString("template_merge_from") );
     }
 
     /**
