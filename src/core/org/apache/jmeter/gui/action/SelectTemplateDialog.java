@@ -40,6 +40,8 @@ import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.template.Template;
@@ -48,12 +50,14 @@ import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Dialog used for Templates selection
  * @since 2.10
  */
-public class SelectTemplateDialog extends JDialog implements ChangeListener, ActionListener {
+public class SelectTemplateDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener {
 
     private static final long serialVersionUID = -4436834972710248247L;
     
@@ -61,7 +65,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     private static final int MINIMAL_BOX_WIDTH = 500;
     private static final int MINIMAL_BOX_HEIGHT = 300;
 
-//    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final JLabeledChoice templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), false); //$NON-NLS-1$;
 
@@ -157,6 +161,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         this.getContentPane().add(templateList, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
         helpDoc.setEditable(false);
+        helpDoc.addHyperlinkListener(this);
         this.getContentPane().add(scroller, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -209,6 +214,19 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         applyTemplateButton.setText(template.isTestPlan() 
                 ? JMeterUtils.getResString("template_create_from")
                 : JMeterUtils.getResString("template_merge_from") );
+    }
+
+    @Override
+    public void hyperlinkUpdate(HyperlinkEvent e) {
+        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            if (java.awt.Desktop.isDesktopSupported()) {
+                try {
+                    java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
+                } catch (Exception ex) {
+                    log.error("Error opening URL in browser:"+e.getURL());
+                } 
+            }
+        }
     }
 
 }
