@@ -171,15 +171,19 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         helpDoc.addHyperlinkListener(this);
         this.getContentPane().add(scroller, BorderLayout.CENTER);
 
-        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
         applyTemplateButton.addActionListener(this);
         cancelButton.addActionListener(this);
 
-        buttonsPanel.add(reloadTemplateButton);
-        buttonsPanel.add(applyTemplateButton);
-        buttonsPanel.add(cancelButton);
-        this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
+        // Buttons bar
+        JPanel buttonBar = new JPanel(new BorderLayout());
+        JPanel reloadBtnBar = new JPanel();
+        reloadBtnBar.add(reloadTemplateButton);
+        buttonBar.add(reloadBtnBar, BorderLayout.WEST);
+        JPanel actionBtnBar = new JPanel(new FlowLayout());
+        actionBtnBar.add(cancelButton);
+        actionBtnBar.add(applyTemplateButton);
+        buttonBar.add(actionBtnBar, BorderLayout.EAST);
+        this.getContentPane().add(buttonBar, BorderLayout.SOUTH);
 
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
