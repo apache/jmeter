@@ -71,6 +71,8 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
 
     private final HtmlPane helpDoc = new HtmlPane();
 
+    private final JButton reloadTemplateButton = new JButton(JMeterUtils.getResString("template_reload")); //$NON-NLS-1$;
+
     private final JButton applyTemplateButton = new JButton();
 
     private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$;
@@ -157,6 +159,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
 
     private void init() {
         templateList.addChangeListener(this);
+        reloadTemplateButton.addActionListener(this);
         this.getContentPane().setLayout(new BorderLayout(10, 10));
         this.getContentPane().add(templateList, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
@@ -169,6 +172,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         applyTemplateButton.addActionListener(this);
         cancelButton.addActionListener(this);
 
+        buttonsPanel.add(reloadTemplateButton);
         buttonsPanel.add(applyTemplateButton);
         buttonsPanel.add(cancelButton);
         this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
@@ -182,8 +186,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     @Override
     public void setVisible(boolean visible){
         if (visible) {
-            String[] templateNames = TemplateManager.getInstance().reset().getTemplateNames();
-            templateList.setValues(templateNames);            
+            templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
             populateTemplatePage();
        }
         super.setVisible(visible);
@@ -195,11 +198,15 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == cancelButton) {
+        final Object source = e.getSource();
+        if (source == cancelButton) {
             this.setVisible(false);
             return;
+        } else if (source == applyTemplateButton) {
+            checkDirtyAndLoad(e);            
+        } else if (source == reloadTemplateButton) {
+            templateList.setValues(TemplateManager.getInstance().reset().getTemplateNames());
         }
-        checkDirtyAndLoad(e);
     }
     
     @Override
