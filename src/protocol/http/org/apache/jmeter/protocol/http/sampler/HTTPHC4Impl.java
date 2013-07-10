@@ -1048,7 +1048,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * header is present from a Header Manager.
      * <p>
      * If the content charset {@link #getContentEncoding()} is null or empty 
-     * we use the HC4 default provided by {@link HTTP.DEF_CONTENT_CHARSET} which is
+     * we use the HC4 default provided by {@link HTTP#DEF_CONTENT_CHARSET} which is
      * ISO-8859-1.
      * 
      * @param entity to be processed, e.g. PUT or PATCH
