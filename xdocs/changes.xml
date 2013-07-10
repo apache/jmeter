@@ -268,6 +268,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>55202</bugzilla> - Add syntax color for scripts elements (BeanShell, BSF, and JSR223) and JDBC elements with RSyntaxTextArea</li>
 <li><bugzilla>55175</bugzilla> - HTTPHC4Impl refactoring to allow better inheritance</li>
 <li><bugzilla>55236</bugzilla> - Templates - provide button to reload template details</li>
+<li><bugzilla>55237</bugzilla> - Template system should support relative fileName entries</li>
 </ul>
 
 <h2>Non-functional changes</h2>
