@@ -1259,6 +1259,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar.jmeter}/templates/*.jmx"/>
     <include name="${dest.jar.jmeter}/templates/*.xml"/>
+    <include name="${dest.jar.jmeter}/templates/*.dtd"/>
     <include name="${dest.jar.jmeter}/examples/*.jmx"/>
     <include name="${extras.dir}/*.jar"/>
     <include name="${extras.dir}/*.jpg"/>
