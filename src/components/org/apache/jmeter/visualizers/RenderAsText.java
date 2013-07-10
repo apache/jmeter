@@ -36,6 +36,9 @@ public class RenderAsText extends SamplerResultTab implements ResultRenderer {
         results.setText(response == null ? "" : response); // $NON-NLS-1$
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
+        // Bug 55111 - Refresh JEditor pane size depending on the presence or absence of scrollbars
+        resultsScrollPane.setPreferredSize(resultsScrollPane.getMinimumSize());
+        results.revalidate();
     }
 
     /** {@inheritDoc} */
