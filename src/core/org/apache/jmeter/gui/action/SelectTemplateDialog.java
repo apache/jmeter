@@ -161,6 +161,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     }
 
     private void init() {
+        templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
         templateList.addChangeListener(this);
         reloadTemplateButton.addActionListener(this);
         this.getContentPane().setLayout(new BorderLayout(10, 10));
@@ -183,16 +184,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
         ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
-    }
-
-    // This is called by TemplateCommand to display the dialog
-    @Override
-    public void setVisible(boolean visible){
-        if (visible) {
-            templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
-            populateTemplatePage();
-       }
-        super.setVisible(visible);
+        populateTemplatePage();
     }
 
     /**
