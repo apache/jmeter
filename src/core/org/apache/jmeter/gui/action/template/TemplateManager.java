@@ -50,7 +50,7 @@ public class TemplateManager {
     
     private static final TemplateManager SINGLETON = new TemplateManager();
     
-    private final Map<String, Template> templates;
+    private final Map<String, Template> allTemplates;
 
     private final XStream xstream = initXStream();
 
@@ -59,7 +59,7 @@ public class TemplateManager {
     }
     
     private TemplateManager()  {
-        templates = readTemplates();            
+        allTemplates = readTemplates();            
     }
     
     private XStream initXStream() {
@@ -81,7 +81,7 @@ public class TemplateManager {
     }
 
     public void addTemplate(Template template) {
-        templates.put(template.getName(), template);
+        allTemplates.put(template.getName(), template);
     }
 
     /**
@@ -90,8 +90,8 @@ public class TemplateManager {
      * @return this
      */
     public TemplateManager reset() {
-        templates.clear();
-        templates.putAll(readTemplates());
+        allTemplates.clear();
+        allTemplates.putAll(readTemplates());
         return this;
     }
 
@@ -99,20 +99,20 @@ public class TemplateManager {
      * @return the templates names
      */
     public String[] getTemplateNames() {
-        return templates.keySet().toArray(new String[templates.size()]);
+        return allTemplates.keySet().toArray(new String[allTemplates.size()]);
     }
 
     private Map<String, Template> readTemplates() {
-        Map<String, Template> templates = new LinkedHashMap<String, Template>();
+        final Map<String, Template> temps = new LinkedHashMap<String, Template>();
        
-        String[] templateFiles = TEMPLATE_FILES.split(",");
+        final String[] templateFiles = TEMPLATE_FILES.split(",");
         for (String templateFile : templateFiles) {
             if(!StringUtils.isEmpty(templateFile)) {
-                File f = new File(JMeterUtils.getJMeterHome(), templateFile); 
+                final File f = new File(JMeterUtils.getJMeterHome(), templateFile); 
                 try {
                     if(f.exists() && f.canRead()) {
                         log.info("Reading templates from:"+f.getAbsolutePath());
-                        templates.putAll(((Templates) xstream.fromXML(f)).templates);
+                        temps.putAll(((Templates) xstream.fromXML(f)).templates);
                     } else {
                         log.warn("Ignoring template file:'"+f.getAbsolutePath()+"' as it does not exist or is not readable");
                     }
@@ -121,7 +121,7 @@ public class TemplateManager {
                 } 
             }
         }
-        return templates;
+        return temps;
     }
 
     /**
@@ -129,6 +129,6 @@ public class TemplateManager {
      * @return {@link Template}
      */
     public Template getTemplateByName(String selectedTemplate) {
-        return templates.get(selectedTemplate);
+        return allTemplates.get(selectedTemplate);
     }
 }
