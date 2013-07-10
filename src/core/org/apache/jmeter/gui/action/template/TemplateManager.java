@@ -112,7 +112,14 @@ public class TemplateManager {
                 try {
                     if(f.exists() && f.canRead()) {
                         log.info("Reading templates from:"+f.getAbsolutePath());
-                        temps.putAll(((Templates) xstream.fromXML(f)).templates);
+                        final File parent = f.getParentFile();
+                        final LinkedHashMap<String, Template> templates = ((Templates) xstream.fromXML(f)).templates;
+                        for(Template t : templates.values()) {
+                            if (!t.getFileName().startsWith("/")) {
+                                t.setParent(parent);
+                            }
+                        }
+                        temps.putAll(templates);
                     } else {
                         log.warn("Ignoring template file:'"+f.getAbsolutePath()+"' as it does not exist or is not readable");
                     }
