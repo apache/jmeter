@@ -39,6 +39,43 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h2>New and Noteworthy</h2>
 
+<h3><u>Core Improvements:</u></h3>
+
+<h4>* New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
+citizen in JMeter, you can now test your expressions very easily</h4>
+<p>
+<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+</p>
+
+<h4>* New functions (__urlencode and __urldecode) are now available to encode/decode URL encoded chars</h4>
+
+
+<h3><u>GUI and ergonomy Improvements:</u></h3>
+
+<h4>* New Templates feature that allows you to create test plan from existing template or merge
+template into your Test Plan</h4>
+<p>
+<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+</p>
+
+<h4>* Workbench can now be saved</h4>
+<p>
+<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+</p>
+
+<h4>* Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223) and JDBC elements making code much more readable</h4>
+<p>
+<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+</p>
+
+<h4>* Moving elements in Test plan has been improved in many ways</h4>
+<h5>Drag and drop of elements in Test Plan tree is now much easier and possible on multiple nodes</h5>
+<p>
+<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+</p>
+<h5>New shortcuts have been added to move elements in the tree. </h5>
+<p>(alt + Arrow Up) and (alt + Arrow Down) move the element within the parent node.
+(alt + Arrow Left) and (alt + Arrow Right) move the element up and down in the tree depth</p>
 <!--  =================== Known bugs =================== -->
 
 <h2>Known bugs</h2>
