@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.gui.action.template;
 
+import java.io.File;
+
 /**
  * Template Bean
  * @since 2.10
@@ -27,6 +29,7 @@ public class Template {
     private String name;
     private String fileName;
     private String description;
+    private transient File parent; // for relative links
     /**
      * @return the name
      */
@@ -68,5 +71,11 @@ public class Template {
     }
     public void setTestPlan(boolean isTestPlan) {
         this.isTestPlan = isTestPlan;
+    }
+    public File getParent() {
+        return parent;
+    }
+    public void setParent(File parent) {
+        this.parent = parent;
     }
 }

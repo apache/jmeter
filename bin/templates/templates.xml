@@ -45,7 +45,7 @@
     </template>
     <template isTestPlan="true">
         <name>JDBC Load Test</name>
-        <fileName>/bin/templates/jdbc.jmx</fileName>
+        <fileName>jdbc.jmx</fileName>
         <description>
         <![CDATA[<h1>Template showing how to Load Test an SQL query on Database</h1>
         <h2>JMeter Configuration</h2>
@@ -62,7 +62,7 @@
     </template>
     <template isTestPlan="false">
         <name>BeanShell Sampler</name>
-        <fileName>/bin/templates/BeanShellSampler.jmx</fileName>
+        <fileName>BeanShellSampler.jmx</fileName>
         <description><![CDATA[
         <h1>BeanShell Sampler with View Results Tree Listener</h1>
         ]]></description>

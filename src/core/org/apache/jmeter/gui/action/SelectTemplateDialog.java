@@ -152,7 +152,10 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
             }
         }
         ActionRouter.getInstance().doActionNow(new ActionEvent(actionEvent.getSource(), actionEvent.getID(), ActionNames.STOP_THREAD));
-        final File fileToCopy = new File(JMeterUtils.getJMeterHome(), template.getFileName());       
+        final File parent = template.getParent();
+        final File fileToCopy = parent != null 
+              ? new File(parent, template.getFileName())
+              : new File(JMeterUtils.getJMeterHome(), template.getFileName());       
         Load.loadProjectFile(actionEvent, fileToCopy, !isTestPlan, false);
         this.setVisible(false);
     }
