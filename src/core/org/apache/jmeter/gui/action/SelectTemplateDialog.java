@@ -21,6 +21,7 @@ package org.apache.jmeter.gui.action;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,6 +65,8 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     // Minimal dimensions for dialog box
     private static final int MINIMAL_BOX_WIDTH = 500;
     private static final int MINIMAL_BOX_HEIGHT = 300;
+    
+    private Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10); // $NON-NLS-1$
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -164,8 +167,15 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
         templateList.addChangeListener(this);
         reloadTemplateButton.addActionListener(this);
-        this.getContentPane().setLayout(new BorderLayout(10, 10));
-        this.getContentPane().add(templateList, BorderLayout.NORTH);
+        reloadTemplateButton.setFont(FONT_SMALL);
+        this.getContentPane().setLayout(new BorderLayout(10, 0));
+        
+        JPanel templateBar = new JPanel(new BorderLayout());
+        templateBar.add(templateList, BorderLayout.CENTER);
+        JPanel reloadBtnBar = new JPanel();
+        reloadBtnBar.add(reloadTemplateButton);
+        templateBar.add(reloadBtnBar, BorderLayout.EAST);
+        this.getContentPane().add(templateBar, BorderLayout.NORTH);
         helpDoc.setContentType("text/html"); //$NON-NLS-1$
         helpDoc.setEditable(false);
         helpDoc.addHyperlinkListener(this);
@@ -174,16 +184,11 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
         applyTemplateButton.addActionListener(this);
         cancelButton.addActionListener(this);
 
-        // Buttons bar
-        JPanel buttonBar = new JPanel(new BorderLayout());
-        JPanel reloadBtnBar = new JPanel();
-        reloadBtnBar.add(reloadTemplateButton);
-        buttonBar.add(reloadBtnBar, BorderLayout.WEST);
+        // Bottom buttons bar
         JPanel actionBtnBar = new JPanel(new FlowLayout());
-        actionBtnBar.add(cancelButton);
         actionBtnBar.add(applyTemplateButton);
-        buttonBar.add(actionBtnBar, BorderLayout.EAST);
-        this.getContentPane().add(buttonBar, BorderLayout.SOUTH);
+        actionBtnBar.add(cancelButton);
+        this.getContentPane().add(actionBtnBar, BorderLayout.SOUTH);
 
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
