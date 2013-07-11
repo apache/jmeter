@@ -58,12 +58,12 @@ public class MongoScriptSamplerBeanInfo
         p = property("source");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-
-        p = property("script");
+       
+        p = property("script", TypeEditor.TextAreaEditor);
         p.setValue(NOT_UNDEFINED, Boolean.FALSE);
         p.setValue(DEFAULT, "");
         p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setPropertyEditorClass(TextAreaEditor.class);
+        p.setValue(TEXT_LANGUAGE, "javascript");  // $NON-NLS-1$
 
         if(log.isDebugEnabled()) {
             for (PropertyDescriptor pd : getPropertyDescriptors()) {
