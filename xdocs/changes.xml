@@ -41,13 +41,23 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3><u>Core Improvements:</u></h3>
 
+<h4>* A Huge performance improvement has been made on High Throughput Tests (no pause)</h4>
+
 <h4>* New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
 citizen in JMeter, you can now test your expressions very easily</h4>
 <p>
 <figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
 </p>
 
+<h4>* You can now load test MongoDB through new MongoDB Source Config</h4>
+
+<h4>* Query timeout has been added to JDBC Request</h4>
+
 <h4>* New functions (__urlencode and __urldecode) are now available to encode/decode URL encoded chars</h4>
+
+<h4>* Continuous Integration is now eased by addition of a new flag that forces NON-GUI JVM to exit after test end</h4>
+<p>See jmeter property:</p>
+<code>jmeterengine.force.system.exit</code>
 
 
 <h3><u>GUI and ergonomy Improvements:</u></h3>
@@ -76,6 +86,11 @@ template into your Test Plan</h4>
 <h5>New shortcuts have been added to move elements in the tree. </h5>
 <p>(alt + Arrow Up) and (alt + Arrow Down) move the element within the parent node.
 (alt + Arrow Left) and (alt + Arrow Right) move the element up and down in the tree depth</p>
+
+<h4>* Response Time Graph Y axis can now be scaled</h4>
+
+<h4>* JUnit Sampler gives now more details on configuration errors</h4>
+
 <!--  =================== Known bugs =================== -->
 
 <h2>Known bugs</h2>
@@ -153,6 +168,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>54629</bugzilla> - HTMLParser does not extract &amp;lt;object&amp;gt; tag urls</li>
 <li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput</li>
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed</li>
+<li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -205,6 +221,8 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>55187</bugzilla> - Integer overflow when computing ONE_YEAR_MS in HTTP CacheManager</li>
 <li><bugzilla>55208</bugzilla> - JSR223 language entries are duplicated; fold to lower case</li>
 <li><bugzilla>55203</bugzilla> - TestBeanGUI - wrong language settings found</li>
+<li><bugzilla>55065</bugzilla> - Useless processing in Spline3.converge()</li>
+<li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction()</li>
 <li><bugzilla>55242</bugzilla> -  BeanShell Client jar throws exceptions after upgrading to 2.8</li>
 </ul>
 
@@ -224,7 +242,6 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>54759</bugzilla> - SSLPeerUnverifiedException using HTTPS , property documented</li>
 <li><bugzilla>54896</bugzilla> - JUnit sampler gives only "failed to create an instance of the class" message with constructor problems</li>
 <li><bugzilla>55084</bugzilla> - Add timeout support for JDBC Request</li>
-<li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -290,8 +307,6 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li>Updated to xmlgraphics-commons 1.5 (from 1.3.1)</li>
 <li>Updated to xstream 1.4.4 (from 1.4.2)</li>
 <li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants</li>
-<li><bugzilla>55065</bugzilla> - Useless processing in Spline3.converge()</li>
-<li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction()</li>
 <li><bugzilla>54903</bugzilla> - Remove the dependency on the Activation Framework</li>
 </ul>
 
