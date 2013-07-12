@@ -25,7 +25,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import org.apache.jorphan.util.JOrphanUtils;
+// N.B. Do not call any JMeter methods; the jar is standalone
 
 
 /**
@@ -108,7 +108,12 @@ public class BeanShellClient {
                 // TODO Why empty block ?
             } finally {
                 System.out.println("... disconnected from server.");
-                JOrphanUtils.closeQuietly(is);
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                    }
+                }
             }
 
         }
