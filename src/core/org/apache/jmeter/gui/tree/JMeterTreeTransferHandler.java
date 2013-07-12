@@ -236,6 +236,9 @@ public class JMeterTreeTransferHandler extends TransferHandler {
        
         nodesForRemoval = new ArrayList<JMeterTreeNode>();
         int index = dl.getChildIndex();
+        TreePath[] pathsToSelect = new TreePath[nodes.length];
+        int pathPosition = 0;
+        JMeterTreeModel treeModel = guiInstance.getTreeModel();
         for (JMeterTreeNode node : nodes) {
             
             if (index == -1) { // drop mode == DropMode.ON
@@ -259,14 +262,16 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             for (JMeterTreeNode jMeterTreeNode : tmp) {
                 copy.add(jMeterTreeNode);
             }
-            guiInstance.getTreeModel().insertNodeInto(copy, target, index++);
+            treeModel.insertNodeInto(copy, target, index++);
             nodesForRemoval.add(node);
+            pathsToSelect[pathPosition++] = new TreePath(treeModel.getPathToRoot(copy));
         }
         
+        TreePath treePath = new TreePath(target.getPath());
         // expand the destination node
         JTree tree = (JTree) support.getComponent();
-        tree.expandPath(new TreePath(target.getPath()));
-        
+        tree.expandPath(treePath);
+        tree.setSelectionPaths(pathsToSelect);
         return true;
     }
 
