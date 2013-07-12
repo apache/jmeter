@@ -81,6 +81,9 @@ template into your Test Plan</h4>
 <h4>* Moving elements in Test plan has been improved in many ways</h4>
 <h5>Drag and drop of elements in Test Plan tree is now much easier and possible on multiple nodes</h5>
 <p>
+Note that due to this <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6560955">bug in Java</a>,
+you cannot drop a node after last node. The workaround is to drop it before this last node and then Drag and Drop the last node 
+before the one you just dropped.
 <figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
 </p>
 <h5>New shortcuts have been added to move elements in the tree. </h5>
