@@ -30,19 +30,23 @@ public class TemplateCommand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<String>();
 
+    // Ensure the dialog is only created when it is first needed
+    // In turn this avoids scanning the templates until first needed
+    static class IODH {
+        private static final SelectTemplateDialog dialog = new SelectTemplateDialog();        
+    }
+
     static {
         commands.add(ActionNames.CREATE_FROM_TEMPLATE);
     }
 
-    private final SelectTemplateDialog dialog = new SelectTemplateDialog();
     /**
      * @see Command#doAction(ActionEvent)
      */
     @Override
     public void doAction(ActionEvent e) {
-        dialog.setVisible(true);
+        IODH.dialog.setVisible(true);
     }
-
 
     /**
      * @see Command#getActionNames()
