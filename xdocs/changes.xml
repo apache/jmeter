@@ -205,6 +205,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>55187</bugzilla> - Integer overflow when computing ONE_YEAR_MS in HTTP CacheManager</li>
 <li><bugzilla>55208</bugzilla> - JSR223 language entries are duplicated; fold to lower case</li>
 <li><bugzilla>55203</bugzilla> - TestBeanGUI - wrong language settings found</li>
+<li><bugzilla>55242</bugzilla> -  BeanShell Client jar throws exceptions after upgrading to 2.8</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
