@@ -4506,9 +4506,12 @@ requests, use this timer.</p></description>
 <component name="Gaussian Random Timer" index="&sect-num;.6.2" width="372" height="156" screenshot="timers/gauss_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
-of the time intervals ocurring near a particular value.  The total delay is the
-sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0) times
-the deviation value you specify, and the offset value.</p></description>
+of the time intervals ocurring near a particular value.  
+The total delay is the sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0) times
+the deviation value you specify, and the offset value.
+Another way to explain it, in Gaussian Random Timer, the variation around constant offset has a gaussian curve distribution. 
+
+</p></description>
 
 
 <properties>
