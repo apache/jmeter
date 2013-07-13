@@ -362,7 +362,6 @@
     <include name="${lib.dir}/${commons-io.jar}"/>
     <include name="${lib.dir}/${commons-jexl.jar}"/>
     <include name="${lib.dir}/${commons-jexl2.jar}"/>
-    <include name="${lib.dir}/${commons-lang.jar}"/>
     <include name="${lib.dir}/${commons-lang3.jar}"/>
     <include name="${lib.dir}/${commons-logging.jar}"/>
     <include name="${lib.dir}/${commons-net.jar}"/>
@@ -2857,7 +2856,6 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="commons-io"/>
         <process_jarfile jarname="commons-jexl"/>
         <process_jarfile jarname="commons-jexl2"/>
-        <process_jarfile jarname="commons-lang"/>
         <process_jarfile jarname="commons-lang3"/>
         <process_jarfile jarname="commons-logging"/>
         <process_jarfile jarname="commons-net"/>
@@ -2889,6 +2887,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="tika-core"/>
         <process_jarfile jarname="tika-parsers"/>
         <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
+        <process_jarfile jarname="commons-lang" dest.dir="${lib.doc}"/>
         <process_jarfile jarname="xalan"/>
         <process_jarfile jarname="xerces"/>
         <process_jarfile jarname="xml-apis"/>
