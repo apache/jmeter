@@ -161,6 +161,8 @@ Webservice (SOAP) Request has been removed by default from GUI as Element is dep
 Transaction Controller now sets Response Code of Generated Parent Sampler (if Generate Parent Sampler is checked) to response code of first failing child in case of failure of one of the children, in previous versions Response Code was empty.
 </p>
 
+<p>commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder. If you use any plugin or third-party code that depends on it, you need to add it in jmeter/lib folder</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
