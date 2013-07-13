@@ -91,7 +91,11 @@ public class Move extends AbstractAction {
                 if (after != null && canAddTo(after, currentNode)) {
                     // move as a child of the next sibling
                     moveAndSelectNode(currentNode, after, 0);
-                } else {
+                }
+                // Commented as per sebb 
+                // http://mail-archives.apache.org/mod_mbox/jmeter-dev/201307.mbox/%3CCAOGo0VZ0z3GMbfsq_gSB%2Bp7nTUqLng6Gy2ecvYbD8_AKb-Dt5w%40mail.gmail.com%3E
+                /*
+                else {
                     // move as a sibling of the parent
                     JMeterTreeNode parentParentNode = getParentNode(parentNode);
                     after = (JMeterTreeNode) parentParentNode
@@ -102,6 +106,7 @@ public class Move extends AbstractAction {
                                 parentParentNode.getIndex(after));
                     }
                 }
+                */
             }
         }
 
