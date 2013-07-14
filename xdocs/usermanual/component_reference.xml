@@ -3962,6 +3962,15 @@ GUI that they can use while developing new JMeter components.</p>
      from the supplied Connection settings. Each thread gets its own connection.
      The connection configuration name is used by the JDBC Sampler to select the appropriate
      connection.
+     You can then access com.mongodb.DB object in Beanshell or JSR223 Test Elements through the element <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a> 
+     using this code<br/>
+     
+	<code>
+	import com.mongodb.DB;<br/>
+	import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;<br/>
+	DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source", "value of property Database Name");<br/>
+	...
+	</code>
     </description>
     <properties>
         <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
