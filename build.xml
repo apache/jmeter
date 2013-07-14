@@ -2901,7 +2901,7 @@ run JMeter unless all the JMeter jars are added.
 
     <target name="_process_doc_jars">
       <process_jarfile jarname="commons-collections"/>
-      <process_jarfile jarname="commons-lang"/>
+      <process_jarfile jarname="commons-lang"   dest.dir="${lib.doc}"/>
       <process_jarfile jarname="jdom"/>
       <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
