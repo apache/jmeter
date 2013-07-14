@@ -481,7 +481,7 @@
     <pathelement location="${lib.doc}/${velocity.jar}"/>
     <pathelement location="${lib.dir}/${jdom.jar}"/>
     <pathelement location="${lib.dir}/${commons-collections.jar}"/>
-    <pathelement location="${lib.dir}/${commons-lang.jar}"/>
+    <pathelement location="${lib.doc}/${commons-lang.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
   </path>
 
