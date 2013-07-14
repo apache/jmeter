@@ -241,6 +241,7 @@
     <pathelement location="${src.monitor.model}"/>
     <pathelement location="${src.jms}"/>
     <pathelement location="${src.native}"/>
+    <pathelement location="${src.mongodb}"/>
     <pathelement location="${src.report}"/>
   </path>
 
