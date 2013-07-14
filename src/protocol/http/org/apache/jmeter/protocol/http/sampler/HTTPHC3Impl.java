@@ -219,14 +219,19 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             } else if (method.equals(HTTPConstants.OPTIONS)){
                 httpMethod = new OptionsMethod(urlStr);
             } else if (method.equals(HTTPConstants.DELETE)){
-                httpMethod = new DeleteMethod(urlStr);
+                httpMethod = new EntityEnclosingMethod(urlStr) {
+                    @Override
+                    public String getName() { // HC3.1 does not have the method
+                        return HTTPConstants.DELETE;
+                    }
+                };
             } else if (method.equals(HTTPConstants.GET)){
                 httpMethod = new GetMethod(urlStr);
             } else if (method.equals(HTTPConstants.PATCH)){
                 httpMethod = new EntityEnclosingMethod(urlStr) {
                     @Override
                     public String getName() { // HC3.1 does not have the method
-                        return "PATCH";
+                        return HTTPConstants.PATCH;
                     }
                 };
             } else {
@@ -254,7 +259,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             if (method.equals(HTTPConstants.POST)) {
                 String postBody = sendPostData((PostMethod)httpMethod);
                 res.setQueryString(postBody);
-            } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
+            } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH) 
+                    || method.equals(HTTPConstants.DELETE)) {
                 String putBody = sendEntityData((EntityEnclosingMethod) httpMethod);
                 res.setQueryString(putBody);
             }
@@ -959,7 +965,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Set up the PUT/PATCH data
+     * Set up the PUT/PATCH/DELETE data
      */
     private String sendEntityData(EntityEnclosingMethod put) throws IOException {
         // Buffer to hold the put body, except file content
