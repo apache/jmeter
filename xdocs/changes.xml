@@ -59,6 +59,7 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 <p>See jmeter property:</p>
 <code>jmeterengine.force.system.exit</code>
 
+<h4>* HttpSampler now allows DELETE Http Method to have a body (works for HC4 and HC31 implementations). This allows for example to test Elastic Search APIs</h4>
 
 <h3><u>GUI and ergonomy Improvements:</u></h3>
 
