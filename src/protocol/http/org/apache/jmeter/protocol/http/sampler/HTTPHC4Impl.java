@@ -55,7 +55,6 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -220,6 +219,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         super(testElement);
     }
 
+    public static final class HttpDelete extends HttpEntityEnclosingRequestBase {
+
+        public HttpDelete(final URI uri) {
+            super();
+            setURI(uri);
+        }
+
+        @Override
+        public String getMethod() {
+            return HTTPConstants.DELETE;
+        }
+    }
+    
     @Override
     protected HTTPSampleResult sample(URL url, String method,
             boolean areFollowingRedirect, int frameDepth) {
@@ -380,7 +392,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if (method.equals(HTTPConstants.POST)) {
             String postBody = sendPostData((HttpPost)httpRequest);
             result.setQueryString(postBody);
-        } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)) {
+        } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)
+                || method.equals(HTTPConstants.DELETE)) {
             String entityBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
             result.setQueryString(entityBody);
         }
