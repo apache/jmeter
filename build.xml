@@ -959,6 +959,9 @@ run JMeter unless all the JMeter jars are added.
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <!-- add license details for images -->
+      <zipfileset file="licenses/src/openiconlibrary.txt"
+        fullpath="META-INF/LICENSE-openiconlibrary.txt" />
       <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"
         excludes="**/BeanShellClient*.class,**/NewDriver*,**/DynamicClassLoader*"/>
