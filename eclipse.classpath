@@ -91,8 +91,8 @@
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.4.4.jar"/>
     <!-- Needed for build and test -->
-    <classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.48.jar"/>
-    <classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.48.jar"/>
-    <classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.48.jar"/>
+    <classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
+    <classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>
+    <classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.49.jar"/>
     <classpathentry kind="output" path="build"/>
 </classpath>
