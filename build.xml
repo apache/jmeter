@@ -380,7 +380,7 @@
     <include name="${lib.dir}/${jcharts.jar}"/>
     <include name="${lib.dir}/${jdom.jar}"/>
     <include name="${lib.dir}/${jms.jar}"/>
-    <include name="${lib.dir}/${js_rhino.jar}"/>
+    <include name="${lib.dir}/${rhino.jar}"/>
     <include name="${lib.dir}/${jodd-core.jar}"/>
     <include name="${lib.dir}/${jodd-lagarto.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
@@ -391,7 +391,7 @@
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
     <include name="${lib.dir}/${soap.jar}"/>
-    <include name="${lib.dir}/${tidy.jar}"/>
+    <include name="${lib.dir}/${jtidy.jar}"/>
     <include name="${lib.dir}/${tika-core.jar}"/>
     <include name="${lib.dir}/${tika-parsers.jar}"/>
     <include name="${lib.dir}/${xalan.jar}"/>
@@ -448,7 +448,7 @@
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
     <pathelement location="${lib.dir}/${jdom.jar}"/>
     <pathelement location="${lib.dir}/${jms.jar}"/>
-    <pathelement location="${lib.dir}/${js_rhino.jar}"/>
+    <pathelement location="${lib.dir}/${rhino.jar}"/>
     <pathelement location="${lib.dir}/${jodd-core.jar}"/>
     <pathelement location="${lib.dir}/${jodd-lagarto.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
@@ -459,7 +459,7 @@
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${soap.jar}"/>
-    <pathelement location="${lib.dir}/${tidy.jar}"/>
+    <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
     <pathelement location="${lib.dir}/${xalan.jar}"/>
@@ -2877,7 +2877,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="jcharts"/>
         <process_jarfile jarname="jdom"/>
         <process_jarfile jarname="jms"/>
-        <process_jarfile jarname="js_rhino"/>
+        <process_jarfile jarname="rhino"/>
         <process_jarfile jarname="jodd-core"/>
         <process_jarfile jarname="jodd-lagarto"/>
         <process_jarfile jarname="jsoup"/>
@@ -2887,7 +2887,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="slf4j-api"/>
         <process_jarfile jarname="soap"/>
-        <process_jarfile jarname="tidy"/>
+        <process_jarfile jarname="jtidy"/>
         <process_jarfile jarname="tika-core"/>
         <process_jarfile jarname="tika-parsers"/>
         <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
