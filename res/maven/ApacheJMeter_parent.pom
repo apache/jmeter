@@ -85,7 +85,7 @@ under the License.
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.2</mongo-java-driver.version>
       <rsyntaxtextarea.version>2.0.7</rsyntaxtextarea.version>
-      <slf4j.version>1.7.5</slf4j.version>
+      <slf4j-api.version>1.7.5</slf4j-api.version>
       <soap.version>2.3.1</soap.version>
       <tidy.version>r938</tidy.version>
       <tika-core.version>1.4</tika-core.version>
@@ -359,7 +359,7 @@ under the License.
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
+        <version>${slf4j-api.version}</version>
       </dependency>
       <!-- Docs only; not needed for source or binary archives 
       <dependency>
