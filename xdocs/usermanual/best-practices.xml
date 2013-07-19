@@ -325,12 +325,14 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 
 <section name="&sect-num;.11 JSR223 Elements" anchor="jsr223">
 <p>
-When using JSR 223 elements, prefer script file to inline script as JMeter will compile script (if underlying language supports it) which will avoid parsing it each
-time it is executed and will highly improve performances of Test Plan.
+When using JSR 223 elements, always set caching key to a unique value to ensure the script compilation is cached if underlying language supports it.
+Ensure the script does not use any variable using ${varName} as caching would take only first value of ${varName}. Instead use :
+<code>
+vars.get("varName")
+</code>
 </p>
 <p>
-In this case, don't use any User Defined variable or variable you create directly in the script file, instead pass these as Parameters to
-the script and use them this way.
+You can also pass them as Parameters to the script and use them this way.
 </p>
 </section>
 
