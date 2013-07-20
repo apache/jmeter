@@ -227,7 +227,7 @@ java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 Each BeanShell test element has its own copy of the interpreter (for each thread).
 If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
 between invocations unless the "Reset bsh.Interpreter before each call" option is selected.
-For intensive load testing, it is recommended to use JSR223 scripting languages which ScriptingEngine implements Compilable, 
+For intensive load testing, it is recommended to use a JSR223 scripting language whose ScriptingEngine implements Compilable, 
 see JSR223 section below for more details.
 </p>
 <p>
@@ -327,9 +327,11 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 
 <section name="&sect-num;.11 JSR223 Elements" anchor="jsr223">
 <p>
-For intensive load testing, the recommended scripting language is one which ScriptingEngine implements Compilable interface.
-Groovy is one of them, Beanshell nor Javascript do as of release date of JMeter 2.10, so it is 
-recommended to avoid them for intensive load testing.
+For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the Compilable interface.
+Groovy is one of them, neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
+recommended to avoid them for intensive load testing. 
+[Note: Beanshell implements the Compilable interface but it has not been coded - the method just throws an Exception.
+JMeter has an explicit work-round for this bug.]
 
 When using JSR 223 elements, always set caching key to a unique value to ensure the script compilation is cached if underlying language supports it.
 Ensure the script does not use any variable using ${varName} as caching would take only first value of ${varName}. Instead use :
