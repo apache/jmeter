@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.java.test;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
@@ -299,7 +300,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
             // Execute the sample. In this case sleep for the
             // specified time, if any
             if (sleep > 0) {
-                Thread.sleep(sleep);
+                TimeUnit.MILLISECONDS.sleep(sleep);
             }
             results.setSuccessful(success);
         } catch (InterruptedException e) {
