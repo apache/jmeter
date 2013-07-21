@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -1313,7 +1314,7 @@ public class SampleResult implements Serializable {
 
         private void getOffset(long wait) {
             try {
-                Thread.sleep(wait);
+                TimeUnit.MILLISECONDS.sleep(wait);
                 long clock = System.currentTimeMillis();
                 long nano = SampleResult.sampleNsClockInMs();
                 nanoOffset = clock - nano;
