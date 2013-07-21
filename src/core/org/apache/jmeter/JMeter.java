@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JTree;
@@ -985,7 +986,7 @@ public class JMeter implements JMeterPlugin {
                 }
             }
             try {
-                Thread.sleep(5000); // Allow listeners to close files
+                TimeUnit.SECONDS.sleep(5); // Allow listeners to close files
             } catch (InterruptedException ignored) {
             }
             ClientJMeterEngine.tidyRMI(log);
@@ -1008,7 +1009,7 @@ public class JMeter implements JMeterPlugin {
                     @Override
                     public void run(){
                         try {
-                            Thread.sleep(REMAIN_THREAD_PAUSE); // Allow enough time for JVM to exit
+                            TimeUnit.MILLISECONDS.sleep(REMAIN_THREAD_PAUSE); // Allow enough time for JVM to exit
                         } catch (InterruptedException ignored) {
                         }
                         // This is a daemon thread, which should only reach here if there are other

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.jmeter.assertions.Assertion;
@@ -759,7 +760,7 @@ public class JMeterThread implements Runnable, Interruptible {
         }
         if (sum > 0) {
             try {
-                Thread.sleep(sum);
+                TimeUnit.MILLISECONDS.sleep(sum);
             } catch (InterruptedException e) {
                 log.warn("The delay timer was interrupted - probably did not wait as long as intended.");
             }
@@ -816,7 +817,7 @@ public class JMeterThread implements Runnable, Interruptible {
                     pause = togo;
                 }
                 try {
-                    Thread.sleep(pause); // delay between checks
+                    TimeUnit.MILLISECONDS.sleep(pause); // delay between checks
                 } catch (InterruptedException e) {
                     if (running) { // Don't bother reporting stop test interruptions
                         log.warn(type+" delay for "+threadName+" was interrupted. Waited "+(now - start)+" milli-seconds out of "+delay);
