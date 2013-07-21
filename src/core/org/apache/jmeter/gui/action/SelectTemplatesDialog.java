@@ -58,7 +58,7 @@ import org.apache.log.Logger;
  * Dialog used for Templates selection
  * @since 2.10
  */
-public class SelectTemplateDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener {
+public class SelectTemplatesDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener {
 
     private static final long serialVersionUID = -4436834972710248247L;
     
@@ -82,7 +82,7 @@ public class SelectTemplateDialog extends JDialog implements ChangeListener, Act
     
     private final JScrollPane scroller = new JScrollPane(helpDoc);
 
-    public SelectTemplateDialog() {
+    public SelectTemplatesDialog() {
         super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$
         init();
     }
