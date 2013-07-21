@@ -21,6 +21,8 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +75,7 @@ public class DummyAnnotatedTest
     @Test(timeout=1000)
     public void timeOutFail() {
         try{
-            Thread.sleep(2000);
+            TimeUnit.SECONDS.sleep(2);
         }catch (InterruptedException e) { }
     }
 
@@ -81,7 +83,7 @@ public class DummyAnnotatedTest
     @Test(timeout=1000)
     public void timeOutPass() {
         try{
-            Thread.sleep(500);
+            TimeUnit.MILLISECONDS.sleep(500);
         }catch (InterruptedException e) { }
     }
 
