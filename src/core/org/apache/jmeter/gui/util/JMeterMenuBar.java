@@ -71,7 +71,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem file_load;
 
-    private JMenuItem create_from_template;
+    private JMenuItem templates;
 
     private List<JComponent> file_load_recent_files;
 
@@ -511,8 +511,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // is selected is ROOT, which does not allow items to be inserted.
         file_load.setEnabled(false);
 
-        create_from_template = makeMenuItemRes("create_from_template", 'T', ActionNames.CREATE_FROM_TEMPLATE); //$NON-NLS-1$
-        create_from_template.setEnabled(true);
+        templates = makeMenuItemRes("template_menu", 'T', ActionNames.TEMPLATES); //$NON-NLS-1$
+        templates.setEnabled(true);
 
         file_close = makeMenuItemRes("menu_close", 'C', ActionNames.CLOSE, KeyStrokes.CLOSE); //$NON-NLS-1$
 
@@ -527,7 +527,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         fileMenu.add(file_close);
         fileMenu.add(file_load);
-        fileMenu.add(create_from_template);
+        fileMenu.add(templates);
         fileMenu.add(file_merge);
         fileMenu.addSeparator();
         fileMenu.add(file_save);
