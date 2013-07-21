@@ -26,18 +26,18 @@ import java.util.Set;
  * Open Templates 
  * @since 2.10
  */
-public class TemplateCommand extends AbstractAction {
+public class TemplatesCommand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<String>();
 
     // Ensure the dialog is only created when it is first needed
     // In turn this avoids scanning the templates until first needed
     static class IODH {
-        private static final SelectTemplateDialog dialog = new SelectTemplateDialog();        
+        private static final SelectTemplatesDialog dialog = new SelectTemplatesDialog();        
     }
 
     static {
-        commands.add(ActionNames.CREATE_FROM_TEMPLATE);
+        commands.add(ActionNames.TEMPLATES);
     }
 
     /**
