@@ -162,6 +162,10 @@ Webservice (SOAP) Request has been removed by default from GUI as Element is dep
 Transaction Controller now sets Response Code of Generated Parent Sampler (if Generate Parent Sampler is checked) to response code of first failing child in case of failure of one of the children, in previous versions Response Code was empty.
 </p>
 
+<p>
+The retry count for the HttpClient 3.1 and HttpClient 4.x samplers has been changed to 0.
+Previously the default was 1, which could cause unexpected additional traffic.
+</p>
 <p>commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder. If you use any plugin or third-party code that depends on it, you need to add it in jmeter/lib folder</p>
 
 <!-- =================== Bug fixes =================== -->
@@ -230,6 +234,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 <li><bugzilla>55065</bugzilla> - Useless processing in Spline3.converge()</li>
 <li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction()</li>
 <li><bugzilla>55242</bugzilla> -  BeanShell Client jar throws exceptions after upgrading to 2.8</li>
+<li><bugzilla>55288</bugzilla> -  JMeter should default to 0 retries for HTTP requests</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
