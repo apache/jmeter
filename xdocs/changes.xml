@@ -74,7 +74,7 @@ template into your Test Plan</h4>
 <figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
 </p>
 
-<h4>* Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223) and JDBC elements making code much more readable</h4>
+<h4>* Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable</h4>
 <p>
 <figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
 </p>
@@ -135,6 +135,12 @@ on some Linux systems that manifests itself as the following error when running 
  java.lang.IllegalArgumentException: Not supported: indent-number
 </pre>
 This does not affect JMeter operation. This issue is fixed since Java 7b05.
+</li>
+
+<li>
+With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may don't work correctly (shift between mouse's click and the menu). 
+This is a known Java bug (see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54477">54477</a>
+A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
 </li>
 </ul>
 
