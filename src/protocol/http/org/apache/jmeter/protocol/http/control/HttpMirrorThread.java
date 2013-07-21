@@ -23,6 +23,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -130,7 +131,7 @@ public class HttpMirrorThread implements Runnable {
             // Look for special Sleep request
             String sleepHeaderValue = getRequestHeaderValue(headerString, "X-Sleep"); //$NON-NLS-1$
             if(sleepHeaderValue != null) {
-                Thread.sleep(Integer.parseInt(sleepHeaderValue));
+                TimeUnit.MILLISECONDS.sleep(Integer.parseInt(sleepHeaderValue));
             }
             String transferEncodingHeaderValue = getRequestHeaderValue(headerString, "Transfer-Encoding"); //$NON-NLS-1$
             if(transferEncodingHeaderValue != null) {
