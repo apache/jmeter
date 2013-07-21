@@ -51,8 +51,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     protected void threadFinished() {
     }
 
-    // Allows HTTPSamplerProxy to call testIterationStart; subclasses can override if necessary
-    protected void testIterationStart(LoopIterationEvent event) {
+    // Allows HTTPSamplerProxy to call notifyFirstSampleAfterLoopRestart; subclasses can override if necessary
+    protected void notifyFirstSampleAfterLoopRestart() {
     }
 
     // Provide access to HTTPSamplerBase methods
