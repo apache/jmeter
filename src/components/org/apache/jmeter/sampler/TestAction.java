@@ -20,6 +20,7 @@ package org.apache.jmeter.sampler;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -117,7 +118,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
         }
         try {
             pauseThread = Thread.currentThread();
-            Thread.sleep(milis);
+            TimeUnit.MILLISECONDS.sleep(milis);
         } catch (InterruptedException e) {
             // NOOP
         } finally {
