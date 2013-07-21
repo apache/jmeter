@@ -139,7 +139,7 @@ This does not affect JMeter operation. This issue is fixed since Java 7b05.
 
 <li>
 With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may don't work correctly (shift between mouse's click and the menu). 
-This is a known Java bug (see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54477">54477</a>
+This is a known Java bug (see  <bugzilla>54477 </bugzilla>). 
 A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
 </li>
 </ul>
