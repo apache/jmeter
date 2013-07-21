@@ -18,6 +18,8 @@
 
 package woolfel;
 
+import java.util.concurrent.TimeUnit;
+
 import junit.framework.TestCase;
 
 public class DummyTestCase extends TestCase {
@@ -44,7 +46,7 @@ public class DummyTestCase extends TestCase {
 
     public void testMethodPass() {
         try {
-            Thread.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(100);
             assertEquals(10,10);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -53,7 +55,7 @@ public class DummyTestCase extends TestCase {
 
     public void testMethodPass2() {
         try {
-            Thread.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(100);
             assertEquals("one","one");
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -62,7 +64,7 @@ public class DummyTestCase extends TestCase {
 
     public void testMethodFail() {
         try {
-            Thread.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(100);
             assertEquals(20,10);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -71,7 +73,7 @@ public class DummyTestCase extends TestCase {
 
     public void testMethodFail2() {
         try {
-            Thread.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(100);
             assertEquals("one","two");
         } catch (InterruptedException e) {
             e.printStackTrace();
