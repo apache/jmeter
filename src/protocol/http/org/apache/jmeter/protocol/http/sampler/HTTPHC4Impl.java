@@ -1183,8 +1183,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     @Override
-    protected void testIterationStart(LoopIterationEvent event) {
-        log.debug("TtestIterationStart");
+    protected void notifyFirstSampleAfterLoopRestart() {
+        log.debug("notifyFirstSampleAfterLoopRestart");
         resetSSLContext = !USE_CACHED_SSL_CONTEXT;
     }
 
