@@ -21,6 +21,7 @@ package org.apache.jmeter.threads;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
@@ -499,7 +500,7 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     private void pause(long ms){
         try {
-            Thread.sleep(ms);
+            TimeUnit.MILLISECONDS.sleep(ms);
         } catch (InterruptedException e) {
             // TODO Is this silent exception intended
         }

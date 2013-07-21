@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -569,7 +570,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     private void pause(long ms){
         try {
-            Thread.sleep(ms);
+            TimeUnit.MILLISECONDS.sleep(ms);
         } catch (InterruptedException e) {
         }
     }
