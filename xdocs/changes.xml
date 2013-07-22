@@ -45,42 +45,64 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h4>* New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
 citizen in JMeter, you can now test your expressions very easily</h4>
-<p>
-<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
-</p>
 
 <h4>* You can now load test MongoDB through new MongoDB Source Config</h4>
+<p>
+<figure width="912" height="486" image="changes/2.10/02_mongodb_source_config.png"></figure>
+</p>
+<p>
+<figure width="906" height="313" image="changes/2.10/03_mongodb_script_alpha.png"></figure>
+</p>
 
 <h4>* Query timeout has been added to JDBC Request</h4>
+<p>
+<figure width="540" height="600" image="changes/2.10/04_jdbc_request_timeout.png"></figure>
+</p>
 
 <h4>* New functions (__urlencode and __urldecode) are now available to encode/decode URL encoded chars</h4>
+<p>
+<figure width="512" height="240" image="changes/2.10/05_urlencode_function.png"></figure>
+</p>
 
 <h4>* Continuous Integration is now eased by addition of a new flag that forces NON-GUI JVM to exit after test end</h4>
 <p>See jmeter property:</p>
 <code>jmeterengine.force.system.exit</code>
 
 <h4>* HttpSampler now allows DELETE Http Method to have a body (works for HC4 and HC31 implementations). This allows for example to test Elastic Search APIs</h4>
+<p>
+<figure width="645" height="329" image="changes/2.10/06_http_request_delete_method.png"></figure>
+</p>
 
 <h3><u>GUI and ergonomy Improvements:</u></h3>
+
 
 <h4>* New Templates feature that allows you to create test plan from existing template or merge
 template into your Test Plan</h4>
 <p>
-<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+<figure width="428" height="130" image="changes/2.10/07_jmeter_templates_icon.png"></figure>
+</p>
+<p>
+<figure width="781" height="472" image="changes/2.10/08_jmeter_templates_box.png"></figure>
 </p>
 
 <h4>* Workbench can now be saved</h4>
 <p>
-<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+<figure width="489" height="198" image="changes/2.10/09_save_workbench.png"></figure>
 </p>
 
 <h4>* Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable</h4>
-<p>
-<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+<p>BSF Sampler with syntax color
+<figure width="915" height="620" image="changes/2.10/10_color_syntax_bsf_sampler.png"></figure>
+</p>
+<p>JSR223 Pre Processor with syntax color
+<figure width="911" height="614" image="changes/2.10/11_color_syntax_jsr223_preprocessor.png"></figure>
 </p>
 
 <h4>* Moving elements in Test plan has been improved in many ways</h4>
 <h5>Drag and drop of elements in Test Plan tree is now much easier and possible on multiple nodes</h5>
+<p>
+<figure width="894" height="236" image="changes/2.10/12_drap_n-drop_multiple.png"></figure>
+</p>
 <p>
 Note that due to this <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6560955">bug in Java</a>,
 you cannot drop a node after last node. The workaround is to drop it before this last node and then Drag and Drop the last node 
@@ -92,6 +114,9 @@ before the one you just dropped.
 (alt + Arrow Left) and (alt + Arrow Right) move the element up and down in the tree depth</p>
 
 <h4>* Response Time Graph Y axis can now be scaled</h4>
+<p>
+<figure width="947" height="596" image="changes/2.10/13_response_time_graph_y_scale.png"></figure>
+</p>
 
 <h4>* JUnit Sampler gives now more details on configuration errors</h4>
 
