@@ -509,7 +509,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      * get the principal from the context property java.naming.security.principal
      *
      * @param context
-     * @return
+     * @return the principal
      * @throws NamingException
      */
     private String getPrincipal(Context context) throws NamingException{
@@ -521,7 +521,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      * get the credentials from the context property java.naming.security.credentials
      *
      * @param context
-     * @return
+     * @return the credentials
      * @throws NamingException
      */
     private String getCredentials(Context context) throws NamingException{

@@ -520,8 +520,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /**
      * @param threadContext
-     * @return 
-     *
+     * @return the iteration listener 
      */
     private IterationListener initRun(JMeterContext threadContext) {
         threadContext.setVariables(threadVars);

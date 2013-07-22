@@ -194,7 +194,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      *                 If neither empty nor null, this means that a durable 
      *                 subscription will be used
      * @param jmsSelector JMS Selector
-     * @return
+     * @return the message consumer
      * @throws JMSException
      */
     private MessageConsumer createSubscriber(Session session, 

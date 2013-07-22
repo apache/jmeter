@@ -221,7 +221,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
     /**
      * Creates the information Panel at the bottom
      *
-     * @return
+     * @return the box containing the panel
      */
     private Box createGraphInfoPanel() {
         Box graphInfoPanel = Box.createHorizontalBox();
