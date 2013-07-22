@@ -94,7 +94,7 @@ public class InitialContextFactory {
      * @param providerUrl
      * @param securityPrincipal
      * @param securityCredentials
-     * @return
+     * @return the cache key
      */
     private static String createKey(
             long threadId,

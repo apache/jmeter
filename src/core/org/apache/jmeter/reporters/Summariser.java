@@ -237,7 +237,7 @@ public class Summariser extends AbstractTestElement
     /**
      * @param myTotal
      * @param string
-     * @return
+     * @return the sunnary information
      */
     private static String format(String name, RunningSample s, String type) {
         DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$

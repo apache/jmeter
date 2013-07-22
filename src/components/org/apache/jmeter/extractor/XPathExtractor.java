@@ -277,7 +277,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
      * Converts (X)HTML response to DOM object Tree.
      * This version cares of charset of response.
      * @param unicodeData
-     * @return
+     * @return the parsed document
      *
      */
     private Document parseResponse(String unicodeData)

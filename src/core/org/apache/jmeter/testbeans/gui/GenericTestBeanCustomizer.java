@@ -334,7 +334,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Identify the property from the descriptor.
      * 
      * @param pd
-     * @return
+     * @return the property details
      */
     private static String getDetails(PropertyDescriptor pd) {
         StringBuilder sb = new StringBuilder();
@@ -350,7 +350,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      *
      * @param typeEditor
      * @param descriptor
-     * @return
+     * @return the wrapper editor
      */
     private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
         String[] editorTags = typeEditor.getTags();
