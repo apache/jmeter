@@ -50,6 +50,6 @@ class HTTPSampler3 extends HTTPSamplerBase implements Interruptible {
      */
     @Override
     public void testIterationStart(LoopIterationEvent event) {
-        hc.testIterationStart(event);
+        hc.notifyFirstSampleAfterLoopRestart();
     }
 }
