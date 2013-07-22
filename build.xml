@@ -1236,6 +1236,7 @@ run JMeter unless all the JMeter jars are added.
 
   <patternset id="dist.binaries.native">
     <include name="LICENSE"/>
+    <include name="licenses/**"/>
     <include name="NOTICE"/>
     <include name="README"/>
     <patternset refid="dist.common.native"/>
@@ -1302,6 +1303,7 @@ run JMeter unless all the JMeter jars are added.
   -->
   <patternset id="dist.sources.native">
     <include name="LICENSE"/>
+    <include name="licenses/src/**"/>
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="${src.dir}/**"/>
