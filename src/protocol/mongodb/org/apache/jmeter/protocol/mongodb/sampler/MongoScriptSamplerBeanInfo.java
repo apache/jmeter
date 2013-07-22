@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.mongodb.sampler;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
-import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
