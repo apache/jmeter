@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
