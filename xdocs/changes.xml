@@ -45,11 +45,19 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h4>* New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
 citizen in JMeter, you can now test your expressions very easily</h4>
+<p>
+<figure width="1144" height="638" image="changes/2.10/01_css_jquery_tester.png"></figure>
+</p>
 
 <h4>* You can now load test MongoDB through new MongoDB Source Config</h4>
 <p>
 <figure width="912" height="486" image="changes/2.10/02_mongodb_source_config.png"></figure>
 </p>
+<p>
+<figure width="850" height="687" image="changes/2.10/14_mongodb_jsr223.png"></figure>
+</p>
+
+<h4>* You can now do functionnal testing of MongoDB scripts through new MongoDB Script</h4>
 <p>
 <figure width="906" height="313" image="changes/2.10/03_mongodb_script_alpha.png"></figure>
 </p>
@@ -70,7 +78,7 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 
 <h4>* HttpSampler now allows DELETE Http Method to have a body (works for HC4 and HC31 implementations). This allows for example to test Elastic Search APIs</h4>
 <p>
-<figure width="645" height="329" image="changes/2.10/06_http_request_delete_method.png"></figure>
+<figure width="573" height="444" image="changes/2.10/06_http_request_delete_method.png"></figure>
 </p>
 
 <h3><u>GUI and ergonomy Improvements:</u></h3>
@@ -163,7 +171,7 @@ This does not affect JMeter operation. This issue is fixed since Java 7b05.
 </li>
 
 <li>
-With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may don't work correctly (shift between mouse's click and the menu). 
+With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may not work correctly (shift between mouse's click and the menu). 
 This is a known Java bug (see  <bugzilla>54477 </bugzilla>). 
 A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
 </li>
