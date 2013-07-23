@@ -2675,6 +2675,27 @@ There are several ways to view the response, selectable by a drop-down box at th
 
 <table>
 <tr><th><b>Renderer</b></th><th><b>Description</b></th></tr>
+<tr><td><b>CSS/JQuery Tester</b></td>
+<td>The <i>CSS/JQuery Tester</i> only works for text responses. It shows the plain text in the upper panel.
+The "Test" button allows the user to apply the CSS/JQuery to the upper panel and the results
+will be displayed in the lower panel.<br/>
+The engine of CSS/JQuery expression can be JSoup or Jodd, syntax of these 2 implementation differs slightly.<br/>
+For example, the Selector <b>a[class=sectionlink]</b> with attribute <b>href</b> applied to the current JMeter functions page gives the following output:
+<br/>
+<pre>
+Match count: 74
+Match[1]=#functions
+Match[2]=#what_can_do
+Match[3]=#where
+Match[4]=#how
+Match[5]=#function_helper
+Match[6]=#functions
+Match[7]=#__regexFunction
+Match[8]=#__regexFunction_parms
+Match[9]=#__counter
+... and so on ...
+</pre>
+<br/></td></tr>
 <tr><td><b>Document</b></td>
 <td>The <i>Document view</i> will show the extract text from various type of documents like Microsoft Office
 (Word, Excel, PowerPoint 97-2003, 2007-2010 (openxml), Apache OpenOffice (writer, calc, impress), HTML,
