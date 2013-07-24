@@ -32,7 +32,11 @@
 <section name="&sect-num;. Best Practices" anchor="best_practices">
 </section>
 
-<section name="&sect-num;.1 Limit the Number of Threads" anchor="limit_threads">
+<section name="&sect-num;.1 Always use last version of JMeter" anchor="use_last_version">
+<p>Performance are constantly improving accross versions, so users are highly encouraged to be the most up to date</p>
+</section>
+
+<section name="&sect-num;.2 Limit the Number of Threads" anchor="limit_threads">
 <p>Your hardware's capabilities will limit the number of threads you can effectively
 run with JMeter.  It will also depend on how fast your server is (a faster server
  makes JMeter work harder since it returns request quicker).  The more
@@ -51,17 +55,17 @@ This allows for a very large total number of threads, provided that not too many
 </p>
 </section>
 
-<section name="&sect-num;.2 Where to Put the Cookie Manager" anchor="put_cookie_manager">
+<section name="&sect-num;.3 Where to Put the Cookie Manager" anchor="put_cookie_manager">
 <p>See <a href="build-web-test-plan.html#adding_cookie_support">Building a Web Test</a>
 for information.</p>
 </section>
 
-<section name="&sect-num;.3 Where to Put the Authorization Manager" anchor="put_auth_manager">
+<section name="&sect-num;.4 Where to Put the Authorization Manager" anchor="put_auth_manager">
 <p>See <a href="build-adv-web-test-plan.html#header_manager">Building an Advanced
 Web Test</a> for information.</p>
 </section>
 
-<section name="&sect-num;.4 Using the Proxy Server" anchor="proxy_server">
+<section name="&sect-num;.5 Using the Proxy Server" anchor="proxy_server">
 <p>Refer to <complink name="HTTP Proxy Server"/> for details on setting up the proxy
 server. The most important thing to do is filter out all requests you aren't
 interested in.  For instance, there's no point in recording image requests (JMeter can
@@ -115,7 +119,7 @@ a good similar example for the variables is http vs. https.-->
 with this new features.-->
 </section>
 
-<section name="&sect-num;.5 User variables" anchor="user_variables">
+<section name="&sect-num;.6 User variables" anchor="user_variables">
 <p>
 Some test plans need to use different values for different users/threads. 
 For example, you might want to test a sequence that requires a unique login for each user.
@@ -139,7 +143,7 @@ samplers
 </p>
 </section>
 
-<section name="&sect-num;.6 Reducing resource requirements" anchor="lean_mean">
+<section name="&sect-num;.7 Reducing resource requirements" anchor="lean_mean">
 <p>
 Some suggestions on reducing resource usage.
 </p>
@@ -156,6 +160,7 @@ Or perhaps use the Access Log Sampler.
 <li>Use CSV output rather than XML</li>
 <li>Only save the data that you need</li>
 <li>Use as few Assertions as possible</li>
+<li>Use the most performing scripting language (see JSR223 section)</li>
 </ul>
 <p>
 If your test needs large amounts of data - particularly if it needs to be randomised - create the test data in a file
@@ -163,7 +168,7 @@ that can be read with CSV Dataset. This avoids wasting resources at run-time.
 </p>
 </section>
 
-<section name="&sect-num;.7 BeanShell server" anchor="beanshell_server">
+<section name="&sect-num;.8 BeanShell server" anchor="beanshell_server">
 <p>
 The BeanShell interpreter has a very useful feature - it can act as a server,
 which is accessible by telnet or http.
@@ -221,8 +226,8 @@ java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 </pre>
 </section>
 
-<section name="&sect-num;.8 BeanShell scripting" anchor="bsh_scripting">
-<subsection name="&sect-num;.8.1 Overview" anchor="bsh_overview">
+<section name="&sect-num;.9 BeanShell scripting" anchor="bsh_scripting">
+<subsection name="&sect-num;.9.1 Overview" anchor="bsh_overview">
 <p>
 Each BeanShell test element has its own copy of the interpreter (for each thread).
 If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
@@ -244,7 +249,7 @@ bsh% exit(); // or use EOF key (e.g. ^Z or ^D)
 </pre>
 </p>
 </subsection>
-<subsection name="&sect-num;.8.2 Sharing Variables" anchor="bsh_variables">
+<subsection name="&sect-num;.9.2 Sharing Variables" anchor="bsh_variables">
 <p>
 Variables can be defined in startup (initialisation) scripts.
 These will be retained across invocations of the test element, unless the reset option is used.\
@@ -281,7 +286,7 @@ defined by the JMeter property "beanshell.init.file". This is only processed onc
 </subsection>
 </section>
 
-<section name="&sect-num;.9 Developing script functions in BeanShell, Javascript or Jexl etc." anchor="developing_scripts">
+<section name="&sect-num;.10 Developing script functions in BeanShell, Javascript or Jexl etc." anchor="developing_scripts">
 <p>
 It's quite hard to write and test scripts as functions.
 However, JMeter has the BSF (and BeanShell) samplers which can be used instead.  
@@ -302,7 +307,7 @@ because the function call is parsed before the variable's value is interpolated.
 </p>
 </section>
 
-<section name="&sect-num;.10 Parameterising tests" anchor="parameterising_tests">
+<section name="&sect-num;.11 Parameterising tests" anchor="parameterising_tests">
 <p>
 Often it is useful to be able to re-run the same test with different settings.
 For example, changing the number of threads or loops, or changing a hostname.
@@ -325,7 +330,7 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 </p>
 </section>
 
-<section name="&sect-num;.11 JSR223 Elements" anchor="jsr223">
+<section name="&sect-num;.12 JSR223 Elements" anchor="jsr223">
 <p>
 For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the Compilable interface.
 Groovy is one of them, neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
@@ -344,7 +349,7 @@ You can also pass them as Parameters to the script and use them this way.
 </p>
 </section>
 
-<section name="&sect-num;.12 Sharing variables between threads and thread groups" anchor="sharing_variables">
+<section name="&sect-num;.13 Sharing variables between threads and thread groups" anchor="sharing_variables">
 <p>
 Variables are local to a thread; a variable set in one thread cannot be read in another.
 This is by design. For variables that can be determined before a test starts, see 
