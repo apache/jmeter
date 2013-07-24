@@ -32,9 +32,9 @@
     <h2>What can I do with it?</h2>
     <p>
       Apache JMeter may be used to test performance both on static and dynamic
-      resources (files, Servlets, Perl scripts, Java Objects, Data Bases and
+      resources (Files, Web dynamic languages - PHP, Java, ASP.NET, etc. -, Java Objects, Data Bases and
       Queries, FTP Servers and more). It can be used to simulate a heavy
-load on a server, network or object to test its strength or to analyze
+load on a server, group of servers, network or object to test its strength or to analyze
 overall performance under different load types. You can use it to make a
 graphical analysis of performance or to test your server/script/object
 behavior under heavy concurrent load.
@@ -42,15 +42,17 @@ behavior under heavy concurrent load.
 <h2>What does it do?</h2>
 <p>Apache JMeter features include:</p>
 <ul>
-    <li>Can load and performance test many different server types:
+    <li>Can load and performance test many different server/protocol types:
         <ul>
         <li>Web - HTTP, HTTPS</li>
         <li>SOAP</li>
+        <li>FTP</li>
         <li>Database via JDBC</li>
         <li>LDAP</li>
-        <li>JMS</li>
+        <li>Message-oriented middleware (MOM) via JMS</li>
         <li>Mail - SMTP(S), POP3(S) and IMAP(S)</li>
         <li>Native commands or shell scripts</li>
+        <li>TCP</li>
         </ul>
     </li>
     <li>Complete portability and <b>100% Java purity</b>.</li>
@@ -65,7 +67,7 @@ behavior under heavy concurrent load.
         <li>Data analysis and <b>visualization plugins</b> allow great extensibility
         as well as personalization.</li>
         <li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>
-        <li>Scriptable Samplers (BeanShell is fully supported; and there is a sampler which supports BSF-compatible languages)</li>
+        <li><b>Scriptable Samplers</b> (BeanShell, BSF-compatible languages and JSR223-compatible languages)</li>
       </ul>
     </li>
 </ul>
@@ -98,7 +100,7 @@ Nor does it render the HTML pages as a browser does
 </ul>
 <h2>Further Information About JMeter</h2>
 <ul>
-<li><a href="changes.html">Change List</a></li>
+<li><a href="changes.html">Changes List</a></li>
 <li><a href="issues.html">Issues</a></li>
 <li><a href="http://www.apache.org/licenses/">License</a></li>
 <li><a href="mail.html">Mailing Lists</a></li>
