@@ -4356,7 +4356,13 @@ document, and is the default XPath Expression.
 The assertion also supports boolean expressions, such as "count(//*error)=2".
 See <a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a> for more information
 on XPath.
-</p></description>
+</p>
+Some sample expressions:
+<ul>
+<li>//title[text()='Text to match'] - matches &amp;lt;text&amp;gt;Text to match&amp;lt;/text&amp;gt; anywhere in the response</li>
+<li>/title[text()='Text to match'] - matches &amp;lt;text&amp;gt;Text to match&amp;lt;/text&amp;gt; at root level in the response</li>
+</ul>
+</description>
 
 <properties>
 <property name="Name"        required="No">Descriptive name for this element that is shown in the tree.</property>
@@ -4375,8 +4381,8 @@ on XPath.
 The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
 </note>
 <note>
-To overcome Xalan XPath parser implementation on which JMeter is based, you can help the parsing by 
-providing a Properties file which will contain:
+As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
+you can provide a Properties file which contains mappings for the namespace prefixes: 
 <ul>
 <li>prefix1=Full Namespace 1</li>
 <li>prefix2=Full Namespace 2</li>
