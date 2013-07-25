@@ -32,8 +32,8 @@
 <section name="&sect-num;. Best Practices" anchor="best_practices">
 </section>
 
-<section name="&sect-num;.1 Always use last version of JMeter" anchor="use_last_version">
-<p>Performance are constantly improving accross versions, so users are highly encouraged to be the most up to date</p>
+<section name="&sect-num;.1 Always use latest version of JMeter" anchor="use_latest_version">
+<p>The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version</p>
 </section>
 
 <section name="&sect-num;.2 Limit the Number of Threads" anchor="limit_threads">
