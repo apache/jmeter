@@ -101,9 +101,9 @@ public final class CSVSaveService {
 
     // Date formats to try if the time format does not parse as milliseconds
     private static final String DATE_FORMAT_STRINGS[] = {
-        "yyyy/MM/dd HH:mm:ss.SSSS",  // $NON-NLS-1$
+        "yyyy/MM/dd HH:mm:ss.SSS",  // $NON-NLS-1$
         "yyyy/MM/dd HH:mm:ss",  // $NON-NLS-1$
-        "yyyy-MM-dd HH:mm:ss.SSSS",  // $NON-NLS-1$
+        "yyyy-MM-dd HH:mm:ss.SSS",  // $NON-NLS-1$
         "yyyy-MM-dd HH:mm:ss",  // $NON-NLS-1$
 
         "MM/dd/yy HH:mm:ss"  // $NON-NLS-1$ (for compatibility, this is the original default)
