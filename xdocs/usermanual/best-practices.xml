@@ -333,7 +333,7 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 <section name="&sect-num;.12 JSR223 Elements" anchor="jsr223">
 <p>
 For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the Compilable interface.
-Groovy is one of them, neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
+Groovy implements Compilable. However neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
 recommended to avoid them for intensive load testing. 
 [Note: Beanshell implements the Compilable interface but it has not been coded - the method just throws an Exception.
 JMeter has an explicit work-round for this bug.]
