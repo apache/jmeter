@@ -45,7 +45,7 @@ HEAP="-Xms512m -Xmx512m"
 
 # There's an awful lot of per-sample objects allocated during test run, so we
 # need a large eden to avoid too frequent scavenges -- you'll need to tune this
-# down proportionally if you reduce the HEAP values above:
+# down proportionally if you modify the HEAP values above:
 NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
 
 # This ratio and target have been proven OK in tests with a specially high
@@ -75,7 +75,7 @@ TENURING="-XX:MaxTenuringThreshold=2"
 RMIGC="-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000"
 
 # Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
-PERM="-XX:PermSize=64m -XX:MaxPermSize=128m"
+PERM="-XX:PermSize=64m -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled"
 
 # Finally, some tracing to help in case things go astray:
 #DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
