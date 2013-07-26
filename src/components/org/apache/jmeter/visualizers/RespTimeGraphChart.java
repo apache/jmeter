@@ -322,7 +322,7 @@ public class RespTimeGraphChart extends JPanel {
 
             // Y Axis ruler
             try {
-                double numInterval = _height / 50; // ~a tic every 50 px
+                double numInterval = _height / 50d; // ~a tic every 50 px
                 double incrYAxis = max / numInterval;
                 double incrTopValue = _incrScaleYAxis;
                 if (_incrScaleYAxis == 0) {
@@ -332,7 +332,7 @@ public class RespTimeGraphChart extends JPanel {
                     incrTopValue = 1.0d; // Increment cannot be < 1
                 }
                 yaxis.setUserDefinedScale(0, incrTopValue);
-                yaxis.setNumItems(new Double(max / incrTopValue).intValue() + 1);
+                yaxis.setNumItems((int)(max / incrTopValue) + 1);
                 yaxis.setShowGridLines(1);
             } catch (PropertyException e) {
                 log.warn("",e);
@@ -367,11 +367,12 @@ public class RespTimeGraphChart extends JPanel {
 
     private int getTopValue(double value, int roundMode) {
         String maxStr = String.valueOf(Math.round(value));
-        String divValueStr = "1"; //$NON-NLS-1$
+        StringBuilder divValueStr = new StringBuilder(maxStr.length()+1);
+        divValueStr.append("1");
         for (int i = 1; i < maxStr.length(); i++) {
-            divValueStr += "0"; //$NON-NLS-1$
+            divValueStr.append("0"); //$NON-NLS-1$
         }
-        int divValueInt = Integer.parseInt(divValueStr);
+        int divValueInt = Integer.parseInt(divValueStr.toString());
         BigDecimal round = new BigDecimal(value / divValueInt);
         round = round.setScale(0, roundMode);
         int topValue = round.intValue() * divValueInt;
