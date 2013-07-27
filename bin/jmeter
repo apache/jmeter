@@ -70,10 +70,6 @@ TENURING="-XX:MaxTenuringThreshold=2"
 # without having gone through a lot of Full GC-ing just before the OOM:
 # EVACUATION="-XX:MaxLiveObjectEvacuationRatio=20%"
 
-# Avoid the RMI-induced Full GCs to run too frequently -- once every ten minutes
-# should be more than enough:
-RMIGC="-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000"
-
 # Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
 PERM="-XX:PermSize=64m -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled"
 
@@ -85,6 +81,6 @@ DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM"
+ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $PERM"
 
 java $ARGS $JVM_ARGS -jar "`dirname "$0"`/ApacheJMeter.jar" "$@"
