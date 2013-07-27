@@ -73,7 +73,7 @@ set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
 set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%
 set TENURING=-XX:MaxTenuringThreshold=2
 set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
-set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
+set PERM=-XX:PermSize=64m -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled
 rem set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
 
 rem Always dump on OOM (does not cost anything unless triggered)
