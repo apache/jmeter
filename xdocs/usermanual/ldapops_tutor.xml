@@ -18,7 +18,6 @@
 <document>   
 <properties>     
     <title>JMeter - User's Manual: LDAP Operations</title>   
-    <author email="Dolf.Smits@Siemens.com">Dolf Smits</author>
   </properties> 
 <body> 
 
@@ -30,8 +29,8 @@
     Per operation, I will shortly explain how these operations are implemented.<br/>
     LDAP servers are some kind of hierarchical database, they store objects (entries) in a tree. The uppermost part of a tree is called the ROOT of the tree.<br/>
     eg. When a tree starts with dc=com, the root equals dc=com.<br/>
-    The next level can exist under the root, eg dc=Siemens. The full name of this object (the "distinghuised name") is "dc=siemens,dc=com.<br/>
-    Again, a following level can be made, by adding the user "cn=admin" under dc=siemens,dc=com. This object has a DN (distinguished name) of "cn=admin,dc=siemens,dc=com".<br/>
+    The next level can exist under the root, eg dc=test. The full name of this object (the "distinghuised name") is "dc=test,dc=com.<br/>
+    Again, a following level can be made, by adding the user "cn=admin" under dc=test,dc=com. This object has a DN (distinguished name) of "cn=admin,dc=test,dc=com".<br/>
     The relative distinguished name (RDN) is the last part of the DN, eg. cn=admin.<br/>
     The characteristics of an object are determined by the objectClasses, which can be seen as a collection of attributes.<br/>
     The type of an object is determined by the "structural objectClass" eg person, organizationalUnit or country.<br/>
@@ -103,10 +102,10 @@
     <p>
         This operation modifies the distinguished name from an object (it "moves" the object).<br/>
         It comes in two flavours, just renaming an entry, then you specify a new RDN (relative distinguished name, this is the lowest part of the DN)<br/>
-        eg, you can rename "cn=admin,dc=siemens,dc=com" to cn=administrator,dc=Siemens,dc=com"<br/>
+        eg, you can rename "cn=admin,dc=test,dc=com" to cn=administrator,dc=test,dc=com"<br/>
         The second flavour is renaming (moving) a complete subtree by specifying a "new superior"<br/>
-        eg you can move a complete subtree "ou=retired,ou=people,dc=siemens,dc=com" to a new subtree "ou=retired people,dc=siemens,dc=com" by specifying
-        a new rdn "ou=retired people" and a new superior of "dc=siemens,dc=com"
+        eg you can move a complete subtree "ou=retired,ou=people,dc=test,dc=com" to a new subtree "ou=retired people,dc=test,dc=com" by specifying
+        a new rdn "ou=retired people" and a new superior of "dc=test,dc=com"
     </p>
 </subsection>
 </section>
