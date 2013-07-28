@@ -158,7 +158,7 @@ properties</p>
 requests in a file  and presenting a visual model of the data. Select the LDAP
 Users element and add a View Results in Table (<b>Add</b>&gt;<b>Listener</b>&gt;<b>View Results in Table</b>)</p>
 <figure image="ldaptest/viewtable.png">
-  Figure &sect-num;.5 View Results in Table Listener</figure>
+  Figure &sect-num;.6 View Results in Table Listener</figure>
 
 </section>
 
