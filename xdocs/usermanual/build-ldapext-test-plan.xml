@@ -39,16 +39,16 @@ needs.
 </p>
 
 <p>
-You will create four users that send requests for four tests on the LDAP server.Also, you will tell
-the users to run their tests twice. So,  the total number of requests is (4 users) x (4 requests) x
-repeat 2 times) = 32 LDAP requests. To construct the Test Plan, you will use the following elements:<br/>
+You will create four users that send requests for four tests on the LDAP server. Also, you will tell
+the users to run their tests one time. So,  the total number of requests is (1 users) x (9 requests) x
+repeat 1 time) = 9 LDAP requests. To construct the Test Plan, you will use the following elements:<br/>
 <a href="test_plan.html#thread_group">Thread Group</a>,<br/>
 <complink name="Adding LDAP Extended Request Defaults"/>,<br/>
 <complink name="Adding LDAP Requests"/>, and<br/>
 <complink name="Adding a Listener to View/Store the Test Results"/>
 </p>
 <p>
-This example assumes that the LDAP Server is installed in your Local machine.
+This example assumes that the LDAP Server is available at ldap.test.com.
 </p>
 <p>
 For the less experienced LDAP users, I build a <a href="ldapops_tutor.html">small
@@ -73,9 +73,9 @@ The Thread Group tells JMeter the number of users you want to simulate, how ofte
 requests, and the how many requests  they should send.
 </p>
 <p>
-Go ahead and add the ThreadGroup element by first selecting the Test Plan, clicking your
-right mouse button to get the Add menu, and then select Add-->ThreadGroup. You should now see the
-Thread Group element under Test Plan. If you do not see the element, then "expand" the Test Plan tree by
+Go ahead and add the <b>Thread Group</b> element by first selecting the <b>Test Plan</b>, clicking your
+right mouse button to get the <b>Add</b> menu, and then select <b>Add</b>&gt;<b>Threads (Users)</b>&gt;<b>Thread Group</b>. 
+You should now see the <b>Thread Group</b> element under <b>Test Plan</b>. If you do not see the element, then "expand" the Test Plan tree by
 clicking on the Test Plan element.
 </p>
 <p>
@@ -86,12 +86,12 @@ Figure &sect-num;.1. Thread Group with Default Values</figure>
 </subsection>
     <subsection name="&sect-num;.2 Adding LDAP Extended Request Defaults" anchor="add_ldapext_defaults">
 <p>
-Begin by selecting the Thread Group element. Click your right mouse button
-to get the Add menu, and then select Add --> Config Element -->LDAP Extended Request Defaults. Then,
+Begin by selecting the LDAP Ext Users element. Click your right mouse button
+to get the <b>Add</b> menu, and then select <b>Add </b>&gt;<b>Config Element</b>&gt;<b>LDAP Extended Request Defaults</b>. Then,
 select this new element to view its Control Panel.
 </p>
 <p>
-Like most JMeter elements, the LDAP Extended Request Defaults Control Panel has a name
+Like most JMeter elements, the <b>LDAP Extended Request Defaults</b> Control Panel has a name
 field that you can modify. In this example, leave this field with the default value.
 </p>
 <p><figure image="ldaptest/extrequestdefaults.png"><br/>
@@ -101,13 +101,13 @@ field that you can modify. In this example, leave this field with the default va
             For each of the different operations, some default values can be filled in.
             In All cases, when a default is filled in, this is used for the LDAP extended requests.
             For each requst, you can override the defaults by filling in the values in the LDAP extended request sampler.
-            When no valueis entered which is necesarry for a test, the test will fail in an unpredictable way!
+            When no value is entered which is necesarry for a test, the test will fail in an unpredictable way!
             </p>
             We will not enter any default values here, as we will build a very small testplan, so we will explain all the different fields when we add the LDAP Extended samplers.
 </subsection>
 <subsection name="&sect-num;.3 Adding LDAP Requests" anchor="add_extrequests">
 <p>
-In our Test Plan, we want to use all 8 LDAP requests.
+In our Test Plan, we want to use all 9 LDAP requests.
 </p>
    <ol>
 <li>
@@ -129,10 +129,10 @@ Add Test
 Modify Test
 </li>
 <li>
-Delete Test
+Rename entry (moddn)
 </li>
 <li>
-Rename entry (moddn)
+Delete Test
 </li>
 <li>
 Thread unbind
@@ -143,8 +143,8 @@ JMeter sends requests in the order that you add them to the tree.
 </p>
 <p>
 Adding a requests always start by:<br/>
-Adding the LDAP Extended Request to the Thread Group element (Add -->
-Sampler --> LDAP Ext Request). Then, select the LDAP Ext Request element in the tree
+Adding the <b>LDAP Extended Request</b> to the LDAP Ext Users element (<b>Add</b>&gt;<b>
+Sampler</b>&gt;<b>LDAP Ext Request</b>). Then, select the <b>LDAP Ext Request</b> element in the tree
 and edit the following properties.</p>
 
 
@@ -152,26 +152,33 @@ and edit the following properties.</p>
 <p>
    <ol>
 <li>
+Rename the element: "1. Thread bind" 
+</li>
+<li>
 Select the "Thread bind" button.
 </li>
 <li>
-enter the hostname value from the LDAP server in the Servername field
+Enter the hostname value from the LDAP server in the Servername field
 </li>
 <li>
-Enter the portnumber from the LDAP server (389) in the port field
+Enter the portnumber from the LDAP server (636 : ldap over SSL) in the port field
 </li>
 <li>
-(optional) enter the baseDN in the DN field, this baseDN will be used as thestarting point for searches, add, deletes etc.<br/>
-take care that this must be the uppermost shared level for all your request, eg When all information is stored under ou=people, dc=siemens, dc=com, you can use this value in the basedn.<br/>
-You cannot search or rename anymore in the subtree ou=users,dc=siemens,dc=com!<br/>
-If you need to search or rename objects in both subtrees, use the common denominator (dc=siemens,dc=com) as the baseDN.
+<i>(Optional)</i> Enter the baseDN in the DN field, this baseDN will be used as thestarting point for searches, add, deletes etc.<br/>
+take care that this must be the uppermost shared level for all your request, eg When all information is stored under ou=Users, dc=test, dc=com, you can use this value in the basedn.<br/>
 </li>
 <li>
-(Optional) enter the distinghuised name from the user you want to use for authentication.
+<i>(Optional)</i> Enter the distinghuised name from the user you want to use for authentication.
 When this field is kept empty, an anonymous bind will be established.
 </li>
 <li>
-(optional) Enter the password for the user you want to authenticate with, an empty password will also lead to an anonymous bind.
+<i>(Optional)</i> Enter the password for the user you want to authenticate with, an empty password will also lead to an anonymous bind.
+</li>
+<li>
+<i>(Optional)</i> Enter a value for the connection timeout with LDAP
+</li>
+<li>
+<i>(Optional)</i> Check the box Use Secure LDAP Protocol if you access with LDAP over SSL (ldaps)
 </li>
 </ol>
 </p>
@@ -185,33 +192,36 @@ Figure &sect-num;.3.1. Thread Bind example</figure>
 <p>
    <ol>
 <li>
+Rename the element: "2. Search Test" 
+</li>
+<li>
 Select the "Search Test" button.
 </li>
 <li>
-(Optional) enter the searchbase under which you want to perform the search, relative to the basedn, used in the thread bind request.<br/>
+<i>(Optional)</i> enter the searchbase under which you want to perform the search, relative to the basedn, used in the thread bind request.<br/>
 When left empty, the basedn is used as a search base, this files is important if you want to use a "base-entry" or "one-level" search (see below)
 </li>
 <li>
-Enter the searchfilter, any decent LDAP serach filter will do, but for now, use something simple, like cn=john doe
+Enter the searchfilter, any decent LDAP serach filter will do, but for now, use something simple, like (sn=Doe) or (cn=*)
 </li>
 <li>
-(optional) enter the scope in the scope field, it has three options:
+<i>(Optional)</i> Enter the scope in the scope field, it has three options:
      <ol>
-     <li>Base level, Enter the value 0<br/>only the given searchbase is used, only for checking attributes or existence.
+     <li>baseobject search<br/>only the given searchbase is used, only for checking attributes or existence.
      </li>
-     <li>One level, Enter the value 1<br/>Only search in one level below given searchbase is used
+     <li>onelevel search<br/>Only search in one level below given searchbase is used
      </li>
-     <li>Subtree, Enter the value 2<br/> Searches for object at any point below the given basedn
+     <li>subtree search<br/> Searches for object at any point below the given basedn
      </li></ol>
 </li>
 <li>
-(Optional) Sizelimit, specifies the maximun number of returned entries,
+<i>(Optional)</i> Size limit, specifies the maximun number of returned entries,
 </li>
 <li>
-(optional) Timelimit, psecifies the maximum number of miliseconds, the SERVER can use for performing the search. it is NOT the maximun time the application will wait!<br/>
+<i>(Optional)</i> Time limit, specifies the maximum number of miliseconds, the SERVER can use for performing the search. it is NOT the maximun time the application will wait.<br/>
 When a very large returnset is returned, from a very fast server, over a very slow line, you may have to wait for ages for the completion of the search request, but this parameter will not influence this.
 </li>
-<li>(Optional) Attributes you want in the search answer. This can be used to limit the size of the answer, especially when an onject has very large attributes (like jpegPhoto). There are three possibilities:
+<li><i>(Optional)</i> Attributes you want in the search answer. This can be used to limit the size of the answer, especially when an onject has very large attributes (like jpegPhoto). There are three possibilities:
 <ol><li>Leave empty (the default setting must also be empty) This will return all attributes.
 </li>
 <li>Put in one empty value (""), it will request a non-existent attributes, so in reality it returns no attributes
@@ -219,11 +229,14 @@ When a very large returnset is returned, from a very fast server, over a very sl
 <li>Put in the attributes, seperated by a semi-colon. It will return only the requested attributes
 </li></ol></li>
 <li>
-(Optional) Return object, possible values are "true" and "false". True will return all java-object attributes, it will add these to the requested attributes, as specified above.<br/>
-false will mean no java-object attributes will be returned.
+<i>(Optional)</i> Return object. Checked will return all java-object attributes, it will add these to the requested attributes, as specified above.<br/>
+Unchecked will mean no java-object attributes will be returned.
 </li>
 <li>
-(Optional) Dereference aliases. possible values "true" and "false". True will mean it will follow references, false says it will not.
+<i>(Optional)</i> Dereference aliases. Checked will mean it will follow references, Unchecked says it will not.
+</li>
+<li>
+<i>(Optional)</i> Parse the search results?. Checked will mean it gets all results in response data, Unchecked says it will not.
 </li>
 </ol>
 </p>
@@ -236,13 +249,16 @@ Figure &sect-num;.3.2. search request example</figure>
 <p>
    <ol>
 <li>
+Rename the element: "3. Compare Test" 
+</li>
+<li>
 Select the "Compare" button.
 </li>
 <li>
-enter the entryname form the object on which you want the compare operation to work, relative to the basedn, eg "cn=john doe,ou=people"
+enter the entryname form the object on which you want the compare operation to work, relative to the basedn, eg "cn=jdoe,ou=Users"
 </li>
 <li>
-Enter the compare filter, this must be in the form "attribute=value", eg "mail=John.doe@siemens.com"
+Enter the compare filter, this must be in the form "attribute=value", eg "mail=jdoe@test.com"
 </li>
 </ol>
 </p>
@@ -256,20 +272,21 @@ Figure &sect-num;.3.3. Compare example</figure>
 <p>
    <ol>
 <li>
+Rename the element: "4. Single bind/unbind Test" 
+</li>
+<li>
 Select the "Single bind/unbind" button.
 </li>
 <li>
 Enter the FULL distinghuised name from the user you want to use for authentication.<br/>
-eg. cn=john doe,ou=people,dc=siemens,dc=com
+eg. cn=jdoe,ou=Users,dc=test,dc=com
 When this field is kept empty, an anonymous bind will be established.
 </li>
 <li>
 Enter the password for the user you want to authenticate with, an empty password will also lead to an anonymous bind.
 </li>
-<li>
-Take care: This single bind/unbind is in reality two seperate operations but cannot easily be split!
-</li>
 </ol>
+<b>Take care</b>: This single bind/unbind is in reality two seperate operations but cannot easily be split!
 </p><p>
 <figure image="ldaptest/extsbind.png">
 Figure &sect-num;.3.4. Single bind/unbind example</figure>
@@ -279,6 +296,9 @@ Figure &sect-num;.3.4. Single bind/unbind example</figure>
 <subsection name="&sect-num;.3.5 Adding an Add Request" anchor="add_addreq">
 <p>
    <ol>
+<li>
+Rename the element: "5. Add Test" 
+</li>
 <li>
 Select the "Add" button.
 </li>
@@ -303,6 +323,9 @@ Figure &sect-num;.3.5. Add request example</figure>
 <p>
    <ol>
 <li>
+Rename the element: "6. Modify Test" 
+</li>
+<li>
 Select the "Modify test" button.
 </li>
 <li>
@@ -313,23 +336,24 @@ Add a line in the "modify test" table, with the "add" button.
 </li>
 <li>
 You need to enter the attribute you want to modify, (optional) a value, and the opcode. The meaning of this opcode:
-<ol><li>add<br/> this will mean that the attribute value (not optional in this case) willbe added to the attribute.<br/>
+<ol><li><b>add</b><br/> this will mean that the attribute value (not optional in this case) willbe added to the attribute.<br/>
 When the attribute is not existing, it will be created and the value added<br/>
 When it is existing, and defined multi-valued, the new value is added.<br/>
 when it is existing, but single valued, it will fail.</li>
-<li>replace<br/>
+<li><b>replace</b><br/>
 This will overwrite the attribute with the given new value (not optional here)<br/>
 When the attribute is not existing, it will be created and the value added<br/>
 When it is existing, old values are removed, the new value is added.</li>
-<li>delete<br/>
+<li><b>delete</b><br/>
 When no value is given, all values will be removed<br/>
 When a value is given, only that value will be removed<br/>
  when the given value is not existing, the test will fail
 </li></ol>
 </li>
 <li>
-(Optional) Add more modifications in the "modify test" table.<br/>
-All modifications which are specified must succeed, to let the modification test pass. When one modification fails, NO modifications at all will be made and the entry will remain unchanged.
+<i>(Optional)</i> Add more modifications in the "modify test" table.<br/>
+All modifications which are specified must succeed, to let the modification test pass. When one modification fails, 
+NO modifications at all will be made and the entry will remain unchanged.
 </li>
 </ol>
 </p>
@@ -339,16 +363,48 @@ Figure &sect-num;.3.6. Modify example</figure>
 </p>
 </subsection>
 
-<subsection name="&sect-num;.3.7 Adding a Delete Request" anchor="add_delreq">
+<subsection name="&sect-num;.3.7 Adding a Rename Request (moddn)" anchor="add_moddn">
 <p>
    <ol>
+<li>
+Rename the element: "7. Rename entry (moddn)" 
+</li>
+<li>
+Select the "Rename Entry" button.
+</li>
+<li>
+Enter the name of the entry, relative to the baseDN, in the "old entry name-Field".<br/>
+that is, if you want to rename "cn=Little John Doe,ou=Users", and you set the baseDN to "dc=test,dc=com",
+you need to enter "cn=John Junior Doe,ou=Users" in the old entry name-field.
+</li>
+<li>
+Enter the new name of the entry, relative to the baseDN, in the "new distinghuised name-Field".<br/>
+when you only change the RDN, it will simply rename the entry<br/>
+when you also add a different subtree, eg you change from cn=john doe,ou=Users to cn=john doe,ou=oldusers, it will move the entry.
+You can also move a complete subtree (If your LDAP server supports this!), eg ou=Users,ou=retired, to ou=oldusers,ou=users, 
+this will move the complete subtee, plus all retired people in the subtree to the new place in the tree.
+</li>
+</ol>
+</p>
+<p>
+<figure image="ldaptest/extmoddn.png">
+Figure &sect-num;.3.8. Rename example</figure>
+</p>
+</subsection>
+
+<subsection name="&sect-num;.3.8 Adding a Delete Request" anchor="add_delreq">
+<p>
+   <ol>
+<li>
+Rename the element: "8. Delete Test" 
+</li>
 <li>
 Select the "Delete" button.
 </li>
 <li>
-enter the name of the entry, relative to the baseDN, in the Delete-Field.<br/>
-that is, if you want to remove "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
-you need to enter "cn=john doe,ou=people" in the Delete-field.
+Enter the name of the entry, relative to the baseDN, in the Delete-Field.<br/>
+that is, if you want to remove "cn=John Junior Doe,ou=Users,dc=test,dc=com", and you set the baseDN to "dc=test,dc=com",
+you need to enter "cn=John Junior Doe,ou=Users" in the Delete-field.
 </li>
 </ol>
 </p>
@@ -358,33 +414,12 @@ Figure &sect-num;.3.7. Delete example</figure>
 </p>
 </subsection>
 
-<subsection name="&sect-num;.3.8 Adding a Rename Request (moddn)" anchor="add_moddn">
-<p>
-   <ol>
-<li>
-Select the "Rename Entry" button.
-</li>
-<li>
-enter the name of the entry, relative to the baseDN, in the "old entry name-Field".<br/>
-that is, if you want to rename "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
-you need to enter "cn=john doe,ou=people" in the old entry name-field.
-</li>
-<li>
-enter the new name of the entry, relative to the baseDN, in the "new distinghuised name-Field".<br/>
-whne you only change the RDN, it will simply rename the entry<br/>
-when you also add a differten subtree, eg you change from cn=john doe,ou=people to cn=john doe,ou=users, it will move the entry.
-You can also move a complete subtree (If your LDAP server supports this!!!!), eg ou=people,ou=retired, to ou=oldusers,ou=users, this will move the complete subtee, plus all retired people in the subtree to the new place in the tree.
-</li>
-</ol>
-</p>
-<p>
-<figure image="ldaptest/extmoddn.png">
-Figure &sect-num;.3.8. Rename example</figure>
-</p>
-</subsection>
 <subsection name="&sect-num;.3.9 Adding an unbind Request" anchor="add_unbind">
 <p>
    <ol>
+<li>
+Rename the element: 9. Thread unbind" 
+</li>
 <li>
 Select the "Thread unbind" button.
 This will be enough as it just closes the current connection.
@@ -403,11 +438,11 @@ Figure &sect-num;.3.9. Unbind example</figure>
 The final element you need to add to your Test Plan is a Listener.
  This element is responsible for storing all of the results of your LDAP
 requests in a file  and presenting a visual model of the data.Select the Thread group
-element and add a View Results Tree (Add --> Listener -->View Results Tree)
+element and add a <b>View Results Tree</b> (<b>Add</b>&gt;<b>Listener</b>&gt;<b>View Results Tree</b>)
 </p>
 <p>
 <figure image="ldaptest/extviewtree.png">
-Figure &sect-num;.4. View result Tree Listener</figure>
+Figure &sect-num;.4. View Result Tree Listener</figure>
 </p>
 <p>
 In this listener you have three tabs to view, the sampler result, the request and the response data.
