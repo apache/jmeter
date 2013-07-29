@@ -210,7 +210,7 @@ JMeter 2.8 and earlier used lenient mode which could result in timestamps with i
 (times were usually correct).</p>
 <subsection name="&sect-num;.1.1 Sample Variables" anchor="sample_variables">
 <p>
-JMeter allow to use the <b>sample_variables</b> 
+JMeter supports the <b>sample_variables</b> 
 property to define a list of additional JMeter variables which are to be saved with
 each sample in the JTL files. The values are written to CSV files as additional columns,
 and as additional attributes in XML files. See above for an example.
