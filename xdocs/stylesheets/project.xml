@@ -27,7 +27,7 @@
        <item name="Overview"            href="/index.html"/>
        <item name="Changes"             href="/changes.html"/>
        <item name="Subscribe to What's New" href="http://projects.apache.org/feeds/rss/jmeter.xml"/>
-       <item name="Issues"              href="/issues.html"/>
+       <item name="Issue Tracking"      href="/issues.html"/>
        <item name="License"             href="http://www.apache.org/licenses/"/>
        <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
      </menu>
@@ -54,12 +54,12 @@
         <item name="Extending JMeter"     href="/extending/jmeter_tutorial.pdf"/>
      </menu>
      <menu name="Community">
-        <item name="Get Involved"        href="http://www.apache.org/foundation/getinvolved.html"/>
         <item name="Mailing Lists"       href="/mail.html"/>
         <item name="SVN Repositories"    href="/svnindex.html"/>
      </menu>
      <menu name="Foundation">
         <item name="ASF"                 href="http://www.apache.org/"/>
+        <item name="Get Involved in the ASF" href="http://www.apache.org/foundation/getinvolved.html"/>
         <item name="Sponsorship"         href="http://www.apache.org/foundation/sponsorship.html"/>
         <item name="Thanks"              href="http://www.apache.org/foundation/thanks.html"/>
      </menu>
