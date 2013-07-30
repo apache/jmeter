@@ -30,10 +30,14 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.security.auth.Subject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -51,6 +55,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpRequestRetryHandler;
@@ -94,7 +99,6 @@ import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.protocol.http.control.AuthManager;
-import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -165,7 +169,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * This allows the defaults to be overridden if necessary from the properties file.
      */
     private static final HttpParams DEFAULT_HTTP_PARAMS;
-    
+
     static {
         log.info("HTTP request retry count = "+RETRY_COUNT);
         
@@ -286,7 +290,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         try {
             currentRequest = httpRequest;
             handleMethod(method, res, httpRequest, localContext);
-            HttpResponse httpResponse = httpClient.execute(httpRequest, localContext); // perform the sample
+            // perform the sample
+            HttpResponse httpResponse = 
+                    executeRequest(httpClient, httpRequest, localContext, url);
 
             // Needs to be done after execute to pick up all the headers
             res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
@@ -414,6 +420,45 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         res.setURL(url);
         
         return res;
+    }
+
+    /**
+     * Execute request either as is or under PrivilegedAction 
+     * if a Subject is available for url
+     * @param httpClient
+     * @param httpRequest
+     * @param localContext
+     * @param url
+     * @return
+     * @throws IOException
+     * @throws ClientProtocolException
+     */
+    private HttpResponse executeRequest(final HttpClient httpClient,
+            final HttpRequestBase httpRequest, final HttpContext localContext, final URL url)
+            throws IOException, ClientProtocolException {
+        AuthManager authManager = getAuthManager();
+        if (authManager != null) {
+            Subject subject = authManager.getSubjectForUrl(url);
+            if(subject != null) {
+                try {
+                    return Subject.doAs(subject,
+                            new PrivilegedExceptionAction<HttpResponse>() {
+    
+                                @Override
+                                public HttpResponse run() throws Exception {
+                                    return httpClient.execute(httpRequest,
+                                            localContext);
+                                }
+                            });
+                } catch (PrivilegedActionException e) {
+                    log.error(
+                            "Can't execute httpRequest with subject:"+subject,
+                            e);
+                    throw new RuntimeException("Can't execute httpRequest with subject:"+subject, e);
+                }
+            }
+        }
+        return httpClient.execute(httpRequest, localContext);
     }
 
     /**
@@ -796,17 +841,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         CredentialsProvider credentialsProvider = 
             ((AbstractHttpClient) client).getCredentialsProvider();
         if (authManager != null) {
-            Authorization auth = authManager.getAuthForURL(url);
-            if (auth != null) {
-                    String username = auth.getUser();
-                    String realm = auth.getRealm();
-                    String domain = auth.getDomain();
-                    if (log.isDebugEnabled()){
-                        log.debug(username + " > D="+domain+" R="+realm);
-                    }
-                    credentialsProvider.setCredentials(
-                            new AuthScope(url.getHost(), url.getPort(), realm.length()==0 ? null : realm),
-                            new NTCredentials(username, auth.getPass(), localHost, domain));
+            if(authManager.hasAuthForURL(url)) {
+                authManager.setupCredentials(client, url, credentialsProvider, localHost);
             } else {
                 credentialsProvider.clear();
             }

@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.control;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.util.Base64Encoder;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
@@ -30,7 +31,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Authorization extends AbstractTestElement implements Serializable {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String URL = "Authorization.url"; // $NON-NLS-1$
 
@@ -42,17 +43,20 @@ public class Authorization extends AbstractTestElement implements Serializable {
 
     private static final String REALM = "Authorization.realm"; // $NON-NLS-1$
 
+    private static final String MECHANISM = "Authorization.mechanism"; // $NON-NLS-1$
+
     private static final String TAB = "\t"; // $NON-NLS-1$
 
     /**
      * create the authorization
      */
-    Authorization(String url, String user, String pass, String domain, String realm) {
+    Authorization(String url, String user, String pass, String domain, String realm, Mechanism mechanism) {
         setURL(url);
         setUser(user);
         setPass(pass);
         setDomain(domain);
         setRealm(realm);
+        setMechanism(mechanism);
     }
 
     public boolean expectsModification() {
@@ -60,7 +64,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     public Authorization() {
-        this("","","","","");
+        this("","","","","", Mechanism.BASIC_DIGEST);
     }
 
     public void addConfigElement(ConfigElement config) {
@@ -106,10 +110,18 @@ public class Authorization extends AbstractTestElement implements Serializable {
         setProperty(REALM, realm);
     }
 
+    public Mechanism getMechanism() {
+        return Mechanism.valueOf(getPropertyAsString(MECHANISM, Mechanism.BASIC_DIGEST.name()));
+    }
+
+    public void setMechanism(Mechanism mechanism) {
+        setProperty(MECHANISM, mechanism.toString());
+    }
+
     // Used for saving entries to a file
     @Override
     public String toString() {
-        return getURL() + TAB + getUser() + TAB + getPass() + TAB + getDomain() + TAB + getRealm();
+        return getURL() + TAB + getUser() + TAB + getPass() + TAB + getDomain() + TAB + getRealm() + TAB + getMechanism();
     }
 
     public String toBasicHeader(){
