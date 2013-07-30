@@ -27,11 +27,21 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.apache.commons.io.IOUtils;
+import javax.security.auth.Subject;
+
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.NTCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.params.AuthPolicy;
+import org.apache.http.impl.auth.SPNegoSchemeFactory;
+import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -52,7 +62,7 @@ import org.apache.log.Logger;
  *
  */
 public class AuthManager extends ConfigTestElement implements Serializable {
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -64,6 +74,7 @@ public class AuthManager extends ConfigTestElement implements Serializable {
         "password",      //$NON-NLS-1$
         "domain",        //$NON-NLS-1$
         "realm",         //$NON-NLS-1$
+        "mechanism",     //$NON-NLS-1$
         };
 
     // Column numbers - must agree with order above
@@ -72,8 +83,29 @@ public class AuthManager extends ConfigTestElement implements Serializable {
     public static final int COL_PASSWORD = 2;
     public static final int COL_DOMAIN = 3;
     public static final int COL_REALM = 4;
+    public static final int COL_MECHANISM = 5;
 
     private static final int COLUMN_COUNT = COLUMN_RESOURCE_NAMES.length;
+
+    private static final Credentials USE_JAAS_CREDENTIALS = new NullCredentials();
+
+    public enum Mechanism {
+        BASIC_DIGEST, KERBEROS;
+    }
+
+    private static final class NullCredentials implements Credentials {
+        @Override
+        public String getPassword() {
+            return null;
+        }
+
+        @Override
+        public Principal getUserPrincipal() {
+            return null;
+        }
+    }
+    
+    private KerberosManager kerberosManager = new KerberosManager();
 
     /**
      * Default Constructor.
@@ -86,14 +118,15 @@ public class AuthManager extends ConfigTestElement implements Serializable {
     @Override
     public void clear() {
         super.clear();
+        kerberosManager.clearSubjects();
         setProperty(new CollectionProperty(AUTH_LIST, new ArrayList<Object>()));
     }
 
     /**
      * Update an authentication record.
      */
-    public void set(int index, String url, String user, String pass, String domain, String realm) {
-        Authorization auth = new Authorization(url, user, pass, domain, realm);
+    public void set(int index, String url, String user, String pass, String domain, String realm, Mechanism mechanism) {
+        Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
         if (index >= 0) {
             getAuthObjects().set(index, new TestElementProperty(auth.getName(), auth));
         } else {
@@ -189,6 +222,25 @@ public class AuthManager extends ConfigTestElement implements Serializable {
         return null;
     }
 
+    /**
+     * @return boolean true if an authorization is setup for url
+     */
+    public boolean hasAuthForURL(URL url) {
+        return getAuthForURL(url) != null;
+    }
+    
+    /**
+     * @return Subject if Auth Scheme uses Subject and an authorization is setup for url
+     */
+    public Subject getSubjectForUrl(URL url) {
+        Authorization authorization = getAuthForURL(url);
+        if (authorization != null && Mechanism.KERBEROS.equals(authorization.getMechanism())) {
+            return kerberosManager.getSubjectForUser(
+                    authorization.getUser(), authorization.getPass());
+        }
+        return null;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void addConfigElement(ConfigElement config) {
@@ -216,14 +268,19 @@ public class AuthManager extends ConfigTestElement implements Serializable {
         if (!file.isAbsolute()) {
             file = new File(System.getProperty("user.dir"),authFile);
         }
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
-        writer.println("# JMeter generated Authorization file");
-        for (int i = 0; i < getAuthObjects().size(); i++) {
-            Authorization auth = (Authorization) getAuthObjects().get(i).getObjectValue();
-            writer.println(auth.toString());
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(new FileWriter(file));
+            writer.println("# JMeter generated Authorization file");
+            for (int i = 0; i < getAuthObjects().size(); i++) {
+                Authorization auth = (Authorization) getAuthObjects().get(i).getObjectValue();
+                writer.println(auth.toString());
+            }
+            writer.flush();
+            writer.close();
+        } finally {
+            JOrphanUtils.closeQuietly(writer);
         }
-        writer.flush();
-        writer.close();
     }
 
     /**
@@ -258,7 +315,11 @@ public class AuthManager extends ConfigTestElement implements Serializable {
                         domain = st.nextToken();
                         realm = st.nextToken();
                     }
-                    Authorization auth = new Authorization(url, user, pass,domain,realm);
+                    Mechanism mechanism = Mechanism.BASIC_DIGEST;
+                    if (st.hasMoreTokens()){// Allow for old format file without mechanism support
+                        mechanism = Mechanism.valueOf(st.nextToken());
+                    }
+                    Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
                     getAuthObjects().addItem(auth);
                 } catch (NoSuchElementException e) {
                     log.error("Error parsing auth line: '" + line + "'");
@@ -266,7 +327,7 @@ public class AuthManager extends ConfigTestElement implements Serializable {
                 }
             }
         } finally {
-            IOUtils.closeQuietly(reader);
+            JOrphanUtils.closeQuietly(reader);
         }
         if (!ok){
             JMeterUtils.reportErrorToUser("One or more errors found when reading the Auth file - see the log file");
@@ -291,5 +352,34 @@ public class AuthManager extends ConfigTestElement implements Serializable {
     static boolean isSupportedProtocol(URL url) {
         String protocol = url.getProtocol().toLowerCase(java.util.Locale.ENGLISH);
         return protocol.equals(HTTPConstants.PROTOCOL_HTTP) || protocol.equals(HTTPConstants.PROTOCOL_HTTPS);
+    }    
+
+    /**
+     * Configure credentials and auth scheme on client if an authorization is 
+     * available for url
+     * @param client {@link HttpClient}
+     * @param url URL to test 
+     * @param credentialsProvider {@link CredentialsProvider}
+     * @param localHost host running JMeter
+     */
+    public void setupCredentials(HttpClient client, URL url,
+            CredentialsProvider credentialsProvider, String localHost) {
+        Authorization auth = getAuthForURL(url);
+        if (auth != null) {
+            String username = auth.getUser();
+            String realm = auth.getRealm();
+            String domain = auth.getDomain();
+            if (log.isDebugEnabled()){
+                log.debug(username + " > D="+domain+" R="+realm + " M="+auth.getMechanism());
+            }
+            if (Mechanism.KERBEROS.equals(auth.getMechanism())) {
+                ((AbstractHttpClient) client).getAuthSchemes().register(AuthPolicy.SPNEGO, new SPNegoSchemeFactory(true));
+                credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
+            } else {
+                credentialsProvider.setCredentials(
+                        new AuthScope(url.getHost(), url.getPort(), realm.length()==0 ? null : realm),
+                        new NTCredentials(username, auth.getPass(), localHost, domain));
+            }
+        }
     }
 }

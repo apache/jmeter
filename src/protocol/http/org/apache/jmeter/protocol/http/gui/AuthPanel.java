@@ -26,7 +26,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -44,6 +46,7 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -57,7 +60,7 @@ import org.apache.log.Logger;
  * user selects.
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener {
-    private static final long serialVersionUID = -9214884465261470761L;
+    private static final long serialVersionUID = -378312656300713636L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -248,6 +251,9 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
         TableColumn passwordColumn = authTable.getColumnModel().getColumn(AuthManager.COL_PASSWORD);
         passwordColumn.setCellRenderer(new PasswordCellRenderer());
+        
+        TableColumn mechanismColumn = authTable.getColumnModel().getColumn(AuthManager.COL_MECHANISM);
+        mechanismColumn.setCellEditor(new MechanismCellEditor());
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -357,6 +363,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
                     return auth.getDomain();
                 case AuthManager.COL_REALM:
                     return auth.getRealm();
+                case AuthManager.COL_MECHANISM:
+                	return auth.getMechanism();
                 default:
                     return null;
             }
@@ -382,9 +390,21 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
                 case AuthManager.COL_REALM:
                     auth.setRealm((String) value);
                     break;
+                case AuthManager.COL_MECHANISM:
+                    auth.setMechanism((Mechanism) value);
+                    break;
                 default:
                     break;
             }
+        }
+    }
+    
+    private static class MechanismCellEditor extends DefaultCellEditor {
+
+        private static final long serialVersionUID = 6085773573067229265L;
+        
+        public MechanismCellEditor() {
+            super(new JComboBox(Mechanism.values()));
         }
     }
 
