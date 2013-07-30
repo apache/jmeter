@@ -167,6 +167,7 @@
                 <stringProp name="Authorization.password">pass</stringProp>
                 <stringProp name="Authorization.domain">domain</stringProp>
                 <stringProp name="Authorization.realm">realm</stringProp>
+                <stringProp name="Authorization.mechanism">BASIC_DIGEST</stringProp>
               </elementProp>
             </collectionProp>
           </AuthManager>
