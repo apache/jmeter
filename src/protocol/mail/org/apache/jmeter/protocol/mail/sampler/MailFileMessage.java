@@ -24,6 +24,8 @@ import javax.mail.Folder;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+// Needed to get access to the protected constructor in MimeMessage from MailFileFolder
+// [This class and its ctor could perhaps be package-protected]
 public class MailFileMessage extends MimeMessage {
 
     protected MailFileMessage(Folder folder, InputStream in, int number)
