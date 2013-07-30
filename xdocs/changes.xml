@@ -207,6 +207,9 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 The retry count for the HttpClient 3.1 and HttpClient 4.x samplers has been changed to 0.
 Previously the default was 1, which could cause unexpected additional traffic.
 </p>
+
+<p>__escapeOroRegexpChars function does not trim anymore the value when escaping it from ORO reserved characters (see <bugzilla>55328</bugzilla>)</p>
+
 <p>commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder. If you use any plugin or third-party code that depends on it, you need to add it in jmeter/lib folder</p>
 
 <!-- =================== Bug fixes =================== -->
@@ -255,6 +258,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h3>Functions</h3>
 <ul>
+<li><bugzilla>55328</bugzilla> - __escapeOroRegexpChars trims spaces </li>
 </ul>
 
 <h3>I18N</h3>

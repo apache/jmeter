@@ -67,7 +67,7 @@ public class EscapeOroRegexpChars extends AbstractFunction {
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
-        String valueToEscape = values[0].execute().trim();       
+        String valueToEscape = values[0].execute();       
         
         String varName = "";//$NON-NLS-1$
         if (values.length >= PARAM_NAME) {
