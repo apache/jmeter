@@ -34,7 +34,6 @@
               <stringProp name="Authorization.password">spot</stringProp>
               <stringProp name="Authorization.domain"></stringProp>
               <stringProp name="Authorization.realm"></stringProp>
-              <stringProp name="Authorization.mechanism">BASIC_DIGEST</stringProp>
             </elementProp>
           </collectionProp>
         </AuthManager>
