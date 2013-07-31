@@ -167,7 +167,6 @@
                 <stringProp name="Authorization.password">pass</stringProp>
                 <stringProp name="Authorization.domain">domain</stringProp>
                 <stringProp name="Authorization.realm">realm</stringProp>
-                <stringProp name="Authorization.mechanism">BASIC_DIGEST</stringProp>
               </elementProp>
             </collectionProp>
           </AuthManager>
@@ -388,7 +387,7 @@
           <hashTree/>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Sampler" enabled="true">
-          <stringProp name="TestPlan.comments">JMS Sub and JMS P-P not available (JavaMail)	</stringProp>
+          <stringProp name="TestPlan.comments">JMS Sub and JMS P-P not available (JavaMail) </stringProp>
         </GenericController>
         <hashTree>
           <FTPSampler guiclass="FtpTestSamplerGui" testclass="FTPSampler" testname="FTP Request" enabled="true">
