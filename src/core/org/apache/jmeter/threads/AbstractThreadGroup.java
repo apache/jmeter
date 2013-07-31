@@ -63,10 +63,10 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     /** Stop current thread if sampler error occurs */
     public static final String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
 
-    /** Stop test (all threads) if sampler error occurs */
+    /** Stop test (all threads) if sampler error occurs, the entire test is stopped at the end of any current samples */
     public static final String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
 
-    /** Stop test NOW (all threads) if sampler error occurs */
+    /** Stop test NOW (all threads) if sampler error occurs, the entire test is stopped abruptly. Any current samplers are interrupted if possible. */
     public static final String ON_SAMPLE_ERROR_STOPTEST_NOW = "stoptestnow";
 
     /** Number of threads in the thread group */
