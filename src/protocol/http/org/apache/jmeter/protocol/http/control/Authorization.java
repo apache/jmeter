@@ -115,7 +115,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     public void setMechanism(Mechanism mechanism) {
-        setProperty(MECHANISM, mechanism.toString());
+        setProperty(MECHANISM, mechanism.name(), Mechanism.BASIC_DIGEST.name());
     }
 
     // Used for saving entries to a file
