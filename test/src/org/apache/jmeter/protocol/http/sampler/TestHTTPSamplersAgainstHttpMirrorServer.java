@@ -45,6 +45,7 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.junit.Assert;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -121,7 +122,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                     httpServer = null;
                     // delete temporay file
                     if(!temporaryFile.delete()) {
-                        fail("Could not delete file:"+temporaryFile.getAbsolutePath());
+                        Assert.fail("Could not delete file:"+temporaryFile.getAbsolutePath());
                     }
             }
         };
