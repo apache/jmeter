@@ -30,7 +30,7 @@
 
 <section name="&sect-num;. Building a Test Plan">
 <p>A test plan describes a series of steps JMeter will execute when run.  A complete
-test plan will consist of one or more Thread Groups, logic conrollers, sample generating
+test plan will consist of one or more Thread Groups, logic controllers, sample generating
 controllers, listeners, timers, assertions, and configuration elements.
 </p>
 
@@ -44,7 +44,7 @@ and choose the "remove" option.</p>
 </subsection>
 
 <subsection name="&sect-num;.2 Loading and Saving Elements" anchor="load_save">
-<p>To load an element from file, right click on the existing tree element to which
+<p>To load an element from file, right click on the existing tree elements to which
 you want to add the loaded element, and select the "merge" option.  Choose the file where
 your elements are saved.  JMeter will merge the elements into the tree.</p>
 
@@ -135,6 +135,8 @@ The commands will only be accepted if the script is run from the same host.
 <subsection name="&sect-num;.7 Error reporting" anchor="error_reporting">
 <p>
 JMeter reports warnings and errors to the jmeter.log file, as well as some information on the test run itself.
+JMeter shows at the right hand end of its window, the number of warnings/errors found in jmeter.log file. next to an warning's icon 
+Click on warning's icon to show the jmeter.log file at the bottom of JMeter's window.
 Just occasionally there may be some errors that JMeter is unable to trap and log; these will appear on the command console.
 If a test is not behaving as you expect, please check the log file in case any errors have been reported (e.g. perhaps a syntax error in a function call).
 </p>
