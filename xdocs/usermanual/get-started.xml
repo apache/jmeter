@@ -292,7 +292,23 @@ from a command line with the following parameters:</p>
 -a [password for proxy authentication - if required]<br/>
 </p>
 <p><b>Example</b>: jmeter -H my.proxy.server -P 8000 -u username -a password -N localhost</p>
-<p>Alternatively, you can use --proxyHost, --proxyPort, --username, and --password</p>
+<p>You can also use --proxyHost, --proxyPort, --username, and --password as parameter names</p>
+<p>
+If the proxy host and port are provided, then JMeter sets the following System propertties:
+<ul>
+<li>http.proxyHost</li>
+<li>http.proxyPort</li>
+<li>https.proxyHost</li>
+<li>https.proxyPort</li>
+</ul>
+If a nonpoxy host list is provided, then JMeter sets the following System propertties:
+<ul>
+<li>http.nonProxyHosts</li>
+<li>https.nonProxyHosts</li>
+</ul>
+So if you don't wish to set both http and https proxies, 
+you can define the relevant properties in system.properties instead of using the command-line parameters.
+</p>
 <note>JMeter also has its own in-built <complink name="HTTP Proxy Server">HTTP Proxy Server</complink>,
 which can be used for recording HTTP or HTTPS browser sessions.
 This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.</note>
