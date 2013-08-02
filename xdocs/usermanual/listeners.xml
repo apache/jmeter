@@ -115,7 +115,7 @@ The full set of properties that affect result file output is shown below.
 # The commented out values are the defaults.
 
 # legitimate values: xml, csv, db.  Only xml and csv are currently supported.
-#jmeter.save.saveservice.output_format=xml
+#jmeter.save.saveservice.output_format=csv
 
 
 # true when field should be saved; false otherwise
@@ -479,7 +479,7 @@ use the menu item Run/Clear (Ctrl+Shift+E) or Run/Clear All (Ctrl+E) before load
 </section>
 <section name="&sect-num;.10 Saving Listener GUI data" anchor="screencap">
 <p>JMeter is capable of saving any listener as a PNG file. To do so, select the
-listener in the left panel. Click edit -> Save As Image. A file dialog will
+listener in the left panel. Click <b>Edit</b> &gt; <b>Save As Image</b>. A file dialog will
 appear. Enter the desired name and save the listener.
 </p>
 <p>
@@ -488,7 +488,7 @@ Select the desired cells in the table, and use the OS Copy short-cut (normally C
 The data will be saved to the clipboard, from where it can be pasted into another application,
 e.g. a spreadsheet or text editor.
 </p>
-<figure image="save_image.png">Figure 1 - Edit -> Save As Image</figure>
+<figure image="save_image.png">Figure 1 - Edit &gt; Save As Image</figure>
 
 </section>
 </body>
