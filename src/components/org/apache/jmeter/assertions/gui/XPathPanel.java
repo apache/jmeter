@@ -26,10 +26,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
@@ -44,7 +45,7 @@ public class XPathPanel extends JPanel {
 
     private JCheckBox negated;
 
-    private JTextField xpath;
+    private JSyntaxTextArea xpath;
 
     private JButton checkXPath;
 
@@ -59,7 +60,7 @@ public class XPathPanel extends JPanel {
     private void init() {
         Box hbox = Box.createHorizontalBox();
         hbox.add(Box.createHorizontalGlue());
-        hbox.add(getXPathTextField());
+        hbox.add(new JTextScrollPane(getXPathField()));
         hbox.add(Box.createHorizontalGlue());
         hbox.add(getCheckXPathButton());
 
@@ -145,9 +146,10 @@ public class XPathPanel extends JPanel {
         return checkXPath;
     }
 
-    public JTextField getXPathTextField() {
+    public JSyntaxTextArea getXPathField() {
         if (xpath == null) {
-            xpath = new JTextField(50);
+            xpath = new JSyntaxTextArea(20, 80);
+            xpath.setLanguage("xpath"); //$NON-NLS-1$
         }
         return xpath;
     }
