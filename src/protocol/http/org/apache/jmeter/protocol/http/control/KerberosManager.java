@@ -134,7 +134,7 @@ class KerberosManager implements Serializable {
     }
 
     public boolean getKrb5Debug() {
-        return Boolean.valueOf(System.getProperty("java.security.krb5.debug", "False")); //$NON-NLS-1$ $NON-NLS-2$
+        return Boolean.getBoolean("java.security.krb5.debug"); //$NON-NLS-1$
     }
 
     public String getJaasConf() {
