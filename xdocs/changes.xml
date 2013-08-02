@@ -238,6 +238,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54985</bugzilla> - Make Transaction Controller set Response Code of Generated Parent Sampler to response code of first failing child in case of failure of one of its children</li>
 <li><bugzilla>54950</bugzilla> - ModuleController : Changes to referenced Module are not taken into account if changes occur after first run and referenced node is disabled</li>
 <li><bugzilla>55201</bugzilla> - ForEach controller excludes start index and includes end index (clarified documentation)</li>
+<li><bugzilla>55334</bugzilla> - Adding Include Controller to test plan (made of Include Controllers) without saving TestPlan leads to included code not being taken into account until save</li>
 </ul>
 
 <h3>Listeners</h3>
