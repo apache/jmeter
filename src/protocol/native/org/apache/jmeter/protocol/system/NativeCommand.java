@@ -103,6 +103,8 @@ public class NativeCommand {
             if (stdin != null) {
                 swin = new StreamCopier(new FileInputStream(stdin), proc.getOutputStream());
                 swin.start();
+            } else {
+                proc.getOutputStream().close(); // ensure the application does not hang if it requests input
             }
             int exitVal = proc.waitFor();
 
