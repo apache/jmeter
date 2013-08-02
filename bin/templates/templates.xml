@@ -101,4 +101,48 @@
             </ul>
         ]]></description>
     </template>
+    <template isTestPlan="true">
+        <name>Building a Web Test Plan</name>
+        <fileName>/bin/templates/build-web-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Test plan from Building a Web Test Plan section in user's manual</h1>
+        <h2>Useful link</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/build-web-test-plan.html" >http://jmeter.apache.org/usermanual/build-web-test-plan.html</a></li>
+            </ul>       
+        ]]></description>
+    </template>
+    <template isTestPlan="true">
+        <name>Building an FTP Test Plan </name>
+        <fileName>/bin/templates/build-ftp-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Test plan from Building an FTP Test Plan section in user's manual</h1>
+        <h2>Useful link</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/build-ftp-test-plan.html" >http://jmeter.apache.org/usermanual/build-ftp-test-plan.html</a></li>
+            </ul>       
+        ]]></description>
+    </template>
+    <template isTestPlan="true">
+        <name>Building an LDAP Test Plan</name>
+        <fileName>/bin/templates/build-ldap-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Test plan from Building an LDAP Test Plan section in user's manual</h1>
+        <h2>Useful link</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/build-ldap-test-plan.html" >http://jmeter.apache.org/usermanual/build-ldap-test-plan.html</a></li>
+            </ul>       
+        ]]></description>
+    </template>
+    <template isTestPlan="true">
+        <name>Building an Extended LDAP Test Plan</name>
+        <fileName>/bin/templates/build-ldap-ext-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Test plan from Building an Extended LDAP Test Plan section in user's manual</h1>
+        <h2>Useful link</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html" >http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html</a></li>
+            </ul>       
+        ]]></description>
+    </template>
 </templates>
