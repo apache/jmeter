@@ -146,7 +146,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
          <ul>
          <li>There is no control over how connections are re-used. 
          When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
-         <li>The API is best suited to single-threaded usage - various settings (e.g. proxy) 
+         <li>The API is best suited to single-threaded usage - various settings 
          are defined via system properties, and therefore apply to all connections.</li>
          <li>There is a bug in the handling of HTTPS via a Proxy (the CONNECT is not handled correctly).
          See Java bugs 6226610 and 6208335.
@@ -216,7 +216,7 @@ https.default.protocol=SSLv3
         <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
         <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
-        <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
+        <code>jmeter.httpsampler</code>, failing that, the HttpClient4 implementation is used.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE, PATCH (not supported for JAVA implementation)</property>
         <property name="Content Encoding" required="No">
