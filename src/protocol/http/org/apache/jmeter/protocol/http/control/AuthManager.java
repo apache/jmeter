@@ -44,7 +44,10 @@ import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.testelement.TestIterationListener;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -61,10 +64,12 @@ import org.apache.log.Logger;
  * user a username to use and pass the appropriate password.
  *
  */
-public class AuthManager extends ConfigTestElement implements Serializable {
+public class AuthManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
     private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String CLEAR = "AuthManager.clearEachIteration";// $NON-NLS-1$
 
     private static final String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$
 
@@ -88,6 +93,8 @@ public class AuthManager extends ConfigTestElement implements Serializable {
     private static final int COLUMN_COUNT = COLUMN_RESOURCE_NAMES.length;
 
     private static final Credentials USE_JAAS_CREDENTIALS = new NullCredentials();
+
+    private static final boolean DEFAULT_CLEAR_VALUE = false;
 
     public enum Mechanism {
         BASIC_DIGEST, KERBEROS;
@@ -342,6 +349,18 @@ public class AuthManager extends ConfigTestElement implements Serializable {
     }
 
     /**
+     *
+     * @return true if kerberos auth must be cleared on each mail loop iteration 
+     */
+    public boolean getClearEachIteration() {
+        return getPropertyAsBoolean(CLEAR, DEFAULT_CLEAR_VALUE);
+    }
+
+    public void setClearEachIteration(boolean clear) {
+        setProperty(CLEAR, clear, DEFAULT_CLEAR_VALUE);
+    }
+
+    /**
      * Return the number of records.
      */
     public int getAuthCount() {
@@ -380,6 +399,36 @@ public class AuthManager extends ConfigTestElement implements Serializable {
                         new AuthScope(url.getHost(), url.getPort(), realm.length()==0 ? null : realm),
                         new NTCredentials(username, auth.getPass(), localHost, domain));
             }
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void testStarted() {
+        kerberosManager.clearSubjects();
+    }
+    
+    /** {@inheritDoc} */
+    @Override
+    public void testEnded() {
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void testStarted(String host) {
+        testStarted();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void testEnded(String host) {
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void testIterationStart(LoopIterationEvent event) {
+        if (getClearEachIteration()) {
+            kerberosManager.clearSubjects();
         }
     }
 }

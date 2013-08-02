@@ -28,6 +28,7 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -51,6 +52,7 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -73,6 +75,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     private static final String SAVE_COMMAND = "Save"; //$NON-NLS-1$
 
     private InnerTableModel tableModel;
+
+    private JCheckBox clearEachIteration;
 
     /**
      * A table to show the authentication information.
@@ -99,6 +103,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     public TestElement createTestElement() {
         AuthManager authMan = tableModel.manager;
         configureTestElement(authMan);
+        authMan.setClearEachIteration(clearEachIteration.isSelected());
         return (TestElement) authMan.clone();
     }
 
@@ -110,8 +115,10 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     @Override
     public void modifyTestElement(TestElement el) {
         GuiUtils.stopTableEditing(authTable);
-        el.clear();
-        el.addTestElement((TestElement) tableModel.manager.clone());
+        AuthManager authManager = (AuthManager) el;
+        authManager.clear();
+        authManager.addTestElement((TestElement) tableModel.manager.clone());
+        authManager.setClearEachIteration(clearEachIteration.isSelected());
         configureTestElement(el);
     }
 
@@ -125,6 +132,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         tableModel.clearData();
         deleteButton.setEnabled(false);
         saveButton.setEnabled(false);
+        clearEachIteration.setSelected(false);
     }
 
     @Override
@@ -132,6 +140,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         super.configure(el);
         tableModel.manager.clear();
         tableModel.manager.addTestElement((AuthManager) el.clone());
+        clearEachIteration.setSelected(((AuthManager) el).getClearEachIteration());
         if (tableModel.getRowCount() != 0) {
             deleteButton.setEnabled(true);
             saveButton.setEnabled(true);
@@ -150,7 +159,22 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         setLayout(new BorderLayout());
         setBorder(makeBorder());
 
-        add(makeTitlePanel(), BorderLayout.NORTH);
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
+        northPanel.add(makeTitlePanel());
+
+        JPanel optionsPane = new JPanel();
+        optionsPane.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("auth_manager_options"))); // $NON-NLS-1$
+        optionsPane.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
+        clearEachIteration = 
+                new JCheckBox(JMeterUtils.getResString("auth_manager_clear_per_iter"), false); //$NON-NLS-1$
+        optionsPane.add(clearEachIteration);
+        northPanel.add(optionsPane);
+        add(northPanel, BorderLayout.NORTH);
+
+        
         add(createAuthTablePanel(), BorderLayout.CENTER);
     }
 
