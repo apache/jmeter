@@ -842,16 +842,7 @@ public class JMeter implements JMeterPlugin {
                 TestElement item = (TestElement) o;
                 if (item.isEnabled()) {
                     if (item instanceof ReplaceableController) {
-                        ReplaceableController rc;
-
-                        // TODO this bit of code needs to be tidied up
-                        // Unfortunately ModuleController is in components, not core
-                        if (item.getClass().getName().equals("org.apache.jmeter.control.ModuleController")){ // Bug 47165
-                            rc = (ReplaceableController) item;
-                        } else {
-                            // HACK: force the controller to load its tree
-                            rc = (ReplaceableController) item.clone();
-                        }
+                        ReplaceableController rc = ensureReplaceableControllerIsLoaded(item);
 
                         HashTree subTree = tree.getTree(item);
                         if (subTree != null) {
@@ -861,9 +852,7 @@ public class JMeter implements JMeterPlugin {
                                 tree.replace(item, rc);
                                 tree.set(rc, replacementTree);
                             }
-                        } else { // null subTree
-                            convertSubTree(tree.getTree(item));
-                        }
+                        } 
                     } else { // not Replaceable Controller
                         convertSubTree(tree.getTree(item));
                     }
@@ -876,10 +865,11 @@ public class JMeter implements JMeterPlugin {
                     // Replacement only needs to occur when starting the engine
                     // @see StandardJMeterEngine.run()
                     if (item.getUserObject() instanceof ReplaceableController) {
-                        ReplaceableController rc =
-                            (ReplaceableController) item.getTestElement();
-                        HashTree subTree = tree.getTree(item);
+                        TestElement controllerAsItem = item.getTestElement();
+                        ReplaceableController rc = ensureReplaceableControllerIsLoaded(controllerAsItem);
 
+                        HashTree subTree = tree.getTree(item);
+                        
                         if (subTree != null) {
                             HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
@@ -898,6 +888,25 @@ public class JMeter implements JMeterPlugin {
                 }
             }
         }
+    }
+
+    /**
+     * Ensures the {@link ReplaceableController} is loaded
+     * @param item {@link TestElement}
+     * @return {@link ReplaceableController} loaded
+     */
+    private static ReplaceableController ensureReplaceableControllerIsLoaded(
+            TestElement item) {
+        ReplaceableController rc;
+        // TODO this bit of code needs to be tidied up
+        // Unfortunately ModuleController is in components, not core
+        if (item.getClass().getName().equals("org.apache.jmeter.control.ModuleController")){ // Bug 47165
+            rc = (ReplaceableController) item;
+        } else {
+            // HACK: force the controller to load its tree
+            rc = (ReplaceableController) item.clone();
+        }
+        return rc;
     }
 
     private JMeterEngine doRemoteInit(String hostName, HashTree testTree) {
