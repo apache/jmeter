@@ -36,6 +36,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -49,6 +50,7 @@ class KerberosManager implements Serializable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final String JAAS_APPLICATION = JMeterUtils.getPropDefault("kerberos_jaas_application", "JMeter"); //$NON-NLS-1$ $NON-NLS-2$
     private ConcurrentMap<String, Future<Subject>> subjects
         = new ConcurrentHashMap<String, Future<Subject>>();
 
@@ -67,7 +69,7 @@ class KerberosManager implements Serializable {
             public Subject call() throws Exception {
                 LoginContext loginCtx;
                 try {
-                    loginCtx = new LoginContext("Client",
+                    loginCtx = new LoginContext(JAAS_APPLICATION,
                             new LoginCallbackHandler(username, password));
                     loginCtx.login();
                     return loginCtx.getSubject();
@@ -79,6 +81,9 @@ class KerberosManager implements Serializable {
         };
 
         FutureTask<Subject> task = new FutureTask<Subject>(callable);
+        if(log.isDebugEnabled()) {
+            log.debug("Subject cached:"+subjects.keySet() +" before:"+username);
+        }
         Future<Subject> subjectFuture = subjects.putIfAbsent(username, task);
         if (subjectFuture == null) {
             subjectFuture = task;
@@ -118,22 +123,22 @@ class KerberosManager implements Serializable {
                     pc.setPassword(password.toCharArray());
                 } else {
                     throw new UnsupportedCallbackException( callback,
-                            "Unrecognized Callback");
+                            "Unrecognized Callback"); //$NON-NLS-1$
                 }
             }
         }
     }
     
     public String getKrb5Conf() {
-        return System.getProperty("java.security.krb5.conf");
+        return System.getProperty("java.security.krb5.conf"); //$NON-NLS-1$
     }
 
     public boolean getKrb5Debug() {
-        return Boolean.valueOf(System.getProperty("java.security.krb5.debug", "False"));
+        return Boolean.valueOf(System.getProperty("java.security.krb5.debug", "False")); //$NON-NLS-1$ $NON-NLS-2$
     }
 
     public String getJaasConf() {
-        return System.getProperty("java.security.auth.login.config");
+        return System.getProperty("java.security.auth.login.config"); //$NON-NLS-1$
     }
     
     @Override
