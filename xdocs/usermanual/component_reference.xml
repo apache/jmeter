@@ -61,7 +61,7 @@
     The sample results have various attributes (success/fail, elapsed time, data size etc) and can be viewed in the various listeners.
     </p>
 </description>
-<component name="FTP Request" index="&sect-num;.1.1" width="519" height="289" screenshot="ftptest/ftp-request.png">
+<component name="FTP Request" index="&sect-num;.1.1" width="861" height="278" screenshot="ftptest/ftp-request.png">
 <description>
 This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
@@ -3812,13 +3812,13 @@ To make JMeter use more than one certificate you need to ensure that:
 
 </component>
 
-<component name="LDAP Request Defaults" index="&sect-num;.4.11"  width="465" height="375" screenshot="ldap_defaults.png">
+<component name="LDAP Request Defaults" index="&sect-num;.4.11"  width="689" height="232" screenshot="ldap_defaults.png">
 <description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
 </description>
 
 </component>
 
-<component name="LDAP Extended Request Defaults" index="&sect-num;.4.12"  width="597" height="545" screenshot="ldapext_defaults.png">
+<component name="LDAP Extended Request Defaults" index="&sect-num;.4.12"  width="686" height="184" screenshot="ldapext_defaults.png">
 <description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
 </description>
 
@@ -4241,7 +4241,7 @@ the size be equal to, greater than, less than, or not equal to a given number of
 </properties>
 </component>
 
-<component name="XML Assertion" index="&sect-num;.5.4"  width="303" height="196" screenshot="xml_assertion.png">
+<component name="XML Assertion" index="&sect-num;.5.4"  width="470" height="85" screenshot="xml_assertion.png">
 <description><p>The XML Assertion tests that the response data consists of a formally correct XML document.  It does not
 validate the XML based on a DTD or schema or do any further validation.</p></description>
 
@@ -4396,7 +4396,7 @@ You reference this file in jmeter.properties file using the property:
 </ul>
 </note>
 </component>
-<component name="XML Schema Assertion" index="&sect-num;.5.9"  width="771" height="171" screenshot="assertion/XMLSchemaAssertion.png">
+<component name="XML Schema Assertion" index="&sect-num;.5.9"  width="472" height="132" screenshot="assertion/XMLSchemaAssertion.png">
 <description><p>The XML Schema Assertion allows the user to validate a response against an XML Schema.</p></description>
 
 <properties>
@@ -4812,7 +4812,7 @@ your dynamic test sample.</note>
 
 </component>
 
-<component name="HTTP URL Re-writing Modifier" index="&sect-num;.7.2"  width="485" height="247" screenshot="url_rewriter.png">
+<component name="HTTP URL Re-writing Modifier" index="&sect-num;.7.2"  width="609" height="215" screenshot="url_rewriter.png">
 <description><p>This modifier works similarly to the HTML Link Parser, except it has a specific purpose for which
 it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
 use URL Re-writing to store session ids instead of cookies, this element can be attached at the
@@ -4867,7 +4867,7 @@ user_4, etc.</p></description>
 </properties>
 </component>
 
-<component name="User Parameters" index="&sect-num;.7.5"  width="638" height="274" screenshot="user_params.png">
+<component name="User Parameters" index="&sect-num;.7.5"  width="703" height="303" screenshot="user_params.png">
 <description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
 <p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
 you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
@@ -5593,12 +5593,17 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 </properties>
 </component>
 
-<component name="WorkBench" index="&sect-num;.9.3"  width="232" height="68" screenshot="workbench.png">
+<component name="WorkBench" index="&sect-num;.9.3"  width="384" height="103" screenshot="workbench.png">
 <description>
 <p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
 When you save your test plan, WorkBench items are not saved with it. 
 Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p>
 <p>Certain test elements are only available on the WorkBench:</p>
+<properties>
+         <property name="Save WorkBench" required="No">
+                Allow to save the WorkBench's elements into the JMX file.
+        </property>
+</properties>
 <ul>
 <li><complink name="HTTP Proxy Server"/></li>
 <li><complink name="HTTP Mirror Server"/></li>
