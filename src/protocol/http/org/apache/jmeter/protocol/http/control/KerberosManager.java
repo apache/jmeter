@@ -42,9 +42,9 @@ import org.apache.log.Logger;
 
 /**
  * Takes in charge Kerberos auth mechanism
- * 
+ * @since 2.10
  */
-class KerberosManager implements Serializable {
+public class KerberosManager implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
