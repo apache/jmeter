@@ -107,7 +107,7 @@
         <description><![CDATA[
         <h1>Test plan from Building a Web Test Plan section in user's manual</h1>
         <h2>Configuration</h2>
-        <p>In order to run the login sample inside plan, create a CSV file following description in <b>loginData</b> sample and put it in a folder of your choice and test running JMeter with:<br/>
+        <p>In order to run the login sample inside plan, create a CSV file following description in <b>loginData</b> sample and put it in a folder of your choice then test running JMeter with:<br/>
             <ul>
                 <li><b>jmeter -Jresources_folder=FOLDER TO CHANGE</b></li>
             </ul>
@@ -123,7 +123,7 @@
         <fileName>/bin/templates/build-webservice-test-plan.jmx</fileName>
         <description><![CDATA[
         <h1>Test plan showing how to create a SOAP Webservice Test Plan </h1>
-        <h2>Useful link</h2>
+        <h2>Useful links</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#User_Defined_Variables" >User Defined Variables</a></li>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Request_Defaults" >User Defined Variables</a></li>
