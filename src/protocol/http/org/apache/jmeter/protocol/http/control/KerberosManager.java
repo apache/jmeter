@@ -101,7 +101,8 @@ public class KerberosManager implements Serializable {
         return null;
     }
 
-    static private class LoginCallbackHandler implements CallbackHandler {
+    // Needs to be package-protected to avoid problem with serialisation tests
+    static class LoginCallbackHandler implements CallbackHandler {
         private final String password;
         private final String username;
 
