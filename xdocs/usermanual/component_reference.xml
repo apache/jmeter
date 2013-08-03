@@ -3430,7 +3430,9 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-        <property name="Clear auth on each iteration ?" required="Yes">Used by Kerberos authentication, if checked authentication will be done on each iteration of Main Thread Group loop even if it has already been done</property>
+        <property name="Clear auth on each iteration ?" required="Yes">Used by Kerberos authentication. If checked, authentication will be done on each iteration of Main Thread Group loop even if it has already been done in a previous one.
+        This is usually useful if each main thread group iteration represents behaviour of one Virtual User.
+        </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
 say you specify a Base URL of "http://jmeter.apache.org/restricted/" with a username of "jmeter" and
 a password of "jmeter".  If you send an HTTP request to the URL
@@ -3457,14 +3459,13 @@ This was an experimental feature and has been removed.
 </note>
 <br></br>
 <b>Kerberos Configuration:</b>
-<p>To configure Kerberos you need to setup at least 2 JVM system properties:
+<p>To configure Kerberos you need to setup at least two JVM system properties:
 <ul>
     <li>-Djava.security.krb5.conf=krb5.conf</li>
     <li>-Djava.security.auth.login.config=jaas.conf</li>
 </ul>
-You can also configure those 2 properties in file system.properties.
-
-See 2 configuration file samples with reference documentation in jmeter bin folder.
+You can also configure those two properties in file bin/system.properties.
+Look at the two sample configuration files in the jmeter bin folder for references to more documentation.
 </p>
 <br></br>
 <b>Controls:</b>
