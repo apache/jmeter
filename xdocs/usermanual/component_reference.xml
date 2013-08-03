@@ -3394,7 +3394,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
 <description></description>
 </component>
 
-<component name="HTTP Authorization Manager" index="&sect-num;.4.3"  width="439" height="238" screenshot="http-config/http-auth-manager.png">
+<component name="HTTP Authorization Manager" index="&sect-num;.4.3"  width="538" height="340" screenshot="http-config/http-auth-manager.png">
 <note>If there is more than one Authorization Manager in the scope of a Sampler,
 there is currently no way to specify which one is to be used.</note>
 
@@ -3430,6 +3430,7 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+        <property name="Clear auth on each iteration ?" required="Yes">Used by Kerberos authentication, if checked authentication will be done on each iteration of Main Thread Group loop even if it has already been done</property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
 say you specify a Base URL of "http://jmeter.apache.org/restricted/" with a username of "jmeter" and
 a password of "jmeter".  If you send an HTTP request to the URL
@@ -3439,6 +3440,14 @@ information for the user named, "jmeter".</property>
   <property name="Password" required="Yes">The password for the user. (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Domain" required="No">The domain to use for NTLM.</property>
   <property name="Realm" required="No">The realm to use for NTLM.</property>
+  <property name="Mechanism" required="No">Type of authentication to perform. JMeter can perform different types of authentications based on used Http Samplers:
+<table>
+<tr><th>Sampler</th><th>Authentications</th></tr>
+<tr><td>Java</td><td>BASIC</td></tr>
+<tr><td>HttpClient 3.1</td><td>BASIC, DIGEST</td></tr>
+<tr><td>HttpClient 4</td><td>BASIC, DIGEST and Kerberos</td></tr>
+</table>
+</property>
 </properties>
 <note>
 The Realm only applies to the HttpClient sampler.
@@ -3446,6 +3455,17 @@ In JMeter 2.2, the domain and realm did not have separate columns, and were enco
 the user name in the form: [domain\]username[@realm].
 This was an experimental feature and has been removed.
 </note>
+<br></br>
+<b>Kerberos Configuration:</b>
+<p>To configure Kerberos you need to setup at least 2 JVM system properties:
+<ul>
+    <li>-Djava.security.krb5.conf=krb5.conf</li>
+    <li>-Djava.security.auth.login.config=jaas.conf</li>
+</ul>
+You can also configure those 2 properties in file system.properties.
+
+See 2 configuration file samples with reference documentation in jmeter bin folder.
+</p>
 <br></br>
 <b>Controls:</b>
 <ul>
@@ -3470,7 +3490,7 @@ to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, name
 "/index.html".</p>
 
 <figure width="289" height="201" image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
-<figure width="539" height="241" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
+<figure width="641" height="329" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
