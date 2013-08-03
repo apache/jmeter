@@ -94,9 +94,7 @@ public class KerberosManager implements Serializable {
         } catch (InterruptedException e1) {
             log.warn("Interrupted while getting subject for " + username, e1);
         } catch (ExecutionException e1) {
-            log.warn(
-                    "Execution of getting subject for " + username + " failed",
-                    e1);
+            log.warn("Execution of getting subject for " + username + " failed", e1);
         }
         return null;
     }
