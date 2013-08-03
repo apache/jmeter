@@ -73,7 +73,6 @@ public class JMeterVersionTest extends JMeterTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        System.out.println();
         final Properties buildProp = new Properties();
         final FileInputStream bp = new FileInputStream(getFileFromHome("build.properties"));
         buildProp.load(bp);
