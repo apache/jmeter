@@ -102,8 +102,8 @@ public class KerberosManager implements Serializable {
     }
 
     static private class LoginCallbackHandler implements CallbackHandler {
-        private String password;
-        private String username;
+        private final String password;
+        private final String username;
 
         public LoginCallbackHandler(final String username, final String password) {
             super();
