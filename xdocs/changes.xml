@@ -306,6 +306,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h3>Controllers</h3>
 <ul>
+<li><bugzilla>54271</bugzilla> - Module Controller breaks if test plan is renamed</li>
 </ul>
 
 <h3>Listeners</h3>
