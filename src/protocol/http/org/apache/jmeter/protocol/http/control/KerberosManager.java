@@ -51,7 +51,7 @@ public class KerberosManager implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String JAAS_APPLICATION = JMeterUtils.getPropDefault("kerberos_jaas_application", "JMeter"); //$NON-NLS-1$ $NON-NLS-2$
-    private ConcurrentMap<String, Future<Subject>> subjects
+    private final ConcurrentMap<String, Future<Subject>> subjects
         = new ConcurrentHashMap<String, Future<Subject>>();
 
     public KerberosManager() {
