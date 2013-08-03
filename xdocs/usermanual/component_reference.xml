@@ -2371,7 +2371,6 @@ For this reason it is best to ensure that the Controller name is changed from th
 - as shown in the example above -
 otherwise a duplicate may be accidentally created when new elements are added to the test plan. 
 </p>
-<note>Renaming any element used in ModuleController implies updating Module to Run field</note>
 </description>
 <note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
 <properties>
