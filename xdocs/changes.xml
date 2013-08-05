@@ -356,7 +356,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li>Updated to jsoup-1.7.2</li>
 <li><bugzilla>54776</bugzilla> - Update the dependency on Bouncy Castle to 1.48</li>
 <li>Updated to HttpComponents Client 4.2.5 (from 4.2.3)</li>
-<li>Updated to HttpComponents Core 4.2.4 (from 4.2.3)</li>
+<li>Updated to HttpComponents Core 4.2.5 (from 4.2.3)</li>
 <li>Updated to commons-codec 1.8 (from 1.6)</li>
 <li>Updated to commons-io 2.4 (from 2.2)</li>
 <li>Updated to commons-logging 1.1.3 (from 1.1.1)</li>
