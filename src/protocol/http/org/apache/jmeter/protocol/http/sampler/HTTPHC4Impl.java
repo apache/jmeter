@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -102,6 +103,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -325,7 +327,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
                     throw new IllegalArgumentException("Missing location header");
                 }
-                res.setRedirectLocation(headerLocation.getValue());
+                try {
+                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(new URL(headerLocation.getValue())).toString());
+                } catch (URISyntaxException e) {
+                    log.error("Error sanitizing URL:"+headerLocation.getValue());
+                }
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
