@@ -37,7 +37,7 @@ public class SamplerCreatorFactory {
 
     private static final SamplerCreator DEFAULT_SAMPLER_CREATOR = new DefaultSamplerCreator();
 
-    private Map<String, SamplerCreator> samplerCreatorMap = new HashMap<String, SamplerCreator>();
+    private final Map<String, SamplerCreator> samplerCreatorMap = new HashMap<String, SamplerCreator>();
 
     /**
      * 
