@@ -116,9 +116,12 @@ public class ConversionUtils {
     
 
     /**
-     * Escapes reserved chars in URL
-     * @param url URL
-     * @return URI
+     * Escapes reserved chars in a non-encoded URL.
+     * Warning: if the input URL has already been (partially) encoded, 
+     * the resulting URI will almost certainly be incorrect
+     * as the encoding character '%' will itself be re-encoded.
+     * @param url non-encoded URL
+     * @return URI which has been encoded as necessary
      * @throws URISyntaxException
      */
     public static final URI sanitizeUrl(URL url) throws URISyntaxException {
