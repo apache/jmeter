@@ -21,7 +21,9 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -132,6 +134,20 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      */
     protected String getIpSource() {
         return testElement.getIpSource();
+    }
+
+    /**
+     * Gets the IP source address (IP spoofing) if one has been provided.
+     * 
+     * @return the IP source address to use (or null, if none provided)
+     * @throws UnknownHostException
+     */
+    protected InetAddress getIpSourceAddress() throws UnknownHostException {
+        final String ipSource = getIpSource();
+        if (ipSource.length() > 0) {
+            return InetAddress.getByName(ipSource);
+        }
+        return null;
     }
 
     /**
