@@ -2593,6 +2593,11 @@ run JMeter unless all the JMeter jars are added.
           <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
       </antcall>
 
+      <antcall target="batchtest">
+        <!--   StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node -->
+        <param name="batchtest.name" value="Bug55375"/>
+      </antcall>
+
       <antcall target="batchtestserver">
           <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
           <!-- This is the actual test -->
