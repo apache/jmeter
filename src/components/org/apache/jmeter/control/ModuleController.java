@@ -145,11 +145,14 @@ public class ModuleController extends GenericController implements ReplaceableCo
         if (node != null && nodePath.size() > level) {
             for (int i = 0; i < node.getChildCount(); i++) {
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
-                if (cur.getName().equals(nodePath.get(level).toString())) {
-                    if (nodePath.size() == (level + 1)) {
-                        selectedNode = cur;
+                // Bug55375 - don't allow selectedNode to be a ModuleController as can cause recursion
+                if (!(cur.getTestElement() instanceof ModuleController)) {
+                    if (cur.getName().equals(nodePath.get(level).toString())) {
+                        if (nodePath.size() == (level + 1)) {
+                            selectedNode = cur;
+                        }
+                        traverse(cur, nodePath, level + 1);
                     }
-                    traverse(cur, nodePath, level + 1);
                 }
             }
         }
