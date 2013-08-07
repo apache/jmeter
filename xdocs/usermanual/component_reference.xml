@@ -261,7 +261,9 @@ resource requires query string parameters, add them below in the
 <b>
 As a special case, if the path starts with "http://" or "https://" then this is used as the full URL.
 </b>
-In this case, the server, port and protocol are ignored; parameters are also ignored for GET and DELETE methods.
+In this case, the server, port and protocol fields are ignored; parameters are also ignored for GET and DELETE methods.
+Also please note that the path is not encoded - apart from replacing spaces with %20 -
+so unsafe characters may need to be encoded to avoid errors such as URISyntaxException.
 </property>
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
