@@ -168,7 +168,15 @@ public class HttpRequestHdr {
         if (getMethod().startsWith(HTTPConstants.CONNECT)) {
             paramHttps = url;
         }
-        if (url.startsWith("/")) {
+        /* The next line looks odd, but proxied HTTP requests look like:
+         * GET http://www.apache.org/foundation/ HTTP/1.1
+         * i.e. url starts with "http:", not "/"
+         * whereas HTTPS proxy requests look like:
+         * CONNECT www.google.co.uk:443 HTTP/1.1
+         * followed by
+         * GET /?gws_rd=cr HTTP/1.1
+         */
+        if (url.startsWith("/")) { // it must be a proxied HTTPS request
             url = HTTPS + "://" + paramHttps + url; // $NON-NLS-1$
         }
         // JAVA Impl accepts URLs with unsafe characters so don't do anything
