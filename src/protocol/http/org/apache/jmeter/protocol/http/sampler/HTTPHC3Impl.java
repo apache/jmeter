@@ -442,9 +442,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         if (localAddress != null){
             hc.setLocalAddress(localAddress);
         } else {
-            final String ipSource = getIpSource();
-            if (ipSource.length() > 0) {// Use special field ip source address (for pseudo 'ip spoofing')
-                InetAddress inetAddr = InetAddress.getByName(ipSource);
+            final InetAddress inetAddr = getIpSourceAddress();
+            if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
                 hc.setLocalAddress(inetAddr);
             }
         }
