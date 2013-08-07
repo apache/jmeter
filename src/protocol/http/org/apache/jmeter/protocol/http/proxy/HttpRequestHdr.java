@@ -21,6 +21,8 @@ package org.apache.jmeter.protocol.http.proxy;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +34,8 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -166,6 +170,29 @@ public class HttpRequestHdr {
         }
         if (url.startsWith("/")) {
             url = HTTPS + "://" + paramHttps + url; // $NON-NLS-1$
+        }
+        // JAVA Impl accepts URLs with unsafe characters so don't do anything
+        if(HTTPSamplerFactory.IMPL_JAVA.equals(httpSamplerName)) {
+            log.debug("First Line: " + url);
+            return;
+        }
+        try {
+            // See Bug 54482
+            URI testCleanUri = new URI(url);
+            if(log.isDebugEnabled()) {
+                log.debug("Successfully built URI from url:"+url);
+            }
+        } catch (URISyntaxException e) {
+            log.warn("Url '" + url + "' contains unsafe characters, will escape it, message:"+e.getMessage());
+            try {
+                String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
+                if(log.isDebugEnabled()) {
+                    log.debug("Successfully escaped url:'"+url +"' to:'"+escapedUrl+"'");
+                }
+                url = escapedUrl;
+            } catch (Exception e1) {
+                log.error("Error escaping URL:'"+url+"', message:"+e1.getMessage());
+            }
         }
         log.debug("First Line: " + url);
     }
