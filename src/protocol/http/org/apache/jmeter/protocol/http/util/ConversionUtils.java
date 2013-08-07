@@ -145,7 +145,7 @@ public class ConversionUtils {
             .setHost(url.getHost())
             .setPort(url.getPort())
             .setUserInfo(url.getUserInfo())
-            .setPath(URLDecoder.decode(url.getPath(), "UTF-8")) // $NON-NLS-1$
+            .setPath(url.getPath() != null ? URLDecoder.decode(url.getPath(), "UTF-8") : null) // $NON-NLS-1$
             .setQuery(url.getQuery());
         URI uri = builder.build();
         return uri;
