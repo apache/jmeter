@@ -296,6 +296,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li>HTTP Request: Small user interaction improvements in Row parameter Detail Box</li>
 <li><bugzilla>55255</bugzilla> - Allow Body in HTTP DELETE method to support API that use it (like ElasticSearch)</li>
 <li><bugzilla>53480</bugzilla> - Add Kerberos support to Http Sampler (HttpClient4)</li>
+<li><bugzilla>54874</bugzilla> - Support device in addition to source IP address</li>
 </ul>
 
 <h3>Other samplers</h3>
