@@ -22,8 +22,12 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -137,14 +141,32 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
+     * The prefix used to distiguish a device name from a host name.
+     * Host names cannot start with "/". 
+     */
+    private static final String DEVICE_PREFIX = "/dev/";
+
+    /**
      * Gets the IP source address (IP spoofing) if one has been provided.
      * 
-     * @return the IP source address to use (or null, if none provided)
+     * @return the IP source address to use (or null, if none provided or the device address could not be found)
      * @throws UnknownHostException
+     * @throws SocketException 
      */
-    protected InetAddress getIpSourceAddress() throws UnknownHostException {
+    protected InetAddress getIpSourceAddress() throws UnknownHostException, SocketException {
         final String ipSource = getIpSource();
         if (ipSource.length() > 0) {
+            if (ipSource.startsWith(DEVICE_PREFIX)) {
+                final String device = ipSource.substring(DEVICE_PREFIX.length());
+                NetworkInterface net = NetworkInterface.getByName(device);
+                if (net != null) {
+                    List<InterfaceAddress> netAds = net.getInterfaceAddresses();
+                    if (netAds.size() > 0) {
+                        return netAds.get(0).getAddress();
+                    }
+                }
+                return null;
+            }
             return InetAddress.getByName(ipSource);
         }
         return null;
