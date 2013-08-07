@@ -26,7 +26,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -329,8 +328,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 try {
                     res.setRedirectLocation(ConversionUtils.sanitizeUrl(new URL(headerLocation.getValue())).toString());
-                } catch (URISyntaxException e) {
-                    log.error("Error sanitizing URL:"+headerLocation.getValue());
+                } catch (Exception e) {
+                    log.error("Error sanitizing URL:"+headerLocation.getValue()+", message:"+e.getMessage());
                 }
             }
 

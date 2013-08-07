@@ -318,8 +318,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 }
                 try {
                     res.setRedirectLocation(ConversionUtils.sanitizeUrl(new URL(headerLocation.getValue())).toString());
-                } catch (URISyntaxException e) {
-                    log.error("Error sanitizing URL:"+headerLocation.getValue());
+                } catch (Exception e) {
+                    log.error("Error sanitizing URL:"+headerLocation.getValue()+", message:"+e.getMessage());
                 }
             }
 
