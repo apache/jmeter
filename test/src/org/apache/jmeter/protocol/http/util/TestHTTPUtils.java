@@ -85,9 +85,14 @@ public class TestHTTPUtils extends TestCase {
     public void testsanitizeUrl() throws Exception {
         testSanitizeUrl("http://localhost/", "http://localhost/");
         testSanitizeUrl("http://localhost/a/b/c%7Cd", "http://localhost/a/b/c|d");
-        // TODO more tests needed
+        testSanitizeUrl("http://localhost:8080/%5B%5D", "http://localhost:8080/%5B%5D");
+        testSanitizeUrl("http://localhost:8080/?%5B%5D", "http://localhost:8080/?%5B%5D");
+        testSanitizeUrl("http://localhost:8080/?%25%5B%5D%21%40%24%25%5E*%28%29", "http://localhost:8080/?%25%5B%5D!@$%^*()#");
+        testSanitizeUrl("http://localhost:8080/%5B%5D?%5B%5D%21%40%24%25%5E*%28%29", "http://localhost:8080/%5B%5D?[]!@$%^*()#");
+
     }
     
+
     private void testSanitizeUrl(String expected, String input) throws Exception {
         final URL url = new URL(input);
         final URI uri = new URI(expected);
