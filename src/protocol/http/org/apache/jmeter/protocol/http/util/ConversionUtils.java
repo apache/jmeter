@@ -116,7 +116,18 @@ public class ConversionUtils {
         return initial;
     }
     
-
+    /**
+     * @param url String Url to escape
+     * @return String cleaned up url
+     * @throws Exception
+     */
+    public static String escapeIllegalURLCharacters(String url) throws Exception{
+        String decodeUrl = URLDecoder.decode(url,"UTF-8");
+        URL urlString = new URL(decodeUrl);
+        URI uri = new URI(urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(), urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
+        return uri.toString();
+    }
+    
     /**
      * Escapes reserved chars in a non-encoded URL.
      * Warning: if the input URL has already been (partially) encoded, 

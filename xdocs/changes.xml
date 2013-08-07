@@ -224,6 +224,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed</li>
 <li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders</li>
 <li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars</li>
+<li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character</li>
 </ul>
 
 <h3>Other Samplers</h3>
