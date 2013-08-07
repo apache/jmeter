@@ -18,10 +18,12 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,15 +125,16 @@ public class ConversionUtils {
      * @param url non-encoded URL
      * @return URI which has been encoded as necessary
      * @throws URISyntaxException
+     * @throws UnsupportedEncodingException 
      */
-    public static final URI sanitizeUrl(URL url) throws URISyntaxException {
+    public static final URI sanitizeUrl(URL url) throws URISyntaxException, UnsupportedEncodingException {
         URIBuilder builder = 
                 new URIBuilder()
             .setScheme(url.getProtocol())
             .setHost(url.getHost())
             .setPort(url.getPort())
             .setUserInfo(url.getUserInfo())
-            .setPath(url.getPath())
+            .setPath(URLDecoder.decode(url.getPath(), "UTF-8")) // $NON-NLS-1$
             .setQuery(url.getQuery());
         URI uri = builder.build();
         return uri;
