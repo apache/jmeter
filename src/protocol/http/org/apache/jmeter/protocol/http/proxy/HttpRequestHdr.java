@@ -180,7 +180,7 @@ public class HttpRequestHdr {
             // See Bug 54482
             URI testCleanUri = new URI(url);
             if(log.isDebugEnabled()) {
-                log.debug("Successfully built URI from url:"+url);
+                log.debug("Successfully built URI from url:"+url+" => " + testCleanUri.toString());
             }
         } catch (URISyntaxException e) {
             log.warn("Url '" + url + "' contains unsafe characters, will escape it, message:"+e.getMessage());
