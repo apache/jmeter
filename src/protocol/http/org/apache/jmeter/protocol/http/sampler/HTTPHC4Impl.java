@@ -669,9 +669,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     HttpParams requestParams = httpRequest.getParams();
     
     // Set up the local address if one exists
-    final String ipSource = getIpSource();
-    if (ipSource.length() > 0) {// Use special field ip source address (for pseudo 'ip spoofing')
-        InetAddress inetAddr = InetAddress.getByName(ipSource);
+    final InetAddress inetAddr = getIpSourceAddress();
+    if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
         requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, inetAddr);
     } else if (localAddress != null){
         requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
