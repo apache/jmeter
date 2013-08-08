@@ -129,11 +129,11 @@ public class ConversionUtils {
     }
     
     /**
-     * Escapes reserved chars in a non-encoded URL.
-     * Warning: if the input URL has already been (partially) encoded, 
-     * the resulting URI will almost certainly be incorrect
-     * as the encoding character '%' will itself be re-encoded.
-     * @param url non-encoded URL
+     * Escapes reserved chars in a non-encoded URL or partially encoded one.
+     * Warning: it won't work on all unencoded URLs.
+     * For example, the unencoded URL http://localhost/% will cause an Exception.
+     * Any instances of % must have been encoded as %25 within the path portion.
+     * @param url non-encoded or partially encoded URL
      * @return URI which has been encoded as necessary
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException 
