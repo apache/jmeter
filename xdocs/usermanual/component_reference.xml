@@ -323,9 +323,11 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         [Only for HTTP Request HTTPClient] 
         Override the default local IP address for this sample.
         The JMeter host must have multiple IP addresses (i.e. IP aliases or network interfaces).
-        The value can be a host name, IP address, or a network interface device such as "eth0" or "le0".
-        In order to distinguish these from host names, the interface name must be entered with the prefix "/dev/",
-        for example "/dev/eth0" or "/dev/le0".
+        The value can be a host name, IP address, or a network interface device such as "eth0" or "lo0".
+        In order to distinguish these from host names, the interface name must be entered with the prefix "/",
+        for example "/eth0" or "/lo0". This will pick the first available address for that interface which
+        this may be either IPV4 or IPV6. To select a specific IP protocol version, prefix the interface name
+        with "/ipv4/" or "/ipv6/", for example "/ipv4/eth0" or "/ipv6/eth0"
         If the property <b>httpclient.localaddress</b> is defined, that is used for all HttpClient requests.
         </property>
 </properties>

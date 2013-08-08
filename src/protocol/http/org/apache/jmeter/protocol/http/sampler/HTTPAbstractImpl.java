@@ -21,13 +21,14 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.List;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -144,7 +145,9 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * The prefix used to distiguish a device name from a host name.
      * Host names cannot start with "/". 
      */
-    private static final String DEVICE_PREFIX = "/dev/";
+    private static final String DEVICE_PREFIX = "/";
+    private static final String IPV4 = "ipv4/";
+    private static final String IPV6 = "ipv6/";
 
     /**
      * Gets the IP source address (IP spoofing) if one has been provided.
@@ -157,19 +160,32 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
         final String ipSource = getIpSource();
         if (ipSource.length() > 0) {
             if (ipSource.startsWith(DEVICE_PREFIX)) {
-                final String device = ipSource.substring(DEVICE_PREFIX.length());
-                NetworkInterface net = NetworkInterface.getByName(device);
-                if (net != null) {
-                    List<InterfaceAddress> netAds = net.getInterfaceAddresses();
-                    if (netAds.size() > 0) {
-                        return netAds.get(0).getAddress();
-                    }
+                String interfaceName = ipSource.substring(DEVICE_PREFIX.length());
+                final Class<? extends InetAddress> ipClass;
+                if (interfaceName.startsWith(IPV4)) {
+                    interfaceName = interfaceName.substring(IPV4.length());
+                    ipClass = Inet4Address.class;
+                } else if (interfaceName.startsWith(IPV6)) {
+                    interfaceName = interfaceName.substring(IPV6.length());                    
+                    ipClass = Inet6Address.class;
+                } else {
+                    ipClass = InetAddress.class;                    
                 }
-                return null;
+                NetworkInterface net = NetworkInterface.getByName(interfaceName);
+                if (net != null) {
+                    for (InterfaceAddress ia : net.getInterfaceAddresses()) {
+                        final InetAddress inetAddr = ia.getAddress();
+                        if (ipClass.isInstance(inetAddr)) {
+                            return inetAddr;
+                        }
+                    }
+                    throw new UnknownHostException("Interface " + interfaceName + " does not have address of type " + ipClass.getSimpleName());
+                }
+                throw new UnknownHostException("Cannot find interface " + interfaceName);
             }
             return InetAddress.getByName(ipSource);
         }
-        return null;
+        return null; // did not want to spoof the IP address
     }
 
     /**
