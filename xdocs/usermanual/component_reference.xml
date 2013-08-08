@@ -1875,8 +1875,9 @@ If omitted, output is captured and returned as the response data.</property>
 <p>Before using this you need to set up a
 <complink name="MongoDB Source Config"/> Configuration element
 </p>
-<note>This Element uses for now com.mongodb.DB#eval which takes globak write lock with performance impacts on Database, see <a href="http://docs.mongodb.org/manual/reference/method/db.eval/">db.eval()</a>. 
-So it is better to avoid using this element for load testing, it is more suitable for functionnal testing or test setup (setup/teardown threads)</note>
+<note>This Element uses for now com.mongodb.DB#eval which takes global write lock with performance impacts on Database, see <a href="http://docs.mongodb.org/manual/reference/method/db.eval/">db.eval()</a>. 
+So it is better to avoid using this element for load testing and use JSR223+Groovy scripting using <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a>.
+MongoDB Script is more suitable for functionnal testing or test setup (setup/teardown threads)</note>
 </description>
 
 <properties>
