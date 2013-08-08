@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -439,13 +438,11 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         hc.setHost(host, port, protocol); // All needed to ensure re-usablility
 
         // Set up the local address if one exists
-        if (localAddress != null){
-            hc.setLocalAddress(localAddress);
+        final InetAddress inetAddr = getIpSourceAddress();
+        if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
+            hc.setLocalAddress(inetAddr);
         } else {
-            final InetAddress inetAddr = getIpSourceAddress();
-            if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
-                hc.setLocalAddress(inetAddr);
-            }
+            hc.setLocalAddress(localAddress); // null means use the default
         }
 
         final String proxyHost = getProxyHost();
