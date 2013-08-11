@@ -226,9 +226,9 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <ul>
 <li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler setting takes the whole screen when there are samplers with long names. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54629</bugzilla> - HTMLParser does not extract &amp;lt;object&amp;gt; tag urls. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput. Contributed by Sebb based on analysis by Brent Cromarty &lt;brent.cromarty at yahoo.ca&gt;</li>
+<li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput. Contributed by Sebb based on analysis by Brent Cromarty (brent.cromarty at yahoo.ca)</li>
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders. Contributed by Adrian Nistor &lt;nistor1 at illinois.edu&gt;</li>
+<li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders. Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character. Contributed by Philippe Mouawad</li>
 <li><bugzilla>55388</bugzilla> - HC3 does not allow IP Source field to override httpclient.localaddress. Contributed by Sebb</li>
@@ -236,7 +236,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h3>Other Samplers</h3>
 <ul>
-<li><bugzilla>54913</bugzilla> - JMSPublisherGui incorrectly restores its state. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
+<li><bugzilla>54913</bugzilla> - JMSPublisherGui incorrectly restores its state. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>55027</bugzilla> - Test Action regression, duration value is not recorded (nightly build). Contributed by Philippe Mouawad</li>
 <li><bugzilla>55163</bugzilla> - BeanShellTestElement fails to quote string when calling testStarted(String)/testEnded(String). Contributed by Sebb</li>
 <li><bugzilla>55349</bugzilla> - NativeCommand hangs if no input file is specified and the application requests input. Contributed by Sebb</li>
@@ -245,7 +245,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <h3>Controllers</h3>
 <ul>
 <li><bugzilla>54467</bugzilla> - Loop Controller: compute loop value only once per parent iteration. Contributed by Philippe Mouawad</li>
-<li><bugzilla>54985</bugzilla> - Make Transaction Controller set Response Code of Generated Parent Sampler to response code of first failing child in case of failure of one of its children. Contributed by Mikhail Epikhin &lt;epihin-m at yandex.ru&gt;</li>
+<li><bugzilla>54985</bugzilla> - Make Transaction Controller set Response Code of Generated Parent Sampler to response code of first failing child in case of failure of one of its children. Contributed by Mikhail Epikhin (epihin-m at yandex.ru)</li>
 <li><bugzilla>54950</bugzilla> - ModuleController : Changes to referenced Module are not taken into account if changes occur after first run and referenced node is disabled. Contributed by Philippe Mouawad</li>
 <li><bugzilla>55201</bugzilla> - ForEach controller excludes start index and includes end index (clarified documentation). Contributed by Philippe Mouawad</li>
 <li><bugzilla>55334</bugzilla> - Adding Include Controller to test plan (made of Include Controllers) without saving TestPlan leads to included code not being taken into account until save. Contributed by Philippe Mouawad</li>
@@ -281,15 +281,15 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <ul>
 <li><bugzilla>54504</bugzilla> - Resource string not found: [clipboard_node_read_error]. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54538</bugzilla> - GUI: context menu is too big. Contributed by Philippe Mouawad</li>
-<li><bugzilla>54847</bugzilla> - Cut &amp; Paste is broken with tree multi-selection. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>54870</bugzilla> - Tree drag and drop may lose leaf nodes (affected nightly build). Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>55056</bugzilla> - wasted work in Data.append(). Contributed by Adrian Nistor &lt;nistor1 at illinois.edu&gt;</li>
+<li><bugzilla>54847</bugzilla> - Cut &amp; Paste is broken with tree multi-selection. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>54870</bugzilla> - Tree drag and drop may lose leaf nodes (affected nightly build). Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>55056</bugzilla> - wasted work in Data.append(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>55129</bugzilla> -  Change Javadoc generation per CVE-2013-1571, VU#225657. Contributed by Sebb</li>
 <li><bugzilla>55187</bugzilla> - Integer overflow when computing ONE_YEAR_MS in HTTP CacheManager. Contributed by Sebb</li>
 <li><bugzilla>55208</bugzilla> - JSR223 language entries are duplicated; fold to lower case. Contributed by Sebb</li>
 <li><bugzilla>55203</bugzilla> - TestBeanGUI - wrong language settings found. Contributed by Sebb</li>
-<li><bugzilla>55065</bugzilla> - Useless processing in Spline3.converge(). Contributed by Adrian Nistor &lt;nistor1 at illinois.edu&gt;</li>
-<li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction(). Contributed by Adrian Nistor &lt;nistor1 at illinois.edu&gt;</li>
+<li><bugzilla>55065</bugzilla> - Useless processing in Spline3.converge(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
+<li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>55242</bugzilla> - BeanShell Client jar throws exceptions after upgrading to 2.8. Contributed by Sebb</li>
 <li><bugzilla>55288</bugzilla> - JMeter should default to 0 retries for HTTP requests. Contributed by Sebb</li>
 </ul>
@@ -302,17 +302,17 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <ul>
 <li>HTTP Request: Small user interaction improvements in Row parameter Detail Box. Contributed by Milamber</li>
 <li><bugzilla>55255</bugzilla> - Allow Body in HTTP DELETE method to support API that use it (like ElasticSearch). Contributed by Philippe Mouawad</li>
-<li><bugzilla>53480</bugzilla> - Add Kerberos support to Http Sampler (HttpClient4). Contributed by Philippe Mouawad based on patch by Felix Schumacher &lt;felix.schumacher at internetallee.de&gt;</li>
-<li><bugzilla>54874</bugzilla> - Support device in addition to source IP address. Contributed by Sebb based on patch by Dan Fruehauf &lt;malkodan at gmail.com&gt;</li>
+<li><bugzilla>53480</bugzilla> - Add Kerberos support to Http Sampler (HttpClient4). Contributed by Philippe Mouawad based on patch by Felix Schumacher (felix.schumacher at internetallee.de)</li>
+<li><bugzilla>54874</bugzilla> - Support device in addition to source IP address. Contributed by Sebb based on patch by Dan Fruehauf (malkodan at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-<li><bugzilla>54788</bugzilla> - JMS Point-to-Point Sampler - GUI enhancements to increase readability and ease of use. Contributed by Bruno Antunes &lt;b.m.antunes at gmail.com&gt;</li>
-<li><bugzilla>54798</bugzilla> - Using subject from EML-file for SMTP Sampler. Contributed by Mikhail Epikhin &lt;epihin-m at yandex.ru&gt;</li>
+<li><bugzilla>54788</bugzilla> - JMS Point-to-Point Sampler - GUI enhancements to increase readability and ease of use. Contributed by Bruno Antunes (b.m.antunes at gmail.com)</li>
+<li><bugzilla>54798</bugzilla> - Using subject from EML-file for SMTP Sampler. Contributed by Mikhail Epikhin (epihin-m at yandex.ru)</li>
 <li><bugzilla>54759</bugzilla> - SSLPeerUnverifiedException using HTTPS , property documented. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54896</bugzilla> - JUnit sampler gives only "failed to create an instance of the class" message with constructor problems. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55084</bugzilla> - Add timeout support for JDBC Request. Contributed by Mikhail Epikhin &lt;epihin-m at yandex.ru&gt;</li>
+<li><bugzilla>55084</bugzilla> - Add timeout support for JDBC Request. Contributed by Mikhail Epikhin (epihin-m at yandex.ru)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -322,9 +322,9 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h3>Listeners</h3>
 <ul>
-<li><bugzilla>54532</bugzilla> - Improve Response Time Graph Y axis scale with huge values or small values (&amp;lt; 1000ms). Add a new field to define increment scale. Contributed by Milamber based on patch by Luca Maragnani &lt;luca.maragnani at gmail.com&gt;</li>
+<li><bugzilla>54532</bugzilla> - Improve Response Time Graph Y axis scale with huge values or small values (&amp;lt; 1000ms). Add a new field to define increment scale. Contributed by Milamber based on patch by Luca Maragnani (luca.maragnani at gmail.com)</li>
 <li><bugzilla>54576</bugzilla> - View Results Tree : Add a CSS/JQuery Tester. Contributed by Philippe Mouawad</li>
-<li><bugzilla>54777</bugzilla> - Improve Performance of default ResultCollector. Contributed by Philippe Mouawad based on patch by Mikhail Epikhin &lt;epihin-m at yandex.ru&gt;</li>
+<li><bugzilla>54777</bugzilla> - Improve Performance of default ResultCollector. Contributed by Philippe Mouawad based on patch by Mikhail Epikhin (epihin-m at yandex.ru)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -343,20 +343,20 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h3>General</h3>
 <ul>
-<li><bugzilla>54584</bugzilla> - MongoDB plugin. Contributed by Philippe Mouawad based on patch by Jan Paul Ettles &lt;janpaulettles at gmail.com&gt;</li>
+<li><bugzilla>54584</bugzilla> - MongoDB plugin. Contributed by Philippe Mouawad based on patch by Jan Paul Ettles (janpaulettles at gmail.com)</li>
 <li><bugzilla>54669</bugzilla> - Add flag forcing non-GUI JVM to exit after test. Contributed by Scott Emmons</li>
-<li><bugzilla>42428</bugzilla> - Workbench not saved with Test Plan. Contributed by Dzmitry Kashlach &lt;dzmitrykashlach at gmail.com&gt;</li>
-<li><bugzilla>54825</bugzilla> - Add shortcuts to move elements in the tree. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>54834</bugzilla> - Improve Drag &amp; Drop in the jmeter tree. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>54839</bugzilla> - Set the application name on Mac. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>54841</bugzilla> - Correctly handle the quit shortcut on Mac Os (CMD-Q). Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>54844</bugzilla> - Set the application icon on Mac Os. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>54864</bugzilla> - Enable multi selection drag &amp; drop in the tree without having to start dragging before releasing Shift or Control. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
+<li><bugzilla>42428</bugzilla> - Workbench not saved with Test Plan. Contributed by Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><bugzilla>54825</bugzilla> - Add shortcuts to move elements in the tree. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>54834</bugzilla> - Improve Drag &amp; Drop in the jmeter tree. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>54839</bugzilla> - Set the application name on Mac. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>54841</bugzilla> - Correctly handle the quit shortcut on Mac Os (CMD-Q). Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>54844</bugzilla> - Set the application icon on Mac Os. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>54864</bugzilla> - Enable multi selection drag &amp; drop in the tree without having to start dragging before releasing Shift or Control. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>54945</bugzilla> - Add Shutdown Hook to enable trapping kill or CTRL+C signals. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54990</bugzilla> - Download large files avoiding outOfMemory. Contributed by Sebb</li>
-<li><bugzilla>55085</bugzilla> - UX Improvement : Ability to create New Test Plan from Templates. Contributed by UBIK Load Pack &lt;support at ubikloadpack.com&gt;</li>
+<li><bugzilla>55085</bugzilla> - UX Improvement : Ability to create New Test Plan from Templates. Contributed by UBIK Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>55172</bugzilla> - Provide plugins a way to add Top Menu and menu items. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55202</bugzilla> - Add syntax color for scripts elements (BeanShell, BSF, and JSR223) and JDBC elements with RSyntaxTextArea. Contributed by Sebb, Milamber based on patch by Marko Vlahovic &lt;vlahovic74 at gmail.com&gt;</li>
+<li><bugzilla>55202</bugzilla> - Add syntax color for scripts elements (BeanShell, BSF, and JSR223) and JDBC elements with RSyntaxTextArea. Contributed by Sebb, Milamber based on patch by Marko Vlahovic (vlahovic74 at gmail.com)</li>
 <li><bugzilla>55175</bugzilla> - HTTPHC4Impl refactoring to allow better inheritance. Contributed by Philippe Mouawad</li>
 <li><bugzilla>55236</bugzilla> - Templates - provide button to reload template details. Contributed by Sebb</li>
 <li><bugzilla>55237</bugzilla> - Template system should support relative fileName entries. Contributed by Sebb</li>
@@ -365,7 +365,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <h2>Non-functional changes</h2>
 <ul>
 <li>Updated to jsoup-1.7.2</li>
-<li><bugzilla>54776</bugzilla> - Update the dependency on Bouncy Castle to 1.48. Contributed by Emmanuel Bourg &lt;ebourg at apache.org&gt;</li>
+<li><bugzilla>54776</bugzilla> - Update the dependency on Bouncy Castle to 1.48. Contributed by Emmanuel Bourg (ebourg at apache.org)</li>
 <li>Updated to HttpComponents Client 4.2.5 (from 4.2.3)</li>
 <li>Updated to HttpComponents Core 4.2.5 (from 4.2.3)</li>
 <li>Updated to commons-codec 1.8 (from 1.6)</li>
@@ -380,8 +380,8 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li>Updated to xmlgraphics-commons 1.5 (from 1.3.1)</li>
 <li>Updated to xstream 1.4.4 (from 1.4.2)</li>
 <li>Updated to BouncyCastle 1.49 (from 1.48)</li>
-<li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants. Contributed by Benoit Wiart &lt;benoit.wiart at gmail.com&gt;</li>
-<li><bugzilla>54903</bugzilla> - Remove the dependency on the Activation Framework. Contributed by Emmanuel Bourg &lt;ebourg at apache.org&gt;</li>
+<li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>54903</bugzilla> - Remove the dependency on the Activation Framework. Contributed by Emmanuel Bourg (ebourg at apache.org)</li>
 <li>Moved commons-lang (2.6) to lib/doc as it's only needed by Velocity. Contributed by Sebb</li>
 <li>Re-organised and simplified NOTICE and LICENSE files. Contributed by Sebb</li>
 </ul>
@@ -391,11 +391,11 @@ Previously the default was 1, which could cause unexpected additional traffic.
 We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
 <ul>
-<li>Immanuel Hayden &lt;immanuel.hayden at gmail.com&gt;</li>
-<li>Danny Lade &lt;dlade at web.de&gt;</li>
-<li>Brent Cromarty &lt;brent.cromarty at yahoo.ca&gt;</li>
-<li>Wolfgang Heider &lt;wolfgang.heider at racon.at&gt;</li>
-<li>Shmuel Krakower &lt;shmulikk at gmail.com&gt;</li>
+<li>Immanuel Hayden (immanuel.hayden at gmail.com)</li>
+<li>Danny Lade (dlade at web.de)</li>
+<li>Brent Cromarty (brent.cromarty at yahoo.ca)</li>
+<li>Wolfgang Heider (wolfgang.heider at racon.at)</li>
+<li>Shmuel Krakower (shmulikk at gmail.com)</li>
 </ul>
 
  </p>
