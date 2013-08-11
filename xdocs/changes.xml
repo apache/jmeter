@@ -378,7 +378,6 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54903</bugzilla> - Remove the dependency on the Activation Framework</li>
 <li>Moved commons-lang (2.6) to lib/doc as it's only needed by Velocity</li>
 <li>Re-organised and simplified NOTICE and LICENSE files</li>
-<li>Updated proxyserver.jks self-signed certificate. It now exprires in 2018, and uses the algorithm SHA256withRSA</li>
 </ul>
 
 </section> 
