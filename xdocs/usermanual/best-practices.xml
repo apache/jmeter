@@ -153,7 +153,6 @@ Some suggestions on reducing resource usage.
 <li>Don't use "View Results Tree" or "View Results in Table" listeners during the load test, use them only during scripting phase to debug your scripts.</li>
 <li>Rather than using lots of similar samplers, 
 use the same sampler in a loop, and use variables (CSV Data Set) to vary the sample. 
-Or perhaps use the Access Log Sampler.
 [The Include Controller does not help here, as it adds all the test elements in the file to the test plan.]
 </li>
 <li>Don't use functional mode</li>
@@ -289,10 +288,10 @@ defined by the JMeter property "beanshell.init.file". This is only processed onc
 <section name="&sect-num;.10 Developing script functions in BeanShell, Javascript or Jexl etc." anchor="developing_scripts">
 <p>
 It's quite hard to write and test scripts as functions.
-However, JMeter has the BSF (and BeanShell) samplers which can be used instead.  
+However, JMeter has the JSR223, BSF (and BeanShell) samplers which can be used instead.  
 </p>
 <p>
-Create a simple Test Plan containing the BSF Sampler and Tree View Listener.
+Create a simple Test Plan containing the JSR223 or BSF Sampler and Tree View Listener.
 Code the script in the sampler script pane, and test it by running the test.
 If there are any errors, these will show up in the Tree View.
 Also the result of running the script will show up as the response.
@@ -333,7 +332,7 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 <section name="&sect-num;.12 JSR223 Elements" anchor="jsr223">
 <p>
 For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the Compilable interface.
-Groovy implements Compilable. However neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
+Groovy scripting engine implements Compilable. However neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
 recommended to avoid them for intensive load testing. 
 [Note: Beanshell implements the Compilable interface but it has not been coded - the method just throws an Exception.
 JMeter has an explicit work-round for this bug.]
