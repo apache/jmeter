@@ -1254,7 +1254,7 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </note>
 </component>
 
-<component name="TCP Sampler" index="&sect-num;.1.12"  width="826" height="336" screenshot="tcpsampler.png">
+<component name="TCP Sampler" index="&sect-num;.1.12"  width="827" height="521" screenshot="tcpsampler.png">
     <description>
         <p>
         The TCP Sampler opens a TCP/IP connection to the specified server.
@@ -3852,7 +3852,7 @@ To make JMeter use more than one certificate you need to ensure that:
 
 </component>
 
-<component name="TCP Sampler Config" index="&sect-num;.4.13"  width="823" height="260" screenshot="tcpsamplerconfig.png">
+<component name="TCP Sampler Config" index="&sect-num;.4.13"  width="826" height="450" screenshot="tcpsamplerconfig.png">
 <description>
         <p>
     The TCP Sampler Config provides default data for the TCP Sampler
