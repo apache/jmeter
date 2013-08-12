@@ -229,20 +229,20 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <ul>
 <li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler setting takes the whole screen when there are samplers with long names. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54629</bugzilla> - HTMLParser does not extract &amp;lt;object&amp;gt; tag urls. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput. Contributed by Sebb based on analysis by Brent Cromarty (brent.cromarty at yahoo.ca)</li>
+<li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput. based on analysis by Brent Cromarty (brent.cromarty at yahoo.ca)</li>
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed. Contributed by Philippe Mouawad</li>
 <li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders. Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55388</bugzilla> - HC3 does not allow IP Source field to override httpclient.localaddress. Contributed by Sebb</li>
+<li><bugzilla>55388</bugzilla> - HC3 does not allow IP Source field to override httpclient.localaddress.</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
 <li><bugzilla>54913</bugzilla> - JMSPublisherGui incorrectly restores its state. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>55027</bugzilla> - Test Action regression, duration value is not recorded (nightly build). Contributed by Philippe Mouawad</li>
-<li><bugzilla>55163</bugzilla> - BeanShellTestElement fails to quote string when calling testStarted(String)/testEnded(String). Contributed by Sebb</li>
-<li><bugzilla>55349</bugzilla> - NativeCommand hangs if no input file is specified and the application requests input. Contributed by Sebb</li>
+<li><bugzilla>55163</bugzilla> - BeanShellTestElement fails to quote string when calling testStarted(String)/testEnded(String).</li>
+<li><bugzilla>55349</bugzilla> - NativeCommand hangs if no input file is specified and the application requests input.</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -252,14 +252,14 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54950</bugzilla> - ModuleController : Changes to referenced Module are not taken into account if changes occur after first run and referenced node is disabled. Contributed by Philippe Mouawad</li>
 <li><bugzilla>55201</bugzilla> - ForEach controller excludes start index and includes end index (clarified documentation). Contributed by Philippe Mouawad</li>
 <li><bugzilla>55334</bugzilla> - Adding Include Controller to test plan (made of Include Controllers) without saving TestPlan leads to included code not being taken into account until save. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55375</bugzilla> -  StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node. Contributed by Sebb</li>
+<li><bugzilla>55375</bugzilla> -  StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node.</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
-<li><bugzilla>54589</bugzilla> - View Results Tree have a lot of Garbage characters if html page uses double-byte charset. Contributed by Sebb</li>
-<li><bugzilla>54753</bugzilla> - StringIndexOutOfBoundsException at SampleResult.getSampleLabel() if key_on_threadname=false when using Statistical mode. Contributed by Sebb</li>
-<li><bugzilla>54685</bugzilla> - ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server. Contributed by Sebb</li>
+<li><bugzilla>54589</bugzilla> - View Results Tree have a lot of Garbage characters if html page uses double-byte charset.</li>
+<li><bugzilla>54753</bugzilla> - StringIndexOutOfBoundsException at SampleResult.getSampleLabel() if key_on_threadname=false when using Statistical mode.</li>
+<li><bugzilla>54685</bugzilla> - ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server.</li>
 <li><bugzilla>55111</bugzilla> - ViewResultsTree: text not refitted if vertical scrollbar is required. Contributed by Milamber</li>
 </ul>
 
@@ -287,14 +287,14 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54847</bugzilla> - Cut &amp; Paste is broken with tree multi-selection. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>54870</bugzilla> - Tree drag and drop may lose leaf nodes (affected nightly build). Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>55056</bugzilla> - wasted work in Data.append(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
-<li><bugzilla>55129</bugzilla> -  Change Javadoc generation per CVE-2013-1571, VU#225657. Contributed by Sebb</li>
-<li><bugzilla>55187</bugzilla> - Integer overflow when computing ONE_YEAR_MS in HTTP CacheManager. Contributed by Sebb</li>
-<li><bugzilla>55208</bugzilla> - JSR223 language entries are duplicated; fold to lower case. Contributed by Sebb</li>
-<li><bugzilla>55203</bugzilla> - TestBeanGUI - wrong language settings found. Contributed by Sebb</li>
+<li><bugzilla>55129</bugzilla> -  Change Javadoc generation per CVE-2013-1571, VU#225657.</li>
+<li><bugzilla>55187</bugzilla> - Integer overflow when computing ONE_YEAR_MS in HTTP CacheManager.</li>
+<li><bugzilla>55208</bugzilla> - JSR223 language entries are duplicated; fold to lower case.</li>
+<li><bugzilla>55203</bugzilla> - TestBeanGUI - wrong language settings found.</li>
 <li><bugzilla>55065</bugzilla> - Useless processing in Spline3.converge(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
-<li><bugzilla>55242</bugzilla> - BeanShell Client jar throws exceptions after upgrading to 2.8. Contributed by Sebb</li>
-<li><bugzilla>55288</bugzilla> - JMeter should default to 0 retries for HTTP requests. Contributed by Sebb</li>
+<li><bugzilla>55242</bugzilla> - BeanShell Client jar throws exceptions after upgrading to 2.8.</li>
+<li><bugzilla>55288</bugzilla> - JMeter should default to 0 retries for HTTP requests.</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -306,7 +306,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li>HTTP Request: Small user interaction improvements in Row parameter Detail Box. Contributed by Milamber</li>
 <li><bugzilla>55255</bugzilla> - Allow Body in HTTP DELETE method to support API that use it (like ElasticSearch). Contributed by Philippe Mouawad</li>
 <li><bugzilla>53480</bugzilla> - Add Kerberos support to Http Sampler (HttpClient4). Contributed by Philippe Mouawad based on patch by Felix Schumacher (felix.schumacher at internetallee.de)</li>
-<li><bugzilla>54874</bugzilla> - Support device in addition to source IP address. Contributed by Sebb based on patch by Dan Fruehauf (malkodan at gmail.com)</li>
+<li><bugzilla>54874</bugzilla> - Support device in addition to source IP address. Based on patch by Dan Fruehauf (malkodan at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -356,13 +356,13 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54844</bugzilla> - Set the application icon on Mac Os. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>54864</bugzilla> - Enable multi selection drag &amp; drop in the tree without having to start dragging before releasing Shift or Control. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>54945</bugzilla> - Add Shutdown Hook to enable trapping kill or CTRL+C signals. Contributed by Philippe Mouawad</li>
-<li><bugzilla>54990</bugzilla> - Download large files avoiding outOfMemory. Contributed by Sebb</li>
+<li><bugzilla>54990</bugzilla> - Download large files avoiding outOfMemory.</li>
 <li><bugzilla>55085</bugzilla> - UX Improvement : Ability to create New Test Plan from Templates. Contributed by UBIK Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>55172</bugzilla> - Provide plugins a way to add Top Menu and menu items. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55202</bugzilla> - Add syntax color for scripts elements (BeanShell, BSF, and JSR223) and JDBC elements with RSyntaxTextArea. Contributed by Sebb, Milamber based on patch by Marko Vlahovic (vlahovic74 at gmail.com)</li>
+<li><bugzilla>55202</bugzilla> - Add syntax color for scripts elements (BeanShell, BSF, and JSR223) and JDBC elements with RSyntaxTextArea. Contributed by Milamber based on patch by Marko Vlahovic (vlahovic74 at gmail.com)</li>
 <li><bugzilla>55175</bugzilla> - HTTPHC4Impl refactoring to allow better inheritance. Contributed by Philippe Mouawad</li>
-<li><bugzilla>55236</bugzilla> - Templates - provide button to reload template details. Contributed by Sebb</li>
-<li><bugzilla>55237</bugzilla> - Template system should support relative fileName entries. Contributed by Sebb</li>
+<li><bugzilla>55236</bugzilla> - Templates - provide button to reload template details.</li>
+<li><bugzilla>55237</bugzilla> - Template system should support relative fileName entries.</li>
 </ul>
 
 <h2>Non-functional changes</h2>
@@ -385,8 +385,8 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li>Updated to BouncyCastle 1.49 (from 1.48)</li>
 <li><bugzilla>54912</bugzilla> - JMeterTreeListener should use constants. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>54903</bugzilla> - Remove the dependency on the Activation Framework. Contributed by Emmanuel Bourg (ebourg at apache.org)</li>
-<li>Moved commons-lang (2.6) to lib/doc as it's only needed by Velocity. Contributed by Sebb</li>
-<li>Re-organised and simplified NOTICE and LICENSE files. Contributed by Sebb</li>
+<li>Moved commons-lang (2.6) to lib/doc as it's only needed by Velocity.</li>
+<li>Re-organised and simplified NOTICE and LICENSE files.</li>
 </ul>
 
 <h2>Thanks</h2>
