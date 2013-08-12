@@ -24,16 +24,18 @@ import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.ServerPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.TristateCheckBox;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
@@ -61,7 +63,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     private JTextField eolByte;
 
-    private JTextArea requestData;
+    private JSyntaxTextArea requestData;
 
     private boolean displayName = true;
 
@@ -224,13 +226,15 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     private JPanel createRequestPanel() {
         JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data")); // $NON-NLS-1$
-        requestData = new JTextArea(3, 0);
-        requestData.setLineWrap(true);
+        requestData = new JSyntaxTextArea(15, 80);
+        requestData.setLanguage("text"); //$NON-NLS-1$
         reqLabel.setLabelFor(requestData);
 
         JPanel reqDataPanel = new JPanel(new BorderLayout(5, 0));
+        reqDataPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
+
         reqDataPanel.add(reqLabel, BorderLayout.WEST);
-        reqDataPanel.add(requestData, BorderLayout.CENTER);
+        reqDataPanel.add(new JTextScrollPane(requestData), BorderLayout.CENTER);
         return reqDataPanel;
     }
 
@@ -265,6 +269,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         mainPanel.add(serverPanel);
         
         HorizontalPanel optionsPanel = new HorizontalPanel();
+        optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
         optionsPanel.add(createClosePortPanel());
         optionsPanel.add(createCloseConnectionPanel());
         optionsPanel.add(createNoDelayPanel());
