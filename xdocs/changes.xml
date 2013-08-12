@@ -41,7 +41,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3><u>Core Improvements:</u></h3>
 
-<h4>* A Huge performance improvement has been made on High Throughput Tests (no pause)</h4>
+<h4>* A Huge performance improvement has been made on High Throughput Tests (no pause), see <bugzilla>54777</bugzilla></h4>
 
 <h4>* New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
 citizen in JMeter, you can now test your expressions very easily</h4>
@@ -58,6 +58,9 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 </p>
 
 <h4>* Kerberos authentication has been added to Auth Manager</h4>
+<p>
+<figure width="1005" height="364" image="changes/2.10/15_kerberos.png"></figure>
+</p>
 
 <h4>* device can now be used in addition to source IP address</h4>
 
