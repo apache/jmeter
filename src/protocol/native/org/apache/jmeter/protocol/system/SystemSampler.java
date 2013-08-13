@@ -38,6 +38,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jorphan.exec.SystemCommand;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -138,7 +139,7 @@ public class SystemSampler extends AbstractSampler {
                     ", Environment:"+env+
                     ", Executing:" + cmdLine.toString());
             
-            NativeCommand nativeCommand = new NativeCommand(directory, env, getStdin(), getStdout(), getStderr());
+            SystemCommand nativeCommand = new SystemCommand(directory, env, getStdin(), getStdout(), getStderr());
             
             String responseData = null;
             try {
