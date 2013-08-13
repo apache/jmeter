@@ -16,35 +16,28 @@
  *
  */
 
-package org.apache.jmeter.protocol.system;
+package org.apache.jorphan.exec;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
- * Thread that copies a stream in the background; closes both input and output streams.
- * @since 2.8
+ * Thread that eats Output and Error Stream to avoid Deadlock on Windows Machines
+ * Inspired from:
+ * http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html
  */
-class StreamCopier extends Thread {
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
-
+class StreamGobbler extends Thread {
     private final InputStream is;
-    private final OutputStream os;
-
+    private final StringBuilder buffer = new StringBuilder();
     /**
      * @param is {@link InputStream}
-     * @param is {@link OutputStream}
-     * @throws IOException 
      */
-    StreamCopier(InputStream is, OutputStream os) throws IOException {
+    StreamGobbler(InputStream is) {
         this.is = is;
-        this.os = os;
     }
 
     /**
@@ -52,16 +45,29 @@ class StreamCopier extends Thread {
      */
     @Override
     public void run() {
+        BufferedReader br = null;
         try {
-            IOUtils.copyLarge(is, os);
-            os.close();
-            is.close();
+            br = new BufferedReader(new InputStreamReader(is));
+            String line = null;
+            while ((line = br.readLine()) != null)
+            {
+                buffer.append(line);
+                buffer.append("\r\n");
+            }
         } catch (IOException e) {
-            log.warn("Error writing stream", e);
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
+            buffer.append(e.getMessage());
+        }
+        finally
+        {
+            JOrphanUtils.closeQuietly(br);
         }
     }
-    
+
+    /**
+     * @return Output
+     */
+    public String getResult()
+    {
+        return buffer.toString();
+    }
 }
