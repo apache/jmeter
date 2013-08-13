@@ -161,6 +161,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
 
+    public static final String IP_SOURCE_TYPE = "HTTPSampler.ipSourceType"; // $NON-NLS-1$
+
     public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
 
     public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
@@ -186,8 +188,24 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resources", false); // $NON-NLS-1$ // default value: false
 
     public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
-    
-    
+
+    public static final int SOURCE_TYPE_IP_HOSTNAME = 0;
+
+    public static final int SOURCE_TYPE_DEVICE = 1;
+
+    public static final int SOURCE_TYPE_DEVICE_IPV4 = 2;
+
+    public static final int SOURCE_TYPE_DEVICE_IPV6 = 3;
+
+    public static final Map<String, Integer> getSourceTypeMap() {
+        Map<String, Integer> sourceTypeMap = new HashMap<String, Integer>(4);
+        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_device"), SOURCE_TYPE_DEVICE); //$NON-NLS-1$
+        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_hostname"), SOURCE_TYPE_IP_HOSTNAME); //$NON-NLS-1$
+        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_device_ipv4"), SOURCE_TYPE_DEVICE_IPV4); //$NON-NLS-1$
+        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_device_ipv6"), SOURCE_TYPE_DEVICE_IPV6); //$NON-NLS-1$
+        return sourceTypeMap;
+    }
+
     public static final String DEFAULT_METHOD = HTTPConstants.GET; // $NON-NLS-1$
     // Supported methods:
     private static final String [] METHODS = {
@@ -1713,7 +1731,23 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public String getIpSource() {
         return getPropertyAsString(IP_SOURCE,"");
     }
-    
+ 
+    /**
+     * set IP/address source type to use
+     */
+    public void setIpSourceType(int value) {
+        setProperty(IP_SOURCE_TYPE, value, HTTPSamplerBase.SOURCE_TYPE_IP_HOSTNAME);
+    }
+
+    /**
+     * get IP/address source type to use
+     * 
+     * @return address source type
+     */
+    public int getIpSourceType() {
+        return getPropertyAsInt(IP_SOURCE_TYPE, HTTPSamplerBase.SOURCE_TYPE_IP_HOSTNAME);
+    }
+
     /**
      * Return if used a concurrent thread pool to get embedded resources.
      *
