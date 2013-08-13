@@ -29,9 +29,9 @@ import java.util.Map;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
- * Native Command 
+ * Utility class for invoking native system applications
  */
-public class NativeCommand {
+public class SystemCommand {
 
     private StreamGobbler outputGobbler;
     private final File directory;
@@ -45,7 +45,7 @@ public class NativeCommand {
      * @param env Environment variables appended to environment
      * @param directory File working directory
      */
-    public NativeCommand(File directory, Map<String, String> env) {
+    public SystemCommand(File directory, Map<String, String> env) {
         this(directory, env, null, null, null);
     }
 
@@ -57,7 +57,7 @@ public class NativeCommand {
      * @param stdout File name that will contain out stream
      * @param stderr File name that will contain err stream
      */
-    public NativeCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
+    public SystemCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
         super();
         this.directory = directory;
         this.env = env;
