@@ -319,15 +319,22 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
         <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
-        <property name="Source IP address:" required="No">
-        [Only for HTTP Request HTTPClient] 
+        <property name="Source address type" required="No">
+        <i>[Only for HTTP Request with HTTPClient implementation]</i> <br></br>
+        To distinguish the source address value, select the type of these:
+        <ul>
+        <li>Select <i>IP/Hostname</i> to use a specific IP address or a (local) hostname</li>
+        <li>Select <i>Device</i> to pick the first available address for that interface which
+        this may be either IPv4 or IPv6</li>
+        <li>Select <i>Device IPv4</i>To select the IPv4 address of the device name (like eth0, lo, em0, etc.)</li>
+        <li>Select <i>Device IPv6</i>To select the IPv6 address of the device name (like eth0, lo, em0, etc.)</li>
+        </ul>
+        </property>
+        <property name="Source address field" required="No">
+        <i>[Only for HTTP Request with HTTPClient implementation]</i> <br></br>
         Override the default local IP address for this sample.
-        The JMeter host must have multiple IP addresses (i.e. IP aliases or network interfaces).
-        The value can be a host name, IP address, or a network interface device such as "eth0" or "lo0".
-        In order to distinguish these from host names, the interface name must be entered with the prefix "/",
-        for example "/eth0" or "/lo0". This will pick the first available address for that interface which
-        this may be either IPV4 or IPV6. To select a specific IP protocol version, prefix the interface name
-        with "/ipv4/" or "/ipv6/", for example "/ipv4/eth0" or "/ipv6/eth0"
+        The JMeter host must have multiple IP addresses (i.e. IP aliases, network interfaces, devices).
+        The value can be a host name, IP address, or a network interface device such as "eth0" or "lo" or "wlan0".<br></br>
         If the property <b>httpclient.localaddress</b> is defined, that is used for all HttpClient requests.
         </property>
 </properties>
