@@ -22,9 +22,11 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Native Command 
+ * Native Command
+ * @deprecated (2.10) use {@link org.apache.jorphan.exec.SystemCommand} instead
  */
-public class NativeCommand extends  org.apache.jorphan.exec.NativeCommand {
+@Deprecated
+public class NativeCommand extends  org.apache.jorphan.exec.SystemCommand {
 
     /**
      * @param env Environment variables appended to environment
