@@ -16,28 +16,35 @@
  *
  */
 
-package org.apache.jmeter.protocol.system;
+package org.apache.jorphan.exec;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
- * Thread that eats Output and Error Stream to avoid Deadlock on Windows Machines
- * Inspired from:
- * http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html
+ * Thread that copies a stream in the background; closes both input and output streams.
+ * @since 2.8
  */
-class StreamGobbler extends Thread {
+class StreamCopier extends Thread {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
     private final InputStream is;
-    private final StringBuilder buffer = new StringBuilder();
+    private final OutputStream os;
+
     /**
      * @param is {@link InputStream}
+     * @param is {@link OutputStream}
+     * @throws IOException 
      */
-    StreamGobbler(InputStream is) {
+    StreamCopier(InputStream is, OutputStream os) throws IOException {
         this.is = is;
+        this.os = os;
     }
 
     /**
@@ -45,29 +52,16 @@ class StreamGobbler extends Thread {
      */
     @Override
     public void run() {
-        BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(is));
-            String line = null;
-            while ((line = br.readLine()) != null)
-            {
-                buffer.append(line);
-                buffer.append("\r\n");
-            }
+            IOUtils.copyLarge(is, os);
+            os.close();
+            is.close();
         } catch (IOException e) {
-            buffer.append(e.getMessage());
-        }
-        finally
-        {
-            JOrphanUtils.closeQuietly(br);
+            log.warn("Error writing stream", e);
+        } finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
         }
     }
-
-    /**
-     * @return Output
-     */
-    public String getResult()
-    {
-        return buffer.toString();
-    }
+    
 }
