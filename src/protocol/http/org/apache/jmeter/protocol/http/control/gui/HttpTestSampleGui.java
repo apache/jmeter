@@ -20,11 +20,14 @@ package org.apache.jmeter.protocol.http.control.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -36,7 +39,6 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledTextField;
 
 //For unit tests, @see TestHttpTestSampleGui
 
@@ -47,6 +49,10 @@ import org.apache.jorphan.gui.JLabeledTextField;
 public class HttpTestSampleGui extends AbstractSamplerGui 
     implements ItemListener {
     private static final long serialVersionUID = 240L;
+    
+    private static final Font FONT_VERY_SMALL = new Font("SansSerif", Font.PLAIN, 9);
+    
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 12);
 
     private MultipartUrlConfigGui urlConfigGui;
 
@@ -60,9 +66,11 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 
     private JCheckBox useMD5;
 
-    private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
+    private JTextField embeddedRE; // regular expression used to match against embedded resource URLs
 
-    private JLabeledTextField sourceIpAddr; // does not apply to Java implementation
+    private JTextField sourceIpAddr; // does not apply to Java implementation
+    
+    private JComboBox sourceIpType = new JComboBox(HTTPSamplerBase.getSourceTypeMap().keySet().toArray());
 
     private final boolean isAJP;
     
@@ -93,6 +101,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
         if (!isAJP) {
             sourceIpAddr.setText(samplerBase.getIpSource());
+            sourceIpType.setSelectedIndex(samplerBase.getIpSourceType());
         }
     }
 
@@ -125,6 +134,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
         if (!isAJP) {
             samplerBase.setIpSource(sourceIpAddr.getText());
+            samplerBase.setIpSourceType(HTTPSamplerBase.getSourceTypeMap().get(sourceIpType.getSelectedItem()).intValue());
         }
         this.configureTestElement(sampler);
     }
@@ -147,19 +157,25 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         urlConfigGui = new MultipartUrlConfigGui(true, !isAJP);
         add(urlConfigGui, BorderLayout.CENTER);
 
-        // OPTIONAL TASKS
-        add(createOptionalTasksPanel(), BorderLayout.SOUTH);
+        // Bottom (embedded resources, source address and optional tasks)
+        JPanel bottomPane = new VerticalPanel();
+        bottomPane.add(createEmbeddedRsrcPanel());
+        JPanel optionAndSourcePane = new HorizontalPanel();
+        optionAndSourcePane.add(createSourceAddrPanel());
+        optionAndSourcePane.add(createOptionalTasksPanel());
+        bottomPane.add(optionAndSourcePane);
+        add(bottomPane, BorderLayout.SOUTH);
     }
 
-    protected JPanel createOptionalTasksPanel() {
-        // OPTIONAL TASKS
-        final JPanel optionalTasksPanel = new VerticalPanel();
-        optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("optional_tasks"))); // $NON-NLS-1$
+    protected JPanel createEmbeddedRsrcPanel() {
+        final JPanel embeddedRsrcPanel = new VerticalPanel();
+        embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
 
         final JPanel checkBoxPanel = new HorizontalPanel();
         // RETRIEVE IMAGES
         getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
+        getImages.setFont(FONT_SMALL);
         // add a listener to activate or not concurrent dwn.
         getImages.addItemListener(new ItemListener() {
             @Override
@@ -170,6 +186,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         });
         // Download concurrent resources
         concurrentDwn = new JCheckBox(JMeterUtils.getResString("web_testing_concurrent_download")); // $NON-NLS-1$
+        concurrentDwn.setFont(FONT_SMALL);
         concurrentDwn.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -178,30 +195,59 @@ public class HttpTestSampleGui extends AbstractSamplerGui
             }
         });
         concurrentPool = new JTextField(2); // 2 column size
+        concurrentPool.setFont(FONT_SMALL);
         concurrentPool.setMaximumSize(new Dimension(30,20));
-        // Is monitor
-        isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
-        // Use MD5
-        useMD5 = new JCheckBox(JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
 
         checkBoxPanel.add(getImages);
         checkBoxPanel.add(concurrentDwn);
         checkBoxPanel.add(concurrentPool);
-        checkBoxPanel.add(isMon);
-        checkBoxPanel.add(useMD5);
-        optionalTasksPanel.add(checkBoxPanel);
+        embeddedRsrcPanel.add(checkBoxPanel);
 
         // Embedded URL match regex
-        embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
-        optionalTasksPanel.add(embeddedRE, BorderLayout.CENTER);
+        JLabel lblEmbRE = new JLabel(JMeterUtils.getResString("web_testing_embedded_url_pattern")); // $NON-NLS-1$
+        lblEmbRE.setFont(FONT_SMALL);
+        checkBoxPanel.add(lblEmbRE);
+        embeddedRE = new JTextField(10);
+        checkBoxPanel.add(embeddedRE);
+        embeddedRsrcPanel.add(checkBoxPanel);
+
+        return embeddedRsrcPanel;
+    }
+
+    protected JPanel createOptionalTasksPanel() {
+        // OPTIONAL TASKS
+        final JPanel checkBoxPanel = new HorizontalPanel();
+        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("optional_tasks"))); // $NON-NLS-1$
+
+        // Is monitor
+        isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
+        isMon.setFont(FONT_SMALL);
+        // Use MD5
+        useMD5 = new JCheckBox(JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
+        useMD5.setFont(FONT_SMALL);
+
+        checkBoxPanel.add(isMon);
+        checkBoxPanel.add(useMD5);
+
+        return checkBoxPanel;
+    }
+    
+    protected JPanel createSourceAddrPanel() {
+        final JPanel sourceAddrPanel = new HorizontalPanel();
+        sourceAddrPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("web_testing_source_ip"))); // $NON-NLS-1$
 
         if (!isAJP) {
             // Add a new field source ip address (for HC implementations only)
-            sourceIpAddr = new JLabeledTextField(JMeterUtils.getResString("web_testing2_source_ip")); // $NON-NLS-1$
-            optionalTasksPanel.add(sourceIpAddr, BorderLayout.EAST);
-        }
+            sourceIpType.setSelectedItem(JMeterUtils.getResString("web_testing_source_ip_hostname"));  //$NON-NLS-1$ default: IP/Hostname
+            sourceIpType.setFont(FONT_VERY_SMALL);
+            sourceAddrPanel.add(sourceIpType);
 
-        return optionalTasksPanel;
+            sourceIpAddr = new JTextField();
+            sourceAddrPanel.add(sourceIpAddr);
+        }
+        return sourceAddrPanel;
     }
 
     /**
@@ -228,6 +274,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         embeddedRE.setText(""); // $NON-NLS-1$
         if (!isAJP) {
             sourceIpAddr.setText(""); // $NON-NLS-1$
+            sourceIpType.setSelectedItem(JMeterUtils.getResString("web_testing_source_ip_hostname"));  //$NON-NLS-1$
         }
     }
     

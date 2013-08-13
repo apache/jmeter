@@ -142,12 +142,11 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
-     * The prefix used to distiguish a device name from a host name.
-     * Host names cannot start with "/". 
+     * Invokes {@link HTTPSamplerBase#getIpSourceType()}
      */
-    private static final String DEVICE_PREFIX = "/";
-    private static final String IPV4 = "ipv4/";
-    private static final String IPV6 = "ipv6/";
+    protected int getIpSourceType() {
+        return testElement.getIpSourceType();
+    }
 
     /**
      * Gets the IP source address (IP spoofing) if one has been provided.
@@ -158,32 +157,34 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      */
     protected InetAddress getIpSourceAddress() throws UnknownHostException, SocketException {
         final String ipSource = getIpSource();
-        if (ipSource.length() > 0) {
-            if (ipSource.startsWith(DEVICE_PREFIX)) {
-                String interfaceName = ipSource.substring(DEVICE_PREFIX.length());
-                final Class<? extends InetAddress> ipClass;
-                if (interfaceName.startsWith(IPV4)) {
-                    interfaceName = interfaceName.substring(IPV4.length());
-                    ipClass = Inet4Address.class;
-                } else if (interfaceName.startsWith(IPV6)) {
-                    interfaceName = interfaceName.substring(IPV6.length());                    
-                    ipClass = Inet6Address.class;
-                } else {
-                    ipClass = InetAddress.class;                    
-                }
-                NetworkInterface net = NetworkInterface.getByName(interfaceName);
-                if (net != null) {
-                    for (InterfaceAddress ia : net.getInterfaceAddresses()) {
-                        final InetAddress inetAddr = ia.getAddress();
-                        if (ipClass.isInstance(inetAddr)) {
-                            return inetAddr;
-                        }
-                    }
-                    throw new UnknownHostException("Interface " + interfaceName + " does not have address of type " + ipClass.getSimpleName());
-                }
-                throw new UnknownHostException("Cannot find interface " + interfaceName);
+        if (ipSource.trim().length() > 0) {
+            Class<? extends InetAddress> ipClass = null;
+            switch (getIpSourceType()) {
+            case HTTPSamplerBase.SOURCE_TYPE_DEVICE:
+                ipClass = InetAddress.class;
+                break;
+            case HTTPSamplerBase.SOURCE_TYPE_DEVICE_IPV4:
+                ipClass = Inet4Address.class;
+                break;
+            case HTTPSamplerBase.SOURCE_TYPE_DEVICE_IPV6:
+                ipClass = Inet6Address.class;
+                break;
+            default:
+                return InetAddress.getByName(ipSource);
             }
-            return InetAddress.getByName(ipSource);
+
+            NetworkInterface net = NetworkInterface.getByName(ipSource);
+            if (net != null) {
+                for (InterfaceAddress ia : net.getInterfaceAddresses()) {
+                    final InetAddress inetAddr = ia.getAddress();
+                    if (ipClass.isInstance(inetAddr)) {
+                        return inetAddr;
+                    }
+                }
+                throw new UnknownHostException("Interface " + ipSource
+                        + " does not have address of type " + ipClass.getSimpleName());
+            }
+            throw new UnknownHostException("Cannot find interface " + ipSource);
         }
         return null; // did not want to spoof the IP address
     }
