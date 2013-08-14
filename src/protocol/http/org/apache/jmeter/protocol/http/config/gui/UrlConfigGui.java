@@ -390,8 +390,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         JPanel proxyServerPanel = new HorizontalPanel();
         proxyServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_proxy_server_title"))); // $NON-NLS-1$
-        proxyServerPanel.add(proxyServer, BorderLayout.CENTER);
-        proxyServerPanel.add(proxyLogin, BorderLayout.EAST);
+        proxyServerPanel.add(proxyServer);
+        proxyServerPanel.add(proxyLogin);
 
         return proxyServerPanel;
     }
@@ -414,6 +414,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
         label.setLabelFor(proxyPort);
+        label.setFont(FONT_SMALL);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -461,10 +462,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     private JPanel getProxyHostPanel() {
-        proxyHost = new JTextField(20);
+        proxyHost = new JTextField(10);
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
         label.setLabelFor(proxyHost);
+        label.setFont(FONT_SMALL);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -477,6 +479,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         JLabel label = new JLabel(JMeterUtils.getResString("username")); // $NON-NLS-1$
         label.setLabelFor(proxyUser);
+        label.setFont(FONT_SMALL);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -489,6 +492,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         JLabel label = new JLabel(JMeterUtils.getResString("password")); // $NON-NLS-1$
         label.setLabelFor(proxyPass);
+        label.setFont(FONT_SMALL);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -534,10 +538,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         }
 
-        JPanel pathPanel = new JPanel(new BorderLayout(5, 0));
-        pathPanel.add(label, BorderLayout.WEST);
-        pathPanel.add(path, BorderLayout.CENTER);
-        pathPanel.setMinimumSize(pathPanel.getPreferredSize());
+        JPanel pathPanel = new HorizontalPanel();
+        pathPanel.add(label);
+        pathPanel.add(path);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
