@@ -189,22 +189,28 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
 
-    public static final int SOURCE_TYPE_IP_HOSTNAME = 0;
+    public static enum SourceType {
+        HOSTNAME("web_testing_source_ip_hostname"), //$NON-NLS-1$
+        DEVICE("web_testing_source_ip_device"), //$NON-NLS-1$
+        DEVICE_IPV4("web_testing_source_ip_device_ipv4"), //$NON-NLS-1$
+        DEVICE_IPV6("web_testing_source_ip_device_ipv6"); //$NON-NLS-1$
+        
+        public final String propertyName;
+        SourceType(String propertyName) {
+            this.propertyName = propertyName;
+        }
+    }
 
-    public static final int SOURCE_TYPE_DEVICE = 1;
-
-    public static final int SOURCE_TYPE_DEVICE_IPV4 = 2;
-
-    public static final int SOURCE_TYPE_DEVICE_IPV6 = 3;
+    private static final int SOURCE_TYPE_DEFAULT = HTTPSamplerBase.SourceType.HOSTNAME.ordinal();
 
     // Use for ComboBox Source Address Type. Preserve order (specially with localization)
-    public static final ArrayList<String> getSourceTypeList() {
-        ArrayList<String> sourceTypeList = new ArrayList<String>(4);
-        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_hostname")); //$NON-NLS-1$
-        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_device")); //$NON-NLS-1$
-        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_device_ipv4")); //$NON-NLS-1$
-        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_device_ipv6")); //$NON-NLS-1$
-        return sourceTypeList;
+    public static final String[] getSourceTypeList() {
+        final SourceType[] types = SourceType.values();
+        final String[] displayStrings = new String[types.length];
+        for(int i = 0; i < types.length; i++) {
+            displayStrings[i] = JMeterUtils.getResString(types[i].propertyName);
+        }
+        return displayStrings;
     }
 
     public static final String DEFAULT_METHOD = HTTPConstants.GET; // $NON-NLS-1$
@@ -1737,7 +1743,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * set IP/address source type to use
      */
     public void setIpSourceType(int value) {
-        setProperty(IP_SOURCE_TYPE, value, HTTPSamplerBase.SOURCE_TYPE_IP_HOSTNAME);
+        setProperty(IP_SOURCE_TYPE, value, SOURCE_TYPE_DEFAULT);
     }
 
     /**
@@ -1746,7 +1752,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return address source type
      */
     public int getIpSourceType() {
-        return getPropertyAsInt(IP_SOURCE_TYPE, HTTPSamplerBase.SOURCE_TYPE_IP_HOSTNAME);
+        return getPropertyAsInt(IP_SOURCE_TYPE, SOURCE_TYPE_DEFAULT);
     }
 
     /**
