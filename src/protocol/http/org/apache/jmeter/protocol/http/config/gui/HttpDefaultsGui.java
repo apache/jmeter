@@ -32,7 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.HorizontalPanel;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -150,13 +149,12 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         add(urlConfig, BorderLayout.CENTER);
 
         // OPTIONAL TASKS
-        final JPanel optionalTasksPanel = new VerticalPanel();
-        optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("optional_tasks"))); // $NON-NLS-1$
+        final JPanel embeddedRsrcPanel = new HorizontalPanel();
+        embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
 
-        final JPanel checkBoxPanel = new HorizontalPanel();
         imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
-        checkBoxPanel.add(imageParser);
+        embeddedRsrcPanel.add(imageParser);
         imageParser.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -176,16 +174,15 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         concurrentPool = new JTextField(2); // 2 columns size
         concurrentPool.setMinimumSize(new Dimension(10,20));
         concurrentPool.setMaximumSize(new Dimension(30,20));
-        checkBoxPanel.add(concurrentDwn);
-        checkBoxPanel.add(concurrentPool);
-        optionalTasksPanel.add(checkBoxPanel);
+        embeddedRsrcPanel.add(concurrentDwn);
+        embeddedRsrcPanel.add(concurrentPool);
         
         // Embedded URL match regex
-        embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
-        optionalTasksPanel.add(embeddedRE);
+        embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),20); // $NON-NLS-1$
+        embeddedRsrcPanel.add(embeddedRE);
 
         
-        add(optionalTasksPanel, BorderLayout.SOUTH);
+        add(embeddedRsrcPanel, BorderLayout.SOUTH);
     }
 
     @Override
