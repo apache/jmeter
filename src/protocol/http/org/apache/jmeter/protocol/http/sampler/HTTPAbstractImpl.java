@@ -35,6 +35,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.SourceType;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
@@ -142,13 +143,6 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
-     * Invokes {@link HTTPSamplerBase#getIpSourceType()}
-     */
-    protected int getIpSourceType() {
-        return testElement.getIpSourceType();
-    }
-
-    /**
      * Gets the IP source address (IP spoofing) if one has been provided.
      * 
      * @return the IP source address to use (or null, if none provided or the device address could not be found)
@@ -159,16 +153,18 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
         final String ipSource = getIpSource();
         if (ipSource.trim().length() > 0) {
             Class<? extends InetAddress> ipClass = null;
-            switch (getIpSourceType()) {
-            case HTTPSamplerBase.SOURCE_TYPE_DEVICE:
+            final SourceType sourceType = HTTPSamplerBase.SourceType.values()[testElement.getIpSourceType()];
+            switch (sourceType) {
+            case DEVICE:
                 ipClass = InetAddress.class;
                 break;
-            case HTTPSamplerBase.SOURCE_TYPE_DEVICE_IPV4:
+            case DEVICE_IPV4:
                 ipClass = Inet4Address.class;
                 break;
-            case HTTPSamplerBase.SOURCE_TYPE_DEVICE_IPV6:
+            case DEVICE_IPV6:
                 ipClass = Inet6Address.class;
                 break;
+            case HOSTNAME:
             default:
                 return InetAddress.getByName(ipSource);
             }
