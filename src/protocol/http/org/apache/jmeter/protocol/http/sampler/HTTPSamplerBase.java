@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -198,14 +197,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final int SOURCE_TYPE_DEVICE_IPV6 = 3;
 
-    // Use for ComboBox Source Address Type. LinkedHashMap to preserve order (specially with localization)
-    public static final LinkedHashMap<String, Integer> getSourceTypeMap() {
-        LinkedHashMap<String, Integer> sourceTypeMap = new LinkedHashMap<String, Integer>(4);
-        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_hostname"), SOURCE_TYPE_IP_HOSTNAME); //$NON-NLS-1$
-        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_device"), SOURCE_TYPE_DEVICE); //$NON-NLS-1$
-        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_device_ipv4"), SOURCE_TYPE_DEVICE_IPV4); //$NON-NLS-1$
-        sourceTypeMap.put(JMeterUtils.getResString("web_testing_source_ip_device_ipv6"), SOURCE_TYPE_DEVICE_IPV6); //$NON-NLS-1$
-        return sourceTypeMap;
+    // Use for ComboBox Source Address Type. Preserve order (specially with localization)
+    public static final ArrayList<String> getSourceTypeList() {
+        ArrayList<String> sourceTypeList = new ArrayList<String>(4);
+        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_hostname")); //$NON-NLS-1$
+        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_device")); //$NON-NLS-1$
+        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_device_ipv4")); //$NON-NLS-1$
+        sourceTypeList.add(JMeterUtils.getResString("web_testing_source_ip_device_ipv6")); //$NON-NLS-1$
+        return sourceTypeList;
     }
 
     public static final String DEFAULT_METHOD = HTTPConstants.GET; // $NON-NLS-1$

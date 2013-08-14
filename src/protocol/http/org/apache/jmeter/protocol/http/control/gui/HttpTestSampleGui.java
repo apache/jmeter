@@ -72,7 +72,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 
     private JTextField sourceIpAddr; // does not apply to Java implementation
     
-    private JComboBox sourceIpType = new JComboBox(HTTPSamplerBase.getSourceTypeMap().keySet().toArray());
+    private JComboBox sourceIpType = new JComboBox(HTTPSamplerBase.getSourceTypeList().toArray());
 
     private final boolean isAJP;
     
@@ -136,7 +136,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
         if (!isAJP) {
             samplerBase.setIpSource(sourceIpAddr.getText());
-            samplerBase.setIpSourceType(HTTPSamplerBase.getSourceTypeMap().get(sourceIpType.getSelectedItem()).intValue());
+            samplerBase.setIpSourceType(HTTPSamplerBase.getSourceTypeList().indexOf(sourceIpType.getSelectedItem()));
         }
         this.configureTestElement(sampler);
     }
@@ -241,7 +241,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 
         if (!isAJP) {
             // Add a new field source ip address (for HC implementations only)
-            sourceIpType.setSelectedItem(JMeterUtils.getResString("web_testing_source_ip_hostname"));  //$NON-NLS-1$ default: IP/Hostname
+            sourceIpType.setSelectedItem(HTTPSamplerBase.getSourceTypeList().
+                    get(HTTPSamplerBase.SOURCE_TYPE_IP_HOSTNAME));  //default: IP/Hostname
             sourceIpType.setFont(FONT_VERY_SMALL);
             sourceAddrPanel.add(sourceIpType);
 
@@ -275,7 +276,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         embeddedRE.setText(""); // $NON-NLS-1$
         if (!isAJP) {
             sourceIpAddr.setText(""); // $NON-NLS-1$
-            sourceIpType.setSelectedItem(JMeterUtils.getResString("web_testing_source_ip_hostname"));  //$NON-NLS-1$
+            sourceIpType.setSelectedItem(HTTPSamplerBase.getSourceTypeList()
+                    .get(HTTPSamplerBase.SOURCE_TYPE_IP_HOSTNAME));
         }
     }
     
