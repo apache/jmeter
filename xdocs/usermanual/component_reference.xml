@@ -96,7 +96,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2" width="907" height="674" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2" width="900" height="686" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It

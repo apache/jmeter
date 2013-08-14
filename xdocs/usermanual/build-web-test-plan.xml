@@ -174,7 +174,7 @@ element.</li>
 </ol>
 </p>
 
-<figure width="1274" height="658" image="webtest/http-request1.png">
+<figure width="1140" height="693" image="webtest/http-request1.png">
 Figure &sect-num;.5. HTTP Request for JMeter Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
@@ -185,7 +185,7 @@ Figure &sect-num;.6:
 </ol>
 </p>
 
-<figure width="1164" height="676" image="webtest/http-request2.png">
+<figure width="1145" height="695" image="webtest/http-request2.png">
 Figure &sect-num;.6. HTTP Request for JMeter Changes Page</figure>
 
 </section>
@@ -223,7 +223,7 @@ Click the Add button twice and enter the username and password details.
 Sometimes the login form contains additional hidden fields.
 These will need to be added as well.
 </p>
-<figure width="941" height="660" image="webtest/http_login.png">
+<figure width="898" height="682" image="webtest/http_login.png">
 Figure &sect-num;.8. Sample HTTP login request</figure>
 
 </section>
