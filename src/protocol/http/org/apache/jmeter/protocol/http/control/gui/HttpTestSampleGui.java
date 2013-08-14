@@ -66,6 +66,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 
     private JCheckBox useMD5;
 
+    private JLabel labelEmbeddedRE = new JLabel(JMeterUtils.getResString("web_testing_embedded_url_pattern")); // $NON-NLS-1$
+
     private JTextField embeddedRE; // regular expression used to match against embedded resource URLs
 
     private JTextField sourceIpAddr; // does not apply to Java implementation
@@ -204,9 +206,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         embeddedRsrcPanel.add(checkBoxPanel);
 
         // Embedded URL match regex
-        JLabel lblEmbRE = new JLabel(JMeterUtils.getResString("web_testing_embedded_url_pattern")); // $NON-NLS-1$
-        lblEmbRE.setFont(FONT_SMALL);
-        checkBoxPanel.add(lblEmbRE);
+        labelEmbeddedRE.setFont(FONT_SMALL);
+        checkBoxPanel.add(labelEmbeddedRE);
         embeddedRE = new JTextField(10);
         checkBoxPanel.add(embeddedRE);
         embeddedRsrcPanel.add(checkBoxPanel);
@@ -281,12 +282,16 @@ public class HttpTestSampleGui extends AbstractSamplerGui
     private void enableConcurrentDwn(boolean enable) {
         if (enable) {
             concurrentDwn.setEnabled(true);
+            labelEmbeddedRE.setEnabled(true);
+            embeddedRE.setEnabled(true);
             if (concurrentDwn.isSelected()) {
                 concurrentPool.setEnabled(true);
             }
         } else {
             concurrentDwn.setEnabled(false);
             concurrentPool.setEnabled(false);
+            labelEmbeddedRE.setEnabled(false);
+            embeddedRE.setEnabled(false);
         }
     }
 
