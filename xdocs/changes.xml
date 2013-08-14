@@ -295,6 +295,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>55242</bugzilla> - BeanShell Client jar throws exceptions after upgrading to 2.8.</li>
 <li><bugzilla>55288</bugzilla> - JMeter should default to 0 retries for HTTP requests.</li>
+<li><bugzilla>55405</bugzilla> - ant download_jars task fails if lib/api or lib/doc are missing. Contributed by  Antonio Gomes Rodrigues.</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
