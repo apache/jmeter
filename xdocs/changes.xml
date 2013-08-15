@@ -88,6 +88,14 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 <figure width="573" height="444" image="changes/2.10/06_http_request_delete_method.png"></figure>
 </p>
 
+<h4>* Distributed testing has been improved</h4>
+<p>
+<ul>
+<li>Performance improvement on BatchSampleSender(<bugzilla>55423</bugzilla>)</li>
+<li>Addition of 2 SampleSender modes (StrippedAsynch and StrippedDiskStore), see jmeter.properties</li>
+</ul>
+</p>
+
 <h4>* ModuleController has been improved to better handle changes to referenced controllers</h4>
 
 <h4>* Best-practices section has been improved, ensure you read it to get the most out of JMeter</h4>
