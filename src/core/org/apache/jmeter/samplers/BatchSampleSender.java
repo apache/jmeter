@@ -143,6 +143,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      */
     @Override
     public void sampleOccurred(SampleEvent e) {
+        List<SampleEvent> clonedStore = null;
         synchronized (sampleStore) {
             sampleStore.add(e);
             final int sampleCount = sampleStore.size();
@@ -167,18 +168,23 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
             }
 
             if (sendNow){
-                try {
-                    log.debug("Firing sample");
-                    listener.processBatch(sampleStore);
-                    sampleStore.clear();
-                    if (timeThresholdMs != -1) {
-                        this.batchSendTime = now + timeThresholdMs;
-                    }
-                } catch (RemoteException err) {
-                    log.error("sampleOccurred", err);
-                }                
+                clonedStore = (ArrayList<SampleEvent>)((ArrayList<SampleEvent>)sampleStore).clone();
+                sampleStore.clear();
+                if (timeThresholdMs != -1) {
+                    this.batchSendTime = now + timeThresholdMs;
+                }
             }
         } // synchronized(sampleStore)
+        
+        if (clonedStore != null){
+            try {
+                log.debug("Firing sample");
+                listener.processBatch(clonedStore);
+                clonedStore.clear();
+            } catch (RemoteException err) {
+                log.error("sampleOccurred", err);
+            }  
+        }
     }
     
     /**
