@@ -42,7 +42,7 @@ import org.apache.jmeter.testelement.TestElement;
  *
  */
 
-public interface JMeterGUIComponent {
+public interface JMeterGUIComponent extends ClearGui {
 
     /**
      * Sets the name of the JMeter GUI Component. The name of the component is
@@ -176,14 +176,4 @@ public interface JMeterGUIComponent {
      * @see org.apache.jmeter.gui.util.MenuFactory
      */
     Collection<String> getMenuCategories();
-
-    /**
-     * Clear the gui and return it to initial default values. This is necessary
-     * because most gui classes are instantiated just once and re-used for
-     * multiple test element objects and thus they need to be cleared between
-     * use.
-     */
-    void clearGui();
-    // N.B. originally called clear()
-    // @see also Clearable
 }
