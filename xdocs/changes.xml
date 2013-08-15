@@ -64,6 +64,10 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 
 <h4>* device can now be used in addition to source IP address</h4>
 
+<p>
+<figure width="1087" height="699" image="changes/2.10/16_device.png"></figure>
+</p>
+
 <h4>* You can now do functionnal testing of MongoDB scripts through new MongoDB Script</h4>
 <p>
 <figure width="906" height="313" image="changes/2.10/03_mongodb_script_alpha.png"></figure>
