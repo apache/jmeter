@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -746,7 +747,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
             if (propertyEditor != null) {
                 try {
-                if (propertyEditor instanceof WrapperEditor){
+                if (propertyEditor instanceof ClearGui) {
+                    ((ClearGui) propertyEditor).clearGui();
+                } else if (propertyEditor instanceof WrapperEditor){
                     WrapperEditor we = (WrapperEditor) propertyEditor;
                     String tags[]=we.getTags();
                     if (tags != null && tags.length > 0) {
