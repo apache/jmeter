@@ -51,7 +51,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     HoldSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using HoldSampleSender for this test run"); // client        
+        log.info("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // client        
     }
 
     @Override
@@ -87,7 +87,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
      * @throws ObjectStreamException  
      */
     private Object readResolve() throws ObjectStreamException{
-        log.info("Using HoldSampleSender for this test run"); // server        
+        log.info("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // server        
         return this;
     }
 }
