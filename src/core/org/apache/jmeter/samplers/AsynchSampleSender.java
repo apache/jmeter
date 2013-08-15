@@ -31,6 +31,9 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
+/**
+ * Sends samples in a separate Thread and in Batch mode
+ */
 public class AsynchSampleSender extends AbstractSampleSender implements Serializable {
 
     private static final long serialVersionUID = 251L;
@@ -40,9 +43,11 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     // Create unique object as marker for end of queue
     private transient static final SampleEvent FINAL_EVENT = new SampleEvent();
 
-    private static final int serverConfiguredCapacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", 100); // $NON-NLS-1$
+    private static final int DEFAULT_QUEUE_SIZE = 100;
     
-    private final int clientConfiguredCapacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", 100); // $NON-NLS-1$
+    private static final int serverConfiguredCapacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", DEFAULT_QUEUE_SIZE); // $NON-NLS-1$
+    
+    private final int clientConfiguredCapacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", DEFAULT_QUEUE_SIZE); // $NON-NLS-1$
 
     // created by client 
     private final RemoteSampleListener listener;
