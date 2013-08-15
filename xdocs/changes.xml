@@ -343,6 +343,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h3>I18N</h3>
 <ul>
+<li><bugzilla>55241</bugzilla> - Need GUI Editor to process fields which are based on Enums with localised display strings</li>
 </ul>
 
 <h3>General</h3>
