@@ -42,7 +42,11 @@ public class SampleSenderFactory {
 
     private static final String MODE_ASYNCH = "Asynch"; // $NON-NLS-1$
 
+    private static final String MODE_STRIPPED_ASYNCH = "StrippedAsynch"; // $NON-NLS-1$
+
     private static final String MODE_DISKSTORE = "DiskStore"; // $NON-NLS-1$
+
+    private static final String MODE_STRIPPED_DISKSTORE = "StrippedDiskStore"; // $NON-NLS-1$
 
     /**
      * Checks for the Jmeter property mode and returns the required class.
@@ -64,20 +68,24 @@ public class SampleSenderFactory {
         } else if (type.equalsIgnoreCase(MODE_BATCH)) {
             BatchSampleSender b = new BatchSampleSender(listener);
             return b;
+        }  else if(type.equalsIgnoreCase(MODE_STRIPPED_BATCH)) {
+            return new DataStrippingSampleSender(new BatchSampleSender(listener));
         } else if (type.equalsIgnoreCase(MODE_STATISTICAL)) {
             StatisticalSampleSender s = new StatisticalSampleSender(listener);
             return s;
         } else if (type.equalsIgnoreCase(MODE_STANDARD)) {
             StandardSampleSender s = new StandardSampleSender(listener);
             return s;
-        }  else if(type.equalsIgnoreCase(MODE_STRIPPED_BATCH)) {
-            return new DataStrippingSampleSender(new BatchSampleSender(listener));
         } else if(type.equalsIgnoreCase(MODE_STRIPPED)){
             return new DataStrippingSampleSender(listener);
         } else if(type.equalsIgnoreCase(MODE_ASYNCH)){
             return new AsynchSampleSender(listener);
+        } else if(type.equalsIgnoreCase(MODE_STRIPPED_ASYNCH)) {
+            return new DataStrippingSampleSender(new AsynchSampleSender(listener));
         } else if(type.equalsIgnoreCase(MODE_DISKSTORE)){
             return new DiskStoreSampleSender(listener);
+        } else if(type.equalsIgnoreCase(MODE_STRIPPED_DISKSTORE)){
+            return new DataStrippingSampleSender(new DiskStoreSampleSender(listener));
         } else {
             // should be a user provided class name
             SampleSender s = null;
