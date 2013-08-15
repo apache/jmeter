@@ -29,6 +29,7 @@ public enum TypeEditor {
     PasswordEditor {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new PasswordEditor(); }},
     TableEditor    {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new TableEditor(); }},
     TextAreaEditor {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new TextAreaEditor(descriptor); }},
+    EnumEditor     {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new EnumEditor(descriptor); }},
     ;
     // Some editors may need the descriptor
     abstract PropertyEditor getInstance(PropertyDescriptor descriptor);
