@@ -175,8 +175,10 @@ public class TestBeanHelper {
         sb.append(method.getName());
         sb.append("(");
         for(Object o : params) {
-            sb.append(o.getClass().getSimpleName());
-            sb.append(' ');
+            if (o != null) {
+                sb.append(o.getClass().getSimpleName());
+                sb.append(' ');
+            }
             sb.append(o);
             sb.append(' ');
         }
