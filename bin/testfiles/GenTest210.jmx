@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.5" jmeter="2.10-SNAPSHOT.20130730">
+<jmeterTestPlan version="1.2" properties="2.5" jmeter="2.10-SNAPSHOT.20130816">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="GuiTest 2.10" enabled="true">
       <stringProp name="TestPlan.comments">Test Plan including all test elements in JMeter 2.19</stringProp>
@@ -343,7 +343,7 @@
           </BSFTimer>
           <hashTree/>
           <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
-            <stringProp name="calcMode">this thread only</stringProp>
+            <intProp name="calcMode">0</intProp>
             <doubleProp>
               <name>throughput</name>
               <value>0.0</value>
