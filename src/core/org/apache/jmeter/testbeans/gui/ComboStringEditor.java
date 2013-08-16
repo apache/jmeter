@@ -82,7 +82,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
     ComboStringEditor(String []tags, boolean noEdit, boolean noUndefined) {
         // Create the combo box we will use to edit this property:
 
-        this.tags = tags == null ? EMPTY_STRING_ARRAY : tags;
+        this.tags = tags == null ? EMPTY_STRING_ARRAY : tags.clone();
 
         model = new DefaultComboBoxModel();
 
@@ -90,7 +90,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
             model.addElement(UNDEFINED);
         }
         for (String tag : this.tags) {
-            model.addElement(tag);
+            model.addElement(tag); // TODO I10N
         }
         if (!noEdit) {
             model.addElement(EDIT);
@@ -211,7 +211,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      */
     @Override
     public String[] getTags() {
-        return tags;
+        return tags.clone();
     }
 
     /**
