@@ -267,7 +267,6 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         if (pn.equals("calcMode")) {
             if (property instanceof StringProperty) {
                 final Object objectValue = property.getObjectValue();
-                log.info("Attempting to convert " + pn + "=" + objectValue);
                 try {
                     final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
                     final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
@@ -275,14 +274,16 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
                         final String propName = e.toString();
                         if (objectValue.equals(rb.getObject(propName))) {
                             final int tmpMode = e.ordinal();
-                            log.info("Converted to " + pn + "=" + tmpMode);
+                            if (log.isDebugEnabled()) {
+                                log.debug("Converted " + pn + "=" + objectValue + " to mode=" + tmpMode  + " using Locale: " + rb.getLocale());
+                            }
                             super.setProperty(pn, tmpMode);
                             return;
                         }
                     }
-                    log.warn("Could not convert "+pn+"="+objectValue);
+                    log.warn("Could not convert " + pn + "=" + objectValue + " using Locale: " + rb.getLocale());
                 } catch (IntrospectionException e) {
-                    log.warn("Could not find BeanInfo", e);
+                    log.error("Could not find BeanInfo", e);
                 }
             }
         }
