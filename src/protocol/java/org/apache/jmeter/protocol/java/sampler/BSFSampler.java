@@ -58,20 +58,10 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
         super();
     }
 
-    /**
-     * Returns a formatted string label describing this sampler
-     *
-     * @return a formatted string label describing this sampler
-     */
-
-    public String getLabel() {
-        return getName();
-    }
-
     @Override
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
     {
-        final String label = getLabel();
+        final String label = getName();
         final String request = getScript();
         final String fileName = getFilename();
         log.debug(label + " " + fileName);
