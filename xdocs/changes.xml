@@ -290,6 +290,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h3>I18N</h3>
 <ul>
+<li><bugzilla>55437</bugzilla> - ComboStringEditor does not translate EDIT and UNDEFINED strings on language change</li>
 </ul>
 
 <h3>General</h3>
