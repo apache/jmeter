@@ -33,8 +33,6 @@ import org.apache.jmeter.gui.ClearGui;
  * <p>
  * The provided GUI is a combo box with an option for each value in the enum.
  * <p>
- * The resource bundle must be provided by the attribute
- * GenericTestBeanCustomizer.RESOURCE_BUNDLE
  */
 class EnumEditor extends PropertyEditorSupport implements ClearGui {
 
@@ -42,26 +40,20 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
 
     private final DefaultComboBoxModel model;
 
-    private final Enum<?>[] eNum;
-
-    private final ResourceBundle rb;
-
     private final int defaultIndex;
 
-    public EnumEditor(PropertyDescriptor descriptor) {
+    public EnumEditor(final PropertyDescriptor descriptor, final Class<? extends Enum<?>> enumClazz, final ResourceBundle rb) {
         model = new DefaultComboBoxModel();
         combo = new JComboBox(model);
         combo.setEditable(false);
-        rb = (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
-        eNum = (Enum<?>[]) descriptor.getValue(GenericTestBeanCustomizer.TAGS);
-        for(Enum<?> e : eNum) {
+        for(Enum<?> e : enumClazz.getEnumConstants()) {
             model.addElement(rb.getObject(e.toString()));
         }
         Enum<?> def = (Enum<?>) descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
         if (def != null) {
-            this.defaultIndex = def.ordinal();
+            defaultIndex = def.ordinal();
         } else {
-            this.defaultIndex = 0;
+            defaultIndex = 0;
         }
         combo.setSelectedIndex(defaultIndex);
     }
