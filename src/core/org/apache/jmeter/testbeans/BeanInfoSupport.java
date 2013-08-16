@@ -187,15 +187,15 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
      * @param name
      *            property name
      * @param enumClass the enum class that is to be used by the editor
-     * @param rb the resource bundle to use for creating the display names
      * @return descriptor for a property of that name, or null if there's none
      */
     protected PropertyDescriptor property(final String name, 
-            final Class<? extends Enum<?>> enumClass, final ResourceBundle rb) {
+            final Class<? extends Enum<?>> enumClass) {
         PropertyDescriptor property = property(name);
         if (property != null) {
             property.setValue(GenericTestBeanCustomizer.GUITYPE, enumClass);
-            property.setValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE, rb);
+            // we also provide the resource bundle
+            property.setValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE, getBeanDescriptor().getValue(RESOURCE_BUNDLE));
         }
         return property;
     }
