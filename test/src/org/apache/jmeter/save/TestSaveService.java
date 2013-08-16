@@ -54,16 +54,20 @@ public class TestSaveService extends JMeterTestCase {
         "GenTest210.jmx",
         };
 
-    // Test files for testLoad; output will generally be different in size
-    private static final String[] FILES_LOAD_ONLY = new String[] {
-        "GuiTest_original.jmx", 
+    // Test files for testLoadAndSave; output will generally be different in size but same number of lines
+    private static final String[] FILES_LINES = new String[] {
         "GuiTest231_original.jmx",
-        "GenTest22.jmx",
-        "GenTest231.jmx",
-        "GenTest24.jmx",
         "GenTest25.jmx", // GraphAccumVisualizer obsolete, BSFSamplerGui now a TestBean
         "GenTest251.jmx", // GraphAccumVisualizer obsolete, BSFSamplerGui now a TestBean
         "GenTest26.jmx", // GraphAccumVisualizer now obsolete
+    };
+
+    // Test files for testLoad; output will generally be different in size and line count
+    private static final String[] FILES_LOAD_ONLY = new String[] {
+        "GuiTest_original.jmx", 
+        "GenTest22.jmx",
+        "GenTest231.jmx",
+        "GenTest24.jmx",
         };
 
     private static final boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
@@ -84,67 +88,82 @@ public class TestSaveService extends JMeterTestCase {
         boolean failed = false; // Did a test fail?
 
         for (int i = 0; i < FILES.length; i++) {
-            final File testFile = findTestFile("testfiles/" + FILES[i]);
-
-            int [] orig = readFile(new BufferedReader(new FileReader(testFile)));
-
-            InputStream in = null;
-            HashTree tree = null;
-            try {
-                in = new FileInputStream(testFile);
-                tree = SaveService.loadTree(in);
-            } finally {
-                if(in != null) {
-                    in.close();
-                }
-            }
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
-            try {
-                SaveService.saveTree(tree, out);
-            } finally {
-                out.close(); // Make sure all the data is flushed out
-            }
-
-            ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
-            
-            int [] output = readFile(new BufferedReader(new InputStreamReader(ins)));
-            // We only check the length of the result. Comparing the
-            // actual result (out.toByteArray==original) will usually
-            // fail, because the order of the properties within each
-            // test element may change. Comparing the lengths should be
-            // enough to detect most problem cases...
-            if (orig[0] != output[0] || orig[1] != output[1]) {
-                failed = true;
-                System.out.println();
-                System.out.println("Loading file testfiles/" + FILES[i] + " and "
-                        + "saving it back changes its size from " + orig[0] + " to " + output[0] + ".");
-                System.out.println("Number of lines changes from " + orig[1] + " to " + output[1]);
-                if (saveOut) {
-                    final File outFile = findTestFile("testfiles/" + FILES[i] + ".out");
-                    System.out.println("Write " + outFile);
-                    FileOutputStream outf = null;
-                    try {
-                        outf = new FileOutputStream(outFile);
-                        outf.write(out.toByteArray());
-                    } finally {
-                        if(outf != null) {
-                            outf.close();
-                        }
-                    }
-                    System.out.println("Wrote " + outFile);
-                }
-            }
-
-            // Note this test will fail if a property is added or
-            // removed to any of the components used in the test
-            // files. The way to solve this is to appropriately change
-            // the test file.
+            final String fileName = FILES[i];
+            final File testFile = findTestFile("testfiles/" + fileName);
+            failed |= loadAndSave(testFile, fileName, true);
+        }
+        for (int i = 0; i < FILES_LINES.length; i++) {
+            final String fileName = FILES[i];
+            final File testFile = findTestFile("testfiles/" + fileName);
+            failed |= loadAndSave(testFile, fileName, false);
         }
         if (failed) // TODO make these separate tests?
         {
             fail("One or more failures detected");
         }
+    }
+
+    private boolean loadAndSave(File testFile, String fileName, boolean checkSize) throws Exception {
+        
+        boolean failed = false;
+
+        int [] orig = readFile(new BufferedReader(new FileReader(testFile)));
+
+        InputStream in = null;
+        HashTree tree = null;
+        try {
+            in = new FileInputStream(testFile);
+            tree = SaveService.loadTree(in);
+        } finally {
+            if(in != null) {
+                in.close();
+            }
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
+        try {
+            SaveService.saveTree(tree, out);
+        } finally {
+            out.close(); // Make sure all the data is flushed out
+        }
+
+        ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
+        
+        int [] output = readFile(new BufferedReader(new InputStreamReader(ins)));
+        // We only check the length of the result. Comparing the
+        // actual result (out.toByteArray==original) will usually
+        // fail, because the order of the properties within each
+        // test element may change. Comparing the lengths should be
+        // enough to detect most problem cases...
+        if ((checkSize && (orig[0] != output[0] ))|| orig[1] != output[1]) {
+            failed = true;
+            System.out.println();
+            System.out.println("Loading file testfiles/" + fileName + " and "
+                    + "saving it back changes its size from " + orig[0] + " to " + output[0] + ".");
+            if (orig[1] != output[1]) {
+                System.out.println("Number of lines changes from " + orig[1] + " to " + output[1]);
+            }
+            if (saveOut) {
+                final File outFile = findTestFile("testfiles/" + fileName + ".out");
+                System.out.println("Write " + outFile);
+                FileOutputStream outf = null;
+                try {
+                    outf = new FileOutputStream(outFile);
+                    outf.write(out.toByteArray());
+                } finally {
+                    if(outf != null) {
+                        outf.close();
+                    }
+                }
+                System.out.println("Wrote " + outFile);
+            }
+        }
+
+        // Note this test will fail if a property is added or
+        // removed to any of the components used in the test
+        // files. The way to solve this is to appropriately change
+        // the test file.
+        return failed;
     }
     
     /**
