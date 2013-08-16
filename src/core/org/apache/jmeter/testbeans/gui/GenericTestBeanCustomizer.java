@@ -225,6 +225,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             Object guiType = descriptor.getValue(GUITYPE);
             if (guiType instanceof TypeEditor) {
                 propertyEditor = ((TypeEditor) guiType).getInstance(descriptor);
+            } else if (guiType instanceof Class && Enum.class.isAssignableFrom((Class<?>) guiType)) {
+                    @SuppressWarnings("unchecked") // we check the class type above
+                    final Class<? extends Enum<?>> enumClass = (Class<? extends Enum<?>>) guiType;
+                    propertyEditor = new EnumEditor(descriptor, enumClass, (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
             } else {
                 Class<?> editorClass = descriptor.getPropertyEditorClass();
                 if (log.isDebugEnabled()) {
