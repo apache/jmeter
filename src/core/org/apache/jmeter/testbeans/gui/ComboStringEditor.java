@@ -25,6 +25,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
+import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -42,7 +43,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * </ul>
  *
  */
-class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
+class ComboStringEditor extends PropertyEditorSupport implements ItemListener, ClearGui {
 
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
@@ -207,10 +208,6 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         }
     }
 
-    public String getInitialEditValue() {
-        return initialEditValue;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -243,5 +240,10 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         public String toString() {
             return s;
         }
+    }
+
+    @Override
+    public void clearGui() {
+        setAsText(initialEditValue);
     }
 }
