@@ -756,9 +756,6 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     } else {
                         we.resetValue();
                     }
-                } else if (propertyEditor instanceof ComboStringEditor) {
-                    ComboStringEditor cse = (ComboStringEditor) propertyEditor;
-                    cse.setAsText(cse.getInitialEditValue());
                 } else {
                     propertyEditor.setAsText("");
                 }
