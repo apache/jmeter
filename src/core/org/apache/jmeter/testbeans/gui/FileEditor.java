@@ -79,9 +79,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
         boolean notExpression = GenericTestBeanCustomizer.notExpression(descriptor);
         boolean notOther = GenericTestBeanCustomizer.notOther(descriptor);
         Object defaultValue = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
-        ComboStringEditor cse = new ComboStringEditor();
-        cse.setNoUndefined(notNull);
-        cse.setNoEdit(notExpression && notOther);
+        ComboStringEditor cse = new ComboStringEditor(null, notExpression && notOther, notNull);
         editor = new WrapperEditor(this, new SimpleFileEditor(), cse,
                 !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions

@@ -20,7 +20,6 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyEditorSupport;
-import java.util.Arrays;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -45,21 +44,12 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     /**
      * The list of options to be offered by this editor.
      */
-    private String[] tags = new String[0];
-
-    /**
-     * True iif the editor should not accept (nor produce) a null value.
-     */
-    private boolean noUndefined = false;
-
-    /**
-     * True iif the editor should not accept (nor produce) any non-null values
-     * different from the provided tags.
-     */
-    private boolean noEdit = false;
+    private final String[] tags;
 
     /**
      * The edited property's default value.
@@ -85,12 +75,27 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 
     private static final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit")); //$NON-NLS-1$
 
+    @Deprecated // only for use from test code
     ComboStringEditor() {
+        this(null, false, false);
+    }
+
+    ComboStringEditor(String []tags, boolean noEdit, boolean noUndefined) {
         // Create the combo box we will use to edit this property:
 
+        this.tags = tags == null ? EMPTY_STRING_ARRAY : tags;
+
         model = new DefaultComboBoxModel();
-        model.addElement(UNDEFINED);
-        model.addElement(EDIT);
+
+        if (!noUndefined) {
+            model.addElement(UNDEFINED);
+        }
+        for (String tag : this.tags) {
+            model.addElement(tag);
+        }
+        if (!noEdit) {
+            model.addElement(EDIT);
+        }
 
         combo = new JComboBox(model);
         combo.addItemListener(this);
@@ -131,7 +136,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         if (value == UNDEFINED) {
             return null;
         }
-        return (String) value;
+        return (String) value; // TODO I10N
     }
 
     /**
@@ -152,7 +157,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         if (value == null) {
             combo.setSelectedItem(UNDEFINED);
         } else {
-            combo.setSelectedItem(value);
+            combo.setSelectedItem(value); // TODO I10N
         }
 
         if (!startingEdit && combo.getSelectedIndex() >= 0) {
@@ -187,7 +192,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 
         textField.requestFocus();
 
-        String text = initialEditValue;
+        String text = initialEditValue; // TODO I10N
         if (initialEditValue == null) {
             text = ""; // will revert to last valid value if invalid
         }
@@ -206,14 +211,6 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         return initialEditValue;
     }
 
-    public boolean getNoEdit() {
-        return noEdit;
-    }
-
-    public boolean getNoUndefined() {
-        return noUndefined;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -227,58 +224,6 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      */
     public void setInitialEditValue(String object) {
         initialEditValue = object;
-    }
-
-    /**
-     * @param b
-     */
-    public void setNoEdit(boolean b) {
-        if (noEdit == b) {
-            return;
-        }
-        noEdit = b;
-
-        if (noEdit) {
-            model.removeElement(EDIT);
-        } else {
-            model.addElement(EDIT);
-        }
-    }
-
-    /**
-     * @param b
-     */
-    public void setNoUndefined(boolean b) {
-        if (noUndefined == b) {
-            return;
-        }
-        noUndefined = b;
-
-        if (noUndefined) {
-            model.removeElement(UNDEFINED);
-        } else {
-            model.insertElementAt(UNDEFINED, 0);
-        }
-    }
-
-    /**
-     * @param strings
-     */
-    public void setTags(String[] strings) {
-        if (Arrays.equals(tags,strings)) {
-            return;
-        }
-
-        for (int i = 0; i < tags.length; i++) {
-            model.removeElement(tags[i]);
-        }
-
-        tags = strings == null ? new String[0] : strings;
-
-        int b = noUndefined ? 0 : 1; // base index for tags
-        for (int i = 0; i < tags.length; i++) {
-            model.insertElementAt(tags[i], b + i);
-        }
     }
 
     /**
