@@ -49,7 +49,7 @@ public class TestComboStringEditor extends junit.framework.TestCase {
             testSetGetAsText(e, "${var}");
 
             // Check "Undefined" does not become a "reserved word":
-            e.setAsText(ComboStringEditor.UNDEFINED.toString());
+            e.setAsText(e.UNDEFINED.toString());
             assertNotNull(e.getAsText());
         }
 }
