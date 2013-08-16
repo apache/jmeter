@@ -19,7 +19,11 @@ package org.apache.jmeter.testbeans.gui;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -61,10 +65,16 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
 
     private final DefaultComboBoxModel model;
 
+    /*
+     * Map of translations for tags; only created if there is at least
+     * one tag and a ResourceBundle has been provided.
+     */
+    private final Map<String, String> validTranslations;
+
     private boolean startingEdit = false;
 
     /*
-     * True iif we're currently processing an event triggered by the user
+     * True iff we're currently processing an event triggered by the user
      * selecting the "Edit" option. Used to prevent reverting the combo to
      * non-editable during processing of secondary events.
      */
@@ -74,23 +84,55 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
 
     private final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit")); //$NON-NLS-1$
 
+    // The minimum index of the tags in the combo box
+    private final int minTagIndex;
+
+    // The maximum index of the tags in the combo box
+    private final int maxTagIndex;
+
     @Deprecated // only for use from test code
     ComboStringEditor() {
         this(null, false, false);
     }
 
-    ComboStringEditor(String []tags, boolean noEdit, boolean noUndefined) {
-        // Create the combo box we will use to edit this property:
+    ComboStringEditor(PropertyDescriptor descriptor) {
+        this((String[])descriptor.getValue(GenericTestBeanCustomizer.TAGS),
+              GenericTestBeanCustomizer.notExpression(descriptor),
+              GenericTestBeanCustomizer.notNull(descriptor),
+              (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
+    }
 
-        this.tags = tags == null ? EMPTY_STRING_ARRAY : tags.clone();
+    ComboStringEditor(String []tags, boolean noEdit, boolean noUndefined) {
+        this(tags, noEdit, noUndefined, null);
+    }
+
+    private ComboStringEditor(String []pTags, boolean noEdit, boolean noUndefined, ResourceBundle rb) {
+
+        tags = pTags == null ? EMPTY_STRING_ARRAY : pTags.clone();
 
         model = new DefaultComboBoxModel();
+
+        if (rb != null && tags.length > 0) {
+            validTranslations=new HashMap<String, String>();
+            for (String tag : this.tags) {
+                validTranslations.put(tag, rb.getString(tag));
+            }
+        } else {
+            validTranslations=null;
+        }
 
         if (!noUndefined) {
             model.addElement(UNDEFINED);
         }
-        for (String tag : this.tags) {
-            model.addElement(tag); // TODO I10N
+        if (tags.length == 0) {
+            this.minTagIndex = Integer.MAX_VALUE;
+            this.maxTagIndex = Integer.MIN_VALUE;
+        } else {
+            this.minTagIndex=model.getSize(); // track where tags start ...
+            for (String tag : this.tags) {
+                model.addElement(translate(tag));
+            }
+            this.maxTagIndex=model.getSize(); // ... and where they end
         }
         if (!noEdit) {
             model.addElement(EDIT);
@@ -130,12 +172,18 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      */
     @Override
     public String getAsText() {
-        Object value = combo.getSelectedItem();
-
+        final Object value = combo.getSelectedItem();
         if (value == UNDEFINED) {
             return null;
         }
-        return (String) value; // TODO I10N
+        final int item = combo.getSelectedIndex();
+        // Check if the entry index corresponds to a tag, if so return the tag
+        // This also works if the tags were not translated
+        if (item >= minTagIndex && item <= maxTagIndex) {
+            return tags[item-minTagIndex];
+        }
+        // Not a tag entry, return the original value
+        return (String) value;
     }
 
     /**
@@ -156,7 +204,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
         if (value == null) {
             combo.setSelectedItem(UNDEFINED);
         } else {
-            combo.setSelectedItem(value); // TODO I10N
+            combo.setSelectedItem(translate(value));
         }
 
         if (!startingEdit && combo.getSelectedIndex() >= 0) {
@@ -191,8 +239,8 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
 
         textField.requestFocus();
 
-        String text = initialEditValue; // TODO I10N
-        if (initialEditValue == null) {
+        String text = translate(initialEditValue);
+        if (text == null) {
             text = ""; // will revert to last valid value if invalid
         }
 
@@ -243,5 +291,14 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
     @Override
     public void clearGui() {
         setAsText(initialEditValue);
+    }
+    
+    // Replace a string with its translation, if one exists
+    private String translate(String input) {
+        if (validTranslations != null) {
+            final String entry = validTranslations.get(input);
+            return entry != null ? entry : input;
+        }
+        return input;
     }
 }
