@@ -39,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import org.apache.jmeter.gui.ClearGui;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -214,8 +215,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             String name = descriptor.getName();
 
             // Don't get editors for hidden or non-read-write properties:
-            if (descriptor.isHidden() || (descriptor.isExpert() && !JMeterUtils.isExpertMode())
-                    || descriptor.getReadMethod() == null || descriptor.getWriteMethod() == null) {
+            if (TestBeanHelper.isDescriptorIgnored(descriptor)) {
                 log.debug("Skipping editor for property " + name);
                 editors[i] = null;
                 continue;

@@ -34,6 +34,7 @@ import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
 import org.apache.log.Logger;
@@ -72,6 +73,12 @@ public class TestBeanHelper {
             }
 
             for (PropertyDescriptor desc : descs) {
+                if (isDescriptorIgnored(desc)) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Ignoring property '" + desc.getName() + "' in " + el.getClass().getCanonicalName());
+                    }
+                    continue;
+                }
                 // Obtain a value of the appropriate type for this property.
                 JMeterProperty jprop = el.getProperty(desc.getName());
                 Class<?> type = desc.getPropertyType();
@@ -184,5 +191,23 @@ public class TestBeanHelper {
         }
         sb.append(")");
         return sb.toString();
+    }
+
+    /**
+     * Checks whether the descriptor should be ignored, i.e.
+     * <ul>
+     * <li>isHidden</li>
+     * <li>isExpert and JMeter not using expert mode</li>
+     * <li>no read method</li>
+     * <li>no write method</li>
+     * </ul>
+     * @param descriptor
+     * @return true if the descriptor should be ignored
+     */
+    public static boolean isDescriptorIgnored(PropertyDescriptor descriptor) {
+        return descriptor.isHidden() 
+            || (descriptor.isExpert() && !JMeterUtils.isExpertMode())
+            || descriptor.getReadMethod() == null 
+            || descriptor.getWriteMethod() == null;
     }
 }
