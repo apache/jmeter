@@ -168,7 +168,9 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
             }
 
             if (sendNow){
-                clonedStore = (ArrayList<SampleEvent>)((ArrayList<SampleEvent>)sampleStore).clone();
+                @SuppressWarnings("unchecked") // OK because sampleStore is of type ArrayList<SampleEvent>
+                final ArrayList<SampleEvent> clone = (ArrayList<SampleEvent>)((ArrayList<SampleEvent>)sampleStore).clone();
+                clonedStore = clone;
                 sampleStore.clear();
                 if (timeThresholdMs != -1) {
                     this.batchSendTime = now + timeThresholdMs;
