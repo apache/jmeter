@@ -40,6 +40,7 @@ public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
 
         p = property("calcMode", ConstantThroughputTimer.Mode.class); //$NON-NLS-1$
         p.setValue(DEFAULT, ConstantThroughputTimer.Mode.ThisThreadOnly);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE); // must be defined
     }
 
 }
