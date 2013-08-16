@@ -18,10 +18,7 @@
 
 package org.apache.jmeter.timers;
 
-import java.util.ResourceBundle;
-
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.TestJMeterContextService;
 import org.apache.jmeter.util.BeanShellInterpreter;
@@ -38,7 +35,7 @@ public class PackageTest extends JMeterTestCase {
 
     public void testTimer1() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
-        assertEquals(0,timer.getCalcModeInt());// Assume this thread only
+        assertEquals(0,timer.getCalcMode());// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
         long delay = timer.delay(); // Initialise
         assertEquals(0,delay);
@@ -48,7 +45,7 @@ public class PackageTest extends JMeterTestCase {
 
     public void testTimer2() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
-        assertEquals(0,timer.getCalcModeInt());// Assume this thread only
+        assertEquals(0,timer.getCalcMode());// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
         assertEquals(1000,timer.calculateCurrentTarget(0)); // Should delay for 1 second
         timer.setThroughput(60000.0);// 1 per milli-second
@@ -57,10 +54,8 @@ public class PackageTest extends JMeterTestCase {
 
     public void testTimer3() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
-        ConstantThroughputTimerBeanInfo bi = new ConstantThroughputTimerBeanInfo();
-        ResourceBundle rb = (ResourceBundle) bi.getBeanDescriptor().getValue(BeanInfoSupport.RESOURCE_BUNDLE);
-        timer.setCalcMode(rb.getString("calcMode.2")); //$NON-NLS-1$ - all threads
-        assertEquals(1,timer.getCalcModeInt());// All threads
+        timer.setMode(ConstantThroughputTimer.Mode.AllActiveThreads); //$NON-NLS-1$ - all threads
+        assertEquals(1,timer.getCalcMode());// All threads
         for(int i=1; i<=10; i++){
             TestJMeterContextService.incrNumberOfThreads();
         }
