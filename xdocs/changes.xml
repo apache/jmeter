@@ -170,10 +170,9 @@ To workaround this issue, ensure you always read the response and add a Response
 </li>
 
 <li>
-Changing language can break part of the configuration of the following elements (see <bugzilla>53679</bugzilla>):
+Changing language can break part of the configuration of the following elements (see <bugzilla>55432</bugzilla>):
 <ul>
     <li>CSV Data Set Config (sharing mode will be lost)</li>
-    <li>Constant Throughput Timer (Calculate throughput based on will be lost)</li>
 </ul>
 </li>
 
@@ -281,6 +280,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54575</bugzilla> - CSS/JQuery Extractor : Choosing JODD Implementation always uses JSOUP. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54901</bugzilla> - Response Assertion GUI behaves weirdly. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54924</bugzilla> - XMLAssertion uses JMeter JVM file.encoding instead of response encoding and does not clean threadlocal variable. Contributed by Philippe Mouawad</li>
+<li><bugzilla>53679</bugzilla> -  Constant Throughput Timer bug with localization. Reported by Ludovic Garcia</li>
 </ul>
 
 <h3>Functions</h3>

@@ -18,12 +18,19 @@
 
 package org.apache.jmeter.timers;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
@@ -51,15 +58,35 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     private static final double MILLISEC_PER_MIN = 60000.0;
 
     /**
+     * This enum defines the calculation modes used by the ConstantThroughputTimer.
+     */
+    public enum Mode {
+        ThisThreadOnly("calcMode.1"),
+        AllActiveThreads("calcMode.2"),
+        AllActiveThreadsInCurrentThreadGroup("calcMode.3"),
+        AllActiveThreads_Shared("calcMode.4"),
+        AllActiveThreadsInCurrentThreadGroup_Shared("calcMode.5"),
+        ;
+
+        private final String propertyName; // The property name to be used to look up the display string
+
+        Mode(String name) {
+            this.propertyName = name;
+        }
+
+        @Override
+        public String toString() {
+            return propertyName;
+        }
+    }
+
+    /**
      * Target time for the start of the next request. The delay provided by the
      * timer will be calculated so that the next request happens at this time.
      */
     private long previousTime = 0;
 
-    private String calcMode; // String representing the mode
-                                // (Locale-specific)
-
-    private int modeInt; // mode as an integer
+    private Mode mode = Mode.ThisThreadOnly;
 
     /**
      * Desired throughput, in samples per minute.
@@ -99,19 +126,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         return throughput;
     }
 
-    public String getCalcMode() {
-        return calcMode;
+    public int getCalcMode() {
+        return mode.ordinal();
     }
 
-    // Needed by test code
-    int getCalcModeInt() {
-        return modeInt;
-    }
-
-    public void setCalcMode(String mode) {
-        this.calcMode = mode;
-        // TODO find better way to get modeInt
-        this.modeInt = ConstantThroughputTimerBeanInfo.getCalcModeAsInt(calcMode);
+    public void setCalcMode(int mode) {
+        this.mode = Mode.values()[mode];
     }
 
     /**
@@ -151,20 +171,20 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         long delay = 0;
         // N.B. we fetch the throughput each time, as it may vary during a test
         double msPerRequest = (MILLISEC_PER_MIN / getThroughput());
-        switch (modeInt) {
-        case 1: // Total number of threads
+        switch (mode) {
+        case AllActiveThreads: // Total number of threads
             delay = (long) (JMeterContextService.getNumberOfThreads() * msPerRequest);
             break;
 
-        case 2: // Active threads in this group
+        case AllActiveThreadsInCurrentThreadGroup: // Active threads in this group
             delay = (long) (JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * msPerRequest);
             break;
 
-        case 3: // All threads - alternate calculation
+        case AllActiveThreads_Shared: // All threads - alternate calculation
             delay = calculateSharedDelay(allThreadsInfo,(long) msPerRequest);
             break;
 
-        case 4: //All threads in this group - alternate calculation
+        case AllActiveThreadsInCurrentThreadGroup_Shared: //All threads in this group - alternate calculation
             final org.apache.jmeter.threads.AbstractThreadGroup group =
                 JMeterContextService.getContext().getThreadGroup();
             ThroughputInfo groupInfo = threadGroupsInfoMap.get(group);
@@ -178,6 +198,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             delay = calculateSharedDelay(groupInfo,(long) msPerRequest);
             break;
 
+        case ThisThreadOnly:
         default: // e.g. 0
             delay = (long) msPerRequest; // i.e. * 1
             break;
@@ -235,6 +256,40 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     }
 
     /**
+     * Override the setProperty method in order to convert
+     * the original String calcMode propertty.
+     * This used the locale-dependent display value, so caused
+     * problems when the language was changed. 
+     */
+    @Override
+    public void setProperty(JMeterProperty property) {
+        final String pn = property.getName();
+        if (pn.equals("calcMode")) {
+            if (property instanceof StringProperty) {
+                final Object objectValue = property.getObjectValue();
+                log.info("Attempting to convert " + pn + "=" + objectValue);
+                try {
+                    final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
+                    final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
+                    for(Enum<Mode> e : Mode.values()) {
+                        final String propName = e.toString();
+                        if (objectValue.equals(rb.getObject(propName))) {
+                            final int tmpMode = e.ordinal();
+                            log.info("Converted to " + pn + "=" + tmpMode);
+                            super.setProperty(pn, tmpMode);
+                            return;
+                        }
+                    }
+                    log.warn("Could not convert "+pn+"="+objectValue);
+                } catch (IntrospectionException e) {
+                    log.warn("Could not find BeanInfo", e);
+                }
+            }
+        }
+        super.setProperty(property);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -256,6 +311,16 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     @Override
     public void testEnded(String host) {
         //NOOP
+    }
+    
+    // For access from test code
+    Mode getMode() {
+        return mode;
+    }
+    
+    // For access from test code
+    void setMode(Mode newMode) {
+        mode = newMode;
     }
 
 }

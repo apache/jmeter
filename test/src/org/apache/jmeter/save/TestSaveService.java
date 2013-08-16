@@ -60,6 +60,7 @@ public class TestSaveService extends JMeterTestCase {
         "GenTest25.jmx", // GraphAccumVisualizer obsolete, BSFSamplerGui now a TestBean
         "GenTest251.jmx", // GraphAccumVisualizer obsolete, BSFSamplerGui now a TestBean
         "GenTest26.jmx", // GraphAccumVisualizer now obsolete
+        "GenTest27_original.jmx", // CTT changed to use intProp for mode
     };
 
     // Test files for testLoad; output will generally be different in size and line count

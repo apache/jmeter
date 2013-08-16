@@ -19,8 +19,6 @@
 package org.apache.jmeter.timers;
 
 import java.beans.PropertyDescriptor;
-import java.util.ResourceBundle;
-
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 /**
@@ -28,18 +26,10 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
  *
  */
 public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
-    private static final String[] tags = new String[5];
 
     public ConstantThroughputTimerBeanInfo() {
         super(ConstantThroughputTimer.class);
 
-        ResourceBundle rb = (ResourceBundle) getBeanDescriptor().getValue(RESOURCE_BUNDLE);
-//       These must agree with the Timer resources
-        tags[0] = rb.getString("calcMode.1"); //$NON-NLS-1$
-        tags[1] = rb.getString("calcMode.2"); //$NON-NLS-1$
-        tags[2] = rb.getString("calcMode.3"); //$NON-NLS-1$
-        tags[3] = rb.getString("calcMode.4"); //$NON-NLS-1$
-        tags[4] = rb.getString("calcMode.5"); //$NON-NLS-1$
         createPropertyGroup("delay",  //$NON-NLS-1$
                 new String[] { "throughput", //$NON-NLS-1$
                 "calcMode" }); //$NON-NLS-1$
@@ -48,21 +38,8 @@ public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Double.valueOf(0.0));
 
-        p = property("calcMode"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, tags[0]);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(TAGS, tags);
+        p = property("calcMode", ConstantThroughputTimer.Mode.class); //$NON-NLS-1$
+        p.setValue(DEFAULT, ConstantThroughputTimer.Mode.ThisThreadOnly);
     }
 
-    // TODO need to find better way to do this
-    public static int getCalcModeAsInt(String mode) {
-        for (int i = 0; i < tags.length; i++) {
-            if (tags[i].equals(mode)) {
-                return i;
-            }
-        }
-        return -1;
-    }
 }

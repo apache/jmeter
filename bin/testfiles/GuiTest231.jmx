@@ -305,7 +305,7 @@
           </BeanShellTimer>
           <hashTree/>
           <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
-            <stringProp name="calcMode">this thread only</stringProp>
+            <intProp name="calcMode">0</intProp>
             <doubleProp>
               <name>throughput</name>
               <value>11.0</value>
