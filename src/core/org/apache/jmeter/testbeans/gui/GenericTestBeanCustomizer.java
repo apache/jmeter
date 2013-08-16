@@ -384,12 +384,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         if (notNull && tags == null) {
             guiEditor = new FieldStringEditor();
         } else {
-            ComboStringEditor e = new ComboStringEditor();
-            e.setNoUndefined(notNull);
-            e.setNoEdit(notExpression && notOther);
-            e.setTags(tags);
-
-            guiEditor = e;
+            guiEditor = new ComboStringEditor(tags, notExpression && notOther, notNull);
         }
 
         WrapperEditor wrapper = new WrapperEditor(typeEditor, guiEditor,
