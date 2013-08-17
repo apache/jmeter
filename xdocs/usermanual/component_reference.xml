@@ -3399,7 +3399,6 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
   Or you could use the thread number to share the file between the same thread numbers in different thread groups.
   </li>
   </ul>
-  <note>When switching language, ensure you set again Sharing mode as a known bug (<bugzilla>55432</bugzilla>) may break your configuration</note>
   </property>
 </properties>
 </component>
