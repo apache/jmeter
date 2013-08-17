@@ -19,9 +19,9 @@
 package org.apache.jmeter.config;
 
 import java.beans.PropertyDescriptor;
-import java.util.ResourceBundle;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.testbeans.gui.TypeEditor;
 
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
@@ -35,20 +35,21 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
     private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
 
-    private static final String[] SHARE_TAGS = new String[3];
-    static final int SHARE_ALL   = 0;
-    static final int SHARE_GROUP = 1;
-    static final int SHARE_THREAD  = 2;
+    // Access needed from CSVDataSet
+    static final String[] SHARE_TAGS = new String[3];
+    static final int SHARE_ALL    = 0;
+    static final int SHARE_GROUP  = 1;
+    static final int SHARE_THREAD = 2;
 
+    // Store the resource keys
+    static {
+        SHARE_TAGS[SHARE_ALL]    = "shareMode.all"; //$NON-NLS-1$
+        SHARE_TAGS[SHARE_GROUP]  = "shareMode.group"; //$NON-NLS-1$
+        SHARE_TAGS[SHARE_THREAD] = "shareMode.thread"; //$NON-NLS-1$        
+    }
 
     public CSVDataSetBeanInfo() {
         super(CSVDataSet.class);
-
-        ResourceBundle rb = (ResourceBundle) getBeanDescriptor().getValue(RESOURCE_BUNDLE);
-//      These must agree with the resources
-        SHARE_TAGS[SHARE_ALL] = rb.getString("shareMode.all"); //$NON-NLS-1$
-        SHARE_TAGS[SHARE_GROUP] = rb.getString("shareMode.group"); //$NON-NLS-1$
-        SHARE_TAGS[SHARE_THREAD] = rb.getString("shareMode.thread"); //$NON-NLS-1$
 
         createPropertyGroup("csv_data",             //$NON-NLS-1$
                 new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, DELIMITER, QUOTED_DATA, RECYCLE, STOPTHREAD, SHAREMODE });
@@ -85,15 +86,15 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.FALSE);
 
-        p = property(SHAREMODE); //$NON-NLS-1$
+        p = property(SHAREMODE, TypeEditor.ComboStringEditor);
+        p.setValue(RESOURCE_BUNDLE, getBeanDescriptor().getValue(RESOURCE_BUNDLE));
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, SHARE_TAGS[0]);
+        p.setValue(DEFAULT, SHARE_TAGS[SHARE_ALL]);
         p.setValue(NOT_OTHER, Boolean.FALSE);
         p.setValue(NOT_EXPRESSION, Boolean.FALSE);
         p.setValue(TAGS, SHARE_TAGS);
     }
 
-    // TODO need to find better way to do this
     public static int getShareModeAsInt(String mode) {
         if (mode == null || mode.length() == 0){
             return SHARE_ALL; // default (e.g. if test plan does not have definition)
