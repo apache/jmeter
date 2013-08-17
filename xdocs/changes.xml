@@ -170,13 +170,6 @@ To workaround this issue, ensure you always read the response and add a Response
 </li>
 
 <li>
-Changing language can break part of the configuration of the following elements (see <bugzilla>55432</bugzilla>):
-<ul>
-    <li>CSV Data Set Config (sharing mode will be lost)</li>
-</ul>
-</li>
-
-<li>
 The numbers that appear to the left of the green box are the number of active threads / total number of threads, 
 these only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode, (see <bugzilla>54152</bugzilla>).
 </li>
@@ -359,7 +352,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <ul>
 <li><bugzilla>55241</bugzilla> - Need GUI Editor to process fields which are based on Enums with localised display strings</li>
 <li><bugzilla>55440</bugzilla> - ComboStringEditor should allow tags to be language dependent</li>
-<li><bugzilla>55432</bugzilla> -  CSV Dataset Config loses sharing mode when switching languages</li>
+<li><bugzilla>55432</bugzilla> - CSV Dataset Config loses sharing mode when switching languages</li>
 </ul>
 
 <h3>General</h3>
