@@ -359,6 +359,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <ul>
 <li><bugzilla>55241</bugzilla> - Need GUI Editor to process fields which are based on Enums with localised display strings</li>
 <li><bugzilla>55440</bugzilla> - ComboStringEditor should allow tags to be language dependent</li>
+<li><bugzilla>55432</bugzilla> -  CSV Dataset Config loses sharing mode when switching languages</li>
 </ul>
 
 <h3>General</h3>
