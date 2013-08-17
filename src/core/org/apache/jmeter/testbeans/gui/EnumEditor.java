@@ -49,9 +49,9 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
         for(Enum<?> e : enumClazz.getEnumConstants()) {
             model.addElement(rb.getObject(e.toString()));
         }
-        Enum<?> def = (Enum<?>) descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
-        if (def != null) {
-            defaultIndex = def.ordinal();
+        Object def = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
+        if (def instanceof Integer) {
+            defaultIndex = ((Integer) def).intValue();
         } else {
             defaultIndex = 0;
         }
