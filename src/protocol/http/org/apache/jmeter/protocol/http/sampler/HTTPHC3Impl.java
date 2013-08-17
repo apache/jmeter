@@ -266,6 +266,11 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             int statusCode = client.executeMethod(httpMethod);
 
+            // We've finished with the request, so we can add the LocalAddress to it for display
+            final InetAddress localAddr = client.getHostConfiguration().getLocalAddress();
+            if (localAddr != null) {
+                httpMethod.addRequestHeader(HEADER_LOCAL_ADDRESS, localAddr.toString());
+            }
             // Needs to be done after execute to pick up all the headers
             res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
