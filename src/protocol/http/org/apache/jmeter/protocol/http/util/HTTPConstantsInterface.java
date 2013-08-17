@@ -55,6 +55,7 @@ public interface HTTPConstantsInterface {
     String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
     String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
     String HEADER_HOST = "Host"; // $NON-NLS-1$
+    String HEADER_LOCAL_ADDRESS = "X-LocalAddress"; // $NON-NLS-1$ pseudo-header for reporting Local Address
     String HEADER_LOCATION = "Location"; // $NON-NLS-1$
     String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"; // $NON-NLS-1$
     String MULTIPART_FORM_DATA = "multipart/form-data"; // $NON-NLS-1$
