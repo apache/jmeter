@@ -33,6 +33,7 @@ public class TestFieldStringEditor extends junit.framework.TestCase {
         }
 
         public void testSetGet() throws Exception {
+            @SuppressWarnings("deprecation") // test code, intentional
             ComboStringEditor e = new ComboStringEditor();
 
             testSetGet(e, "any string");
@@ -41,6 +42,7 @@ public class TestFieldStringEditor extends junit.framework.TestCase {
         }
 
         public void testSetGetAsText() throws Exception {
+            @SuppressWarnings("deprecation") // test code, intentional
             ComboStringEditor e = new ComboStringEditor();
 
             testSetGetAsText(e, "any string");
