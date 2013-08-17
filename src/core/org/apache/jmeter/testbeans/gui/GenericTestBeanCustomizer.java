@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.util.JMeterUtils;
@@ -318,8 +319,18 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param pe the propertyEditor
      */
     private static void validateAttributes(PropertyDescriptor pd, PropertyEditor pe) {
-        if (notNull(pd) && pd.getValue(DEFAULT) == null) {
-            log.warn(getDetails(pd) + " requires a value but does not provide a default.");
+        final Object deflt = pd.getValue(DEFAULT);
+        if (deflt == null) {
+            if (notNull(pd)) {
+                log.warn(getDetails(pd) + " requires a value but does not provide a default.");
+            }            
+        } else {
+            final Class<?> defltClass = deflt.getClass(); // the DEFAULT class
+            // Convert int to Integer etc:
+            final Class<?> propClass = ClassUtils.primitiveToWrapper(pd.getPropertyType());
+            if (!propClass.isAssignableFrom(defltClass) ){
+                log.warn(getDetails(pd) + " has a DEFAULT of class " + defltClass.getCanonicalName());
+            }            
         }
         if (notOther(pd) && pd.getValue(TAGS) == null && pe.getTags() == null) {
             log.warn(getDetails(pd) + " does not have tags but other values are not allowed.");
@@ -346,6 +357,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         sb.append(pd.getReadMethod().getDeclaringClass().getName());
         sb.append('#');
         sb.append(pd.getName());
+        sb.append('(');
+        sb.append(pd.getPropertyType().getCanonicalName());
+        sb.append(')');
         return sb.toString();
     }
 
