@@ -336,6 +336,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54532</bugzilla> - Improve Response Time Graph Y axis scale with huge values or small values (&amp;lt; 1000ms). Add a new field to define increment scale. Contributed by Milamber based on patch by Luca Maragnani (luca.maragnani at gmail.com)</li>
 <li><bugzilla>54576</bugzilla> - View Results Tree : Add a CSS/JQuery Tester. Contributed by Philippe Mouawad</li>
 <li><bugzilla>54777</bugzilla> - Improve Performance of default ResultCollector. Contributed by Philippe Mouawad based on patch by Mikhail Epikhin (epihin-m at yandex.ru)</li>
+<li><bugzilla>55389</bugzilla> - Show IP source address in request data</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

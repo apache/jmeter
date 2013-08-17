@@ -296,7 +296,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     executeRequest(httpClient, httpRequest, localContext, url);
 
             // Needs to be done after execute to pick up all the headers
-            res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
+            final HttpRequest request = (HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST);
+            // We've finished with the request, so we can add the LocalAddress to it for display
+            final InetAddress localAddr = (InetAddress) httpRequest.getParams().getParameter(ConnRoutePNames.LOCAL_ADDRESS);
+            if (localAddr != null) {
+                request.addHeader(HEADER_LOCAL_ADDRESS, localAddr.toString());
+            }
+            res.setRequestHeaders(getConnectionHeaders(request));
 
             Header contentType = httpResponse.getLastHeader(HTTPConstants.HEADER_CONTENT_TYPE);
             if (contentType != null){
