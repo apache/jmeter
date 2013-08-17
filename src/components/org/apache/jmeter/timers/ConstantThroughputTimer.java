@@ -259,13 +259,15 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * Override the setProperty method in order to convert
      * the original String calcMode propertty.
      * This used the locale-dependent display value, so caused
-     * problems when the language was changed. 
+     * problems when the language was changed.
+     * Note that the calcMode StringProperty is replaced with an IntegerProperty
+     * so the conversion only needs to happen once.
      */
     @Override
     public void setProperty(JMeterProperty property) {
-        final String pn = property.getName();
-        if (pn.equals("calcMode")) {
-            if (property instanceof StringProperty) {
+        if (property instanceof StringProperty) {
+            final String pn = property.getName();
+            if (pn.equals("calcMode")) {
                 final Object objectValue = property.getObjectValue();
                 try {
                     final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
