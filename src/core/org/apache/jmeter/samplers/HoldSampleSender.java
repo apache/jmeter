@@ -51,7 +51,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     HoldSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // client        
+        log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // client        
     }
 
     @Override
