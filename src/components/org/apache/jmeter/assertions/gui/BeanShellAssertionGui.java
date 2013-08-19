@@ -44,7 +44,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 
     private JTextField parameters;// parameters to pass to script file (or script)
 
-    private org.apache.jmeter.gui.util.JSyntaxTextArea scriptField; // script area
+    private JSyntaxTextArea scriptField; // script area
 
     public BeanShellAssertionGui() {
         init();
@@ -53,6 +53,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
     @Override
     public void configure(TestElement element) {
         scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
+        scriptField.setCaretPosition(0);
         filename.setText(element.getPropertyAsString(BeanShellAssertion.FILENAME));
         parameters.setText(element.getPropertyAsString(BeanShellAssertion.PARAMETERS));
         resetInterpreter.setSelected(element.getPropertyAsBoolean(BeanShellAssertion.RESET_INTERPRETER));

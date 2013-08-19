@@ -96,6 +96,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         setNoDelay.setTristateFromProperty(element, TCPSampler.NODELAY);
 //        setNoDelay.setSelected(element.getPropertyAsBoolean(TCPSampler.NODELAY));
         requestData.setText(element.getPropertyAsString(TCPSampler.REQUEST));
+        requestData.setCaretPosition(0);
         closeConnection.setTristateFromProperty(element, TCPSampler.CLOSE_CONNECTION);
 //        closeConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.CLOSE_CONNECTION, TCPSampler.CLOSE_CONNECTION_DEFAULT));
         soLinger.setText(element.getPropertyAsString(TCPSampler.SO_LINGER));

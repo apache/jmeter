@@ -54,6 +54,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     @Override
     public void configure(TestElement element) {
         scriptField.setText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
+        scriptField.setCaretPosition(0);
         filename.setText(element.getPropertyAsString(BeanShellSampler.FILENAME));
         parameters.setText(element.getPropertyAsString(BeanShellSampler.PARAMETERS));
         resetInterpreter.setSelected(element.getPropertyAsBoolean(BeanShellSampler.RESET_INTERPRETER));
