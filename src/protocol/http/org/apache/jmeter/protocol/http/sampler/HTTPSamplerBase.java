@@ -1402,8 +1402,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // replacing them automatically with %20. We want to emulate
             // this behaviour.
             location = encodeSpaces(location);
+            // Change all but HEAD into GET (Bug 55450)
+            String method = lastRes.getHTTPMethod();
+            if (!HTTPConstants.HEAD.equalsIgnoreCase(method)) {
+                method = HTTPConstants.GET;
+            }
             try {
-                lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), HTTPConstants.GET, true, frameDepth);
+                lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), method, true, frameDepth);
             } catch (MalformedURLException e) {
                 errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL
