@@ -1270,7 +1270,7 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
         If "Re-use connection" is selected, connections are shared between Samplers in the same thread,
         provided that the exact same host name string and port are used. 
         Different hosts/port combinations will use different connections, as will different threads. 
-        If both of "Re-use connection" and "Close connetion" are selected, the socket will be closed after running the sampler. 
+        If both of "Re-use connection" and "Close connection" are selected, the socket will be closed after running the sampler. 
         On the next sampler, another socket will be created. You may want to close a socket at the end of each thread loop.
         <br></br>
         If an error is detected - or "Re-use connection" is not selected - the socket is closed. 
