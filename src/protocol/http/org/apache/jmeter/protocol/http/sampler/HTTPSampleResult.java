@@ -91,12 +91,13 @@ public class HTTPSampleResult extends SampleResult {
 
     /**
      * Determine whether this result is a redirect.
-     *
-     * @return true iif res is an HTTP redirect response
+     * Returs true for: 301,302,303, & 307(GET or HEAD)
+     * @return true iff res is an HTTP redirect response
      */
     public boolean isRedirect() {
         /*
          * Don't redirect the following:
+         * 300 = Multiple choice
          * 304 = Not Modified
          * 305 = Use Proxy
          * 306 = (Unused)
