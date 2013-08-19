@@ -87,7 +87,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
      * @throws ObjectStreamException  
      */
     private Object readResolve() throws ObjectStreamException{
-        log.info("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // server        
+        log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // server        
         return this;
     }
 }
