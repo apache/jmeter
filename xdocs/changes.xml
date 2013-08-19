@@ -377,6 +377,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55237</bugzilla> - Template system should support relative fileName entries.</li>
 <li><bugzilla>55423</bugzilla> - BatchSampleSender: Reduce locking granularity by moving listener.processBatch outside of synchronized block</li>
 <li><bugzilla>55424</bugzilla> - Add Stripping to existing SampleSenders</li>
+<li><bugzilla>55451</bugzilla> - Test Element GUI with JSyntaxTextArea scroll down when text content is long enough to add a Scrollbar</li>
 </ul>
 
 <h2>Non-functional changes</h2>
