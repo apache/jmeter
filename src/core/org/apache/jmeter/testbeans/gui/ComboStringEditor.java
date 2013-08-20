@@ -80,9 +80,9 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      */
 
     // Needs to be visible to test cases
-    final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined")); //$NON-NLS-1$
+    final Object UNDEFINED = new UniqueObject("property_undefined"); //$NON-NLS-1$
 
-    private final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit")); //$NON-NLS-1$
+    private final Object EDIT = new UniqueObject("property_edit"); //$NON-NLS-1$
 
     // The minimum index of the tags in the combo box
     private final int minTagIndex;
@@ -173,7 +173,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
     @Override
     public String getAsText() {
         final Object value = combo.getSelectedItem();
-        if (value == UNDEFINED) {
+        if (UNDEFINED.equals(value)) {
             return null;
         }
         final int item = combo.getSelectedIndex();
@@ -218,7 +218,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            if (e.getItem() == EDIT) {
+            if (EDIT.equals(e.getItem())) {
                 startingEdit = true;
                 startEditing();
                 startingEdit = false;
@@ -276,15 +276,28 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      * this by using a different type having a controlled .toString().
      */
     private static class UniqueObject {
-        private final String s;
+        private final String propKey;
+        private final String propValue;
 
-        UniqueObject(String s) {
-            this.s = s;
+        UniqueObject(String propKey) {
+            this.propKey = propKey;
+            this.propValue = JMeterUtils.getResString(propKey);
         }
 
         @Override
         public String toString() {
-            return s;
+            return propValue;
+        }
+        
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other instanceof UniqueObject) {
+                return propKey.equals(((UniqueObject) other).propKey);
+            }
+            return false;
         }
     }
 
