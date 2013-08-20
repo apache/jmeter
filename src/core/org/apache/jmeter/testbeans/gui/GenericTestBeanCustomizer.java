@@ -136,6 +136,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
     public static final String DEFAULT = "default"; //$NON-NLS-1$
 
+    /** Pointer to the resource bundle, if any (will generally be null) */
     public static final String RESOURCE_BUNDLE = "resourceBundle"; //$NON-NLS-1$
 
     /** Property editor override; must be an enum of type {@link TypeEditor} */

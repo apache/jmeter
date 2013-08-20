@@ -67,18 +67,24 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
     // Some known attribute names, just for convenience:
     public static final String TAGS = GenericTestBeanCustomizer.TAGS;
 
+    /** Whether the field must be defined (i.e. is required);  Boolean, defaults to FALSE */
     public static final String NOT_UNDEFINED = GenericTestBeanCustomizer.NOT_UNDEFINED;
 
+    /** Whether the field disallows JMeter expressions; Boolean, default FALSE */
     public static final String NOT_EXPRESSION = GenericTestBeanCustomizer.NOT_EXPRESSION;
 
+    /** Whether the field disallows constant values different from the provided tags; Boolean, default FALSE */
     public static final String NOT_OTHER = GenericTestBeanCustomizer.NOT_OTHER;
 
     public static final String MULTILINE = "multiline";
 
+    /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
     public static final String DEFAULT = GenericTestBeanCustomizer.DEFAULT;
 
+    /** Pointer to the resource bundle, if any (will generally be null) */
     public static final String RESOURCE_BUNDLE = GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
+    /** TextEditor property */
     public static final String TEXT_LANGUAGE = GenericTestBeanCustomizer.TEXT_LANGUAGE;
 
     /** The BeanInfo for our class as obtained by the introspector. */
