@@ -150,10 +150,10 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         long currentTarget = previousTime  + calculateDelay();
         if (currentTime > currentTarget) {
             // We're behind schedule -- try to catch up:
-            previousTime = currentTime;
+            previousTime = currentTime; // assume the sample will run immediately
             return 0;
         }
-        previousTime = currentTarget;
+        previousTime = currentTarget; // assume the sample will run as soon as the delay has expired
         return currentTarget - currentTime;
     }
 
