@@ -68,15 +68,17 @@ public class JsseSSLManager extends SSLManager {
     private static final boolean SHARED_SESSION_CONTEXT =
         JMeterUtils.getPropDefault("https.sessioncontext.shared",false); // $NON-NLS-1$
 
-    private static final int cps;
+    /**
+     * Characters per second, used to slow down sockets
+     */
+    public static final int CPS = JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$
 
     static {
         log.info("Using default SSL protocol: "+DEFAULT_SSL_PROTOCOL);
         log.info("SSL session context: "+(SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
-        cps = JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$
 
-        if (cps > 0) {
-            log.info("Setting up HTTPS SlowProtocol, cps="+cps);
+        if (CPS > 0) {
+            log.info("Setting up HTTPS SlowProtocol, cps="+CPS);
         }
 
     }
@@ -118,7 +120,7 @@ public class JsseSSLManager extends SSLManager {
              * java.lang.RuntimeException: Export restriction: this JSSE implementation is non-pluggable.
              */
 
-            HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this));
+            HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this, CPS));
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
@@ -131,7 +133,7 @@ public class JsseSSLManager extends SSLManager {
              */
             Protocol protocol = new Protocol(
                     JsseSSLManager.HTTPS,
-                    (ProtocolSocketFactory) new HttpSSLProtocolSocketFactory(this, cps),
+                    (ProtocolSocketFactory) new HttpSSLProtocolSocketFactory(this, CPS),
                     443);
             Protocol.registerProtocol(JsseSSLManager.HTTPS, protocol);
             log.debug("SSL stuff all set");

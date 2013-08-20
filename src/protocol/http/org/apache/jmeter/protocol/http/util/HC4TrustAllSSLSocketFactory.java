@@ -52,7 +52,7 @@ public class HC4TrustAllSSLSocketFactory extends SSLSocketFactory {
      * @throws GeneralSecurityException if there's a problem setting up the security
      */
     public HC4TrustAllSSLSocketFactory() throws GeneralSecurityException {
-        this(new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance()));
+        this(new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance(), JsseSSLManager.CPS));
     }
     
     /**
@@ -63,7 +63,7 @@ public class HC4TrustAllSSLSocketFactory extends SSLSocketFactory {
      */
     protected HC4TrustAllSSLSocketFactory(javax.net.ssl.SSLSocketFactory factory) throws GeneralSecurityException {
         super(TRUSTALL, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        this.factory = new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance());
+        this.factory = new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance(), JsseSSLManager.CPS);
     }
 
     /* (non-Javadoc)
