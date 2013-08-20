@@ -114,12 +114,6 @@ public class JsseSSLManager extends SSLManager {
                 this.threadlocal = new ThreadLocal<SSLContext>();
             }
 
-            /*
-             * Set up Java defaults.
-             * N.B. does not allow SlowSocket - fails with:
-             * java.lang.RuntimeException: Export restriction: this JSSE implementation is non-pluggable.
-             */
-
             HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this, CPS));
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override
