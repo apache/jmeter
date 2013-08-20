@@ -240,6 +240,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character.</li>
 <li><bugzilla>55388</bugzilla> - HC3 does not allow IP Source field to override httpclient.localaddress.</li>
 <li><bugzilla>55450</bugzilla> - HEAD redirects should remain as HEAD</li>
+<li><bugzilla>55455</bugzilla> - HTTPS with HTTPClient4 ignores cps setting</li>
 </ul>
 
 <h3>Other Samplers</h3>
