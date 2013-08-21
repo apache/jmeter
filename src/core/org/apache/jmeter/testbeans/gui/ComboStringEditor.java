@@ -183,11 +183,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
             return tags[item-minTagIndex];
         }
         // Not a tag entry, return the original value
-        // combo.getSelectedItem() javadocs says:
-        // If the combo box is editable,  then this value may not have been added to the combo box 
-        // with addItem, insertItemAt or the data constructors.
-        JTextComponent textField = (JTextComponent) combo.getEditor().getEditorComponent();
-        return textField.getText();
+        return (String) value;
     }
 
     /**
@@ -241,7 +237,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
 
         combo.setEditable(true);
 
-        textField.requestFocus();
+        textField.requestFocusInWindow();
         String text = translate(initialEditValue);
         if (text == null) {
             text = ""; // will revert to last valid value if invalid
