@@ -409,6 +409,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55411</bugzilla> -  NativeCommand could be useful elsewhere. Copied code to o.a.jorphan.exec.</li>
 <li><bugzilla>55435</bugzilla> - ComboStringEditor could be simplified to make most settings final</li>
 <li><bugzilla>55436</bugzilla> - ComboStringEditor should implement ClearGui</li>
+<li><bugzilla>55463</bugzilla> - Component.requestFocus() is discouraged; use requestFocusInWindow() instead</li>
 </ul>
 
 <h2>Thanks</h2>

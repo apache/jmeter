@@ -196,7 +196,7 @@ public class JDateField extends JTextField {
             try {
                 dateFormat.parse(getText());
             } catch (ParseException e1) {
-                requestFocus();
+                requestFocusInWindow();
             }
         }
     }

@@ -321,7 +321,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
             popup.pack();
             popup.show(tree, e.getX(), e.getY());
             popup.setVisible(true);
-            popup.requestFocus();
+            popup.requestFocusInWindow();
         }
     }
 }
