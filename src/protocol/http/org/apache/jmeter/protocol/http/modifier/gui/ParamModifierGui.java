@@ -236,7 +236,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
             JOptionPane.showMessageDialog(this, "This field must have a long value!", "Value Required",
                     JOptionPane.ERROR_MESSAGE);
             temp.setText(defaultValue);
-            temp.requestFocus();
+            temp.requestFocusInWindow();
         }
         return longVal;
     }

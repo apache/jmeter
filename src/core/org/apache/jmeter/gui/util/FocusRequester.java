@@ -33,7 +33,7 @@ public class FocusRequester {
         SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run() {
-                comp.requestFocus();
+                comp.requestFocusInWindow();
             }            
         });
     }

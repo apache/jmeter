@@ -597,7 +597,7 @@ public final class GuiPackage implements LocaleChangeListener {
             popup.pack();
             popup.show(invoker, e.getX(), e.getY());
             popup.setVisible(true);
-            popup.requestFocus();
+            popup.requestFocusInWindow();
         }
     }
 
