@@ -25,6 +25,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -73,6 +74,9 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      */
     private long sleepMask;
 
+    // The name of the sampler
+    private String name;
+
     /**
      * Default constructor for <code>SleepTest</code>.
      *
@@ -103,6 +107,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
         }
         sleepTime = context.getLongParameter("SleepTime", DEFAULT_SLEEP_TIME);
         sleepMask = context.getLongParameter("SleepMask", DEFAULT_SLEEP_MASK);
+        name = context.getParameter(TestElement.NAME);
     }
 
     /**
@@ -129,20 +134,19 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
     @Override
     public SampleResult runTest(JavaSamplerContext context) {
         SampleResult results = new SampleResult();
+        results.setSampleLabel(name);
+        long sleep = sleepTime;
+        // Only do the calculation if it is needed
+        if (sleepTime > 0 && sleepMask > 0) {
+            long start = System.currentTimeMillis();
+            // Generate a random-ish offset value using the current time.
+            sleep = sleepTime + (start % sleepMask);
+        }
+        results.setSamplerData("Sleep Test: time = " + sleep);
 
         try {
             // Record sample start time.
             results.sampleStart();
-
-            long sleep = sleepTime;
-            // Only do the calculation if it is needed
-            if (sleepTime > 0 && sleepMask > 0) {
-                long start = System.currentTimeMillis();
-                // Generate a random-ish offset value using the current time.
-                sleep = sleepTime + (start % sleepMask);
-            }
-
-            results.setSampleLabel("Sleep Test: time = " + sleep);
 
             // Execute the sample. In this case sleep for the
             // specified time.
@@ -152,9 +156,11 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
         } catch (InterruptedException e) {
             LOG.warn("SleepTest: interrupted.");
             results.setSuccessful(true);
+            results.setResponseMessage(e.toString());
         } catch (Exception e) {
             LOG.error("SleepTest: error during sample", e);
             results.setSuccessful(false);
+            results.setResponseMessage(e.toString());
         } finally {
             results.sampleEnd();
         }
