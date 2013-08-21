@@ -99,92 +99,86 @@ public class SystemSampler extends AbstractSampler {
     public SampleResult sample(Entry entry) {
         SampleResult results = new SampleResult();
         results.setDataType(SampleResult.TEXT);
+        results.setSampleLabel(getName());
+        
+        String command = getCommand();
+        Arguments args = getArguments();
+        Arguments environment = getEnvironmentVariables();
+        boolean checkReturnCode = getCheckReturnCode();
+        int expectedReturnCode = getExpectedReturnCode();
+        List<String> cmds = new ArrayList<String>(args.getArgumentCount()+1);
+        StringBuilder cmdLine = new StringBuilder((null == command) ? "" : command);
+        cmds.add(command);
+        for (int i=0;i<args.getArgumentCount();i++) {
+            Argument arg = args.getArgument(i);
+            cmds.add(arg.getPropertyAsString(Argument.VALUE));
+            cmdLine.append(" ");
+            cmdLine.append(cmds.get(i+1));
+        }
+
+        Map<String,String> env = new HashMap<String, String>();
+        for (int i=0;i<environment.getArgumentCount();i++) {
+            Argument arg = environment.getArgument(i);
+            env.put(arg.getName(), arg.getPropertyAsString(Argument.VALUE));
+        }
+        
+        File directory = null;
+        if(StringUtils.isEmpty(getDirectory())) {
+            directory = new File(FileServer.getDefaultBase());
+            if(log.isDebugEnabled()) {
+                log.debug("Using default directory:"+directory.getAbsolutePath());
+            }
+        } else {
+            directory = new File(getDirectory());
+            if(log.isDebugEnabled()) {
+                log.debug("Using configured directory:"+directory.getAbsolutePath());
+            }
+        }
+        
+        if(log.isDebugEnabled()) {
+            log.debug("Will run :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
+                    " with environment:"+env);
+        }
+
+        results.setSamplerData("Working Directory:"+directory.getAbsolutePath()+
+                "\nEnvironment:"+env+
+                "\nExecuting:" + cmdLine.toString());
+        
+        SystemCommand nativeCommand = new SystemCommand(directory, env, getStdin(), getStdout(), getStderr());
         
         try {
-            String command = getCommand();
-            Arguments args = getArguments();
-            Arguments environment = getEnvironmentVariables();
-            boolean checkReturnCode = getCheckReturnCode();
-            int expectedReturnCode = getExpectedReturnCode();
-            
-            List<String> cmds = new ArrayList<String>(args.getArgumentCount()+1);
-            StringBuilder cmdLine = new StringBuilder((null == command) ? "" : command);
-            cmds.add(command);
-            for (int i=0;i<args.getArgumentCount();i++) {
-                Argument arg = args.getArgument(i);
-                cmds.add(arg.getPropertyAsString(Argument.VALUE));
-                cmdLine.append(" ");
-                cmdLine.append(cmds.get(i+1));
+            results.sampleStart();
+            int returnCode = nativeCommand.run(cmds);
+            results.sampleEnd();
+            results.setResponseCode(Integer.toString(returnCode)); // TODO is this the best way to do this?
+            if(log.isDebugEnabled()) {
+                log.debug("Ran :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
+                        " with execution environment:"+nativeCommand.getExecutionEnvironment()+ " => " + returnCode);
             }
 
-            Map<String,String> env = new HashMap<String, String>();
-            for (int i=0;i<environment.getArgumentCount();i++) {
-                Argument arg = environment.getArgument(i);
-                env.put(arg.getName(), arg.getPropertyAsString(Argument.VALUE));
-            }
-            
-            File directory = null;
-            if(StringUtils.isEmpty(getDirectory())) {
-                directory = new File(FileServer.getDefaultBase());
-                if(log.isDebugEnabled()) {
-                    log.debug("Using default directory:"+directory.getAbsolutePath());
-                }
+            if (checkReturnCode && (returnCode != expectedReturnCode)) {
+                results.setSuccessful(false);
+                results.setResponseMessage("Uexpected return code.  Expected ["+expectedReturnCode+"]. Actual ["+returnCode+"].");
             } else {
-                directory = new File(getDirectory());
-                if(log.isDebugEnabled()) {
-                    log.debug("Using configured directory:"+directory.getAbsolutePath());
-                }
+                results.setSuccessful(true);
+                results.setResponseMessage("OK");
             }
-            results.setSamplerData("Working Directory:"+directory.getAbsolutePath()+
-                    ", Environment:"+env+
-                    ", Executing:" + cmdLine.toString());
-            
-            SystemCommand nativeCommand = new SystemCommand(directory, env, getStdin(), getStdout(), getStderr());
-            
-            String responseData = null;
-            try {
-                if(log.isDebugEnabled()) {
-                    log.debug("Will run :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
-                            " with environment:"+env);
-                }
-                results.sampleStart();
-                int returnCode = nativeCommand.run(cmds);
-                if(log.isDebugEnabled()) {
-                    log.debug("Ran :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
-                            " with execution environment:"+nativeCommand.getExecutionEnvironment());
-                }
-                results.sampleEnd();
-
-                if (checkReturnCode && (returnCode != expectedReturnCode)) {
-                    results.setSuccessful(false);
-                    responseData = "System did not return expected return code.  Expected ["+expectedReturnCode+"]. Returned ["+returnCode+"].";
-                    results.setSampleLabel("FAILED: " + getName());
-                } else {
-                    results.setSuccessful(true);
-                    responseData = "System Call Complete.";
-                    results.setSampleLabel(getName());
-                }
-            } catch (IOException ioe) {
-                results.setSuccessful(false);
-                responseData = "Exception occured whilst executing System Call: "+ioe;
-                results.setSampleLabel("ERROR: " + getName());
-            } catch (InterruptedException ie) {
-                results.setSuccessful(false);
-                responseData = "System Sampler Interupted whilst executing System Call: "+ie;
-                results.setSampleLabel("ERROR: " + getName());
-            }
-    
-            results.setResponseData((responseData+"\nProcess Output:\n"+nativeCommand.getOutResult()).getBytes());
-            
-        } catch (Exception e) {
-            log.warn("Unexpected error",e);
+        } catch (IOException ioe) {
+            results.sampleEnd();
             results.setSuccessful(false);
-            results.setResponseData(("Unknown Exception caught: "+e).getBytes());
-            results.setSampleLabel("ERROR: " + getName());
+            // results.setResponseCode("???"); TODO what code should be set here?
+            results.setResponseMessage("Exception occured whilst executing System Call: " + ioe);
+        } catch (InterruptedException ie) {
+            results.sampleEnd();
+            results.setSuccessful(false);
+            // results.setResponseCode("???"); TODO what code should be set here?
+            results.setResponseMessage("System Sampler Interupted whilst executing System Call: " + ie);
         }
+
+        results.setResponseData(nativeCommand.getOutResult().getBytes()); // default charset is deliberate here
+            
         return results;
     }
-    
     
     /**
      * @see org.apache.jmeter.samplers.AbstractSampler#applies(org.apache.jmeter.config.ConfigTestElement)
