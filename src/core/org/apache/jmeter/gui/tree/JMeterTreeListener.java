@@ -144,6 +144,11 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
     public void valueChanged(TreeSelectionEvent e) {
         log.debug("value changed, updating currentPath");
         currentPath = e.getNewLeadSelectionPath();
+        // Call requestFocusInWindow to ensure current component loses focus and
+        // all values are correctly saved
+        // see https://issues.apache.org/bugzilla/show_bug.cgi?id=55103
+        // see https://issues.apache.org/bugzilla/show_bug.cgi?id=55459
+        tree.requestFocusInWindow();
         actionHandler.actionPerformed(new ActionEvent(this, 3333, ActionNames.EDIT)); // $NON-NLS-1$
     }
 
