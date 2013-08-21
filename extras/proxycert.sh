@@ -16,12 +16,17 @@
 ##   limitations under the License.
 
 
-## Generate proxyserver certificate for JMeter
+## Generate temporary proxyserver for use with JMeter Proxy recorder
 
-DNAME="cn=JMeter Proxy, ou=JMeter, o=Apache Software Foundation, c=US"
+DNAME="cn=JMeter Proxy (DO NOT TRUST)"
+VALIDITY=1
+# Must agree with property proxy.cert.keystorepass
+STOREPASSWORD=password
+# Must agree with proxy.cert.keypassword
+KEYPASSWORD=password
 
 ## generate the keystore with the certificate
-keytool -genkey -alias jmeter -keystore proxyserver.jks -keypass password -storepass password -validity 1825 -keyalg RSA -dname ${DNAME}
+keytool -genkeypair -alias jmeter -keystore proxyserver.jks -keypass ${KEYPASSWORD} -storepass ${STOREPASSWORD} -validity ${VALIDITY} -keyalg RSA -dname ${DNAME}
 
 ## show the contents
-keytool -list -v -keystore proxyserver.jks -storepass password
+keytool -list -v -keystore proxyserver.jks -storepass ${STOREPASSWORD}
