@@ -249,6 +249,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55027</bugzilla> - Test Action regression, duration value is not recorded (nightly build).</li>
 <li><bugzilla>55163</bugzilla> - BeanShellTestElement fails to quote string when calling testStarted(String)/testEnded(String).</li>
 <li><bugzilla>55349</bugzilla> - NativeCommand hangs if no input file is specified and the application requests input.</li>
+<li><bugzilla>55462</bugzilla> - System Sampler should not change the sampler label if a sample fails</li>
 </ul>
 
 <h3>Controllers</h3>
