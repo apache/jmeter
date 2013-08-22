@@ -42,8 +42,8 @@ public class SystemCommand {
     private final String stderr;
 
     /**
-     * @param env Environment variables appended to environment
-     * @param directory File working directory
+     * @param env Environment variables appended to environment (may be null)
+     * @param directory File working directory (may be null)
      */
     public SystemCommand(File directory, Map<String, String> env) {
         this(directory, env, null, null, null);
@@ -51,11 +51,11 @@ public class SystemCommand {
 
     /**
      * 
-     * @param env Environment variables appended to environment
-     * @param directory File working directory
-     * @param stdin File name that will contain data to be input to process
-     * @param stdout File name that will contain out stream
-     * @param stderr File name that will contain err stream
+     * @param env Environment variables appended to environment (may be null)
+     * @param directory File working directory (may be null)
+     * @param stdin File name that will contain data to be input to process (may be null)
+     * @param stdout File name that will contain out stream (may be null)
+     * @param stderr File name that will contain err stream (may be null)
      */
     public SystemCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
         super();
@@ -67,7 +67,7 @@ public class SystemCommand {
     }
 
     /**
-     * @param arguments List<String>
+     * @param arguments List<String>, not null
      * @return return code
      * @throws InterruptedException
      * @throws IOException
@@ -77,7 +77,9 @@ public class SystemCommand {
         try
         {
             ProcessBuilder procBuild = new ProcessBuilder(arguments);
-            procBuild.environment().putAll(env);
+            if (env != null) {
+                procBuild.environment().putAll(env);
+            }
             this.executionEnvironment = Collections.unmodifiableMap(procBuild.environment());
             procBuild.directory(directory);
             if (stderr == null || stderr.equals(stdout)) { // we're not redirecting stderr separately
