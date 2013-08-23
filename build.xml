@@ -1206,10 +1206,12 @@ run JMeter unless all the JMeter jars are added.
   <!-- Source files also needed at runtime -->
   <patternset id="dist.common.native">
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
+    <include name="${dest.jar.jmeter}/jaas.conf"/>
+    <include name="${dest.jar.jmeter}/krb5.conf"/>
     <include name="${dest.jar.jmeter}/hc.parameters"/>
+    <include name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/logkit.xml"/>
-    <include name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
     <include name="${dest.jar.jmeter}/saveservice.properties"/>
     <include name="${dest.jar.jmeter}/users.dtd"/>
@@ -1579,6 +1581,8 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.bshrc"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.parameters"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.properties"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="jaas.conf"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="krb5.conf"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="log4j.conf"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="logkit.xml"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="proxyserver.jks"/>
