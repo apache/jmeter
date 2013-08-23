@@ -3478,7 +3478,8 @@ This was an experimental feature and has been removed.
     <li>-Djava.security.auth.login.config=jaas.conf</li>
 </ul>
 You can also configure those two properties in file bin/system.properties.
-Look at the two sample configuration files in the jmeter bin folder for references to more documentation.
+Look at the two sample configuration files (krb5.conf and jaas.conf) located in the jmeter bin folder for references to more documentation, and tweak them to match 
+your Kerberos configuration.
 </p>
 <br></br>
 <b>Controls:</b>
