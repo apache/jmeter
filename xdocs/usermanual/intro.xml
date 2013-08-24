@@ -39,20 +39,30 @@ test scripts with <a href="test_plan.html#assertions">assertions</a> to validate
 results you expect.  For maximum flexibility, JMeter lets you create these assertions using
 regular expressions.</p>
 
-<p>But please note that JMeter is not a browser.</p>
+<p>But please note that JMeter is not a browser, it works at protocol level.</p>
 <subsection name="1.1 History" anchor="history">
 <p>Stefano Mazzocchi of the Apache Software Foundation was the original developer of JMeter.
 He wrote it primarily to test the performance of Apache JServ (a project that has
 since been replaced by the Apache Tomcat project).  We redesigned JMeter to enhance the GUI
 and to add functional-testing capabilities.
 </p>
+
+<p>JMeter became a Top Level Apache project in November 2011, which means it has a Project Management Commitee and a dedicated website.</p>
 </subsection>
 
 <subsection name="1.2 The Future" anchor="future">
 <p>We hope to see JMeter's capabilities rapidly expand as developers take advantage of its
-pluggable architecture.  The primary goal of further development is to make JMeter the most
-useful regression testing tool as possible, without compromising JMeter's load-testing
-capabilities.</p>
+pluggable architecture. <br/>
+The primary goal of further developments will be:
+<ul>
+<li>Addition of Websocket protocol</li>
+<li>Addition of FTPS and SFTP protocols</li>
+<li>Enhancements to Webservices protocols (SOAP Attachments)</li>
+<li>Enhancements to JMS protocol implementation</li>
+<li></li>
+</ul>
+
+</p>
 </subsection>
 </section>
 
