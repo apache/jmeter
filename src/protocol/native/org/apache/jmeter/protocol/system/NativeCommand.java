@@ -45,7 +45,7 @@ public class NativeCommand extends  org.apache.jorphan.exec.SystemCommand {
      * @param stderr File name that will contain err stream
      */
     public NativeCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
-        super(directory, env, stdin, stdout, stderr);
+        super(directory, 0L, env, stdin, stdout, stderr);
     }
 
 }

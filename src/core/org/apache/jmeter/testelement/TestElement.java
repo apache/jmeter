@@ -56,6 +56,10 @@ public interface TestElement extends Cloneable {
 
     void setProperty(String key, int value, int dflt);
 
+    void setProperty(String name, long value);
+
+    void setProperty(String name, long value, long dflt);
+
     /**
      * Check if ENABLED property is present and true ; defaults to true
      *

@@ -67,6 +67,8 @@ public class SystemSampler extends AbstractSampler {
 
     private static final String STDIN = "SystemSampler.stdin";
 
+    private static final String TIMEOUT = "SystemSampler.timeout";
+
     // - JMX names
 
     /**
@@ -144,7 +146,7 @@ public class SystemSampler extends AbstractSampler {
                 "\nEnvironment:"+env+
                 "\nExecuting:" + cmdLine.toString());
         
-        SystemCommand nativeCommand = new SystemCommand(directory, env, getStdin(), getStdout(), getStderr());
+        SystemCommand nativeCommand = new SystemCommand(directory, getTimeout(), env, getStdin(), getStdout(), getStderr());
         
         try {
             results.sampleStart();
@@ -309,4 +311,11 @@ public class SystemSampler extends AbstractSampler {
         setProperty(STDIN, filename, "");
     }
 
+    public long getTimeout() {
+        return getPropertyAsLong(TIMEOUT, 0L);
+    }
+
+    public void setTimout(long timeoutMs) {
+        setProperty(TIMEOUT, timeoutMs, 0L);
+    }
 }
