@@ -40,12 +40,15 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.log.Logger;
 
 /**
  * GUI for {@link SystemSampler}
  */
 public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * 
@@ -59,6 +62,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     private final FilePanelEntry stderr = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stderr")); // $NON-NLS-1$
     private JLabeledTextField directory;
     private JLabeledTextField command;
+    private JLabeledTextField timeout;
     private ArgumentsPanel argsPanel;
     private ArgumentsPanel envPanel;
     
@@ -92,7 +96,8 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         
         JPanel streamsCodePane = new JPanel(new BorderLayout());
         streamsCodePane.add(makeStreamsPanel(), BorderLayout.NORTH);
-        streamsCodePane.add(makeReturnCodePanel(), BorderLayout.SOUTH);
+        streamsCodePane.add(makeReturnCodePanel(), BorderLayout.CENTER);
+        streamsCodePane.add(makeTimeoutPanel(), BorderLayout.SOUTH);
         add(streamsCodePane, BorderLayout.SOUTH);
     }
 
@@ -125,6 +130,13 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         systemSampler.setStdin(stdin.getFilename());
         systemSampler.setStdout(stdout.getFilename());
         systemSampler.setStderr(stderr.getFilename());
+        if(!StringUtils.isEmpty(timeout.getText())) {
+            try {
+                systemSampler.setTimout(Long.parseLong(timeout.getText()));
+            } catch (NumberFormatException e) {
+                log.error("Error parsing timeout field value:"+timeout.getText(), e);
+            }
+        } 
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
@@ -161,6 +173,21 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         panel.add(Box.createHorizontalStrut(5));
         panel.add(desiredReturnCode);
         checkReturnCode.setSelected(true);
+        return panel;
+    }
+    
+    /**
+     * @return JPanel timeout config
+     */
+    private JPanel makeTimeoutPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("timeout_config_box_title"))); // $NON-NLS-1$
+        timeout = new JLabeledTextField(JMeterUtils.getResString("timeout_title")); // $NON-NLS-1$
+        timeout.setSize(timeout.getSize().height, 30);
+        panel.add(timeout);
         return panel;
     }
     

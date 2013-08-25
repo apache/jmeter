@@ -33,6 +33,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
@@ -406,7 +407,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     }
 
     /**
-     * Create a boolean property - but only if it is not the default.
+     * Create an int property - but only if it is not the default.
      * This is intended for use when adding new properties to JMeter
      * so that JMX files are not expanded unnecessarily.
      *
@@ -422,6 +423,31 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             removeProperty(name);
         } else {
             setProperty(new IntegerProperty(name, value));
+        }
+    }
+    
+    @Override
+    public void setProperty(String name, long value) {
+        setProperty(new LongProperty(name, value));
+    }
+    
+    /**
+     * Create a long property - but only if it is not the default.
+     * This is intended for use when adding new properties to JMeter
+     * so that JMX files are not expanded unnecessarily.
+     *
+     * N.B. - must agree with the default applied when reading the property.
+     *
+     * @param name property name
+     * @param value current value
+     * @param dflt default
+     */
+    @Override
+    public void setProperty(String name, long value, long dflt) {
+        if (value == dflt) {
+            removeProperty(name);
+        } else {
+            setProperty(new LongProperty(name, value));
         }
     }
 
