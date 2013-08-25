@@ -73,6 +73,11 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 <figure width="906" height="313" image="changes/2.10/03_mongodb_script_alpha.png"></figure>
 </p>
 
+<h4>* Timeout has been added to OS Process Sampler</h4>
+<p>
+<figure width="540" height="600" image="changes/2.10/17_os_process_timeout.png"></figure>
+</p>
+
 <h4>* Query timeout has been added to JDBC Request</h4>
 <p>
 <figure width="540" height="600" image="changes/2.10/04_jdbc_request_timeout.png"></figure>
@@ -129,19 +134,22 @@ template into your Test Plan</h4>
 <figure width="911" height="614" image="changes/2.10/11_color_syntax_jsr223_preprocessor.png"></figure>
 </p>
 
+<h4>* JMeter GUI can now be fully Internationalized, all remaining issues have been fixed</h4>
+<h5>Currently French has all its labels translated. Other languages are partly translated, feel free to 
+contribute translations by reading <a href="localising/index.html">Localisation (Translator's Guide)</a></h5>
+
 <h4>* Moving elements in Test plan has been improved in many ways</h4>
 <h5>Drag and drop of elements in Test Plan tree is now much easier and possible on multiple nodes</h5>
 <p>
 <figure width="894" height="236" image="changes/2.10/12_drap_n-drop_multiple.png"></figure>
 </p>
 <p>
-Note that due to this <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6560955">bug in Java</a>,
+<b>Note that due to this <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6560955">bug in Java</a>,
 you cannot drop a node after last node. The workaround is to drop it before this last node and then Drag and Drop the last node 
-before the one you just dropped.
-<figure width="762" height="277" image="changes/2.10/XXX.png"></figure>
+before the one you just dropped.</b>
 </p>
 <h5>New shortcuts have been added to move elements in the tree. </h5>
-<p>(alt + Arrow Up) and (alt + Arrow Down) move the element within the parent node.
+<p>(alt + Arrow Up) and (alt + Arrow Down) move the element within the parent node.<br/>
 (alt + Arrow Left) and (alt + Arrow Right) move the element up and down in the tree depth</p>
 
 <h4>* Response Time Graph Y axis can now be scaled</h4>
@@ -328,6 +336,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54759</bugzilla> - SSLPeerUnverifiedException using HTTPS , property documented.</li>
 <li><bugzilla>54896</bugzilla> - JUnit sampler gives only "failed to create an instance of the class" message with constructor problems.</li>
 <li><bugzilla>55084</bugzilla> - Add timeout support for JDBC Request. Contributed by Mikhail Epikhin (epihin-m at yandex.ru)</li>
+<li><bugzilla>55403</bugzilla> - Enhancement to OS sampler: Support for timeout</li>
 </ul>
 
 <h3>Controllers</h3>

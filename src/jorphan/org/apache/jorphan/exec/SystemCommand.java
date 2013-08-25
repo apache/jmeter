@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -33,6 +34,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class SystemCommand {
 
+    private static final int POLL_INTERVAL = JMeterUtils.getPropDefault("os_sampler.poll_for_timeout", 100);
     private StreamGobbler outputGobbler;
     private final File directory;
     private final Map<String, String> env;
@@ -40,25 +42,28 @@ public class SystemCommand {
     private final String stdin;
     private final String stdout;
     private final String stderr;
+    private final long timeoutMillis;
 
     /**
      * @param env Environment variables appended to environment (may be null)
      * @param directory File working directory (may be null)
      */
     public SystemCommand(File directory, Map<String, String> env) {
-        this(directory, env, null, null, null);
+        this(directory, 0L, env, null, null, null);
     }
 
     /**
      * 
      * @param env Environment variables appended to environment (may be null)
      * @param directory File working directory (may be null)
+     * @param timeoutMillis timeout in Milliseconds
      * @param stdin File name that will contain data to be input to process (may be null)
      * @param stdout File name that will contain out stream (may be null)
      * @param stderr File name that will contain err stream (may be null)
      */
-    public SystemCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
+    public SystemCommand(File directory, long timeoutMillis, Map<String, String> env, String stdin, String stdout, String stderr) {
         super();
+        this.timeoutMillis = timeoutMillis;
         this.directory = directory;
         this.env = env;
         this.stdin = JOrphanUtils.nullifyIfEmptyTrimmed(stdin);
@@ -108,7 +113,7 @@ public class SystemCommand {
             } else {
                 proc.getOutputStream().close(); // ensure the application does not hang if it requests input
             }
-            int exitVal = proc.waitFor();
+            int exitVal = waitForEndWithTimeout(proc, timeoutMillis);
 
             if (outputGobbler != null) {
                 outputGobbler.join();
@@ -138,6 +143,44 @@ public class SystemCommand {
         }
     }
 
+    /**
+     * Wait for end of proc execution or timeout if timeoutInMillis is greater than 0
+     * @param proc Process
+     * @param timeoutInMillis long timeout in ms
+     * @return proc exit value
+     * @throws InterruptedException
+     */
+    private int waitForEndWithTimeout(Process proc, long timeoutInMillis) throws InterruptedException {
+        if (timeoutInMillis <= 0L) {
+            return proc.waitFor();
+        } else {
+            long now = System.currentTimeMillis();
+            long finish = now + timeoutInMillis;
+            while (isAlive(proc) && (System.currentTimeMillis() < finish)) {
+                Thread.sleep(POLL_INTERVAL);
+            }
+            
+            if (isAlive(proc)) {
+                throw new InterruptedException( "Process timeout out after " + timeoutInMillis + " milliseconds" );
+            }
+            return proc.exitValue();
+        }
+    }
+
+    /**
+     * 
+     * @param p Process
+     * @return true if p is still running
+     */
+    public static boolean isAlive(Process p) {
+        try {
+            p.exitValue();
+            return false;
+        } catch (IllegalThreadStateException e) {
+            return true;
+        }
+    }
+    
     /**
      * @return Out/Err stream contents
      */
