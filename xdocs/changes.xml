@@ -75,7 +75,7 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 
 <h4>* Timeout has been added to OS Process Sampler</h4>
 <p>
-<figure width="540" height="600" image="changes/2.10/17_os_process_timeout.png"></figure>
+<figure width="684" height="586" image="changes/2.10/17_os_process_timeout.png"></figure>
 </p>
 
 <h4>* Query timeout has been added to JDBC Request</h4>
