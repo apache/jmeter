@@ -42,7 +42,7 @@ behavior under heavy concurrent load.
 <h2>What does it do?</h2>
 <p>Apache JMeter features include:</p>
 <ul>
-    <li>Can load and performance test many different server/protocol types:
+    <li>Ability to load and performance test many different server/protocol types:
         <ul>
         <li>Web - HTTP, HTTPS</li>
         <li>SOAP</li>
@@ -58,9 +58,9 @@ behavior under heavy concurrent load.
     <li>Complete portability and <b>100% Java purity</b>.</li>
     <li>Full <b>multithreading</b> framework allows concurrent sampling by many threads and
         simultaneous sampling of different functions by separate thread groups.</li>
-    <li>Careful <b>GUI</b> design allows faster operation and more precise timings.</li>
+    <li>Careful <b>GUI</b> design allows faster Test Plan building and debugging.</li>
     <li>Caching and offline analysis/replaying of test results.</li>
-    <li><b>Highly Extensible:</b>
+    <li><b>Highly Extensible core:</b>
       <ul>
         <li>Pluggable Samplers allow unlimited testing capabilities.</li>
         <li>Several load statistics may be choosen with <b>pluggable timers</b>.</li>
