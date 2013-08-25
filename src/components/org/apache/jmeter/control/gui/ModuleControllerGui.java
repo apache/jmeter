@@ -40,6 +40,7 @@ import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -248,6 +249,8 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==expandButton) {
+            // reset previous result
+            ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
             JMeterTreeNode currentSelectedNode = null;
             TreeNodeWrapper tnw = (TreeNodeWrapper) nodesModel.getSelectedItem();
             if (tnw != null && tnw.getTreeNode() != null) {
