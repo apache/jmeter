@@ -38,6 +38,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.SystemCommand;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -46,6 +47,9 @@ import org.apache.log.Logger;
  * A sampler for executing a System function. 
  */
 public class SystemSampler extends AbstractSampler {
+
+    private static final int POLL_INTERVAL = JMeterUtils.getPropDefault("os_sampler.poll_for_timeout", 100);
+
     private static final long serialVersionUID = 1;
     
     // + JMX names, do not change their values
@@ -146,7 +150,7 @@ public class SystemSampler extends AbstractSampler {
                 "\nEnvironment:"+env+
                 "\nExecuting:" + cmdLine.toString());
         
-        SystemCommand nativeCommand = new SystemCommand(directory, getTimeout(), env, getStdin(), getStdout(), getStderr());
+        SystemCommand nativeCommand = new SystemCommand(directory, getTimeout(), POLL_INTERVAL, env, getStdin(), getStdout(), getStderr());
         
         try {
             results.sampleStart();

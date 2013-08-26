@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -34,7 +33,6 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class SystemCommand {
 
-    private static final int POLL_INTERVAL = JMeterUtils.getPropDefault("os_sampler.poll_for_timeout", 100);
     private StreamGobbler outputGobbler;
     private final File directory;
     private final Map<String, String> env;
@@ -43,13 +41,14 @@ public class SystemCommand {
     private final String stdout;
     private final String stderr;
     private final long timeoutMillis;
+    private final int pollInterval;
 
     /**
      * @param env Environment variables appended to environment (may be null)
      * @param directory File working directory (may be null)
      */
     public SystemCommand(File directory, Map<String, String> env) {
-        this(directory, 0L, env, null, null, null);
+        this(directory, 0L, 100, env, null, null, null);
     }
 
     /**
@@ -57,15 +56,17 @@ public class SystemCommand {
      * @param env Environment variables appended to environment (may be null)
      * @param directory File working directory (may be null)
      * @param timeoutMillis timeout in Milliseconds
+     * @param pollInterval Value used to poll for Process execution end
      * @param stdin File name that will contain data to be input to process (may be null)
      * @param stdout File name that will contain out stream (may be null)
      * @param stderr File name that will contain err stream (may be null)
      */
-    public SystemCommand(File directory, long timeoutMillis, Map<String, String> env, String stdin, String stdout, String stderr) {
+    public SystemCommand(File directory, long timeoutMillis, int pollInterval, Map<String, String> env, String stdin, String stdout, String stderr) {
         super();
         this.timeoutMillis = timeoutMillis;
         this.directory = directory;
         this.env = env;
+        this.pollInterval = pollInterval;
         this.stdin = JOrphanUtils.nullifyIfEmptyTrimmed(stdin);
         this.stdout = JOrphanUtils.nullifyIfEmptyTrimmed(stdout);
         this.stderr = JOrphanUtils.nullifyIfEmptyTrimmed(stderr);
@@ -157,7 +158,7 @@ public class SystemCommand {
             long now = System.currentTimeMillis();
             long finish = now + timeoutInMillis;
             while (isAlive(proc) && (System.currentTimeMillis() < finish)) {
-                Thread.sleep(POLL_INTERVAL);
+                Thread.sleep(pollInterval);
             }
             
             if (isAlive(proc)) {
