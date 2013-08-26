@@ -238,7 +238,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     // FIXME FACTOR WITH HTTPHC4Impl, HTTPHC3Impl
     // Just append all the parameter values, and use that as the post body
     /**
-     * Compute Post body from arguments
+     * Compute body data from arguments
      * @param arguments {@link Arguments}
      * @return {@link String}
      */
@@ -247,7 +247,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     /**
-     * Compute Post body from arguments
+     * Compute body data from arguments
      * @param arguments {@link Arguments}
      * @param crlfToLF whether to convert CRLF to LF
      * @return {@link String}
