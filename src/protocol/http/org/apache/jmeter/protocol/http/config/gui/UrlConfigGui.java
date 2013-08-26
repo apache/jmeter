@@ -113,7 +113,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     
     private final boolean showImplementation; // Set false for AJP
 
-    // Raw POST Body 
+    // Body data
     private JLabeledTextArea postBodyContent;
 
     // Tabbed pane that contains parameters and raw body

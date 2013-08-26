@@ -382,7 +382,7 @@ To send a CRLF after the last line of data, just ensure that there is an empty l
 </p>
 <figure width="902" height="421" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
 <figure width="908" height="212" image="http-request-confirm-raw-body.png">Figure 2 - Confirm dialog to switch</figure>
-<figure width="905" height="423" image="http-request-raw-body.png">Figure 3 - HTTP Request using RAW Post body</figure>
+<figure width="905" height="423" image="http-request-raw-body.png">Figure 3 - HTTP Request using Body Data</figure>
 
 <p>
 <b>Method Handling:</b><br></br>
