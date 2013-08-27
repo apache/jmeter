@@ -284,15 +284,12 @@ public class Proxy extends Thread {
             InputStream in = getCertificate();
             Exception except = null;
             if (in != null) {
-                KeyStore ks = null;
-                KeyManagerFactory kmf = null;
-                SSLContext sslcontext = null;
                 try {
-                    ks = KeyStore.getInstance(KEYSTORE_TYPE);
+                    KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
                     ks.load(in, JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
-                    kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
+                    KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
                     kmf.init(ks, JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
-                    sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
+                    SSLContext sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
                     sslcontext.init(kmf.getKeyManagers(), null, null);
                     SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
                     hashHost.put(host, sslFactory);
