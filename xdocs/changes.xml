@@ -217,7 +217,7 @@ It was therefore necessary to change the shortcut.
 </p>
 
 <p>
-Webservice (SOAP) Request has been removed by default from GUI as Element is deprecated (use HTTP Sampler with Raw Post body), if you need to show it, see property not_in_menu in jmeter.properties
+Webservice (SOAP) Request has been removed by default from GUI as Element is deprecated (use HTTP Sampler with Body Data), if you need to show it, see property not_in_menu in jmeter.properties
 </p>
 
 <p>
@@ -312,7 +312,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55064</bugzilla> - Useless processing in ReportTreeListener.isValidDragAction(). Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>55242</bugzilla> - BeanShell Client jar throws exceptions after upgrading to 2.8.</li>
 <li><bugzilla>55288</bugzilla> - JMeter should default to 0 retries for HTTP requests.</li>
-<li><bugzilla>55405</bugzilla> - ant download_jars task fails if lib/api or lib/doc are missing. Contributed by  Antonio Gomes Rodrigues.</li>
+<li><bugzilla>55405</bugzilla> - ant download_jars task fails if lib/api or lib/doc are missing. Contributed by Antonio Gomes Rodrigues.</li>
 <li><bugzilla>55427</bugzilla> - TestBeanHelper should ignore properties not supported by GenericTestBeanCustomizer</li>
 <li><bugzilla>55459</bugzilla> - Elements using ComboStringEditor lose the input value if user selects another Test Element</li>
 </ul>
@@ -321,12 +321,13 @@ Previously the default was 1, which could cause unexpected additional traffic.
 
 <h2>Improvements</h2>
 
-<h3>HTTP Samplers</h3>
+<h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li>HTTP Request: Small user interaction improvements in Row parameter Detail Box. Contributed by Milamber</li>
 <li><bugzilla>55255</bugzilla> - Allow Body in HTTP DELETE method to support API that use it (like ElasticSearch).</li>
 <li><bugzilla>53480</bugzilla> - Add Kerberos support to Http Sampler (HttpClient4). Based on patch by Felix Schumacher (felix.schumacher at internetallee.de)</li>
 <li><bugzilla>54874</bugzilla> - Support device in addition to source IP address. Based on patch by Dan Fruehauf (malkodan at gmail.com)</li>
+<li><bugzilla>55488</bugzilla> - Add .ico and .woff file extension to default suggested exclusions in proxy recorder. Contributed by Antonio Gomes Rodrigues</li>
 </ul>
 
 <h3>Other samplers</h3>
