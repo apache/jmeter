@@ -66,10 +66,9 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
 
     public void makeDirectory() {
         File output = new File(getTargetDirectory());
-        if (!output.exists() || !output.isDirectory()) {
-            if(!output.mkdir()) {
-                throw new IllegalStateException("Could not create directory:"+output.getAbsolutePath());
-            }
+        // mkdir() returns false if the directory was not created; could be because it exists
+        if (!output.mkdir() && !output.isDirectory()) {
+            throw new IllegalStateException("Could not create directory:"+output.getAbsolutePath());
         }
     }
 
