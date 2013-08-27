@@ -1158,6 +1158,11 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         website for details of the languages supported.
         You may need to download the appropriate jars for the language; they should be put in the JMeter <b>lib</b> directory.
         </p>
+        <note>
+        The BSF API has been largely superseded by JSR-223, which is included in Java 1.6 onwards.
+        Most scripting languages now include support for JSR-223; please use the JSR223 Sampler instead.
+        The BSF Sampler should only be needed for supporting legacy languages/test scripts.
+        </note>
         <p>By default, JMeter supports the following languages:</p>
         <ul>
         <li>javascript</li>
@@ -1231,11 +1236,13 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
 <description>
 <p>
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
-JSR223 related elements have a feature that increases highly their performances.
+</p>
+<p>
+The JSR223 test elements have a feature (compilation) that can significantly increase performance.
 To benefit from this feature:
 <ul>
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
-    <li>Or Use Script Text and fill in script cache key property, ensure it is unique accross Test Plan as JMeter will use it to cache result of compilation.
+    <li>Or Use Script Text and fill in script cache key property, ensure it is unique across Test Plan as JMeter will use it to cache result of compilation.
     <note>When using this feature, ensure you script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
     <note>To benefit fomr Caching and compilation, language engine used for scripting must implement JSR223 Compilable interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
