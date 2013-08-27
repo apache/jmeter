@@ -162,6 +162,7 @@ public class SystemCommand {
             }
             
             if (isAlive(proc)) {
+                // N.B. proc.destroy() is called by the finally clause in the run() method
                 throw new InterruptedException( "Process timeout out after " + timeoutInMillis + " milliseconds" );
             }
             return proc.exitValue();
