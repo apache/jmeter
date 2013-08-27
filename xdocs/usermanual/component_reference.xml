@@ -5715,6 +5715,11 @@ You also need to set up your browser to use the JMeter proxy port as the proxy f
 Do not use JMeter as the proxy for any other request types - FTP, etc. - as the JMeter proxy cannot handle them.
 </p>
 <p>
+Ideally use private browsing mode when recording the session.
+This should ensure that the browser starts with no stored cookies, and prevents certain changes from being saved.
+For example, Firefox does not allow certificate overrides to be saved permanently.
+</p>
+<p>
 <b>HTTPS recording</b><br/>
 JMeter proxy server uses a dummy certificate to enable it to accept the SSL connection from
 the browser. This certificate is not one of the certificates that browsers normally trust, and will not be for the
@@ -5729,7 +5734,8 @@ As a consequence:
    "JMeter Proxy". It is not possible to verify that this is a valid certificate.<br/>
 </code> <br/>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
-record it. You should only accept the certificate temporarily.
+record it.
+However, do not accept this certificate permanently; it should only be accepted temporarily.
 Browsers only prompt this dialogue for the certificate of the main url, not for the resources loaded in the page, such as images, css or javascript files hosted on a secured external CDN. 
 If you have such resources (gmail has for example), you'll have to first browse manually to these other domains in order to accept JMeter's certificate for them. 
 Check in jmeter.log for secure domains that you need to register certificate for.
