@@ -170,11 +170,11 @@ public class SystemCommand {
     }
 
     /**
-     * 
+     * Check if the process is still running.
      * @param p Process
      * @return true if p is still running
      */
-    public static boolean isAlive(Process p) {
+    private static boolean isAlive(Process p) {
         try {
             p.exitValue();
             return false;
