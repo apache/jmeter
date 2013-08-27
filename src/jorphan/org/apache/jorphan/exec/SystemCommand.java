@@ -157,32 +157,22 @@ public class SystemCommand {
         } else {
             long now = System.currentTimeMillis();
             long finish = now + timeoutInMillis;
-            while (isAlive(proc) && (System.currentTimeMillis() < finish)) {
-                Thread.sleep(pollInterval);
+            while(System.currentTimeMillis() < finish) {
+                try {
+                    return proc.exitValue();
+                } catch (IllegalThreadStateException e) { // not yet terminated
+                    Thread.sleep(pollInterval);
+                }
             }
-            
-            if (isAlive(proc)) {
+            try {
+                return proc.exitValue();
+            } catch (IllegalThreadStateException e) { // not yet terminated
                 // N.B. proc.destroy() is called by the finally clause in the run() method
                 throw new InterruptedException( "Process timeout out after " + timeoutInMillis + " milliseconds" );
             }
-            return proc.exitValue();
         }
     }
 
-    /**
-     * Check if the process is still running.
-     * @param p Process
-     * @return true if p is still running
-     */
-    private static boolean isAlive(Process p) {
-        try {
-            p.exitValue();
-            return false;
-        } catch (IllegalThreadStateException e) {
-            return true;
-        }
-    }
-    
     /**
      * @return Out/Err stream contents
      */
