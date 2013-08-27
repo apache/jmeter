@@ -103,11 +103,7 @@ public class Proxy extends Thread {
     private static final String CERT_FILE =
         JMeterUtils.getPropDefault("proxy.cert.file", CERT_FILE_DEFAULT); // $NON-NLS-1$
 
-    private static final char[] KEYSTORE_PASSWORD =
-        JMeterUtils.getPropDefault("proxy.cert.keystorepass", "password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$
-
-    private static final char[] KEY_PASSWORD =
-        JMeterUtils.getPropDefault("proxy.cert.keypassword","password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$
+    private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$
 
     private static final SamplerCreatorFactory factory = new SamplerCreatorFactory();
 
@@ -293,9 +289,9 @@ public class Proxy extends Thread {
                 SSLContext sslcontext = null;
                 try {
                     ks = KeyStore.getInstance(KEYSTORE_TYPE);
-                    ks.load(in, KEYSTORE_PASSWORD);
+                    ks.load(in, JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
                     kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
-                    kmf.init(ks, KEY_PASSWORD);
+                    kmf.init(ks, JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
                     sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
                     sslcontext.init(kmf.getKeyManagers(), null, null);
                     SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
