@@ -5729,9 +5729,9 @@ As a consequence:
 <li>If the browser hasn't already registered a certificate for the domain of your URL, it should display a dialogue asking if you want to accept the certificate or not. For example:<br/>
 <code>
 1) The server's name "www.example.com" does not match the certificate's name
-   "JMeter Proxy". Somebody may be trying to eavesdrop on you.<br/>
-2) The certificate for "JMeter Proxy" is signed by the unknown Certificate Authority
-   "JMeter Proxy". It is not possible to verify that this is a valid certificate.<br/>
+   "JMeter Proxy (DO NOT TRUST)". Somebody may be trying to eavesdrop on you.<br/>
+2) The certificate for "JMeter Proxy (DO NOT TRUST)" is signed by the unknown Certificate Authority
+   "JMeter Proxy (DO NOT TRUST)". It is not possible to verify that this is a valid certificate.<br/>
 </code> <br/>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.
