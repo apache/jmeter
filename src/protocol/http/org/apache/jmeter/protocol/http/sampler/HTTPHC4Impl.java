@@ -264,7 +264,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else if (method.equals(HTTPConstants.PATCH)) {
                 httpRequest = new HttpPatch(uri);
             } else {
-                throw new IllegalArgumentException("Unexpected method: "+method);
+                throw new IllegalArgumentException("Unexpected method: '"+method+"'");
             }
             setupRequest(url, httpRequest, res); // can throw IOException
         } catch (Exception e) {
