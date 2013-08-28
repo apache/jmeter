@@ -570,6 +570,14 @@
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
     <mkdir dir="${build.components}"/>
+    <!-- get the source compile classpath in a printable form -->
+    <pathconvert pathsep="${line.separator}|   |-- "
+                 property="echo.path.compile"
+                 refid="classpath">
+    </pathconvert>
+    <echo message="|-- compile classpath"/>
+    <echo message="|   |"/>
+    <echo message="|   |-- ${echo.path.compile}"/>
     <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
