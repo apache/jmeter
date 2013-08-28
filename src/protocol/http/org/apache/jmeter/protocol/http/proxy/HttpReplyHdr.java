@@ -191,11 +191,11 @@ public final class HttpReplyHdr {
     }
 
     /**
-     * Client not otherized for the request.
+     * Client not authorized for the request.
      *
      * @return The header in a string;
      */
-    public static String formUnautorized() {
+    public static String formUnauthorized() {
         return formError("401 Unathorized", "Unathorized use of this service");
     }
 
