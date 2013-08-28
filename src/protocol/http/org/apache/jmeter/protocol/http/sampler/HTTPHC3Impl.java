@@ -234,7 +234,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     }
                 };
             } else {
-                throw new IllegalArgumentException("Unexpected method: "+method);
+                throw new IllegalArgumentException("Unexpected method: '"+method+"'");
             }
 
             final CacheManager cacheManager = getCacheManager();
