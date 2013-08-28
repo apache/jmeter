@@ -570,14 +570,6 @@
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
     <mkdir dir="${build.components}"/>
-    <!-- get the source compile classpath in a printable form -->
-    <pathconvert pathsep="${line.separator}|   |-- "
-                 property="echo.path.compile"
-                 refid="classpath">
-    </pathconvert>
-    <echo message="|-- compile classpath"/>
-    <echo message="|   |"/>
-    <echo message="|   |-- ${echo.path.compile}"/>
     <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
@@ -2936,6 +2928,10 @@ run JMeter unless all the JMeter jars are added.
         <!-- The directories must exist otherwise the build fails when deleting previous versions -->
         <mkdir dir="${lib.api}" />
         <mkdir dir="${lib.doc}" />
+        <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
+        <delete verbose="true">
+          <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
+        </delete>
         <antcall target="_process_all_jars">
             <param name="_get_file" value="true"/>
         </antcall>
