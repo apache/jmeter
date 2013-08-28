@@ -95,10 +95,12 @@ class SMIMEAssertion {
             }
             if (msg.isMimeType("multipart/signed")) { // $NON-NLS-1$
                 MimeMultipart multipart = (MimeMultipart) msg.getContent();
-                s = new SMIMESignedParser(new BcDigestCalculatorProvider(), multipart);
+                // temporary cast to try and trace issue with buildbot trunk build
+                s = new SMIMESignedParser((org.bouncycastle.operator.DigestCalculatorProvider) new BcDigestCalculatorProvider(), multipart);
             } else if (msg.isMimeType("application/pkcs7-mime") // $NON-NLS-1$
                     || msg.isMimeType("application/x-pkcs7-mime")) { // $NON-NLS-1$
-                s = new SMIMESignedParser(new BcDigestCalculatorProvider(), msg);
+                // temporary cast to try and trace issue with buildbot trunk build
+                s = new SMIMESignedParser((org.bouncycastle.operator.DigestCalculatorProvider) new BcDigestCalculatorProvider(), msg);
             }
 
             if (null != s) {
