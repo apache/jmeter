@@ -85,8 +85,11 @@ public class HttpRequestHdr {
 
     private HeaderManager headerManager;
 
+    private String firstLine; // saved copy of first line for error reports
+
     public HttpRequestHdr() {
         this.httpSamplerName = ""; // $NON-NLS-1$
+        this.firstLine = "" ; // $NON-NLS-1$
     }
 
     /**
@@ -151,6 +154,7 @@ public class HttpRequestHdr {
     }
 
     private void parseFirstLine(String firstLine) {
+        this.firstLine = firstLine;
         if (log.isDebugEnabled()) {
             log.debug("browser request: " + firstLine);
         }
@@ -363,6 +367,10 @@ public class HttpRequestHdr {
      */
     public String getMethod(){
         return method;
+    }
+
+    public String getFirstLine() {
+        return firstLine;
     }
 
     /**
