@@ -85,7 +85,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String USE_DEFAULT_HTTP_IMPL = ""; // $NON-NLS-1$
 
     private static final String SUGGESTED_EXCLUSIONS =
-            JMeterUtils.getPropDefault("proxy.excludes.suggested", ".*\\.js;.*\\.css;.*\\.swf;.*\\.gif;.*\\.png;.*\\.jpg;.*\\.jpeg;.*\\.bmp;.*\\.ico;.*\\.woff"); // $NON-NLS-1$
+            JMeterUtils.getPropDefault("proxy.excludes.suggested", ".*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)"); // $NON-NLS-1$
     
     private JTextField portField;
 
