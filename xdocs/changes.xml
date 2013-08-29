@@ -107,6 +107,15 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 
 <h4>* ModuleController has been improved to better handle changes to referenced controllers</h4>
 
+<h4>* Improved class loader configuration, see <bugzilla>55503</bugzilla></h4>
+<p>
+<ul>
+<li>New property "plugin_dependency_paths" for plugin dependencies</li>
+<li>Properties "search_paths", "user.classpath" and "plugin_dependency_paths"
+    now automatically add all jars from configured directories</li>
+</ul>
+</p>
+
 <h4>* Best-practices section has been improved, ensure you read it to get the most out of JMeter</h4>
 
 <h3><u>GUI and ergonomy Improvements:</u></h3>

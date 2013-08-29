@@ -5569,13 +5569,17 @@ The tearDown threads won't be run if the test is forcibly stopped.
 </p>
 <p>
 Test plan now provides an easy way to add classpath setting to a specific test plan. 
-The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter.
+The feature is additive, meaning that you can add jar files or directories,
+but removing an entry requires restarting JMeter.
 Note that this cannot be used to add JMeter GUI plugins, because they are processed earlier.
-However it can be useful for utility jars such as JDBC drivers. 
+However it can be useful for utility jars such as JDBC drivers. The jars are only added to
+the search path for the JMeter loader, not for the system class loader.
 </p>
 <p>
 JMeter properties also provides an entry for loading additional classpaths.
-In jmeter.properties, edit "user.classpath" to include additional libraries.
+In jmeter.properties, edit "user.classpath" or "plugin_dependency_paths" to include additional libraries.
+See <a href="get-started.html#classpath">JMeter's Classpath</a> and
+<a href="get-started.html#configuring_jmeter">Configuring JMeter</a> for details.
 </p>
 </description>
 </component>
