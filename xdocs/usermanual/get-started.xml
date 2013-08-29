@@ -257,21 +257,26 @@ will override the HEAP settings in the script.
 <p>JMeter automatically finds classes from jars in the following directories:</p>
 <ul>
 <li>JMETER_HOME/lib - used for utility jars</li>
-<li>JMETER_HOME/lib/ext - used for JMeter components and add-ons</li>
+<li>JMETER_HOME/lib/ext - used for JMeter components and plugins</li>
 </ul>
 <p>If you have developed new JMeter components,
 then you should jar them and copy the jar into JMeter's <b>lib/ext</b> directory.
 JMeter will automatically find JMeter components in any jars found here.
+Do not use lib/ext for utility jars or dependency jars used by the plugins;
+it is only intended for JMeter components and plugins.
 </p>
-<p>Support jars (libraries etc) should be placed in the <b>lib</b> directory.</p>
-
-<p>If you don't want to put JMeter extension jars in the <b>lib/ext</b> directory,
+<p>If you don't want to put JMeter plugin jars in the <b>lib/ext</b> directory,
 then define the property <b>search_paths</b> in jmeter.properties.
-Do not use lib/ext for utility jars; it is only intended for JMeter components.
+</p>
+<p>Utility and dependency jars (libraries etc) can be placed in the <b>lib</b> directory.</p>
+<p>If you don't want to put such jars in the <b>lib</b> directory,
+then define the property <b>user.classpath</b> or <b>plugin_dependency_paths</b>
+in jmeter.properties. See below for an explanation of the differences.
 </p>
 <p>
 Other jars (such as JDBC, JMS implementations and any other support libaries needed by the JMeter code)
- should be placed in the <b>lib</b> directory - not the <b>lib/ext</b> directory</p>
+should be placed in the <b>lib</b> directory - not the <b>lib/ext</b> directory,
+or added to <b>user.classpath</b>.</p>
 <p>Note: JMeter will only find .jar files, not .zip.</p>
 <p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or you can set the property <b>user.classpath</b> in jmeter.properties</p>
 <p>Note that setting the CLASSPATH environment variable will have no effect.
@@ -543,13 +548,33 @@ If set to 0, then JMeter does not start the daemon thread.
   You may list their classname or their class label (the string that appears
   in JMeter's UI) here, and they will no longer appear in the menus.</property>
   <property name="search_paths">
-  List of paths (separated by ;) that JMeter will search for JMeter add-on classes;
-  for example additional samplers.
-  This is in addition to any jars found in the lib/ext directory.
+  List of paths (separated by ;) that JMeter will search for JMeter plugin classes,
+  for example additional samplers. A path item can either be a jar file or a directory.
+  Any jar file in such a directory will be automatically included in search_paths,
+  jar files in sub directories are ignored.
+  The given value is in addition to any jars found in the lib/ext directory.
   </property>
   <property name="user.classpath">
-  List of paths that JMeter will search for utility classes.
-  This is in addition to any jars found in the lib directory.
+  List of paths that JMeter will search for utility and plugin dependency classes.
+  Use your platform path separator to separate multiple paths.
+  A path item can either be a jar file or a directory.
+  Any jar file in such a directory will be automatically included in user.classpath,
+  jar files in sub directories are ignored.
+  The given value is in addition to any jars found in the lib directory.
+  All entries will be added to the class path of the system class loader
+  and also to the path of the JMeter internal loader.
+  </property>
+  <property name="plugin_dependency_paths">
+  List of paths (separated by ;) that JMeter will search for utility
+  and plugin dependency classes.
+  A path item can either be a jar file or a directory.
+  Any jar file in such a directory will be automatically included in plugin_dependency_paths,
+  jar files in sub directories are ignored.
+  The given value is in addition to any jars found in the lib directory
+  or given by the user.classpath property.
+  All entries will be added to the path of the JMeter internal loader only.
+  For plugin dependencies using plugin_dependency_paths should be preferred over
+  user.classpath.
   </property>
   <property name="user.properties">
   Name of file containing additional JMeter properties. 

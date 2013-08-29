@@ -141,6 +141,28 @@ public final class NewDriver {
     }
 
     /**
+     * Generate an array of jar files located in a directory.
+     * Jar files located in sub directories will not be added.
+     *
+     * @param dir to search for the jar files.
+     */
+    private static File[] listJars(File dir) {
+        if (dir.isDirectory()) {
+            return dir.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File f, String name) {
+                    if (name.endsWith(".jar")) {// $NON-NLS-1$
+                        File jar = new File(f, name);
+                        return jar.isFile() && jar.canRead();
+                    }
+                    return false;
+                }
+            });
+        }
+        return new File[0];
+    }
+
+    /**
      * Add a URL to the loader classpath only; does not update the system classpath.
      *
      * @param path to be added.
@@ -151,6 +173,14 @@ public final class NewDriver {
             loader.addURL(furl.toURI().toURL()); // See Java bug 4496398
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        }
+        File[] jars = listJars(furl);
+        for (int x = 0; x < jars.length; x++) {
+            try {
+                loader.addURL(jars[x].toURI().toURL()); // See Java bug 4496398
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -179,6 +209,17 @@ public final class NewDriver {
         StringBuilder sb = new StringBuilder(System.getProperty(JAVA_CLASS_PATH));
         sb.append(CLASSPATH_SEPARATOR);
         sb.append(path);
+        File[] jars = listJars(file);
+        for (int x = 0; x < jars.length; x++) {
+            try {
+                loader.addURL(jars[x].toURI().toURL()); // See Java bug 4496398
+                sb.append(CLASSPATH_SEPARATOR);
+                sb.append(jars[x].getPath());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+
         // ClassFinder needs this
         System.setProperty(JAVA_CLASS_PATH,sb.toString());
     }
