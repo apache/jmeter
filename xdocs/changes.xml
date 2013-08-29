@@ -295,7 +295,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <h3>I18N</h3>
 <ul>
 <li><bugzilla>55437</bugzilla> - ComboStringEditor does not translate EDIT and UNDEFINED strings on language change</li>
-<li><bugzilla>55501</bugzilla> - Incorrect encoding for French description of __char function. Contributed by Antonio Gomes Rodrigues (ra007 at gmail.com)</li>
+<li><bugzilla>55501</bugzilla> - Incorrect encoding for French description of __char function. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
