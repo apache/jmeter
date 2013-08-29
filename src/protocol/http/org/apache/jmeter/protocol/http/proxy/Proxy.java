@@ -54,6 +54,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -180,6 +181,10 @@ public class Proxy extends Thread {
         try {
             // Now, parse initial request (in case it is a CONNECT request)
             byte[] ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
+            if (ba.length == 0) {
+                log.warn(port + "Empty request, ignored");
+                throw new JMeterException(); // hack to skip processing
+            }
             if (log.isDebugEnabled()) {
                 log.debug(port + "Initial request: " + new String(ba));
             }
@@ -228,6 +233,8 @@ public class Proxy extends Thread {
 
             writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()));
             samplerCreator.postProcessSampler(sampler, result);
+        } catch (JMeterException jme) {
+            // ignored, already processed
         } catch (UnknownHostException uhe) {
             log.warn(port + "Server Not Found.", uhe);
             writeErrorToClient(HttpReplyHdr.formServerNotFound());
