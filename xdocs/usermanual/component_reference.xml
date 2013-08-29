@@ -5803,6 +5803,7 @@ This setting will also be needed when running the generated test plan.
         [Does not have to match the entire field].
         The include filter is checked first, then the exclude filter.
         Samples which are filtered out will not be stored.
+        <b>Note: this filtering is applied to the content type of the response</b>
         </property>
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
         those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
