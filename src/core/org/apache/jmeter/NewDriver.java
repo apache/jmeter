@@ -88,21 +88,21 @@ public final class NewDriver {
         File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),// $NON-NLS-1$ $NON-NLS-2$
                 new File(jmDir + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
                 new File(jmDir + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
-        for (int a = 0; a < libDirs.length; a++) {
-            File[] libJars = libDirs[a].listFiles(new FilenameFilter() {
+        for (File libDir : libDirs) {
+            File[] libJars = libDir.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {// only accept jar files
                     return name.endsWith(".jar");// $NON-NLS-1$
                 }
             });
             if (libJars == null) {
-                new Throwable("Could not access " + libDirs[a]).printStackTrace();
+                new Throwable("Could not access " + libDir).printStackTrace();
                 continue;
             }
             Arrays.sort(libJars); // Bug 50708 Ensure predictable order of jars
-            for (int i = 0; i < libJars.length; i++) {
+            for (File libJar : libJars) {
                 try {
-                    String s = libJars[i].getPath();
+                    String s = libJar.getPath();
 
                     // Fix path to allow the use of UNC URLs
                     if (usesUNC) {
@@ -175,9 +175,9 @@ public final class NewDriver {
             e.printStackTrace();
         }
         File[] jars = listJars(furl);
-        for (int x = 0; x < jars.length; x++) {
+        for (File jar : jars) {
             try {
-                loader.addURL(jars[x].toURI().toURL()); // See Java bug 4496398
+                loader.addURL(jar.toURI().toURL()); // See Java bug 4496398
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -210,11 +210,11 @@ public final class NewDriver {
         sb.append(CLASSPATH_SEPARATOR);
         sb.append(path);
         File[] jars = listJars(file);
-        for (int x = 0; x < jars.length; x++) {
+        for (File jar : jars) {
             try {
-                loader.addURL(jars[x].toURI().toURL()); // See Java bug 4496398
+                loader.addURL(jar.toURI().toURL()); // See Java bug 4496398
                 sb.append(CLASSPATH_SEPARATOR);
-                sb.append(jars[x].getPath());
+                sb.append(jar.getPath());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
