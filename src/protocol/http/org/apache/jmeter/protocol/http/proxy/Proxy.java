@@ -320,7 +320,7 @@ public class Proxy extends Thread {
                     sslcontext.init(kmf.getKeyManagers(), null, null);
                     SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
                     hashHost.put(host, sslFactory);
-                    log.info(port + "KeyStore for SSL loaded OK and put host in map (localPort+"+host+")");
+                    log.info(port + "KeyStore for SSL loaded OK and put host in map ("+host+")");
                     return sslFactory;
                 } catch (NoSuchAlgorithmException e) {
                     except=e;
