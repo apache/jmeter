@@ -201,7 +201,9 @@ public class Proxy extends Thread {
                     log.debug(port + "Start to negotiate SSL connection, host: " + param[0]);
                     clientSocket = startSSL(clientSocket, param[0]);
                 } else {
-                    log.warn("In SSL request, unable to find host and port in CONNECT request");
+                    // Should not happen, but if it does we don't want to continue 
+                    log.error("In SSL request, unable to find host and port in CONNECT request: " + request.getUrl());
+                    throw new JMeterException(); // hack to skip processing
                 }
                 // Re-parse (now it's the http request over SSL)
                 ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
