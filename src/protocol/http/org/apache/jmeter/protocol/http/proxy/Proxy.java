@@ -178,10 +178,10 @@ public class Proxy extends Thread {
         String[] param = new String[0];
         log.debug(port + "====================================================================");
         try {
-            // Now, parse only first line
+            // Now, parse initial request (in case it is a CONNECT request)
             byte[] ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             if (log.isDebugEnabled()) {
-                log.debug(port + "First line: " + new String(ba));
+                log.debug(port + "Initial request: " + new String(ba));
             }
             outStreamClient = clientSocket.getOutputStream();
 
