@@ -376,31 +376,38 @@ public class ProxyControl extends GenericController {
 
     /**
      * Receives the recorded sampler from the proxy server for placing in the
-     * test tree. param serverResponse to be added to allow saving of the
-     * server's response while recording. A future consideration.
+     * test tree; this is skipped if the sampler is null (e.g. for recording SSL errors)
+     * Always sends the result to any registered sample listeners.
+     *
+     * @param sampler the sampler, may be null
+     * @param subConfigs the configuration elements to be added (e.g. header namager)
+     * @param result the sample result, not null
+     * TODO param serverResponse to be added to allow saving of the
+     * server's response while recording.
      */
     public synchronized void deliverSampler(final HTTPSamplerBase sampler, final TestElement[] subConfigs, final SampleResult result) {
-        if (filterContentType(result) && filterUrl(sampler)) {
-            JMeterTreeNode myTarget = findTargetControllerNode();
-            @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-            Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
-            @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-            Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
-
-            removeValuesFromSampler(sampler, defaultConfigurations);
-            replaceValues(sampler, subConfigs, userDefinedVariables);
-            sampler.setAutoRedirects(samplerRedirectAutomatically.get());
-            sampler.setFollowRedirects(samplerFollowRedirects.get());
-            sampler.setUseKeepAlive(useKeepAlive.get());
-            sampler.setImageParser(samplerDownloadImages.get());
-
-            placeSampler(sampler, subConfigs, myTarget);
-        }
-        else {
-            if(log.isDebugEnabled()) {
-                log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+        if (sampler != null) {
+            if (filterContentType(result) && filterUrl(sampler)) {
+                JMeterTreeNode myTarget = findTargetControllerNode();
+                @SuppressWarnings("unchecked") // OK, because find only returns correct element types
+                Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
+                @SuppressWarnings("unchecked") // OK, because find only returns correct element types
+                Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
+    
+                removeValuesFromSampler(sampler, defaultConfigurations);
+                replaceValues(sampler, subConfigs, userDefinedVariables);
+                sampler.setAutoRedirects(samplerRedirectAutomatically.get());
+                sampler.setFollowRedirects(samplerFollowRedirects.get());
+                sampler.setUseKeepAlive(useKeepAlive.get());
+                sampler.setImageParser(samplerDownloadImages.get());
+    
+                placeSampler(sampler, subConfigs, myTarget);
+            } else {
+                if(log.isDebugEnabled()) {
+                    log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+                }
+                result.setSampleLabel("["+result.getSampleLabel()+"]");
             }
-            result.setSampleLabel("["+result.getSampleLabel()+"]");
         }
         // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
         notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
