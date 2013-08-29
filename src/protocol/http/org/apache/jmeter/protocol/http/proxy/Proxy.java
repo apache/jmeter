@@ -208,6 +208,10 @@ public class Proxy extends Thread {
                 if (log.isDebugEnabled()) {
                     log.debug(port + "Reparse: " + new String(ba));
                 }
+                if (ba.length == 0) {
+                    log.warn(port + "Empty response to http over SSL. Probably waiting for user to authorize the certificate for " + request.getUrl());
+                    throw new JMeterException(); // hack to skip processing
+                }
             }
 
             SamplerCreator samplerCreator = factory.getSamplerCreator(request, pageEncodings, formEncodings);
