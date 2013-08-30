@@ -328,6 +328,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55405</bugzilla> - ant download_jars task fails if lib/api or lib/doc are missing. Contributed by Antonio Gomes Rodrigues.</li>
 <li><bugzilla>55427</bugzilla> - TestBeanHelper should ignore properties not supported by GenericTestBeanCustomizer</li>
 <li><bugzilla>55459</bugzilla> - Elements using ComboStringEditor lose the input value if user selects another Test Element</li>
+<li><bugzilla>54152</bugzilla> - In distributed testing : activeThreads and totalThreads always show 0</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

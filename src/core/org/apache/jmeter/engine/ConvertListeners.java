@@ -30,6 +30,9 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.RemoteThreadsListenerImpl;
+import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
+import org.apache.jmeter.threads.RemoteThreadsListenerWrapper;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.logging.LoggingManager;
@@ -55,7 +58,19 @@ public class ConvertListeners implements HashTreeTraverser {
                 log.debug("num threads = " + ((AbstractThreadGroup) item).getNumThreads());
             }
             if (item instanceof Remoteable) {
+                if (item instanceof RemoteThreadsListenerTestElement){
+                    // Used for remote notification of threads start/stop,see BUG 54152
+                    try {
+                        RemoteThreadsListenerWrapper wrapper = new RemoteThreadsListenerWrapper(new RemoteThreadsListenerImpl());
+                        subTree.replace(item, wrapper);
+                    } catch (RemoteException e) {
+                        log.error("Error replacing "+RemoteThreadsListenerTestElement.class.getName() 
+                                +" by wrapper:"+RemoteThreadsListenerWrapper.class.getName(), e); 
+                    }
+                    continue;
+                }
                 if (item instanceof ThreadListener){
+                    // TODO Document the reason for this
                     log.error("Cannot handle ThreadListener Remotable item "+item.getClass().getName());
                     continue;
                 }

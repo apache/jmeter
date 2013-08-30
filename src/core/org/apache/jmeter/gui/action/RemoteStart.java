@@ -30,6 +30,7 @@ import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -203,6 +204,8 @@ public class RemoteStart extends AbstractAction {
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
         testTree.add(testTree.getArray()[0], gui.getMainFrame());
+        // Used for remote notification of threads start/stop,see BUG 54152
+        testTree.add(testTree.getArray()[0], new RemoteThreadsListenerTestElement());
         engine.configure(testTree);
     }
 }
