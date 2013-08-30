@@ -282,7 +282,7 @@ public class Proxy extends Thread {
                     headers.removeHeaderNamed(hdr);
                 }
             }
-            if(result != null) // sampler is allowed to be null
+            if(result != null) // deliverSampler allows sampler to be null, but result must not be null
             {
                 target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
             }
