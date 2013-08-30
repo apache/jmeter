@@ -18,12 +18,19 @@
 
 package org.apache.jmeter.threads;
 
+import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.log.Logger;
 
 /**
  * RMI Implementation, client side code (ie executed on Controller)
@@ -31,6 +38,9 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         RemoteThreadsListener, ThreadListener {
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    private final List<RemoteThreadsLifeCycleListener> listeners = new ArrayList<RemoteThreadsLifeCycleListener>();
+
     /**
      * 
      */
@@ -46,6 +56,30 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
      */
     public RemoteThreadsListenerImpl() throws RemoteException {
         super(DEFAULT_LOCAL_PORT);
+        try {
+            List<String> listClasses = ClassFinder.findClassesThatExtend(
+                    JMeterUtils.getSearchPaths(), 
+                    new Class[] {RemoteThreadsLifeCycleListener.class }); 
+            for (String strClassName : listClasses) {
+                try {
+                    if(log.isDebugEnabled()) {
+                        log.debug("Loading class: "+ strClassName);
+                    }
+                    Class<?> commandClass = Class.forName(strClassName);
+                    if (!Modifier.isAbstract(commandClass.getModifiers())) {
+                        if(log.isDebugEnabled()) {
+                            log.debug("Instantiating: "+ commandClass.getName());
+                        }
+                        RemoteThreadsLifeCycleListener listener = (RemoteThreadsLifeCycleListener) commandClass.newInstance();
+                        listeners.add(listener);
+                    }
+                } catch (Exception e) {
+                    log.error("Exception registering "+RemoteThreadsLifeCycleListener.class.getName() + " with implementation:"+strClassName, e);
+                }
+            }
+        } catch (IOException e) {
+            log.error("Exception finding implementations of "+RemoteThreadsLifeCycleListener.class, e);
+        }
     }
 
     /**
@@ -59,6 +93,9 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         if (gp != null) {// check there is a GUI
             gp.getMainFrame().updateCounts();
         }
+        for (RemoteThreadsLifeCycleListener listener : listeners) {
+            listener.threadNumberIncreased(JMeterContextService.getNumberOfThreads());
+        }
     }
 
     /* (non-Javadoc)
@@ -70,6 +107,9 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         GuiPackage gp =GuiPackage.getInstance();
         if (gp != null) {// check there is a GUI
             gp.getMainFrame().updateCounts();
+        }
+        for (RemoteThreadsLifeCycleListener listener : listeners) {
+            listener.threadNumberDecreased(JMeterContextService.getNumberOfThreads());
         }
     }
 }
