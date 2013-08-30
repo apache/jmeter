@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -206,7 +208,15 @@ public class Proxy extends Thread {
                     throw new JMeterException(); // hack to skip processing
                 }
                 // Re-parse (now it's the http request over SSL)
-                ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
+                try {
+                    ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
+                } catch (IOException ioe) { // most likely this is because of a certificate error
+                    final String url = param.length>0 ?  " for '"+ param[0] +"'" : "";
+                    log.warn(port + "Problem with SSL certificate"+url+"? Ensure browser is set to accept the JMeter proxy cert: " + ioe.getMessage());
+                    // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
+                    result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**"); // Generate result (if nec.) and populate it
+                    throw new JMeterException(); // hack to skip processing
+                }
                 if (log.isDebugEnabled()) {
                     log.debug(port + "Reparse: " + new String(ba));
                 }
@@ -244,26 +254,17 @@ public class Proxy extends Thread {
         } catch (UnknownHostException uhe) {
             log.warn(port + "Server Not Found.", uhe);
             writeErrorToClient(HttpReplyHdr.formServerNotFound());
-            result = generateErrorResult(result, uhe); // Generate result (if nec.) and populate it
+            result = generateErrorResult(result, request, uhe); // Generate result (if nec.) and populate it
         } catch (IllegalArgumentException e) {
             log.error(port + "Not implemented (probably used https)", e);
             writeErrorToClient(HttpReplyHdr.formNotImplemented("Probably used https instead of http. " +
                     "To record https requests, see " +
                     "<a href=\"http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server\">HTTP Proxy Server documentation</a>"));
-            result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
-        } catch (IOException ioe) {
-            final String url = param.length>0 ?  " for '"+ param[0] +"'" : "";
-            log.error(port + "Problem with SSL certificate"+url+"? Ensure browser is set to accept the JMeter proxy cert:", ioe);
-            // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
-            if (result == null) {
-                result = new SampleResult();
-                result.setSampleLabel("Sample failed");
-            }
-            result.setResponseMessage(ioe.getMessage()+ "\n**ensure browser is set to accept the JMeter proxy certificate**");
+            result = generateErrorResult(result, request, e); // Generate result (if nec.) and populate it
         } catch (Exception e) {
             log.error(port + "Exception when processing sample", e);
             writeErrorToClient(HttpReplyHdr.formInternalError());
-            result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
+            result = generateErrorResult(result, request, e); // Generate result (if nec.) and populate it
         } finally {
             if (log.isDebugEnabled()) {
                 if(sampler != null) {
@@ -281,7 +282,8 @@ public class Proxy extends Thread {
                     headers.removeHeaderNamed(hdr);
                 }
             }
-            if(sampler != null) {
+            if(result != null) // sampler is allowed to be null
+            {
                 target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
             }
             try {
@@ -397,12 +399,21 @@ public class Proxy extends Thread {
         return in;
     }
 
-    private static SampleResult generateErrorResult(SampleResult result, Exception e) {
+    private SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e) {
+        return generateErrorResult(result, request, e, "");
+    }
+
+    private static SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e, String msg) {
         if (result == null) {
             result = new SampleResult();
-            result.setSampleLabel("Sample failed");
+            ByteArrayOutputStream text = new ByteArrayOutputStream(200);
+            e.printStackTrace(new PrintStream(text));
+            result.setResponseData(text.toByteArray());
+            result.setSamplerData(request.getFirstLine());
+            result.setSampleLabel(request.getUrl());
         }
-        result.setResponseMessage(e.getMessage());
+        result.setSuccessful(false);
+        result.setResponseMessage(e.getMessage()+msg);
         return result;
     }
 
