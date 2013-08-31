@@ -100,6 +100,16 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 <h4>* Distributed testing has been improved</h4>
 <p>
 <ul>
+<li>
+Number of threads on each node are now reported to controller.
+<p>
+<figure width="988" height="355" image="changes/2.10/17_threads_summariser.png"></figure>
+</p>
+<p>
+<figure width="125" height="33" image="changes/2.10/17_threads_gui.png"></figure>
+</p>
+
+</li>
 <li>Performance improvement on BatchSampleSender(<bugzilla>55423</bugzilla>)</li>
 <li>Addition of 2 SampleSender modes (StrippedAsynch and StrippedDiskStore), see jmeter.properties</li>
 </ul>
