@@ -786,6 +786,8 @@ public class JMeter implements JMeterPlugin {
                 }
             }
             // Used for remote notification of threads start/stop,see BUG 54152
+            // Summariser uses this feature to compute correctly number of threads 
+            // when NON GUI mode is used
             tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
 
             List<JMeterEngine> engines = new LinkedList<JMeterEngine>();
