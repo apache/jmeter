@@ -32,7 +32,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * Utility class for invoking native system applications
  */
 public class SystemCommand {
-    protected static final int POLL_INTERVAL = 100;
+    public static final int POLL_INTERVAL = 100;
     private StreamGobbler outputGobbler;
     private final File directory;
     private final Map<String, String> env;
