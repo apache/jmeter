@@ -48,7 +48,7 @@ import org.apache.log.Logger;
  */
 public class SystemSampler extends AbstractSampler {
 
-    private static final int POLL_INTERVAL = JMeterUtils.getPropDefault("os_sampler.poll_for_timeout", 100);
+    private static final int POLL_INTERVAL = JMeterUtils.getPropDefault("os_sampler.poll_for_timeout", SystemCommand.POLL_INTERVAL);
 
     private static final long serialVersionUID = 1;
     
