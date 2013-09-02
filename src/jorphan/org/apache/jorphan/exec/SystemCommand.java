@@ -18,10 +18,14 @@
 
 package org.apache.jorphan.exec;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +37,13 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class SystemCommand {
     public static final int POLL_INTERVAL = 100;
-    private StreamGobbler outputGobbler;
     private final File directory;
     private final Map<String, String> env;
     private Map<String, String> executionEnvironment;
-    private final String stdin;
-    private final String stdout;
-    private final String stderr;
+    private final InputStream stdin;
+    private final OutputStream stdout;
+    private final boolean stdoutWasNull;
+    private final OutputStream stderr;
     private final long timeoutMillis;
     private final int pollInterval;
 
@@ -48,7 +52,40 @@ public class SystemCommand {
      * @param directory File working directory (may be null)
      */
     public SystemCommand(File directory, Map<String, String> env) {
-        this(directory, 0L, POLL_INTERVAL, env, null, null, null);
+        this(directory, 0L, POLL_INTERVAL, env, (InputStream) null, (OutputStream) null, (OutputStream) null);
+    }
+
+    /**
+     * 
+     * @param env Environment variables appended to environment (may be null)
+     * @param directory File working directory (may be null)
+     * @param timeoutMillis timeout in Milliseconds
+     * @param pollInterval Value used to poll for Process execution end
+     * @param stdin File name that will contain data to be input to process (may be null)
+     * @param stdout File name that will contain out stream (may be null)
+     * @param stderr File name that will contain err stream (may be null)
+     * @throws IOException if the input file is not found or output cannot be written
+     */
+    public SystemCommand(File directory, long timeoutMillis, int pollInterval, Map<String, String> env, String stdin, String stdout, String stderr) throws IOException {
+        this(directory, timeoutMillis, pollInterval, env, checkIn(stdin), checkOut(stdout), checkOut(stderr));
+    }
+
+    private static InputStream checkIn(String stdin) throws FileNotFoundException {
+        String in = JOrphanUtils.nullifyIfEmptyTrimmed(stdin);
+        if (in == null) {
+            return null;
+        } else {
+            return new FileInputStream(in);
+        }
+    }
+
+    private static OutputStream checkOut(String path) throws IOException {
+        String in = JOrphanUtils.nullifyIfEmptyTrimmed(path);
+        if (in == null) {
+            return null;
+        } else {
+            return new FileOutputStream(path);
+        }
     }
 
     /**
@@ -61,15 +98,20 @@ public class SystemCommand {
      * @param stdout File name that will contain out stream (may be null)
      * @param stderr File name that will contain err stream (may be null)
      */
-    public SystemCommand(File directory, long timeoutMillis, int pollInterval, Map<String, String> env, String stdin, String stdout, String stderr) {
+    public SystemCommand(File directory, long timeoutMillis, int pollInterval, Map<String, String> env, InputStream stdin, OutputStream stdout, OutputStream stderr) {
         super();
         this.timeoutMillis = timeoutMillis;
         this.directory = directory;
         this.env = env;
         this.pollInterval = pollInterval;
-        this.stdin = JOrphanUtils.nullifyIfEmptyTrimmed(stdin);
-        this.stdout = JOrphanUtils.nullifyIfEmptyTrimmed(stdout);
-        this.stderr = JOrphanUtils.nullifyIfEmptyTrimmed(stderr);
+        this.stdin = stdin;
+        this.stdoutWasNull = stdout == null;
+        if (stdout == null) {
+            this.stdout = new ByteArrayOutputStream(); // capture the output
+        } else {
+            this.stdout = stdout;
+        }
+        this.stderr = stderr;
     }
 
     /**
@@ -80,48 +122,45 @@ public class SystemCommand {
      */
     public int run(List<String> arguments) throws InterruptedException, IOException {
         Process proc = null;
+        final ProcessBuilder procBuild = new ProcessBuilder(arguments);
+        if (env != null) {
+            procBuild.environment().putAll(env);
+        }
+        this.executionEnvironment = Collections.unmodifiableMap(procBuild.environment());
+        procBuild.directory(directory);
+        if (stderr == null) {
+            procBuild.redirectErrorStream(true);
+        }
         try
         {
-            ProcessBuilder procBuild = new ProcessBuilder(arguments);
-            if (env != null) {
-                procBuild.environment().putAll(env);
-            }
-            this.executionEnvironment = Collections.unmodifiableMap(procBuild.environment());
-            procBuild.directory(directory);
-            if (stderr == null || stderr.equals(stdout)) { // we're not redirecting stderr separately
-                procBuild.redirectErrorStream(true);
-            }
             proc = procBuild.start();
-            StreamCopier swerr = null;
-            if (!procBuild.redirectErrorStream()) { // stderr has separate output file
-                swerr = new StreamCopier(proc.getErrorStream(), new FileOutputStream(stderr));
+
+            final OutputStream procOut = proc.getOutputStream();
+            final InputStream procErr = proc.getErrorStream();
+            final InputStream procIn = proc.getInputStream();
+
+            final StreamCopier swerr;
+            if (stderr != null){
+                swerr = new StreamCopier(procErr, stderr);
                 swerr.start();
-            }
-            
-            StreamCopier swout = null;
-            if (stdout != null) {
-                swout = new StreamCopier(proc.getInputStream(), new FileOutputStream(stdout));
-                swout.start();
             } else {
-                outputGobbler = new StreamGobbler(proc.getInputStream());
-                outputGobbler.start();
+                swerr = null;
             }
+
+            final StreamCopier swout = new StreamCopier(procIn, stdout);
+            swout.start();
             
-            StreamCopier swin = null;
+            final StreamCopier swin;
             if (stdin != null) {
-                swin = new StreamCopier(new FileInputStream(stdin), proc.getOutputStream());
+                swin = new StreamCopier(stdin, procOut);
                 swin.start();
             } else {
-                proc.getOutputStream().close(); // ensure the application does not hang if it requests input
+                swin = null;
+                procOut.close(); // ensure the application does not hang if it requests input
             }
             int exitVal = waitForEndWithTimeout(proc, timeoutMillis);
 
-            if (outputGobbler != null) {
-                outputGobbler.join();
-            }
-            if (swout != null) {
-                swout.join();
-            }
+            swout.join();
             if (swerr != null) {
                 swerr.join();
             }
@@ -130,15 +169,13 @@ public class SystemCommand {
                 swin.join();
             }
             return exitVal;
-        }
-        finally
-        {
-            if(proc != null)
-            {
+        } finally {
+            if(proc != null) {
                 try {
                     proc.destroy();
                 } catch (Exception ignored) {
                     // Ignored
+                    ignored.printStackTrace();
                 }
             }
         }
@@ -177,8 +214,8 @@ public class SystemCommand {
      * @return Out/Err stream contents
      */
     public String getOutResult() {
-        if(outputGobbler != null) {    
-            return outputGobbler.getResult();
+        if (stdoutWasNull) { // we are capturing output
+            return stdout.toString(); // Default charset is probably appropriate here.
         } else {
             return "";
         }
