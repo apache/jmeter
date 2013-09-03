@@ -84,7 +84,7 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
 
     /**
      * 
-     * @see org.apache.jmeter.samplers.RemoteThreadsListener#threadStarted()
+     * @see RemoteThreadsListener#threadStarted()
      */
     @Override
     public void threadStarted() {
