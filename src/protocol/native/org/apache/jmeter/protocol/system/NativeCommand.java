@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.system;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -43,8 +44,9 @@ public class NativeCommand extends  org.apache.jorphan.exec.SystemCommand {
      * @param stdin File name that will contain data to be input to process
      * @param stdout File name that will contain out stream
      * @param stderr File name that will contain err stream
+     * @throws IOException if any of the files are not accessible
      */
-    public NativeCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) {
+    public NativeCommand(File directory, Map<String, String> env, String stdin, String stdout, String stderr) throws IOException {
         super(directory, 0L, POLL_INTERVAL, env, stdin, stdout, stderr);
     }
 
