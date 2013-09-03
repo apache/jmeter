@@ -419,6 +419,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55451</bugzilla> - Test Element GUI with JSyntaxTextArea scroll down when text content is long enough to add a Scrollbar</li>
 <li><bugzilla>55513</bugzilla> - StreamCopier cannot be used with System.err or System.out as it closes the output stream</li>
 <li><bugzilla>55514</bugzilla> - SystemCommand should support arbitrary input and output streams</li>
+<li><bugzilla>55515</bugzilla> - SystemCommand should support chaining of commands</li>
 </ul>
 
 <h2>Non-functional changes</h2>
