@@ -149,10 +149,10 @@ public class SystemSampler extends AbstractSampler {
         results.setSamplerData("Working Directory:"+directory.getAbsolutePath()+
                 "\nEnvironment:"+env+
                 "\nExecuting:" + cmdLine.toString());
-        
-        SystemCommand nativeCommand = new SystemCommand(directory, getTimeout(), POLL_INTERVAL, env, getStdin(), getStdout(), getStderr());
-        
+
+        SystemCommand nativeCommand = null;
         try {
+            nativeCommand = new SystemCommand(directory, getTimeout(), POLL_INTERVAL, env, getStdin(), getStdout(), getStderr());
             results.sampleStart();
             int returnCode = nativeCommand.run(cmds);
             results.sampleEnd();
@@ -181,7 +181,9 @@ public class SystemSampler extends AbstractSampler {
             results.setResponseMessage("System Sampler Interupted whilst executing System Call: " + ie);
         }
 
-        results.setResponseData(nativeCommand.getOutResult().getBytes()); // default charset is deliberate here
+        if (nativeCommand != null) {
+            results.setResponseData(nativeCommand.getOutResult().getBytes()); // default charset is deliberate here
+        }
             
         return results;
     }
