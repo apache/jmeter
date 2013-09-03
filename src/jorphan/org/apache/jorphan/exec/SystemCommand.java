@@ -18,6 +18,7 @@
 
 package org.apache.jorphan.exec;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -121,6 +122,11 @@ public class SystemCommand {
      * @throws IOException
      */
     public int run(List<String> arguments) throws InterruptedException, IOException {
+        return run(arguments, stdin, stdout, stderr);
+    }
+
+    // helper method to allow input and output to be changed for chaining
+    private int run(List<String> arguments, InputStream in, OutputStream out, OutputStream err) throws InterruptedException, IOException {
         Process proc = null;
         final ProcessBuilder procBuild = new ProcessBuilder(arguments);
         if (env != null) {
@@ -128,7 +134,7 @@ public class SystemCommand {
         }
         this.executionEnvironment = Collections.unmodifiableMap(procBuild.environment());
         procBuild.directory(directory);
-        if (stderr == null) {
+        if (err == null) {
             procBuild.redirectErrorStream(true);
         }
         try
@@ -140,19 +146,19 @@ public class SystemCommand {
             final InputStream procIn = proc.getInputStream();
 
             final StreamCopier swerr;
-            if (stderr != null){
-                swerr = new StreamCopier(procErr, stderr);
+            if (err != null){
+                swerr = new StreamCopier(procErr, err);
                 swerr.start();
             } else {
                 swerr = null;
             }
 
-            final StreamCopier swout = new StreamCopier(procIn, stdout);
+            final StreamCopier swout = new StreamCopier(procIn, out);
             swout.start();
             
             final StreamCopier swin;
-            if (stdin != null) {
-                swin = new StreamCopier(stdin, procOut);
+            if (in != null) {
+                swin = new StreamCopier(in, procOut);
                 swin.start();
             } else {
                 swin = null;
@@ -179,6 +185,24 @@ public class SystemCommand {
                 }
             }
         }
+    }
+
+    /**
+     * Pipe the output of one command into another
+     * 
+     * @param arguments1 first command to run
+     * @param arguments2 second command to run
+     * @return exit status
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    public int run(List<String> arguments1, List<String> arguments2) throws InterruptedException, IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream(); // capture the intermediate output
+        int exitCode=run(arguments1,stdin,out, stderr);
+        if (exitCode == 0) {
+            exitCode = run(arguments2,new ByteArrayInputStream(out.toByteArray()),stdout,stderr);
+        }
+        return exitCode;
     }
 
     /**
