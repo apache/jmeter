@@ -28,33 +28,37 @@ import java.util.List;
  */
 public class KeyToolUtils {
 
+    // The DNAME which is used if none is provided
+    private static final String DEFAULT_DNAME = "cn=JMeter Proxy (DO NOT TRUST)";  // $NON-NLS-1$
+
     private KeyToolUtils() {
         // not instantiable
     }
 
     /**
-     * Generate a self-signed keypair using the alias "jmeter",
-     * algorithm "RSA" and dname "cn=JMeter Proxy (DO NOT TRUST)"
+     * Generate a self-signed keypair using the algorithm "RSA".
      * 
-     * @param keystore the keystore to create; must not exist
+     * @param keystore the keystore; if it already contains the alias the command will fail
+     * @param alias the alias to use, not null 
      * @param password the password to use for the store and the key
      * @param validity the validity period in days, greater than 0
+     * @param dname the dname value, if omitted use "cn=JMeter Proxy (DO NOT TRUST)"
+     * @param ext if not null, the extension (-ext) to add (e.g. "bc:c")
+     * 
      * @throws InterruptedException 
      * @throws IOException
      */
-    public static void genkeypair(final File keystore, final String password, int validity) throws IOException, InterruptedException {
-        if (keystore.exists()) {
-            throw new IOException("Keystore already exists");
-        }
+    public static void genkeypair(final File keystore, String alias, final String password, int validity, String dname, String ext) 
+            throws IOException, InterruptedException {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, null);
         final List<String> arguments = new ArrayList<String>();
         arguments.add("keytool"); // $NON-NLS-1$
         arguments.add("-genkeypair"); // $NON-NLS-1$
         arguments.add("-alias"); // $NON-NLS-1$
-        arguments.add("jmeter"); // $NON-NLS-1$
+        arguments.add(alias);
         arguments.add("-dname"); // $NON-NLS-1$
-        arguments.add("cn=JMeter Proxy (DO NOT TRUST)"); // $NON-NLS-1$
+        arguments.add(dname == null ? DEFAULT_DNAME : dname);
         arguments.add("-keyalg"); // $NON-NLS-1$
         arguments.add("RSA"); // $NON-NLS-1$
 
@@ -66,6 +70,10 @@ public class KeyToolUtils {
         arguments.add(password);
         arguments.add("-validity"); // $NON-NLS-1$
         arguments.add(Integer.toString(validity));
+        if (ext != null) {
+            arguments.add("-ext"); // $NON-NLS-1$
+            arguments.add(ext);            
+        }
         int exitVal = nativeCommand.run(arguments);
         if (exitVal != 0) {
             throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
