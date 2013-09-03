@@ -27,13 +27,13 @@ import java.rmi.RemoteException;
 public interface RemoteThreadsListener extends java.rmi.Remote {
     
     /**
-     * @see ThreadListener#threadStarted()
+     * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
      * @throws RemoteException
      */
     void threadStarted() throws RemoteException;
 
     /**
-     * @see ThreadListener#threadStarted()
+     * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
      */
     void threadFinished() throws RemoteException;
 }
