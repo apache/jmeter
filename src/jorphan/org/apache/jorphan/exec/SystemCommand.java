@@ -181,7 +181,6 @@ public class SystemCommand {
                     proc.destroy();
                 } catch (Exception ignored) {
                     // Ignored
-                    ignored.printStackTrace();
                 }
             }
         }
