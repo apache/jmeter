@@ -35,9 +35,11 @@ public class KeyToolUtils {
     // The DNAME which is used if none is provided
     private static final String DEFAULT_DNAME = "cn=JMeter Proxy (DO NOT TRUST)";  // $NON-NLS-1$
 
-    private static final String DNAME_ROOT_KEY = "cn=Apache JMeter Proxy root (TEMPORARY TRUST ONLY)";
-    private static final String DNAME_CA_KEY   = "cn=Apache JMeter Proxy server CA (TEMPORARY TRUST ONLY)";
-    private static final String CACERT = "ApacheJMeterTemporaryCA.crt";
+    private static final String DNAME_ROOT_KEY = "cn=Apache JMeter Proxy root (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
+    private static final String DNAME_CA_KEY   = "cn=Apache JMeter Proxy server CA (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
+    private static final String CACERT = "ApacheJMeterTemporaryCA.crt"; // $NON-NLS-1$
+    private static final String ROOT_ALIAS = "root";  // $NON-NLS-1$
+    private static final String CA_ALIAS = "ca";  // $NON-NLS-1$
 
     private KeyToolUtils() {
         // not instantiable
@@ -104,20 +106,20 @@ public class KeyToolUtils {
         new File(CACERT).delete(); // not strictly needed
 
         // Create the self-signed keypairs (requires Java 7 for -ext flag)
-        KeyToolUtils.genkeypair(keystore, "root", password, validity, DNAME_ROOT_KEY, "bc:c");
-        KeyToolUtils.genkeypair(keystore, "ca", password, validity, DNAME_CA_KEY, "bc:c");
+        KeyToolUtils.genkeypair(keystore, ROOT_ALIAS, password, validity, DNAME_ROOT_KEY, "bc:c");
+        KeyToolUtils.genkeypair(keystore, CA_ALIAS, password, validity, DNAME_CA_KEY, "bc:c");
 
         // Create cert for CA using root (requires Java 7 for gencert)
         ByteArrayOutputStream certReqOut = new ByteArrayOutputStream();
         // generate the request
-        KeyToolUtils.keytool("-certreq", keystore, password, "ca", null, certReqOut);
+        KeyToolUtils.keytool("-certreq", keystore, password, CA_ALIAS, null, certReqOut);
 
         // generate the certificate and store in output file
         InputStream certReqIn = new ByteArrayInputStream(certReqOut.toByteArray());
-        KeyToolUtils.keytool("-gencert", keystore, password, "ca", certReqIn, null, "-ext", "BC:0", "-outfile", CACERT);
+        KeyToolUtils.keytool("-gencert", keystore, password, CA_ALIAS, certReqIn, null, "-ext", "BC:0", "-outfile", CACERT);
 
         // import the signed CA cert into the store (root already there) - both are needed to sign the domain certificates
-        KeyToolUtils.keytool("-importcert", keystore, password, "ca", null, null, "-file", CACERT);
+        KeyToolUtils.keytool("-importcert", keystore, password, CA_ALIAS, null, null, "-file", CACERT);
     }
 
     /**
@@ -147,7 +149,7 @@ public class KeyToolUtils {
         //rem ku:c=dig,keyE means KeyUsage:criticial=digitalSignature,keyEncipherment
         InputStream certReqIn = new ByteArrayInputStream(certReqOut.toByteArray());
         ByteArrayOutputStream certOut = new ByteArrayOutputStream();
-        KeyToolUtils.keytool("-gencert", keystore, password, "ca", certReqIn, certOut, "-ext", "ku:c=dig,keyE");
+        KeyToolUtils.keytool("-gencert", keystore, password, CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE");
 
         // inport the certificate
         InputStream certIn = new ByteArrayInputStream(certOut.toByteArray());
