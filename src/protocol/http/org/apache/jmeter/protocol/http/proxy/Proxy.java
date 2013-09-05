@@ -32,15 +32,12 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.security.KeyManagementException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
@@ -105,6 +102,8 @@ public class Proxy extends Thread {
 
     private static final String CERT_FILE =
         JMeterUtils.getPropDefault("proxy.cert.file", CERT_FILE_DEFAULT); // $NON-NLS-1$
+
+    private static final String CERT_ALIAS = JMeterUtils.getProperty("proxy.cert.alias"); // $NON-NLS-1$
 
     private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$
 
@@ -301,49 +300,67 @@ public class Proxy extends Thread {
      * Get SSL connection from hashmap, creating it if necessary.
      *
      * @param host
-     * @return a ssl socket factory
+     * @return a ssl socket factory, or null if keystore could not be opened/processed
      * @throws IOException
      */
-    private SSLSocketFactory getSSLSocketFactory(String host) throws IOException {
+    private SSLSocketFactory getSSLSocketFactory(String host) {
         synchronized (hashHost) {
             if (hashHost.containsKey(host)) {
                 log.debug(port + "Good, already in map, host=" + host);
                 return hashHost.get(host);
             }
-            InputStream in = getCertificate();
-            Exception except = null;
-            if (in != null) {
-                try {
-                    KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
-                    ks.load(in, JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
-                    KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
-                    kmf.init(ks, JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
-                    SSLContext sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
-                    sslcontext.init(kmf.getKeyManagers(), null, null);
-                    SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
-                    hashHost.put(host, sslFactory);
-                    log.info(port + "KeyStore for SSL loaded OK and put host in map ("+host+")");
-                    return sslFactory;
-                } catch (NoSuchAlgorithmException e) {
-                    except=e;
-                } catch (KeyManagementException e) {
-                    except=e;
-                } catch (KeyStoreException e) {
-                    except=e;
-                } catch (UnrecoverableKeyException e) {
-                    except=e;
-                } catch (CertificateException e) {
-                    except=e;
-                } finally {
-                    if (except != null){
-                        log.error(port + "Problem with SSL certificate",except);
-                    }
-                    IOUtils.closeQuietly(in);
-                }
-            } else {
-                throw new IOException("Unable to read keystore");
+            try {
+                SSLContext sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
+                sslcontext.init(getKeyManagers(CERT_ALIAS), null, null);
+                SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
+                hashHost.put(host, sslFactory);
+                log.info(port + "KeyStore for SSL loaded OK and put host in map ("+host+")");
+                return sslFactory;
+            } catch (GeneralSecurityException e) {
+                log.error(port + "Problem with SSL certificate", e);
+            } catch (IOException e) {
+                log.error(port + "Problem with keystore", e);
             }
             return null;
+        }
+    }
+
+    /**
+     * Return the key managers, wrapped if necessary to return a specific alias
+     * 
+     * @param serverAlias the alias to return, or null to use whatever is present
+     * @return the key managers
+     * @throws GeneralSecurityException
+     * @throws IOException if the store cannot be opened or read or the alias is missing
+     */
+    private KeyManager[] getKeyManagers(String serverAlias) throws GeneralSecurityException, IOException {
+        InputStream in = getCertificate();
+        if (in == null) {
+            throw new IOException("Cannot open keystore");
+        } else {
+            try {
+                KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
+                ks.load(in, JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
+                kmf.init(ks, JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
+                final KeyManager[] keyManagers = kmf.getKeyManagers();
+                if (serverAlias == null) {
+                    return keyManagers;
+                } else {
+                    // Check if alias is suitable here, rather than waiting for connection to fail
+                    if (!ks.containsAlias(serverAlias)) {
+                        throw new IOException("Keystore does not contain alias " + serverAlias);
+                    }
+                    final int keyManagerCount = keyManagers.length;
+                    final KeyManager[] wrappedKeyManagers = new KeyManager[keyManagerCount];
+                    for (int i =0; i < keyManagerCount; i++) {
+                        wrappedKeyManagers[i] = new ServerAliasKeyManager(keyManagers[i], serverAlias);
+                    }
+                    return wrappedKeyManagers;
+                }
+            } finally {
+                IOUtils.closeQuietly(in);
+            }
         }
     }
 
