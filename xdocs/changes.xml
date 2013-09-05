@@ -353,6 +353,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>53480</bugzilla> - Add Kerberos support to Http Sampler (HttpClient4). Based on patch by Felix Schumacher (felix.schumacher at internetallee.de)</li>
 <li><bugzilla>54874</bugzilla> - Support device in addition to source IP address. Based on patch by Dan Fruehauf (malkodan at gmail.com)</li>
 <li><bugzilla>55488</bugzilla> - Add .ico and .woff file extension to default suggested exclusions in proxy recorder. Contributed by Antonio Gomes Rodrigues</li>
+<li><bugzilla>55525</bugzilla> - Proxy should support alias for keyserver entry</li>
 </ul>
 
 <h3>Other samplers</h3>
