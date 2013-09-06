@@ -334,33 +334,41 @@ public class Proxy extends Thread {
      * @throws IOException if the store cannot be opened or read or the alias is missing
      */
     private KeyManager[] getKeyManagers(String serverAlias) throws GeneralSecurityException, IOException {
-        InputStream in = getCertificate();
-        if (in == null) {
-            throw new IOException("Cannot open keystore");
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
+        KeyStore ks = getKeyStore(JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
+        kmf.init(ks, JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
+        final KeyManager[] keyManagers = kmf.getKeyManagers();
+        if (serverAlias == null) {
+            return keyManagers;
         } else {
-            try {
-                KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
-                ks.load(in, JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
-                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
-                kmf.init(ks, JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD).toCharArray()); // $NON-NLS-1$
-                final KeyManager[] keyManagers = kmf.getKeyManagers();
-                if (serverAlias == null) {
-                    return keyManagers;
-                } else {
-                    // Check if alias is suitable here, rather than waiting for connection to fail
-                    if (!ks.containsAlias(serverAlias)) {
-                        throw new IOException("Keystore does not contain alias " + serverAlias);
-                    }
-                    final int keyManagerCount = keyManagers.length;
-                    final KeyManager[] wrappedKeyManagers = new KeyManager[keyManagerCount];
-                    for (int i =0; i < keyManagerCount; i++) {
-                        wrappedKeyManagers[i] = new ServerAliasKeyManager(keyManagers[i], serverAlias);
-                    }
-                    return wrappedKeyManagers;
-                }
-            } finally {
-                IOUtils.closeQuietly(in);
+            // Check if alias is suitable here, rather than waiting for connection to fail
+            if (!ks.containsAlias(serverAlias)) {
+                throw new IOException("Keystore does not contain alias " + serverAlias);
             }
+            final int keyManagerCount = keyManagers.length;
+            final KeyManager[] wrappedKeyManagers = new KeyManager[keyManagerCount];
+            for (int i =0; i < keyManagerCount; i++) {
+                wrappedKeyManagers[i] = new ServerAliasKeyManager(keyManagers[i], serverAlias);
+            }
+            return wrappedKeyManagers;
+        }
+    }
+
+    private KeyStore getKeyStore(char[] password) throws GeneralSecurityException, IOException {
+        File certFile = new File(CERT_DIRECTORY, CERT_FILE);
+        InputStream in = null;
+        final String certPath = certFile.getAbsolutePath();
+        try {
+            in = new BufferedInputStream(new FileInputStream(certFile));
+            log.info(port + "Opened Keystore file: " + certPath);
+            KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
+            ks.load(in, password);
+            return ks;
+        } catch (FileNotFoundException e) {
+            log.error(port + "Could not open Keystore file: " + certPath, e);
+            throw e;
+        } finally {
+            IOUtils.closeQuietly(in);
         }
     }
 
@@ -392,28 +400,6 @@ public class Proxy extends Thread {
             log.warn(port + "Unable to negotiate SSL transaction, no keystore?");
             throw new IOException("Unable to negotiate SSL transaction, no keystore?");
         }
-    }
-
-    /**
-     * Open the local certificate file.
-     *
-     * @return stream to key cert; null if there was a problem opening it
-     */
-    private InputStream getCertificate() {
-        File certFile = new File(CERT_DIRECTORY, CERT_FILE);
-        InputStream in = null;
-        final String certPath = certFile.getAbsolutePath();
-        if (certFile.exists() && certFile.canRead()) {
-            try {
-                in = new BufferedInputStream(new FileInputStream(certFile));
-                log.info(port + "Opened Keystore file: "+certPath);
-            } catch (FileNotFoundException e) {
-                log.error(port + "No server cert file found: "+certPath, e);
-            }
-        } else {
-            log.error(port + "No server cert file found: "+certPath);
-        }
-        return in;
     }
 
     private SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e) {
