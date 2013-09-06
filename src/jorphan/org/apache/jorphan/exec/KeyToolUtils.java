@@ -123,7 +123,7 @@ public class KeyToolUtils {
     }
 
     /**
-     * Create a domain certificate and sign it with the CA certificate.
+     * Create a domain certificate (*.domain) and sign it with the CA certificate.
      *
      * @param keystore the keystore to use
      * @param password the password to use for the keystore and keys
@@ -136,8 +136,34 @@ public class KeyToolUtils {
      */
     public static void generateDomainCert(File keystore, String password, String domain, int validity) throws IOException, InterruptedException {
         // generate the keypair for the domain
-        String alias = domain;
-        String dname = "cn=*."+domain+", o=JMeter Proxy (TEMPORARY TRUST ONLY";
+        generateSignedCert(keystore, password, validity, 
+                domain,         // alias 
+                "*." + domain); // subject
+    }
+
+    /**
+     * Create a host certificate and sign it with the CA certificate.
+     *
+     * @param keystore the keystore to use
+     * @param password the password to use for the keystore and keys
+     * @param host the host, e.g. jmeter.apache.org
+     * @param validity the validity period for the key
+     *
+     * @throws InterruptedException
+     * @throws IOException
+     *
+     */
+    public static void generateHostCert(File keystore, String password, String host, int validity) throws IOException, InterruptedException {
+        // generate the keypair for the host
+        generateSignedCert(keystore, password, validity, 
+                host,  // alias 
+                host); // subject
+    }
+
+    private static void generateSignedCert(File keystore, String password,
+            int validity, String alias, String subject) throws IOException,
+            InterruptedException {
+        String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY";
         KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, null);
         //rem generate cert for DOMAIN using CA (requires Java7 for gencert) and import it
 
