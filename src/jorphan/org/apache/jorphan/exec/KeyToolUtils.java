@@ -47,13 +47,14 @@ public class KeyToolUtils {
 
     /**
      * Generate a self-signed keypair using the algorithm "RSA".
+     * Requires Java 7 or later if the "ext" parameter is not null.
      *
      * @param keystore the keystore; if it already contains the alias the command will fail
      * @param alias the alias to use, not null
      * @param password the password to use for the store and the key
      * @param validity the validity period in days, greater than 0
      * @param dname the dname value, if omitted use "cn=JMeter Proxy (DO NOT TRUST)"
-     * @param ext if not null, the extension (-ext) to add (e.g. "bc:c")
+     * @param ext if not null, the extension (-ext) to add (e.g. "bc:c"). This requires Java 7.
      *
      * @throws InterruptedException
      * @throws IOException
@@ -80,7 +81,7 @@ public class KeyToolUtils {
         arguments.add(password);
         arguments.add("-validity"); // $NON-NLS-1$
         arguments.add(Integer.toString(validity));
-        if (ext != null) {
+        if (ext != null) { // Requires Java 7
             arguments.add("-ext"); // $NON-NLS-1$
             arguments.add(ext);
         }
@@ -93,6 +94,7 @@ public class KeyToolUtils {
     /**
      * Create a self-signed CA certificate that can be used to sign SSL domain certificates.
      * The certificate file is created in the same directory as the keystore.
+     * Requires Java 7 or later.
      *
      * @param keystore the keystore in which to store everything
      * @param password the password for keystore and keys
@@ -124,6 +126,7 @@ public class KeyToolUtils {
 
     /**
      * Create a domain certificate (*.domain) and sign it with the CA certificate.
+     * Requires Java 7 or later.
      *
      * @param keystore the keystore to use
      * @param password the password to use for the keystore and keys
@@ -143,6 +146,7 @@ public class KeyToolUtils {
 
     /**
      * Create a host certificate and sign it with the CA certificate.
+     * Requires Java 7 or later.
      *
      * @param keystore the keystore to use
      * @param password the password to use for the keystore and keys
