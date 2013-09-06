@@ -5723,8 +5723,8 @@ Ideally use private browsing mode when recording the session.
 This should ensure that the browser starts with no stored cookies, and prevents certain changes from being saved.
 For example, Firefox does not allow certificate overrides to be saved permanently.
 </p>
+<h4>HTTPS recording</h4>
 <p>
-<b>HTTPS recording</b><br/>
 JMeter proxy server uses a dummy certificate to enable it to accept the SSL connection from
 the browser. This certificate is not one of the certificates that browsers normally trust, and will not be for the
 correct host. <br/>
@@ -5757,6 +5757,7 @@ The following properties can be used to change the certificate that is used:
 <li>proxy.cert.keypassword - certificate key password (default "password")</li>
 <li>proxy.cert.type - the certificate type (default "JKS")</li>
 <li>proxy.cert.factory - the factory (default "SunX509")</li>
+<li>proxy.cert.alias - the alias for the key to be used</li>
 <li>proxy.ssl.protocol - the protocol to be used (default "SSLv3")</li>
 </ul>
 </p>
@@ -5798,7 +5799,9 @@ This setting will also be needed when running the generated test plan.
         <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, ie it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b.</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
-        <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?</property>
+        <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?<br/>
+        <b>Note:</b> see "Recording and redirects" section below for important information.
+        </property>
         <property name="Use Keep-Alive" required="Yes">Set Use Keep-Alive in the generated samplers?</property>
         <property name="Retrieve all Embedded Resources" required="Yes">Set Retrieve all Embedded Resources in the generated samplers?</property>
         <property name="Content Type filter" required="No">
@@ -5822,6 +5825,25 @@ This setting will also be needed when running the generated test plan.
   useful when you change/add/delete an include/exclude filter expression.</property>
 </properties>
 
+<h4>Recording and redirects</h4>
+<p>
+During recording, the browser will follow a redirect response and generate an additional request.
+The Proxy will record both the original request and the redirected request
+(subject to whatever exclusions are configured).
+The generated samples have "Follow Redirects" selected by default,
+so when a test plan is replayed, JMeter will follow the redirect, 
+and then replay the redirect request that was recorded.
+To avoid this duplicate replay, either delete the redirected sample from the test plan,
+or ensure that the recorded samples don't have "Follow Redirects" selected.
+The default of "Follow Redirects" was chosen because that is generally better.
+Redirects may depend on the original request, so repeating the originally recorded sample may not always work.
+</p>
+<p>
+It is hoped (eventually) to be able to detect redirects during recording and drop/disable them
+so they don't get replayed.
+</p>
+
+<h4>Includes and Excludes</h4>
 <p>The <b>include and exclude patterns</b> are treated as regular expressions (using Jakarta ORO).
 They will be matched against the host name, port (actual or implied) path and query (if any) of each browser request.
 If the URL you are browsing is <br></br> 
@@ -5845,6 +5867,7 @@ you should be able to record what you are interested in and skip what you are no
 N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus <b>&quot;\.html&quot;</b> will <b>not</b> match <b>j.a.o/index.html</b>
 </p>
 
+<h4>Capturing binary POST data</h4>
 <p>
 Versions of JMeter from 2.3.2 are able to capture binary POST data.
 To configure which content-types are treated as binary, update the JMeter property proxy.binary.types.
@@ -5859,6 +5882,7 @@ proxy.binary.filesuffix=.binary
 </pre>
 </p>
 
+<h4>Adding timers</h4>
 <p>It is also possible to have the proxy add timers to the recorded script. To
 do this, create a timer directly within the HTTP Proxy Server component.
 The proxy will place a copy of this timer into each sample it records, or into
@@ -5872,7 +5896,7 @@ recorded (in milliseconds).</p>
 appropriate server and port, where the server is the machine JMeter is running on, and
 the port # is from the Proxy Control Panel shown above.</note>
 
-<p><b>Where Do Samples Get Recorded?</b></p>
+<h4>Where Do Samples Get Recorded?</h4>
 <p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
 "Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
 sure to add a Recording Controller before you start recording).</p>
@@ -5889,7 +5913,7 @@ If JMeter does not record browser URLs such as http://localhost/ or http://127.0
 try using the non-loopback hostname or IP address, e.g. http://myhost/ or http://192.168.0.2/.
 </p>
 
-<p><b>Handling of HTTP Request Defaults</b></p>
+<h4>Handling of HTTP Request Defaults</h4>
 <p>If the HTTP Proxy Server finds enabled <complink name="HTTP Request Defaults"/> directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
 will have empty fields for the default values you specified. You may further control this behaviour by placing an
@@ -5897,7 +5921,7 @@ HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-b
 those in the other HTTP Request Defaults. See <a href="best-practices.html#proxy_server"> Best
 Practices with the Proxy Server</a> for more info.</p>
 
-<p><b>User Defined Variable replacement</b></p>
+<h4>User Defined Variable replacement</h4>
 <p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> (UDV) directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
 will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
@@ -5926,12 +5950,12 @@ so be sure to check this if UDVs are not working as expected.
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.</p>
 
-<p><b>How can I record the server's responses too?</b></p>
+<h4>How can I record the server's responses too?</h4>
 <p>Just place a <complink name="View Results Tree"/> listener as a child of the Proxy Server and the responses will be displayed. 
 You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
 </p>
 
-<p><b>Cookie Manager</b></p>
+<h4>Cookie Manager</h4>
 <p>
 If the server you are testing against uses cookies, remember to add an <complink name="HTTP Cookie Manager"/> to the test plan
 when you have finished recording it.
@@ -5940,19 +5964,19 @@ to do the cookie handling during a test run.
 The JMeter Proxy server passes on all cookies sent by the browser during recording, but does not save them to the test
 plan because they are likely to change between runs.
 </p>
-<p><b>Authorization Manager</b></p>
+<h4>Authorization Manager</h4>
 <p>
 The Proxy server passes on any Authorization headers sent by the browser, but does not save them in the test plan.
 If the site requires Authorization, you will need to add an Authorization Manager and fill it in with the necessary entries.
 </p>
-<p><b>Uploading files</b></p>
+<h4>Uploading files</h4>
 <p>
 Some browsers (e.g. Firefox and Opera) don't include the full name of a file when uploading files.
 This can cause the JMeter proxy server to fail.
 One solution is to ensure that any files to be uploaded are in the JMeter working directory,
 either by copying the files there or by starting JMeter in the directory containing the files.
 </p>
-<p><b>Recording HTTP Based Non Textual Protocols not natively available in JMeter</b></p>
+<h4>Recording HTTP Based Non Textual Protocols not natively available in JMeter</h4>
 <p>
 You may have to record an HTTP protocol that is not handled by default by JMeter (Custom Binary Protocol, Adobe Flex, Microsoft Silverlight... ).
 Although JMeter does not provide a native proxy implementation to record these protocols, you have the ability to
