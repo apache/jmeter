@@ -45,9 +45,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -115,9 +113,6 @@ public class Proxy extends Thread {
 
     private static final int CERT_VALIDITY = JMeterUtils.getPropDefault("proxy.cert.validity", 7); // $NON-NLS-1$
 
-    // Are we running on a system that supports keytool -gencert and -ext options ?
-    private static final boolean isAtLeastJava7 = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_7);
-
     private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$
 
     private static final SamplerCreatorFactory factory = new SamplerCreatorFactory();
@@ -147,7 +142,7 @@ public class Proxy extends Thread {
             log.info("Proxy Server will use the specified SSL keystore with the alias: '" + CERT_ALIAS + "'");
             keystoreType = KEYSTORE_IMPL.USER_KEYSTORE;
         } else {
-            if (isAtLeastJava7) {
+            if (KeyToolUtils.SUPPORTS_HOST_CERT) {
                 keystoreType = KEYSTORE_IMPL.DYNAMIC_KEYSTORE;
                 log.info("Java 7 detected: Proxy Server SSL Proxy will use keys that support embedded 3rd party resources");                
             } else {

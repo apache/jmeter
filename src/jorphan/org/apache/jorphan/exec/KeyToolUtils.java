@@ -27,6 +27,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
+
 /**
  * Utilities for working with Java keytool
  */
@@ -40,6 +43,10 @@ public class KeyToolUtils {
     private static final String CACERT = "ApacheJMeterTemporaryCA.crt"; // $NON-NLS-1$
     private static final String ROOT_ALIAS = "root";  // $NON-NLS-1$
     private static final String CA_ALIAS = "ca";  // $NON-NLS-1$
+
+    /** Does this class support generation of host certificates? */
+    public static final boolean SUPPORTS_HOST_CERT = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_7);
+    // i.e. does keytool support -gencert and -ext ?
 
     private KeyToolUtils() {
         // not instantiable
