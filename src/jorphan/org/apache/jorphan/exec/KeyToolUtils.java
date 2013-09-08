@@ -29,11 +29,14 @@ import java.util.List;
 
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Utilities for working with Java keytool
  */
 public class KeyToolUtils {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     // The DNAME which is used if none is provided
     private static final String DEFAULT_DNAME = "cn=JMeter Proxy (DO NOT TRUST)";  // $NON-NLS-1$
@@ -114,8 +117,11 @@ public class KeyToolUtils {
      */
     public static void generateProxyCA(File keystore, String password,  int validity) throws IOException {
         keystore.delete(); // any existing entries will be invalidated anyway
-        new File(CACERT).delete(); // not strictly needed
-
+        // not strictly needed
+        if(!new File(CACERT).delete()) {
+            // Noop as we accept not to be able to delete it
+            log.warn("Could not delete file:"+new File(CACERT).getAbsolutePath()+", will continue ignoring this");
+        }
         // Create the self-signed keypairs (requires Java 7 for -ext flag)
         KeyToolUtils.genkeypair(keystore, ROOT_ALIAS, password, validity, DNAME_ROOT_KEY, "bc:c");
         KeyToolUtils.genkeypair(keystore, CA_ALIAS, password, validity, DNAME_CA_KEY, "bc:c");
