@@ -429,7 +429,10 @@ public class Proxy extends Thread {
                 log.info(port + "Created keystore in " + canonicalPath);
             } else {
                 log.info(port + "Generating standard keypair in " + canonicalPath);
-                certFile.delete(); // Must not exist
+                // Must not exist
+                if(!certFile.delete()) {
+                    throw new IOException("Could not delete file:"+certFile.getAbsolutePath()+", this is needed for certificate generation");
+                }
                 KeyToolUtils.genkeypair(certFile, JMETER_SERVER_ALIAS, keyStorePass, CERT_VALIDITY, null, null);                    
             }
             keyStore = getKeyStore(keyStorePass.toCharArray()); // This should now work
