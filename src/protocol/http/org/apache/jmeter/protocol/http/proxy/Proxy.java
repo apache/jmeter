@@ -430,7 +430,7 @@ public class Proxy extends Thread {
             } else {
                 log.info(port + "Generating standard keypair in " + canonicalPath);
                 // Must not exist
-                if(!certFile.delete()) {
+                if(certFile.exists() && !certFile.delete()) {
                     throw new IOException("Could not delete file:"+certFile.getAbsolutePath()+", this is needed for certificate generation");
                 }
                 KeyToolUtils.genkeypair(certFile, JMETER_SERVER_ALIAS, keyStorePass, CERT_VALIDITY, null, null);                    
