@@ -118,7 +118,7 @@ public class KeyToolUtils {
     public static void generateProxyCA(File keystore, String password,  int validity) throws IOException {
         keystore.delete(); // any existing entries will be invalidated anyway
         // not strictly needed
-        if(!new File(CACERT).delete()) {
+        if(new File(CACERT).exists() && !new File(CACERT).delete()) {
             // Noop as we accept not to be able to delete it
             log.warn("Could not delete file:"+new File(CACERT).getAbsolutePath()+", will continue ignoring this");
         }
