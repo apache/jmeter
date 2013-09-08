@@ -173,6 +173,11 @@ public class IncludeController extends GenericController implements ReplaceableC
         return tree;
     }
 
+    /**
+     * Extract from tree (included test plan) all Test Elements located in a Test Fragment
+     * @param tree HashTree included Test Plan
+     * @return HashTree Subset within Test Fragment or Empty HashTree
+     */
     private HashTree getProperBranch(HashTree tree) {
         Iterator<Object> iter = new LinkedList<Object>(tree.list()).iterator();
         while (iter.hasNext()) {
@@ -189,9 +194,8 @@ public class IncludeController extends GenericController implements ReplaceableC
                 return tree.getTree(item);
             }
         }
-        //return the tree since we didn't find a TestFragment.  This will mimic the 
-        //old behavior to import an exact node.
-        return tree;
+        log.warn("No Test Fragment was found in included Test Plan, returning empty HashTree");
+        return new HashTree();
     }
 
 
