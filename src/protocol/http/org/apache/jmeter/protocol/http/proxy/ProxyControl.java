@@ -1070,8 +1070,4 @@ public class ProxyControl extends GenericController {
         return null == server;
     }
 
-    public String getSSLHosts() {
-        // TODO Auto-generated method stub; should return the field trimmed
-        return "jmeter.apache.org,*.google.co.uk";
-    }
 }
