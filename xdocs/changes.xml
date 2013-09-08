@@ -364,6 +364,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54896</bugzilla> - JUnit sampler gives only "failed to create an instance of the class" message with constructor problems.</li>
 <li><bugzilla>55084</bugzilla> - Add timeout support for JDBC Request. Contributed by Mikhail Epikhin (epihin-m at yandex.ru)</li>
 <li><bugzilla>55403</bugzilla> - Enhancement to OS sampler: Support for timeout</li>
+<li><bugzilla>55518</bugzilla> - Add ability to limit number of cached PreparedStatements per connection when "Prepared Select Statement", "Prepared Update Statement" or "Callable Statement" query type is selected</li>
 </ul>
 
 <h3>Controllers</h3>
