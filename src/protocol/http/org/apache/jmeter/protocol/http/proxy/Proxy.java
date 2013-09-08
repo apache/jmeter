@@ -189,7 +189,6 @@ public class Proxy extends Thread {
         SampleResult result = null;
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;
-        String[] param = new String[0];
         log.debug(port + "====================================================================");
         try {
             // Now, parse initial request (in case it is a CONNECT request)
@@ -209,7 +208,7 @@ public class Proxy extends Thread {
                 outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes(SampleResult.DEFAULT_HTTP_ENCODING)); // $NON-NLS-1$
                 outStreamClient.flush();
                // With ssl request, url is host:port (without https:// or path)
-                param = request.getUrl().split(":");  // $NON-NLS-1$
+                String[] param = request.getUrl().split(":");  // $NON-NLS-1$
                 if (param.length == 2) {
                     log.debug(port + "Start to negotiate SSL connection, host: " + param[0]);
                     clientSocket = startSSL(clientSocket, param[0]);
