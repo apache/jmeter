@@ -30,6 +30,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,9 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     // String used to indicate a null value
     private static final String NULL_MARKER =
         JMeterUtils.getPropDefault("jdbcsampler.nullmarker","]NULL["); // $NON-NLS-1$
+    
+    private static final int MAX_OPEN_PREPARED_STATEMENTS =
+        JMeterUtils.getPropDefault("jdbcsampler.maxopenpreparedstatements", 100); 
 
     private static final String INOUT = "INOUT"; // $NON-NLS-1$
 
@@ -323,7 +327,15 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private PreparedStatement getPreparedStatement(Connection conn, boolean callable) throws SQLException {
         Map<String, PreparedStatement> preparedStatementMap = perConnCache.get(conn);
         if (null == preparedStatementMap ) {
-            preparedStatementMap = new ConcurrentHashMap<String, PreparedStatement>();
+            preparedStatementMap = Collections.<String, PreparedStatement>synchronizedMap(
+                    new org.apache.commons.collections.map.LRUMap(MAX_OPEN_PREPARED_STATEMENTS) {
+                @Override
+                protected boolean removeLRU(LinkEntry entry) {
+                    PreparedStatement preparedStatement = (PreparedStatement)entry.getValue();
+                    close(preparedStatement);
+                    return true;
+                }  
+            });
             // As a connection is held by only one thread, we cannot already have a 
             // preparedStatementMap put by another thread
             perConnCache.put(conn, preparedStatementMap);
