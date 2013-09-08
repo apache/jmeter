@@ -422,33 +422,25 @@ public class Proxy extends Thread {
         if (keyStore == null) { // no existing file or not valid
             keyStorePass = RandomStringUtils.randomAscii(20);
             setPassword(keyStorePass);
-            try {
-                if (host != null) { // i.e. Java 7
-                    log.info(port + "Creating Proxy CA in " + canonicalPath);
-                    KeyToolUtils.generateProxyCA(certFile, keyStorePass, CERT_VALIDITY);
-                    log.info(port + "Creating entry " + subject + " in " + canonicalPath);
-                    KeyToolUtils.generateHostCert(certFile, keyStorePass, subject, CERT_VALIDITY);
-                    log.info(port + "Created keystore in " + canonicalPath);
-                } else {
-                    log.info(port + "Generating standard keypair in " + canonicalPath);
-                    certFile.delete(); // Must not exist
-                    KeyToolUtils.genkeypair(certFile, JMETER_SERVER_ALIAS, keyStorePass, CERT_VALIDITY, null, null);                    
-                }
-                keyStore = getKeyStore(keyStorePass.toCharArray()); // This should now work
-            } catch (InterruptedException e) {
-                throw new IOException("Could not create Proxy CA keystore", e);
+            if (host != null) { // i.e. Java 7
+                log.info(port + "Creating Proxy CA in " + canonicalPath);
+                KeyToolUtils.generateProxyCA(certFile, keyStorePass, CERT_VALIDITY);
+                log.info(port + "Creating entry " + subject + " in " + canonicalPath);
+                KeyToolUtils.generateHostCert(certFile, keyStorePass, subject, CERT_VALIDITY);
+                log.info(port + "Created keystore in " + canonicalPath);
+            } else {
+                log.info(port + "Generating standard keypair in " + canonicalPath);
+                certFile.delete(); // Must not exist
+                KeyToolUtils.genkeypair(certFile, JMETER_SERVER_ALIAS, keyStorePass, CERT_VALIDITY, null, null);                    
             }
+            keyStore = getKeyStore(keyStorePass.toCharArray()); // This should now work
         }
         // keyStorePass should not be null here; checking it avoids a possible NPE warning below
         if (keyStorePass != null && host != null && !keyStore.containsAlias(host)) {
             log.info(port + "Creating entry '" + host + "' in " + canonicalPath);
-            try {
-                // Requires Java 7
-                KeyToolUtils.generateHostCert(certFile, keyStorePass, host, CERT_VALIDITY);
-                keyStore = getKeyStore(keyStorePass.toCharArray()); // reload
-            } catch (InterruptedException e) {
-                throw new IOException("Could not create entry for subject '" + host + "'", e);
-            }            
+        // Requires Java 7
+            KeyToolUtils.generateHostCert(certFile, keyStorePass, host, CERT_VALIDITY);
+            keyStore = getKeyStore(keyStorePass.toCharArray()); // reload
         }
         return keyStore;
     }
