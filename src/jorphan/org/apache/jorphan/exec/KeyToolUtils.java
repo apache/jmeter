@@ -42,7 +42,7 @@ public class KeyToolUtils {
     private static final String DNAME_CA_KEY   = "cn=Apache JMeter Proxy server CA (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
     private static final String CACERT = "ApacheJMeterTemporaryCA.crt"; // $NON-NLS-1$
     private static final String ROOT_ALIAS = "root";  // $NON-NLS-1$
-    private static final String CA_ALIAS = "ca";  // $NON-NLS-1$
+    public static final String CA_ALIAS = "ca";  // $NON-NLS-1$
 
     /** Does this class support generation of host certificates? */
     public static final boolean SUPPORTS_HOST_CERT = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_7);
@@ -63,11 +63,10 @@ public class KeyToolUtils {
      * @param dname the dname value, if omitted use "cn=JMeter Proxy (DO NOT TRUST)"
      * @param ext if not null, the extension (-ext) to add (e.g. "bc:c"). This requires Java 7.
      *
-     * @throws InterruptedException
      * @throws IOException
      */
     public static void genkeypair(final File keystore, String alias, final String password, int validity, String dname, String ext)
-            throws IOException, InterruptedException {
+            throws IOException {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, null);
         final List<String> arguments = new ArrayList<String>();
@@ -92,9 +91,13 @@ public class KeyToolUtils {
             arguments.add("-ext"); // $NON-NLS-1$
             arguments.add(ext);
         }
-        int exitVal = nativeCommand.run(arguments);
-        if (exitVal != 0) {
-            throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+        try {
+            int exitVal = nativeCommand.run(arguments);
+            if (exitVal != 0) {
+                throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+            }
+        } catch (InterruptedException e) {
+            throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
     }
 
@@ -107,10 +110,9 @@ public class KeyToolUtils {
      * @param password the password for keystore and keys
      * @param validity the validity period in days, must be greater than 0 
      *
-     * @throws InterruptedException
      * @throws IOException
      */
-    public static void generateProxyCA(File keystore, String password,  int validity) throws IOException, InterruptedException{
+    public static void generateProxyCA(File keystore, String password,  int validity) throws IOException {
         keystore.delete(); // any existing entries will be invalidated anyway
         new File(CACERT).delete(); // not strictly needed
 
@@ -140,11 +142,10 @@ public class KeyToolUtils {
      * @param domain the domain, e.g. apache.org
      * @param validity the validity period for the key
      *
-     * @throws InterruptedException
      * @throws IOException
      *
      */
-    public static void generateDomainCert(File keystore, String password, String domain, int validity) throws IOException, InterruptedException {
+    public static void generateDomainCert(File keystore, String password, String domain, int validity) throws IOException {
         // generate the keypair for the domain
         generateSignedCert(keystore, password, validity, 
                 domain,         // alias 
@@ -160,11 +161,10 @@ public class KeyToolUtils {
      * @param host the host, e.g. jmeter.apache.org
      * @param validity the validity period for the key
      *
-     * @throws InterruptedException
      * @throws IOException
      *
      */
-    public static void generateHostCert(File keystore, String password, String host, int validity) throws IOException, InterruptedException {
+    public static void generateHostCert(File keystore, String password, String host, int validity) throws IOException {
         // generate the keypair for the host
         generateSignedCert(keystore, password, validity, 
                 host,  // alias 
@@ -172,8 +172,7 @@ public class KeyToolUtils {
     }
 
     private static void generateSignedCert(File keystore, String password,
-            int validity, String alias, String subject) throws IOException,
-            InterruptedException {
+            int validity, String alias, String subject) throws IOException {
         String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY";
         KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, null);
         //rem generate cert for DOMAIN using CA (requires Java7 for gencert) and import it
@@ -200,7 +199,7 @@ public class KeyToolUtils {
      * @param storePass the keystore password
      * @return the output from the command "keytool -list -v"
      */
-    public static String list(final File keystore, final String storePass) throws IOException, InterruptedException {
+    public static String list(final File keystore, final String storePass) throws IOException {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, null);
         final List<String> arguments = new ArrayList<String>();
@@ -212,9 +211,13 @@ public class KeyToolUtils {
         arguments.add(keystore.getName());
         arguments.add("-storepass"); // $NON-NLS-1$
         arguments.add(storePass);
-        int exitVal = nativeCommand.run(arguments);
-        if (exitVal != 0) {
-            throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+        try {
+            int exitVal = nativeCommand.run(arguments);
+            if (exitVal != 0) {
+                throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+            }
+        } catch (InterruptedException e) {
+            throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
         return nativeCommand.getOutResult();
     }
@@ -230,11 +233,10 @@ public class KeyToolUtils {
      * @param output where to send output, may be null
      * @param parameters additional parameters to the command, may be null
      * @throws IOException
-     * @throws InterruptedException
      */
     static void keytool(String command, File keystore, String password, String alias,
             InputStream input, OutputStream output, String ... parameters)
-            throws IOException, InterruptedException {
+            throws IOException {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, 0L, 0, null, input, output, null);
         final List<String> arguments = new ArrayList<String>();
@@ -252,9 +254,13 @@ public class KeyToolUtils {
             arguments.add(parameter);
         }
 
-        int exitVal = nativeCommand.run(arguments);
-        if (exitVal != 0) {
-            throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+        try {
+            int exitVal = nativeCommand.run(arguments);
+            if (exitVal != 0) {
+                throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+            }
+        } catch (InterruptedException e) {
+            throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
     }
 }
