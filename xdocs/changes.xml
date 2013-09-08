@@ -244,6 +244,11 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 </p>
 
 <p>
+In previous versions, IncludeController could run Test Elements located inside a Thread Group, this behaviour which was not documented could result in weird behaviour, it has been removed in this version (see <bugzilla>55464</bugzilla>). 
+The correct way to include Test Elements is to use Test Fragment as stated in documentation of Include Controller.
+</p>
+
+<p>
 The retry count for the HttpClient 3.1 and HttpClient 4.x samplers has been changed to 0.
 Previously the default was 1, which could cause unexpected additional traffic.
 </p>
@@ -290,6 +295,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55201</bugzilla> - ForEach controller excludes start index and includes end index (clarified documentation).</li>
 <li><bugzilla>55334</bugzilla> - Adding Include Controller to test plan (made of Include Controllers) without saving TestPlan leads to included code not being taken into account until save.</li>
 <li><bugzilla>55375</bugzilla> -  StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node.</li>
+<li><bugzilla>55464</bugzilla> - Include Controller running included thread group</li>
 </ul>
 
 <h3>Listeners</h3>
