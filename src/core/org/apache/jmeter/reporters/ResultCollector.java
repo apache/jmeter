@@ -151,11 +151,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
         @Override
         public void run() {
-            log.warn("Shutdown hook started");
+            log.info("Shutdown hook started");
             synchronized (LOCK) {
                 flushFileOutput();                    
             }
-            log.warn("Shutdown hook ended");
+            log.info("Shutdown hook ended");
         }     
     }
     
