@@ -1191,11 +1191,14 @@ public class ProxyControl extends GenericController {
         if (storePassword  != null) { // Assume we have already created the store
             try {
                 keyStore = getKeyStore(storePassword.toCharArray());
-                X509Certificate  caCert = (X509Certificate) keyStore.getCertificate(KeyToolUtils.CA_ALIAS);
-                if (caCert == null) {
-                    keyStore = null; // no CA key - probably the wrong store type.
-                } else {
-                    caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
+                for(String alias : KeyToolUtils.getCAaliases()) {
+                    X509Certificate  caCert = (X509Certificate) keyStore.getCertificate(alias);
+                    if (caCert == null) {
+                        keyStore = null; // no CA key - probably the wrong store type.
+                        break; // cannot continue
+                    } else {
+                        caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
+                    }
                 }
             } catch (IOException e) { // store is faulty, we need to recreate it
                 keyStore = null; // if cert is not valid, flag up to recreate it

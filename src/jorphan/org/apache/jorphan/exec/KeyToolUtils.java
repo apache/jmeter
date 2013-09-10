@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -41,11 +42,17 @@ public class KeyToolUtils {
     // The DNAME which is used if none is provided
     private static final String DEFAULT_DNAME = "cn=JMeter Proxy (DO NOT TRUST)";  // $NON-NLS-1$
 
-    private static final String DNAME_ROOT_KEY = "cn=Apache JMeter Proxy root (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
-    private static final String DNAME_CA_KEY   = "cn=Apache JMeter Proxy server CA (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
-    private static final String CACERT = "ApacheJMeterTemporaryCA.crt"; // $NON-NLS-1$
-    private static final String ROOT_ALIAS = "root";  // $NON-NLS-1$
-    public static final String CA_ALIAS = "ca";  // $NON-NLS-1$
+    // N.B. It seems that Opera needs a chain in order to accept server keys signed by the intermediate CA
+    // Opera does not seem to like server keys signed by the root (self-signed) cert.
+
+    private static final String DNAME_ROOT_CA_KEY          = "cn=Apache JMeter Proxy Root CA (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
+    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=Apache JMeter Proxy Intermediate CA (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
+
+    private static final String ROOT_CACERT_CRT = "ApacheJMeterTemporaryRootCA.crt"; // $NON-NLS-1$ (Firefox and Windows)
+    private static final String ROOT_CACERT_USR = "ApacheJMeterTemporaryRootCA.usr"; // $NON-NLS-1$ (Opera)
+
+    private static final String ROOTCA_ALIAS = ":root_ca:";  // $NON-NLS-1$
+    private static final String INTERMEDIATE_CA_ALIAS = ":intermediate_ca:";  // $NON-NLS-1$
 
     /** Does this class support generation of host certificates? */
     public static final boolean SUPPORTS_HOST_CERT = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_7);
@@ -105,8 +112,10 @@ public class KeyToolUtils {
     }
 
     /**
-     * Create a self-signed CA certificate that can be used to sign SSL domain certificates.
-     * The certificate file is created in the same directory as the keystore.
+     * Creates a self-signed Root CA certificate and an intermediate CA certificate 
+     * (signed by the Root CA certificate) that can be used to sign server certificates.
+     * The Root CA certificate file is exported to the same directory as the keystore
+     * in formats suitable for Firefox/Chrome/IE (.crt) and Opera (.usr).
      * Requires Java 7 or later.
      *
      * @param keystore the keystore in which to store everything
@@ -116,56 +125,56 @@ public class KeyToolUtils {
      * @throws IOException
      */
     public static void generateProxyCA(File keystore, String password,  int validity) throws IOException {
-        keystore.delete(); // any existing entries will be invalidated anyway
-        // not strictly needed
-        if(new File(CACERT).exists() && !new File(CACERT).delete()) {
-            // Noop as we accept not to be able to delete it
-            log.warn("Could not delete file:"+new File(CACERT).getAbsolutePath()+", will continue ignoring this");
+        File caCert_crt = new File(ROOT_CACERT_CRT);
+        File caCert_usr = new File(ROOT_CACERT_USR);
+        boolean fileExists = false;
+        if (!keystore.delete() && keystore.exists()) {
+            log.warn("Problem deleting the keystore '" + keystore + "'");
+            fileExists = true;
+        }
+        if (!caCert_crt.delete() && caCert_crt.exists()) {
+            log.warn("Problem deleting the certificate file '" + caCert_crt + "'");
+            fileExists = true;
+        }
+        if (!caCert_usr.delete() && caCert_usr.exists()) {
+            log.warn("Problem deleting the certificate file '" + caCert_usr + "'");
+            fileExists = true;
+        }
+        if (fileExists) {
+            log.warn("If problems occur when recording SSL, delete the files manually and retry.");
         }
         // Create the self-signed keypairs (requires Java 7 for -ext flag)
-        KeyToolUtils.genkeypair(keystore, ROOT_ALIAS, password, validity, DNAME_ROOT_KEY, "bc:c");
-        KeyToolUtils.genkeypair(keystore, CA_ALIAS, password, validity, DNAME_CA_KEY, "bc:c");
+        KeyToolUtils.genkeypair(keystore, ROOTCA_ALIAS, password, validity, DNAME_ROOT_CA_KEY, "bc:c");
+        KeyToolUtils.genkeypair(keystore, INTERMEDIATE_CA_ALIAS, password, validity, DNAME_INTERMEDIATE_CA_KEY, "bc:c");
 
         // Create cert for CA using root (requires Java 7 for gencert)
         ByteArrayOutputStream certReqOut = new ByteArrayOutputStream();
         // generate the request
-        KeyToolUtils.keytool("-certreq", keystore, password, CA_ALIAS, null, certReqOut);
+        KeyToolUtils.keytool("-certreq", keystore, password, INTERMEDIATE_CA_ALIAS, null, certReqOut);
 
         // generate the certificate and store in output file
         InputStream certReqIn = new ByteArrayInputStream(certReqOut.toByteArray());
-        KeyToolUtils.keytool("-gencert", keystore, password, CA_ALIAS, certReqIn, null, "-ext", "BC:0", "-outfile", CACERT);
+        ByteArrayOutputStream genCertOut = new ByteArrayOutputStream();
+        KeyToolUtils.keytool("-gencert", keystore, password, ROOTCA_ALIAS, certReqIn, genCertOut, "-ext", "BC:0");
 
         // import the signed CA cert into the store (root already there) - both are needed to sign the domain certificates
-        KeyToolUtils.keytool("-importcert", keystore, password, CA_ALIAS, null, null, "-file", CACERT);
+        InputStream genCertIn = new ByteArrayInputStream(genCertOut.toByteArray());
+        KeyToolUtils.keytool("-importcert", keystore, password, INTERMEDIATE_CA_ALIAS, genCertIn, null);
+
+        // Export the Root CA for Firefox/Chrome/IE
+        KeyToolUtils.keytool("-exportcert", keystore, password, ROOTCA_ALIAS, null, null, "-rfc", "-file", ROOT_CACERT_CRT);
+        // Copy for Opera
+        FileUtils.copyFile(caCert_crt, caCert_usr);
     }
 
     /**
-     * Create a domain certificate (*.domain) and sign it with the CA certificate.
+     * Create a host certificate signed with the CA certificate.
      * Requires Java 7 or later.
      *
      * @param keystore the keystore to use
      * @param password the password to use for the keystore and keys
-     * @param domain the domain, e.g. apache.org
-     * @param validity the validity period for the key
-     *
-     * @throws IOException
-     *
-     */
-    public static void generateDomainCert(File keystore, String password, String domain, int validity) throws IOException {
-        // generate the keypair for the domain
-        generateSignedCert(keystore, password, validity, 
-                domain,         // alias 
-                "*." + domain); // subject
-    }
-
-    /**
-     * Create a host certificate and sign it with the CA certificate.
-     * Requires Java 7 or later.
-     *
-     * @param keystore the keystore to use
-     * @param password the password to use for the keystore and keys
-     * @param host the host, e.g. jmeter.apache.org
-     * @param validity the validity period for the key
+     * @param host the host, e.g. jmeter.apache.org or *.apache.org; also used as the alias
+     * @param validity the validity period for the generated keypair
      *
      * @throws IOException
      *
@@ -191,7 +200,7 @@ public class KeyToolUtils {
         //rem ku:c=dig,keyE means KeyUsage:criticial=digitalSignature,keyEncipherment
         InputStream certReqIn = new ByteArrayInputStream(certReqOut.toByteArray());
         ByteArrayOutputStream certOut = new ByteArrayOutputStream();
-        KeyToolUtils.keytool("-gencert", keystore, password, CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE");
+        KeyToolUtils.keytool("-gencert", keystore, password, INTERMEDIATE_CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE");
 
         // inport the certificate
         InputStream certIn = new ByteArrayInputStream(certOut.toByteArray());
@@ -226,6 +235,15 @@ public class KeyToolUtils {
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
         return nativeCommand.getOutResult();
+    }
+
+    /**
+     * Returns a list of the CA aliases that should be in the keystore.
+     * 
+     * @return the aliases that are used for the keystore
+     */
+    public static String[] getCAaliases() {
+        return new String[]{ROOTCA_ALIAS, INTERMEDIATE_CA_ALIAS};
     }
 
     /**
