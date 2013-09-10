@@ -68,7 +68,7 @@ public class Proxy extends Thread {
 
     private static final String NEW_LINE = "\n"; // $NON-NLS-1$
 
-    private static final String[] headersToRemove;
+    private static final String[] HEADERS_TO_REMOVE;
 
     // Allow list of headers to be overridden
     private static final String PROXY_HEADERS_REMOVE = "proxy.headers.remove"; // $NON-NLS-1$
@@ -84,18 +84,18 @@ public class Proxy extends Thread {
         JMeterUtils.getPropDefault("proxy.ssl.protocol", "SSLv3"); // $NON-NLS-1$ $NON-NLS-2$
 
     // HashMap to save ssl connection between Jmeter proxy and browser
-    private static final HashMap<String, SSLSocketFactory> hashHost = new HashMap<String, SSLSocketFactory>();
+    private static final HashMap<String, SSLSocketFactory> HOST2SSL_SOCK_FAC = new HashMap<String, SSLSocketFactory>();
 
-    private static final SamplerCreatorFactory factory = new SamplerCreatorFactory();
-
-    // Use with SSL connection
-    private OutputStream outStreamClient = null;
+    private static final SamplerCreatorFactory SAMPLERFACTORY = new SamplerCreatorFactory();
 
     static {
         String removeList = JMeterUtils.getPropDefault(PROXY_HEADERS_REMOVE,PROXY_HEADERS_REMOVE_DEFAULT);
-        headersToRemove = JOrphanUtils.split(removeList,PROXY_HEADERS_REMOVE_SEPARATOR);
+        HEADERS_TO_REMOVE = JOrphanUtils.split(removeList,PROXY_HEADERS_REMOVE_SEPARATOR);
         log.info("Proxy will remove the headers: "+removeList);
     }
+
+    // Use with SSL connection
+    private OutputStream outStreamClient = null;
 
     /** Socket to client. */
     private Socket clientSocket = null;
@@ -209,7 +209,7 @@ public class Proxy extends Thread {
                 }
             }
 
-            SamplerCreator samplerCreator = factory.getSamplerCreator(request, pageEncodings, formEncodings);
+            SamplerCreator samplerCreator = SAMPLERFACTORY.getSamplerCreator(request, pageEncodings, formEncodings);
             sampler = samplerCreator.createAndPopulateSampler(request, pageEncodings, formEncodings);
 
             /*
@@ -261,7 +261,7 @@ public class Proxy extends Thread {
                 headers.removeHeaderNamed(HTTPConstants.HEADER_COOKIE);// Always remove cookies
                 headers.removeHeaderNamed(HTTPConstants.HEADER_AUTHORIZATION);// Always remove authorization
                 // Remove additional headers
-                for(String hdr : headersToRemove){
+                for(String hdr : HEADERS_TO_REMOVE){
                     headers.removeHeaderNamed(hdr);
                 }
             }
@@ -327,8 +327,8 @@ public class Proxy extends Thread {
         default:
             throw new IllegalStateException("Impossible case: " + ProxyControl.KEYSTORE_MODE);
         }
-        synchronized (hashHost) {
-            final SSLSocketFactory sslSocketFactory = hashHost.get(hashAlias);
+        synchronized (HOST2SSL_SOCK_FAC) {
+            final SSLSocketFactory sslSocketFactory = HOST2SSL_SOCK_FAC.get(hashAlias);
             if (sslSocketFactory != null) {
                 log.debug(port + "Good, already in map, host=" + host + " using alias " + hashAlias);
                 return sslSocketFactory;
@@ -337,7 +337,7 @@ public class Proxy extends Thread {
                 SSLContext sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
                 sslcontext.init(getWrappedKeyManagers(keyAlias), null, null);
                 SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
-                hashHost.put(hashAlias, sslFactory);
+                HOST2SSL_SOCK_FAC.put(hashAlias, sslFactory);
                 log.info(port + "KeyStore for SSL loaded OK and put host '" + host + "' in map with key ("+hashAlias+")");
                 return sslFactory;
             } catch (GeneralSecurityException e) {
