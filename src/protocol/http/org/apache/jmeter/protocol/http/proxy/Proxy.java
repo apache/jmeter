@@ -22,11 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -34,9 +30,9 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.prefs.Preferences;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -44,8 +40,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -54,7 +48,6 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -84,10 +77,6 @@ public class Proxy extends Thread {
 
     private static final String PROXY_HEADERS_REMOVE_SEPARATOR = ","; // $NON-NLS-1$
 
-    // for ssl connection
-    private static final String KEYSTORE_TYPE =
-        JMeterUtils.getPropDefault("proxy.cert.type", "JKS"); // $NON-NLS-1$ $NON-NLS-2$
-
     private static final String KEYMANAGERFACTORY =
         JMeterUtils.getPropDefault("proxy.cert.factory", "SunX509"); // $NON-NLS-1$ $NON-NLS-2$
 
@@ -97,29 +86,7 @@ public class Proxy extends Thread {
     // HashMap to save ssl connection between Jmeter proxy and browser
     private static final HashMap<String, SSLSocketFactory> hashHost = new HashMap<String, SSLSocketFactory>();
 
-    // Proxy configuration SSL
-    private static final String CERT_DIRECTORY =
-        JMeterUtils.getPropDefault("proxy.cert.directory", JMeterUtils.getJMeterBinDir()); // $NON-NLS-1$
-
-    private static final String CERT_FILE_DEFAULT = "proxyserver.jks";// $NON-NLS-1$
-
-    private static final String CERT_FILE =
-        JMeterUtils.getPropDefault("proxy.cert.file", CERT_FILE_DEFAULT); // $NON-NLS-1$
-
-    // The alias to be used if dynamic host names are not possible
-    private static final String JMETER_SERVER_ALIAS = ":jmeter:"; // $NON-NLS-1$
-
-    private static final int CERT_VALIDITY = JMeterUtils.getPropDefault("proxy.cert.validity", 7); // $NON-NLS-1$
-
-    private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$
-
     private static final SamplerCreatorFactory factory = new SamplerCreatorFactory();
-
-    // Keys for user preferences
-    private static final String USER_PASSWORD_KEY = "proxy_cert_PASSWORD";
-
-    private static final Preferences prefs = Preferences.userNodeForPackage(Proxy.class);
-    // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
 
     // Use with SSL connection
     private OutputStream outStreamClient = null;
@@ -145,6 +112,10 @@ public class Proxy extends Thread {
     private Map<String, String> formEncodings;
 
     private String port; // For identifying log messages
+
+    private KeyStore keyStore; // keystore for SSL keys; fixed at config except for dynamic host key generation
+
+    private String keyPassword;
 
     /**
      * Default constructor - used by newInstance call in Daemon
@@ -175,6 +146,8 @@ public class Proxy extends Thread {
         this.pageEncodings = _pageEncodings;
         this.formEncodings = _formEncodings;
         this.port = "["+ clientSocket.getPort() + "] ";
+        this.keyStore = _target.getKeyStore();
+        this.keyPassword = _target.getKeyPassword();
     }
 
     /**
@@ -315,17 +288,57 @@ public class Proxy extends Thread {
      * @throws IOException
      */
     private SSLSocketFactory getSSLSocketFactory(String host) {
+        if (keyStore == null) {
+            log.error(port + "No keystore available, cannot record SSL");
+            return null;
+        }
+        final String hashAlias;
+        final String keyAlias;
+        switch(ProxyControl.KEYSTORE_MODE) {
+        case DYNAMIC_KEYSTORE:
+            try {
+                keyStore = target.getKeyStore(); // pick up any recent changes from other threads
+                String alias = getDomainMatch(keyStore, host);
+                if (alias == null) {
+                    hashAlias = host;
+                    keyAlias = host;
+                    keyStore = target.updateKeyStore(port, keyAlias);
+                } else if (alias.equals(host)) { // the host has a key already
+                    hashAlias = host;
+                    keyAlias = host;
+                } else { // the host matches a domain; use its key
+                    hashAlias = alias;
+                    keyAlias = alias;
+                }
+            } catch (IOException e) {
+                log.error(port + "Problem with keystore", e);
+                return null;
+            } catch (GeneralSecurityException e) {
+                log.error(port + "Problem with keystore", e);
+                return null;
+            }
+            break;
+        case JMETER_KEYSTORE:
+            hashAlias = keyAlias = ProxyControl.JMETER_SERVER_ALIAS;
+            break;
+        case USER_KEYSTORE:
+            hashAlias = keyAlias = ProxyControl.CERT_ALIAS;
+            break;
+        default:
+            throw new IllegalStateException("Impossible case: " + ProxyControl.KEYSTORE_MODE);
+        }
         synchronized (hashHost) {
-            if (hashHost.containsKey(host)) {
-                log.debug(port + "Good, already in map, host=" + host);
-                return hashHost.get(host);
+            final SSLSocketFactory sslSocketFactory = hashHost.get(hashAlias);
+            if (sslSocketFactory != null) {
+                log.debug(port + "Good, already in map, host=" + host + " using alias " + hashAlias);
+                return sslSocketFactory;
             }
             try {
                 SSLContext sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
-                sslcontext.init(getKeyManagers(host), null, null);
+                sslcontext.init(getWrappedKeyManagers(keyAlias), null, null);
                 SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
-                hashHost.put(host, sslFactory);
-                log.info(port + "KeyStore for SSL loaded OK and put host in map ("+host+")");
+                hashHost.put(hashAlias, sslFactory);
+                log.info(port + "KeyStore for SSL loaded OK and put host '" + host + "' in map with key ("+hashAlias+")");
                 return sslFactory;
             } catch (GeneralSecurityException e) {
                 log.error(port + "Problem with SSL certificate", e);
@@ -337,115 +350,57 @@ public class Proxy extends Thread {
     }
 
     /**
-     * Return the key managers, wrapped if necessary to return a specific alias
-     * 
-     * @param serverAlias the alias to return, or null to use whatever is present
-     * @param host the target host
-     * @return the key managers
-     * @throws GeneralSecurityException
-     * @throws IOException if the store cannot be opened or read or the alias is missing
+     * Get matching alias for a host from keyStore that may contain domain aliases.
+     * Assumes domains must have at least 2 parts (apache.org);
+     * does not check if TLD requires more (google.co.uk).
+     * ProxyControl checks for valid domains before adding them, and any subsequent
+     * additions by the Proxy class will be hosts, not domains.
+     * @param keyStore the KeyStore to search
+     * @param host the hostname to match
+     * @return
+     * @throws KeyStoreException 
      */
-    private KeyManager[] getKeyManagers(String host) throws GeneralSecurityException, IOException {
-        final KeyStore ks;
-        final String serverAlias;
-        String keyPass;
-        switch(ProxyControl.keystoreType) {
-        case JMETER_KEYSTORE:
-            ks = getJMeterKeyStore(getPassword(), (String) null);
-            keyPass = getPassword(); // above call may have updated the stored password
-            serverAlias = JMETER_SERVER_ALIAS;
-            break;
-        case DYNAMIC_KEYSTORE:
-            ks = getJMeterKeyStore(getPassword(), host);
-            keyPass = getPassword(); // above call may have updated the stored password
-            serverAlias = host;
-            break;
-        case USER_KEYSTORE:
-        default: // Not really needed, but avoids complaints about non-init password strings
-            String keyStorePass = JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD); // $NON-NLS-1$
-            ks = getKeyStore(keyStorePass.toCharArray());
-            keyPass = JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD); // $NON-NLS-1$
-            serverAlias = ProxyControl.CERT_ALIAS;
-            break;
+    private String getDomainMatch(KeyStore keyStore, String host) throws KeyStoreException {
+        if (keyStore.containsAlias(host)) {
+            return host;
+        }
+        String parts[] = host.split("\\."); // get the component parts
+        // Assume domains must have at least 2 parts, e.g. apache.org
+        // Don't try matching against *.org; however we don't check *.co.uk here
+        for(int i = 1; i <= parts.length - 2; i++) {
+            StringBuilder sb = new StringBuilder("*");
+            for(int j = i; j < parts.length ; j++) { // add the remaining parts
+                sb.append('.');
+                sb.append(parts[j]);
+            }
+            String alias = sb.toString();
+            if (keyStore.containsAlias(alias)) {
+                return alias;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return the key managers, wrapped to return a specific alias
+     */
+    private KeyManager[] getWrappedKeyManagers(final String keyAlias)
+            throws GeneralSecurityException, IOException {
+        if (!keyStore.containsAlias(keyAlias)) {
+            throw new IOException("Keystore does not contain alias " + keyAlias);
         }
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
-        kmf.init(ks, keyPass.toCharArray());
+        kmf.init(keyStore, keyPassword.toCharArray());
         final KeyManager[] keyManagers = kmf.getKeyManagers();
-        if (serverAlias == null) {
-            return keyManagers;
-        } else {
-            // Check if alias is suitable here, rather than waiting for connection to fail
-            if (!ks.containsAlias(serverAlias)) {
-                throw new IOException("Keystore does not contain alias " + serverAlias);
-            }
-            final int keyManagerCount = keyManagers.length;
-            final KeyManager[] wrappedKeyManagers = new KeyManager[keyManagerCount];
-            for (int i =0; i < keyManagerCount; i++) {
-                wrappedKeyManagers[i] = new ServerAliasKeyManager(keyManagers[i], serverAlias);
-            }
-            return wrappedKeyManagers;
+        // Check if alias is suitable here, rather than waiting for connection to fail
+        final int keyManagerCount = keyManagers.length;
+        final KeyManager[] wrappedKeyManagers = new KeyManager[keyManagerCount];
+        for (int i =0; i < keyManagerCount; i++) {
+            wrappedKeyManagers[i] = new ServerAliasKeyManager(keyManagers[i], keyAlias);
         }
+        return wrappedKeyManagers;
     }
 
-    private KeyStore getKeyStore(char[] password) throws GeneralSecurityException, IOException {
-        File certFile = new File(CERT_DIRECTORY, CERT_FILE);
-        InputStream in = null;
-        final String certPath = certFile.getAbsolutePath();
-        try {
-            in = new BufferedInputStream(new FileInputStream(certFile));
-            log.info(port + "Opened Keystore file: " + certPath);
-            KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
-            ks.load(in, password);
-            return ks;
-        } catch (FileNotFoundException e) {
-            log.error(port + "Could not open Keystore file: " + certPath, e);
-            throw e;
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
-    }
-
-    // If host == null, we are not using dynamic keys
-    private KeyStore getJMeterKeyStore(String keyStorePass, String host) throws GeneralSecurityException, IOException {
-        final File certFile = new File(CERT_DIRECTORY, CERT_FILE);
-        final String subject = host == null ? JMETER_SERVER_ALIAS : host;
-        KeyStore keyStore = null;
-        final String canonicalPath = certFile.getCanonicalPath();
-        if (keyStorePass != null) { // Assume we have already created the store
-            try {
-                keyStore = getKeyStore(keyStorePass.toCharArray());
-            } catch (Exception e) { // store is faulty, we need to recreate it
-                log.warn(port + "Could not open expected file " + canonicalPath + " " + e.getMessage());            
-            }
-        }
-        if (keyStore == null) { // no existing file or not valid
-            keyStorePass = RandomStringUtils.randomAscii(20);
-            setPassword(keyStorePass);
-            if (host != null) { // i.e. Java 7
-                log.info(port + "Creating Proxy CA in " + canonicalPath);
-                KeyToolUtils.generateProxyCA(certFile, keyStorePass, CERT_VALIDITY);
-                log.info(port + "Creating entry " + subject + " in " + canonicalPath);
-                KeyToolUtils.generateHostCert(certFile, keyStorePass, subject, CERT_VALIDITY);
-                log.info(port + "Created keystore in " + canonicalPath);
-            } else {
-                log.info(port + "Generating standard keypair in " + canonicalPath);
-                // Must not exist
-                if(certFile.exists() && !certFile.delete()) {
-                    throw new IOException("Could not delete file:"+certFile.getAbsolutePath()+", this is needed for certificate generation");
-                }
-                KeyToolUtils.genkeypair(certFile, JMETER_SERVER_ALIAS, keyStorePass, CERT_VALIDITY, null, null);                    
-            }
-            keyStore = getKeyStore(keyStorePass.toCharArray()); // This should now work
-        }
-        // keyStorePass should not be null here; checking it avoids a possible NPE warning below
-        if (keyStorePass != null && host != null && !keyStore.containsAlias(host)) {
-            log.info(port + "Creating entry '" + host + "' in " + canonicalPath);
-        // Requires Java 7
-            KeyToolUtils.generateHostCert(certFile, keyStorePass, host, CERT_VALIDITY);
-            keyStore = getKeyStore(keyStorePass.toCharArray()); // reload
-        }
-        return keyStore;
-    }
     /**
      * Negotiate a SSL connection.
      *
@@ -639,13 +594,4 @@ public class Proxy extends Thread {
         }
         return urlWithoutQuery;
     }
-
-    private String getPassword() {
-        return prefs.get(USER_PASSWORD_KEY, null);
-    }
-
-    private void setPassword(String password) {
-        prefs.put(USER_PASSWORD_KEY, password);        
-    }
-
 }
