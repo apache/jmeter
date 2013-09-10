@@ -107,8 +107,6 @@ public class ProxyControl extends GenericController {
 
     private static final String HEADER_PANEL = HeaderPanel.class.getName();
 
-    private transient Daemon server;
-
     public static final int DEFAULT_PORT = 8080;
 
     // and as a string
@@ -160,8 +158,6 @@ public class ProxyControl extends GenericController {
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC4 = "2";
 
-    private long lastTime = 0;// When was the last sample seen?
-
     private static final long sampleGap =
         JMeterUtils.getPropDefault("proxy.pause", 1000); // $NON-NLS-1$
     // Detect if user has pressed a new link
@@ -188,7 +184,7 @@ public class ProxyControl extends GenericController {
     // Keys for user preferences
     private static final String USER_PASSWORD_KEY = "proxy_cert_password";
 
-    private static final Preferences prefs = Preferences.userNodeForPackage(ProxyControl.class);
+    private static final Preferences PREFERENCES = Preferences.userNodeForPackage(ProxyControl.class);
     // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
 
     // Whether to use dymanic key generation (if supported)
@@ -223,6 +219,10 @@ public class ProxyControl extends GenericController {
             }
         }
     }
+
+    private transient Daemon server;
+
+    private long lastTime = 0;// When was the last sample seen?
 
     private transient KeyStore keyStore;
 
@@ -1299,11 +1299,11 @@ public class ProxyControl extends GenericController {
     }
 
     private String getPassword() {
-        return prefs.get(USER_PASSWORD_KEY, null);
+        return PREFERENCES.get(USER_PASSWORD_KEY, null);
     }
 
     private void setPassword(String password) {
-        prefs.put(USER_PASSWORD_KEY, password);
+        PREFERENCES.put(USER_PASSWORD_KEY, password);
     }
 
     // the keystore for use by the Proxy
