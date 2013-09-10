@@ -345,6 +345,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
 
+        // Prevent both redirect types from being selected
+        final Object source = action.getSource();
+        if (source.equals(samplerFollowRedirects) && samplerFollowRedirects.isSelected()) {
+            samplerRedirectAutomatically.setSelected(false);
+        } else if (source.equals(samplerRedirectAutomatically) && samplerRedirectAutomatically.isSelected()) {
+            samplerFollowRedirects.setSelected(false);            
+        }
+
         // System.err.println(action.paramString()+" "+command+ "
         // "+action.getModifiers());
 
