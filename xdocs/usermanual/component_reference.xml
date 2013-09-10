@@ -5835,17 +5835,18 @@ This setting will also be needed when running the generated test plan.
 During recording, the browser will follow a redirect response and generate an additional request.
 The Proxy will record both the original request and the redirected request
 (subject to whatever exclusions are configured).
-The generated samples have "Follow Redirects" selected by default,
-so when a test plan is replayed, JMeter will follow the redirect, 
-and then replay the redirect request that was recorded.
-To avoid this duplicate replay, either delete the redirected sample from the test plan,
-or ensure that the recorded samples don't have "Follow Redirects" selected.
-The default of "Follow Redirects" was chosen because that is generally better.
-Redirects may depend on the original request, so repeating the originally recorded sample may not always work.
+The generated samples have "Follow Redirects" selected by default, because that is generally better.
+[Redirects may depend on the original request, so repeating the originally recorded sample may not always work.]
 </p>
 <p>
-It is hoped (eventually) to be able to detect redirects during recording and drop/disable them
-so they don't get replayed.
+Now if JMeter is set to follow the redirect during replay, it will issue the original request, 
+and then replay the redirect request that was recorded.
+To avoid this duplicate replay, JMeter tries to detect when a sample is the result of a previous
+redirect. If the current response is a redirect, JMeter will save the redirect URL.
+When the next request is received, it is compared with the saved redirect URL and if there is a match,
+JMeter will disable the generated sample. It also adds comments to the redirect chain.
+This assumes that all the requests in a redirect chain will follow each other without any intervening requests.
+To disable the redirect detection, set the property <code>proxy.redirect.disabling=false</code>
 </p>
 
 <h4>Includes and Excludes</h4>
