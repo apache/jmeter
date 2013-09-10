@@ -615,15 +615,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     // Moved from JMeter class
     @Override
     public boolean isEnabled() {
         return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
     }
-    
+
+    public void setEnabled(boolean enabled) {
+        setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+    }
+
     /** 
      * {@inheritDoc}}
      */
