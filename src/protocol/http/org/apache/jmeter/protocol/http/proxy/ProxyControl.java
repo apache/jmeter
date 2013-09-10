@@ -60,6 +60,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -202,7 +203,7 @@ public class ProxyControl extends GenericController {
     }
 
     static final KeystoreMode KEYSTORE_MODE;
-    
+
     static {
         if (CERT_ALIAS != null) {
             KEYSTORE_MODE = KeystoreMode.USER_KEYSTORE;
@@ -217,6 +218,18 @@ public class ProxyControl extends GenericController {
             }
         }
     }
+
+    // Whether to use the redirect disabling feature (can be switched off if it does not work)
+    private static final boolean ATTEMPT_REDIRECT_DISABLING =
+            JMeterUtils.getPropDefault("proxy.redirect.disabling", true); // $NON-NLS-1$
+
+    // Although this field is mutable, it is only accessed within the synchronized method deliverSampler()
+    private static String LAST_REDIRECT = null;
+    /*
+     * TODO this assumes that the redirected response will always immediately follow the original response.
+     * This may not always be true.
+     * Is there a better way to do this?
+     */
 
     private transient Daemon server;
 
@@ -483,6 +496,26 @@ public class ProxyControl extends GenericController {
      */
     public synchronized void deliverSampler(final HTTPSamplerBase sampler, final TestElement[] subConfigs, final SampleResult result) {
         if (sampler != null) {
+            if (ATTEMPT_REDIRECT_DISABLING && (samplerRedirectAutomatically || samplerFollowRedirects)) {
+                if (result instanceof HTTPSampleResult) {
+                    final HTTPSampleResult httpSampleResult = (HTTPSampleResult) result;
+                    final String urlAsString = httpSampleResult.getUrlAsString();
+                    if (urlAsString.equals(LAST_REDIRECT)) { // the url matches the last redirect
+                        sampler.setEnabled(false);
+                        sampler.setComment("Detected a redirect from the previous sample");
+                    } else { // this is not the result of a redirect
+                        LAST_REDIRECT = null; // so break the chain                            
+                    }
+                    if (httpSampleResult.isRedirect()) { // Save Location so resulting sample can be disabled
+                        if (LAST_REDIRECT == null) {
+                            sampler.setComment("Detected the start of a redirect chain");
+                        }
+                        LAST_REDIRECT = httpSampleResult.getRedirectLocation();
+                    } else {
+                        LAST_REDIRECT = null;
+                    }
+                }
+            }
             if (filterContentType(result) && filterUrl(sampler)) {
                 JMeterTreeNode myTarget = findTargetControllerNode();
                 @SuppressWarnings("unchecked") // OK, because find only returns correct element types
@@ -1159,7 +1192,7 @@ public class ProxyControl extends GenericController {
             initUserKeyStore();
             break;
         default:
-            throw new IllegalStateException("Impossible case: " + KEYSTORE_MODE);        
+            throw new IllegalStateException("Impossible case: " + KEYSTORE_MODE);
         }
     }
 
