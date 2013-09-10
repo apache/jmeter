@@ -240,7 +240,7 @@ public class KeyToolUtils {
      * @param parameters additional parameters to the command, may be null
      * @throws IOException
      */
-    static void keytool(String command, File keystore, String password, String alias,
+    private static void keytool(String command, File keystore, String password, String alias,
             InputStream input, OutputStream output, String ... parameters)
             throws IOException {
         final File workingDir = keystore.getParentFile();
