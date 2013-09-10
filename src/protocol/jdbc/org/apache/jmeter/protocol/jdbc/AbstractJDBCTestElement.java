@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.collections.map.LRUMap;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -327,15 +328,17 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private PreparedStatement getPreparedStatement(Connection conn, boolean callable) throws SQLException {
         Map<String, PreparedStatement> preparedStatementMap = perConnCache.get(conn);
         if (null == preparedStatementMap ) {
-            preparedStatementMap = Collections.<String, PreparedStatement>synchronizedMap(
-                    new org.apache.commons.collections.map.LRUMap(MAX_OPEN_PREPARED_STATEMENTS) {
+            @SuppressWarnings("unchecked") // LRUMap is not generic
+            Map<String, PreparedStatement> lruMap = new LRUMap(MAX_OPEN_PREPARED_STATEMENTS) {
+                private static final long serialVersionUID = 1L;
                 @Override
                 protected boolean removeLRU(LinkEntry entry) {
                     PreparedStatement preparedStatement = (PreparedStatement)entry.getValue();
                     close(preparedStatement);
                     return true;
-                }  
-            });
+                }
+            };
+            preparedStatementMap = Collections.<String, PreparedStatement>synchronizedMap(lruMap);
             // As a connection is held by only one thread, we cannot already have a 
             // preparedStatementMap put by another thread
             perConnCache.put(conn, preparedStatementMap);
