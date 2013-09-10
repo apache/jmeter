@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.proxy.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -70,6 +71,7 @@ import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -88,6 +90,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             JMeterUtils.getPropDefault("proxy.excludes.suggested", ".*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)"); // $NON-NLS-1$
     
     private JTextField portField;
+
+    private JLabeledTextField sslDomains;
 
     /**
      * Used to indicate that HTTP request headers should be captured. The
@@ -230,6 +234,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         if (el instanceof ProxyControl) {
             model = (ProxyControl) el;
             model.setPort(portField.getText());
+            model.setSslDomains(sslDomains.getText());
             setIncludeListInProxyControl(model);
             setExcludeListInProxyControl(model);
             model.setCaptureHttpHeaders(httpHeaders.isSelected());
@@ -294,6 +299,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         super.configure(element);
         model = (ProxyControl) element;
         portField.setText(model.getPortString());
+        sslDomains.setText(model.getSslDomains());
         httpHeaders.setSelected(model.getCaptureHttpHeaders());
         groupingMode.setSelectedIndex(model.getGroupingMode());
         addAssertions.setSelected(model.getAssertions());
@@ -453,6 +459,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private void startProxy() {
         ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
         modifyTestElement(model);
+        // Proxy can take some while to start up; show a wating cursor
+        Cursor cursor = getCursor();
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // TODO somehow show progress
         try {
             replacer.replaceValues(model);
             model.startProxy();
@@ -474,6 +484,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                     JMeterUtils.getResString("proxy_daemon_error"), // $NON-NLS-1$
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
+        } finally {
+            setCursor(cursor);
         }
     }
 
@@ -584,9 +596,13 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
+        panel.add(Box.createHorizontalStrut(10));
 
         gPane.add(panel, BorderLayout.WEST);
-        gPane.add(Box.createHorizontalStrut(10));
+
+        sslDomains = new JLabeledTextField(JMeterUtils.getResString("proxy_domains")); // $NON-NLS-1$
+        sslDomains.setEnabled(ProxyControl.isDynamicMode());
+        gPane.add(sslDomains, BorderLayout.CENTER);
         return gPane;
     }
 
