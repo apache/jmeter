@@ -36,8 +36,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.Preferences;
 
 import org.apache.commons.io.IOUtils;
@@ -226,19 +224,19 @@ public class ProxyControl extends GenericController {
 
     private transient KeyStore keyStore;
 
-    private AtomicBoolean addAssertions = new AtomicBoolean(false);
+    private volatile boolean addAssertions = false;
 
-    private AtomicInteger groupingMode = new AtomicInteger(0);
+    private volatile int groupingMode = 0;
 
-    private AtomicBoolean samplerRedirectAutomatically = new AtomicBoolean(false);
+    private volatile boolean samplerRedirectAutomatically = false;
 
-    private AtomicBoolean samplerFollowRedirects = new AtomicBoolean(false);
+    private volatile boolean samplerFollowRedirects = false;
 
-    private AtomicBoolean useKeepAlive = new AtomicBoolean(false);
+    private volatile boolean useKeepAlive = false;
 
-    private AtomicBoolean samplerDownloadImages = new AtomicBoolean(false);
+    private volatile boolean samplerDownloadImages = false;
 
-    private AtomicBoolean regexMatch = new AtomicBoolean(false);// Should we match using regexes?
+    private volatile boolean regexMatch = false;// Should we match using regexes?
 
     /**
      * Tree node where the samples should be stored.
@@ -279,12 +277,12 @@ public class ProxyControl extends GenericController {
     }
 
     public void setGroupingMode(int grouping) {
-        this.groupingMode.set(grouping);
+        this.groupingMode = grouping;
         setProperty(new IntegerProperty(GROUPING_MODE, grouping));
     }
 
     public void setAssertions(boolean b) {
-        addAssertions.set(b);
+        addAssertions = b;
         setProperty(new BooleanProperty(ADD_ASSERTIONS, b));
     }
 
@@ -297,12 +295,12 @@ public class ProxyControl extends GenericController {
         setProperty(new StringProperty(SAMPLER_TYPE_NAME, samplerTypeName));
     }
     public void setSamplerRedirectAutomatically(boolean b) {
-        samplerRedirectAutomatically.set(b);
+        samplerRedirectAutomatically = b;
         setProperty(new BooleanProperty(SAMPLER_REDIRECT_AUTOMATICALLY, b));
     }
 
     public void setSamplerFollowRedirects(boolean b) {
-        samplerFollowRedirects.set(b);
+        samplerFollowRedirects = b;
         setProperty(new BooleanProperty(SAMPLER_FOLLOW_REDIRECTS, b));
     }
 
@@ -310,12 +308,12 @@ public class ProxyControl extends GenericController {
      * @param b
      */
     public void setUseKeepAlive(boolean b) {
-        useKeepAlive.set(b);
+        useKeepAlive = b;
         setProperty(new BooleanProperty(USE_KEEPALIVE, b));
     }
 
     public void setSamplerDownloadImages(boolean b) {
-        samplerDownloadImages.set(b);
+        samplerDownloadImages = b;
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
@@ -331,7 +329,7 @@ public class ProxyControl extends GenericController {
      * @param b
      */
     public void setRegexMatch(boolean b) {
-        regexMatch.set(b);
+        regexMatch = b;
         setProperty(new BooleanProperty(REGEX_MATCH, b));
     }
 
@@ -494,10 +492,10 @@ public class ProxyControl extends GenericController {
 
                 removeValuesFromSampler(sampler, defaultConfigurations);
                 replaceValues(sampler, subConfigs, userDefinedVariables);
-                sampler.setAutoRedirects(samplerRedirectAutomatically.get());
-                sampler.setFollowRedirects(samplerFollowRedirects.get());
-                sampler.setUseKeepAlive(useKeepAlive.get());
-                sampler.setImageParser(samplerDownloadImages.get());
+                sampler.setAutoRedirects(samplerRedirectAutomatically);
+                sampler.setFollowRedirects(samplerFollowRedirects);
+                sampler.setUseKeepAlive(useKeepAlive);
+                sampler.setImageParser(samplerDownloadImages);
 
                 placeSampler(sampler, subConfigs, myTarget);
             } else {
@@ -895,7 +893,7 @@ public class ProxyControl extends GenericController {
             boolean firstInBatch = false;
             long now = System.currentTimeMillis();
             long deltaT = now - lastTime;
-            int cachedGroupingMode = groupingMode.get();
+            int cachedGroupingMode = groupingMode;
             if (deltaT > sampleGap) {
                 if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
                     addDivider(treeModel, myTarget);
@@ -945,7 +943,7 @@ public class ProxyControl extends GenericController {
                     try {
                         final JMeterTreeNode newNode = treeModel.addComponent(sampler, myTargetFinal);
                         if (firstInBatchFinal) {
-                            if (addAssertions.get()) {
+                            if (addAssertions) {
                                 addAssertion(treeModel, newNode);
                             }
                             addTimers(treeModel, newNode, deltaTFinal);
@@ -1064,7 +1062,7 @@ public class ProxyControl extends GenericController {
         }
 
         try {
-            boolean cachedRegexpMatch = regexMatch.get();
+            boolean cachedRegexpMatch = regexMatch;
             replacer.reverseReplace(sampler, cachedRegexpMatch);
             for (int i = 0; i < configs.length; i++) {
                 if (configs[i] != null) {
