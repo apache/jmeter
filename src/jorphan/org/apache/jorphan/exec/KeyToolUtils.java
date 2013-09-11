@@ -188,7 +188,7 @@ public class KeyToolUtils {
 
     private static void generateSignedCert(File keystore, String password,
             int validity, String alias, String subject) throws IOException {
-        String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY";
+        String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
         KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, null);
         //rem generate cert for DOMAIN using CA (requires Java7 for gencert) and import it
 
