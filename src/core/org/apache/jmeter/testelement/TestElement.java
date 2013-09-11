@@ -68,6 +68,12 @@ public interface TestElement extends Cloneable {
     boolean isEnabled();
 
     /**
+     * Set the enabled status of the test element
+     * @param enabled the status to set
+     */
+    void setEnabled(boolean enabled);
+
+    /**
      * Returns true or false whether the element is the running version.
      */
     boolean isRunningVersion();

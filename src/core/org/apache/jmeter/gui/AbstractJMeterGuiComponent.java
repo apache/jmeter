@@ -32,8 +32,6 @@ import javax.swing.border.Border;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
@@ -190,11 +188,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @Override
     public void configure(TestElement element) {
         setName(element.getName());
-        if (element.getProperty(TestElement.ENABLED) instanceof NullProperty) {
-            enabled = true;
-        } else {
-            enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
-        }
+        enabled = element.isEnabled();
         getCommentPanel().setText(element.getComment());
     }
 
@@ -236,7 +230,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
         // This stores the state of the TestElement
         log.debug("setting element to enabled: " + enabled);
-        mc.setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+        mc.setEnabled(enabled);
         mc.setComment(getComment());
     }
 
