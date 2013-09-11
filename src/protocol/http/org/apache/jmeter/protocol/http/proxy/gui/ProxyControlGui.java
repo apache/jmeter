@@ -610,6 +610,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
         sslDomains = new JLabeledTextField(JMeterUtils.getResString("proxy_domains")); // $NON-NLS-1$
         sslDomains.setEnabled(ProxyControl.isDynamicMode());
+        if (ProxyControl.isDynamicMode()) {
+            sslDomains.setToolTipText(JMeterUtils.getResString("proxy_domains_dynamic_mode_tooltip"));
+        } else {
+            sslDomains.setToolTipText(JMeterUtils.getResString("proxy_domains_dynamic_mode_tooltip_java6"));
+        }
         gPane.add(sslDomains, BorderLayout.CENTER);
         return gPane;
     }
