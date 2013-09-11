@@ -33,7 +33,6 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
-import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
@@ -104,13 +103,8 @@ public class ReportTreeModel extends DefaultTreeModel {
         // This check the state of the TestElement and if returns false it
         // disable the loaded node
         try {
-            if (component.getProperty(TestElement.ENABLED) instanceof NullProperty
-                    || component.getPropertyAsBoolean(TestElement.ENABLED)) {
-                newNode.setEnabled(true);
-            } else {
-                newNode.setEnabled(false);
-            }
-        } catch (Exception e) {
+            newNode.setEnabled(component.isEnabled());
+        } catch (Exception e) { // TODO can this ever happen?
             newNode.setEnabled(true);
         }
 

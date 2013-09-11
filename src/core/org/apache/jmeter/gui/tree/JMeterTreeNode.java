@@ -35,9 +35,7 @@ import javax.swing.tree.TreeNode;
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -64,11 +62,11 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     }
 
     public boolean isEnabled() {
-        return ((AbstractTestElement) getTestElement()).getPropertyAsBoolean(TestElement.ENABLED);
+        return getTestElement().isEnabled();
     }
 
     public void setEnabled(boolean enabled) {
-        getTestElement().setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+        getTestElement().setEnabled(enabled);
         treeModel.nodeChanged(this);
     }
     
