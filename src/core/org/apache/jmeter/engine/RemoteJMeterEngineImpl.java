@@ -25,6 +25,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.ServerNotActiveException;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -95,7 +96,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         } catch (UnknownHostException e1) {
             throw new RemoteException("Cannot start. Unable to get local host IP address.", e1);
         }
-        log.info("IP address="+localHost.getHostAddress());
+        log.info("Local IP address="+localHost.getHostAddress());
         String hostName = localHost.getHostName();
         // BUG 52469 : Allow loopback address for SSH Tunneling of RMI traffic
         if (localHost.isLoopbackAddress() && host == null){
@@ -139,6 +140,11 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     @Override
     public void rconfigure(HashTree testTree, String host, File jmxBase, String scriptName) throws RemoteException {
         log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
+        try {
+            log.info("Remote client host: " + getClientHost());
+        } catch (ServerNotActiveException e) {
+            // ignored
+        }
         synchronized(LOCK) { // close window where another remote client might jump in
             if (backingEngine != null && backingEngine.isActive()) {
                 log.warn("Engine is busy - cannot create JMeter engine");
