@@ -621,6 +621,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
     }

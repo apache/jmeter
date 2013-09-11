@@ -32,9 +32,7 @@ import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.tree.NamedTreeNode;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -60,13 +58,11 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
     }
 
     public boolean isEnabled() {
-        return ((AbstractTestElement) getTestElement())
-                .getPropertyAsBoolean(TestElement.ENABLED);
+        return getTestElement().isEnabled();
     }
 
     public void setEnabled(boolean enabled) {
-        getTestElement().setProperty(
-                new BooleanProperty(TestElement.ENABLED, enabled));
+        getTestElement().setEnabled(enabled);
         treeModel.nodeChanged(this);
     }
 
