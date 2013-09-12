@@ -72,7 +72,7 @@ under the License.
       <excalibur-logger.version>1.1</excalibur-logger.version>
       <excalibur-pool.version>1.2</excalibur-pool.version>
       <htmlparser.version>2.1</htmlparser.version>
-      <httpclient.version>4.2.5</httpclient.version>
+      <httpclient.version>4.2.6</httpclient.version>
       <httpcore.version>4.2.5</httpcore.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
