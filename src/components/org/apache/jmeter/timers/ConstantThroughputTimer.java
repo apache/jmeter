@@ -257,7 +257,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     /**
      * Override the setProperty method in order to convert
-     * the original String calcMode propertty.
+     * the original String calcMode property.
      * This used the locale-dependent display value, so caused
      * problems when the language was changed.
      * Note that the calcMode StringProperty is replaced with an IntegerProperty
