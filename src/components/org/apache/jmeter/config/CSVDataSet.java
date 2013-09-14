@@ -104,7 +104,7 @@ public class CSVDataSet extends ConfigTestElement
 
     /**
      * Override the setProperty method in order to convert
-     * the original String shareMode propertty.
+     * the original String shareMode property.
      * This used the locale-dependent display value, so caused
      * problems when the language was changed. 
      * If the "shareMode" value matches a resource value then it is converted
