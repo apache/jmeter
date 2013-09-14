@@ -388,7 +388,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
                 case AuthManager.COL_REALM:
                     return auth.getRealm();
                 case AuthManager.COL_MECHANISM:
-                	return auth.getMechanism();
+                    return auth.getMechanism();
                 default:
                     return null;
             }
