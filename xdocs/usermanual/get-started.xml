@@ -302,14 +302,14 @@ from a command line with the following parameters:</p>
 Parameters provided on a command-line may be visible to other users on the system.
 </note>
 <p>
-If the proxy host and port are provided, then JMeter sets the following System propertties:
+If the proxy host and port are provided, then JMeter sets the following System properties:
 <ul>
 <li>http.proxyHost</li>
 <li>http.proxyPort</li>
 <li>https.proxyHost</li>
 <li>https.proxyPort</li>
 </ul>
-If a nonproxy host list is provided, then JMeter sets the following System propertties:
+If a nonproxy host list is provided, then JMeter sets the following System properties:
 <ul>
 <li>http.nonProxyHosts</li>
 <li>https.nonProxyHosts</li>
