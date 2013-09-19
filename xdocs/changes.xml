@@ -253,6 +253,12 @@ The retry count for the HttpClient 3.1 and HttpClient 4.x samplers has been chan
 Previously the default was 1, which could cause unexpected additional traffic.
 </p>
 
+<p>Starting with this version, JMeter Proxy Server tries to detect when a sample is the result of a previous
+redirect. If the current response is a redirect, JMeter will save the redirect URL. When the next request is received, 
+it is compared with the saved redirect URL and if there is a match, JMeter will disable the generated sample.
+To revert to previous behaviour, set the property <code>proxy.redirect.disabling=false</code>
+ </p>
+
 <p>__escapeOroRegexpChars function does not trim anymore the value when escaping it from ORO reserved characters (see <bugzilla>55328</bugzilla>)</p>
 
 <p>commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder. If you use any plugin or third-party code that depends on it, you need to add it in jmeter/lib folder</p>
@@ -347,6 +353,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>55459</bugzilla> - Elements using ComboStringEditor lose the input value if user selects another Test Element</li>
 <li><bugzilla>54152</bugzilla> - In distributed testing : activeThreads always show 0 in GUI and Summariser</li>
 <li><bugzilla>55509</bugzilla> - Allow Plugins to be notified of remote thread number progression</li>
+<li><bugzilla>55572</bugzilla> - Detail popup of parameter does not show a Scrollbar when content exceeds display</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -454,7 +461,7 @@ Previously the default was 1, which could cause unexpected additional traffic.
 <li><bugzilla>54903</bugzilla> - Remove the dependency on the Activation Framework. Contributed by Emmanuel Bourg (ebourg at apache.org)</li>
 <li>Moved commons-lang (2.6) to lib/doc as it's only needed by Velocity.</li>
 <li>Re-organised and simplified NOTICE and LICENSE files.</li>
-<li><bugzilla>55411</bugzilla> - NativeCommand could be useful elsewhere. Copied code to o.a.jorphan.exec.</li>
+<li><bugzilla>55411</bugzilla> -  NativeCommand could be useful elsewhere. Copied code to o.a.jorphan.exec.</li>
 <li><bugzilla>55435</bugzilla> - ComboStringEditor could be simplified to make most settings final</li>
 <li><bugzilla>55436</bugzilla> - ComboStringEditor should implement ClearGui</li>
 <li><bugzilla>55463</bugzilla> - Component.requestFocus() is discouraged; use requestFocusInWindow() instead</li>

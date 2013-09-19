@@ -19,7 +19,6 @@
 package org.apache.jmeter.config.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,13 +36,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.ObjectTableModel;
@@ -72,7 +71,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
 
     private JLabel valueLabel;
 
-    private JTextArea valueTA;
+    private JSyntaxTextArea valueTA;
 
     private JButton nextButton;
 
@@ -146,15 +145,13 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         namePane.add(nameTF, BorderLayout.CENTER);
 
         valueLabel = new JLabel(JMeterUtils.getResString("value")); //$NON-NLS-1$
-        valueTA = new JTextArea();
-        valueTA.setLineWrap(true);
-        valueTA.setWrapStyleWord(true);
+        valueTA = new JSyntaxTextArea(30, 80);
         valueTA.getDocument().addDocumentListener(this);
-        valueTA.setPreferredSize(new Dimension(450, 300));
         setValues(selectedRow);
         JPanel valuePane = new JPanel(new BorderLayout());
         valuePane.add(valueLabel, BorderLayout.NORTH);
-        valuePane.add(new JScrollPane(valueTA), BorderLayout.CENTER);
+        JTextScrollPane jTextScrollPane = new JTextScrollPane(valueTA);
+        valuePane.add(jTextScrollPane, BorderLayout.CENTER);
 
         JPanel detailPanel = new JPanel(new BorderLayout());
         detailPanel.add(namePane, BorderLayout.NORTH);
@@ -228,6 +225,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     private void setValues(int selectedRow) {
         nameTF.setText((String)tableModel.getValueAt(selectedRow, 0));
         valueTA.setText((String)tableModel.getValueAt(selectedRow, 1));
+        valueTA.setCaretPosition(0);
         textChanged = false;
     }
 
