@@ -88,7 +88,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final String SUGGESTED_EXCLUSIONS =
             JMeterUtils.getPropDefault("proxy.excludes.suggested", ".*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)"); // $NON-NLS-1$
-    
+
     private JTextField portField;
 
     private JLabeledTextField sslDomains;
@@ -243,7 +243,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             if(samplerTypeName.getSelectedIndex()< HTTPSamplerFactory.getImplementations().length) {
                 model.setSamplerTypeName(HTTPSamplerFactory.getImplementations()[samplerTypeName.getSelectedIndex()]);
             } else {
-                model.setSamplerTypeName(USE_DEFAULT_HTTP_IMPL);               
+                model.setSamplerTypeName(USE_DEFAULT_HTTP_IMPL);
             }
             model.setSamplerRedirectAutomatically(samplerRedirectAutomatically.isSelected());
             model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
@@ -350,7 +350,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         if (source.equals(samplerFollowRedirects) && samplerFollowRedirects.isSelected()) {
             samplerRedirectAutomatically.setSelected(false);
         } else if (source.equals(samplerRedirectAutomatically) && samplerRedirectAutomatically.isSelected()) {
-            samplerFollowRedirects.setSelected(false);            
+            samplerFollowRedirects.setSelected(false);
         }
 
         // System.err.println(action.paramString()+" "+command+ "
@@ -420,7 +420,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 for (String clipboardLine : exclusions) {
                     model.addRow(new Object[] {clipboardLine});
                 }
-                if (table.getRowCount() > rowCount) {   
+                if (table.getRowCount() > rowCount) {
                     // Highlight (select) the appropriate rows.
                     int rowToSelect = model.getRowCount() - 1;
                     table.setRowSelectionInterval(rowCount, rowToSelect);
@@ -428,7 +428,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             }
         }
     }
-    
+
     /**
      * Add values from the clipboard to table
      * @param table {@link JTable}
@@ -809,7 +809,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
         return panel;
     }
-    
+
     private JPanel createTableButtonPanel(String addCommand, String deleteCommand, String copyFromClipboard, String addSuggestedExcludes) {
         JPanel buttonPanel = new JPanel();
 
@@ -828,7 +828,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         addFromClipboard.setActionCommand(copyFromClipboard);
         addFromClipboard.addActionListener(this);
         buttonPanel.add(addFromClipboard);
-        
+
         if(addSuggestedExcludes != null) {
             /** A button for adding suggested excludes. */
             JButton addFromSuggestedExcludes = new JButton(JMeterUtils.getResString("add_from_suggested_excludes")); // $NON-NLS-1$
