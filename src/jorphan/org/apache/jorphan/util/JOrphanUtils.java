@@ -41,7 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 public final class JOrphanUtils {
 
     private static final int DEFAULT_CHUNK_SIZE = 4096;
-    
+
     /**
      * Private constructor to prevent instantiation.
      */
@@ -474,14 +474,14 @@ public final class JOrphanUtils {
 
     /**
      * Read as much as possible into buffer.
-     * 
+     *
      * @param is the stream to read from
      * @param buffer output buffer
      * @param offset offset into buffer
      * @param length number of bytes to read
-     * 
+     *
      * @return the number of bytes actually read
-     * @throws IOException 
+     * @throws IOException
      */
     public static int read(InputStream is, byte[] buffer, int offset, int length) throws IOException {
         int remaining = length;
@@ -500,7 +500,7 @@ public final class JOrphanUtils {
      * Display currently running threads on system.out
      * This may be expensive to run.
      * Mainly designed for use at the end of a non-GUI test to check for threads that might prevent the JVM from exitting.
-     * 
+     *
      * @param includeDaemons whether to include daemon threads or not.
      */
     public static void displayThreads(boolean includeDaemons) {
@@ -521,7 +521,7 @@ public final class JOrphanUtils {
             }
         }
     }
-    
+
     /**
      * Returns null if input is empty, null or contains spaces
      * @param input String
@@ -551,7 +551,7 @@ public final class JOrphanUtils {
      * Write data to an output stream in chunks with a maximum size of 4K.
      * This is to avoid OutOfMemory issues if the data buffer is very large
      * and the JVM needs to copy the buffer for use by native code.
-     * 
+     *
      * @param data the buffer to be written
      * @param output the output stream to use
      * @throws IOException if there is a problem writing the data

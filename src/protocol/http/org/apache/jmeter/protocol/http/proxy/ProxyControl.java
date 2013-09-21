@@ -506,7 +506,7 @@ public class ProxyControl extends GenericController {
                         sampler.setEnabled(false);
                         sampler.setComment("Detected a redirect from the previous sample");
                     } else { // this is not the result of a redirect
-                        LAST_REDIRECT = null; // so break the chain                            
+                        LAST_REDIRECT = null; // so break the chain
                     }
                     if (httpSampleResult.isRedirect()) { // Save Location so resulting sample can be disabled
                         if (LAST_REDIRECT == null) {

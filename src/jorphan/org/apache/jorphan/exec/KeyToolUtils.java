@@ -112,7 +112,7 @@ public class KeyToolUtils {
     }
 
     /**
-     * Creates a self-signed Root CA certificate and an intermediate CA certificate 
+     * Creates a self-signed Root CA certificate and an intermediate CA certificate
      * (signed by the Root CA certificate) that can be used to sign server certificates.
      * The Root CA certificate file is exported to the same directory as the keystore
      * in formats suitable for Firefox/Chrome/IE (.crt) and Opera (.usr).
@@ -120,7 +120,7 @@ public class KeyToolUtils {
      *
      * @param keystore the keystore in which to store everything
      * @param password the password for keystore and keys
-     * @param validity the validity period in days, must be greater than 0 
+     * @param validity the validity period in days, must be greater than 0
      *
      * @throws IOException
      */
@@ -181,8 +181,8 @@ public class KeyToolUtils {
      */
     public static void generateHostCert(File keystore, String password, String host, int validity) throws IOException {
         // generate the keypair for the host
-        generateSignedCert(keystore, password, validity, 
-                host,  // alias 
+        generateSignedCert(keystore, password, validity,
+                host,  // alias
                 host); // subject
     }
 
@@ -239,7 +239,7 @@ public class KeyToolUtils {
 
     /**
      * Returns a list of the CA aliases that should be in the keystore.
-     * 
+     *
      * @return the aliases that are used for the keystore
      */
     public static String[] getCAaliases() {
@@ -248,7 +248,7 @@ public class KeyToolUtils {
 
     /**
      * Get the root CA alias; needed to check the serial number and fingerprint
-     * 
+     *
      * @return the alias
      */
     public static String getRootCAalias() {
@@ -257,7 +257,7 @@ public class KeyToolUtils {
 
     /**
      * Helper method to simplify chaining keytool commands.
-     * 
+     *
      * @param command the command, not null
      * @param keystore the keystore, not nill
      * @param password the password used for keystore and key, not null
