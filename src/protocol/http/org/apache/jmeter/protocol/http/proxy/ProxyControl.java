@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -81,6 +82,7 @@ import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
@@ -556,6 +558,26 @@ public class ProxyControl extends GenericController {
         }
     }
 
+    public String[] getCertificateSerialAndFingerPrint() {
+        if (isDynamicMode()) {
+            try {
+                X509Certificate caCert = (X509Certificate) keyStore.getCertificate(KeyToolUtils.getRootCAalias());
+                if (caCert == null) {
+                    return new String[]{"Could not find certificate"};
+                }
+                return new String[]
+                        {
+                        caCert.getSubjectX500Principal().toString(),
+                        "Fingerprint(SHA1):",
+                        JOrphanUtils.baToHexString(DigestUtils.sha1(caCert.getEncoded()), ' ')
+                        };
+            } catch (GeneralSecurityException e) {
+                log.error("Problem reading root CA from keystore", e);
+                return new String[]{"Could not read certificate"};
+            }
+        }
+        return null; // should not happen
+    }
     // Package protected to allow test case access
     boolean filterUrl(HTTPSamplerBase sampler) {
         String domain = sampler.getDomain();

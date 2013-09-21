@@ -45,8 +45,8 @@ public class KeyToolUtils {
     // N.B. It seems that Opera needs a chain in order to accept server keys signed by the intermediate CA
     // Opera does not seem to like server keys signed by the root (self-signed) cert.
 
-    private static final String DNAME_ROOT_CA_KEY          = "cn=Apache JMeter Proxy Root CA (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
-    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=Apache JMeter Proxy Intermediate CA (TEMPORARY TRUST ONLY)"; // $NON-NLS-1$
+    private static final String DNAME_ROOT_CA_KEY          = "cn=_ DO NOT TRUST unless this is your certificate (JMeter root CA)"; // $NON-NLS-1$
+    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=_ DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
 
     private static final String ROOT_CACERT_CRT = "ApacheJMeterTemporaryRootCA.crt"; // $NON-NLS-1$ (Firefox and Windows)
     private static final String ROOT_CACERT_USR = "ApacheJMeterTemporaryRootCA.usr"; // $NON-NLS-1$ (Opera)
@@ -244,6 +244,15 @@ public class KeyToolUtils {
      */
     public static String[] getCAaliases() {
         return new String[]{ROOTCA_ALIAS, INTERMEDIATE_CA_ALIAS};
+    }
+
+    /**
+     * Get the root CA alias; needed to check the serial number and fingerprint
+     * 
+     * @return the alias
+     */
+    public static String getRootCAalias() {
+        return ROOTCA_ALIAS;
     }
 
     /**

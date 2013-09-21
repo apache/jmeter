@@ -430,6 +430,28 @@ public final class JOrphanUtils {
      * Convert binary byte array to hex string.
      *
      * @param ba input binary byte array
+     * @param separator the separator to be added between pairs of hex digits
+     * @return hex representation of binary input
+     */
+    public static String baToHexString(byte ba[], char separator) {
+        StringBuilder sb = new StringBuilder(ba.length*2);
+        for (int i = 0; i < ba.length; i++) {
+            if (i > 0 && separator != 0) {
+                sb.append(separator);
+            }
+            int j = ba[i] & 0xff;
+            if (j < 16) {
+                sb.append("0"); // $NON-NLS-1$ add zero padding
+            }
+            sb.append(Integer.toHexString(j));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Convert binary byte array to hex string.
+     *
+     * @param ba input binary byte array
      * @return hex representation of binary input
      */
     public static byte[] baToHexBytes(byte ba[]) {
