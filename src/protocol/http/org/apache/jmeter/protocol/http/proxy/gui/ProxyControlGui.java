@@ -477,6 +477,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             start.setEnabled(false);
             stop.setEnabled(true);
             restart.setEnabled(false);
+            if (ProxyControl.isDynamicMode()) {
+                String details[] = model.getCertificateSerialAndFingerPrint();
+                StringBuilder sb = new StringBuilder();
+                for(String detail : details) {
+                    sb.append(detail).append("\n");
+                }
+                JOptionPane.showMessageDialog(this,
+                    sb.toString(),
+                    "Please check the certificate before installing it:",
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (InvalidVariableException e) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("invalid_variables"), // $NON-NLS-1$
