@@ -16,13 +16,7 @@
    limitations under the License.
 -->
 ##
-##  Content Stylesheet for Site
-##
-##	Java cannot currently handle HTML tags of the form <xxx />, e.g. <br/>;
-##	the trailing > characters are output to the display, which messes it up.
-##	Java does handle <br></br> OK, but as the output from this stylesheet
-##	does not have to be XHTML, for simplicity the trailing slashes have been removed.
-##
+##  Content Stylesheet for Printable docs
 ##
 ## Defined variables
 #set ($bodybg = "#ffffff")
@@ -39,14 +33,22 @@
 #set ($space = $space.charAt(0))
 #set ($udsc = "_")
 #set ($udsc = $udsc.charAt(0))
+#set ($year = $date.getYear()+1900)
+##
+## Printable document settings
 #set ($imgdir = "$relativePath/../docs/images")
 #set ($cssdir = "$relativePath/../docs/css")
 #set ($sshotdir = "$imgdir/screenshots")
-#set ($year = $date.getYear()+1900)
 
+<!-- start the processing -->
 #document()
+<!-- end the processing -->
 
-## This is where the macro's live
+## This is where the macros live
+
+#macro ( sectionlink $anchor)
+#if($anchor)<a class="sectionlink" href="#$anchor.replace($space,$udsc)" title="Link to here">&para;</a>#end
+#end
 
 #macro ( table $table)
 <table>
@@ -127,26 +129,26 @@ $value.content
 #if ($value.getAttributeValue("align"))
 #set ($align=$value.getAttributeValue("align"))
 #end
-<img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align">
+<img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align"/>
 #end
 
 #macro ( source $value)
 <div align="left">
 <table cellspacing="4" cellpadding="0" border="0">
 <tr>
-<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
-<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
-<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
 </tr>
 <tr>
-<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
 <td bgcolor="#ffffff"><pre>$escape.getText($value.getText())</pre></td>
-<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
 </tr>
 <tr>
-<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
-<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
-<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
 </tr>
 </table>
 </div>
@@ -197,20 +199,22 @@ No
 #if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"/><br>
 <font size="-1">#runloop($figure)</font></td></tr></table></p>
 #end
 
 #macro (example $example)
-<a name="$example.getAttributeValue("anchor")">
+<a name="$example.getAttributeValue("anchor")"/>
 <p><b>$example.getAttributeValue("title")</b></p>
 #runloop($example)
 #end
 
 #macro (note $note)
-<p><table border="1" bgcolor="$notebackground" width="50%" cellspacing="0" cellpadding="2">
+<p>
+<table border="1" bgcolor="$notebackground" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>#runloop($note)</td></tr>
-</table></p>
+</table>
+</p>
 #end
 
 #macro (scope $scope)
@@ -220,7 +224,7 @@ No
 <a href="test_plan.html#scoping_rules">$scope.getText()</a>
 #end
 #end
-
+##
 #macro ( bugzilla $id)
 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
 #end
@@ -303,12 +307,9 @@ $node.getText()
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-#set ($tag = "")
-#set ($tag = $component.getAttributeValue("tag"))
-#if ("$!tag" != "")
-<a name="$tag"></a>
-#end
-<h3><a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</a></h3>
+<h3>
+<a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</a>
+</h3>
 </font>
 </td></tr>
 #if($component.getAttribute("useinstead"))
@@ -320,7 +321,7 @@ $node.getText()
 #runloop($items)
 #if ("$!screenshot" != "")
 <p><b>Control Panel</b></p>
-<div align="center"><img $dim src="$sshotdir/$screenshot"></div>
+<div align="center"><img $dim src="$sshotdir/$screenshot"/></div>
 #end
 #else
 #unknown($items)
@@ -449,17 +450,17 @@ $comp.getAttributeValue("index")
 
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
+#set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
+#set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
+#set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
 <td align="left">
 <a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-#set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
-#set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
-#set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
 #if ( $logoString.startsWith("/") )
-<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"></a>
+<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #else
-<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"></a>
+<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #end
 </td>
 #else
@@ -476,7 +477,7 @@ $comp.getAttributeValue("index")
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="$cssdir/style.css"/>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 #set ($authors = $root.getChild("properties").getChildren("author"))
 #foreach ( $au in $authors )
 #metaauthor ( $au.getText() $au.getAttributeValue("email") )
@@ -487,8 +488,10 @@ $comp.getAttributeValue("index")
 #set ($prev = $root.getAttributeValue("prev"))
 #set ($id = "")
 #set ($id = $root.getAttributeValue("id"))
+
 <title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
 </head>
+
 <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">
 <table border="0" cellspacing="0">
 ##<!-- TOP IMAGE -->
@@ -498,7 +501,7 @@ $comp.getAttributeValue("index")
 </table>
 <table border="0" cellspacing="4">
 <tr><td>
-<hr noshade size="1">
+<hr noshade size="1"/>
 </td></tr>
 <tr>
 <td align="left" valign="top">
@@ -516,7 +519,7 @@ $comp.getAttributeValue("index")
 </td>
 </tr>
 <tr><td>
-<hr noshade size="1">
+<hr noshade size="1"/>
 </td></tr>
 <tr>
 <td>
