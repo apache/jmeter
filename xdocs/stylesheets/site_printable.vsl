@@ -307,8 +307,14 @@ $node.getText()
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
+#set ($was = "")
+#set ($was = $component.getAttributeValue("was"))
+#if ("$!was" != "")
+<a name="$was.replace($space,$udsc)"></a>
+#set ($was = " (was: $was)")
+#end
 <h3>
-<a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</a>
+<a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")$!was</a>
 </h3>
 </font>
 </td></tr>
@@ -436,7 +442,11 @@ $node.getText()
 #if ("$!index2" == "yes")
 $comp.getAttributeValue("index")
 #end
-<a href="#$comp.getAttributeValue("name").replace($space,$udsc)">$comp.getAttributeValue("name")</a></li>
+#set ($was = $comp.getAttributeValue("was"))
+#if ("$!was" != "")
+#set ($was = " (was: $was)")
+#end
+<a href="#$comp.getAttributeValue("name").replace($space,$udsc)">$comp.getAttributeValue("name")$!was</a></li>
 #end
 </ul>
 #end
