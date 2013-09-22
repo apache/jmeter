@@ -818,6 +818,12 @@
         <path refid="classpath"/>
       </classpath>
     </rmic>
+    <rmic base="${build.core}" classname="org.apache.jmeter.threads.RemoteThreadsListenerImpl">
+      <classpath>
+        <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
+      </classpath>
+    </rmic>
   </target>
 
   <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components"
