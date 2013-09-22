@@ -1889,7 +1889,8 @@ If omitted, output is captured and returned as the response data.</property>
 <property name="Timeout" required="No">Timeout for command in milliseconds, defaults to 0, which means NO timeout.</property>
 </component>
 
-<component name="MongoDB Script (alpha)" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
+<component name="MongoDB Script" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
+<center><h2>(Alpha Code)</h2></center>
 
 <description><p>This sampler lets you send an Request to a MongoDB.</p>
 <p>Before using this you need to set up a
