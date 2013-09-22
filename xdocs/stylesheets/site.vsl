@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,10 +33,12 @@
 #set ($space = $space.charAt(0))
 #set ($udsc = "_")
 #set ($udsc = $udsc.charAt(0))
+#set ($year = $date.getYear()+1900)
+##
+## Website settings
 #set ($imgdir = "$relativePath/images")
 #set ($sshotdir = "$imgdir/screenshots" )
 #set ($cssdir = "$relativePath/css")
-#set ($year = $date.getYear()+1900)
 
 <!-- start the processing -->
 #document()
@@ -89,12 +91,8 @@ $value.content
 #end
 
 #macro ( th $value)
-#if ($value.getAttributeValue("colspan"))
 #set ($colspan = $value.getAttributeValue("colspan"))
-#end
-#if ($value.getAttributeValue("rowspan"))
 #set ($rowspan = $value.getAttributeValue("rowspan"))
-#end
 <td bgcolor="$tablethbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 #if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
@@ -131,7 +129,7 @@ $value.content
 #if ($value.getAttributeValue("align"))
 #set ($align=$value.getAttributeValue("align"))
 #end
-<img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align">
+<img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align"/>
 #end
 
 #macro ( source $value)
@@ -207,7 +205,7 @@ No
 #if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"/><br>
 <font size="-1">#runloop($figure)</font></td></tr></table></p>
 #end
 
@@ -242,37 +240,37 @@ No
 Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&gt;
 #end
 
-#macro (unknown $u_node)
-#if($u_node.getName() == "note")
-#note($u_node)
-#elseif($u_node.getName() == "complink")
-#complink($u_node)
-#elseif($u_node.getName() == "figure")
-#figure($u_node)
-#elseif ($u_node.getName() == "links")
-#seeAlso ($u_node)
-#elseif ($u_node.getName() == "properties")
-#properties ($u_node)
-#elseif ($u_node.getName() == "example")
-#example ($u_node)
-#elseif ($u_node.getName().equals("source"))
-#source ($u_node)
-#elseif ($u_node.getName().equals("table"))
-#table ($u_node)
-#elseif ($u_node.getName().equals("component"))
-#component($u_node)
-#elseif ($u_node.getName().equals("subsection"))
-#subsection ($u_node)
-#elseif ($u_node.getName().equals("scope"))
-#scope ($u_node)
-#elseif ($u_node.getName().equals("bugzilla"))
-#bugzilla ($u_node)
-#elseif ($u_node.getName().equals("contributor"))
-#contributor ($u_node)
+#macro (unknown $node)
+#if($node.getName() == "note")
+#note($node)
+#elseif($node.getName() == "complink")
+#complink($node)
+#elseif($node.getName() == "figure")
+#figure($node)
+#elseif ($node.getName() == "links")
+#seeAlso ($node)
+#elseif ($node.getName() == "properties")
+#properties ($node)
+#elseif ($node.getName() == "example")
+#example ($node)
+#elseif ($node.getName().equals("source"))
+#source ($node)
+#elseif ($node.getName().equals("table"))
+#table ($node)
+#elseif ($node.getName().equals("component"))
+#component($node)
+#elseif ($node.getName().equals("subsection"))
+#subsection ($node)
+#elseif ($node.getName().equals("scope"))
+#scope ($node)
+#elseif ($node.getName().equals("bugzilla"))
+#bugzilla ($node)
+#elseif ($node.getName().equals("contributor"))
+#contributor ($node)
 #else
-#outputTag($u_node)
-#runloop($u_node)
-#outputEndTag($u_node)
+#outputTag($node)
+#runloop($node)
+#outputEndTag($node)
 #end
 #end
 
@@ -293,18 +291,16 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #end
 
 #macro (runloop $itemToLoop)
-#foreach ($rl_node in $itemToLoop.getContent())
-#if($rl_node.getClass().getName().indexOf("Element") > -1)
-#unknown($rl_node)
+#foreach ($node in $itemToLoop.getContent())
+#if($node.getClass().getName().indexOf("Element") > -1)
+#unknown($node)
 #else
-$rl_node.getText()
+$node.getText()
 #end
 #end
 #end
 
 #macro ( component $component)
-#set ($screenshot = "")
-#set ($screenshot = $component.getAttributeValue('screenshot') )
 #set ($width = "")
 #set ($width = $component.getAttributeValue('width') )
 #set ($height = "")
@@ -313,6 +309,8 @@ $rl_node.getText()
 #if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
+#set ($screenshot = "")
+#set ($screenshot = $component.getAttributeValue('screenshot') )
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
@@ -326,15 +324,15 @@ $rl_node.getText()
 <tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="$relativePath/usermanual/component_reference.html#$component.getAttributeValue("useinstead").replace($space,$udsc)">$component.getAttributeValue("useinstead")</a> instead ***</b></div></td></tr>
 #end
 <tr><td>
-#foreach ( $c_items in $component.getChildren() )
-#if ($c_items.getName().equals("description"))
-#runloop($c_items)
-#if ("$!screenshot" != "")                        
+#foreach ( $items in $component.getChildren() )
+#if ($items.getName().equals("description"))
+#runloop($items)
+#if ("$!screenshot" != "")
 <p><b>Control Panel</b></p>
-<div align="center"><img $dim src="$sshotdir/$screenshot"></div>
+<div align="center"><img $dim src="$sshotdir/$screenshot"/></div>
 #end
 #else
-#unknown($c_items)
+#unknown($items)
 #end
 #end
 </td></tr>
@@ -353,11 +351,11 @@ $rl_node.getText()
 </td></tr>
 <tr><td>
 <blockquote>
-#foreach ( $su_items in $subsection.getChildren() )
-#if ($su_items.getName().equals("img"))
-#image ($su_items)
+#foreach ( $items in $subsection.getChildren() )
+#if ($items.getName().equals("img"))
+#image ($items)
 #else
-#unknown($su_items)
+#unknown($items)
 #end
 #end
 </blockquote>
@@ -398,11 +396,11 @@ $rl_node.getText()
 </td></tr>
 <tr><td>
 <blockquote>
-#foreach ( $s_items in $section.getChildren() )
-#if ($s_items.getName().equals("img"))
-#image ($s_items)
+#foreach ( $items in $section.getChildren() )
+#if ($items.getName().equals("img"))
+#image ($items)
 #else
-#unknown($s_items)
+#unknown($items)
 #end
 #end
 </blockquote>
@@ -452,13 +450,10 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-#set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
-#set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
-#set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
 #if ( $logoString.startsWith("/") )
 <a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #else
-<a href="$project.getAttributeValue("href")"><img  width="$logoWidth" height="$logoHeight" src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
+<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #end
 </td>
 #else
@@ -469,30 +464,30 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 #end
 
 #macro (document)
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
+## ======================================================================
+## Main Page Section -->
+## ======================================================================
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="$cssdir/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-#set ($next = "")
-#set ($next = $root.getAttributeValue("next"))
-#set ($prev = "")
-#set ($prev = $root.getAttributeValue("prev"))
-
 #set ($authors = $root.getChild("properties").getChildren("author"))
 #foreach ( $au in $authors )
 #metaauthor ( $au.getText() $au.getAttributeValue("email") )
 #end
+#set ($next = "")
+#set ($next = $root.getAttributeValue("next"))
+#set ($prev = "")
+#set ($prev = $root.getAttributeValue("prev"))
+#set ($id = "")
+#set ($id = $root.getAttributeValue("id"))
 
 <title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
 </head>
 
 <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
+##<!-- TOP IMAGE -->
 <tr>
 #getProjectImage()
 </tr>
@@ -516,8 +511,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 #foreach ( $section in $allSections )
 #section ($section)
 #end
-#pagelinks()
 <br>
+#pagelinks()
 </td>
 </tr>
 <tr><td colspan="2">
