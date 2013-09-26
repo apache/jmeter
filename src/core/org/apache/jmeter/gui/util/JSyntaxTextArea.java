@@ -21,9 +21,9 @@ package org.apache.jmeter.gui.util;
 import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
-
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RUndoManager;
 
 /**
  * Utility class to handle RSyntaxTextArea code
@@ -37,6 +37,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private final boolean WRAP_STYLE_WORD = JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);
     private final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
     private final boolean CODE_FOLDING    = JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
+    private final int MAX_UNDOS           = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
 
     @Deprecated
     public JSyntaxTextArea() {
@@ -76,6 +77,17 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         } else {
             super.setSyntaxEditingStyle(style);
         }
+    }
+
+    /**
+     * Override UndoManager to allow disabling if feature causes issues
+     * See https://github.com/bobbylight/RSyntaxTextArea/issues/19
+     */
+    @Override
+    protected RUndoManager createUndoManager() {
+        RUndoManager undoManager = super.createUndoManager();
+        undoManager.setLimit(MAX_UNDOS);
+        return undoManager;
     }
 
 }
