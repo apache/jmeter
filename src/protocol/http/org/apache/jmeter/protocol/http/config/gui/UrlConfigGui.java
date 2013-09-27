@@ -40,6 +40,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -51,7 +53,6 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.gui.JLabeledTextArea;
 
 /**
  * Basic URL / HTTP Request configuration:
@@ -114,7 +115,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private final boolean showImplementation; // Set false for AJP
 
     // Body data
-    private JLabeledTextArea postBodyContent;
+    private JSyntaxTextArea postBodyContent;
 
     // Tabbed pane that contains parameters and raw body
     private ValidationTabbedPane postContentTabbedPane;
@@ -169,7 +170,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         contentEncoding.setText(""); // $NON-NLS-1$
         argsPanel.clear();
         if(showRawBodyPane) {
-            postBodyContent.setText("");// $NON-NLS-1$
+            postBodyContent.setInitialText("");// $NON-NLS-1$
         }
         postContentTabbedPane.setSelectedIndex(TAB_PARAMETERS, false);
     }
@@ -279,7 +280,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         boolean useRaw = el.getPropertyAsBoolean(HTTPSamplerBase.POST_BODY_RAW, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
         if(useRaw) {
             String postBody = computePostBody(arguments, true); // Convert CRLF to CR, see modifyTestElement
-            postBodyContent.setText(postBody);   
+            postBodyContent.setInitialText(postBody);   
             postContentTabbedPane.setSelectedIndex(TAB_RAW_BODY, false);
         } else {
             argsPanel.configure(arguments);
@@ -610,8 +611,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         argsPanel = new HTTPArgumentsPanel();
         postContentTabbedPane.add(JMeterUtils.getResString("post_as_parameters"), argsPanel);// $NON-NLS-1$
         if(showRawBodyPane) {
-            postBodyContent = new JLabeledTextArea(JMeterUtils.getResString("post_body_raw"));// $NON-NLS-1$
-            postContentTabbedPane.add(JMeterUtils.getResString("post_body"), postBodyContent);// $NON-NLS-1$
+            postBodyContent = new JSyntaxTextArea(30, 50);// $NON-NLS-1$
+            postContentTabbedPane.add(JMeterUtils.getResString("post_body"), new JTextScrollPane(postBodyContent));// $NON-NLS-1$
         }
         return postContentTabbedPane;
     }
@@ -647,7 +648,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                     // If there is no data, then switching between Parameters and Raw should be
                     // allowed with no further user interaction.
                     argsPanel.clear();
-                    postBodyContent.setText("");
+                    postBodyContent.setInitialText("");
                     super.setSelectedIndex(index);
                 }
                 else { 
@@ -725,7 +726,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * Convert Parameters to Raw Body
      */
     void convertParametersToRaw() {
-        postBodyContent.setText(computePostBody((Arguments)argsPanel.createTestElement()));
+        postBodyContent.setInitialText(computePostBody((Arguments)argsPanel.createTestElement()));
     }
 
     /**
