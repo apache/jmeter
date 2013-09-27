@@ -25,17 +25,19 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
+import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
@@ -58,7 +60,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
 
-    private JLabeledTextArea messageContent = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content")); //$NON-NLS-1$
+    private JSyntaxTextArea messageContent = new JSyntaxTextArea(15, 50); //$NON-NLS-1$
 
     private JLabeledTextField initialContextFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
@@ -96,7 +98,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
         jmsSelector.setText(""); // $NON-NLS-1$
-        messageContent.setText(""); // $NON-NLS-1$
+        messageContent.setInitialText(""); // $NON-NLS-1$
         initialContextFactory.setText(""); // $NON-NLS-1$
         providerUrl.setText(""); // $NON-NLS-1$
         jmsPropertiesPanel.clear();
@@ -172,7 +174,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         timeout.setText(sampler.getTimeout());
         jmsSelector.setText(sampler.getJMSSelector());
-        messageContent.setText(sampler.getContent());
+        messageContent.setInitialText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
         providerUrl.setText(sampler.getContextProvider());
 
@@ -242,7 +244,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         messagePanel.add(messageNorthPanel, BorderLayout.NORTH);
 
         JPanel messageContentPanel = new JPanel(new BorderLayout());
-        messageContentPanel.add(messageContent);
+        messageContentPanel.add(new JLabel(JMeterUtils.getResString("jms_msg_content")), BorderLayout.NORTH);
+        messageContentPanel.add(new JTextScrollPane(messageContent), BorderLayout.CENTER);
         Dimension pref = new Dimension(400, 150);
         messageContent.setPreferredSize(pref);
         messagePanel.add(messageContentPanel, BorderLayout.CENTER);

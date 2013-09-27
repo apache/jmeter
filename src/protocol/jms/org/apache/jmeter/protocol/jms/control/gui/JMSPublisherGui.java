@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -32,13 +33,14 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledPasswordField;
-import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
@@ -101,7 +103,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
 
-    private final JLabeledTextArea textMessage = new JLabeledTextArea(JMeterUtils.getResString("jms_text_area")); // $NON-NLS-1$
+    private final JSyntaxTextArea textMessage = new JSyntaxTextArea(15, 50); // $NON-NLS-1$
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
@@ -209,7 +211,12 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(msgChoice);
         mainPanel.add(messageFile);
         mainPanel.add(randomFile);
-        mainPanel.add(textMessage);
+
+        JPanel messageContentPanel = new JPanel(new BorderLayout());
+        messageContentPanel.add(new JLabel(JMeterUtils.getResString("jms_text_area")), BorderLayout.NORTH);
+        messageContentPanel.add(new JTextScrollPane(textMessage), BorderLayout.CENTER);
+
+        mainPanel.add(messageContentPanel);
         Dimension pref = new Dimension(400, 150);
         textMessage.setPreferredSize(pref);
 
@@ -229,7 +236,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsDestination.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
-        textMessage.setText(""); // $NON-NLS-1$
+        textMessage.setInitialText(""); // $NON-NLS-1$
         messageFile.setFilename(""); // $NON-NLS-1$
         randomFile.setFilename(""); // $NON-NLS-1$
         msgChoice.setText(""); // $NON-NLS-1$
@@ -259,7 +266,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsDestination.setText(sampler.getDestination());
         jmsUser.setText(sampler.getUsername());
         jmsPwd.setText(sampler.getPassword());
-        textMessage.setText(sampler.getTextMessage());
+        textMessage.setInitialText(sampler.getTextMessage());
         messageFile.setFilename(sampler.getInputFile());
         randomFile.setFilename(sampler.getRandomPath());
         configChoice.setText(sampler.getConfigChoice());
