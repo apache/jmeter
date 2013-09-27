@@ -355,6 +355,7 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>55509</bugzilla> - Allow Plugins to be notified of remote thread number progression</li>
 <li><bugzilla>55572</bugzilla> - Detail popup of parameter does not show a Scrollbar when content exceeds display</li>
 <li><bugzilla>55580</bugzilla> -  Help pane does not scroll to start for &lt;a href="#"&gt; links</li>
+<li><bugzilla>55600</bugzilla> - JSyntaxTextArea : Strange behaviour on first undo</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
