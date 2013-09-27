@@ -101,7 +101,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     /** {@inheritDoc} */
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        textUI.setText(text);
+        textUI.setInitialText(text);
         textUI.setCaretPosition(0);
     }
 
@@ -109,10 +109,10 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     @Override
     public void setValue(Object value) {
         if (value != null) {
-            textUI.setText(value.toString());
+            textUI.setInitialText(value.toString());
             textUI.setCaretPosition(0);
         } else {
-            textUI.setText("");
+            textUI.setInitialText("");
         }
     }
 

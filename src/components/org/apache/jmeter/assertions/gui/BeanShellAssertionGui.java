@@ -52,7 +52,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 
     @Override
     public void configure(TestElement element) {
-        scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
+        scriptField.setInitialText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
         scriptField.setCaretPosition(0);
         filename.setText(element.getPropertyAsString(BeanShellAssertion.FILENAME));
         parameters.setText(element.getPropertyAsString(BeanShellAssertion.PARAMETERS));
@@ -164,7 +164,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
         super.clearGui();
         filename.setText(""); // $NON-NLS-1$
         parameters.setText(""); // $NON-NLS-1$
-        scriptField.setText(""); // $NON-NLS-1$
+        scriptField.setInitialText(""); // $NON-NLS-1$
         resetInterpreter.setSelected(false);
     }
 }
