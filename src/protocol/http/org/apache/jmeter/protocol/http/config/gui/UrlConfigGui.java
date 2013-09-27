@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.HeadlessException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -54,8 +53,6 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * Basic URL / HTTP Request configuration:
@@ -67,8 +64,6 @@ import org.apache.log.Logger;
 public class UrlConfigGui extends JPanel implements ChangeListener {
 
     private static final long serialVersionUID = 240L;
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final int TAB_PARAMETERS = 0;
     
@@ -326,31 +321,25 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     private void init() {// called from ctor, so must not be overridable
-    	try {
-	        this.setLayout(new BorderLayout());
-	
-	        // WEB REQUEST PANEL
-	        JPanel webRequestPanel = new JPanel();
-	        webRequestPanel.setLayout(new BorderLayout());
-	        webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-	                JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
-	
-	        JPanel northPanel = new JPanel();
-	        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-	        northPanel.add(getProtocolAndMethodPanel());
-	        northPanel.add(getPathPanel());
-	
-	        webRequestPanel.add(northPanel, BorderLayout.NORTH);
-	        webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
-	
-	        this.add(getWebServerTimeoutPanel(), BorderLayout.NORTH);
-	        this.add(webRequestPanel, BorderLayout.CENTER);
-	        this.add(getProxyServerPanel(), BorderLayout.SOUTH);
-    	}
-        catch (HeadlessException e){
-        	// When running in Headless mode, avoid unit tests failures
-            log.warn(e.toString());
-        } 
+        this.setLayout(new BorderLayout());
+
+        // WEB REQUEST PANEL
+        JPanel webRequestPanel = new JPanel();
+        webRequestPanel.setLayout(new BorderLayout());
+        webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
+
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+        northPanel.add(getProtocolAndMethodPanel());
+        northPanel.add(getPathPanel());
+
+        webRequestPanel.add(northPanel, BorderLayout.NORTH);
+        webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
+
+        this.add(getWebServerTimeoutPanel(), BorderLayout.NORTH);
+        this.add(webRequestPanel, BorderLayout.CENTER);
+        this.add(getProxyServerPanel(), BorderLayout.SOUTH); 
     }
 
     /**
