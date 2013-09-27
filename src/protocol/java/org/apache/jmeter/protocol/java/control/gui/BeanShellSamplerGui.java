@@ -53,7 +53,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 
     @Override
     public void configure(TestElement element) {
-        scriptField.setText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
+        scriptField.setInitialText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
         scriptField.setCaretPosition(0);
         filename.setText(element.getPropertyAsString(BeanShellSampler.FILENAME));
         parameters.setText(element.getPropertyAsString(BeanShellSampler.PARAMETERS));
@@ -92,7 +92,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 
         filename.setText(""); //$NON-NLS-1$
         parameters.setText(""); //$NON-NLS-1$
-        scriptField.setText(""); //$NON-NLS-1$
+        scriptField.setInitialText(""); //$NON-NLS-1$
         resetInterpreter.setSelected(false);
     }
 
