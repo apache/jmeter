@@ -58,7 +58,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
 
-    private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content")); //$NON-NLS-1$
+    private JLabeledTextArea messageContent = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content")); //$NON-NLS-1$
 
     private JLabeledTextField initialContextFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
@@ -96,7 +96,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
         jmsSelector.setText(""); // $NON-NLS-1$
-        soapXml.setText(""); // $NON-NLS-1$
+        messageContent.setText(""); // $NON-NLS-1$
         initialContextFactory.setText(""); // $NON-NLS-1$
         providerUrl.setText(""); // $NON-NLS-1$
         jmsPropertiesPanel.clear();
@@ -124,7 +124,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setUseResMsgIdAsCorrelId(useResMsgIdAsCorrelId.isSelected());
         element.setTimeout(timeout.getText());
         element.setJMSSelector(jmsSelector.getText());
-        element.setContent(soapXml.getText());
+        element.setContent(messageContent.getText());
 
         element.setInitialContextFactory(initialContextFactory.getText());
         element.setContextProvider(providerUrl.getText());
@@ -172,7 +172,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         timeout.setText(sampler.getTimeout());
         jmsSelector.setText(sampler.getJMSSelector());
-        soapXml.setText(sampler.getContent());
+        messageContent.setText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
         providerUrl.setText(sampler.getContextProvider());
 
@@ -242,9 +242,9 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         messagePanel.add(messageNorthPanel, BorderLayout.NORTH);
 
         JPanel soapXmlPanel = new JPanel(new BorderLayout());
-        soapXmlPanel.add(soapXml);
+        soapXmlPanel.add(messageContent);
         Dimension pref = new Dimension(400, 150);
-        soapXml.setPreferredSize(pref);
+        messageContent.setPreferredSize(pref);
         messagePanel.add(soapXmlPanel, BorderLayout.CENTER);
 
         jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
