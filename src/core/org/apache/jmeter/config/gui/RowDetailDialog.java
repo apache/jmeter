@@ -224,7 +224,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
      */
     private void setValues(int selectedRow) {
         nameTF.setText((String)tableModel.getValueAt(selectedRow, 0));
-        valueTA.setText((String)tableModel.getValueAt(selectedRow, 1));
+        valueTA.setInitialText((String)tableModel.getValueAt(selectedRow, 1));
         valueTA.setCaretPosition(0);
         textChanged = false;
     }
