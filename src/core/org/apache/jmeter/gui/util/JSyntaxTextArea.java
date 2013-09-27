@@ -90,4 +90,12 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         return undoManager;
     }
 
+    /**
+     * Sets initial text resetting undo history
+     * @param string
+     */
+	public void setInitialText(String string) {
+		setText(string);
+		discardAllEdits();
+	}
 }
