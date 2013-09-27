@@ -94,7 +94,7 @@ public class XPathPanel extends JPanel {
      * @param xpath
      */
     public void setXPath(String xpath) {
-        this.xpath.setText(xpath);
+        this.xpath.setInitialText(xpath);
     }
 
     /**
