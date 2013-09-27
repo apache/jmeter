@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.config.gui;
 
 import java.awt.BorderLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,10 +28,14 @@ import javax.swing.JPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPFileArgsPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class MultipartUrlConfigGui extends UrlConfigGui {
 
     private static final long serialVersionUID = 240L;
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Files panel that holds file informations to be uploaded by
@@ -68,26 +73,32 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
     }
 
     private void init() {// called from ctor, so must not be overridable
-        this.setLayout(new BorderLayout());
-
-        // WEB REQUEST PANEL
-        JPanel webRequestPanel = new JPanel();
-        webRequestPanel.setLayout(new BorderLayout());
-        webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
-
-        JPanel northPanel = new JPanel();
-        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-        northPanel.add(getProtocolAndMethodPanel());
-        northPanel.add(getPathPanel());
-
-        webRequestPanel.add(northPanel, BorderLayout.NORTH);
-        webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
-        webRequestPanel.add(getHTTPFileArgsPanel(), BorderLayout.SOUTH);
-
-        this.add(getWebServerTimeoutPanel(), BorderLayout.NORTH);
-        this.add(webRequestPanel, BorderLayout.CENTER);
-        this.add(getProxyServerPanel(), BorderLayout.SOUTH);
+    	try {
+	        this.setLayout(new BorderLayout());
+	
+	        // WEB REQUEST PANEL
+	        JPanel webRequestPanel = new JPanel();
+	        webRequestPanel.setLayout(new BorderLayout());
+	        webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+	                JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
+	
+	        JPanel northPanel = new JPanel();
+	        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+	        northPanel.add(getProtocolAndMethodPanel());
+	        northPanel.add(getPathPanel());
+	
+	        webRequestPanel.add(northPanel, BorderLayout.NORTH);
+	        webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
+	        webRequestPanel.add(getHTTPFileArgsPanel(), BorderLayout.SOUTH);
+	
+	        this.add(getWebServerTimeoutPanel(), BorderLayout.NORTH);
+	        this.add(webRequestPanel, BorderLayout.CENTER);
+	        this.add(getProxyServerPanel(), BorderLayout.SOUTH);
+    	}
+        catch (HeadlessException e){
+        	// When running in Headless mode, avoid unit tests failures
+            log.warn(e.toString());
+        }
     }
 
     private JPanel getHTTPFileArgsPanel() {
