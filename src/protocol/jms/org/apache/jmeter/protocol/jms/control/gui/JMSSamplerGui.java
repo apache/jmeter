@@ -241,11 +241,11 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         messagePanel.add(messageNorthPanel, BorderLayout.NORTH);
 
-        JPanel soapXmlPanel = new JPanel(new BorderLayout());
-        soapXmlPanel.add(messageContent);
+        JPanel messageContentPanel = new JPanel(new BorderLayout());
+        messageContentPanel.add(messageContent);
         Dimension pref = new Dimension(400, 150);
         messageContent.setPreferredSize(pref);
-        messagePanel.add(soapXmlPanel, BorderLayout.CENTER);
+        messagePanel.add(messageContentPanel, BorderLayout.CENTER);
 
         jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
         messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
