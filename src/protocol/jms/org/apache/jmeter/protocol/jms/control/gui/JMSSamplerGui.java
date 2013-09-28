@@ -60,7 +60,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
 
-    private JSyntaxTextArea messageContent = new JSyntaxTextArea(15, 50); //$NON-NLS-1$
+    private JSyntaxTextArea messageContent = new JSyntaxTextArea(10, 50); //$NON-NLS-1$
 
     private JLabeledTextField initialContextFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$

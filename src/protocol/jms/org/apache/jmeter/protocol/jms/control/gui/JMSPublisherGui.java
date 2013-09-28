@@ -103,7 +103,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
 
-    private final JSyntaxTextArea textMessage = new JSyntaxTextArea(15, 50); // $NON-NLS-1$
+    private final JSyntaxTextArea textMessage = new JSyntaxTextArea(10, 50); // $NON-NLS-1$
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
