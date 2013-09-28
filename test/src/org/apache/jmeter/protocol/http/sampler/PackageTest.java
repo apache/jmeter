@@ -21,6 +21,8 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.awt.HeadlessException;
+
 import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Arguments;
@@ -28,15 +30,24 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class PackageTest extends TestCase {
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
     public PackageTest(String arg0) {
         super(arg0);
     }
 
     public void testConfiguring() throws Exception {
-        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
-        configure(sampler);
+    	try {
+	        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+	        configure(sampler);
+    	} catch (HeadlessException e) {
+            System.out.println("o.a.j.junit.JMeterTest Error running testConfiguring due to Headless mode, "+e.toString());
+            log.warn("o.a.j.junit.JMeterTest Error running testConfiguring due to Headless mode, "+e.toString());
+    	}
     }
 
     private void configure(HTTPSamplerBase sampler) throws Exception {
