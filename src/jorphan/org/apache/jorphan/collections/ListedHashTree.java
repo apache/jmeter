@@ -25,7 +25,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.jorphan.util.JMeterError;
 
@@ -206,52 +205,8 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         }
         ListedHashTree lht = (ListedHashTree) o;
         return (super.equals(lht) && order.equals(lht.order));
-
-        // boolean flag = true;
-        // if (o instanceof ListedHashTree)
-        // {
-        // ListedHashTree oo = (ListedHashTree) o;
-        // Iterator it = order.iterator();
-        // Iterator it2 = oo.order.iterator();
-        // if (size() != oo.size())
-        // {
-        // flag = false;
-        // }
-        // while (it.hasNext() && it2.hasNext() && flag)
-        // {
-        // if (!it.next().equals(it2.next()))
-        // {
-        // flag = false;
-        // }
-        // }
-        // if (flag)
-        // {
-        // it = order.iterator();
-        // while (it.hasNext() && flag)
-        // {
-        // Object temp = it.next();
-        // flag = get(temp).equals(oo.get(temp));
-        // }
-        // }
-        // }
-        // else
-        // {
-        // flag = false;
-        // }
-        // return flag;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public Set<Object> keySet() {
-        return data.keySet();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int size() {
-        return data.size();
-    }
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
