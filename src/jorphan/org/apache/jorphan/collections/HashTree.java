@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -51,8 +52,6 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
     private static final long serialVersionUID = 240L;
 
-//    private static final Logger log = LoggingManager.getLoggerForClass();
-    
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
 
@@ -185,8 +184,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            sub tree to add to the node created for the first argument.
      */
     public void add(Object key, HashTree subTree) {
-        add(key);
-        getTree(key).add(subTree);
+        add(key).add(subTree);
     }
 
     /**
@@ -197,8 +195,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     public void add(HashTree newTree) {
         for (Object item : newTree.list()) {
-            add(item);
-            getTree(item).add(newTree.getTree(item));
+            add(item).add(newTree.getTree(item));
         }
     }
 
@@ -448,8 +445,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            value to be added as a key in the secondary node
      */
     public HashTree add(Object key, Object value) {
-        add(key);
-        return getTree(key).add(value);
+        return add(key).add(value);
     }
 
     /**
@@ -463,8 +459,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            array of objects to be added as keys in the secondary node
      */
     public void add(Object key, Object[] values) {
-        add(key);
-        getTree(key).add(values);
+        add(key).add(values);
     }
 
     /**
@@ -478,8 +473,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            node
      */
     public void add(Object key, Collection<?> values) {
-        add(key);
-        getTree(key).add(values);
+        add(key).add(values);
     }
 
     /**
@@ -576,8 +570,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     protected HashTree addTreePath(Collection<?> treePath) {
         HashTree tree = this;
         for (Object temp : treePath) {
-            tree.add(temp);
-            tree = tree.getTree(temp);
+            tree = tree.add(temp);
         }
         return tree;
     }
@@ -716,7 +709,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (temp != null) {
             return temp.list();
         }
-        return new HashTree().list();
+        return new HashSet<Object>();
     }
 
     /**
@@ -763,7 +756,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (tree != null) {
             return tree.list();
         }
-        return new HashTree().list();
+        return new HashSet<Object>();
     }
 
     /**
@@ -881,39 +874,6 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
             return false;
         }
         return data.equals(oo.data);
-
-        // boolean flag = true;
-        // if (o instanceof HashTree)
-        // {
-        // HashTree oo = (HashTree) o;
-        // Iterator it = data.keySet().iterator();
-        // while (it.hasNext())
-        // {
-        // if (!oo.containsKey(it.next()))
-        // {
-        // flag = false;
-        // break;
-        // }
-        // }
-        // if (flag)
-        // {
-        // it = data.keySet().iterator();
-        // while (it.hasNext())
-        // {
-        // Object temp = it.next();
-        // flag = get(temp).equals(oo.get(temp));
-        // if (!flag)
-        // {
-        // break;
-        // }
-        // }
-        // }
-        // }
-        // else
-        // {
-        // flag = false;
-        // }
-        // return flag;
     }
 
     /**
