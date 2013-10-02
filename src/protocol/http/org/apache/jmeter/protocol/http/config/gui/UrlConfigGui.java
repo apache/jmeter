@@ -280,7 +280,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         boolean useRaw = el.getPropertyAsBoolean(HTTPSamplerBase.POST_BODY_RAW, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
         if(useRaw) {
             String postBody = computePostBody(arguments, true); // Convert CRLF to CR, see modifyTestElement
-            postBodyContent.setInitialText(postBody);   
+            postBodyContent.setInitialText(postBody); 
+            postBodyContent.setCaretPosition(0);
             postContentTabbedPane.setSelectedIndex(TAB_RAW_BODY, false);
         } else {
             argsPanel.configure(arguments);
@@ -727,6 +728,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      */
     void convertParametersToRaw() {
         postBodyContent.setInitialText(computePostBody((Arguments)argsPanel.createTestElement()));
+        postBodyContent.setCaretPosition(0);
     }
 
     /**
