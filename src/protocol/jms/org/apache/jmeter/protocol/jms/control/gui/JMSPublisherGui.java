@@ -217,9 +217,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         messageContentPanel.add(new JTextScrollPane(textMessage), BorderLayout.CENTER);
 
         mainPanel.add(messageContentPanel);
-        Dimension pref = new Dimension(400, 150);
-        textMessage.setPreferredSize(pref);
-
         useProperties.addChangeListener(this);
         useAuth.addChangeListener(this);
         configChoice.addChangeListener(this);
@@ -267,6 +264,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsUser.setText(sampler.getUsername());
         jmsPwd.setText(sampler.getPassword());
         textMessage.setInitialText(sampler.getTextMessage());
+        textMessage.setCaretPosition(0);
         messageFile.setFilename(sampler.getInputFile());
         randomFile.setFilename(sampler.getRandomPath());
         configChoice.setText(sampler.getConfigChoice());
