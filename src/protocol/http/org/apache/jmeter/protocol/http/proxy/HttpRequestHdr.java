@@ -171,6 +171,7 @@ public class HttpRequestHdr {
         // SSL connection
         if (getMethod().startsWith(HTTPConstants.CONNECT)) {
             paramHttps = url;
+            return; // Don't try to adjust the host name
         }
         /* The next line looks odd, but proxied HTTP requests look like:
          * GET http://www.apache.org/foundation/ HTTP/1.1
