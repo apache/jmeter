@@ -330,12 +330,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (res.isRedirect()) {
                 final Header headerLocation = httpResponse.getLastHeader(HTTPConstants.HEADER_LOCATION);
                 if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
-                    throw new IllegalArgumentException("Missing location header");
+                    throw new IllegalArgumentException("Missing location header in redirect for " + httpRequest.getRequestLine());
                 }
+                final String redirectLocation = headerLocation.getValue();
                 try {
-                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(new URL(headerLocation.getValue())).toString());
+                    final URL redirectUrl = new URL(redirectLocation);
+                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(redirectUrl).toString());
                 } catch (Exception e) {
-                    log.error("Error sanitizing URL:"+headerLocation.getValue()+", message:"+e.getMessage());
+                    log.error("Error in redirect URL for "  + httpRequest.getRequestLine());
+                    log.error("Error sanitizing redirect URL: " + redirectLocation + "\n\t", e);
                 }
             }
 
