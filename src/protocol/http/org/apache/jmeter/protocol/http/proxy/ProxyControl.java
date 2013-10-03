@@ -565,6 +565,7 @@ public class ProxyControl extends GenericController {
                 if (caCert == null) {
                     return new String[]{"Could not find certificate"};
                 }
+                caCert.checkValidity();
                 return new String[]
                         {
                         caCert.getSubjectX500Principal().toString(),
@@ -573,7 +574,7 @@ public class ProxyControl extends GenericController {
                         };
             } catch (GeneralSecurityException e) {
                 log.error("Problem reading root CA from keystore", e);
-                return new String[]{"Could not read certificate"};
+                return new String[]{"Problem with root certificate", e.getMessage()};
             }
         }
         return null; // should not happen
@@ -1251,12 +1252,13 @@ public class ProxyControl extends GenericController {
                         break; // cannot continue
                     } else {
                         caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
+                        log.info("Valid alias found for " + alias);
                     }
                 }
             } catch (IOException e) { // store is faulty, we need to recreate it
                 keyStore = null; // if cert is not valid, flag up to recreate it
                 if (e.getCause() instanceof UnrecoverableKeyException) {
-                    log.warn("Could not read key store " + e.getMessage() + " cause " + e.getCause().getMessage());
+                    log.warn("Could not read key store " + e.getMessage() + "; cause: " + e.getCause().getMessage());
                 } else {
                     log.warn("Could not open/read key store " + e.getMessage()); // message includes the file name
                 }
