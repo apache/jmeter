@@ -125,18 +125,19 @@ public class HttpRequestHdr {
                     inHeaders = false;
                     firstLine = false; // cannot be first line either
                 }
+                final String reqLine = line.toString();
                 if (firstLine) {
-                    parseFirstLine(line.toString());
+                    parseFirstLine(reqLine);
                     firstLine = false;
                 } else {
                     // parse other header lines, looking for Content-Length
-                    final int contentLen = parseLine(line.toString());
+                    final int contentLen = parseLine(reqLine);
                     if (contentLen > 0) {
                         dataLength = contentLen; // Save the last valid content length one
                     }
                 }
                 if (log.isDebugEnabled()){
-                    log.debug("Client Request Line: " + line.toString());
+                    log.debug("Client Request Line: '" + reqLine.replaceFirst("\r\n$", "<CRLF>") + "'");
                 }
                 line.reset();
             } else if (!inHeaders) {
@@ -148,7 +149,7 @@ public class HttpRequestHdr {
 
         if (log.isDebugEnabled()){
             log.debug("rawPostData in default JRE encoding: " + new String(rawPostData)); // TODO - charset?
-            log.debug("Request: " + clientRequest.toString());
+            log.debug("Request: '" + clientRequest.toString().replaceAll("\r\n", "<CRLF>") + "'");
         }
         return clientRequest.toByteArray();
     }
@@ -156,17 +157,16 @@ public class HttpRequestHdr {
     private void parseFirstLine(String firstLine) {
         this.firstLine = firstLine;
         if (log.isDebugEnabled()) {
-            log.debug("browser request: " + firstLine);
+            log.debug("browser request: " + firstLine.replaceFirst("\r\n$", "<CRLF>"));
         }
         StringTokenizer tz = new StringTokenizer(firstLine);
         method = getToken(tz).toUpperCase(java.util.Locale.ENGLISH);
         url = getToken(tz);
         version = getToken(tz);
         if (log.isDebugEnabled()) {
-            log.debug("parser input:  " + firstLine);
-            log.debug("parsed method: " + method);
-            log.debug("parsed url:    " + url);
-            log.debug("parsed version:" + version);
+            log.debug("parsed method:   " + method);
+            log.debug("parsed url/host: " + url); // will be host:port for CONNECT
+            log.debug("parsed version:  " + version);
         }
         // SSL connection
         if (getMethod().startsWith(HTTPConstants.CONNECT)) {
@@ -185,7 +185,7 @@ public class HttpRequestHdr {
         }
         // JAVA Impl accepts URLs with unsafe characters so don't do anything
         if(HTTPSamplerFactory.IMPL_JAVA.equals(httpSamplerName)) {
-            log.debug("First Line: " + url);
+            log.debug("First Line url: " + url);
             return;
         }
         try {
@@ -206,7 +206,7 @@ public class HttpRequestHdr {
                 log.error("Error escaping URL:'"+url+"', message:"+e1.getMessage());
             }
         }
-        log.debug("First Line: " + url);
+        log.debug("First Line url: " + url);
     }
 
     /*
