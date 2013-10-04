@@ -566,7 +566,6 @@ public class ProxyControl extends GenericController {
                 if (caCert == null) {
                     return new String[]{"Could not find certificate"};
                 }
-                caCert.checkValidity();
                 return new String[]
                         {
                         caCert.getSubjectX500Principal().toString(),
