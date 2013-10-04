@@ -30,6 +30,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -45,11 +46,30 @@ public class KeyToolUtils {
     // N.B. It seems that Opera needs a chain in order to accept server keys signed by the intermediate CA
     // Opera does not seem to like server keys signed by the root (self-signed) cert.
 
-    private static final String DNAME_ROOT_CA_KEY          = "cn=_ DO NOT TRUST unless this is your certificate (JMeter root CA)"; // $NON-NLS-1$
-    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=_ DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
+    private static final String DNAME_ROOT_CA_KEY;
 
-    private static final String ROOT_CACERT_CRT = "ApacheJMeterTemporaryRootCA.crt"; // $NON-NLS-1$ (Firefox and Windows)
-    private static final String ROOT_CACERT_USR = "ApacheJMeterTemporaryRootCA.usr"; // $NON-NLS-1$ (Opera)
+    private static void addElement(StringBuilder sb, String prefix, String value) {
+        if (value != null) {
+            sb.append(", ");
+            sb.append(prefix);
+            sb.append(value);
+        }
+    }
+
+    static {
+        StringBuilder sb = new StringBuilder();
+        sb.append("CN=_ DO NOT INSTALL unless this is your certificate (JMeter root CA)"); // $NON-NLS-1$
+        addElement(sb, "OU=Username: ", System.getProperty("user.name")); // $NON-NLS-1$ $NON-NLS-2$
+        addElement(sb, "L=Hostname: ", JMeterUtils.getLocalHostName()); // $NON-NLS-1$
+        addElement(sb, "C=", System.getProperty("user.country")); // $NON-NLS-1$ $NON-NLS-2$
+        DNAME_ROOT_CA_KEY = sb.toString();
+    }
+
+    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
+
+    public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA";
+    private static final String ROOT_CACERT_CRT = ROOT_CACERT_CRT_PFX + ".crt"; // $NON-NLS-1$ (Firefox and Windows)
+    private static final String ROOT_CACERT_USR = ROOT_CACERT_CRT_PFX + ".usr"; // $NON-NLS-1$ (Opera)
 
     private static final String ROOTCA_ALIAS = ":root_ca:";  // $NON-NLS-1$
     private static final String INTERMEDIATE_CA_ALIAS = ":intermediate_ca:";  // $NON-NLS-1$
