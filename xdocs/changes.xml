@@ -488,6 +488,7 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>55486</bugzilla> - New JMeter Logo. Contributed by UBIK Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>55548</bugzilla> - Tidy up use of TestElement.ENABLED; use TestElement.isEnabled()/setEnabled() throughout</li>
 <li><bugzilla>55617</bugzilla> - Improvements to jorphan collection. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li><bugzilla>55623</bugzilla> - Invalid/unexpected configuration values should not be silently ignored</li>
 </ul>
 
 <h2>Thanks</h2>
