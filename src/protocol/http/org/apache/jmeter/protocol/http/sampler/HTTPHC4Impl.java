@@ -338,7 +338,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     res.setRedirectLocation(ConversionUtils.sanitizeUrl(redirectUrl).toString());
                 } catch (Exception e) {
                     log.error("Error in redirect URL for "  + httpRequest.getRequestLine()
-                            +", Error sanitizing redirect URL: " + redirectLocation + "\n\t", e);
+                            +"\n\tCould not sanitize URL: " + redirectLocation + "\n\t", e);
                 }
             }
 
