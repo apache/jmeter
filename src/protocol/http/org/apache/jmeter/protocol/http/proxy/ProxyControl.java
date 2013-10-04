@@ -570,7 +570,8 @@ public class ProxyControl extends GenericController {
                 return new String[]
                         {
                         caCert.getSubjectX500Principal().toString(),
-                        "Fingerprint(SHA1): " + JOrphanUtils.baToHexString(DigestUtils.sha1(caCert.getEncoded()), ' ')
+                        "Fingerprint(SHA1): " + JOrphanUtils.baToHexString(DigestUtils.sha1(caCert.getEncoded()), ' '),
+                        "Created: "+ caCert.getNotBefore().toString()
                         };
             } catch (GeneralSecurityException e) {
                 log.error("Problem reading root CA from keystore", e);
