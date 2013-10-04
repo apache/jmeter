@@ -122,7 +122,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         HTTP Request.</p>
 
         <p>Or, instead of manually adding HTTP Requests, you may want to use
-        JMeter's <complink name="HTTP Proxy Server"/> to create
+        JMeter's <complink name="HTTP(S) Test Script Recorder"/> to create
         them.  This can save you time if you have a lot of HTTP requests or requests with many
         parameters.</p>
 
@@ -453,7 +453,7 @@ httpclient3.retrycount=3
         <complink name="HTTP Cookie Manager"/>
         <complink name="HTTP Header Manager"/>
         <complink name="HTML Link Parser"/>
-        <complink name="HTTP Proxy Server"/>
+        <complink name="HTTP(S) Test Script Recorder"/>
         <complink name="HTTP Request Defaults"/>
         <link href="build-adv-web-test-plan.html#session_url_rewriting">HTTP Requests and Session ID's: URL Rewriting</link>
 </links>
@@ -2496,7 +2496,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 <description>
 <p>The Recording Controller is a place holder indicating where the proxy server should
 record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
-recording using the <complink name="HTTP Proxy Server" />, all recorded samples will by default
+recording using the <complink name="HTTP(S) Test Script Recorder" />, all recorded samples will by default
 be saved under the Recording Controller.</p>
 
 </description>
@@ -5657,7 +5657,7 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
         </property>
 </properties>
 <ul>
-<li><complink name="HTTP Proxy Server"/></li>
+<li><complink name="HTTP(S) Test Script Recorder"/></li>
 <li><complink name="HTTP Mirror Server"/></li>
 <li><complink name="Property Display"/></li>
 </ul>
@@ -5712,14 +5712,14 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 </p>
 </component>
 
-<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="957" height="593" screenshot="proxy_control.png">
-<description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
+<component name="HTTP(S) Test Script Recorder" was="HTTP Proxy Server" index="&sect-num;.9.5"  width="957" height="593" screenshot="proxy_control.png">
+<description><p>The HTTP(S) Test Script Recorder allows JMeter to watch and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
 
-<p>To use the proxy server, <i>add</i> the HTTP Proxy Server element to the workbench.
+<p>To use the proxy server, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
 Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
+Add menu (Add --> Non-Test Elements --> HTTP(S) Test Script Recorder).</p>
 <p>
 You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP and HTTPS requests.
 Do not use JMeter as the proxy for any other request types - FTP, etc. - as the JMeter proxy cannot handle them.
@@ -5777,7 +5777,7 @@ This setting will also be needed when running the generated test plan.
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
+        <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  8080 is the default, but you can change it.</property>
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
            <ul>
@@ -5891,7 +5891,7 @@ proxy.binary.filesuffix=.binary
 
 <h4>Adding timers</h4>
 <p>It is also possible to have the proxy add timers to the recorded script. To
-do this, create a timer directly within the HTTP Proxy Server component.
+do this, create a timer directly within the HTTP(S) Test Script Recorder component.
 The proxy will place a copy of this timer into each sample it records, or into
 the first sample of each group if you're using grouping. This copy will then be
 scanned for occurences of variable ${T} in its properties, and any such
@@ -5921,19 +5921,19 @@ try using the non-loopback hostname or IP address, e.g. http://myhost/ or http:/
 </p>
 
 <h4>Handling of HTTP Request Defaults</h4>
-<p>If the HTTP Proxy Server finds enabled <complink name="HTTP Request Defaults"/> directly within the
+<p>If the HTTP(S) Test Script Recorder finds enabled <complink name="HTTP Request Defaults"/> directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
 will have empty fields for the default values you specified. You may further control this behaviour by placing an
-HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-blank values will override
+HTTP Request Defaults element directly within the HTTP(S) Test Script Recorder, whose non-blank values will override
 those in the other HTTP Request Defaults. See <a href="best-practices.html#proxy_server"> Best
-Practices with the Proxy Server</a> for more info.</p>
+Practices with the HTTP(S) Test Script Recorder</a> for more info.</p>
 
 <h4>User Defined Variable replacement</h4>
-<p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> (UDV) directly within the
+<p>Similarly, if the HTTP(S) Test Script Recorder finds <complink name="User Defined Variables"/> (UDV) directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
 will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
-place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
-<a href="best-practices.html#proxy_server"> Best Practices with the Proxy Server</a> for more info.</p>
+place User Defined Variables directly within the HTTP(S) Test Script Recorder to override the values to be replaced. See
+<a href="best-practices.html#proxy_server"> Best Practices with the Test Script Recorder</a> for more info.</p>
 
 <note>Please note that matching is case-sensitive.</note>
 
@@ -5958,7 +5958,7 @@ your browser's proxy settings.  Now, you may want to sort and re-order the test 
 cookie manager, etc.</p>
 
 <h4>How can I record the server's responses too?</h4>
-<p>Just place a <complink name="View Results Tree"/> listener as a child of the Proxy Server and the responses will be displayed. 
+<p>Just place a <complink name="View Results Tree"/> listener as a child of the HTTP(S) Test Script Recorder and the responses will be displayed. 
 You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
 </p>
 

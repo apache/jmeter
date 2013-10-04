@@ -308,7 +308,7 @@ and will count towards the error %age for example in the Aggregate and Summary r
 
 <subsection name="&sect-num;.6 Configuration Elements" anchor="config_elements">
 <p>A configuration element works closely with a Sampler.  Although it does not send requests
-(except for <complink name="HTTP Proxy Server"/>), it can add to or modify requests.</p>
+(except for <complink name="HTTP(S) Test Script Recorder"/>), it can add to or modify requests.</p>
 
 <p>A configuration element is accessible from only inside the tree branch where you place the element.
 For example, if you place an HTTP Cookie Manager inside a Simple Logic Controller, the Cookie Manager will

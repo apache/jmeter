@@ -210,14 +210,14 @@ public class ProxyControl extends GenericController {
     static {
         if (CERT_ALIAS != null) {
             KEYSTORE_MODE = KeystoreMode.USER_KEYSTORE;
-            log.info("Proxy Server will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
+            log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
         } else {
             if (KeyToolUtils.SUPPORTS_HOST_CERT && USE_DYNAMIC_KEYS) {
                 KEYSTORE_MODE = KeystoreMode.DYNAMIC_KEYSTORE;
-                log.info("Proxy Server SSL Proxy will use keys that support embedded 3rd party resources in file " + CERT_PATH_ABS);
+                log.info("HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file " + CERT_PATH_ABS);
             } else {
                 KEYSTORE_MODE = KeystoreMode.JMETER_KEYSTORE;
-                log.warn("Proxy Server SSL Proxy will use keys that may not work for embedded resources in file " + CERT_PATH_ABS);
+                log.warn("HTTP(S) Test Script Recorder SSL Proxy will use keys that may not work for embedded resources in file " + CERT_PATH_ABS);
             }
         }
     }
@@ -867,7 +867,7 @@ public class ProxyControl extends GenericController {
      * Finds all configuration objects of the given class applicable to the
      * recorded samplers, that is:
      * <ul>
-     * <li>All such elements directly within the HTTP Proxy Server (these have
+     * <li>All such elements directly within the HTTP(S) Test Script Recorder (these have
      * the highest priority).
      * <li>All such elements directly within the target controller (higher
      * priority) or directly within any containing controller (lower priority),
@@ -1211,7 +1211,7 @@ public class ProxyControl extends GenericController {
         case USER_KEYSTORE:
             storePassword = JMeterUtils.getPropDefault("proxy.cert.keystorepass", DEFAULT_PASSWORD); // $NON-NLS-1$;
             keyPassword = JMeterUtils.getPropDefault("proxy.cert.keypassword", DEFAULT_PASSWORD); // $NON-NLS-1$;
-            log.info("Proxy Server will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
+            log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
             initUserKeyStore();
             break;
         default:
