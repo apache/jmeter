@@ -70,6 +70,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.logging.LoggingManager;
@@ -478,14 +479,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             stop.setEnabled(true);
             restart.setEnabled(false);
             if (ProxyControl.isDynamicMode()) {
-                String details[] = model.getCertificateSerialAndFingerPrint();
+                String details[] = model.getCertificateDetails();
                 StringBuilder sb = new StringBuilder();
                 for(String detail : details) {
-                    sb.append(detail).append("\n");
+                    sb.append(detail).append("\n"); // $NON-NLS-1$
                 }
                 JOptionPane.showMessageDialog(this,
                     sb.toString(),
-                    "Please check the certificate before installing it:",
+                    "Please check the certificate matches the details below before installing " + KeyToolUtils.ROOT_CACERT_CRT_PFX,
                     JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (InvalidVariableException e) {
