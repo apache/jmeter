@@ -65,9 +65,9 @@ for information.</p>
 Web Test</a> for information.</p>
 </section>
 
-<section name="&sect-num;.5 Using the Proxy Server" anchor="proxy_server">
-<p>Refer to <complink name="HTTP Proxy Server"/> for details on setting up the proxy
-server. The most important thing to do is filter out all requests you aren't
+<section name="&sect-num;.5 Using the HTTP(S) Test Script Recorder" anchor="proxy_server">
+<p>Refer to <complink name="HTTP(S) Test Script Recorder"/> for details on setting up the
+recorder. The most important thing to do is filter out all requests you aren't
 interested in.  For instance, there's no point in recording image requests (JMeter can
 be instructed to download all images on a page - see <complink name="HTTP Request"/>).
 These will just clutter your test plan.  Most likely, there is an extension all your files
@@ -82,7 +82,7 @@ fresh.</p>
 covered by the Grouping features. include/exclude may still be useful to filter hosts out, so
 that regular browsing with the proxy enabled and the browser configured won't fill your test
 plan with crap. Think about other uses. -->
-<p>The Proxy Server expects to find a ThreadGroup element with a Recording Controller
+<p>The HTTP(S) Test Script Recorder expects to find a ThreadGroup element with a Recording Controller
 under it where it will record HTTP Requests to.  This conveniently packages all your samples under one
 controller, which can be given a name that describes the test case.</p><!--TODO: is this best practice? I don't think so!-->
 <p>Now, go through the steps of a Test Case.  If you have no pre-defined test cases, use
@@ -91,7 +91,7 @@ definite series of steps, save the entire test case in an appropriately named fi
 clean and start a new test case.  By doing this, you can quickly record a large number of
 test case "rough drafts".</p><!--TODO: no need to wipe out now - you can create a new controller and
 resume recording into it-->
-<p>One of the most useful features of the Proxy Server is that you can abstract out
+<p>One of the most useful features of the HTTP(S) Test Script Recorder is that you can abstract out
 certain common elements from the recorded samples.  By defining some
 <a href="functions.html">user-defined variables</a> at the Test Plan level or in
 <complink name="User Defined Variables"/> elements, you can have JMeter automatically

@@ -177,7 +177,7 @@
      <li><a href="best-practices.html#limit_threads">16.1 Limit the Number of Threads</a></li>
      <li><a href="best-practices.html#put_cookie_manager">16.2 Where to Put the Cookie Manager</a></li>
      <li><a href="best-practices.html#put_auth_manager">16.3 Where to Put the Authorization Manager</a></li>
-     <li><a href="best-practices.html#proxy_server">16.4 Using the Proxy Server to record test scripts</a></li>
+     <li><a href="best-practices.html#proxy_server">16.4 Using the HTTP(S) Test Script Recorder to record test scripts</a></li>
      <li><a href="best-practices.html#user_variables">16.5 User variables</a></li>
      <li><a href="best-practices.html#lean_mean">16.6 Reducing resource requirements</a></li>
      <li><a href="best-practices.html#beanshell_server">16.7 BeanShell server</a></li>

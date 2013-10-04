@@ -55,16 +55,12 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 <figure width="1144" height="638" image="changes/2.10/01_css_jquery_tester.png"></figure>
 </p>
 
-<h4>* Many improvements in HTTP(S) Recording have been made</h4>
-<p>
-<note>
-The "HTTP Proxy Server" test element has been renamed as "HTTP(S) Test Script Recorder".
-</note>
-<ul>
+<h4>* Many improvements in HTTP Recording (JMeter Proxy Server) have been made</h4>
+<p><ul>
 <li>Better recording of HTTPS sites, embedded resources using subdomains will more easily be recorded when using JDK 7</li>
 <li>Redirection are now more smartly detected by HTTP Proxy Server, see <bugzilla>55531</bugzilla></li>
-<li>Many fixes on edge cases with HTTPS have been made, see <bugzilla>55502</bugzilla>, <bugzilla>55504</bugzilla>, <bugzilla>55506</bugzilla></li>
-<li>Many encoding fixes have been made, see <bugzilla>54482</bugzilla>, <bugzilla>54142</bugzilla>, <bugzilla>54293</bugzilla></li>
+<li>Many fixes on edgy cases with HTTPS have been made, see <bugzilla>55502</bugzilla>, <bugzilla>55504</bugzilla>, <bugzilla>55506</bugzilla></li>
+<li>Many fixes on edgy encoding have been made, see <bugzilla>54482</bugzilla>, <bugzilla>54142</bugzilla>, <bugzilla>54293</bugzilla></li>
 </ul>
 </p>
 
@@ -296,14 +292,14 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed.</li>
 <li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders. Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars.</li>
-<li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character.</li>
+<li><bugzilla>54142</bugzilla> - HTTP(S) Test Script Recorder throws an exception when path contains "|" character.</li>
 <li><bugzilla>55388</bugzilla> - HC3 does not allow IP Source field to override httpclient.localaddress.</li>
 <li><bugzilla>55450</bugzilla> - HEAD redirects should remain as HEAD</li>
 <li><bugzilla>55455</bugzilla> - HTTPS with HTTPClient4 ignores cps setting</li>
 <li><bugzilla>55502</bugzilla> - Proxy generates empty http:/ entries when recording</li>
 <li><bugzilla>55504</bugzilla> - Proxy incorrectly issues CONNECT requests when browser prompts for certificate override</li>
 <li><bugzilla>55506</bugzilla> - Proxy should deliver failed requests to any configured Listeners</li>
-<li><bugzilla>55545</bugzilla> - HTTP Proxy Server GUI should not allow both Follow and Auto redirect to be selected</li>
+<li><bugzilla>55545</bugzilla> - HTTP(S) Test Script Recorder GUI should not allow both Follow and Auto redirect to be selected</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -493,7 +489,6 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>55548</bugzilla> - Tidy up use of TestElement.ENABLED; use TestElement.isEnabled()/setEnabled() throughout</li>
 <li><bugzilla>55617</bugzilla> - Improvements to jorphan collection. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li><bugzilla>55623</bugzilla> - Invalid/unexpected configuration values should not be silently ignored</li>
-<li><bugzilla>55626</bugzilla> - Rename HTTP Proxy Server as HTTP(S) Test Script Recorder</li>
 </ul>
 
 <h2>Thanks</h2>
