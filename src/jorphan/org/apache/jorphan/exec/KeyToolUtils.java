@@ -30,7 +30,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -60,7 +59,6 @@ public class KeyToolUtils {
         StringBuilder sb = new StringBuilder();
         sb.append("CN=_ DO NOT INSTALL unless this is your certificate (JMeter root CA)"); // $NON-NLS-1$
         addElement(sb, "OU=Username: ", System.getProperty("user.name")); // $NON-NLS-1$ $NON-NLS-2$
-        addElement(sb, "L=Hostname: ", JMeterUtils.getLocalHostName()); // $NON-NLS-1$
         addElement(sb, "C=", System.getProperty("user.country")); // $NON-NLS-1$ $NON-NLS-2$
         DNAME_ROOT_CA_KEY = sb.toString();
     }
