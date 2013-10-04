@@ -41,13 +41,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3><u>Core Improvements:</u></h3>
 
-<h4>* New Performance improvements</h4>
-<p>
-<ul>
-<li>A Huge performance improvement has been made on High Throughput Tests (no pause), see <bugzilla>54777</bugzilla></li>
-<li>An issue with abusive SSL Context reset has been fixed which improves performances of pure HTTP tests, see <bugzilla>55023</bugzilla></li>
-</ul>
-</p>
+<h4>* A Huge performance improvement has been made on High Throughput Tests (no pause), see <bugzilla>54777</bugzilla></h4>
 
 <h4>* New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
 citizen in JMeter, you can now test your expressions very easily</h4>
@@ -55,19 +49,23 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 <figure width="1144" height="638" image="changes/2.10/01_css_jquery_tester.png"></figure>
 </p>
 
-<h4>* Many improvements in HTTP(S) Recording have been made</h4>
+<h4>* Recording of HTTPS scripts is much easier</h4>
 <p>
-<note>
-The "HTTP Proxy Server" test element has been renamed as "HTTP(S) Test Script Recorder".
-</note>
-<ul>
-<li>Better recording of HTTPS sites, embedded resources using subdomains will more easily be recorded when using JDK 7</li>
-<li>Redirection are now more smartly detected by HTTP Proxy Server, see <bugzilla>55531</bugzilla></li>
-<li>Many fixes on edge cases with HTTPS have been made, see <bugzilla>55502</bugzilla>, <bugzilla>55504</bugzilla>, <bugzilla>55506</bugzilla></li>
-<li>Many encoding fixes have been made, see <bugzilla>54482</bugzilla>, <bugzilla>54142</bugzilla>, <bugzilla>54293</bugzilla></li>
-</ul>
+[Note: the HTTP Proxy Server has been renamed as the HTTP(S) Test Recorder]
+</p>
+<p>
+Previously, JMeter used a generic self-signed certificate to record HTTPS browser sessions. 
+The certificate was not specific to a host, and was not signed by a trusted Root CA, so browsers would prompt the user
+to accept the certificate each time a new host was encountered.
+This was awkward to use. But the main problem was that browsers do not prompt for embedded resources,
+so it did not work for 3rd party embedded HTTPS resources (e.g. images from a separate server).
 </p>
 
+<p>
+The HTTPS Test Recorder can now automatically generate a signed host certificate for each HTTPS host.
+To do this, it uses a locally generated Root CA certificate, unique to the JMeter installation.
+This is used to authenticate the host (or domain) certificates JMeter generates 
+</p>
 <h4>* You can now load test MongoDB through new MongoDB Source Config</h4>
 <p>
 <figure width="912" height="486" image="changes/2.10/02_mongodb_source_config.png"></figure>
@@ -164,15 +162,13 @@ template into your Test Plan</h4>
 <figure width="489" height="198" image="changes/2.10/09_save_workbench.png"></figure>
 </p>
 
-<h4>* Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</h4>
+<h4>* Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable</h4>
 <p>BSF Sampler with syntax color
 <figure width="915" height="620" image="changes/2.10/10_color_syntax_bsf_sampler.png"></figure>
 </p>
 <p>JSR223 Pre Processor with syntax color
 <figure width="911" height="614" image="changes/2.10/11_color_syntax_jsr223_preprocessor.png"></figure>
 </p>
-
-<h4>* Better editors are now available for Test Elements with large text content, like HTTP Sampler, and JMS related Test Element providing line numbering and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</h4>
 
 <h4>* JMeter GUI can now be fully Internationalized, all remaining issues have been fixed</h4>
 <h5>Currently French has all its labels translated. Other languages are partly translated, feel free to 
@@ -296,14 +292,14 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed.</li>
 <li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders. Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
 <li><bugzilla>54482</bugzilla> - HC fails to follow redirects with non-encoded chars.</li>
-<li><bugzilla>54142</bugzilla> - HTTP Proxy Server throws an exception when path contains "|" character.</li>
+<li><bugzilla>54142</bugzilla> - HTTP(S) Test Script Recorder throws an exception when path contains "|" character.</li>
 <li><bugzilla>55388</bugzilla> - HC3 does not allow IP Source field to override httpclient.localaddress.</li>
 <li><bugzilla>55450</bugzilla> - HEAD redirects should remain as HEAD</li>
 <li><bugzilla>55455</bugzilla> - HTTPS with HTTPClient4 ignores cps setting</li>
 <li><bugzilla>55502</bugzilla> - Proxy generates empty http:/ entries when recording</li>
 <li><bugzilla>55504</bugzilla> - Proxy incorrectly issues CONNECT requests when browser prompts for certificate override</li>
 <li><bugzilla>55506</bugzilla> - Proxy should deliver failed requests to any configured Listeners</li>
-<li><bugzilla>55545</bugzilla> - HTTP Proxy Server GUI should not allow both Follow and Auto redirect to be selected</li>
+<li><bugzilla>55545</bugzilla> - HTTP(S) Test Script Recorder GUI should not allow both Follow and Auto redirect to be selected</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -375,8 +371,6 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>54152</bugzilla> - In distributed testing : activeThreads always show 0 in GUI and Summariser</li>
 <li><bugzilla>55509</bugzilla> - Allow Plugins to be notified of remote thread number progression</li>
 <li><bugzilla>55572</bugzilla> - Detail popup of parameter does not show a Scrollbar when content exceeds display</li>
-<li><bugzilla>55580</bugzilla> -  Help pane does not scroll to start for &lt;a href="#"&gt; links</li>
-<li><bugzilla>55600</bugzilla> - JSyntaxTextArea : Strange behaviour on first undo</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -460,7 +454,6 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>55513</bugzilla> - StreamCopier cannot be used with System.err or System.out as it closes the output stream</li>
 <li><bugzilla>55514</bugzilla> - SystemCommand should support arbitrary input and output streams</li>
 <li><bugzilla>55515</bugzilla> - SystemCommand should support chaining of commands</li>
-<li><bugzilla>55606</bugzilla> - Use JSyntaxtTextArea for Http Request, JMS Test Elements</li>
 </ul>
 
 <h2>Non-functional changes</h2>
@@ -491,9 +484,6 @@ To revert to previous behaviour, set the property <code>proxy.redirect.disabling
 <li><bugzilla>55463</bugzilla> - Component.requestFocus() is discouraged; use requestFocusInWindow() instead</li>
 <li><bugzilla>55486</bugzilla> - New JMeter Logo. Contributed by UBIK Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>55548</bugzilla> - Tidy up use of TestElement.ENABLED; use TestElement.isEnabled()/setEnabled() throughout</li>
-<li><bugzilla>55617</bugzilla> - Improvements to jorphan collection. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
-<li><bugzilla>55623</bugzilla> - Invalid/unexpected configuration values should not be silently ignored</li>
-<li><bugzilla>55626</bugzilla> - Rename HTTP Proxy Server as HTTP(S) Test Script Recorder</li>
 </ul>
 
 <h2>Thanks</h2>

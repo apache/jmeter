@@ -135,9 +135,9 @@ public class Daemon extends Thread implements Stoppable {
                     // told to stop running.
                 }
             }
-            log.info("Proxy Server stopped");
+            log.info("HTTP(S) Test Script Recorder stopped");
         } catch (Exception e) {
-            log.warn("Proxy Server stopped", e);
+            log.warn("HTTP(S) Test Script Recorder stopped", e);
         } finally {
             JOrphanUtils.closeQuietly(mainSocket);
         }
