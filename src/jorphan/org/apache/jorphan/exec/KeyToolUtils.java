@@ -104,11 +104,27 @@ public class KeyToolUtils {
         try {
             int exitVal = nativeCommand.run(arguments);
             if (exitVal != 0) {
-                throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+                throw new IOException("Command :'"+formatCommand(arguments)+"' failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
             }
         } catch (InterruptedException e) {
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
+    }
+
+    /**
+     * Formats arguments
+     * @param arguments
+     * @return String command line
+     */
+    private static String formatCommand(List<String> arguments) {
+        StringBuilder builder = new StringBuilder();
+        for (String string : arguments) {
+            builder.append("\"").append(string).append("\"").append(" ");
+        }
+        if(arguments.size()>0) {
+            builder.setLength(builder.length()-1);
+        }
+        return builder.toString();
     }
 
     /**
