@@ -61,7 +61,9 @@ citizen in JMeter, you can now test your expressions very easily</h4>
 The "HTTP Proxy Server" test element has been renamed as "HTTP(S) Test Script Recorder".
 </note>
 <ul>
-<li>Better recording of HTTPS sites, embedded resources using subdomains will more easily be recorded when using JDK 7</li>
+<li>Better recording of HTTPS sites, embedded resources using subdomains will more easily be recorded when using JDK 7. See <bugzilla>55507</bugzilla>.
+See updated documentation: <complink name="HTTP(S) Test Script Recorder"/>
+</li>
 <li>Redirection are now more smartly detected by HTTP Proxy Server, see <bugzilla>55531</bugzilla></li>
 <li>Many fixes on edge cases with HTTPS have been made, see <bugzilla>55502</bugzilla>, <bugzilla>55504</bugzilla>, <bugzilla>55506</bugzilla></li>
 <li>Many encoding fixes have been made, see <bugzilla>54482</bugzilla>, <bugzilla>54142</bugzilla>, <bugzilla>54293</bugzilla></li>
@@ -393,6 +395,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li><bugzilla>55488</bugzilla> - Add .ico and .woff file extension to default suggested exclusions in proxy recorder. Contributed by Antonio Gomes Rodrigues</li>
 <li><bugzilla>55525</bugzilla> - Proxy should support alias for keyserver entry</li>
 <li><bugzilla>55531</bugzilla> - Proxy recording and redirects. Added code to disable redirected samples.</li>
+<li><bugzilla>55507</bugzilla> - Proxy SSL recording does not handle external embedded resources well</li>
 </ul>
 
 <h3>Other samplers</h3>
