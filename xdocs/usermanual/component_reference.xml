@@ -5712,31 +5712,42 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 </p>
 </component>
 
-<component name="HTTP(S) Test Script Recorder" was="HTTP Proxy Server" index="&sect-num;.9.5"  width="957" height="593" screenshot="proxy_control.png">
-<description><p>The HTTP(S) Test Script Recorder allows JMeter to watch and record your actions while you browse your web application
+<component name="HTTP(S) Test Script Recorder" was="HTTP Proxy Server" index="&sect-num;.9.5"  width="917" height="622" screenshot="proxy_control.png">
+<description><p>The HTTP(S) Test Script Recorder allows JMeter to intercept and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
 
-<p>To use the proxy server, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
+<p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
 Select the WorkBench element in the tree, and right-click on this element to get the
 Add menu (Add --> Non-Test Elements --> HTTP(S) Test Script Recorder).</p>
 <p>
-You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP and HTTPS requests.
-Do not use JMeter as the proxy for any other request types - FTP, etc. - as the JMeter proxy cannot handle them.
+The recorder is implemented as an HTTP(S) proxy server.
+You need to set up your browser use the proxy for all HTTP and HTTPS requests.
+[Do not use JMeter as the proxy for any other request types - FTP, etc. - as JMeter cannot handle them.]
 </p>
 <p>
 Ideally use private browsing mode when recording the session.
 This should ensure that the browser starts with no stored cookies, and prevents certain changes from being saved.
 For example, Firefox does not allow certificate overrides to be saved permanently.
 </p>
-<h4>HTTPS recording</h4>
+<h4>HTTPS recording and certificates</h4>
 <p>
-JMeter proxy server uses a dummy certificate to enable it to accept the SSL connection from
-the browser. This certificate is not one of the certificates that browsers normally trust, and will not be for the
-correct host. <br/>
+HTTPS connections use certificates to authenticate the connection between the browser and the web server.
+When connecting via HTTPS, the server presents the certificate to the browser.
+To authenticate the certificate, the browser checks that the server certificate is signed
+by a Certificate Authority (CA) that is linked to one of its in-built root CAs.
+[Browsers also check that the certificate is for the correct host or domain, and that it is valid and not expired.]
+If any of the browser checks fail, it will prompt the user who can then decided whether to allow the connection to proceed.  
+</p>
+<p>
+JMeter needs to use its own certificate to enable it to intercept the HTTPS connection from
+the browser. Effectively JMeter has to pretend to be the target server.
+With versions of JMeter up to 2.9, it used a single certificate for all target servers.
+This certificate is not one of the certificates that browsers normally trust, and was not for the
+correct host.<br/>
 As a consequence: 
 <ul>
-<li>If the browser hasn't already registered a certificate for the domain of your URL, it should display a dialogue asking if you want to accept the certificate or not. For example:<br/>
+<li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:<br/>
 <code>
 1) The server's name "www.example.com" does not match the certificate's name
    "JMeter Proxy (DO NOT TRUST)". Somebody may be trying to eavesdrop on you.<br/>
@@ -5755,17 +5766,35 @@ Check in jmeter.log for secure domains that you need to register certificate for
 </ul>
 </p>
 <p>
+Versions of JMeter from 2.10 onwards still support this method, and will continue to do so if the you define the following property:
+<code>proxy.cert.alias</code>
 The following properties can be used to change the certificate that is used:
 <ul>
 <li>proxy.cert.directory - the directory in which to find the certificate (default = JMeter bin/)</li>
 <li>proxy.cert.file - name of the keystore file (default "proxyserver.jks")</li>
-<li>proxy.cert.keystorepass - keystore password (default "password")</li>
-<li>proxy.cert.keypassword - certificate key password (default "password")</li>
-<li>proxy.cert.type - the certificate type (default "JKS")</li>
-<li>proxy.cert.factory - the factory (default "SunX509")</li>
-<li>proxy.cert.alias - the alias for the key to be used</li>
+<li>proxy.cert.keystorepass - keystore password (default "password") [Ignored if using JMeter certificate]</li>
+<li>proxy.cert.keypassword - certificate key password (default "password") [Ignored if using JMeter certificate]</li>
+<li>proxy.cert.type - the certificate type (default "JKS") [Ignored if using JMeter certificate]</li>
+<li>proxy.cert.factory - the factory (default "SunX509") [Ignored if using JMeter certificate]</li>
+<li>proxy.cert.alias - the alias for the key to be used. If this is defined, JMeter does not attempt to generate its own certificate(s).</li>
 <li>proxy.ssl.protocol - the protocol to be used (default "SSLv3")</li>
 </ul>
+</p>
+<p>
+For versions of JMeter from 2.10, if the <code>proxy.cert.alias</code> property is not defined, JMeter will generate its own certificate(s).
+These are generated with a validity period defined by the property <code>proxy.cert.validity</code>, default 7 days, and random passwords.
+If JMeter detects that it is running under Java 7 or later, it will generate certificates for each target server as necessary (dynamic mode)
+unless the following property is defined: <code>proxy.cert.dynamic_keys=false</code>.
+When using dynamic mode, the certificate will be for the correct host name, and will be signed by a JMeter-generated CA certificate.
+By default, this CA certificate won't be trusted by the browser, however it can be installed as a trusted certificate.
+Once this is done, the generated server certificates will be accepted by the browser.
+This has the advantage that even embedded HTTPS resources can be intercepted, and there is no need to override the browser checks for each new server.
+(Browsers don't prompt for embedded resources. So with earlier versions, embedded resources would only be downloaded for servers that were already 'known' to the browser)
+</p>
+<p>
+The JMeter certificates are generated when the proxy is started.
+Certificate generation can take some while, during which time the GUI will be unresponsive.
+The cursor is changed to an hour-glass whilst this is happening.
 </p>
 <note>
 If your browser currently uses a proxy (e.g. a company intranet may route all external requests via a proxy),
@@ -5773,11 +5802,66 @@ then you need to <a href="get-started.html#proxy_server">tell JMeter to use that
 using the <a href="get-started.html#options">command-line options</a> -H and -P.
 This setting will also be needed when running the generated test plan.
 </note>
+<h4>Installing the JMeter CA certificate for HTTPS recording</h4>
+<p>
+As mentioned above, when run under Java 7, JMeter can generate certificates for each server.
+For this to work smoothly, the root CA signing certificate used by JMeter needs to be trusted by the browser.
+The first time that the proxy is started, it will generate the certificates. 
+The root CA certificate is exported into a file with the name <code>ApacheJMeterTemporaryRootCA</code> in the current launch directory.
+When the certificates have been set up, JMeter will show a dialog with the current certificate details.
+At this point, the certificate can be imported into the browser, as per the instructions below.
+</p>
+<p>
+Note that once the root CA certificate has been installed as a trusted CA, the browser will trust any certificates signed by it.
+Until such time as the certificate expires or the certificate is removed from the browser, it will not warn the user that the certificate is being relied upon.
+So anyone that can get hold of the keystore and password can use the certificate to generate certificates which will be accepted
+by any browsers that trust the JMeter root CA certificate.
+For this reason, the password for the keystore and private keys are randomly generated and a short validity period used.
+The passwords are stored in the local preferences area.
+Please ensure that only trusted users have access to the host with the keystore.
+</p>
+<h5>Installing the certificate in Firefox</h5>
+<p>
+Choose the following options:
+<ul>
+<li>Tools / Options</li>
+<li>Advanced / Certificates</li>
+<li>View Certificates</li>
+<li>Authorities</li>
+<li>Import ...</li>
+<li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.crt</code>, press Open</li>
+<li>Click View and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
+<li>If OK, select "Trust this CA to identify web sites", and press OK</li>
+<li>Close dialogs by pressing OK as necessary</li>
+</ul>
+</p>
+<h5>Installing the certificate in Chrome or Internet Explorer</h5>
+<p>
+Both Chrome and Internet Explorer use the same trust store for certificates.
+<ul>
+<li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.crt</code>, and open it</li>
+<li>Click on the "Details" tab and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
+<li>If OK, go back to the "General" tab, and click on "Install Certificate ..." and follow the Wizard prompts</li>
+</ul>
+</p>
+<h5>Installing the certificate in Opera</h5>
+<p>
+<ul>
+<li>Tools / Preferences / Advanced / Security</li>
+<li>Manage Certificates...</li>
+<li>Select "Intermediate" tab, click "Import..."</li>
+<li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.usr</code>, and open it</li>
+<li></li>
+</ul>
+</p>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  8080 is the default, but you can change it.</property>
+        <property name="HTTPS Domains" required="No">List of domain (or host) names for HTTPS. Use this to pre-generate certificates for all servers you wish to record.
+        For example, *.apache.org
+        </property>
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
            <ul>
