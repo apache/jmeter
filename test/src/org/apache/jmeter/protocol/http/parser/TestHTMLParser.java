@@ -99,7 +99,8 @@ public class TestHTMLParser extends JMeterTestCase {
         private static final String[] PARSERS = { 
             "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser",
             "org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
-            "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser" 
+            "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser",
+            "org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser"
             };
 
         private static final TestData[] TESTS = new TestData[] {

@@ -396,6 +396,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li><bugzilla>55525</bugzilla> - Proxy should support alias for keyserver entry</li>
 <li><bugzilla>55531</bugzilla> - Proxy recording and redirects. Added code to disable redirected samples.</li>
 <li><bugzilla>55507</bugzilla> - Proxy SSL recording does not handle external embedded resources well</li>
+<li><bugzilla>55632</bugzilla> - Have a new implementation of htmlParser for embedded resources parsing with better performances</li>
 </ul>
 
 <h3>Other samplers</h3>
