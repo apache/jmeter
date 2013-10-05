@@ -132,7 +132,7 @@ class HtmlParserHTMLParser extends HTMLParser {
                 try {
                     if (!baseref.equals(""))// Bugzilla 30713
                     {
-                        baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseHref.getBaseUrl());
+                        baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref);
                     }
                 } catch (MalformedURLException e1) {
                     throw new HTMLParseException(e1);
