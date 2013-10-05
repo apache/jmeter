@@ -45,7 +45,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <p>
 <ul>
 <li>A Huge performance improvement has been made on High Throughput Tests (no pause), see <bugzilla>54777</bugzilla></li>
-<li>An issue with abusive SSL Context reset has been fixed which improves performances of pure HTTP tests, see <bugzilla>55023</bugzilla></li>
+<li>An issue with unnecessary SSL Context reset has been fixed which improves performances of pure HTTP tests, see <bugzilla>55023</bugzilla></li>
 </ul>
 </p>
 
@@ -265,7 +265,7 @@ Transaction Controller now sets Response Code of Generated Parent Sampler (if Ge
 </p>
 
 <p>
-In previous versions, IncludeController could run Test Elements located inside a Thread Group, this behaviour which was not documented could result in weird behaviour, it has been removed in this version (see <bugzilla>55464</bugzilla>). 
+In previous versions, IncludeController could run Test Elements located inside a Thread Group, this behaviour (which was not documented) could result in weird behaviour, it has been removed in this version (see <bugzilla>55464</bugzilla>). 
 The correct way to include Test Elements is to use Test Fragment as stated in documentation of Include Controller.
 </p>
 
@@ -280,9 +280,10 @@ it is compared with the saved redirect URL and if there is a match, JMeter will 
 To revert to previous behaviour, set the property <code>proxy.redirect.disabling=false</code>
  </p>
 
-<p>__escapeOroRegexpChars function does not trim anymore the value when escaping it from ORO reserved characters (see <bugzilla>55328</bugzilla>)</p>
+<p>__escapeOroRegexpChars function (which escapes ORO reserved characters) no longer trims the value (see <bugzilla>55328</bugzilla>)</p>
 
-<p>commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder. If you use any plugin or third-party code that depends on it, you need to add it in jmeter/lib folder</p>
+<p>The commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder as it is not needed by JMeter at run-time (it is only used by Apache Velocity for generating documentation).
+If you use any plugin or third-party code that depends on it, you need to add it in jmeter/lib folder</p>
 
 <!-- =================== Bug fixes =================== -->
 
@@ -508,6 +509,7 @@ For this release we want to give special thanks to the following reporters for t
 <li>Shmuel Krakower (shmulikk at gmail.com)</li>
 </ul>
 
+Apologies if we have omitted anyone else.
  </p>
 </section> 
 </body> 
