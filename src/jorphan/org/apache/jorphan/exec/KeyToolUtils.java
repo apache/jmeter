@@ -65,7 +65,7 @@ public class KeyToolUtils {
 
     private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
 
-    public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA";
+    public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA"; // $NON-NLS-1$ (do not change)
     private static final String ROOT_CACERT_CRT = ROOT_CACERT_CRT_PFX + ".crt"; // $NON-NLS-1$ (Firefox and Windows)
     private static final String ROOT_CACERT_USR = ROOT_CACERT_CRT_PFX + ".usr"; // $NON-NLS-1$ (Opera)
 
