@@ -151,12 +151,12 @@ class HtmlParserHTMLParser extends HTMLParser {
             } else if (tag instanceof ObjectTag) {
                 // look for Objects
                 ObjectTag applet = (ObjectTag) tag; 
-                String data = applet.getAttribute("codebase");
+                String data = applet.getAttribute(ATT_CODEBASE);
                 if(!StringUtils.isEmpty(data)) {
                     binUrlStr = data;               
                 }
                 
-                data = applet.getAttribute("data");
+                data = applet.getAttribute(ATT_DATA);
                 if(!StringUtils.isEmpty(data)) {
                     binUrlStr = data;                    
                 }
