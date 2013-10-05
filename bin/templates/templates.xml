@@ -130,7 +130,7 @@
         ]]></description>
     </template>
     <template isTestPlan="true">
-        <name>Building a WebService Test Plan</name>
+        <name>Building a SOAP WebService Test Plan</name>
         <fileName>/bin/templates/build-webservice-test-plan.jmx</fileName>
         <description><![CDATA[
         <h1>Test plan showing how to create a SOAP Webservice Test Plan </h1>
