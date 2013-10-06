@@ -20,20 +20,26 @@ package org.apache.jmeter.protocol.http.parser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Iterator;
 
 import jodd.lagarto.EmptyTagVisitor;
+import jodd.lagarto.LagartoException;
 import jodd.lagarto.LagartoParser;
 import jodd.lagarto.Tag;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Parser based on Lagarto
  * @since 2.10
  */
 public class LagartoBasedHtmlParser extends HTMLParser {
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
     /*
      * A dummy class to pass the pointer of URL.
      */
@@ -145,6 +151,12 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             JMeterTagVisitor tagVisitor = new JMeterTagVisitor(new URLPointer(baseUrl), coll);
             lagartoParser.parse(tagVisitor);
             return coll.iterator();
+        } catch (LagartoException e) {
+            // TODO is it the best way ? https://issues.apache.org/bugzilla/show_bug.cgi?id=55634
+            if(log.isDebugEnabled()) {
+                log.debug("Error extracting embedded resource URLs from:'"+baseUrl+"', probably not text content, message:"+e.getMessage());
+            }
+            return Collections.<URL>emptyList().iterator();
         } catch (Exception e) {
             throw new HTMLParseException(e);
         }
