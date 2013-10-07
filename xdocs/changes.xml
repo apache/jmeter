@@ -46,6 +46,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <ul>
 <li>A Huge performance improvement has been made on High Throughput Tests (no pause), see <bugzilla>54777</bugzilla></li>
 <li>An issue with unnecessary SSL Context reset has been fixed which improves performances of pure HTTP tests, see <bugzilla>55023</bugzilla></li>
+<li>Important performance improvement in parsing of Embedded resource in HTML pages thanks to a switch to JODD/Lagarto HTML Parser, see <bugzilla>55632</bugzilla></li>
 </ul>
 </p>
 
@@ -116,6 +117,16 @@ See updated documentation: <complink name="HTTP(S) Test Script Recorder"/>
 <h4>* HttpSampler now allows DELETE Http Method to have a body (works for HC4 and HC31 implementations). This allows for example to test Elastic Search APIs</h4>
 <p>
 <figure width="573" height="444" image="changes/2.10/06_http_request_delete_method.png"></figure>
+</p>
+
+<h4>* 2 implementations of HtmlParser have been added to improve Embedded resources parsing</h4>
+<p>
+You can choose the implementation to use for parsing Embedded resources in HTML pages:
+See jmeter.properties and look at property "htmlParser.className".
+<ul>
+<li>org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser for optimal performances</li>
+<li>org.apache.jmeter.protocol.http.parser.JSoupBasedHtmlParser for most accurate parsing and functional testing</li>
+</ul>
 </p>
 
 <h4>* Distributed testing has been improved</h4>
