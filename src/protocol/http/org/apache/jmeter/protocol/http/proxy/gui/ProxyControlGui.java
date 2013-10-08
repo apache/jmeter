@@ -82,6 +82,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final long serialVersionUID = 232L;
 
+    private static final String NEW_LINE = "\n";  // $NON-NLS-1$
+
     /**
      * This choice means don't explicitly set Implementation and rely on default, see Bug 54154
      */
@@ -441,7 +443,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         try {
             String clipboardContent = GuiUtils.getPastedText();
             if (clipboardContent != null) {
-                String[] clipboardLines = clipboardContent.split("\n");
+                String[] clipboardLines = clipboardContent.split(NEW_LINE);
                 for (String clipboardLine : clipboardLines) {
                     model = (PowerTableModel) table.getModel();
                     model.addRow(new Object[] {clipboardLine});
@@ -481,12 +483,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             if (ProxyControl.isDynamicMode()) {
                 String details[] = model.getCertificateDetails();
                 StringBuilder sb = new StringBuilder();
+                sb.append("Please check the details below when installing the certificate in the browser")
+                    .append(NEW_LINE).append(NEW_LINE);
                 for(String detail : details) {
-                    sb.append(detail).append("\n"); // $NON-NLS-1$
+                    sb.append(detail).append(NEW_LINE);
                 }
                 JOptionPane.showMessageDialog(this,
                     sb.toString(),
-                    "Please check the certificate matches the details below before installing " + KeyToolUtils.ROOT_CACERT_CRT_PFX,
+                    "Root CA certificate: " + KeyToolUtils.ROOT_CACERT_CRT_PFX + " created in JMeter bin directory",
                     JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (InvalidVariableException e) {
