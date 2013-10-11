@@ -477,6 +477,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li><bugzilla>55514</bugzilla> - SystemCommand should support arbitrary input and output streams</li>
 <li><bugzilla>55515</bugzilla> - SystemCommand should support chaining of commands</li>
 <li><bugzilla>55606</bugzilla> - Use JSyntaxtTextArea for Http Request, JMS Test Elements</li>
+<li><bugzilla>55651</bugzilla> - Change JMeter application icon to Apache plume icon</li>
 </ul>
 
 <h2>Non-functional changes</h2>
