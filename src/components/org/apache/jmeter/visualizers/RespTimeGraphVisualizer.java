@@ -373,6 +373,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             durationTest = 0;
             colorIdx = 0;
         }
+        tabbedGraph.setSelectedIndex(0);
     }
 
     /**
@@ -517,6 +518,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             makeGraph();
             tabbedGraph.setSelectedIndex(1);
         } else {
+            tabbedGraph.setSelectedIndex(0);
             JOptionPane.showMessageDialog(null, msgErr, msgErr, JOptionPane.WARNING_MESSAGE);
         }
     }
