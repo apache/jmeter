@@ -84,6 +84,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final String NEW_LINE = "\n";  // $NON-NLS-1$
 
+    private static final String SPACE = " ";  // $NON-NLS-1$
+
     /**
      * This choice means don't explicitly set Implementation and rely on default, see Bug 54154
      */
@@ -416,7 +418,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         GuiUtils.stopTableEditing(table);
         int rowCount = table.getRowCount();
         PowerTableModel model = null;
-        String[] exclusions = SUGGESTED_EXCLUSIONS.split(";");
+        String[] exclusions = SUGGESTED_EXCLUSIONS.split(";"); // $NON-NLS-1$
         if (exclusions.length>0) {
             model = (PowerTableModel) table.getModel();
             if(model != null) {
@@ -458,12 +460,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             }
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this,
-                    "Could not add read arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
+                    JMeterUtils.getResString("proxy_daemon_error_read_args") // $NON-NLS-1$
+                    + "\n" + ioe.getLocalizedMessage(), JMeterUtils.getResString("error_title"),  // $NON-NLS-1$  $NON-NLS-2$
                     JOptionPane.ERROR_MESSAGE);
         } catch (UnsupportedFlavorException ufe) {
             JOptionPane.showMessageDialog(this,
-                    "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
-                            + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JMeterUtils.getResString("proxy_daemon_error_not_retrieve") + SPACE // $NON-NLS-1$
+                        + DataFlavor.stringFlavor.getHumanPresentableName() + SPACE
+                        + JMeterUtils.getResString("proxy_daemon_error_from_clipboard") // $NON-NLS-1$
+                        + ufe.getLocalizedMessage(), JMeterUtils.getResString("error_title"),  // $NON-NLS-1$
+                        JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -483,30 +489,32 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             if (ProxyControl.isDynamicMode()) {
                 String details[] = model.getCertificateDetails();
                 StringBuilder sb = new StringBuilder();
-                sb.append("Please check the details below when installing the certificate in the browser")
+                sb.append(JMeterUtils.getResString("proxy_daemon_msg_check_details")) // $NON-NLS-1$
                     .append(NEW_LINE).append(NEW_LINE);
                 for(String detail : details) {
                     sb.append(detail).append(NEW_LINE);
                 }
                 JOptionPane.showMessageDialog(this,
                     sb.toString(),
-                    "Root CA certificate: " + KeyToolUtils.ROOT_CACERT_CRT_PFX + " created in JMeter bin directory",
+                    JMeterUtils.getResString("proxy_daemon_msg_rootca_cert") + SPACE // $NON-NLS-1$
+                    + KeyToolUtils.ROOT_CACERT_CRT_PFX + SPACE
+                    + JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"), // $NON-NLS-1$
                     JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (InvalidVariableException e) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("invalid_variables"), // $NON-NLS-1$
-                    "Error",
+                    JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
         } catch (BindException e) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("proxy_daemon_bind_error"), // $NON-NLS-1$
-                    "Error",
+                    JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("proxy_daemon_error"), // $NON-NLS-1$
-                    "Error",
+                    JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
         } finally {
             setCursor(cursor);
@@ -541,7 +549,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             } catch (NumberFormatException nfe) {
                 int length = portField.getText().length();
                 if (length > 0) {
-                    JOptionPane.showMessageDialog(this, "Only digits allowed", "Invalid data",
+                    JOptionPane.showMessageDialog(this, 
+                            JMeterUtils.getResString("proxy_settings_port_error_digits"), // $NON-NLS-1$
+                            JMeterUtils.getResString("proxy_settings_port_error_invalid_data"), // $NON-NLS-1$
                             JOptionPane.WARNING_MESSAGE);
                     // Drop the last character:
                     portField.setText(portField.getText().substring(0, length-1));
