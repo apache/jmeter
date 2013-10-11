@@ -491,7 +491,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         addWindowListener(new WindowHappenings());
 
         setTitle(DEFAULT_TITLE);
-        setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
+        setIconImage(JMeterUtils.getImage("icon-apache.png").getImage());// $NON-NLS-1$
         setWindowTitle(); // define AWT WM_CLASS string
     }
 
