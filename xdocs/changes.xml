@@ -37,11 +37,23 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h1>Version 2.10</h1>
 
-<h2>New and Noteworthy</h2>
+Summary
+<ul>
+<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
+<li><a href="#Known bugs">Known bugs</a></li>
+<li><a href="#Incompatible changes">Incompatible changes</a></li>
+<li><a href="#Bug fixes">Bug fixes</a></li>
+<li><a href="#Improvements">Improvements</a></li>
+<li><a href="#Non-functional changes">Non-functional changes</a></li>
+<li><a href="#Thanks">Thanks</a></li>
 
-<h3><u>Core Improvements:</u></h3>
+</ul>
 
-<h4>* New Performance improvements</h4>
+<ch_section>New and Noteworthy</ch_section>
+
+<ch_category>Core Improvements</ch_category>
+
+<ch_title>New Performance improvements</ch_title>
 <p>
 <ul>
 <li>A Huge performance improvement has been made on High Throughput Tests (no pause), see <bugzilla>54777</bugzilla></li>
@@ -50,14 +62,15 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </ul>
 </p>
 
-<h4>* New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
-citizen in JMeter, you can now test your expressions very easily</h4>
+<ch_title>New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class</ch_title>
+citizen in JMeter, you can now test your expressions very easily"/>
 <p>
 <figure width="1144" height="638" image="changes/2.10/01_css_jquery_tester.png"></figure>
 </p>
 
-<h4>* Many improvements in HTTP(S) Recording have been made</h4>
+<ch_title>Many improvements in HTTP(S) Recording have been made</ch_title>
 <p>
+<figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
 <note>
 The "HTTP Proxy Server" test element has been renamed as "HTTP(S) Test Script Recorder".
 </note>
@@ -71,7 +84,7 @@ See updated documentation: <complink name="HTTP(S) Test Script Recorder"/>
 </ul>
 </p>
 
-<h4>* You can now load test MongoDB through new MongoDB Source Config</h4>
+<ch_title>You can now load test MongoDB through new MongoDB Source Config</ch_title>
 <p>
 <figure width="912" height="486" image="changes/2.10/02_mongodb_source_config.png"></figure>
 </p>
@@ -79,47 +92,48 @@ See updated documentation: <complink name="HTTP(S) Test Script Recorder"/>
 <figure width="850" height="687" image="changes/2.10/14_mongodb_jsr223.png"></figure>
 </p>
 
-<h4>* Kerberos authentication has been added to Auth Manager</h4>
+<ch_title>Kerberos authentication has been added to Auth Manager</ch_title>
 <p>
 <figure width="1005" height="364" image="changes/2.10/15_kerberos.png"></figure>
 </p>
 
-<h4>* device can now be used in addition to source IP address</h4>
+<ch_title>Device can now be used in addition to source IP address</ch_title>
 
 <p>
 <figure width="1087" height="699" image="changes/2.10/16_device.png"></figure>
 </p>
 
-<h4>* You can now do functional testing of MongoDB scripts through new MongoDB Script</h4>
+<ch_title>You can now do functional testing of MongoDB scripts through new MongoDB Script</ch_title>
 <p>
 <figure width="906" height="313" image="changes/2.10/03_mongodb_script_alpha.png"></figure>
 </p>
 
-<h4>* Timeout has been added to OS Process Sampler</h4>
+<ch_title>Timeout has been added to OS Process Sampler</ch_title>
 <p>
 <figure width="684" height="586" image="changes/2.10/17_os_process_timeout.png"></figure>
 </p>
 
-<h4>* Query timeout has been added to JDBC Request</h4>
+<ch_title>Query timeout has been added to JDBC Request</ch_title>
 <p>
 <figure width="540" height="600" image="changes/2.10/04_jdbc_request_timeout.png"></figure>
 </p>
 
-<h4>* New functions (__urlencode and __urldecode) are now available to encode/decode URL encoded chars</h4>
+<ch_title>New functions (__urlencode and __urldecode) are now available to encode/decode URL encoded chars</ch_title>
 <p>
 <figure width="512" height="240" image="changes/2.10/05_urlencode_function.png"></figure>
 </p>
 
-<h4>* Continuous Integration is now eased by addition of a new flag that forces NON-GUI JVM to exit after test end</h4>
+<ch_title>Continuous Integration is now eased by addition of a new flag that forces NON-GUI JVM to exit after test end</ch_title>
 <p>See jmeter property:</p>
 <code>jmeterengine.force.system.exit</code>
+<p></p>
 
-<h4>* HttpSampler now allows DELETE Http Method to have a body (works for HC4 and HC31 implementations). This allows for example to test Elastic Search APIs</h4>
+<ch_title>HttpSampler now allows DELETE Http Method to have a body (works for HC4 and HC31 implementations). This allows for example to test Elastic Search APIs</ch_title>
 <p>
 <figure width="573" height="444" image="changes/2.10/06_http_request_delete_method.png"></figure>
 </p>
 
-<h4>* 2 implementations of HtmlParser have been added to improve Embedded resources parsing</h4>
+<ch_title>2 implementations of HtmlParser have been added to improve Embedded resources parsing</ch_title>
 <p>
 You can choose the implementation to use for parsing Embedded resources in HTML pages:
 See jmeter.properties and look at property "htmlParser.className".
@@ -129,7 +143,7 @@ See jmeter.properties and look at property "htmlParser.className".
 </ul>
 </p>
 
-<h4>* Distributed testing has been improved</h4>
+<ch_title>Distributed testing has been improved</ch_title>
 <p>
 <ul>
 <li>
@@ -147,9 +161,9 @@ Number of threads on each node are now reported to controller.
 </ul>
 </p>
 
-<h4>* ModuleController has been improved to better handle changes to referenced controllers</h4>
+<ch_title>ModuleController has been improved to better handle changes to referenced controllers</ch_title>
 
-<h4>* Improved class loader configuration, see <bugzilla>55503</bugzilla></h4>
+<ch_title>Improved class loader configuration, see <bugzilla>55503</bugzilla></ch_title>
 <p>
 <ul>
 <li>New property "plugin_dependency_paths" for plugin dependencies</li>
@@ -158,13 +172,14 @@ Number of threads on each node are now reported to controller.
 </ul>
 </p>
 
-<h4>* Best-practices section has been improved, ensure you read it to get the most out of JMeter</h4>
+<ch_title>Best-practices section has been improved, ensure you read it to get the most out of JMeter</ch_title>
+<p>See <a href="usermanual/best-practices.html">Best Practices</a>
+</p>
+<ch_category>GUI and ergonomy Improvements</ch_category>
 
-<h3><u>GUI and ergonomy Improvements:</u></h3>
 
-
-<h4>* New Templates feature that allows you to create test plan from existing template or merge
-template into your Test Plan</h4>
+<ch_title>New Templates feature that allows you to create test plan from existing template or merge
+template into your Test Plan</ch_title>
 <p>
 <figure width="428" height="130" image="changes/2.10/07_jmeter_templates_icon.png"></figure>
 </p>
@@ -172,12 +187,12 @@ template into your Test Plan</h4>
 <figure width="781" height="472" image="changes/2.10/08_jmeter_templates_box.png"></figure>
 </p>
 
-<h4>* Workbench can now be saved</h4>
+<ch_title>Workbench can now be saved</ch_title>
 <p>
 <figure width="489" height="198" image="changes/2.10/09_save_workbench.png"></figure>
 </p>
 
-<h4>* Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</h4>
+<ch_title>Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</ch_title>
 <p>BSF Sampler with syntax color
 <figure width="915" height="620" image="changes/2.10/10_color_syntax_bsf_sampler.png"></figure>
 </p>
@@ -185,13 +200,13 @@ template into your Test Plan</h4>
 <figure width="911" height="614" image="changes/2.10/11_color_syntax_jsr223_preprocessor.png"></figure>
 </p>
 
-<h4>* Better editors are now available for Test Elements with large text content, like HTTP Sampler, and JMS related Test Element providing line numbering and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</h4>
+<ch_title>Better editors are now available for Test Elements with large text content, like HTTP Sampler, and JMS related Test Element providing line numbering and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</ch_title>
 
-<h4>* JMeter GUI can now be fully Internationalized, all remaining issues have been fixed</h4>
+<ch_title>JMeter GUI can now be fully Internationalized, all remaining issues have been fixed</ch_title>
 <h5>Currently French has all its labels translated. Other languages are partly translated, feel free to 
 contribute translations by reading <a href="localising/index.html">Localisation (Translator's Guide)</a></h5>
 
-<h4>* Moving elements in Test plan has been improved in many ways</h4>
+<ch_title>Moving elements in Test plan has been improved in many ways</ch_title>
 <h5>Drag and drop of elements in Test Plan tree is now much easier and possible on multiple nodes</h5>
 <p>
 <figure width="894" height="236" image="changes/2.10/12_drap_n-drop_multiple.png"></figure>
@@ -205,16 +220,17 @@ before the one you just dropped.</b>
 <p>(alt + Arrow Up) and (alt + Arrow Down) move the element within the parent node.<br/>
 (alt + Arrow Left) and (alt + Arrow Right) move the element up and down in the tree depth</p>
 
-<h4>* Response Time Graph Y axis can now be scaled</h4>
+<ch_title>Response Time Graph Y axis can now be scaled</ch_title>
 <p>
 <figure width="947" height="596" image="changes/2.10/13_response_time_graph_y_scale.png"></figure>
 </p>
 
-<h4>* JUnit Sampler gives now more details on configuration errors</h4>
+<ch_title>JUnit Sampler gives now more details on configuration errors</ch_title>
 
 <!--  =================== Known bugs =================== -->
 
-<h2>Known bugs</h2>
+
+<ch_section>Known bugs</ch_section>
 
 <ul>
 <li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
@@ -255,7 +271,7 @@ A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
 
 <!-- =================== Incompatible changes =================== -->
 
-<h2>Incompatible changes</h2>
+<ch_section>Incompatible changes</ch_section>
 
 <p>SMTP Sampler now uses eml file subject if subject field is empty</p>
 
@@ -300,7 +316,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 
 <!-- =================== Bug fixes =================== -->
 
-<h2>Bug fixes</h2>
+<ch_section>Bug fixes</ch_section>
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
@@ -395,7 +411,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 
 <!-- =================== Improvements =================== -->
 
-<h2>Improvements</h2>
+<ch_section>Improvements</ch_section>
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
@@ -480,7 +496,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li><bugzilla>55651</bugzilla> - Change JMeter application icon to Apache plume icon</li>
 </ul>
 
-<h2>Non-functional changes</h2>
+<ch_section>Non-functional changes</ch_section>
 <ul>
 <li>Updated to jsoup-1.7.2</li>
 <li><bugzilla>54776</bugzilla> - Update the dependency on Bouncy Castle to 1.48. Contributed by Emmanuel Bourg (ebourg at apache.org)</li>
@@ -513,7 +529,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li><bugzilla>55626</bugzilla> - Rename HTTP Proxy Server as HTTP(S) Test Script Recorder</li>
 </ul>
 
-<h2>Thanks</h2>
+<ch_section>Thanks</ch_section>
 <p>We thank all contributors mentioned in bug and improvement sections above.<br/>
 We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
