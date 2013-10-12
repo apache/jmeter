@@ -62,8 +62,9 @@ Summary
 </ul>
 </p>
 
-<ch_title>New CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class</ch_title>
-citizen in JMeter, you can now test your expressions very easily"/>
+<ch_title>New CSS/JQuery Tester in View Tree Results</ch_title>
+<p>A new CSS/JQuery Tester in View Tree Results that makes CSS/JQuery Extractor a first class
+citizen in JMeter, you can now test your expressions very easily</p>
 <p>
 <figure width="1144" height="638" image="changes/2.10/01_css_jquery_tester.png"></figure>
 </p>
