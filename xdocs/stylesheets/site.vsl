@@ -240,6 +240,21 @@ No
 Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&gt;
 #end
 
+#macro ( ch_section $section)
+<br/><br/><table width="100%" cellpadding="3" cellspacing="2" bgcolor="$bodylink" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big><big><a name="$section.getText()">$section.getText()</a></big></big></b></font></td></tr></table><br/>
+#end
+
+#macro ( ch_category $category)
+<br/><br/><table width="90%" cellpadding="2" cellspacing="2" bgcolor="$subbannerbg" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big>$category.getText()</big></b></font></td></tr></table><br/>
+#end
+
+#macro ( ch_title $title)
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="$subbannerbg" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">$title.getText()</font></td></tr></table>
+#end
+
 #macro (unknown $node)
 #if($node.getName() == "note")
 #note($node)
@@ -267,6 +282,12 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #bugzilla ($node)
 #elseif ($node.getName().equals("contributor"))
 #contributor ($node)
+#elseif ($node.getName().equals("ch_section"))
+#ch_section ($node)
+#elseif ($node.getName().equals("ch_category"))
+#ch_category ($node)
+#elseif ($node.getName().equals("ch_title"))
+#ch_title ($node)
 #else
 #outputTag($node)
 #runloop($node)
@@ -544,3 +565,4 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 #end
+
