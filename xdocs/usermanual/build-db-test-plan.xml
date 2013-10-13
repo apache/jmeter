@@ -23,8 +23,7 @@
 <document prev="build-adv-web-test-plan.html" next="build-ftp-test-plan.html" id="$Id$">
 
 <properties>
-  <author email="mramshaw@alumni.concordia.ca">Martin Ramshaw</author>
-  <title>User's Manual: Building a Database Test Plan</title>
+  <title>User's Manual: Building a Simple Database Test Plan</title>
 </properties>
 
 <body>
@@ -34,14 +33,14 @@
 <a href="build-test-plan.html">Test Plan</a> to test a database server.
 You will create ten users that send five SQL requests to the database server.
 Also, you will tell the users to run their tests three times. So, the total number
-of requests is (10 users) x (2 requests) x (repeat 3 times) = 60 JDBC requests.
+of requests is (50 users) x (2 requests) x (repeat 100 times) = 10'000 JDBC requests.
 To construct the Test Plan, you will use the following elements:
 <a href="test_plan.html#thread_group">Thread Group</a>,
-<complink name="JDBC Request"/>, <complink name="Graph Results"/>.</p>
+<complink name="JDBC Request"/>, <complink name="Summary Report"/>.</p>
 
 <note>This example uses the MySQL database driver.
-To use this driver, its containing .jar file must be copied to the JMeter
-<b>lib</b> directory (see <a href="get-started.html#classpath">JMeter's Classpath</a>
+To use this driver, its containing .jar file (ex. mysql-connector-java-X.X.X-bin.jar) must be copied to the JMeter
+<b>./lib</b> directory (see <a href="get-started.html#classpath">JMeter's Classpath</a>
 for more details).</note>
 
 </section>
@@ -54,7 +53,7 @@ send requests, and the how many requests they should send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
 clicking your right mouse button to get the Add menu, and then select
-Add --&gt; ThreadGroup.</p>
+<b>Add</b> --&gt; <b>ThreadGroup</b>.</p>
 
 <p>You should now see the Thread Group element under Test Plan. If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
@@ -72,20 +71,20 @@ Figure &sect-num;.1. Thread Group with Default Values</figure>
 field, enter JDBC Users.</p>
 
 <note>You will need a valid database, database table, and user-level access to that
-table. In the example shown here, the database is 'mydb' and the table name is
-'Stocks'.</note>
+table. In the example shown here, the database is 'cloud' and the table name is
+'vm_instance'.</note>
 
-<p>Next, increase the number of users to 10.</p>
+<p>Next, increase the number of users to 50.</p>
 
-<p>In the next field, the Ramp-Up Period, leave the the default value of 0
+<p>In the next field, the Ramp-Up Period, leave the the value of 10
 seconds.  This property tells JMeter how long to delay between starting each
-user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
-finish starting all of your users by the end of the 5 seconds.  So, if we have
-5 users and a 5 second Ramp-Up Period, then the delay between starting users
-would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
+user. For example, if you enter a Ramp-Up Period of 10 seconds, JMeter will
+finish starting all of your users by the end of the 10 seconds.  So, if we have
+50 users and a 10 second Ramp-Up Period, then the delay between starting users
+would be 200 milliseconds (10 seconds / 50 users = 0.2 user per second).  If you set the
 value to 0, then JMeter will immediately start all of your users.</p>
 
-<p>Finally, enter a value of 3 in
+<p>Finally, enter a value of 100 in
 the Loop Count field.  This property tells JMeter how many times to repeat your
 test. To have JMeter repeatedly run your Test Plan, select the Forever
 checkbox.</p>
@@ -109,16 +108,16 @@ will be performing.  In this section, you will specify the JDBC requests to
 perform.</p>
 
 <p>Begin by selecting the JDBC Users element. Click your right mouse button
-to get the Add menu, and then select Add --&gt; Config Element --&gt; JDBC Connection Configuration.
+to get the w<b>Add</b> menu, and then select <b>Add</b> --&gt; <b>Config Element</b> --&gt; <b>JDBC Connection Configuration</b>.
 Then, select this new element to view its Control Panel (see Figure &sect-num;.3).</p>
 
-<p>Set up the following fields (these assume we will be using a local MySQL database called test):</p>
+<p>Set up the following fields (these assume we will be using a MySQL database called 'cloud'):</p>
 <ul>
-<li>Variable name bound to pool. This needs to uniquely identify the configuration. It is used by the JDBC Sampler to identify the configuration to be used.</li>
-<li>Database URL: jdbc:mysql://localhost:3306/test</li>
+<li>Variable name (here: myDatabase) bound to pool. This needs to uniquely identify the configuration. It is used by the JDBC Sampler to identify the configuration to be used.</li>
+<li>Database URL: jdbc:mysql://ipOfTheServer:3306/cloud</li>
 <li>JDBC Driver class: com.mysql.jdbc.Driver</li>
-<li>Username: guest</li>
-<li>Password: password for guest</li>
+<li>Username: the username of database</li>
+<li>Password: password for the username</li>
 </ul>
 <p>The other fields on the screen can be left as the defaults.</p>
 <p>JMeter creates a database connection pool with the configuration settings as specified in the Control Panel.
@@ -131,14 +130,14 @@ More than one JDBC Request can refer to the same pool.
 Figure &sect-num;.3. JDBC Configuration</figure>
 
 <p>Selecting the JDBC Users element again. Click your right mouse button
-to get the Add menu, and then select Add --&gt; Sampler --&gt; JDBC Request.
+to get the <b>Add</b> menu, and then select <b>Add</b> --&gt; <b>Sampler</b> --&gt; <b>JDBC Request</b>.
 Then, select this new element to view its Control Panel (see Figure &sect-num;.4).</p>
 
 <figure image="jdbctest/JDBCRequest.png">
 Figure &sect-num;.4. JDBC Request</figure>
 
 <p>In our Test Plan, we will make two JDBC requests. The first one is for
-Eastman Kodak stock, and the second is Pfizer stock (obviously you should
+select all 'Running' VM instances, and the second is to select 'Expunging' VM instance (obviously you should
 change these to examples appropriate for your particular database). These
 are illustrated below.</p>
 
@@ -146,25 +145,27 @@ are illustrated below.</p>
 
 <p>Start by editing the following properties (see Figure &sect-num;.5):
 <ul>
-<li>Change the Name to "Kodak".</li>
-<li>Enter the Pool Name: MySQL (same as in the configuration element)</li>
+<li>Change the Name to 'VM Running'.</li>
+<li>Enter the Pool Name: 'myDatabase' (same as in the configuration element)</li>
 <li>Enter the SQL Query String field.</li>
+<li>Enter the Parameter values field with 'Running' value.</li>
+<li>Enter the Parameter types with 'VARCHAR'.</li>
 </ul>
 </p>
 
 <figure image="jdbctest/JDBCRequest2.png">
-Figure &sect-num;.5. JDBC Request for Eastman Kodak stock</figure>
+Figure &sect-num;.5. JDBC Request for the first SQL request</figure>
 
 <p>Next, add the second JDBC Request and edit the following properties (see
 Figure &sect-num;.6):
 <ul>
-<li>Change the Name to "Pfizer".</li>
-<li>Enter the SQL Query String field.</li>
+<li>Change the Name to 'VM Expunging'.</li>
+<li>Change the value of Parameter values to 'Expunging'.</li>
 </ul>
 </p>
 
 <figure image="jdbctest/JDBCRequest3.png">
-Figure &sect-num;.6. JDBC Request for Pfizer stock</figure>
+Figure &sect-num;.6. JDBC Request for the second request</figure>
 
 </section>
 
@@ -172,12 +173,16 @@ Figure &sect-num;.6. JDBC Request for Pfizer stock</figure>
 <p>The final element you need to add to your Test Plan is a
 <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your JDBC requests in a file
-and presenting a visual model of the data.</p>
+and presenting the results.</p>
 
-<p>Select the JDBC Users element and add a <complink name="Graph Results"/>
-listener (Add --&gt; Listener --&gt; Graph Results).</p>
+<p>Select the <i>JDBC Users</i> element and add a <complink name="Summary Report"/>
+listener (<b>Add</b> --&gt; <b>Listener</b> --&gt; <b>Summary Report</b>).</p>
 
-<figure image="jdbctest/graph-results.png">
+<p>Save the test plan, and run the test with the menu <b>Run</b> --&gt; <b>Start</b> or <b>Ctrl+R</b></p>
+
+<p>The listener shows the results.</p>
+
+<figure image="jdbctest/jdbc-results.png">
 Figure &sect-num;.7. Graph results Listener</figure>
 
 </section>
