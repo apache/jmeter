@@ -193,7 +193,7 @@ template into your Test Plan</ch_title>
 <figure width="489" height="198" image="changes/2.10/09_save_workbench.png"></figure>
 </p>
 
-<ch_title>Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</ch_title>
+<ch_title>Syntax color has been added to scripts elements (BeanShell, BSF, and JSR223), MongoDB and JDBC elements making code much more readable and allowing UNDO/REDO through CTRL+Z/CTRL+Y</ch_title>
 <p>BSF Sampler with syntax color
 <figure width="915" height="620" image="changes/2.10/10_color_syntax_bsf_sampler.png"></figure>
 </p>
@@ -201,7 +201,7 @@ template into your Test Plan</ch_title>
 <figure width="911" height="614" image="changes/2.10/11_color_syntax_jsr223_preprocessor.png"></figure>
 </p>
 
-<ch_title>Better editors are now available for Test Elements with large text content, like HTTP Sampler, and JMS related Test Element providing line numbering and allowing <b>UNDO/REDO</b> through CTRL+Z/CTRL+Y</ch_title>
+<ch_title>Better editors are now available for Test Elements with large text content, like HTTP Sampler, and JMS related Test Element providing line numbering and allowing UNDO/REDO through CTRL+Z/CTRL+Y</ch_title>
 
 <ch_title>JMeter GUI can now be fully Internationalized, all remaining issues have been fixed</ch_title>
 <h5>Currently French has all its labels translated. Other languages are partly translated, feel free to 
@@ -218,7 +218,7 @@ you cannot drop a node after last node. The workaround is to drop it before this
 before the one you just dropped.</b>
 </p>
 <h5>New shortcuts have been added to move elements in the tree. </h5>
-<p>(alt + Arrow Up) and (alt + Arrow Down) move the element within the parent node.<br/>
+<p>(alt + Arrow Up) and (alt + Arrow Down) move the element within the parent node<br/>
 (alt + Arrow Left) and (alt + Arrow Right) move the element up and down in the tree depth</p>
 
 <ch_title>Response Time Graph Y axis can now be scaled</ch_title>
@@ -268,6 +268,12 @@ With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may not work correct
 This is a known Java bug (see  <bugzilla>54477 </bugzilla>). 
 A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
 </li>
+
+<li>
+With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry. 
+This is a known Java bug, see Bug <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
+A workaround is to use a Java 7 update 40 runtime which fixes this issue.
+</li>
 </ul>
 
 <!-- =================== Incompatible changes =================== -->
@@ -278,7 +284,7 @@ A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
 
 <p>With this version autoFlush has been turned off on PrintWriter in charge of writing test results. 
 This results in improved throughput for intensive tests but can result in more test data loss in case
-of JMeter crash (very rare). To revert to previous behaviour set jmeter.save.saveservice.autoflush property to true. </p>
+of JMeter crash (extremely rare). To revert to previous behaviour set jmeter.save.saveservice.autoflush property to true. </p>
 
 <p>
 Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for Mac OS).
@@ -287,7 +293,7 @@ It was therefore necessary to change the shortcut.
 </p>
 
 <p>
-Webservice (SOAP) Request has been removed by default from GUI as Element is deprecated (use HTTP Sampler with Body Data), if you need to show it, see property not_in_menu in jmeter.properties
+Webservice (SOAP) Request has been removed by default from GUI as Element is deprecated (use HTTP Sampler with Body Data, see also Template "Building a SOAP Webservice Test Plan"), if you need to show it, see property not_in_menu in jmeter.properties
 </p>
 
 <p>
