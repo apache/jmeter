@@ -34,6 +34,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$;
 
+	private final boolean disableUndo;
+
     private static final boolean WRAP_STYLE_WORD = JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);
     private static final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
     private static final boolean CODE_FOLDING    = JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
@@ -42,6 +44,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     @Deprecated
     public JSyntaxTextArea() {
         // For use by test code only
+    	this(30, 50, false);
     }
 
     /**
@@ -58,15 +61,34 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * @param cols
      */
     public JSyntaxTextArea(int rows, int cols) {
+        this(rows, cols, false);
+    }
+
+    /**
+     * Creates the default syntax highlighting text area.
+     * The following are set:
+     * <ul>
+     * <li>setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA)</li>
+     * <li>setCodeFoldingEnabled(true)</li>
+     * <li>setAntiAliasingEnabled(true)</li>
+     * <li>setLineWrap(true)</li>
+     * <li>setWrapStyleWord(true)</li>
+     * </ul>
+     * @param rows
+     * @param cols
+     * @param disableUndo true to disable undo manager, defaults to false
+     */
+    public JSyntaxTextArea(int rows, int cols, boolean disableUndo) {
         super(rows, cols);
         super.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         super.setCodeFoldingEnabled(CODE_FOLDING);
         super.setAntiAliasingEnabled(true);
         super.setLineWrap(LINE_WRAP);
         super.setWrapStyleWord(WRAP_STYLE_WORD);
-    }
+    	this.disableUndo = disableUndo;
+	}
 
-    /**
+	/**
      * Sets the language of the text area.
      * @param language
      */
@@ -86,7 +108,11 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     @Override
     protected RUndoManager createUndoManager() {
         RUndoManager undoManager = super.createUndoManager();
-        undoManager.setLimit(MAX_UNDOS);
+        if(disableUndo) {
+        	undoManager.setLimit(0);        	
+        } else {
+        	undoManager.setLimit(MAX_UNDOS);
+        }
         return undoManager;
     }
 
