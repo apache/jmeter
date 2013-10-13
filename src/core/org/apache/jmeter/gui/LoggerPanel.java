@@ -23,10 +23,11 @@ import java.awt.Insets;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.LogEvent;
@@ -40,7 +41,7 @@ public class LoggerPanel extends JPanel implements LogTarget {
 
     private static final long serialVersionUID = 6911128494402594429L;
 
-    private JTextArea textArea;
+    private JSyntaxTextArea textArea;
 
     private final PatternFormatter format;
 
@@ -60,11 +61,12 @@ public class LoggerPanel extends JPanel implements LogTarget {
         this.setLayout(new BorderLayout());
 
         // TEXTAREA
-        textArea = new JTextArea();
+        textArea = new JSyntaxTextArea(15, 50, true);
         textArea.setEditable(false);
         textArea.setLineWrap(false);
+        textArea.setLanguage("text");
         textArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
-        JScrollPane areaScrollPane = new JScrollPane(textArea);
+        JScrollPane areaScrollPane = new JTextScrollPane(textArea);
 
         areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
