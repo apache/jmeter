@@ -1883,10 +1883,10 @@ Param 3:   C:\TEMP
 If omitted, output is captured and returned as the response data.</property>
 <property name="Standard error (stderr)" required="No">Name of output file for standard error (STDERR). 
 If omitted, output is captured and returned as the response data.</property>
-</properties>
 <property name="Check Return Code" required="No">If checked, sampler will compare return code with Expected Return Code.</property>
 <property name="Expected Return Code" required="No">Expected return code for System Call, required if "Check Return Code" is checked.</property>
 <property name="Timeout" required="No">Timeout for command in milliseconds, defaults to 0, which means NO timeout.</property>
+</properties>
 </component>
 
 <component name="MongoDB Script" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
@@ -5247,7 +5247,7 @@ extracting the node as text or attribute value and store the result into the giv
         As of JMeter 2.9, 2 implementations for CSS/JQuery based syntax are supported:
         <ul>
                 <li><a href="http://jsoup.org/" >JSoup</a></li>
-                <li><a href="http://jodd.org/doc/lagarto/index.html" >Jodd-Lagerto (CSSelly)</a></li>
+                <li><a href="http://jodd.org/doc/lagarto/index.html" >Jodd-Lagarto (CSSelly)</a></li>
         </ul>
         If selector is set to empty, default implementation(JSoup) will be used.
         </property>
@@ -5264,7 +5264,7 @@ extracting the node as text or attribute value and store the result into the giv
         For more details on syntax, see:
             <ul>
                 <li><a href="http://jsoup.org/cookbook/extracting-data/selector-syntax" >JSoup</a></li>
-                <li><a href="http://jodd.org/doc/csselly/" >Jodd-Lagerto (CSSelly)</a></li>
+                <li><a href="http://jodd.org/doc/csselly/" >Jodd-Lagarto (CSSelly)</a></li>
             </ul>
         </property>
         <property name="Attribute" required="false">
