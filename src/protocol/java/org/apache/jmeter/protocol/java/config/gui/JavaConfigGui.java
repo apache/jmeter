@@ -22,9 +22,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -225,7 +228,27 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 
         argsPanel.configure((Arguments) config.getProperty(JavaSampler.ARGUMENTS).getObjectValue());
 
-        classnameCombo.setSelectedItem(config.getPropertyAsString(JavaSampler.CLASSNAME));
+        String className = config.getPropertyAsString(JavaSampler.CLASSNAME);
+        if(checkContainsClassName(classnameCombo.getModel(), className)) {
+            classnameCombo.setSelectedItem(className);
+        } else {
+            log.error("Error setting class:'"+className+"' in JavaSampler "+getName()+", check for a missing jar in your jmeter classpath");
+        }
+    }
+
+    /**
+     * Check combo contains className
+     * @param model ComboBoxModel
+     * @param className String class name
+     * @return boolean
+     */
+    private static final boolean checkContainsClassName(ComboBoxModel model, String className) {
+        int size = model.getSize();
+        Set<String> set = new HashSet<String>(size);
+        for (int i = 0; i < size; i++) {
+            set.add((String)model.getElementAt(i));
+        }
+        return set.contains(className);
     }
 
     /** {@inheritDoc} */
