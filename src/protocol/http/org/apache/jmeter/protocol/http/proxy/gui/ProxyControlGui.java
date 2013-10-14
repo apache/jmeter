@@ -489,7 +489,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             if (ProxyControl.isDynamicMode()) {
                 String details[] = model.getCertificateDetails();
                 StringBuilder sb = new StringBuilder();
-                sb.append(JMeterUtils.getResString("proxy_daemon_msg_check_details")) // $NON-NLS-1$
+                sb.append(JMeterUtils.getResString("proxy_daemon_msg_rootca_cert"))  // $NON-NLS-1$
+                        .append(SPACE).append(KeyToolUtils.ROOT_CACERT_CRT_PFX)
+                        .append(SPACE).append(JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"));
+                sb.append(NEW_LINE).append(JMeterUtils.getResString("proxy_daemon_msg_install_as_in_doc")); // $NON-NLS-1$
+                sb.append(NEW_LINE).append(JMeterUtils.getResString("proxy_daemon_msg_check_details")) // $NON-NLS-1$
                     .append(NEW_LINE).append(NEW_LINE);
                 for(String detail : details) {
                     sb.append(detail).append(NEW_LINE);
