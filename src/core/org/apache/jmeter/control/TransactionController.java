@@ -53,6 +53,8 @@ public class TransactionController extends GenericController implements SampleLi
     
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final boolean DEFAULT_VALUE_FOR_INCLUDE_TIMERS = true; // default true for compatibility
+
     /**
      * Only used in parent Mode
      */
@@ -293,7 +295,7 @@ public class TransactionController extends GenericController implements SampleLi
      * @param includeTimers
      */
     public void setIncludeTimers(boolean includeTimers) {
-        setProperty(INCLUDE_TIMERS, includeTimers, true); // default true for compatibility
+        setProperty(INCLUDE_TIMERS, includeTimers, DEFAULT_VALUE_FOR_INCLUDE_TIMERS);
     }
 
     /**
@@ -302,6 +304,6 @@ public class TransactionController extends GenericController implements SampleLi
      * @return boolean (defaults to true for backwards compatibility)
      */
     public boolean isIncludeTimers() {
-        return getPropertyAsBoolean(INCLUDE_TIMERS, true);
+        return getPropertyAsBoolean(INCLUDE_TIMERS, DEFAULT_VALUE_FOR_INCLUDE_TIMERS);
     }
 }
