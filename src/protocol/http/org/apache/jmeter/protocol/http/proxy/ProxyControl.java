@@ -753,6 +753,7 @@ public class ProxyControl extends GenericController {
     private void addTransactionController(final JMeterTreeModel model, final JMeterTreeNode node, String name)
             throws InterruptedException, InvocationTargetException {
         final TransactionController sc = new TransactionController();
+        sc.setIncludeTimers(false);
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
         JMeterUtils.runSafe(new Runnable() {
