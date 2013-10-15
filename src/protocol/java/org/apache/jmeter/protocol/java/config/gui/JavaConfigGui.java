@@ -232,7 +232,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
         if(checkContainsClassName(classnameCombo.getModel(), className)) {
             classnameCombo.setSelectedItem(className);
         } else {
-            log.error("Error setting class:'"+className+"' in JavaSampler "+getName()+", check for a missing jar in your jmeter classpath");
+            log.error("Error setting class:'"+className+"' in JavaSampler "+getName()+", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties");
         }
     }
 
