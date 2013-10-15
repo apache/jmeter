@@ -361,6 +361,11 @@ under the License.
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j-api.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-nop</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
       <!-- Docs only; not needed for source or binary archives 
       <dependency>
         <groupId>org.apache.velocity</groupId>
