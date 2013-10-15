@@ -5812,7 +5812,7 @@ This setting will also be needed when running the generated test plan.
 <p>
 As mentioned above, when run under Java 7, JMeter can generate certificates for each server.
 For this to work smoothly, the root CA signing certificate used by JMeter needs to be trusted by the browser.
-The first time that the proxy is started, it will generate the certificates. 
+The first time that the recorder is started, it will generate the certificates if necessary. 
 The root CA certificate is exported into a file with the name <code>ApacheJMeterTemporaryRootCA</code> in the current launch directory.
 When the certificates have been set up, JMeter will show a dialog with the current certificate details.
 At this point, the certificate can be imported into the browser, as per the instructions below.
