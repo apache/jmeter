@@ -123,7 +123,7 @@ public class JMeterVersionTest extends JMeterTestCase {
                     fail("Versions list does not contain: " + jar);
                 } else {
                     if (!version.equals(expected)) {
-                        assertEquals(jar,expected,version);
+                        assertEquals(jar,version,expected);
                     }
                 }
             }
