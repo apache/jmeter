@@ -390,7 +390,7 @@
     <include name="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
-    <include name="${lib.dir}/${slf4j-impl.jar}"/>
+    <include name="${lib.dir}/${slf4j-nop.jar}"/>
     <include name="${lib.dir}/${soap.jar}"/>
     <include name="${lib.dir}/${jtidy.jar}"/>
     <include name="${lib.dir}/${tika-core.jar}"/>
@@ -459,7 +459,7 @@
     <pathelement location="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
-    <pathelement location="${lib.dir}/${slf4j-impl.jar}"/>
+    <pathelement location="${lib.dir}/${slf4j-nop.jar}"/>
     <pathelement location="${lib.dir}/${soap.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
@@ -2905,7 +2905,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="mongo-java-driver"/>
         <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="slf4j-api"/>
-        <process_jarfile jarname="slf4j-impl"/>
+        <process_jarfile jarname="slf4j-nop"/>
         <process_jarfile jarname="soap"/>
         <process_jarfile jarname="jtidy"/>
         <process_jarfile jarname="tika-core"/>
