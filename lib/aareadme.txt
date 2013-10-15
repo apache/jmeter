@@ -109,12 +109,12 @@ http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-jodd-core-3.4.4
+jodd-core-3.4.8
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.4.4
+jodd-lagarto-3.4.8
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
