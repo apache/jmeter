@@ -316,11 +316,6 @@ it is compared with the saved redirect URL and if there is a match, JMeter will 
 To revert to previous behaviour, set the property <code>proxy.redirect.disabling=false</code>
  </p>
 
-<p>Starting with this version, in HTTP(S) Test Script Recorder if Grouping is set to "Put each group in a new Transaction Controller", 
-the Recorder will create Transaction Controller instances with "Include duration of timer and pre-post processors in generated sample" set 
-to false. This default value reflect more accurately response time.
- </p>
-
 <p>__escapeOroRegexpChars function (which escapes ORO reserved characters) no longer trims the value (see <bugzilla>55328</bugzilla>)</p>
 
 <p>The commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder as it is not needed by JMeter at run-time (it is only used by Apache Velocity for generating documentation).
@@ -436,7 +431,6 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li><bugzilla>55531</bugzilla> - Proxy recording and redirects. Added code to disable redirected samples.</li>
 <li><bugzilla>55507</bugzilla> - Proxy SSL recording does not handle external embedded resources well</li>
 <li><bugzilla>55632</bugzilla> - Have a new implementation of htmlParser for embedded resources parsing with better performances</li>
-<li><bugzilla>55653</bugzilla> - HTTP(S) Test Script Recorder should set TransactionController property "Include duration of timer and pre-post processors in generated sample" to false</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -520,7 +514,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li>Updated to commons-logging 1.1.3 (from 1.1.1)</li>
 <li>Updated to commons-net 3.3 (from 3.1)</li>
 <li>Updated to jdom-1.1.3 (from 1.1.2)</li>
-<li>Updated to jodd-lagarto and jodd-core 3.4.4 (from 3.4.1)</li>
+<li>Updated to jodd-lagarto and jodd-core 3.4.8 (from 3.4.1)</li>
 <li>Updated to junit 4.11 (from 4.10)</li>
 <li>Updated to slf4j-api 1.7.5 (from 1.7.2)</li>
 <li>Updated to tika 1.4 (from 1.3)</li>
