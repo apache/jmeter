@@ -280,51 +280,59 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <ch_section>Incompatible changes</ch_section>
 
-<p>SMTP Sampler now uses eml file subject if subject field is empty</p>
+<ul>
+<li><b>SMTP Sampler</b> now uses eml file subject if subject field is empty</li>
 
-<p>With this version autoFlush has been turned off on PrintWriter in charge of writing test results. 
+<li>With this version autoFlush has been turned off on PrintWriter in charge of writing test results. 
 This results in improved throughput for intensive tests but can result in more test data loss in case
-of JMeter crash (extremely rare). To revert to previous behaviour set jmeter.save.saveservice.autoflush property to true. </p>
+of JMeter crash (extremely rare). To revert to previous behaviour set <code>jmeter.save.saveservice.autoflush</code> property to <code>true</code>.</li>
 
-<p>
-Shortcut for Function Helper Dialog is now CTRL+SHIFT+F1 (CMD + SHIFT + F1 for Mac OS).
-The original key sequence (Ctrl+F1) did not work in some locations (it is consumed by the Java Swing ToolTipManager).
+<li>
+Shortcut for <b>Function Helper Dialog</b> is now <i>CTRL+SHIFT+F1 (CMD + SHIFT + F1 for Mac OS)</i>.
+The original key sequence <i>(Ctrl+F1)</i> did not work in some locations (it is consumed by the Java Swing ToolTipManager).
 It was therefore necessary to change the shortcut.
-</p>
+</li>
 
-<p>
-Webservice (SOAP) Request has been removed by default from GUI as Element is deprecated (use HTTP Sampler with Body Data, see also Template "Building a SOAP Webservice Test Plan"), if you need to show it, see property not_in_menu in jmeter.properties
-</p>
+<li>
+<b>Webservice (SOAP) Request</b> has been removed by default from GUI as Element is deprecated. (Use <b>HTTP Request</b> 
+with <i>Body Data</i>, see also the Template <i>Building a SOAP Webservice Test Plan</i>), if you need to show it, see property <code>not_in_menu</code> in <i>jmeter.properties</i>
+</li>
 
-<p>
-Transaction Controller now sets Response Code of Generated Parent Sampler (if Generate Parent Sampler is checked) to response code of first failing child in case of failure of one of the children, in previous versions Response Code was empty.
-</p>
+<li>
+<b>Transaction Controller</b> now sets <i>Response Code</i> of <i>Generated Parent Sampler</i> 
+(if <i>Generated Parent Sampler</i> is checked) to response code of first failing child in case of failure of one of the children, in previous versions <i>Response Code</i> was empty.
+</li>
 
-<p>
-In previous versions, IncludeController could run Test Elements located inside a Thread Group, this behaviour (which was not documented) could result in weird behaviour, it has been removed in this version (see <bugzilla>55464</bugzilla>). 
-The correct way to include Test Elements is to use Test Fragment as stated in documentation of Include Controller.
-</p>
+<li>
+In previous versions, <b>IncludeController</b> could run Test Elements located inside a <b>Thread Group</b>, this behaviour (<i>which was not documented</i>) 
+ould result in weird behaviour, it has been removed in this version (see <bugzilla>55464</bugzilla>). 
+The correct way to include Test Elements is to use <b>Test Fragment</b> as stated in documentation of <b>Include Controller</b>.
+</li>
 
-<p>
-The retry count for the HttpClient 3.1 and HttpClient 4.x samplers has been changed to 0.
+<li>
+The retry count for the HttpClient 3.1 and HttpClient 4.x samplers has been changed to <b>0</b>.
 Previously the default was 1, which could cause unexpected additional traffic.
-</p>
+</li>
 
-<p>Starting with this version, the HTTP(S) Test Script Recorder tries to detect when a sample is the result of a previous
+<li>Starting with this version, the <b>HTTP(S) Test Script Recorder</b> tries to detect when a sample is the result of a previous
 redirect. If the current response is a redirect, JMeter will save the redirect URL. When the next request is received, 
 it is compared with the saved redirect URL and if there is a match, JMeter will disable the generated sample.
 To revert to previous behaviour, set the property <code>proxy.redirect.disabling=false</code>
- </p>
+</li>
 
-<p>Starting with this version, in HTTP(S) Test Script Recorder if Grouping is set to "Put each group in a new Transaction Controller", 
-the Recorder will create Transaction Controller instances with "Include duration of timer and pre-post processors in generated sample" set 
+<li>Starting with this version, in <b>HTTP(S) Test Script Recorder</b> if Grouping is set to <i>Put each group in a new Transaction Controller</i>, 
+the Recorder will create <b>Transaction Controller</b> instances with <i>Include duration of timer and pre-post processors in generated sample</i> set 
 to false. This default value reflect more accurately response time.
- </p>
+</li>
 
-<p>__escapeOroRegexpChars function (which escapes ORO reserved characters) no longer trims the value (see <bugzilla>55328</bugzilla>)</p>
+<li><code>__escapeOroRegexpChars</code> function (which escapes ORO reserved characters) no longer trims the value (see <bugzilla>55328</bugzilla>)
+</li>
 
-<p>The commons-lang-2.6.jar has been removed from embedded libraries in jmeter/lib folder as it is not needed by JMeter at run-time (it is only used by Apache Velocity for generating documentation).
-If you use any plugin or third-party code that depends on it, you need to add it in jmeter/lib folder</p>
+<li>The <i>commons-lang-2.6.jar</i> has been removed from embedded libraries in <code>jmeter/lib</code> folder as it is not needed by JMeter at run-time
+(it is only used by Apache Velocity for generating documentation).
+If you use any plugin or third-party code that depends on it, you need to add it in <code>jmeter/lib</code> folder
+</li>
+</ul>
 
 <!-- =================== Bug fixes =================== -->
 
