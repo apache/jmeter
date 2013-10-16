@@ -86,6 +86,7 @@ under the License.
       <mongo-java-driver.version>2.11.2</mongo-java-driver.version>
       <rsyntaxtextarea.version>2.5.0</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.5</slf4j-api.version>
+      <slf4j-nop.version>1.7.5</slf4j-nop.version>
       <soap.version>2.3.1</soap.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.4</tika-core.version>
