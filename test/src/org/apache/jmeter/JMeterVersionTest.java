@@ -130,7 +130,7 @@ public class JMeterVersionTest extends JMeterTestCase {
         }
         eclipse.close();
         if (propNames.size() > 0) {
-            fail("Should have no names left: "+Arrays.toString(propNames.toArray()));
+            fail("Should have no names left: "+Arrays.toString(propNames.toArray()) + ". Check eclipse.classpath");
         }
     }
 
@@ -159,7 +159,7 @@ public class JMeterVersionTest extends JMeterTestCase {
         }
         maven.close();
         if (propNames.size() > 0) {
-            fail("Should have no names left: "+Arrays.toString(propNames.toArray()));
+            fail("Should have no names left: "+Arrays.toString(propNames.toArray()) + ". Check ApacheJMeter_parent.pom");
         }
    }
 
