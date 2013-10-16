@@ -583,7 +583,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     
     public void setRunning(boolean running, String host) {
         log.info("setRunning(" + running + "," + host + ")");
-
+        if(org.apache.jmeter.gui.MainFrame.LOCAL.equals(host)) {
+            return;
+        }
         Iterator<JMenuItem> iter = remote_engine_start.iterator();
         Iterator<JMenuItem> iter2 = remote_engine_stop.iterator();
         Iterator<JMenuItem> iter3 = remote_engine_exit.iterator();

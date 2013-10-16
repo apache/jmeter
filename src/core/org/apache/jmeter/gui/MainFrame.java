@@ -104,7 +104,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     // This is used to keep track of local (non-remote) tests
     // The name is chosen to be an unlikely host-name
-    private static final String LOCAL = "*local*"; // $NON-NLS-1$
+    public static final String LOCAL = "*local*"; // $NON-NLS-1$
 
     // The application name
     private static final String DEFAULT_APP_NAME = "Apache JMeter"; // $NON-NLS-1$
@@ -407,7 +407,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         activeThreads.setText("0"); // $NON-NLS-1$
         totalThreads.setText("0"); // $NON-NLS-1$
         menuBar.setRunning(true, host);
-        toolbar.setTestStarted(true);
+        if(LOCAL.equals(host)) {
+            toolbar.setLocalTestStarted(true);
+        } else {
+            toolbar.setRemoteTestStarted(true);
+        }
     }
 
     /**
@@ -436,7 +440,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             JMeterContextService.endTest();
         }
         menuBar.setRunning(false, host);
-        toolbar.setTestStarted(false);
+        if(LOCAL.equals(host)) {
+            toolbar.setLocalTestStarted(false);
+        } else {
+            toolbar.setRemoteTestStarted(false);
+        }
         if (stoppingMessage != null) {
             stoppingMessage.dispose();
             stoppingMessage = null;
