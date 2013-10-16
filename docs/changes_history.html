@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,15 +20,10 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="./css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 <meta name="author" value="JMeter developers">
 <meta name="email" value="dev AT jmeter.apache.org">
 
@@ -37,7 +32,6 @@
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -67,7 +61,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="./issues.html">Issues</a>
+<li><a href="./issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -117,8 +111,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="./mail.html">Mailing Lists</a>
 </li>
 <li><a href="./svnindex.html">SVN Repositories</a>
@@ -127,6 +119,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -171,6 +165,938 @@ Changes sections are chronologically ordered from top (most recent) to bottom
 </b>
 </p>
 <h1>
+Version 2.9
+</h1>
+<h2>
+New and Noteworthy
+</h2>
+<h3>
+<u>
+Core Improvements:
+</u>
+</h3>
+<h4>
+* A new Extractor that uses CSS or jquery-like selector syntax has been introduced, 
+it allows using either JODD or JSOUP implementations
+</h4>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='762' height='277' src="./images/screenshots/changes/2.9/01_css_jquery_extractor.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<p>
+Result: the title of the page in a JMeter variable
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='719' height='171' src="./images/screenshots/changes/2.9/01_css_jquery_extractor_resul.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* JMeter can now handle different types of documents (PDF, MsOffice files, Apache OpenOffice's files...)
+ within different elements 
+</h4>
+<ul>
+
+    
+<li>
+Regular Expression Extractor, extract text from documents
+</li>
+
+    
+<li>
+Assertion Response, check text in documents
+</li>
+
+    
+<li>
+View Results Tree, view as a text the documents
+</li>
+
+
+</ul>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='761' height='345' src="./images/screenshots/changes/2.9/02_document_render_view_results_tree.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* A new Regex User Parameters Pre-Processor that enables injecting input parameter names and values 
+using a reference extracted by Regular Expression Extractor from a previous response
+</h4>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='727' height='138' src="./images/screenshots/changes/2.9/13_regex_user_params.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* TCP Sampler: new options
+</h4>
+<p>
+TCP Sampler has been enhanced with new options to allow setting 
+<b>
+Close Connection
+</b>
+, 
+ 
+<b>
+SO_LINGER
+</b>
+ and  
+<b>
+End of line(EOL) byte value
+</b>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1147' height='302' src="./images/screenshots/changes/2.9/03_new_options_tcp_sampler.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* A new function 
+<i>
+__escapeOroRegexpChars(,)
+</i>
+ has been introduced quote ORO regexp meta characters
+</h4>
+<h4>
+* ForEach Controller: new fields
+</h4>
+<p>
+ForEach Controller has now 2 new fields to control start and end of loop
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='320' height='203' src="./images/screenshots/changes/2.9/04_for_each_new_fields.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* Result Status Action Handler now has a new option to "Start next thread loop"
+</h4>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='722' height='132' src="./images/screenshots/changes/2.9/05_result_status_action_handler.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* JMS Publisher: new option
+</h4>
+<p>
+JMS Publisher can now send Bytes Messages
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='833' height='701' src="./images/screenshots/changes/2.9/11_jms_publisher_bytes.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+<h4>
+* Memory and performance improvements
+</h4>
+<p>
+Significant improvements have been done in this version on memory usage per Thread and CPU when more 
+than one Post Processor is used as child of a Sampler
+</p>
+<p>
+JSR223 Elements (enable using Groovy, Scala... as scripting languages) have been improved to enable caching 
+of Compilation results when scripts are passed in Text area
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='841' height='470' src="./images/screenshots/changes/2.9/12_jsr223_sampler.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+<p>
+Some configuration defaults have changed to improve performances by default(see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54412">Bug 54412</a>
+), 
+see description in New and Noteworthy section.
+
+<ul>
+
+    
+<li>
+Distributed testing now uses MODE_STRIPPED_BATCH, which returns samples in batch mode (every 100 samples
+     or every minute by default). Note also that MODE_STRIPPED_BATCH strips response data from SampleResult, 
+     so if you need it change to another mode (mode property in jmeter.properties)
+</li>
+
+    
+<li>
+Result data are now saved to CSV by default (jmeter.save.saveservice.output_format in jmeter.properties)
+</li>
+
+
+</ul>
+
+
+</p>
+<h4>
+* XPath Assertion now enables using a JMeter variable as input
+</h4>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='800' height='317' src="./images/screenshots/changes/2.9/14_xpath_assertion.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+<u>
+GUI and ergonomy Improvements:
+</u>
+</h3>
+<h4>
+* Search feature has been improved to search within more internal fields of elements and expand search results
+</h4>
+<h4>
+* Copy/paste is now possible between 2 JMeter instances >= 2.9 version
+</h4>
+<p>
+Copy element(s) from one JMeter instance:
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='618' height='262' src="./images/screenshots/changes/2.9/06_copy_paste_between_2_jmeter1.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<p>
+Paste element(s) into a second JMeter instance:
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='617' height='278' src="./images/screenshots/changes/2.9/06_copy_paste_between_2_jmeter2.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* HTTP Header Manager
+</h4>
+<p>
+Allow copy from clipboard to HeaderPanel, headers are supposed to be separated by new line
+ and have the following form 
+<i>
+name:value
+</i>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='661' height='263' src="./images/screenshots/changes/2.9/07_header_panel_add_from_clipboard.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* Module Controller
+</h4>
+<p>
+Module Controller has been improved to better render referenced controller and expand it by clicking on a new button
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='832' height='274' src="./images/screenshots/changes/2.9/08_module_controller_improvements.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* HTTP Proxy Server
+</h4>
+<p>
+HTTP Proxy Server now has a button to add a set of default exclusions for URL patterns, 
+this list can be configured through property : 
+<i>
+proxy.excludes.suggested
+</i>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='811' height='214' src="./images/screenshots/changes/2.9/09_proxy_excludes_suggested.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h4>
+* Rendering of target controller has been improved in HTTP Proxy Server
+</h4>
+<h3>
+<u>
+HTTP Proxy Server recording:
+</u>
+</h3>
+<p>
+* HTTP Proxy Server now automatically uses HTTP Request with Raw Post Body mode for 
+samples that only have one unnamed argument (JSON, XML, GWT...)
+</p>
+<p>
+* HTTP Proxy Server does not force user to select the type of Sampler in HTTP Sampler Settings,
+ this allows easier switch between implementations as Sampler do not have this information set anymore
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='484' height='307' src="./images/screenshots/changes/2.9/10_http_proxy_dont_force_http_type.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<p>
+* SamplerCreator interface has been enriched to meet new requirements for plug-in providers
+</p>
+<p>
+* It is now possible to create binary sampler for x-www-form-urlencoded POST request by 
+modifying 
+<i>
+proxy.binary.types
+</i>
+ property to add application/x-www-form-urlencoded 
+</p>
+<p>
+* Improved timestamp format auto-detection when reading CSV files
+</p>
+<h2>
+Known bugs
+</h2>
+<p>
+The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).
+</p>
+<p>
+Listeners don't show iteration counts when a If Controller has a condition which is always false from the first iteration (see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=52496">Bug 52496</a>
+).  
+A workaround is to add a sampler at the same level as (or superior to) the If Controller.
+For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
+or a Debug Sampler with all fields set to False (to reduce the sample size).
+
+</p>
+<p>
+Webservice sampler does not consider the HTTP response status to compute the status of a response, thus a response 500 containing a non empty body will be considered as successful, see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54006">Bug 54006</a>
+.
+To workaround this issue, ensure you always read the response and add a Response Assertion checking text inside the response.
+
+</p>
+<p>
+
+Changing language can break part of the configuration of the following elements (see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53679">Bug 53679</a>
+):
+
+<ul>
+
+    
+<li>
+CSV Data Set Config (sharing mode will be lost)
+</li>
+
+    
+<li>
+Constant Throughput Timer (Calculate throughput based on will be lost)
+</li>
+
+
+</ul>
+
+
+</p>
+<p>
+
+The numbers that appear to the left of the green box are the number of active threads / total number of threads, 
+these only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode, (see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54152">Bug 54152</a>
+).
+
+</p>
+<p>
+
+Note that there is a bug in Java on some Linux systems that manifests
+itself as the following error when running the test cases or JMeter itself:
+
+<pre>
+
+ [java] WARNING: Couldn't flush user prefs:
+ java.util.prefs.BackingStoreException:
+ java.lang.IllegalArgumentException: Not supported: indent-number
+
+</pre>
+
+This does not affect JMeter operation.
+
+</p>
+<h2>
+Incompatible changes
+</h2>
+<p>
+<b>
+JMeter requires now a Java 6 runtime or higher.
+</b>
+</p>
+<p>
+Some configuration defaults have changed to improve performances by default (see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54412">Bug 54412</a>
+), 
+see description in New and Noteworthy section.
+</p>
+<p>
+Webservice sampler now adds to request the headers that are set through Header Manager, these were previously ignored
+</p>
+<p>
+<i>
+jdbcsampler.cachesize
+</i>
+ property has been removed, it previously limited the size of a per connection cache of Map < String, 
+PreparedStatement > , it also limited the size of this
+map which held the PreparedStatement for SQL queries. This limitation provoked a bug 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53995">Bug 53995</a>
+. 
+It has been removed so now size of these 2 maps is not limited anymore. This change changes behaviour as starting from 
+this version no PreparedStatement will be closed during the test.
+</p>
+<p>
+Starting with this version, there are some important changes on JSR223 Test Elements:
+
+<ul>
+
+    
+<li>
+JSR223 Test Elements that have an invalid filename (not existing or unreadable) will make test fail instead of 
+    making the element silently work
+</li>
+
+    
+<li>
+In JSR223 Test Elements: responseCodeOk, responseMessageOK and successful are set before
+     script is executed, if responseData is set it will not be overriden anymore by a toString() on script return value
+</li>
+
+
+</ul>
+
+
+</p>
+<p>
+View Results Tree now considers response with missing content type as text.
+</p>
+<p>
+In remote Test mode, JMeter now exits in error if one of the remote engines cannot be configured, 
+previously it started the test with available engines.
+</p>
+<h2>
+Bug fixes
+</h2>
+<h3>
+HTTP Samplers and Proxy
+</h3>
+<ul>
+
+
+<li>
+Don't log spurious warning messages when using concurrent pool embedded downloads with Cache Manager or CookieManager
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54057">Bug 54057</a>
+- Proxy option to set user and password at startup (-u and -a) not working with HTTPClient 4
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54187">Bug 54187</a>
+ - Request tab does not show headers if request fails
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53840">Bug 53840</a>
+ - Proxy Recording : Response message: URLDecoder: Illegal hex characters in escape (%) pattern - For input string: "" "
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54351">Bug 54351</a>
+ - HC4 and URI fragments is failing
+</li>
+
+
+</ul>
+<h3>
+Other Samplers
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53997">Bug 53997</a>
+ - LDAP Extended Request: Escape ampersand (&), left angle bracket (<) 
+and right angle bracket (>) in search filter tag in XML response data
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53995">Bug 53995</a>
+ - AbstractJDBCTestElement shares PreparedStatement between multi-threads
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54119">Bug 54119</a>
+ - HTTP 307 response is not redirected
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54326">Bug 54326</a>
+ - AjpSampler send file in post throws FileNotFoundException
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54331">Bug 54331</a>
+ - AjpSampler throws null pointer on GET request that are protected
+</li>
+
+
+</ul>
+<h3>
+Controllers
+</h3>
+<ul>
+
+
+</ul>
+<h3>
+Listeners
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54088">Bug 54088</a>
+ - The type video/f4m is text, not binary
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54166">Bug 54166</a>
+ - ViewResultsTree could not render the HTML response: handle failure to parse HTML
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54287">Bug 54287</a>
+ - Incorrect Timestamp in Response Time Graph when using a date with time in Date format field
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54451">Bug 54451</a>
+ - Response Time Graph reports wrong times when the are many samples for same time
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54459">Bug 54459</a>
+ - CSVSaveService does not handle date parsing very well
+</li>
+
+
+</ul>
+<h3>
+Timers, Assertions, Config, Pre- & Post-Processors
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54058">Bug 54058</a>
+ - In HTTP Request Defaults, the value of field "Embedded URLs must match: is not saved if the check box "Retrieve All  Embedded Resources" is not checked.
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54375">Bug 54375</a>
+ - Regular Expression Extractor : When regex syntax is wrong, post processing is stopped
+</li>
+
+
+</ul>
+<h3>
+Functions
+</h3>
+<ul>
+
+
+</ul>
+<h3>
+I18N
+</h3>
+<ul>
+
+
+</ul>
+<h3>
+General
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53975">Bug 53975</a>
+ - Variables replacement doesn't work with option "Delay thread creation until needed"
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54055">Bug 54055</a>
+ - View Results tree: = signs are stripped from parameter values at HTTP tab
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54129">Bug 54129</a>
+ - Search Feature does not find text although existing in elements 
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54023">Bug 54023</a>
+ - Unable to start JMeter from a root directory and if the full path of JMeter installation contains one or more spaces (Unix/linux)
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54172">Bug 54172</a>
+ - Duplicate shortcut key not working and CTRL+C / CTRL+V / CTRL+V do not cancel default event
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54057">Bug 54057</a>
+ - Proxy option to set user and password at startup (-u and -a) not working with HTTPClient 4
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54267">Bug 54267</a>
+ - Start Next Thread Loop setting doesn't work in custom thread groups
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54413">Bug 54413</a>
+ - DataStrippingSampleSender returns 0 for number of bytes of any response
+</li>
+
+
+</ul>
+<h2>
+Improvements
+</h2>
+<h3>
+HTTP Samplers
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54185">Bug 54185</a>
+ - Allow query strings in paths that start with HTTP or HTTPS
+</li>
+
+
+</ul>
+<h3>
+Other samplers
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54004">Bug 54004</a>
+ - Webservice Sampler : Allow adding headers to request with Header Manager
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54106">Bug 54106</a>
+ - JSR223TestElement should check for file existence when a filename is set instead of using Text Area content 
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54107">Bug 54107</a>
+ - JSR223TestElement : Enable compilation and caching of Script Text
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54109">Bug 54109</a>
+ - JSR223TestElement : SampleResult properties should be set before entering script to allow user setting different code
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54230">Bug 54230</a>
+ - TCP Sampler, additions of "Close Connection", "SO_LINGER" and "End of line(EOL) byte value" options
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54182">Bug 54182</a>
+ - Support sending of ByteMessage for JMS Publisher.
+</li>
+
+
+</ul>
+<h3>
+Controllers
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54131">Bug 54131</a>
+ - ForEach Controller : Add start and end index for looping over variables
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54132">Bug 54132</a>
+ - Module Controller GUI : Improve rendering of referenced controller
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54155">Bug 54155</a>
+ - ModuleController : Add a shortcut button to unfold the tree up to referenced controller and highlight it
+</li>
+
+
+</ul>
+<h3>
+Listeners
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54200">Bug 54200</a>
+ - Add support of several document types (like Apache OpenOffice's files, MS Office's files, PDF's files, etc.) 
+to the elements View Results Tree, Assertion Response and Regular Expression Extractor (using Apache Tika)
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54226">Bug 54226</a>
+ - View Results Tree : Show response even when server does not return ContentType header
+</li>
+
+
+</ul>
+<h3>
+Timers, Assertions, Config, Pre- & Post-Processors
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54259">Bug 54259</a>
+ - Introduce a new Extractor that uses CSS or jquery-like selector syntax
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45772">Bug 45772</a>
+ - RegEx User Parameters Post Processor
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54160">Bug 54160</a>
+ - Add support for xpath assertion to apply to a JMeter variable.
+</li>
+
+
+</ul>
+<h3>
+Functions
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54189">Bug 54189</a>
+ - Add a function to quote ORO regexp meta characters
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54418">Bug 54418</a>
+ - UUID Function
+</li>
+
+
+</ul>
+<h3>
+I18N
+</h3>
+<ul>
+
+
+</ul>
+<h3>
+General
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54005">Bug 54005</a>
+ - HTTP Mirror Server : Add special headers "X-" to control Response status and response content
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53875">Bug 53875</a>
+ - Include suggested defaults for URL filters on HTTP Proxy
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54031">Bug 54031</a>
+ - Add tooltip to running/total threads indicator 
+</li>
+
+
+<li>
+Webservice (SOAP) Request has been deprecated
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54161">Bug 54161</a>
+ - Proxy : be able to create binary sampler for x-www-form-urlencoded POST request
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54154">Bug 54154</a>
+ - HTTP Proxy Server should not force user to select the type of Sampler in HTTP Sampler Settings
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54165">Bug 54165</a>
+ - Proxy Server: Improve rendering of target controller
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46677">Bug 46677</a>
+ - Copying Test Elements between test plans
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54204">Bug 54204</a>
+ - Result Status Action Handler : Add start next thread loop option
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54232">Bug 54232</a>
+ - Search Feature : Add a button to search and expand results
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54251">Bug 54251</a>
+ - Add tristate checkbox implementation
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54257">Bug 54257</a>
+ - Enhance SamplerCreator interface to meet new requirements
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54258">Bug 54258</a>
+ - Proxy : Use Raw Post Body when Sampler has one unnamed argument, useful for Samplers using POST method by of type JSON, XML, GWT body
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54268">Bug 54268</a>
+ - Improve CPU and memory usage
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54376">Bug 54376</a>
+ - ScopePanel : Allow configuring more precisely scopes
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54412">Bug 54412</a>
+ - Changing JMeter defaults to ensure better performances by default
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54414">Bug 54414</a>
+ - Remote Test should not start if one of the engines fails to start correctly
+</li>
+
+
+</ul>
+<h2>
+Non-functional changes
+</h2>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=53956">Bug 53956</a>
+ - Add ability to paste (a list of values) from clipboard for Header Manager
+</li>
+
+
+<li>
+Updated to HttpComponents Client 4.2.3 (from 4.2.1)
+</li>
+
+
+<li>
+Updated to HttpComponents Core 4.2.3 (from 4.2.2)
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54110">Bug 54110</a>
+ - BSFTestElement and JSR223TestElement should use shared super-class for common fields
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54199">Bug 54199</a>
+ - Move to Java 6
+</li>
+
+
+<li>
+Upgraded to rhino 1.7R4
+</li>
+
+
+</ul>
+<h1>
 Version 2.8
 </h1>
 <h2>
@@ -196,7 +1122,7 @@ This new feature allows running tests with a huge number of short lived threads.
 </b>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='817' height='296' src="./images/screenshots/changes/2.8/12_delay_thread_creation.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='817' height='296' src="./images/screenshots/changes/2.8/12_delay_thread_creation.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -211,7 +1137,7 @@ Add HTTPClient 4 cookie implementation in JMeter.
 
 Cookie Manager has now the default HC3.1 implementation and a new choice HC4 implementation (compliant with IPv6 address) 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='635' height='239' src="./images/screenshots/changes/2.8/11_hc4_cookie.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='635' height='239' src="./images/screenshots/changes/2.8/11_hc4_cookie.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -253,7 +1179,7 @@ OS Process Sampler
 <p>
 Allow defining files for stdout/stderr/stdin. 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='820' height='531' src="./images/screenshots/changes/2.8/06_os_sampler_stdout-err-in.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='820' height='531' src="./images/screenshots/changes/2.8/06_os_sampler_stdout-err-in.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -264,7 +1190,7 @@ HTTP Request: PATCH verb
 <p>
 Add PATCH verb to HTTP sampler
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='615' height='340' src="./images/screenshots/changes/2.8/01_http_patch_verb.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='615' height='340' src="./images/screenshots/changes/2.8/01_http_patch_verb.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -279,7 +1205,7 @@ HTTPClient 4 is now the default HTTP Request implementation (and for Proxy eleme
 
 Previously the default was the HTTP Java implementation (i.e. the implementation provided by the JVM) 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='558' height='288' src="./images/screenshots/changes/2.8/02_http_default_hc4.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='558' height='288' src="./images/screenshots/changes/2.8/02_http_default_hc4.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -290,7 +1216,7 @@ HTTP Request
 <p>
 Add Embedded URL Filter to HTTP Request Defaults Control (it was already present for HTTP Requests)
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='586' height='682' src="./images/screenshots/changes/2.8/05_http_defaults_url_filter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='586' height='682' src="./images/screenshots/changes/2.8/05_http_defaults_url_filter.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -326,7 +1252,7 @@ Response Time Graph
 <p>
 Add a new visualizer Response Time Graph to draw a line graph showing the evolution of response time for a test
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='993' height='549' src="./images/screenshots/changes/2.8/09_resp_time_graph.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='993' height='549' src="./images/screenshots/changes/2.8/09_resp_time_graph.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -334,7 +1260,7 @@ Add a new visualizer Response Time Graph to draw a line graph showing the evolut
 <p>
 Settings for Response Time Graph
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='989' height='602' src="./images/screenshots/changes/2.8/08_resp_time_graph_settings.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='989' height='602' src="./images/screenshots/changes/2.8/08_resp_time_graph_settings.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -345,7 +1271,7 @@ View Results in Table
 <p>
 Add latency to View Result in Table listener
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='998' height='324' src="./images/screenshots/changes/2.8/10_latency_view_results_table.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='998' height='324' src="./images/screenshots/changes/2.8/10_latency_view_results_table.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -356,7 +1282,7 @@ Aggregate Graph
 <p>
 Small improvements: legend at left or right is now on 1 column (instead of 1 large line), ...
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='989' height='418' src="./images/screenshots/changes/2.8/07_aggregate_graph_legend_left_right.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='989' height='418' src="./images/screenshots/changes/2.8/07_aggregate_graph_legend_left_right.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -370,7 +1296,7 @@ HTTP Proxy Server simplifications
 <p>
 HTTPS Spoofing options have been removed from Proxy as HTTPS recording is directly available since JMeter 2.4.
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='940' height='277' src="./images/screenshots/changes/2.8/03_remove_https_spoofing1.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='940' height='277' src="./images/screenshots/changes/2.8/03_remove_https_spoofing1.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -381,7 +1307,7 @@ HTTP Proxy Server
 <p>
 Allow URL Filters to be pasted from clipboard 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='707' height='614' src="./images/screenshots/changes/2.8/15_add_from_clipboard_filter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='707' height='614' src="./images/screenshots/changes/2.8/15_add_from_clipboard_filter.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -392,7 +1318,7 @@ Find in JMeter
 <p>
 CTRL + F for the new Find feature 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='477' height='157' src="./images/screenshots/changes/2.8/14_ctrl_F_shortcut.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='477' height='157' src="./images/screenshots/changes/2.8/14_ctrl_F_shortcut.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -405,7 +1331,7 @@ User Interface in GNOME 3
 <p>
 Display 'Apache JMeter' title in app title bar in Gnome 3
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='441' height='253' src="./images/screenshots/changes/2.8/13_gnome3_title.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='441' height='253' src="./images/screenshots/changes/2.8/13_gnome3_title.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1005,7 +1931,7 @@ OS Process Sampler
 <p>
 A new System Sampler that can be used to execute commands on the local machine.
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='629' height='497' src="./images/screenshots/changes/2.7/01_os_process_sampler.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='629' height='497' src="./images/screenshots/changes/2.7/01_os_process_sampler.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1013,7 +1939,7 @@ A new System Sampler that can be used to execute commands on the local machine.
 <p>
 OS Process Sampler results example with DNS lookup command 'dig'
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='877' height='470' src="./images/screenshots/changes/2.7/02_os_process_example_results.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='877' height='470' src="./images/screenshots/changes/2.7/02_os_process_example_results.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1024,7 +1950,7 @@ JMS Samplers improvements
 <p>
 Addition of a "Non Persistent Delivery" option to send "Non-Persistent" (Guaranteed to be delivered at most once. Message loss is not a concern.) JMS messages
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='336' src="./images/screenshots/changes/2.7/11_jms_non_persistent_delivery_mode.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='336' src="./images/screenshots/changes/2.7/11_jms_non_persistent_delivery_mode.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1032,7 +1958,7 @@ Addition of a "Non Persistent Delivery" option to send "Non-Persistent" (Guarant
 <p>
 Support sending of JMS Object Messages to enable sending Objects unmarshalled from XML by XStream
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='808' height='726' src="./images/screenshots/changes/2.7/12_jms_sending_objects.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='808' height='726' src="./images/screenshots/changes/2.7/12_jms_sending_objects.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1040,7 +1966,7 @@ Support sending of JMS Object Messages to enable sending Objects unmarshalled fr
 <p>
 Enable setting JMS Properties through JMS Publisher sampler
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1029' height='470' src="./images/screenshots/changes/2.7/13_jms_properties.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1029' height='470' src="./images/screenshots/changes/2.7/13_jms_properties.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1051,7 +1977,7 @@ Test Action sampler
 <p>
 Allow premature exit from a loop
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='862' height='167' src="./images/screenshots/changes/2.7/07_test_action_next_iter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='862' height='167' src="./images/screenshots/changes/2.7/07_test_action_next_iter.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1062,7 +1988,7 @@ Webservice Sampler improvements
 <p>
 Add a jmeter property soap.document_cache to control size of Document Cache
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='270' height='59' src="./images/screenshots/changes/2.7/14_ws_document_cache.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='270' height='59' src="./images/screenshots/changes/2.7/14_ws_document_cache.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1070,7 +1996,7 @@ Add a jmeter property soap.document_cache to control size of Document Cache
 <p>
 Make Maintain HTTP Session configurable
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='833' height='505' src="./images/screenshots/changes/2.7/15_ws_maintain_session.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='833' height='505' src="./images/screenshots/changes/2.7/15_ws_maintain_session.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1081,7 +2007,7 @@ Aggregate graph: Clustered Bar char with average, median, 90% line, min and max 
 <p>
 Aggregate graph changes to Clustered Bar chart, add more columns (median, 90% line, min, max) and options, fixed some bugs 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1177' height='503' src="./images/screenshots/changes/2.7/03_aggregate_graph_with_new_cols.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1177' height='503' src="./images/screenshots/changes/2.7/03_aggregate_graph_with_new_cols.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1089,7 +2015,7 @@ Aggregate graph changes to Clustered Bar chart, add more columns (median, 90% li
 <p>
 New settings for aggregate graph
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1173' height='433' src="./images/screenshots/changes/2.7/04_aggregate_graph_parameters.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1173' height='433' src="./images/screenshots/changes/2.7/04_aggregate_graph_parameters.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1100,7 +2026,7 @@ Improvements of HTML report design generated by JMeter Ant task in extras folder
 <p>
 HTML report example 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1264' height='506' src="./images/screenshots/changes/2.7/05_jmeter_ant_task_report_success.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1264' height='506' src="./images/screenshots/changes/2.7/05_jmeter_ant_task_report_success.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1108,7 +2034,7 @@ HTML report example
 <p>
 HTML report example with some assertion errors
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1267' height='550' src="./images/screenshots/changes/2.7/06_jmeter_ant_task_report_errors.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1267' height='550' src="./images/screenshots/changes/2.7/06_jmeter_ant_task_report_errors.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1138,7 +2064,7 @@ Add internationalisation (i18n) support
 </ul>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='860' height='403' src="./images/screenshots/changes/2.7/10_mailer_visualizer_gui.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='860' height='403' src="./images/screenshots/changes/2.7/10_mailer_visualizer_gui.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1149,7 +2075,7 @@ New Visual Indicator of number of ERROR/FATAL messages in logs
 <p>
 Indicator shows number of ERROR/FATAL messsages in logs, it can be clicked to toggle Log Viewer panel
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='815' height='633' src="./images/screenshots/changes/2.7/16_log_errors_counter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='815' height='633' src="./images/screenshots/changes/2.7/16_log_errors_counter.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1160,7 +2086,7 @@ Dialog box to show detail of a parameter row
 <p>
 Add a detail button on parameters table to show detail of a Row 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='824' height='165' src="./images/screenshots/changes/2.7/08_param_button_detail.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='824' height='165' src="./images/screenshots/changes/2.7/08_param_button_detail.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1168,7 +2094,7 @@ Add a detail button on parameters table to show detail of a Row
 <p>
 Detail box example
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='702' height='454' src="./images/screenshots/changes/2.7/09_detail_box.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='702' height='454' src="./images/screenshots/changes/2.7/09_detail_box.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1825,7 +2751,7 @@ Toolbar
 <p>
 A new toolbar on JMeter's main window
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='986' height='91' src="./images/screenshots/changes/2.6/01_toolbar.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='986' height='91' src="./images/screenshots/changes/2.6/01_toolbar.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1836,7 +2762,7 @@ JMeter start test button
 <p>
 A new menu option and button allow to start a test ignoring the Pause Timers
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='201' height='58' src="./images/screenshots/changes/2.6/02_ignore_pause_timers.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='201' height='58' src="./images/screenshots/changes/2.6/02_ignore_pause_timers.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1847,7 +2773,7 @@ JMeter GUI Look and Feel
 <p>
 Allow System or CrossPlatform LAF to be set from options menu
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='373' height='162' src="./images/screenshots/changes/2.6/03_look_and_feel.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='373' height='162' src="./images/screenshots/changes/2.6/03_look_and_feel.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1858,7 +2784,7 @@ JMeter GUI - duplicate node
 <p>
 Add "duplicate node" in context menu
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='323' height='136' src="./images/screenshots/changes/2.6/04_duplicate_context_menu.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='323' height='136' src="./images/screenshots/changes/2.6/04_duplicate_context_menu.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1869,7 +2795,7 @@ JMeter tree view - search facility
 <p>
 Functionality to search by keyword in Samplers Tree View
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='554' height='219' src="./images/screenshots/changes/2.6/05_search_tree.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='554' height='219' src="./images/screenshots/changes/2.6/05_search_tree.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1880,7 +2806,7 @@ HTTP Request - raw request pane
 <p>
 Improve HTTP Request GUI to better show parameters without name (GWT RPC request or SOAP request for example)
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='759' height='461' src="./images/screenshots/changes/2.6/06_post_data.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='759' height='461' src="./images/screenshots/changes/2.6/06_post_data.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1910,7 +2836,7 @@ Ability to move variables up or down in HTTP Request
 </ul>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='875' height='218' src="./images/screenshots/changes/2.6/07_multiple_selection_params.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='875' height='218' src="./images/screenshots/changes/2.6/07_multiple_selection_params.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1921,7 +2847,7 @@ HTTP Request - file protocol
 <p>
 Better support for file: protocol in HTTP sampler
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='489' height='662' src="./images/screenshots/changes/2.6/08_file_protocol.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='489' height='662' src="./images/screenshots/changes/2.6/08_file_protocol.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1929,7 +2855,7 @@ Better support for file: protocol in HTTP sampler
 <p>
 Retrieve embedded resources with file: protocol
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='700' height='138' src="./images/screenshots/changes/2.6/09_file_protocol_embedded.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='700' height='138' src="./images/screenshots/changes/2.6/09_file_protocol_embedded.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1940,7 +2866,7 @@ HTTP Request - Ignore embedded resources failed
 <p>
 Enable "ignore failed" for embedded resources
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='820' height='246' src="./images/screenshots/changes/2.6/26_ignore_child_failed.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='820' height='246' src="./images/screenshots/changes/2.6/26_ignore_child_failed.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1948,7 +2874,7 @@ Enable "ignore failed" for embedded resources
 <p>
 Parent success with a embedded resource failed
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='590' height='214' src="./images/screenshots/changes/2.6/27_succes_with_child_failed.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='590' height='214' src="./images/screenshots/changes/2.6/27_succes_with_child_failed.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1959,7 +2885,7 @@ View Results in Table - child sample display
 <p>
 Add option to TableVisualiser to display child samples instead of parent
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='911' height='619' src="./images/screenshots/changes/2.6/10_child_sampler.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='911' height='619' src="./images/screenshots/changes/2.6/10_child_sampler.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -1970,7 +2896,7 @@ Key Store - multiple certificates
 <p>
 Allowing multiple certificates (JKS)
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='324' height='166' src="./images/screenshots/changes/2.6/11_jks_keystore.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='324' height='166' src="./images/screenshots/changes/2.6/11_jks_keystore.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2020,7 +2946,7 @@ allow to define Y axis maximum scale
 </ul>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='850' height='411' src="./images/screenshots/changes/2.6/12_aggregate_graph_settings.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='850' height='411' src="./images/screenshots/changes/2.6/12_aggregate_graph_settings.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2028,7 +2954,7 @@ allow to define Y axis maximum scale
 <p>
 Aggregate Graph bar
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='851' height='506' src="./images/screenshots/changes/2.6/13_aggregate_graph_bar.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='851' height='506' src="./images/screenshots/changes/2.6/13_aggregate_graph_bar.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2039,7 +2965,7 @@ Counter - new reset option
 <p>
 Add an option to reset counter on each Thread Group iteration
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='345' height='257' src="./images/screenshots/changes/2.6/14_reset_counter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='345' height='257' src="./images/screenshots/changes/2.6/14_reset_counter.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2074,7 +3000,7 @@ Add a new function  __jexl2 to support Jexl2
 </ul>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='697' height='236' src="./images/screenshots/changes/2.6/15_random_string.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='697' height='236' src="./images/screenshots/changes/2.6/15_random_string.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2102,7 +3028,7 @@ Ability to move up or down variables in User Defined Variables
 </ul>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='543' height='237' src="./images/screenshots/changes/2.6/16_udv_comments.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='543' height='237' src="./images/screenshots/changes/2.6/16_udv_comments.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2113,7 +3039,7 @@ View Results Tree
 <p>
 In View Results Tree rather than showing just a message if the results are to big, show as much of the result as are configured
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='98' src="./images/screenshots/changes/2.6/17_vrt_max_size_display.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='98' src="./images/screenshots/changes/2.6/17_vrt_max_size_display.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2124,7 +3050,7 @@ Controllers - change elements
 <p>
 Add ability to Change Controller elements
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='643' height='112' src="./images/screenshots/changes/2.6/18_change_ctl_type.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='643' height='112' src="./images/screenshots/changes/2.6/18_change_ctl_type.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2135,7 +3061,7 @@ JDBC pre- and post-processor
 <p>
 Add JDBC pre- and post-processor
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='535' height='217' src="./images/screenshots/changes/2.6/19_jdbc_pre_post_proc.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='535' height='217' src="./images/screenshots/changes/2.6/19_jdbc_pre_post_proc.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2146,7 +3072,7 @@ JDBC transaction isolation option
 <p>
 Allow to set the transaction isolation in the JDBC Connection Configuration
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='437' height='351' src="./images/screenshots/changes/2.6/20_jdbc_trans_isolation.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='437' height='351' src="./images/screenshots/changes/2.6/20_jdbc_trans_isolation.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2157,7 +3083,7 @@ Poisson Timer
 <p>
 Add a Poisson based timer
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='358' height='156' src="./images/screenshots/changes/2.6/21_poisson_timer.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='358' height='156' src="./images/screenshots/changes/2.6/21_poisson_timer.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2168,7 +3094,7 @@ GUI and OS interaction
 <p>
 Support for file Drag and Drop. 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='776' height='508' src="./images/screenshots/changes/2.6/22_drag_and_drop.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='776' height='508' src="./images/screenshots/changes/2.6/22_drag_and_drop.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2179,7 +3105,7 @@ Confirm Remove Dialog box
 <p>
 Add a dialog box to confirm removing the element(s) when Remove action is called
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='583' height='210' src="./images/screenshots/changes/2.6/23_confirm_remove.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='583' height='210' src="./images/screenshots/changes/2.6/23_confirm_remove.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 The dialogue can be skipped by setting the JMeter property 
@@ -2196,7 +3122,7 @@ Remote batching support
 Use external store to hold samples during distributed testing, 
 Added DiskStore remote sample sender: like Hold, but saves samples to disk until end of test
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='998' height='273' src="./images/screenshots/changes/2.6/24_diskstore.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='998' height='273' src="./images/screenshots/changes/2.6/24_diskstore.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2207,7 +3133,7 @@ JMS Subscriber sampler
 <p>
 With JMS Subscriber, ability to use Selectors
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='705' height='297' src="./images/screenshots/changes/2.6/25_selector.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='705' height='297' src="./images/screenshots/changes/2.6/25_selector.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2218,7 +3144,7 @@ New Logger Panel
 <p>
 A new Log Viewer  has been added to the GUI and can be enabled from menu Options > Log Viewer:
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='326' height='147' src="./images/screenshots/changes/2.6/28_loggerpanel_option.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='326' height='147' src="./images/screenshots/changes/2.6/28_loggerpanel_option.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -2226,7 +3152,7 @@ A new Log Viewer  has been added to the GUI and can be enabled from menu Options
 <p>
 This Log Viewer shows the jmeter.log file, and useful (for example) to debug BeanShell/BSF scripts:
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='466' src="./images/screenshots/changes/2.6/28_loggerpanel.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='466' src="./images/screenshots/changes/2.6/28_loggerpanel.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 
 
@@ -10597,7 +11523,7 @@ Version 2.0
 </h3>
 <ul>
 
-	
+    
 <li>
 HTML parsing improved; now has choice of 3 parsers, and most embedded elements can now be detected and downloaded.
 </li>
@@ -10667,31 +11593,31 @@ Add Response Assertion to first sampler in each set
 Test Plan has a comment field
 </li>
 
-	
-	
+
+    
 <li>
 Help Page can now be pushed to background
 </li>
 
-	
+    
 <li>
 Separate Function help page
 </li>
 
-	
+    
 <li>
 New / amended functions
 </li>
 
-	
+    
 <ul>
 
-	  
+      
 <li>
 __property() and __P() functions
 </li>
 
-	  
+      
 <li>
 __log() and __logn() - for writing to the log file
 </li>
@@ -10706,15 +11632,15 @@ _StringFromFile can now process a sequence of files, e.g. dir/file01.txt, dir/fi
 _StringFromFile() funtion can now use a variable or function for the file name 
 </li>
 
-	
+    
 </ul>
 
-	
+    
 <li>
 New / amended Assertions
 </li>
 
-	
+    
 <ul>
 
         
@@ -10727,48 +11653,48 @@ Response Assertion now works for URLs, and it handles null data better
 Response Assertion can now match on Response Code and Response message as well 
 </li>
 
-		
+        
 <li>
 HTML Assertion using JTidy to check for well-formed HTML
 </li>
 
-	
+    
 </ul>
 
-	
+    
 <li>
 If Controller (not fully functional yet)
 </li>
 
-	
+    
 <li>
 Transaction Controller (aggregates the times of its children)
 </li>
 
-	
+    
 <li>
 New Samplers
 </li>
 
-		
+        
 <ul>
 
-			
+            
 <li>
 Basic BSF Sampler (optional)
 </li>
 
-			
+            
 <li>
 BeanShell Sampler (optional, needs to be downloaded from www.beanshell.org
 </li>
 
-			
+            
 <li>
 Basic TCP Sampler
 </li>
 
-		
+        
 </ul>
 
      
@@ -11245,106 +12171,106 @@ Version 1.7Beta
 </h3>
 <ul>
  
-	
+    
 <li>
 Better XML support for special characters (Tushar Bhatia) 
 </li>
  
-	
+    
 <li>
 Non-GUI functioning  & Non-GUI test plan execution  (Tushar Bhatia)
 </li>
  
-	
+    
 <li>
 Removing Swing dependence from base JMeter classes
 </li>
  
-	
+    
 <li>
 Internationalization (Takashi Okamoto)
 </li>
  
-	
+    
 <li>
 AllTests bug fix (neth6@atozasia.com)
 </li>
  
-	
+    
 <li>
 ClassFinder bug fix (neth6@atozasia.com)
 </li>
  
-	
+    
 <li>
 New Loop Controller
 </li>
  
-	
+    
 <li>
 Proxy Server records HTTP samples from browser 
-		(and documented in the user manual)
+        (and documented in the user manual)
 </li>
  
 <li>
 Multipart Form support
 </li>
  
-	
+    
 <li>
 HTTP Header class for Header customization
 </li>
  
-	
+    
 <li>
 Extracting HTTP Header information from responses (Jamie Davidson)
 </li>
  
-	
+    
 <li>
 Mailer Visualizer re-added to JMeter
 </li>
  
-	
+    
 <li>
 JMeter now url encodes parameter names and values
 </li>
  
-	
+    
 <li>
 listeners no longer give exceptions if their gui's haven't been initialized
 </li>
  
-	
+    
 <li>
 HTTPS and Authorization working together
 </li>
  
-	
+    
 <li>
 New Http sampling that automatically parses HTML response 
-		for images to download, and includes the downloading of these 
-		images in total time for request (Neth neth6@atozasia.com) 
+        for images to download, and includes the downloading of these 
+        images in total time for request (Neth neth6@atozasia.com) 
 </li>
  
-	
+    
 <li>
 HTTP responses from server can be parsed for links and forms, 
-		and dynamic data can be extracted and added to test samples 
-		at run-time (documented)
+        and dynamic data can be extracted and added to test samples 
+        at run-time (documented)
 </li>
   
-	
+    
 <li>
 New Ramp-up feature (Jonathan O'Keefe)
 </li>
  
-	
+    
 <li>
 New visualizers (Neth)
 </li>
  
-	
+    
 <li>
 New Assertions for functional testing
 </li>
@@ -11356,31 +12282,31 @@ Version 1.6.1
 </h3>
 <ul>
  
-	
+    
 <li>
 Fixed saving and loading of test scripts (no more extra lines)
 </li>
  
-	
+    
 <li>
 Can save and load special characters (such as "&" and "<").
 </li>
  
-	
+    
 <li>
 Can save and load timers and listeners.
 </li>
  
-	
+    
 <li>
 Minor bug fix for cookies (if you cookie value 
-		contained an "=", then it broke).
+        contained an "=", then it broke).
 </li>
  
-	
+    
 <li>
 URL's can sample ports other than 80, and can test HTTPS, 
-		provided you have the necessary jars (JSSE)
+        provided you have the necessary jars (JSSE)
 </li>
  
 
@@ -11390,37 +12316,37 @@ Version 1.6 Alpha
 </h3>
 <ul>
  
-	
+    
 <li>
 New UI
 </li>
  
-	
+    
 <li>
 Separation of GUI and Logic code
 </li>
- 	
-	
+
+    
 <li>
 New Plug-in framework for new modules
 </li>
  
-	
+    
 <li>
 Enhanced performance
 </li>
  
-	
+    
 <li>
 Layering of test logic for greater flexibility
 </li>
  
-	
+    
 <li>
 Added support for saving of test elements
 </li>
  
-	
+    
 <li>
 Added support for distributed testing using a single client
 </li>
@@ -11433,39 +12359,39 @@ Version 1.5.1
 </h3>
 <ul>
  
-	
+    
 <li>
 Fixed bug that caused cookies not to be read if header name case not as expected.
 </li>
  
-	
+    
 <li>
 Clone entries before sending to sampler - prevents relocations from messing up 
-		information across threads
+        information across threads
 </li>
  
-	
+    
 <li>
 Minor bug fix to convenience dialog for adding paramters to test sample.  
-		Bug prevented entries in dialog from appearing in test sample.
+        Bug prevented entries in dialog from appearing in test sample.
 </li>
  
-	
+    
 <li>
 Added xerces.jar to distribution
 </li>
  
-	
+    
 <li>
 Added junit.jar to distribution and created a few tests.
 </li>
  
-	
+    
 <li>
 Started work on new framework.  New files in cvs, but do not effect program yet.
 </li>
  
-	
+    
 <li>
 Fixed bug that prevent HTTPJMeterThread from delaying according to chosen timer.
 </li>
@@ -11482,37 +12408,37 @@ Version 1.5
 
 <ul>
    
-	
+    
 <li>
 Abstracted out the concept of the Sampler, SamplerController, and TestSample.   
-		A Sampler represents code that understands a protocol (such as HTTP, 
-		or FTP, RMI,   SMTP, etc..).  It is the code that actually makes the 
-		connection to whatever is   being tested.   A SamplerController 
-		represents code that understands how to organize and run a group   
-		of test samples.  It is what binds together a Sampler and its test 
-		samples and runs them.   A TestSample represents code that understands 
-		how to gather information from the   user about a particular test.  
-		For a website, it would represent a URL and any   information to be sent 
-		with the URL.
+        A Sampler represents code that understands a protocol (such as HTTP, 
+        or FTP, RMI,   SMTP, etc..).  It is the code that actually makes the 
+        connection to whatever is   being tested.   A SamplerController 
+        represents code that understands how to organize and run a group   
+        of test samples.  It is what binds together a Sampler and its test 
+        samples and runs them.   A TestSample represents code that understands 
+        how to gather information from the   user about a particular test.  
+        For a website, it would represent a URL and any   information to be sent 
+        with the URL.
 </li>
    
-	
+    
 <li>
 The UI has been updated to make entering test samples more convenient.
 </li>
    
-	
+    
 <li>
 Thread groups have been added, allowing a user to setup multiple test to run   
-		concurrently, and to allow sharing of test samples between those tests.
+        concurrently, and to allow sharing of test samples between those tests.
 </li>
    
-	
+    
 <li>
 It is now possible to save and load test samples.
 </li>
    
-	
+    
 <li>
 ....and many more minor changes/improvements...
 </li>
@@ -11783,6 +12709,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 

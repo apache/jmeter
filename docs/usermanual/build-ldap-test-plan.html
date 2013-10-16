@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,22 +20,16 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="../css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 
 <title>Apache JMeter - User's Manual: Building an LDAP Test Plan</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -65,7 +59,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="../issues.html">Issues</a>
+<li><a href="../issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -115,8 +109,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="../mail.html">Mailing Lists</a>
 </li>
 <li><a href="../svnindex.html">SVN Repositories</a>
@@ -125,6 +117,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -156,9 +150,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <blockquote>
 <p>
 In this section, you will learn how to create a basic Test Plan to test an LDAP server.
-You will create four users that send requests for four tests on the LDAP server.Also, you will tell
-the users to run their tests twice. So,  the total number of requests is (4 users) x (4 requests) x
-repeat 2 times) = 32 LDAP requests. To construct the Test Plan, you will use the following elements:
+You will create four users that send requests for four tests on the LDAP server. Also, you will tell
+the users to run their tests 4 times. So,  the total number of requests is (4 users) x (4 requests) x
+repeat 4 times) = 40 LDAP requests. To construct the Test Plan, you will use the following elements:
 
 <a href="test_plan.html#thread_group">
 Thread Group
@@ -176,7 +170,7 @@ Thread Group
 .
 </p>
 <p>
-This example assumes that the LDAP Server is installed in your Local machine.
+This example assumes that the LDAP Server is available at ldap.test.com.
 </p>
 </blockquote>
 </p>
@@ -197,13 +191,25 @@ requests, and the how many requests  they should send.
 </p>
 <p>
 Go ahead and add the ThreadGroup element by first selecting the Test Plan, clicking your
-right mouse button to get the Add menu, and then select Add-->ThreadGroup. You should now see the
+right mouse button to get the 
+<b>
+Add
+</b>
+ menu, and then select 
+<b>
+Add
+</b>
+>
+<b>
+ThreadGroup
+</b>
+. You should now see the
 Thread Group element under Test Plan. If you do not see the element, then "expand" the Test Plan tree by
 clicking on the Test Plan element.
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/threadgroup.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/threadgroup.png"/><br>
 <font size="-1">
-Figure 9a.1. Thread Group with Default Values
+Figure 9a.1. Thread Group and final test tree
 </font></td></tr></table></p>
 
 
@@ -222,32 +228,52 @@ Figure 9a.1. Thread Group with Default Values
 <tr><td>
 <blockquote>
 <p>
-Begin by selecting the Siptech Users element. Click your right mouse
-button to get the Add menu, and then select Add --> Config Element --> Login Config Element.
+Begin by selecting the 
+<b>
+LDAP Users
+</b>
+ element. Click your right mouse
+button to get the Add menu, and then select 
+<b>
+Add
+</b>
+>
+<b>
+Config Element
+</b>
+>
+<b>
+Login Config Element
+</b>
+.
 Then,  select this new element to view its Control Panel.
 </p>
 <p>
-Like most JMeter elements, the Login  Config Element  Control Panel has a name
+Like most JMeter elements, the 
+<b>
+Login  Config Element
+</b>
+'s Control Panel has a name
 field that you can modify. In this example, leave this field with the default value.
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/login-config-element.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/login-config-element.png"/><br>
 <font size="-1">
   Figure 9a.2 Login Config Element for our Test Plan
 </font></td></tr></table></p>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td><p>
-Enter Username field to "your Server Username",
+Enter Username field to "your LDAP Username",
 <br>
 
 
-		The password field to "your Server Passowrd"
+        The password field to "your LDAP Passowrd"
 </p>
 
 
-		
+        
 <p>
-These values are default for the LDAP Requests.
+These values will be used by the LDAP Requests.
 </p>
 </td></tr>
 </table>
@@ -265,33 +291,53 @@ These values are default for the LDAP Requests.
 <tr><td>
 <blockquote>
 <p>
-Begin by selecting the Siptech Users element. Click your right mouse button
-to get the Add menu, and then select Add --> Config Element -->LDAP Request Defaults. Then,
+Begin by selecting the LDAP Users element. Click your right mouse button
+to get the 
+<b>
+Add
+</b>
+ menu, and then select 
+<b>
+Add
+</b>
+>
+<b>
+Config Element
+</b>
+>
+<b>
+LDAP Request Defaults
+</b>
+. Then,
 select this new element to view its Control Panel.
 </p>
 <p>
-Like most JMeter elements, the LDAP Request Defaults Control Panel has a name
+Like most JMeter elements, the 
+<b>
+LDAP Request Defaults
+</b>
+ Control Panel has a name
 field that you can modify. In this example, leave this field with the default value.
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/requestdefaults.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/requestdefaults.png"/><br>
 <font size="-1">
   Figure 9a.3 LDAP Defaults for our Test Plan
 </font></td></tr></table></p>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>Enter DN field to "your Server Root Dn".
+<tr><td>Enter DN field to "your LDAP Root Distinguished Name".
 <br>
 
 
-                Enter LDAP Server's Servername field to "localhost".
+                Enter LDAP Server's Servername field to "ldap.test.com".
 <br>
 
 
-		The port to  389.
+        The port to 389.
 <br>
 
 
-		These values are default for the LDAP Requests.
+        These values are default for the LDAP Requests.
 </td></tr>
 </table>
 </p>
@@ -312,56 +358,84 @@ In our Test Plan, we need to make four LDAP requests.
 </p>
 <ol>
 
-			
+            
 <li>
 Inbuilt Add Test
 </li>
 
-			
-<li>
-Inbuilt Modify Test
-</li>
-
-			
-<li>
-Inbuilt Delete Test
-</li>
-
-			
+            
 <li>
 Inbuilt Search Test
 </li>
 
-		
+            
+<li>
+Inbuilt Modify Test
+</li>
+
+            
+<li>
+Inbuilt Delete Test
+</li>
+
+
+        
 </ol>
 <p>
 JMeter sends requests in the order that you add them to the tree.
-Start by adding the first LDAP Request to the Siptech Users element (Add -->
-Sampler --> LDAP Request). Then, select the LDAP Request  element in the tree
+Start by adding the first LDAP Request to the LDAP Users element (
+<b>
+Add
+</b>
+>
+<b>
+
+Sampler
+</b>
+>
+<b>
+LDAP Request
+</b>
+). Then, select the LDAP Request  element in the tree
 and edit the following properties
 </p>
 <ol>
 
-			
+            
 <li>
-Change the Name to "Inbuilt-Add Test".
+Rename to "Add" this element
 </li>
 
-			
+            
 <li>
-Select the Add test Radio button
+Select the 
+<b>
+Add Test
+</b>
+ radio button in 
+<b>
+Test Configuration
+</b>
+ group
 </li>
 
-		
+        
 </ol>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/add.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/add.png"/><br>
 <font size="-1">
                   Figure 9a.4.1 LDAP Request for Inbuilt Add test
 </font></td></tr></table></p>
 <p>
 You do not have to set the Server Name field, port field, Username, Password
-and DN because you already specified this value in the Login Config Element and
+and DN because you already specified this value in the 
+<b>
+Login Config Element
+</b>
+ and
+
+<b>
 LDAP Request Defaults.
+</b>
 </p>
 <p>
 Next, add the second LDAP Request and edit the following
@@ -369,57 +443,81 @@ properties
 </p>
 <ol>
 
-			
+            
 <li>
-Change the Name to "Inbuilt-Modify Test".
+Rename to "Search" this element
 </li>
 
-			
+            
 <li>
-Select the Modify test Radio button
+Select the 
+<b>
+Search Test
+</b>
+ radio button in 
+<b>
+Test Configuration
+</b>
+ group
 </li>
 
-		
+        
 </ol>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/modify.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/search.png"/><br>
 <font size="-1">
-                  Figure 9a.4.2 LDAP Request for Inbuilt Modify test
+                  Figure 9a.4.2 LDAP Request for Inbuilt Search test
 </font></td></tr></table></p>
 <ol>
 
-			
+            
 <li>
-Change the Name to "Inbuilt-Delete Test".
+Rename to "Modify" this element
 </li>
 
-			
+            
 <li>
-Select the Delete test Radio button
+Select the 
+<b>
+Modify Test
+</b>
+ radio button in 
+<b>
+Test Configuration
+</b>
+ group
 </li>
 
-		
+        
 </ol>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/delete.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/modify.png"/><br>
 <font size="-1">
-                  Figure 9a.4.3 LDAP Request for Inbuilt Delete test
+                  Figure 9a.4.3 LDAP Request for Inbuilt Modify test
 </font></td></tr></table></p>
 <ol>
 
-			
+            
 <li>
-Change the Name to "Inbuilt-Search Test".
+Rename to "Delete" this element
 </li>
 
-			
+            
 <li>
-Select the Search test Radio button
+Select the 
+<b>
+Delete Test
+</b>
+ radio button in 
+<b>
+Test Configuration
+</b>
+ group
 </li>
 
-		
+        
 </ol>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/search.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/delete.png"/><br>
 <font size="-1">
-                  Figure 9a.4.4 LDAP Request for Inbuilt Search test
+                  Figure 9a.4.4 LDAP Request for Inbuilt Delete test
 </font></td></tr></table></p>
 </blockquote>
 </p>
@@ -429,25 +527,118 @@ Select the Search test Radio button
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="add_listener"><strong>9a.5 Adding a Listener to View/Store the Test Results</strong></a><a class="sectionlink" href="#add_listener" title="Link to here">&para;</a></font>
+<a name="ResponseAssertion"><strong>9a.5 Adding a Response Assertion</strong></a><a class="sectionlink" href="#ResponseAssertion" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
-The final element you need to add to your Test Plan is a Listener.
- This element is responsible for storing all of the results of your LDAP
-requests in a file  and presenting a visual model of the data.Select the Siptech
-Users element and add a View Results in Table (Add --> Listener -->View Results in Table)
+You can add a Response Assertion element.
+ This element will check the received response data by verifying if the response text is "successful".
+  (
+<b>
+Add
+</b>
+>
+<b>
+Assertion
+</b>
+>
+<b>
+Response Assertion
+</b>
+).
+<br>
+Note: A this position in the tree,
+  the Response Assertion will be executed for each LDAP Request.
+
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/viewtable.png"><br>
+<ol>
+
+            
+<li>
+Select 
+<b>
+Text Response
+</b>
+ Radio button in 
+<b>
+Response Field to Test
+</b>
+ group
+</li>
+
+            
+<li>
+Select 
+<b>
+Substring
+</b>
+ Radio button in 
+<b>
+Pattern Matching Rules
+</b>
+ group
+</li>
+
+            
+<li>
+Click on 
+<b>
+Add
+</b>
+ button and add the string "successful" in 
+<b>
+Pattern to Test
+</b>
+ field
+</li>
+
+        
+</ol>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/responseassertion.png"/><br>
 <font size="-1">
-  Figure 9a.5 View result in Table Listener
+  Figure 9a.5 LDAP Response Assertion
 </font></td></tr></table></p>
 </blockquote>
 </p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_listener"><strong>9a.6 Adding a Listener to View/Store the Test Results</strong></a><a class="sectionlink" href="#add_listener" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The final element you need to add to your Test Plan is a Listener.
+ This element is responsible for storing all of the results of your LDAP
+requests in a file  and presenting a visual model of the data. Select the LDAP
+Users element and add a View Results in Table (
+<b>
+Add
+</b>
+>
+<b>
+Listener
+</b>
+>
+<b>
+View Results in Table
+</b>
+)
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/viewtable.png"/><br>
+<font size="-1">
+  Figure 9a.6 View Results in Table Listener
+</font></td></tr></table></p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<br>
 <table>
 <tr>
 <td bgcolor="#525D76">
@@ -461,7 +652,6 @@ Users element and add a View Results in Table (Add --> Listener -->View Results 
 </td>
 </tr>
 </table>
-<br>
 </td>
 </tr>
 <tr><td colspan="2">
@@ -483,6 +673,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 

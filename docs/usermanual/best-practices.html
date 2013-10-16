@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,22 +20,16 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="../css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 
 <title>Apache JMeter - User's Manual: Best Practices</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -65,7 +59,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="../issues.html">Issues</a>
+<li><a href="../issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -115,8 +109,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="../mail.html">Mailing Lists</a>
 </li>
 <li><a href="../svnindex.html">SVN Repositories</a>
@@ -125,6 +117,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -162,7 +156,22 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="limit_threads"><strong>16.1 Limit the Number of Threads</strong></a><a class="sectionlink" href="#limit_threads" title="Link to here">&para;</a></font>
+<a name="use_latest_version"><strong>16.1 Always use latest version of JMeter</strong></a><a class="sectionlink" href="#use_latest_version" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="limit_threads"><strong>16.2 Limit the Number of Threads</strong></a><a class="sectionlink" href="#limit_threads" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -194,7 +203,7 @@ This allows for a very large total number of threads, provided that not too many
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="put_cookie_manager"><strong>16.2 Where to Put the Cookie Manager</strong></a><a class="sectionlink" href="#put_cookie_manager" title="Link to here">&para;</a></font>
+<a name="put_cookie_manager"><strong>16.3 Where to Put the Cookie Manager</strong></a><a class="sectionlink" href="#put_cookie_manager" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -214,7 +223,7 @@ for information.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="put_auth_manager"><strong>16.3 Where to Put the Authorization Manager</strong></a><a class="sectionlink" href="#put_auth_manager" title="Link to here">&para;</a></font>
+<a name="put_auth_manager"><strong>16.4 Where to Put the Authorization Manager</strong></a><a class="sectionlink" href="#put_auth_manager" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -234,15 +243,15 @@ Web Test
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="proxy_server"><strong>16.4 Using the Proxy Server</strong></a><a class="sectionlink" href="#proxy_server" title="Link to here">&para;</a></font>
+<a name="proxy_server"><strong>16.5 Using the HTTP(S) Test Script Recorder</strong></a><a class="sectionlink" href="#proxy_server" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
 Refer to 
-<a href="../usermanual/component_reference.html#HTTP_Proxy_Server">HTTP Proxy Server</a>
- for details on setting up the proxy
-server. The most important thing to do is filter out all requests you aren't
+<a href="../usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder</a>
+ for details on setting up the
+recorder. The most important thing to do is filter out all requests you aren't
 interested in.  For instance, there's no point in recording image requests (JMeter can
 be instructed to download all images on a page - see 
 <a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a>
@@ -259,7 +268,7 @@ out your settings to verify you are recording what you want, and then erase and 
 fresh.
 </p>
 <p>
-The Proxy Server expects to find a ThreadGroup element with a Recording Controller
+The HTTP(S) Test Script Recorder expects to find a ThreadGroup element with a Recording Controller
 under it where it will record HTTP Requests to.  This conveniently packages all your samples under one
 controller, which can be given a name that describes the test case.
 </p>
@@ -271,7 +280,7 @@ clean and start a new test case.  By doing this, you can quickly record a large 
 test case "rough drafts".
 </p>
 <p>
-One of the most useful features of the Proxy Server is that you can abstract out
+One of the most useful features of the HTTP(S) Test Script Recorder is that you can abstract out
 certain common elements from the recorded samples.  By defining some
 
 <a href="functions.html">
@@ -318,7 +327,7 @@ JMeter Proxy server certificate.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="user_variables"><strong>16.5 User variables</strong></a><a class="sectionlink" href="#user_variables" title="Link to here">&para;</a></font>
+<a name="user_variables"><strong>16.6 User variables</strong></a><a class="sectionlink" href="#user_variables" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -371,7 +380,7 @@ The CSV Data Set element will read a new line for each thread.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="lean_mean"><strong>16.6 Reducing resource requirements</strong></a><a class="sectionlink" href="#lean_mean" title="Link to here">&para;</a></font>
+<a name="lean_mean"><strong>16.7 Reducing resource requirements</strong></a><a class="sectionlink" href="#lean_mean" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -401,7 +410,6 @@ Don't use "View Results Tree" or "View Results in Table" listeners during the lo
 <li>
 Rather than using lots of similar samplers, 
 use the same sampler in a loop, and use variables (CSV Data Set) to vary the sample. 
-Or perhaps use the Access Log Sampler.
 [The Include Controller does not help here, as it adds all the test elements in the file to the test plan.]
 
 </li>
@@ -427,6 +435,11 @@ Use as few Assertions as possible
 </li>
 
 
+<li>
+Use the most performing scripting language (see JSR223 section)
+</li>
+
+
 </ul>
 <p>
 
@@ -442,7 +455,7 @@ that can be read with CSV Dataset. This avoids wasting resources at run-time.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="beanshell_server"><strong>16.7 BeanShell server</strong></a><a class="sectionlink" href="#beanshell_server" title="Link to here">&para;</a></font>
+<a name="beanshell_server"><strong>16.8 BeanShell server</strong></a><a class="sectionlink" href="#beanshell_server" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -536,14 +549,14 @@ java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="bsh_scripting"><strong>16.8 BeanShell scripting</strong></a><a class="sectionlink" href="#bsh_scripting" title="Link to here">&para;</a></font>
+<a name="bsh_scripting"><strong>16.9 BeanShell scripting</strong></a><a class="sectionlink" href="#bsh_scripting" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="bsh_overview"><strong>16.8.1 Overview</strong></a>
+<a name="bsh_overview"><strong>16.9.1 Overview</strong></a>
 <a class="sectionlink" href="#bsh_overview" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
@@ -553,6 +566,8 @@ java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 Each BeanShell test element has its own copy of the interpreter (for each thread).
 If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
 between invocations unless the "Reset bsh.Interpreter before each call" option is selected.
+For intensive load testing, it is recommended to use a JSR223 scripting language whose ScriptingEngine implements Compilable, 
+see JSR223 section below for more details.
 
 </p>
 <p>
@@ -583,7 +598,7 @@ bsh% exit(); // or use EOF key (e.g. ^Z or ^D)
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="bsh_variables"><strong>16.8.2 Sharing Variables</strong></a>
+<a name="bsh_variables"><strong>16.9.2 Sharing Variables</strong></a>
 <a class="sectionlink" href="#bsh_variables" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
@@ -653,19 +668,19 @@ defined by the JMeter property "beanshell.init.file". This is only processed onc
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="developing_scripts"><strong>16.9 Developing script functions in BeanShell, Javascript or Jexl etc.</strong></a><a class="sectionlink" href="#developing_scripts" title="Link to here">&para;</a></font>
+<a name="developing_scripts"><strong>16.10 Developing script functions in BeanShell, Javascript or Jexl etc.</strong></a><a class="sectionlink" href="#developing_scripts" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
 
 It's quite hard to write and test scripts as functions.
-However, JMeter has the BSF (and BeanShell) samplers which can be used instead.  
+However, JMeter has the JSR223, BSF (and BeanShell) samplers which can be used instead.  
 
 </p>
 <p>
 
-Create a simple Test Plan containing the BSF Sampler and Tree View Listener.
+Create a simple Test Plan containing the JSR223 or BSF Sampler and Tree View Listener.
 Code the script in the sampler script pane, and test it by running the test.
 If there are any errors, these will show up in the Tree View.
 Also the result of running the script will show up as the response.
@@ -693,7 +708,7 @@ because the function call is parsed before the variable's value is interpolated.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="parameterising_tests"><strong>16.10 Parameterising tests</strong></a><a class="sectionlink" href="#parameterising_tests" title="Link to here">&para;</a></font>
+<a name="parameterising_tests"><strong>16.11 Parameterising tests</strong></a><a class="sectionlink" href="#parameterising_tests" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -739,20 +754,32 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="jsr223"><strong>16.11 JSR223 Elements</strong></a><a class="sectionlink" href="#jsr223" title="Link to here">&para;</a></font>
+<a name="jsr223"><strong>16.12 JSR223 Elements</strong></a><a class="sectionlink" href="#jsr223" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
 
-When using JSR 223 elements, prefer script file to inline script as JMeter will compile script (if underlying language supports it) which will avoid parsing it each
-time it is executed and will highly improve performances of Test Plan.
+For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the Compilable interface.
+Groovy scripting engine implements Compilable. However neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
+recommended to avoid them for intensive load testing. 
+[Note: Beanshell implements the Compilable interface but it has not been coded - the method just throws an Exception.
+JMeter has an explicit work-round for this bug.]
+
+When using JSR 223 elements, always set caching key to a unique value to ensure the script compilation is cached if underlying language supports it.
+Ensure the script does not use any variable using ${varName} as caching would take only first value of ${varName}. Instead use :
+
+<code>
+
+vars.get("varName")
+
+</code>
+
 
 </p>
 <p>
 
-In this case, don't use any User Defined variable or variable you create directly in the script file, instead pass these as Parameters to
-the script and use them this way.
+You can also pass them as Parameters to the script and use them this way.
 
 </p>
 </blockquote>
@@ -763,7 +790,7 @@ the script and use them this way.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="sharing_variables"><strong>16.12 Sharing variables between threads and thread groups</strong></a><a class="sectionlink" href="#sharing_variables" title="Link to here">&para;</a></font>
+<a name="sharing_variables"><strong>16.13 Sharing variables between threads and thread groups</strong></a><a class="sectionlink" href="#sharing_variables" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -813,6 +840,7 @@ Write your own Java classes
 </td></tr>
 <tr><td><br></td></tr>
 </table>
+<br>
 <table>
 <tr>
 <td bgcolor="#525D76">
@@ -826,7 +854,6 @@ Write your own Java classes
 </td>
 </tr>
 </table>
-<br>
 </td>
 </tr>
 <tr><td colspan="2">
@@ -848,6 +875,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 

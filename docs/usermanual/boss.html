@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,15 +20,10 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="../css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 <meta name="author" value="Martin Ramshaw">
 <meta name="email" value="mramshaw@alumni.concordia.ca">
 
@@ -37,7 +32,6 @@
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -67,7 +61,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="../issues.html">Issues</a>
+<li><a href="../issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -117,8 +111,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="../mail.html">Mailing Lists</a>
 </li>
 <li><a href="../svnindex.html">SVN Repositories</a>
@@ -127,6 +119,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -226,13 +220,13 @@ people are, so that you can ask them for help if you need it.
 <blockquote>
 <p>
 Who knows our network topology ? If you run into any firewall or
-	proxy issues, this will become very important. As well, a private
-	testing network (which will therefore have very low network latency)
-	would be a very nice thing. Knowing who can set one up for you
-	(if you feel that this is necessary) will be very useful. If the
-	application doesn't scale as expected, who can add additional
-	hardware ?
-	
+    proxy issues, this will become very important. As well, a private
+    testing network (which will therefore have very low network latency)
+    would be a very nice thing. Knowing who can set one up for you
+    (if you feel that this is necessary) will be very useful. If the
+    application doesn't scale as expected, who can add additional
+    hardware ?
+    
 </p>
 </blockquote>
 </td></tr>
@@ -248,43 +242,43 @@ Who knows our network topology ? If you run into any firewall or
 <blockquote>
 <p>
 Who knows how our application functions ? The normal sequence is
-	
+    
 <ul>
 
-		
+        
 <li>
 test (low-volume - can we benchmark our application?)
 </li>
 
-		
+        
 <li>
 benchmark (the average number of users)
 </li>
 
-		
+        
 <li>
 load-test (the maximum number of users)
 </li>
 
-		
+        
 <li>
 test destructively (what is our hard limit?)
 </li>
 
-	
+    
 </ul>
 
-	The 
+    The 
 <b>
 test
 </b>
  process may progress from black-box testing to
-	white-box testing (the difference is that the first requires
-	no knowledge of the application [it is treated as a "black box"]
-	while the second requires some knowledge of the application).
-	It is not uncommon to discover problems with the application
-	during this process, so be prepared to defend your work.
-	
+    white-box testing (the difference is that the first requires
+    no knowledge of the application [it is treated as a "black box"]
+    while the second requires some knowledge of the application).
+    It is not uncommon to discover problems with the application
+    during this process, so be prepared to defend your work.
+    
 </p>
 </blockquote>
 </td></tr>
@@ -372,10 +366,10 @@ and any supplied documentation).
 <blockquote>
 <p>
 
-	This can be used to establish whether or not you can reach your
-	target site. Options can be specified so that 'ping' provides the
-	same type of route reporting as 'traceroute'.
-	
+    This can be used to establish whether or not you can reach your
+    target site. Options can be specified so that 'ping' provides the
+    same type of route reporting as 'traceroute'.
+    
 </p>
 </blockquote>
 </td></tr>
@@ -391,19 +385,19 @@ and any supplied documentation).
 <blockquote>
 <p>
 
-	While the 
+    While the 
 <u>
 user
 </u>
  will normally use a human-readable internet
-	address, 
+    address, 
 <u>
 you
 </u>
  may wish to avoid the overhead of DNS lookups when
-	performing benchmarking/load-testing. These can be used to determine
-	the unique address (dotted quad) of your target site.
-	
+    performing benchmarking/load-testing. These can be used to determine
+    the unique address (dotted quad) of your target site.
+    
 </p>
 </blockquote>
 </td></tr>
@@ -419,13 +413,13 @@ you
 <blockquote>
 <p>
 
-	If you cannot "ping" your target site, this may be used to determine 
-	the problem (possibly a firewall or a proxy). It can also be used
-	to estimate the overall network latency (running locally should give
-	the lowest possible network latency - remember that your users will
-	be running over a possibly busy internet). Generally, the fewer hops
-	the better.
-	
+    If you cannot "ping" your target site, this may be used to determine 
+    the problem (possibly a firewall or a proxy). It can also be used
+    to estimate the overall network latency (running locally should give
+    the lowest possible network latency - remember that your users will
+    be running over a possibly busy internet). Generally, the fewer hops
+    the better.
+    
 </p>
 </blockquote>
 </td></tr>
@@ -466,11 +460,11 @@ if your requirements are not particularly complicated.
 <blockquote>
 <p>
 
-	You should definitely start with this one. It handles HTTP 'get' requests
-	very well, and can be made to handle HTTP 'post' requests with a little
-	effort. Written in 'C', it performs very well, and offers good (if basic)
-	performance reporting.
-	
+    You should definitely start with this one. It handles HTTP 'get' requests
+    very well, and can be made to handle HTTP 'post' requests with a little
+    effort. Written in 'C', it performs very well, and offers good (if basic)
+    performance reporting.
+    
 </p>
 </blockquote>
 </td></tr>
@@ -486,15 +480,15 @@ if your requirements are not particularly complicated.
 <blockquote>
 <p>
 
-	This is worth a look. It is a library (and therefore of more interest to
-	developers) that can be used to perform HTTP tests/benchmarks. It is
-	intended to be used instead of a web browser (therefore no GUI) in
-	conjunction with 
+    This is worth a look. It is a library (and therefore of more interest to
+    developers) that can be used to perform HTTP tests/benchmarks. It is
+    intended to be used instead of a web browser (therefore no GUI) in
+    conjunction with 
 <b>
 JUnit
 </b>
 .
-	
+    
 </p>
 </blockquote>
 </td></tr>
@@ -510,10 +504,10 @@ JUnit
 <blockquote>
 <p>
 
-	This is definitely worth a look. It has an excellent user interface
-	but it may not do exactly what you want. If this is the case, be aware
-	that the functionality of this product is not likely to change.
-	
+    This is definitely worth a look. It has an excellent user interface
+    but it may not do exactly what you want. If this is the case, be aware
+    that the functionality of this product is not likely to change.
+    
 </p>
 </blockquote>
 </td></tr>
@@ -529,15 +523,15 @@ JUnit
 <blockquote>
 <p>
 
-	If you have non-standard requirements, then this solution offers an
-	open-source community to provide them (of course, if you are reading
-	
+    If you have non-standard requirements, then this solution offers an
+    open-source community to provide them (of course, if you are reading
+    
 <u>
 this
 </u>
 , you are probably already committed to this one). This
-	product is free to evolve along with your requirements.
-	
+    product is free to evolve along with your requirements.
+    
 </p>
 </blockquote>
 </td></tr>
@@ -602,6 +596,7 @@ platform.
 </td></tr>
 <tr><td><br></td></tr>
 </table>
+<br>
 <table>
 <tr>
 <td bgcolor="#525D76">
@@ -615,7 +610,6 @@ platform.
 </td>
 </tr>
 </table>
-<br>
 </td>
 </tr>
 <tr><td colspan="2">
@@ -637,6 +631,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 

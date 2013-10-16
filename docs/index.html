@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,22 +20,16 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="./css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 
 <title>Apache JMeter - Apache JMeter&trade;</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -65,7 +59,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="./issues.html">Issues</a>
+<li><a href="./issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -115,8 +109,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="./mail.html">Mailing Lists</a>
 </li>
 <li><a href="./svnindex.html">SVN Repositories</a>
@@ -125,6 +117,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -143,26 +137,26 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <blockquote>
 <p>
 
-	  The 
+      The 
 <b>
 Apache JMeter&trade;
 </b>
  desktop application is open source software,
       a 100% pure Java application designed
-	  to load test functional behavior and measure performance.  It was
-	  originally designed for testing Web Applications but has
-	  since expanded to other test functions.
-	
+      to load test functional behavior and measure performance.  It was
+      originally designed for testing Web Applications but has
+      since expanded to other test functions.
+    
 </p>
 <h2>
 What can I do with it?
 </h2>
 <p>
 
-	  Apache JMeter may be used to test performance both on static and dynamic
-	  resources (files, Servlets, Perl scripts, Java Objects, Data Bases and
-	  Queries, FTP Servers and more). It can be used to simulate a heavy
-load on a server, network or object to test its strength or to analyze
+      Apache JMeter may be used to test performance both on static and dynamic
+      resources (Files, Web dynamic languages - PHP, Java, ASP.NET, etc. -, Java Objects, Data Bases and
+      Queries, FTP Servers and more). It can be used to simulate a heavy
+load on a server, group of servers, network or object to test its strength or to analyze
 overall performance under different load types. You can use it to make a
 graphical analysis of performance or to test your server/script/object
 behavior under heavy concurrent load.
@@ -176,54 +170,64 @@ Apache JMeter features include:
 </p>
 <ul>
 
-	
+    
 <li>
-Can load and performance test many different server types:
-	    
+Ability to load and performance test many different server/protocol types:
+        
 <ul>
 
-	    
+        
 <li>
 Web - HTTP, HTTPS
 </li>
 
-	    
+        
 <li>
 SOAP
 </li>
 
-	    
+        
+<li>
+FTP
+</li>
+
+        
 <li>
 Database via JDBC
 </li>
 
-	    
+        
 <li>
 LDAP
 </li>
 
-	    
+        
 <li>
-JMS
+Message-oriented middleware (MOM) via JMS
 </li>
 
-	    
+        
 <li>
 Mail - SMTP(S), POP3(S) and IMAP(S)
 </li>
 
-	    
+        
 <li>
 Native commands or shell scripts
 </li>
 
-	    
-</ul>
-
-	
+        
+<li>
+TCP
 </li>
 
-	
+        
+</ul>
+
+    
+</li>
+
+    
 <li>
 Complete portability and 
 <b>
@@ -232,45 +236,45 @@ Complete portability and
 .
 </li>
 
-	
+    
 <li>
 Full 
 <b>
 multithreading
 </b>
  framework allows concurrent sampling by many threads and
-		simultaneous sampling of different functions by separate thread groups.
+        simultaneous sampling of different functions by separate thread groups.
 </li>
 
-	
+    
 <li>
 Careful 
 <b>
 GUI
 </b>
- design allows faster operation and more precise timings.
+ design allows faster Test Plan building and debugging.
 </li>
 
-	
+    
 <li>
 Caching and offline analysis/replaying of test results.
 </li>
 
-	
+    
 <li>
 <b>
-Highly Extensible:
+Highly Extensible core:
 </b>
 
-	  
+      
 <ul>
 
-		
+        
 <li>
 Pluggable Samplers allow unlimited testing capabilities.
 </li>
 
-		
+        
 <li>
 Several load statistics may be choosen with 
 <b>
@@ -279,30 +283,33 @@ pluggable timers
 .
 </li>
 
-		
+        
 <li>
 Data analysis and 
 <b>
 visualization plugins
 </b>
  allow great extensibility
-		as well as personalization.
+        as well as personalization.
 </li>
 
-		
+        
 <li>
 Functions can be used to provide dynamic input to a test or provide data manipulation.
 </li>
 
-		
+        
 <li>
-Scriptable Samplers (BeanShell is fully supported; and there is a sampler which supports BSF-compatible languages)
+<b>
+Scriptable Samplers
+</b>
+ (BeanShell, BSF-compatible languages and JSR223-compatible languages)
 </li>
 
-	  
+      
 </ul>
 
-	
+    
 </li>
 
 
@@ -419,7 +426,7 @@ Further Information About JMeter
 
 <li>
 <a href="changes.html">
-Change List
+Changes List
 </a>
 </li>
 
@@ -487,6 +494,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 

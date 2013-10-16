@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,22 +20,16 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="../css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 
 <title>Apache JMeter - User's Manual: Remote (Distributed) Testing</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -65,7 +59,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="../issues.html">Issues</a>
+<li><a href="../issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -115,8 +109,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="../mail.html">Mailing Lists</a>
 </li>
 <li><a href="../svnindex.html">SVN Repositories</a>
@@ -125,6 +117,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -207,8 +201,8 @@ server, you need to be mindful of the fact that this will be adding processing
 overhead on the application server and thus your testing results will be 
 somewhat tainted.  The recommended approach is to have one or more machines on
 the same Ethernet segment as your application server that you configure to run
-the JMeter Engine.  This will minimize the impact of the network on the test 
-results without impacting the performance of the application serer 
+the JMeter Engine.  This will minimise the impact of the network on the test 
+results without impacting the performance of the application server 
 itself.
 
 </p>
@@ -291,7 +285,7 @@ command line option
 </a>
 
 instead to specify the remote host(s) to use. This has the same effect as using -r and -Jremote_hosts={serverlist}.
-	E.g. jmeter -Rhost1,127.0.0.1,host2
+    E.g. jmeter -Rhost1,127.0.0.1,host2
 </p>
 <p>
 If you define the JMeter property server.exitaftertest=true, then the server will exit after it runs a single test.
@@ -309,7 +303,7 @@ use the script "bin/jmeter".  You will notice that the Run menu contains two new
 (see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
 normal JMeter start and stop menu items.
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='232' height='156' src="../images/screenshots/remote/run-menu00.gif"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='232' height='156' src="../images/screenshots/remote/run-menu00.gif"/><br>
 <font size="-1">Figure 1 - Run Menu
 </font></td></tr></table></p>
 <p>
@@ -373,17 +367,17 @@ directory.  Before running rmiregistry, make sure that the following jars are in
 
 <ul>
 
-	
+    
 <li>
 JMETER_HOME/lib/ext/ApacheJMeter_core.jar
 </li>
 
-	
+    
 <li>
 JMETER_HOME/lib/jorphan.jar
 </li>
 
-	
+    
 <li>
 JMETER_HOME/lib/logkit-1.2.jar
 </li>
@@ -752,6 +746,7 @@ time_threshold - number of milliseconds to wait (default 60 seconds)
 </td></tr>
 <tr><td><br></td></tr>
 </table>
+<br>
 <table>
 <tr>
 <td bgcolor="#525D76">
@@ -765,7 +760,6 @@ time_threshold - number of milliseconds to wait (default 60 seconds)
 </td>
 </tr>
 </table>
-<br>
 </td>
 </tr>
 <tr><td colspan="2">
@@ -787,6 +781,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 

@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,22 +20,16 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="../css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 
 <title>Apache JMeter - User's Manual: Getting Started</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -65,7 +59,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="../issues.html">Issues</a>
+<li><a href="../issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -115,8 +109,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="../mail.html">Mailing Lists</a>
 </li>
 <li><a href="../svnindex.html">SVN Repositories</a>
@@ -125,6 +117,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -162,7 +156,7 @@ download the latest production release
 </a>
  and install it.
 The release contains all of the files you need to build and run most types of tests,
-e.g. Web (HTTP/HTTPS), FTP, JDBC, LDAP, Java, and JUnit.
+e.g. Web (HTTP/HTTPS), FTP, JDBC, LDAP, Java, JUnit and more.
 </p>
 <p>
 If you want to perform JDBC testing,
@@ -273,6 +267,50 @@ Once you are comfortable with building and running JMeter Test Plans, you can lo
 various configuration elements (timers, listeners, assertions, and others) which give you more control
 over your Test Plans.
 </p>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="template"><strong>2.0.1 Create Test Plan from Template</strong></a>
+<a class="sectionlink" href="#template" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+You have the ability to create a new Test Plan from existing template.
+</p>
+<p>
+To do so you use the menu 
+<b>
+File
+</b>
+ > 
+<b>
+Templates...
+</b>
+ or Templates icon:
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/template_menu.png"/><br>
+<font size="-1">Templates icon item
+</font></td></tr></table></p>
+
+
+</p>
+<p>
+A popup appears, you can then choose a template among the list:
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/template_wizard.png"/><br>
+<font size="-1">Templates popup
+</font></td></tr></table></p>
+
+
+</p>
+<p>
+A documentation for each template explains what to do once test plan is created from template.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
 </blockquote>
 </p>
 </td></tr>
@@ -410,7 +448,7 @@ implementation.
 <p>
 JMeter has extensive Email capabilities. 
 It can send email based on test results, and has a POP3(S)/IMAP(S) sampler.
-It also has an SMTP sampler.
+It also has an SMTP(S) sampler.
 
 </p>
 </blockquote>
@@ -443,13 +481,17 @@ system.properties
 <p>
 
 JMeter HTTP defaults to protocol level TLS. This can be changed by editting the JMeter property 
-"https.default.protocol" in jmeter.properties or user.properties.
+
+<i>
+https.default.protocol
+</i>
+ in jmeter.properties or user.properties.
 
 </p>
 <p>
 <b>
 The JMeter HTTP samplers are configured to accept all certificates,
-whether trusted or not, regardless of validity periods etc.
+whether trusted or not, regardless of validity periods, etc.
 </b>
 
 This is to allow the maximum flexibility in testing servers.
@@ -464,7 +506,7 @@ There is also the
 </p>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>The JMeter proxy server (see below) supports recording HTTPS (SSL) in versions after 2.3.4
+<tr><td>The JMeter proxy server (see below) supports recording HTTPS (SSL)
 </td></tr>
 </table>
 </p>
@@ -600,22 +642,23 @@ Note: there can be problems (especially with client-server mode) if the director
 </p>
 <p>
 
-The installation directory structure should look something like this (for version 2.7):
+The installation directory structure should look something like this (where X.Y is version number):
 
 <pre>
 
-apache-jmeter-2.7
-apache-jmeter-2.7/bin
-apache-jmeter-2.7/docs
-apache-jmeter-2.7/extras
-apache-jmeter-2.7/lib/
-apache-jmeter-2.7/lib/ext
-apache-jmeter-2.7/lib/junit
-apache-jmeter-2.7/printable_docs
+apache-jmeter-X.Y
+apache-jmeter-X.Y/bin
+apache-jmeter-X.Y/docs
+apache-jmeter-X.Y/extras
+apache-jmeter-X.Y/lib/
+apache-jmeter-X.Y/lib/ext
+apache-jmeter-X.Y/lib/junit
+apache-jmeter-X.Y/licenses
+apache-jmeter-X.Y/printable_docs
 
 </pre>
 
-You can rename the parent directory (i.e. apache-jmeter-2.7) if you want, but do not change any of the sub-directory names.
+You can rename the parent directory (i.e. apache-jmeter-X.Y) if you want, but do not change any of the sub-directory names.
 
 </p>
 </blockquote>
@@ -635,7 +678,7 @@ You can rename the parent directory (i.e. apache-jmeter-2.7) if you want, but do
 <p>
 To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file.
 These files are found in the bin directory.
-After a short pause, the JMeter GUI should appear. 
+After a short time, the JMeter GUI should appear. 
 
 </p>
 <p>
@@ -782,7 +825,7 @@ JMETER_HOME/lib - used for utility jars
 
 
 <li>
-JMETER_HOME/lib/ext - used for JMeter components and add-ons
+JMETER_HOME/lib/ext - used for JMeter components and plugins
 </li>
 
 
@@ -795,17 +838,12 @@ lib/ext
 </b>
  directory.
 JMeter will automatically find JMeter components in any jars found here.
+Do not use lib/ext for utility jars or dependency jars used by the plugins;
+it is only intended for JMeter components and plugins.
 
 </p>
 <p>
-Support jars (libraries etc) should be placed in the 
-<b>
-lib
-</b>
- directory.
-</p>
-<p>
-If you don't want to put JMeter extension jars in the 
+If you don't want to put JMeter plugin jars in the 
 <b>
 lib/ext
 </b>
@@ -815,13 +853,37 @@ then define the property
 search_paths
 </b>
  in jmeter.properties.
-Do not use lib/ext for utility jars; it is only intended for JMeter components.
+
+</p>
+<p>
+Utility and dependency jars (libraries etc) can be placed in the 
+<b>
+lib
+</b>
+ directory.
+</p>
+<p>
+If you don't want to put such jars in the 
+<b>
+lib
+</b>
+ directory,
+then define the property 
+<b>
+user.classpath
+</b>
+ or 
+<b>
+plugin_dependency_paths
+</b>
+
+in jmeter.properties. See below for an explanation of the differences.
 
 </p>
 <p>
 
 Other jars (such as JDBC, JMS implementations and any other support libaries needed by the JMeter code)
- should be placed in the 
+should be placed in the 
 <b>
 lib
 </b>
@@ -829,13 +891,18 @@ lib
 <b>
 lib/ext
 </b>
- directory
+ directory,
+or added to 
+<b>
+user.classpath
+</b>
+.
 </p>
 <p>
 Note: JMeter will only find .jar files, not .zip.
 </p>
 <p>
-You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property 
+You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or you can set the property 
 <b>
 user.classpath
 </b>
@@ -854,14 +921,14 @@ and the java command silently ignores the CLASSPATH variable, and the -classpath
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="proxy_server"><strong>2.4.2 Using a Proxy Server</strong></a>
+<a name="proxy_server"><strong>2.4.2 Using a HTTP(S) Test Script Recorder</strong></a>
 <a class="sectionlink" href="#proxy_server" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
 If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
-the firewall/proxy server hostname and port number.  To do so, run the jmeter.bat/jmeter file
+the firewall/proxy server hostname and port number.  To do so, run the jmeter[.bat] file
 from a command line with the following parameters:
 </p>
 <p>
@@ -895,14 +962,82 @@ Example
 : jmeter -H my.proxy.server -P 8000 -u username -a password -N localhost
 </p>
 <p>
-Alternatively, you can use --proxyHost, --proxyPort, --username, and --password
+You can also use --proxyHost, --proxyPort, --username, and --password as parameter names
 </p>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>JMeter also has its own in-built 
-<a href="../usermanual/component_reference.html#HTTP_Proxy_Server">HTTP Proxy Server</a>
-,
-which can be used for recording HTTP or HTTPS browser sessions.
+<tr><td>
+Parameters provided on a command-line may be visible to other users on the system.
+
+</td></tr>
+</table>
+</p>
+<p>
+
+If the proxy host and port are provided, then JMeter sets the following System properties:
+
+<ul>
+
+
+<li>
+http.proxyHost
+</li>
+
+
+<li>
+http.proxyPort
+</li>
+
+
+<li>
+https.proxyHost
+</li>
+
+
+<li>
+https.proxyPort
+</li>
+
+
+</ul>
+
+If a nonproxy host list is provided, then JMeter sets the following System properties:
+
+<ul>
+
+
+<li>
+http.nonProxyHosts
+</li>
+
+
+<li>
+https.nonProxyHosts
+</li>
+
+
+</ul>
+
+So if you don't wish to set both http and https proxies, 
+you can define the relevant properties in system.properties instead of using the command-line parameters.
+
+</p>
+<p>
+
+Proxy Settings can also be defined in a Test Plan, using either the 
+<a href="../usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a>
+
+configuration or the 
+<a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a>
+ sampler elements.
+
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>JMeter also has its own in-built Proxy Server, the 
+<a href="../usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder</a>
+.
+This is only used for recording HTTP or HTTPS browser sessions.
 This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.
 </td></tr>
 </table>
@@ -921,35 +1056,44 @@ This is not to be confused with the proxy settings described above, which are us
 <blockquote>
 <p>
 For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
-the following command options
+the following command options:
 </p>
 <p>
+
 -n This specifies JMeter is to run in non-gui mode
-</p>
-<p>
+<br>
+
+
 -t [name of JMX file that contains the Test Plan].
-</p>
-<p>
+<br>
+
+
 -l [name of JTL file to log sample results to].
-</p>
-<p>
+<br>
+
+
 -j [name of JMeter run log file].
-</p>
-<p>
+<br>
+
+
 -r Run the test in the servers specified by the JMeter property "remote_hosts"
-</p>
-<p>
+<br>
+
+
 -R [list of remote servers] Run the test in the specified remote servers
+
 </p>
 <p>
 The script also lets you specify the optional firewall/proxy server information:
 </p>
 <p>
+
 -H [proxy server hostname or ip address]
 <br>
 
 
 -P [proxy server port]
+
 </p>
 <p>
 <b>
@@ -987,7 +1131,7 @@ distributed testing
 </a>
 , run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
 You can also use non-GUI mode to run remote tests.
-To start the server(s), run jmeter-server/jmeter-server.bat on each server host.
+To start the server(s), run jmeter-server[.bat] on each server host.
 </p>
 <p>
 The script also lets you specify the optional firewall/proxy server information:
@@ -1050,19 +1194,25 @@ Java system properties, JMeter properties, and logging properties can be overrid
 To do so, use the following options:
 </p>
 <p>
+
 -D[prop_name]=[value] - defines a java system property value.
-</p>
-<p>
+<br>
+
+
 -J[prop name]=[value] - defines a local JMeter property.
-</p>
-<p>
+<br>
+
+
 -G[prop name]=[value] - defines a JMeter property to be sent to all remote servers.
-</p>
-<p>
+<br>
+
+
 -G[propertyfile] - defines a file containing JMeter properties to be sent to all remote servers.
-</p>
-<p>
+<br>
+
+
 -L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.
+
 </p>
 <p>
 The -L flag can also be used without the category name to set the root logging level.
@@ -1091,11 +1241,11 @@ N.B.
 <br>
 
 
-	The command line properties are processed early in startup, but after the logging system has been set up.
-	Attempts to use the -J flag to update log_level or log_file properties will have no effect.
+    The command line properties are processed early in startup, but after the logging system has been set up.
+    Attempts to use the -J flag to update log_level or log_file properties will have no effect.
 </b>
 
-	
+    
 </p>
 </blockquote>
 </td></tr>
@@ -1125,41 +1275,45 @@ Functions and Variables for more information
 </p>
 <p>
 If JMeter detects an error during a test, a message will be written to the log file. 
-		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
-		It defaults to 
+        The log file name is defined in the jmeter.properties file (or using the -j option, see below).
+        It defaults to 
 <b>
 jmeter.log
 </b>
 , and will be found in the directory from which JMeter was launched.
-		
+        
 </p>
 <p>
 
-		Since JMeter 2.6, menu 
+        The menu 
 <b>
 Options > Log Viewer
 </b>
  displays the log file in a bottom pane on main JMeter window. 
-		
+        
 </p>
 <p>
 
-		Since JMeter 2.7 (GUI mode), the number of error/fatal messages logged in the log file is displayed at top-right. 
-		
+        In the GUI mode, the number of error/fatal messages logged in the log file is displayed at top-right. 
+        
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/log_errors_counter.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/log_errors_counter.png"/><br>
 <font size="-1">Error/fatal counter
 </font></td></tr></table></p>
 <p>
 
-		JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
-		This is processed after the initial properties file is read,
-		and before any further properties are processed. 
-		It therefore allows the default of jmeter.log to be overridden.
-		The jmeter scripts that take a test plan name as a parameter (e.g. jmeter-n.cmd) have been updated
-		to define the log file using the test plan name,
-		e.g. for the test plan Test27.jmx the log file is set to Test27.log.
-		
+        The command-line option 
+<i>
+-j jmeterlogfile
+</i>
+ allow to process
+        after the initial properties file is read,
+        and before any further properties are processed. 
+        It therefore allows the default of jmeter.log to be overridden.
+        The jmeter scripts that take a test plan name as a parameter (e.g. jmeter-n.cmd) have been updated
+        to define the log file using the test plan name,
+        e.g. for the test plan Test27.jmx the log file is set to Test27.log.
+        
 </p>
 <p>
 When running on Windows, the file may appear as just 
@@ -1167,8 +1321,8 @@ When running on Windows, the file may appear as just
 jmeter
 </b>
  unless you have set Windows to show file extensions.
-		[Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
-		
+        [Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
+        
 </p>
 <p>
 As well as recording errors, the jmeter.log file records some information about the test run. For example:
@@ -1185,7 +1339,7 @@ As well as recording errors, the jmeter.log file records some information about 
 10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Continue on error 
 10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 started 
 10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 is done 
-10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Test has ended 	
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Test has ended
 
 </pre>
 
@@ -1193,7 +1347,7 @@ As well as recording errors, the jmeter.log file records some information about 
 </div>
 <p>
 The log file can be helpful in determining the cause of an error,
-	as JMeter does not interrupt a test to display an error dialogue.
+    as JMeter does not interrupt a test to display an error dialogue.
 </p>
 </blockquote>
 </td></tr>
@@ -1333,7 +1487,7 @@ If you wish to modify the properties with which JMeter runs you need to
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>
-  Note: since 2.2, you can define additional JMeter properties in the file defined by the
+  Note: You can define additional JMeter properties in the file defined by the
   JMeter property 
 <b>
 user.properties
@@ -1361,8 +1515,8 @@ system.properties
 <tr>
 <td>ssl.provider</td>
 <td>You can specify the class for your SSL
-	implementation if you don't want to use the built-in Java implementation.
-	
+    implementation if you don't want to use the built-in Java implementation.
+    
 </td>
 <td>
 No
@@ -1371,7 +1525,7 @@ No
 <tr>
 <td>xml.parser</td>
 <td>You can specify an implementation as your XML
-	parser.  The default value is: org.apache.xerces.parsers.SAXParser
+    parser.  The default value is: org.apache.xerces.parsers.SAXParser
 </td>
 <td>
 No
@@ -1380,9 +1534,9 @@ No
 <tr>
 <td>remote_hosts</td>
 <td>Comma-delimited list of remote JMeter hosts (or host:port if required).
-	If you are running JMeter in a distributed environment, list the machines where
+    If you are running JMeter in a distributed environment, list the machines where
   you have JMeter remote servers running.  This will allow you to control those
-	servers from this machine's GUI
+    servers from this machine's GUI
 </td>
 <td>
 No
@@ -1391,7 +1545,7 @@ No
 <tr>
 <td>not_in_menu</td>
 <td>A list of components you do not want to see in
-	JMeter's menus.  As JMeter has more and more components added, you may wish to
+    JMeter's menus.  As JMeter has more and more components added, you may wish to
   customize your JMeter to show only those components you are interested in.
   You may list their classname or their class label (the string that appears
   in JMeter's UI) here, and they will no longer appear in the menus.
@@ -1403,9 +1557,11 @@ No
 <tr>
 <td>search_paths</td>
 <td>
-  List of paths (separated by ;) that JMeter will search for JMeter add-on classes;
-  for example additional samplers.
-  This is in addition to any jars found in the lib/ext directory.
+  List of paths (separated by ;) that JMeter will search for JMeter plugin classes,
+  for example additional samplers. A path item can either be a jar file or a directory.
+  Any jar file in such a directory will be automatically included in search_paths,
+  jar files in sub directories are ignored.
+  The given value is in addition to any jars found in the lib/ext directory.
   
 </td>
 <td>
@@ -1415,8 +1571,33 @@ No
 <tr>
 <td>user.classpath</td>
 <td>
-  List of paths that JMeter will search for utility classes.
-  This is in addition to any jars found in the lib directory.
+  List of paths that JMeter will search for utility and plugin dependency classes.
+  Use your platform path separator to separate multiple paths.
+  A path item can either be a jar file or a directory.
+  Any jar file in such a directory will be automatically included in user.classpath,
+  jar files in sub directories are ignored.
+  The given value is in addition to any jars found in the lib directory.
+  All entries will be added to the class path of the system class loader
+  and also to the path of the JMeter internal loader.
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>plugin_dependency_paths</td>
+<td>
+  List of paths (separated by ;) that JMeter will search for utility
+  and plugin dependency classes.
+  A path item can either be a jar file or a directory.
+  Any jar file in such a directory will be automatically included in plugin_dependency_paths,
+  jar files in sub directories are ignored.
+  The given value is in addition to any jars found in the lib directory
+  or given by the user.classpath property.
+  All entries will be added to the path of the JMeter internal loader only.
+  For plugin dependencies using plugin_dependency_paths should be preferred over
+  user.classpath.
   
 </td>
 <td>
@@ -1505,6 +1686,7 @@ See also the comments in the jmeter.properties, user.properties and system.prope
 </td></tr>
 <tr><td><br></td></tr>
 </table>
+<br>
 <table>
 <tr>
 <td bgcolor="#525D76">
@@ -1518,7 +1700,6 @@ See also the comments in the jmeter.properties, user.properties and system.prope
 </td>
 </tr>
 </table>
-<br>
 </td>
 </tr>
 <tr><td colspan="2">
@@ -1540,6 +1721,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 

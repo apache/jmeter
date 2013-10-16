@@ -6,9 +6,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,22 +20,16 @@
 
 
 <!-- start the processing -->
-<!-- ====================================================================== -->
-<!-- Main Page Section -->
-<!-- ====================================================================== -->
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="../css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-
 
 <title>Apache JMeter - User's Manual: Elements of a Test Plan</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
 <table border="0" cellspacing="0">
-<!-- TOP IMAGE -->
 <tr>
 <td>
 <!-- Need to specify height otherwise iframe seems to grab extra -->
@@ -65,7 +59,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="../issues.html">Issues</a>
+<li><a href="../issues.html">Issue Tracking</a>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
@@ -115,8 +109,6 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
-</li>
 <li><a href="../mail.html">Mailing Lists</a>
 </li>
 <li><a href="../svnindex.html">SVN Repositories</a>
@@ -125,6 +117,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <p><strong>Foundation</strong></p>
 <ul>
 <li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
 </li>
 <li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
 </li>
@@ -236,15 +230,15 @@ Version 1.9 introduces a test run
 scheduler
 </b>
 . 
-	Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
-	 in which you can enter the start and end times of the run. 
-	 When the test is started, JMeter will wait if necessary until the start-time has been reached.
-	 At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
-	 otherwise the test is allowed to continue until the iteration limit is reached.
+    Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
+     in which you can enter the start and end times of the run. 
+     When the test is started, JMeter will wait if necessary until the start-time has been reached.
+     At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
+     otherwise the test is allowed to continue until the iteration limit is reached.
 </p>
 <p>
 Alternatively, one can use the relative delay and duration fields. 
-	 Note that delay overrides start-time, and duration over-rides end-time.
+     Note that delay overrides start-time, and duration over-rides end-time.
 </p>
 </blockquote>
 </td></tr>
@@ -311,37 +305,37 @@ JMeter samplers include:
 
 <ul>
 
-	
+    
 <li>
 FTP Request
 </li>
 
-	
+    
 <li>
 HTTP Request
 </li>
 
-	
+    
 <li>
 JDBC Request
 </li>
 
-	
+    
 <li>
 Java object request
 </li>
 
-	
+    
 <li>
 LDAP Request
 </li>
 
-	
+    
 <li>
 SOAP/XML-RPC Request
 </li>
 
-	
+    
 <li>
 WebService (SOAP) Request
 </li>
@@ -414,80 +408,80 @@ following test tree:
 Test Plan
 </li>
 
-	
+    
 <ul>
 
-	
+    
 <li>
 Thread Group
 </li>
 
-		
+        
 <ul>
 
-		
+        
 <li>
 Once Only Controller
 </li>
 
-			
+            
 <ul>
 
-			
+            
 <li>
 Login Request (an 
 <a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a>
 )
 </li>
 
-			
+            
 </ul>
 
-		
+        
 <li>
 Load Search Page (HTTP Sampler)
 </li>
 
-		
+        
 <li>
 Interleave Controller
 </li>
 
-			
+            
 <ul>
 
-			
+            
 <li>
 Search "A" (HTTP Sampler)
 </li>
 
-			
+            
 <li>
 Search "B" (HTTP Sampler)
 </li>
 
-			
+            
 <li>
 HTTP default request (Configuration Element)
 </li>
 
-			
+            
 </ul>
 
-		
+        
 <li>
 HTTP default request (Configuration Element)
 </li>
 
-		
+        
 <li>
 Cookie Manager (Configuration Element)
 </li>
 
-		
+        
 </ul>
 
-	
+    
 </ul>
 
 
@@ -739,7 +733,7 @@ and will count towards the error %age for example in the Aggregate and Summary r
 <p>
 A configuration element works closely with a Sampler.  Although it does not send requests
 (except for 
-<a href="../usermanual/component_reference.html#HTTP_Proxy_Server">HTTP Proxy Server</a>
+<a href="../usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder</a>
 ), it can add to or modify requests.
 </p>
 <p>
@@ -754,9 +748,9 @@ branch.  For example, we defined two HTTP Request Defaults elements, "Web Defaul
 Since we placed "Web Defaults 1" inside a Loop Controller, only "Web Page 2" can access it.  The other HTTP
 requests will use "Web Defaults 2", since we placed it in the Thread Group (the "parent" of all other branches).
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/http-config/http-config-example.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/http-config/http-config-example.png"/><br>
 <font size="-1">Figure 1 -
-	Test Plan Showing Accessability of Configuration Elements
+    Test Plan Showing Accessability of Configuration Elements
 </font></td></tr></table></p>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
@@ -980,7 +974,7 @@ Assertion 1
 
 The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping1.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping1.png"/><br>
 <font size="-1">Example test tree
 </font></td></tr></table></p>
 <p>
@@ -999,7 +993,7 @@ If its parent is a request, then it is applied to that request. If its
 parent is a Controller, then it affects all requests that are descendants of
 that Controller.  In the following test tree:
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping2.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping2.png"/><br>
 <font size="-1">Hierarchy example
 </font></td></tr></table></p>
 <p>
@@ -1008,7 +1002,7 @@ Assertion #1 is applied only to Request One, while Assertion #2 is applied to Re
 <p>
 Another example, this time using Timers:
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping3.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping3.png"/><br>
 <font size="-1">complex example
 </font></td></tr></table></p>
 <p>
@@ -1204,6 +1198,7 @@ jmeter ... -Jhost=www3.example.org -Jloops=13
 </td></tr>
 <tr><td><br></td></tr>
 </table>
+<br>
 <table>
 <tr>
 <td bgcolor="#525D76">
@@ -1217,7 +1212,6 @@ jmeter ... -Jhost=www3.example.org -Jloops=13
 </td>
 </tr>
 </table>
-<br>
 </td>
 </tr>
 <tr><td colspan="2">
@@ -1239,6 +1233,11 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
+
+
+
+
 
 
 
