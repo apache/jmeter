@@ -420,6 +420,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <li><bugzilla>55580</bugzilla> -  Help pane does not scroll to start for &lt;a href="#"&gt; links</li>
 <li><bugzilla>55600</bugzilla> - JSyntaxTextArea : Strange behaviour on first undo</li>
 <li><bugzilla>55655</bugzilla> - NullPointerException when Remote stopping /shutdown all if one engine did not start correctly. Contributed by UBIK Load Pack (support at ubikloadpack.com)</li>
+<li><bugzilla>55657</bugzilla> - Remote and Local Stop/Shutdown buttons state does not take into account local / remote status </li>
 </ul>
 
 <!-- =================== Improvements =================== -->
