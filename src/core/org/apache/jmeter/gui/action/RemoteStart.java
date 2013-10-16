@@ -127,7 +127,10 @@ public class RemoteStart extends AbstractAction {
     private void doRemoteStop(String name, boolean now) {
         GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
         JMeterEngine engine = remoteEngines.get(name);
-        engine.stopTest(now);
+        // Engine may be null if it has not correctly started
+        if(engine != null) {
+            engine.stopTest(now);
+        }
     }
 
     /**
