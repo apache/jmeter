@@ -70,6 +70,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.LoadDraggedFile;
@@ -341,7 +342,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             stoppingMessage.dispose();
         }
         stoppingMessage = new EscapeDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
-        JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host); //$NON-NLS-1$$NON-NLS-2$
+        String label = JMeterUtils.getResString("stopping_test"); //$NON-NLS-1
+        if(!StringUtils.isEmpty(host)) {
+            label = label + JMeterUtils.getResString("stopping_test_host")+ ": " + host;
+        }
+        JLabel stopLabel = new JLabel(label); //$NON-NLS-1$$NON-NLS-2$
         stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         stoppingMessage.getContentPane().add(stopLabel);
         stoppingMessage.pack();
