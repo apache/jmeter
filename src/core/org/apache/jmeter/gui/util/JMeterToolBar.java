@@ -181,8 +181,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     }
 
     /**
-     * Change state of buttons
-     * @param started
+     * Init the state of buttons
      */
     public void initButtonsState() {
         final boolean started = false;
