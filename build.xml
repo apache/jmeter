@@ -1381,7 +1381,7 @@ run JMeter unless all the JMeter jars are added.
         <property name="workdir" value="${dist.dir}/${eoltype}"/>
         <echo level="info">Converting work files to eol=${eoltype} in ${workdir}</echo>
         <mkdir dir="${workdir}"/>
-        <copy includeemptydirs="false" todir="${workdir}">
+        <copy includeemptydirs="false" todir="${workdir}" encoding="${encoding}">
             <fileset dir=".">
                 <patternset refid="${fileset}"/>
             </fileset>
