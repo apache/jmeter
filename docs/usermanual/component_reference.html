@@ -822,7 +822,13 @@ No
 </tr>
 <tr>
 <td>Response Timeout</td>
-<td>Response Timeout. Number of milliseconds to wait for a response.
+<td>Response Timeout. Number of milliseconds to wait for a response. 
+        Note that this appplies to each wait for a response. If the server response is sent in several chunks, the overall
+        elapsed time may be longer than the timeout.
+        A 
+<a href="../usermanual/component_reference.html#Duration_Assertion">Duration Assertion</a>
+ can be used to detect overlong responses.
+        
 </td>
 <td>
 No

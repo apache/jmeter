@@ -899,7 +899,7 @@
         <include name="*.notice" />
       </fileset>
     </copy>
-    <fixcrlf srcdir="${resources.meta-inf}" eol="crlf" includes="*.license *.notice"/>
+    <fixcrlf encoding="${encoding}" srcdir="${resources.meta-inf}" eol="crlf" includes="*.license *.notice"/>
   </target>
 
 <!--
@@ -1196,7 +1196,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
-    <fixcrlf srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report"/>
+    <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report"/>
   </target>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
@@ -1381,7 +1381,7 @@ run JMeter unless all the JMeter jars are added.
         <property name="workdir" value="${dist.dir}/${eoltype}"/>
         <echo level="info">Converting work files to eol=${eoltype} in ${workdir}</echo>
         <mkdir dir="${workdir}"/>
-        <copy includeemptydirs="false" todir="${workdir}">
+        <copy includeemptydirs="false" todir="${workdir}" encoding="${encoding}">
             <fileset dir=".">
                 <patternset refid="${fileset}"/>
             </fileset>
@@ -2473,7 +2473,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="batchtest.value" value="dummy"/>
 
     <!-- Fix the EOL in case the file was derived from the "wrong" archive type -->
-    <fixcrlf srcdir="${batchtest.inp}" includes="${batchtest.name}.csv"/>
+    <fixcrlf encoding="${encoding}" srcdir="${batchtest.inp}" includes="${batchtest.name}.csv"/>
 
     <echo level="info" message="Starting ${batchtest.name} using ${remote}"/>
 
