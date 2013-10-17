@@ -365,7 +365,7 @@ under the License.
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-nop</artifactId>
-        <version>${slf4j-api.version}</version>
+        <version>${slf4j-nop.version}</version>
       </dependency>
       <!-- Docs only; not needed for source or binary archives 
       <dependency>
