@@ -1167,7 +1167,7 @@ Note: use UTF-8 as the encoding scheme.
 </p>
 <p>
 For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code> would get converted to
- <code>Word &quot;school&quot; is &quot;&amp;eacute;&quot; in french</code>.
+ <code>Word &quot;school&quot; is &quot;&amp;eacute;cole&quot; in french</code>.
 </p>
     <p>
     Uses Java class <a href="http://docs.oracle.com/javase/6/docs/api/java/net/URLDecoder.html">URLDecoder</a>.
