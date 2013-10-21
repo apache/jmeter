@@ -132,6 +132,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Other Samplers</h3>
 <ul>
+<li><bugzilla>55685</bugzilla> - OS Sampler: timeout option don't save and restore correctly value and don't init correctly timeout</li>
 </ul>
 
 <h3>Controllers</h3>

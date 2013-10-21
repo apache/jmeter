@@ -154,6 +154,8 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         stdin.setFilename(systemSampler.getStdin());
         stdout.setFilename(systemSampler.getStdout());
         stderr.setFilename(systemSampler.getStderr());
+        timeout.setText(systemSampler.getTimeout() == 0L ? "":  // $NON-NLS-1$
+            Long.toString(systemSampler.getTimeout())); // not sure if replace 0L to empty string is the good way.
     }
 
     /**
@@ -268,6 +270,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         stdin.clearGui();
         stdout.clearGui();
         stderr.clearGui();
+        timeout.setText(""); // $NON-NLS-1$
     }
 
     @Override
