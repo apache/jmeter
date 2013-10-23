@@ -20,6 +20,7 @@ package org.apache.jmeter.extractor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -194,6 +195,10 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
+            if(inputString == null) {
+                log.warn("No variable '"+getVariableName()+"' found to process by RegexExtractor "+getName()+", skipping processing");
+                return Collections.emptyList();
+            }
             matchStrings(matchNumber, matcher, pattern, matches, found,
                     inputString);
         } else {
