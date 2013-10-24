@@ -1313,7 +1313,8 @@ run JMeter unless all the JMeter jars are added.
   -->
   <patternset id="dist.sources.native">
     <include name="LICENSE"/>
-    <include name="licenses/src/**"/>
+    <!-- Include all the licenses; they are needed to build the distribution -->
+    <include name="licenses/**"/>
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="${src.dir}/**"/>
