@@ -37,6 +37,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -100,15 +101,22 @@ public class Save implements Command {
         } 
         else if (e.getActionCommand().equals(ActionNames.SAVE_AS_TEST_FRAGMENT)) {
             JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
-            subTree = GuiPackage.getInstance().getCurrentSubTree();
-            
-            TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
-            HashTree hashTree = new ListedHashTree();
-            HashTree tfTree = hashTree.add(new JMeterTreeNode(element, null));
-            for (int i = 0; i < nodes.length; i++) {
-                tfTree.add(nodes[i]);
+            if(checkAcceptableForTestFragment(nodes)) {
+                subTree = GuiPackage.getInstance().getCurrentSubTree();
+                
+                TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
+                HashTree hashTree = new ListedHashTree();
+                HashTree tfTree = hashTree.add(new JMeterTreeNode(element, null));
+                for (int i = 0; i < nodes.length; i++) {
+                    tfTree.add(nodes[i]);
+                }
+                subTree = hashTree;
+            } else {
+                JMeterUtils.reportErrorToUser(
+                        JMeterUtils.getResString("save_as_test_fragment_error"), // $NON-NLS-1$
+                        JMeterUtils.getResString("save_as_test_fragment")); // $NON-NLS-1$
+                return;
             }
-            subTree = hashTree;
         } else {
             fullSave = true;
             HashTree testPlan = GuiPackage.getInstance().getTreeModel().getTestPlan();
@@ -179,6 +187,21 @@ public class Save implements Command {
             JOrphanUtils.closeQuietly(ostream);
         }
         GuiPackage.getInstance().updateCurrentGui();
+    }
+
+    /**
+     * Check nodes does not contain a node of type TestPlan or ThreadGroup
+     * @param nodes
+     */
+    private static final boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
+        for (int i = 0; i < nodes.length; i++) {
+            Object userObject = nodes[i].getUserObject();
+            if(userObject instanceof org.apache.jmeter.threads.ThreadGroup ||
+                    userObject instanceof TestPlan) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // package protected to allow access from test code
