@@ -197,12 +197,22 @@ public final class MenuFactory {
         menu.add(makeMenuItemRes("reset_gui", ActionNames.RESET_GUI )); //$NON-NLS-1$
     }
 
-    public static void addFileMenu(JPopupMenu menu) {
+    public static void addFileMenu(JPopupMenu pop) {
+        addFileMenu(pop, true);
+    }
+
+    /**
+     * @param menu JPopupMenu
+     * @param addTestFragmentMenu Add Save as Test Fragment menu if true 
+     */
+    public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
         addSeparator(menu);
         menu.add(makeMenuItemRes("open", ActionNames.OPEN));// $NON-NLS-1$
         menu.add(makeMenuItemRes("menu_merge", ActionNames.MERGE));// $NON-NLS-1$
         menu.add(makeMenuItemRes("save_as", ActionNames.SAVE_AS));// $NON-NLS-1$
-
+        if(addSaveTestFragmentMenu) {
+            menu.add(makeMenuItemRes("save_as_test_fragment", ActionNames.SAVE_AS_TEST_FRAGMENT));// $NON-NLS-1$
+        }
         addSeparator(menu);
         JMenuItem savePicture = makeMenuItemRes("save_as_image",// $NON-NLS-1$
                 ActionNames.SAVE_GRAPHICS,
