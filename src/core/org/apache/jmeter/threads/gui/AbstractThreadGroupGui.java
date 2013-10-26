@@ -79,7 +79,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
                 JMeterUtils.getResString("add"), // $NON-NLS-1$
                 ActionNames.ADD));
         MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
+        MenuFactory.addFileMenu(pop, false);
         return pop;
     }
 

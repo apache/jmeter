@@ -194,6 +194,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>General</h3>
 <ul>
+<li><bugzilla>55693</bugzilla> - Add a "Save as Test Fragment" option</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
