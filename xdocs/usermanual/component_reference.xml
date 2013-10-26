@@ -6058,6 +6058,13 @@ cookie manager, etc.</p>
 You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
 </p>
 
+<h4>Associating requests with responses</h4>
+<p>
+If you define the property <code>proxy.number.requests=true</code> 
+JMeter will add a number to each sampler and each response.
+Note that there may be more responses than samplers if excludes or includes have been used.
+Responses that have been excluded will have labels enclosed in [ and ], for example <code>[23 /favicon.ico]</code> 
+</p>
 <h4>Cookie Manager</h4>
 <p>
 If the server you are testing against uses cookies, remember to add an <complink name="HTTP Cookie Manager"/> to the test plan
