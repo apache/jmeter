@@ -30,6 +30,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -39,6 +40,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -58,6 +60,7 @@ public class Save implements Command {
 
     static {
         commands.add(ActionNames.SAVE_AS); // Save (Selection) As
+        commands.add(ActionNames.SAVE_AS_TEST_FRAGMENT); // Save as Test Fragment
         commands.add(ActionNames.SAVE_ALL_AS); // Save TestPlan As
         commands.add(ActionNames.SAVE); // Save
     }
@@ -94,6 +97,18 @@ public class Save implements Command {
                 return;
             }
             subTree = GuiPackage.getInstance().getCurrentSubTree();
+        } 
+        else if (e.getActionCommand().equals(ActionNames.SAVE_AS_TEST_FRAGMENT)) {
+            JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
+            subTree = GuiPackage.getInstance().getCurrentSubTree();
+            
+            TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
+            HashTree hashTree = new ListedHashTree();
+            HashTree tfTree = hashTree.add(new JMeterTreeNode(element, null));
+            for (int i = 0; i < nodes.length; i++) {
+                tfTree.add(nodes[i]);
+            }
+            subTree = hashTree;
         } else {
             fullSave = true;
             HashTree testPlan = GuiPackage.getInstance().getTreeModel().getTestPlan();
