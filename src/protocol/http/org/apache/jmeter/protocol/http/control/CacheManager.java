@@ -51,6 +51,8 @@ import org.apache.log.Logger;
  */
 public class CacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
 
+    private static final Date EXPIRED_DATE = new Date(0L);
+
     private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -174,6 +176,11 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         if (useExpires) {// Check that we are processing Expires/CacheControl
             final String MAX_AGE = "max-age=";
             
+            if(cacheControl.contains("no-store")) {
+                // We must not store an CacheEntry, otherwise a 
+                // conditional request may be made
+                return;
+            }
             if (expires != null) {
                 try {
                     expiresDate = DateUtil.parseDate(expires);
@@ -181,7 +188,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                     if (log.isDebugEnabled()){
                         log.debug("Unable to parse Expires: '"+expires+"' "+e);
                     }
-                    expiresDate = new Date(0L); // invalid dates must be treated as expired
+                    expiresDate = CacheManager.EXPIRED_DATE; // invalid dates must be treated as expired
                 }
             }
             // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
