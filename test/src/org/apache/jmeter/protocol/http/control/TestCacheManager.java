@@ -315,6 +315,17 @@ public class TestCacheManager extends JMeterTestCase {
         assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
     }
     
+    public void testNoStoreHttpClient() throws Exception{
+        this.cacheManager.setUseExpires(true);
+        this.cacheManager.testIterationStart(null);
+        assertNull("Should not find entry",getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
+        ((HttpMethodStub)httpMethod).cacheControl="no-store";
+        this.cacheManager.saveDetails(httpMethod, sampleResultOK);
+        assertNull("Should not find entry",getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
+    }
+    
     public void testCacheHttpClientBug51932() throws Exception{
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
@@ -421,7 +432,7 @@ public class TestCacheManager extends JMeterTestCase {
         assertEquals("Did not find single property for property " + property, 1, listOfPropertyValues.size());
         assertEquals("Unexpected value for property " + property, expectedPropertyValue, listOfPropertyValues.get(0));
     }
-
+    
     private SampleResult getSampleResultWithSpecifiedResponseCode(String code) {
         SampleResult sampleResult = new SampleResult();
         sampleResult.setResponseCode(code);
