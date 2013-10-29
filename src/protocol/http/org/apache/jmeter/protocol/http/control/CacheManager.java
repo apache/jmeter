@@ -176,7 +176,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         if (useExpires) {// Check that we are processing Expires/CacheControl
             final String MAX_AGE = "max-age=";
             
-            if(cacheControl.contains("no-store")) {
+            if(cacheControl != null && cacheControl.contains("no-store")) {
                 // We must not store an CacheEntry, otherwise a 
                 // conditional request may be made
                 return;
