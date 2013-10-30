@@ -20,13 +20,14 @@
 
      <title>Apache JMeter</title>
      <!---->
-     <logo width="221" height="102" href="/images/logo.jpg">Apache JMeter</logo>
+     <logo width="182" height="88" href="/images/logo.jpg">Apache JMeter</logo>
      <!---->
      <body>
      <menu name="About">
        <item name="Overview"            href="/index.html"/>
        <item name="Changes"             href="/changes.html"/>
        <item name="Subscribe to What's New" href="http://projects.apache.org/feeds/rss/jmeter.xml"/>
+       <item name="JMeter on Twitter"   href="http://twitter.com/ApacheJMeter" icon="twitter.png"/>
        <item name="Issue Tracking"      href="/issues.html"/>
        <item name="License"             href="http://www.apache.org/licenses/"/>
        <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
