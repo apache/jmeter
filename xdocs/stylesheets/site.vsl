@@ -438,16 +438,24 @@ $node.getText()
 #end
 
 #macro ( makeProject )
+<table border="0" width="100%" cellspacing="0">
+<tr><td>
 #set ($menus = $project.getChild("body").getChildren("menu"))
 #foreach ( $menu in $menus )
 <p><strong>$menu.getAttributeValue("name")</strong></p>
 <ul>
 #foreach ( $item in $menu.getChildren() )
+#set ($icon = $item.getAttributeValue("icon"))
 #set ($name = $item.getAttributeValue("name"))
-<li>#projectanchor($name $item.getAttributeValue("href"))</li>
+<li>#projectanchor($name $item.getAttributeValue("href"))#if($icon)<img src="$imgdir/$icon" align="top"/>#end</li>
 #end
 </ul>
 #end
+</td></tr>
+<tr><td>
+<iframe src="http://www.apache.org/ads/button.html" style="border-width:0; float: left;" frameborder="0" scrolling="no"></iframe>
+</td></tr>
+</table>
 #end
 
 #macro (makeIndex $subsections)
@@ -472,32 +480,20 @@ $node.getText()
 #set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
 #set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
 #set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
-<td>
-<!-- Need to specify height otherwise iframe seems to grab extra -->
-<iframe src="http://www.apache.org/ads/halfbanner.html" height="$logoHeight"
-style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+<td width="10%">
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="$imgdir/asf-logo.png" border="0"/></a>
 </td>
-<td align="left">
-<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
-</td>
-<td align="right">
+<td align="left" width="40%">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 #if ( $logoString.startsWith("/") )
 <a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #else
 <a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #end
 </td>
-<td>
-<a href="https://twitter.com/share" class="twitter-share-button" data-text="Powerful Load Testing with Apache #JMeter http://jmeter.apache.org" data-via="ApacheJMeter" data-lang="en-gb" data-size="large">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</td>
-<td>
-<a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button" data-show-count="false" data-lang="en-gb" data-size="large">Follow @ApacheJMeter</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</td>
 #else
 <td colspan="2">
-<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="$imgdir/asf-logo.png" border="0"/></a>
 </td>
 #end
 #end
@@ -525,12 +521,38 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </head>
 
 <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">
+<table width="100%" cellspacing="0" border="0">
+<tr>
+<td width="90%" align="left">
 <table border="0" cellspacing="0">
 ##<!-- TOP IMAGE -->
 <tr>
 #getProjectImage()
 </tr>
 </table>
+</td>
+<td align="left" width="50%">
+<table cellspacing="0" align="right" border="0">
+<tr>
+<td align="left"> <a href="https://twitter.com/share"
+class="twitter-share-button"
+data-text="Powerful Load Testing with
+Apache #JMeter" data-via="ApacheJMeter"
+data-lang="en-gb" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</td>
+<td align="right"> <a
+href="https://twitter.com/ApacheJMeter"
+class="twitter-follow-button"
+data-show-count="false" data-lang="en-gb"
+data-size="large">Follow</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
 <table border="0" width="100%" cellspacing="4">
 <tr><td colspan="2">
 <hr noshade size="1"/>
