@@ -262,4 +262,54 @@ public class ConversionUtils {
         s.replace(pathStartIndex, pathEndIndex, newPath.toString());
         return s.toString();
     }
+
+    /**
+     * Builds Full url (containing scheme, host,port) from relative URL
+     * as per RFC http://tools.ietf.org/html/rfc3986#section-4.2
+     * @param lastUrl URL
+     * @param redirectLocation absolute URL
+     * @return Full URL
+     * 
+     */
+    public static final String buildFullUrlFromRelative(URL lastUrl,
+            String redirectLocation) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(lastUrl.getProtocol())
+            .append("://")
+            .append(lastUrl.getHost());
+        if(lastUrl.getPort()!= -1) {
+            builder.append(":").append(lastUrl.getPort());
+        }
+        if(redirectLocation.startsWith("/")) {
+            // A relative reference that begins with a single slash 
+            // character is termed an absolute-path reference
+            builder.append(redirectLocation);
+        } else {
+            // A relative reference that does not begin with a
+            // slash character is termed a relative-path reference
+            // We need to merge a relative-path reference with the path of the base URI
+            // http://tools.ietf.org/html/rfc3986#section-5.2.3
+            if(lastUrl.getPath().isEmpty()) {
+                // If the base URI has a defined authority component and an empty
+                // path, then return a string consisting of "/" concatenated with the
+                // reference's path; otherwise,
+                builder.append("/").append(redirectLocation);
+            } else {
+                // string consisting of the reference's path component
+                // appended to all but the last segment of the base URI's path (i.e.,
+                // excluding any characters after the right-most "/" in the base URI
+                // path, or excluding the entire base URI path if it does not contain
+                // any "/" characters).     
+                String path = lastUrl.getPath();
+                int index = path.lastIndexOf("/");
+                if(index == -1) {
+                    builder.append("/").append(redirectLocation);
+                } else {
+                    builder.append(path.substring(0, index+1))
+                        .append(redirectLocation);
+                }
+            }
+        }
+        return builder.toString();
+    }
 }

@@ -321,7 +321,12 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     throw new IllegalArgumentException("Missing location header");
                 }
                 try {
-                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(new URL(headerLocation.getValue())).toString());
+                    String redirectLocation = headerLocation.getValue();
+                    if(!(redirectLocation.startsWith("http://")||redirectLocation.startsWith("https://"))) {
+                        redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
+                    }
+
+                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(new URL(redirectLocation)).toString());
                 } catch (Exception e) {
                     log.error("Error sanitizing URL:"+headerLocation.getValue()+", message:"+e.getMessage());
                 }
