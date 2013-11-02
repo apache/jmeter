@@ -332,7 +332,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
                     throw new IllegalArgumentException("Missing location header in redirect for " + httpRequest.getRequestLine());
                 }
-                final String redirectLocation = headerLocation.getValue();
+                String redirectLocation = headerLocation.getValue();
+                if(!(redirectLocation.startsWith("http://")|| redirectLocation.startsWith("https://"))) {
+                    redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
+                }
                 try {
                     final URL redirectUrl = new URL(redirectLocation);
                     res.setRedirectLocation(ConversionUtils.sanitizeUrl(redirectUrl).toString());
