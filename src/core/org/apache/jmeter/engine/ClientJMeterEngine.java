@@ -106,7 +106,11 @@ public class ClientJMeterEngine implements JMeterEngine {
     @Override
     public void runTest() throws JMeterEngineException {
         log.info("running clientengine run method");
+        
+        // See https://issues.apache.org/bugzilla/show_bug.cgi?id=55510
+        JMeterContextService.clearTotalThreads();
         HashTree testTree = test;
+
         synchronized(testTree) {
             testTree.traverse(new PreCompiler(true));  // limit the changes to client only test elements
             testTree.traverse(new TurnElementsOn());
