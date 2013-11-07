@@ -81,9 +81,11 @@ public final class FileDialoger {
      */
     public static JFileChooser promptToOpenFile(String[] exts, String existingFileName) {
         // JFileChooser jfc = null;
-        File existingFileStart = new File(existingFileName);
-        if(!StringUtils.isEmpty(existingFileName) && existingFileStart.exists() && existingFileStart.canRead()) {
-            jfc.setCurrentDirectory(new File(existingFileName));
+        if(!StringUtils.isEmpty(existingFileName)) {
+            File existingFileStart = new File(existingFileName);
+            if(existingFileStart.exists() && existingFileStart.canRead()) {
+                jfc.setCurrentDirectory(new File(existingFileName));
+            }
         }
         else if (lastJFCDirectory == null) {
             String start = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
