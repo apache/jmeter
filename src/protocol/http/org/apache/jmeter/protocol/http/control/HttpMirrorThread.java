@@ -101,6 +101,17 @@ public class HttpMirrorThread implements Runnable {
             out.write("Content-Type: text/plain".getBytes(ISO_8859_1)); //$NON-NLS-1$
             out.write(CRLF);
 
+            // Look for special Cookie request
+            String headersValue = getRequestHeaderValue(headerString, "X-SetHeaders"); //$NON-NLS-1$
+            if (headersValue != null) {
+                String[] headersToSet = headersValue.split("\\|");
+                for (String string : headersToSet) {
+                    out.write(string.getBytes(ISO_8859_1));
+                    out.write(CRLF);                    
+                }
+            }
+            out.write(CRLF);
+            
             // Look for special Response Length header
             String responseLengthValue = getRequestHeaderValue(headerString, "X-ResponseLength"); //$NON-NLS-1$
             int responseLength=-1;
