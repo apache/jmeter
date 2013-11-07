@@ -110,7 +110,6 @@ public class HttpMirrorThread implements Runnable {
                     out.write(CRLF);                    
                 }
             }
-            out.write(CRLF);
             
             // Look for special Response Length header
             String responseLengthValue = getRequestHeaderValue(headerString, "X-ResponseLength"); //$NON-NLS-1$
