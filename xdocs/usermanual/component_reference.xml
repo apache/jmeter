@@ -6120,6 +6120,9 @@ Note that you can get more control on responses by adding an HTTP Header Manager
         <property name="X-SetCookie" required="No">Cookies to be set on response</property>
         <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status responses</a>, example 200 OK, 500 Internal Server Error ....</property>
         <property name="X-ResponseLength" required="No">Size of response, this enable returning only a substring of Request content</property>
+        <property name="X-SetHeaders" required="No">Pipe separator list of headers, example:<br/> 
+        <code>headerA=valueA|headerB=valueB</code> would set headerA to valueA and headerB to valueB.        
+        </property>
 </properties>
 
 </note>
