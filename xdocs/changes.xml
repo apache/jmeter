@@ -161,6 +161,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <h3>General</h3>
 <ul>
 <li><bugzilla>55739</bugzilla> - Remote Test : Total threads in GUI mode shows invalid total number of threads</li>
+<li><bugzilla>55753</bugzilla> - Improve FilePanel behaviour to start from the value set in Filename field if any</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
