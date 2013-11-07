@@ -2435,7 +2435,7 @@ However, if the property <b>includecontroller.prefix</b> is defined,
 the contents are used to prefix the pathname.
 </note>
 <note>
-When using IncludeController and including the same JMX file, ensure you name the IncludeController differently to avoid facing known issue 50898.
+When using IncludeController and including the same JMX file, ensure you name the IncludeController differently to avoid facing known issue <bugzilla>50898</bugzilla>.
 </note>
 <p>
 If the file cannot be found at the location given by prefix+filename, then the controller
@@ -3364,7 +3364,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
     <note>CSV Dataset variables are defined at the start of each test iteration.
     As this is after configuration processing is completed,
     they cannot be used for some configuration items - such as JDBC Config - 
-    that process their contents at configuration time (see <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">Bug 40394 </a>)
+    that process their contents at configuration time (see <bugzilla>40394</bugzilla>)
     However the variables do work in the HTTP Auth Manager, as the username etc are processed at run-time.
     </note>
     <p>
