@@ -23,6 +23,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
 
@@ -43,6 +44,15 @@ public final class FileDialoger {
     private FileDialoger() {
     }
 
+
+    public static JFileChooser promptToOpenFile() {
+        return promptToOpenFile((String)null);
+    }
+
+    public static JFileChooser promptToOpenFile(String existingFileName) {
+        return promptToOpenFile(new String[0], existingFileName);
+    }
+    
     /**
      * Prompts the user to choose a file from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
@@ -55,9 +65,27 @@ public final class FileDialoger {
      *         finished using it - null if no file was chosen
      */
     public static JFileChooser promptToOpenFile(String[] exts) {
+        return promptToOpenFile(exts, null);
+    }
+    
+    /**
+     * Prompts the user to choose a file from their filesystems for our own
+     * devious uses. This method maintains the last directory the user visited
+     * before dismissing the dialog. This does NOT imply they actually chose a
+     * file from that directory, only that they closed the dialog there. It is
+     * the caller's responsibility to check to see if the selected file is
+     * non-null.
+     *
+     * @return the JFileChooser that interacted with the user, after they are
+     *         finished using it - null if no file was chosen
+     */
+    public static JFileChooser promptToOpenFile(String[] exts, String existingFileName) {
         // JFileChooser jfc = null;
-
-        if (lastJFCDirectory == null) {
+        File existingFileStart = new File(existingFileName);
+        if(!StringUtils.isEmpty(existingFileName) && existingFileStart.exists() && existingFileStart.canRead()) {
+            jfc.setCurrentDirectory(new File(existingFileName));
+        }
+        else if (lastJFCDirectory == null) {
             String start = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
 
             if (start.length() > 0) {
@@ -85,10 +113,6 @@ public final class FileDialoger {
         for (FileFilter filter : filters) {
             jfc.removeChoosableFileFilter(filter);
         }
-    }
-
-    public static JFileChooser promptToOpenFile() {
-        return promptToOpenFile(new String[0]);
     }
 
     /**

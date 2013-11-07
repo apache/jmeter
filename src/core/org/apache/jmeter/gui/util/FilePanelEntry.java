@@ -136,9 +136,9 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
         if (e.getActionCommand().equals(ACTION_BROWSE)) {
             JFileChooser chooser;
             if(filetypes == null || filetypes.length == 0){
-                chooser = FileDialoger.promptToOpenFile();
+                chooser = FileDialoger.promptToOpenFile(filename.getText());
             } else {
-                chooser = FileDialoger.promptToOpenFile(filetypes);
+                chooser = FileDialoger.promptToOpenFile(filetypes, filename.getText());
             }
             if (chooser != null && chooser.getSelectedFile() != null) {
                 filename.setText(chooser.getSelectedFile().getPath());
