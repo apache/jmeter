@@ -48,6 +48,7 @@ public class ConversionUtils {
     private static final String DOTDOT = "..";
     private static final String SLASH = "/";
     private static final String COLONSLASHSLASH = "://";
+    private static final String COLON = ":";
 
     /**
      * Extract the encoding (charset) from the Content-Type,
@@ -275,12 +276,12 @@ public class ConversionUtils {
             String redirectLocation) {
         StringBuilder builder = new StringBuilder();
         builder.append(lastUrl.getProtocol())
-            .append("://")
+            .append(COLONSLASHSLASH)
             .append(lastUrl.getHost());
         if(lastUrl.getPort()!= -1) {
-            builder.append(":").append(lastUrl.getPort());
+            builder.append(COLON).append(lastUrl.getPort());
         }
-        if(redirectLocation.startsWith("/")) {
+        if(redirectLocation.startsWith(SLASH)) {
             // A relative reference that begins with a single slash 
             // character is termed an absolute-path reference
             builder.append(redirectLocation);
@@ -293,7 +294,7 @@ public class ConversionUtils {
                 // If the base URI has a defined authority component and an empty
                 // path, then return a string consisting of "/" concatenated with the
                 // reference's path; otherwise,
-                builder.append("/").append(redirectLocation);
+                builder.append(SLASH).append(redirectLocation);
             } else {
                 // string consisting of the reference's path component
                 // appended to all but the last segment of the base URI's path (i.e.,
@@ -301,9 +302,9 @@ public class ConversionUtils {
                 // path, or excluding the entire base URI path if it does not contain
                 // any "/" characters).     
                 String path = lastUrl.getPath();
-                int index = path.lastIndexOf("/");
+                int index = path.lastIndexOf(SLASH);
                 if(index == -1) {
-                    builder.append("/").append(redirectLocation);
+                    builder.append(SLASH).append(redirectLocation);
                 } else {
                     builder.append(path.substring(0, index+1))
                         .append(redirectLocation);
