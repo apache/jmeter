@@ -2793,6 +2793,11 @@ video/
 <td>The <i>XML view</i> will show response in tree style. 
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
 <br/></td></tr>
+<tr><td><b>XPath Tester</b></td>
+<td>The <i>XPath Tester</i> only works for text responses. It shows the plain text in the upper panel.
+The "Test" button allows the user to apply the XPath query to the upper panel and the results
+will be displayed in the lower panel.<br/>
+</td></tr>
 </table>
 <p><i>Scroll automatically?</i> option permit to have last node display in tree selection</p>
 <p>
