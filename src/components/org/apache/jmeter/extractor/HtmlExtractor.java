@@ -20,8 +20,10 @@ package org.apache.jmeter.extractor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -179,7 +181,14 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         List<String> result = new ArrayList<String>();
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
-            getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, "-1");
+            if(!StringUtils.isEmpty(inputString)) {
+                getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, "-1");
+            } else {
+                if(inputString==null) {
+                    log.warn("No variable '"+getVariableName()+"' found to process by Css/JQuery Extractor '"+getName()+"', skipping processing");
+                }
+                return Collections.emptyList();
+            } 
         } else {
             List<SampleResult> sampleList = getSampleList(previousResult);
             int i=0;
