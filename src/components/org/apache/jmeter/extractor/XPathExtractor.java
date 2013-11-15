@@ -128,8 +128,14 @@ public class XPathExtractor extends AbstractScopedTestElement implements
         try{
             if (isScopeVariable()){
                 String inputString=vars.get(getVariableName());
-                Document d =  parseResponse(inputString);
-                getValuesForXPath(d,getXPathQuery(),matches);
+                if(inputString != null) {
+                    if(inputString.length()>0) {
+                        Document d =  parseResponse(inputString);
+                        getValuesForXPath(d,getXPathQuery(),matches);
+                    }
+                } else {
+                    log.warn("No variable '"+getVariableName()+"' found to process by XPathExtractor '"+getName()+"', skipping processing");
+                }
             } else {
                 List<SampleResult> samples = getSampleList(previousResult);
                 for (SampleResult res : samples) {
