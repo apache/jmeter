@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -334,7 +335,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             log.debug("Type:" + (contains?"Contains":"Match") + (notTest? "(not)": ""));
         }
 
-        if (toCheck.length() == 0) {
+        if (StringUtils.isEmpty(toCheck)) {
             if (notTest) { // Not should always succeed against an empty result
                 return result;
             }

@@ -196,7 +196,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
             if(inputString == null) {
-                log.warn("No variable '"+getVariableName()+"' found to process by RegexExtractor "+getName()+", skipping processing");
+                log.warn("No variable '"+getVariableName()+"' found to process by RegexExtractor '"+getName()+"', skipping processing");
                 return Collections.emptyList();
             }
             matchStrings(matchNumber, matcher, pattern, matches, found,

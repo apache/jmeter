@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -78,12 +79,15 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
 
         try {
             if (isScopeVariable()){
-                responseData = getThreadContext().getVariables().get(getVariableName()).getBytes("UTF-8");
+                String inputString=getThreadContext().getVariables().get(getVariableName());
+                if(!StringUtils.isEmpty(inputString)) {
+                    responseData = inputString.getBytes("UTF-8");
+                } 
             } else {
                 responseData = response.getResponseData();
             }
             
-            if (responseData.length == 0) {
+            if (responseData == null || responseData.length == 0) {
                 return result.setResultForNull();
             }
     
