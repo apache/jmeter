@@ -1264,7 +1264,8 @@ public class ProxyControl extends GenericController {
                     log.warn("Could not open/read key store " + e.getMessage()); // message includes the file name
                 }
             } catch (GeneralSecurityException e) {
-                log.warn("Problem reading key store" + e.getMessage());
+            	keyStore = null; // if cert is not valid, flag up to recreate it
+                log.warn("Problem reading key store: " + e.getMessage());
             }
         }
         if (keyStore == null) { // no existing file or not valid
