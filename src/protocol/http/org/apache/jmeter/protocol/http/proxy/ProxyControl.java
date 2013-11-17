@@ -860,7 +860,7 @@ public class ProxyControl extends GenericController {
         if (myTarget != null) {
             return myTarget;
         }
-        log.error("Program error: proxy recording target not found.");
+        log.error("Program error: test script recording target not found.");
         return null;
     }
 
