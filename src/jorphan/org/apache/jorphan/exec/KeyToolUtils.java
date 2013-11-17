@@ -31,6 +31,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -47,6 +48,14 @@ public class KeyToolUtils {
 
     private static final String DNAME_ROOT_CA_KEY;
 
+    private static final String KEYTOOL_DIRECTORY = "keytool.directory"; // $NON-NLS-1$
+
+    /**
+     * Where to find the keytool application.
+     * If null, then keytool cannot be found.
+     */
+	private static final String KEYTOOL_PATH;
+
     private static void addElement(StringBuilder sb, String prefix, String value) {
         if (value != null) {
             sb.append(", ");
@@ -61,6 +70,38 @@ public class KeyToolUtils {
         addElement(sb, "OU=Username: ", System.getProperty("user.name")); // $NON-NLS-1$ $NON-NLS-2$
         addElement(sb, "C=", System.getProperty("user.country")); // $NON-NLS-1$ $NON-NLS-2$
         DNAME_ROOT_CA_KEY = sb.toString();
+
+        // Try to find keytool application
+        // N.B. Cannot use JMeter property from jorphan jar.
+        final String keytoolDir = System.getProperty(KEYTOOL_DIRECTORY);
+
+        String keytoolPath; // work field
+        if (keytoolDir != null) {
+        	keytoolPath = new File(new File(keytoolDir),"keytool").getPath(); // $NON-NLS-1$
+			if (!checkKeytool(keytoolPath)) { // $NON-NLS-1$
+        		log.error("Cannot find keytool using property " + KEYTOOL_DIRECTORY + "="+keytoolDir);
+        		keytoolPath = null; // don't try anything else if the property is provided
+        	}
+        } else {
+        	keytoolPath = "keytool"; // $NON-NLS-1$
+        	if (!checkKeytool(keytoolPath)) { // Not found on PATH, check Java Home
+        		File javaHome = JOrphanUtils.getJavaHome();
+        		if (javaHome != null) {
+        			keytoolPath = new File(new File(javaHome,"bin"),"keytool").getPath(); // $NON-NLS-1$ $NON-NLS-2$
+					if (!checkKeytool(keytoolPath)) {
+            			keytoolPath = null;
+            		}
+        		} else {
+        			keytoolPath = null;
+        		}
+        	}
+        }
+        if (keytoolPath == null) {
+        	log.error("Unable to find keytool application. Check PATH or define system property " + KEYTOOL_DIRECTORY);
+        } else {
+        	log.info("keytool found at '" + keytoolPath + "'");
+        }
+    	KEYTOOL_PATH = keytoolPath;
     }
 
     private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
@@ -98,7 +139,7 @@ public class KeyToolUtils {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, null);
         final List<String> arguments = new ArrayList<String>();
-        arguments.add("keytool"); // $NON-NLS-1$
+        arguments.add(getKeyToolPath());
         arguments.add("-genkeypair"); // $NON-NLS-1$
         arguments.add("-alias"); // $NON-NLS-1$
         arguments.add(alias);
@@ -252,7 +293,7 @@ public class KeyToolUtils {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, null);
         final List<String> arguments = new ArrayList<String>();
-        arguments.add("keytool"); // $NON-NLS-1$
+        arguments.add(getKeyToolPath());
         arguments.add("-list"); // $NON-NLS-1$
         arguments.add("-v"); // $NON-NLS-1$
 
@@ -307,7 +348,7 @@ public class KeyToolUtils {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, 0L, 0, null, input, output, null);
         final List<String> arguments = new ArrayList<String>();
-        arguments.add("keytool"); // $NON-NLS-1$
+        arguments.add(getKeyToolPath());
         arguments.add(command);
         arguments.add("-keystore"); // $NON-NLS-1$
         arguments.add(keystore.getName());
@@ -330,4 +371,35 @@ public class KeyToolUtils {
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
     }
+
+    public static boolean haveKeytool() {
+    	return KEYTOOL_PATH != null;
+    }
+
+    private static String getKeyToolPath() throws IOException {
+    	if (KEYTOOL_PATH == null) {
+    		throw new IOException("keytool application cannot be found");
+    	}
+    	return "keytool";
+    }
+
+    /**
+     * Check if keytool can be found
+     * @param keytoolPath the path to check
+     */
+	private static boolean checkKeytool(String keytoolPath) {
+        final SystemCommand nativeCommand = new SystemCommand(null, null);
+        final List<String> arguments = new ArrayList<String>();
+        arguments.add(keytoolPath);
+        arguments.add("-help"); // $NON-NLS-1$
+        try {
+            nativeCommand.run(arguments);
+            return true;
+        } catch (IOException ioe) {
+        	return false;
+        } catch (InterruptedException e) {
+        	log.error("Command was interrupted\n" + nativeCommand.getOutResult(), e);
+        	return false;
+        }
+	}
 }
