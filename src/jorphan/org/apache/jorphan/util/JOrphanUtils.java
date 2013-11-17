@@ -25,13 +25,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -577,17 +577,6 @@ public final class JOrphanUtils {
      * @return the home location of Java, or {@code null} if the method fails
      */
 	public static File getJavaHome() {
-		// For example: jar:file:/C:/jdk1.6.0_45/jre/lib/rt.jar!/java/lang/Object.class
-		URL resource = Object.class.getResource("Object.class"); // might not work with some Java implementations
-		if (resource == null) {
-			return null;
-		}
-		String path = resource.getPath();
-		// For example: file:/C:/jdk1.6.0_45/jre/lib/rt.jar!/java/lang/Object.class
-		path = path.replace("file:","").replaceFirst("!.+", "");
-		// e.g. /C:/jdk1.6.0_45/jre/lib/rt.jar
-		File rt = new File(path);
-		return rt.getParentFile().getParentFile().getParentFile();
+		return SystemUtils.getJavaHome();
 	}
-    
 }
