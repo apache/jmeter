@@ -507,17 +507,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             }
         } catch (InvalidVariableException e) {
             JOptionPane.showMessageDialog(this,
-                    JMeterUtils.getResString("invalid_variables"), // $NON-NLS-1$
+                    JMeterUtils.getResString("invalid_variables")+":"+e.getMessage(), // $NON-NLS-1$ $NON-NLS-2$
                     JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
         } catch (BindException e) {
             JOptionPane.showMessageDialog(this,
-                    JMeterUtils.getResString("proxy_daemon_bind_error"), // $NON-NLS-1$
+                    JMeterUtils.getResString("proxy_daemon_bind_error")+":"+e.getMessage(), // $NON-NLS-1$ $NON-NLS-2$
                     JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                    JMeterUtils.getResString("proxy_daemon_error"), // $NON-NLS-1$
+                    JMeterUtils.getResString("proxy_daemon_error")+":"+e.getMessage(), // $NON-NLS-1$ $NON-NLS-2$
                     JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                     JOptionPane.ERROR_MESSAGE);
         } finally {
