@@ -41,13 +41,13 @@ public class PackageTest extends TestCase {
     }
 
     public void testConfiguring() throws Exception {
-    	try {
-	        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
-	        configure(sampler);
-    	} catch (HeadlessException e) {
+        try {
+            HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+            configure(sampler);
+        } catch (HeadlessException e) {
             System.out.println("o.a.j.junit.JMeterTest Error running testConfiguring due to Headless mode, "+e.toString());
             log.warn("o.a.j.junit.JMeterTest Error running testConfiguring due to Headless mode, "+e.toString());
-    	}
+        }
     }
 
     private void configure(HTTPSamplerBase sampler) throws Exception {

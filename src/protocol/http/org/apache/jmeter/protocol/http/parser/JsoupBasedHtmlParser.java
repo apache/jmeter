@@ -50,15 +50,15 @@ public class JsoupBasedHtmlParser extends HTMLParser {
         }
         private URL url;
     }
-    
+
     private static final class JMeterNodeVisitor implements NodeVisitor {
 
         private URLCollection urls;
         private URLPointer baseUrl;
 
         /**
-         * @param baseUrl 
-         * @param urls 
+         * @param baseUrl
+         * @param urls
          */
         public JMeterNodeVisitor(final URLPointer baseUrl, URLCollection urls) {
             this.urls = urls;
@@ -74,15 +74,15 @@ public class JsoupBasedHtmlParser extends HTMLParser {
 
         @Override
         public void head(Node node, int depth) {
-        	if (!(node instanceof Element)) {
-        		return;
-        	}
-        	Element tag = (Element) node;
+            if (!(node instanceof Element)) {
+                return;
+            }
+            Element tag = (Element) node;
             String tagName = tag.tagName().toLowerCase();
             if (tagName.equals(TAG_BODY)) {
                 extractAttribute(tag, ATT_BACKGROUND);
             } else if (tagName.equals(TAG_SCRIPT)) {
-            	extractAttribute(tag, ATT_SRC);
+                extractAttribute(tag, ATT_SRC);
             } else if (tagName.equals(TAG_BASE)) {
                 String baseref = tag.attr(ATT_HREF);
                 try {
@@ -98,8 +98,8 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             } else if (tagName.equals(TAG_APPLET)) {
                 extractAttribute(tag, ATT_CODE);
             } else if (tagName.equals(TAG_OBJECT)) {
-                extractAttribute(tag, ATT_CODEBASE);                
-                extractAttribute(tag, ATT_DATA);                 
+                extractAttribute(tag, ATT_CODEBASE);
+                extractAttribute(tag, ATT_DATA);
             } else if (tagName.equals(TAG_INPUT)) {
                 // we check the input tag type for image
                 if (ATT_IS_IMAGE.equalsIgnoreCase(tag.attr(ATT_TYPE))) {
@@ -132,17 +132,17 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             }
         }
 
-		@Override
-		public void tail(Node arg0, int arg1) {
-			// Noop
-		}
+        @Override
+        public void tail(Node arg0, int arg1) {
+            // Noop
+        }
     }
 
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl,
             URLCollection coll, String encoding) throws HTMLParseException {
         try {
-            String contents = new String(html,encoding); 
+            String contents = new String(html,encoding);
             Document doc = Jsoup.parse(contents);
             JMeterNodeVisitor nodeVisitor = new JMeterNodeVisitor(new URLPointer(baseUrl), coll);
             new NodeTraversor(nodeVisitor).traverse(doc);
