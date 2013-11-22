@@ -569,14 +569,4 @@ public final class JOrphanUtils {
             offset += chunk;
         }
     }
-
-    /**
-     * Find where the running instance of Java is installed (if possible).
-     * May not work with all versions of Java.
-     * 
-     * @return the home location of Java, or {@code null} if the method fails
-     */
-	public static File getJavaHome() {
-		return SystemUtils.getJavaHome();
-	}
 }
