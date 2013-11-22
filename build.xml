@@ -1794,8 +1794,8 @@ run JMeter unless all the JMeter jars are added.
 
   
   <target name="RC_upload" 
-  	description="Upload release candidate to svnpubsub area. Params: [-DrepoType=test|live] [-Djmeter.version=m.n] -DRC=RCn [-Dasf.ldap.password=secret -Dasf.ldap.usermame=user]" 
-  	depends="init-version">
+    description="Upload release candidate to svnpubsub area. Params: [-DrepoType=test|live] [-Djmeter.version=m.n] -DRC=RCn [-Dasf.ldap.password=secret -Dasf.ldap.usermame=user]" 
+    depends="init-version">
     <fail message="RC property must be defined!" unless="RC"/>
     <echo>Version = ${jmeter.version} ${RC}</echo>
     <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
@@ -1807,8 +1807,8 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="RC_publish" 
-  	description="Publish release candidate from svnpubsub area. Params: [-DrepoType=test|live] [-Djmeter.version=m.n] -DRC=RCn [-Dasf.ldap.password=secret -Dasf.ldap.usermame=user]" 
-  	depends="init-version">
+    description="Publish release candidate from svnpubsub area. Params: [-DrepoType=test|live] [-Djmeter.version=m.n] -DRC=RCn [-Dasf.ldap.password=secret -Dasf.ldap.usermame=user]" 
+    depends="init-version">
     <fail message="RC property must be defined!" unless="RC"/>
     <echo>Version = ${jmeter.version} ${RC}</echo>
     <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
@@ -1820,8 +1820,8 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="release_delete" 
-  	description="Delete old release candidate from svnpubsub area. : [-DrepoType=test|live] -Djmeter.old.version=m.n [-Dasf.ldap.user=name -Dasf.ldap.password=secret]" 
-  	depends="init-version">
+    description="Delete old release candidate from svnpubsub area. : [-DrepoType=test|live] -Djmeter.old.version=m.n [-Dasf.ldap.user=name -Dasf.ldap.password=secret]" 
+    depends="init-version">
     <fail message="jmeter.old.version property must be defined!" unless="jmeter.old.version"/>
     <condition property="same">
       <equals arg1="${jmeter.old.version}" arg2="${jmeter.version}"/>
