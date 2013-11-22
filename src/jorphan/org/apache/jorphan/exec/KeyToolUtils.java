@@ -48,6 +48,9 @@ public class KeyToolUtils {
 
     private static final String DNAME_ROOT_CA_KEY;
 
+    private static final String KEYTOOL = "keytool";
+
+    /** Name of property that can be used to override the default keytool location */
     private static final String KEYTOOL_DIRECTORY = "keytool.directory"; // $NON-NLS-1$
 
     /**
@@ -77,17 +80,17 @@ public class KeyToolUtils {
 
         String keytoolPath; // work field
         if (keytoolDir != null) {
-        	keytoolPath = new File(new File(keytoolDir),"keytool").getPath(); // $NON-NLS-1$
-			if (!checkKeytool(keytoolPath)) { // $NON-NLS-1$
+        	keytoolPath = new File(new File(keytoolDir),KEYTOOL).getPath();
+        if (!checkKeytool(keytoolPath)) {
         		log.error("Cannot find keytool using property " + KEYTOOL_DIRECTORY + "="+keytoolDir);
         		keytoolPath = null; // don't try anything else if the property is provided
         	}
         } else {
-        	keytoolPath = "keytool"; // $NON-NLS-1$
+        	keytoolPath = KEYTOOL;
         	if (!checkKeytool(keytoolPath)) { // Not found on PATH, check Java Home
         		File javaHome = SystemUtils.getJavaHome();
         		if (javaHome != null) {
-        			keytoolPath = new File(new File(javaHome,"bin"),"keytool").getPath(); // $NON-NLS-1$ $NON-NLS-2$
+        			keytoolPath = new File(new File(javaHome,"bin"),KEYTOOL).getPath(); // $NON-NLS-1$
 					if (!checkKeytool(keytoolPath)) {
             			keytoolPath = null;
             		}
