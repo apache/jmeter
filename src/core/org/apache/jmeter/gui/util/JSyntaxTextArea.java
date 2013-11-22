@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.util;
@@ -34,7 +34,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$;
 
-	private final boolean disableUndo;
+    private final boolean disableUndo;
 
     private static final boolean WRAP_STYLE_WORD = JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);
     private static final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
@@ -44,7 +44,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     @Deprecated
     public JSyntaxTextArea() {
         // For use by test code only
-    	this(30, 50, false);
+        this(30, 50, false);
     }
 
     /**
@@ -85,10 +85,10 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setAntiAliasingEnabled(true);
         super.setLineWrap(LINE_WRAP);
         super.setWrapStyleWord(WRAP_STYLE_WORD);
-    	this.disableUndo = disableUndo;
-	}
+        this.disableUndo = disableUndo;
+    }
 
-	/**
+    /**
      * Sets the language of the text area.
      * @param language
      */
@@ -109,9 +109,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     protected RUndoManager createUndoManager() {
         RUndoManager undoManager = super.createUndoManager();
         if(disableUndo) {
-        	undoManager.setLimit(0);        	
+            undoManager.setLimit(0);
         } else {
-        	undoManager.setLimit(MAX_UNDOS);
+            undoManager.setLimit(MAX_UNDOS);
         }
         return undoManager;
     }
@@ -120,8 +120,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * Sets initial text resetting undo history
      * @param string
      */
-	public void setInitialText(String string) {
-		setText(string);
-		discardAllEdits();
-	}
+    public void setInitialText(String string) {
+        setText(string);
+        discardAllEdits();
+    }
 }

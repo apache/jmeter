@@ -213,9 +213,9 @@ public class ProxyControl extends GenericController {
             KEYSTORE_MODE = KeystoreMode.USER_KEYSTORE;
             log.info("HTTP(S) Test Script Recorder will use the keystore '"+ CERT_PATH_ABS + "' with the alias: '" + CERT_ALIAS + "'");
         } else {
-        	if (!KeyToolUtils.haveKeytool()) {
-                KEYSTORE_MODE = KeystoreMode.NONE;        		
-        	} else if (KeyToolUtils.SUPPORTS_HOST_CERT && USE_DYNAMIC_KEYS) {
+            if (!KeyToolUtils.haveKeytool()) {
+                KEYSTORE_MODE = KeystoreMode.NONE;
+            } else if (KeyToolUtils.SUPPORTS_HOST_CERT && USE_DYNAMIC_KEYS) {
                 KEYSTORE_MODE = KeystoreMode.DYNAMIC_KEYSTORE;
                 log.info("HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file " + CERT_PATH_ABS);
             } else {
@@ -1219,7 +1219,7 @@ public class ProxyControl extends GenericController {
             initUserKeyStore();
             break;
         case NONE:
-        	throw new IOException("Cannot find keytool application and no keystore was provided");
+            throw new IOException("Cannot find keytool application and no keystore was provided");
         default:
             throw new IllegalStateException("Impossible case: " + KEYSTORE_MODE);
         }
@@ -1269,7 +1269,7 @@ public class ProxyControl extends GenericController {
                     log.warn("Could not open/read key store " + e.getMessage()); // message includes the file name
                 }
             } catch (GeneralSecurityException e) {
-            	keyStore = null; // if cert is not valid, flag up to recreate it
+                keyStore = null; // if cert is not valid, flag up to recreate it
                 log.warn("Problem reading key store: " + e.getMessage());
             }
         }

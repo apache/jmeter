@@ -97,7 +97,7 @@ public class SampleSenderFactory {
                 // houston we have a problem !!
                 log.error("Unable to create a sample sender from class:'"+type+"', search for mode property in jmeter.properties for correct configuration options");
                 throw new IllegalArgumentException("Unable to create a sample sender from mode or class:'"
-                		+type+"', search for mode property in jmeter.properties for correct configuration options, message:"+e.getMessage(), e);
+                        +type+"', search for mode property in jmeter.properties for correct configuration options, message:"+e.getMessage(), e);
             }
 
             return s;

@@ -67,7 +67,7 @@ public class ButtonPanel extends JPanel {
             save.addActionListener(listener);
             break;
         default:
-        	throw new IllegalStateException("Unexpected button id: " + button);
+            throw new IllegalStateException("Unexpected button id: " + button);
         }
     }
 

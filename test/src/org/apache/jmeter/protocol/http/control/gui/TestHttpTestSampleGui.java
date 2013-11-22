@@ -37,21 +37,21 @@ public class TestHttpTestSampleGui extends TestCase {
 
         @Override
         public void setUp() {
-        	if(GraphicsEnvironment.isHeadless()) {
-        		System.out.println("Skipping test:"+getClass().getName()+", cannot run in Headless mode");
-        		log.warn("Skipping test:"+getClass().getName()+", cannot run in Headless mode");
-        		return;
-        	}
+            if(GraphicsEnvironment.isHeadless()) {
+                System.out.println("Skipping test:"+getClass().getName()+", cannot run in Headless mode");
+                log.warn("Skipping test:"+getClass().getName()+", cannot run in Headless mode");
+                return;
+            }
             gui = new HttpTestSampleGui();
         }
 
         public void testCloneSampler() throws Exception {
-        	if(GraphicsEnvironment.isHeadless()) {
-        		System.out.println("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
-        		log.warn("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
-        		return;
-        	}
-        	HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
+            if(GraphicsEnvironment.isHeadless()) {
+                System.out.println("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
+                log.warn("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
+                return;
+            }
+            HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
             sampler.addArgument("param", "value");
             HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
             clonedSampler.setRunningVersion(true);
