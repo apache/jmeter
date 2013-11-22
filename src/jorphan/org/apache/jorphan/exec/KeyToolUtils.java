@@ -380,7 +380,7 @@ public class KeyToolUtils {
     	if (KEYTOOL_PATH == null) {
     		throw new IOException("keytool application cannot be found");
     	}
-    	return "keytool";
+    	return KEYTOOL_PATH;
     }
 
     /**
