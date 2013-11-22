@@ -85,7 +85,7 @@ public class KeyToolUtils {
         } else {
         	keytoolPath = "keytool"; // $NON-NLS-1$
         	if (!checkKeytool(keytoolPath)) { // Not found on PATH, check Java Home
-        		File javaHome = JOrphanUtils.getJavaHome();
+        		File javaHome = SystemUtils.getJavaHome();
         		if (javaHome != null) {
         			keytoolPath = new File(new File(javaHome,"bin"),"keytool").getPath(); // $NON-NLS-1$ $NON-NLS-2$
 					if (!checkKeytool(keytoolPath)) {
