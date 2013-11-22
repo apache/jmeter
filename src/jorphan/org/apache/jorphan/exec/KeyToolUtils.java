@@ -57,7 +57,7 @@ public class KeyToolUtils {
      * Where to find the keytool application.
      * If null, then keytool cannot be found.
      */
-	private static final String KEYTOOL_PATH;
+    private static final String KEYTOOL_PATH;
 
     private static void addElement(StringBuilder sb, String prefix, String value) {
         if (value != null) {
@@ -80,31 +80,31 @@ public class KeyToolUtils {
 
         String keytoolPath; // work field
         if (keytoolDir != null) {
-        	keytoolPath = new File(new File(keytoolDir),KEYTOOL).getPath();
+            keytoolPath = new File(new File(keytoolDir),KEYTOOL).getPath();
         if (!checkKeytool(keytoolPath)) {
-        		log.error("Cannot find keytool using property " + KEYTOOL_DIRECTORY + "="+keytoolDir);
-        		keytoolPath = null; // don't try anything else if the property is provided
-        	}
+                log.error("Cannot find keytool using property " + KEYTOOL_DIRECTORY + "="+keytoolDir);
+                keytoolPath = null; // don't try anything else if the property is provided
+            }
         } else {
-        	keytoolPath = KEYTOOL;
-        	if (!checkKeytool(keytoolPath)) { // Not found on PATH, check Java Home
-        		File javaHome = SystemUtils.getJavaHome();
-        		if (javaHome != null) {
-        			keytoolPath = new File(new File(javaHome,"bin"),KEYTOOL).getPath(); // $NON-NLS-1$
-					if (!checkKeytool(keytoolPath)) {
-            			keytoolPath = null;
-            		}
-        		} else {
-        			keytoolPath = null;
-        		}
-        	}
+            keytoolPath = KEYTOOL;
+            if (!checkKeytool(keytoolPath)) { // Not found on PATH, check Java Home
+                File javaHome = SystemUtils.getJavaHome();
+                if (javaHome != null) {
+                    keytoolPath = new File(new File(javaHome,"bin"),KEYTOOL).getPath(); // $NON-NLS-1$
+                    if (!checkKeytool(keytoolPath)) {
+                        keytoolPath = null;
+                    }
+                } else {
+                    keytoolPath = null;
+                }
+            }
         }
         if (keytoolPath == null) {
-        	log.error("Unable to find keytool application. Check PATH or define system property " + KEYTOOL_DIRECTORY);
+            log.error("Unable to find keytool application. Check PATH or define system property " + KEYTOOL_DIRECTORY);
         } else {
-        	log.info("keytool found at '" + keytoolPath + "'");
+            log.info("keytool found at '" + keytoolPath + "'");
         }
-    	KEYTOOL_PATH = keytoolPath;
+        KEYTOOL_PATH = keytoolPath;
     }
 
     private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
@@ -376,21 +376,21 @@ public class KeyToolUtils {
     }
 
     public static boolean haveKeytool() {
-    	return KEYTOOL_PATH != null;
+        return KEYTOOL_PATH != null;
     }
 
     private static String getKeyToolPath() throws IOException {
-    	if (KEYTOOL_PATH == null) {
-    		throw new IOException("keytool application cannot be found");
-    	}
-    	return KEYTOOL_PATH;
+        if (KEYTOOL_PATH == null) {
+            throw new IOException("keytool application cannot be found");
+        }
+        return KEYTOOL_PATH;
     }
 
     /**
      * Check if keytool can be found
      * @param keytoolPath the path to check
      */
-	private static boolean checkKeytool(String keytoolPath) {
+    private static boolean checkKeytool(String keytoolPath) {
         final SystemCommand nativeCommand = new SystemCommand(null, null);
         final List<String> arguments = new ArrayList<String>();
         arguments.add(keytoolPath);
@@ -399,10 +399,10 @@ public class KeyToolUtils {
             int status = nativeCommand.run(arguments);
             return status == 0;
         } catch (IOException ioe) {
-        	return false;
+            return false;
         } catch (InterruptedException e) {
-        	log.error("Command was interrupted\n" + nativeCommand.getOutResult(), e);
-        	return false;
+            log.error("Command was interrupted\n" + nativeCommand.getOutResult(), e);
+            return false;
         }
-	}
+    }
 }
