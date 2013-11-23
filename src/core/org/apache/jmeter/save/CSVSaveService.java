@@ -1001,8 +1001,8 @@ public final class CSVSaveService {
     }
 
     // State of the parser
-    private static final int INITIAL = 0, PLAIN = 1, QUOTED = 2,
-            EMBEDDEDQUOTE = 3;
+    private enum ParserState {INITIAL, PLAIN, QUOTED, EMBEDDEDQUOTE}
+
     public static final char QUOTING_CHAR = '"';
 
     /**
@@ -1024,7 +1024,7 @@ public final class CSVSaveService {
     public static String[] csvReadFile(BufferedReader infile, char delim)
             throws IOException {
         int ch;
-        int state = INITIAL;
+        ParserState state = ParserState.INITIAL;
         List<String> list = new ArrayList<String>();
         CharArrayWriter baos = new CharArrayWriter(200);
         boolean push = false;
@@ -1033,12 +1033,12 @@ public final class CSVSaveService {
             switch (state) {
             case INITIAL:
                 if (ch == QUOTING_CHAR) {
-                    state = QUOTED;
+                    state = ParserState.QUOTED;
                 } else if (isDelimOrEOL(delim, ch)) {
                     push = true;
                 } else {
                     baos.write(ch);
-                    state = PLAIN;
+                    state = ParserState.PLAIN;
                 }
                 break;
             case PLAIN:
@@ -1049,14 +1049,14 @@ public final class CSVSaveService {
                                     + baos.toString() + "]");
                 } else if (isDelimOrEOL(delim, ch)) {
                     push = true;
-                    state = INITIAL;
+                    state = ParserState.INITIAL;
                 } else {
                     baos.write(ch);
                 }
                 break;
             case QUOTED:
                 if (ch == QUOTING_CHAR) {
-                    state = EMBEDDEDQUOTE;
+                    state = ParserState.EMBEDDEDQUOTE;
                 } else {
                     baos.write(ch);
                 }
@@ -1064,10 +1064,10 @@ public final class CSVSaveService {
             case EMBEDDEDQUOTE:
                 if (ch == QUOTING_CHAR) {
                     baos.write(QUOTING_CHAR); // doubled quote => quote
-                    state = QUOTED;
+                    state = ParserState.QUOTED;
                 } else if (isDelimOrEOL(delim, ch)) {
                     push = true;
-                    state = INITIAL;
+                    state = ParserState.INITIAL;
                 } else {
                     baos.write(QUOTING_CHAR);
                     throw new IOException(
@@ -1088,19 +1088,19 @@ public final class CSVSaveService {
                 list.add(s);
                 baos.reset();
             }
-            if ((ch == '\n' || ch == '\r') && state != QUOTED) {
+            if ((ch == '\n' || ch == '\r') && state != ParserState.QUOTED) {
                 break;
             }
         } // while not EOF
         if (ch == -1) {// EOF (or end of string) so collect any remaining data
-            if (state == QUOTED) {
+            if (state == ParserState.QUOTED) {
                 throw new IOException("Missing trailing quote-char in quoted field:[\""
                         + baos.toString() + "]");
             }
             // Do we have some data, or a trailing empty field?
             if (baos.size() > 0 // we have some data
                     || push // we've started a field
-                    || state == EMBEDDEDQUOTE // Just seen ""
+                    || state == ParserState.EMBEDDEDQUOTE // Just seen ""
             ) {
                 list.add(baos.toString());
             }
