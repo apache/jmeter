@@ -33,7 +33,7 @@ import org.apache.log.Logger;
 
 /**
  * Web daemon thread. Creates main socket on port 8080 and listens on it
- * forever. For each client request, creates a proxy thread to handle the
+ * forever. For each client request, creates a Proxy thread to handle the
  * request.
  *
  */
@@ -111,7 +111,7 @@ public class Daemon extends Thread implements Stoppable {
     @Override
     public void run() {
         running = true;
-        log.info("Proxy up and running!");
+        log.info("Test Script Recorder up and running!");
 
         // Maps to contain page and form encodings
         // TODO - do these really need to be shared between all Proxy instances?
