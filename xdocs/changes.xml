@@ -126,9 +126,10 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <ch_section>Bug fixes</ch_section>
 
-<h3>HTTP Samplers and Proxy</h3>
+<h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-<li><bugzilla>55717</bugzilla> - Bad handling of Redirect when URLs are in relative format by HttpClient4 and HttpClient31</li>
+<li><bugzilla>55815</bugzilla> - Proxy#getDomainMatch does not handle wildcards correctly</li>
+<li><bugzilla>55717</bugzilla> - Bad handling of Redirect when URLs are in relative format by HttpClient4 and HttpClient3.1</li>
 </ul>
 
 <h3>Other Samplers</h3>

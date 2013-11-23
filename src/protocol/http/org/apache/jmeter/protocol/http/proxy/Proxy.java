@@ -362,8 +362,10 @@ public class Proxy extends Thread {
      * Get matching alias for a host from keyStore that may contain domain aliases.
      * Assumes domains must have at least 2 parts (apache.org);
      * does not check if TLD requires more (google.co.uk).
-     * ProxyControl checks for valid domains before adding them, and any subsequent
-     * additions by the Proxy class will be hosts, not domains.
+     * Note that DNS wildcards only apply to a single level, i.e.
+     * podling.incubator.apache.org matches *.incubator.apache.org
+     * but does not match *.apache.org
+     *
      * @param keyStore the KeyStore to search
      * @param host the hostname to match
      * @return the keystore entry or {@code null} if no match found
@@ -375,17 +377,15 @@ public class Proxy extends Thread {
         }
         String parts[] = host.split("\\."); // get the component parts
         // Assume domains must have at least 2 parts, e.g. apache.org
-        // Don't try matching against *.org; however we don't check *.co.uk here
-        for(int i = 1; i <= parts.length - 2; i++) {
-            StringBuilder sb = new StringBuilder("*");
-            for(int j = i; j < parts.length ; j++) { // add the remaining parts
-                sb.append('.');
-                sb.append(parts[j]);
-            }
-            String alias = sb.toString();
-            if (keyStore.containsAlias(alias)) {
-                return alias;
-            }
+        // Replace the first part with "*" 
+        StringBuilder sb = new StringBuilder("*"); // $NON-NLS-1$
+        for(int j = 1; j < parts.length ; j++) { // Skip the first part
+            sb.append('.');
+            sb.append(parts[j]);
+        }
+        String alias = sb.toString();
+        if (keyStore.containsAlias(alias)) {
+            return alias;
         }
         return null;
     }
