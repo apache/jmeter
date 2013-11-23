@@ -5877,7 +5877,11 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  8080 is the default, but you can change it.</property>
         <property name="HTTPS Domains" required="No">List of domain (or host) names for HTTPS. Use this to pre-generate certificates for all servers you wish to record.
-        For example, *.apache.org
+        <br/>
+        For example, *.apache.org,*.incubator.apache.org
+        <br/>
+        Note that wildcard domains only apply to one level,
+        i.e. podling.incubator.apache.org matches *.incubator.apache.org but not *.apache.org
         </property>
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
