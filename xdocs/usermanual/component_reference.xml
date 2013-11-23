@@ -5765,6 +5765,13 @@ Once this is done, the generated server certificates will be accepted by the bro
 This has the advantage that even embedded HTTPS resources can be intercepted, and there is no need to override the browser checks for each new server.
 (Browsers don't prompt for embedded resources. So with earlier versions, embedded resources would only be downloaded for servers that were already 'known' to the browser)
 </p>
+<p>Unless a keystore is provided (and you define the property <code>proxy.cert.alias</code>),
+JMeter needs to use the keytool application to create the keystore entries. 
+Versions of JMeter after 2.10 include code to check that keytool is available by looking in various standard places.
+If JMeter is unable to find the keytool application, it will report an error.
+If necessary, the systen property <code>keytool.directory</code> can be used to tell JMeter where to find keytool.
+This should be defined in the file <code>system.properties</code>.
+</p>
 <p>
 The JMeter certificates are generated (if necessary) when the Start button is pressed.
 <b>Certificate generation can take some while, during which time the GUI will be unresponsive.</b>
