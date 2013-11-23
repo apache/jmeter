@@ -196,6 +196,11 @@ public class TransactionController extends GenericController implements SampleLi
         if (returnValue == null && isLast) // Must be the end of the controller
         {
             if (res != null) {
+                // See BUG 55816
+                if (!isIncludeTimers()) {
+                    long processingTimeOfLastChild = res.currentTimeInMillis()-prevEndTime;
+                    pauseTime += processingTimeOfLastChild;
+                }
                 res.setIdleTime(pauseTime+res.getIdleTime());
                 res.sampleEnd();
                 res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
