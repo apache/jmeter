@@ -182,7 +182,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         try {
-            xmlDataField.setText(response == null ? "" : XPathUtil.formatXml(response));
+            xmlDataField.setText(response == null ? "" : response);
             xmlDataField.setCaretPosition(0);
         } catch (Exception e) {
             logger.error("Exception converting to XML:"+response+ ", message:"+e.getMessage(),e);
