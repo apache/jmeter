@@ -198,7 +198,7 @@ public class TransactionController extends GenericController implements SampleLi
             if (res != null) {
                 // See BUG 55816
                 if (!isIncludeTimers()) {
-                    long processingTimeOfLastChild = res.currentTimeInMillis()-prevEndTime;
+                    long processingTimeOfLastChild = res.currentTimeInMillis() - prevEndTime;
                     pauseTime += processingTimeOfLastChild;
                 }
                 res.setIdleTime(pauseTime+res.getIdleTime());
