@@ -92,6 +92,8 @@ public class TristateCheckBoxTest {
                     System.out.println("Not Selected"); break;
                 case INDETERMINATE:
                     System.out.println("Tristate Selected"); break;
+                default:
+                	System.err.println("Unexpected state: " + tristateBox.getState()); break;
                 }
             }
         });
@@ -106,6 +108,8 @@ public class TristateCheckBoxTest {
                     System.out.println("Not Selected"); break;
                 case INDETERMINATE:
                     System.out.println("Tristate Selected"); break;
+                default:
+                	System.err.println("Unexpected state: " + tristateBox.getState()); break;
                 }
             }
         });

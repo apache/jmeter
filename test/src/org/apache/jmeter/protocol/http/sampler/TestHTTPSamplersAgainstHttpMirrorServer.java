@@ -1441,6 +1441,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 return new HTTPSampler2();
             case HTTP_SAMPLER3:
                 return new HTTPSampler3();
+            default:
+                break;
         }
         throw new IllegalArgumentException("Unexpected type: "+samplerType);
     }
