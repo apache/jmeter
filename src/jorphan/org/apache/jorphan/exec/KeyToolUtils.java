@@ -395,8 +395,12 @@ public class KeyToolUtils {
         arguments.add(keytoolPath);
         arguments.add("-help"); // $NON-NLS-1$
         try {
-            int status = nativeCommand.run(arguments);
-            return status == 0;
+            /*
+             * Don't check status return.
+             * Some implementations of keytool return non-zero status for -help
+             */
+            nativeCommand.run(arguments);
+            return true;
         } catch (IOException ioe) {
             return false;
         } catch (InterruptedException e) {
