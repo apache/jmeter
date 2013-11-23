@@ -174,6 +174,9 @@ public class SystemCommand {
                 swin.interrupt(); // the copying thread won't generally detect EOF
                 swin.join();
             }
+            procErr.close();
+            procIn.close();
+            procOut.close();
             return exitVal;
         } finally {
             if(proc != null) {
