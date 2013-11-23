@@ -60,9 +60,12 @@ public class SampleSenderFactory {
         final boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false); // $NON-NLS-1$
 
         // Extended property name
-         final String type = JMeterUtils.getPropDefault("mode", MODE_STRIPPED_BATCH); // $NON-NLS-1$
-
+        final String type = JMeterUtils.getPropDefault("mode", MODE_STRIPPED_BATCH); // $NON-NLS-1$
+        
         if (holdSamples || type.equalsIgnoreCase(MODE_HOLD)) {
+            if(holdSamples) {
+                log.warn("Property hold_samples is deprecated and will be removed in upcomping version, use mode="+MODE_HOLD +" instead");
+            }
             HoldSampleSender h = new HoldSampleSender(listener);
             return h;
         } else if (type.equalsIgnoreCase(MODE_BATCH)) {
