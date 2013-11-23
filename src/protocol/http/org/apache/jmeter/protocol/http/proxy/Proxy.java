@@ -366,7 +366,7 @@ public class Proxy extends Thread {
      * additions by the Proxy class will be hosts, not domains.
      * @param keyStore the KeyStore to search
      * @param host the hostname to match
-     * @return
+     * @return the keystore entry or {@code null} if no match found
      * @throws KeyStoreException 
      */
     private String getDomainMatch(KeyStore keyStore, String host) throws KeyStoreException {
