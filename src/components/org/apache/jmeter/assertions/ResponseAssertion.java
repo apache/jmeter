@@ -332,7 +332,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         boolean matches = isMatchType();
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled){
-            log.debug("Type:" + (contains?"Contains":"Match") + (notTest? "(not)": ""));
+            log.debug("Type:" + (contains?"Contains" : "Match") + (notTest? "(not)" : ""));
         }
 
         if (StringUtils.isEmpty(toCheck)) {
