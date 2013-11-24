@@ -395,12 +395,16 @@ public class KeyToolUtils {
         arguments.add(keytoolPath);
         arguments.add("-help"); // $NON-NLS-1$
         try {
+            int status = nativeCommand.run(arguments);
+            if (log.isDebugEnabled()) {
+                log.debug("checkKeyTool:status=" + status);
+                log.debug(nativeCommand.getOutResult());
+            }
             /*
-             * Don't check status return.
-             * Some implementations of keytool return non-zero status for -help
+             * Some implementations of keytool return status 1 for -help
+             * MacOS/Java 7 returns 2 if it cannot find keytool
              */
-            nativeCommand.run(arguments);
-            return true;
+            return status == 0 || status == 1; // TODO this is rather fragile
         } catch (IOException ioe) {
             return false;
         } catch (InterruptedException e) {
