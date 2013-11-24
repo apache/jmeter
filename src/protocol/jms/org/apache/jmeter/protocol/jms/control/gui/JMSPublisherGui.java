@@ -28,13 +28,12 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -118,7 +117,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private final JLabeledRadioI18N destSetup =
         new JLabeledRadioI18N("jms_dest_setup", DEST_SETUP_ITEMS, DEST_SETUP_STATIC); // $NON-NLS-1$
 
-    private ArgumentsPanel jmsPropertiesPanel;
+    private JMSPropertiesPanel jmsPropertiesPanel;
 
     public JMSPublisherGui() {
         init();
@@ -177,7 +176,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
       sampler.setUseAuth(useAuth.isSelected());
       sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
      
-      Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+      JMSProperties args = (JMSProperties) jmsPropertiesPanel.createTestElement();
       sampler.setJMSProperties(args);
     }
 
@@ -201,7 +200,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(createAuthPane());
         mainPanel.add(iterations);
 
-        jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
+        jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
         mainPanel.add(jmsPropertiesPanel);
 
         configChoice.setLayout(new BoxLayout(configChoice, BoxLayout.X_AXIS));
@@ -245,7 +244,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsPwd.setEnabled(false);
         destSetup.setText(DEST_SETUP_STATIC);
         useNonPersistentDelivery.setSelected(false);
-        jmsPropertiesPanel.clear();
+        jmsPropertiesPanel.clearGui();
     }
 
     /**
