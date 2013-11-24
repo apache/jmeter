@@ -157,7 +157,7 @@ public class Publisher implements Closeable {
         return publish(text, destinationName, null);
     }
     
-    public Message publish(String text, String destinationName, Map<String, String> properties)
+    public Message publish(String text, String destinationName, Map<String, Object> properties)
             throws JMSException, NamingException {
         TextMessage msg = session.createTextMessage(text);
         return setPropertiesAndSend(destinationName, properties, msg);
@@ -173,13 +173,13 @@ public class Publisher implements Closeable {
         return publish(contents, destinationName, null);
     }
     
-    public Message publish(Serializable contents, String destinationName, Map<String, String> properties)
+    public Message publish(Serializable contents, String destinationName, Map<String, Object> properties)
             throws JMSException, NamingException {
         ObjectMessage msg = session.createObjectMessage(contents);
         return setPropertiesAndSend(destinationName, properties, msg);
     }
     
-    public Message publish(byte[] bytes, String destinationName, Map<String, String> properties)
+    public Message publish(byte[] bytes, String destinationName, Map<String, Object> properties)
             throws JMSException, NamingException {
         BytesMessage msg = session.createBytesMessage();
         msg.writeBytes(bytes);
@@ -196,7 +196,7 @@ public class Publisher implements Closeable {
         return publish(map, destinationName, null);
     }
     
-    public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, String> properties)
+    public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, Object> properties)
             throws JMSException, NamingException {
         MapMessage msg = session.createMapMessage();
         for (Entry<String, Object> me : map.entrySet()) {
@@ -214,7 +214,7 @@ public class Publisher implements Closeable {
      * @throws NamingException
      */
     private Message setPropertiesAndSend(String destinationName,
-            Map<String, String> properties, Message msg)
+            Map<String, Object> properties, Message msg)
             throws JMSException, NamingException {
         Utils.addJMSProperties(msg, properties);
         if (staticDest || destinationName == null) {

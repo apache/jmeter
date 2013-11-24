@@ -185,16 +185,33 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private void addJMSProperties(TextMessage msg) throws JMSException {
-        Map<String, String> map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
-        Utils.addJMSProperties(msg, map);
+        Utils.addJMSProperties(msg, getJMSProperties().getJmsPropertysAsMap());
     }
 
-    public Arguments getJMSProperties() {
-        return getArguments(JMSSampler.JMS_PROPERTIES);
+    /** 
+     * @return {@link JMSProperties} JMS Properties
+     */
+    public JMSProperties getJMSProperties() {
+        Object o = getProperty(JMS_PROPERTIES).getObjectValue();
+        JMSProperties jmsProperties = null;
+        // Backward compatibility with versions <= 2.10
+        if(o instanceof Arguments) {
+            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments)o);
+        } else {
+            jmsProperties = (JMSProperties) o;
+        }
+        if(jmsProperties == null) {
+            jmsProperties = new JMSProperties();
+            setJMSProperties(jmsProperties);
+        }
+        return jmsProperties;
     }
-
-    public void setJMSProperties(Arguments args) {
-        setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+    
+    /**
+     * @param jmsProperties JMS Properties
+     */
+    public void setJMSProperties(JMSProperties jmsProperties) {
+        setProperty(new TestElementProperty(JMS_PROPERTIES, jmsProperties));
     }
 
     public Arguments getJNDIProperties() {
