@@ -31,6 +31,8 @@ import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
+import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -171,23 +173,39 @@ public final class Utils {
      * @param map Map<String, String>
      * @throws JMSException
      */
-    public static void addJMSProperties(Message msg, Map<String, String> map) throws JMSException {
+    public static void addJMSProperties(Message msg, Map<String, Object> map) throws JMSException {
         if(map == null) {
             return;
         }
-        for (Map.Entry<String, String> me : map.entrySet()) {
+        for (Map.Entry<String, Object> me : map.entrySet()) {
             String name = me.getKey();
-            String value = me.getValue();
+            Object value = me.getValue();
             if (log.isDebugEnabled()) {
                 log.debug("Adding property [" + name + "=" + value + "]");
             }
 
             // WebsphereMQ does not allow corr. id. to be set using setStringProperty()
             if("JMSCorrelationID".equalsIgnoreCase(name)) { // $NON-NLS-1$
-                msg.setJMSCorrelationID(value);
+                msg.setJMSCorrelationID((String)value);
             } else {
-                msg.setStringProperty(name, value);
+                msg.setObjectProperty(name, value);
             }
         }
+    }
+
+
+    /**
+     * Converts {@link Arguments} to {@link JmsProperties} defaulting to String type
+     * Used to convert version <= 2.10 test plans
+     * @param args {@link Arguments}
+     * @return jmsProperties {@link JmsProperties}
+     */
+    public static final JMSProperties convertArgumentsToJmsProperties(Arguments args) {
+        JMSProperties jmsProperties = new JMSProperties();
+        Map<String,String>  map = args.getArgumentsAsMap();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            jmsProperties.addJmsProperty(entry.getKey(), entry.getValue());
+        }
+        return jmsProperties;
     }
 }

@@ -165,24 +165,26 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         int loop = getIterationCount();
         result.sampleStart();
         String type = getMessageChoice();
+        
         try {
+            Map<String, Object> msgProperties = getJMSProperties().getJmsPropertysAsMap();
             for (int idx = 0; idx < loop; idx++) {
                 if (JMSPublisherGui.TEXT_MSG_RSC.equals(type)){
                     String tmsg = getMessageContent();
-                    Message msg = publisher.publish(tmsg, getDestination(), getJMSProperties().getArgumentsAsMap());
+                    Message msg = publisher.publish(tmsg, getDestination(), msgProperties);
                     buffer.append(tmsg);
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.MAP_MSG_RSC.equals(type)){
                     Map<String, Object> m = getMapContent();
-                    Message msg = publisher.publish(m, getDestination(), getJMSProperties().getArgumentsAsMap());
+                    Message msg = publisher.publish(m, getDestination(), msgProperties);
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)){
                     Serializable omsg = getObjectContent();
-                    Message msg = publisher.publish(omsg, getDestination(), getJMSProperties().getArgumentsAsMap());
+                    Message msg = publisher.publish(omsg, getDestination(), msgProperties);
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.BYTES_MSG_RSC.equals(type)){
                     byte[] bmsg = getBytesContent();
-                    Message msg = publisher.publish(bmsg, getDestination(), getJMSProperties().getArgumentsAsMap());
+                    Message msg = publisher.publish(bmsg, getDestination(), msgProperties);
                     Utils.messageProperties(propBuffer, msg);
                 } else {
                     throw new JMSException(type+ " is not recognised");                    
@@ -201,7 +203,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         }
         return result;
     }
-
 
     private Map<String, Object> getMapContent() throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Map<String,Object> m = new HashMap<String,Object>();
@@ -502,31 +503,30 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     public boolean getUseNonPersistentDelivery() {
         return getPropertyAsBoolean(NON_PERSISTENT_DELIVERY, false);
     }
-    
-    public void setArguments(Arguments args) {
-        setProperty(new TestElementProperty(JMS_PROPERTIES, args));
-    }
-    
-    public Arguments getArguments(String name) {
-        return (Arguments) getProperty(name).getObjectValue();
-    }
 
     /** 
-     * @return Arguments JMS Properties
+     * @return {@link JMSProperties} JMS Properties
      */
-    public Arguments getJMSProperties() {
-        Arguments arguments = getArguments(JMS_PROPERTIES);
-        if(arguments == null) {
-            arguments = new Arguments();
-            setArguments(arguments);
+    public JMSProperties getJMSProperties() {
+        Object o = getProperty(JMS_PROPERTIES).getObjectValue();
+        JMSProperties jmsProperties = null;
+        // Backward compatibility with versions <= 2.10
+        if(o instanceof Arguments) {
+            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments)o);
+        } else {
+            jmsProperties = (JMSProperties) o;
         }
-        return arguments;
+        if(jmsProperties == null) {
+            jmsProperties = new JMSProperties();
+            setJMSProperties(jmsProperties);
+        }
+        return jmsProperties;
     }
-
+    
     /**
-     * @param args Arguments JMS Properties
+     * @param jmsProperties JMS Properties
      */
-    public void setJMSProperties(Arguments args) {
-        setProperty(new TestElementProperty(JMS_PROPERTIES, args));
+    public void setJMSProperties(JMSProperties jmsProperties) {
+        setProperty(new TestElementProperty(JMS_PROPERTIES, jmsProperties));
     }
 }

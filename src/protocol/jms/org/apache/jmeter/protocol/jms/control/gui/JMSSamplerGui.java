@@ -33,6 +33,7 @@ import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
+import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -72,7 +73,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledChoice oneWay = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels); //$NON-NLS-1$
 
-    private ArgumentsPanel jmsPropertiesPanel;
+    private JMSPropertiesPanel jmsPropertiesPanel;
 
     private ArgumentsPanel jndiPropertiesPanel;
 
@@ -101,7 +102,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         messageContent.setInitialText(""); // $NON-NLS-1$
         initialContextFactory.setText(""); // $NON-NLS-1$
         providerUrl.setText(""); // $NON-NLS-1$
-        jmsPropertiesPanel.clear();
+        jmsPropertiesPanel.clearGui();
         jndiPropertiesPanel.clear();
     }
 
@@ -133,7 +134,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         Arguments jndiArgs = (Arguments) jndiPropertiesPanel.createTestElement();
         element.setJNDIProperties(jndiArgs);
 
-        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+        JMSProperties args = (JMSProperties) jmsPropertiesPanel.createTestElement();
         element.setJMSProperties(args);
 
     }
@@ -250,7 +251,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         messageContent.setPreferredSize(pref);
         messagePanel.add(messageContentPanel, BorderLayout.CENTER);
 
-        jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
+        jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
         messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
 
         Box mainPanel = Box.createVerticalBox();
