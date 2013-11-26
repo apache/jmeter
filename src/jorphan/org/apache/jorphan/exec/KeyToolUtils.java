@@ -179,11 +179,17 @@ public class KeyToolUtils {
      */
     private static String formatCommand(List<String> arguments) {
         StringBuilder builder = new StringBuilder();
+        boolean redact = false; // whether to redact next parameter
         for (String string : arguments) {
-            builder.append("\"").append(string).append("\"").append(" ");
+            final boolean quote = string.contains(" ");
+            if (quote) builder.append("\"");
+            builder.append(redact? "{redacted)" : string);
+            if (quote) builder.append("\"");
+            builder.append(" ");
+            redact = string.equals("-storepass") || string.equals("-keypass");
         }
         if(arguments.size()>0) {
-            builder.setLength(builder.length()-1);
+            builder.setLength(builder.length()-1); // trim trailing space
         }
         return builder.toString();
     }
