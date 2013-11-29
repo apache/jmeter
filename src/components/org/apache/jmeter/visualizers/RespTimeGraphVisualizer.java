@@ -489,8 +489,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 filePanel.actionPerformed(event);
             } else {
                 // Reload data form internal list of results
-                if (internalList.size() >= 2) {
-                    synchronized (lockInterval) {
+                synchronized (lockInterval) {
+                    if (internalList.size() >= 2) {
                         List<RespTimeGraphDataBean> tempList = new ArrayList<RespTimeGraphDataBean>();
                         tempList.addAll(internalList);
                         this.clearData();
