@@ -195,10 +195,10 @@ public final class Utils {
 
 
     /**
-     * Converts {@link Arguments} to {@link JmsProperties} defaulting to String type
+     * Converts {@link Arguments} to {@link JMSProperties} defaulting to String type
      * Used to convert version <= 2.10 test plans
      * @param args {@link Arguments}
-     * @return jmsProperties {@link JmsProperties}
+     * @return jmsProperties {@link JMSProperties}
      */
     public static final JMSProperties convertArgumentsToJmsProperties(Arguments args) {
         JMSProperties jmsProperties = new JMSProperties();

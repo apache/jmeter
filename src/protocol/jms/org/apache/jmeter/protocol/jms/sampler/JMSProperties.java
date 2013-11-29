@@ -133,8 +133,8 @@ public class JMSProperties extends AbstractTestElement implements Serializable {
      *            the name of the argument
      * @param value
      *            the value of the argument
-     * @param metadata
-     *            the metadata for the argument
+     * @param type
+     *            the type for the argument
      */
     public void addJmsProperty(String name, String value, String type) {
         addJmsProperty(new JMSProperty(name, value, type));
