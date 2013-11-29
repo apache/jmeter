@@ -85,7 +85,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
 
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
         if (scriptEngine == null) {
-            throw new ScriptException("Cannot find engine named: "+lang);
+            throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 Test Element:"+getName());
         }
 
         return scriptEngine;
