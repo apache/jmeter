@@ -123,8 +123,8 @@ public class JMSProperty extends AbstractTestElement implements Serializable {
     /**
      * Sets the Meta Data attribute of the JmsProperty.
      *
-     * @param newMetaData
-     *            the new metadata
+     * @param type
+     *            the new type
      */
     public void setType(String type) {
         setProperty(new StringProperty(PROP_TYPE, type));

@@ -203,7 +203,7 @@ public final class MenuFactory {
 
     /**
      * @param menu JPopupMenu
-     * @param addTestFragmentMenu Add Save as Test Fragment menu if true 
+     * @param addSaveTestFragmentMenu Add Save as Test Fragment menu if true 
      */
     public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
         addSeparator(menu);
