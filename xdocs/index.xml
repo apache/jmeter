@@ -51,6 +51,7 @@ behavior under heavy concurrent load.
         <li>LDAP</li>
         <li>Message-oriented middleware (MOM) via JMS</li>
         <li>Mail - SMTP(S), POP3(S) and IMAP(S)</li>
+        <li>MongoDB (NoSQL)</li>
         <li>Native commands or shell scripts</li>
         <li>TCP</li>
         </ul>
