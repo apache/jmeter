@@ -52,9 +52,9 @@ public class TestKeyToolUtils extends TestCase {
             if (status == 0 || status ==1) {
                 fail("Unexpected status " + status);
             }
-            System.out.println("testCheckKeytool:status="+status);
-        } catch (IOException e) {
-            System.out.println("testCheckKeytool:Exception="+e);
+//            System.out.println("testCheckKeytool:status="+status);
+        } catch (IOException expected) {
+//            System.out.println("testCheckKeytool:Exception="+e);
         }
     }
 }
