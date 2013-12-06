@@ -6202,6 +6202,9 @@ The Test Fragment is used in conjunction with the <complink name="Include Contro
 <properties>
         <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.</property>
 </properties>
+<note>
+When using Test Fragment with <complink name="Module Controller"/>, ensure you disable the Test Fragment to avoid the execution of Test Fragment itself.
+</note>
 </component>
 
 <component name="setUp Thread Group" index="&sect-num;.9.10" width="537" height="289" screenshot="setup_thread_group.png">
