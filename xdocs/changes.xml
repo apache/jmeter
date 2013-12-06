@@ -119,7 +119,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
-<li></li>
+<li>When creating a new Transaction Controller, property "Include duration of timer and pre-post processors in generated sample" will be unchecked starting from version 2.10.1</li>
 </ul>
 
 <!-- =================== Bug fixes =================== -->
@@ -181,6 +181,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Controllers</h3>
 <ul>
+<li><bugzilla>55854</bugzilla> - Transaction Controller:Change default property "Include duration of timer..." for newly created element</li>
 </ul>
 
 <h3>Listeners</h3>

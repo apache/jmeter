@@ -48,6 +48,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
     @Override
     public TestElement createTestElement() {
         TransactionController lc = new TransactionController();
+        lc.setIncludeTimers(false); // change default for new test elements
         configureTestElement(lc);
         return lc;
     }
