@@ -205,6 +205,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>55693</bugzilla> - Add a "Save as Test Fragment" option</li>
 <li><bugzilla>55753</bugzilla> - Improve FilePanel behaviour to start from the value set in Filename field if any. Contributed by UBIK Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>55756</bugzilla> - HTTP Mirror Server : Add ability to set Headers</li>
+<li><bugzilla>55852</bugzilla> - Be more lenient in parsing when charset value is surrounded with single quotes</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
