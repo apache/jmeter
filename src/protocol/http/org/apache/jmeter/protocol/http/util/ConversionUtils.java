@@ -90,11 +90,6 @@ public class ConversionUtils {
         return charSet;
     }
 
-    public static void main(String[] args) {
-        //System.out.println(getEncodingFromContentType("charset='UTF-8'"));
-        
-        System.out.println(StringUtils.replaceChars("a'b'c\"cece\'zadad\"", "\'\"", null));
-    }
     /**
      * Generate a relative URL, allowing for extraneous leading "../" segments.
      * The Java {@link URL#URL(URL, String)} constructor does not remove these.
