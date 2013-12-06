@@ -28,6 +28,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.IllegalCharsetNameException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -566,7 +567,12 @@ public class Proxy extends Thread {
      * @return the page encoding found for the sample result, or null
      */
     private String addPageEncoding(SampleResult result) {
-        String pageEncoding = ConversionUtils.getEncodingFromContentType(result.getContentType());
+        String pageEncoding = null;
+        try {
+            pageEncoding = ConversionUtils.getEncodingFromContentType(result.getContentType());
+        } catch(IllegalCharsetNameException ex) {
+            log.warn("Unsupported charset detected in contentType:'"+result.getContentType()+"', will continue processing with default charset", ex);
+        }
         if(pageEncoding != null) {
             String urlWithoutQuery = getUrlWithoutQuery(result.getURL());
             synchronized(pageEncodings) {
