@@ -25,14 +25,15 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.jorphan.util.JOrphanUtils;
 
 // @see TestHTTPUtils for unit tests
 
@@ -56,6 +57,7 @@ public class ConversionUtils {
      *
      * @param contentType
      * @return the charset encoding - or null, if none was found or the charset is not supported
+     * @throws IllegalCharsetNameException 
      */
     public static String getEncodingFromContentType(String contentType){
         String charSet = null;
@@ -64,8 +66,8 @@ public class ConversionUtils {
             if (charSetStartPos >= 0) {
                 charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
                 if (charSet != null) {
-                    // Remove quotes from charset name
-                    charSet = JOrphanUtils.replaceAllChars(charSet, '"', "");
+                    // Remove quotes from charset name, see bug 55852
+                    charSet = StringUtils.replaceChars(charSet, "\'\"", null);
                     charSet = charSet.trim();
                     if (charSet.length() > 0) {
                         // See Bug 44784
@@ -88,6 +90,11 @@ public class ConversionUtils {
         return charSet;
     }
 
+    public static void main(String[] args) {
+        //System.out.println(getEncodingFromContentType("charset='UTF-8'"));
+        
+        System.out.println(StringUtils.replaceChars("a'b'c\"cece\'zadad\"", "\'\"", null));
+    }
     /**
      * Generate a relative URL, allowing for extraneous leading "../" segments.
      * The Java {@link URL#URL(URL, String)} constructor does not remove these.

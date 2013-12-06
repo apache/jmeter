@@ -755,7 +755,7 @@ public class SampleResult implements Serializable {
                     charSet=charSet.substring(0, semiColon);
                 }
                 // Check for quoted string
-                if (charSet.startsWith("\"")){ // $NON-NLS-1$
+                if (charSet.startsWith("\"")||charSet.startsWith("\'")){ // $NON-NLS-1$
                     setDataEncoding(charSet.substring(1, charSet.length()-1)); // remove quotes
                 } else {
                     setDataEncoding(charSet);
