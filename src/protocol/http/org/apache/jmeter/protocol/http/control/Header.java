@@ -40,8 +40,7 @@ public class Header extends AbstractTestElement implements Serializable {
      * Create the header.
      */
     public Header() {
-        this.setName("");
-        this.setValue("");
+        this("", ""); //$NON-NLS-1$ $NON-NLS-2$
     }
 
     /**
