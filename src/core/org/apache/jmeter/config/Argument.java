@@ -50,6 +50,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      * Create a new Argument without a name, value, or metadata.
      */
     public Argument() {
+        this(null, null, null, null);
     }
 
     /**
@@ -61,8 +62,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the argument value
      */
     public Argument(String name, String value) {
-        setProperty(new StringProperty(ARG_NAME, name));
-        setProperty(new StringProperty(VALUE, value));
+        this(name, value, null, null);
     }
 
     /**
@@ -76,9 +76,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the argument metadata
      */
     public Argument(String name, String value, String metadata) {
-        setProperty(new StringProperty(ARG_NAME, name));
-        setProperty(new StringProperty(VALUE, value));
-        setProperty(new StringProperty(METADATA, metadata));
+        this(name, value, metadata, null);
     }
 
     /**
@@ -94,10 +92,18 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the argument description
      */
     public Argument(String name, String value, String metadata, String description) {
-        setProperty(new StringProperty(ARG_NAME, name));
-        setProperty(new StringProperty(VALUE, value));
-        setProperty(new StringProperty(METADATA, metadata));
-        setProperty(DESCRIPTION, description, DFLT_DESCRIPTION);
+        if(name != null) {
+            setProperty(new StringProperty(ARG_NAME, name));
+        }
+        if(value != null) {
+            setProperty(new StringProperty(VALUE, value));
+        }
+        if(metadata != null) {
+            setProperty(new StringProperty(METADATA, metadata));
+        }
+        if(description != null) {
+            setProperty(DESCRIPTION, description, DFLT_DESCRIPTION);
+        }
     }
     
     /**
