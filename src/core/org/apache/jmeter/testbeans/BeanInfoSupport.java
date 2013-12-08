@@ -122,9 +122,10 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
             // Store the resource bundle as an attribute of the BeanDescriptor:
             getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
+            final String dnKey = "displayName";
             // Localize the bean name
-            if (resourceBundle.containsKey("displayName")) { // $NON-NLS-1$
-                getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName")); // $NON-NLS-1$
+            if (resourceBundle.containsKey(dnKey)) { // $NON-NLS-1$
+                getBeanDescriptor().setDisplayName(resourceBundle.getString(dnKey)); // $NON-NLS-1$
             } else {
                 log.debug("Localized display name not available for bean " + beanClass);                    
             }
@@ -132,14 +133,15 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
             PropertyDescriptor[] properties = getPropertyDescriptors();
             for (PropertyDescriptor property : properties) {
                 String name = property.getName();
-                if(resourceBundle.containsKey(name + ".displayName")) {
-                    property.setDisplayName(resourceBundle.getString(name + ".displayName")); // $NON-NLS-1$
+                final String propDnKey = name + ".displayName";
+                if(resourceBundle.containsKey(propDnKey)) {
+                    property.setDisplayName(resourceBundle.getString(propDnKey)); // $NON-NLS-1$
                 } else {
                     log.debug("Localized display name not available for property " + name + " in " + beanClass);
                 }
-                
-                if(resourceBundle.containsKey(name + ".shortDescription")) {
-                    property.setShortDescription(resourceBundle.getString(name + ".shortDescription"));
+                final String propSdKey = name + ".shortDescription";
+                if(resourceBundle.containsKey(propSdKey)) {
+                    property.setShortDescription(resourceBundle.getString(propSdKey));
                 } else {
                     log.debug("Localized short description not available for property " + name + " in " + beanClass);
                 }
