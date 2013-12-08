@@ -208,6 +208,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>55756</bugzilla> - HTTP Mirror Server : Add ability to set Headers</li>
 <li><bugzilla>55852</bugzilla> - Be more lenient in parsing when charset value is surrounded with single quotes</li>
 <li><bugzilla>55857</bugzilla> - Performance : AbstractProperty should test for emptiness to avoid Exception throwing</li>
+<li><bugzilla>55858</bugzilla> - Startup Performance : On Startup, BeanInfoSupport should test for key availability instead of throwing</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
