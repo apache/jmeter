@@ -132,15 +132,15 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
             PropertyDescriptor[] properties = getPropertyDescriptors();
             for (PropertyDescriptor property : properties) {
                 String name = property.getName();
-                try {
+                if(resourceBundle.containsKey(name + ".displayName")) {
                     property.setDisplayName(resourceBundle.getString(name + ".displayName")); // $NON-NLS-1$
-                } catch (MissingResourceException e) {
+                } else {
                     log.debug("Localized display name not available for property " + name + " in " + beanClass);
                 }
-
-                try {
+                
+                if(resourceBundle.containsKey(name + ".shortDescription")) {
                     property.setShortDescription(resourceBundle.getString(name + ".shortDescription"));
-                } catch (MissingResourceException e) {
+                } else {
                     log.debug("Localized short description not available for property " + name + " in " + beanClass);
                 }
             }
