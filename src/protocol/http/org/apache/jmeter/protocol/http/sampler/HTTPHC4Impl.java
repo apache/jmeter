@@ -175,6 +175,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         log.info("HTTP request retry count = "+RETRY_COUNT);
         
         DEFAULT_HTTP_PARAMS = new SyncBasicHttpParams(); // Could we drop the Sync here?
+        DEFAULT_HTTP_PARAMS.setBooleanParameter("http.connection.stalecheck", false);
         DefaultHttpClient.setDefaultHttpParams(DEFAULT_HTTP_PARAMS);
         
         // Process Apache HttpClient parameters file

@@ -40,3 +40,6 @@
 #http.socket.timeout$Integer=10000
 
 #http.protocol.reject-relative-redirect$Boolean=true
+
+# Default value since JMeter 2.10.1
+#http.connection.stalecheck$Boolean=false
