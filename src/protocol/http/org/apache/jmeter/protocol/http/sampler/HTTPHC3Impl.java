@@ -95,6 +95,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     /** retry count to be used (default 1); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient3.retrycount", 0);
 
+    private static final boolean STRICT_RFC_2616 = JMeterUtils.getPropDefault("jmeter.httpclient.strict_rfc2616", false);
+
     private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
     private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
@@ -322,7 +324,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 }
                 try {
                     String redirectLocation = headerLocation.getValue();
-                    if(!(redirectLocation.startsWith("http://")||redirectLocation.startsWith("https://"))) {
+                    if(!STRICT_RFC_2616 && !(redirectLocation.startsWith("http://")||redirectLocation.startsWith("https://"))) {
                         redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
                     }
 
