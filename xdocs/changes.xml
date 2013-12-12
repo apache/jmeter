@@ -155,6 +155,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Functions</h3>
 <ul>
+<li><bugzilla>55871</bugzilla> - Wrong result with intSum() function when a space character is present before/after the number.</li>
 </ul>
 
 <h3>I18N</h3>

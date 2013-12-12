@@ -61,7 +61,7 @@ public class IntSum extends AbstractFunction {
         JMeterVariables vars = getVariables();
 
         int sum = 0;
-        String varName = ((CompoundVariable) values[values.length - 1]).execute();
+        String varName = ((CompoundVariable) values[values.length - 1]).execute().trim(); // trim() see bug 55871
 
         for (int i = 0; i < values.length - 1; i++) {
             sum += Integer.parseInt(((CompoundVariable) values[i]).execute());
