@@ -127,6 +127,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final boolean STRICT_RFC_2616 = JMeterUtils.getPropDefault("jmeter.httpclient.strict_rfc2616", false);
+
     /** retry count to be used (default 1); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
 
@@ -334,7 +336,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     throw new IllegalArgumentException("Missing location header in redirect for " + httpRequest.getRequestLine());
                 }
                 String redirectLocation = headerLocation.getValue();
-                if(!(redirectLocation.startsWith("http://")|| redirectLocation.startsWith("https://"))) {
+                if(!STRICT_RFC_2616 && !(redirectLocation.startsWith("http://")|| redirectLocation.startsWith("https://"))) {
                     redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
                 }
                 try {
