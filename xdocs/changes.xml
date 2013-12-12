@@ -120,6 +120,8 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <ul>
 <li>When creating a new Transaction Controller, property "Include duration of timer and pre-post processors in generated sample" will be unchecked starting from version 2.10.1</li>
+<li>In Non GUI mode, since 2.10.1 summariser is enabled with a 30 seconds frequency</li>
+<li>JMeter is more lenient with redirect handling and relaxes on RFC2616 by allowing relative locations. See property "jmeter.httpclient.strict_rfc2616" in jmeter.properties to change this behaviour</li>
 </ul>
 
 <!-- =================== Bug fixes =================== -->
