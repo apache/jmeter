@@ -767,7 +767,7 @@ public class JMeter implements JMeterPlugin {
             convertSubTree(tree);
 
             Summariser summer = null;
-            String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
+            String summariserName = JMeterUtils.getPropDefault("summariser.name", "summary");//$NON-NLS-1$
             if (summariserName.length() > 0) {
                 log.info("Creating summariser <" + summariserName + ">");
                 println("Creating summariser <" + summariserName + ">");
