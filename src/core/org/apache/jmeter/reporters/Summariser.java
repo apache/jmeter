@@ -72,8 +72,8 @@ public class Summariser extends AbstractTestElement
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** interval between summaries (in seconds) default 3 minutes */
-    private static final long INTERVAL = JMeterUtils.getPropDefault("summariser.interval", 3 * 60); //$NON-NLS-1$
+    /** interval between summaries (in seconds) default 30 seconds */
+    private static final long INTERVAL = JMeterUtils.getPropDefault("summariser.interval", 30); //$NON-NLS-1$
 
     /** Write messages to log file ? */
     private static final boolean TOLOG = JMeterUtils.getPropDefault("summariser.log", true); //$NON-NLS-1$

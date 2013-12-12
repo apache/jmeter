@@ -211,6 +211,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>55857</bugzilla> - Performance : AbstractProperty should test for emptiness to avoid Exception throwing</li>
 <li><bugzilla>55858</bugzilla> - Startup Performance : On Startup, BeanInfoSupport should test for key availability instead of throwing</li>
 <li><bugzilla>55865</bugzilla> - Performance :Disable stale check by default in HttpClient 4 and 3.1</li>
+<li><bugzilla>55512</bugzilla> - Summariser should be enabled by default in Non GUI mode</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
