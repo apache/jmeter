@@ -200,7 +200,7 @@ public class AssertionGui extends AbstractAssertionGui {
         responseHeadersButton.setSelected(false);
         assumeSuccess.setSelected(false);
 
-        containsBox.setSelected(true);
+        substringBox.setSelected(true);
         notBox.setSelected(false);
     }
 
