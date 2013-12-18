@@ -218,6 +218,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+<li>Updated to rsyntaxtextarea-2.5.1.jar (from 2.5.0)</li>
 </ul>
 
 <ch_section>Thanks</ch_section>
