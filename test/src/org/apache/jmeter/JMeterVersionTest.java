@@ -111,7 +111,10 @@ public class JMeterVersionTest extends JMeterTestCase {
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling
                     jar="commons-jexl2";
-                } else {
+                } else if (jar.endsWith("mail-1.5.0-b01")) { // special handling
+                    jar = jar.replace("-b01", "");
+                }
+                else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
                     if (tmp != null) {
                         jar = tmp;
