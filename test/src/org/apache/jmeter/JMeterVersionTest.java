@@ -94,6 +94,16 @@ public class JMeterVersionTest extends JMeterTestCase {
         propNames.remove("commons-lang");
     }
 
+    public static void main(String[] args) {
+        String line = "<classpathentry kind=\"lib\" path=\"lib/mail-1.5.0-b01.jar\"/>";
+        final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+)-([^-]+)\\.jar\"/>");
+        final Matcher m = p.matcher(line);
+        if (m.matches()) {
+            String jar = m.group(1);
+            String version = m.group(2);
+            System.out.println(jar);
+        }
+    }
     public void testEclipse() throws Exception {
         final BufferedReader eclipse = new BufferedReader(
                 new FileReader(getFileFromHome("eclipse.classpath"))); // assume default charset is OK here
@@ -111,8 +121,9 @@ public class JMeterVersionTest extends JMeterTestCase {
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling
                     jar="commons-jexl2";
-                } else if (jar.endsWith("mail-1.5.0-b01")) { // special handling
-                    jar = jar.replace("-b01", "");
+                } else if (jar.endsWith("mail-1.5.0")) { // special hack for mail-1.5.0-b01, to remove when migrating to 1.5.0
+                    jar = "javamail";
+                    version = "1.5.0-b01";
                 }
                 else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
