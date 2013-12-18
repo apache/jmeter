@@ -220,6 +220,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ul>
 <li>Updated to rsyntaxtextarea-2.5.1.jar (from 2.5.0)</li>
 <li>Updated to jodd-core-3.4.9.jar from (3.4.8) and jodd-lagarto-3.4.9.jar (from 3.4.9)</li>
+<li>Updated to jsoup-1.7.3.jar (from 1.7.2)</li>
 </ul>
 
 <ch_section>Thanks</ch_section>
