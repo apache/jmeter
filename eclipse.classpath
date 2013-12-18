@@ -75,7 +75,7 @@
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
-	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.2.jar"/>
+	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7R4.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.5.1.jar"/>
