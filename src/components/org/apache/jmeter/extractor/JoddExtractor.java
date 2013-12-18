@@ -71,7 +71,7 @@ public class JoddExtractor implements Extractor {
             jodd.lagarto.dom.Document doc = domBuilder.parse(inputString);
             nodeSelector = new NodeSelector(doc);
         }
-        LinkedList<Node> elements = nodeSelector.select(expression);
+        List<Node> elements = nodeSelector.select(expression);
         int size = elements.size();
         for (int i = 0; i < size; i++) {
             Node element = elements.get(i);
