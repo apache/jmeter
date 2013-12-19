@@ -3826,7 +3826,7 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 </component>
 
 
-<component name="Keystore Configuration" index="&sect-num;.4.9"  width="530" height="171" screenshot="keystore_config.png">
+<component name="Keystore Configuration" index="&sect-num;.4.9"  width="441" height="189" screenshot="keystore_config.png">
 <description><p>The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
 This component is typically used in HTTPS scenarios where you don't want to take into account keystore initialization into account in response time.</p>
 <p>To use this element, you need to setup first a Java Key Store with the client certificates you want to test, to do that:
@@ -3843,11 +3843,20 @@ This component is typically used in HTTPS scenarios where you don't want to take
 </p>
 </description>
 
+preload.shortDescription=Preload Keystore before test. Setting is to true is usually the best option.
+startIndex.displayName=Alias Start index (0-based)
+startIndex.shortDescription=First index of Alias in Keystore
+endIndex.displayName=Alias End index (0-based)
+endIndex.shortDescription=Last index of Alias in Keystore. When using Variable name ensure it is large enough so that all keys are loaded at startup.
+clientCertAliasVarName.displayName=Variable name holding certificate alias
+clientCertAliasVarName.shortDescription=Variable name that will contain the alias to use for Cert authentication. Var content can come from CSV Data Set.
+
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-  <property name="Preload" required="Yes">Wether or not to preload Keystore.</property>
+  <property name="Preload" required="Yes">Wether or not to preload Keystore. Setting is to true is usually the best option.</property>
+  <property name="Variable name holding certificate alias" required="False">Variable name that will contain the alias to use for authentication by client certificate. Variable value will be filled from CSV Data Set for example. In the screenshot, "certificat_ssl" will also be a variable in CSV Data Set.</property>
   <property name="Alias Start Index" required="Yes">The index of the first key to use in Keystore, 0-based.</property>
-  <property name="Alias End Index" required="Yes">The index of the last key to use in Keystore, 0-based.</property>
+  <property name="Alias End Index" required="Yes">The index of the last key to use in Keystore, 0-based. When using "Variable name holding certificate alias" ensure it is large enough so that all keys are loaded at startup.</property>
 </properties>
 <note>
 To make JMeter use more than one certificate you need to ensure that:

@@ -389,10 +389,12 @@ public class JsseSSLManager extends SSLManager {
          */
         @Override
         public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
-            log.debug("keyType: " + keyType[0]);
+            if(log.isDebugEnabled()) {
+                log.debug("keyType: " + keyType[0]);
+            }
             String alias = this.store.getAlias();
-            if (alias == null || alias.length() == 0) {
-                log.debug("ClientAlias not found.");
+            if(log.isDebugEnabled()) {
+                log.debug("Client alias:'"+alias+"'");
             }
             return alias;
         }

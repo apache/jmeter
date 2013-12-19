@@ -41,6 +41,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
     private String startIndex;
     private String endIndex;
     private String preload;
+    private String clientCertAliasVarName;
     
     public KeystoreConfig() {
         super();
@@ -90,11 +91,13 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
             throw new JMeterStopTestException("Keystore Config error : Alias start index must be lower than Alias end index");
         }
         log.info("Configuring Keystore with (preload:"+preload+", startIndex:"+
-                startIndexAsInt+", endIndex:"+endIndexAsInt+")");
+                startIndexAsInt+", endIndex:"+endIndexAsInt+
+                ", clientCertAliasVarName:'" + clientCertAliasVarName +"')");
 
         SSLManager.getInstance().configureKeystore(Boolean.parseBoolean(preload),
                 startIndexAsInt, 
-                endIndexAsInt);
+                endIndexAsInt,
+                clientCertAliasVarName);
     }
 
     /**
@@ -137,5 +140,19 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
      */
     public void setPreload(String preload) {
         this.preload = preload;
+    }
+
+    /**
+     * @return the clientCertAliasVarName
+     */
+    public String getClientCertAliasVarName() {
+        return clientCertAliasVarName;
+    }
+
+    /**
+     * @param clientCertAliasVarName the clientCertAliasVarName to set
+     */
+    public void setClientCertAliasVarName(String clientCertAliasVarName) {
+        this.clientCertAliasVarName = clientCertAliasVarName;
     }
 }
