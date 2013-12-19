@@ -30,6 +30,7 @@ public class KeystoreConfigBeanInfo extends BeanInfoSupport {
     private static final String ALIASES_GROUP = "aliases";
     private static final String ALIAS_END_INDEX = "endIndex";
     private static final String ALIAS_START_INDEX = "startIndex";
+    private static final String CLIENT_CERT_ALIAS_VAR_NAME = "clientCertAliasVarName";
     private static final String PRELOAD = "preload";
 
     /**
@@ -39,7 +40,7 @@ public class KeystoreConfigBeanInfo extends BeanInfoSupport {
         super(KeystoreConfig.class);
 
         createPropertyGroup(ALIASES_GROUP, new String[] { 
-                PRELOAD, ALIAS_START_INDEX, ALIAS_END_INDEX });
+                PRELOAD, CLIENT_CERT_ALIAS_VAR_NAME, ALIAS_START_INDEX, ALIAS_END_INDEX });
 
         PropertyDescriptor p = property(PRELOAD);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -47,6 +48,10 @@ public class KeystoreConfigBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_EXPRESSION, Boolean.TRUE);
         p.setValue(NOT_OTHER, Boolean.TRUE);
         p.setValue(TAGS, new String[]{"True", "False"}); // $NON-NLS-1$ $NON-NLS-2$
+
+        p = property(CLIENT_CERT_ALIAS_VAR_NAME);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property(ALIAS_START_INDEX);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
