@@ -81,6 +81,8 @@ public abstract class SSLManager {
 
     private int keystoreAliasEndIndex;
 
+    private String clientCertAliasVarName;
+
     /**
      * Resets the SSLManager so that we can create a new one with a new keystore
      */
@@ -104,14 +106,14 @@ public abstract class SSLManager {
      * not set, this method will prompt you to enter it. Unfortunately, there is
      * no PasswordEntryField available from JOptionPane.
      */
-    protected JmeterKeyStore getKeyStore() {
+    protected synchronized JmeterKeyStore getKeyStore() {
         if (null == this.keyStore) {
             String fileName = System.getProperty(JAVAX_NET_SSL_KEY_STORE,""); // empty if not provided
             String fileType = System.getProperty(JAVAX_NET_SSL_KEY_STORE_TYPE, // use the system property to determine the type
                     fileName.toLowerCase(Locale.ENGLISH).endsWith(".p12") ? PKCS12 : "JKS"); // otherwise use the name
             log.info("JmeterKeyStore Location: " + fileName + " type " + fileType);
             try {
-                this.keyStore = JmeterKeyStore.getInstance(fileType, keystoreAliasStartIndex, keystoreAliasEndIndex);
+                this.keyStore = JmeterKeyStore.getInstance(fileType, keystoreAliasStartIndex, keystoreAliasEndIndex, clientCertAliasVarName);
                 log.info("KeyStore created OK");
             } catch (Exception e) {
                 this.keyStore = null;
@@ -275,10 +277,12 @@ public abstract class SSLManager {
      * @param preload 
      * @param startIndex 
      * @param endIndex 
+     * @param clientCertAliasVarName 
      */
-    public void configureKeystore(boolean preload, int startIndex, int endIndex) {
+    public void configureKeystore(boolean preload, int startIndex, int endIndex, String clientCertAliasVarName) {
         this.keystoreAliasStartIndex = startIndex;
         this.keystoreAliasEndIndex = endIndex;
+        this.clientCertAliasVarName = clientCertAliasVarName;
         if(preload) {
             keyStore = getKeyStore();
         }
