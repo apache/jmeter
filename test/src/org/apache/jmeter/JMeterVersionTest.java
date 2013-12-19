@@ -94,16 +94,6 @@ public class JMeterVersionTest extends JMeterTestCase {
         propNames.remove("commons-lang");
     }
 
-    public static void main(String[] args) {
-        String line = "<classpathentry kind=\"lib\" path=\"lib/mail-1.5.0-b01.jar\"/>";
-        final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+)-([^-]+)\\.jar\"/>");
-        final Matcher m = p.matcher(line);
-        if (m.matches()) {
-            String jar = m.group(1);
-            String version = m.group(2);
-            System.out.println(jar);
-        }
-    }
     public void testEclipse() throws Exception {
         final BufferedReader eclipse = new BufferedReader(
                 new FileReader(getFileFromHome("eclipse.classpath"))); // assume default charset is OK here
