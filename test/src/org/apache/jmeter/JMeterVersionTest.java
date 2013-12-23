@@ -181,9 +181,11 @@ public class JMeterVersionTest extends JMeterTestCase {
         String [] lice = licencesDir.list(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return ! name.equalsIgnoreCase("README.txt");
+                return ! name.equalsIgnoreCase("README.txt") 
+                        && !name.equals(".svn"); // Allow for old-style SVN workspaces
             }
         });
+        assertTrue("Expected at least one license file",lice.length > 0);
         for(String l : lice) {
             if (!liceNames.remove(l)) {
                 fail("Mismatched version in license file " + l);
