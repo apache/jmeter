@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -167,4 +168,26 @@ public class JMeterVersionTest extends JMeterTestCase {
         }
    }
 
+    public void testLicences() {
+        Set<String> liceNames = new HashSet<String>();
+        for (Map.Entry<String, String> me : versions.entrySet()) {
+        final String key = me.getKey();
+            liceNames.add(key+"-"+me.getValue()+".txt");
+            if (key.equals("htmlparser")) {
+                liceNames.add("htmllexer"+"-"+me.getValue()+".txt");
+            }
+        }
+        File licencesDir = getFileFromHome("licenses/bin");
+        String [] lice = licencesDir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return ! name.equalsIgnoreCase("README.txt");
+            }
+        });
+        for(String l : lice) {
+            if (!liceNames.remove(l)) {
+                fail("Mismatched version in license file " + l);
+            }
+        }
+    }
 }
