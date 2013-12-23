@@ -1,4 +1,4 @@
-Extracted from mail-1.4.4.jar
+Extracted from mail-1.5.0-b01.jar
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
