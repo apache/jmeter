@@ -77,8 +77,8 @@ under the License.
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
       <jdom.version>1.1.3</jdom.version>
-      <jodd-core.version>3.4.9</jodd-core.version>
-      <jodd-lagarto.version>3.4.9</jodd-lagarto.version>
+      <jodd-core.version>3.4.10</jodd-core.version>
+      <jodd-lagarto.version>3.4.10</jodd-lagarto.version>
       <jsoup.version>1.7.3</jsoup.version>
       <rhino.version>1.7R4</rhino.version>
       <junit.version>4.11</junit.version>
