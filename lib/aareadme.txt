@@ -109,17 +109,17 @@ http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-jodd-core-3.4.8
+jodd-core-3.4.10
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.4.8
+jodd-lagarto-3.4.10
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jsoup-1.7.2
+jsoup-1.7.3
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
@@ -150,7 +150,7 @@ logkit-2.0
 - logging
 - Anakia
 
-mongo-java-driver 2.11.2
+mongo-java-driver 2.11.3
 ------------------------
 http://www.mongodb.org/
 - MongoDB sampler
@@ -159,6 +159,11 @@ oro-2.0.8
 ---------
 http://jakarta.apache.org/site/downloads/downloads_oro.cgi
 - regular expressions: various
+
+rsyntaxtextarea-2.5.1
+---------------------
+http://fifesoft.com/rsyntaxtextarea/
+- syntax coloration
 
 serialiser-2.7.1
 ----------------
