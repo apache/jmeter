@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.extractor;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import jodd.lagarto.dom.LagartoDOMBuilder;
