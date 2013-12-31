@@ -46,7 +46,7 @@ import org.apache.log.Logger;
 
 /**
  * Handles input for Jms Properties
- * @since 2.10.1
+ * @since 2.11
  */
 public class JMSPropertiesPanel extends JPanel implements ActionListener {
 
