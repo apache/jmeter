@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
  * A set of JMSProperty objects.
- * @since 2.10.1
+ * @since 2.11
  */
 public class JMSProperties extends AbstractTestElement implements Serializable {
 
