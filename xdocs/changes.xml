@@ -69,7 +69,7 @@ Summary
 <p>When testing client based certificate authentications you have now better control on certificate you use through a new field "Variable name holding certificate alias", this 
 field lets you select the certificate you want to send to server to authenticate. You can use a CSV Data Set as a holder for the variable value.</p>
 <p>
-<figure width="942" height="378" image="changes/2.11/07_keystore_config.png"></figure>
+<figure width="471" height="189" image="changes/2.11/07_keystore_config.png"></figure>
 </p>
 
 <ch_title>Add a "Save as Test Fragment" option </ch_title>
