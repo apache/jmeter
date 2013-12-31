@@ -54,28 +54,23 @@ Summary
 <!-- <ch_category>Improvements</ch_category> -->
 
 <ch_title>JMS Publisher/Point to Point : Add ability to set typed values in JMS header properties</ch_title>
-<p>In the samplers JMS Publisher and JMS Point-to-Point, you can set up the type of values form the JMS header properties.</p>
+<p>In the samplers JMS Publisher and JMS Point-to-Point, you can now set up the class of values for the JMS header properties. Previously only String was possible.</p>
 <p>
 <figure width="928" height="796" image="changes/2.11/01_jms_properties_typed_values.png"></figure>
 </p>
 
-<ch_title>Transaction Controller:Change default property "Include duration of timer..." for newly created element</ch_title>
-<p>In the samplers JMS Publisher and JMS Point-to-Point, you can set up the type of values form the JMS header properties.</p>
-<p>
-<figure width="628" height="140" image="changes/2.11/02_transaction_controller.png"></figure>
-</p>
-
 <ch_title>View Results Tree : Add an XPath Tester </ch_title>
-<p>In View Results Tree listener, a new XPath tester can be use to test xpath search.</p>
+<p>In View Results Tree listener, a new XPath tester can be used to test XPATH expressions.</p>
 <p>
 <figure width="990" height="765" image="changes/2.11/03_xpath_tester.png"></figure>
 </p>
 
 <ch_title>Ability to choose the client alias for the cert key in JsseSslManager such that Mutual SSL auth testing can be made more flexible</ch_title>
-<p></p>
-<!--<p>
-<figure width="1144" height="638" image="changes/2.11/01_css_jquery_tester.png"></figure>
-</p>-->
+<p>When testing client based certificate authentications you have now better control on certificate you use through a new field "Variable name holding certificate alias", this 
+field lets you select the certificate you want to send to server to authenticate. You can use a CSV Data Set as a holder for the variable value.</p>
+<p>
+<figure width="942" height="378" image="changes/2.11/07_keystore_config.png"></figure>
+</p>
 
 <ch_title>Add a "Save as Test Fragment" option </ch_title>
 <p>In the file menu, a new option allow to save a group of elements as a Test fragment.</p>
@@ -83,10 +78,16 @@ Summary
 <figure width="295" height="242" image="changes/2.11/05_save_as_fragement.png"></figure>
 </p>
 
-<ch_title>Summariser should be enabled by default in Non GUI mode</ch_title>
-<p>When you run JMeter from command line, now JMeter display some statistics from the Summariser mode..</p>
+<ch_title>Summariser is be enabled by default in Non GUI mode</ch_title>
+<p>When you run JMeter from command line, now JMeter display some statistics from the Summariser mode.</p>
 <p>
 <figure width="1287" height="386" image="changes/2.11/06_summariser.png"></figure>
+</p>
+
+<ch_title>Transaction Controller:Change default property "Include duration of timer..." for newly created element</ch_title>
+<p>Starting from 2.11, Transaction Controller is configured by default to exclude processing time of pre/post processors as long as timers pause.</p>
+<p>
+<figure width="628" height="140" image="changes/2.11/02_transaction_controller.png"></figure>
 </p>
 
 <!-- <ch_title>Sample title</ch_title>
@@ -117,13 +118,9 @@ For example a Test Action sampler with 0 wait time (which doesn't generate a sam
 or a Debug Sampler with all fields set to False (to reduce the sample size).
 </li>
 
-<li>Webservice sampler does not consider the HTTP response status to compute the status of a response, thus a response 500 containing a non empty body will be considered as successful, see <bugzilla>54006</bugzilla>.
-To workaround this issue, ensure you always read the response and add a Response Assertion checking text inside the response.
-</li>
-
 <li>
 The numbers that appear to the left of the green box are the number of active threads / total number of threads, 
-these only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode, (see <bugzilla>54152</bugzilla>).
+the total number of threads only applies to a locally run test, otherwise it will show 0 (see <bugzilla>55510</bugzilla>).
 </li>
 
 <li>
@@ -155,10 +152,10 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
-<li>When creating a new Transaction Controller, property "Include duration of timer and pre-post processors in generated sample" will be unchecked starting from version 2.10.1</li>
-<li>In Non GUI mode, since 2.10.1 summariser is enabled with a 30 seconds frequency</li>
-<li>JMeter is more lenient with redirect handling and relaxes on RFC2616 by allowing relative locations. See property "jmeter.httpclient.strict_rfc2616" in jmeter.properties to change this behaviour</li>
-<li>When creating a new Response Assertion, property "Pattern Matching Rules" now defaults to Substringstarting from version 2.10.1</li>
+<li>When creating a new Transaction Controller, property "Include duration of timer and pre-post processors in generated sample" will be unchecked starting from version 2.11</li>
+<li>In Non GUI mode, since 2.11 summariser is enabled with a 30 seconds frequency</li>
+<li>JMeter is more lenient with redirect handling and relaxes on RFC2616 by allowing relative locations. See property "jmeter.httpclient.strict_rfc2616" in jmeter.properties to change this behaviour, see <bugzilla>55717</bugzilla></li>
+<li>When creating a new Response Assertion, property "Pattern Matching Rules" now defaults to Substring starting from version 2.11</li>
 </ul>
 
 <!-- =================== Bug fixes =================== -->
@@ -232,7 +229,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
 <li><bugzilla>55908</bugzilla> - Response assertion : Change Pattern Matching Rules default to Substring on creation for better performances</li>
-<li><bugzilla>54977</bugzilla> - Ability to choose the client alias for the cert key in JsseSslManager such that Mutual SSL auth testing can be made more flexible</li>
+<li><bugzilla>54977</bugzilla> - Ability to choose the client alias for the cert key in JsseSslManager such that Mutual SSL auth testing can be made more flexible. Contributed by UBIK Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
