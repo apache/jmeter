@@ -254,8 +254,108 @@ Thanks
 </ul>
 <br/><br/><table width="100%" cellpadding="3" cellspacing="2" bgcolor="#525D76" border="0">
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big><big><a name="New and Noteworthy">New and Noteworthy</a></big></big></b></font></td></tr></table><br/>
-<br/><br/><table width="90%" cellpadding="2" cellspacing="2" bgcolor="#828DA6" border="0">
-<tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big>Core Improvements</big></b></font></td></tr></table><br/>
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">HTTP(S) Test Script Recorder improvements</font></td></tr></table>
+<p>
+
+Following improvements have been made since major changes introduced in JMeter 2.10 on HTTP(S) Test Script Recorder:
+
+<ul>
+
+
+<li>
+Better detection of missing or invalid configuration of keytool utility
+</li>
+
+
+<li>
+New system property keytool.directory (see system.properties) lets you configure directory containing keytool in case on non-standard installation
+</li>
+
+
+</ul>
+
+
+</p>
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">JMS Publisher/Point to Point : Add ability to set typed values in JMS header properties</font></td></tr></table>
+<p>
+In the samplers JMS Publisher and JMS Point-to-Point, you can now set up the class of values for the JMS header properties. Previously only String was possible.
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='928' height='796' src="./images/screenshots/changes/2.11/01_jms_properties_typed_values.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">View Results Tree : Add an XPath Tester </font></td></tr></table>
+<p>
+In View Results Tree listener, a new XPath tester can be used to test XPATH expressions.
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='990' height='765' src="./images/screenshots/changes/2.11/03_xpath_tester.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">Ability to choose the client alias for the cert key in JsseSslManager such that Mutual SSL auth testing can be made more flexible</font></td></tr></table>
+<p>
+When testing client based certificate authentications you have now better control on certificate you use through a new field "Variable name holding certificate alias", this 
+field lets you select the certificate you want to send to server to authenticate. You can use a CSV Data Set as a holder for the variable value.
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='471' height='189' src="./images/screenshots/changes/2.11/07_keystore_config.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">Add a "Save as Test Fragment" option </font></td></tr></table>
+<p>
+In the file menu, a new option allow to save a group of elements as a Test fragment.
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='295' height='242' src="./images/screenshots/changes/2.11/05_save_as_fragement.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">Summariser is be enabled by default in Non GUI mode</font></td></tr></table>
+<p>
+When you run JMeter from command line, now JMeter displays some statistics from the Summariser mode.
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1287' height='386' src="./images/screenshots/changes/2.11/06_summariser.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
+<tr><td><font color="white" face="Helvetica, Arial, sans-serif">Transaction Controller:Change default property "Include duration of timer..." for newly created element</font></td></tr></table>
+<p>
+Starting from 2.11, Transaction Controller is configured by default to exclude processing time of pre/post processors as long as timers pause.
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='628' height='140' src="./images/screenshots/changes/2.11/02_transaction_controller.png"/><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
 <br/><br/><table width="100%" cellpadding="3" cellspacing="2" bgcolor="#525D76" border="0">
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big><big><a name="Known bugs">Known bugs</a></big></big></b></font></td></tr></table><br/>
 <ul>
@@ -281,20 +381,10 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 
 <li>
-Webservice sampler does not consider the HTTP response status to compute the status of a response, thus a response 500 containing a non empty body will be considered as successful, see 
-<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54006">Bug 54006</a>
-.
-To workaround this issue, ensure you always read the response and add a Response Assertion checking text inside the response.
-
-</li>
-
-
-
-<li>
 
 The numbers that appear to the left of the green box are the number of active threads / total number of threads, 
-these only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode, (see 
-<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54152">Bug 54152</a>
+the total number of threads only applies to a locally run test, otherwise it will show 0 (see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55510">Bug 55510</a>
 ).
 
 </li>
@@ -356,6 +446,23 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 
 <li>
+When creating a new Transaction Controller, property "Include duration of timer and pre-post processors in generated sample" will be unchecked starting from version 2.11
+</li>
+
+
+<li>
+In Non GUI mode, since 2.11 summariser is enabled with a 30 seconds frequency
+</li>
+
+
+<li>
+JMeter is more lenient with redirect handling and relaxes on RFC2616 by allowing relative locations. See property "jmeter.httpclient.strict_rfc2616" in jmeter.properties to change this behaviour, see 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55717">Bug 55717</a>
+</li>
+
+
+<li>
+When creating a new Response Assertion, property "Pattern Matching Rules" now defaults to Substring starting from version 2.11
 </li>
 
 
@@ -363,9 +470,21 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <br/><br/><table width="100%" cellpadding="3" cellspacing="2" bgcolor="#525D76" border="0">
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big><big><a name="Bug fixes">Bug fixes</a></big></big></b></font></td></tr></table><br/>
 <h3>
-HTTP Samplers and Proxy
+HTTP Samplers and Test Script Recorder
 </h3>
 <ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55815">Bug 55815</a>
+ - Proxy#getDomainMatch does not handle wildcards correctly
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55717">Bug 55717</a>
+ - Bad handling of Redirect when URLs are in relative format by HttpClient4 and HttpClient3.1
+</li>
 
 
 </ul>
@@ -388,11 +507,23 @@ Controllers
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55816">Bug 55816</a>
+ - Transaction Controller with "Include duration of timer..." unchecked does not ignore processing time of last child sampler
+</li>
+
+
 </ul>
 <h3>
 Listeners
 </h3>
 <ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55826">Bug 55826</a>
+ - Unsynchronised concurrent accesses to list in field RespTimeGraphVisualizer.internalList 
+</li>
 
 
 </ul>
@@ -404,7 +535,7 @@ Timers, Assertions, Config, Pre- & Post-Processors
 
 <li>
 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55694">Bug 55694</a>
- - java.lang.NullPointerException if Apply to is set to a missing JMeter variable
+ - Assertions and Extractors : Avoid NullPointerException when scope is variable and variable is missing
 </li>
 
 
@@ -421,6 +552,12 @@ Functions
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55871">Bug 55871</a>
+ - Wrong result with intSum() function when a space character is present before/after the number. Contributed by Milamber based on a proposal by James Liang.
+</li>
+
+
 </ul>
 <h3>
 I18N
@@ -433,6 +570,12 @@ I18N
 General
 </h3>
 <ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55739">Bug 55739</a>
+ - Remote Test : Total threads in GUI mode shows invalid total number of threads
+</li>
 
 
 </ul>
@@ -451,11 +594,23 @@ Other samplers
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55589">Bug 55589</a>
+ - JMS Publisher/Point to Point : Add ability to set typed values in JMS header properties.
+</li>
+
+
 </ul>
 <h3>
 Controllers
 </h3>
 <ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55854">Bug 55854</a>
+ - Transaction Controller:Change default property "Include duration of timer..." for newly created element
+</li>
 
 
 </ul>
@@ -465,11 +620,29 @@ Listeners
 <ul>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55610">Bug 55610</a>
+ - View Results Tree : Add an XPath Tester
+</li>
+
+
 </ul>
 <h3>
 Timers, Assertions, Config, Pre- & Post-Processors
 </h3>
 <ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55908">Bug 55908</a>
+ - Response assertion : Change Pattern Matching Rules default to Substring on creation for better performances
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54977">Bug 54977</a>
+ - Ability to choose the client alias for the cert key in JsseSslManager such that Mutual SSL auth testing can be made more flexible. Contributed by UBIK Load Pack (support at ubikloadpack.com)
+</li>
 
 
 </ul>
@@ -499,17 +672,101 @@ General
 </li>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55753">Bug 55753</a>
+ - Improve FilePanel behaviour to start from the value set in Filename field if any. Contributed by UBIK Load Pack (support at ubikloadpack.com)
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55756">Bug 55756</a>
+ - HTTP Mirror Server : Add ability to set Headers
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55852">Bug 55852</a>
+ - Be more lenient in parsing when charset value is surrounded with single quotes
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55857">Bug 55857</a>
+ - Performance : AbstractProperty should test for emptiness to avoid Exception throwing
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55858">Bug 55858</a>
+ - Startup Performance : On Startup, BeanInfoSupport should test for key availability instead of throwing
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55865">Bug 55865</a>
+ - Performance :Disable stale check by default in HttpClient 4 and 3.1
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=55512">Bug 55512</a>
+ - Summariser should be enabled by default in Non GUI mode
+</li>
+
+
 </ul>
 <br/><br/><table width="100%" cellpadding="3" cellspacing="2" bgcolor="#525D76" border="0">
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big><big><a name="Non-functional changes">Non-functional changes</a></big></big></b></font></td></tr></table><br/>
 <ul>
 
 
+<li>
+Updated to rsyntaxtextarea-2.5.1.jar (from 2.5.0)
+</li>
+
+
+<li>
+Updated to jodd-core-3.4.9.jar from (3.4.8) and jodd-lagarto-3.4.9.jar (from 3.4.9)
+</li>
+
+
+<li>
+Updated to jsoup-1.7.3.jar (from 1.7.2)
+</li>
+
+
+<li>
+Updated to mail-1.5.0-b01 (from 1.4.4)
+</li>
+
+
+<li>
+Updated to mongo-java-driver-2.11.3 (from 2.11.2)
+</li>
+
+
 </ul>
 <br/><br/><table width="100%" cellpadding="3" cellspacing="2" bgcolor="#525D76" border="0">
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif"><b><big><big><a name="Thanks">Thanks</a></big></big></b></font></td></tr></table><br/>
 <p>
-We thank all contributors mentioned in bug and improvement sections above.
+We thank all contributors mentioned in bug and improvement sections above:
+
+<ul>
+
+
+<li>
+James Liang (jliang at andera.com)
+</li>
+
+
+<li>
+UBIK Load Pack (support at ubikloadpack.com)
+</li>
+
+
+</ul>
+
+
 <br>
 
 
@@ -523,7 +780,12 @@ For this release we want to give special thanks to the following reporters for t
 
 
 <li>
-Firstname Name (email at gmail.com)
+John Natsioulas (john_natsioulas at yahoo.com.au)
+</li>
+
+
+<li>
+Antonio Gomes Rodrigues (ra0077 at gmail.com)
 </li>
 
 

@@ -4664,7 +4664,7 @@ No
 
     
 <p><b>Control Panel</b></p>
-<div align="center"><img width='790' height='702' src="../images/screenshots/jmspublisher.png"/></div>
+<div align="center"><img width='946' height='776' src="../images/screenshots/jmspublisher.png"/></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Publisher_parms"/>
@@ -4806,6 +4806,7 @@ No
 <td>JMS Properties</td>
 <td>
       The JMS Properties are properties specific for the underlying messaging system.
+      You can setup the name, the value and the class (type) of value. Default type is String.
       For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
       webservices through JMS.
   
@@ -5325,7 +5326,7 @@ JMSSampler.useSecurity.properties=false
 
     
 <p><b>Control Panel</b></p>
-<div align="center"><img width='746' height='662' src="../images/screenshots/jms/JMS_Point-to-Point.png"/></div>
+<div align="center"><img width='924' height='797' src="../images/screenshots/jms/JMS_Point-to-Point.png"/></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Point-to-Point_parms"/>
@@ -5541,6 +5542,7 @@ No
 <td>JMS Properties</td>
 <td>
       The JMS Properties are properties specific for the underlying messaging system.
+      You can setup the name, the value and the class (type) of value. Default type is String.
       For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
       webservices through JMS.
   
@@ -8321,7 +8323,9 @@ the contents are used to prefix the pathname.
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>
-When using IncludeController and including the same JMX file, ensure you name the IncludeController differently to avoid facing known issue 50898.
+When using IncludeController and including the same JMX file, ensure you name the IncludeController differently to avoid facing known issue 
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=50898">Bug 50898</a>
+.
 
 </td></tr>
 </table>
@@ -8372,9 +8376,18 @@ Yes
 
         The Transaction Controller generates an additional
         sample which measures the overall time taken to perform the nested test elements.
-        Note that this time by default includes all processing within the controller scope, not just
-        the samples, this can be changed by unchecking "Include duration of timer and pre-post processors in generated sample".
         
+</p>
+
+        
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+        Note: when the check box "Include duration of timer and pre-post processors in generated sample" is checked,
+        the time includes all processing within the controller scope, not just the samples.
+        
+</td></tr>
+</table>
 </p>
 
         
@@ -8444,7 +8457,7 @@ The generated sample is only regarded as successful if all its sub-samples are s
 
     
 <p><b>Control Panel</b></p>
-<div align="center"><img width='378' height='129' src="../images/screenshots/transactioncontroller.png"/></div>
+<div align="center"><img width='622' height='140' src="../images/screenshots/transactioncontroller.png"/></div>
 <p>
 <b>Parameters</b>
 <a name="Transaction_Controller_parms"/>
@@ -8473,8 +8486,7 @@ Yes
 <td>Include duration of timer and pre-post processors in generated sample</td>
 <td>
     Whether to include timer, pre- and post-processing delays in the generated sample.
-    Default is true to be compatible with the behaviour in previous versions of JMeter.
-    Setting it to false is a better option to get only response time of the sample.
+    Default is false (since JMeter 2.11, in previous versions the default value is true).
     
 </td>
 <td>
@@ -9266,6 +9278,21 @@ video/
 The <i>XML view</i> will show response in tree style. 
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
 <br />
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<b>XPath Tester</b>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+The <i>XPath Tester</i> only works for text responses. It shows the plain text in the upper panel.
+The "Test" button allows the user to apply the XPath query to the upper panel and the results
+will be displayed in the lower panel.<br />
+
 </font>
 </td>
 </tr>
@@ -11083,9 +11110,7 @@ test${__threadNum}.csv
     As this is after configuration processing is completed,
     they cannot be used for some configuration items - such as JDBC Config - 
     that process their contents at configuration time (see 
-<a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">
-Bug 40394 
-</a>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=40394">Bug 40394</a>
 )
     However the variables do work in the HTTP Auth Manager, as the username etc are processed at run-time.
     
@@ -12705,7 +12730,7 @@ Then reference the keystore file through the 2 JVM properties (or add them in sy
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='530' height='171' src="../images/screenshots/keystore_config.png"/></div>
+<div align="center"><img width='441' height='189' src="../images/screenshots/keystore_config.png"/></div>
 <p>
 <b>Parameters</b>
 <a name="Keystore_Configuration_parms"/>
@@ -12721,10 +12746,18 @@ No
 </tr>
 <tr>
 <td>Preload</td>
-<td>Wether or not to preload Keystore.
+<td>Wether or not to preload Keystore. Setting is to true is usually the best option.
 </td>
 <td>
 Yes
+</td>
+</tr>
+<tr>
+<td>Variable name holding certificate alias</td>
+<td>Variable name that will contain the alias to use for authentication by client certificate. Variable value will be filled from CSV Data Set for example. In the screenshot, "certificat_ssl" will also be a variable in CSV Data Set.
+</td>
+<td>
+False
 </td>
 </tr>
 <tr>
@@ -12737,7 +12770,7 @@ Yes
 </tr>
 <tr>
 <td>Alias End Index</td>
-<td>The index of the last key to use in Keystore, 0-based.
+<td>The index of the last key to use in Keystore, 0-based. When using "Variable name holding certificate alias" ensure it is large enough so that all keys are loaded at startup.
 </td>
 <td>
 Yes
@@ -19147,7 +19180,7 @@ directly into your test plan as you go (so you can view samples interactively wh
 <br>
 
 
-Ensure your read this 
+Ensure you read this 
 <a href="https://wiki.apache.org/jmeter/TestRecording210">
 wiki page
 </a>
@@ -19235,6 +19268,29 @@ This has the advantage that even embedded HTTPS resources can be intercepted, an
 
 
 <p>
+Unless a keystore is provided (and you define the property 
+<code>
+proxy.cert.alias
+</code>
+),
+JMeter needs to use the keytool application to create the keystore entries. 
+Versions of JMeter after 2.10 include code to check that keytool is available by looking in various standard places.
+If JMeter is unable to find the keytool application, it will report an error.
+If necessary, the systen property 
+<code>
+keytool.directory
+</code>
+ can be used to tell JMeter where to find keytool.
+This should be defined in the file 
+<code>
+system.properties
+</code>
+.
+
+</p>
+
+
+<p>
 
 The JMeter certificates are generated (if necessary) when the Start button is pressed.
 
@@ -19249,6 +19305,17 @@ This certificate needs to be installed by the browser in order for it to accept 
 below
 </a>
  for details.
+
+</p>
+
+
+<p>
+
+If necessary, you can force JMeter to regenerate the keystore (and the exported certificates - ApacheJMeterTemporaryRootCA[.usr|.crt]) by deleting the keystore file 
+<code>
+proxyserver.jks
+</code>
+ from the JMeter directory.
 
 </p>
 
@@ -19606,7 +19673,17 @@ Yes
 <tr>
 <td>HTTPS Domains</td>
 <td>List of domain (or host) names for HTTPS. Use this to pre-generate certificates for all servers you wish to record.
-        For example, *.apache.org
+        
+<br>
+
+
+        For example, *.apache.org,*.incubator.apache.org
+        
+<br>
+
+
+        Note that wildcard domains only apply to one level,
+        i.e. podling.incubator.apache.org matches *.incubator.apache.org but not *.apache.org
         
 </td>
 <td>
@@ -20269,7 +20346,7 @@ No
 <td>X-ResponseStatus</td>
 <td>Response status, see 
 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">
-HTTP Stauts responses
+HTTP Status responses
 </a>
 , example 200 OK, 500 Internal Server Error ....
 </td>
@@ -20280,6 +20357,23 @@ No
 <tr>
 <td>X-ResponseLength</td>
 <td>Size of response, this enable returning only a substring of Request content
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>X-SetHeaders</td>
+<td>Pipe separator list of headers, example:
+<br>
+
+ 
+        
+<code>
+headerA=valueA|headerB=valueB
+</code>
+ would set headerA to valueA and headerB to valueB.        
+        
 </td>
 <td>
 No
@@ -20528,6 +20622,16 @@ The Test Fragment is used in conjunction with the
 Yes
 </td>
 </tr>
+</table>
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+When using Test Fragment with 
+<a href="../usermanual/component_reference.html#Module_Controller">Module Controller</a>
+, ensure you disable the Test Fragment to avoid the execution of Test Fragment itself.
+
+</td></tr>
 </table>
 </p>
 </td></tr>
