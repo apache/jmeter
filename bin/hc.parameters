@@ -41,5 +41,6 @@
 
 #http.protocol.reject-relative-redirect$Boolean=true
 
-# Default value since JMeter 2.10.1
+# Default value since JMeter 2.11, 
+# also uncomment hc.parameters.file=hc.parameters to enable this check:
 #http.connection.stalecheck$Boolean=false
