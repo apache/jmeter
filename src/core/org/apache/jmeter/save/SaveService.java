@@ -180,7 +180,7 @@ public class SaveService {
     private static String fileVersion = ""; // read from saveservice.properties file// $NON-NLS-1$
     // Must match Revision id value in saveservice.properties, 
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    private static final String FILEVERSION = "1545092"; // Expected value $NON-NLS-1$
+    private static final String FILEVERSION = "1554411"; // Expected value $NON-NLS-1$
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
