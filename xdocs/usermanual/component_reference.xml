@@ -1375,7 +1375,7 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13" width="790" height="702" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" width="946" height="776" screenshot="jmspublisher.png">
 <note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
@@ -1414,6 +1414,7 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
   </property>
   <property name="JMS Properties" required="No">
       The JMS Properties are properties specific for the underlying messaging system.
+      You can setup the name, the value and the class (type) of value. Default type is String.
       For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
       webservices through JMS.
   </property>
@@ -1533,7 +1534,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 </p>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="746" height="662" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="924" height="797" screenshot="jms/JMS_Point-to-Point.png">
 <note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
@@ -1620,6 +1621,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
   </property>
   <property name="JMS Properties" required="No">
       The JMS Properties are properties specific for the underlying messaging system.
+      You can setup the name, the value and the class (type) of value. Default type is String.
       For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
       webservices through JMS.
   </property>
