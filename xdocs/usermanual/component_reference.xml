@@ -2447,14 +2447,16 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 </properties>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.15" width="378" height="129" screenshot="transactioncontroller.png">
+<component name="Transaction Controller" index="&sect-num;.2.15" width="622" height="140" screenshot="transactioncontroller.png">
     <description>
         <p>
         The Transaction Controller generates an additional
         sample which measures the overall time taken to perform the nested test elements.
-        Note that this time by default includes all processing within the controller scope, not just
-        the samples, this can be changed by unchecking "Include duration of timer and pre-post processors in generated sample".
         </p>
+        <note>
+        Note: when the check box "Include duration of timer and pre-post processors in generated sample" is checked,
+        the time includes all processing within the controller scope, not just the samples.
+        </note>
         <p>
         For JMeter versions after 2.3, there are two modes of operation
         <ul>
@@ -2490,8 +2492,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
     </property>
     <property name="Include duration of timer and pre-post processors in generated sample" required="Yes">
     Whether to include timer, pre- and post-processing delays in the generated sample.
-    Default is true to be compatible with the behaviour in previous versions of JMeter.
-    Setting it to false is a better option to get only response time of the sample.
+    Default is false (since JMeter 2.11, in previous versions the default value is true).
     </property>
 </properties>
 </component>
