@@ -51,7 +51,43 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
-<ch_category>Core Improvements</ch_category>
+<!-- <ch_category>Improvements</ch_category> -->
+
+<ch_title>JMS Publisher/Point to Point : Add ability to set typed values in JMS header properties</ch_title>
+<p>In the samplers JMS Publisher and JMS Point-to-Point, you can set up the type of values form the JMS header properties.</p>
+<p>
+<figure width="928" height="796" image="changes/2.11/01_jms_properties_typed_values.png"></figure>
+</p>
+
+<ch_title>Transaction Controller:Change default property "Include duration of timer..." for newly created element</ch_title>
+<p>In the samplers JMS Publisher and JMS Point-to-Point, you can set up the type of values form the JMS header properties.</p>
+<p>
+<figure width="628" height="140" image="changes/2.11/02_transaction_controller.png"></figure>
+</p>
+
+<ch_title>View Results Tree : Add an XPath Tester </ch_title>
+<p>In View Results Tree listener, a new XPath tester can be use to test xpath search.</p>
+<p>
+<figure width="990" height="765" image="changes/2.11/03_xpath_tester.png"></figure>
+</p>
+
+<ch_title>Ability to choose the client alias for the cert key in JsseSslManager such that Mutual SSL auth testing can be made more flexible</ch_title>
+<p></p>
+<!--<p>
+<figure width="1144" height="638" image="changes/2.11/01_css_jquery_tester.png"></figure>
+</p>-->
+
+<ch_title>Add a "Save as Test Fragment" option </ch_title>
+<p>In the file menu, a new option allow to save a group of elements as a Test fragment.</p>
+<p>
+<figure width="295" height="242" image="changes/2.11/05_save_as_fragement.png"></figure>
+</p>
+
+<ch_title>Summariser should be enabled by default in Non GUI mode</ch_title>
+<p>When you run JMeter from command line, now JMeter display some statistics from the Summariser mode..</p>
+<p>
+<figure width="1287" height="386" image="changes/2.11/06_summariser.png"></figure>
+</p>
 
 <!-- <ch_title>Sample title</ch_title>
 <p>
