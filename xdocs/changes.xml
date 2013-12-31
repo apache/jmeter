@@ -52,6 +52,14 @@ Summary
 <ch_section>New and Noteworthy</ch_section>
 
 <!-- <ch_category>Improvements</ch_category> -->
+<ch_title>HTTP(S) Test Script Recorder improvements</ch_title>
+<p>
+Following improvements have been made since major changes introduced in JMeter 2.10 on HTTP(S) Test Script Recorder:
+<ul>
+<li>Better detection of missing or invalid configuration of keytool utility</li>
+<li>New system property keytool.directory (see system.properties) lets you configure directory containing keytool in case on non-standard installation</li>
+</ul>
+</p>
 
 <ch_title>JMS Publisher/Point to Point : Add ability to set typed values in JMS header properties</ch_title>
 <p>In the samplers JMS Publisher and JMS Point-to-Point, you can now set up the class of values for the JMS header properties. Previously only String was possible.</p>
