@@ -1966,6 +1966,7 @@ run JMeter unless all the JMeter jars are added.
     <deployfile stem="ApacheJMeter_junit-test"/>
     <deployfile stem="ApacheJMeter_ldap"/>
     <deployfile stem="ApacheJMeter_mail"/>
+    <deployfile stem="ApacheJMeter_mongodb"/>
     <deployfile stem="ApacheJMeter_monitors"/>
     <deployfile stem="ApacheJMeter_native"/>
     <deployfile stem="ApacheJMeter_report"/>
