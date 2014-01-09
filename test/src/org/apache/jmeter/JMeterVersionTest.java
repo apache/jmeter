@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,7 +103,9 @@ public class JMeterVersionTest extends JMeterTestCase {
 //      <classpathentry kind="lib" path="lib/activation-1.1.1.jar"/>
 //      <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
         final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+)-([^-]+)\\.jar\"/>");
+        final Pattern versionPat = Pattern.compile("\\$\\{(.+)\\.version\\}");
         String line;
+        final ArrayList<String> toRemove = new ArrayList<String>();
         while((line=eclipse.readLine()) != null){
             final Matcher m = p.matcher(line);
             if (m.matches()) {
@@ -122,7 +125,14 @@ public class JMeterVersionTest extends JMeterTestCase {
                         jar = tmp;
                     }
                 }
-                final String expected = versions.get(jar);
+                String expected = versions.get(jar);
+                // Process ${xxx.version} references
+                final Matcher mp = versionPat.matcher(expected);
+                if (mp.matches()) {
+                    String key = mp.group(1);
+                    expected = versions.get(key);
+                    toRemove.add(key); // in case it is not itself used we remove it later
+                }
                 propNames.remove(jar);
                 if (expected == null) {
                     fail("Versions list does not contain: " + jar);
@@ -132,6 +142,10 @@ public class JMeterVersionTest extends JMeterTestCase {
                     }
                 }
             }
+        }
+        // remove any possibly unused references
+        for(Object key : toRemove.toArray()) {
+            propNames.remove(key);            
         }
         eclipse.close();
         if (propNames.size() > 0) {
