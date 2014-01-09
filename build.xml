@@ -369,7 +369,9 @@
     <include name="${lib.dir}/${excalibur-datasource.jar}"/>
     <include name="${lib.dir}/${excalibur-instrument.jar}"/>
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
-    <include name="${lib.dir}/${excalibur-pool.jar}"/>
+    <include name="${lib.dir}/${excalibur-pool-api.jar}"/>
+    <include name="${lib.dir}/${excalibur-pool-impl.jar}"/>
+    <include name="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
@@ -438,7 +440,9 @@
     <pathelement location="${lib.dir}/${excalibur-datasource.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-instrument.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
-    <pathelement location="${lib.dir}/${excalibur-pool.jar}"/>
+    <pathelement location="${lib.dir}/${excalibur-pool-api.jar}"/>
+    <pathelement location="${lib.dir}/${excalibur-pool-impl.jar}"/>
+    <pathelement location="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
@@ -2893,7 +2897,9 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="excalibur-datasource"/>
         <process_jarfile jarname="excalibur-instrument"/>
         <process_jarfile jarname="excalibur-logger"/>
-        <process_jarfile jarname="excalibur-pool"/>
+        <process_jarfile jarname="excalibur-pool-api"/>
+        <process_jarfile jarname="excalibur-pool-impl"/>
+        <process_jarfile jarname="excalibur-pool-instrumented"/>
         <process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
@@ -2948,6 +2954,8 @@ run JMeter unless all the JMeter jars are added.
         <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
         <delete verbose="true">
           <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
+          <!-- tidy up old pool jar -->
+          <fileset dir="${lib.dir}" includes="excalibur-pool-1.2.jar"/>
         </delete>
         <antcall target="_process_all_jars">
             <param name="_get_file" value="true"/>
