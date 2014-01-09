@@ -157,8 +157,9 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <ch_section>Improvements</ch_section>
 
-<h3>HTTP Samplers and Proxy</h3>
+<h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+<li><bugzilla>55959</bugzilla> - improve error message when Test Script Recorder fails due to I/O problem</li>
 </ul>
 
 <h3>Other samplers</h3>
