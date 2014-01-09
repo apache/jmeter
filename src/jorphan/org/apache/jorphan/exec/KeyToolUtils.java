@@ -165,7 +165,9 @@ public class KeyToolUtils {
         try {
             int exitVal = nativeCommand.run(arguments);
             if (exitVal != 0) {
-                throw new IOException("Command :'"+formatCommand(arguments)+"' failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
+                throw new IOException("  >> " + nativeCommand.getOutResult().trim() + " <<"
+                    + "\nCommand failed, code: " + exitVal
+                    + "\n'" + formatCommand(arguments)+"'");
             }
         } catch (InterruptedException e) {
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
@@ -183,7 +185,7 @@ public class KeyToolUtils {
         for (String string : arguments) {
             final boolean quote = string.contains(" ");
             if (quote) builder.append("\"");
-            builder.append(redact? "{redacted)" : string);
+            builder.append(redact? "{redacted}" : string);
             if (quote) builder.append("\"");
             builder.append(" ");
             redact = string.equals("-storepass") || string.equals("-keypass");
