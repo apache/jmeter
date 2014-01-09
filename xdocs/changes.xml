@@ -126,6 +126,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Other Samplers</h3>
 <ul>
+<li><bugzilla>55977</bugzilla> - JDBC pook keepalive flooding</li>
 </ul>
 
 <h3>Controllers</h3>
