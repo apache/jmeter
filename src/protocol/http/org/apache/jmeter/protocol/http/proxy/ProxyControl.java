@@ -258,7 +258,7 @@ public class ProxyControl extends GenericController {
 
     private volatile boolean samplerDownloadImages = false;
 
-    private volatile boolean notifyChildSamplerListenersOfFilteredSamples = false;
+    private volatile boolean notifyChildSamplerListenersOfFilteredSamples = true;
 
     private volatile boolean regexMatch = false;// Should we match using regexes?
 
@@ -424,7 +424,7 @@ public class ProxyControl extends GenericController {
     }
 
     public boolean getNotifyChildSamplerListenerOfFilteredSamplers() {
-        return getPropertyAsBoolean(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, false);
+        return getPropertyAsBoolean(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, true);
     }
     
     public boolean getRegexMatch() {
