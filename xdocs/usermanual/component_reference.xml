@@ -5952,6 +5952,8 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         recorded</b>.</property>
         <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
         <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
+        <property name="Notify Child Listeners of filtered samplers" required="No">Notify Child Listeners of filtered samplers
+        <b>Any response that match one or more Exclude pattern is <i>not</i> delivered to Child Listeners (View Results Tree)</b>.</property>
         <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".</property>
         <property name="Stop Button" required="N/A">Stop the proxy server.</property>
         <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is

@@ -160,6 +160,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      * List of available target controllers
      */
     private JComboBox targetNodes;
+    
+    /**
+     * Notify child Listener of Filtered Samplers
+     */
+    private JCheckBox notifyChildSamplerListenerOfFilteredSamplersCB;
 
     private DefaultComboBoxModel targetNodesModel;
 
@@ -254,6 +259,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
             model.setUseKeepAlive(useKeepAlive.isSelected());
             model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
+            model.setNotifyChildSamplerListenerOfFilteredSamplers(notifyChildSamplerListenerOfFilteredSamplersCB.isSelected());
             model.setRegexMatch(regexMatch.isSelected());
             model.setContentTypeInclude(contentTypeInclude.getText());
             model.setContentTypeExclude(contentTypeExclude.getText());
@@ -313,6 +319,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerFollowRedirects.setSelected(model.getSamplerFollowRedirects());
         useKeepAlive.setSelected(model.getUseKeepalive());
         samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
+        notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(model.getNotifyChildSamplerListenerOfFilteredSamplers());
         regexMatch.setSelected(model.getRegexMatch());
         contentTypeInclude.setText(model.getContentTypeInclude());
         contentTypeExclude.setText(model.getContentTypeExclude());
@@ -589,6 +596,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         Box includeExcludePanel = Box.createVerticalBox();
         includeExcludePanel.add(createIncludePanel());
         includeExcludePanel.add(createExcludePanel());
+        includeExcludePanel.add(createNotifyListenersPanel());
         mainPanel.add(includeExcludePanel, BorderLayout.CENTER);
 
         mainPanel.add(createControls(), BorderLayout.SOUTH);
@@ -826,6 +834,20 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
         panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE, ADD_TO_EXCLUDE_FROM_CLIPBOARD, ADD_SUGGESTED_EXCLUDES), BorderLayout.SOUTH);
 
+        return panel;
+    }
+
+    private JPanel createNotifyListenersPanel() {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("notify_child_listeners_fr"))); // $NON-NLS-1$
+        
+        notifyChildSamplerListenerOfFilteredSamplersCB = new JCheckBox(JMeterUtils.getResString("notify_child_listeners_fr")); // $NON-NLS-1$
+        notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(false);
+        notifyChildSamplerListenerOfFilteredSamplersCB.addActionListener(this);
+        notifyChildSamplerListenerOfFilteredSamplersCB.setActionCommand(ENABLE_RESTART);
+
+        panel.add(notifyChildSamplerListenerOfFilteredSamplersCB);
         return panel;
     }
 
