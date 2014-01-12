@@ -28,7 +28,7 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
-commons-codec-1.8
+commons-codec-1.9
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - used by commons-httpclient-3.1
@@ -61,7 +61,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.1
+commons-lang3-3.2.1
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
@@ -194,13 +194,13 @@ xalan_2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 +org.apache.xalan|xml|xpath
 
-xercesimpl-2.9.1
+xercesimpl-2.11.0
 ----------------
 http://xerces.apache.org/xerces2-j/download.cgi
 +org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize
 +org.w3c.dom.html|ls
 
-xml-apis-1.3.04
+xml-apis-1.4.01
 --------------
 http://xerces.apache.org/xerces2-j/download.cgi
 +javax.xml
