@@ -24,10 +24,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.security.cert.X509Certificate;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -68,8 +68,8 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -144,6 +144,9 @@ public class ProxyControl extends GenericController {
     private static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
 
     private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
+
+    private static final String NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED = "ProxyControlGui.notify_child_sl_filtered"; // $NON-NLS-1$
+
     //- JMX file attributes
 
     // Must agree with the order of entries in the drop-down
@@ -255,6 +258,8 @@ public class ProxyControl extends GenericController {
 
     private volatile boolean samplerDownloadImages = false;
 
+    private volatile boolean notifyChildSamplerListenersOfFilteredSamples = false;
+
     private volatile boolean regexMatch = false;// Should we match using regexes?
 
     /**
@@ -335,6 +340,11 @@ public class ProxyControl extends GenericController {
         samplerDownloadImages = b;
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
+    
+    public void setNotifyChildSamplerListenerOfFilteredSamplers(boolean b) {
+        notifyChildSamplerListenersOfFilteredSamples = b;
+        setProperty(new BooleanProperty(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, b));
+    }
 
     public void setIncludeList(Collection<String> list) {
         setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet<String>(list)));
@@ -413,6 +423,10 @@ public class ProxyControl extends GenericController {
         return getPropertyAsBoolean(SAMPLER_DOWNLOAD_IMAGES, false);
     }
 
+    public boolean getNotifyChildSamplerListenerOfFilteredSamplers() {
+        return getPropertyAsBoolean(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, false);
+    }
+    
     public boolean getRegexMatch() {
         return getPropertyAsBoolean(REGEX_MATCH, false);
     }
@@ -501,6 +515,7 @@ public class ProxyControl extends GenericController {
      * server's response while recording.
      */
     public synchronized void deliverSampler(final HTTPSamplerBase sampler, final TestElement[] subConfigs, final SampleResult result) {
+        boolean notifySampleListeners = true;
         if (sampler != null) {
             if (ATTEMPT_REDIRECT_DISABLING && (samplerRedirectAutomatically || samplerFollowRedirects)) {
                 if (result instanceof HTTPSampleResult) {
@@ -541,11 +556,16 @@ public class ProxyControl extends GenericController {
                 if(log.isDebugEnabled()) {
                     log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
                 }
+                notifySampleListeners = notifyChildSamplerListenersOfFilteredSamples;
                 result.setSampleLabel("["+result.getSampleLabel()+"]");
             }
+        } 
+        if(notifySampleListeners) {
+            // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
+            notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
+        } else {
+            log.debug("Sample not delivered to Child Sampler Listener based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
         }
-        // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
-        notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
     }
 
     public void stopProxy() {
