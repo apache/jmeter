@@ -114,6 +114,8 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
+<li>Since JMeter 2.12, HTTP(S) Test Script Recorder does not deliver anymore filtered samplers (as per Include/Exclude settings) to child listeners.
+If you want child Listeners to be notified, check ""otify Child Listeners of filtered samplers" option.</li>
 </ul>
 
 <!-- =================== Bug fixes =================== -->
