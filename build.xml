@@ -2422,7 +2422,10 @@ run JMeter unless all the JMeter jars are added.
   <target name="batchtestserver" description="Run the batch test using client-server mode">
     <property name="batchtestserver.out" location="${basedir}/bin"/>
     <property name="batchtestserver.log" value="BatchTestServer.log"/>
-    <property name="rmi_port" value="2099"/>
+    <tstamp>
+      <!-- Use variable port to help avoid clashes on CI servers -->
+      <format property="rmi_port" pattern="1mmss"/>
+    </tstamp>
     <parallel>
         <daemons>
             <java taskname="server" classname="org.apache.jmeter.NewDriver" fork="yes" dir="${batchtestserver.out}">
