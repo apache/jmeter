@@ -35,4 +35,21 @@ case $(uname) in
    ;;
 esac
 
-java $JVM_ARGS $JMETER_OPTS -jar `dirname $0`/ApacheJMeter.jar "$@"
+
+# resolve links - $0 may be a softlink (code as used by Tomcat)
+# N.B. readlink would be a lot simpler but is not supported on Solaris
+PRG="$0"
+
+while [ -h "$PRG" ]; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+
+PRGDIR=`dirname "$PRG"`
+
+java $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
