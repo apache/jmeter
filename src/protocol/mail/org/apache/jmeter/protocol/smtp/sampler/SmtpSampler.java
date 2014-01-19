@@ -75,6 +75,8 @@ public class SmtpSampler extends AbstractSampler {
 
 
     public static final String SERVER_PORT          = "SMTPSampler.serverPort"; // $NON-NLS-1$
+    public static final String SERVER_TIMEOUT       = "SMTPSampler.serverTimeout"; // $NON-NLS-1$
+    public static final String SERVER_CONNECTION_TIMEOUT = "SMTPSampler.serverConnectionTimeout"; // $NON-NLS-1$
     public static final String USE_AUTH             = "SMTPSampler.useAuth"; // $NON-NLS-1$
     public static final String USERNAME             = "SMTPSampler.username"; // $NON-NLS-1$
     public static final String PASSWORD             = "SMTPSampler.password"; // $NON-NLS-1$
@@ -122,6 +124,8 @@ public class SmtpSampler extends AbstractSampler {
         SendMailCommand instance = new SendMailCommand();
         instance.setSmtpServer(getPropertyAsString(SmtpSampler.SERVER));
         instance.setSmtpPort(getPropertyAsString(SmtpSampler.SERVER_PORT));
+        instance.setConnectionTimeOut(getPropertyAsString(SmtpSampler.SERVER_CONNECTION_TIMEOUT));
+        instance.setTimeOut(getPropertyAsString(SmtpSampler.SERVER_TIMEOUT));
 
         instance.setUseSSL(getPropertyAsBoolean(SecuritySettingsPanel.USE_SSL));
         instance.setUseStartTLS(getPropertyAsBoolean(SecuritySettingsPanel.USE_STARTTLS));

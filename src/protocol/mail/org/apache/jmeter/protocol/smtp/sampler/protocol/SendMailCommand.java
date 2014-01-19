@@ -90,6 +90,9 @@ public class SendMailCommand {
 
     private String mailBody;
 
+    private String timeOut; // Socket read timeout value in milliseconds. This timeout is implemented by java.net.Socket.
+    private String connectionTimeOut; // Socket connection timeout value in milliseconds. This timeout is implemented by java.net.Socket.
+
     // case we are measuring real time of spedition
     private boolean synchronousMode;
 
@@ -126,6 +129,10 @@ public class SendMailCommand {
         props.setProperty("mail." + protocol + ".host", smtpServer);
         props.setProperty("mail." + protocol + ".port", getPort());
         props.setProperty("mail." + protocol + ".auth", Boolean.toString(useAuthentication));
+        
+        // set timeout
+        props.setProperty("mail." + protocol + ".timeout", getTimeout());
+        props.setProperty("mail." + protocol + ".connectiontimeout", getConnectionTimeout());
 
         if (enableDebug) {
             props.setProperty("mail.debug","true");
@@ -706,6 +713,48 @@ public class SendMailCommand {
             return "587";
         }
         return "25";
+    }
+
+    /**
+     * @param timeOut the timeOut to set
+     */
+    public void setTimeOut(String timeOut) {
+        this.timeOut = timeOut;
+    }
+
+    /**
+     * Returns timeout for the SMTP-connection - returns the
+     * default timeout if no value has been supplied.
+     *
+     * @return Timeout to be set for SMTP-connection
+     */
+    public String getTimeout() {
+        String timeout = timeOut.trim();
+        if (timeout.length() > 0) { // OK, it has been supplied
+            return timeout;
+        }
+        return "0"; // Default is infinite timeout (value 0).
+    }
+
+    /**
+     * @param connectionTimeOut the connectionTimeOut to set
+     */
+    public void setConnectionTimeOut(String connectionTimeOut) {
+        this.connectionTimeOut = connectionTimeOut;
+    }
+
+    /**
+     * Returns connection timeout for the SMTP-connection - returns the
+     * default connection timeout if no value has been supplied.
+     *
+     * @return Connection timeout to be set for SMTP-connection
+     */
+    public String getConnectionTimeout() {
+        String connectionTimeout = connectionTimeOut.trim();
+        if (connectionTimeout.length() > 0) { // OK, it has been supplied
+            return connectionTimeout;
+        }
+        return "0"; // Default is infinite timeout (value 0).
     }
 
     /**
