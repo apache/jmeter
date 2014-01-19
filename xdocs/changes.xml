@@ -166,6 +166,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Other samplers</h3>
 <ul>
+<li><bugzilla>Bug 56033</bugzilla> - Add Connection timeout and Read timeout to SMTP Sampler</li>
 </ul>
 
 <h3>Controllers</h3>
