@@ -129,8 +129,8 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         super.configureTestElement(te);
         te.setProperty(SmtpSampler.SERVER, smtpPanel.getServer());
         te.setProperty(SmtpSampler.SERVER_PORT, smtpPanel.getPort());
-        te.setProperty(SmtpSampler.SERVER_TIMEOUT, smtpPanel.getTimeout());
-        te.setProperty(SmtpSampler.SERVER_CONNECTION_TIMEOUT, smtpPanel.getConnectionTimeout());
+        te.setProperty(SmtpSampler.SERVER_TIMEOUT, smtpPanel.getTimeout(), ""); // $NON-NLS-1$
+        te.setProperty(SmtpSampler.SERVER_CONNECTION_TIMEOUT, smtpPanel.getConnectionTimeout(), ""); // $NON-NLS-1$
         te.setProperty(SmtpSampler.MAIL_FROM, smtpPanel.getMailFrom());
         te.setProperty(SmtpSampler.MAIL_REPLYTO, smtpPanel.getMailReplyTo());
         te.setProperty(SmtpSampler.RECEIVER_TO, smtpPanel.getReceiverTo());
