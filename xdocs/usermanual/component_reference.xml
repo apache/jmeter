@@ -1794,7 +1794,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </component>
 
 
-<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="713" height="802" screenshot="smtp_sampler.png">
+<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="825" height="728" screenshot="smtp_sampler.png">
 <description>
 <p>
 The SMTP Sampler can send mail messages using SMTP/SMTPS protocol. 
@@ -1812,6 +1812,8 @@ Two alternatives to handle this verification are available:<br></br>
 <property name="Port" required="No">Port to be used to connect to the server.
 Defaults are: SMTP=25, SSL=465, StartTLS=587
 </property>
+<property name="Connection timeout" required="No">Connection timeout value in milliseconds (socket level). Default is infinite timeout.</property>
+<property name="Read timeout" required="No">Read timeout value in milliseconds (socket level). Default is infinite timeout.</property>
 <property name="Address From" required="Yes">The from address that will appear in the e-mail</property>
 <property name="Address To" required="Yes, unless CC or BCC is specified">The destination e-mail address (multiple values separated by ";")</property>
 <property name="Address To CC" required="No">Carbon copy destinations e-mail address (multiple values separated by ";")</property>

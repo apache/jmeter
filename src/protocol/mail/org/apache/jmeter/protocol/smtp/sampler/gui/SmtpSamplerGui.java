@@ -69,6 +69,8 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         }
         smtpPanel.setServer(element.getPropertyAsString(SmtpSampler.SERVER));
         smtpPanel.setPort(element.getPropertyAsString(SmtpSampler.SERVER_PORT));
+        smtpPanel.setTimeout(element.getPropertyAsString(SmtpSampler.SERVER_TIMEOUT));
+        smtpPanel.setConnectionTimeout(element.getPropertyAsString(SmtpSampler.SERVER_CONNECTION_TIMEOUT));
         smtpPanel.setMailFrom(element.getPropertyAsString(SmtpSampler.MAIL_FROM));
         smtpPanel.setMailReplyTo(element.getPropertyAsString(SmtpSampler.MAIL_REPLYTO));
         smtpPanel.setReceiverTo(element.getPropertyAsString(SmtpSampler.RECEIVER_TO));
@@ -127,6 +129,8 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         super.configureTestElement(te);
         te.setProperty(SmtpSampler.SERVER, smtpPanel.getServer());
         te.setProperty(SmtpSampler.SERVER_PORT, smtpPanel.getPort());
+        te.setProperty(SmtpSampler.SERVER_TIMEOUT, smtpPanel.getTimeout());
+        te.setProperty(SmtpSampler.SERVER_CONNECTION_TIMEOUT, smtpPanel.getConnectionTimeout());
         te.setProperty(SmtpSampler.MAIL_FROM, smtpPanel.getMailFrom());
         te.setProperty(SmtpSampler.MAIL_REPLYTO, smtpPanel.getMailReplyTo());
         te.setProperty(SmtpSampler.RECEIVER_TO, smtpPanel.getReceiverTo());

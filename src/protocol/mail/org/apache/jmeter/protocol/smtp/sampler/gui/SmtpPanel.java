@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.smtp.sampler.gui;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -40,6 +41,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.smtp.sampler.SmtpSampler;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -62,6 +65,8 @@ public class SmtpPanel extends JPanel {
     private JCheckBox cbUseAuth;
     private JTextField tfMailServer;
     private JTextField tfMailServerPort;
+    private JTextField tfMailServerTimeout;
+    private JTextField tfMailServerConnectionTimeout;
     private JTextField tfMailTo;
     private JTextField tfMailToCC;
     private JTextField tfMailToBCC;
@@ -76,6 +81,8 @@ public class SmtpPanel extends JPanel {
     private JLabel jlAddressToCC;
     private JLabel jlAddressToBCC;
     private JLabel jlMailServerPort;
+    private JLabel jlMailServerTimeout;
+    private JLabel jlMailServerConnectionTimeout;
     private JLabel jlMailServer;
     private JLabel jlAttachFile;
     private JLabel jlDutPortStandard;
@@ -264,6 +271,44 @@ public class SmtpPanel extends JPanel {
      */
     public void setServer(String server) {
         tfMailServer.setText(server);
+    }
+
+    /**
+     * Returns timeout for SMTP connection from textfield
+     *
+     * @return Smtp timeout
+     */
+    public String getTimeout() {
+        return tfMailServerTimeout.getText();
+    }
+
+    /**
+     * Sets timeout (ms) for SMTP connection
+     *
+     * @param timeout
+     *            SMTP Timeout (ms)
+     */
+    public void setTimeout(String timeout) {
+        tfMailServerTimeout.setText(timeout);
+    }
+
+    /**
+     * Returns connection timeout for SMTP connection from textfield
+     *
+     * @return SMTP connection timeout
+     */
+    public String getConnectionTimeout() {
+        return tfMailServerConnectionTimeout.getText();
+    }
+
+    /**
+     * Sets connection timeout (ms) for SMTP connection
+     *
+     * @param connectionTimeout
+     *            SMTP Connection Timeout (ms)
+     */
+    public void setConnectionTimeout(String connectionTimeout) {
+        tfMailServerConnectionTimeout.setText(connectionTimeout);
     }
 
     /**
@@ -499,6 +544,8 @@ public class SmtpPanel extends JPanel {
         jlAddressToBCC = new JLabel(JMeterUtils.getResString("smtp_bcc")); // $NON-NLS-1$
         jlMailServerPort = new JLabel(JMeterUtils.getResString("smtp_server_port")); // $NON-NLS-1$
         jlMailServer = new JLabel(JMeterUtils.getResString("smtp_server")); // $NON-NLS-1$
+        jlMailServerTimeout = new JLabel(JMeterUtils.getResString("smtp_server_timeout")); // $NON-NLS-1$
+        jlMailServerConnectionTimeout = new JLabel(JMeterUtils.getResString("smtp_server_connection_timeout")); // $NON-NLS-1$
         jlAttachFile = new JLabel(JMeterUtils.getResString("smtp_attach_file")); // $NON-NLS-1$
         jlDutPortStandard = new JLabel(JMeterUtils.getResString("smtp_default_port")); // $NON-NLS-1$
         jlUsername = new JLabel(JMeterUtils.getResString("smtp_username")); // $NON-NLS-1$
@@ -508,6 +555,8 @@ public class SmtpPanel extends JPanel {
 
         tfMailServer = new JTextField(30);
         tfMailServerPort = new JTextField(6);
+        tfMailServerTimeout = new JTextField(6);
+        tfMailServerConnectionTimeout = new JTextField(6);
         tfMailFrom = new JTextField(25);
         tfMailReplyTo = new JTextField(25);
         tfMailTo = new JTextField(25);
@@ -575,39 +624,42 @@ public class SmtpPanel extends JPanel {
         /*
          * Server Settings
          */
-        JPanel panelServerSettings = new JPanel(new GridBagLayout());
-        panelServerSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
+        JPanel panelServerSettings = new VerticalPanel();
+        panelServerSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_server_settings"))); // $NON-NLS-1$
+        
+        JPanel panelMailServer = new JPanel(new BorderLayout(5, 0));
+        panelMailServer.add(jlMailServer, BorderLayout.WEST);
+        panelMailServer.add(tfMailServer, BorderLayout.CENTER);
+        JPanel panelMailServerPort = new JPanel(new BorderLayout(5, 0));
+        panelMailServerPort.add(jlMailServerPort, BorderLayout.WEST);
+        panelMailServerPort.add(tfMailServerPort, BorderLayout.CENTER);
+        panelMailServerPort.add(jlDutPortStandard, BorderLayout.EAST);
+        
+        panelServerSettings.add(panelMailServer, BorderLayout.CENTER);
+        panelServerSettings.add(panelMailServerPort, BorderLayout.SOUTH);
 
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        panelServerSettings.add(jlMailServer, gridBagConstraints);
+        JPanel panelServerTimeoutsSettings = new VerticalPanel();
+        panelServerTimeoutsSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("smtp_server_timeouts_settings"))); // $NON-NLS-1$
+        
+        JPanel panelMailServerConnectionTimeout = new JPanel(new BorderLayout(5, 0));
+        panelMailServerConnectionTimeout.add(jlMailServerConnectionTimeout, BorderLayout.WEST);
+        panelMailServerConnectionTimeout.add(tfMailServerConnectionTimeout, BorderLayout.CENTER);
+        JPanel panelMailServerTimeout = new JPanel(new BorderLayout(5, 0));
+        panelMailServerTimeout.add(jlMailServerTimeout, BorderLayout.WEST);
+        panelMailServerTimeout.add(tfMailServerTimeout, BorderLayout.CENTER);
+        
+        panelServerTimeoutsSettings.add(panelMailServerConnectionTimeout, BorderLayout.CENTER);
+        panelServerTimeoutsSettings.add(panelMailServerTimeout, BorderLayout.SOUTH);
 
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        panelServerSettings.add(tfMailServer, gridBagConstraints);
-
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        panelServerSettings.add(jlMailServerPort, gridBagConstraints);
-
-        JPanel panelServerPortSettings = new JPanel(new GridBagLayout());
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        panelServerPortSettings.add(tfMailServerPort, gridBagConstraints);
-
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        panelServerPortSettings.add(jlDutPortStandard, gridBagConstraints);
-
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        panelServerSettings.add(panelServerPortSettings, gridBagConstraints);
+        JPanel panelServerConfig = new HorizontalPanel();
+        panelServerConfig.add(panelServerSettings, BorderLayout.CENTER);
+        panelServerConfig.add(panelServerTimeoutsSettings, BorderLayout.EAST);
 
         gridBagConstraintsMain.gridx = 0;
         gridBagConstraintsMain.gridy = 0;
-        add(panelServerSettings, gridBagConstraintsMain);
+        add(panelServerConfig, gridBagConstraintsMain);
 
         /*
          * E-Mail Settings
@@ -1000,6 +1052,8 @@ public class SmtpPanel extends JPanel {
         tfMailReplyTo.setText("");
         tfMailServer.setText("");
         tfMailServerPort.setText("");
+        tfMailServerConnectionTimeout.setText("");
+        tfMailServerTimeout.setText("");
         tfMailTo.setText("");
         tfMailToBCC.setText("");
         tfMailToCC.setText("");
