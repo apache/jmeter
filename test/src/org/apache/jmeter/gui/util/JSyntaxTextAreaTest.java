@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.HeadlessException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
@@ -29,18 +30,15 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 public class JSyntaxTextAreaTest extends JMeterTestCase {
 
-  public void testSetLanguage(){
-    JSyntaxTextArea textArea = new JSyntaxTextArea(30, 50, false);
-    
-    try {
-      textArea.setLanguage(null);
-    } catch(Exception e){
-      fail("No Exception expected");
+    public void testSetLanguage() {
+        try {
+            JSyntaxTextArea textArea = new JSyntaxTextArea(30, 50, false);
+            textArea.setLanguage(null);
+            assertEquals(SyntaxConstants.SYNTAX_STYLE_NONE, textArea.getSyntaxEditingStyle());
+        } catch (HeadlessException he) {
+            // Does not work in headless mode
+        }
     }
-    
-    assertEquals(SyntaxConstants.SYNTAX_STYLE_NONE, textArea.getSyntaxEditingStyle());
-    
-  }
   
     public void testSyntaxNames() throws IllegalArgumentException,
             IllegalAccessException {
