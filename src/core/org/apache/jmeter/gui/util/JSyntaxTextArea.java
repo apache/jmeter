@@ -93,11 +93,17 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * @param language
      */
     public void setLanguage(String language) {
-        final String style = languageProperties.getProperty(language);
-        if (style == null) {
-            super.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        if(language == null) {
+          // TODO: Log a message?
+          // But how to find the name of the offending GUI element in the case of a TestBean?
+          super.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
         } else {
-            super.setSyntaxEditingStyle(style);
+          final String style = languageProperties.getProperty(language);
+          if (style == null) {
+              super.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+          } else {
+              super.setSyntaxEditingStyle(style);
+          }
         }
     }
 
