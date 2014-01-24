@@ -152,6 +152,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>General</h3>
 <ul>
+<li><bugzilla>56059</bugzilla> - Older TestBeans incompatible with 2.11 when using TextAreaEditor</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
