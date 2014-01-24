@@ -18,7 +18,13 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.HashSet;
+import java.util.Properties;
+
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 public class JSyntaxTextAreaTest extends JMeterTestCase {
@@ -35,4 +41,36 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
     assertEquals(SyntaxConstants.SYNTAX_STYLE_NONE, textArea.getSyntaxEditingStyle());
     
   }
+  
+    public void testSyntaxNames() throws IllegalArgumentException,
+            IllegalAccessException {
+        HashSet<String> values = new HashSet<String>();
+        for (Field field : SyntaxConstants.class.getFields()) {
+            int modifiers = field.getModifiers();
+            if (field.getType().equals(String.class)
+                    && Modifier.isStatic(modifiers)
+                    && Modifier.isPublic(modifiers)) {
+                values.add((String) field.get(null));
+            }
+        }
+        final Properties languageProperties = JMeterUtils
+                .loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$;
+        for (Object s : languageProperties.values()) {
+            if (!values.contains(s)) {
+                fail("Invalid property value: " + s);
+            }
+        }
+        // Show unused entries
+//        for (Object s : languageProperties.values()) {
+//            values.remove(s);
+//        }
+//        if (values.size() > 0) {
+//            System.out.print("Unused JSyntaxAreaTypes:");
+//            for (String value : values) {
+//                System.out.print(" ");
+//                System.out.print(value);
+//            }
+//            System.out.println();
+//        }
+    }
 }
