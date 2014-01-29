@@ -227,7 +227,7 @@ or
 http://www.extreme.indiana.edu/dist/java-repository/xpp3/distributions/
 - xstream
 
-xstream-1.4.4
+xstream-1.4.6
 -------------
 http://xstream.codehaus.org/download.html
 - SaveService
