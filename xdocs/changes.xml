@@ -148,6 +148,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>I18N</h3>
 <ul>
+<li><bugzilla>56111</bugzilla> - "comments" in german translation is not correct</li>
 </ul>
 
 <h3>General</h3>
