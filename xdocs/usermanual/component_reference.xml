@@ -2660,6 +2660,7 @@ Further details on the precise meaning of the statistical terms can be found on 
  </ul>
  <p>The individual figures at the bottom of the display are the current values. 
  "Latest Sample" is the current elapsed sample time, shown on the graph as "Data".</p>
+ <p>The value displayed on the top left of graph is the max of 90th percentile of response time.</p>
 </component>
 
 <component name="Spline Visualizer" index="&sect-num;.3.4"  width="581" height="440" screenshot="spline_visualizer.png">
