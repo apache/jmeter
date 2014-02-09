@@ -29,6 +29,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
+import org.apache.jmeter.testelement.property.NumberProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
@@ -59,6 +60,13 @@ public class ValueReplacer {
         this.variables = variables;
     }
 
+    /**
+     * Replaces TestElement StringProperties containing functions with their Function properties equivalent, example:
+     * ${__time()}_${__threadNum()}_${__machineName()} will become a FunctionProperty of 
+     * a CompoundVariable containing  3 functions
+     * @param el
+     * @throws InvalidVariableException
+     */
     public void replaceValues(TestElement el) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceStringWithFunctions(masterFunction,
                 variables));
@@ -72,18 +80,34 @@ public class ValueReplacer {
         }
     }
 
+    /**
+     * Transforms strings into variable references 
+     * @param el
+     * @throws InvalidVariableException
+     */
     public void reverseReplace(TestElement el) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
                 variables));
         setProperties(el, newProps);
     }
 
+    /**
+     * Transforms strings into variable references using regexp matching if regexMatch is true
+     * @param el
+     * @param regexMatch
+     * @throws InvalidVariableException
+     */
     public void reverseReplace(TestElement el, boolean regexMatch) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
                 variables, regexMatch));
         setProperties(el, newProps);
     }
 
+    /**
+     * Replaces ${key} by value extracted from variables if any
+     * @param el
+     * @throws InvalidVariableException
+     */
     public void undoReverseReplace(TestElement el) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new UndoVariableReplacement(masterFunction,
                 variables));
@@ -104,6 +128,15 @@ public class ValueReplacer {
         variables.putAll(vars);
     }
 
+    /**
+     * Replaces a StringProperty containing functions with their Function properties equivalent, example:
+     * ${__time()}_${__threadNum()}_${__machineName()} will become a FunctionProperty of 
+     * a CompoundVariable containing  3 functions
+     * @param iter {@link PropertyIterator}
+     * @param transform {@link ValueTransformer}
+     * @return Collection<JMeterProperty>
+     * @throws InvalidVariableException
+     */
     private Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
         List<JMeterProperty> props = new LinkedList<JMeterProperty>();
         while (iter.hasNext()) {
@@ -119,6 +152,11 @@ public class ValueReplacer {
                     if (log.isDebugEnabled()) {
                         log.debug("Replacement result: " + val);
                     }
+                }
+            } else if (val instanceof NumberProperty) {
+                val = transform.transformValue(val);
+                if (log.isDebugEnabled()) {
+                    log.debug("Replacement result: " + val);
                 }
             } else if (val instanceof MultiProperty) {
                 MultiProperty multiVal = (MultiProperty) val;

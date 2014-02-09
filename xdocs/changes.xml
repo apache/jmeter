@@ -122,6 +122,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+<li><bugzilla>55998</bugzilla> - HTTP recording – Replacing port value by user defined variable does not work</li>
 </ul>
 
 <h3>Other Samplers</h3>
