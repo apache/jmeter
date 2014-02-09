@@ -8,6 +8,31 @@
   Apache JMeter is a 100% pure Java application designed to test
   and measure performance.  It may be used as a highly portable 
   server benchmark as well as multiclient load generator.
+  
+  Apache JMeter features include:
+
+ Ability to load and performance test many different server/protocol types:
+   o  Web - HTTP, HTTPS
+   o  SOAP
+   o  FTP
+   o  Database via JDBC
+   o  LDAP
+   o  Message-oriented middleware (MOM) via JMS
+   o  Mail - SMTP(S), POP3(S) and IMAP(S)
+   o  MongoDB (NoSQL)
+   o  Native commands or shell scripts
+   o  TCP
+
+ Full multithreading framework allows concurrent sampling by many threads and simultaneous sampling of different functions by separate thread groups.
+ Careful GUI design allows faster Test Plan building and debugging.
+ Caching and offline analysis/replaying of test results.
+ Highly Extensible core:
+   o  Pluggable Samplers allow unlimited testing capabilities.
+   o  Several load statistics may be choosen with pluggable timers .
+   o  Data analysis and visualization plugins allow great extensibility as well as personalization.
+   o  Functions can be used to provide dynamic input to a test or provide data manipulation.
+   o  Scriptable Samplers (BeanShell, BSF-compatible languages and JSR223-compatible languages)
+  
 
   The Latest Version
   ------------------
