@@ -27,6 +27,11 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 
+/**
+ * Replaces a String containing functions with their Function properties equivalent, example:
+ * ${__time()}_${__threadNum()}_${__machineName()} will become a FunctionProperty of 
+ * a CompoundVariable containing  3 functions
+ */
 public class ReplaceStringWithFunctions extends AbstractTransformer {
     public ReplaceStringWithFunctions(CompoundVariable masterFunction, Map<String, String> variables) {
         super();
