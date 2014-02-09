@@ -11,7 +11,7 @@
   
   Apache JMeter features include:
 
- Ability to load and performance test many different server/protocol types:
+  Ability to load and performance test many different server/protocol types:
    o  Web - HTTP, HTTPS
    o  SOAP
    o  FTP
@@ -23,10 +23,10 @@
    o  Native commands or shell scripts
    o  TCP
 
- Full multithreading framework allows concurrent sampling by many threads and simultaneous sampling of different functions by separate thread groups.
- Careful GUI design allows faster Test Plan building and debugging.
- Caching and offline analysis/replaying of test results.
- Highly Extensible core:
+  Full multithreading framework allows concurrent sampling by many threads and simultaneous sampling of different functions by separate thread groups.
+  Careful GUI design allows faster Test Plan building and debugging.
+  Caching and offline analysis/replaying of test results.
+  Highly Extensible core:
    o  Pluggable Samplers allow unlimited testing capabilities.
    o  Several load statistics may be choosen with pluggable timers .
    o  Data analysis and visualization plugins allow great extensibility as well as personalization.
