@@ -132,8 +132,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /** retry count to be used (default 1); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
 
-    private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack, to be removed later
+    private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack for metrics related to HTTPCLIENT-1081, to be removed later
 
+    /**
+     * Special interceptor made to keep metrics when connection is released for some method like HEAD
+     * Otherwise calling directly ((HttpConnection) localContext.getAttribute(ExecutionContext.HTTP_CONNECTION)).getMetrics();
+     * would throw org.apache.http.impl.conn.ConnectionShutdownException
+     * See https://issues.apache.org/jira/browse/HTTPCLIENT-1081
+     */
     private static final HttpResponseInterceptor METRICS_SAVER = new HttpResponseInterceptor(){
         @Override
         public void process(HttpResponse response, HttpContext context)
