@@ -1893,7 +1893,9 @@ If omitted, output is captured and returned as the response data.</property>
 If omitted, output is captured and returned as the response data.</property>
 <property name="Check Return Code" required="No">If checked, sampler will compare return code with Expected Return Code.</property>
 <property name="Expected Return Code" required="No">Expected return code for System Call, required if "Check Return Code" is checked.</property>
-<property name="Timeout" required="No">Timeout for command in milliseconds, defaults to 0, which means NO timeout.</property>
+<property name="Timeout" required="No">Timeout for command in milliseconds, defaults to 0, which means NO timeout.
+If the timeout expires before the command finishes, JMeter will attempt to kill the OS process.
+</property>
 </properties>
 </component>
 
