@@ -394,12 +394,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         } catch (IOException e) {
             res.sampleEnd();
+            log.debug("IOException", e);
            // pick up headers if failed to execute the request
             res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
             errorResult(e, res);
             return res;
         } catch (RuntimeException e) {
             res.sampleEnd();
+            log.debug("RuntimeException", e);
             errorResult(e, res);
             return res;
         } finally {
@@ -569,6 +571,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         public int hashCode(){
             return hashCode;
         }
+
+        // For debugging
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append(target);
+            if (hasProxy) {
+                sb.append(" via ");
+                sb.append(proxyUser);
+                sb.append("@");
+                sb.append(proxyHost);
+                sb.append(":");
+                sb.append(proxyPort);
+            }
+            return sb.toString();
+        }
     }
 
     private HttpClient setupClient(URL url) {
@@ -651,13 +669,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             clientParams.setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.IGNORE_COOKIES);
 
             if (log.isDebugEnabled()) {
-                log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient));
+                log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
 
             map.put(key, httpClient); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
-                log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient));
+                log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
         }
 
