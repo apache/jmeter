@@ -85,8 +85,8 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-nop-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/soap-2.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/tika-core-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/tika-parsers-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/tika-parsers-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
