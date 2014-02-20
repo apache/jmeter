@@ -21,6 +21,8 @@ rem
 rem   JMETER_BIN - JMeter bin directory (must end in \)
 rem   JM_LAUNCH - java.exe (default) or javaw.exe
 rem   JVM_ARGS - additional java options, e.g. -Dprop=val
+rem   JM_START - set this to "start" to launch JMeter in a separate window
+rem              this is used by the jmeterw.cmd script.
 rem
 rem   =====================================================
 
