@@ -195,7 +195,8 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>General</h3>
 <ul>
-<li><bugzilla>21695</bugzilla> -  Unix jmeter start script assumes it is on PATH, not a link</li>
+<li><bugzilla>21695</bugzilla> - Unix jmeter start script assumes it is on PATH, not a link</li>
+<li><bugzilla>65175</bugzilla> - Add Commons Logging interface to logkit logger</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
