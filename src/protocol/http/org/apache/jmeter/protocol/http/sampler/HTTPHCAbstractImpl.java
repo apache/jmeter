@@ -106,13 +106,8 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
                 log.warn(e.getLocalizedMessage());
             }
         } else {
-            try {
-                InetAddress addr = InetAddress.getLocalHost();
-                // Get hostname
-                localHostOrIP = addr.getHostName();
-            } catch (UnknownHostException e) {
-                log.warn("Cannot determine localhost name, and httpclient.localaddress was not specified");
-            }
+            // Get hostname
+            localHostOrIP = JMeterUtils.getLocalHostName();
         }
         localAddress = inet;
         localHost = localHostOrIP;
