@@ -97,9 +97,9 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
             throw new RemoteException("Cannot start. Unable to get local host IP address.", e1);
         }
         log.info("Local IP address="+localHost.getHostAddress());
-        String hostName = localHost.getHostName();
         // BUG 52469 : Allow loopback address for SSH Tunneling of RMI traffic
-        if (localHost.isLoopbackAddress() && host == null){
+        if (host == null && localHost.isLoopbackAddress()){
+            String hostName = localHost.getHostName();
             throw new RemoteException("Cannot start. "+hostName+" is a loopback address.");
         }
         if (localHost.isSiteLocalAddress()){
