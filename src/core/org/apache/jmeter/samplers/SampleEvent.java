@@ -19,8 +19,6 @@
 package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 
 import org.apache.jmeter.threads.JMeterVariables;
@@ -51,13 +49,7 @@ public class SampleEvent implements Serializable {
 
     // The hostname cannot change during a run, so safe to cache it just once
     static {
-        String hn="";
-        try {
-            hn = InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-            log.error("Cannot obtain local host name "+e);
-        }
-        HOSTNAME=hn;
+        HOSTNAME=JMeterUtils.getLocalHostName();
         initSampleVariables();
     }
 
