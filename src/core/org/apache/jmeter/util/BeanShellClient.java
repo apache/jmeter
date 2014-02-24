@@ -58,7 +58,8 @@ public class BeanShellClient {
 
         InputStreamReader fis = new FileReader(file);
 
-        new SockRead(is).start();
+        final SockRead sockRead = new SockRead(is);
+        sockRead.start();
 
         sendLine("bsh.prompt=\"\";",os);// Prompt is unnecessary
 
@@ -75,8 +76,9 @@ public class BeanShellClient {
         fis.close();
         sendLine("bsh.prompt=\"bsh % \";",os);// Reset for other users
         os.flush();
-        os.close();
         sock.shutdownOutput(); // Tell server that we are done
+        sockRead.join(); // wait for script to finish
+        os.close();
     }
 
     private static void sendLine( String line, OutputStream outPipe )
