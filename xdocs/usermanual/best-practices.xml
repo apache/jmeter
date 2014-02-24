@@ -198,6 +198,38 @@ Httpd started on port: 9000
 Sessiond started on port: 9001
 </pre>
 <p>
+There is a sample script (extras/remote.bsh) you can use to test the server.
+[Have a look at it to see how it works.]
+<br/>
+When starting it in the JMeter bin directory
+(adjust paths as necessary if running from elsewhere)
+the output should look like:
+<pre>
+$ java -jar ../lib/bshclient.jar localhost 9000 ../extras/remote.bsh
+Connecting to BSH server on localhost:9000
+Reading responses from server ...
+BeanShell 2.0b5 - by Pat Niemeyer (pat@pat.net)
+bsh % remote.bsh starting
+user.home = C:\Documents and Settings\User
+user.dir = D:\eclipseworkspaces\main\JMeter_trunk\bin
+log_level.jmeter = INFO
+log_level.jorphan = INFO
+Setting property 'EXAMPLE' to '0'.
+Setting property 'EXAMPLE' to '1'.
+Setting property 'EXAMPLE' to '2'.
+Setting property 'EXAMPLE' to '3'.
+Setting property 'EXAMPLE' to '4'.
+Setting property 'EXAMPLE' to '5'.
+Setting property 'EXAMPLE' to '6'.
+Setting property 'EXAMPLE' to '7'.
+Setting property 'EXAMPLE' to '8'.
+Setting property 'EXAMPLE' to '9'.
+EXAMPLE = 9
+remote.bsh ended
+bsh % ... disconnected from server.
+</pre>
+</p>
+<p>
 As a practical example, assume you have a long-running JMeter test running in non-GUI mode,
 and you want to vary the throughput at various times during the test. 
 The test-plan includes a Constant Throughput Timer which is defined in terms of a property,
