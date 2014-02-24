@@ -53,14 +53,10 @@ public class BeanShellClient {
 
         Socket sock = new Socket(host,port);
         InputStream is = sock.getInputStream();
-
-        OutputStream os = sock.getOutputStream();
-
-        InputStreamReader fis = new FileReader(file);
-
-        final SockRead sockRead = new SockRead(is);
+        SockRead sockRead = new SockRead(is);
         sockRead.start();
 
+        OutputStream os = sock.getOutputStream();
         sendLine("bsh.prompt=\"\";",os);// Prompt is unnecessary
 
         sendLine("String [] args={",os);
@@ -70,6 +66,7 @@ public class BeanShellClient {
         sendLine("};",os);
 
         int b;
+        InputStreamReader fis = new FileReader(file);
         while ((b=fis.read()) != -1){
             os.write(b);
         }
