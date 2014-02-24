@@ -78,6 +78,7 @@ public class BeanShellClient {
         os.flush();
         sock.shutdownOutput(); // Tell server that we are done
         sockRead.join(); // wait for script to finish
+        is.close();
         os.close();
     }
 
@@ -110,15 +111,7 @@ public class BeanShellClient {
                 // TODO Why empty block ?
             } finally {
                 System.out.println("... disconnected from server.");
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                    }
-                }
             }
-
         }
-
     }
 }
