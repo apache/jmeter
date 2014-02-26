@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -38,11 +39,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -56,6 +58,12 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String[] CACHEABLE_METHODS = JMeterUtils.getPropDefault("cacheable_methods", "GET").split("[ ,]");
+
+    static {
+        log.info("Will only cache the following methods: "+Arrays.toString(CACHEABLE_METHODS));
+    }
 
     //+ JMX attributes, do not change values
     public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$
@@ -113,7 +121,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param conn connection
      * @param res result
      */
-    public void saveDetails(URLConnection conn, SampleResult res){
+    public void saveDetails(URLConnection conn, HTTPSampleResult res){
         if (isCacheable(res)){
             String lastModified = conn.getHeaderField(HTTPConstants.LAST_MODIFIED);
             String expires = conn.getHeaderField(HTTPConstants.EXPIRES);
@@ -131,7 +139,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param method
      * @param res result
      */
-    public void saveDetails(HttpMethod method, SampleResult res) throws URIException{
+    public void saveDetails(HttpMethod method, HTTPSampleResult res) throws URIException{
         if (isCacheable(res)){
             String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
@@ -149,7 +157,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param method
      * @param res result
      */
-    public void saveDetails(HttpResponse method, SampleResult res) {
+    public void saveDetails(HttpResponse method, HTTPSampleResult res) {
         if (isCacheable(res)){
             String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
@@ -249,12 +257,23 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     /*
      * Is the sample result OK to cache?
-     * i.e is it in the 2xx range?
+     * i.e is it in the 2xx range, and is it a cacheable method?
      */
-    private boolean isCacheable(SampleResult res){
+    private boolean isCacheable(HTTPSampleResult res){
         final String responseCode = res.getResponseCode();
-        return "200".compareTo(responseCode) <= 0  // $NON-NLS-1$
-            && "299".compareTo(responseCode) >= 0; // $NON-NLS-1$
+        return isCacheableMethod(res)
+            && "200".compareTo(responseCode) <= 0  // $NON-NLS-1$
+            && "299".compareTo(responseCode) >= 0;  // $NON-NLS-1$
+    }
+
+    private boolean isCacheableMethod(HTTPSampleResult res) {
+        final String resMethod = res.getHTTPMethod();
+        for(String method : CACHEABLE_METHODS) {
+            if (method.equalsIgnoreCase(resMethod)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
