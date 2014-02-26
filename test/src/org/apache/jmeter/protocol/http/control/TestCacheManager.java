@@ -41,7 +41,6 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.CacheManager.CacheEntry;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
-import org.apache.jmeter.samplers.SampleResult;
 
 public class TestCacheManager extends JMeterTestCase {
     
@@ -259,6 +258,20 @@ public class TestCacheManager extends JMeterTestCase {
         assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
     }
     
+    public void testCacheHttpClientHEAD() throws Exception{
+        this.cacheManager.setUseExpires(true);
+        this.cacheManager.testIterationStart(null);
+        assertNull("Should not find entry",getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
+        ((HttpMethodStub)httpMethod).expires=makeDate(new Date(System.currentTimeMillis()));
+        ((HttpMethodStub)httpMethod).cacheControl="public, max-age=5";
+        HTTPSampleResult sampleResultHEAD=getSampleResultWithSpecifiedResponseCode("200");
+        sampleResultHEAD.setHTTPMethod("HEAD");
+        this.cacheManager.saveDetails(httpMethod, sampleResultHEAD);
+        assertNull("Should not find entry",getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
+    }
+    
     public void testPrivateCacheHttpClient() throws Exception{
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
@@ -437,6 +450,7 @@ public class TestCacheManager extends JMeterTestCase {
     private HTTPSampleResult getSampleResultWithSpecifiedResponseCode(String code) {
         HTTPSampleResult sampleResult = new HTTPSampleResult();
         sampleResult.setResponseCode(code);
+        sampleResult.setHTTPMethod("GET");
         return sampleResult;
     }
 
