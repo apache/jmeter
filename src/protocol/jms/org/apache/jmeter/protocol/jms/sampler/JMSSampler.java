@@ -429,13 +429,19 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private void printEnvironment(Context context) throws NamingException {
-        Hashtable<?,?> env = context.getEnvironment();
-        LOGGER.debug("Initial Context Properties");
-        @SuppressWarnings("unchecked")
-        Enumeration<String> keys = (Enumeration<String>) env.keys();
-        while (keys.hasMoreElements()) {
-            String key = keys.nextElement();
-            LOGGER.debug(key + "=" + env.get(key));
+        try {
+            Hashtable<?,?> env = context.getEnvironment();
+            if(env != null) {
+                LOGGER.debug("Initial Context Properties");
+                for (Map.Entry<?, ?> entry : env.entrySet()) {
+                    LOGGER.debug(entry.getKey() + "=" + entry.getValue());
+                }
+            } else {
+                LOGGER.warn("context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
+            }
+        } catch (javax.naming.OperationNotSupportedException ex) {
+            // Some JNDI implementation can return this
+            LOGGER.warn("context.getEnvironment() not supported by implementation ");
         }
     }
 
