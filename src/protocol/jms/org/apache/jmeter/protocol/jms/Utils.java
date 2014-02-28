@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.jms;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Map;
 
 import javax.jms.Connection;
@@ -137,6 +138,29 @@ public final class Utils {
     }
 
     /**
+     * Get value from Context environment taking into account non fully compliant
+     * JNDI implementations
+     * @param context
+     * @param key
+     * @return String or null if context.getEnvironment() is not compliant
+     * @throws NamingException 
+     */
+    public static final String getFromEnvironment(Context context, String key) throws NamingException {
+        try {
+            Hashtable<?,?> env = context.getEnvironment();
+            if(env != null) {
+                return (String) env.get(key);
+            } else {
+                log.warn("context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
+                return null;
+            }
+        } catch (javax.naming.OperationNotSupportedException ex) {
+            // Some JNDI implementation can return this
+            log.warn("context.getEnvironment() not supported by implementation ");
+            return null;
+        }        
+    }
+    /**
      * Obtain the queue connection from the context and factory name.
      * 
      * @param ctx
@@ -153,11 +177,9 @@ public final class Utils {
             throw new NamingException("Lookup failed: "+e.toString());
         }
         if (objfac instanceof javax.jms.ConnectionFactory) {
-            @SuppressWarnings("unchecked") // The environment is supposed to use String keys only
-            Map<String, Object> env = (Map<String, Object>)ctx.getEnvironment();
-            if(env.containsKey(Context.SECURITY_PRINCIPAL)) {
-                String username = (String)env.get(Context.SECURITY_PRINCIPAL);
-                String password = (String)env.get(Context.SECURITY_CREDENTIALS);
+            String username = getFromEnvironment(ctx, Context.SECURITY_PRINCIPAL);
+            if(username != null) {
+                String password = getFromEnvironment(ctx, Context.SECURITY_CREDENTIALS);
                 return ((javax.jms.ConnectionFactory) objfac).createConnection(username, password);                
             }
             else {
