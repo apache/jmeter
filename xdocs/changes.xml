@@ -130,6 +130,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ul>
 <li><bugzilla>55977</bugzilla> - JDBC pook keepalive flooding</li>
 <li><bugzilla>55999</bugzilla> - Scroll bar on jms point-to-point sampler does not work when content exceeds display</li>
+<li><bugzilla>56198</bugzilla> - JMSSampler : NullPointerException is thrown when log level is DEBUG and JNDI underlying implementation of JMS provider does not comply with Context.getEnvironment contract</li>
 </ul>
 
 <h3>Controllers</h3>
