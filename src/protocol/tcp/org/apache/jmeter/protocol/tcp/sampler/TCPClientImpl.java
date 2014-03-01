@@ -47,8 +47,8 @@ import org.apache.log.Logger;
 public class TCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
-    private String charset = JMeterUtils.getPropDefault("tcp.charset", Charset.defaultCharset().name()); // $NON-NLS-1$
+    private static final int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
+    private static final String charset = JMeterUtils.getPropDefault("tcp.charset", Charset.defaultCharset().name()); // $NON-NLS-1$
     // default is not in range of a byte
 
     public TCPClientImpl() {
@@ -71,11 +71,11 @@ public class TCPClientImpl extends AbstractTCPClient {
      */
     @Override
     public void write(OutputStream os, String s)  throws IOException{
+        if(log.isDebugEnabled()) {
+            log.debug("WriteS: " + showEOL(s));
+        }
         os.write(s.getBytes(charset)); 
         os.flush();
-        if(log.isDebugEnabled()) {
-            log.debug("Wrote: " + s);
-        }
     }
 
     /**
@@ -85,6 +85,9 @@ public class TCPClientImpl extends AbstractTCPClient {
     public void write(OutputStream os, InputStream is) throws IOException{
         byte buff[]=new byte[512];
         while(is.read(buff) > 0){
+            if(log.isDebugEnabled()) {
+                log.debug("WriteIS: " + showEOL(new String(buff, charset)));
+            }
             os.write(buff);
             os.flush();
         }
@@ -114,7 +117,22 @@ public class TCPClientImpl extends AbstractTCPClient {
             }
             return w.toString(charset);
         } catch (IOException e) {
-            throw new ReadException("", e, w.toString());
+            throw new ReadException("Error reading from server, bytes read: " + w.size(), e, w.toString());
         }
+    }
+
+    private String showEOL(final String input) {
+        StringBuilder sb = new StringBuilder(input.length()*2);
+        for(int i=0; i < input.length(); i++) {
+            char ch = input.charAt(i);
+            if (ch < ' ') {
+                sb.append('[');
+                sb.append((int)ch);
+                sb.append(']');
+            } else {
+                sb.append(ch);
+            }
+        }
+        return sb.toString();
     }
 }
