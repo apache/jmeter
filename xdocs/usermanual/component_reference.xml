@@ -3448,7 +3448,12 @@ restricted using server authentication.  You see this type of authentication whe
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter
 transmits the login information when it encounters this type of page.</p>
 <p>
-The Authorisation headers are not shown in the Tree View Listener.
+The Authorisation headers may not be shown in the Tree View Listener "Request" tab.
+The Java implementation does pre-emptive authentication, but it does not
+return the Authorization header when JMeter fetches the headers.
+The Commons HttpClient (3.1) implementation defaults to pre-emptive and the header will be shown.
+The HttpComponents implementation does not do pre-emptive auth 
+(it is supported by the library but JMeter does not enable it)
 </p>
 <p>
 In versions of JMeter after 2.2, the HttpClient sampler defaults to pre-emptive authentication
