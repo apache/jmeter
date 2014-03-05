@@ -327,8 +327,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     if(!STRICT_RFC_2616 && !(redirectLocation.startsWith("http://")||redirectLocation.startsWith("https://"))) {
                         redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
                     }
-
-                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(new URL(redirectLocation)).toString());
+                    res.setRedirectLocation(redirectLocation); // in case sanitising fails
+                    final URL redirectUrl = new URL(redirectLocation);
+                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(redirectUrl).toString());
                 } catch (Exception e) {
                     log.error("Error sanitizing URL:"+headerLocation.getValue()+", message:"+e.getMessage());
                 }
