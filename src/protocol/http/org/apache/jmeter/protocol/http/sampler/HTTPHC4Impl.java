@@ -364,6 +364,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
                 }
                 try {
+                    res.setRedirectLocation(redirectLocation); // in case sanitising fails
                     final URL redirectUrl = new URL(redirectLocation);
                     res.setRedirectLocation(ConversionUtils.sanitizeUrl(redirectUrl).toString());
                 } catch (Exception e) {

@@ -124,6 +124,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ul>
 <li><bugzilla>55998</bugzilla> - HTTP recording – Replacing port value by user defined variable does not work</li>
 <li><bugzilla>56178</bugzilla> - keytool error: Invalid escaped character in AVA: - some characters must be escaped</li>
+<li><bugzilla>56222</bugzilla> - NPE if jmeter.httpclient.strict_rfc2616=true and location is not absolute</li>
 </ul>
 
 <h3>Other Samplers</h3>
