@@ -41,9 +41,9 @@ public class JSR223PreProcessor extends JSR223TestElement implements Cloneable, 
             ScriptEngine scriptEngine = getScriptEngine();
             processFileOrScript(scriptEngine, null);
         } catch (ScriptException e) {
-            log.error("Problem in JSR223 script ", e);
+            log.error("Problem in JSR223 script "+getName(), e);
         } catch (IOException e) {
-            log.error("Problem in JSR223 script ", e);
+            log.error("Problem in JSR223 script "+getName(), e);
         }
     }
 }
