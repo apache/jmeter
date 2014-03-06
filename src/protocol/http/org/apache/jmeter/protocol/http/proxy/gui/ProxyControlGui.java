@@ -451,6 +451,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         PowerTableModel model = null;
         try {
             String clipboardContent = GuiUtils.getPastedText();
+            if(clipboardContent == null) {
+                return;
+            }
             if (clipboardContent != null) {
                 String[] clipboardLines = clipboardContent.split(NEW_LINE);
                 for (String clipboardLine : clipboardLines) {
