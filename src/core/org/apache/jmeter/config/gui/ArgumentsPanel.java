@@ -478,6 +478,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         int rowCount = table.getRowCount();
         try {
             String clipboardContent = GuiUtils.getPastedText();
+            if(clipboardContent == null) {
+                return;
+            }
             String[] clipboardLines = clipboardContent.split("\n");
             for (String clipboardLine : clipboardLines) {
                 String[] clipboardCols = clipboardLine.split("\t");
