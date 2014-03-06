@@ -150,7 +150,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         tpPanel.add(tpLabel);
 
         // TEXT FIELD
-        throughput = new JTextField(5);
+        throughput = new JTextField(15);
         tpPanel.add(throughput);
         throughput.setText("1"); // $NON-NLS-1$
         // throughput.addActionListener(this);
