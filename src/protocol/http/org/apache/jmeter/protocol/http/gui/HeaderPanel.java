@@ -241,6 +241,9 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         int rowCount = headerTable.getRowCount();
         try {
             String clipboardContent = GuiUtils.getPastedText();
+            if(clipboardContent == null) {
+                return;
+            }
             String[] clipboardLines = clipboardContent.split("\n"); // $NON-NLS-1$
             for (String clipboardLine : clipboardLines) {
                 int index = clipboardLine.indexOf(":"); // $NON-NLS-1$
