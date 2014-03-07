@@ -163,6 +163,7 @@ public class ConversionUtils {
      * 
      * @param url
      * @return collapsed URL
+     * @see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=49083">Bug 49083 - collapse /.. in redirect URLs</a>
      */
     public static String removeSlashDotDot(String url)
     {
