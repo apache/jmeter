@@ -99,6 +99,7 @@ public class ConversionUtils {
      * @param location the location, possibly with extraneous leading "../"
      * @return URL with extraneous ../ removed
      * @throws MalformedURLException
+     * @see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690 - handling of 302 redirects with invalid relative paths</a>
      */
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
         URL initial = new URL(baseURL,location);
