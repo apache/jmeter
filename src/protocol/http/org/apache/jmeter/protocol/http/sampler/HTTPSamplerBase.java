@@ -1395,6 +1395,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         for (redirect = 0; redirect < MAX_REDIRECTS; redirect++) {
             boolean invalidRedirectUrl = false;
             String location = lastRes.getRedirectLocation(); 
+            if (log.isDebugEnabled()) {
+                log.debug("Initial location: " + location);
+            }
             if (REMOVESLASHDOTDOT) {
                 location = ConversionUtils.removeSlashDotDot(location);
             }
@@ -1402,13 +1405,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // replacing them automatically with %20. We want to emulate
             // this behaviour.
             location = encodeSpaces(location);
+            if (log.isDebugEnabled()) {
+                log.debug("Location after /. and space transforms: " + location);
+            }
             // Change all but HEAD into GET (Bug 55450)
             String method = lastRes.getHTTPMethod();
             if (!HTTPConstants.HEAD.equalsIgnoreCase(method)) {
                 method = HTTPConstants.GET;
             }
             try {
-                lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), method, true, frameDepth);
+                final URL url = ConversionUtils.makeRelativeURL(lastRes.getURL(), location);
+                if (log.isDebugEnabled()) {
+                    log.debug("Location as URL: " + url.toString());
+                }
+                lastRes = sample(url, method, true, frameDepth);
             } catch (MalformedURLException e) {
                 errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL
