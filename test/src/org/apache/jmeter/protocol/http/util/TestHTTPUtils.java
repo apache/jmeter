@@ -61,6 +61,15 @@ public class TestHTTPUtils extends TestCase {
         assertEquals(new URL("http://192.168.0.1/a/b/c/d"),ConversionUtils.makeRelativeURL(base,"./d"));
     }
 
+    // Test that location urls with a protocol are passed unchanged
+    public void testMakeRelativeURL3() throws Exception {
+        URL base = new URL("http://ahost.invalid/a/b/c");
+        assertEquals(new URL("http://host.invalid/e"),ConversionUtils.makeRelativeURL(base ,"http://host.invalid/e"));
+        assertEquals(new URL("https://host.invalid/e"),ConversionUtils.makeRelativeURL(base ,"https://host.invalid/e"));
+        assertEquals(new URL("http://host.invalid:8081/e"),ConversionUtils.makeRelativeURL(base ,"http://host.invalid:8081/e"));
+        assertEquals(new URL("https://host.invalid:8081/e"),ConversionUtils.makeRelativeURL(base ,"https://host.invalid:8081/e"));
+    }
+
     public void testRemoveSlashDotDot()
     {
         assertEquals("/path/", ConversionUtils.removeSlashDotDot("/path/"));

@@ -91,11 +91,12 @@ public class ConversionUtils {
     }
 
     /**
-     * Generate a relative URL, allowing for extraneous leading "../" segments.
+     * Generate an absolute URL from a possibly relative location,
+     * allowing for extraneous leading "../" segments.
      * The Java {@link URL#URL(URL, String)} constructor does not remove these.
      *
-     * @param baseURL
-     * @param location relative location, possibly with extraneous leading "../"
+     * @param baseURL the base URL which is used to resolve missing protocol/host in the location
+     * @param location the location, possibly with extraneous leading "../"
      * @return URL with extraneous ../ removed
      * @throws MalformedURLException
      */
