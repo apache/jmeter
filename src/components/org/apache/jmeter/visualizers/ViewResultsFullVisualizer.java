@@ -32,7 +32,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -107,6 +109,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     // Maximum size that we will display
     private static final int MAX_DISPLAY_SIZE =
         JMeterUtils.getPropDefault("view.results.tree.max_size", 200 * 1024); // $NON-NLS-1$
+
+    // default display order
+    private static final String VIEWERS_ORDER =
+        JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
 
     private ResultRenderer resultsRender = null;
 
@@ -288,13 +294,11 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
         VerticalPanel leftPane = new VerticalPanel();
         leftPane.add(treePane, BorderLayout.CENTER);
-        VerticalPanel leftDownPane = new VerticalPanel();
-        leftDownPane.add(createComboRender(), BorderLayout.NORTH);
+        leftPane.add(createComboRender(), BorderLayout.NORTH);
         autoScrollCB = new JCheckBox(JMeterUtils.getResString("view_results_autoscroll")); // $NON-NLS-1$
         autoScrollCB.setSelected(false);
         autoScrollCB.addItemListener(this);
-        leftDownPane.add(autoScrollCB, BorderLayout.SOUTH);
-        leftPane.add(leftDownPane, BorderLayout.SOUTH);
+        leftPane.add(autoScrollCB, BorderLayout.SOUTH);
         return leftPane;
     }
 
@@ -318,6 +322,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         String textRenderer = JMeterUtils.getResString("view_results_render_text"); // $NON-NLS-1$
         Object textObject = null;
+        Map<String, ResultRenderer> map = new HashMap<String, ResultRenderer>(classesToAdd.size());
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes
@@ -326,10 +331,29 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     textObject=renderer;
                 }
                 renderer.setBackgroundColor(getBackground());
-                selectRenderPanel.addItem(renderer);
+                map.put(renderer.getClass().getName(), renderer);
             } catch (Exception e) {
-                log.warn("Error in load result render:" + clazz, e);
+                log.warn("Error loading result renderer:" + clazz, e);
             }
+        }
+        if(VIEWERS_ORDER.length()>0) {
+            String[] keys = VIEWERS_ORDER.split(",");
+            for (String key : keys) {
+                if(key.startsWith(".")) {
+                    key = "org.apache.jmeter.visualizers"+key; //$NON-NLS-1$
+                }
+                ResultRenderer renderer = map.remove(key);
+                if(renderer != null) {
+                    selectRenderPanel.addItem(renderer);
+                } else {
+                    log.warn("Missing (check spelling error in renderer name) or already added(check doublon) " +
+                    		"result renderer, check property 'view.results.tree.renderers_order', renderer name:'"+key+"'");
+                }
+            }
+        }
+        // Add remaining (plugins or missed in property)
+        for (ResultRenderer renderer : map.values()) {
+            selectRenderPanel.addItem(renderer);
         }
         nodesModel.setSelectedItem(textObject); // preset to "Text" option
         return selectRenderPanel;
