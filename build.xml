@@ -385,6 +385,7 @@
     <include name="${lib.dir}/${rhino.jar}"/>
     <include name="${lib.dir}/${jodd-core.jar}"/>
     <include name="${lib.dir}/${jodd-lagarto.jar}"/>
+    <include name="${lib.dir}/${jodd-log.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>
@@ -456,6 +457,7 @@
     <pathelement location="${lib.dir}/${rhino.jar}"/>
     <pathelement location="${lib.dir}/${jodd-core.jar}"/>
     <pathelement location="${lib.dir}/${jodd-lagarto.jar}"/>
+    <pathelement location="${lib.dir}/${jodd-log.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
     <pathelement location="${lib.dir}/${junit.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
@@ -2921,6 +2923,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="rhino"/>
         <process_jarfile jarname="jodd-core"/>
         <process_jarfile jarname="jodd-lagarto"/>
+        <process_jarfile jarname="jodd-log"/>
         <process_jarfile jarname="jsoup"/>
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
