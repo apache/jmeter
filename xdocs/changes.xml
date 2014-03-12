@@ -136,6 +136,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Controllers</h3>
 <ul>
+<li><bugzilla>56243</bugzilla> - Foreach works incorrectly with indexes on subsequent iterations </li>
 </ul>
 
 <h3>Listeners</h3>
