@@ -2613,6 +2613,11 @@ run JMeter unless all the JMeter jars are added.
       </antcall>
 
       <antcall target="batchtest">
+          <!-- Foreach works incorrectly with indexes on subsequent iterations -->
+          <param name="batchtest.name" value="Bug56243"/>
+      </antcall>
+
+  	  <antcall target="batchtest">
           <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
           <!-- This is unaffected by the bug; it just checks the script works OK in local mode -->
           <param name="batchtest.name" value="Bug54685"/>
