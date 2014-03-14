@@ -187,6 +187,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 sampler.setArguments(urlConfig.getArguments());
                 // Set the file uploads
                 sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
+                sampler.setDoBrowserCompatibleMultipart(true); // we are parsing browser input here
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
             } else if (postData.trim().startsWith("<?") 
                     || HTTPConstants.PUT.equals(sampler.getMethod())
