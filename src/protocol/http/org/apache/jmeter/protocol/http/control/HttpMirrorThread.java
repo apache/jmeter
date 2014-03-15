@@ -39,6 +39,12 @@ import org.apache.oro.text.regex.Perl5Matcher;
 /**
  * Thread to handle one client request. Gets the request from the client and
  * sends the response back to the client.
+ * The server responds to some header settings:
+ * X-ResponseStatus - the response code/message; default "200 OK"
+ * X-SetHeaders - pipe-separated list of headers to return
+ * X-ResponseLength - truncates the response to the stated length
+ * X-SetCookie - set a cookie
+ * X-Sleep - sleep before returning
  */
 public class HttpMirrorThread implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
