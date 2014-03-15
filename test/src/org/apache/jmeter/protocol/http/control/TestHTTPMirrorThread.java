@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.Socket;
+import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
@@ -342,6 +343,26 @@ public class TestHTTPMirrorThread extends TestCase {
         conn.connect();
         assertEquals(302, conn.getResponseCode());
         assertEquals("Temporary Redirect", conn.getResponseMessage());
+    }
+
+    public void testQueryStatus() throws Exception {
+        URL url = new URI("http",null,"localhost",HTTP_SERVER_PORT,"/path","status=303 See Other",null).toURL();
+        System.err.println(url);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.connect();
+        assertEquals(303, conn.getResponseCode());
+        assertEquals("See Other", conn.getResponseMessage());
+    }
+
+    public void testQueryRedirect() throws Exception {
+        URL url = new URI("http",null,"localhost",HTTP_SERVER_PORT,"/path","redirect=/a/b/c/d?q",null).toURL();
+        System.err.println(url);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setInstanceFollowRedirects(false);
+        conn.connect();
+        assertEquals(302, conn.getResponseCode());
+        assertEquals("Temporary Redirect", conn.getResponseMessage());
+        assertEquals("/a/b/c/d?q",conn.getHeaderField("Location"));
     }
 
     public void testHeaders() throws Exception {

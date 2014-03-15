@@ -173,8 +173,9 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
 <li><bugzilla>55959</bugzilla> - improve error message when Test Script Recorder fails due to I/O problem</li>
-<li><bugzilla>52013</bugzilla> -  Test Script Recorder's Child View Results Tree does not take into account Test Script Recorder excluded/included URLs. Based on report and analysis of James Liang</li>
+<li><bugzilla>52013</bugzilla> - Test Script Recorder's Child View Results Tree does not take into account Test Script Recorder excluded/included URLs. Based on report and analysis of James Liang</li>
 <li><bugzilla>56119</bugzilla> - File uploads fail every other attempt using timers. Enable idle timeouts for servers that don't send Keep-Alive headers.</li>
+<li><bugzilla>56272</bugzilla> -  MirrorServer should support query parameters for status and redirects</li>
 </ul>
 
 <h3>Other samplers</h3>
