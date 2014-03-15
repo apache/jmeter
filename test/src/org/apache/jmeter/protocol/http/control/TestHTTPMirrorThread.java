@@ -22,24 +22,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.Socket;
-/*
-import org.apache.jmeter.engine.util.ValueReplacer;
-import org.apache.jmeter.protocol.http.control.HttpMirrorControl;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.util.EncoderCache;
-import org.apache.jmeter.protocol.http.util.HTTPArgument;
-import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.oro.text.regex.MatchResult;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.PatternMatcherInput;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
-*/
+import java.net.URL;
+
+import org.apache.commons.io.IOUtils;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -60,7 +48,9 @@ public class TestHTTPMirrorThread extends TestCase {
     public TestHTTPMirrorThread(String arg0) {
         super(arg0);
     }
-    
+
+    // We need to use a suite in order to preserve the server across test cases
+    // With JUnit4 we could use before/after class annotations
     public static Test suite(){
         TestSetup setup = new TestSetup(new TestSuite(TestHTTPMirrorThread.class)){         
             private HttpMirrorServer httpServer;
@@ -333,6 +323,57 @@ public class TestHTTPMirrorThread extends TestCase {
         // TODO - implement testing of chunked post request
     }
 */    
+
+    public void testStatus() throws Exception {
+        URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("X-ResponseStatus", "302 Temporary Redirect");
+        conn.connect();
+        assertEquals(302, conn.getResponseCode());
+        assertEquals("Temporary Redirect", conn.getResponseMessage());
+    }
+
+    public void testHeaders() throws Exception {
+        URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("X-SetHeaders", "Location: /abcd|X-Dummy: none");
+        conn.connect();
+        assertEquals(200, conn.getResponseCode());
+        assertEquals("OK", conn.getResponseMessage());
+        assertEquals("/abcd",conn.getHeaderField("Location"));
+        assertEquals("none",conn.getHeaderField("X-Dummy"));
+    }
+
+    public void testResponseLength() throws Exception {
+        URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("X-ResponseLength", "10");
+        conn.connect();
+        final InputStream inputStream = conn.getInputStream();
+        assertEquals(10, IOUtils.toByteArray(inputStream).length);
+        inputStream.close();
+    }
+
+    public void testCookie() throws Exception {
+        URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("X-SetCookie", "four=2*2");
+        conn.connect();
+        assertEquals("four=2*2",conn.getHeaderField("Set-Cookie"));
+    }
+
+    public void testSleep() throws Exception {
+        URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.addRequestProperty("X-Sleep", "1000");
+        conn.connect();
+        long now = System.currentTimeMillis();
+        final InputStream inputStream = conn.getInputStream();
+        while(inputStream.read() != -1) {}
+        inputStream.close();
+        final long elapsed = System.currentTimeMillis() - now;
+        assertTrue("Expected > 1000 " + elapsed, elapsed >= 1000);
+    }
 
     /**
      * Check that the the two byte arrays have identical content
