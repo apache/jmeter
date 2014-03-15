@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -134,7 +135,7 @@ public class HttpMirrorThread implements Runnable {
                 out.write(baos.toByteArray());
             }
             // Check if we have found a content-length header
-            String contentLengthHeaderValue = getRequestHeaderValue(headerString, "Content-Length"); //$NON-NLS-1$
+            String contentLengthHeaderValue = getRequestHeaderValue(headerString, HTTPConstants.HEADER_CONTENT_LENGTH);
             if(contentLengthHeaderValue != null) {
                 contentLength = Integer.parseInt(contentLengthHeaderValue);
             }
@@ -143,7 +144,7 @@ public class HttpMirrorThread implements Runnable {
             if(sleepHeaderValue != null) {
                 TimeUnit.MILLISECONDS.sleep(Integer.parseInt(sleepHeaderValue));
             }
-            String transferEncodingHeaderValue = getRequestHeaderValue(headerString, "Transfer-Encoding"); //$NON-NLS-1$
+            String transferEncodingHeaderValue = getRequestHeaderValue(headerString, HTTPConstants.TRANSFER_ENCODING);
             if(transferEncodingHeaderValue != null) {
                 isChunked = transferEncodingHeaderValue.equalsIgnoreCase("chunked"); //$NON-NLS-1$
                 // We only support chunked transfer encoding
