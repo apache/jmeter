@@ -116,8 +116,9 @@ public class HttpMirrorThread implements Runnable {
                         String params[] = query.split("&");
                         for(String param : params) {
                             String parts[] = param.split("=",2);
-                            parameters.put(parts[0], parts[1]);
-                            System.err.println(parts[0]+ "=>" + parts[1]);
+                            if (parts.length==2) {
+                                parameters.put(parts[0], parts[1]);
+                            }
                         }
                     }
                 } catch (URISyntaxException e) {
