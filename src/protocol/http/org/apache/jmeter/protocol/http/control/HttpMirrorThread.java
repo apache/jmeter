@@ -23,6 +23,9 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -45,12 +48,20 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * X-ResponseLength - truncates the response to the stated length
  * X-SetCookie - set a cookie
  * X-Sleep - sleep before returning
+ *
+ * It also responds to some query strings:
+ * status=nnn Message (overrides X-ResponseStatus)
+ * redirect=location - sends a temporary redirect
  */
 public class HttpMirrorThread implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String ISO_8859_1 = "ISO-8859-1"; //$NON-NLS-1$
     private static final byte[] CRLF = { 0x0d, 0x0a };
+
+    private static final String REDIRECT = "redirect"; //$NON-NLS-1$
+
+    private static final String STATUS = "status"; //$NON-NLS-1$
 
     /** Socket to client. */
     private final Socket clientSocket;
@@ -93,11 +104,38 @@ public class HttpMirrorThread implements Runnable {
 
             baos.close();
             final String headerString = headers.toString();
+            final String[] requestParts = headerString.split("\\s+",3);
+            final String requestMethod = requestParts[0];
+            final String requestPath = requestParts[1];
+            final HashMap<String, String> parameters = new HashMap<String, String>();
+            if (HTTPConstants.GET.equals(requestMethod)) {
+                try {
+                    URI uri = new URI(requestPath);
+                    String query = uri.getQuery();
+                    if (query != null) {
+                        String params[] = query.split("&");
+                        for(String param : params) {
+                            String parts[] = param.split("=",2);
+                            parameters.put(parts[0], parts[1]);
+                            System.err.println(parts[0]+ "=>" + parts[1]);
+                        }
+                    }
+                } catch (URISyntaxException e) {
+                    log.warn("error parsing "+requestPath, e);
+                }
+            }
 
             // Look for special Response Length header
             String responseStatusValue = getRequestHeaderValue(headerString, "X-ResponseStatus"); //$NON-NLS-1$
             if(responseStatusValue == null) {
                 responseStatusValue = "200 OK";
+            }
+            // Do this before the status check so can override the status, e.g. with a different redirect type
+            if (parameters.containsKey(REDIRECT)) {
+                responseStatusValue = "302 Temporary Redirect";
+            }
+            if (parameters.containsKey(STATUS)) {
+                responseStatusValue = parameters.get(STATUS);
             }
 
             log.debug("Write headers");
@@ -108,16 +146,22 @@ public class HttpMirrorThread implements Runnable {
             out.write("Content-Type: text/plain".getBytes(ISO_8859_1)); //$NON-NLS-1$
             out.write(CRLF);
 
-            // Look for special Cookie request
+            if (parameters.containsKey(REDIRECT)) {
+                out.write((HTTPConstants.HEADER_LOCATION + ": ").getBytes(ISO_8859_1)); //$NON-NLS-1$
+                out.write(parameters.get(REDIRECT).getBytes(ISO_8859_1));
+                out.write(CRLF);
+            }
+
+            // Look for special Header request
             String headersValue = getRequestHeaderValue(headerString, "X-SetHeaders"); //$NON-NLS-1$
             if (headersValue != null) {
                 String[] headersToSet = headersValue.split("\\|");
                 for (String string : headersToSet) {
                     out.write(string.getBytes(ISO_8859_1));
-                    out.write(CRLF);                    
+                    out.write(CRLF);
                 }
             }
-            
+
             // Look for special Response Length header
             String responseLengthValue = getRequestHeaderValue(headerString, "X-ResponseLength"); //$NON-NLS-1$
             int responseLength=-1;
