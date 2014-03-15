@@ -875,15 +875,15 @@ public class PostWriterTest extends TestCase {
     }
     
     private void checkContentTypeMultipart(HttpURLConnection conn, String boundaryString) {
-        assertEquals("multipart/form-data; boundary=" + boundaryString, conn.getRequestProperty("Content-Type"));
+        assertEquals("multipart/form-data; boundary=" + boundaryString, conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 
     private void checkContentTypeUrlEncoded(HttpURLConnection conn) {
-        assertEquals(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED, conn.getRequestProperty("Content-Type"));
+        assertEquals(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED, conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 
     private void checkContentLength(HttpURLConnection conn, int length) {
-        assertEquals(Integer.toString(length), conn.getRequestProperty("Content-Length"));
+        assertEquals(Integer.toString(length), conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_LENGTH));
     }
 
     /**
