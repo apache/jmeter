@@ -109,9 +109,16 @@ public class HttpMirrorThread implements Runnable {
             final String requestPath = requestParts[1];
             final HashMap<String, String> parameters = new HashMap<String, String>();
             if (HTTPConstants.GET.equals(requestMethod)) {
-                try {
-                    URI uri = new URI(requestPath);
-                    String query = uri.getQuery();
+                int querypos = requestPath.indexOf('?');
+                if (querypos >= 0) {
+                    String query;
+                    try {
+                        URI uri = new URI(requestPath); // Use URI because it will decode the query
+                        query = uri.getQuery();
+                    } catch (URISyntaxException e) {
+                        log.warn(e.getMessage());
+                        query=requestPath.substring(querypos+1);
+                    }
                     if (query != null) {
                         String params[] = query.split("&");
                         for(String param : params) {
@@ -121,8 +128,6 @@ public class HttpMirrorThread implements Runnable {
                             }
                         }
                     }
-                } catch (URISyntaxException e) {
-                    log.warn("error parsing "+requestPath, e);
                 }
             }
 
