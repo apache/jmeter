@@ -6157,18 +6157,27 @@ It uses default port 8081 since 2.6.
         be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than 0. Defaults to 25</property>
 </properties>
 <note>
-Note that you can get more control on responses by adding an HTTP Header Manager with the following name/value pairs:
+Note that you can get more control over the responses by adding an HTTP Header Manager with the following name/value pairs:
+</note>
 <properties>
         <property name="X-Sleep" required="No">Time to sleep in ms before sending response</property>
         <property name="X-SetCookie" required="No">Cookies to be set on response</property>
         <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status responses</a>, example 200 OK, 500 Internal Server Error ....</property>
-        <property name="X-ResponseLength" required="No">Size of response, this enable returning only a substring of Request content</property>
-        <property name="X-SetHeaders" required="No">Pipe separator list of headers, example:<br/> 
+        <property name="X-ResponseLength" required="No">Size of response, this trims the response to the requested size if that is less than the total size</property>
+        <property name="X-SetHeaders" required="No">Pipe separated list of headers, example:<br/> 
         <code>headerA=valueA|headerB=valueB</code> would set headerA to valueA and headerB to valueB.        
         </property>
 </properties>
-
-</note>
+<p>
+You can also use the following query parameters:
+</p>
+<properties>
+    <property name="redirect" required="No">Generates a 302 (Temporary Redirect) with the provided location.
+    e.g. ?redirect=/path 
+    </property>
+    <property name="status" required="No">Overrides the default status return. e.g. ?status=404 Not Found</property>
+    <property name="v" required="No">Verbose flag, writes some details to standard output. e.g. first line and redirect location if specified</property>
+</properties>
 </component>
 
 <component name="Property Display" index="&sect-num;.9.7"  width="804" height="508" screenshot="property_display.png">
