@@ -452,7 +452,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         HttpURLConnection conn = null;
 
         String urlStr = url.toString();
-        log.debug("Start : sample " + urlStr);
+        if (log.isDebugEnabled()) {
+            log.debug("Start : sample " + urlStr);
+            log.debug("method " + method+ " followingRedirect " + areFollowingRedirect + " depth " + frameDepth);            
+        }
 
         HTTPSampleResult res = new HTTPSampleResult();
         res.setMonitor(isMonitor());
