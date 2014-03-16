@@ -52,6 +52,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * It also responds to some query strings:
  * status=nnn Message (overrides X-ResponseStatus)
  * redirect=location - sends a temporary redirect
+ * v - verbose, i.e. print some details to stdout
  */
 public class HttpMirrorThread implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -62,6 +63,8 @@ public class HttpMirrorThread implements Runnable {
     private static final String REDIRECT = "redirect"; //$NON-NLS-1$
 
     private static final String STATUS = "status"; //$NON-NLS-1$
+
+    private static final String VERBOSE = "v"; // $NON-NLS-1$
 
     /** Socket to client. */
     private final Socket clientSocket;
@@ -104,7 +107,8 @@ public class HttpMirrorThread implements Runnable {
 
             baos.close();
             final String headerString = headers.toString();
-            final String[] requestParts = headerString.split("\\s+",3);
+            final String firstLine = headerString.substring(0, headerString.indexOf('\r'));
+            final String[] requestParts = firstLine.split("\\s+");
             final String requestMethod = requestParts[0];
             final String requestPath = requestParts[1];
             final HashMap<String, String> parameters = new HashMap<String, String>();
@@ -125,10 +129,18 @@ public class HttpMirrorThread implements Runnable {
                             String parts[] = param.split("=",2);
                             if (parts.length==2) {
                                 parameters.put(parts[0], parts[1]);
+                            } else { // allow for parameter name only
+                                parameters.put(parts[0], "");
                             }
                         }
                     }
                 }
+            }
+
+            final boolean verbose = parameters.containsKey(VERBOSE);
+            
+            if (verbose) {
+                System.out.println(firstLine);
             }
 
             // Look for special Response Length header
@@ -153,8 +165,15 @@ public class HttpMirrorThread implements Runnable {
             out.write(CRLF);
 
             if (parameters.containsKey(REDIRECT)) {
-                out.write((HTTPConstants.HEADER_LOCATION + ": ").getBytes(ISO_8859_1)); //$NON-NLS-1$
-                out.write(parameters.get(REDIRECT).getBytes(ISO_8859_1));
+                StringBuilder sb = new StringBuilder();
+                sb.append(HTTPConstants.HEADER_LOCATION);
+                sb.append(": "); //$NON-NLS-1$
+                sb.append(parameters.get(REDIRECT));
+                final String redirectLocation = sb.toString();
+                if (verbose) {
+                    System.out.println(redirectLocation);
+                }
+                out.write(redirectLocation.getBytes(ISO_8859_1));
                 out.write(CRLF);
             }
 
