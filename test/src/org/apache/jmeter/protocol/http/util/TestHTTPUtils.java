@@ -92,13 +92,18 @@ public class TestHTTPUtils extends TestCase {
     }
     
     public void testsanitizeUrl() throws Exception {
-        testSanitizeUrl("http://localhost/", "http://localhost/");
-        testSanitizeUrl("http://localhost/a/b/c%7Cd", "http://localhost/a/b/c|d");
-        testSanitizeUrl("http://localhost:8080/%5B%5D", "http://localhost:8080/%5B%5D");
-        testSanitizeUrl("http://localhost:8080/?%5B%5D", "http://localhost:8080/?%5B%5D");
-        testSanitizeUrl("http://localhost:8080/?%25%5B%5D%21%40%24%25%5E*%28%29", "http://localhost:8080/?%25%5B%5D!@$%^*()#");
-        testSanitizeUrl("http://localhost:8080/%5B%5D?%5B%5D%21%40%24%25%5E*%28%29", "http://localhost:8080/%5B%5D?[]!@$%^*()#");
-
+        testSanitizeUrl("http://localhost/", "http://localhost/"); // normal, no encoding needed
+        testSanitizeUrl("http://localhost/a/b/c%7Cd", "http://localhost/a/b/c|d"); // pipe needs encoding
+        testSanitizeUrl("http://localhost:8080/%5B%5D", "http://localhost:8080/%5B%5D"); // already encoded
+        testSanitizeUrl("http://localhost:8080/?%5B%5D", "http://localhost:8080/?%5B%5D"); //already encoded
+        testSanitizeUrl("http://localhost:8080/?!£$*():@~;'%22%25%5E%7B%7D[]%3C%3E%7C%5C#",
+                        "http://localhost:8080/?!£$*():@~;'\"%^{}[]<>|\\#"); // unencoded query
+        testSanitizeUrl("http://localhost:8080/?!£$*():@~;'%22%25%5E%7B%7D[]%3C%3E%7C%5C#",
+                        "http://localhost:8080/?!£$*():@~;'%22%25%5E%7B%7D[]%3C%3E%7C%5C#"); // encoded
+        testSanitizeUrl("http://localhost:8080/!£$*():@~;'%22%25%5E%7B%7D%5B%5D%3C%3E%7C%5C#",
+                        "http://localhost:8080/!£$*():@~;'\"%^{}[]<>|\\#"); // unencoded path
+        testSanitizeUrl("http://localhost:8080/!£$*():@~;'%22%25%5E%7B%7D%5B%5D%3C%3E%7C%5C#",
+                        "http://localhost:8080/!£$*():@~;'%22%25%5E%7B%7D%5B%5D%3C%3E%7C%5C#"); // encoded
     }
     
 
