@@ -127,6 +127,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>56222</bugzilla> - NPE if jmeter.httpclient.strict_rfc2616=true and location is not absolute</li>
 <li><bugzilla>56263</bugzilla> - DefaultSamplerCreator should set BrowserCompatible Multipart true</li>
 <li><bugzilla>56231</bugzilla> - Move redirect location processing from HC3/HC4 samplers to HTTPSamplerBase#followRedirects()</li>
+<li><bugzilla>56207</bugzilla> - URLs get encoded on redirects in HC3.1 & HC4 samplers</li>
 </ul>
 
 <h3>Other Samplers</h3>

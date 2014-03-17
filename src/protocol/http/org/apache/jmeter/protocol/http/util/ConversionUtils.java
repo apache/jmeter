@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 
 // @see TestHTTPUtils for unit tests
 
@@ -45,11 +43,10 @@ public class ConversionUtils {
     private static final String CHARSET_EQ = "charset="; // $NON-NLS-1$
     private static final int CHARSET_EQ_LEN = CHARSET_EQ.length();
     
-    private static final String SLASHDOTDOT = "/..";
-    private static final String DOTDOT = "..";
-    private static final String SLASH = "/";
-    private static final String COLONSLASHSLASH = "://";
-    private static final String COLON = ":";
+    private static final String SLASHDOTDOT = "/.."; // $NON-NLS-1$
+    private static final String DOTDOT = ".."; // $NON-NLS-1$
+    private static final String SLASH = "/"; // $NON-NLS-1$
+    private static final String COLONSLASHSLASH = "://"; // $NON-NLS-1$
 
     /**
      * Extract the encoding (charset) from the Content-Type,
@@ -134,26 +131,26 @@ public class ConversionUtils {
     }
     
     /**
-     * Escapes reserved chars in a non-encoded URL or partially encoded one.
-     * Warning: it won't work on all unencoded URLs.
-     * For example, the unencoded URL http://localhost/% will cause an Exception.
-     * Any instances of % must have been encoded as %25 within the path portion.
-     * @param url non-encoded or partially encoded URL
+     * Checks a URL and encodes it if necessary,
+     * i.e. if it is not currently correctly encoded.
+     * Warning: it may not work on all unencoded URLs.
+     * @param url non-encoded URL
      * @return URI which has been encoded as necessary
      * @throws URISyntaxException
-     * @throws UnsupportedEncodingException 
      */
-    public static final URI sanitizeUrl(URL url) throws URISyntaxException, UnsupportedEncodingException {
-        URIBuilder builder = 
-                new URIBuilder()
-            .setScheme(url.getProtocol())
-            .setHost(url.getHost())
-            .setPort(url.getPort())
-            .setUserInfo(url.getUserInfo())
-            .setPath(url.getPath() != null ? URLDecoder.decode(url.getPath(), "UTF-8") : null) // $NON-NLS-1$
-            .setQuery(url.getQuery());
-        URI uri = builder.build();
-        return uri;
+    public static final URI sanitizeUrl(URL url) throws URISyntaxException {
+        try {
+            return url.toURI(); // Assume the URL is already encoded
+        } catch (URISyntaxException e) { // it's not, so encode it
+          return new URI(
+          url.getProtocol(),
+          url.getUserInfo(),
+          url.getHost(),
+          url.getPort(),
+          url.getPath(),
+          url.getQuery(),
+          url.getRef()); // anchor or fragment
+        }
     }
 
     /**
@@ -269,53 +266,4 @@ public class ConversionUtils {
         return s.toString();
     }
 
-    /**
-     * Builds Full url (containing scheme, host,port) from relative URL
-     * as per RFC http://tools.ietf.org/html/rfc3986#section-4.2
-     * @param lastUrl URL
-     * @param redirectLocation absolute URL
-     * @return Full URL
-     * 
-     */
-    public static final String buildFullUrlFromRelative(URL lastUrl,
-            String redirectLocation) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(lastUrl.getProtocol())
-            .append(COLONSLASHSLASH)
-            .append(lastUrl.getHost());
-        if(lastUrl.getPort()!= -1) {
-            builder.append(COLON).append(lastUrl.getPort());
-        }
-        if(redirectLocation.startsWith(SLASH)) {
-            // A relative reference that begins with a single slash 
-            // character is termed an absolute-path reference
-            builder.append(redirectLocation);
-        } else {
-            // A relative reference that does not begin with a
-            // slash character is termed a relative-path reference
-            // We need to merge a relative-path reference with the path of the base URI
-            // http://tools.ietf.org/html/rfc3986#section-5.2.3
-            if(lastUrl.getPath().isEmpty()) {
-                // If the base URI has a defined authority component and an empty
-                // path, then return a string consisting of "/" concatenated with the
-                // reference's path; otherwise,
-                builder.append(SLASH).append(redirectLocation);
-            } else {
-                // string consisting of the reference's path component
-                // appended to all but the last segment of the base URI's path (i.e.,
-                // excluding any characters after the right-most "/" in the base URI
-                // path, or excluding the entire base URI path if it does not contain
-                // any "/" characters).     
-                String path = lastUrl.getPath();
-                int index = path.lastIndexOf(SLASH);
-                if(index == -1) {
-                    builder.append(SLASH).append(redirectLocation);
-                } else {
-                    builder.append(path.substring(0, index+1))
-                        .append(redirectLocation);
-                }
-            }
-        }
-        return builder.toString();
-    }
 }
