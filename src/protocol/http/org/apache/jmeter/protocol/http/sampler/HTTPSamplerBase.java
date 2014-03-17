@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -1024,7 +1025,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public void parseArguments(String queryString, String contentEncoding) {
         String[] args = JOrphanUtils.split(queryString, QRY_SEP);
+        final boolean isDebug = log.isDebugEnabled();
         for (int i = 0; i < args.length; i++) {
+            if (isDebug) {
+                log.debug("Arg: " + args[i]);
+            }
             // need to handle four cases:
             // - string contains name=value
             // - string contains name=
@@ -1047,6 +1052,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 value="";
             }
             if (name.length() > 0) {
+                if (isDebug) {
+                    log.debug("Name: " + name+ " Value: " + value+ " Metadata: " + metaData);
+                }
                 // If we know the encoding, we can decode the argument value,
                 // to make it easier to read for the user
                 if(!StringUtils.isEmpty(contentEncoding)) {
@@ -1414,12 +1422,17 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 method = HTTPConstants.GET;
             }
             try {
-                final URL url = ConversionUtils.makeRelativeURL(lastRes.getURL(), location);
+                URL url = ConversionUtils.makeRelativeURL(lastRes.getURL(), location);
+                url = ConversionUtils.sanitizeUrl(url).toURL();
                 if (log.isDebugEnabled()) {
                     log.debug("Location as URL: " + url.toString());
                 }
                 lastRes = sample(url, method, true, frameDepth);
             } catch (MalformedURLException e) {
+                errorResult(e, lastRes);
+                // The redirect URL we got was not a valid URL
+                invalidRedirectUrl = true;
+            } catch (URISyntaxException e) {
                 errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL
                 invalidRedirectUrl = true;

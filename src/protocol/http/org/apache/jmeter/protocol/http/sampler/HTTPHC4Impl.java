@@ -104,7 +104,6 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -128,8 +127,6 @@ import org.apache.log.Logger;
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final boolean STRICT_RFC_2616 = JMeterUtils.getPropDefault("jmeter.httpclient.strict_rfc2616", false);
 
     /** retry count to be used (default 0); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
@@ -267,6 +264,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected HTTPSampleResult sample(URL url, String method,
             boolean areFollowingRedirect, int frameDepth) {
 
+        if (log.isDebugEnabled()) {
+            log.debug("Start : sample " + url.toString());
+            log.debug("method " + method+ " followingRedirect " + areFollowingRedirect + " depth " + frameDepth);            
+        }
+
         HTTPSampleResult res = createSampleResult(url, method);
 
         HttpClient httpClient = setupClient(url);
@@ -360,17 +362,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     throw new IllegalArgumentException("Missing location header in redirect for " + httpRequest.getRequestLine());
                 }
                 String redirectLocation = headerLocation.getValue();
-                if(!STRICT_RFC_2616 && !(redirectLocation.startsWith("http://")|| redirectLocation.startsWith("https://"))) {
-                    redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
-                }
-                try {
-                    res.setRedirectLocation(redirectLocation); // in case sanitising fails
-                    final URL redirectUrl = new URL(redirectLocation);
-                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(redirectUrl).toString());
-                } catch (Exception e) {
-                    log.error("Error in redirect URL for "  + httpRequest.getRequestLine()
-                            +"\n\tCould not sanitize URL: " + redirectLocation + "\n\t", e);
-                }
+                res.setRedirectLocation(redirectLocation);
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options

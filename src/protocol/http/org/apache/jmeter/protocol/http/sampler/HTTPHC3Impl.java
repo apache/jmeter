@@ -69,7 +69,6 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -94,8 +93,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     /** retry count to be used (default 1); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient3.retrycount", 0);
-
-    private static final boolean STRICT_RFC_2616 = JMeterUtils.getPropDefault("jmeter.httpclient.strict_rfc2616", false);
 
     private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
@@ -194,8 +191,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
         String urlStr = url.toString();
 
-        log.debug("Start : sample " + urlStr);
-        log.debug("method " + method);
+        if (log.isDebugEnabled()) {
+            log.debug("Start : sample " + urlStr);
+            log.debug("method " + method+ " followingRedirect " + areFollowingRedirect + " depth " + frameDepth);            
+        }
 
         HttpMethodBase httpMethod = null;
 
@@ -322,17 +321,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
                     throw new IllegalArgumentException("Missing location header");
                 }
-                try {
-                    String redirectLocation = headerLocation.getValue();
-                    if(!STRICT_RFC_2616 && !(redirectLocation.startsWith("http://")||redirectLocation.startsWith("https://"))) {
-                        redirectLocation = ConversionUtils.buildFullUrlFromRelative(url, redirectLocation);
-                    }
-                    res.setRedirectLocation(redirectLocation); // in case sanitising fails
-                    final URL redirectUrl = new URL(redirectLocation);
-                    res.setRedirectLocation(ConversionUtils.sanitizeUrl(redirectUrl).toString());
-                } catch (Exception e) {
-                    log.error("Error sanitizing URL:"+headerLocation.getValue()+", message:"+e.getMessage());
-                }
+                String redirectLocation = headerLocation.getValue();
+                res.setRedirectLocation(redirectLocation); // in case sanitising fails
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
