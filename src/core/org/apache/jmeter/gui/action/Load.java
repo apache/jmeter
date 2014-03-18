@@ -171,7 +171,7 @@ public class Load implements Command {
     public static boolean insertLoadedTree(final int id, final HashTree tree, final boolean merging) throws IllegalUserActionException {
         // convertTree(tree);
         if (tree == null) {
-            throw new IllegalUserActionException("Empty TestPlan - see log file");
+            throw new IllegalUserActionException("Empty TestPlan or error reading test plan - see log file");
         }
         final boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
 
