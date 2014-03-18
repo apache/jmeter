@@ -71,7 +71,12 @@ public class LoopController extends GenericController implements Serializable {
     public int getLoops() {
         // Evaluation occurs when nbLoops is not yet evaluated 
         // or when nbLoops is equal to special value INFINITE_LOOP_COUNT
-        if(nbLoops==null || nbLoops.intValue()==INFINITE_LOOP_COUNT) {
+        if(nbLoops==null || // No evaluated yet
+                nbLoops.intValue()==0 || // Last iteration led to nbLoops == 0, 
+                                         // in this case as resetLoopCount will not be called, 
+                                         // it leads to no further evaluations if we don't evaluate, see BUG 56276
+                nbLoops.intValue()==INFINITE_LOOP_COUNT // Number of iteration is set to infinite
+                ) {
             try {
                 JMeterProperty prop = getProperty(LOOPS);
                 nbLoops = Integer.valueOf(prop.getStringValue());
