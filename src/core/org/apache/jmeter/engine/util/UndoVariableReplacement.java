@@ -26,11 +26,11 @@ import java.util.Map;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.StringUtilities;
 
 /**
- * Replaces ${key} by value extracted from {@link JMeterVariables} if any
+ * Replaces ${key} by value extracted from 
+ * {@link org.apache.jmeter.threads.JMeterVariables JMeterVariables} if any
  */
 public class UndoVariableReplacement extends AbstractTransformer {
     public UndoVariableReplacement(CompoundVariable masterFunction, Map<String, String> variables) {
