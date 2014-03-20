@@ -21,6 +21,23 @@
 ##
 ##   ==============================================
 
+# Minimal version to run JMeter
+MINIMAL_VERSION=1.6.0
+
+# Check if Java is present and the minimal version requierement
+_java=`type java | awk '{ print $ NF }'`
+CURRENT_VERSION=$("$_java" -version 2>&1 | awk -F '"' '/version/ {print $2}')
+minimal_version=$(echo $MINIMAL_VERSION | awk -F'.' '{ print $2 }')
+current_version=$(echo $CURRENT_VERSION | awk -F'.' '{ print $2 }')
+if [ $current_version ]; then
+        if [ $current_version -lt $minimal_version ]; then
+                 echo "Error: Java version is too lower to run JMeter. Needs at least Java >= ${MINIMAL_VERSION}." 
+                 exit 1
+        fi
+    else
+         echo "Not able to find Java executable or version. Please check your Java installation."
+         exit 1
+fi
 
 # The following should be reasonably good values for most tests running
 # on Sun JVMs. Following is the analysis on which it is based. If it's total
@@ -70,8 +87,13 @@ TENURING="-XX:MaxTenuringThreshold=2"
 # without having gone through a lot of Full GC-ing just before the OOM:
 # EVACUATION="-XX:MaxLiveObjectEvacuationRatio=20%"
 
-# Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
-PERM="-XX:PermSize=64m -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled"
+# Java 8 remove Permanent generation, don't settings the PermSize
+if [ $current_version -lt "8" ]; then
+    # Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
+    PERM="-XX:PermSize=64m -XX:MaxPermSize=128m"
+fi
+
+CLASS_UNLOAD="-XX:+CMSClassUnloadingEnabled"
 
 # Finally, some tracing to help in case things go astray:
 #DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
@@ -81,6 +103,6 @@ DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $PERM"
+ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $PERM $CLASS_UNLOAD"
 
 java $ARGS $JVM_ARGS -jar "`dirname "$0"`/ApacheJMeter.jar" "$@"

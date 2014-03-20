@@ -26,6 +26,40 @@ rem              this is used by the jmeterw.cmd script.
 rem
 rem   =====================================================
 
+rem Minimal version to run JMeter
+set MINIMAL_VERSION=1.6.0
+
+for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do (
+    rem @echo Debug Output: %%g
+    set JAVAVER=%%g
+)
+set JAVAVER=%JAVAVER:"=%
+if not defined JAVAVER (
+    @echo Not able to find Java executable or version. Please check your Java installation.
+    set ERRORLEVEL=2-NO_JAVA
+    goto pause
+)
+@echo JAVAVER %JAVAVER%
+for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
+    set current_minor=%%w
+)
+
+for /f "delims=. tokens=1-3" %%v in ("%MINIMAL_VERSION%") do (
+    set minimal_minor=%%w
+)
+
+if not defined current_minor (
+    @echo Not able to find Java executable or version. Please check your Java installation.
+    set ERRORLEVEL=2-NO_JAVA
+    goto pause
+)
+rem @echo Debug: CURRENT=%current_minor% - MINIMAL=%minimal_minor%
+if %current_minor% LSS %minimal_minor% (
+    @echo Error: Java version is too lower to run JMeter. Needs at least Java greater or equal to %MINIMAL_VERSION%
+    set ERRORLEVEL=3-JAVA_TOO_LOWER
+    goto pause
+)
+
 if .%JM_LAUNCH% == . set JM_LAUNCH=java.exe
 
 if not "%OS%"=="Windows_NT" goto win9xStart
@@ -74,7 +108,13 @@ set HEAP=-Xms512m -Xmx512m
 set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
 set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%
 set TENURING=-XX:MaxTenuringThreshold=2
-set PERM=-XX:PermSize=64m -XX:MaxPermSize=128m -XX:+CMSClassUnloadingEnabled
+rem Java 8 remove Permanent generation, don't settings the PermSize
+if %current_minor% LEQ "8" (
+    rem Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
+    set PERM=-XX:PermSize=64m -XX:MaxPermSize=128m
+)
+
+set CLASS_UNLOAD=-XX:+CMSClassUnloadingEnabled
 rem set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
 
 rem Always dump on OOM (does not cost anything unless triggered)
@@ -95,7 +135,7 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %NEW% %SURVIVOR% %TENURING% %PERM% %DDRAW%
+set ARGS=%DUMP% %HEAP% %NEW% %SURVIVOR% %TENURING% %PERM% %CLASS_UNLOAD% %DDRAW%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
@@ -111,3 +151,4 @@ echo errorlevel=%ERRORLEVEL%
 pause
 
 :end
+
