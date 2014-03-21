@@ -19,11 +19,13 @@
 package org.apache.jmeter.util;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.Locale;
-import java.util.Set;
-
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.ResourceBundle;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 
@@ -36,22 +38,44 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
 
     private static final String[] LANGUAGE_TAGS;
 
+    public static final String[][] LANGUAGE_NAMES;
+
     static {
-        Set<String> shortNames = new HashSet<String>();
+        Map<String, ScriptEngineFactory> nameMap = new HashMap<String, ScriptEngineFactory>();
         ScriptEngineManager sem = new ScriptEngineManager();
         final List<ScriptEngineFactory> engineFactories = sem.getEngineFactories();
         for(ScriptEngineFactory fact : engineFactories){
             List<String> names = fact.getNames();
             for(String shortName : names) {
-                shortNames.add(shortName.toLowerCase(Locale.ENGLISH));
+                nameMap.put(shortName.toLowerCase(Locale.ENGLISH), fact);
             }
         }
-        LANGUAGE_TAGS = shortNames.toArray(new String[shortNames.size()]);
+        LANGUAGE_TAGS = nameMap.keySet().toArray(new String[nameMap.size()]);
         Arrays.sort(LANGUAGE_TAGS);
+        LANGUAGE_NAMES = new String[nameMap.size()][2];
+        int i = 0;
+        for(Entry<String, ScriptEngineFactory> me : nameMap.entrySet()) {
+            final String key = me.getKey();
+            LANGUAGE_NAMES[i][0] = key;
+            final ScriptEngineFactory fact = me.getValue();
+            LANGUAGE_NAMES[i++][1] = key + 
+                    "     (" // $NON-NLS-1$
+                    + fact.getLanguageName() + " " + fact.getLanguageVersion()  // $NON-NLS-1$
+                    + " / "  // $NON-NLS-1$
+                    + fact.getEngineName() + " " + fact.getEngineVersion() // $NON-NLS-1$
+                    + ")";   // $NON-NLS-1$
+        }
     }
 
+    private static final ResourceBundle NAME_BUNDLE = new ListResourceBundle() {            
+        @Override
+        protected Object[][] getContents() {
+            return LANGUAGE_NAMES;
+        }
+    };
+
     protected JSR223BeanInfoSupport(Class<? extends TestBean> beanClass) {
-        super(beanClass, LANGUAGE_TAGS);
+        super(beanClass, LANGUAGE_TAGS, NAME_BUNDLE);
     }
 
 }
