@@ -21,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -340,7 +341,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
             text = fixGetAsTextBug(typeEditor.getAsText());
 
             if (!acceptsOther && !isATag(text)) {
-                throw new IllegalArgumentException("Value not allowed: "+text);
+                throw new IllegalArgumentException("Value not allowed: '" + text + "' is not in " + Arrays.toString(getTags()));
             }
         }
 
