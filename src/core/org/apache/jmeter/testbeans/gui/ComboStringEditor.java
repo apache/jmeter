@@ -106,7 +106,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
         this(tags, noEdit, noUndefined, null);
     }
 
-    private ComboStringEditor(String []pTags, boolean noEdit, boolean noUndefined, ResourceBundle rb) {
+    ComboStringEditor(String []pTags, boolean noEdit, boolean noUndefined, ResourceBundle rb) {
 
         tags = pTags == null ? EMPTY_STRING_ARRAY : pTags.clone();
 
