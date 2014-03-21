@@ -19,6 +19,7 @@
 package org.apache.jmeter.util;
 
 import java.beans.PropertyDescriptor;
+import java.util.ResourceBundle;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
@@ -30,13 +31,20 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  */
 public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
-    protected ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] LANGUAGE_TAGS) {
+    public ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] languageTags) {
+        this(beanClass, languageTags, null);
+    }
+
+    protected ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] LANGUAGE_TAGS, ResourceBundle rb) {
         super(beanClass);
         PropertyDescriptor p;
 
         p = property("scriptLanguage"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        if (rb != null) {
+            p.setValue(RESOURCE_BUNDLE, rb);
+        }
         p.setValue(TAGS, LANGUAGE_TAGS);
 
         createPropertyGroup("scriptingLanguage", // $NON-NLS-1$
