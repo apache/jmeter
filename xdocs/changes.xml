@@ -235,7 +235,8 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
 <ul>
-<li>Oliver LLoyd (email at oliverlloyd.com)</li>
+<li>Oliver LLoyd (email at oliverlloyd.com) for his help on <bugzilla>56119</bugzilla></li>
+<li>Vladimir Ryabtsev (greatvovan at gmail.com) for his help on <bugzilla>56243</bugzilla> and <bugzilla>56276</bugzilla></li>
 </ul>
 
 Apologies if we have omitted anyone else.
