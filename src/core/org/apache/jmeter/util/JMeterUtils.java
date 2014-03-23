@@ -775,6 +775,7 @@ public class JMeterUtils implements UnitTestManager {
             ans = (Integer.valueOf(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim()))
                     .intValue();
         } catch (Exception e) {
+            log.warn("Unexpected value set for int property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -801,6 +802,7 @@ public class JMeterUtils implements UnitTestManager {
                 ans = ((Integer.valueOf(strVal)).intValue() == 1);
             }
         } catch (Exception e) {
+            log.warn("Unexpected value set for boolean property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -820,6 +822,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = (Long.valueOf(appProperties.getProperty(propName, Long.toString(defaultVal)).trim())).longValue();
         } catch (Exception e) {
+            log.warn("Unexpected value set for long property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -836,12 +839,14 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String getPropDefault(String propName, String defaultVal) {
         String ans = defaultVal;
-        try {
+        try 
+        {
             String value = appProperties.getProperty(propName, defaultVal);
             if(value != null) {
                 ans = value.trim();
             }
         } catch (Exception e) {
+            // TODO Can this happen ?
             ans = defaultVal;
         }
         return ans;
@@ -859,6 +864,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = appProperties.getProperty(propName);
         } catch (Exception e) {
+            // TODO Can this happen ?
             ans = null;
         }
         return ans;
@@ -1045,7 +1051,7 @@ public class JMeterUtils implements UnitTestManager {
                     titleMsg,
                     JOptionPane.ERROR_MESSAGE);
         } catch (HeadlessException e) {
-                log.warn("reportErrorToUser(\"" + errorMsg + "\") caused", e);
+            log.warn("reportErrorToUser(\"" + errorMsg + "\") caused", e);
         }
     }
 
