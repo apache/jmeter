@@ -701,18 +701,10 @@ public class JMeterUtils implements UnitTestManager {
      */
     // TODO only called by UserParameterXMLParser.getXMLParameters which is a deprecated class
     public static XMLReader getXMLParser() {
-        XMLReader reader = null;
         final String parserName = getPropDefault("xml.parser", // $NON-NLS-1$
                 "org.apache.xerces.parsers.SAXParser");  // $NON-NLS-1$
-        try {
-            reader = (XMLReader) instantiate(parserName,
-                    "org.xml.sax.XMLReader"); // $NON-NLS-1$
-            // reader = xmlFactory.newSAXParser().getXMLReader();
-        } catch (Exception e) {
-            reader = (XMLReader) instantiate(parserName, // $NON-NLS-1$
-                    "org.xml.sax.XMLReader"); // $NON-NLS-1$
-        }
-        return reader;
+        return (XMLReader) instantiate(parserName,
+                "org.xml.sax.XMLReader"); // $NON-NLS-1$
     }
 
     /**
