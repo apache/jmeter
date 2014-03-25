@@ -204,6 +204,7 @@ public class JMeterThread implements Runnable, Interruptible {
         long delay = now - endTime;
         if ((delay >= 0)) {
             running = false;
+            log.info("Stopping because end time detected by thread: " + threadName);
         }
     }
 
@@ -282,6 +283,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 }
                 if (controller.isDone()) {
                     running = false;
+                    log.info("Thread is done: " + threadName);
                 }
             }
         }
