@@ -39,7 +39,7 @@ if not defined JAVAVER (
     set ERRORLEVEL=2-NO_JAVA
     goto pause
 )
-@echo JAVAVER %JAVAVER%
+rem @echo JAVAVER %JAVAVER%
 for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
     set current_minor=%%w
 )
