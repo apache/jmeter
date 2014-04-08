@@ -73,6 +73,8 @@ public class JMeterVersionTest extends JMeterTestCase {
         return new File(JMETER_HOME, relativeFile);
     }
 
+    private Properties prop;
+
     @Override
     protected void setUp() throws Exception {
         final Properties buildProp = new Properties();
@@ -94,6 +96,7 @@ public class JMeterVersionTest extends JMeterTestCase {
         // remove docs-only jars
         propNames.remove("velocity");
         propNames.remove("commons-lang");
+        prop = buildProp;
     }
 
     public void testEclipse() throws Exception {
@@ -204,6 +207,27 @@ public class JMeterVersionTest extends JMeterTestCase {
             if (!liceNames.remove(l)) {
                 fail("Mismatched version in license file " + l);
             }
+        }
+    }
+
+    /**
+     * Check that all downloads use Maven Central
+     */
+    public void testMavenDownload() {
+        int fails = 0;
+        for (Entry<Object, Object> entry : prop.entrySet()) {
+            final String key = (String) entry.getKey();
+            if (key.endsWith(".loc")) {
+                final String value = (String) entry.getValue();
+                if (! value.startsWith("${maven2.repo}")) {
+                    fails++;
+                    System.err.println("ERROR: non-Maven download detected\n" + key + "=" +value);
+                }
+            }
+        }
+        if (fails > 0) {
+            // TODO replace with fail()
+            System.err.println("ERROR: All files must be available from Maven Central; but " + fails + " use(s) a different download source");
         }
     }
 }
