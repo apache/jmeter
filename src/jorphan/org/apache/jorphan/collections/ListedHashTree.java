@@ -116,7 +116,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
-    public void replace(Object currentKey, Object newKey) {
+    public void replaceKey(Object currentKey, Object newKey) {
         HashTree tree = getTree(currentKey);
         data.remove(currentKey);
         data.put(newKey, tree);

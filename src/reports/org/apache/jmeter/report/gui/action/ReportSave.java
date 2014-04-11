@@ -127,7 +127,7 @@ public class ReportSave implements Command {
             ReportTreeNode item = (ReportTreeNode) iter.next();
             convertSubTree(tree.getTree(item));
             TestElement testElement = item.getTestElement();
-            tree.replace(item, testElement);
+            tree.replaceKey(item, testElement);
         }
     }
 }
