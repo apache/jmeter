@@ -62,7 +62,7 @@ public class ConvertListeners implements HashTreeTraverser {
                     // Used for remote notification of threads start/stop,see BUG 54152
                     try {
                         RemoteThreadsListenerWrapper wrapper = new RemoteThreadsListenerWrapper(new RemoteThreadsListenerImpl());
-                        subTree.replace(item, wrapper);
+                        subTree.replaceKey(item, wrapper);
                     } catch (RemoteException e) {
                         log.error("Error replacing "+RemoteThreadsListenerTestElement.class.getName() 
                                 +" by wrapper:"+RemoteThreadsListenerWrapper.class.getName(), e); 
@@ -78,13 +78,13 @@ public class ConvertListeners implements HashTreeTraverser {
                     RemoteSampleListener rtl = new RemoteSampleListenerImpl(item);
                     if (item instanceof TestStateListener && item instanceof SampleListener) { // TL - all
                         RemoteListenerWrapper wrap = new RemoteListenerWrapper(rtl);
-                        subTree.replace(item, wrap);
+                        subTree.replaceKey(item, wrap);
                     } else if (item instanceof TestStateListener) {
                         RemoteTestListenerWrapper wrap = new RemoteTestListenerWrapper(rtl);
-                        subTree.replace(item, wrap);
+                        subTree.replaceKey(item, wrap);
                     } else if (item instanceof SampleListener) {
                         RemoteSampleListenerWrapper wrap = new RemoteSampleListenerWrapper(rtl);
-                        subTree.replace(item, wrap);
+                        subTree.replaceKey(item, wrap);
                     } else {
                         log.warn("Could not replace Remotable item "+item.getClass().getName());
                     }

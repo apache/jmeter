@@ -211,7 +211,7 @@ public class Save implements Command {
             JMeterTreeNode item = (JMeterTreeNode) iter.next();
             convertSubTree(tree.getTree(item));
             TestElement testElement = item.getTestElement(); // requires JMeterTreeNode
-            tree.replace(item, testElement);
+            tree.replaceKey(item, testElement);
         }
     }
 }
