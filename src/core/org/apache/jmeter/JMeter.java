@@ -860,7 +860,7 @@ public class JMeter implements JMeterPlugin {
                             HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
                                 convertSubTree(replacementTree);
-                                tree.replace(item, rc);
+                                tree.replaceKey(item, rc);
                                 tree.set(rc, replacementTree);
                             }
                         } 
@@ -885,14 +885,14 @@ public class JMeter implements JMeterPlugin {
                             HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
                                 convertSubTree(replacementTree);
-                                tree.replace(item, rc);
+                                tree.replaceKey(item, rc);
                                 tree.set(rc, replacementTree);
                             }
                         }
                     } else { // Not a ReplaceableController
                         convertSubTree(tree.getTree(item));
                         TestElement testElement = item.getTestElement();
-                        tree.replace(item, testElement);
+                        tree.replaceKey(item, testElement);
                     }
                  } else { // Not enabled
                     tree.remove(item);
