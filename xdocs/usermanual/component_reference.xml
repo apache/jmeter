@@ -3250,7 +3250,7 @@ For details, see <complink name="BSF Listener"/>.
     <description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
-Output is generated every n seconds (default 3 minutes) on the appropriate
+Output is generated every n seconds (default 30 seconds) on the appropriate
 time boundary, so that multiple test runs on the same time will be synchronised.
 See jmeter.properties file for the summariser configuration items:
 <pre>
@@ -3259,7 +3259,7 @@ See jmeter.properties file for the summariser configuration items:
 #summariser.name=summary
 #
 # interval between summaries (in seconds) default 3 minutes
-#summariser.interval=180
+#summariser.interval=30
 #
 # Write messages to log file
 #summariser.log=true
@@ -3279,17 +3279,17 @@ label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (
 label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
 </pre>
 The "label" is the the name of the element.
-The "+" means that the line is a delta line, i.e. shows the changes since the last output.
-The "=" means that the line is a totals line, i.e. it shows the running total.
+The "+" means that the line is a delta line, i.e. shows the changes since the last output.<br/>
+The "=" means that the line is a totals line, i.e. it shows the running total.<br/>
 Entries in the jmeter log file also include time-stamps.
 The example "806 in  91.6s =    8.8/s" means that there were 806 samples recorded in 91.6 seconds,
-and that works out at 8.8 samples per second.
-The Avg (Average), Min(imum) and Max(imum) times are in milliseconds.
-"Err" means number of errors (also shown as percentage).
+and that works out at 8.8 samples per second.<br/>
+The Avg (Average), Min(imum) and Max(imum) times are in milliseconds.<br/>
+"Err" means number of errors (also shown as percentage).<br/>
 The last two lines will appear at the end of a test.
 They will not be synchronised to the appropriate time boundary.
 Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
-The first delta will generally be lower, as JMeter synchronises to the interval boundary.
+The first delta will generally be lower, as JMeter synchronizes to the interval boundary.
 The last delta will be lower, as the test will generally not finish on an exact interval boundary.
 <p>
 The label is used to group sample results together. 
@@ -3298,7 +3298,11 @@ So if you have multiple Thread Groups and want to summarize across them all, the
 Different summary groupings can be implemented
 by using suitable labels and adding the summarisers to appropriate parts of the test plan.
 </p>
-
+<note>
+In Non-GUI mode by default a Generate Summary Results listener named "summariser" is configured, if you have already added one to your Test Plan, ensure you name it differently 
+otherwise results will be accumulated under this label (summary) leading to wrong results (sum of total samples + samples located under the Parent of Generate Summary Results listener).
+This is not a bug but a design choice allowing to summarize across thread groups.
+</note>
     </description>
  <properties>
  <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.
