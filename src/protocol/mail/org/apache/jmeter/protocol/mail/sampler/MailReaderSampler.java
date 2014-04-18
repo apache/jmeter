@@ -205,8 +205,14 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                 folder.open(Folder.READ_ONLY);
             }
 
+            final int messageTotal = folder.getMessageCount();
+            int n = getNumMessages();
+            if (n == ALL_MESSAGES || n > messageTotal) {
+                n = messageTotal;
+            }
+
             // Get directory
-            Message messages[] = folder.getMessages();
+            Message messages[] = folder.getMessages(1,n);
             StringBuilder pdata = new StringBuilder();
             pdata.append(messages.length);
             pdata.append(" messages found\n");
@@ -214,19 +220,13 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             parent.setDataType(SampleResult.TEXT);
             parent.setContentType("text/plain"); // $NON-NLS-1$
 
-            int n = getNumMessages();
-            if (n == ALL_MESSAGES || n > messages.length) {
-                n = messages.length;
-            }
-
-            parent.setSampleCount(n); // TODO is this sensible?
+            parent.setSampleCount(messages.length); // TODO is this sensible?
 
             busy = true;
-            for (int i = 0; busy && i < n; i++) {
+            for (Message message : messages) {
                 StringBuilder cdata = new StringBuilder();
                 SampleResult child = new SampleResult();
                 child.sampleStart();
-                Message message = messages[i];
 
                 cdata.append("Message "); // $NON-NLS-1$
                 cdata.append(message.getMessageNumber());
