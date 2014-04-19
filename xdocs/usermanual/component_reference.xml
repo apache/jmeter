@@ -1737,6 +1737,7 @@ The actual provider names for POP3 and IMAP are <code>pop3</code> and <code>imap
 <property name="Password" required="">User login password (N.B. this is stored unencrypted in the test plan)</property>
 <property name="Folder" required="Yes, if using IMAP(S)">The IMAP(S) folder to use. See below for use with <code>file</code> protocol.</property>
 <property name="Number of messages to retrieve" required="Yes">Set this to retrieve all or some messages</property>
+<property name="Fetch headers only" required="Yes">If selected, only the message headers will be retrieved.</property>
 <property name="Delete messages from the server" required="Yes">If set, messages will be deleted after retrieval</property>
 <property name="Store the message using MIME" required="Yes">Whether to store the message as MIME. 
 If so, then the entire raw message is stored in the Response Data; the headers are not stored as they are available in the data. 
