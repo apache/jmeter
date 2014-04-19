@@ -91,6 +91,10 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
 
+    private static final String FALSE = "false";  // $NON-NLS-1$
+
+    private static final String TRUE = "true";  // $NON-NLS-1$
+
     public boolean isUseLocalTrustStore() {
         return getPropertyAsBoolean(SecuritySettingsPanel.USE_LOCAL_TRUSTSTORE);
     }
@@ -138,7 +142,8 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     public SampleResult sample(Entry e) {
         SampleResult parent = new SampleResult();
         boolean isOK = false; // Did sample succeed?
-        boolean deleteMessages = getDeleteMessages();
+        final boolean deleteMessages = getDeleteMessages();
+        final String serverProtocol = getServerType();
 
         parent.setSampleLabel(getName());
 
@@ -154,20 +159,20 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             Properties props = new Properties();
 
             if (isUseStartTLS()) {
-                props.setProperty("mail.pop3s.starttls.enable", "true");
+                props.setProperty(mailProp(serverProtocol, "starttls.enable"), TRUE);  // $NON-NLS-1$
                 if (isEnforceStartTLS()){
                     // Requires JavaMail 1.4.2+
-                    props.setProperty("mail.pop3s.starttls.require", "true");
+                    props.setProperty(mailProp(serverProtocol, "starttls.require"), TRUE);  // $NON-NLS-1$
                 }
             }
 
             if (isTrustAllCerts()) {
                 if (isUseSSL()) {
-                    props.setProperty("mail.pop3s.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
-                    props.setProperty("mail.pop3s.ssl.socketFactory.fallback", "false");
+                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.class"), TRUST_ALL_SOCKET_FACTORY);  // $NON-NLS-1$
+                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 } else if (isUseStartTLS()) {
-                    props.setProperty("mail.pop3s.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
-                    props.setProperty("mail.pop3s.ssl.socketFactory.fallback", "false");
+                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.class"), TRUST_ALL_SOCKET_FACTORY);  // $NON-NLS-1$
+                    props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 }
             } else if (isUseLocalTrustStore()){
                 File truststore = new File(getTrustStoreToUse());
@@ -183,12 +188,14 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                 }
                 if (isUseSSL()) {
                     // Requires JavaMail 1.4.2+
-                    props.put("mail.pop3s.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
-                    props.put("mail.pop3s.ssl.socketFactory.fallback", "false");
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory"),   // $NON-NLS-1$ 
+                            new LocalTrustStoreSSLSocketFactory(truststore));
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 } else if (isUseStartTLS()) {
                     // Requires JavaMail 1.4.2+
-                    props.put("mail.pop3s.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
-                    props.put("mail.pop3s.ssl.socketFactory.fallback", "false");
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory"),  // $NON-NLS-1$
+                            new LocalTrustStoreSSLSocketFactory(truststore));
+                    props.put(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
                 }
             }
 
@@ -196,7 +203,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             Session session = Session.getInstance(props, null);
 
             // Get the store
-            Store store = session.getStore(getServerType());
+            Store store = session.getStore(serverProtocol);
             store.connect(getServer(), getPortAsInt(), getUserName(), getPassword());
 
             // Get folder
@@ -592,5 +599,19 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
 
     public void setHeaderOnly(boolean selected) {
         setProperty(HEADER_ONLY, selected, HEADER_ONLY_DEFAULT);
+    }
+
+    /**
+     * Build a property name of the form "mail.pop3s.starttls.require"
+     *
+     * @param protocol the protocol, i.e. "pop3s" in the example
+     * @param propname the property name suffix, i.e. "starttls.require" in the example
+     * @return the constructed name
+     */
+    private String mailProp(String protocol, String propname) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("mail.").append(protocol).append(".");
+        sb.append(propname);
+        return sb.toString();
     }
 }
