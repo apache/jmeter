@@ -74,6 +74,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
 
     private JCheckBox storeMimeMessageBox;
 
+    private JCheckBox headerOnlyBox;
+
     // Labels - don't make these static, else language change will not work
 
     private final String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
@@ -95,6 +97,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
     private final String FolderLabel = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
 
     private final String STOREMIME = JMeterUtils.getResString("mail_reader_storemime");// $NON-NLS-1$
+
+    private final String headerOnlyLabel = JMeterUtils.getResString("mail_reader_header_only");// $NON-NLS-1$
 
     private static final String INBOX = "INBOX"; // $NON-NLS-1$
     
@@ -129,6 +133,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
             someMessagesButton.setSelected(true);
             someMessagesField.setText(mrs.getNumMessagesString());
         }
+        headerOnlyBox.setSelected(mrs.getHeaderOnly());
         deleteBox.setSelected(mrs.getDeleteMessages());
         storeMimeMessageBox.setSelected(mrs.isStoreMimeMessage());
         securitySettingsPanel.configure(element);
@@ -166,6 +171,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         } else {
             mrs.setNumMessages(someMessagesField.getText());
         }
+        mrs.setHeaderOnly(headerOnlyBox.isSelected());
         mrs.setDeleteMessages(deleteBox.isSelected());
         mrs.setStoreMimeMessage(storeMimeMessageBox.isSelected());
         
@@ -232,6 +238,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         numMessagesPanel.add(someMessagesButton);
         numMessagesPanel.add(someMessagesField);
 
+        headerOnlyBox = new JCheckBox(headerOnlyLabel);
+
         deleteBox = new JCheckBox(DeleteLabel);
 
         storeMimeMessageBox = new JCheckBox(STOREMIME);
@@ -242,6 +250,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         settings.add(Box.createVerticalStrut(5));
         settings.add(settingsPanel);
         settings.add(numMessagesPanel);
+        settings.add(headerOnlyBox);
         settings.add(deleteBox);
         settings.add(storeMimeMessageBox);
         settings.add(securitySettingsPanel);
@@ -291,6 +300,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
 
     private void initGui() {
         allMessagesButton.setSelected(true);
+        headerOnlyBox.setSelected(false);
         deleteBox.setSelected(false);
         storeMimeMessageBox.setSelected(false);
         folderBox.setText(INBOX);

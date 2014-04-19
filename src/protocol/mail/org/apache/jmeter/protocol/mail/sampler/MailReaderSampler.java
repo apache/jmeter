@@ -79,7 +79,9 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     private static final String DELETE = "delete"; // $NON-NLS-1$
     private static final String NUM_MESSAGES = "num_messages"; // $NON-NLS-1$
     private static final String NEW_LINE = "\n"; // $NON-NLS-1$
-    private static final String STORE_MIME_MESSAGE = "storeMimeMessage";
+    private static final String STORE_MIME_MESSAGE = "storeMimeMessage"; // $NON-NLS-1$
+    private static final String HEADER_ONLY = "headerOnly"; // $NON-NLS-1$
+    private static final boolean HEADER_ONLY_DEFAULT = false;
     //-
 
     private static final String RFC_822_DEFAULT_ENCODING = "iso-8859-1"; // RFC 822 uses ascii per default
@@ -222,6 +224,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
 
             parent.setSampleCount(messages.length); // TODO is this sensible?
 
+            final boolean headerOnly = getHeaderOnly();
             busy = true;
             for (Message message : messages) {
                 StringBuilder cdata = new StringBuilder();
@@ -260,7 +263,9 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                     }
                     child.setResponseHeaders(cdata.toString());
                     cdata.setLength(0);
-                    appendMessageData(child, message);
+                    if (!headerOnly) {
+                        appendMessageData(child, message);
+                    }
                 }
 
                 if (deleteMessages) {
@@ -579,5 +584,13 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+
+    public boolean getHeaderOnly() {
+        return getPropertyAsBoolean(HEADER_ONLY, HEADER_ONLY_DEFAULT);
+    }
+
+    public void setHeaderOnly(boolean selected) {
+        setProperty(HEADER_ONLY, selected, HEADER_ONLY_DEFAULT);
     }
 }
