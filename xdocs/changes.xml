@@ -217,6 +217,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>21695</bugzilla> - Unix jmeter start script assumes it is on PATH, not a link</li>
 <li><bugzilla>56292</bugzilla> - Add the check of the Java's version in startup files and disable some options when is Java v8 engine</li>
 <li><bugzilla>56298</bugzilla> - JSR223 language display does not show which engine will be used</li>
+<li><bugzilla>56455</bugzilla> - Batch files: drop support for non-NT Windows shell scripts</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
