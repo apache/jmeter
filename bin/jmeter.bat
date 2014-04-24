@@ -26,6 +26,8 @@ rem              this is used by the jmeterw.cmd script.
 rem
 rem   =====================================================
 
+setlocal
+
 rem Minimal version to run JMeter
 set MINIMAL_VERSION=1.6.0
 
@@ -62,40 +64,12 @@ if %current_minor% LSS %minimal_minor% (
 
 if .%JM_LAUNCH% == . set JM_LAUNCH=java.exe
 
-if not "%OS%"=="Windows_NT" goto win9xStart
-:winNTStart
-@setlocal
-
-rem Need to check if we are using the 4NT shell...
-if "%eval[2+2]" == "4" goto setup4NT
-
 if exist jmeter.bat goto winNT1
 if .%JMETER_BIN% == . set JMETER_BIN=%~dp0
 
 :winNT1
 rem On NT/2K grab all arguments at once
 set JMETER_CMD_LINE_ARGS=%*
-goto doneStart
-
-:setup4NT
-set JMETER_CMD_LINE_ARGS=%$
-goto doneStart
-
-:win9xStart
-rem Slurp the command line arguments.  This loop allows for an unlimited number of 
-rem arguments (up to the command line limit, anyway).
-
-set JMETER_CMD_LINE_ARGS=
-
-:setupArgs
-if %1a==a goto doneStart
-set JMETER_CMD_LINE_ARGS=%JMETER_CMD_LINE_ARGS% %1
-shift
-goto setupArgs
-
-:doneStart
-rem This label provides a place for the argument list loop to break out 
-rem and for NT handling to skip to.
 
 rem The following link describes the -XX options:
 rem http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
