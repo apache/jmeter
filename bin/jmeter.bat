@@ -35,13 +35,12 @@ for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do (
     rem @echo Debug Output: %%g
     set JAVAVER=%%g
 )
-set JAVAVER=%JAVAVER:"=%
 if not defined JAVAVER (
     @echo Not able to find Java executable or version. Please check your Java installation.
     set ERRORLEVEL=2
     goto pause
 )
-rem @echo JAVAVER %JAVAVER%
+set JAVAVER=%JAVAVER:"=%
 for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do (
     set current_minor=%%w
 )
