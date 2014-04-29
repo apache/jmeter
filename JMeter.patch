@@ -1,0 +1,34 @@
+Index: src/core/org/apache/jmeter/JMeter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/core/org/apache/jmeter/JMeter.java	(revision dc5f5406147902e4e2768063c41e5de77a02a116)
++++ src/core/org/apache/jmeter/JMeter.java	(revision )
+@@ -107,6 +107,7 @@
+     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
+ 
+     public static final String JMETER_NON_GUI = "JMeter.NonGui"; // $NON-NLS-1$
++    public static final String CONTINUE_ON_REMOTE_ENGINE_FAIL = "continue.on.remote_engine_fail"; // $NON-NLS-1$
+ 
+     // If the -t flag is to "LAST", then the last loaded file (if any) is used
+     private static final String USE_LAST_JMX = "LAST";
+@@ -819,8 +820,17 @@
+                     println("No remote engines were started.");
+                     return;
+                 }
+-                if(failingEngines.size()>0) {
++                boolean continueOnEngineFail=JMeterUtils.getPropDefault(CONTINUE_ON_REMOTE_ENGINE_FAIL,true);
++                if(failingEngines.size()>0&!continueOnEngineFail) {
+                     throw new IllegalArgumentException("The following remote engines could not be configured:"+failingEngines);
++                }
++                println("Number of failed remote engines: "+failingEngines.size());
++                println("Trying to re-init failed engines...");
++                for(String engine:failingEngines){
++                    JMeterEngine eng = doRemoteInit(engine, tree);
++                    if (null != eng) {
++                        engines.add(eng);
++                    }
+                 }
+                 println("Starting remote engines");
+                 log.info("Starting remote engines");
