@@ -984,12 +984,14 @@ public class JMeter implements JMeterPlugin {
                         throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
                     } else {
                         println("Number of failed remote engines: " + failingEngines.size());
+                        Thread.sleep(20000);
                         println("Trying to re-init failed engines...");
                         for (String engine : failingEngines) {
                             EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
                             engineReInitializer.start();
                             engineReInitializer.join();
                             JMeterEngine eng = engineReInitializer.getEngine();
+
                             if (null != eng) {
                                 engines.add(eng);
                             } else {

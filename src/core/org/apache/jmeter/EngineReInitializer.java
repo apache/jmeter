@@ -23,15 +23,32 @@ public class EngineReInitializer extends Thread {
 
     @Override
     public void run() {
-            try {
-                this.engine = new ClientJMeterEngine(this.engineStr);
-            } catch (Exception e) {
-                log.fatalError("Failure connecting to remote host: " + this.engineStr, e);
-                System.err.println("Failure connecting to remote host: " + this.engineStr + " " + e);
-                return;
-            }
-            engine.configure(this.tree);
+        try {
+            this.engine = new ClientJMeterEngine(this.engineStr);
+        } catch (Exception e) {
+            log.fatalError("Failure connecting to remote host: " + this.engineStr, e);
+            System.err.println("Failure connecting to remote host: " + this.engineStr + " " + e);
+            return;
         }
+        if (engine != null) {
+            engine.configure(this.tree);
+            return;
+        }
+
+
+
+/*
+        for (int i = 0; i < 3; i++) {
+            log.debug("Trying to re-initialize  "+this.engineStr+" "+String.valueOf(i)+" time");
+
+
+        }
+        if(engine==null){
+            log.debug("Failed to re-initialize "+engineStr);
+        }
+*/
+
+    }
 
     public JMeterEngine getEngine() {
         return engine;
