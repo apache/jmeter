@@ -983,7 +983,10 @@ public class JMeter implements JMeterPlugin {
                 println("Number of failed remote engines: " + failingEngines.size());
                 println("Trying to re-init failed engines...");
                 for (String engine : failingEngines) {
-                    JMeterEngine eng = doRemoteInit(engine, tree);
+                    EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
+                    engineReInitializer.start();
+                    engineReInitializer.join();
+                    JMeterEngine eng = engineReInitializer.getEngine();
                     if (null != eng) {
                         engines.add(eng);
                     }
