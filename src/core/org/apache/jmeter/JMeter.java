@@ -972,25 +972,28 @@ public class JMeter implements JMeterPlugin {
                         println("Failed to configure " + el);
                     }
                 }
-                if (engines.isEmpty()) {
-                    println("No remote engines were started.");
-                    return;
-                }
                 boolean continueOnEngineFail = JMeterUtils.getPropDefault(CONTINUE_ON_REMOTE_ENGINE_FAIL, true);
-                if (failingEngines.size() > 0 & !continueOnEngineFail) {
-                    throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
-                }
-                println("Number of failed remote engines: " + failingEngines.size());
-                println("Trying to re-init failed engines...");
-                for (String engine : failingEngines) {
-                    EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
-                    engineReInitializer.start();
-                    engineReInitializer.join();
-                    JMeterEngine eng = engineReInitializer.getEngine();
-                    if (null != eng) {
-                        engines.add(eng);
+
+                if (failingEngines.size() > 0) {
+                    if (!continueOnEngineFail) {
+                        throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
+                    }
+                } else {
+                    println("Number of failed remote engines: " + failingEngines.size());
+                    Thread.sleep(20000);
+                    println("Trying to re-init failed engines...");
+                    for (String engine : failingEngines) {
+                        EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
+                        engineReInitializer.start();
+                        engineReInitializer.join();
+                        JMeterEngine eng = engineReInitializer.getEngine();
+                        if (null != eng) {
+                            engines.add(eng);
+                        }
                     }
                 }
+
+
                 println("Starting remote engines");
                 log.info("Starting remote engines");
                 long now = System.currentTimeMillis();
