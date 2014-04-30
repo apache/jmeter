@@ -93,33 +93,32 @@ public class JMeter implements JMeterPlugin {
     // If the -j  or -l flag is set to LAST or LAST.log|LAST.jtl, then the last loaded file name is used to
     // generate the log file name by removing .JMX and replacing it with .log|.jtl
 
-    private static final int PROXY_PASSWORD     = 'a';// $NON-NLS-1$
-    private static final int JMETER_HOME_OPT    = 'd';// $NON-NLS-1$
-    private static final int HELP_OPT           = 'h';// $NON-NLS-1$
+    private static final int PROXY_PASSWORD = 'a';// $NON-NLS-1$
+    private static final int JMETER_HOME_OPT = 'd';// $NON-NLS-1$
+    private static final int HELP_OPT = 'h';// $NON-NLS-1$
     // jmeter.log
-    private static final int JMLOGFILE_OPT      = 'j';// $NON-NLS-1$
+    private static final int JMLOGFILE_OPT = 'j';// $NON-NLS-1$
     // sample result log file
-    private static final int LOGFILE_OPT        = 'l';// $NON-NLS-1$
-    private static final int NONGUI_OPT         = 'n';// $NON-NLS-1$
-    private static final int PROPFILE_OPT       = 'p';// $NON-NLS-1$
-    private static final int PROPFILE2_OPT      = 'q';// $NON-NLS-1$
-    private static final int REMOTE_OPT         = 'r';// $NON-NLS-1$
-    private static final int SERVER_OPT         = 's';// $NON-NLS-1$
-    private static final int TESTFILE_OPT       = 't';// $NON-NLS-1$
-    private static final int PROXY_USERNAME     = 'u';// $NON-NLS-1$
-    private static final int VERSION_OPT        = 'v';// $NON-NLS-1$
+    private static final int LOGFILE_OPT = 'l';// $NON-NLS-1$
+    private static final int NONGUI_OPT = 'n';// $NON-NLS-1$
+    private static final int PROPFILE_OPT = 'p';// $NON-NLS-1$
+    private static final int PROPFILE2_OPT = 'q';// $NON-NLS-1$
+    private static final int REMOTE_OPT = 'r';// $NON-NLS-1$
+    private static final int SERVER_OPT = 's';// $NON-NLS-1$
+    private static final int TESTFILE_OPT = 't';// $NON-NLS-1$
+    private static final int PROXY_USERNAME = 'u';// $NON-NLS-1$
+    private static final int VERSION_OPT = 'v';// $NON-NLS-1$
 
-    private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
+    private static final int SYSTEM_PROPERTY = 'D';// $NON-NLS-1$
     private static final int JMETER_GLOBAL_PROP = 'G';// $NON-NLS-1$
-    private static final int PROXY_HOST         = 'H';// $NON-NLS-1$
-    private static final int JMETER_PROPERTY    = 'J';// $NON-NLS-1$
-    private static final int LOGLEVEL           = 'L';// $NON-NLS-1$
-    private static final int NONPROXY_HOSTS     = 'N';// $NON-NLS-1$
-    private static final int PROXY_PORT         = 'P';// $NON-NLS-1$
-    private static final int REMOTE_OPT_PARAM   = 'R';// $NON-NLS-1$
-    private static final int SYSTEM_PROPFILE    = 'S';// $NON-NLS-1$
-    private static final int REMOTE_STOP        = 'X';// $NON-NLS-1$
-
+    private static final int PROXY_HOST = 'H';// $NON-NLS-1$
+    private static final int JMETER_PROPERTY = 'J';// $NON-NLS-1$
+    private static final int LOGLEVEL = 'L';// $NON-NLS-1$
+    private static final int NONPROXY_HOSTS = 'N';// $NON-NLS-1$
+    private static final int PROXY_PORT = 'P';// $NON-NLS-1$
+    private static final int REMOTE_OPT_PARAM = 'R';// $NON-NLS-1$
+    private static final int SYSTEM_PROPFILE = 'S';// $NON-NLS-1$
+    private static final int REMOTE_STOP = 'X';// $NON-NLS-1$
 
 
     /**
@@ -133,7 +132,7 @@ public class JMeter implements JMeterPlugin {
      * <li>A description of the option.</li>
      * </ul>
      */
-    private static final CLOptionDescriptor[] options = new CLOptionDescriptor[] {
+    private static final CLOptionDescriptor[] options = new CLOptionDescriptor[]{
             new CLOptionDescriptor("help", CLOptionDescriptor.ARGUMENT_DISALLOWED, HELP_OPT,
                     "print usage information and exit"),
             new CLOptionDescriptor("version", CLOptionDescriptor.ARGUMENT_DISALLOWED, VERSION_OPT,
@@ -142,7 +141,8 @@ public class JMeter implements JMeterPlugin {
                     "the jmeter property file to use"),
             new CLOptionDescriptor("addprop", CLOptionDescriptor.ARGUMENT_REQUIRED
                     | CLOptionDescriptor.DUPLICATES_ALLOWED, PROPFILE2_OPT,
-                    "additional JMeter property file(s)"),
+                    "additional JMeter property file(s)"
+            ),
             new CLOptionDescriptor("testfile", CLOptionDescriptor.ARGUMENT_REQUIRED, TESTFILE_OPT,
                     "the jmeter test(.jmx) file to run"),
             new CLOptionDescriptor("logfile", CLOptionDescriptor.ARGUMENT_REQUIRED, LOGFILE_OPT,
@@ -165,19 +165,24 @@ public class JMeter implements JMeterPlugin {
                     "Set password for proxy server that JMeter is to use"),
             new CLOptionDescriptor("jmeterproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_PROPERTY,
-                    "Define additional JMeter properties"),
+                    "Define additional JMeter properties"
+            ),
             new CLOptionDescriptor("globalproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_GLOBAL_PROP,
-                    "Define Global properties (sent to servers)\n\t\te.g. -Gport=123 or -Gglobal.properties"),
+                    "Define Global properties (sent to servers)\n\t\te.g. -Gport=123 or -Gglobal.properties"
+            ),
             new CLOptionDescriptor("systemproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, SYSTEM_PROPERTY,
-                    "Define additional system properties"),
+                    "Define additional system properties"
+            ),
             new CLOptionDescriptor("systemPropertyFile", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENT_REQUIRED, SYSTEM_PROPFILE,
-                    "additional system property file(s)"),
+                    "additional system property file(s)"
+            ),
             new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
-                    "[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
+                    "[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"
+            ),
             new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_OPT,
                     "Start remote servers (as defined in remote_hosts)"),
             new CLOptionDescriptor("remotestart", CLOptionDescriptor.ARGUMENT_REQUIRED, REMOTE_OPT_PARAM,
@@ -185,8 +190,8 @@ public class JMeter implements JMeterPlugin {
             new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
                     "the jmeter home directory to use"),
             new CLOptionDescriptor("remoteexit", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_STOP,
-            "Exit the remote servers at end of test (non-GUI)"),
-                    };
+                    "Exit the remote servers at end of test (non-GUI)"),
+    };
     private static final String[][] DEFAULT_ICONS = {
             {"org.apache.jmeter.control.gui.TestPlanGui", "org/apache/jmeter/images/beaker.gif"},     //$NON-NLS-1$ $NON-NLS-2$
             {"org.apache.jmeter.timers.gui.AbstractTimerGui", "org/apache/jmeter/images/timer.gif"},      //$NON-NLS-1$ $NON-NLS-2$
@@ -671,7 +676,7 @@ public class JMeter implements JMeterPlugin {
             String n = parser.getArgumentById(NONPROXY_HOSTS).getArgument();
             System.setProperty("http.nonProxyHosts", n);// $NON-NLS-1$
             System.setProperty("https.nonProxyHosts", n);// $NON-NLS-1$
-            log.info("Set http[s].nonProxyHosts: "+n);
+            log.info("Set http[s].nonProxyHosts: " + n);
         }
     }
 
@@ -977,18 +982,19 @@ public class JMeter implements JMeterPlugin {
                 if (failingEngines.size() > 0) {
                     if (!continueOnEngineFail) {
                         throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
-                    }
-                } else {
-                    println("Number of failed remote engines: " + failingEngines.size());
-                    Thread.sleep(20000);
-                    println("Trying to re-init failed engines...");
-                    for (String engine : failingEngines) {
-                        EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
-                        engineReInitializer.start();
-                        engineReInitializer.join();
-                        JMeterEngine eng = engineReInitializer.getEngine();
-                        if (null != eng) {
-                            engines.add(eng);
+                    } else {
+                        println("Number of failed remote engines: " + failingEngines.size());
+                        println("Trying to re-init failed engines...");
+                        for (String engine : failingEngines) {
+                            EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
+                            engineReInitializer.start();
+                            engineReInitializer.join();
+                            JMeterEngine eng = engineReInitializer.getEngine();
+                            if (null != eng) {
+                                engines.add(eng);
+                            } else {
+                                throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
+                            }
                         }
                     }
                 }
