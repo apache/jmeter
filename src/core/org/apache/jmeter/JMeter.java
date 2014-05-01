@@ -86,7 +86,7 @@ public class JMeter implements JMeterPlugin {
     public static final String HTTP_PROXY_PASS = "http.proxyPass"; // $NON-NLS-1$
     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
     public static final String JMETER_NON_GUI = "JMeter.NonGui"; // $NON-NLS-1$
-    public static final String CONTINUE_ON_REMOTE_ENGINE_FAIL = "continue.on.remote_engine_fail"; // $NON-NLS-1$
+    public static final String RMI_CONTINUE_ON_FAIL = "rmi.continue_on_fail"; // $NON-NLS-1$
     private static final Logger log = LoggingManager.getLoggerForClass();
     // If the -t flag is to "LAST", then the last loaded file (if any) is used
     private static final String USE_LAST_JMX = "LAST";
@@ -977,15 +977,13 @@ public class JMeter implements JMeterPlugin {
                         println("Failed to configure " + el);
                     }
                 }
-                boolean continueOnEngineFail = JMeterUtils.getPropDefault(CONTINUE_ON_REMOTE_ENGINE_FAIL, true);
+                boolean continueOnEngineFail = JMeterUtils.getPropDefault(RMI_CONTINUE_ON_FAIL, true);
 
                 if (failingEngines.size() > 0) {
                     if (!continueOnEngineFail) {
                         throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
                     } else {
                         println("Number of failed remote engines: " + failingEngines.size());
-                        Thread.sleep(20000);
-                        println("Trying to re-init failed engines...");
                         for (String engine : failingEngines) {
                             EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
                             engineReInitializer.start();
@@ -994,8 +992,6 @@ public class JMeter implements JMeterPlugin {
 
                             if (null != eng) {
                                 engines.add(eng);
-                            } else {
-                                throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
                             }
                         }
                     }
