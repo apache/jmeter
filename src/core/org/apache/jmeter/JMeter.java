@@ -1000,6 +1000,7 @@ public class JMeter implements JMeterPlugin {
 
                         println("Trying to reconnect to failed engines...");
 
+                        int reConSuccessEng = 0;
                         for (String engine : failingEngines) {
                             EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
                             engineReInitializer.start();
@@ -1007,9 +1008,15 @@ public class JMeter implements JMeterPlugin {
                             JMeterEngine eng = engineReInitializer.getEngine();
 
                             if (null != eng) {
+                                reConSuccessEng++;
                                 engines.add(eng);
                             }
                         }
+                        String failedReConEng = String.valueOf(Math.abs(failingEngines.size() - reConSuccessEng));
+                        println("Successfully re-connected to " + String.valueOf(reConSuccessEng) + " engines");
+                        log.debug("Successfully re-connected to " + String.valueOf(reConSuccessEng) + " engines");
+                        println("Failed to re-connect to " + failedReConEng + " engines");
+                        log.debug("Successfully re-connected to " + failedReConEng + " engines");
                     }
                 }
 
