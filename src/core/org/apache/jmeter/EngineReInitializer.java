@@ -63,18 +63,26 @@ public class EngineReInitializer extends Thread {
         while (i <= rmiRetriesNumber & engine == null) {
             try {
                 sleep(rmiRetriesDelay);
-                log.debug(String.valueOf(i) + " retry to connect to " + engineStr + "...");
-                System.err.println(String.valueOf(i) + " retry to connect to " + engineStr + "...");
+                log.debug(String.valueOf(i) + "/"
+                        + String.valueOf(rmiRetriesNumber) + " retry to connect to " + engineStr + "...");
+                System.err.println(String.valueOf(i) + "/"
+                        + String.valueOf(rmiRetriesNumber) + " retry to connect to " + engineStr + "...");
                 i++;
                 this.engine = new ClientJMeterEngine(this.engineStr);
             } catch (Exception e) {
-                log.fatalError("Failed to re-connect to remote host: " + this.engineStr, e);
-                System.err.println("Failed to re-connect to remote host: " + this.engineStr + " " + e);
+                log.fatalError("Failed to re-connect to remote host " + this.engineStr + ": " + String.valueOf(i - 1)
+                        + " retry", e);
+                System.err.println("Failed to re-connect to remote host " + this.engineStr + ": " + String.valueOf(i - 1)
+                        + " retry");
             }
         }
 
 
         if (engine != null) {
+            log.debug("Successfull re-connection with " + String.valueOf(i - 1) + "/"
+                    + String.valueOf(rmiRetriesNumber) + " retry");
+            System.err.println("Successfull re-connection with " + String.valueOf(i - 1) + "/"
+                    + String.valueOf(rmiRetriesNumber) + " retry");
             engine.configure(this.tree);
         } else {
             log.debug("Failed to re-initialize " + engineStr);
