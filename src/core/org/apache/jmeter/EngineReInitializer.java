@@ -12,26 +12,57 @@ import org.apache.log.Logger;
  */
 public class EngineReInitializer extends Thread {
     private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final String RMI_RETRIES_NUMBER = "rmi.retries_number";
+    private static final String RMI_RETRIES_DELAY = "rmi.retries_delay";
+    private static final String RMI_CONTINUE_ON_FAIL = "rmi.continue_on_fail"; // $NON-NLS-1$
+    private static final boolean rmiContinueOnFail;
+    private static int rmiRetriesDelay;
+    private static int rmiRetriesNumber;
     private final String engineStr;
-    private final String RMI_RETRIES_NUMBER = "rmi.retries_number";
-    private final String RMI_RETRIES_DELAY = "rmi.retries_delay";
     private JMeterEngine engine = null;
     private HashTree tree;
 
+    static {
+        rmiContinueOnFail = JMeterUtils.getPropDefault(RMI_CONTINUE_ON_FAIL, true);
+        rmiRetriesDelay = JMeterUtils.getPropDefault(RMI_RETRIES_DELAY, 0);
+        rmiRetriesNumber = JMeterUtils.getPropDefault(RMI_RETRIES_NUMBER, 0);
+    }
 
     public EngineReInitializer(String engineStr, HashTree tree) {
         this.engineStr = engineStr;
         this.tree = tree;
     }
 
+    public static String getRmiRetriesNumberName() {
+        return RMI_RETRIES_NUMBER;
+    }
+
+    public static String getRmiRetriesDelayName() {
+        return RMI_RETRIES_DELAY;
+    }
+
+    public static String getRmiContinueOnFailName() {
+        return RMI_CONTINUE_ON_FAIL;
+    }
+
+    public static boolean isRmiContinueOnFailValue() {
+        return rmiContinueOnFail;
+    }
+
+    public static int getRmiRetriesDelayValue() {
+        return rmiRetriesDelay;
+    }
+
+    public static int getRmiRetriesNumberValue() {
+        return rmiRetriesNumber;
+    }
+
     @Override
     public void run() {
         int i = 1;
-        int attemptsNumber = JMeterUtils.getPropDefault(RMI_RETRIES_NUMBER, 0);
-        int retries_delay = JMeterUtils.getPropDefault(RMI_RETRIES_DELAY, 0);
-        while (i <= attemptsNumber & engine == null) {
+        while (i <= rmiRetriesNumber & engine == null) {
             try {
-                sleep(retries_delay);
+                sleep(rmiRetriesDelay);
                 log.debug(String.valueOf(i) + " retry to connect to " + engineStr + "...");
                 System.err.println(String.valueOf(i) + " retry to connect to " + engineStr + "...");
                 i++;
@@ -56,3 +87,4 @@ public class EngineReInitializer extends Thread {
         return engine;
     }
 }
+

@@ -86,7 +86,6 @@ public class JMeter implements JMeterPlugin {
     public static final String HTTP_PROXY_PASS = "http.proxyPass"; // $NON-NLS-1$
     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
     public static final String JMETER_NON_GUI = "JMeter.NonGui"; // $NON-NLS-1$
-    public static final String RMI_CONTINUE_ON_FAIL = "rmi.continue_on_fail"; // $NON-NLS-1$
     private static final Logger log = LoggingManager.getLoggerForClass();
     // If the -t flag is to "LAST", then the last loaded file (if any) is used
     private static final String USE_LAST_JMX = "LAST";
@@ -977,13 +976,30 @@ public class JMeter implements JMeterPlugin {
                         println("Failed to configure " + el);
                     }
                 }
-                boolean continueOnEngineFail = JMeterUtils.getPropDefault(RMI_CONTINUE_ON_FAIL, true);
+                String rmiContinueOnFail = EngineReInitializer.getRmiContinueOnFailName();
+                boolean rmiContinueOnFail_Bool = JMeterUtils.getPropDefault(rmiContinueOnFail, true);
+
+                String rmiRetriesNumber = EngineReInitializer.getRmiRetriesNumberName();
+
+                String rmiRetriesDelay = EngineReInitializer.getRmiRetriesDelayName();
+//                Thread.sleep(10000);
+
+                String rmiRetriesDelay_Str = String.valueOf(EngineReInitializer.getRmiRetriesDelayValue());
+                String rmiRetriesNumber_Str = String.valueOf(EngineReInitializer.getRmiRetriesNumberValue());
+                String rmiContinueOnFail_Str = String.valueOf(rmiContinueOnFail_Bool);
 
                 if (failingEngines.size() > 0) {
-                    if (!continueOnEngineFail) {
+                    if (!rmiContinueOnFail_Bool) {
                         throw new IllegalArgumentException("The following remote engines could not be configured:" + failingEngines);
                     } else {
                         println("Number of failed remote engines: " + failingEngines.size());
+                        println(EngineReInitializer.class.getSimpleName() + " parameters:");
+                        println(rmiContinueOnFail + "=" + rmiContinueOnFail_Str);
+                        println(rmiRetriesDelay + "=" + rmiRetriesDelay_Str);
+                        println(rmiRetriesNumber + "=" + rmiRetriesNumber_Str);
+
+                        println("Trying to reconnect to failed engines...");
+
                         for (String engine : failingEngines) {
                             EngineReInitializer engineReInitializer = new EngineReInitializer(engine, tree);
                             engineReInitializer.start();
