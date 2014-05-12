@@ -6266,6 +6266,12 @@ When using Test Fragment with <complink name="Module Controller"/>, ensure you d
     execute after the test has finished executing its regular Thread Groups.
     </p>
 </description>
+<note>
+Note that by default it won't run if Test is gracefully shutdown, if you want to make it run in this case, 
+ensure you check option "Run tearDown Thread Groups after shutdown of main threads" on Test Plan element.
+If Test Plan is stopped, tearDown will not run even if option is checked.
+</note>
+<figure width="1081" height="570" image="tear_down_on_shutdown.png">Figure 1 - Run tearDown Thread Groups after shutdown of main threads</figure>
 </component>
 
 <a href="#">^</a>
