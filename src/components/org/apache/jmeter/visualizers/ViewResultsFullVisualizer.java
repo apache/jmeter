@@ -347,7 +347,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     selectRenderPanel.addItem(renderer);
                 } else {
                     log.warn("Missing (check spelling error in renderer name) or already added(check doublon) " +
-                    		"result renderer, check property 'view.results.tree.renderers_order', renderer name:'"+key+"'");
+                            "result renderer, check property 'view.results.tree.renderers_order', renderer name:'"+key+"'");
                 }
             }
         }
