@@ -259,21 +259,21 @@
               <stringProp name="script">import groovy.sql.Sql
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement
 try {
-	// build Pfo List
-	println(&quot;Building Portfolio List&quot;)
-	def pfoList = &quot;&lt;PfoList&gt;&quot;
-	def pfoNr = 1
-	def pfo = vars.get(&quot;Pfo_&quot; + pfoNr)
-	while(pfo != null) {
-		println(&quot;Pfo: $pfo&quot;);
-		pfoList = pfoList + &quot;&lt;Pfo ID=&apos;$pfo&apos; EmptyValuation=&apos;true&apos; PropagatePrice=&apos;true&apos;/&gt;&quot;
-		pfoNr++
-		pfo = vars.get(&quot;Pfo_&quot; + pfoNr)
-	}
-	pfoList = pfoList + &quot;&lt;/PfoList&gt;&quot;
-	vars.put(&quot;PfoListXML&quot;, pfoList)
+    // build Pfo List
+    println(&quot;Building Portfolio List&quot;)
+    def pfoList = &quot;&lt;PfoList&gt;&quot;
+    def pfoNr = 1
+    def pfo = vars.get(&quot;Pfo_&quot; + pfoNr)
+    while(pfo != null) {
+        println(&quot;Pfo: $pfo&quot;);
+        pfoList = pfoList + &quot;&lt;Pfo ID=&apos;$pfo&apos; EmptyValuation=&apos;true&apos; PropagatePrice=&apos;true&apos;/&gt;&quot;
+        pfoNr++
+        pfo = vars.get(&quot;Pfo_&quot; + pfoNr)
+    }
+    pfoList = pfoList + &quot;&lt;/PfoList&gt;&quot;
+    vars.put(&quot;PfoListXML&quot;, pfoList)
 } catch (Exception e) {
-  	println(e.toString());
+    println(e.toString());
 }</stringProp>
             </BSFPreProcessor>
             <hashTree/>
