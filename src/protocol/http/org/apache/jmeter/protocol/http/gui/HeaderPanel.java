@@ -223,7 +223,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
                     headerManager.save(chooser.getSelectedFile().getAbsolutePath());
                 }
             } catch (IOException ex) {
-                log.error("Could not save headers", ex);
+                JMeterUtils.reportErrorToUser(ex.getMessage(), "Error saving headers");
             }
         } else if (action.equals(ADD_FROM_CLIPBOARD)) {
             addFromClipboard();

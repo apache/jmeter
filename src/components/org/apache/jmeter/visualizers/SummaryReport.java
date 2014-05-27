@@ -52,10 +52,8 @@ import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 
 /**
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
@@ -64,8 +62,6 @@ import org.apache.log.Logger;
 public class SummaryReport extends AbstractVisualizer implements Clearable, ActionListener {
 
     private static final long serialVersionUID = 240L;
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
@@ -260,9 +256,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
                 writer = new FileWriter(chooser.getSelectedFile());
                 CSVSaveService.saveCSVStats(model,writer, saveHeaders.isSelected());
             } catch (FileNotFoundException e) {
-                log.warn(e.getMessage());
+                JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } catch (IOException e) {
-                log.warn(e.getMessage());
+                JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } finally {
                 JOrphanUtils.closeQuietly(writer);
             }

@@ -38,8 +38,6 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
-//import javax.swing.table.AbstractTableModel;
-//import javax.swing.table.TableModel;
 
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -53,10 +51,8 @@ import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 
 /**
  * Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
@@ -68,8 +64,6 @@ import org.apache.log.Logger;
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
 
     private static final long serialVersionUID = 240L;
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
@@ -265,9 +259,9 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                 writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
                 CSVSaveService.saveCSVStats(model,writer, saveHeaders.isSelected());
             } catch (FileNotFoundException e) {
-                log.warn(e.getMessage());
+                JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } catch (IOException e) {
-                log.warn(e.getMessage());
+                JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } finally {
                 JOrphanUtils.closeQuietly(writer);
             }
