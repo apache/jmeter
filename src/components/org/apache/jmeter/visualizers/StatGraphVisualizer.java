@@ -569,9 +569,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
                 CSVSaveService.saveCSVStats(getAllTableData(),writer,saveHeaders.isSelected() ? COLUMNS : null);
             } catch (FileNotFoundException e) {
-                log.warn(e.getMessage());
+                JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } catch (IOException e) {
-                log.warn(e.getMessage());
+                JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } finally {
                 JOrphanUtils.closeQuietly(writer);
             }

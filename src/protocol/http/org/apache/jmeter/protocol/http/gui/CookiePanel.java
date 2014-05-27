@@ -232,7 +232,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                     ((CookieManager) createTestElement()).save(chooser.getSelectedFile().getAbsolutePath());
                 }
             } catch (IOException ex) {
-                log.error("", ex);
+                JMeterUtils.reportErrorToUser(ex.getMessage(), "Error saving cookies");
             }
         }
     }
