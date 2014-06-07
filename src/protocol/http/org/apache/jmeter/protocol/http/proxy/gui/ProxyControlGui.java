@@ -45,6 +45,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -740,6 +742,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JPanel createTargetPanel() {
         targetNodesModel = new DefaultComboBoxModel();
         targetNodes = new JComboBox(targetNodesModel);
+        targetNodes.setPrototypeDisplayValue(""); // $NON-NLS-1$ // Bug 56303 fixed the width of combo list
+        JPopupMenu popup = (JPopupMenu) targetNodes.getUI().getAccessibleChild(targetNodes, 0); // get popup element
+        JScrollPane scrollPane = (JScrollPane) popup.getComponent(0);
+        scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL)); // add scroll pane if label element is too long
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         targetNodes.setActionCommand(CHANGE_TARGET);
         // Action listener will be added later
 
