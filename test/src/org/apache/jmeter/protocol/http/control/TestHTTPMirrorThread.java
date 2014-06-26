@@ -347,7 +347,6 @@ public class TestHTTPMirrorThread extends TestCase {
 
     public void testQueryStatus() throws Exception {
         URL url = new URI("http",null,"localhost",HTTP_SERVER_PORT,"/path","status=303 See Other",null).toURL();
-        System.err.println(url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.connect();
         assertEquals(303, conn.getResponseCode());
@@ -356,7 +355,6 @@ public class TestHTTPMirrorThread extends TestCase {
 
     public void testQueryRedirect() throws Exception {
         URL url = new URI("http",null,"localhost",HTTP_SERVER_PORT,"/path","redirect=/a/b/c/d?q",null).toURL();
-        System.err.println(url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setInstanceFollowRedirects(false);
         conn.connect();
