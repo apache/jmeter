@@ -399,7 +399,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     private JPanel getPortPanel() {
-        port = new JTextField(4);
+        port = new JTextField(10);
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
         label.setLabelFor(port);
@@ -412,7 +412,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     private JPanel getProxyPortPanel() {
-        proxyPort = new JTextField(4);
+        proxyPort = new JTextField(10);
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
         label.setLabelFor(proxyPort);
@@ -426,7 +426,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     private JPanel getConnectTimeOutPanel() {
-        connectTimeOut = new JTextField(4);
+        connectTimeOut = new JTextField(10);
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_timeout_connect")); // $NON-NLS-1$
         label.setLabelFor(connectTimeOut);
@@ -439,7 +439,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     private JPanel getResponseTimeOutPanel() {
-        responseTimeOut = new JTextField(4);
+        responseTimeOut = new JTextField(10);
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_timeout_response")); // $NON-NLS-1$
         label.setLabelFor(responseTimeOut);
