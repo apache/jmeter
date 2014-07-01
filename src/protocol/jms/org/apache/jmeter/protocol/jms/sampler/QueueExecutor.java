@@ -30,13 +30,18 @@ import javax.jms.Message;
 public interface QueueExecutor {
     /**
      * Sends and receives a message.
-     *
-     * @param request
-     *            the message to send
+     * 
+     * @param request the message to send
+     * @param deliveryMode
+     * @param priority
+     * @param expiration
      * @return the received message or <code>null</code>
      * @throws JMSException
      *             in case of an exception from the messaging system
      */
-    Message sendAndReceive(Message request) throws JMSException;
+    Message sendAndReceive(Message request,
+            int deliveryMode, 
+            int priority, 
+            long expiration) throws JMSException;
 
 }

@@ -25,7 +25,6 @@ import java.util.Map.Entry;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
-import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -49,12 +48,11 @@ public class Publisher implements Closeable {
 
     private final Session session;
 
-    private final  MessageProducer producer;
+    private final MessageProducer producer;
     
     private final Context ctx;
     
     private final boolean staticDest;
-
 
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters.
@@ -76,32 +74,9 @@ public class Publisher implements Closeable {
             String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
         this(useProps, initialContextFactory, providerUrl, connfactory,
                 destinationName, useAuth, securityPrincipal,
-                securityCredentials, true, false);
+                securityCredentials, true);
     }
     
-    /**
-     * Create a publisher using either the jndi.properties file or the provided parameters.
-     * Uses a static destination (for backward compatibility)
-     * 
-     * @param useProps true if a jndi.properties file is to be used
-     * @param initialContextFactory the (ignored if useProps is true)
-     * @param providerUrl (ignored if useProps is true)
-     * @param connfactory
-     * @param destinationName
-     * @param useAuth (ignored if useProps is true)
-     * @param securityPrincipal (ignored if useProps is true)
-     * @param securityCredentials (ignored if useProps is true)
-     * @param useNonPersistentMessages Flag Delivery Mode as Non persistent if true
-     * @throws JMSException if the context could not be initialised, or there was some other error
-     * @throws NamingException 
-     */
-    public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
-            String connfactory, String destinationName, boolean useAuth,
-            String securityPrincipal, String securityCredentials, boolean useNonPersistentMessages) throws JMSException, NamingException {
-        this(useProps, initialContextFactory, providerUrl, connfactory,
-                destinationName, useAuth, securityPrincipal,
-                securityCredentials, true, useNonPersistentMessages);
-    }
     
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters
@@ -114,14 +89,13 @@ public class Publisher implements Closeable {
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
      * @param staticDestination true is the destination is not to change between loops
-     * @param useNonPersistentMessages Flag Delivery Mode as Non persistent if true
      * @throws JMSException if the context could not be initialised, or there was some other error
      * @throws NamingException 
      */
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
             String connfactory, String destinationName, boolean useAuth,
             String securityPrincipal, String securityCredentials,
-            boolean staticDestination,  boolean useNonPersistentMessages) throws JMSException, NamingException {
+            boolean staticDestination) throws JMSException, NamingException {
         super();
         boolean initSuccess = false;
         try{
@@ -136,9 +110,6 @@ public class Publisher implements Closeable {
             } else {
                 producer = session.createProducer(null);
             }
-            if(useNonPersistentMessages) {
-                producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-            }
             initSuccess = true;
         } finally {
             if(!initSuccess) {
@@ -146,82 +117,57 @@ public class Publisher implements Closeable {
             }
         }
     }
-
-    public Message publish(String text) throws JMSException,
-            NamingException {
-        return publish(text, null, null);
-    }
     
-    public Message publish(String text, String destinationName)
-            throws JMSException, NamingException {
-        return publish(text, destinationName, null);
-    }
-    
-    public Message publish(String text, String destinationName, Map<String, Object> properties)
+    public Message publish(String text, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         TextMessage msg = session.createTextMessage(text);
-        return setPropertiesAndSend(destinationName, properties, msg);
+        return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
     
-    public Message publish(Serializable contents) throws JMSException,
-            NamingException {
-        return publish(contents, null);
-    }
-
-    public Message publish(Serializable contents, String destinationName) 
-            throws JMSException, NamingException {
-        return publish(contents, destinationName, null);
-    }
-    
-    public Message publish(Serializable contents, String destinationName, Map<String, Object> properties)
+    public Message publish(Serializable contents, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         ObjectMessage msg = session.createObjectMessage(contents);
-        return setPropertiesAndSend(destinationName, properties, msg);
+        return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
     
-    public Message publish(byte[] bytes, String destinationName, Map<String, Object> properties)
+    public Message publish(byte[] bytes, String destinationName, Map<String, Object> properties, int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         BytesMessage msg = session.createBytesMessage();
         msg.writeBytes(bytes);
-        return setPropertiesAndSend(destinationName, properties, msg);
-    }
-
-    public Message publish(Map<String, Object> map) throws JMSException,
-            NamingException {
-        return publish(map, null, null);
+        return setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
     
-    public Message publish(Map<String, Object> map, String destinationName)
-            throws JMSException, NamingException {
-        return publish(map, destinationName, null);
-    }
-    
-    public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, Object> properties)
+    public MapMessage publish(Map<String, Object> map, String destinationName, Map<String, Object> properties, 
+            int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         MapMessage msg = session.createMapMessage();
         for (Entry<String, Object> me : map.entrySet()) {
             msg.setObject(me.getKey(), me.getValue());
         }
-        return (MapMessage)setPropertiesAndSend(destinationName, properties, msg);
+        return (MapMessage)setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
     }
 
     /**
      * @param destinationName 
      * @param properties Map<String, String>
      * @param msg Message
+     * @param deliveryMode
+     * @param priority
+     * @param expiration
      * @return Message
      * @throws JMSException
      * @throws NamingException
      */
     private Message setPropertiesAndSend(String destinationName,
-            Map<String, Object> properties, Message msg)
+            Map<String, Object> properties, Message msg,
+            int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         Utils.addJMSProperties(msg, properties);
         if (staticDest || destinationName == null) {
-            producer.send(msg);
+            producer.send(msg, deliveryMode, priority, expiration);
         } else {
             Destination dest = Utils.lookupDestination(ctx, destinationName);
-            producer.send(dest, msg);
+            producer.send(dest, msg, deliveryMode, priority, expiration);
         }
         return msg;
     }

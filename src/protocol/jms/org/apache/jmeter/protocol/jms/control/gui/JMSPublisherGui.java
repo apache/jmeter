@@ -29,6 +29,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.util.FilePanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -88,6 +89,10 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private final JLabeledTextField jndiConnFac = new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); //$NON-NLS-1$
 
     private final JLabeledTextField jmsDestination = new JLabeledTextField(JMeterUtils.getResString("jms_topic")); //$NON-NLS-1$
+
+    private final JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"),10); //$NON-NLS-1$
+
+    private final JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
 
     private final JCheckBox useAuth = new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
 
@@ -165,6 +170,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
       sampler.setProviderUrl(urlField.getText());
       sampler.setConnectionFactory(jndiConnFac.getText());
       sampler.setDestination(jmsDestination.getText());
+      sampler.setExpiration(expiration.getText());
+      sampler.setPriority(priority.getText());
       sampler.setUsername(jmsUser.getText());
       sampler.setPassword(jmsPwd.getText());
       sampler.setTextMessage(textMessage.getText());
@@ -198,6 +205,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(jndiConnFac);
         mainPanel.add(createDestinationPane());
         mainPanel.add(createAuthPane());
+        mainPanel.add(createPriorityAndExpiration());
         mainPanel.add(iterations);
 
         jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
@@ -229,6 +237,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         urlField.setText(""); // $NON-NLS-1$
         jndiConnFac.setText(""); // $NON-NLS-1$
         jmsDestination.setText(""); // $NON-NLS-1$
+        expiration.setText(""); // $NON-NLS-1$
+        priority.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
         textMessage.setInitialText(""); // $NON-NLS-1$
@@ -268,6 +278,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         configChoice.setText(sampler.getConfigChoice());
         msgChoice.setText(sampler.getMessageChoice());
         iterations.setText(sampler.getIterations());
+        expiration.setText(sampler.getExpiration());
+        priority.setText(sampler.getPriority());
         useAuth.setSelected(sampler.isUseAuth());
         jmsUser.setEnabled(useAuth.isSelected());
         jmsPwd.setEnabled(useAuth.isSelected());
@@ -363,5 +375,15 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         pane.add(Box.createHorizontalStrut(10));
         pane.add(jmsPwd);
         return pane;
+    }
+
+    /**
+     * @return JPanel Panel for priority and expiration
+     */
+    private JPanel createPriorityAndExpiration() {
+        JPanel panel = new HorizontalPanel();
+        panel.add(expiration);
+        panel.add(priority);
+        return panel;
     }
 }

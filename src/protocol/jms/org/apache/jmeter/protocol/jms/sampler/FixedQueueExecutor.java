@@ -33,8 +33,6 @@ import org.apache.log.Logger;
  *
  * Used by JMS Sampler (Point to Point)
  *
- * Created on: October 28, 2004
- *
  */
 public class FixedQueueExecutor implements QueueExecutor {
 
@@ -68,7 +66,10 @@ public class FixedQueueExecutor implements QueueExecutor {
      * {@inheritDoc}
      */
     @Override
-    public Message sendAndReceive(Message request) throws JMSException {
+    public Message sendAndReceive(Message request, 
+            int deliveryMode, 
+            int priority, 
+            long expiration) throws JMSException {
         String id = request.getJMSCorrelationID();
         if(id == null && !useReqMsgIdAsCorrelId){
             throw new IllegalArgumentException("Correlation id is null. Set the JMSCorrelationID header.");
@@ -78,13 +79,13 @@ public class FixedQueueExecutor implements QueueExecutor {
         if(useReqMsgIdAsCorrelId) {// msgId not available until after send() is called
             // Note: there is only one admin object which is shared between all threads
             synchronized (admin) {// interlock with Receiver
-                producer.send(request);
+                producer.send(request, deliveryMode, priority, expiration);
                 id=request.getJMSMessageID();
                 admin.putRequest(id, request, countDownLatch);
             }
         } else {
             admin.putRequest(id, request, countDownLatch);            
-            producer.send(request);
+            producer.send(request, deliveryMode, priority, expiration);
         }
 
         try {
