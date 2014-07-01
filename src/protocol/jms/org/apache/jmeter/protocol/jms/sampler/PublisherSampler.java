@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.naming.NamingException;
@@ -73,6 +74,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private static final String NON_PERSISTENT_DELIVERY = "jms.non_persistent"; //$NON-NLS-1$
     
     private static final String JMS_PROPERTIES = "jms.jmsProperties"; // $NON-NLS-1$
+
+    private static final String JMS_PRIORITY = "jms.priority"; // $NON-NLS-1$
+
+    private static final String JMS_EXPIRATION = "jms.expiration"; // $NON-NLS-1$
 
     //--
 
@@ -132,7 +137,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private void initClient() throws JMSException, NamingException {
         publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), 
                 getProviderUrl(), getConnectionFactory(), getDestination(), isUseAuth(), getUsername(),
-                getPassword(), isDestinationStatic(), getUseNonPersistentDelivery());
+                getPassword(), isDestinationStatic());
         ClientPool.addClient(publisher);
         log.debug("PublisherSampler.initClient called");
     }
@@ -168,23 +173,27 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         
         try {
             Map<String, Object> msgProperties = getJMSProperties().getJmsPropertysAsMap();
+            int deliveryMode = getUseNonPersistentDelivery() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT; 
+            int priority = Integer.parseInt(getPriority());
+            long expiration = Long.parseLong(getExpiration());
+            
             for (int idx = 0; idx < loop; idx++) {
                 if (JMSPublisherGui.TEXT_MSG_RSC.equals(type)){
                     String tmsg = getMessageContent();
-                    Message msg = publisher.publish(tmsg, getDestination(), msgProperties);
+                    Message msg = publisher.publish(tmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                     buffer.append(tmsg);
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.MAP_MSG_RSC.equals(type)){
                     Map<String, Object> m = getMapContent();
-                    Message msg = publisher.publish(m, getDestination(), msgProperties);
+                    Message msg = publisher.publish(m, getDestination(), msgProperties, deliveryMode, priority, expiration);
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)){
                     Serializable omsg = getObjectContent();
-                    Message msg = publisher.publish(omsg, getDestination(), msgProperties);
+                    Message msg = publisher.publish(omsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.BYTES_MSG_RSC.equals(type)){
                     byte[] bmsg = getBytesContent();
-                    Message msg = publisher.publish(bmsg, getDestination(), msgProperties);
+                    Message msg = publisher.publish(bmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                     Utils.messageProperties(propBuffer, msg);
                 } else {
                     throw new JMSException(type+ " is not recognised");                    
@@ -490,6 +499,22 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         return getPropertyAsString(TEXT_MSG);
     }
 
+    public String getExpiration() {
+        return getPropertyAsString(JMS_EXPIRATION, Long.toString(Utils.DEFAULT_NO_EXPIRY));
+    }
+
+    public String getPriority() {
+        return getPropertyAsString(JMS_PRIORITY, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+    }
+    
+    public void setPriority(String s) {
+        setProperty(JMS_PRIORITY, s, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+    }
+    
+    public void setExpiration(String s) {
+        setProperty(JMS_EXPIRATION, s, Long.toString(Utils.DEFAULT_NO_EXPIRY));
+    }
+    
     /**
      * @param value boolean use NON_PERSISTENT
      */

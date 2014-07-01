@@ -56,7 +56,11 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue")); //$NON-NLS-1$
 
-    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
+    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"),10); //$NON-NLS-1$
+
+    private JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"),10); //$NON-NLS-1$
+
+    private JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
 
@@ -97,6 +101,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         receiveQueue.setText(""); // $NON-NLS-1$
         ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
+        expiration.setText("");  // $NON-NLS-1$
+        priority.setText("");  // $NON-NLS-1$
         jmsSelector.setText(""); // $NON-NLS-1$
         messageContent.setInitialText(""); // $NON-NLS-1$
         initialContextFactory.setText(""); // $NON-NLS-1$
@@ -125,6 +131,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
         element.setUseResMsgIdAsCorrelId(useResMsgIdAsCorrelId.isSelected());
         element.setTimeout(timeout.getText());
+        element.setExpiration(expiration.getText());
+        element.setPriority(priority.getText());
         element.setJMSSelector(jmsSelector.getText());
         element.setContent(messageContent.getText());
 
@@ -173,6 +181,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         useResMsgIdAsCorrelId.setSelected(sampler.isUseResMsgIdAsCorrelId());
 
         timeout.setText(sampler.getTimeout());
+        expiration.setText(sampler.getExpiration());
+        priority.setText(sampler.getPriority());
         jmsSelector.setText(sampler.getJMSSelector());
         messageContent.setInitialText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
@@ -238,6 +248,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         JPanel timeoutPanel = new HorizontalPanel();
         timeoutPanel.add(timeout);
+        timeoutPanel.add(expiration);
+        timeoutPanel.add(priority);
         timeoutPanel.add(useNonPersistentDelivery);
         messageNorthPanel.add(timeoutPanel, BorderLayout.SOUTH);
 
