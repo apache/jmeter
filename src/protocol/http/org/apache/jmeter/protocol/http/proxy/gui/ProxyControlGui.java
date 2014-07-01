@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.proxy.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
@@ -744,9 +745,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         targetNodes = new JComboBox(targetNodesModel);
         targetNodes.setPrototypeDisplayValue(""); // $NON-NLS-1$ // Bug 56303 fixed the width of combo list
         JPopupMenu popup = (JPopupMenu) targetNodes.getUI().getAccessibleChild(targetNodes, 0); // get popup element
-        JScrollPane scrollPane = (JScrollPane) popup.getComponent(0);
-        scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL)); // add scroll pane if label element is too long
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = findScrollPane(popup);
+        if(scrollPane != null) {
+            scrollPane.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL)); // add scroll pane if label element is too long
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        }
         targetNodes.setActionCommand(CHANGE_TARGET);
         // Action listener will be added later
 
@@ -758,6 +761,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         panel.add(targetNodes);
 
         return panel;
+    }
+
+    private JScrollPane findScrollPane(JPopupMenu popup) {
+        Component[] components = popup.getComponents();
+        for (Component component : components) {
+            if(component instanceof JScrollPane) {
+                return (JScrollPane) component;
+            }
+        }
+        return null;
     }
 
     private JPanel createGroupingPanel() {
