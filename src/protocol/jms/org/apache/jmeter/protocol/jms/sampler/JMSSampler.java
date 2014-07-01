@@ -70,6 +70,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private static final String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
 
+    private static final String JMS_PRIORITY = "JMSSampler.priority"; // $NON-NLS-1$
+
+    private static final String JMS_EXPIRATION = "JMSSampler.expiration"; // $NON-NLS-1$
+
     private static final String JMS_SELECTOR = "JMSSampler.jmsSelector"; // $NON-NLS-1$
 
     private static final String JMS_SELECTOR_DEFAULT = ""; // $NON-NLS-1$
@@ -138,7 +142,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         try {
             TextMessage msg = createMessage();
             if (isOneway()) {
-                producer.send(msg);
+                int deliveryMode = isNonPersistent() ? 
+                        DeliveryMode.NON_PERSISTENT:DeliveryMode.PERSISTENT;
+                producer.send(msg, deliveryMode, Integer.parseInt(getPriority()), 
+                        Long.parseLong(getExpiration()));
                 res.setRequestHeaders(Utils.messageProperties(msg));
                 res.setResponseOK();
                 res.setResponseData("Oneway request has no response data", null);
@@ -146,8 +153,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 if (!useTemporyQueue()) {
                     msg.setJMSReplyTo(receiveQueue);
                 }
-
-                Message replyMsg = executor.sendAndReceive(msg);
+                Message replyMsg = executor.sendAndReceive(msg,
+                        isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT, 
+                        Integer.parseInt(getPriority()), 
+                        Long.parseLong(getExpiration()));
                 res.setRequestHeaders(Utils.messageProperties(msg));
                 if (replyMsg == null) {
                     res.setResponseMessage("No reply message received");
@@ -351,20 +360,19 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 LOGGER.debug("Session created");
             }
 
-            if (getPropertyAsBoolean(IS_ONE_WAY)) {
+            if (isOneway()) {
                 producer = session.createSender(sendQueue);
                 if (isNonPersistent()) {
                     producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
                 }
+                producer.setPriority(Integer.parseInt(getPriority()));
+                producer.setTimeToLive(Long.parseLong(getExpiration()));
             } else {
 
                 if (useTemporyQueue()) {
                     executor = new TemporaryQueueExecutor(session, sendQueue);
                 } else {
                     producer = session.createSender(sendQueue);
-                    if (isNonPersistent()) {
-                        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-                    }
                     executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
                 }
             }
@@ -466,7 +474,15 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     public String getTimeout() {
         return getPropertyAsString(TIMEOUT, DEFAULT_TIMEOUT_STRING);
     }
+    
+    public String getExpiration() {
+        return getPropertyAsString(JMS_EXPIRATION, Long.toString(Utils.DEFAULT_NO_EXPIRY));
+    }
 
+    public String getPriority() {
+        return getPropertyAsString(JMS_PRIORITY, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -496,6 +512,14 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public void setTimeout(String s) {
         setProperty(JMSSampler.TIMEOUT, s);
+    }
+    
+    public void setPriority(String s) {
+        setProperty(JMSSampler.JMS_PRIORITY, s, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+    }
+    
+    public void setExpiration(String s) {
+        setProperty(JMSSampler.JMS_EXPIRATION, s, Long.toString(Utils.DEFAULT_NO_EXPIRY));
     }
 
     /**

@@ -28,10 +28,6 @@ import javax.jms.QueueSession;
  * Request/reply executor with a temporary reply queue. <br>
  * 
  * Used by JMS Sampler (Point to Point)
- * 
- * Created on: October 28, 2004
- *
- * @version $Revision$
  */
 public class TemporaryQueueExecutor implements QueueExecutor {
     /** The sender and receiver. */
@@ -54,7 +50,10 @@ public class TemporaryQueueExecutor implements QueueExecutor {
      * {@inheritDoc}
      */
     @Override
-    public Message sendAndReceive(Message request) throws JMSException {
+    public Message sendAndReceive(Message request, 
+            int deliveryMode, 
+            int priority, 
+            long expiration) throws JMSException {
         return requestor.request(request);
     }
 }

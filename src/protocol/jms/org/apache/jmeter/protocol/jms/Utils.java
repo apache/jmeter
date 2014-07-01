@@ -42,6 +42,14 @@ import org.apache.log.Logger;
  * WARNING - the API for this class is likely to change!
  */
 public final class Utils {
+    // By default priority is 4
+    // http://docs.oracle.com/javaee/6/tutorial/doc/bncfu.html
+    public static final int DEFAULT_PRIORITY_4 = 4;
+
+    // By default a message never expires
+    // http://docs.oracle.com/javaee/6/tutorial/doc/bncfu.html
+    public static final long DEFAULT_NO_EXPIRY = 0L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static void close(MessageConsumer closeable, Logger log){
