@@ -525,7 +525,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          */
         public HttpClientKey(URL url, boolean hasProxy, String proxyHost,
                 int proxyPort, String proxyUser, String proxyPass) {
-            // N.B. need to separate protocol from authority otherwise http://server would match https://server
+            // N.B. need to separate protocol from authority otherwise http://server would match https://erver (<= sic, not typo error)
             // could use separate fields, but simpler to combine them
             this.target = url.getProtocol()+"://"+url.getAuthority();
             this.hasProxy = hasProxy;
