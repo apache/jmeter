@@ -172,6 +172,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>56182</bugzilla> - Can't trigger bsh script using bshclient.jar; socket is closed unexpectedly </li>
 <li><bugzilla>56360</bugzilla> - HashTree and ListedHashTree fail to compile with Java 8</li>
 <li><bugzilla>56419</bugzilla> - Jmeter silently fails to save results</li>
+<li><bugzilla>56662</bugzilla> - Save as xml in a listener is not remembered</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
