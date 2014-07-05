@@ -27,11 +27,16 @@ public class SyncTimerBeanInfo extends BeanInfoSupport {
     public SyncTimerBeanInfo() {
         super(SyncTimer.class);
 
-        createPropertyGroup("grouping", new String[] { "groupSize" });
+        createPropertyGroup("grouping", new String[] { "groupSize", "timeoutInMs" });
 
         PropertyDescriptor p = property("groupSize");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Integer.valueOf(0));
+
+        p = property("timeoutInMs");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Long.valueOf(0));
+
     }
 
 }

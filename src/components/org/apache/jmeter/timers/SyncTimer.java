@@ -21,12 +21,16 @@ package org.apache.jmeter.timers;
 import java.io.Serializable;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * The purpose of the SyncTimer is to block threads until X number of threads
@@ -35,6 +39,7 @@ import org.apache.jmeter.threads.JMeterContextService;
  *
  */
 public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean, TestStateListener, ThreadListener {
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     /**
      * Wrapper to {@link CyclicBarrier} to allow lazy init of CyclicBarrier when SyncTimer is configured with 0
@@ -67,15 +72,29 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
             }
         }
 
+
         /**
-         * @see CyclicBarrier#await()
          * @return int
          * @throws InterruptedException
          * @throws BrokenBarrierException
+         * @throws TimeoutException 
          * @see java.util.concurrent.CyclicBarrier#await()
          */
-        public int await() throws InterruptedException, BrokenBarrierException {
+        public int await() throws InterruptedException, BrokenBarrierException{
             return barrier.await();
+        }
+        
+        /**
+         * @param timeout
+         * @param timeUnit
+         * @return int
+         * @throws InterruptedException
+         * @throws BrokenBarrierException
+         * @throws TimeoutException 
+         * @see java.util.concurrent.CyclicBarrier#await()
+         */
+        public int await(long timeout, TimeUnit timeUnit) throws InterruptedException, BrokenBarrierException, TimeoutException {
+            return barrier.await(timeout, timeUnit);
         }
 
         /**
@@ -106,6 +125,8 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     private transient BarrierWrapper barrier;
 
     private int groupSize;
+    
+    private long timeoutInMs;
 
     // Ensure transient object is created by the server
     private Object readResolve(){
@@ -136,10 +157,17 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         if(getGroupSize()>=0) {
             int arrival = 0;
             try {
-                arrival = this.barrier.await();
+                if(timeoutInMs==0) {
+                    arrival = this.barrier.await();                    
+                } else {
+                    arrival = this.barrier.await(timeoutInMs, TimeUnit.MILLISECONDS);
+                }
             } catch (InterruptedException e) {
                 return 0;
             } catch (BrokenBarrierException e) {
+                return 0;
+            } catch (TimeoutException e) {
+                LOGGER.warn("SyncTimer "+ getName() + " timeouted waiting for users after:"+getTimeoutInMs()+"ms");
                 return 0;
             } finally {
                 if(arrival == 0) {
@@ -218,5 +246,19 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     @Override
     public void threadFinished() {
         // NOOP
+    }
+
+    /**
+     * @return the timeoutInMs
+     */
+    public long getTimeoutInMs() {
+        return timeoutInMs;
+    }
+
+    /**
+     * @param timeoutInMs the timeoutInMs to set
+     */
+    public void setTimeoutInMs(long timeoutInMs) {
+        this.timeoutInMs = timeoutInMs;
     }
 }
