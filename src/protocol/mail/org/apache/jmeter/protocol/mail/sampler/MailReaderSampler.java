@@ -229,8 +229,6 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             parent.setDataType(SampleResult.TEXT);
             parent.setContentType("text/plain"); // $NON-NLS-1$
 
-            parent.setSampleCount(messages.length); // TODO is this sensible?
-
             final boolean headerOnly = getHeaderOnly();
             busy = true;
             for (Message message : messages) {

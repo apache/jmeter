@@ -114,6 +114,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
+<li>Since JMeter 2.12, Mail Reader Sampler will show 1 for number of samples instead of number of messages retrieved, see <bugzilla>56539</bugzilla></li>
 </ul>
 
 <!-- =================== Bug fixes =================== -->
@@ -138,6 +139,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>56198</bugzilla> - JMSSampler : NullPointerException is thrown when JNDI underlying implementation of JMS provider does not comply with Context.getEnvironment contract</li>
 <li><bugzilla>56428</bugzilla> - MailReaderSampler - should it use mail.pop3s.* properties?</li>
 <li><bugzilla>46932</bugzilla> - Alias given in select statement is not used as column header in response data for a JDBC request.Based on report and analysis of Nicola Ambrosetti</li>
+<li><bugzilla>56539</bugzilla> - Mail reader sampler: When Number of messages to retrieve is superior to 1, Number of samples should only show 1 not the number of messages retrieved</li>
 </ul>
 
 <h3>Controllers</h3>
