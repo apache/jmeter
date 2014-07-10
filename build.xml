@@ -2928,6 +2928,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
         <process_jarfile jarname="mongo-java-driver"/>
+        <process_jarfile jarname="rsyntaxtextarea"/>
         <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="slf4j-api"/>
         <process_jarfile jarname="slf4j-nop"/>
@@ -2944,8 +2945,6 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="xmlpull"/>
         <process_jarfile jarname="xpp3"/>
         <process_jarfile jarname="xstream"/>
-        <!-- special -->
-        <antcall target="_process_rsyntaxtextarea"/>
     </target>
 
     <target name="_process_doc_jars">
@@ -3000,12 +2999,16 @@ run JMeter unless all the JMeter jars are added.
     </target>
 
     <!-- Special: process to get RSyntaxTextArea-->
+	<!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
+	<!--
     <target name="_process_rsyntaxtextarea">
         <available file="./lib/${rsyntaxtextarea.jar}" property="rsyntaxtextarea.exists"/>
         <antcall target="_get_rsyntaxtextarea"/>
     </target>
-
+    -->
     <!-- Get RSyntaxTextArea binary zip file, unpack it, pick up jar file and remove the zip -->
+    <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
+	<!--
     <target name="_get_rsyntaxtextarea" unless="rsyntaxtextarea.exists">
         <property name="loc" value="${rsyntaxtextarea.loc}"/>
         <property name="zip" value="${rsyntaxtextarea.name}_${rsyntaxtextarea.version}.zip"/>
@@ -3033,7 +3036,7 @@ run JMeter unless all the JMeter jars are added.
             file="${build.dir}/${jar}" tofile="${path}/${rsyntaxtextarea.jar}" verbose="true"/>
         <delete file="${build.dir}/${zip}"/>
     </target>
-
+    -->
     <target name="checkstyle">
         <taskdef resource="checkstyletask.properties"
                  classpath="${lib.opt}/checkstyle-5.3-all.jar"/>

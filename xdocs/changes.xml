@@ -175,6 +175,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>56360</bugzilla> - HashTree and ListedHashTree fail to compile with Java 8</li>
 <li><bugzilla>56419</bugzilla> - Jmeter silently fails to save results</li>
 <li><bugzilla>56662</bugzilla> - Save as xml in a listener is not remembered</li>
+<li><bugzilla>56367</bugzilla> - JMeter 2.11 on maven central triggers a not existing dependency rsyntaxtextarea 2.5.1, upgrade to 2.5.3</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -237,6 +238,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li>Updated to xml-apis 1.4.01 (from 1.3.04)</li>
 <li>Updated to xstream 1.4.6 (from 1.4.4)</li>
 <li>Updated to jodd 3.5 (from 3.4.10)</li>
+<li>Updated to rsyntaxtextarea 2.5.3 (from 2.5.1)</li>
 </ul>
 
 <ch_section>Thanks</ch_section>
