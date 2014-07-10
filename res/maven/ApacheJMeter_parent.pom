@@ -88,7 +88,7 @@ under the License.
       <junit.version>4.11</junit.version>
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
-      <rsyntaxtextarea.version>2.5.1</rsyntaxtextarea.version>
+      <rsyntaxtextarea.version>2.5.3</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.5</slf4j-api.version>
       <slf4j-nop.version>1.7.5</slf4j-nop.version>
       <soap.version>2.3.1</soap.version>
