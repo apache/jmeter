@@ -205,6 +205,23 @@ public class HTTPSampleResult extends SampleResult {
      * the Meta content-type if necessary.
      *
      * Updates the dataEncoding field if the content-type is found.
+     * @param defaultEncoding Default encoding used if there is no data encoding
+     * @return the dataEncoding value as a String
+     */
+    @Override
+    public String getDataEncodingWithDefault(String defaultEncoding) {
+        String dataEncodingNoDefault = getDataEncodingNoDefault();
+        if(dataEncodingNoDefault != null && dataEncodingNoDefault.length()> 0) {
+            return dataEncodingNoDefault;
+        }
+        return defaultEncoding;
+    }
+    
+    /**
+     * Overrides the method from SampleResult - so the encoding can be extracted from
+     * the Meta content-type if necessary.
+     *
+     * Updates the dataEncoding field if the content-type is found.
      *
      * @return the dataEncoding value as a String
      */
