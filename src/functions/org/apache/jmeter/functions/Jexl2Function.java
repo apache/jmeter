@@ -24,10 +24,10 @@ import org.apache.commons.jexl2.Expression;
 import org.apache.commons.jexl2.JexlContext;
 import org.apache.commons.jexl2.JexlEngine;
 import org.apache.commons.jexl2.MapContext;
-
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -40,7 +40,7 @@ import org.apache.log.Logger;
  * @since 2.6
  */
 // For unit tests, see TestJexlFunction
-public class Jexl2Function extends AbstractFunction {
+public class Jexl2Function extends AbstractFunction implements ThreadListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -48,13 +48,7 @@ public class Jexl2Function extends AbstractFunction {
 
     private static final List<String> desc = new LinkedList<String>();
 
-    // TODO should the engine be static?
-    private static final JexlEngine jexl = new JexlEngine();
-    static {
-       jexl.setCache(512);
-       jexl.setLenient(false);
-       jexl.setSilent(false);
-    }
+    private static final ThreadLocal<JexlEngine> threadLocalJexl = new ThreadLocal<JexlEngine>();
 
     static
     {
@@ -96,7 +90,7 @@ public class Jexl2Function extends AbstractFunction {
             jc.set("OUT", System.out);//$NON-NLS-1$
 
             // Now evaluate the script, getting the result
-            Expression e = jexl.createExpression( exp );
+            Expression e = getJexlEngine().createExpression( exp );
             Object o = e.evaluate(jc);
             if (o != null)
             {
@@ -113,6 +107,22 @@ public class Jexl2Function extends AbstractFunction {
         return str;
     }
 
+    /**
+     * Get JexlEngine from ThreadLocal
+     * @return JexlEngine
+     */
+    private static JexlEngine getJexlEngine() {
+        JexlEngine engine = threadLocalJexl.get();
+        if(engine == null) {
+            engine = new JexlEngine();
+            engine.setCache(512);
+            engine.setLenient(false);
+            engine.setSilent(false);
+            threadLocalJexl.set(engine);
+        }
+        return engine;
+    }
+    
     /** {@inheritDoc} */
     @Override
     public List<String> getArgumentDesc()
@@ -134,6 +144,19 @@ public class Jexl2Function extends AbstractFunction {
     {
         checkParameterCount(parameters, 1, 2);
         values = parameters.toArray();
+    }
+
+    @Override
+    public void threadStarted() {
+    }
+
+    @Override
+    public void threadFinished() {
+        JexlEngine engine = threadLocalJexl.get();
+        if(engine != null) {
+            engine.clearCache();
+            threadLocalJexl.remove();
+        }
     }
 
 }
