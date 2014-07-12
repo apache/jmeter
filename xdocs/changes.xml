@@ -216,6 +216,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Functions</h3>
 <ul>
+<li><bugzilla>56708</bugzilla> - __jexl2 doesn't scale with multiple CPU cores. Based on analysis and patch contributed by Mikhail Epikhin(epihin-m at yandex.ru)</li>
 </ul>
 
 <h3>I18N</h3>
@@ -249,6 +250,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li>Emmanuel Bourg (ebourg at apache.org)</li>
 <li>Nicola Ambrosetti (ambrosetti.nicola at gmail.com)</li>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack support</a></li>
+<li>Mikhail Epikhin (epihin-m at yandex.ru)</li>
 </ul>
 
 <br/>
