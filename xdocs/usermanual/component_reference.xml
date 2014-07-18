@@ -4730,6 +4730,11 @@ points of the test plan.
 If timeout in milliseconds is set to 0 and number of threads never reaches "Number of Simultaneous Users to Group by" then Test will pause infinitely.
 Only a forced stop will stop it. Setting Timeout in milliseconds is an option to consider in this case.
 </note>
+<note>
+Synchronizing timer blocks only within one JVM, so if using Distributed testing ensure you never set "Number of Simultaneous Users to Group by" to a value superior to the number of users 
+of its containing Thread group considering 1 injector only.
+</note>
+
 </component>
 
 <component name="BeanShell Timer" index="&sect-num;.6.6"  width="846" height="636" screenshot="timers/beanshell_timer.png">
