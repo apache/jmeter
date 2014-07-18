@@ -4871,6 +4871,10 @@ expressions are used to find matches.</p>
 Matches are performed using protocol, host, path and parameter names.
 The target sampler cannot contain parameters that are not in the response links.
 </note>
+<note>
+If using distributed testing, ensure you switch mode (see jmeter.properties) so that it's not a stripping one, see <bugzilla>56376</bugzilla>
+</note>
+
 <example title="Spidering Example" anchor="spider_example">
 <p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
 hitting link after link parsed from the HTML returned from your server (this is not
@@ -4936,6 +4940,11 @@ Clever users will even determine that this modifier can be used to grab values t
         Should the value of the session Id be saved for later use when the session Id is not present?
         </property>
 </properties>
+
+<note>
+If using distributed testing, ensure you switch mode (see jmeter.properties) so that it's not a stripping one, see <bugzilla>56376</bugzilla>.
+</note>
+
 </component>
 
 <component name="HTML Parameter Mask (DEPRECATED)" index="&sect-num;.7.3" useinstead="Counter"  width="624" height="209" screenshot="parameter_mask.png">
