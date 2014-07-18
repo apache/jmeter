@@ -2518,12 +2518,21 @@ be saved under the Recording Controller.</p>
 
 </component>
 
-<component name="Critical Section Controller" index="&sect-num;.2.17" width="420" height="79" screenshot="logic-controller/critical-section-controller.png">
+<component name="Critical Section Controller" index="&sect-num;.2.17" width="469" height="129" screenshot="logic-controller/critical-section-controller.png">
 <description>
 <p>The Critical Section Controller ensures that its children elements (samplers/controllers, etc) will be executed 
 by only one thread as a named lock will be taken before executing children of controller.</p>
-
 </description>
+<p>
+    The figure below shows an example of using Critical Section Controller, in the figure below 2 Critical Section Controllers ensure 
+    that:
+    <ul>
+        <li>DS2-${__threadNum} is executed only by one thread at a time</li>
+        <li>DS4-${__threadNum} is executed only by one thread at a time</li>
+    </ul>
+<figure width="248" height="241" image="logic-controller/critical-section-controller-tp.png">Test Plan using Critical Section Controller</figure>
+</p>
+
 <properties>
         <property name="Lock Name" required="Yes">Lock that will be taken by controller, ensure you use different lock names for unrelated sections</property>
 </properties>
