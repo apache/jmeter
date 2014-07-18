@@ -96,6 +96,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     private static final boolean DEFAULT_CLEAR_VALUE = false;
 
+    /** Decides whether port should be omitted from SPN for kerberos spnego authentication */
+    private static final boolean STRIP_PORT = JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
+
     public enum Mechanism {
         BASIC_DIGEST, KERBEROS;
     }
@@ -392,8 +395,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                 log.debug(username + " > D="+domain+" R="+realm + " M="+auth.getMechanism());
             }
             if (Mechanism.KERBEROS.equals(auth.getMechanism())) {
-                boolean stripPort = (url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT || url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT);
-                ((AbstractHttpClient) client).getAuthSchemes().register(AuthPolicy.SPNEGO, new SPNegoSchemeFactory(stripPort));
+                ((AbstractHttpClient) client).getAuthSchemes().register(AuthPolicy.SPNEGO, new SPNegoSchemeFactory(isStripPort(url)));
                 credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
             } else {
                 credentialsProvider.setCredentials(
@@ -401,6 +403,24 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                         new NTCredentials(username, auth.getPass(), localHost, domain));
             }
         }
+    }
+
+    /**
+     * IE and Firefox will always strip port from the url before constructing
+     * the SPN. Chrome has an option (<code>--enable-auth-negotiate-port</code>)
+     * to include the port if it differs from <code>80</code> or
+     * <code>443</code>. That behavior can be changed by setting the jmeter
+     * property <code>kerberos.spnego.strip_port</code>.
+     *
+     * @param url to be checked
+     * @return <code>true</code> when port should omitted in SPN
+     */
+    private boolean isStripPort(URL url) {
+        if (STRIP_PORT) {
+            return true;
+        }
+        return (url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT || 
+                url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT);
     }
 
     /** {@inheritDoc} */

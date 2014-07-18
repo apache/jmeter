@@ -3545,6 +3545,18 @@ You can also configure those two properties in file bin/system.properties.
 Look at the two sample configuration files (krb5.conf and jaas.conf) located in the jmeter bin folder for references to more documentation, and tweak them to match 
 your Kerberos configuration.
 </p>
+<p>
+When generating a SPN for Kerberos SPNEGO authentication IE and Firefox will omit the port number
+from the url. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
+number if it differs from the standard ones (<code>80</code> and <code>443</code>). That behavior
+can be emulated by setting the following jmeter property as below.
+<pre>
+In jmeter.properties or user.properties, set:
+<ul>
+<li>kerberos.spnego.strip_port=false</li>
+</ul>
+</pre> 
+</p>
 <br></br>
 <b>Controls:</b>
 <ul>
