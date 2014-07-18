@@ -35,7 +35,7 @@
 
     Unfortunately Java does not currently allow for this - it outputs the trailing > -
     which messes up the Help display. 
-    To avoid these artefacts, use the form <br></br>, which Java does seem to handle OK.
+    To avoid these artifacts, use the form <br></br>, which Java does seem to handle OK.
 
  -->
 <section name="&sect-num;.0 Introduction" anchor="introduction">
@@ -138,7 +138,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         <li>HTTPClient3.1 - uses Apache Commons HttpClient 3.1. 
         This is no longer being developed, and support for this may be dropped in a future JMeter release.</li>
         <li>HTTPClient4 - uses Apache HttpComponents HttpClient 4.x.</li>
-        <li>Blank Value - does not set implementationon HTTP Samplers, so relies on HTTP Request Defaults if present or on jmeter.httpsampler property defined in jmeter.properties</li>
+        <li>Blank Value - does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on jmeter.httpsampler property defined in jmeter.properties</li>
         </ul>
         </ul>
          </p>
@@ -153,7 +153,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
          </li>
          <li>It does not support virtual hosts.</li>
          </ul>
-         <p>Note: the FILE protocol is intended for testing puposes only. 
+         <p>Note: the FILE protocol is intended for testing purposes only. 
          It is handled by the same code regardless of which HTTP Sampler is used.</p>
         <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
          you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
