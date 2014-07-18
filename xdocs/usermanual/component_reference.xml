@@ -210,9 +210,9 @@ https.default.protocol=SSLv3
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. 
-        Note that this appplies to each wait for a response. If the server response is sent in several chunks, the overall
+        Note that this applies to each wait for a response. If the server response is sent in several chunks, the overall
         elapsed time may be longer than the timeout.
-        A <complink name="Duration Assertion"/> can be used to detect overlong responses.
+        A <complink name="Duration Assertion"/> can be used to detect extremely slow responses.
         </property>
         <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
@@ -302,7 +302,7 @@ so unsafe characters may need to be encoded to avoid errors such as URISyntaxExc
         </property>
         <property name="Parameter name:" required="No">Value of the "name" web request parameter.</property>
         <property name="MIME Type" required="No">MIME type (for example, text/plain).
-        If it is a POST or PUT or PATCH request and either the 'name' atribute (below) are omitted or the request body is
+        If it is a POST or PUT or PATCH request and either the 'name' attribute (below) are omitted or the request body is
         constructed from parameter values only, then the value of this field is used as the value of the
         content-type request header.
         </property>
