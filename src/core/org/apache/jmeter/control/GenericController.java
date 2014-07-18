@@ -109,7 +109,7 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     /**
-     * Resets the controller:
+     * Resets the controller (called after execution of last child of controller):
      * <ul>
      * <li>resetCurrent() (i.e. current=0)</li>
      * <li>increment iteration count</li>
@@ -192,10 +192,17 @@ public class GenericController extends AbstractTestElement implements Controller
         this.done = done;
     }
 
+    /**
+     * @return true if it's the controller is returning the first of its children
+     */
     protected boolean isFirst() {
         return first;
     }
 
+    /**
+     * If b is true, it means first is reset which means Controller has executed all its children 
+     * @param b
+     */
     public void setFirst(boolean b) {
         first = b;
     }
