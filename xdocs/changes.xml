@@ -1,4 +1,4 @@
-<?xml version="1.0"?> 
+Crti<?xml version="1.0"?> 
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -201,6 +201,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Controllers</h3>
 <ul>
+<li><bugzilla>56728</bugzilla> - New Critical Section Controller to serialize blocks of a Test. Based partly on a patch contributed by Mikhail Epikhin(epihin-m at yandex.ru)</li>
 </ul>
 
 <h3>Listeners</h3>
