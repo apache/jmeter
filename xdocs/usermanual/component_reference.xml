@@ -2527,6 +2527,9 @@ by only one thread as a named lock will be taken before executing children of co
 <properties>
         <property name="Lock Name" required="Yes">Lock that will be taken by controller, ensure you use different lock names for unrelated sections</property>
 </properties>
+<note>
+Critical Section Controller takes locks only within one JVM, so if using Distributed testing ensure your use case does not rely on all threads of all JVMs blocking.
+</note>
 
 </component>
 
