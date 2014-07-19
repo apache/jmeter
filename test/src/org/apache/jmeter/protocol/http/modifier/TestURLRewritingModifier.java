@@ -106,6 +106,42 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             Arguments args = sampler.getArguments();
             assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
         }
+        
+        public void testGrabSessionId6() throws Exception {
+            String html = "location: http://server.com/index.html" + "?session_id=bonjour+monsieur";
+            response = new SampleResult();
+            response.setResponseData(html, null);
+            mod.setArgumentName("session_id");
+            HTTPSamplerBase sampler = createSampler();
+            sampler.addArgument("session_id", "adfasdfdsafasdfasd");
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
+            Arguments args = sampler.getArguments();
+            assertEquals("bonjour+monsieur", ((Argument) args.getArguments().get(0).getObjectValue())
+                    .getValue());
+            assertEquals("http://server.com/index.html?" + "session_id=bonjour+monsieur", sampler.toString());
+        }
+        
+        public void testGrabSessionId7() throws Exception {
+            String html = "location: http://server.com/index.html" + "?session_id=bonjour+monsieur";
+            response = new SampleResult();
+            response.setResponseData(html, null);
+            mod.setArgumentName("session_id");
+            mod.setEncode(true);
+            HTTPSamplerBase sampler = createSampler();
+            sampler.addArgument("session_id", "adfasdfdsafasdfasd");
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
+            Arguments args = sampler.getArguments();
+            System.out.println(((Argument) args.getArguments().get(0).getObjectValue())
+                    .getValue());
+            System.out.println(sampler.toString());
+            assertEquals("bonjour+monsieur", ((Argument) args.getArguments().get(0).getObjectValue())
+                    .getValue());
+            assertEquals("http://server.com/index.html?" + "session_id=bonjour%2Bmonsieur", sampler.toString());
+        }
 
         public void testGrabSessionIdFromXMLNonPatExtension() throws Exception { // Bug 50286
             String html = "<url>/some/path;jsessionid=123456789</url>";
