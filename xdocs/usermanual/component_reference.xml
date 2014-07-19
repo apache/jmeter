@@ -4944,7 +4944,7 @@ your dynamic test sample.</note>
 
 </component>
 
-<component name="HTTP URL Re-writing Modifier" index="&sect-num;.7.2"  width="609" height="215" screenshot="url_rewriter.png">
+<component name="HTTP URL Re-writing Modifier" index="&sect-num;.7.2"  width="579" height="239" screenshot="url_rewriter.png">
 <description><p>This modifier works similarly to the HTML Link Parser, except it has a specific purpose for which
 it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
 use URL Re-writing to store session ids instead of cookies, this element can be attached at the
