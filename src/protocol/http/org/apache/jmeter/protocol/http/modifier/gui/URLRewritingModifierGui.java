@@ -42,6 +42,8 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 
     private JCheckBox shouldCache;
 
+    private JCheckBox encode;
+
     @Override
     public String getLabelResource() {
         return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
@@ -75,6 +77,10 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
         shouldCache.setSelected(true);
         mainPanel.add(shouldCache);
 
+        encode = new JCheckBox(JMeterUtils.getResString("encode")); // $NON-NLS-1$
+        encode.setSelected(false);
+        mainPanel.add(encode);
+
         add(mainPanel, BorderLayout.CENTER);
     }
 
@@ -102,6 +108,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
         rewritingModifier.setPathExtensionNoEquals(pathExtNoEquals.isSelected());
         rewritingModifier.setPathExtensionNoQuestionmark(pathExtNoQuestionmark.isSelected());
         rewritingModifier.setShouldCache((shouldCache.isSelected()));
+        rewritingModifier.setEncode(encode.isSelected());
     }
 
     /**
@@ -116,6 +123,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
         pathExtNoEquals.setSelected(false);
         pathExtNoQuestionmark.setSelected(false);
         shouldCache.setSelected(false);
+        encode.setSelected(false);
     }
 
     /**
@@ -129,7 +137,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
         pathExtNoEquals.setSelected(rewritingModifier.isPathExtensionNoEquals());
         pathExtNoQuestionmark.setSelected(rewritingModifier.isPathExtensionNoQuestionmark());
         shouldCache.setSelected(rewritingModifier.shouldCache());
-
+        encode.setSelected(rewritingModifier.encode());
         super.configure(el);
     }
 }
