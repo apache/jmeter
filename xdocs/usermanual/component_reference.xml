@@ -4968,6 +4968,9 @@ Clever users will even determine that this modifier can be used to grab values t
         <property name="Cache Session Id?" required="Yes">
         Should the value of the session Id be saved for later use when the session Id is not present?
         </property>
+        <property name="URL Encode" required="No">
+        URL Encode value when writing parameter
+        </property>
 </properties>
 
 <note>

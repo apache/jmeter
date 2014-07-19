@@ -63,6 +63,8 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
     private static final String SHOULD_CACHE = "cache_value"; // $NON-NLS-1$
 
+    private static final String ENCODE = "encode"; // $NON-NLS-1$
+
     // PreProcessors are cloned per-thread, so this will be saved per-thread
     private transient String savedValue = ""; // $NON-NLS-1$
 
@@ -137,7 +139,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             }
         } else {
             sampler.getArguments().removeArgument(getArgumentName());
-            sampler.getArguments().addArgument(new HTTPArgument(getArgumentName(), value, true));
+            sampler.getArguments().addArgument(new HTTPArgument(getArgumentName(), value, !encode()));
         }
     }
 
@@ -225,4 +227,12 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         savedValue = "";
         return this;
     }
+
+    public boolean encode() {
+        return getPropertyAsBoolean(ENCODE, false);        
+    }
+    public void setEncode(boolean b) {
+        setProperty(new BooleanProperty(ENCODE, b));
+    }
+
 }
