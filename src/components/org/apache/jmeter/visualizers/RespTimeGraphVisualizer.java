@@ -63,6 +63,7 @@ import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jmeter.visualizers.utils.Colors;
@@ -79,6 +80,86 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10);
+
+    //+ JMX property names; do not change
+
+    public static final String INTERVAL = "RespTimeGraph.interval"; // $NON-NLS-1$
+
+    public static final String SERIES_SELECTION = "RespTimeGraph.seriesselection"; // $NON-NLS-1$
+
+    public static final String SERIES_SELECTION_MATCH_LABEL = "RespTimeGraph.seriesselectionmatchlabel"; // $NON-NLS-1$
+
+    public static final String SERIES_SELECTION_CASE_SENSITIVE = "RespTimeGraph.seriesselectioncasesensitive"; // $NON-NLS-1$
+
+    public static final String SERIES_SELECTION_REGEXP = "RespTimeGraph.seriesselectionregexp"; // $NON-NLS-1$
+    
+    public static final String GRAPH_TITLE = "RespTimeGraph.graphtitle"; // $NON-NLS-1$
+
+    public static final String GRAPH_TITLE_FONT_NAME = "RespTimeGraph.graphtitlefontname"; // $NON-NLS-1$
+
+    public static final String GRAPH_TITLE_FONT_SIZE = "RespTimeGraph.graphtitlefondsize"; // $NON-NLS-1$
+
+    public static final String GRAPH_TITLE_FONT_STYLE = "RespTimeGraph.graphtitlefontstyle"; // $NON-NLS-1$
+
+    public static final String LINE_STROKE_WIDTH = "RespTimeGraph.linestrockwidth"; // $NON-NLS-1$
+
+    public static final String LINE_SHAPE_POINT = "RespTimeGraph.lineshapepoint"; // $NON-NLS-1$
+
+    public static final String GRAPH_SIZE_DYNAMIC = "RespTimeGraph.graphsizedynamic"; // $NON-NLS-1$
+
+    public static final String GRAPH_SIZE_WIDTH = "RespTimeGraph.graphsizewidth"; // $NON-NLS-1$
+
+    public static final String GRAPH_SIZE_HEIGHT = "RespTimeGraph.graphsizeheight"; // $NON-NLS-1$
+
+    public static final String XAXIS_TIME_FORMAT = "RespTimeGraph.xaxistimeformat"; // $NON-NLS-1$
+
+    public static final String YAXIS_SCALE_MAX_VALUE = "RespTimeGraph.yaxisscalemaxvalue"; // $NON-NLS-1$
+
+    public static final String YAXIS_INCREMENT_SCALE = "RespTimeGraph.yaxisscaleincrement"; // $NON-NLS-1$
+
+    public static final String YAXIS_NUMBER_GROUPING = "RespTimeGraph.yaxisnumbergrouping"; // $NON-NLS-1$
+
+    public static final String LEGEND_PLACEMENT = "RespTimeGraph.legendplacement"; // $NON-NLS-1$
+
+    public static final String LEGEND_FONT = "RespTimeGraph.legendfont"; // $NON-NLS-1$
+
+    public static final String LEGEND_SIZE = "RespTimeGraph.legendsize"; // $NON-NLS-1$
+
+    public static final String LEGEND_STYLE = "RespTimeGraph.legendstyle"; // $NON-NLS-1$
+
+    //- JMX property names
+
+    public static final int DEFAULT_INTERVAL = 10000; // in milli-seconds // TODO: properties?
+
+    public static final boolean DEFAULT_SERIES_SELECTION = false;
+    
+    public static final boolean DEFAULT_CASE_SENSITIVE = false;
+    
+    public static final boolean DEFAULT_REGEXP = true;
+    
+    public static final int DEFAULT_TITLE_FONT_NAME = 0; // default: sans serif
+    
+    public static final int DEFAULT_TITLE_FONT_SIZE = 6; // default: 16
+
+    public static final int DEFAULT_TITLE_FONT_STYLE = 1; // default: bold
+
+    public static final int DEFAULT_STROKE_WIDTH_LIST = 4; // default: 3.0f
+    
+    public static final int DEFAULT_LINE_SHAPE_POINT = 0; // default: circle
+
+    public static final boolean DEFAULT_DYNAMIC_GRAPH_SIZE = true; // default: true
+
+    public static final String DEFAULT_XAXIS_TIME_FORMAT = "HH:mm:ss"; // $NON-NLS-1$
+    
+    public static final boolean DEFAULT_NUMBER_SHOW_GROUPING = true;
+    
+    public static final int DEFAULT_LEGEND_PLACEMENT = 0; // default: bottom
+
+    public static final int DEFAULT_LEGEND_FONT = 0; // default: sans serif
+    
+    public static final int DEFAULT_LEGEND_SIZE = 2; // default: 10
+
+    public static final int DEFAULT_LEGEND_STYLE = 0; // default: normal
 
     /**
      * Lock used to protect list update
@@ -103,10 +184,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private static final int DEFAULT_HEIGTH = 300;
     
-    private static final int INTERVAL_DEFAULT = 10000; // in milli-seconds // TODO: properties?
-    
-    private int intervalValue = INTERVAL_DEFAULT;
-    
+    private int intervalValue = DEFAULT_INTERVAL;
+
     private final JLabeledTextField intervalField =
             new JLabeledTextField(JMeterUtils.getResString("graph_resp_time_interval_label"), 7); //$NON-NLS-1$
 
@@ -146,7 +225,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final JComboBox strokeWidthList = new JComboBox(StatGraphProperties.strokeWidth);
 
-    private final JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), true); // Default checked // $NON-NLS-1$
+    private final JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), // $NON-NLS-1$
+            DEFAULT_NUMBER_SHOW_GROUPING); // Default checked
 
     private final JButton syncWithName =
             new JButton(JMeterUtils.getResString("aggregate_graph_sync_with_name"));  //$NON-NLS-1$
@@ -447,25 +527,10 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         } else if (eventSource == syncWithName) {
             graphTitle.setText(namePanel.getName());
         } else if (eventSource == dynamicGraphSize) {
-            // if use dynamic graph size is checked, we disable the dimension fields
-            if (dynamicGraphSize.isSelected()) {
-                graphWidth.setEnabled(false);
-                graphHeight.setEnabled(false);
-            } else {
-                graphWidth.setEnabled(true);
-                graphHeight.setEnabled(true);
-            }
+                enableDynamicGraph(dynamicGraphSize.isSelected());
         } else if (eventSource == samplerSelection) {
-            if (samplerSelection.isSelected()) {
-                samplerMatchLabel.setEnabled(true);
-                applyFilterBtn.setEnabled(true);
-                caseChkBox.setEnabled(true);
-                regexpChkBox.setEnabled(true);
-            } else {
-                samplerMatchLabel.setEnabled(false);
-                applyFilterBtn.setEnabled(false);
-                caseChkBox.setEnabled(false);
-                regexpChkBox.setEnabled(false);
+            enableSamplerSelection(samplerSelection.isSelected());
+            if (!samplerSelection.isSelected()) {
                 // Force reload data
                 forceReloadData = true;
             }
@@ -534,6 +599,97 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         return this;
     }
 
+    @Override
+    public void configure(TestElement te) {
+        super.configure(te);
+        intervalField.setText(te.getPropertyAsString(INTERVAL, String.valueOf(DEFAULT_INTERVAL)));
+        samplerSelection.setSelected(te.getPropertyAsBoolean(SERIES_SELECTION, DEFAULT_SERIES_SELECTION));
+        samplerMatchLabel.setText(te.getPropertyAsString(SERIES_SELECTION_MATCH_LABEL, "")); //$NON-NLS-1$
+        caseChkBox.setSelected(te.getPropertyAsBoolean(SERIES_SELECTION_CASE_SENSITIVE, DEFAULT_CASE_SENSITIVE));
+        regexpChkBox.setSelected(te.getPropertyAsBoolean(SERIES_SELECTION_REGEXP, DEFAULT_REGEXP));
+        graphTitle.setText(te.getPropertyAsString(GRAPH_TITLE, "")); //$NON-NLS-1$
+        titleFontNameList.setSelectedIndex(te.getPropertyAsInt(GRAPH_TITLE_FONT_NAME, DEFAULT_TITLE_FONT_NAME));
+        titleFontSizeList.setSelectedIndex(te.getPropertyAsInt(GRAPH_TITLE_FONT_SIZE, DEFAULT_TITLE_FONT_SIZE));
+        titleFontStyleList.setSelectedIndex(te.getPropertyAsInt(GRAPH_TITLE_FONT_STYLE, DEFAULT_TITLE_FONT_STYLE));
+        strokeWidthList.setSelectedIndex(te.getPropertyAsInt(LINE_STROKE_WIDTH, DEFAULT_STROKE_WIDTH_LIST));
+        pointShapeLine.setSelectedIndex(te.getPropertyAsInt(LINE_SHAPE_POINT, DEFAULT_LINE_SHAPE_POINT));
+        dynamicGraphSize.setSelected(te.getPropertyAsBoolean(GRAPH_SIZE_DYNAMIC, DEFAULT_DYNAMIC_GRAPH_SIZE));
+        graphWidth.setText(te.getPropertyAsString(GRAPH_SIZE_WIDTH, "")); //$NON-NLS-1$
+        graphHeight.setText(te.getPropertyAsString(GRAPH_SIZE_HEIGHT, "")); //$NON-NLS-1$
+        xAxisTimeFormat.setText(te.getPropertyAsString(XAXIS_TIME_FORMAT, DEFAULT_XAXIS_TIME_FORMAT));
+        maxValueYAxisLabel.setText(te.getPropertyAsString(YAXIS_SCALE_MAX_VALUE, "")); //$NON-NLS-1$
+        incrScaleYAxis.setText(te.getPropertyAsString(YAXIS_INCREMENT_SCALE, "")); //$NON-NLS-1$
+        numberShowGrouping.setSelected(te.getPropertyAsBoolean(YAXIS_NUMBER_GROUPING, DEFAULT_NUMBER_SHOW_GROUPING));
+        legendPlacementList.setSelectedIndex(te.getPropertyAsInt(LEGEND_PLACEMENT, DEFAULT_LEGEND_PLACEMENT));
+        fontNameList.setSelectedIndex(te.getPropertyAsInt(LEGEND_FONT, DEFAULT_LEGEND_FONT));
+        fontSizeList.setSelectedIndex(te.getPropertyAsInt(LEGEND_SIZE, DEFAULT_LEGEND_SIZE));
+        fontStyleList.setSelectedIndex(te.getPropertyAsInt(LEGEND_STYLE, DEFAULT_LEGEND_STYLE));
+        
+        enableSamplerSelection(samplerSelection.isSelected());
+        enableDynamicGraph(dynamicGraphSize.isSelected());
+    }
+
+    @Override
+    public void modifyTestElement(TestElement te) {
+        super.modifyTestElement(te);
+        te.setProperty(INTERVAL, intervalField.getText(), String.valueOf(DEFAULT_INTERVAL));
+        te.setProperty(SERIES_SELECTION, samplerSelection.isSelected(), DEFAULT_SERIES_SELECTION);
+        te.setProperty(SERIES_SELECTION_MATCH_LABEL, samplerMatchLabel.getText(), ""); //$NON-NLS-1$
+        te.setProperty(SERIES_SELECTION_CASE_SENSITIVE, caseChkBox.isSelected(), DEFAULT_CASE_SENSITIVE);
+        te.setProperty(SERIES_SELECTION_REGEXP, regexpChkBox.isSelected(), DEFAULT_REGEXP);
+        te.setProperty(GRAPH_TITLE, graphTitle.getText(), ""); //$NON-NLS-1$
+        te.setProperty(GRAPH_TITLE_FONT_NAME, titleFontNameList.getSelectedIndex(), DEFAULT_TITLE_FONT_NAME);
+        te.setProperty(GRAPH_TITLE_FONT_SIZE, titleFontSizeList.getSelectedIndex(), DEFAULT_TITLE_FONT_SIZE);
+        te.setProperty(GRAPH_TITLE_FONT_STYLE, titleFontStyleList.getSelectedIndex(), DEFAULT_TITLE_FONT_STYLE);
+        te.setProperty(LINE_STROKE_WIDTH, strokeWidthList.getSelectedIndex(), DEFAULT_STROKE_WIDTH_LIST);
+        te.setProperty(LINE_SHAPE_POINT, pointShapeLine.getSelectedIndex(), DEFAULT_LINE_SHAPE_POINT);
+        te.setProperty(GRAPH_SIZE_DYNAMIC, dynamicGraphSize.isSelected(), DEFAULT_DYNAMIC_GRAPH_SIZE);
+        te.setProperty(GRAPH_SIZE_WIDTH, graphWidth.getText(), ""); //$NON-NLS-1$
+        te.setProperty(GRAPH_SIZE_HEIGHT, graphHeight.getText(), ""); //$NON-NLS-1$
+        te.setProperty(XAXIS_TIME_FORMAT, xAxisTimeFormat.getText(), DEFAULT_XAXIS_TIME_FORMAT);
+        te.setProperty(YAXIS_SCALE_MAX_VALUE, maxValueYAxisLabel.getText(), ""); //$NON-NLS-1$
+        te.setProperty(YAXIS_INCREMENT_SCALE, incrScaleYAxis.getText(), ""); //$NON-NLS-1$
+        te.setProperty(YAXIS_NUMBER_GROUPING, numberShowGrouping.isSelected(), DEFAULT_NUMBER_SHOW_GROUPING);
+        te.setProperty(LEGEND_PLACEMENT, legendPlacementList.getSelectedIndex(), DEFAULT_LEGEND_PLACEMENT);
+        te.setProperty(LEGEND_FONT, fontNameList.getSelectedIndex(), DEFAULT_LEGEND_FONT);
+        te.setProperty(LEGEND_SIZE, fontSizeList.getSelectedIndex(), DEFAULT_LEGEND_SIZE);
+        te.setProperty(LEGEND_STYLE, fontStyleList.getSelectedIndex(), DEFAULT_LEGEND_STYLE);
+        
+        // Update sub-element visibility and data reload if need
+        enableSamplerSelection(samplerSelection.isSelected());
+        enableDynamicGraph(dynamicGraphSize.isSelected());
+    }
+
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    @Override
+    public void clearGui() {
+        super.clearGui();
+        intervalField.setText(String.valueOf(DEFAULT_INTERVAL));
+        samplerSelection.setSelected(DEFAULT_SERIES_SELECTION);
+        samplerMatchLabel.setText( ""); //$NON-NLS-1$
+        caseChkBox.setSelected(DEFAULT_CASE_SENSITIVE);
+        regexpChkBox.setSelected(DEFAULT_REGEXP);
+        graphTitle.setText(""); //$NON-NLS-1$
+        titleFontNameList.setSelectedIndex(DEFAULT_TITLE_FONT_NAME);
+        titleFontSizeList.setSelectedIndex(DEFAULT_TITLE_FONT_SIZE);
+        titleFontStyleList.setSelectedIndex(DEFAULT_TITLE_FONT_STYLE);
+        strokeWidthList.setSelectedIndex(DEFAULT_STROKE_WIDTH_LIST);
+        pointShapeLine.setSelectedIndex(DEFAULT_LINE_SHAPE_POINT);
+        dynamicGraphSize.setSelected(DEFAULT_DYNAMIC_GRAPH_SIZE);
+        graphWidth.setText(""); //$NON-NLS-1$
+        graphHeight.setText(""); //$NON-NLS-1$
+        xAxisTimeFormat.setText(DEFAULT_XAXIS_TIME_FORMAT);
+        maxValueYAxisLabel.setText(""); //$NON-NLS-1$
+        incrScaleYAxis.setText(""); //$NON-NLS-1$
+        numberShowGrouping.setSelected(DEFAULT_NUMBER_SHOW_GROUPING);
+        legendPlacementList.setSelectedIndex(DEFAULT_LEGEND_PLACEMENT);
+        fontNameList.setSelectedIndex(DEFAULT_LEGEND_FONT);
+        fontSizeList.setSelectedIndex(DEFAULT_LEGEND_SIZE);
+        fontStyleList.setSelectedIndex(DEFAULT_LEGEND_STYLE);
+    }
+
     private JPanel createGraphActionsPane() {
         JPanel buttonPanel = new JPanel(new BorderLayout());
         JPanel displayPane = new JPanel();
@@ -598,7 +754,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         
         JPanel intervalPane = new JPanel();
         intervalPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        intervalField.setText(String.valueOf(INTERVAL_DEFAULT));
+        intervalField.setText(String.valueOf(DEFAULT_INTERVAL));
         intervalPane.add(intervalField);
         
         // Button
@@ -652,13 +808,13 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         titleStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
                 titleFontNameList));
-        titleFontNameList.setSelectedIndex(0); // default: sans serif
+        titleFontNameList.setSelectedIndex(DEFAULT_TITLE_FONT_NAME);
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 titleFontSizeList));
-        titleFontSizeList.setSelectedItem(StatGraphProperties.fontSize[6]); // default: 16
+        titleFontSizeList.setSelectedItem(StatGraphProperties.fontSize[DEFAULT_TITLE_FONT_SIZE]);
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 titleFontStyleList));
-        titleFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.bold"));  // $NON-NLS-1$ // default: bold
+        titleFontStyleList.setSelectedIndex(DEFAULT_TITLE_FONT_STYLE);
 
         JPanel titlePane = new JPanel(new BorderLayout());
         titlePane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -676,10 +832,10 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 JMeterUtils.getResString("graph_resp_time_settings_line"))); // $NON-NLS-1$
         lineStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("graph_resp_time_stroke_width"), //$NON-NLS-1$
                 strokeWidthList));
-        strokeWidthList.setSelectedItem(StatGraphProperties.strokeWidth[4]); // default: 3.0f
+        strokeWidthList.setSelectedItem(StatGraphProperties.strokeWidth[DEFAULT_STROKE_WIDTH_LIST]);
         lineStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("graph_resp_time_shape_label"), //$NON-NLS-1$
                 pointShapeLine));
-        pointShapeLine.setSelectedIndex(0); // default: circle
+        pointShapeLine.setSelectedIndex(DEFAULT_LINE_SHAPE_POINT);
         return lineStylePane;
     }
 
@@ -691,7 +847,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 JMeterUtils.getResString("aggregate_graph_dimension"))); // $NON-NLS-1$
 
         dimensionPane.add(dynamicGraphSize);
-        dynamicGraphSize.setSelected(true); // default option
+        dynamicGraphSize.setSelected(DEFAULT_DYNAMIC_GRAPH_SIZE);
         graphWidth.setEnabled(false);
         graphHeight.setEnabled(false);
         dynamicGraphSize.addActionListener(this);
@@ -712,7 +868,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         xAxisPane.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_xaxis_group"))); // $NON-NLS-1$
-        xAxisTimeFormat.setText("HH:mm:ss"); // $NON-NLS-1$
+        xAxisTimeFormat.setText(DEFAULT_XAXIS_TIME_FORMAT); // $NON-NLS-1$
         xAxisPane.add(xAxisTimeFormat);
         return xAxisPane;
     }
@@ -746,16 +902,16 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$
                 legendPlacementList));
-        legendPlacementList.setSelectedItem(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"));  //$NON-NLS-1$ default: bottom
+        legendPlacementList.setSelectedIndex(DEFAULT_LEGEND_PLACEMENT);
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_font"), //$NON-NLS-1$
                 fontNameList));
-        fontNameList.setSelectedIndex(0); // default: sans serif
+        fontNameList.setSelectedIndex(DEFAULT_LEGEND_FONT);
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 fontSizeList));
-        fontSizeList.setSelectedItem(StatGraphProperties.fontSize[2]); // default: 10
+        fontSizeList.setSelectedItem(StatGraphProperties.fontSize[DEFAULT_LEGEND_SIZE]);
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 fontStyleList));
-        fontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal"));  //$NON-NLS-1$ default: normal
+        fontStyleList.setSelectedIndex(DEFAULT_LEGEND_STYLE);
 
         return legendPanel;
     }
@@ -780,5 +936,30 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             return null;
         }
         return pattern;
+    }
+    
+    private void enableDynamicGraph(boolean enable) {
+        // if use dynamic graph size is checked, we disable the dimension fields
+        if (enable) {
+            graphWidth.setEnabled(false);
+            graphHeight.setEnabled(false);
+        } else {
+            graphWidth.setEnabled(true);
+            graphHeight.setEnabled(true);
+        }
+    }
+
+    private void enableSamplerSelection(boolean enable) {
+        if (enable) {
+            samplerMatchLabel.setEnabled(true);
+            applyFilterBtn.setEnabled(true);
+            caseChkBox.setEnabled(true);
+            regexpChkBox.setEnabled(true);
+        } else {
+            samplerMatchLabel.setEnabled(false);
+            applyFilterBtn.setEnabled(false);
+            caseChkBox.setEnabled(false);
+            regexpChkBox.setEnabled(false);
+        }
     }
 }

@@ -21,7 +21,6 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.Font;
 import java.awt.Shape;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class StatGraphProperties {
     public static final String[] strokeWidth = { "1.0f", "1.5f", "2.0f", "2.5f", "3.0f", "3.5f", "4.0f", "4.5f", "5.0f", "5.5f", "6.0f", "6.5f"};
 
     public static Map<String, String> getFontNameMap() {
-        Map<String, String> fontNameMap = new HashMap<String, String>(2);
+        Map<String, String> fontNameMap = new LinkedHashMap<String, String>(2);
         fontNameMap.put(JMeterUtils.getResString("font.sansserif"), "SansSerif"); //$NON-NLS-1$ //$NON-NLS-1$
         fontNameMap.put(JMeterUtils.getResString("font.serif"), "Serif"); //$NON-NLS-1$
         return fontNameMap;
@@ -44,7 +43,7 @@ public class StatGraphProperties {
 
     @SuppressWarnings("boxing")
     public static Map<String, Integer> getFontStyleMap() {
-        Map<String, Integer> fontStyleMap = new HashMap<String, Integer>(3);
+        Map<String, Integer> fontStyleMap = new LinkedHashMap<String, Integer>(3);
         fontStyleMap.put(JMeterUtils.getResString("fontstyle.normal"), Font.PLAIN); //$NON-NLS-1$
         fontStyleMap.put(JMeterUtils.getResString("fontstyle.bold"), Font.BOLD); //$NON-NLS-1$
         fontStyleMap.put(JMeterUtils.getResString("fontstyle.italic"), Font.ITALIC); //$NON-NLS-1$
@@ -53,7 +52,7 @@ public class StatGraphProperties {
 
     @SuppressWarnings("boxing")
     public static Map<String, Integer> getPlacementNameMap() {
-        Map<String, Integer> placementNameMap = new HashMap<String, Integer>(4);
+        Map<String, Integer> placementNameMap = new LinkedHashMap<String, Integer>(4);
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"), LegendAreaProperties.BOTTOM); //$NON-NLS-1$
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.right"), LegendAreaProperties.RIGHT); //$NON-NLS-1$
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.left"), LegendAreaProperties.LEFT); //$NON-NLS-1$
