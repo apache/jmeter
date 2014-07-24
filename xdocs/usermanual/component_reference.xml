@@ -3043,7 +3043,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
 <figure width="919" height="481" image="response_time_graph_settings.png">Response time graph settings</figure>
 </p>
 </div>
-<p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
+<p><i>Please note: All this parameters are saved in JMeter .jmx file.</i></p>
 <properties>
         <property name="Interval (ms)" required="Yes">The time in milli-seconds for X axis interval. Samples are grouped according to this value.
         Before display the graph, click on <b>Apply interval</b> button to refresh internal data.</property>
