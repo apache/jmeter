@@ -212,7 +212,7 @@ https.default.protocol=SSLv3
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. 
         Note that this applies to each wait for a response. If the server response is sent in several chunks, the overall
         elapsed time may be longer than the timeout.
-        A <complink name="Duration Assertion"/> can be used to detect extremely slow responses.
+        A <complink name="Duration Assertion"/> can be used to detect responses that take too long to complete.
         </property>
         <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
