@@ -44,8 +44,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 7177285850634344095L;
 
     /**
-     * A field allowing the user to specify the number of times the controller
-     * should loop.
+     * A field allowing the user to specify the lock name
      */
     private JTextField tfLockName;
 
@@ -57,14 +56,14 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
     private boolean displayName = true;
 
     /**
-     * Create a new LoopControlPanel as a standalone component.
+     * Create a new CriticalSection Panel as a standalone component.
      */
     public CriticalSectionControllerGui() {
         this(true);
     }
 
     /**
-     * Create a new IfControllerPanel as either a standalone or an embedded
+     * Create a new CriticalSectionPanel as either a standalone or an embedded
      * component.
      * 
      * @param displayName
@@ -144,22 +143,22 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
             add(makeTitlePanel(), BorderLayout.NORTH);
 
             JPanel mainPanel = new JPanel(new BorderLayout());
-            mainPanel.add(createConditionPanel(), BorderLayout.NORTH);
+            mainPanel.add(createCriticalSectionPanel(), BorderLayout.NORTH);
             add(mainPanel, BorderLayout.CENTER);
 
         } else {
             // Embedded
             setLayout(new BorderLayout());
-            add(createConditionPanel(), BorderLayout.NORTH);
+            add(createCriticalSectionPanel(), BorderLayout.NORTH);
         }
     }
 
     /**
-     * Create a GUI panel containing the condition.
+     * Create a GUI panel containing the lockName
      * 
-     * @return a GUI panel containing the condition components
+     * @return a GUI panel containing the lock name components
      */
-    private JPanel createConditionPanel() {
+    private JPanel createCriticalSectionPanel() {
         JPanel conditionPanel = new JPanel(new BorderLayout(5, 0));
 
         // Condition LABEL
