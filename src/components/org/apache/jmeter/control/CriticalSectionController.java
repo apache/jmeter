@@ -70,9 +70,9 @@ public class CriticalSectionController extends GenericController implements
 
     private static final String LOCK_NAME = "CriticalSectionController.lockName"; //$NON-NLS-1$
 
-    private static final ConcurrentHashMap<String, ReentrantLock> lockMap = new ConcurrentHashMap<String, ReentrantLock>();
+    private static final ConcurrentHashMap<String, ReentrantLock> LOCK_MAP = new ConcurrentHashMap<String, ReentrantLock>();
 
-    private transient ReentrantLock currentLock;
+    private transient volatile ReentrantLock currentLock;
 
     /**
      * constructor
@@ -97,23 +97,25 @@ public class CriticalSectionController extends GenericController implements
     }
 
     /**
-     * Function for autocreate and get lock
+     * If lock exists returns it, otherwise creates one, puts it in LOCK_MAP 
+     * then returns it
      * 
-     * @return named lock
+     * @return {@link ReentrantLock}
      */
-    private ReentrantLock getLock() {
-        ReentrantLock lock = lockMap.get(getLockName());
+    private ReentrantLock getOrCreateLock() {
+        String lockName = getLockName();
+        ReentrantLock lock = LOCK_MAP.get(lockName);
         ReentrantLock prev = null;
         if (lock != null) {
             return lock;
         }
         lock = new ReentrantLock();
-        prev = lockMap.putIfAbsent(getLockName(), lock);
+        prev = LOCK_MAP.putIfAbsent(lockName, lock);
         return prev == null ? lock : prev;
     }
 
     /**
-     * Lock name
+     * @return String lock name
      */
     public String getLockName() {
         return getPropertyAsString(LOCK_NAME);
@@ -133,7 +135,7 @@ public class CriticalSectionController extends GenericController implements
             // Take the lock for first child element
             long startTime = System.currentTimeMillis();
             if (this.currentLock == null) {
-                this.currentLock = getLock();
+                this.currentLock = getOrCreateLock();
             }
             this.currentLock.lock();
             long endTime = System.currentTimeMillis();
@@ -191,7 +193,7 @@ public class CriticalSectionController extends GenericController implements
 
     @Override
     public void testEnded() {
-        lockMap.clear();
+        LOCK_MAP.clear();
     }
 
     @Override
