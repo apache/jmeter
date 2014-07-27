@@ -239,7 +239,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-<li>Updated to commons-lang3 3.2.1 (from 3.1)</li>
+<li>Updated to commons-lang3 3.3.2 (from 3.1)</li>
 <li>Updated to commons-codec 1.9 (from 1.8)</li>
 <li>Updated to tika 1.5 (from 1.4)</li>
 <li>Updated to xercesImpl 2.11.0 (from 2.9.1)</li>
