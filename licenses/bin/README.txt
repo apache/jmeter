@@ -12,7 +12,7 @@ commons-io-2.4.jar
 commons-jexl-1.1.jar
 commons-jexl-2.1.1.jar
 commons-lang3-3.3.2.jar
-commons-logging-1.1.3.jar
+commons-logging-1.2.jar
 commons-net-3.3.jar
 excalibur-datasource-1.1.1.jar
 excalibur-instrument-1.0.jar

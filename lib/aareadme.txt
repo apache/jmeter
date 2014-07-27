@@ -66,7 +66,7 @@ commons-lang3-3.3.2
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
 
-commons-logging-1.1.3
+commons-logging-1.2
 ---------------------
 http://commons.apache.org/downloads/download_logging.cgi
 - httpclient
