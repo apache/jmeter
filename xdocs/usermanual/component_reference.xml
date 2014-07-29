@@ -336,7 +336,8 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         </property>
         <property name="Source address field" required="No">
         <i>[Only for HTTP Request with HTTPClient implementation]</i> <br></br>
-        Override the default local IP address for this sample.
+        This property is used to enable IP Spoofing.
+        It override the default local IP address for this sample.
         The JMeter host must have multiple IP addresses (i.e. IP aliases, network interfaces, devices).
         The value can be a host name, IP address, or a network interface device such as "eth0" or "lo" or "wlan0".<br></br>
         If the property <b>httpclient.localaddress</b> is defined, that is used for all HttpClient requests.
