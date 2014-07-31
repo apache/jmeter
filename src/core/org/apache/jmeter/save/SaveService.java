@@ -470,9 +470,9 @@ public class SaveService {
      *
      * @param reader of the file
      * @param resultCollectorHelper helper class to enable TestResultWrapperConverter to deliver the samples
-     * @throws Exception
+     * @throws IOException
      */
-    public static void loadTestResults(InputStream reader, ResultCollectorHelper resultCollectorHelper) throws Exception {
+    public static void loadTestResults(InputStream reader, ResultCollectorHelper resultCollectorHelper) throws IOException {
         // Get the InputReader to use
         InputStreamReader inputStreamReader = getInputStreamReader(reader);
         DataHolder dh = JTLSAVER.newDataHolder();
@@ -487,9 +487,9 @@ public class SaveService {
      * Load a Test tree (JMX file)
      * @param reader on the JMX file
      * @return the loaded tree
-     * @throws Exception if there is a problem reading the file or processing it
+     * @throws IOException if there is a problem reading the file or processing it
      */
-    public static HashTree loadTree(InputStream reader) throws Exception {
+    public static HashTree loadTree(InputStream reader) throws IOException {
         if (!reader.markSupported()) {
             reader = new BufferedInputStream(reader);
         }
