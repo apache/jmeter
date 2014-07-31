@@ -123,7 +123,7 @@ public class MailFileFolder extends Folder {
                 IOUtils.closeQuietly(fis);
             }
         } catch (FileNotFoundException e) {
-            throw new MessagingException("Cannot open folder: "+e.getMessage());
+            throw new MessagingException("Cannot open folder: "+e.getMessage(), e);
         }
     }
 
