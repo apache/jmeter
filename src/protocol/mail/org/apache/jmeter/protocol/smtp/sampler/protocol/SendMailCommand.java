@@ -261,7 +261,7 @@ public class SendMailCommand {
      * Sends message to mailserver, waiting for delivery if using synchronous mode.
      *
      * @param message
-     *            Message prior prepared by prepareMessage()
+     *            Message previously prepared by prepareMessage()
      * @throws MessagingException
      * @throws IOException
      * @throws InterruptedException
@@ -298,9 +298,11 @@ public class SendMailCommand {
     /**
      * Processes prepareMessage() and execute()
      *
-     * @throws Exception
+     * @throws InterruptedException 
+     * @throws IOException 
+     * @throws MessagingException 
      */
-    public void execute() throws Exception {
+    public void execute() throws MessagingException, IOException, InterruptedException {
         execute(prepareMessage());
     }
 
