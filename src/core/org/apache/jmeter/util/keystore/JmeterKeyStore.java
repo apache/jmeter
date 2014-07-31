@@ -18,11 +18,16 @@
 
 package org.apache.jmeter.util.keystore;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -55,7 +60,7 @@ public final class JmeterKeyStore {
     private int last_user;
 
 
-    private JmeterKeyStore(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws Exception {
+    private JmeterKeyStore(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException {
         if (startIndex < 0 || endIndex < 0 || endIndex < startIndex) {
             throw new IllegalArgumentException("Invalid index(es). Start="+startIndex+", end="+endIndex);
         }
@@ -67,8 +72,13 @@ public final class JmeterKeyStore {
 
     /**
      * Process the input stream
+     * @throws IOException 
+     * @throws CertificateException 
+     * @throws NoSuchAlgorithmException 
+     * @throws KeyStoreException 
+     * @throws UnrecoverableKeyException 
      */
-    public void load(InputStream is, String pword) throws Exception {
+    public void load(InputStream is, String pword) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
         char pw[] = pword==null ? null : pword.toCharArray();
         store.load(is, pw);
     
@@ -86,11 +96,11 @@ public final class JmeterKeyStore {
                     if (index >= startIndex && index <= endIndex) {
                         _key = (PrivateKey) store.getKey(alias, pw);
                         if (null == _key) {
-                            throw new Exception("No key found for alias: " + alias); // Should not happen
+                            throw new IOException("No key found for alias: " + alias); // Should not happen
                         }
                         Certificate[] chain = store.getCertificateChain(alias);
                         if (null == chain) {
-                            throw new Exception("No certificate chain found for alias: " + alias);
+                            throw new IOException("No certificate chain found for alias: " + alias);
                         }
                         v_names.add(alias);
                         X509Certificate[] x509certs = new X509Certificate[chain.length];
@@ -106,7 +116,7 @@ public final class JmeterKeyStore {
             }
     
             if (null == _key) {
-                throw new Exception("No key(s) found");
+                throw new IOException("No key(s) found");
             }
             if (index <= endIndex-startIndex) {
                 LOG.warn("Did not find all requested aliases. Start="+startIndex
@@ -187,9 +197,9 @@ public final class JmeterKeyStore {
      * @param endIndex last index (to count -1)
      * @param clientCertAliasVarName 
      * @return the keystore
-     * @throws Exception
+     * @throws KeyStoreException 
      */
-    public static JmeterKeyStore getInstance(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws Exception {
+    public static JmeterKeyStore getInstance(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException  {
         return new JmeterKeyStore(type, startIndex, endIndex, clientCertAliasVarName);
     }
 
@@ -197,9 +207,9 @@ public final class JmeterKeyStore {
      * Create a keystore which returns the first alias only.
      * @param type e.g. JKS
      * @return the keystore
-     * @throws Exception
+     * @throws KeyStoreException
      */
-    public static JmeterKeyStore getInstance(String type) throws Exception {
+    public static JmeterKeyStore getInstance(String type) throws KeyStoreException {
         return getInstance(type, 0, 0, null);
     }
 
