@@ -630,7 +630,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * {@inheritDoc}}
      */
     @Override
-    public List<String> getSearchableTokens() throws Exception {
+    public List<String> getSearchableTokens() {
         List<String> result = new ArrayList<String>(25);
         PropertyIterator iterator = propertyIterator();
         while(iterator.hasNext()) {
