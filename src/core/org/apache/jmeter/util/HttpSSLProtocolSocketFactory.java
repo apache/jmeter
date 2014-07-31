@@ -103,7 +103,7 @@ public class HttpSSLProtocolSocketFactory
             SSLContext sslContext = this.sslManager.getContext();
             return sslContext.getSocketFactory();
         } catch (GeneralSecurityException ex) {
-            throw new IOException(ex.getMessage());
+            throw new IOException("Rethrown as IOE", ex);
         }
     }
 
