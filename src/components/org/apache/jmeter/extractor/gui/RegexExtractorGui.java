@@ -61,6 +61,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
     private JRadioButton useHeaders;
 
+    private JRadioButton useRequestHeaders;
+
     private JRadioButton useURL;
 
     private JRadioButton useCode;
@@ -86,6 +88,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
             RegexExtractor re = (RegexExtractor) el;
             showScopeSettings(re, true);
             useHeaders.setSelected(re.useHeaders());
+            useRequestHeaders.setSelected(re.useRequestHeaders());
             useBody.setSelected(re.useBody());
             useUnescapedBody.setSelected(re.useUnescapedBody());
             useBodyAsDocument.setSelected(re.useBodyAsDocument());
@@ -166,6 +169,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         useUnescapedBody = new JRadioButton(JMeterUtils.getResString("regex_src_body_unescaped")); //$NON-NLS-1$
         useBodyAsDocument = new JRadioButton(JMeterUtils.getResString("regex_src_body_as_document")); //$NON-NLS-1$
         useHeaders = new JRadioButton(JMeterUtils.getResString("regex_src_hdrs")); //$NON-NLS-1$
+        useRequestHeaders = new JRadioButton(JMeterUtils.getResString("regex_src_hdrs_req")); //$NON-NLS-1$
         useURL = new JRadioButton(JMeterUtils.getResString("regex_src_url")); //$NON-NLS-1$
         useCode = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
         useMessage = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
@@ -175,6 +179,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         group.add(useUnescapedBody);
         group.add(useBodyAsDocument);
         group.add(useHeaders);
+        group.add(useRequestHeaders);
         group.add(useURL);
         group.add(useCode);
         group.add(useMessage);
@@ -183,6 +188,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         panel.add(useUnescapedBody);
         panel.add(useBodyAsDocument);
         panel.add(useHeaders);
+        panel.add(useRequestHeaders);
         panel.add(useURL);
         panel.add(useCode);
         panel.add(useMessage);
@@ -194,6 +200,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         useUnescapedBody.setActionCommand(RegexExtractor.USE_BODY_UNESCAPED);
         useBodyAsDocument.setActionCommand(RegexExtractor.USE_BODY_AS_DOCUMENT);
         useHeaders.setActionCommand(RegexExtractor.USE_HDRS);
+        useRequestHeaders.setActionCommand(RegexExtractor.USE_REQUEST_HDRS);
         useURL.setActionCommand(RegexExtractor.USE_URL);
         useCode.setActionCommand(RegexExtractor.USE_CODE);
         useMessage.setActionCommand(RegexExtractor.USE_MESSAGE);
