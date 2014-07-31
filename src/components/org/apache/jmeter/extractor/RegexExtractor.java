@@ -62,6 +62,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *  Do not change these values!
     */
     public static final String USE_HDRS = "true"; // $NON-NLS-1$
+    public static final String USE_REQUEST_HDRS = "request_headers"; // $NON-NLS-1$
     public static final String USE_BODY = "false"; // $NON-NLS-1$
     public static final String USE_BODY_UNESCAPED = "unescaped"; // $NON-NLS-1$
     public static final String USE_BODY_AS_DOCUMENT = "as_document"; // $NON-NLS-1$
@@ -172,6 +173,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     private String getInputString(SampleResult result) {
         String inputString = useUrl() ? result.getUrlAsString() // Bug 39707
                 : useHeaders() ? result.getResponseHeaders()
+                : useRequestHeaders() ? result.getRequestHeaders()
                 : useCode() ? result.getResponseCode() // Bug 43451
                 : useMessage() ? result.getResponseMessage() // Bug 43451
                 : useUnescapedBody() ? StringEscapeUtils.unescapeHtml4(result.getResponseDataAsString())
@@ -433,6 +435,10 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     public boolean useHeaders() {
         return USE_HDRS.equalsIgnoreCase( getPropertyAsString(MATCH_AGAINST));
+    }
+
+    public boolean useRequestHeaders() {
+        return USE_REQUEST_HDRS.equalsIgnoreCase(getPropertyAsString(MATCH_AGAINST));
     }
 
     // Allow for property not yet being set (probably only applies to Test cases)

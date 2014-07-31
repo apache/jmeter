@@ -158,6 +158,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <li><bugzilla>56162</bugzilla> -  HTTP Cache Manager should not cache PUT/POST etc.</li>
 <li><bugzilla>56227</bugzilla> - AssertionGUI : NPE in assertion on mouse selection</li>
 <li><bugzilla>41319</bugzilla> - URLRewritingModifier : Allow Parameter value to be url encoded</li>
+<li><bugzilla>52061</bugzilla> - Allow access to Request Headers in Regex Extractor</li>
 </ul>
 
 <h3>Functions</h3>

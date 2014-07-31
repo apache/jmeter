@@ -5235,8 +5235,8 @@ generate the template string, and store the result into the given variable name.
         For match number = 0 or negative, all qualifying samples will be processed.
         For match number > 0, matching will stop as soon as enough matches have been found.
         </property>
-        <property name="Response Field to check" required="Yes">
-        The following response fields can be checked:
+        <property name="Field to check" required="Yes">
+        The following fields can be checked:
         <ul>
         <li>Body - the body of the response, e.g. the content of a web-page (excluding headers)</li>
         <li>Body (unescaped) - the body of the response, with all Html escape codes replaced.
@@ -5245,9 +5245,10 @@ generate the template string, and store the result into the given variable name.
         <note>Note that this option highly impacts performances, so use it only when absolutely necessary and be aware of its impacts</note>
         </li>
         <li>Body as a Document - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).
-        <note>Note that Body as a Document option can impact performances, so ensure it is Ok for your test</note>
+        <note>Note that the Body as a Document option can impact performances, so ensure it is Ok for your test</note>
         </li>
-        <li>Headers - may not be present for non-HTTP samples</li>
+        <li>Request Headers - may not be present for non-HTTP samples</li>
+        <li>Response Headers - may not be present for non-HTTP samples</li>
         <li>URL</li>
         <li>Response Code - e.g. 200</li>
         <li>Response Message - e.g. OK</li>
