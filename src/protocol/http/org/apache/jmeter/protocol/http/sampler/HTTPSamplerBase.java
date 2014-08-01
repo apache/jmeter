@@ -106,6 +106,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     "org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui",
                     "org.apache.jmeter.config.gui.SimpleConfigGui",
                     "org.apache.jmeter.protocol.http.gui.HeaderPanel",
+                    "org.apache.jmeter.protocol.http.control.DNSCacheManager",
+                    "org.apache.jmeter.protocol.http.gui.DNSPanel",
                     "org.apache.jmeter.protocol.http.gui.AuthPanel",
                     "org.apache.jmeter.protocol.http.gui.CacheManagerGui",
                     "org.apache.jmeter.protocol.http.gui.CookiePanel"}));
