@@ -84,6 +84,7 @@ public class LookAndFeelCommand implements Command {
     /**
      * Get LookAndFeel classname from the following properties:
      * <ul>
+     * <li>User preferences key: "laf"</li>
      * <li>jmeter.laf.&lt;os.name> - lowercased; spaces replaced by '_'</li>
      * <li>jmeter.laf.&lt;os.family> - lowercased.</li>
      * <li>jmeter.laf</li>
