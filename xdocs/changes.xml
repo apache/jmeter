@@ -107,6 +107,16 @@ With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blur
 This is a known Java bug, see Bug <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
 A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 </li>
+
+<li>
+Cut and Paste don't work on MacOSX with all LookAndFeel types.
+The default value for MacOSX is System, which should work OK.
+The current setting is logged at start-up, for example:
+<pre>
+jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLookAndFeel [Mac OS X, System] 
+</pre>
+</li>
+
 </ul>
 
 <!-- =================== Incompatible changes =================== -->
