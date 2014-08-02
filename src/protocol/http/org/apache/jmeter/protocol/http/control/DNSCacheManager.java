@@ -9,11 +9,11 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.xbill.DNS.*;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.security.Security;
 import java.util.*;
 
 
@@ -27,8 +27,6 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
     //++ JMX tag values
     private static final String CLEAR = "DNSCacheManager.clearEachIteration";// $NON-NLS-1$
     //-- JMX tag values
-    private static final String DNS_SERVERS = "DNSCacheManager.servers";// $NON-NLS-1$
-    private static final String A_RECORDS = "DNSCacheManager.aRecords";// $NON-NLS-1$
     // See bug 33796
     private static final boolean DELETE_NULL_SERVERS =
             JMeterUtils.getPropDefault("DNSCacheManager.delete_null_servers", true);// $NON-NLS-1$
@@ -39,8 +37,6 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
         );
     }
 
-    private Resolver resolver = null;
-    private Cache cache = null;
 
 
     // ensure that the initial DNSServers are copied to the per-thread instances
@@ -51,19 +47,10 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
     @Override
     public Object clone() {
         DNSCacheManager clone = (DNSCacheManager) super.clone();
-        try {
-            clone.resolver = new SimpleResolver();
-            clone.cache = new Cache(DClass.IN);
-        } catch (UnknownHostException uhe) {
-            log.error("Failed to clone DNS CacheManager: " + uhe);
-        }
+        Security.setProperty("networkaddress.cache.ttl", "0");
         return clone;
     }
 
-
-    public CollectionProperty getDNSServers() {
-        return (CollectionProperty) getProperty(DNS_SERVERS);
-    }
 
     public boolean getClearEachIteration() {
         return getPropertyAsBoolean(CLEAR);
@@ -75,17 +62,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
 
 
 
-    public String doRequest(Lookup lookup) {
-        Record[] records = lookup.run();
-        String recordStr = "";
-        if (records != null && records.length > 0) {
-            recordStr = records[0].toString();
-            return recordStr.substring(recordStr.lastIndexOf("\t") + 1);
-        }
-
-        return "";
-    }
-    public String resolve(String host) throws TextParseException, UnknownHostException {
+    public String resolve(String host) throws UnknownHostException {
 
         return null;
     }
@@ -146,8 +123,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
         if (getClearEachIteration()) {
             log.debug("Initialise servers ...");
             // No need to call clear
-            setProperty(getDNSServers().clone());
-            this.cache.clearCache();
+//            this.cache.clearCache();
         }
     }
 }

@@ -427,7 +427,6 @@
   <path id="classpath">
     <!-- Externally produced jars -->
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
-    <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
     <pathelement location="${lib.dir}/${beanshell.jar}"/>
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
@@ -2890,7 +2889,6 @@ run JMeter unless all the JMeter jars are added.
     conditional execution (it would be a lot easier if antcall supported if/unless).
     -->
     <target name="_process_all_jars">
-        <process_jarfile jarname="dnsjava"/>
         <process_jarfile jarname="apache-bsf"/>
         <process_jarfile jarname="avalon-framework"/>
         <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
