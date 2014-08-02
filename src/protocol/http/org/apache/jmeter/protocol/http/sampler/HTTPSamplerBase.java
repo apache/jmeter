@@ -46,6 +46,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -1134,15 +1135,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             URL url = getUrl();
             DNSCacheManager dnsCacheManager = getDNSCacheManager();
             if (dnsCacheManager != null) {
-                String host = url.getHost();
-                String ip = dnsCacheManager.resolve(host);
-                if (!ip.isEmpty()) {
-                    URL resolvedURL = new URL(url.getProtocol(), ip, url.getPort(), url.getFile());
-                    // resolve domain name into IP using dnsjava lib
-                    res = sample(resolvedURL, getMethod(), false, 0);
-                } else {
-                    res = sample(url, getMethod(), false, 0);
-                }
+                SystemDefaultDnsResolver systemDefaultDnsResolver = new SystemDefaultDnsResolver();
+                systemDefaultDnsResolver.resolve(url.getHost());
             } else {
                 res = sample(url, getMethod(), false, 0);
             }
