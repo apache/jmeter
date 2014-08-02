@@ -62,11 +62,8 @@ public class ToolBar implements Command {
     public void doAction(ActionEvent e) {
         if (ActionNames.TOOLBAR.equals(e.getActionCommand())) {
             GuiPackage guiInstance = GuiPackage.getInstance();
-            if (guiInstance.getMenuItemToolbar().getModel().isSelected()) {
-                guiInstance.getMainToolbar().setVisible(true);
-            } else {
-                guiInstance.getMainToolbar().setVisible(false);
-            }
+            final boolean isSelected = guiInstance.getMenuItemToolbar().getModel().isSelected();
+            guiInstance.getMainToolbar().setVisible(isSelected);
         }
     }
 }
