@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -46,17 +47,11 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.http.control.AuthManager;
-import org.apache.jmeter.protocol.http.control.CacheManager;
-import org.apache.jmeter.protocol.http.control.DNSCacheManager;
-import org.apache.jmeter.protocol.http.control.CookieManager;
-import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.control.Cookie;
+import org.apache.jmeter.protocol.http.control.*;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -1134,12 +1129,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         try {
             URL url = getUrl();
             DNSCacheManager dnsCacheManager = getDNSCacheManager();
+            DNSResolver dnsResolver=null;
             if (dnsCacheManager != null) {
-                SystemDefaultDnsResolver systemDefaultDnsResolver = new SystemDefaultDnsResolver();
-                systemDefaultDnsResolver.resolve(url.getHost());
-            } else {
-                res = sample(url, getMethod(), false, 0);
+                dnsResolver=new DNSResolver();
             }
+            InetAddress inetAddress= dnsResolver.resolve(url.getHost())[0];
+            res = sample(url, getMethod(), false, 0);
+
             // Get URL, get domain and resolve it, if DNS CacheManager exists
             res.setSampleLabel(getName());
             return res;
