@@ -1133,7 +1133,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if (dnsCacheManager != null) {
                 dnsResolver=new DNSResolver();
             }
-            InetAddress inetAddress= dnsResolver.resolve(url.getHost())[0];
             res = sample(url, getMethod(), false, 0);
 
             // Get URL, get domain and resolve it, if DNS CacheManager exists
