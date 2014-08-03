@@ -92,6 +92,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.impl.conn.SchemeRegistryFactory;
+import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
@@ -634,7 +635,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             HttpParams clientParams = new DefaultedHttpParams(new BasicHttpParams(), DEFAULT_HTTP_PARAMS);
 
-            DnsResolver resolver=new DNSResolver();
+            DNSCacheManager dnsCacheManager=this.testElement.getDNSCacheManager();
+            DnsResolver resolver=null;
+            if(dnsCacheManager!=null){
+                resolver=dnsCacheManager.getDnsResolver();
+            }else{
+                resolver= new SystemDefaultDnsResolver();
+            }
             PoolingClientConnectionManager poolingClientConnectionManager=
                     new PoolingClientConnectionManager(SchemeRegistryFactory.createDefault(),resolver);
             httpClient= new DefaultHttpClient(poolingClientConnectionManager,clientParams);

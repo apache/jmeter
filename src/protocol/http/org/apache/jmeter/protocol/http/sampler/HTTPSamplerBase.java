@@ -1128,11 +1128,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         SampleResult res = null;
         try {
             URL url = getUrl();
-            DNSCacheManager dnsCacheManager = getDNSCacheManager();
-            DNSResolver dnsResolver=null;
-            if (dnsCacheManager != null) {
-                dnsResolver=new DNSResolver();
-            }
             res = sample(url, getMethod(), false, 0);
 
             // Get URL, get domain and resolve it, if DNS CacheManager exists

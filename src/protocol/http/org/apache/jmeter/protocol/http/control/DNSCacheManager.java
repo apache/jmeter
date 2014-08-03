@@ -24,6 +24,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
     // Package protected for tests
     private static final long serialVersionUID = 233L;
     private static final Logger log = LoggingManager.getLoggerForClass();
+    private DNSResolver dnsResolver;
     //++ JMX tag values
     private static final String CLEAR = "DNSCacheManager.clearEachIteration";// $NON-NLS-1$
     //-- JMX tag values
@@ -47,10 +48,14 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
     @Override
     public Object clone() {
         DNSCacheManager clone = (DNSCacheManager) super.clone();
+        clone.dnsResolver=new DNSResolver();
         Security.setProperty("networkaddress.cache.ttl", "0");
         return clone;
     }
 
+    public DNSResolver getDnsResolver() {
+        return dnsResolver;
+    }
 
     public boolean getClearEachIteration() {
         return getPropertyAsBoolean(CLEAR);
