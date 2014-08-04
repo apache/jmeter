@@ -58,14 +58,14 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         InetAddress[] addresses;
         if(cache.containsKey(host)){
             if(log.isDebugEnabled()){
-                log.debug("Cache hit: " + host + "#" + JMeterContextService.getContext().getThreadNum());
+                log.debug("Cache hit: " + host + "  found in cache Thread #" + JMeterContextService.getContext().getThreadNum());
             }
            return cache.get(host);
         }else{
             addresses=systemDefaultDnsResolver.resolve(host);
             if(log.isDebugEnabled()){
-                log.debug("Cache miss: " + host + "#" + JMeterContextService.getContext().getThreadNum()
-                        + ", resolved into " + addresses.length + " addresses...");
+                log.debug("Cache miss: " + host + "Thread #" + JMeterContextService.getContext().getThreadNum()
+                        + ", resolved with system resolver into " + addresses.length + " addresses...");
             }
             cache.put(host,addresses);
             return addresses;
@@ -79,7 +79,6 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     @Override
     public void testIterationStart(LoopIterationEvent event) {
         if (getClearEachIteration()) {
-            log.debug("Initialise servers ...");
             // No need to call clear
             this.cache.clear();
         }
