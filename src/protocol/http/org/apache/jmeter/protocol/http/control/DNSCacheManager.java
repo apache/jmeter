@@ -4,9 +4,11 @@ import org.apache.http.conn.DnsResolver;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -26,17 +28,6 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     //++ JMX tag values
     private static final String CLEAR = "DNSCacheManager.clearEachIteration";// $NON-NLS-1$
     //-- JMX tag values
-    // See bug 33796
-    private static final boolean DELETE_NULL_SERVERS =
-            JMeterUtils.getPropDefault("DNSCacheManager.delete_null_servers", true);// $NON-NLS-1$
-
-    static {
-        log.info("Settings:"
-                        + " Delete null: " + DELETE_NULL_SERVERS
-        );
-    }
-
-
 
     // ensure that the initial DNSServers are copied to the per-thread instances
 
@@ -64,35 +55,23 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
 
     public InetAddress[] resolve(String host) throws UnknownHostException {
-        log.debug("Preparing for resolving host...");
         InetAddress[] addresses;
         if(cache.containsKey(host)){
-            log.debug(host+" found in cache");
+            if(log.isDebugEnabled()){
+                log.debug("Cache hit: " + host + "#" + JMeterContextService.getContext().getThreadNum());
+            }
            return cache.get(host);
         }else{
-            log.debug("Preparing for resolving host through OS resolver...");
             addresses=systemDefaultDnsResolver.resolve(host);
-            log.debug("Got "+addresses.length+" addresses...");
+            if(log.isDebugEnabled()){
+                log.debug("Cache miss: " + host + "#" + JMeterContextService.getContext().getThreadNum()
+                        + ", resolved into " + addresses.length + " addresses...");
+            }
             cache.put(host,addresses);
             return addresses;
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setRunningVersion(boolean running) {
-        // do nothing, the DNS cache manager has to accept changes.
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void clear() {
-        super.clear();
-    }
 
     /**
      * {@inheritDoc}

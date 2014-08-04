@@ -637,7 +637,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             DnsResolver resolver= this.testElement.getDNSCacheManager();
             if(resolver==null){
-                log.debug("Got ");
                 resolver= new SystemDefaultDnsResolver();
             }
             PoolingClientConnectionManager poolingClientConnectionManager=
