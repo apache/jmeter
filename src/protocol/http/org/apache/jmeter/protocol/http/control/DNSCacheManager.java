@@ -70,10 +70,14 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
 
 
     public InetAddress[] resolve(String host) throws UnknownHostException {
-        InetAddress[] addresses=systemDefaultDnsResolver.resolve(host);
-        cache.put(host,addresses);
-        InetAddress copy=systemDefaultDnsResolver.resolve(host)[0];
-        return addresses;
+        InetAddress[] addresses;
+        if(cache.containsKey(host)){
+           return cache.get(host);
+        }else{
+            addresses=systemDefaultDnsResolver.resolve(host);
+            cache.put(host,addresses);
+            return addresses;
+        }
     }
 
     /**
