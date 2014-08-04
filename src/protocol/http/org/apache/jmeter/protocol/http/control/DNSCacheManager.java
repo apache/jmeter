@@ -1,5 +1,7 @@
 package org.apache.jmeter.protocol.http.control;
 
+import org.apache.http.conn.DnsResolver;
+import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestIterationListener;
@@ -11,6 +13,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.security.Security;
@@ -20,11 +23,13 @@ import java.util.*;
 /**
  * Created by dzmitrykashlach on 6/13/14.
  */
-public class DNSCacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
+public class DNSCacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable,
+        DnsResolver {
     // Package protected for tests
     private static final long serialVersionUID = 233L;
     private static final Logger log = LoggingManager.getLoggerForClass();
-    private DNSResolver dnsResolver;
+    private SystemDefaultDnsResolver systemDefaultDnsResolver=null;
+    private LinkedHashMap<String,InetAddress[]> cache = new LinkedHashMap<String,InetAddress[]>();
     //++ JMX tag values
     private static final String CLEAR = "DNSCacheManager.clearEachIteration";// $NON-NLS-1$
     //-- JMX tag values
@@ -48,14 +53,11 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
     @Override
     public Object clone() {
         DNSCacheManager clone = (DNSCacheManager) super.clone();
-        clone.dnsResolver=new DNSResolver();
+        clone.systemDefaultDnsResolver=new SystemDefaultDnsResolver();
         Security.setProperty("networkaddress.cache.ttl", "0");
         return clone;
     }
 
-    public DNSResolver getDnsResolver() {
-        return dnsResolver;
-    }
 
     public boolean getClearEachIteration() {
         return getPropertyAsBoolean(CLEAR);
@@ -67,9 +69,11 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
 
 
 
-    public String resolve(String host) throws UnknownHostException {
-
-        return null;
+    public InetAddress[] resolve(String host) throws UnknownHostException {
+        InetAddress[] addresses=systemDefaultDnsResolver.resolve(host);
+        cache.put(host,addresses);
+        InetAddress copy=systemDefaultDnsResolver.resolve(host)[0];
+        return addresses;
     }
 
     /**
@@ -128,7 +132,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestStateListe
         if (getClearEachIteration()) {
             log.debug("Initialise servers ...");
             // No need to call clear
-//            this.cache.clearCache();
+            this.cache.clear();
         }
     }
 }

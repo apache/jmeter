@@ -638,14 +638,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             DNSCacheManager dnsCacheManager=this.testElement.getDNSCacheManager();
             DnsResolver resolver=null;
             if(dnsCacheManager!=null){
-                resolver=dnsCacheManager.getDnsResolver();
+                resolver=dnsCacheManager;
             }else{
                 resolver= new SystemDefaultDnsResolver();
             }
             PoolingClientConnectionManager poolingClientConnectionManager=
                     new PoolingClientConnectionManager(SchemeRegistryFactory.createDefault(),resolver);
-            httpClient= new DefaultHttpClient(poolingClientConnectionManager,clientParams);
 
+            httpClient = new DefaultHttpClient(poolingClientConnectionManager, clientParams) {
+                @Override
+                protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
+                    return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false); // set retry count
+                }
+            };
             if (IDLE_TIMEOUT > 0) {
                 ((AbstractHttpClient) httpClient).setKeepAliveStrategy(IDLE_STRATEGY );
             }
