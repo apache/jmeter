@@ -2,12 +2,12 @@ package org.apache.jmeter.protocol.http.control;
 
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -15,7 +15,6 @@ import org.apache.log.Logger;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.security.Security;
 import java.util.*;
 
 public class DNSCacheManager extends ConfigTestElement implements TestIterationListener, Serializable,
@@ -31,6 +30,19 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     // ensure that the initial DNSServers are copied to the per-thread instances
 
+    static{
+
+        String cacheTTL=System.getProperty("networkaddress.cache.ttl");
+
+        if(cacheTTL==null||!cacheTTL.equals("0")){
+            log.warn("JVM DNS cache is not disabled, DNS Resolver won't work correctly.");
+            log.warn("Restart JMeter with the following parameter: -Dnetworkaddress.cache.ttl=0");
+        if(!JMeter.isNonGUI()){
+            GuiPackage.showErrorMessage("JVM DNS cache is not disabled, DNS Resolver won't work correctly.\n" +
+                    "Restart JMeter with the following parameter: -Dnetworkaddress.cache.ttl=0","DNS Resolver won't work correctly");
+        }
+        }
+    }
     /**
      * {@inheritDoc}
      */
@@ -39,7 +51,6 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         DNSCacheManager clone = (DNSCacheManager) super.clone();
         clone.systemDefaultDnsResolver=new SystemDefaultDnsResolver();
         clone.cache=new LinkedHashMap<String,InetAddress[]>();
-        Security.setProperty("networkaddress.cache.ttl", "0");
         return clone;
     }
 
