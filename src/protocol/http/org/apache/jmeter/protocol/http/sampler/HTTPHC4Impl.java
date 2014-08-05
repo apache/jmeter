@@ -74,6 +74,7 @@ import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -89,6 +90,9 @@ import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.conn.SchemeRegistryFactory;
+import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
@@ -100,10 +104,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
-import org.apache.jmeter.protocol.http.control.AuthManager;
-import org.apache.jmeter.protocol.http.control.CacheManager;
-import org.apache.jmeter.protocol.http.control.CookieManager;
-import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.control.*;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -633,8 +634,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if (httpClient == null){ // One-time init for this client
 
             HttpParams clientParams = new DefaultedHttpParams(new BasicHttpParams(), DEFAULT_HTTP_PARAMS);
-            
-            httpClient = new DefaultHttpClient(clientParams){
+
+            DnsResolver resolver= this.testElement.getDNSCacheManager();
+            if(resolver==null){
+                resolver= new SystemDefaultDnsResolver();
+            }
+            PoolingClientConnectionManager poolingClientConnectionManager=
+                    new PoolingClientConnectionManager(SchemeRegistryFactory.createDefault(),resolver);
+
+            httpClient = new DefaultHttpClient(poolingClientConnectionManager, clientParams) {
                 @Override
                 protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
                     return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false); // set retry count

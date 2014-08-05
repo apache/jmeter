@@ -2961,6 +2961,7 @@ run JMeter unless all the JMeter jars are added.
         <!-- The directories must exist otherwise the build fails when deleting previous versions -->
         <mkdir dir="${lib.api}" />
         <mkdir dir="${lib.doc}" />
+        <mkdir dir="${lib.opt}" />
         <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
         <delete verbose="true">
           <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>

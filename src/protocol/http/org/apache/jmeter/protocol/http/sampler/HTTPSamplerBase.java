@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -50,11 +51,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.http.control.AuthManager;
-import org.apache.jmeter.protocol.http.control.CacheManager;
-import org.apache.jmeter.protocol.http.control.Cookie;
-import org.apache.jmeter.protocol.http.control.CookieManager;
-import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.control.*;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -105,6 +102,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     "org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui",
                     "org.apache.jmeter.config.gui.SimpleConfigGui",
                     "org.apache.jmeter.protocol.http.gui.HeaderPanel",
+                    "org.apache.jmeter.protocol.http.control.DNSCacheManager",
+                    "org.apache.jmeter.protocol.http.gui.DNSPanel",
                     "org.apache.jmeter.protocol.http.gui.AuthPanel",
                     "org.apache.jmeter.protocol.http.gui.CacheManagerGui",
                     "org.apache.jmeter.protocol.http.gui.CookiePanel"}));
@@ -119,6 +118,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final String CACHE_MANAGER = "HTTPSampler.cache_manager"; // $NON-NLS-1$
 
     public static final String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
+
+    public static final String DNS_CACHE_MANAGER = "HTTPSampler.dns_cache_manager"; // $NON-NLS-1$
 
     public static final String DOMAIN = "HTTPSampler.domain"; // $NON-NLS-1$
 
@@ -622,10 +623,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             setHeaderManager((HeaderManager) el);
         } else if (el instanceof AuthManager) {
             setAuthManager((AuthManager) el);
+        } else if (el instanceof DNSCacheManager) {
+            setDNSCacheManager((DNSCacheManager) el);
         } else {
             super.addTestElement(el);
         }
     }
+
 
     /**
      * {@inheritDoc}
@@ -834,6 +838,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public CacheManager getCacheManager() {
         return (CacheManager) getProperty(CACHE_MANAGER).getObjectValue();
     }
+
+    public DNSCacheManager getDNSCacheManager() {
+        return (DNSCacheManager) getProperty(DNS_CACHE_MANAGER).getObjectValue();
+    }
+
+    public void setDNSCacheManager(DNSCacheManager cacheManager) {
+        DNSCacheManager mgr = getDNSCacheManager();
+        if (mgr != null) {
+            log.warn("Existing DNSCacheManager " + mgr.getName() + " superseded by " + cacheManager.getName());
+        }
+        setProperty(new TestElementProperty(DNS_CACHE_MANAGER, cacheManager));
+    }
+
 
     public boolean isImageParser() {
         return getPropertyAsBoolean(IMAGE_PARSER, false);
@@ -1110,13 +1127,17 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public SampleResult sample() {
         SampleResult res = null;
         try {
-            res = sample(getUrl(), getMethod(), false, 0);
+            URL url = getUrl();
+            res = sample(url, getMethod(), false, 0);
+
+            // Get URL, get domain and resolve it, if DNS CacheManager exists
             res.setSampleLabel(getName());
             return res;
         } catch (Exception e) {
             return errorResult(e, new HTTPSampleResult());
         }
     }
+
 
     /**
      * Samples the URL passed in and stores the result in
@@ -1802,7 +1823,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the pool size
      */
     public String getConcurrentPool() {
-        return getPropertyAsString(CONCURRENT_POOL,CONCURRENT_POOL_DEFAULT);
+        return getPropertyAsString(CONCURRENT_POOL, CONCURRENT_POOL_DEFAULT);
     }
 
     public void setConcurrentPool(String poolSize) {
