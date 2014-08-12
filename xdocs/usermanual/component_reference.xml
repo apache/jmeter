@@ -153,7 +153,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
          </li>
          <li>It does not support virtual hosts.</li>
          </ul>
-         <p>Note: the FILE protocol is intended for testing purposes only. 
+         <p>Note: the FILE protocol is intended for testing purposes only.
          It is handled by the same code regardless of which HTTP Sampler is used.</p>
         <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
          you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
@@ -2521,11 +2521,11 @@ be saved under the Recording Controller.</p>
 
 <component name="Critical Section Controller" index="&sect-num;.2.17" width="469" height="129" screenshot="logic-controller/critical-section-controller.png">
 <description>
-<p>The Critical Section Controller ensures that its children elements (samplers/controllers, etc) will be executed 
+<p>The Critical Section Controller ensures that its children elements (samplers/controllers, etc) will be executed
 by only one thread as a named lock will be taken before executing children of controller.</p>
 </description>
 <p>
-    The figure below shows an example of using Critical Section Controller, in the figure below 2 Critical Section Controllers ensure 
+    The figure below shows an example of using Critical Section Controller, in the figure below 2 Critical Section Controllers ensure
     that:
     <ul>
         <li>DS2-${__threadNum} is executed only by one thread at a time</li>
@@ -3556,7 +3556,7 @@ In jmeter.properties or user.properties, set:
 <ul>
 <li>kerberos.spnego.strip_port=false</li>
 </ul>
-</pre> 
+</pre>
 </p>
 <br></br>
 <b>Controls:</b>
@@ -4756,7 +4756,7 @@ If timeout in milliseconds is set to 0 and number of threads never reaches "Numb
 Only a forced stop will stop it. Setting Timeout in milliseconds is an option to consider in this case.
 </note>
 <note>
-Synchronizing timer blocks only within one JVM, so if using Distributed testing ensure you never set "Number of Simultaneous Users to Group by" to a value superior to the number of users 
+Synchronizing timer blocks only within one JVM, so if using Distributed testing ensure you never set "Number of Simultaneous Users to Group by" to a value superior to the number of users
 of its containing Thread group considering 1 injector only.
 </note>
 
