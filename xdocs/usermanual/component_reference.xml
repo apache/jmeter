@@ -3637,7 +3637,7 @@ This may cause problems for Assertions.
 </properties>
 </component>
 
-<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="513" height="383" screenshot="http-config/http-cookie-manager.png">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.5"  width="513" height="383" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
 there is currently no way to specify which one is to be used.
@@ -3707,7 +3707,7 @@ cookie table entries.</property>
 
 </component>
 
-<component name="HTTP Request Defaults" index="&sect-num;.4.5" width="853" height="463" 
+<component name="HTTP Request Defaults" index="&sect-num;.4.6" width="853" height="463" 
          screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
@@ -3768,7 +3768,7 @@ but if the button is on, a later element cannot set it off.
 </note>
 </component>
 
-<component name="HTTP Header Manager" index="&sect-num;.4.6"  width="767" height="239" screenshot="http-config/http-header-manager.png">
+<component name="HTTP Header Manager" index="&sect-num;.4.7"  width="767" height="239" screenshot="http-config/http-header-manager.png">
 <description>
 <p>The Header Manager lets you add or override HTTP request headers.</p>
 <p>
@@ -3808,13 +3808,13 @@ instead. (see figures 12 and 13).</p>
 
 </component>
 
-<component name="Java Request Defaults" index="&sect-num;.4.7"  width="454" height="283" screenshot="java_defaults.png">
+<component name="Java Request Defaults" index="&sect-num;.4.8"  width="454" height="283" screenshot="java_defaults.png">
 <description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request" />.</p>
 </description>
 
 </component>
 
-<component name="JDBC Connection Configuration" index="&sect-num;.4.8" 
+<component name="JDBC Connection Configuration" index="&sect-num;.4.9" 
                  width="474" height="458" screenshot="jdbc-config/jdbc-conn-config.png">
     <description>Creates a database connection (used by <complink name="JDBC Request"/>Sampler)
      from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
@@ -3880,7 +3880,7 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 </component>
 
 
-<component name="Keystore Configuration" index="&sect-num;.4.9"  width="441" height="189" screenshot="keystore_config.png">
+<component name="Keystore Configuration" index="&sect-num;.4.10"  width="441" height="189" screenshot="keystore_config.png">
 <description><p>The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
 This component is typically used in HTTPS scenarios where you don't want to take into account keystore initialization into account in response time.</p>
 <p>To use this element, you need to setup first a Java Key Store with the client certificates you want to test, to do that:
@@ -3921,7 +3921,7 @@ To make JMeter use more than one certificate you need to ensure that:
 </note>
 </component>
 
-<component name="Login Config Element" index="&sect-num;.4.10"  width="352" height="112" screenshot="login-config.png">
+<component name="Login Config Element" index="&sect-num;.4.11"  width="352" height="112" screenshot="login-config.png">
 <description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
 </description>
 
@@ -3933,19 +3933,19 @@ To make JMeter use more than one certificate you need to ensure that:
 
 </component>
 
-<component name="LDAP Request Defaults" index="&sect-num;.4.11"  width="689" height="232" screenshot="ldap_defaults.png">
+<component name="LDAP Request Defaults" index="&sect-num;.4.12"  width="689" height="232" screenshot="ldap_defaults.png">
 <description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
 </description>
 
 </component>
 
-<component name="LDAP Extended Request Defaults" index="&sect-num;.4.12"  width="686" height="184" screenshot="ldapext_defaults.png">
+<component name="LDAP Extended Request Defaults" index="&sect-num;.4.13"  width="686" height="184" screenshot="ldapext_defaults.png">
 <description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
 </description>
 
 </component>
 
-<component name="TCP Sampler Config" index="&sect-num;.4.13"  width="826" height="450" screenshot="tcpsamplerconfig.png">
+<component name="TCP Sampler Config" index="&sect-num;.4.14"  width="826" height="450" screenshot="tcpsamplerconfig.png">
 <description>
         <p>
     The TCP Sampler Config provides default data for the TCP Sampler
@@ -3967,7 +3967,7 @@ To make JMeter use more than one certificate you need to ensure that:
 </properties>
 </component>
 
-<component name="User Defined Variables" index="&sect-num;.4.14"  width="741" height="266" screenshot="user_defined_variables.png">
+<component name="User Defined Variables" index="&sect-num;.4.15"  width="741" height="266" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables element lets you define an <b>initial set of variables</b>, just as in the <complink name="Test Plan" />.
 <b>
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
@@ -4017,7 +4017,7 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 </properties>
 </component>
 
-<component name="Random Variable" index="&sect-num;.4.15"  width="495" height="286" screenshot="random_variable.png">
+<component name="Random Variable" index="&sect-num;.4.16"  width="495" height="286" screenshot="random_variable.png">
 <description>
 <p>
 The Random Variable Config Element is used to generate random numeric strings and store them in variable for use later.
@@ -4052,7 +4052,7 @@ however the minimum and maximum values can be any long values so long as the ran
 
 </component>
 
-<component name="Counter" index="&sect-num;.4.16"  width="404" height="262" screenshot="counter.png">
+<component name="Counter" index="&sect-num;.4.17"  width="404" height="262" screenshot="counter.png">
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
@@ -4083,7 +4083,7 @@ with the start, continuing on like that until the test is ended.  </p>
 </properties>
 </component>
 
-<component name="Simple Config Element" index="&sect-num;.4.17"  width="393" height="245" screenshot="simple_config_element.png">
+<component name="Simple Config Element" index="&sect-num;.4.18"  width="393" height="245" screenshot="simple_config_element.png">
 <description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
 and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
 GUI that they can use while developing new JMeter components.</p>
@@ -4099,7 +4099,7 @@ GUI that they can use while developing new JMeter components.</p>
 </component>
 
 
-<component name="MongoDB Source Config" index="&sect-num;.4.18" 
+<component name="MongoDB Source Config" index="&sect-num;.4.19" 
                  width="1233" height="618" screenshot="mongodb-source-config.png">
     <description>Creates a MongoDB connection (used by <complink name="MongoDB Script"/>Sampler)
      from the supplied Connection settings. Each thread gets its own connection.
