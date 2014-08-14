@@ -3470,6 +3470,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
 <component name="DNS Cache Manager" index="&sect-num;.4.3"  width="712" height="387" screenshot="dns-cache-manager.png">
     <note>DNS Cache Manager is designed for using in the root of Thread Group or Test Plan. Do not place it as child element of particular HTTP Sampler
     </note>
+    <note>DNS Cache Manager working only with the HTTP request using HTTPClient4 implementation.</note>
     <description><p>The DNS Cache Manager element allows to test applications, which have several servers behind load balancers (CDN, etc), 
     when user receives content from different IP's. By default JMeter uses JVM DNS cache. That's why
     only one server from the cluster receives load. DNS Cache Manager resolves name for each thread separately each iteration and
