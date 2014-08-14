@@ -438,6 +438,7 @@
     <pathelement location="${lib.dir}/${commons-lang3.jar}"/>
     <pathelement location="${lib.dir}/${commons-logging.jar}"/>
     <pathelement location="${lib.dir}/${commons-net.jar}"/>
+    <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-datasource.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-instrument.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
@@ -2904,6 +2905,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="commons-lang3"/>
         <process_jarfile jarname="commons-logging"/>
         <process_jarfile jarname="commons-net"/>
+        <process_jarfile jarname="dnsjava"/>
         <process_jarfile jarname="excalibur-datasource"/>
         <process_jarfile jarname="excalibur-instrument"/>
         <process_jarfile jarname="excalibur-logger"/>

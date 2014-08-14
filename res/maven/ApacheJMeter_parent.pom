@@ -67,6 +67,7 @@ under the License.
       <commons-lang3.version>3.3.2</commons-lang3.version>
       <commons-logging.version>1.2</commons-logging.version>
       <commons-net.version>3.3</commons-net.version>
+      <dnsjava.version>2.1.6</dnsjava.version>
       <excalibur-datasource.version>2.1</excalibur-datasource.version>
       <excalibur-instrument.version>1.0</excalibur-instrument.version>
       <excalibur-logger.version>1.1</excalibur-logger.version>
@@ -183,6 +184,11 @@ under the License.
         <groupId>commons-net</groupId>
         <artifactId>commons-net</artifactId>
         <version>${commons-net.version}</version>
+      </dependency>
+      <dependency>
+	    <groupId>dnsjava</groupId>
+	    <artifactId>dnsjava</artifactId>
+	    <version>${dnsjava.version}</version>
       </dependency>
       <dependency>
         <groupId>excalibur-datasource</groupId>
