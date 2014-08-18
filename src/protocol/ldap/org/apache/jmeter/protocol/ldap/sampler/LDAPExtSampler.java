@@ -801,7 +801,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 final String countLimit = getCountlim();
 
                 res.setSamplerData("Search with filter " + searchFilter);
-                xmlBuffer.tag("searchfilter", StringEscapeUtils.escapeXml(searchFilter)); // $NON-NLS-1$
+                xmlBuffer.tag("searchfilter", StringEscapeUtils.escapeXml10(searchFilter)); // $NON-NLS-1$
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
                 xmlBuffer.tag("searchbase",searchBase);// $NON-NLS-1$
                 xmlBuffer.tag("scope" , scopeStr); // $NON-NLS-1$
@@ -1044,19 +1044,19 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     {
         if (value instanceof String) {
             // assume it's senstive data
-            return StringEscapeUtils.escapeXml((String)value);
+            return StringEscapeUtils.escapeXml10((String)value);
         }
         if (value instanceof byte[]) {
             try
             {
-                return StringEscapeUtils.escapeXml(new String((byte[])value, "UTF-8")); //$NON-NLS-1$
+                return StringEscapeUtils.escapeXml10(new String((byte[])value, "UTF-8")); //$NON-NLS-1$
             }
             catch (UnsupportedEncodingException e)
             {
                 log.error("this can't happen: UTF-8 character encoding not supported", e);
             }
         }
-        return StringEscapeUtils.escapeXml(value.toString());
+        return StringEscapeUtils.escapeXml10(value.toString());
     }
 
     @Override
