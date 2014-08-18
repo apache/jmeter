@@ -168,7 +168,6 @@ jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLoo
 <li><bugzilla>56162</bugzilla> -  HTTP Cache Manager should not cache PUT/POST etc.</li>
 <li><bugzilla>56227</bugzilla> - AssertionGUI : NPE in assertion on mouse selection</li>
 <li><bugzilla>41319</bugzilla> - URLRewritingModifier : Allow Parameter value to be url encoded</li>
-<li><bugzilla>52061</bugzilla> - Allow access to Request Headers in Regex Extractor</li>
 </ul>
 
 <h3>Functions</h3>
@@ -230,6 +229,7 @@ jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLoo
 <li><bugzilla>56691</bugzilla> - Synchronizing Timer : Add timeout on waiting</li>
 <li><bugzilla>56701</bugzilla> - HTTP Authorization Manager/ Kerberos Authentication: add port to SPN when server port is neither 80 nor 443. Based on patches from Dan Haughey (dan.haughey at swinton.co.uk) and Felix Schumacher (felix.schumacher at internetallee.de)</li>
 <li><bugzilla>56841</bugzilla> - New configuration element: DNS Cache Manager to improve the testing of CDN. Based on patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><bugzilla>52061</bugzilla> - Allow access to Request Headers in Regex Extractor. Based on patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 </ul>
 
 <h3>Functions</h3>
