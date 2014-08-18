@@ -24,8 +24,8 @@ import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,7 +39,7 @@ import org.jsoup.select.NodeVisitor;
  * TODO Factor out common code between {@link LagartoBasedHtmlParser} and this one (adapter pattern)
  */
 public class JsoupBasedHtmlParser extends HTMLParser {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+//    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /*
      * A dummy class to pass the pointer of URL.
