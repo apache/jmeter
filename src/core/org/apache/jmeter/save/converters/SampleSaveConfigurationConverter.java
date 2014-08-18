@@ -44,7 +44,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
     static {
         ReflectionProvider tmp;
         try {
-            tmp = new JVM().bestReflectionProvider();
+            tmp = JVM.newReflectionProvider();
         } catch (NullPointerException e) {// Bug in above method
             tmp = new PureJavaReflectionProvider();
         }
