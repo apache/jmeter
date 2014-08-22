@@ -127,6 +127,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private transient Throwable thrown = null;
 
+    private transient Context context = null;
+
     /**
      * {@inheritDoc}
      */
@@ -321,7 +323,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     public void threadStarted() {
         logThreadStart();
 
-        Context context = null;
         thrown = null;
         try {
             context = getInitialContext();
@@ -391,14 +392,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         } catch (NoClassDefFoundError e) {
             thrown = e;
             LOGGER.error(e.getLocalizedMessage(), e);
-        } finally {
-            if (context != null) {
-                try {
-                    context.close();
-                } catch (NamingException ignored) {
-                    // ignore
-                }
-            }
         }
     }
 
@@ -490,6 +483,13 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     public void threadFinished() {
         LOGGER.debug("Thread ended " + new Date());
 
+        if (context != null) {
+            try {
+                context.close();
+            } catch (NamingException ignored) {
+                // ignore
+            }
+        }
         Utils.close(session, LOGGER);
         Utils.close(connection, LOGGER);
         if (receiverThread != null) {
