@@ -150,6 +150,7 @@ jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLoo
 <li><bugzilla>56428</bugzilla> - MailReaderSampler - should it use mail.pop3s.* properties?</li>
 <li><bugzilla>46932</bugzilla> - Alias given in select statement is not used as column header in response data for a JDBC request.Based on report and analysis of Nicola Ambrosetti</li>
 <li><bugzilla>56539</bugzilla> - Mail reader sampler: When Number of messages to retrieve is superior to 1, Number of samples should only show 1 not the number of messages retrieved</li>
+<li><bugzilla>56809</bugzilla> - JMSSampler closes InitialContext too early. Contributed by Bradford Hovinen (hovinen at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -275,6 +276,7 @@ jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLoo
 <li>Felix Schumacher (felix.schumacher at internetallee.de)</li>
 <li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 <li>Andrey Pohilko (apc4 at ya.ru)</li>
+<li>Bradford Hovinen (hovinen at gmail.com)</li>
 </ul>
 
 <br/>
