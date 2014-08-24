@@ -203,6 +203,7 @@ jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLoo
 <li><bugzilla>52013</bugzilla> - Test Script Recorder's Child View Results Tree does not take into account Test Script Recorder excluded/included URLs. Based on report and analysis of James Liang</li>
 <li><bugzilla>56119</bugzilla> - File uploads fail every other attempt using timers. Enable idle timeouts for servers that don't send Keep-Alive headers.</li>
 <li><bugzilla>56272</bugzilla> - MirrorServer should support query parameters for status and redirects</li>
+<li><bugzilla>56772</bugzilla> - Handle IE Conditional comments when parsing embedded resources</li>
 </ul>
 
 <h3>Other samplers</h3>

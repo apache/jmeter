@@ -139,9 +139,10 @@ public class JsoupBasedHtmlParser extends HTMLParser {
     }
 
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl,
+    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl,
             URLCollection coll, String encoding) throws HTMLParseException {
         try {
+            // TODO Handle conditional comments for IE
             String contents = new String(html,encoding);
             Document doc = Jsoup.parse(contents);
             JMeterNodeVisitor nodeVisitor = new JMeterNodeVisitor(new URLPointer(baseUrl), coll);

@@ -66,7 +66,7 @@ class HtmlParserHTMLParser extends HTMLParser {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
 
         if (log.isDebugEnabled()) {
             log.debug("Parsing html of: " + baseUrl);
