@@ -83,11 +83,18 @@ public class TestHTMLParser extends JMeterTestCase {
 
             private String expectedList;
 
-            private TestData(String f, String b, String s, String l) {
-                fileName = f;
-                baseURL = b;
-                expectedSet = s;
-                expectedList = l;
+            /**
+             * 
+             * @param htmlFileName HTML File with content
+             * @param baseUrl Base URL
+             * @param expectedSet Set of expected URLs
+             * @param expectedList List of expected URLs
+             */
+            private TestData(String htmlFileName, String baseUrl, String expectedSet, String expectedList) {
+                this.fileName = htmlFileName;
+                this.baseURL = baseUrl;
+                this.expectedSet = expectedSet;
+                this.expectedList = expectedList;
             }
 
 //            private TestData(String f, String b, String s) {
@@ -141,7 +148,7 @@ public class TestHTMLParser extends JMeterTestCase {
                 new TestData("testfiles/HTMLParserTestFile_2.html",
                         "file:HTMLParserTestFile_2.html",
                         "testfiles/HTMLParserTestFile_2.all",
-                        "testfiles/HTMLParserTestFile_2.all"), 
+                        "testfiles/HTMLParserTestFile_2.all"),
                          };
 
         public static junit.framework.Test suite() {
