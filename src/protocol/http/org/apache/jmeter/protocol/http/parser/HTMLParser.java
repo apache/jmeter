@@ -18,12 +18,15 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
+
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -60,6 +63,10 @@ public abstract class HTMLParser {
     protected static final String TAG_OBJECT        = "object";// $NON-NLS-1$
     protected static final String TAG_SCRIPT        = "script";// $NON-NLS-1$
     protected static final String STYLESHEET        = "stylesheet";// $NON-NLS-1$
+
+    protected static final String IE_UA             = "MSIE ([0-9]+.[0-9]+)";// $NON-NLS-1$
+    protected static final Pattern IE_UA_PATTERN    = Pattern.compile(IE_UA);
+    private   static final float IE_10                = 10.0f;
 
     // Cache of parsers - parsers must be re-usable
     private static final Map<String, HTMLParser> parsers = new ConcurrentHashMap<String, HTMLParser>(4);
@@ -121,6 +128,8 @@ public abstract class HTMLParser {
      * Malformed URLs can be reported to the caller by having the Iterator
      * return the corresponding RL String. Overall problems parsing the html
      * should be reported by throwing an HTMLParseException.
+     * @param userAgent
+     *            User Agent
      *
      * @param html
      *            HTML code
@@ -129,7 +138,7 @@ public abstract class HTMLParser {
      * @param encoding Charset
      * @return an Iterator for the resource URLs
      */
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, String encoding) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, String encoding) throws HTMLParseException {
         // The Set is used to ignore duplicated binary files.
         // Using a LinkedHashSet to avoid unnecessary overhead in iterating
         // the elements in the set later on. As a side-effect, this will keep
@@ -137,7 +146,7 @@ public abstract class HTMLParser {
         // behaviour.
 
         Collection<URLString> col = new LinkedHashSet<URLString>();
-        return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(col),encoding);
+        return getEmbeddedResourceURLs(userAgent, html, baseUrl, new URLCollection(col),encoding);
 
         // An additional note on using HashSets to store URLs: I just
         // discovered that obtaining the hashCode of a java.net.URL implies
@@ -167,6 +176,8 @@ public abstract class HTMLParser {
      * N.B. The Iterator returns URLs, but the Collection will contain objects
      * of class URLString.
      *
+     * @param userAgent
+     *            User Agent
      * @param html
      *            HTML code
      * @param baseUrl
@@ -176,7 +187,7 @@ public abstract class HTMLParser {
      * @param encoding Charset
      * @return an Iterator for the resource URLs
      */
-    public abstract Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection coll, String encoding)
+    public abstract Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection coll, String encoding)
             throws HTMLParseException;
 
     /**
@@ -187,6 +198,8 @@ public abstract class HTMLParser {
      * N.B. The Iterator returns URLs, but the Collection will contain objects
      * of class URLString.
      *
+     * @param userAgent
+     *            User Agent
      * @param html
      *            HTML code
      * @param baseUrl
@@ -196,8 +209,8 @@ public abstract class HTMLParser {
      * @param encoding Charset
      * @return an Iterator for the resource URLs
      */
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) throws HTMLParseException {
-        return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(coll), encoding);
+    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) throws HTMLParseException {
+        return getEmbeddedResourceURLs(userAgent, html, baseUrl, new URLCollection(coll), encoding);
     }
 
     /**
@@ -208,5 +221,42 @@ public abstract class HTMLParser {
      */
     protected boolean isReusable() {
         return false;
+    }
+    
+    /**
+     * 
+     * @param ieVersion Float IE version
+     * @return
+     */
+    protected final boolean isEnableConditionalComments(Float ieVersion) {
+        if(ieVersion == null) {
+            return false;
+        }
+        // Conditionnal comment have been dropped in IE10
+        // http://msdn.microsoft.com/en-us/library/ie/hh801214%28v=vs.85%29.aspx
+        return ieVersion.floatValue() < IE_10;
+    }
+    
+    /**
+     * 
+     * @param userAgent User Agent
+     * @return version null if not IE or the version after MSIE
+     */
+    protected Float extractIEVersion(String userAgent) {
+        Matcher matcher = IE_UA_PATTERN.matcher(userAgent);
+        String ieVersion = null;
+        while (matcher.find()) {
+            if (matcher.groupCount() > 0) {
+                ieVersion = matcher.group(1);
+            } else {
+                ieVersion = matcher.group();
+            }
+            break;
+        }
+        if(ieVersion != null) {
+            return Float.valueOf(ieVersion);
+        } else {
+            return null;
+        }
     }
 }
