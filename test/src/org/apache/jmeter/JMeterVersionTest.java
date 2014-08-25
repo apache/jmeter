@@ -125,8 +125,16 @@ public class JMeterVersionTest extends JMeterTestCase {
                 } else if (jar.endsWith("mail-1.5.0")) { // special hack for mail-1.5.0-b01, to remove when migrating to 1.5.0
                     jar = "javamail";
                     version = "1.5.0-b01";
-                }
-                else {
+                } else if (jar.indexOf("jodd")>=0) { 
+                    version = "3.6.0-BETA2";
+                    if (jar.indexOf("jodd-core")>=0) { // special hack for jodd-core-3.6.0-BETA2
+                        jar = "jodd-core";
+                    } else if (jar.indexOf("jodd-log")>=0) { // special hack for jodd-log-3.6.0-BETA2
+                        jar = "jodd-log";
+                    } else if (jar.indexOf("jodd-lagarto")>=0) { // special hack for jodd-lagarto-3.6.0-BETA2
+                        jar = "jodd-lagarto";
+                    }
+                } else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
                     if (tmp != null) {
                         jar = tmp;
