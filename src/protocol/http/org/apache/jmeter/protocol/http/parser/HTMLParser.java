@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -243,6 +244,10 @@ public abstract class HTMLParser {
      * @return version null if not IE or the version after MSIE
      */
     protected Float extractIEVersion(String userAgent) {
+        if(StringUtils.isEmpty(userAgent)) {
+            log.info("userAgent is null");
+            return null;
+        }
         Matcher matcher = IE_UA_PATTERN.matcher(userAgent);
         String ieVersion = null;
         while (matcher.find()) {
