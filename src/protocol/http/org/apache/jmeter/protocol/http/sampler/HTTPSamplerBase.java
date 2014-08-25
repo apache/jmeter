@@ -180,6 +180,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final String CONCURRENT_POOL = "HTTPSampler.concurrentPool"; // $NON-NLS-1$
 
     private static final String CONCURRENT_POOL_DEFAULT = "4"; // default for concurrent pool (do not change)
+    
+    private static final String USER_AGENT = "User-Agent"; // $NON-NLS-1$
 
     //- JMX names
 
@@ -1184,7 +1186,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         HTMLParser.getParser(parserName)
                         :
                         HTMLParser.getParser(); // we don't; use the default parser
-                    urls = parser.getEmbeddedResourceURLs(responseData, res.getURL(), res.getDataEncodingWithDefault());
+                    String userAgent = getUserAgent(res);
+                    urls = parser.getEmbeddedResourceURLs(userAgent, responseData, res.getURL(), res.getDataEncodingWithDefault());
                 }
             }
         } catch (HTMLParseException e) {
@@ -1334,6 +1337,33 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return res;
     }
     
+    /**
+     * Extract User-Agent header value
+     * @param sampleResult HTTPSampleResult
+     * @return User Agent part
+     */
+    private String getUserAgent(HTTPSampleResult sampleResult) {
+        String res = sampleResult.getRequestHeaders();
+        int index = res.indexOf(USER_AGENT);
+        if(index >=0) {
+            // see HTTPHC3Impl#getConnectionHeaders
+            // see HTTPHC4Impl#getConnectionHeaders
+            // see HTTPJavaImpl#getConnectionHeaders    
+            //': ' is used by JMeter to fill-in requestHeaders, see getConnectionHeaders
+            final String userAgentPrefix = USER_AGENT+": ";
+            String userAgentHdr = res.substring(
+                    index+userAgentPrefix.length(), 
+                    res.indexOf('\n',// '\n' is used by JMeter to fill-in requestHeaders, see getConnectionHeaders
+                            index+userAgentPrefix.length()+1));
+            return userAgentHdr.trim();
+        } else {
+            if(log.isInfoEnabled()) {
+                log.info("No user agent extracted from requestHeaders:"+res);
+            }
+            return null;
+        }
+    }
+
     /**
      * Set parent successful attribute based on IGNORE_FAILED_EMBEDDED_RESOURCES parameter
      * @param res {@link HTTPSampleResult}
