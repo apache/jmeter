@@ -99,6 +99,10 @@ public class JMeterVersionTest extends JMeterTestCase {
         prop = buildProp;
     }
 
+    /**
+     * Check eclipse.classpath contains the jars declared in build.properties
+     * @throws Exception
+     */
     public void testEclipse() throws Exception {
         final BufferedReader eclipse = new BufferedReader(
                 new FileReader(getFileFromHome("eclipse.classpath"))); // assume default charset is OK here
@@ -129,6 +133,10 @@ public class JMeterVersionTest extends JMeterTestCase {
                     }
                 }
                 String expected = versions.get(jar);
+                if(expected == null) {
+                    System.err.println("Didn't find version for jar name extracted by regexp, jar name extracted:"+jar+", version extracted:"+version+", current line:"+line);
+                    fail("Didn't find version for jar name extracted by regexp, jar name extracted:"+jar+", version extracted:"+version+", current line:"+line);
+                }
                 // Process ${xxx.version} references
                 final Matcher mp = versionPat.matcher(expected);
                 if (mp.matches()) {
