@@ -109,7 +109,7 @@ public class JMeterVersionTest extends JMeterTestCase {
 //      <classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 //      <classpathentry kind="lib" path="lib/activation-1.1.1.jar"/>
 //      <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
-        final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+)-([^-]+)\\.jar\"/>");
+        final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+?)-([^-]+(-b\\d+|-BETA\\d)?)\\.jar\"/>");
         final Pattern versionPat = Pattern.compile("\\$\\{(.+)\\.version\\}");
         String line;
         final ArrayList<String> toRemove = new ArrayList<String>();
@@ -118,22 +118,11 @@ public class JMeterVersionTest extends JMeterTestCase {
             if (m.matches()) {
                 String jar = m.group(1);
                 String version = m.group(2);
+                System.out.println(jar + " => " + version);
                 if (jar.endsWith("-jdk15on")) { // special handling
                     jar=jar.replace("-jdk15on","");
                 } else if (jar.equals("commons-jexl") && version.startsWith("2")) { // special handling
                     jar="commons-jexl2";
-                } else if (jar.endsWith("mail-1.5.0")) { // special hack for mail-1.5.0-b01, to remove when migrating to 1.5.0
-                    jar = "javamail";
-                    version = "1.5.0-b01";
-                } else if (jar.indexOf("jodd")>=0) { 
-                    version = "3.6.0-BETA2";
-                    if (jar.indexOf("jodd-core")>=0) { // special hack for jodd-core-3.6.0-BETA2
-                        jar = "jodd-core";
-                    } else if (jar.indexOf("jodd-log")>=0) { // special hack for jodd-log-3.6.0-BETA2
-                        jar = "jodd-log";
-                    } else if (jar.indexOf("jodd-lagarto")>=0) { // special hack for jodd-lagarto-3.6.0-BETA2
-                        jar = "jodd-lagarto";
-                    }
                 } else {
                     String tmp = JAR_TO_BUILD_PROP.get(jar);
                     if (tmp != null) {
