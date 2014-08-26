@@ -207,7 +207,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             String contents = new String(html,encoding); 
             // As per Jodd javadocs, emitStrings should be false for visitor for better performances
             LagartoParser lagartoParser = new LagartoParser(contents, false);
-            LagartoParserConfig<LagartoParserConfig> config = new LagartoParserConfig<LagartoParserConfig>();
+            LagartoParserConfig<LagartoParserConfig<?>> config = new LagartoParserConfig<LagartoParserConfig<?>>();
             config.setCaseSensitive(false);
             // Conditional comments only apply for IE < 10
             config.setEnableConditionalComments(isEnableConditionalComments(ieVersion));
