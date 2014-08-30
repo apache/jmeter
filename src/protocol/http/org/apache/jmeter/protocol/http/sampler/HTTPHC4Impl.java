@@ -314,10 +314,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         final CacheManager cacheManager = getCacheManager();
         if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)) {
            if (cacheManager.inCache(url)) {
-               res.sampleEnd();
-               res.setResponseNoContent();
-               res.setSuccessful(true);
-               return res;
+               return createSampleResultForResourceInCache(res);
            }
         }
 
