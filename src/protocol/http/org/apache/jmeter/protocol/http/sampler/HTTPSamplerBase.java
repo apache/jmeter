@@ -1253,7 +1253,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             // default: serial download embedded resources
                             HTTPSampleResult binRes = sample(url, HTTPConstants.GET, false, frameDepth + 1);
                             res.addSubResult(binRes);
-                            setParentSampleSuccess(res, res.isSuccessful() && binRes.isSuccessful());
+                            setParentSampleSuccess(res, res.isSuccessful() && (binRes != null ? binRes.isSuccessful() : true));
                         }
 
                     }
@@ -1317,7 +1317,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                                 }
                             }
                             res.addSubResult(binRes.getResult());
-                            setParentSampleSuccess(res, res.isSuccessful() && binRes.getResult().isSuccessful());
+                            setParentSampleSuccess(res, res.isSuccessful() && (binRes.getResult() != null ? binRes.getResult().isSuccessful():true));
                         } catch (TimeoutException e) {
                             errorResult(e, res);
                         }
