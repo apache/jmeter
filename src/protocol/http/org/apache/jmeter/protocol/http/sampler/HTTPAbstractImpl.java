@@ -321,4 +321,16 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     protected void notifySSLContextWasReset() {
         // NOOP
     }
+    
+    /**
+     * Create HTTPSampleResult for a resource in cache
+     * @param res {@link HTTPSampleResult}
+     * @return HTTPSampleResult
+     */
+    protected HTTPSampleResult createSampleResultForResourceInCache(HTTPSampleResult res) {
+        res.sampleEnd();
+        res.setResponseNoContent();
+        res.setSuccessful(true);
+        return res;
+    }
 }

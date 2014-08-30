@@ -20,14 +20,12 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.BindException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -40,16 +38,12 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
-
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
-
 import org.apache.jorphan.logging.LoggingManager;
-
 import org.apache.log.Logger;
 
 /**
@@ -470,10 +464,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         final CacheManager cacheManager = getCacheManager();
         if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)) {
            if (cacheManager.inCache(url)) {
-               res.sampleEnd();
-               res.setResponseNoContent();
-               res.setSuccessful(true);
-               return res;
+               return createSampleResultForResourceInCache(res);
            }
         }
 
