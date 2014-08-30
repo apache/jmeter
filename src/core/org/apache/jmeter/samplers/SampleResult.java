@@ -564,6 +564,10 @@ public class SampleResult implements Serializable {
      * @param subResult
      */
     public void addSubResult(SampleResult subResult) {
+        if(subResult == null) {
+            // see https://issues.apache.org/bugzilla/show_bug.cgi?id=54778
+            return;
+        }
         String tn = getThreadName();
         if (tn.length()==0) {
             tn=Thread.currentThread().getName();//TODO do this more efficiently
