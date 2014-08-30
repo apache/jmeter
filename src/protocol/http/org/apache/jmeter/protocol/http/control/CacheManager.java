@@ -32,11 +32,11 @@ import java.util.Map;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.util.DateParseException;
-import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.cookie.DateParseException;
+import org.apache.http.impl.cookie.DateUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
@@ -191,8 +191,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             }
             if (expires != null) {
                 try {
-                    expiresDate = DateUtil.parseDate(expires);
-                } catch (DateParseException e) {
+                    expiresDate = DateUtils.parseDate(expires);
+                } catch (org.apache.http.impl.cookie.DateParseException e) {
                     if (log.isDebugEnabled()){
                         log.debug("Unable to parse Expires: '"+expires+"' "+e);
                     }
@@ -212,8 +212,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 } else if(expires==null) { // No max-age && No expires
                     if(!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(date)) {
                         try {
-                            Date responseDate = DateUtil.parseDate( date );
-                            Date lastModifiedAsDate = DateUtil.parseDate( lastModified );
+                            Date responseDate = DateUtils.parseDate( date );
+                            Date lastModifiedAsDate = DateUtils.parseDate( lastModified );
                             // see https://developer.mozilla.org/en/HTTP_Caching_FAQ
                             // see http://www.ietf.org/rfc/rfc2616.txt#13.2.4 
                             expiresDate=new Date(System.currentTimeMillis()
