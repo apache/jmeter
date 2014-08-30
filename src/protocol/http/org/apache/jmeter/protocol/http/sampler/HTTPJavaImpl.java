@@ -464,7 +464,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         final CacheManager cacheManager = getCacheManager();
         if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)) {
            if (cacheManager.inCache(url)) {
-               return createSampleResultForResourceInCache(res);
+               return updateSampleResultForResourceInCache(res);
            }
         }
 

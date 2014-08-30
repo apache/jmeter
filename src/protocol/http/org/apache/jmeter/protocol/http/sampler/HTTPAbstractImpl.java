@@ -323,14 +323,18 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
     
     /**
-     * Create HTTPSampleResult for a resource in cache
+     * Update HTTPSampleResult for a resource in cache
      * @param res {@link HTTPSampleResult}
      * @return HTTPSampleResult
      */
-    protected HTTPSampleResult createSampleResultForResourceInCache(HTTPSampleResult res) {
-        res.sampleEnd();
-        res.setResponseNoContent();
-        res.setSuccessful(true);
-        return res;
+    protected HTTPSampleResult updateSampleResultForResourceInCache(HTTPSampleResult res) {
+        // TODO Should we add an option to keep compatibility 
+//        res.sampleEnd();
+//        res.setResponseNoContent();
+//        res.setSuccessful(true);
+//        return res;
+        // We don't want to issue a SampleResult
+        // see https://issues.apache.org/bugzilla/show_bug.cgi?id=54778
+        return null;
     }
 }
