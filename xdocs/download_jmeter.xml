@@ -72,7 +72,7 @@
       For more information concerning Apache JMeter, see the <a href="http://jmeter.apache.org/">Apache JMeter</a> site. 
       </p>
       <p>
-      <a href="http://www.apache.org/dist/jmeter/KEYS">KEYS</a>
+      <a href="https://www.apache.org/dist/jmeter/KEYS">KEYS</a>
       </p>
     </section>
     <section name="Apache JMeter &release; (Requires Java 6 or later)">
@@ -80,13 +80,13 @@
         <table>
           <tr>
               <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.tgz">apache-jmeter-&release;.tgz</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tgz.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tgz.asc">pgp</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tgz.md5">md5</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tgz.asc">pgp</a></td>
           </tr>
           <tr>
               <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.zip">apache-jmeter-&release;.zip</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.asc">pgp</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.md5">md5</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
@@ -94,13 +94,13 @@
         <table>
           <tr>
               <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.tgz">apache-jmeter-&release;_src.tgz</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tgz.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tgz.asc">pgp</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tgz.md5">md5</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tgz.asc">pgp</a></td>
           </tr>
           <tr>
               <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.zip">apache-jmeter-&release;_src.zip</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.asc">pgp</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.md5">md5</a></td>
+              <td><a href="https://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
@@ -111,8 +111,8 @@
         </p>
         <ul>
           <li class="download"><a href="[preferred]/jmeter/">browse download area</a></li>
-          <li><a href="http://archive.apache.org/dist/jmeter/">Apache JMeter archives...</a></li>
-          <li><a href="http://archive.apache.org/dist/jakarta/jmeter/">Apache Jakarta JMeter archives...</a></li>
+          <li><a href="https://archive.apache.org/dist/jmeter/">Apache JMeter archives...</a></li>
+          <li><a href="https://archive.apache.org/dist/jakarta/jmeter/">Apache Jakarta JMeter archives...</a></li>
         </ul>
     </section>
     <section name="Verification of downloads">
