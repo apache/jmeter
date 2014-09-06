@@ -95,6 +95,8 @@ public final class ActionNames {
     public static final String MOVE_DOWN        = "move_down"; // $NON-NLS-1$
     public static final String MOVE_LEFT        = "move_left"; // $NON-NLS-1$
     public static final String MOVE_RIGHT       = "move_right"; // $NON-NLS-1$
+    public static final String UNDO             = "undo"; // $NON-NLS-1$
+    public static final String REDO             = "redo"; // $NON-NLS-1$
 
     // Prevent instantiation
     private ActionNames(){
