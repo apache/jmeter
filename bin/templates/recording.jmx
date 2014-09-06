@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.5" jmeter="2.10">
+<jmeterTestPlan version="1.2" properties="2.7" jmeter="2.12">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -95,7 +95,8 @@
       <ProxyControl guiclass="ProxyControlGui" testclass="ProxyControl" testname="HTTP(S) Test Script Recorder" enabled="true">
         <stringProp name="ProxyControlGui.port">8888</stringProp>
         <collectionProp name="ProxyControlGui.exclude_list">
-          <stringProp name="-1330403993">.*\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)</stringProp>
+          <stringProp name="-2135475220">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)[\?;].*</stringProp>
+          <stringProp name="1409425616">(?i).*\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)</stringProp>
         </collectionProp>
         <collectionProp name="ProxyControlGui.include_list"/>
         <boolProp name="ProxyControlGui.capture_http_headers">true</boolProp>
@@ -109,6 +110,7 @@
         <boolProp name="ProxyControlGui.regex_match">true</boolProp>
         <stringProp name="ProxyControlGui.content_type_include"></stringProp>
         <stringProp name="ProxyControlGui.content_type_exclude"></stringProp>
+        <boolProp name="ProxyControlGui.notify_child_sl_filtered">true</boolProp>
       </ProxyControl>
       <hashTree>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
