@@ -44,6 +44,9 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
@@ -104,7 +107,7 @@ public final class GuiPackage implements LocaleChangeListener {
 
     /** The main JMeter frame. */
     private MainFrame mainFrame;
-    
+
     /** The main JMeter toolbar. */
     private JToolBar toolbar;
 
@@ -121,13 +124,18 @@ public final class GuiPackage implements LocaleChangeListener {
      */
     private LoggerPanel loggerPanel;
 
-    
+    /**
+     * History for tree states
+     */
+    private UndoHistory undoHistory = new UndoHistory();
+
     /**
      * Private constructor to permit instantiation only from within this class.
      * Use {@link #getInstance()} to retrieve a singleton instance.
      */
     private GuiPackage(JMeterTreeModel treeModel, JMeterTreeListener treeListener) {
         this.treeModel = treeModel;
+        this.treeModel.addTreeModelListener(undoHistory);
         this.treeListener = treeListener;
         JMeterUtils.addLocaleChangeListener(this);
     }
@@ -155,6 +163,7 @@ public final class GuiPackage implements LocaleChangeListener {
     public static GuiPackage getInstance(JMeterTreeListener listener, JMeterTreeModel treeModel) {
         if (guiPack == null) {
             guiPack = new GuiPackage(treeModel, listener);
+            guiPack.undoHistory.add(treeModel, "Created");
         }
         return guiPack;
     }
@@ -408,8 +417,12 @@ public final class GuiPackage implements LocaleChangeListener {
                 log.debug("Updating current node " + currentNode.getName());
                 JMeterGUIComponent comp = getGui(currentNode.getTestElement());
                 TestElement el = currentNode.getTestElement();
+                int before = getTestElementCheckSum(el);
                 comp.modifyTestElement(el);
-                currentNode.nameChanged(); // Bug 50221 - ensure label is updated
+                int after = getTestElementCheckSum(el);
+                if (before != after) {
+                    currentNode.nameChanged(); // Bug 50221 - ensure label is updated
+                }
             }
             // The current node is now updated
             currentNodeUpdated = true;
@@ -464,7 +477,10 @@ public final class GuiPackage implements LocaleChangeListener {
      *             if a subtree cannot be added to the currently selected node
      */
     public HashTree addSubTree(HashTree subTree) throws IllegalUserActionException {
-        return treeModel.addSubTree(subTree, treeListener.getCurrentNode());
+        HashTree hashTree = treeModel.addSubTree(subTree, treeListener.getCurrentNode());
+        undoHistory.clear();
+        undoHistory.add(this.treeModel, "Loaded tree");
+        return hashTree;
     }
 
     /**
@@ -527,7 +543,7 @@ public final class GuiPackage implements LocaleChangeListener {
     public JMeterTreeListener getTreeListener() {
         return treeListener;
     }
-    
+
     /**
      * Set the main JMeter toolbar.
      *
@@ -546,7 +562,7 @@ public final class GuiPackage implements LocaleChangeListener {
     public JToolBar getMainToolbar() {
         return toolbar;
     }
-    
+
     /**
      * Set the menu item toolbar.
      *
@@ -670,6 +686,8 @@ public final class GuiPackage implements LocaleChangeListener {
         getTreeModel().clearTestPlan();
         nodesToGui.clear();
         setTestPlanFile(null);
+        undoHistory.clear();
+        undoHistory.add(this.treeModel, "Initial Tree");
     }
 
     /**
@@ -680,6 +698,8 @@ public final class GuiPackage implements LocaleChangeListener {
     public void clearTestPlan(TestElement element) {
         getTreeModel().clearTestPlan(element);
         removeNode(element);
+        undoHistory.clear();
+        undoHistory.add(this.treeModel, "Initial Tree");
     }
 
     public static void showErrorMessage(final String message, final String title){
@@ -720,7 +740,7 @@ public final class GuiPackage implements LocaleChangeListener {
             }
         }
     }
-    
+
     /**
      * Register process to stop on reload
      * @param stoppable
@@ -730,7 +750,7 @@ public final class GuiPackage implements LocaleChangeListener {
     }
 
     /**
-     * 
+     *
      * @return List<IStoppable> Copy of IStoppable
      */
     public List<Stoppable> getStoppables() {
@@ -746,7 +766,7 @@ public final class GuiPackage implements LocaleChangeListener {
     public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
         this.menuItemLoggerPanel = menuItemLoggerPanel;
     }
-    
+
     /**
      * Get the menu item LoggerPanel.
      *
@@ -769,4 +789,53 @@ public final class GuiPackage implements LocaleChangeListener {
     public LoggerPanel getLoggerPanel() {
         return loggerPanel;
     }
+
+    /**
+     * Navigate back and forward through undo history
+     *
+     * @param offset int
+     */
+    public void goInHistory(int offset) {
+        undoHistory.getRelativeState(offset, this.treeModel);
+    }
+
+    /**
+     * @return true if history contains redo item
+     */
+    public boolean canRedo() {
+        return undoHistory.canRedo();
+    }
+
+    /**
+     * @return true if history contains undo item
+     */
+    public boolean canUndo() {
+        return undoHistory.canUndo();
+    }
+
+    /**
+     * Compute checksum of TestElement to detect changes
+     * the method calculates properties checksum to detect testelement
+     * modifications
+     * TODO would be better to override hashCode for TestElement, but I decided not to touch it
+     *
+     * @param el {@link TestElement}
+     * @return int checksum
+     */
+    private int getTestElementCheckSum(TestElement el) {
+        int ret = el.getClass().hashCode();
+        PropertyIterator it = el.propertyIterator();
+        while (it.hasNext()) {
+            JMeterProperty obj = it.next();
+            if (obj instanceof TestElementProperty) {
+                ret ^= getTestElementCheckSum(((TestElementProperty) obj)
+                        .getElement());
+            } else {
+                ret ^= obj.getName().hashCode();
+                ret ^= obj.getStringValue().hashCode();
+            }
+        }
+        return ret;
+    }
+
 }
