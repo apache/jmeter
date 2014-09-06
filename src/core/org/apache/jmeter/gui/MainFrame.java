@@ -810,4 +810,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             }
        }
     }
+
+    /**
+     * Update Undo/Redo icons state
+     * @param canUndo
+     * @param canRedo
+     */
+    public void updateUndoRedoIcons(boolean canUndo, boolean canRedo) {
+        toolbar.updateUndoRedoIcons(canUndo, canRedo);
+    }
 }
