@@ -206,6 +206,10 @@ public final class MenuFactory {
      * @param addSaveTestFragmentMenu Add Save as Test Fragment menu if true 
      */
     public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
+        // the undo/redo as a standard goes first in Edit menus
+        // maybe there's better place for them in JMeter?
+        addUndoItems(menu);
+
         addSeparator(menu);
         menu.add(makeMenuItemRes("open", ActionNames.OPEN));// $NON-NLS-1$
         menu.add(makeMenuItemRes("menu_merge", ActionNames.MERGE));// $NON-NLS-1$
@@ -246,6 +250,25 @@ public final class MenuFactory {
         addSeparator(menu);
         menu.add(makeMenuItemRes("help", ActionNames.HELP));// $NON-NLS-1$
     }
+
+    /**
+     * Add undo / redo
+     * @param menu JPopupMenu
+     */
+    private static void addUndoItems(JPopupMenu menu) {
+        addSeparator(menu);
+
+        JMenuItem undo = makeMenuItemRes("undo", ActionNames.UNDO); //$NON-NLS-1$
+        undo.setEnabled(GuiPackage.getInstance().canUndo());
+        menu.add(undo);
+
+        JMenuItem redo = makeMenuItemRes("redo", ActionNames.REDO); //$NON-NLS-1$
+        // TODO: we could even show some hints on action being undone here if this will be required (by passing those hints into history  records)
+        redo.setEnabled(GuiPackage.getInstance().canRedo());
+        menu.add(redo);
+        // TODO: find a way to enable/disable toolbar items depending on action states
+    }
+
 
     public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
         JMenu addMenu = new JMenu(label);
