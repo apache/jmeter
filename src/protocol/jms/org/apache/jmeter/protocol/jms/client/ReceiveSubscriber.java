@@ -62,6 +62,8 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     private final LinkedBlockingQueue<Message> queue;
 
+    private boolean connectionStarted;
+
     /**
      * Constructor takes the necessary JNDI related parameters to create a
      * connection and prepare to begin receiving messages.
@@ -222,6 +224,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     public void start() throws JMSException {
         log.debug("start()");
         connection.start();
+        connectionStarted=true;
     }
 
     /**
@@ -231,6 +234,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     public void stop() throws JMSException {
         log.debug("stop()");
         connection.stop();
+        connectionStarted=false;
     }
 
     /**
@@ -271,11 +275,12 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     public void close() { // called from threadFinished() thread
         log.debug("close()");
         try {
-            if(connection != null) {
+            if(connection != null && connectionStarted) {
                 connection.stop();
+                connectionStarted = false;
             }
         } catch (JMSException e) {
-            log.error(e.getMessage());
+            log.warn("Stopping connection throws exception, message:"+e.getMessage());
         }
         Utils.close(subscriber, log);
         Utils.close(session, log);
