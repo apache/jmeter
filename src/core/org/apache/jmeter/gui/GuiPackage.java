@@ -36,9 +36,11 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.gui.UndoHistory.HistoryListener;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.JMeterToolBar;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -63,7 +65,7 @@ import org.apache.log.Logger;
  * parts of the GUI.
  *
  */
-public final class GuiPackage implements LocaleChangeListener {
+public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** Logging. */
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -137,7 +139,6 @@ public final class GuiPackage implements LocaleChangeListener {
         this.treeModel = treeModel;
         this.treeModel.addTreeModelListener(undoHistory);
         this.treeListener = treeListener;
-        JMeterUtils.addLocaleChangeListener(this);
     }
 
     /**
@@ -147,6 +148,16 @@ public final class GuiPackage implements LocaleChangeListener {
      */
     public static GuiPackage getInstance() {
         return guiPack;
+    }
+    
+    /**
+     * Register as listener of:
+     * - UndoHistory
+     * - Locale Changes
+     */
+    public void registerAsListener() {
+        this.undoHistory.registerHistoryListener(this);
+        JMeterUtils.addLocaleChangeListener(this);
     }
 
     /**
@@ -796,7 +807,7 @@ public final class GuiPackage implements LocaleChangeListener {
      * @param offset int
      */
     public void goInHistory(int offset) {
-        undoHistory.getRelativeState(offset, this.treeModel);
+        undoHistory.moveInHistory(offset, this.treeModel);
     }
 
     /**
@@ -836,6 +847,14 @@ public final class GuiPackage implements LocaleChangeListener {
             }
         }
         return ret;
+    }
+
+    /**
+     * Called when history changes, it updates toolbar
+     */
+    @Override
+    public void notifyChangeInHistory(UndoHistory history) {
+        ((JMeterToolBar)toolbar).updateUndoRedoIcons(history.canUndo(), history.canRedo());
     }
 
 }
