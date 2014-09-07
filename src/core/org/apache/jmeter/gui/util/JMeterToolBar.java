@@ -176,8 +176,28 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      */
     @Override
     public void localeChanged(LocaleChangeEvent event) {
+        Map<String, Boolean> currentButtonStates = getCurrentButtonsStates();
         this.removeAll();
         setupToolbarContent(this);
+        updateButtons(currentButtonStates);
+    }
+
+    /**
+     * 
+     * @return Current state (enabled/disabled) of Toolbar button
+     */
+    private Map<String, Boolean> getCurrentButtonsStates() {
+        Component[] components = getComponents();
+        Map<String, Boolean> buttonStates = 
+                new HashMap<String, Boolean>(components.length);
+        for (int i = 0; i < components.length; i++) {
+            if(components[i]instanceof JButton) {
+                JButton button = (JButton) components[i];
+                buttonStates.put(button.getActionCommand(),  
+                        Boolean.valueOf(button.isEnabled()));
+            }
+        }
+        return buttonStates;
     }
 
     /**
