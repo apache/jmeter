@@ -45,6 +45,13 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * 
      */
     private static final long serialVersionUID = -974269825492906010L;
+    
+    /**
+     * Interface to be implemented by components interested in UndoHistory
+     */
+    public interface HistoryListener {
+        void notifyChangeInHistory(UndoHistory history);
+    }
 
     /**
      * Avoid storing too many elements
@@ -95,6 +102,11 @@ public class UndoHistory implements TreeModelListener, Serializable {
      */
     private boolean working = false;
 
+    /**
+     * History listeners
+     */
+    private List<HistoryListener> listeners = new ArrayList<UndoHistory.HistoryListener>();
+
     public UndoHistory() {
     }
 
@@ -108,6 +120,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
         log.debug("Clearing undo history");
         history.clear();
         position = INITIAL_POS;
+        notifyListeners();
     }
 
     /**
@@ -155,6 +168,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
         log.debug("Added history element, position: " + position + ", size: " + history.size());
         working = false;
+        notifyListeners();
     }
 
     /**
@@ -163,7 +177,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * @param offset        the direction to go to, usually -1 for undo or 1 for redo
      * @param acceptorModel TreeModel to accept the changes
      */
-    public void getRelativeState(int offset, JMeterTreeModel acceptorModel) {
+    public void moveInHistory(int offset, JMeterTreeModel acceptorModel) {
         log.debug("Moving history from position " + position + " with step " + offset + ", size is " + history.size());
         if (offset < 0 && !canUndo()) {
             log.warn("Can't undo, we're already on the last record");
@@ -198,6 +212,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
         // refresh the all ui
         guiInstance.updateCurrentGui();
         guiInstance.getMainFrame().repaint();
+        notifyListeners();
     }
 
     /**
@@ -320,6 +335,23 @@ public class UndoHistory implements TreeModelListener, Serializable {
             tree.expandRow(0);
         }
         tree.setSelectionRow(savedSelected);
+    }
+    
+    /**
+     * Register HistoryListener 
+     * @param listener
+     */
+    public void registerHistoryListener(HistoryListener listener) {
+        listeners.add(listener);
+    }
+    
+    /**
+     * Notify listener
+     */
+    private void notifyListeners() {
+        for (HistoryListener listener : listeners) {
+            listener.notifyChangeInHistory(this);
+        }
     }
 
 }
