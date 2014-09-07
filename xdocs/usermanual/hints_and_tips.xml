@@ -66,12 +66,19 @@ You can use these to determine the correct property setting to change the loggin
 <p>
 It is sometimes very useful to see Log messages to debug dynamic scripting languages like BeanShell or
 groovy used in JMeter.
-Since 2.6, you can view log messages directly in JMeter GUI, to do so, use menu Options &gt; Log Viewer,
-a log console will appear at the bottom of the interface.
-Note that log messages are cleared each time you disable this option.
+Since version 2.6, you can view log messages directly in JMeter GUI, to do so:
+<ul>
+<li>use menu Options &gt; Log Viewer, a log console will appear at the bottom of the interface</li>
+<li>Or click on the Warning icon in the upper right corner of GUI</li>
+</ul>
 By default this log console is disabled, you can enable it by changing in jmeter.properties:
 <ul>
 <li>jmeter.loggerpanel.display=true</li>
+</ul>
+
+To avoid using too much memory, this components limits the number of characters used by this panel:
+<ul>
+<li>jmeter.loggerpanel.maxlength=80000</li>
 </ul>
 </p>
 </subsection>

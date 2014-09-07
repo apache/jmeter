@@ -49,6 +49,10 @@ public class LoggerPanel extends JPanel implements LogTarget {
     private static final int LOGGER_PANEL_MAX_LENGTH =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 80000); // $NON-NLS-1$
 
+    // Make panel handle event even if closed
+    private static final boolean LOGGER_PANEL_RECEIVE_WHEN_CLOSED =
+            JMeterUtils.getPropDefault("jmeter.loggerpanel.enable_when_closed", true); // $NON-NLS-1$
+
     /**
      * Pane for display JMeter log file
      */
@@ -78,7 +82,7 @@ public class LoggerPanel extends JPanel implements LogTarget {
      */
     @Override
     public void processEvent(final LogEvent logEvent) {
-        if(!GuiPackage.getInstance().getMenuItemLoggerPanel().getModel().isSelected()) {
+        if(!LOGGER_PANEL_RECEIVE_WHEN_CLOSED && !GuiPackage.getInstance().getMenuItemLoggerPanel().getModel().isSelected()) {
             return;
         }
         
