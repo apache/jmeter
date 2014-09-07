@@ -20,6 +20,7 @@ package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
@@ -204,7 +205,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         warnIndicator.setOpaque(false);
         warnIndicator.setContentAreaFilled(false);
         warnIndicator.setBorderPainted(false);
-
+        warnIndicator.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
         warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
         warnIndicator.addActionListener(this);
         errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
