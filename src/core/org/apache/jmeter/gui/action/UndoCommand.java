@@ -47,12 +47,16 @@ public class UndoCommand implements Command {
 
         if (command.equals(ActionNames.UNDO)) {
             guiPackage.goInHistory(-1);
+            /*
             guiPackage.getMainFrame().updateUndoRedoIcons(guiPackage.canUndo()
                     ,guiPackage.canRedo());
+                    */
         } else if (command.equals(ActionNames.REDO)) {
             guiPackage.goInHistory(1);
+            /*
             guiPackage.getMainFrame().updateUndoRedoIcons(guiPackage.canUndo()
                     ,guiPackage.canRedo());
+                   */
         } else {
             throw new IllegalArgumentException("Wrong action called: " + command);
         }
