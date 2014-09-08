@@ -40,11 +40,18 @@ import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Base class for HTTP implementations used by the HTTPSamplerProxy sampler.
  */
 public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsInterface {
+
+    /**
+     * If true create a SampleResult with emply content and 204 response code 
+     */
+    private static final boolean RETURN_204_FOR_INCACHE_RESOURCE = 
+            JMeterUtils.getPropDefault("cache_manager.return_204_for_cached_resource", false);
 
     protected final HTTPSamplerBase testElement;
 
@@ -328,13 +335,14 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * @return HTTPSampleResult
      */
     protected HTTPSampleResult updateSampleResultForResourceInCache(HTTPSampleResult res) {
-        // TODO Should we add an option to keep compatibility 
-//        res.sampleEnd();
-//        res.setResponseNoContent();
-//        res.setSuccessful(true);
-//        return res;
-        // We don't want to issue a SampleResult
-        // see https://issues.apache.org/bugzilla/show_bug.cgi?id=54778
-        return null;
+        if(!RETURN_204_FOR_INCACHE_RESOURCE) {
+            // We don't want to issue a SampleResult
+            // see https://issues.apache.org/bugzilla/show_bug.cgi?id=54778
+            return null;
+        }        
+        res.sampleEnd();
+        res.setResponseNoContent();
+        res.setSuccessful(true);
+        return res;
     }
 }
