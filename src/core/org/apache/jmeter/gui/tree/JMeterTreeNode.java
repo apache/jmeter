@@ -46,7 +46,8 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     private static final int TEST_PLAN_LEVEL = 1;
 
-    private final JMeterTreeModel treeModel;
+    // See Bug 54648
+    private transient JMeterTreeModel treeModel;
 
     private boolean markedBySearch;
 
