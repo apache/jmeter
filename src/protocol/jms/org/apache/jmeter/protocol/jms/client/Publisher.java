@@ -88,7 +88,7 @@ public class Publisher implements Closeable {
      * @param useAuth (ignored if useProps is true)
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
-     * @param staticDestination true is the destination is not to change between loops
+     * @param staticDestination true if the destination is not to change between loops
      * @throws JMSException if the context could not be initialised, or there was some other error
      * @throws NamingException 
      */
