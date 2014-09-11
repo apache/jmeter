@@ -266,11 +266,13 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     @Override
     public void stateChanged(ChangeEvent event) {
         if (event.getSource() == useProperties) {
-            jndiICF.setEnabled(!useProperties.isSelected());
-            urlField.setEnabled(!useProperties.isSelected());
+            final boolean isUseProperties = useProperties.isSelected();
+            jndiICF.setEnabled(!isUseProperties);
+            urlField.setEnabled(!isUseProperties);
+            useAuth.setEnabled(!isUseProperties);
         } else if (event.getSource() == useAuth) {
-            jmsUser.setEnabled(useAuth.isSelected());
-            jmsPwd.setEnabled(useAuth.isSelected());
+            jmsUser.setEnabled(useAuth.isSelected() && useAuth.isEnabled());
+            jmsPwd.setEnabled(useAuth.isSelected()  && useAuth.isEnabled());
         }
     }
     
