@@ -414,6 +414,8 @@ public class JMeterUtils implements UnitTestManager {
         LocaleChangeEvent event = new LocaleChangeEvent(JMeterUtils.class, locale);
         @SuppressWarnings("unchecked") // clone will produce correct type
         // TODO but why do we need to clone the list?
+        // ANS: to avoid possible ConcurrentUpdateException when unsubscribing
+        // Could perhaps avoid need to clone by using a modern concurrent list
         Vector<LocaleChangeListener> listeners = (Vector<LocaleChangeListener>) localeChangeListeners.clone();
         for (LocaleChangeListener listener : listeners) {
             listener.localeChanged(event);
