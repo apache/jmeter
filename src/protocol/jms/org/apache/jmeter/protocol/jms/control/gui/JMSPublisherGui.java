@@ -110,7 +110,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
-    private JCheckBox useNonPersistentDelivery;
+    private final JCheckBox useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
 
     // These are the names of properties used to define the labels
     private static final String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
@@ -358,7 +358,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         pane.add(jmsDestination, BorderLayout.WEST);
         destSetup.setLayout(new BoxLayout(destSetup, BoxLayout.X_AXIS));
         pane.add(destSetup, BorderLayout.CENTER);
-        useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
         pane.add(useNonPersistentDelivery, BorderLayout.EAST);
         return pane;
     }
