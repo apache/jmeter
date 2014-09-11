@@ -123,11 +123,11 @@ public class InitialContextFactory {
      *
      * @param useProps if true, create a new InitialContext; otherwise use the other parameters to call
      * {@link #lookupContext(String, String, boolean, String, String)} 
-     * @param initialContextFactory
-     * @param providerUrl
-     * @param useAuth
-     * @param securityPrincipal
-     * @param securityCredentials
+     * @param initialContextFactory (ignored if useProps is true)
+     * @param providerUrl (ignored if useProps is true)
+     * @param useAuth (ignored if useProps is true)
+     * @param securityPrincipal (ignored if useProps is true)
+     * @param securityCredentials (ignored if useProps is true)
      * @return  the context, never null
      * @throws NamingException 
      */
