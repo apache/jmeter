@@ -36,15 +36,14 @@
 <p>The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version</p>
 </section>
 
-<section name="&sect-num;.2 Limit the Number of Threads" anchor="limit_threads">
-<p>Your hardware's capabilities will limit the number of threads you can effectively
+<section name="&sect-num;.2 Size correctly the Number of Threads" anchor="sizing_threads">
+<p>Your hardware's capabilities as long as your Test Plan writing will impact the number of threads you can effectively
 run with JMeter.  It will also depend on how fast your server is (a faster server
- makes JMeter work harder since it returns request quicker).  The more
-JMeter works, the less accurate its timing information may become.  The more work
-JMeter does, the more each thread has to wait to get access to the CPU, the more
-inflated the timing information gets.  If you need large-scale load testing, consider
-running multiple non-GUI JMeter instances on multiple machines. 
-The sample result files can be combined for subsequent analysis.
+ makes JMeter work harder since it returns request quicker).  As any Load Testing tool, if you don't size correctly
+ the number of threads, you will face the "Coordinated Omission" problem which can give you wrong or inaccurate results.
+ If you need large-scale load testing, consider running multiple non-GUI JMeter instances on multiple machines 
+ using distributed mode (or not). When using distributed mode the result file is combined on Controller node, if
+ using multiple autonomous instances, the sample result files can be combined for subsequent analysis.
 For testing how JMeter performs on a given platform, the JavaTest sampler can be used.
 It does not require any network access so can give some idea as to the maximum throughput achievable.
 </p>
