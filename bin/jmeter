@@ -19,6 +19,9 @@
 ##   Environment variables:
 ##   JVM_ARGS - optional java args, e.g. -Dprop=val
 ##
+##   e.g.
+##   JVM_ARGS="-Xms512m -Xmx512m" jmeter etc.
+##
 ##   ==============================================
 
 # Minimal version to run JMeter
@@ -38,6 +41,31 @@ if [ $current_version ]; then
          echo "Not able to find Java executable or version. Please check your Java installation."
          exit 1
 fi
+
+JMETER_OPTS=""
+case $(uname) in
+   Darwin*)
+   # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
+   JMETER_OPTS="-Xdock:name=JMeter -Xdock:icon="`dirname $0`/../docs/images/logo.jpg" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"
+   ;;
+esac
+
+
+# resolve links - $0 may be a softlink (code as used by Tomcat)
+# N.B. readlink would be a lot simpler but is not supported on Solaris
+PRG="$0"
+
+while [ -h "$PRG" ]; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+
+PRGDIR=`dirname "$PRG"`
 
 # The following should be reasonably good values for most tests running
 # on Sun JVMs. Following is the analysis on which it is based. If it's total
@@ -105,4 +133,4 @@ SERVER="-server"
 
 ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $PERM $CLASS_UNLOAD"
 
-java $ARGS $JVM_ARGS -jar "`dirname "$0"`/ApacheJMeter.jar" "$@"
+java $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
