@@ -63,7 +63,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     private final LinkedBlockingQueue<Message> queue;
 
     /**
-     * No need for sync as this variable is only accessed by JMeterThread thread
+     * No need for volatile as this variable is only accessed by a single thread
      */
     private boolean connectionStarted;
 
@@ -275,7 +275,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * Then it closes the subscriber, session and connection.
      */
     @Override
-    public void close() { 
+    public void close() { // called by SubscriberSampler#threadFinished()
         log.debug("close()");
         try {
             if(connection != null && connectionStarted) {
