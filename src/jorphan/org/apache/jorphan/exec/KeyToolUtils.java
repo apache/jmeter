@@ -251,7 +251,11 @@ public class KeyToolUtils {
         // Export the Root CA for Firefox/Chrome/IE
         KeyToolUtils.keytool("-exportcert", keystore, password, ROOTCA_ALIAS, null, null, "-rfc", "-file", ROOT_CACERT_CRT);
         // Copy for Opera
-        FileUtils.copyFile(caCert_crt, caCert_usr);
+        if(caCert_crt.exists() && caCert_crt.canRead()) {
+            FileUtils.copyFile(caCert_crt, caCert_usr);            
+        } else {
+            log.warn("Failed creating "+caCert_crt.getAbsolutePath()+", check 'keytool' utility in path is available and points to a JDK >= 7");
+        }
     }
 
     /**
