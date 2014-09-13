@@ -108,15 +108,6 @@ This is a known Java bug, see Bug <a href="http://bugs.sun.com/bugdatabase/view_
 A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 </li>
 
-<li>
-Cut and Paste don't work on MacOSX with all LookAndFeel types.
-The default value for MacOSX is System, which should work OK.
-The current setting is logged at start-up, for example:
-<pre>
-jmeter.gui.action.LookAndFeelCommand: Using look and feel: com.apple.laf.AquaLookAndFeel [Mac OS X, System] 
-</pre>
-</li>
-
 </ul>
 
 <!-- =================== Incompatible changes =================== -->
@@ -298,6 +289,7 @@ For this release we want to give special thanks to the following reporters for t
 <ul>
 <li>Oliver LLoyd (email at oliverlloyd.com) for his help on <bugzilla>56119</bugzilla></li>
 <li>Vladimir Ryabtsev (greatvovan at gmail.com) for his help on <bugzilla>56243</bugzilla> and <bugzilla>56276</bugzilla></li>
+<li>Adrian Speteanu (asp.adieu at gmail.com) and Matt Kilbride (matt.kilbride at gmail.com) for their feedback and tests on <bugzilla>54648</bugzilla></li>
 </ul>
 
 Apologies if we have omitted anyone else.
