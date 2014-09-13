@@ -63,7 +63,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     // This is the maximum time the sampler can be blocked.
     private static final long DEFAULT_WAIT = 500L;
 
-    // No need to synch/ - only used by sampler and ClientPool (which does its own synch)
+    // No need to synch/ - only used by sampler
+    // Note: not currently added to the ClientPool
     private transient ReceiveSubscriber SUBSCRIBER = null;
 
     private transient volatile boolean interrupted = false;
