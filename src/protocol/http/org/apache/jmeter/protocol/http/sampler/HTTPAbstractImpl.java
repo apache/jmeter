@@ -46,12 +46,43 @@ import org.apache.jmeter.util.JMeterUtils;
  * Base class for HTTP implementations used by the HTTPSamplerProxy sampler.
  */
 public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsInterface {
+    private static enum CachedResourceMode {
+        RETURN_200_CACHE("RETURN_200_CACHE"),
+        RETURN_NO_SAMPLE("RETURN_NO_SAMPLE"),
+        RETURN_CUSTOM_STATUS("RETURN_CUSTOM_STATUS");
+        
+        private String name;
+
+        CachedResourceMode(String name) {
+            this.name = name;
+        }
+    }
 
     /**
      * If true create a SampleResult with emply content and 204 response code 
      */
-    private static final boolean RETURN_204_FOR_INCACHE_RESOURCE = 
-            JMeterUtils.getPropDefault("cache_manager.return_204_for_cached_resource", false);
+    private static final CachedResourceMode CACHED_RESOURCE_MODE = 
+            CachedResourceMode.valueOf(
+                    JMeterUtils.getPropDefault("cache_manager.cached_resource_mode", //$NON-NLS-1$
+                    CachedResourceMode.RETURN_NO_SAMPLE.toString()));
+    
+    /**
+     * SampleResult message when resource was in cache and mode is RETURN_200_CACHE
+     */
+    private static final String RETURN_200_CACHE_MESSAGE =
+            JMeterUtils.getPropDefault("RETURN_200_CACHE.message","(ex cache)");//$NON-NLS-1$ $NON-NLS-2$
+
+    /**
+     * Custom response code for cached resource
+     */
+    private static final String RETURN_CUSTOM_STATUS_CODE = 
+            JMeterUtils.getProperty("RETURN_CUSTOM_STATUS.code");//$NON-NLS-1$
+
+    /**
+     * Custom response message for cached resource
+     */
+    private static final String RETURN_CUSTOM_STATUS_MESSAGE = 
+            JMeterUtils.getProperty("RETURN_CUSTOM_STATUS.message"); //$NON-NLS-1$
 
     protected final HTTPSamplerBase testElement;
 
@@ -335,14 +366,24 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * @return HTTPSampleResult
      */
     protected HTTPSampleResult updateSampleResultForResourceInCache(HTTPSampleResult res) {
-        if(!RETURN_204_FOR_INCACHE_RESOURCE) {
-            // We don't want to issue a SampleResult
-            // see https://issues.apache.org/bugzilla/show_bug.cgi?id=54778
-            return null;
-        }        
-        res.sampleEnd();
-        res.setResponseNoContent();
-        res.setSuccessful(true);
-        return res;
+        switch (CACHED_RESOURCE_MODE) {
+            case RETURN_NO_SAMPLE:
+                return null;
+            case RETURN_200_CACHE:
+                res.sampleEnd();
+                res.setResponseCodeOK();
+                res.setResponseMessage(RETURN_200_CACHE_MESSAGE);
+                res.setSuccessful(true);
+                return res;
+            case RETURN_CUSTOM_STATUS:
+                res.sampleEnd();
+                res.setResponseCode(RETURN_CUSTOM_STATUS_CODE);
+                res.setResponseMessage(RETURN_CUSTOM_STATUS_MESSAGE);
+                res.setSuccessful(true);
+                return res;
+            default:
+                // Cannot happen
+                throw new IllegalStateException("Unknown CACHED_RESOURCE_MODE");
+        }
     }
 }
