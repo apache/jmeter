@@ -90,8 +90,8 @@ HEAP="-Xms512m -Xmx512m"
 
 # There's an awful lot of per-sample objects allocated during test run, so we
 # need a large eden to avoid too frequent scavenges -- you'll need to tune this
-# down proportionally if you modify the HEAP values above:
-NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
+# down proportionally if you modify the HEAP values above, below example is fine for 512m of Heap:
+# NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
 
 # This ratio and target have been proven OK in tests with a specially high
 # amount of per-sample objects (the HtmlParserHTMLParser tests):
