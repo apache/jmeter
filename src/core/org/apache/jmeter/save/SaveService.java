@@ -33,8 +33,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
@@ -356,8 +358,25 @@ public class SaveService {
         dh.put(SAMPLE_EVENT_OBJECT, evt);
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
-        JTLSAVER.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
+        try {
+            JTLSAVER.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
+        } catch(RuntimeException e) {
+            throw new IllegalArgumentException("Failed marshalling:"+(evt.getResult() != null ? showDebuggingInfo(evt.getResult()) : "null"), e);
+        }
         writer.write('\n');
+    }
+
+    /**
+     * 
+     * @param result SampleResult
+     * @return String debugging information
+     */
+    private static String showDebuggingInfo(SampleResult result) {
+        try {
+            return "class:"+result.getClass()+",content:"+ToStringBuilder.reflectionToString(result);
+        } catch(Exception e) {
+            return "Exception occured creating debug from event, message:"+e.getMessage();
+        }
     }
 
     /**
