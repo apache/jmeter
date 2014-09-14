@@ -1169,7 +1169,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         You may need to download the appropriate jars for the language; they should be put in the JMeter <b>lib</b> directory.
         </p>
         <note>
-        The BSF API has been largely superseded by JSR-223, which is included in Java 1.6 onwards.
+        The BSF API has been largely superseded by JSR-223, which is included in Java 6 onwards.
         Most scripting languages now include support for JSR-223; please use the JSR223 Sampler instead.
         The BSF Sampler should only be needed for supporting legacy languages/test scripts.
         </note>
@@ -3747,8 +3747,8 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="Server" required="No">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.</property>
         <property name="Port" required="No">Port the web server is listening to.</property>
-        <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
-        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
+        <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
+        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
         <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
         If not specified the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
@@ -5892,7 +5892,7 @@ If necessary, you can force JMeter to regenerate the keystore (and the exported 
 </p>
 <p>
 With versions of JMeter up to 2.9, it used a single certificate for all target servers.
-[Likewise if JMeter is not being run under Java 1.7 or later]
+[Likewise if JMeter is not being run under Java 7 or later]
 This certificate is not one of the certificates that browsers normally trust, and will not be for the
 correct host.<br/>
 As a consequence: 
