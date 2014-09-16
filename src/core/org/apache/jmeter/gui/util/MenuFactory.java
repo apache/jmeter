@@ -266,7 +266,6 @@ public final class MenuFactory {
         // TODO: we could even show some hints on action being undone here if this will be required (by passing those hints into history  records)
         redo.setEnabled(GuiPackage.getInstance().canRedo());
         menu.add(redo);
-        // TODO: find a way to enable/disable toolbar items depending on action states
     }
 
 
