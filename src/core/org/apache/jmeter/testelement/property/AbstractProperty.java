@@ -285,8 +285,6 @@ public abstract class AbstractProperty implements JMeterProperty {
             return new IntegerProperty("", ((Integer) item).intValue());
         } else if (item instanceof Long) {
             return new LongProperty("", ((Long) item).longValue());
-        } else if (item instanceof Long) {
-            return new LongProperty("", ((Long) item).longValue());
         } else {
             return new StringProperty("", item.toString());
         }
