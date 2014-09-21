@@ -64,6 +64,51 @@ Summary
 <figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
  -->
 
+<ch_title>Java 8 support</ch_title>
+<p>
+Now, JMeter 2.12 is compliant with Java 8.
+</p>
+
+<ch_category>New Elements</ch_category>
+<ch_title>Critical Section Controller</ch_title>
+<p>The Critical Section Controller allow to serialize the execution of a section in your tree. 
+Only one instance of the section will be executed at the same time during the test.</p>
+<figure width="683" height="240" image="changes/2.12/01_critical_section_controller.png"></figure>
+
+<ch_title>DNS Cache Manager</ch_title>
+<p>The new configuration element <b>DNS Cache Manager</b> allow to improve the testing of CDN (Content Delivery Network) 
+and/or DNS load balancing.</p>
+<figure width="573" height="359" image="changes/2.12/02_dns_cache_manager.png"></figure>
+
+<ch_category>Improvements</ch_category>
+<ch_title>Mail Reader Sampler</ch_title>
+<p>You can now specify the number of messages that want you retrieve (before all messages were retrieved). 
+In addition, you can fetch only the message header now.</p>
+<figure width="814" height="416" image="changes/2.12/03_mail_reader_sampler.png"></figure>
+
+<ch_title>JMS Publisher / JMS Point-to-Point</ch_title>
+<p> Add JMSPriority and JMSExpiration fields for these samplers.</p>
+<figure width="901" height="277" image="changes/2.12/04_jms_publisher.png"></figure>
+
+<figure width="900" height="294" image="changes/2.12/05_jms_point_to_point.png"></figure>
+
+<ch_title>SMTP Sampler</ch_title>
+<p>Adding the Connection timeout and the Read timeout to the <b>SMTP Sampler.</b></p>
+<figure width="796" height="192" image="changes/2.12/06_smtp_sampler.png"></figure>
+
+<ch_title>View Results Tree</ch_title>
+<p>Improve the ergonomics of View Results Tree by changing placement of Renderers and allowing custom ordering 
+(with the property <i>view.results.tree.renderers_order</i>).</p>
+<figure width="900" height="329" image="changes/2.12/07_view_results_tree.png"></figure>
+
+<ch_title>Response Time Graph</ch_title>
+<p>Adding the ability for the <b>Response Time Graph</b> listener to save/restore format its settings in/from the jmx file.</p>
+<figure width="997" height="574" image="changes/2.12/08_response_time_graph.png"></figure>
+
+<ch_title>Synchronizing Timer </ch_title>
+<p>Adding a timeout to define the maximum time to waiting of the group of virtual users.</p>
+<figure width="546" height="144" image="changes/2.12/09_synchronizing_timer.png"></figure>
+
 
 <!--  =================== Known bugs =================== -->
 
