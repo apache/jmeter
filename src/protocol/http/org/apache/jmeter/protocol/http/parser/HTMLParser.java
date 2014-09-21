@@ -227,7 +227,7 @@ public abstract class HTMLParser {
     /**
      * 
      * @param ieVersion Float IE version
-     * @return
+     * @return true if IE version < IE v10
      */
     protected final boolean isEnableConditionalComments(Float ieVersion) {
         if(ieVersion == null) {
