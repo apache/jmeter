@@ -62,11 +62,11 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private SystemDefaultDnsResolver systemDefaultDnsResolver = null;
+    private transient SystemDefaultDnsResolver systemDefaultDnsResolver = null;
 
     private Map<String, InetAddress[]> cache = null;
 
-    private Resolver resolver = null;
+    private transient Resolver resolver = null;
 
     //++ JMX tag values
     public static final String CLEAR_CACHE_EACH_ITER = "DNSCacheManager.clearEachIteration"; // $NON-NLS-1$
