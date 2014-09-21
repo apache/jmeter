@@ -366,6 +366,7 @@
     <include name="${lib.dir}/${commons-lang3.jar}"/>
     <include name="${lib.dir}/${commons-logging.jar}"/>
     <include name="${lib.dir}/${commons-net.jar}"/>
+  	<include name="${lib.dir}/${dnsjava.jar}"/>
     <include name="${lib.dir}/${excalibur-datasource.jar}"/>
     <include name="${lib.dir}/${excalibur-instrument.jar}"/>
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
