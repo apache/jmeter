@@ -133,6 +133,11 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * @param comment   String
      */
     public void add(JMeterTreeModel treeModel, String comment) {
+        if(!isEnabled()) {
+            log.debug("undo.history.size is set to 0, undo/redo feature is disabled");
+            return;
+        }
+
         // don't add element if we are in the middle of undo/redo or a big loading
         if (working) {
             log.debug("Not adding history because of noop");
@@ -335,6 +340,14 @@ public class UndoHistory implements TreeModelListener, Serializable {
             tree.expandRow(0);
         }
         tree.setSelectionRow(savedSelected);
+    }
+    
+    /**
+     * 
+     * @return true if history is enabled
+     */
+    boolean isEnabled() {
+        return HISTORY_SIZE > 0;
     }
     
     /**
