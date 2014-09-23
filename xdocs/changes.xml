@@ -80,11 +80,14 @@ Only one instance of the section will be executed at the same time during the te
 and/or DNS load balancing.</p>
 <figure width="573" height="359" image="changes/2.12/02_dns_cache_manager.png"></figure>
 
-<ch_category>Improvements</ch_category>
-<ch_title>Mail Reader Sampler</ch_title>
-<p>You can now specify the number of messages that want you retrieve (before all messages were retrieved). 
-In addition, you can fetch only the message header now.</p>
-<figure width="814" height="416" image="changes/2.12/03_mail_reader_sampler.png"></figure>
+<ch_category>Core Improvements</ch_category>
+<ch_title>Better handling of embedded resources</ch_title>
+<p>When download embedded resources is checked, JMeter now uses User Agent header to download or not resources embedded within conditionnal comments as per <a href="http://msdn.microsoft.com/en-us/library/ms537512%28v=vs.85%29.aspx" target="_blank">About conditional comments</a>.</p>
+
+<ch_title>Ability to customize Cache Manager (Browser cache simulation) handling of cached resources</ch_title>
+<p>You can now configure the behaviour of JMeter when a resource is found in Cache, this can be controlled with <i>cache_manager.cached_resource_mode</i> property</p>
+<figure width="1024" height="314" image="changes/2.12/12_cache_resource_mode.png"></figure>
+
 
 <ch_title>JMS Publisher / JMS Point-to-Point</ch_title>
 <p> Add JMSPriority and JMSExpiration fields for these samplers.</p>
@@ -92,9 +95,24 @@ In addition, you can fetch only the message header now.</p>
 
 <figure width="900" height="294" image="changes/2.12/05_jms_point_to_point.png"></figure>
 
+<ch_title>Mail Reader Sampler</ch_title>
+<p>You can now specify the number of messages that want you retrieve (before all messages were retrieved). 
+In addition, you can fetch only the message header now.</p>
+<figure width="814" height="416" image="changes/2.12/03_mail_reader_sampler.png"></figure>
+
 <ch_title>SMTP Sampler</ch_title>
 <p>Adding the Connection timeout and the Read timeout to the <b>SMTP Sampler.</b></p>
 <figure width="796" height="192" image="changes/2.12/06_smtp_sampler.png"></figure>
+
+<ch_title>Synchronizing Timer </ch_title>
+<p>Adding a timeout to define the maximum time to waiting of the group of virtual users.</p>
+<figure width="546" height="144" image="changes/2.12/09_synchronizing_timer.png"></figure>
+
+<ch_category>GUI Improvements</ch_category>
+
+<ch_title>Undo/Redo support</ch_title>
+<p>Undo / Redo has been introduced and allows user to undo/redo changes made on Test Plan Tree</p>
+<figure width="1024" height="56" image="changes/2.12/10_undo_redo.png"></figure>
 
 <ch_title>View Results Tree</ch_title>
 <p>Improve the ergonomics of View Results Tree by changing placement of Renderers and allowing custom ordering 
@@ -105,9 +123,9 @@ In addition, you can fetch only the message header now.</p>
 <p>Adding the ability for the <b>Response Time Graph</b> listener to save/restore format its settings in/from the jmx file.</p>
 <figure width="997" height="574" image="changes/2.12/08_response_time_graph.png"></figure>
 
-<ch_title>Synchronizing Timer </ch_title>
-<p>Adding a timeout to define the maximum time to waiting of the group of virtual users.</p>
-<figure width="546" height="144" image="changes/2.12/09_synchronizing_timer.png"></figure>
+<ch_title>Log Viewer</ch_title>
+<p>Starting with this version, jmeter logs can be viewed in GUI by clicking on Warning icon in the upper right corner. This will unfold the Log Viewer panel and show logs.</p>
+<figure width="1024" height="437" image="changes/2.12/11_log_viewer.png"></figure>
 
 
 <!--  =================== Known bugs =================== -->
@@ -296,9 +314,9 @@ for details on configuring this component.</li>
 <li><bugzilla>56455</bugzilla> - Batch files: drop support for non-NT Windows shell scripts</li>
 <li><bugzilla>56807</bugzilla> - Ability to force flush of ResultCollector file. Contributed by Andrey Pohilko (apc4 at ya.ru)</li>
 <li><bugzilla>56921</bugzilla> - Templates : Improve Recording template to ignore embedded resources case and URL parameters. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bugzilla>42248</bugzilla> - Undo-redo support on Test Plan tree modification. Developed by Andrey Pohilko (apc4 at ya.ru) and contributed by BlazeMeter Ltd. Additional contribution by Ubik Load Pack (support at ubikloadpack.com)</li></ul>
+<li><bugzilla>42248</bugzilla> - Undo-redo support on Test Plan tree modification. Developed by Andrey Pohilko (apc4 at ya.ru) and contributed by BlazeMeter Ltd. Additional contribution by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>56920</bugzilla> - LogViewer : Make it receive all log events even when it is closed. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-
+</ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
 <li>Updated to commons-lang3 3.3.2 (from 3.1)</li>
