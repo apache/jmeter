@@ -137,7 +137,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     private GuiPackage(JMeterTreeModel treeModel, JMeterTreeListener treeListener) {
         this.treeModel = treeModel;
-        this.treeModel.addTreeModelListener(undoHistory);
+        if(undoHistory.isEnabled()) {
+            this.treeModel.addTreeModelListener(undoHistory);
+        }
         this.treeListener = treeListener;
     }
 
@@ -156,7 +158,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * - Locale Changes
      */
     public void registerAsListener() {
-        this.undoHistory.registerHistoryListener(this);
+        if(undoHistory.isEnabled()) {
+            this.undoHistory.registerHistoryListener(this);
+        }
         JMeterUtils.addLocaleChangeListener(this);
     }
 
