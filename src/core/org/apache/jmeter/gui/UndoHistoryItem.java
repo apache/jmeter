@@ -37,6 +37,16 @@ public class UndoHistoryItem implements Serializable {
     private final String comment;
 
     /**
+     * This constructor is for Unit test purposes only
+     * @deprecated DO NOT USE
+     */
+    @Deprecated
+    public UndoHistoryItem() {
+        tree = null;
+        comment = null;
+    }
+
+    /**
      * @param copy HashTree
      * @param acomment String
      */
