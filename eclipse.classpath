@@ -83,13 +83,13 @@
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7R4.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/serializer-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-nop-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/soap-2.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/tika-core-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/tika-parsers-1.6.jar"/>
-	<classpathentry kind="lib" path="lib/xalan-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.5.jar"/>
