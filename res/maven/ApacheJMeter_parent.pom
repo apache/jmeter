@@ -100,7 +100,7 @@ under the License.
       <xstream.version>1.4.7</xstream.version>
       <xpp3.version>1.1.4c</xpp3.version>
       <xalan.version>2.7.2</xalan.version>
-      <serializer.version>2.7.1</serializer.version>
+      <serializer.version>2.7.2</serializer.version>
       <xerces.version>2.11.0</xerces.version>
       <xml-apis.version>1.4.01</xml-apis.version>
       <xmlgraphics-commons.version>1.5</xmlgraphics-commons.version>
