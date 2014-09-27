@@ -63,7 +63,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      * Optionally number the requests
      */
     private static final boolean numberRequests =
-        JMeterUtils.getPropDefault("proxy.number.requests", false); // $NON-NLS-1$
+        JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
 
     private static volatile int requestNumber = 0;// running number
     
