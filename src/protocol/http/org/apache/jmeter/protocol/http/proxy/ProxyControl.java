@@ -163,7 +163,7 @@ public class ProxyControl extends GenericController {
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC4 = "2";
 
     private static final long sampleGap =
-        JMeterUtils.getPropDefault("proxy.pause", 1000); // $NON-NLS-1$
+        JMeterUtils.getPropDefault("proxy.pause", 5000); // $NON-NLS-1$
     // Detect if user has pressed a new link
 
     // for ssl connection
