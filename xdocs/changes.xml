@@ -111,7 +111,7 @@ In addition, you can fetch only the message header now.</p>
 <ch_category>GUI Improvements</ch_category>
 
 <ch_title>Undo/Redo support</ch_title>
-<p>Undo / Redo has been introduced and allows user to undo/redo changes made on Test Plan Tree</p>
+<p>Undo / Redo has been introduced and allows user to undo/redo changes made on Test Plan Tree. This feature (ALPHA MODE) is disabled by default, to enable it set property <b>undo.history.size=25</b> </p>
 <figure width="1024" height="56" image="changes/2.12/10_undo_redo.png"></figure>
 
 <ch_title>View Results Tree</ch_title>
