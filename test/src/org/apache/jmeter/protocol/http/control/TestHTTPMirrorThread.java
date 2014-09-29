@@ -397,11 +397,13 @@ public class TestHTTPMirrorThread extends TestCase {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.addRequestProperty("X-Sleep", "1000");
         conn.connect();
-        long now = System.currentTimeMillis();
+        // use nanoTime to do timing measurement or calculation
+        // See https://blogs.oracle.com/dholmes/entry/inside_the_hotspot_vm_clocks
+        long now = System.nanoTime();
         final InputStream inputStream = conn.getInputStream();
         while(inputStream.read() != -1) {}
         inputStream.close();
-        final long elapsed = System.currentTimeMillis() - now;
+        final long elapsed = (System.nanoTime() - now)/1000;
         assertTrue("Expected > 1000 " + elapsed, elapsed >= 1000);
     }
 
