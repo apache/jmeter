@@ -20,6 +20,8 @@ package org.apache.jmeter.assertions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.TestCase;
 
@@ -198,26 +200,20 @@ public class ResponseAssertionTest  extends TestCase {
         assertTrue("Expecting failure",result.isFailure());     
         
     }
-    private volatile int threadsRunning;
-
-    private volatile int failed;
+    private AtomicInteger failed;
 
     public void testThreadSafety() throws Exception {
         Thread[] threads = new Thread[100];
+        CountDownLatch latch = new CountDownLatch(threads.length);
         for (int i = 0; i < threads.length; i++) {
-            threads[i] = new TestThread();
+            threads[i] = new TestThread(latch);
         }
-        failed = 0;
+        failed = new AtomicInteger(0);
         for (int i = 0; i < threads.length; i++) {
             threads[i].start();
-            threadsRunning++;
         }
-        synchronized (this) {
-            while (threadsRunning > 0) {
-                wait();
-            }
-        }
-        assertEquals(failed, 0);
+        latch.await();
+        assertEquals(failed.get(), 0);
     }
 
     class TestThread extends Thread {
@@ -227,24 +223,30 @@ public class ResponseAssertionTest  extends TestCase {
         // unknown.
         static final String TEST_PATTERN = ".*A.*\\.";
 
+        private CountDownLatch latch;
+
+        public TestThread(CountDownLatch latch) {
+            this.latch = latch;
+        }
+
         @Override
         public void run() {
-            ResponseAssertion assertion = new ResponseAssertion();
-            assertion.setTestFieldResponseData();
-            assertion.setToContainsType();
-            assertion.addTestString(TEST_PATTERN);
-            SampleResult response = new SampleResult();
-            response.setResponseData(TEST_STRING, null);
-            for (int i = 0; i < 100; i++) {
-                AssertionResult result;
-                result = assertion.getResult(response);
-                if (result.isFailure() || result.isError()) {
-                    failed++;
+            try {
+                ResponseAssertion assertion = new ResponseAssertion();
+                assertion.setTestFieldResponseData();
+                assertion.setToContainsType();
+                assertion.addTestString(TEST_PATTERN);
+                SampleResult response = new SampleResult();
+                response.setResponseData(TEST_STRING, null);
+                for (int i = 0; i < 100; i++) {
+                    AssertionResult result;
+                    result = assertion.getResult(response);
+                    if (result.isFailure() || result.isError()) {
+                        failed.incrementAndGet();
+                    }
                 }
-            }
-            synchronized (ResponseAssertionTest.this) {
-                threadsRunning--;
-                ResponseAssertionTest.this.notifyAll();
+            } finally {
+                latch.countDown();
             }
         }
     }
