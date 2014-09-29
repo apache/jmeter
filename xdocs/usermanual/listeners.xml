@@ -145,7 +145,7 @@ The full set of properties that affect result file output is shown below.
 #jmeter.save.saveservice.url=false
 #jmeter.save.saveservice.filename=false
 #jmeter.save.saveservice.hostname=false
-#jmeter.save.saveservice.thread_counts=false
+#jmeter.save.saveservice.thread_counts=true
 #jmeter.save.saveservice.sample_count=false
 #jmeter.save.saveservice.idle_time=false
 
