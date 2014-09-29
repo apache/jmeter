@@ -93,7 +93,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     private static final int INITIAL_POS = -1;
     private int position = INITIAL_POS;
 
-    private static final int HISTORY_SIZE = JMeterUtils.getPropDefault("undo.history.size", 25);
+    private static final int HISTORY_SIZE = JMeterUtils.getPropDefault("undo.history.size", 0);
 
     private List<UndoHistoryItem> history = new LimitedArrayList<UndoHistoryItem>(HISTORY_SIZE);
 
