@@ -111,7 +111,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     }
 
     /**
-     * The tree traverses itself depth-first, calling processNode for each
+     * The tree traverses itself depth-first, calling addNode for each
      * object it encounters as it goes.
      */
     @Override
