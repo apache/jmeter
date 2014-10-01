@@ -62,9 +62,10 @@ public class TableSample implements Serializable, Comparable<TableSample> {
         this.startTime = startTime;
         this.threadName = threadName;
         this.label = label;
-        this.elapsed = elapsed/sampleCount;
+        // SampleCount can be equal to 0, see SubscriberSampler#sample
+        this.elapsed = (sampleCount > 0) ? elapsed/sampleCount : 0;
+        this.bytes =  (sampleCount > 0) ? bytes/sampleCount : 0;
         this.success = success;
-        this.bytes = bytes/sampleCount;
         this.latency = latency;
     }
 
@@ -77,8 +78,8 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     public String getSampleNumberString(){
         StringBuilder sb = new StringBuilder();
         if (sampleCount > 1) {
-        sb.append(totalSamples-sampleCount+1);
-        sb.append('-');
+            sb.append(totalSamples-sampleCount+1);
+            sb.append('-');
         }
         sb.append(totalSamples);
         return sb.toString();
