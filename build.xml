@@ -366,7 +366,7 @@
     <include name="${lib.dir}/${commons-lang3.jar}"/>
     <include name="${lib.dir}/${commons-logging.jar}"/>
     <include name="${lib.dir}/${commons-net.jar}"/>
-  	<include name="${lib.dir}/${dnsjava.jar}"/>
+    <include name="${lib.dir}/${dnsjava.jar}"/>
     <include name="${lib.dir}/${excalibur-datasource.jar}"/>
     <include name="${lib.dir}/${excalibur-instrument.jar}"/>
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
@@ -2621,7 +2621,7 @@ run JMeter unless all the JMeter jars are added.
           <param name="batchtest.name" value="Bug56243"/>
       </antcall>
 
-  	  <antcall target="batchtest">
+      <antcall target="batchtest">
           <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
           <!-- This is unaffected by the bug; it just checks the script works OK in local mode -->
           <param name="batchtest.name" value="Bug54685"/>
@@ -3002,8 +3002,8 @@ run JMeter unless all the JMeter jars are added.
     </target>
 
     <!-- Special: process to get RSyntaxTextArea-->
-	<!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
-	<!--
+    <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
+    <!--
     <target name="_process_rsyntaxtextarea">
         <available file="./lib/${rsyntaxtextarea.jar}" property="rsyntaxtextarea.exists"/>
         <antcall target="_get_rsyntaxtextarea"/>
@@ -3011,7 +3011,7 @@ run JMeter unless all the JMeter jars are added.
     -->
     <!-- Get RSyntaxTextArea binary zip file, unpack it, pick up jar file and remove the zip -->
     <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
-	<!--
+    <!--
     <target name="_get_rsyntaxtextarea" unless="rsyntaxtextarea.exists">
         <property name="loc" value="${rsyntaxtextarea.loc}"/>
         <property name="zip" value="${rsyntaxtextarea.name}_${rsyntaxtextarea.version}.zip"/>
