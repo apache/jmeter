@@ -153,7 +153,11 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     protected synchronized void updateTextFields(SampleResult res) {
         noSamplesField.setText(Long.toString(calc.getCount()));
-        dataField.setText(Long.toString(res.getTime()/res.getSampleCount()));
+        if(res.getSampleCount() > 0) {
+            dataField.setText(Long.toString(res.getTime()/res.getSampleCount()));
+        } else {
+            dataField.setText("0");
+        }
         averageField.setText(Long.toString((long) calc.getMean()));
         deviationField.setText(Long.toString((long) calc.getStandardDeviation()));
     }
