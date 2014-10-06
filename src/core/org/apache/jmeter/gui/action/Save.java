@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.control.gui.TestFragmentControllerGui;
+import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -101,16 +102,22 @@ public class Save implements Command {
         } 
         else if (e.getActionCommand().equals(ActionNames.SAVE_AS_TEST_FRAGMENT)) {
             JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
-            if(checkAcceptableForTestFragment(nodes)) {
+            if(checkAcceptableForTestFragment(nodes)) {                
                 subTree = GuiPackage.getInstance().getCurrentSubTree();
-                
+                // Create Test Fragment node
                 TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
                 HashTree hashTree = new ListedHashTree();
                 HashTree tfTree = hashTree.add(new JMeterTreeNode(element, null));
                 for (int i = 0; i < nodes.length; i++) {
-                    tfTree.add(nodes[i]);
+                    // Clone deeply current node
+                    TreeCloner cloner = new TreeCloner(false);
+                    GuiPackage.getInstance().getTreeModel().getCurrentSubTree(nodes[i]).traverse(cloner);
+                    // Add clone to tfTree
+                    tfTree.add(cloner.getClonedTree());
                 }
+                                
                 subTree = hashTree;
+                
             } else {
                 JMeterUtils.reportErrorToUser(
                         JMeterUtils.getResString("save_as_test_fragment_error"), // $NON-NLS-1$
