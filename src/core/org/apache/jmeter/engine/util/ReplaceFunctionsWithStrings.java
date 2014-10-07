@@ -79,7 +79,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
             String value = entry.getValue();
             if (regexMatch) {
                 try {
-                    pattern = compiler.compile("\\b("+value+")\\b");
+                    pattern = compiler.compile(constructPattern(value));
                     input = Util.substitute(pm, pattern,
                             new StringSubstitution(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX),
                             input, Util.SUBSTITUTE_ALL);
@@ -92,4 +92,12 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
         }
         return new StringProperty(prop.getName(), input);
     }
+
+    private String constructPattern(String value) {
+        if (value.startsWith("(") && value.endsWith(")")) {
+            return value;
+        }
+	return "\\b(" + value + ")\\b";
+    }
+
 }
