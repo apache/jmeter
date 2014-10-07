@@ -25,6 +25,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
 
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -33,6 +36,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.LogEvent;
 import org.apache.log.LogTarget;
 import org.apache.log.format.PatternFormatter;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 /**
  * Panel that shows log events
@@ -48,7 +52,9 @@ public class LoggerPanel extends JPanel implements LogTarget {
     // Limit length of log content
     private static final int LOGGER_PANEL_MAX_LENGTH =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 80000); // $NON-NLS-1$
-
+    
+    private static final int LOGGER_PANEL_MAX_LINES_COUNT = LOGGER_PANEL_MAX_LENGTH / 80; // $NON-NLS-1$
+    
     // Make panel handle event even if closed
     private static final boolean LOGGER_PANEL_RECEIVE_WHEN_CLOSED =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.enable_when_closed", true); // $NON-NLS-1$
@@ -65,7 +71,10 @@ public class LoggerPanel extends JPanel implements LogTarget {
         this.setLayout(new BorderLayout());
 
         // TEXTAREA
-        textArea = new JSyntaxTextArea(15, 50, true);
+        textArea = new JSyntaxTextArea(15, 80, true);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        textArea.setCodeFoldingEnabled(false);
+        textArea.setAntiAliasingEnabled(false);
         textArea.setEditable(false);
         textArea.setLineWrap(false);
         textArea.setLanguage("text");
@@ -90,14 +99,20 @@ public class LoggerPanel extends JPanel implements LogTarget {
             @Override
             public void run() {
                 synchronized (textArea) {
-                    textArea.append(format.format(logEvent));
-                    int currentLength = textArea.getText().length();
-                    // If LOGGER_PANEL_MAX_LENGTH is 0, it means all log events are kept
-                    if(LOGGER_PANEL_MAX_LENGTH != 0 && currentLength> LOGGER_PANEL_MAX_LENGTH) {
-                        textArea.setText(textArea.getText().substring(Math.max(0, currentLength-LOGGER_PANEL_MAX_LENGTH), 
-                                currentLength));
+                    Document doc;
+                    try {
+                        doc = textArea.getDocument();
+                        Element root = doc.getDefaultRootElement();
+                        int lineCount = root.getElementCount();
+                        if (lineCount>LOGGER_PANEL_MAX_LINES_COUNT) {
+                            int end = root.getElement(lineCount-LOGGER_PANEL_MAX_LINES_COUNT-1).getEndOffset();
+                            doc.remove(0, end);
+                         }
+                        doc.insertString(doc.getLength(), format.format(logEvent), null);
+                        textArea.setCaretPosition(doc.getLength()-1);
+                    } catch (BadLocationException e) {
+                        // NOOP 
                     }
-                    textArea.setCaretPosition(textArea.getText().length());
                 }
             }
         });
