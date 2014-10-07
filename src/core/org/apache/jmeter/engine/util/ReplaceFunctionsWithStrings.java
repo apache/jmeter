@@ -94,9 +94,12 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
     }
     
     /**
+     * Normal regexes will be surrounded by boundary character matches to make life easier for users.
+     * If a user doesn't want that behaviour, he can prevent the modification by giving a regex, that
+     * starts and ends with a parenthesis.
      * 
-     * @param value
-     * @return regexp if value is not already one 
+     * @param value given by user
+     * @return regex surrounded by boundary character matches, if value is not included in parens
      */
     private String constructPattern(String value) {
         if (value.startsWith("(") && value.endsWith(")")) {
