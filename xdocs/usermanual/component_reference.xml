@@ -6196,6 +6196,10 @@ but retain the trailing <code>/</code> in the output by using <code>(^/images(?=
 Note that the current version of Jakara ORO does not support look-behind - i.e. <code>(?&amp;lt;=...)</code> or <code>(?&amp;lt;!...)</code>.
 </note>
 
+<p>Look out for overlapping matchers. For example the value <code>.*</code> as a regex in a variable named
+<code>regex</code> will partly match a previous replaced variable, which will result in something like
+<code>${{regex}</code>, which is most probably not the desired result.</p>
+
 <p>If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
 so be sure to check this if UDVs are not working as expected.</p>
 

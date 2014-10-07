@@ -92,6 +92,18 @@ public class TestValueReplacer extends JMeterTestCase {
             assertEquals("${bounded_regex}", args.get(0).getStringValue());
         }
 
+        public void testOverlappingMatches() throws Exception {
+            TestPlan plan = new TestPlan();
+            plan.addParameter("longMatch", "servername");
+            plan.addParameter("shortMatch", ".*");
+            ValueReplacer replacer = new ValueReplacer(plan);
+            TestElement element = new TestPlan();
+            element.setProperty(new StringProperty("domain", "servername.domain"));
+            replacer.reverseReplace(element, true);
+            String replacedDomain = element.getPropertyAsString("domain");
+            assertEquals("${${shortMatch}", replacedDomain);
+        }
+
         public void testReplace() throws Exception {
             ValueReplacer replacer = new ValueReplacer();
             replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
