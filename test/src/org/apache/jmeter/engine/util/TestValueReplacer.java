@@ -47,7 +47,8 @@ public class TestValueReplacer extends JMeterTestCase {
             // The following used to be jacks_password, but the Arguments class uses
             // HashMap for which the order is not defined.
             variables.addParameter("password", "his_password");
-            variables.addParameter("regex", ".*");
+            variables.addParameter("normal_regex", "Hello .*");
+            variables.addParameter("bounded_regex", "(<.*>)");
             JMeterVariables vars = new JMeterVariables();
             vars.put("server", "jakarta.apache.org");
             JMeterContextService.getContext().setVariables(vars);
@@ -70,6 +71,25 @@ public class TestValueReplacer extends JMeterTestCase {
             List<JMeterProperty> args = (List<JMeterProperty>) element.getProperty("args").getObjectValue();
             assertEquals("username is ${username}", args.get(0).getStringValue());
             assertEquals("${password}", args.get(1).getStringValue());
+        }
+
+        public void testReverseReplacementXml() throws Exception {
+            ValueReplacer replacer = new ValueReplacer(variables);
+            assertTrue(variables.getUserDefinedVariables().containsKey("bounded_regex"));
+            assertTrue(variables.getUserDefinedVariables().containsKey("normal_regex"));
+            assertTrue(replacer.containsKey("bounded_regex"));
+            assertTrue(replacer.containsKey("normal_regex"));
+            TestElement element = new TestPlan();
+            element.setProperty(new StringProperty("domain", "<this><is>xml</this></is>"));
+            List<Object> argsin = new ArrayList<Object>();
+            argsin.add("<this><is>xml</this></is>");
+            argsin.add("And I say: Hello World.");
+            element.setProperty(new CollectionProperty("args", argsin));
+            replacer.reverseReplace(element, true);
+            @SuppressWarnings("unchecked")
+            List<JMeterProperty> args = (List<JMeterProperty>) element.getProperty("args").getObjectValue();
+            assertEquals("${bounded_regex}", element.getPropertyAsString("domain"));
+            assertEquals("${bounded_regex}", args.get(0).getStringValue());
         }
 
         public void testReplace() throws Exception {
