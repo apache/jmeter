@@ -92,12 +92,17 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
         }
         return new StringProperty(prop.getName(), input);
     }
-
+    
+    /**
+     * 
+     * @param value
+     * @return regexp if value is not already one 
+     */
     private String constructPattern(String value) {
         if (value.startsWith("(") && value.endsWith(")")) {
             return value;
         }
-	return "\\b(" + value + ")\\b";
+        return "\\b(" + value + ")\\b";
     }
 
 }
