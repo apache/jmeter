@@ -6025,7 +6025,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         as a comma-separated list of headers.
         </property>
         <property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
-        <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, ie it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b.</property>
+        <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, ie it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b. More information below in the paragraph about "User Defined Variable replacement".</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
         <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?<br/>
@@ -6163,21 +6163,42 @@ place User Defined Variables directly within the HTTP(S) Test Script Recorder to
 <note>Please note that matching is case-sensitive.</note>
 
 <p>Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
-If you define the variable "WEB" with the value "www", for example, 
-the string "www" will be replaced by ${WEB} wherever it is found.
+If you define the variable <code>WEB</code> with the value <code>www</code>, for example,
+the string <code>www</code> will be replaced by <code>${WEB}</code> wherever it is found.
 To avoid this happening everywhere, set the "Regex Matching" check-box.
-This tells the proxy server to treat values as Regexes (using ORO).
-<br></br>
-If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
-<br></br>
-If you want to match /images at the start of a string only, use the value "^/images".
-Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
-but retain the trailing / in the output by using "^/images(?=/)".
-Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&amp;lt;=...) or (?&amp;lt;!...)".
-<br></br>
-If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
-so be sure to check this if UDVs are not working as expected.
-</p>
+This tells the proxy server to treat values as Regexes (using the perl5 compatible regex matchers provided by ORO).</p>
+
+<p>If "Regex Matching" is selected every variable will be compiled into a perl compatible regex enclosed in
+<code>\b(</code> and <code>)\b</code>. That way each match will start and end at a word boundary.</p>
+
+<note>Note that the boundary characters are not part of the matching group, e.g. <code>n.*</code> to match <code>name</code> out
+of <code>You can call me 'name'</code>.</note>
+
+<p>If you don't want your regex to be enclosed with those boundary matchers, you have to enclose your
+regex within parens, e.g <code>('.*?')</code> to match <code>'name'</code> out of <code>You can call me 'name'</code>.</p>
+
+<note>
+The variables will be checked in random order. So ensure, that the potential matches don't overlap.
+Overlapping matchers would be <code>.*</code> (which matches anything) and <code>www</code> (which
+matches <code>www</code> only). Non-overlapping matchers would be <code>a+</code> (matches a sequence
+of <cod>a</cod>'s) and <code>b+</code> (matches a sequence of <code>b</code>'s).
+</note>
+
+<p>If you want to match a whole string only, enclose it in <code>(^</code> and <code>$)</code>, e.g. <code>(^thus$)</code>.
+The parens are neccessary, since the normally added boundary characters will prevent <code>^</code> and
+<code>$</code> to match.</p>
+
+<p>If you want to match <code>/images</code> at the start of a string only, use the value <code>(^/images)</code>.
+Jakarta ORO also supports zero-width look-ahead, so one can match <code>/images/...</code>
+but retain the trailing <code>/</code> in the output by using <code>(^/images(?=/))</code>".</p>
+
+<note>
+Note that the current version of Jakara ORO does not support look-behind - i.e. <code>(?&amp;lt;=...)</code> or <code>(?&amp;lt;!...)</code>.
+</note>
+
+<p>If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
+so be sure to check this if UDVs are not working as expected.</p>
+
 <p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.</p>
