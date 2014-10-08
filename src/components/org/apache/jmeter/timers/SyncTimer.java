@@ -159,8 +159,10 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
             try {
                 if(timeoutInMs==0) {
                     arrival = this.barrier.await();                    
-                } else {
+                } else if(timeoutInMs > 0){
                     arrival = this.barrier.await(timeoutInMs, TimeUnit.MILLISECONDS);
+                } else {
+                    throw new IllegalArgumentException("Negative value for timeout:"+timeoutInMs+" in Synchronizing Timer "+getName());
                 }
             } catch (InterruptedException e) {
                 return 0;
