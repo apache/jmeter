@@ -118,7 +118,11 @@ public class TestAction extends AbstractSampler implements Interruptible {
         }
         try {
             pauseThread = Thread.currentThread();
-            TimeUnit.MILLISECONDS.sleep(milis);
+            if(milis>=0) {
+                TimeUnit.MILLISECONDS.sleep(milis);
+            } else {
+                throw new IllegalArgumentException("Configured sleep is negative:"+milis);
+            }
         } catch (InterruptedException e) {
             // NOOP
         } finally {
