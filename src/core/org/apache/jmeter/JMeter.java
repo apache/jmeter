@@ -1042,11 +1042,9 @@ public class JMeter implements JMeterPlugin {
                 };
                 daemon.setDaemon(true);
                 daemon.start();
-            } else if(REMAIN_THREAD_PAUSE<0) {
-                throw new IllegalArgumentException("Configured jmeter.exit.check.pause is negative:"+REMAIN_THREAD_PAUSE);
-            } else {
+            } else if(REMAIN_THREAD_PAUSE<=0) {
                 if(log.isDebugEnabled()) {
-                    log.debug("jmeter.exit.check.pause is set to 0, no wait for thread ends");
+                    log.debug("jmeter.exit.check.pause is <= 0, no wait for thread ends");
                 }
             }
         }
