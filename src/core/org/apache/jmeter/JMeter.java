@@ -1044,7 +1044,7 @@ public class JMeter implements JMeterPlugin {
                 daemon.start();
             } else if(REMAIN_THREAD_PAUSE<=0) {
                 if(log.isDebugEnabled()) {
-                    log.debug("jmeter.exit.check.pause is <= 0, no wait for thread ends");
+                    log.debug("jmeter.exit.check.pause is <= 0, JMeter won't check for unterminated non-daemon threads");
                 }
             }
         }
