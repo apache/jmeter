@@ -99,7 +99,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // should be quicker to find the editors if they are registered.
+    // Need to register Editors that don't follow the standard naming convention,
+    // i.e. <classname>Editor
     static {
         PropertyEditorManager.registerEditor(Long.class,    LongPropertyEditor.class);
         PropertyEditorManager.registerEditor(Integer.class, IntegerPropertyEditor.class);
