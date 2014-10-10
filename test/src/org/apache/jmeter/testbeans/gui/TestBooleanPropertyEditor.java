@@ -26,6 +26,12 @@ import java.beans.PropertyEditorManager;
  */
 public class TestBooleanPropertyEditor extends junit.framework.TestCase {
  
+    /*
+     * N.B.
+     * These values are NOT the same as Boolean.FALSE|TRUE.toString()
+     * which returns lower-case only. The getAsText() method converts
+     * the result to mixed case.
+     */
     private static final String FALSE = "False";
     private static final String TRUE = "True";
 
