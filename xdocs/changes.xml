@@ -268,6 +268,7 @@ for details on configuring this component.</li>
 <li><bugzilla>54648</bugzilla> - JMeter GUI on OS X crashes when using CMD+C (keyboard shortcut or UI menu entry) on an element from the tree</li>
 <li><bugzilla>56962</bugzilla> - JMS GUIs should disable all fields affected by jndi.properties checkbox</li>
 <li><bugzilla>57061</bugzilla> - Save as Test Fragment fails to clone deeply selected node. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bugzilla>57075</bugzilla> - BeanInfoSupport.MULTILINE attribute is not processed</li>
 </ul>
 
 <!-- =================== Improvements =================== -->

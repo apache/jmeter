@@ -76,7 +76,8 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
     /** Whether the field disallows constant values different from the provided tags; Boolean, default FALSE */
     public static final String NOT_OTHER = GenericTestBeanCustomizer.NOT_OTHER;
 
-    public static final String MULTILINE = "multiline";
+    /** If specified, create a multi-line editor */
+    public static final String MULTILINE = GenericTestBeanCustomizer.MULTILINE;
 
     /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
     public static final String DEFAULT = GenericTestBeanCustomizer.DEFAULT;
