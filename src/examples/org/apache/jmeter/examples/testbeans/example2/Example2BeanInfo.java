@@ -23,6 +23,6 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 public class Example2BeanInfo extends BeanInfoSupport {
     public Example2BeanInfo() {
         super(Example2.class);
-        // ...
+        property("myStringProperty").setValue(DEFAULT, "");
     }
 }

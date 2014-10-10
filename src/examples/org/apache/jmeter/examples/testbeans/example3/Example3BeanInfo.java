@@ -26,7 +26,9 @@ import org.apache.jmeter.testbeans.gui.TypeEditor;
 public class Example3BeanInfo extends BeanInfoSupport {
 
     private PropertyDescriptor getprop(String name) {
-        return property(name);
+        final PropertyDescriptor property = property(name);
+        property.setValue(NOT_UNDEFINED, Boolean.FALSE); // Ensure it is not flagged as 'unconfigured'
+        return property;
     }
 
     private PropertyDescriptor getprop(String name, Object deflt) {
@@ -38,17 +40,18 @@ public class Example3BeanInfo extends BeanInfoSupport {
 
     public Example3BeanInfo() {
         super(Example3.class);
-        getprop("mybool");
+        getprop("mybool", Boolean.TRUE); // Must use defaults for primitive types
         getprop("myBoolean1");
-        getprop("myBoolean2", "True");
-        getprop("myInt", "77");
+        getprop("myBoolean2", Boolean.TRUE);
+        getprop("myInt", Integer.valueOf(77)); // Must use defaults for primitive types
         getprop("myInteger1");
         getprop("myInteger2", Integer.valueOf(123));
-        getprop("mylong", "99");
+        getprop("mylong", Long.valueOf(99)); // Must use defaults for primitive types
         getprop("myLong1");
         getprop("myLong2", Long.valueOf(456));
         getprop("myString1");
         getprop("myString2","abcd");
+        getprop("myFile1");
         property("myFile2", TypeEditor.FileEditor);
     }
 }
