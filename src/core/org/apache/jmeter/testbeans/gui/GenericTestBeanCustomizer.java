@@ -133,6 +133,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /** Whether the field disallows constant values different from the provided tags; Boolean, default FALSE */
     public static final String NOT_OTHER = "notOther"; //$NON-NLS-1$
 
+    /** If specified, create a multi-line editor */
+    public static final String MULTILINE = "multiline";
+
     /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
     public static final String DEFAULT = "default"; //$NON-NLS-1$
 
@@ -585,7 +588,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             Component customEditor = editors[i].getCustomEditor();
 
             boolean multiLineEditor = false;
-            if (customEditor.getPreferredSize().height > 50 || customEditor instanceof JScrollPane) {
+            if (customEditor.getPreferredSize().height > 50 || customEditor instanceof JScrollPane
+                    || descriptors[i].getValue(MULTILINE) != null) {
                 // TODO: the above works in the current situation, but it's
                 // just a hack. How to get each editor to report whether it
                 // wants to grow bigger? Whether the property label should
