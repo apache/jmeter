@@ -22,7 +22,8 @@ import java.beans.PropertyEditorManager;
 /**
  * Test class to check that the JVM provides sensible behaviour for the boolean PropertyEditor, i.e.
  * that getAsText() can only return values that match getTags().
- * 
+ *
+ * Also checks that BooleanPropertyEditor behaves in the same way.
  */
 public class TestBooleanPropertyEditor extends junit.framework.TestCase {
  
@@ -32,8 +33,8 @@ public class TestBooleanPropertyEditor extends junit.framework.TestCase {
      * which returns lower-case only. The getAsText() method converts
      * the result to mixed case.
      */
-    private static final String FALSE = "False";
-    private static final String TRUE = "True";
+    private static final String FALSE = "False"; // $NON-NLS-1$
+    private static final String TRUE  = "True";  // $NON-NLS-1$
 
     public TestBooleanPropertyEditor(String name) {
         super(name);
@@ -41,7 +42,17 @@ public class TestBooleanPropertyEditor extends junit.framework.TestCase {
 
     public void testBooleanEditor(){
         PropertyEditor propertyEditor = PropertyEditorManager.findEditor(boolean.class);
-        assertNotNull(propertyEditor);
+        testBooleanEditor(propertyEditor);
+    }
+
+    public void testBooleanPropertyEditor() {
+        PropertyEditor propertyEditor = new BooleanPropertyEditor();
+        testBooleanEditor(propertyEditor);
+    }
+
+    private void testBooleanEditor(PropertyEditor propertyEditor) {
+        assertNotNull("Expected to find property editor", propertyEditor);
+        System.out.println(propertyEditor.getClass().getCanonicalName());
         String tags[] = propertyEditor.getTags();
         assertEquals(2,tags.length);
         assertEquals(TRUE,tags[0]);
@@ -53,6 +64,10 @@ public class TestBooleanPropertyEditor extends junit.framework.TestCase {
         assertEquals(FALSE,propertyEditor.getAsText());
         propertyEditor.setAsText("false");
         assertEquals(FALSE,propertyEditor.getAsText());
+        propertyEditor.setAsText("False");
+        assertEquals(FALSE,propertyEditor.getAsText());
+        propertyEditor.setAsText("FALSE");
+        assertEquals(FALSE,propertyEditor.getAsText());
         
         propertyEditor.setValue(Boolean.TRUE);
         assertEquals(TRUE,propertyEditor.getAsText());
@@ -60,5 +75,9 @@ public class TestBooleanPropertyEditor extends junit.framework.TestCase {
         assertEquals(TRUE,propertyEditor.getAsText());
         propertyEditor.setAsText("true");
         assertEquals(TRUE,propertyEditor.getAsText());
-        }
+        propertyEditor.setAsText("True");
+        assertEquals(TRUE,propertyEditor.getAsText());
+        propertyEditor.setAsText("TRUE");
+        assertEquals(TRUE,propertyEditor.getAsText());
+    }
 }
