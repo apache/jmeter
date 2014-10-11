@@ -52,7 +52,6 @@ public class TestBooleanPropertyEditor extends junit.framework.TestCase {
 
     private void testBooleanEditor(PropertyEditor propertyEditor) {
         assertNotNull("Expected to find property editor", propertyEditor);
-        System.out.println(propertyEditor.getClass().getCanonicalName());
         String tags[] = propertyEditor.getTags();
         assertEquals(2,tags.length);
         assertEquals(TRUE,tags[0]);
