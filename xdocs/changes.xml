@@ -147,12 +147,6 @@ In addition, you can fetch only the message header now.</p>
 <li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</li>
 
-<li>Infinite Loop can happen within JMeter (with possible StackOverflow side effect) when a If Controller has a condition which is always false from the first iteration (see <bugzilla>52496</bugzilla>).  
-A workaround is to add a sampler at the same level as (or superior to) the If Controller.
-For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
-or a Debug Sampler with all fields set to False (to reduce the sample size).
-</li>
-
 <li>
 The numbers that appear to the left of the green box are the number of active threads / total number of threads, 
 the total number of threads only applies to a locally run test, otherwise it will show 0 (see <bugzilla>55510</bugzilla>).
@@ -229,6 +223,7 @@ for details on configuring this component.</li>
 <ul>
 <li><bugzilla>56243</bugzilla> - Foreach works incorrectly with indexes on subsequent iterations </li>
 <li><bugzilla>56276</bugzilla> - Loop controller becomes broken once loop count evaluates to zero </li>
+<li><bugzilla>56160</bugzilla> - StackOverflowError when using WhileController within IfController</li>
 </ul>
 
 <h3>Listeners</h3>
