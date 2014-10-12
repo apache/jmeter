@@ -98,12 +98,18 @@ public class GenericController extends AbstractTestElement implements Controller
         resetCurrent();
         resetIterCount();
         done = false; // TODO should this use setDone()?
-        first = true; // TODO should this use setFirst()?
-        TestElement elem;
-        for (int i = 0; i < subControllersAndSamplers.size(); i++) {
-            elem = subControllersAndSamplers.get(i);
-            if (elem instanceof Controller) {
-                ((Controller) elem).initialize();
+        first = true; // TODO should this use setFirst()?        
+        initializeSubControllers();
+    }
+
+    /**
+     * (re)Initializes sub controllers
+     * See Bug 50032
+     */
+    protected void initializeSubControllers() {
+        for (TestElement te : subControllersAndSamplers) {
+            if(te instanceof GenericController) {
+                ((Controller) te).initialize();
             }
         }
     }
@@ -216,15 +222,7 @@ public class GenericController extends AbstractTestElement implements Controller
      * @throws NextIsNullException
      */
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
-        Sampler sampler = null;
-        try {
-            sampler = controller.next();
-        } catch (StackOverflowError soe) {
-            // See bug 50618  Catches a StackOverflowError when a condition returns 
-            // always false (after at least one iteration with return true)
-            log.warn("StackOverflowError detected"); // $NON-NLS-1$
-            throw new NextIsNullException("StackOverflowError detected", soe);
-        }
+        Sampler sampler = controller.next();
         if (sampler == null) {
             currentReturnedNull(controller);
             sampler = next();
@@ -268,28 +266,10 @@ public class GenericController extends AbstractTestElement implements Controller
 
     /**
      * Called to re-initialize a index of controller's elements (Bug 50032)
-     * 
+     * @deprecated replaced by GeneriController#initializeSubControllers
      */
     protected void reInitializeSubController() {
-        boolean wasFlagSet = getThreadContext().setIsReinitializingSubControllers();
-        try {
-            TestElement currentElement = getCurrentElement();
-            if (currentElement != null) {
-                if (currentElement instanceof Sampler) {
-                    nextIsASampler((Sampler) currentElement);
-                } else { // must be a controller
-                    if (nextIsAController((Controller) currentElement) != null) {
-                        reInitializeSubController();
-                    }
-                }
-            }
-        } catch (NextIsNullException e) {
-            // NOOP
-        } finally {
-            if (wasFlagSet) {
-                getThreadContext().unsetIsReinitializingSubControllers();
-            }
-        }
+        initializeSubControllers();
     }
     
     /**
