@@ -175,7 +175,7 @@ public class IfController extends GenericController implements Serializable {
         }
         // If-test is false, need to re-initialize indexes
         try {
-            reInitializeSubController(); // Bug 50032 - reinitialize current index element for all sub controller
+            initializeSubControllers();
             return nextIsNull();
         } catch (NextIsNullException e1) {
             return null;
@@ -187,7 +187,7 @@ public class IfController extends GenericController implements Serializable {
      */
     @Override
     public void triggerEndOfLoop() {
-        reInitializeSubController();
+        super.initializeSubControllers();
         super.triggerEndOfLoop();
     }
 

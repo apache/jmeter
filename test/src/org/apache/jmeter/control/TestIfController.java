@@ -18,13 +18,127 @@
 
 package org.apache.jmeter.control;
 
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
+import org.apache.jmeter.modifiers.CounterConfig;
+import org.apache.jmeter.sampler.DebugSampler;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestIfController extends JMeterTestCase {
         public TestIfController(String name) {
             super(name);
+        }
+        
+        /**
+         * See Bug 56160
+         * @throws Exception
+         */
+        public void testStackOverflow() throws Exception {
+            LoopController controller = new LoopController();
+            controller.setLoops(1);
+            controller.setContinueForever(false);
+            
+            IfController ifCont = new IfController("true==false");
+            ifCont.setUseExpression(false);
+            ifCont.setEvaluateAll(false);
+            WhileController whileController = new WhileController();
+            whileController.setCondition("${__javaScript(\"true\" != \"false\")}");
+            whileController.addTestElement(new TestSampler("Sample1"));
+            
+
+            controller.addTestElement(ifCont);
+            ifCont.addTestElement(whileController);
+
+            Sampler sampler = null;
+            int counter = 0;
+            controller.initialize();
+            controller.setRunningVersion(true);
+            ifCont.setRunningVersion(true);
+            whileController.setRunningVersion(true);
+
+            try {
+                while ((sampler = controller.next()) != null) {
+                    sampler.sample(null);
+                    counter++;
+                }
+                assertEquals(0, counter);
+            } catch(StackOverflowError e) {
+                fail("Stackoverflow occured in testStackOverflow");
+            }
+        }
+        
+        /**
+         * See Bug 53768
+         * @throws Exception
+         */
+        public void testBug53768() throws Exception {
+            LoopController controller = new LoopController();
+            controller.setLoops(1);
+            controller.setContinueForever(false);
+            
+            Arguments arguments = new Arguments();
+            arguments.addArgument("VAR1", "0", "=");
+            
+            DebugSampler debugSampler1 = new DebugSampler();
+            debugSampler1.setName("VAR1 = ${VAR1}");
+            
+            IfController ifCont = new IfController("true==false");
+            ifCont.setUseExpression(false);
+            ifCont.setEvaluateAll(false);
+            
+            IfController ifCont2 = new IfController("true==true");
+            ifCont2.setUseExpression(false);
+            ifCont2.setEvaluateAll(false);
+            
+            CounterConfig counterConfig = new CounterConfig();
+            counterConfig.setStart(1);
+            counterConfig.setIncrement(1);
+            counterConfig.setVarName("VAR1");
+            
+            DebugSampler debugSampler2 = new DebugSampler();
+            debugSampler2.setName("VAR1 = ${VAR1}");
+
+            controller.addTestElement(arguments);
+            controller.addTestElement(debugSampler1);
+            controller.addTestElement(ifCont);
+            ifCont.addTestElement(ifCont2);
+            ifCont2.addTestElement(counterConfig);
+            controller.addTestElement(debugSampler2);
+            
+            
+
+            controller.initialize();
+            controller.setRunningVersion(true);
+            ifCont.setRunningVersion(true);
+            ifCont2.setRunningVersion(true);
+            counterConfig.setRunningVersion(true);
+            arguments.setRunningVersion(true);
+            debugSampler1.setRunningVersion(true);
+            debugSampler2.setRunningVersion(true);
+            ifCont2.addIterationListener(counterConfig);
+            JMeterVariables vars = new JMeterVariables();
+            JMeterContext jmctx = JMeterContextService.getContext();
+
+            jmctx.setVariables(vars);
+            vars.put("VAR1", "0");
+            try {
+
+                Sampler sampler = controller.next();
+                SampleResult sampleResult1 = sampler.sample(null);
+                assertEquals("0", vars.get("VAR1"));
+                sampler = controller.next();
+                SampleResult sampleResult2 = sampler.sample(null);
+                assertEquals("0", vars.get("VAR1"));
+                
+
+            } catch(StackOverflowError e) {
+                fail("Stackoverflow occured in testStackOverflow");
+            }
         }
 
         public void testProcessing() throws Exception {
@@ -87,6 +201,7 @@ public class TestIfController extends JMeterTestCase {
             String[] order = new String[] { "Sample1", "Sample2", "Sample3", 
                     "Sample1", "Sample2", "Sample3" };
             int counter = 0;
+            controller.initialize();
             controller.setRunningVersion(true);
             ifCont.setRunningVersion(true);
             
@@ -120,6 +235,7 @@ public class TestIfController extends JMeterTestCase {
             String[] order = new String[] { "Sample1", "Sample2", "Sample3", 
                     "Sample1", "Sample2", "Sample3" };
             int counter = 0;
+            controller.initialize();
             controller.setRunningVersion(true);
             ifCont.setRunningVersion(true);
             
@@ -158,6 +274,7 @@ public class TestIfController extends JMeterTestCase {
             String[] order = new String[] { "Sample1", "Sample2", "Sample3", 
                     "Sample1", "Sample2", "Sample3" };
             int counter = 0;
+            controller.initialize();
             controller.setRunningVersion(true);
             ifCont.setRunningVersion(true);
             genericCont.setRunningVersion(true);

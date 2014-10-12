@@ -50,8 +50,6 @@ public class JMeterContext {
 
     private int threadNum;
 
-    private boolean isReinitSubControllers = false;
-
     private boolean restartNextLoop = false;
 
     private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<String, Object>(5);
@@ -72,7 +70,6 @@ public class JMeterContext {
         samplingStarted = false;
         threadNum = 0;
         thread = null;
-        isReinitSubControllers = false;
         samplerContext.clear();
     }
 
@@ -164,36 +161,6 @@ public class JMeterContext {
 
     public void setSamplingStarted(boolean b) {
         samplingStarted = b;
-    }
-
-    /**
-     * Reset flag indicating listeners should not be notified since reinit of sub 
-     * controllers is being done. See bug 50032 
-     */
-    public void unsetIsReinitializingSubControllers() {
-        if (isReinitSubControllers) {
-            isReinitSubControllers = false;
-        }
-    }
-
-    /**
-     * Set flag indicating listeners should not be notified since reinit of sub 
-     * controllers is being done. See bug 50032 
-     * @return true if it is the first one to set
-     */
-    public boolean setIsReinitializingSubControllers() {
-        if (!isReinitSubControllers) {
-            isReinitSubControllers = true;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @return true if within reinit of Sub Controllers
-     */
-    public boolean isReinitializingSubControllers() {
-        return isReinitSubControllers;
     }
 
     /**
