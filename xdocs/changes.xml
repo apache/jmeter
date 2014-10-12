@@ -217,6 +217,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56809</bugzilla> - JMSSampler closes InitialContext too early. Contributed by Bradford Hovinen (hovinen at gmail.com)</li>
 <li><bugzilla>56761</bugzilla> - JMeter tries to stop already stopped JMS connection and displays "The connection is closed"</li>
 <li><bugzilla>57068</bugzilla> - No error thrown when negative duration is entered in Test Action</li>
+<li><bugzilla>57078</bugzilla> - LagartoBasedHTMLParser fails to parse page that contains input with no type</li>
 </ul>
 
 <h3>Controllers</h3>

@@ -133,7 +133,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                     extractAttribute(tag, ATT_DATA);                 
                 } else if (tag.nameEquals(TAG_INPUT)) {
                     // we check the input tag type for image
-                    if (TagUtil.equalsIgnoreCase(ATT_IS_IMAGE, tag.getAttributeValue(ATT_TYPE))) {
+                    CharSequence type = tag.getAttributeValue(ATT_TYPE);
+                    if (type != null && TagUtil.equalsIgnoreCase(ATT_IS_IMAGE, type)) {
                         // then we need to download the binary
                         extractAttribute(tag, ATT_SRC);
                     }
@@ -149,7 +150,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_LINK)) {
                     CharSequence relAttribute = tag.getAttributeValue(ATT_REL);
                     // Putting the string first means it works even if the attribute is null
-                    if (TagUtil.equalsIgnoreCase(STYLESHEET,relAttribute)) {
+                    if (relAttribute != null && TagUtil.equalsIgnoreCase(STYLESHEET,relAttribute)) {
                         extractAttribute(tag, ATT_HREF);
                     }
                 } else {
