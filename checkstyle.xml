@@ -35,8 +35,10 @@
 -->
  
   <!-- No tabs allowed! -->
-  <module name="FileTabCharacter"/>
-
+  <module name="FileTabCharacter">
+    <property name="fileExtensions" value="java"/>
+  </module>
+  
   <module name="TreeWalker">
    
     <!-- Operator must be at end of wrapped line -->
