@@ -47,15 +47,9 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsInterface {
     private static enum CachedResourceMode {
-        RETURN_200_CACHE("RETURN_200_CACHE"),
-        RETURN_NO_SAMPLE("RETURN_NO_SAMPLE"),
-        RETURN_CUSTOM_STATUS("RETURN_CUSTOM_STATUS");
-        
-        private String name;
-
-        CachedResourceMode(String name) {
-            this.name = name;
-        }
+        RETURN_200_CACHE(),
+        RETURN_NO_SAMPLE(),
+        RETURN_CUSTOM_STATUS();
     }
 
     /**
