@@ -330,6 +330,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56921</bugzilla> - Templates : Improve Recording template to ignore embedded resources case and URL parameters. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>42248</bugzilla> - Undo-redo support on Test Plan tree modification. Developed by Andrey Pohilko (apc4 at ya.ru) and contributed by BlazeMeter Ltd. Additional contribution by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>56920</bugzilla> - LogViewer : Make it receive all log events even when it is closed. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bugzilla>57083</bugzilla> - simplified the CachedResourceMode enum. Contributed by Graham Russel (graham at ham1.co.uk)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
@@ -359,6 +360,7 @@ for details on configuring this component.</li>
 <li>Andrey Pohilko (apc4 at ya.ru)</li>
 <li>Bradford Hovinen (hovinen at gmail.com)</li>
 <li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
+<li>Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <br/>
