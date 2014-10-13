@@ -298,6 +298,11 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
             }
             return false;
         }
+        
+        @Override
+        public int hashCode() {
+            return propKey.hashCode();
+        }
     }
 
     @Override
