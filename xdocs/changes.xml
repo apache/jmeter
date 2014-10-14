@@ -333,6 +333,8 @@ for details on configuring this component.</li>
 <li><bugzilla>57083</bugzilla> - simplified the CachedResourceMode enum. Contributed by Graham Russel (graham at ham1.co.uk)</li>
 <li><bugzilla>57082</bugzilla> - ComboStringEditor : Added hashCode to an inner class which overwrote equals. Contributed by Graham Russel (graham at ham1.co.uk)</li>
 <li><bugzilla>57081</bugzilla> - Updating checkstyle to only check for tabs in java files (and not images!). Contributed by Graham Russel (graham at ham1.co.uk)</li>
+<li><bugzilla>56178</bugzilla> - Really replace backslashes in user name before generating proxy certificate. Contributed by Graham Russel (graham at ham1.co.uk)</li>
+<li><bugzilla>57084</bugzilla> - Close socket after usage in BeahShellClient. Contributed by Graham Russel (graham at ham1.co.uk)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
