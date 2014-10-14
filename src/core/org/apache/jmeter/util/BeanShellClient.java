@@ -77,6 +77,7 @@ public class BeanShellClient {
         sockRead.join(); // wait for script to finish
         is.close();
         os.close();
+        sock.close();
     }
 
     private static void sendLine( String line, OutputStream outPipe )
