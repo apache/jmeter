@@ -266,7 +266,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             instanceCount--;
             if (instanceCount <= 0) {
                 // No need for the hook now
-                Runtime.getRuntime().removeShutdownHook(shutdownHook);
+                // Bug 57088 - prevent (im?)possible NPE
+                if (shutdownHook != null) {
+                    Runtime.getRuntime().removeShutdownHook(shutdownHook);
+                } else {
+                    log.warn("Should not happen: shutdownHook==null, instanceCount=" + instanceCount);
+                }
                 finalizeFileOutput();
                 inTest = false;
             }

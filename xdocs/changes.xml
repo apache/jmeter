@@ -266,6 +266,7 @@ for details on configuring this component.</li>
 <li><bugzilla>57061</bugzilla> - Save as Test Fragment fails to clone deeply selected node. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>57075</bugzilla> - BeanInfoSupport.MULTILINE attribute is not processed</li>
 <li><bugzilla>57076</bugzilla> - BooleanPropertyEditor#getAsText() must return a value that is in getTags()</li>
+<li><bugzilla>57088</bugzilla> - NPE in ResultCollector.testEnded</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
