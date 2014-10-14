@@ -70,7 +70,7 @@ public class KeyToolUtils {
         StringBuilder sb = new StringBuilder();
         sb.append("CN=_ DO NOT INSTALL unless this is your certificate (JMeter root CA)"); // $NON-NLS-1$
         String userName = System.getProperty("user.name"); // $NON-NLS-1$
-        userName.replace('\\','/'); // Backslash is special (Bugzilla 56178)
+        userName = userName.replace('\\','/'); // Backslash is special (Bugzilla 56178)
         addElement(sb, "OU=Username: ", userName); // $NON-NLS-1$
         addElement(sb, "C=", System.getProperty("user.country")); // $NON-NLS-1$ $NON-NLS-2$
         DNAME_ROOT_CA_KEY = sb.toString();
