@@ -60,8 +60,6 @@ public class SSLManagerCommand implements Command {
         commandSet = Collections.unmodifiableSet(commands);
     }
 
-    private JFileChooser keyStoreChooser;
-
     /**
      * Handle the "sslmanager" action by displaying the "SSL CLient Manager"
      * dialog box. The Dialog Box is NOT modal, because those should be avoided
@@ -89,7 +87,7 @@ public class SSLManagerCommand implements Command {
     private void sslManager() {
         SSLManager.reset();
 
-        keyStoreChooser = new JFileChooser(System.getProperty("user.dir")); //$NON-NLS-1$
+        JFileChooser keyStoreChooser = new JFileChooser(System.getProperty("user.dir")); //$NON-NLS-1$
         keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
         keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
@@ -103,7 +101,6 @@ public class SSLManagerCommand implements Command {
             }
         }
 
-        keyStoreChooser = null;
         SSLManager.getInstance();
     }
 
