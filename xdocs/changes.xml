@@ -281,6 +281,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56272</bugzilla> - MirrorServer should support query parameters for status and redirects</li>
 <li><bugzilla>56772</bugzilla> - Handle IE Conditional comments when parsing embedded resources</li>
 <li><bugzilla>57026</bugzilla> - HTTP(S) Test Script Recorder : Better default settings. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bugzilla>57107</bugzilla> - Patch proposal: Add DAV verbs to HTTP Sampler. Contributed by Philippe Jung (apache at famille-jung.fr)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -366,6 +367,7 @@ for details on configuring this component.</li>
 <li>Bradford Hovinen (hovinen at gmail.com)</li>
 <li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
 <li>Graham Russell (graham at ham1.co.uk)</li>
+<li>Philippe Jung (apache at famille-jung.fr)</li>
 </ul>
 
 <br/>
