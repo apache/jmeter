@@ -108,6 +108,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.sampler.HttpWebdav;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -296,6 +297,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 httpRequest = new HttpGet(uri);
             } else if (method.equals(HTTPConstants.PATCH)) {
                 httpRequest = new HttpPatch(uri);
+            } else if (HttpWebdav.isWebdavMethod(method)) {
+                httpRequest = new HttpWebdav(method, uri);
             } else {
                 throw new IllegalArgumentException("Unexpected method: '"+method+"'");
             }
@@ -438,6 +441,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             String postBody = sendPostData((HttpPost)httpRequest);
             result.setQueryString(postBody);
         } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)
+                || HttpWebdav.isWebdavMethod(method)
                 || method.equals(HTTPConstants.DELETE)) {
             String entityBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
             result.setQueryString(entityBody);
