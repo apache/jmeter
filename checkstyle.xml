@@ -36,7 +36,7 @@
  
   <!-- No tabs allowed! -->
   <module name="FileTabCharacter">
-    <property name="fileExtensions" value="java, xml, xsd, xls, dtd, htm, html, txt"/>
+    <property name="fileExtensions" value="java, xml, xsd, dtd, htm, html, txt"/>
   </module>
   
   <module name="TreeWalker">
