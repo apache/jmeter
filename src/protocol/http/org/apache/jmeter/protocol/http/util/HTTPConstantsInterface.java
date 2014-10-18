@@ -39,6 +39,13 @@ public interface HTTPConstantsInterface {
     String TRACE = "TRACE"; // $NON-NLS-1$
     String DELETE = "DELETE"; // $NON-NLS-1$
     String PATCH = "PATCH"; // $NON-NLS-1$
+    String PROPFIND = "PROPFIND"; // $NON-NLS-1$
+    String PROPPATCH = "PROPPATCH"; // $NON-NLS-1$
+    String MKCOL = "MKCOL"; // $NON-NLS-1$
+    String COPY = "COPY"; // $NON-NLS-1$
+    String MOVE = "MOVE"; // $NON-NLS-1$
+    String LOCK = "LOCK"; // $NON-NLS-1$
+    String UNLOCK = "UNLOCK"; // $NON-NLS-1$
     String CONNECT = "CONNECT"; // $NON-NLS-1$
     String HEADER_AUTHORIZATION = "Authorization"; // $NON-NLS-1$
     String HEADER_COOKIE = "Cookie"; // $NON-NLS-1$
