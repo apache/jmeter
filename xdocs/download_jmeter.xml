@@ -23,16 +23,16 @@
     
 <document>   
 <properties>     
-    <title>Downloads</title>   
+    <title>Download Apache JMeter</title>   
 </properties> 
 <body>
     <section name="Download Apache JMeter">
       <p>
         We recommend you use a mirror to download our release
-        builds, but you <strong>must</strong> verify the integrity of
+        builds, but you <strong>must</strong> <a href="http://www.apache.org/info/verification.html">verify the integrity</a> of
         the downloaded files using signatures downloaded from our main 
         distribution directories. Recent releases (48 hours) may not yet
-        be available from the mirrors.
+        be available from all the mirrors.
       </p>
 
       <p>
@@ -67,6 +67,8 @@
         The <code>KEYS</code> link links to the code signing keys used to sign the product.
         The <code>PGP</code> link downloads the OpenPGP compatible signature from our main site. 
         The <code>MD5</code> link downloads the checksum from the main site.
+        Please <a href="http://www.apache.org/info/verification.html">verify the integrity</a>
+        of the downloaded file.
       </p>
       <p>
       For more information concerning Apache JMeter, see the <a href="http://jmeter.apache.org/">Apache JMeter</a> site. 
@@ -117,35 +119,8 @@
     </section>
     <section name="Verification of downloads">
     <p>
-    It is essential that you verify the integrity of the downloaded files using the PGP or MD5 signatures. 
-    Please read Verifying Apache Software Foundation Releases for more information on why you should verify our releases.
-    </p>
-    <p>
-    The PGP signatures can be verified using PGP or GPG. First download the KEYS as well as the asc signature file for the relevant distribution. 
-    Make sure you get these files from the main distribution site, rather than from a mirror. 
-    Then verify the signatures using
-    </p>
-<pre>
-% pgpk -a KEYS
-% pgpv downloaded_file.asc
-or
-% pgp -ka KEYS
-% pgp downloaded_file.asc
-or
-% gpg --import KEYS
-% gpg --verify downloaded_file.asc
-</pre>
-    <p>
-    Alternatively, you can verify the MD5 signature on the files.
-    This is not very secure, and should only be used to check that the file has been downloaded successfully.
-    <br/>
-    A unix program called md5 or md5sum is included in many unix distributions. 
-    It is also available as part of <a href="http://www.gnu.org/software/textutils/textutils.html">GNU Textutils</a>. 
-    <br/>
-    Windows users can get binary md5 programs from 
-    <a href="http://www.fourmilab.ch/md5/">here</a>, 
-    <a href="http://www.pc-tools.net/win32/freeware/console/">here</a>, or 
-    <a href="http://www.slavasoft.com/fsum/">here</a>.
+    It is essential that you verify the integrity of the downloaded files using the PGP signature. 
+    Please read <a href="http://www.apache.org/info/verification.html">Verifying Apache Software Foundation Releases</a> for more information on why you should verify our releases.
     </p>
     </section>
 </body>
