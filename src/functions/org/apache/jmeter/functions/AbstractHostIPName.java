@@ -71,7 +71,7 @@ abstract class AbstractHostIPName extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 0, 1);
         values = parameters.toArray();
     }

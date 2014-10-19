@@ -55,7 +55,7 @@ public class Random extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+    public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
 
@@ -80,7 +80,7 @@ public class Random extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 2, 3);
         Object[] values = parameters.toArray();
 

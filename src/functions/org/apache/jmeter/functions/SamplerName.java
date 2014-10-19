@@ -69,7 +69,7 @@ public class SamplerName extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters)
+    public void setParameters(Collection<CompoundVariable> parameters)
             throws InvalidVariableException {
         checkParameterCount(parameters, 0, 1);
         values = parameters.toArray();

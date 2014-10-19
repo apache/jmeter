@@ -60,7 +60,7 @@ public class Jexl2Function extends AbstractFunction implements ThreadListener {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+    public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException
     {
         String str = ""; //$NON-NLS-1$
@@ -139,7 +139,7 @@ public class Jexl2Function extends AbstractFunction implements ThreadListener {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters)
+    public void setParameters(Collection<CompoundVariable> parameters)
             throws InvalidVariableException
     {
         checkParameterCount(parameters, 1, 2);
