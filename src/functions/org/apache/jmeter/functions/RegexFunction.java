@@ -57,6 +57,8 @@ public class RegexFunction extends AbstractFunction {
 
     private Object[] values;// Parameters are stored here
 
+    // Using the same Random across threads might result in pool performance
+    // It might make sense to use ThreadLocalRandom or ThreadLocal<Random>
     private static final Random rand = new Random();
 
     private static final List<String> desc = new LinkedList<String>();
@@ -86,7 +88,7 @@ public class RegexFunction extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+    public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String valueIndex = ""; //$NON-NLS-1$
         String defaultValue = ""; //$NON-NLS-1$
@@ -242,7 +244,7 @@ public class RegexFunction extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
         values = parameters.toArray();
     }

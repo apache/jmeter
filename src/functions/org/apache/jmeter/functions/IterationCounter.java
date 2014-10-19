@@ -68,10 +68,8 @@ public class IterationCounter extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+    public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
-
-        globalCounter++;
 
         JMeterVariables vars = getVariables();
 
@@ -90,7 +88,10 @@ public class IterationCounter extends AbstractFunction {
             perThreadInt.set(Integer.valueOf(threadCounter));
             counterString = String.valueOf(threadCounter);
         } else {
-            counterString = String.valueOf(globalCounter);
+            synchronized (this) {
+                globalCounter++;
+                counterString = String.valueOf(globalCounter);
+            }
         }
 
         // vars will be null on Test Plan
@@ -102,7 +103,7 @@ public class IterationCounter extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 1, 2);
         variables = parameters.toArray();
     }

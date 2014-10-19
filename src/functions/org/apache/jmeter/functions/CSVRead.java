@@ -69,14 +69,16 @@ public class CSVRead extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+    public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String myValue = ""; //$NON-NLS-1$
 
         String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
         String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
-        log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
+        if (log.isDebugEnabled()) {
+            log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
+        }
 
         // Process __CSVRead(filename,*ALIAS)
         if (columnOrNext.startsWith("*")) { //$NON-NLS-1$
@@ -115,7 +117,9 @@ public class CSVRead extends AbstractFunction {
                     + FileWrapper.getCurrentRow(fileName) + " " + e.toString());
         }
 
-        log.debug("execute value: " + myValue);
+        if (log.isDebugEnabled()) {
+            log.debug("execute value: " + myValue);
+        }
 
         return myValue;
     }
@@ -134,7 +138,7 @@ public class CSVRead extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         log.debug("setParameter - Collection.size=" + parameters.size());
 
         values = parameters.toArray();

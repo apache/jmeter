@@ -75,7 +75,7 @@ public class TimeFunction extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
+    public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String datetime;
         if (format.length() == 0){// Default to milliseconds
             datetime = Long.toString(System.currentTimeMillis());
@@ -85,6 +85,7 @@ public class TimeFunction extends AbstractFunction {
             if (fmt == null) {
                 fmt = format;// Not found
             }
+            // TODO: avoid regexp parsing in loop
             if (fmt.matches("/\\d+")) { // divisor is a positive number
                 long div = Long.parseLong(fmt.substring(1)); // should never case NFE
                 datetime = Long.toString((System.currentTimeMillis() / div));
@@ -105,7 +106,7 @@ public class TimeFunction extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
         checkParameterCount(parameters, 0, 2);
 
