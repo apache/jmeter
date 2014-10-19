@@ -34,9 +34,11 @@ public abstract class AbstractFunction implements Function {
 
     /**
      * <p><b>
-     * N.B. setParameters() and execute() are called from different threads,
-     * so both must be synchronized unless there are no parameters to save
+     * N.B. execute() should be synchronized if function is operating with non-thread-safe
+     * objects (e.g. operates with files).
      * </b></p>
+     * JMeter ensures setParameters() happens-before execute(): setParameters is executed in main thread,
+     * and worker threads are started after that.
      * @see Function#execute(SampleResult, Sampler)
      */
     @Override
@@ -50,11 +52,6 @@ public abstract class AbstractFunction implements Function {
     }
 
     /**
-     *
-     * <p><b>
-     * N.B. setParameters() and execute() are called from different threads,
-     * so both must be synchronized unless there are no parameters to save
-     * </b></p>
      *
      * @see Function#setParameters(Collection)
      * <br/>

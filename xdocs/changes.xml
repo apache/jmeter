@@ -331,6 +331,7 @@ for details on configuring this component.</li>
 <h3>Functions</h3>
 <ul>
 <li><bugzilla>56708</bugzilla> - __jexl2 doesn't scale with multiple CPU cores. Based on analysis and patch contributed by Mikhail Epikhin(epihin-m at yandex.ru)</li>
+<li><bugzilla>57114</bugzilla> - Performance : Functions that only have values as instance variable should not synchronize execute. Based on analysis by Ubik Load Pack support and Vladimir Sitnikov, patch contributed by Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
 </ul>
 
 <h3>I18N</h3>
@@ -384,6 +385,7 @@ for details on configuring this component.</li>
 <li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
 <li>Graham Russell (graham at ham1.co.uk)</li>
 <li>Philippe Jung (apache at famille-jung.fr)</li>
+<li>Vladimir Sitnikov (sitnikov.vladimir at gmail.com)</li>
 </ul>
 
 <br/>

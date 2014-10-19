@@ -53,7 +53,7 @@ public class CompoundVariable implements Function {
 
     private boolean hasFunction, isDynamic;
 
-    private String permanentResults = ""; // $NON-NLS-1$
+    private String permanentResults;
 
     private LinkedList<Object> compiledComponents = new LinkedList<Object>();
 
@@ -95,8 +95,6 @@ public class CompoundVariable implements Function {
     }
 
     public CompoundVariable() {
-        super();
-        isDynamic = true;
         hasFunction = false;
     }
 
@@ -113,7 +111,7 @@ public class CompoundVariable implements Function {
     }
 
     public String execute() {
-        if (isDynamic) {
+        if (isDynamic || permanentResults == null) {
             JMeterContext context = JMeterContextService.getContext();
             SampleResult previousResult = context.getPreviousResult();
             Sampler currentSampler = context.getCurrentSampler();
@@ -137,11 +135,9 @@ public class CompoundVariable implements Function {
         if (compiledComponents == null || compiledComponents.size() == 0) {
             return ""; // $NON-NLS-1$
         }
-        boolean testDynamic = false;
         StringBuilder results = new StringBuilder();
         for (Object item : compiledComponents) {
             if (item instanceof Function) {
-                testDynamic = true;
                 try {
                     results.append(((Function) item).execute(previousResult, currentSampler));
                 } catch (InvalidVariableException e) {
@@ -151,14 +147,12 @@ public class CompoundVariable implements Function {
                     }
                 }
             } else if (item instanceof SimpleVariable) {
-                testDynamic = true;
                 results.append(((SimpleVariable) item).toString());
             } else {
                 results.append(item);
             }
         }
-        if (!testDynamic) {
-            isDynamic = false;
+        if (!isDynamic) {
             permanentResults = results.toString();
         }
         return results.toString();
@@ -169,6 +163,8 @@ public class CompoundVariable implements Function {
         CompoundVariable func = new CompoundVariable();
         func.compiledComponents = (LinkedList<Object>) compiledComponents.clone();
         func.rawParameters = rawParameters;
+        func.hasFunction = hasFunction;
+        func.isDynamic = isDynamic;
         return func;
     }
 
@@ -193,6 +189,14 @@ public class CompoundVariable implements Function {
         compiledComponents = functionParser.compileString(parameters);
         if (compiledComponents.size() > 1 || !(compiledComponents.get(0) instanceof String)) {
             hasFunction = true;
+        }
+        permanentResults = null; // To be calculated and cached on first execution
+        isDynamic = false;
+        for (Object item : compiledComponents) {
+            if (item instanceof Function || item instanceof SimpleVariable) {
+                isDynamic = true;
+                break;
+            }
         }
     }
 

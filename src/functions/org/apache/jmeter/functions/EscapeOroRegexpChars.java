@@ -64,7 +64,7 @@ public class EscapeOroRegexpChars extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+    public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
         String valueToEscape = values[0].execute();       
