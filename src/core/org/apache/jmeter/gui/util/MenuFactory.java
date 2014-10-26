@@ -39,7 +39,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
-
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
@@ -609,8 +608,9 @@ public final class MenuFactory {
 
         // Force TestFragment to only be pastable under a Test Plan
         if (foundClass(nodes, new Class[]{org.apache.jmeter.control.TestFragmentController.class})){
-            if (parent instanceof TestPlan)
+            if (parent instanceof TestPlan) {
                 return true;
+            }
             return false;
         }
 
@@ -721,9 +721,9 @@ public final class MenuFactory {
             String lab1 = o1.getLabel();
             String lab2 = o2.getLabel();
             if (caseBlind) {
-                return lab1.toLowerCase(Locale.ENGLISH).compareTo(lab2.toLowerCase(Locale.ENGLISH));                
+                return lab1.toLowerCase(Locale.ENGLISH).compareTo(lab2.toLowerCase(Locale.ENGLISH));
             }
-            return lab1.compareTo(lab2);                
+            return lab1.compareTo(lab2);
         }
     }
 
