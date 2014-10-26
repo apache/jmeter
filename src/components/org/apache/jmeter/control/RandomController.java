@@ -19,12 +19,14 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
-import java.util.Random;
 
+import org.apache.jmeter.util.ThreadLocalRandom;
+
+/**
+ * Controller that rans randomly one of it's children on each iteration
+ */
 public class RandomController extends InterleaveControl implements Serializable {
     private static final long serialVersionUID = 240L;
-
-    private static final Random RAND = new Random();
 
     public RandomController() {
     }
@@ -35,7 +37,7 @@ public class RandomController extends InterleaveControl implements Serializable 
     @Override
     protected void resetCurrent() {
         if (getSubControllers().size() > 0) {
-            current = RAND.nextInt(this.getSubControllers().size());
+            current = ThreadLocalRandom.current().nextInt(this.getSubControllers().size());
         } else {
             current = 0;
         }
@@ -47,7 +49,7 @@ public class RandomController extends InterleaveControl implements Serializable 
     @Override
     protected void incrementCurrent() {
         super.incrementCurrent();
-        current = RAND.nextInt(this.getSubControllers().size());
+        current = ThreadLocalRandom.current().nextInt(this.getSubControllers().size());
     }
 
 }
