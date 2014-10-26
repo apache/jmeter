@@ -24,6 +24,9 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 
+/**
+ * Alternate among each of the children controllers or samplers for each loop iteration
+ */
 public class InterleaveControl extends GenericController implements Serializable {
     private static final long serialVersionUID = 233L;
 
