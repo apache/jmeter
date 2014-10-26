@@ -232,6 +232,17 @@ public class TransactionController extends GenericController implements SampleLi
                 notifyListeners();
             }
         } else {
+            Sampler subSampler = transactionSampler.getSubSampler();
+            // See Bug 56811
+            // triggerEndOfLoop is called when error occurs to end Main Loop
+            // in this case normal workflow doesn't happen, so we need 
+            // to notify the childs of TransactionController and 
+            // update them with SubSamplerResult
+            if(subSampler instanceof TransactionSampler) {
+                TransactionSampler tc = (TransactionSampler) subSampler;
+                tc.getTransactionController().triggerEndOfLoop();
+                transactionSampler.addSubSamplerResult(tc.getTransactionResult());
+            }
             transactionSampler.setTransactionDone();
             // This transaction is done
             transactionSampler = null;

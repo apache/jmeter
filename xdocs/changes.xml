@@ -239,6 +239,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56243</bugzilla> - Foreach works incorrectly with indexes on subsequent iterations </li>
 <li><bugzilla>56276</bugzilla> - Loop controller becomes broken once loop count evaluates to zero </li>
 <li><bugzilla>56160</bugzilla> - StackOverflowError when using WhileController within IfController</li>
+<li><bugzilla>56811</bugzilla> - "Start Next Thread Loop" in Result Status Action Handler or on Thread Group and "Go to next Loop iteration" in Test Action behave incorrectly with TransactionController that has "Generate Parent Sampler" checked</li>
 </ul>
 
 <h3>Listeners</h3>
