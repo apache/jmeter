@@ -311,6 +311,7 @@ for details on configuring this component.</li>
 <h3>Controllers</h3>
 <ul>
 <li><bugzilla>56728</bugzilla> - New Critical Section Controller to serialize blocks of a Test. Based partly on a patch contributed by Mikhail Epikhin(epihin-m at yandex.ru)</li>
+<li><bugzilla>57145</bugzilla> - RandomController : Use ThreadLocalRandom instead of Random for better performances</li>
 </ul>
 
 <h3>Listeners</h3>
