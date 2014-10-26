@@ -44,8 +44,6 @@ import org.apache.log.Logger;
 public class JMeterTreeListener implements TreeSelectionListener, MouseListener, KeyListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // Container endWindow;
-    // JPopupMenu pop;
     private TreePath currentPath;
 
     private ActionListener actionHandler;
@@ -177,8 +175,6 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
             currentPath = tree.getPathForLocation(e.getX(), e.getY());
         }
         if (selRow != -1) {
-            // updateMainMenu(((JMeterGUIComponent)
-            // getCurrentNode().getUserObject()).createPopupMenu());
             if (isRightClick(e)) {
                 if (tree.getSelectionCount() < 2) {
                     tree.setSelectionPath(currentPath);
@@ -189,44 +185,35 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         }
     }
 
-
     @Override
     public void mouseExited(MouseEvent ev) {
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (KeyStrokes.matches(e,KeyStrokes.COPY)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.COPY));
-            e.consume();
-        } else if (KeyStrokes.matches(e,KeyStrokes.PASTE)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.PASTE));
-            e.consume();
-        } else if (KeyStrokes.matches(e,KeyStrokes.CUT)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CUT));
-            e.consume();
-        } else if (KeyStrokes.matches(e,KeyStrokes.DUPLICATE)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.DUPLICATE));
-            e.consume();
-        } else if (KeyStrokes.matches(e,KeyStrokes.ALT_UP_ARROW)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.MOVE_UP));
-            e.consume();
-        } else if (KeyStrokes.matches(e,KeyStrokes.ALT_DOWN_ARROW)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.MOVE_DOWN));
-            e.consume();
-        } else if (KeyStrokes.matches(e,KeyStrokes.ALT_LEFT_ARROW)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.MOVE_LEFT));
-            e.consume();
-        } else if (KeyStrokes.matches(e,KeyStrokes.ALT_RIGHT_ARROW)) {
-            ActionRouter actionRouter = ActionRouter.getInstance();
-            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.MOVE_RIGHT));
+        String actionName = null;
+
+        if (KeyStrokes.matches(e, KeyStrokes.COPY)) {
+            actionName = ActionNames.COPY;
+        } else if (KeyStrokes.matches(e, KeyStrokes.PASTE)) {
+            actionName = ActionNames.PASTE;
+        } else if (KeyStrokes.matches(e, KeyStrokes.CUT)) {
+            actionName = ActionNames.CUT;
+        } else if (KeyStrokes.matches(e, KeyStrokes.DUPLICATE)) {
+            actionName = ActionNames.DUPLICATE;
+        } else if (KeyStrokes.matches(e, KeyStrokes.ALT_UP_ARROW)) {
+            actionName = ActionNames.MOVE_UP;
+        } else if (KeyStrokes.matches(e, KeyStrokes.ALT_DOWN_ARROW)) {
+            actionName = ActionNames.MOVE_DOWN;
+        } else if (KeyStrokes.matches(e, KeyStrokes.ALT_LEFT_ARROW)) {
+            actionName = ActionNames.MOVE_LEFT;
+        } else if (KeyStrokes.matches(e, KeyStrokes.ALT_RIGHT_ARROW)) {
+            actionName = ActionNames.MOVE_RIGHT;
+        } 
+        
+        if (actionName != null) {
+            final ActionRouter actionRouter = ActionRouter.getInstance();
+            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), actionName));
             e.consume();
         }
     }
