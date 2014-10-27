@@ -2641,6 +2641,10 @@ run JMeter unless all the JMeter jars are added.
           <param name="batchtest.variable" value="sample_variables"/>
           <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
       </antcall>
+  	
+      <antcall target="batchtest">
+          <param name="batchtest.name" value="Bug56811"/>
+      </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->
