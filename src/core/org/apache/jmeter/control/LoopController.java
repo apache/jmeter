@@ -27,7 +27,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
- * Class that implements the Loop Controller.
+ * Class that implements the Loop Controller, ie iterate infinitely or a configured number of times
  */
 public class LoopController extends GenericController implements Serializable {
 
