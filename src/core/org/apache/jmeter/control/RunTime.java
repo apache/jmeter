@@ -24,6 +24,9 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
+/**
+ * Controller that runs its children until configured Runtime(s) is exceeded
+ */
 public class RunTime extends GenericController implements Serializable {
 
     private static final long serialVersionUID = 240L;
@@ -69,13 +72,13 @@ public class RunTime extends GenericController implements Serializable {
     }
 
     private boolean endOfLoop() {
-        return System.currentTimeMillis() - startTime >= 1000 * getRuntime();
+        return ((System.nanoTime() - startTime)/1000) >= 1000 * getRuntime();
     }
 
     @Override
     public Sampler next() {
         if (startTime == 0) {
-            startTime = System.currentTimeMillis();
+            startTime = System.nanoTime();
         }
         if (endOfLoop()) {
             reInitialize();// ??
