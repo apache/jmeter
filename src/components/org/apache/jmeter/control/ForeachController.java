@@ -28,6 +28,13 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * ForeachController that iterates over a list of variables named XXXX_NN stored in {@link JMeterVariables}
+ * where NN is a number starting from 1 to number of occurences.
+ * This list of variable is usually set by PostProcessor (Regexp PostProcessor or {@link HtmlExtractor})
+ * Iteration can take the full list or only a subset (configured through indexes)
+ *
+ */
 public class ForeachController extends GenericController implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
