@@ -369,6 +369,7 @@ for details on configuring this component.</li>
 <li>Updated to jodd 3.6.1 (from 3.4.10)</li>
 <li>Updated to rsyntaxtextarea 2.5.3 (from 2.5.1)</li>
 <li>Updated xalan and serializer to 2.7.2 (from 2.7.1)</li>
+<li>Updated to jsoup-1.8.1.jar (from 1.7.3)</li>
 </ul>
 
 <ch_section>Thanks</ch_section>

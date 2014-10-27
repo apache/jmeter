@@ -84,7 +84,7 @@ under the License.
       <jodd-core.version>3.6.1</jodd-core.version>
       <jodd-lagarto.version>3.6.1</jodd-lagarto.version>
       <jodd-log.version>3.6.1</jodd-log.version>
-      <jsoup.version>1.7.3</jsoup.version>
+      <jsoup.version>1.8.1</jsoup.version>
       <rhino.version>1.7R4</rhino.version>
       <junit.version>4.11</junit.version>
       <logkit.version>2.0</logkit.version>
