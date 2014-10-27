@@ -94,7 +94,7 @@ public class EscapeOroRegexpChars extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAM_COUNT, MAX_PARAM_COUNT);
         values = parameters.toArray(new CompoundVariable[parameters.size()]);
     }
