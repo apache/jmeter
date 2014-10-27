@@ -25,7 +25,7 @@ import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
- * Controller that runs its children until configured Runtime(s) is exceeded
+ * Runtime Controller that runs its children until configured Runtime(s) is exceeded
  */
 public class RunTime extends GenericController implements Serializable {
 
