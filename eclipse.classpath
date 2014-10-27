@@ -74,7 +74,7 @@
 	<classpathentry kind="lib" path="lib/jodd-core-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-lagarto-3.6.1.jar"/>
     <classpathentry kind="lib" path="lib/jodd-log-3.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/jsoup-1.7.3.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
