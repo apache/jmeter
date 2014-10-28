@@ -91,6 +91,10 @@ and/or DNS load balancing.</p>
     will be smarter making all requests emitted by a web page be children as new Transaction Controller</li>
 </ul>
 
+<ch_title>Support of Webdav requests</ch_title>
+<p>You can now test against WebDav server using HttpClient4 Implementation of Http Request</p>
+<figure width="989" height="406" image="changes/2.12/13_webdav.png"></figure>
+
 <ch_title>Better handling of embedded resources</ch_title>
 <p>When download embedded resources is checked, JMeter now uses User Agent header to download or not resources embedded within conditionnal comments as per <a href="http://msdn.microsoft.com/en-us/library/ms537512%28v=vs.85%29.aspx" target="_blank">About conditional comments</a>.</p>
 
@@ -118,6 +122,10 @@ In addition, you can fetch only the message header now.</p>
 <p>Adding a timeout to define the maximum time to waiting of the group of virtual users.</p>
 <figure width="546" height="144" image="changes/2.12/09_synchronizing_timer.png"></figure>
 
+<ch_title>Performance improvements</ch_title>
+<p>A big improvement in performances of Functions has been made by lifting useless synchronization. It concerns all functions except __StringFromFile, __XPath and __BeanShell, see <bugzilla>57114</bugzilla></p>
+<p>__jexl2 performances have been improved to avoid contention point, see <bugzilla>56708</bugzilla></p>
+
 <ch_category>GUI Improvements</ch_category>
 
 <ch_title>Undo/Redo support</ch_title>
@@ -137,7 +145,8 @@ In addition, you can fetch only the message header now.</p>
 <p>Starting with this version, jmeter logs can be viewed in GUI by clicking on Warning icon in the upper right corner. This will unfold the Log Viewer panel and show logs.</p>
 <figure width="1024" height="437" image="changes/2.12/11_log_viewer.png"></figure>
 
-
+<ch_title>File Opening</ch_title>
+<p>Now, "Open File dialog" uses last opened file folder as start folder, see <bugzilla>52707</bugzilla></p>
 <!--  =================== Known bugs =================== -->
 
 
@@ -346,6 +355,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56292</bugzilla> - Add the check of the Java's version in startup files and disable some options when is Java v8 engine</li>
 <li><bugzilla>56298</bugzilla> - JSR223 language display does not show which engine will be used</li>
 <li><bugzilla>56455</bugzilla> - Batch files: drop support for non-NT Windows shell scripts</li>
+<li><bugzilla>52707</bugzilla> - Make Open File dialog use last opened file folder as start folder. Based on patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com), and contributed by BlazeMeter Ltd.</li>
 <li><bugzilla>56807</bugzilla> - Ability to force flush of ResultCollector file. Contributed by Andrey Pohilko (apc4 at ya.ru)</li>
 <li><bugzilla>56921</bugzilla> - Templates : Improve Recording template to ignore embedded resources case and URL parameters. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bugzilla>42248</bugzilla> - Undo-redo support on Test Plan tree modification. Developed by Andrey Pohilko (apc4 at ya.ru) and contributed by BlazeMeter Ltd. Additional contribution by Ubik Load Pack (support at ubikloadpack.com)</li>
