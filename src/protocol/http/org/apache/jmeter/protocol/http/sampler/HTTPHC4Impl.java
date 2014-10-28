@@ -883,20 +883,23 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return the headers as a string
      */
     private String getConnectionHeaders(HttpRequest method) {
-        // Get all the request headers
-        StringBuilder hdrs = new StringBuilder(100);
-        Header[] requestHeaders = method.getAllHeaders();
-        for(int i = 0; i < requestHeaders.length; i++) {
-            // Exclude the COOKIE header, since cookie is reported separately in the sample
-            if(!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeaders[i].getName())) {
-                hdrs.append(requestHeaders[i].getName());
-                hdrs.append(": "); // $NON-NLS-1$
-                hdrs.append(requestHeaders[i].getValue());
-                hdrs.append("\n"); // $NON-NLS-1$
+        if(method != null) {
+            // Get all the request headers
+            StringBuilder hdrs = new StringBuilder(100);
+            Header[] requestHeaders = method.getAllHeaders();
+            for(int i = 0; i < requestHeaders.length; i++) {
+                // Exclude the COOKIE header, since cookie is reported separately in the sample
+                if(!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeaders[i].getName())) {
+                    hdrs.append(requestHeaders[i].getName());
+                    hdrs.append(": "); // $NON-NLS-1$
+                    hdrs.append(requestHeaders[i].getValue());
+                    hdrs.append("\n"); // $NON-NLS-1$
+                }
             }
+    
+            return hdrs.toString();
         }
-
-        return hdrs.toString();
+        return ""; ////$NON-NLS-1$
     }
 
     /**
