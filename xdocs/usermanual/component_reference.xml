@@ -3636,12 +3636,11 @@ be able to run it.  However, you can use it as a reference in constructing your 
 </component>
 
 <component name="HTTP Cache Manager" index="&sect-num;.4.5"  width="511" height="196" screenshot="http-config/http-cache-manager.png">
-
-<note>This is a new element, and is liable to change</note>
-
 <description>
 <p>
-The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope.
+The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope to simulate browser cache feature.
+Each Virtual User thread has its own Cache. By default, Cache Manager will store up to 5000 items in cache per Virtual User thread using LRU algorithm. 
+Use property "maxSize" to modify this value. Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt -Xmx option accordingly.
 </p>
 <p>
 If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag (and Expired if relevant) values are saved for the URL.
@@ -3657,10 +3656,6 @@ so will generate a conditional GET request.
 If Cache-Control has any other value, 
 the "max-age" expiry option is processed to compute entry lifetime, if missing then expire header will be used, if also missing entry will be cached 
 as specified in <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a> section 13.2.4. using Last-Modified time and response Date.
-</p>
-<p>
-By default, Cache Manager will store up to 5000 items in cache using LRU algorithm. Use property to modify this value.
-Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt -Xmx option.
 </p>
 <p>
 If the requested document has not changed since it was cached, then the response body will be empty.
