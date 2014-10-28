@@ -362,6 +362,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         } catch (IOException e) {
             res.sampleEnd();
             // pick up headers if failed to execute the request
+            // httpMethod cannot be null here, otherwise 
+            // it would have been caught in the previous catch block
             res.setRequestHeaders(getConnectionHeaders(httpMethod));
             errorResult(e, res);
             return res;
