@@ -3639,7 +3639,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 <description>
 <p>
 The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope to simulate browser cache feature.
-Each Virtual User thread has its own Cache. By default, Cache Manager will store up to 5000 items in cache per Virtual User thread using LRU algorithm. 
+Each Virtual User thread has its own Cache. By default, Cache Manager will store up to 5000 items in cache per Virtual User thread, using LRU algorithm. 
 Use property "maxSize" to modify this value. Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt -Xmx option accordingly.
 </p>
 <p>
