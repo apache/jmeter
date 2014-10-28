@@ -152,6 +152,7 @@ public class Load implements Command {
             } finally {
                 JOrphanUtils.closeQuietly(reader);
             }
+            FileDialoger.setLastJFCDirectory(f.getParentFile().getAbsolutePath());
             guiPackage.updateCurrentGui();
             guiPackage.getMainFrame().repaint();
         }
