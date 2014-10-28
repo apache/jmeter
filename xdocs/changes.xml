@@ -65,9 +65,7 @@ Summary
  -->
 
 <ch_title>Java 8 support</ch_title>
-<p>
-Now, JMeter 2.12 is compliant with Java 8.
-</p>
+<p>Now, JMeter 2.12 is compliant with Java 8.</p>
 
 <ch_category>New Elements</ch_category>
 <ch_title>Critical Section Controller</ch_title>
@@ -76,17 +74,23 @@ Only one instance of the section will be executed at the same time during the te
 <figure width="683" height="240" image="changes/2.12/01_critical_section_controller.png"></figure>
 
 <ch_title>DNS Cache Manager</ch_title>
-<p>The new configuration element <b>DNS Cache Manager</b> allow to improve the testing of CDN (Content Delivery Network) 
-and/or DNS load balancing.</p>
+<p>The new configuration element <b>DNS Cache Manager</b>(see <bugzilla>56841</bugzilla>) improves the testing of:
+<ul>
+<li>CDN (Content Delivery Network)</li> 
+<li>DNS load balancing.</li>
+<li>Load Balancers like Amazon Elastic Load Balancer</li>
+</ul>
+</p>
 <figure width="573" height="359" image="changes/2.12/02_dns_cache_manager.png"></figure>
-
 <ch_category>Core Improvements</ch_category>
 
 <ch_title>Smarter Recording of Http Test Plans</ch_title>
 <p>Test Script Recorder has been improved in many ways</p>
 <ul>
     <li>Better matching of Variables in Requests, making Test Script Recorder variabilize your sampler during recording more versatile</li>
-    <li>Ability to filter from View Results Tree the Samples that are excluded from recording, this lets you concentrate on recorded Samplers analysis and not bother with useless Sample Results</li>
+    <li>Ability to filter from View Results Tree the Samples that are excluded from recording, this lets you concentrate on recorded Samplers analysis and not bother with useless Sample Results
+    <figure width="1094" height="647" image="changes/2.12/14_recorder_filter.png"></figure>
+    </li>
     <li>Better defaults for recording, since this version Recorder will number created Samplers letting you find them much easily in View Results Tree. Grouping of Samplers under Transaction Controller will
     will be smarter making all requests emitted by a web page be children as new Transaction Controller</li>
 </ul>
@@ -364,7 +368,7 @@ for details on configuring this component.</li>
 <li><bugzilla>57082</bugzilla> - ComboStringEditor : Added hashCode to an inner class which overwrote equals. Contributed by Graham Russel (graham at ham1.co.uk)</li>
 <li><bugzilla>57081</bugzilla> - Updating checkstyle to only check for tabs in java, xml, xsd, dtd, htm, html and txt files (not images!). Contributed by Graham Russell (graham at ham1.co.uk)</li>
 <li><bugzilla>56178</bugzilla> - Really replace backslashes in user name before generating proxy certificate. Contributed by Graham Russel (graham at ham1.co.uk)</li>
-<li><bugzilla>57084</bugzilla> - Close socket after usage in BeahShellClient. Contributed by Graham Russel (graham at ham1.co.uk)</li>
+<li><bugzilla>57084</bugzilla> - Close socket after usage in BeanShellClient. Contributed by Graham Russel (graham at ham1.co.uk)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
