@@ -989,7 +989,7 @@ Webservice Soap Sampler assumes that empty response means failure.
 
 
 <component name="Access Log Sampler" index="&sect-num;.1.9"  width="613" height="318" screenshot="accesslogsampler.png">
-<center><h2>(Alpha Code)</h2></center>
+<center><h2>(Beta Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
 request it accepted. This means every image, css file, javascript file, html file.... 
@@ -1921,8 +1921,6 @@ If the timeout expires before the command finishes, JMeter will attempt to kill 
 </component>
 
 <component name="MongoDB Script" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
-<center><h2>(Alpha Code)</h2></center>
-
 <description><p>This sampler lets you send an Request to a MongoDB.</p>
 <p>Before using this you need to set up a
 <complink name="MongoDB Source Config"/> Configuration element
