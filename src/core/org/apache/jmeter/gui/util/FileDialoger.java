@@ -101,6 +101,7 @@ public final class FileDialoger {
             jfc.setAcceptAllFileFilterUsed(true);
             jfc.setFileFilter(currentFilter);
         }
+        jfc.setCurrentDirectory(new File(lastJFCDirectory));
         int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
         lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
@@ -173,5 +174,21 @@ public final class FileDialoger {
             return jfc;
         }
         return null;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public static String getLastJFCDirectory() {
+        return lastJFCDirectory;
+    }
+    
+    /**
+     * 
+     * @param lastJFCDirectory
+     */
+    public static void setLastJFCDirectory(String lastJFCDirectory) {
+        FileDialoger.lastJFCDirectory = lastJFCDirectory;
     }
 }
