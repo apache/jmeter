@@ -72,7 +72,7 @@ public class RunTime extends GenericController implements Serializable {
     }
 
     private boolean endOfLoop() {
-        return ((System.nanoTime() - startTime)/1000000.0) >= 1000 * getRuntime();
+        return ((System.nanoTime() - startTime)/1000000L) >= 1000 * getRuntime();
     }
 
     @Override
