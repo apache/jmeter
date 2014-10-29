@@ -403,7 +403,7 @@ public class TestHTTPMirrorThread extends TestCase {
         final InputStream inputStream = conn.getInputStream();
         while(inputStream.read() != -1) {}
         inputStream.close();
-        final long elapsed = Math.round((System.nanoTime() - now)/1000000.0);
+        final long elapsed = (System.nanoTime() - now)/1000000L;
         assertTrue("Expected > 1000 " + elapsed, elapsed >= 1000);
     }
 
