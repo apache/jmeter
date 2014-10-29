@@ -101,6 +101,9 @@ public final class FileDialoger {
             jfc.setAcceptAllFileFilterUsed(true);
             jfc.setFileFilter(currentFilter);
         }
+        if(lastJFCDirectory==null) {
+            lastJFCDirectory = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
+        }
         jfc.setCurrentDirectory(new File(lastJFCDirectory));
         int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
         lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
