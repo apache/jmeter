@@ -98,9 +98,7 @@ public class FixedQueueExecutor implements QueueExecutor {
                 countDownLatch.await(); //
             } else {
                 if(!countDownLatch.await(timeout, TimeUnit.MILLISECONDS)) {
-                    if(log.isDebugEnabled()) {
-                        log.debug("Timeout reached before getting a reply message");
-                    }
+                    log.debug("Timeout reached before getting a reply message");
                 }
             }
             if (log.isDebugEnabled()) {
