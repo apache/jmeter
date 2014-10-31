@@ -33,7 +33,9 @@
 </section>
 
 <section name="&sect-num;.1 Always use latest version of JMeter" anchor="use_latest_version">
-<p>The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version</p>
+<p>The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version. <br/>
+Ensure you always read <a href="../changes.html">changes list</a> to be aware of new improvements and components:
+</p>
 </section>
 
 <section name="&sect-num;.2 Use the correct Number of Threads" anchor="sizing_threads">
