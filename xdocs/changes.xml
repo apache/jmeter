@@ -177,6 +177,16 @@ This does not affect JMeter operation. This issue is fixed since Java 7b05.
 </li>
 
 <li>
+Note that under some windows systems you may have this WARNING:
+<pre>
+java.util.prefs.WindowsPreferences 
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
+x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+</pre>
+The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
+</li>
+
+<li>
 With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may not work correctly (shift between mouse's click and the menu). 
 This is a known Java bug (see  <bugzilla>54477 </bugzilla>). 
 A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
