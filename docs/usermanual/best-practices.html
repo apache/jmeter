@@ -192,7 +192,16 @@ data-size="large">Follow</a>
 <tr><td>
 <blockquote>
 <p>
-The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version
+The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version. 
+<br>
+
+
+Ensure you always read 
+<a href="../changes.html">
+changes list
+</a>
+ to be aware of new improvements and components:
+
 </p>
 </blockquote>
 </p>
@@ -202,19 +211,18 @@ The performance of JMeter is being constantly improved, so users are highly enco
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="limit_threads"><strong>16.2 Limit the Number of Threads</strong></a><a class="sectionlink" href="#limit_threads" title="Link to here">&para;</a></font>
+<a name="sizing_threads"><strong>16.2 Use the correct Number of Threads</strong></a><a class="sectionlink" href="#sizing_threads" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
-Your hardware's capabilities will limit the number of threads you can effectively
-run with JMeter.  It will also depend on how fast your server is (a faster server
- makes JMeter work harder since it returns request quicker).  The more
-JMeter works, the less accurate its timing information may become.  The more work
-JMeter does, the more each thread has to wait to get access to the CPU, the more
-inflated the timing information gets.  If you need large-scale load testing, consider
-running multiple non-GUI JMeter instances on multiple machines. 
-The sample result files can be combined for subsequent analysis.
+Your hardware capabilities as well as the Test Plan design will both impact the number of threads you can effectively
+run with JMeter.  The number will also depend on how fast your server is (a faster server
+ makes JMeter work harder since it returns a response quicker).  As with any Load Testing tool, if you don't correctly size
+ the number of threads, you will face the "Coordinated Omission" problem which can give you wrong or inaccurate results.
+ If you need large-scale load testing, consider running multiple non-GUI JMeter instances on multiple machines 
+ using distributed mode (or not). When using distributed mode the result file is combined on the Controller node, if
+ using multiple autonomous instances, the sample result files can be combined for subsequent analysis.
 For testing how JMeter performs on a given platform, the JavaTest sampler can be used.
 It does not require any network access so can give some idea as to the maximum throughput achievable.
 
@@ -538,6 +546,47 @@ Httpd started on port: 9000
 Sessiond started on port: 9001
 
 </pre>
+<p>
+
+There is a sample script (extras/remote.bsh) you can use to test the server.
+[Have a look at it to see how it works.]
+
+<br>
+
+
+When starting it in the JMeter bin directory
+(adjust paths as necessary if running from elsewhere)
+the output should look like:
+
+<pre>
+
+$ java -jar ../lib/bshclient.jar localhost 9000 ../extras/remote.bsh
+Connecting to BSH server on localhost:9000
+Reading responses from server ...
+BeanShell 2.0b5 - by Pat Niemeyer (pat@pat.net)
+bsh % remote.bsh starting
+user.home = C:\Documents and Settings\User
+user.dir = D:\eclipseworkspaces\main\JMeter_trunk\bin
+log_level.jmeter = INFO
+log_level.jorphan = INFO
+Setting property 'EXAMPLE' to '0'.
+Setting property 'EXAMPLE' to '1'.
+Setting property 'EXAMPLE' to '2'.
+Setting property 'EXAMPLE' to '3'.
+Setting property 'EXAMPLE' to '4'.
+Setting property 'EXAMPLE' to '5'.
+Setting property 'EXAMPLE' to '6'.
+Setting property 'EXAMPLE' to '7'.
+Setting property 'EXAMPLE' to '8'.
+Setting property 'EXAMPLE' to '9'.
+EXAMPLE = 9
+remote.bsh ended
+bsh % ... disconnected from server.
+
+</pre>
+
+
+</p>
 <p>
 
 As a practical example, assume you have a long-running JMeter test running in non-GUI mode,
@@ -892,7 +941,7 @@ Write your own Java classes
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2013, Apache Software Foundation
+Copyright &copy; 1999-2014, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
