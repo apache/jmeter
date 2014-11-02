@@ -220,7 +220,8 @@ See  <bugzilla>56357</bugzilla> for details.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
-<li>Since JMeter 2.12, active threads in all thread groups and active threads in current thread group are saved by default to CSV or XML results, see <bugzilla>57025</bugzilla>. If you want to revert to previous behaviour, set property <b>jmeter.save.saveservice.thread_counts=true</b></li>
+<li>Since JMeter 2.12, active threads in all thread groups and active threads in current thread group are saved by default to CSV or XML results, see <bugzilla>57025</bugzilla>. 
+This is usually the expected behaviour as you want to have the number of running threads during the test. But if you want to revert to previous behaviour, set property <b>jmeter.save.saveservice.thread_counts=false</b></li>
 <li>Since JMeter 2.12, Mail Reader Sampler will show 1 for number of samples instead of number of messages retrieved, see <bugzilla>56539</bugzilla></li>
 <li>Since JMeter 2.12, when using Cache Manager, if resource is found in cache no SampleResult will be created, in previous version a SampleResult with empty content and 204 return code was returned, see <bugzilla>54778</bugzilla>.
 You can choose between different ways to handle this case, see cache_manager.cached_resource_mode in jmeter.properties.</li>
