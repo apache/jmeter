@@ -146,7 +146,8 @@ In addition, you can fetch only the message header now.</p>
 <figure width="997" height="574" image="changes/2.12/08_response_time_graph.png"></figure>
 
 <ch_title>Log Viewer</ch_title>
-<p>Starting with this version, JMeter's log file (jmeter.log) can be viewed in GUI by clicking on Warning icon in the upper right corner. This will unfold the Log Viewer panel and show logs.</p>
+<p>Starting with this version, the last lines of JMeter's log file (jmeter.log) can be viewed directly in GUI by clicking on Warning icon in the upper right corner. 
+This will unfold the Log Viewer panel and show logs.</p>
 <figure width="1024" height="437" image="changes/2.12/11_log_viewer.png"></figure>
 
 <ch_title>File Opening</ch_title>
