@@ -181,7 +181,7 @@ public final class FileDialoger {
     
     /**
      * 
-     * @return
+     * @return last JFC Directory
      */
     public static String getLastJFCDirectory() {
         return lastJFCDirectory;
