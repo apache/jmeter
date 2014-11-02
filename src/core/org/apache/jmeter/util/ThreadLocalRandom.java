@@ -19,8 +19,8 @@ import java.util.Random;
  * than shared {@code Random} objects in concurrent programs will
  * typically encounter much less overhead and contention.  Use of
  * {@code ThreadLocalRandom} is particularly appropriate when multiple
- * tasks (for example, each a {@link ForkJoinTask}) use random numbers
- * in parallel in thread pools.
+ * tasks (for example, each a java.util.concurrent.ForkJoinTask (JDK 1.7))
+ * use random numbers in parallel in thread pools.
  *
  * <p>Usages of this class should typically be of the form:
  * {@code ThreadLocalRandom.current().nextX(...)} (where
