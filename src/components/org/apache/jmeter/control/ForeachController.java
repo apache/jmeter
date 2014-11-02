@@ -20,6 +20,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.extractor.HtmlExtractor;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
