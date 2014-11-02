@@ -91,8 +91,8 @@ Only one instance of the section will be executed at the same time during the te
     <li>Ability to filter from View Results Tree the Samples that are excluded from recording, this lets you concentrate on recorded Samplers analysis and not bother with useless Sample Results
     <figure width="1094" height="647" image="changes/2.12/14_recorder_filter.png"></figure>
     </li>
-    <li>Better defaults for recording, since this version Recorder will number created Samplers letting you find them much easily in View Results Tree. Grouping of Samplers under Transaction Controller will
-    will be smarter making all requests emitted by a web page be children as new Transaction Controller</li>
+    <li>Better defaults for recording, since this version Recorder will number created Samplers letting you find them much easily in View Results Tree. 
+    Grouping of Samplers under Transaction Controller will be smarter making all requests emitted by a web page be children as new Transaction Controller</li>
 </ul>
 
 <ch_title>Support of Webdav requests</ch_title>
@@ -146,7 +146,7 @@ In addition, you can fetch only the message header now.</p>
 <figure width="997" height="574" image="changes/2.12/08_response_time_graph.png"></figure>
 
 <ch_title>Log Viewer</ch_title>
-<p>Starting with this version, jmeter logs can be viewed in GUI by clicking on Warning icon in the upper right corner. This will unfold the Log Viewer panel and show logs.</p>
+<p>Starting with this version, JMeter's log file (jmeter.log) can be viewed in GUI by clicking on Warning icon in the upper right corner. This will unfold the Log Viewer panel and show logs.</p>
 <figure width="1024" height="437" image="changes/2.12/11_log_viewer.png"></figure>
 
 <ch_title>File Opening</ch_title>
