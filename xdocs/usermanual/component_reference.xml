@@ -1421,11 +1421,11 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Expiration" required="No">
-      The expiration time (in milliseconds) of the message before become obsolete.
+      The expiration time (in milliseconds) of the message before it becomes obsolete.
       If you do not specify an expiration time, the default value is 0 (never expires). 
   </property>
   <property name="Priority" required="No">
-      The level priority of the message. They have ten levels of priority from 0 (lowest) to 9 (highest). 
+      The priority level of the message. There are ten priority levels from 0 (lowest) to 9 (highest). 
       If you do not specify a priority level, the default level is 4. 
   </property>
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
