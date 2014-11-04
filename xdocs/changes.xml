@@ -257,6 +257,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56761</bugzilla> - JMeter tries to stop already stopped JMS connection and displays "The connection is closed"</li>
 <li><bugzilla>57068</bugzilla> - No error thrown when negative duration is entered in Test Action</li>
 <li><bugzilla>57078</bugzilla> - LagartoBasedHTMLParser fails to parse page that contains input with no type</li>
+<li><bugzilla>57183</bugzilla> - JMSSampler: For input string: "" java.lang.NumberFormatException (for Expiration or Priority fields)</li>
 </ul>
 
 <h3>Controllers</h3>
