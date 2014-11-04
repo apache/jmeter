@@ -44,11 +44,11 @@ import org.apache.log.Logger;
 public final class Utils {
     // By default priority is 4
     // http://docs.oracle.com/javaee/6/tutorial/doc/bncfu.html
-    public static final int DEFAULT_PRIORITY_4 = 4;
+    public static final String DEFAULT_PRIORITY_4 = "4"; // $NON-NLS-1$
 
     // By default a message never expires
     // http://docs.oracle.com/javaee/6/tutorial/doc/bncfu.html
-    public static final long DEFAULT_NO_EXPIRY = 0L;
+    public static final String DEFAULT_NO_EXPIRY = "0"; // $NON-NLS-1$
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 

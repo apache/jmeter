@@ -469,11 +469,21 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
     
     public String getExpiration() {
-        return getPropertyAsString(JMS_EXPIRATION, Long.toString(Utils.DEFAULT_NO_EXPIRY));
+        String expiration = getPropertyAsString(JMS_EXPIRATION);
+        if (expiration.length() == 0) {
+            return Utils.DEFAULT_NO_EXPIRY;
+        } else {
+            return expiration;
+        }
     }
 
     public String getPriority() {
-        return getPropertyAsString(JMS_PRIORITY, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+        String priority = getPropertyAsString(JMS_PRIORITY);
+        if (priority.length() == 0) {
+            return Utils.DEFAULT_PRIORITY_4;
+        } else {
+            return priority;
+        }
     }
     
     /**
@@ -515,11 +525,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
     
     public void setPriority(String s) {
-        setProperty(JMSSampler.JMS_PRIORITY, s, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+        setProperty(JMSSampler.JMS_PRIORITY, s, Utils.DEFAULT_PRIORITY_4);
     }
     
     public void setExpiration(String s) {
-        setProperty(JMSSampler.JMS_EXPIRATION, s, Long.toString(Utils.DEFAULT_NO_EXPIRY));
+        setProperty(JMSSampler.JMS_EXPIRATION, s, Utils.DEFAULT_NO_EXPIRY);
     }
 
     /**

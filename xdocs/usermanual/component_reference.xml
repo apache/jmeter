@@ -1395,7 +1395,7 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13" width="946" height="776" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" width="854" height="796" screenshot="jmspublisher.png">
 <note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
@@ -1420,6 +1420,14 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
+  <property name="Expiration" required="No">
+      The expiration time (in milliseconds) of the message before become obsolete.
+      If you do not specify an expiration time, the default value is 0 (never expires). 
+  </property>
+  <property name="Priority" required="No">
+      The level priority of the message. They have ten levels of priority from 0 (lowest) to 9 (highest). 
+      If you do not specify a priority level, the default level is 4. 
+  </property>
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
   <property name="Message source" required="Yes">Where to obtain the message:
   <ul>
@@ -1554,7 +1562,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 </p>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="924" height="797" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="882" height="804" screenshot="jms/JMS_Point-to-Point.png">
 <note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
@@ -1632,6 +1640,15 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase failes and the specific reply message received after the timeout is discarded.
+      Default value is 2000 ms.
+  </property>
+  <property name="Expiration" required="No">
+      The expiration time (in milliseconds) of the message before become obsolete.
+      If you do not specify an expiration time, the default value is 0 (never expires). 
+  </property>
+  <property name="Priority" required="No">
+      The level priority of the message. They have ten levels of priority from 0 (lowest) to 9 (highest). 
+      If you do not specify a priority level, the default level is 4. 
   </property>
   <property name="Use non-persistent delivery mode?" required="Yes">
       Whether to set DeliveryMode.NON_PERSISTENT.
