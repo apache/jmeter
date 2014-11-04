@@ -425,6 +425,7 @@ For this release we want to give special thanks to the following reporters for t
 <li>Oliver LLoyd (email at oliverlloyd.com) for his help on <bugzilla>56119</bugzilla></li>
 <li>Vladimir Ryabtsev (greatvovan at gmail.com) for his help on <bugzilla>56243</bugzilla> and <bugzilla>56276</bugzilla></li>
 <li>Adrian Speteanu (asp.adieu at gmail.com) and Matt Kilbride (matt.kilbride at gmail.com) for their feedback and tests on <bugzilla>54648</bugzilla></li>
+<li>Shmuel Krakower (shmulikk at gmail.com) for his tests and reports on Undo/Redo feature</li>
 </ul>
 
 Apologies if we have omitted anyone else.
