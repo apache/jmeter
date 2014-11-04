@@ -109,9 +109,9 @@ Only one instance of the section will be executed at the same time during the te
 
 <ch_title>JMS Publisher / JMS Point-to-Point</ch_title>
 <p> Add JMSPriority and JMSExpiration fields for these samplers.</p>
-<figure width="901" height="277" image="changes/2.12/04_jms_publisher.png"></figure>
+<figure width="877" height="314" image="changes/2.12/04_jms_publisher.png"></figure>
 
-<figure width="900" height="294" image="changes/2.12/05_jms_point_to_point.png"></figure>
+<figure width="877" height="293" image="changes/2.12/05_jms_point_to_point.png"></figure>
 
 <ch_title>Mail Reader Sampler</ch_title>
 <p>You can now specify the number of messages that want you retrieve (before all messages were retrieved). 
