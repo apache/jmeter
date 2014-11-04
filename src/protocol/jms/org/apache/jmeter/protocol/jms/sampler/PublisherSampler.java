@@ -500,19 +500,19 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     }
 
     public String getExpiration() {
-        return getPropertyAsString(JMS_EXPIRATION, Long.toString(Utils.DEFAULT_NO_EXPIRY));
+        return getPropertyAsString(JMS_EXPIRATION, Utils.DEFAULT_NO_EXPIRY);
     }
 
     public String getPriority() {
-        return getPropertyAsString(JMS_PRIORITY, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+        return getPropertyAsString(JMS_PRIORITY, Utils.DEFAULT_PRIORITY_4);
     }
     
     public void setPriority(String s) {
-        setProperty(JMS_PRIORITY, s, Integer.toString(Utils.DEFAULT_PRIORITY_4));
+        setProperty(JMS_PRIORITY, s, Utils.DEFAULT_PRIORITY_4);
     }
     
     public void setExpiration(String s) {
-        setProperty(JMS_EXPIRATION, s, Long.toString(Utils.DEFAULT_NO_EXPIRY));
+        setProperty(JMS_EXPIRATION, s, Utils.DEFAULT_NO_EXPIRY);
     }
     
     /**
