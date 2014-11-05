@@ -1643,11 +1643,11 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
       Default value is 2000 ms.
   </property>
   <property name="Expiration" required="No">
-      The expiration time (in milliseconds) of the message before become obsolete.
+      The expiration time (in milliseconds) of the message before it becomes obsolete.
       If you do not specify an expiration time, the default value is 0 (never expires). 
   </property>
   <property name="Priority" required="No">
-      The level priority of the message. They have ten levels of priority from 0 (lowest) to 9 (highest). 
+      The priority level of the message. There are ten priority levels from 0 (lowest) to 9 (highest). 
       If you do not specify a priority level, the default level is 4. 
   </property>
   <property name="Use non-persistent delivery mode?" required="Yes">
