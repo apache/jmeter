@@ -109,9 +109,9 @@ Only one instance of the section will be executed at the same time during the te
 
 <ch_title>JMS Publisher / JMS Point-to-Point</ch_title>
 <p> Add JMSPriority and JMSExpiration fields for these samplers.</p>
-<figure width="901" height="277" image="changes/2.12/04_jms_publisher.png"></figure>
+<figure width="877" height="314" image="changes/2.12/04_jms_publisher.png"></figure>
 
-<figure width="900" height="294" image="changes/2.12/05_jms_point_to_point.png"></figure>
+<figure width="877" height="293" image="changes/2.12/05_jms_point_to_point.png"></figure>
 
 <ch_title>Mail Reader Sampler</ch_title>
 <p>You can now specify the number of messages that want you retrieve (before all messages were retrieved). 
@@ -220,7 +220,8 @@ See  <bugzilla>56357</bugzilla> for details.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
-<li>Since JMeter 2.12, active threads in all thread groups and active threads in current thread group are saved by default to CSV or XML results, see <bugzilla>57025</bugzilla>. If you want to revert to previous behaviour, set property <b>jmeter.save.saveservice.thread_counts=true</b></li>
+<li>Since JMeter 2.12, active threads in all thread groups and active threads in current thread group are saved by default to CSV or XML results, see <bugzilla>57025</bugzilla>. 
+This is usually the expected behaviour as you want to have the number of running threads during the test. But if you want to revert to previous behaviour, set property <b>jmeter.save.saveservice.thread_counts=false</b></li>
 <li>Since JMeter 2.12, Mail Reader Sampler will show 1 for number of samples instead of number of messages retrieved, see <bugzilla>56539</bugzilla></li>
 <li>Since JMeter 2.12, when using Cache Manager, if resource is found in cache no SampleResult will be created, in previous version a SampleResult with empty content and 204 return code was returned, see <bugzilla>54778</bugzilla>.
 You can choose between different ways to handle this case, see cache_manager.cached_resource_mode in jmeter.properties.</li>
@@ -256,6 +257,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56761</bugzilla> - JMeter tries to stop already stopped JMS connection and displays "The connection is closed"</li>
 <li><bugzilla>57068</bugzilla> - No error thrown when negative duration is entered in Test Action</li>
 <li><bugzilla>57078</bugzilla> - LagartoBasedHTMLParser fails to parse page that contains input with no type</li>
+<li><bugzilla>57183</bugzilla> - JMSSampler: For input string: "" java.lang.NumberFormatException (for Expiration or Priority fields)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -294,7 +296,7 @@ for details on configuring this component.</li>
 <li><bugzilla>56080</bugzilla> - Conversion error com.thoughtworks.xstream.converters.ConversionException with Java 8 Early Access Build</li>
 <li><bugzilla>56182</bugzilla> - Can't trigger bsh script using bshclient.jar; socket is closed unexpectedly </li>
 <li><bugzilla>56360</bugzilla> - HashTree and ListedHashTree fail to compile with Java 8</li>
-<li><bugzilla>56419</bugzilla> - Jmeter silently fails to save results</li>
+<li><bugzilla>56419</bugzilla> - JMeter silently fails to save results</li>
 <li><bugzilla>56662</bugzilla> - Save as xml in a listener is not remembered</li>
 <li><bugzilla>56367</bugzilla> - JMeter 2.11 on maven central triggers a not existing dependency rsyntaxtextarea 2.5.1, upgrade to 2.5.3</li>
 <li><bugzilla>56743</bugzilla> - Wrong mailing list archives on mail2.xml. Contributed by Felix Schumacher (felix.schumacher at internetallee.de)</li>
@@ -423,6 +425,7 @@ For this release we want to give special thanks to the following reporters for t
 <li>Oliver LLoyd (email at oliverlloyd.com) for his help on <bugzilla>56119</bugzilla></li>
 <li>Vladimir Ryabtsev (greatvovan at gmail.com) for his help on <bugzilla>56243</bugzilla> and <bugzilla>56276</bugzilla></li>
 <li>Adrian Speteanu (asp.adieu at gmail.com) and Matt Kilbride (matt.kilbride at gmail.com) for their feedback and tests on <bugzilla>54648</bugzilla></li>
+<li>Shmuel Krakower (shmulikk at gmail.com) for his tests and reports on Undo/Redo feature</li>
 </ul>
 
 Apologies if we have omitted anyone else.

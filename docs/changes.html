@@ -368,9 +368,9 @@ cache_manager.cached_resource_mode
 <p>
  Add JMSPriority and JMSExpiration fields for these samplers.
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='901' height='277' src="./images/screenshots/changes/2.12/04_jms_publisher.png"/><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='877' height='314' src="./images/screenshots/changes/2.12/04_jms_publisher.png"/><br>
 <font size="-1"></font></td></tr></table></p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='900' height='294' src="./images/screenshots/changes/2.12/05_jms_point_to_point.png"/><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='877' height='293' src="./images/screenshots/changes/2.12/05_jms_point_to_point.png"/><br>
 <font size="-1"></font></td></tr></table></p>
 <br/><table width="80%" cellpadding="1" cellspacing="2" bgcolor="#828DA6" border="0">
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif">Mail Reader Sampler</font></td></tr></table>
@@ -594,9 +594,10 @@ See
 <li>
 Since JMeter 2.12, active threads in all thread groups and active threads in current thread group are saved by default to CSV or XML results, see 
 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=57025">Bug 57025</a>
-. If you want to revert to previous behaviour, set property 
+. 
+This is usually the expected behaviour as you want to have the number of running threads during the test. But if you want to revert to previous behaviour, set property 
 <b>
-jmeter.save.saveservice.thread_counts=true
+jmeter.save.saveservice.thread_counts=false
 </b>
 </li>
 
@@ -751,6 +752,12 @@ Other Samplers
 </li>
 
 
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=57183">Bug 57183</a>
+ - JMSSampler: For input string: "" java.lang.NumberFormatException (for Expiration or Priority fields)
+</li>
+
+
 </ul>
 <h3>
 Controllers
@@ -879,7 +886,7 @@ General
 
 <li>
 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=56419">Bug 56419</a>
- - Jmeter silently fails to save results
+ - JMeter silently fails to save results
 </li>
 
 
@@ -1418,6 +1425,11 @@ Vladimir Ryabtsev (greatvovan at gmail.com) for his help on
 <li>
 Adrian Speteanu (asp.adieu at gmail.com) and Matt Kilbride (matt.kilbride at gmail.com) for their feedback and tests on 
 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=54648">Bug 54648</a>
+</li>
+
+
+<li>
+Shmuel Krakower (shmulikk at gmail.com) for his tests and reports on Undo/Redo feature
 </li>
 
 
