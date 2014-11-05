@@ -4725,7 +4725,7 @@ No
 
     
 <p><b>Control Panel</b></p>
-<div align="center"><img width='946' height='776' src="../images/screenshots/jmspublisher.png"/></div>
+<div align="center"><img width='854' height='796' src="../images/screenshots/jmspublisher.png"/></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Publisher_parms"/>
@@ -4802,6 +4802,28 @@ No
 <tr>
 <td>Password</td>
 <td>Password (N.B. this is stored unencrypted in the test plan)
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Expiration</td>
+<td>
+      The expiration time (in milliseconds) of the message before it becomes obsolete.
+      If you do not specify an expiration time, the default value is 0 (never expires). 
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Priority</td>
+<td>
+      The priority level of the message. There are ten priority levels from 0 (lowest) to 9 (highest). 
+      If you do not specify a priority level, the default level is 4. 
+  
 </td>
 <td>
 No
@@ -5387,7 +5409,7 @@ JMSSampler.useSecurity.properties=false
 
     
 <p><b>Control Panel</b></p>
-<div align="center"><img width='924' height='797' src="../images/screenshots/jms/JMS_Point-to-Point.png"/></div>
+<div align="center"><img width='882' height='804' src="../images/screenshots/jms/JMS_Point-to-Point.png"/></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Point-to-Point_parms"/>
@@ -5573,10 +5595,33 @@ Yes
 <td>
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase failes and the specific reply message received after the timeout is discarded.
+      Default value is 2000 ms.
   
 </td>
 <td>
 Yes
+</td>
+</tr>
+<tr>
+<td>Expiration</td>
+<td>
+      The expiration time (in milliseconds) of the message before it becomes obsolete.
+      If you do not specify an expiration time, the default value is 0 (never expires). 
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Priority</td>
+<td>
+      The priority level of the message. There are ten priority levels from 0 (lowest) to 9 (highest). 
+      If you do not specify a priority level, the default level is 4. 
+  
+</td>
+<td>
+No
 </td>
 </tr>
 <tr>
