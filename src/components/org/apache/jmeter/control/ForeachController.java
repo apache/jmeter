@@ -20,7 +20,6 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.extractor.HtmlExtractor;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -32,7 +31,7 @@ import org.apache.log.Logger;
 /**
  * ForeachController that iterates over a list of variables named XXXX_NN stored in {@link JMeterVariables}
  * where NN is a number starting from 1 to number of occurences.
- * This list of variable is usually set by PostProcessor (Regexp PostProcessor or {@link HtmlExtractor})
+ * This list of variable is usually set by PostProcessor (Regexp PostProcessor or {@link org.apache.jmeter.extractor.HtmlExtractor})
  * Iteration can take the full list or only a subset (configured through indexes)
  *
  */
