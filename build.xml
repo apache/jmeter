@@ -1204,7 +1204,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
-    <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report"/>
+    <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report bin/mirror-server"/>
   </target>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
@@ -1273,7 +1273,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/heapdump.*"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <exclude name="${dest.jar.jmeter}/jmeter.properties"/>
-    <include name="${dest.jar.jmeter}/mirror-server.*"/>
+    <include name="${dest.jar.jmeter}/mirror-server*"/>
     <include name="${dest.jar.jmeter}/shutdown.*"/>
     <include name="${dest.jar.jmeter}/stoptest.*"/>
     <!-- Fake SSL cert for JMeter proxy recorder in https -->
@@ -1311,7 +1311,7 @@ run JMeter unless all the JMeter jars are added.
       These need special handling to create the correct file mode
   -->
   <property name="dist.executables"
-    value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server ${dest.jar.jmeter}/*.sh ${extras.dir}/*.sh"/>
+    value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server ${dest.jar.jmeter}/jmeter-report ${dest.jar.jmeter}/mirror-server ${dest.jar.jmeter}/*.sh ${extras.dir}/*.sh"/>
 
   <!-- List of files in source distribution that are eol=native -->
   <!--
