@@ -2232,7 +2232,7 @@ run JMeter unless all the JMeter jars are added.
     <javadoc
       sourcepathref="srcpaths"
       overview="${src.docs}/overview.html"
-      additionalparam="-breakiterator"
+      additionalparam="-breakiterator -notimestamp"
       destdir="${dest.docs.api}"
       encoding="${javadoc.encoding}"
       verbose="false"
