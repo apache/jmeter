@@ -194,6 +194,13 @@
         <revision>2.11 final</revision>
       </Version>
     </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2014-11-10</created>
+        <revision>2.12 final</revision>
+      </Version>
+    </release>
     <repository>
       <SVNRepository>
         <location rdf:resource="http://svn.apache.org/repos/asf/jmeter/"/>
