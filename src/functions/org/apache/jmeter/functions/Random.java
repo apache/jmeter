@@ -27,6 +27,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.ThreadLocalRandom;
 
 /**
  * Provides a Random function which returns a random long integer between a min
@@ -36,7 +37,6 @@ import org.apache.jmeter.util.JMeterUtils;
 public class Random extends AbstractFunction {
 
     private static final List<String> desc = new LinkedList<String>();
-
     private static final String KEY = "__Random"; //$NON-NLS-1$
 
     static {
@@ -62,7 +62,7 @@ public class Random extends AbstractFunction {
         long min = Long.parseLong(minimum.execute().trim());
         long max = Long.parseLong(maximum.execute().trim());
 
-        long rand = min + (long) (Math.random() * (max - min + 1));
+        long rand = ThreadLocalRandom.current().nextLong(min, max);
 
         String randString = Long.toString(rand);
 
