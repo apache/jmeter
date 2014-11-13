@@ -32,7 +32,6 @@ package org.apache.jmeter.testelement;
  * <li>saveScopeSettings()</li>
  * <li>showScopeSettings()</li>
  * </ul>
- * </p>
  */
 public abstract class AbstractScopedAssertion extends AbstractScopedTestElement {
 
