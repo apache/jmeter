@@ -44,7 +44,7 @@ import org.mozilla.javascript.Scriptable;
  * Thread-Group (set to loop a number of times or indefinitely,
  *    ... Samplers ... (e.g. Counter )
  *    ... Other Controllers ....
- *    ... IfController ( condition set to something like - ${counter} &lt 10)
+ *    ... IfController ( condition set to something like - ${counter} &lt; 10)
  *       ... statements to perform if condition is true
  *       ...
  *    ... Other Controllers /Samplers }
