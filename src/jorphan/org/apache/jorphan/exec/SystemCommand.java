@@ -116,7 +116,7 @@ public class SystemCommand {
     }
 
     /**
-     * @param arguments List<String>, not null
+     * @param arguments List of strings, not null
      * @return return code
      * @throws InterruptedException
      * @throws IOException
