@@ -226,7 +226,7 @@ public final class Utils {
 
     /**
      * Converts {@link Arguments} to {@link JMSProperties} defaulting to String type
-     * Used to convert version <= 2.10 test plans
+     * Used to convert version &lt;= 2.10 test plans
      * @param args {@link Arguments}
      * @return jmsProperties {@link JMSProperties}
      */
