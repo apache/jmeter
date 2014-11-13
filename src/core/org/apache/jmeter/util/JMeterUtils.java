@@ -112,6 +112,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * Gets Perl5Matcher for this thread.
+     * @return the {@link Perl5Matcher} for this thread
      */
     public static Perl5Matcher getMatcher() {
         return localMatcher.get();
@@ -173,7 +174,7 @@ public class JMeterUtils implements UnitTestManager {
      * default to "org/apache/jmeter/jmeter.properties" from the classpath
      *
      * c.f. loadProperties
-     *
+     * @param file Name of the file from which the JMeter properties should be loaded
      */
     public static void loadJMeterProperties(String file) {
         Properties p = new Properties(System.getProperties());
@@ -298,6 +299,7 @@ public class JMeterUtils implements UnitTestManager {
      *
      * @param superClass - single class to search for
      * @return List of Strings containing discovered class names.
+     * @throws IOException when the used {@link ClassFinder} throws one while searching for the class
      */
     public static List<String> findClassesThatExtend(Class<?> superClass)
         throws IOException {
@@ -330,6 +332,7 @@ public class JMeterUtils implements UnitTestManager {
      *
      * @param r -
      *            the upper bound (exclusive)
+     * @return a random <code>int</code>
      */
     public static int getRandomInt(int r) {
         return rand.nextInt(r);
@@ -589,7 +592,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * This looks for the requested image in the classpath under
-     * org.apache.jmeter.images. <name>, and also sets the description
+     * org.apache.jmeter.images.<em>&lt;name&gt;</em>, and also sets the description
      * of the image, which is useful if the icon is going to be placed
      * on the clipboard.
      *
@@ -889,6 +892,10 @@ public class JMeterUtils implements UnitTestManager {
      * Sets the selection of the JComboBox to the Object 'name' from the list in
      * namVec.
      * NOTUSED?
+     * @param properties not used at the moment
+     * @param combo {@link JComboBox} to work on
+     * @param namVec List of names, which are displayed in <code>combo</code>
+     * @param name Name, that is to be selected. It has to be in <code>namVec</code>
      */
     public static void selJComboBoxItem(Properties properties, JComboBox combo, Vector<?> namVec, String name) {
         int idx = namVec.indexOf(name);
