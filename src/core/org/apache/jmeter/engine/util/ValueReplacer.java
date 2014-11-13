@@ -48,6 +48,10 @@ public class ValueReplacer {
     public ValueReplacer() {
     }
 
+    /**
+     * Constructor which couples the given {@link TestPlan} to this by means of the user defined variables
+     * @param tp {@link TestPlan} from which we will take the user defined variables as variables map
+     */
     public ValueReplacer(TestPlan tp) {
         setUserDefinedVariables(tp.getUserDefinedVariables());
     }
@@ -56,6 +60,10 @@ public class ValueReplacer {
         return variables.containsKey(k);
     }
 
+    /**
+     * Set this {@link ValueReplacer}'s variable map
+     * @param variables Map which stores the variables
+     */
     public void setUserDefinedVariables(Map<String, String> variables) {
         this.variables = variables;
     }
@@ -64,8 +72,9 @@ public class ValueReplacer {
      * Replaces TestElement StringProperties containing functions with their Function properties equivalent, example:
      * ${__time()}_${__threadNum()}_${__machineName()} will become a FunctionProperty of 
      * a CompoundVariable containing  3 functions
-     * @param el
-     * @throws InvalidVariableException
+     * @param el {@link TestElement} in which the values should be replaced
+     * @throws InvalidVariableException when transforming of the variables goes awry and
+     * the used transformer throws an {@link InvalidVariableException}
      */
     public void replaceValues(TestElement el) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceStringWithFunctions(masterFunction,
@@ -82,8 +91,9 @@ public class ValueReplacer {
 
     /**
      * Transforms strings into variable references 
-     * @param el
-     * @throws InvalidVariableException
+     * @param el {@link TestElement} in which the we will look for strings, that can be replaced by variable references
+     * @throws InvalidVariableException  when transforming of the strings goes awry and
+     * the used transformer throws an {@link InvalidVariableException}
      */
     public void reverseReplace(TestElement el) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
@@ -92,10 +102,11 @@ public class ValueReplacer {
     }
 
     /**
-     * Transforms strings into variable references using regexp matching if regexMatch is true
-     * @param el
-     * @param regexMatch
-     * @throws InvalidVariableException
+     * Transforms strings into variable references using regexp matching if regexMatch is <code>true</code>
+     * @param el {@link TestElement} in which the we will look for strings, that can be replaced by variable references
+     * @param regexMatch when <code>true</code> variable substitution will be done in regexp matching mode
+     * @throws InvalidVariableException  when transforming of the strings goes awry and
+     * the used transformer throws an {@link InvalidVariableException}
      */
     public void reverseReplace(TestElement el, boolean regexMatch) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
@@ -105,8 +116,9 @@ public class ValueReplacer {
 
     /**
      * Replaces ${key} by value extracted from variables if any
-     * @param el
-     * @throws InvalidVariableException
+     * @param el {@link TestElement} in which values should be replaced
+     * @throws InvalidVariableException when transforming of the variables goes awry and
+     * the used transformer throws an {@link InvalidVariableException}
      */
     public void undoReverseReplace(TestElement el) throws InvalidVariableException {
         Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new UndoVariableReplacement(masterFunction,
@@ -114,6 +126,11 @@ public class ValueReplacer {
         setProperties(el, newProps);
     }
 
+    /**
+     * Add a variable to this replacer's variables map
+     * @param name Name of the variable
+     * @param value Value of the variable
+     */
     public void addVariable(String name, String value) {
         variables.put(name, value);
     }
@@ -129,13 +146,15 @@ public class ValueReplacer {
     }
 
     /**
-     * Replaces a StringProperty containing functions with their Function properties equivalent, example:
-     * ${__time()}_${__threadNum()}_${__machineName()} will become a FunctionProperty of 
-     * a CompoundVariable containing  3 functions
-     * @param iter {@link PropertyIterator}
-     * @param transform {@link ValueTransformer}
-     * @return Collection<JMeterProperty>
-     * @throws InvalidVariableException
+     * Replaces a {@link StringProperty} containing functions with their Function properties equivalent.
+     * <p>For example:
+     * <code>${__time()}_${__threadNum()}_${__machineName()}</code> will become a
+     * {@link org.apache.jmeter.testelement.property.FunctionProperty} of
+     * a {@link CompoundVariable} containing three functions
+     * @param iter the {@link PropertyIterator} over all properties, in which the values should be replaced
+     * @param transform the {@link ValueTransformer}, that should do transformation
+     * @return a new {@link Collection} with all the transformed {@link JMeterProperty}s
+     * @throws InvalidVariableException when <code>transform</code> throws an {@link InvalidVariableException} while transforming a value
      */
     private Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
         List<JMeterProperty> props = new LinkedList<JMeterProperty>();

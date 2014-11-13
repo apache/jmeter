@@ -30,7 +30,7 @@ interface ValueTransformer {
     /**
      * Transform the given property and return the new version.
      *
-     * @param property
+     * @param property Property to be transformed
      * @return the transformed property
      */
     JMeterProperty transformValue(JMeterProperty property) throws InvalidVariableException;
@@ -39,7 +39,7 @@ interface ValueTransformer {
      * Set the master function for the value transformer. This handles
      * converting strings to functions.
      *
-     * @param masterFunction
+     * @param masterFunction Function to be used for the transformation
      */
     void setMasterFunction(CompoundVariable masterFunction);
 
@@ -47,7 +47,7 @@ interface ValueTransformer {
      * Set the variable names and values used to reverse replace functions with
      * strings, and undo functions to raw values.
      *
-     * @param vars
+     * @param vars Map of names and values to be used for the transformation
      */
     void setVariables(Map<String, String> vars);
 }
