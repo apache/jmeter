@@ -277,9 +277,11 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * Check the cache, and if there is a match, set the headers:<br/>
-     * If-Modified-Since<br/>
-     * If-None-Match<br/>
+     * Check the cache, and if there is a match, set the headers:
+     * <ul>
+     * <li>If-Modified-Since</li>
+     * <li>If-None-Match</li>
+     * </ul>
      * Commons HttpClient version
      * @param url URL to look up in cache
      * @param method where to set the headers
@@ -302,11 +304,13 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * Check the cache, and if there is a match, set the headers:<br/>
-     * If-Modified-Since<br/>
-     * If-None-Match<br/>
+     * Check the cache, and if there is a match, set the headers:
+     * <ul>
+     * <li>If-Modified-Since</li>
+     * <li>If-None-Match</li>
+     * </ul>
      * Apache HttpClient version.
-     * @param url URL to look up in cache
+     * @param url {@link URL} to look up in cache
      * @param request where to set the headers
      */
     public void setHeaders(URL url, HttpRequestBase request) {
@@ -327,10 +331,12 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * Check the cache, and if there is a match, set the headers:<br/>
-     * If-Modified-Since<br/>
-     * If-None-Match<br/>
-     * @param url URL to look up in cache
+     * Check the cache, and if there is a match, set the headers:
+     * <ul>
+     * <li>If-Modified-Since</li>
+     * <li>If-None-Match</li>
+     * </ul>
+     * @param url {@link URL} to look up in cache
      * @param conn where to set the headers
      */
     public void setHeaders(HttpURLConnection conn, URL url) {
@@ -351,8 +357,9 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * Check the cache, if the entry has an expires header and the entry has not expired, return true<br/>
-     * @param url URL to look up in cache
+     * Check the cache, if the entry has an expires header and the entry has not expired, return true<br>
+     * @param url {@link URL} to look up in cache
+     * @return <code>true</code> if entry has an expires header and the entry has not expired, else <code>false</code>
      */
     public boolean inCache(URL url) {
         CacheEntry entry = getCache().get(url.toString());
