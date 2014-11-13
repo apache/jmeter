@@ -126,7 +126,7 @@ public class StatisticalSampleResult extends SampleResult implements
     }
 
     /**
-     * Generates the key to be used for aggregating samples as follows:<br/>
+     * Generates the key to be used for aggregating samples as follows:<br>
      * <code>sampleLabel</code> "-" <code>[threadName|threadGroup]</code>
      * <p>
      * N.B. the key should agree with the fixed items that are saved in the sample.
