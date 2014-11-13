@@ -69,12 +69,12 @@ import org.apache.log.Logger;
  * <dt>notUndefined: Boolean</dt>
  * <dd>If true, the property should not be left undefined. A <b>default</b>
  * attribute must be provided if this is set.</dd>
- * <dd>notExpression: Boolean</dd>
+ * <dt>notExpression: Boolean</dt>
  * <dd>If true, the property content should always be constant: JMeter
- * 'expressions' (strings using ${var}, etc...) can't be used.</dt>
- * <dd>notOther: Boolean</dd>
+ * 'expressions' (strings using ${var}, etc...) can't be used.</dd>
+ * <dt>notOther: Boolean</dt>
  * <dd>If true, the property content must always be one of the tags values or
- * null.</dt>
+ * null.</dd>
  * <dt>default: Object</dt>
  * <dd>Initial value for the property's GUI. Must be provided and be non-null
  * if <b>notUndefined</b> is set. Must be one of the provided tags (or null) if
