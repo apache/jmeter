@@ -68,11 +68,18 @@ import org.apache.log.Logger;
  * <P>
  * Here is a little piece of code showing how to use this class :
  *
- * <PRE>// ... float[] nodes = {3F, 2F, 4F, 1F, 2.5F, 5F, 3F}; Spline3 curve =
- * new Spline3(nodes); // ... public void paint(Graphics g) { int[] plot =
- * curve.getPlots(); for (int i = 1; i &lt; n; i++) { g.drawLine(i - 1, plot[i -
- * 1], i, plot[i]); } } // ...
- *
+ * <PRE>
+ *  // ...
+ *  float[] nodes = {3F, 2F, 4F, 1F, 2.5F, 5F, 3F};
+ *  Spline3 curve = new Spline3(nodes);
+ *  // ...
+ *  public void paint(Graphics g) {
+ *    int[] plot = curve.getPlots();
+ *    for (int i = 1; i &lt; n; i++) {
+ *      g.drawLine(i - 1, plot[i - 1], i, plot[i]);
+ *    }
+ *  }
+ *  // ...
  * </PRE>
  *
  */
