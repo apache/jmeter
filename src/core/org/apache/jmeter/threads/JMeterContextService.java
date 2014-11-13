@@ -135,7 +135,7 @@ public final class JMeterContextService {
     }
 
     /**
-     * Get the total number of threads (>= active)
+     * Get the total number of threads (&gt;= active)
      * @return total thread count
      */
     public static synchronized int getTotalThreads() {

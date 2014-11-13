@@ -379,7 +379,7 @@ public final class JOrphanUtils {
      *
      * @param target array to scan
      * @param search array to search for
-     * @param offset starting offset (>=0)
+     * @param offset starting offset (&gt;=0)
      * @return true if the search array matches the target at the current offset
      */
     public static boolean startsWith(byte [] target, byte [] search, int offset){
