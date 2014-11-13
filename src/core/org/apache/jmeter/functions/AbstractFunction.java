@@ -51,12 +51,11 @@ public abstract class AbstractFunction implements Function {
         return execute(previousResult, currentSampler);
     }
 
-    /**
-     *
-     * @see Function#setParameters(Collection)
-     * <br/>
+    /** 
      * Note: This is always called even if no parameters are provided
      * (versions of JMeter after 2.3.1)
+     * 
+     * @see Function#setParameters(Collection)
      */
     @Override
     abstract public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException;
