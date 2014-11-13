@@ -56,10 +56,12 @@ import org.apache.jorphan.gui.JLabeledChoice;
 
 /**
  * Basic URL / HTTP Request configuration:
- * - host and port
- * - connect and response timeouts
- * - path, method, encoding, parameters
- * - redirects & keepalive
+ * <ul>
+ * <li>host and port</li>
+ * <li>connect and response timeouts</li>
+ * <li>path, method, encoding, parameters</li>
+ * <li>redirects and keepalive</li>
+ * </ul>
  */
 public class UrlConfigGui extends JPanel implements ChangeListener {
 

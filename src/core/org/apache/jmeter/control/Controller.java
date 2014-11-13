@@ -24,8 +24,8 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * This interface is used by JMeterThread in the following manner:
- *
- * while (running && (sampler = controller.next()) != null)
+ * <p>
+ * <code>while (running &amp;&amp; (sampler = controller.next()) != null)</code>
  */
 public interface Controller extends TestElement {
     /**

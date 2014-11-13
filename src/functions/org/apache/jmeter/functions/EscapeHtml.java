@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * <p>
  * For example:
  * </p> 
- * <p><code>"bread" & "butter"</code></p>
+ * <p><code>"bread" &amp; "butter"</code></p>
  * becomes:
  * <p>
  * <code>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</code>.

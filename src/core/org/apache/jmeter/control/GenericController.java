@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  * The main entry point is next(), which is called by by JMeterThread as follows:
  * </p>
  * <p>
- * <code>while (running && (sampler = controller.next()) != null)</code>
+ * <code>while (running &amp;&amp; (sampler = controller.next()) != null)</code>
  * </p>
  */
 public class GenericController extends AbstractTestElement implements Controller, Serializable, TestCompilerHelper {

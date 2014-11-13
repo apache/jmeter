@@ -44,7 +44,7 @@ import org.mozilla.javascript.Scriptable;
  * Thread-Group (set to loop a number of times or indefinitely,
  *    ... Samplers ... (e.g. Counter )
  *    ... Other Controllers ....
- *    ... IfController ( condition set to something like - ${counter}<10)
+ *    ... IfController ( condition set to something like - ${counter} &lt 10)
  *       ... statements to perform if condition is true
  *       ...
  *    ... Other Controllers /Samplers }
@@ -81,14 +81,14 @@ public class IfController extends GenericController implements Serializable {
     }
 
     /**
-     * Condition Accessor - this is gonna be like ${count}<10
+     * Condition Accessor - this is gonna be like <code>${count} &lt; 10</code>
      */
     public void setCondition(String condition) {
         setProperty(new StringProperty(CONDITION, condition));
     }
 
     /**
-     * Condition Accessor - this is gonna be like ${count}<10
+     * Condition Accessor - this is gonna be like <code>${count} &lt; 10</code>
      */
     public String getCondition() {
         return getPropertyAsString(CONDITION);
