@@ -213,10 +213,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     /**
-     * Decides whether or not to a sample is wanted based on:<br/>
-     * - errorOnly<br/>
-     * - successOnly<br/>
-     * - sample success<br/>
+     * Decides whether or not to a sample is wanted based on:
+     * <ul>
+     * <li>errorOnly</li>
+     * <li>successOnly</li>
+     * <li>sample success</li>
+     * </ul>
      * Should only be called for single samples.
      *
      * @param success is sample successful
@@ -229,10 +231,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     /**
-     * Decides whether or not to a sample is wanted based on: <br/>
-     * - errorOnly <br/>
-     * - successOnly <br/>
-     * - sample success <br/>
+     * Decides whether or not to a sample is wanted based on:
+     * <ul>
+     * <li>errorOnly</li>
+     * <li>successOnly</li>
+     * <li>sample success</li>
+     * </ul>
      * This version is intended to be called by code that loops over many samples;
      * it is cheaper than fetching the settings each time.
      * @param success status of sample
