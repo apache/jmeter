@@ -335,7 +335,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      *  <li>stop JMeter thread</li>
      *  <li>interrupt JMeter thread</li>
      *  <li>interrupt underlying thread</li>
-     * <ol>
+     * </ol>
      * @param threadName String thread name
      * @param now boolean for stop
      * @return true if thread stopped
