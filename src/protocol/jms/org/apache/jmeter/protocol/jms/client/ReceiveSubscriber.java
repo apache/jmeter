@@ -70,7 +70,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     /**
      * Constructor takes the necessary JNDI related parameters to create a
      * connection and prepare to begin receiving messages.
-     * <br/>
+     * <br>
      * The caller must then invoke {@link #start()} to enable message reception.
      * 
      * @param useProps if true, use jndi.properties instead of 
@@ -101,7 +101,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     /**
      * Constructor takes the necessary JNDI related parameters to create a
      * connection and create an onMessageListener to prepare to begin receiving messages.
-     * <br/>
+     * <br>
      * The caller must then invoke {@link #start()} to enable message reception.
      * 
      * @param queueSize maximum queue size, where a queueSize &lt;=0 means no limit
