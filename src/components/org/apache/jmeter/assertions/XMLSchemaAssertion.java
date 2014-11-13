@@ -37,8 +37,8 @@ import org.xml.sax.SAXParseException;
 // See Bug 34383
 
 /**
- * XMLSchemaAssertion.java Validate response against an XML Schema author <a
- * href="mailto:d.maung@mdl.com">Dave Maung</a>
+ * XMLSchemaAssertion.java Validate response against an XML Schema author
+ * <a href="mailto:d.maung@mdl.com">Dave Maung</a>
  * 
  */
 public class XMLSchemaAssertion extends AbstractTestElement implements Serializable, Assertion {
