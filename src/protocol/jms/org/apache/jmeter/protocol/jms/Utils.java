@@ -168,6 +168,7 @@ public final class Utils {
             return null;
         }        
     }
+
     /**
      * Obtain the queue connection from the context and factory name.
      * 
@@ -199,9 +200,9 @@ public final class Utils {
     
     /**
      * Set JMS Properties to msg
-     * @param msg Message
-     * @param map Map<String, String>
-     * @throws JMSException
+     * @param msg Message to operate on
+     * @param map Map of Properties to be set on the message
+     * @throws JMSException when <code>msg</code> throws a {@link JMSException} while the properties get set
      */
     public static void addJMSProperties(Message msg, Map<String, Object> map) throws JMSException {
         if(map == null) {
@@ -227,8 +228,8 @@ public final class Utils {
     /**
      * Converts {@link Arguments} to {@link JMSProperties} defaulting to String type
      * Used to convert version &lt;= 2.10 test plans
-     * @param args {@link Arguments}
-     * @return jmsProperties {@link JMSProperties}
+     * @param args {@link Arguments} to be converted
+     * @return jmsProperties The converted {@link JMSProperties}
      */
     public static final JMSProperties convertArgumentsToJmsProperties(Arguments args) {
         JMSProperties jmsProperties = new JMSProperties();
