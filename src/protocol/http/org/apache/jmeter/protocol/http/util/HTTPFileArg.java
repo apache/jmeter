@@ -181,7 +181,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      *
      * @return the string demonstration of HTTPFileArg object in this
      * format:
-     *    "path:'<PATH>'|param:'<PARAM NAME>'|mimetype:'<MIME TYPE>'"
+     *    "path:'&lt;PATH&gt;'|param:'&lt;PARAM NAME&gt;'|mimetype:'&lt;MIME TYPE&gt;'"
      */
     @Override
     public String toString() {
