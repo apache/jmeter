@@ -43,7 +43,6 @@ import org.apache.log.Priority;
  * <li>throwable message (optional)</li>
  * <li>comment (optional)</li>
  * </ul>
- * </p>
  * Returns: - the input string
  * @since 2.2
  */

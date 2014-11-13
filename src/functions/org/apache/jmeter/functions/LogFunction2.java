@@ -41,7 +41,6 @@ import org.apache.log.Logger;
  * <li>log level (optional; defaults to INFO; or DEBUG if unrecognised; or can use OUT or ERR)</li>
  * <li>throwable message (optional)</li>
  * </ul>
- * </p>
  * Returns: - Empty String (so can be used where return value would be a nuisance)
  * @since 2.2
  */

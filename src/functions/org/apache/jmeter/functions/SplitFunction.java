@@ -43,7 +43,6 @@ import org.apache.log.Logger;
  * <li>Variable name prefix</li>
  * <li>String to split on (optional, default is comma)</li>
  * </ul>
- * </p>
  * <p>
  * Returns: the input string
  * </p>
