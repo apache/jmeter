@@ -77,7 +77,6 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
          * @return int
          * @throws InterruptedException
          * @throws BrokenBarrierException
-         * @throws TimeoutException 
          * @see java.util.concurrent.CyclicBarrier#await()
          */
         public int await() throws InterruptedException, BrokenBarrierException{
