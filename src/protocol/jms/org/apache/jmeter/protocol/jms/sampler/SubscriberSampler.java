@@ -277,7 +277,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     /**
      * Initialise the thread-local variables.
-     * <br/>
+     * <br>
      * {@inheritDoc}
      */
     @Override
@@ -327,7 +327,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     /**
      * Close subscriber.
-     * <br/>
+     * <br>
      * {@inheritDoc}
      */
     @Override
