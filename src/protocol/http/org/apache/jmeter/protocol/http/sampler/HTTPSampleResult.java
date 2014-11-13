@@ -91,7 +91,7 @@ public class HTTPSampleResult extends SampleResult {
 
     /**
      * Determine whether this result is a redirect.
-     * Returs true for: 301,302,303, & 307(GET or HEAD)
+     * Returns true for: 301,302,303 and 307(GET or HEAD)
      * @return true iff res is an HTTP redirect response
      */
     public boolean isRedirect() {

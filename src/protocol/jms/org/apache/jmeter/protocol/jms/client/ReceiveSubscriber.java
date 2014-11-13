@@ -104,7 +104,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * <br/>
      * The caller must then invoke {@link #start()} to enable message reception.
      * 
-     * @param queueSize maximum queue size <=0 == no limit
+     * @param queueSize maximum queue size, where a queueSize &lt;=0 means no limit
      * @param useProps if true, use jndi.properties instead of 
      * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
      * @param initialContextFactory
@@ -137,7 +137,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * <br/>
      * The caller must then invoke {@link #start()} to enable message reception.
      * 
-     * @param queueSize maximum queue size <=0 == no limit
+     * @param queueSize maximum queue, where a queueSize &lt;=0 means no limit
      * @param useProps if true, use jndi.properties instead of 
      * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
      * @param initialContextFactory

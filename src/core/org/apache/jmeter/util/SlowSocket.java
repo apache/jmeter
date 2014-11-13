@@ -57,7 +57,7 @@ public class SlowSocket extends Socket {
      * @param localPort local port
      *
      * @throws IOException
-     * @throws IllegalArgumentException if cps <=0
+     * @throws IllegalArgumentException if cps &lt;= 0
      */
     public SlowSocket(int cps, String host, int port, InetAddress localAddr, int localPort) throws IOException {
         super(host, port, localAddr, localPort);
@@ -75,7 +75,7 @@ public class SlowSocket extends Socket {
      *
      * @throws UnknownHostException
      * @throws IOException
-     * @throws IllegalArgumentException if cps <=0
+     * @throws IllegalArgumentException if cps &lt;= 0
      */
     public SlowSocket(int cps, String host, int port) throws UnknownHostException, IOException {
         super(host, port);

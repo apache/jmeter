@@ -57,9 +57,9 @@ public class TextFile extends File {
      * encoding.
      *
      * @param filename
-     *            File to be read & written through this object.
+     *            File to be read and written through this object.
      * @param encoding
-     *            Encoding to be used when reading & writing this file.
+     *            Encoding to be used when reading and writing this file.
      */
     public TextFile(File filename, String encoding) {
         super(filename.toString());
@@ -71,7 +71,7 @@ public class TextFile extends File {
      * default encoding.
      *
      * @param filename
-     *            File to be read & written through this object.
+     *            File to be read and written through this object.
      */
     public TextFile(File filename) {
         super(filename.toString());
@@ -82,7 +82,7 @@ public class TextFile extends File {
      * default encoding.
      *
      * @param filename
-     *            Name of the file to be read & written through this object.
+     *            Name of the file to be read and written through this object.
      */
     public TextFile(String filename) {
         super(filename);
@@ -93,9 +93,9 @@ public class TextFile extends File {
      * encoding.
      *
      * @param filename
-     *            Name of the file to be read & written through this object.
+     *            Name of the file to be read and written through this object.
      * @param encoding
-     *            Encoding to be used when reading & writing this file.
+     *            Encoding to be used when reading and writing this file.
      */
     public TextFile(String filename, String encoding) {
         super(filename);
@@ -160,7 +160,7 @@ public class TextFile extends File {
     }
 
     /**
-     * @return Encoding being used to read & write this file.
+     * @return Encoding being used to read and write this file.
      */
     public String getEncoding() {
         return encoding;
@@ -168,7 +168,7 @@ public class TextFile extends File {
 
     /**
      * @param string
-     *            Encoding to be used to read & write this file.
+     *            Encoding to be used to read and write this file.
      */
     public void setEncoding(String string) {
         encoding = string;

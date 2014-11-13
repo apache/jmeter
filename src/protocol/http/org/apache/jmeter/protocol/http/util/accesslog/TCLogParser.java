@@ -62,7 +62,7 @@ import org.apache.log.Logger;
  * <li> tokenizes the string using question mark "?"
  * <li> get the path from the first token
  * <li> returns the second token and checks it for parameters
- * <li> tokenizes the string using ampersand "&"
+ * <li> tokenizes the string using ampersand "&amp;"
  * <li> parses each token to name/value pairs
  * </ol>
  * <p>
@@ -450,7 +450,7 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * Checks the string to see if it contains "&" and "=". If it does, return
+     * Checks the string to see if it contains "&amp;" and "=". If it does, return
      * true, so that it can be parsed.
      *
      * @param text
@@ -529,7 +529,7 @@ public class TCLogParser implements LogParser {
     /**
      * Method uses StringTokenizer to convert the string into single pairs. The
      * string should conform to HTTP protocol spec, which means the name/value
-     * pairs are separated by the ampersand symbol "&". Some one could write the
+     * pairs are separated by the ampersand symbol "&amp;". Someone could write the
      * querystrings by hand, but that would be round about and go against the
      * purpose of this utility.
      *
