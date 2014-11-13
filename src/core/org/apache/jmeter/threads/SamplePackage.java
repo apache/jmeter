@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 
 /**
- * Packages methods related to sample handling.<br/>
+ * Packages methods related to sample handling.<br>
  * A SamplePackage contains all elements associated to a Sampler:
  * <ul>
  *  <li>SampleListener(s)</li>

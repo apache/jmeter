@@ -125,7 +125,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
     /**
      * Add tree model copy to the history
-     * <p/>
+     * <p>
      * This method relies on the rule that the record in history made AFTER
      * change has been made to test plan
      *
