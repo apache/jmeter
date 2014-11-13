@@ -562,7 +562,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * This looks for the requested image in the classpath under
-     * org.apache.jmeter.images. <name>
+     * org.apache.jmeter.images.&lt;name&gt;
      *
      * @param name
      *            Description of Parameter
