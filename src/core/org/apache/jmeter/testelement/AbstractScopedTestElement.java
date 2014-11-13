@@ -37,7 +37,6 @@ import org.apache.jmeter.samplers.SampleResult;
  * <li>saveScopeSettings()</li>
  * <li>showScopeSettings()</li>
  * </ul>
- * </p>
  */
 public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
