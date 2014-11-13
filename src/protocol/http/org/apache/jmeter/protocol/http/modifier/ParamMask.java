@@ -72,7 +72,7 @@ public class ParamMask extends AbstractTestElement implements Serializable {
     }
 
     /**
-     * Set the current value of the <code>long<code> portion of the parameter
+     * Set the current value of the <code>long</code> portion of the parameter
      * value to replace. This is usually not used, as the method
      * {@link #resetValue} is used to define a policy for the starting value.
      *
