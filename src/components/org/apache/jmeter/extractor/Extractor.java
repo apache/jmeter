@@ -32,7 +32,7 @@ public interface Extractor extends Serializable {
      * @param attribute Attribute name to return 
      * @param matchNumber Match number
      * @param inputString Page or excerpt
-     * @param result List<String> results
+     * @param result List of results
      * @param found current matches found
      * @param cacheKey If not null, the implementation is encouraged to cache parsing result and use this key as part of cache key
      * @return match found updated

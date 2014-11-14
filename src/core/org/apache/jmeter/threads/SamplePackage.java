@@ -128,7 +128,7 @@ public class SamplePackage {
     }
 
     /**
-     * @return List<SampleListener>
+     * @return List of {@link SampleListener}s
      */
     public List<SampleListener> getSampleListeners() {
         return sampleListeners;
@@ -143,7 +143,7 @@ public class SamplePackage {
     }
 
     /**
-     * @return List<Timer>
+     * @return List of {@link Timer}s
      */
     public List<Timer> getTimers() {
         return timers;
@@ -183,14 +183,14 @@ public class SamplePackage {
     }
 
     /**
-     * @return List<Assertion>
+     * @return List of {@link Assertion}
      */
     public List<Assertion> getAssertions() {
         return assertions;
     }
 
     /**
-     * @return List<PostProcessor>
+     * @return List of {@link PostProcessor}s
      */
     public List<PostProcessor> getPostProcessors() {
         return postProcessors;
@@ -212,7 +212,7 @@ public class SamplePackage {
 
     /**
      * Returns the preProcessors.
-     * @return List<PreProcessor>
+     * @return List of {@link PreProcessor}
      */
     public List<PreProcessor> getPreProcessors() {
         return preProcessors;
@@ -221,7 +221,7 @@ public class SamplePackage {
     /**
      * Returns the configs.
      *
-     * @return List
+     * @return List of {@link ConfigTestElement}
      */
     public List<ConfigTestElement> getConfigs() {
         return configs;

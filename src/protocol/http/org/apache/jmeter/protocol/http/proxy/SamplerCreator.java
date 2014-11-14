@@ -36,8 +36,8 @@ public interface SamplerCreator {
     /**
      * Create HTTPSamplerBase
      * @param request {@link HttpRequestHdr}
-     * @param pageEncodings Map<String, String>
-     * @param formEncodings Map<String, String>
+     * @param pageEncodings Map of page encodings
+     * @param formEncodings Map of form encodings
      * @return {@link HTTPSamplerBase}
      */
     HTTPSamplerBase createSampler(HttpRequestHdr request,
@@ -47,8 +47,8 @@ public interface SamplerCreator {
      * Populate sampler from request
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
-     * @param pageEncodings Map<String, String>
-     * @param formEncodings Map<String, String>
+     * @param pageEncodings Map of page encodings
+     * @param formEncodings Map of form encodings
      * @throws Exception
      */
     void populateSampler(HTTPSamplerBase sampler,
@@ -72,9 +72,10 @@ public interface SamplerCreator {
      *  <li>{@link SamplerCreator}{@link #populateSampler(HTTPSamplerBase, HttpRequestHdr, Map, Map)}</li>
      * </ol>
      * @param request {@link HttpRequestHdr}
-     * @param pageEncodings Map<String, String>
-     * @param formEncodings Map<String, String>
+     * @param pageEncodings Map of page encodings
+     * @param formEncodings Map of form encodings
      * @return {@link HTTPSamplerBase}
+     * @throws Exception
      * @since 2.9
      */
     HTTPSamplerBase createAndPopulateSampler(HttpRequestHdr request,

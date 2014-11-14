@@ -411,14 +411,14 @@ public class SendMailCommand {
      * SmtpSampler-object
      *
      * @param receiverTo
-     *            List of receivers <InternetAddress>
+     *            List of receivers
      */
     public void setReceiverTo(List<InternetAddress> receiverTo) {
         this.receiverTo = receiverTo;
     }
 
     /**
-     * Returns receivers of current message <InternetAddress> ("cc") - standard
+     * Returns receivers of current message as {@link InternetAddress} ("cc") - standard
      * getter
      *
      * @return List of receivers
@@ -432,14 +432,14 @@ public class SendMailCommand {
      * SmtpSampler-object
      *
      * @param receiverCC
-     *            List of receivers <InternetAddress>
+     *            List of receivers
      */
     public void setReceiverCC(List<InternetAddress> receiverCC) {
         this.receiverCC = receiverCC;
     }
 
     /**
-     * Returns receivers of current message <InternetAddress> ("bcc") - standard
+     * Returns receivers of current message as {@link InternetAddress} ("bcc") - standard
      * getter
      *
      * @return List of receivers
@@ -453,7 +453,7 @@ public class SendMailCommand {
      * SmtpSampler-object
      *
      * @param receiverBCC
-     *            List of receivers <InternetAddress>
+     *            List of receivers
      */
     public void setReceiverBCC(List<InternetAddress> receiverBCC) {
         this.receiverBCC = receiverBCC;
