@@ -139,7 +139,7 @@ public class TCLogParser implements LogParser {
     /**
      * by default decode is set to true. if the parameters shouldn't be
      * decoded, call the method with false
-     * @param decodeparams
+     * @param decodeparams flag whether parameters should be decoded
      */
     public void setDecodeParameterValues(boolean decodeparams) {
         this.decode = decodeparams;
@@ -147,7 +147,7 @@ public class TCLogParser implements LogParser {
 
     /**
      * decode the parameter values is to true by default
-     * @return  if paramter values should be decoded
+     * @return <code>true</code> if parameter values should be decoded, <code>false</code> otherwise
      */
     public boolean decodeParameterValue() {
         return this.decode;
@@ -166,10 +166,10 @@ public class TCLogParser implements LogParser {
 
     /**
      * Use the filter to include/exclude files in the access logs. This is
-     * provided as a convienance and reduce the need to spend hours cleaning up
+     * provided as a convenience and reduce the need to spend hours cleaning up
      * log files.
      *
-     * @param filter
+     * @param filter {@link Filter} to be used while reading the log lines
      */
     @Override
     public void setFilter(Filter filter) {
@@ -179,7 +179,7 @@ public class TCLogParser implements LogParser {
     /**
      * Sets the source file.
      *
-     * @param source
+     * @param source name of the source file
      */
     @Override
     public void setSourceFile(String source) {
@@ -189,7 +189,9 @@ public class TCLogParser implements LogParser {
     /**
      * parse the entire file.
      *
-     * @return boolean success/failure
+     * @param el TestElement to read the lines into
+     * @param parseCount number of max lines to read
+     * @return number of read lines, or <code>-1</code> if an error occurred while reading
      */
     public int parse(TestElement el, int parseCount) {
         if (this.SOURCE == null) {
@@ -226,10 +228,11 @@ public class TCLogParser implements LogParser {
 
     /**
      * parse a set number of lines from the access log. Keep in mind the number
-     * of lines parsed will depend the filter and number of lines in the log.
+     * of lines parsed will depend on the filter and number of lines in the log.
      * The method returns the actual number of lines parsed.
      *
-     * @param count
+     * @param count number of lines to read
+     * @param el {@link TestElement} to read lines into
      * @return lines parsed
      */
     @Override
@@ -239,9 +242,12 @@ public class TCLogParser implements LogParser {
 
     /**
      * The method is responsible for reading each line, and breaking out of the
-     * while loop if a set number of lines is given.
+     * while loop if a set number of lines is given.<br>
+     * Note: empty lines will not be counted
      *
-     * @param breader
+     * @param breader {@link BufferedReader} to read lines from
+     * @param el {@link TestElement} to read lines into
+     * @param parseCount number of lines to read
      */
     protected int parse(BufferedReader breader, TestElement el, int parseCount) {
         int actualCount = 0;
@@ -280,7 +286,8 @@ public class TCLogParser implements LogParser {
     /**
      * parseLine calls the other parse methods to parse the given text.
      *
-     * @param line
+     * @param line single line to be parsed
+     * @param el {@link TestElement} in which the line will be added
      */
     protected int parseLine(String line, TestElement el) {
         int count = 0;
@@ -318,7 +325,8 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * @param line
+     * @param line single line of which the url should be extracted 
+     * @param el {@link TestElement} into which the url will be added
      */
     private void createUrl(String line, TestElement el) {
         String paramString = null;
@@ -346,8 +354,9 @@ public class TCLogParser implements LogParser {
      * 127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] "GET /addrbook/ HTTP/1.1" 200
      * 1981
      * <p>
+     * would result in the extracted url <code>/addrbook/</code>
      *
-     * @param entry
+     * @param entry line from which the url is to be extracted
      * @return cleaned url
      */
     public String cleanURL(String entry) {
@@ -395,11 +404,11 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * The method checks for POST and GET methods currently. The other methods
-     * aren't supported yet.
+     * The method checks for <code>POST</code>, <code>GET</code> and <code>HEAD</code> methods currently.
+     * The other methods aren't supported yet.
      *
-     * @param text
-     * @return if method is supported
+     * @param text text to be checked for HTTP method
+     * @return <code>true</code> if method is supported, <code>false</code> otherwise
      */
     public boolean checkMethod(String text) {
         if (text.indexOf("GET") > -1) {
@@ -419,10 +428,11 @@ public class TCLogParser implements LogParser {
     /**
      * Tokenize the URL into two tokens. If the URL has more than one "?", the
      * parse may fail. Only the first two tokens are used. The first token is
-     * automatically parsed and set at URL_PATH.
+     * automatically parsed and set at {@link TCLogParser#URL_PATH URL_PATH}.
      *
-     * @param url
-     * @return String parameters
+     * @param url url which should be stripped from parameters
+     * @param el {@link TestElement} to parse url into
+     * @return String presenting the parameters, or <code>null</code> when none where found
      */
     public String stripFile(String url, TestElement el) {
         if (url.indexOf('?') > -1) {
@@ -436,11 +446,12 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * Checks the string to make sure it has /path/file?name=value format. If
-     * the string doesn't have "?", it will return false.
+     * Checks the string to make sure it has <code>/path/file?name=value</code> format. If
+     * the string doesn't contains a "?", it will return <code>false</code>.
      *
-     * @param url
-     * @return boolean
+     * @param url url to check for parameters
+     * @return <code>true</code> if url contains a <code>?</code>,
+     *         <code>false</code> otherwise
      */
     public boolean checkURL(String url) {
         if (url.indexOf('?') > -1) {
@@ -451,10 +462,11 @@ public class TCLogParser implements LogParser {
 
     /**
      * Checks the string to see if it contains "&amp;" and "=". If it does, return
-     * true, so that it can be parsed.
+     * <code>true</code>, so that it can be parsed.
      *
-     * @param text
-     * @return boolean
+     * @param text text to be checked for <code>&amp;</code> and <code>=</code>
+     * @return <code>true</code> if <code>text</code> contains both <code>&amp;</code>
+     *         and <code>=</code>, <code>false</code> otherwise
      */
     public boolean checkParamFormat(String text) {
         if (text.indexOf('&') > -1 && text.indexOf('=') > -1) {
@@ -466,7 +478,8 @@ public class TCLogParser implements LogParser {
     /**
      * Convert a single line into XML
      *
-     * @param text
+     * @param text to be be converted
+     * @param el {@link HTTPSamplerBase} which consumes the <code>text</code>
      */
     public void convertStringToJMRequest(String text, TestElement el) {
         ((HTTPSamplerBase) el).parseArguments(text);
@@ -477,7 +490,8 @@ public class TCLogParser implements LogParser {
      * is returned. The method uses parseOneParameter(string) to convert each
      * pair.
      *
-     * @param stringparams
+     * @param stringparams String with parameters to be parsed
+     * @return array of {@link NVPair}s
      */
     public NVPair[] convertStringtoNVPair(String stringparams) {
         List<String> vparams = this.parseParameters(stringparams);
@@ -498,7 +512,7 @@ public class TCLogParser implements LogParser {
      *
      * @param parameter
      *            to be parsed
-     * @return NVPair
+     * @return {@link NVPair} with the parsed name and value of the parameter
      */
     protected NVPair parseOneParameter(String parameter) {
         String name = ""; // avoid possible NPE when trimming the name
@@ -533,7 +547,7 @@ public class TCLogParser implements LogParser {
      * querystrings by hand, but that would be round about and go against the
      * purpose of this utility.
      *
-     * @param parameters
+     * @param parameters string to be parsed
      * @return List of name/value pairs
      */
     protected List<String> parseParameters(String parameters) {
@@ -552,7 +566,7 @@ public class TCLogParser implements LogParser {
      *            line to be parsed
      * @param delim
      *            delimiter
-     * @return StringTokenizer
+     * @return StringTokenizer constructed with <code>line</code> and <code>delim</code>
      */
     public StringTokenizer tokenize(String line, String delim) {
         return new StringTokenizer(line, delim);

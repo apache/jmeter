@@ -257,7 +257,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * Record the changes in the node as the undo step
      *
-     * @param tme
+     * @param tme {@link TreeModelEvent} with event details
      */
     @Override
     public void treeNodesChanged(TreeModelEvent tme) {
@@ -270,7 +270,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * Record adding nodes as the undo step
      *
-     * @param tme
+     * @param tme {@link TreeModelEvent} with event details
      */
     @Override
     public void treeNodesInserted(TreeModelEvent tme) {
@@ -283,7 +283,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * Record deleting nodes as the undo step
      *
-     * @param tme
+     * @param tme {@link TreeModelEvent} with event details
      */
     @Override
     public void treeNodesRemoved(TreeModelEvent tme) {
@@ -295,7 +295,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * Record some other change
      *
-     * @param tme
+     * @param tme {@link TreeModelEvent} with event details
      */
     @Override
     public void treeStructureChanged(TreeModelEvent tme) {
@@ -352,7 +352,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     
     /**
      * Register HistoryListener 
-     * @param listener
+     * @param listener to add to our listeners
      */
     public void registerHistoryListener(HistoryListener listener) {
         listeners.add(listener);
