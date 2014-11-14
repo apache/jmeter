@@ -643,8 +643,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     
     /**
      * Add to result the values of propertyNames
-     * @param result List<String> values of propertyNames
-     * @param propertyNames Set<String> properties to extract
+     * @param result List of values of propertyNames
+     * @param propertyNames Set of names of properties to extract
      */
     protected final void addPropertiesValues(List<String> result, Set<String> propertyNames) {
         PropertyIterator iterator = propertyIterator();

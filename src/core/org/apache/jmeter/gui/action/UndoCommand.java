@@ -55,7 +55,7 @@ public class UndoCommand implements Command {
     }
 
     /**
-     * @return Set<String>
+     * @return Set of all action names
      */
     @Override
     public Set<String> getActionNames() {
@@ -67,6 +67,7 @@ public class UndoCommand implements Command {
      * and clone tree for saving
      *
      * @param tree to be converted and cloned
+     * @return converted and cloned tree
      */
     public static HashTree convertAndCloneSubTree(HashTree tree) {
         Save executor = new Save();

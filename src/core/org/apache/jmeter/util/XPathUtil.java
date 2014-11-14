@@ -300,7 +300,7 @@ public class XPathUtil {
      * Put in matchStrings results of evaluation
      * @param document XML document
      * @param xPathQuery XPath Query
-     * @param matchStrings List<String> that will be filled
+     * @param matchStrings List of strings that will be filled
      * @param fragment return fragment
      * @throws TransformerException
      */

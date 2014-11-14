@@ -766,7 +766,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      *
-     * @return List<IStoppable> Copy of IStoppable
+     * @return copy of list of {@link Stoppable}s
      */
     public List<Stoppable> getStoppables() {
         ArrayList<Stoppable> list = new ArrayList<Stoppable>();
