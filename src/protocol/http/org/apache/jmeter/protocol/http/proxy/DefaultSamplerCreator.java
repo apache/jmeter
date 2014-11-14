@@ -114,8 +114,8 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * Compute sampler informations from Request Header
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
-     * @param pageEncodings Map<String, String>
-     * @param formEncodings Map<String, String>
+     * @param pageEncodings Map of page encodings
+     * @param formEncodings Map of form encodings
      * @throws Exception
      */
     protected void computeFromHeader(HTTPSamplerBase sampler,
@@ -311,9 +311,10 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * Compute content encoding
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
-     * @param pageEncodings Map<String, String>
-     * @param formEncodings Map<String, String>
-     * @throws MalformedURLException
+     * @param pageEncodings Map of page encodings
+     * @param formEncodings Map of form encodings
+     * @throws MalformedURLException when no {@link URL} could be built from
+     *         <code>sampler</code> and <code>request</code>
      */
     protected void computeContentEncoding(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
@@ -342,8 +343,8 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * Computes content encoding from request and if not found uses pageEncoding 
      * and formEncoding to see if URL was previously computed with a content type
      * @param request {@link HttpRequestHdr}
-     * @param pageEncodings Map<String, String>
-     * @param formEncodings Map<String, String>
+     * @param pageEncodings Map of page encodings
+     * @param formEncodings Map of form encodings
      * @return String content encoding
      */
     protected String computeContentEncoding(HttpRequestHdr request,

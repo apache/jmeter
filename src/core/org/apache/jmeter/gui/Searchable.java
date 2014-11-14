@@ -25,7 +25,7 @@ import java.util.List;
  */
 public interface Searchable {
     /**
-     * @return List<String> of searchable tokens
+     * @return List of searchable tokens
      * @throws Exception
      */
     List<String> getSearchableTokens()

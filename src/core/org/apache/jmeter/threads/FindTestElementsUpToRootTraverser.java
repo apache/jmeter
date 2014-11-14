@@ -86,7 +86,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
 
     /**
      * Returns all controllers that where in Tree down to nodeToFind in reverse order (from leaf to root)
-     * @return List<Controller>
+     * @return List of {@link Controller}
      */
     public List<Controller> getControllersToRoot() {
         List<Controller> result = new ArrayList<Controller>(stack.size());

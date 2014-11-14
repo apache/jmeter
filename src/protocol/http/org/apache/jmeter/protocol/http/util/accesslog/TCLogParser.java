@@ -534,7 +534,7 @@ public class TCLogParser implements LogParser {
      * purpose of this utility.
      *
      * @param parameters
-     * @return List<String>
+     * @return List of name/value pairs
      */
     protected List<String> parseParameters(String parameters) {
         List<String> parsedParams = new ArrayList<String>();

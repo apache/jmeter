@@ -27,7 +27,7 @@ public interface Searcher {
 
     /**
      * Implements the search
-     * @param textTokens List<String> content to be searched
+     * @param textTokens List of content to be searched
      * @return true if search on textTokens is successful
      */
     boolean search(List<String> textTokens);
