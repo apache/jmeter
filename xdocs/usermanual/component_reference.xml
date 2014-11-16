@@ -2939,7 +2939,7 @@ This allows identical labels from different thread groups to be collated separat
 <li>Median - The <a href="glossary.html#Median">median</a> is the time in the middle of a set of results.
 50% of the samples took no more than this time; the remainder took at least as long.</li>
 <li>90% Line - 90% of the samples took no more than this time.
-The remaining samples at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
+The remaining samples took at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
 <li>Min - The shortest time for the samples with the same label</li>
 <li>Max - The longest time for the samples with the same label</li>
 <li>Error % - Percent of requests with errors</li>
