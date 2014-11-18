@@ -52,16 +52,26 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
     private final Color background;
 
     /**
-     * Constructor for the FilePanel object.
+     * Constructor for the FilePanel object. No {@link ChangeListener} is registered
+     * and an empty title is assumed. 
      */
     public DirectoryPanel() {
         this("", null); // $NON-NLS-1$
     }
 
+    /**
+     * Constructor for the FilePanel object. No {@link ChangeListener} is registered.
+     * @param title
+     */
     public DirectoryPanel(String title) {
         this(title, null);
     }
 
+    /**
+     * Constructor for the FilePanel object. No {@link ChangeListener} is registered.
+     * @param title The title of the panel
+     * @param bk The {@link Color} of the background of this panel
+     */
     public DirectoryPanel(String title, Color bk) {
         this.title = title;
         this.background = bk;
@@ -69,12 +79,18 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
     }
     /**
      * Constructor for the FilePanel object.
+     * @param l The {@link ChangeListener} to which we report events
+     * @param title The title of the panel
      */
     public DirectoryPanel(ChangeListener l, String title) {
         this(title);
         listeners.add(l);
     }
 
+    /**
+     * Add a {@link ChangeListener} to this panel
+     * @param l The {@link ChangeListener} to add
+     */
     public void addChangeListener(ChangeListener l) {
         listeners.add(l);
     }
@@ -94,7 +110,7 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
     /**
      * If the gui needs to enable/disable the FilePanel, call the method.
      *
-     * @param enable
+     * @param enable specifies whether the FilePanel should be enabled or disabled
      */
     public void enableFile(boolean enable) {
         browse.setEnabled(enable);

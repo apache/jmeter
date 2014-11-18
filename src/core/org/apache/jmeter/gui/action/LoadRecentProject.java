@@ -244,6 +244,8 @@ public class LoadRecentProject extends Load {
 
     /**
      * Get the full path to the recent file where index 0 is the most recent
+     * @param index the index of the recent file
+     * @return full path to the recent file at <code>index</code>
      */
     public static String getRecentFile(int index) {
         return prefs.get(USER_PREFS_KEY + index, null);
