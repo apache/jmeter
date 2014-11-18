@@ -68,10 +68,11 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
     /**
-     * @param owner
-     * @param title
-     * @param modal
-     * @throws java.awt.HeadlessException
+     * @param owner The {@link Frame} from which the dialog is displayed
+     * @param title The string to be used as a title of this dialog
+     * @param modal specifies whether the dialog should be modal
+     * @param s The details, which sample attributes are to be saved
+     * @throws java.awt.HeadlessException - when run headless
      */
     public SavePropertyDialog(Frame owner, String title, boolean modal, SampleSaveConfiguration s)
     // throws HeadlessException

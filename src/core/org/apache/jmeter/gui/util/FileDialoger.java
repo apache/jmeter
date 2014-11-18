@@ -44,11 +44,35 @@ public final class FileDialoger {
     private FileDialoger() {
     }
 
-
+    /**
+     * Prompts the user to choose a file from their filesystems for our own
+     * devious uses. This method maintains the last directory the user visited
+     * before dismissing the dialog. This does NOT imply they actually chose a
+     * file from that directory, only that they closed the dialog there. It is
+     * the caller's responsibility to check to see if the selected file is
+     * non-null.
+     *
+     * @return the JFileChooser that interacted with the user, after they are
+     *         finished using it - null if no file was chosen
+     */
     public static JFileChooser promptToOpenFile() {
         return promptToOpenFile((String)null);
     }
 
+    /**
+     * Prompts the user to choose a file from their filesystems for our own
+     * devious uses. This method maintains the last directory the user visited
+     * before dismissing the dialog. This does NOT imply they actually chose a
+     * file from that directory, only that they closed the dialog there. It is
+     * the caller's responsibility to check to see if the selected file is
+     * non-null.
+     * @param existingFileName The name of a file with path. If the filename points
+     *             to an existing file, the directory in which it lies, will be used
+     *             as the starting point for the returned JFileChooser.
+     *
+     * @return the JFileChooser that interacted with the user, after they are
+     *         finished using it - null if no file was chosen
+     */
     public static JFileChooser promptToOpenFile(String existingFileName) {
         return promptToOpenFile(new String[0], existingFileName);
     }
@@ -60,6 +84,8 @@ public final class FileDialoger {
      * file from that directory, only that they closed the dialog there. It is
      * the caller's responsibility to check to see if the selected file is
      * non-null.
+     * @param exts The list of allowed file extensions. If empty, any
+     *             file extension is allowed
      *
      * @return the JFileChooser that interacted with the user, after they are
      *         finished using it - null if no file was chosen
@@ -75,6 +101,11 @@ public final class FileDialoger {
      * file from that directory, only that they closed the dialog there. It is
      * the caller's responsibility to check to see if the selected file is
      * non-null.
+     * @param exts The list of allowed file extensions. If empty, any
+     *             file extension is allowed
+     * @param existingFileName The name of a file with path. If the filename points
+     *             to an existing file, the directory in which it lies, will be used
+     *             as the starting point for the returned JFileChooser.
      *
      * @return the JFileChooser that interacted with the user, after they are
      *         finished using it - null if no file was chosen
@@ -128,6 +159,9 @@ public final class FileDialoger {
      * file from that directory, only that they closed the dialog there. It is
      * the caller's responsibility to check to see if the selected file is
      * non-null.
+     * @param filename  The name of a file with path. If the filename points
+     *             to an existing file, the directory in which it lies, will be used
+     *             as the starting point for the returned JFileChooser.
      *
      * @return the JFileChooser that interacted with the user, after they are
      *         finished using it - null if no file was chosen
@@ -181,7 +215,7 @@ public final class FileDialoger {
     
     /**
      * 
-     * @return last JFC Directory
+     * @return The last directory visited by the user while choosing Files
      */
     public static String getLastJFCDirectory() {
         return lastJFCDirectory;
@@ -189,7 +223,7 @@ public final class FileDialoger {
     
     /**
      * 
-     * @param lastJFCDirectory
+     * @param lastJFCDirectory The last directory visited by the user while choosing Files
      */
     public static void setLastJFCDirectory(String lastJFCDirectory) {
         FileDialoger.lastJFCDirectory = lastJFCDirectory;
