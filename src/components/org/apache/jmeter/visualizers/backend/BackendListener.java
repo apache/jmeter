@@ -30,7 +30,6 @@ import java.util.concurrent.locks.LockSupport;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.util.NoThreadClone;
-import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -95,7 +94,7 @@ public class BackendListener extends AbstractTestElement
     private transient BackendListenerClient backendListenerClient = null;
 
     /**
-     * The JavaSamplerContext instance used by this sampler to hold information
+     * The BackendListenerContext instance used by this sampler to hold information
      * related to the test run, such as the parameters specified for the sampler
      * client.
      */
