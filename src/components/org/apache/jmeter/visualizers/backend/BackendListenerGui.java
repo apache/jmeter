@@ -46,7 +46,7 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
 /**
- * The <code>BackendListenerGui</code> class provides the user interface for the
+ * The {@link BackendListenerGui} class provides the user interface for the
  * {@link BackendListener} object.
  * @since 2.13
  */
@@ -158,8 +158,8 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      *            the ActionEvent to be handled
      */
     @Override
-    public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == classnameCombo) {
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource() == classnameCombo) {
             String className = ((String) classnameCombo.getSelectedItem()).trim();
             try {
                 BackendListenerClient client = (BackendListenerClient) Class.forName(className, true,
@@ -239,7 +239,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      * Check combo contains className
      * @param model ComboBoxModel
      * @param className String class name
-     * @return boolean
+     * @return boolean true if model contains className
      */
     private static final boolean checkContainsClassName(ComboBoxModel model, String className) {
         int size = model.getSize();
