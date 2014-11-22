@@ -75,7 +75,7 @@ public interface BackendListenerClient {
 
     /**
      * Perform a single sample for each iteration. This method returns a
-     * <code>SampleResult</code> object. <code>SampleResult</code> has many
+     * {@link SampleResult} object. <code>SampleResult</code> has many
      * fields which can be used. At a minimum, the test should use
      * <code>SampleResult.sampleStart</code> and
      * <code>SampleResult.sampleEnd</code>to set the time that the test
