@@ -136,7 +136,7 @@ public class BackendListenerContext {
             throw new NumberFormatException("No value for parameter named '" + name + "'.");
         }
 
-        return Integer.decode(params.get(name)).intValue();
+        return Integer.parseInt(params.get(name));
     }
 
     /**
@@ -162,7 +162,7 @@ public class BackendListenerContext {
         }
 
         try {
-            return Integer.decode(params.get(name)).intValue();
+            return Integer.parseInt(params.get(name));
         } catch (NumberFormatException e) {
             LOGGER.warn("Value for parameter '" + name + "' not an integer: '" + params.get(name) + "'.  Using default: '"
                     + defaultValue + "'.", e);
@@ -190,7 +190,7 @@ public class BackendListenerContext {
             throw new NumberFormatException("No value for parameter named '" + name + "'.");
         }
 
-        return Long.decode(params.get(name)).longValue();
+        return Long.parseLong(params.get(name));
     }
 
     /**
@@ -223,10 +223,9 @@ public class BackendListenerContext {
     }
 
     /**
-     * 
-     * @param name
-     * @param defaultValue
-     * @return
+     * @param name Parameter name
+     * @param defaultValue Default value used if name is not in params
+     * @return boolean
      */
     public boolean getBooleanParameter(String name, boolean defaultValue) {
         if (params == null || !params.containsKey(name)) {
