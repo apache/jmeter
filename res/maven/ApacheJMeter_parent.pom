@@ -66,7 +66,9 @@ under the License.
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-lang3.version>3.3.2</commons-lang3.version>
       <commons-logging.version>1.2</commons-logging.version>
+      <commons-math3.version>3.3</commons-math3.version>
       <commons-net.version>3.3</commons-net.version>
+      <commons-pool2.version>2.2</commons-pool2.version>
       <dnsjava.version>2.1.6</dnsjava.version>
       <excalibur-datasource.version>2.1</excalibur-datasource.version>
       <excalibur-instrument.version>1.0</excalibur-instrument.version>
@@ -181,9 +183,19 @@ under the License.
         <version>${commons-logging.version}</version>
       </dependency>
       <dependency>
+        <groupId>commons-math3</groupId>
+        <artifactId>commons-math3</artifactId>
+        <version>${commons-math3.version}</version>
+      </dependency>
+      <dependency>
         <groupId>commons-net</groupId>
         <artifactId>commons-net</artifactId>
         <version>${commons-net.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-pool2</groupId>
+        <artifactId>commons-pool2</artifactId>
+        <version>${commons-pool2.version}</version>
       </dependency>
       <dependency>
 	    <groupId>dnsjava</groupId>
