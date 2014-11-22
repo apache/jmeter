@@ -258,6 +258,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      * Sets the doctype setting
      * 
      * @param inDoctype
+     *            The doctype to be set. If <code>doctype</code> is
+     *            <code>null</code> or a blank string, {@link HTMLAssertion#DEFAULT_DOCTYPE} will be
+     *            used
      */
     public void setDoctype(String inDoctype) {
         if ((inDoctype == null) || (inDoctype.trim().equals(""))) {
@@ -268,9 +271,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     }
 
     /**
-     * Sets if errors shoud be tracked only
+     * Sets if errors should be tracked only
      * 
-     * @param inErrorsOnly
+     * @param inErrorsOnly Flag whether only errors should be tracked
      */
     public void setErrorsOnly(boolean inErrorsOnly) {
         setProperty(new BooleanProperty(ERRORS_ONLY_KEY, inErrorsOnly));
@@ -280,6 +283,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      * Sets the threshold on error level
      * 
      * @param inErrorThreshold
+     *            The max number of parse errors which are to be tolerated
+     * @throws IllegalArgumentException
+     *             if <code>inErrorThreshold</code> is less or equals zero
      */
     public void setErrorThreshold(long inErrorThreshold) {
         if (inErrorThreshold < 0L) {
@@ -296,6 +302,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      * Sets the threshold on warning level
      * 
      * @param inWarningThreshold
+     *            The max number of warnings which are to be tolerated
+     * @throws IllegalArgumentException
+     *             if <code>inWarningThreshold</code> is less or equal zero
      */
     public void setWarningThreshold(long inWarningThreshold) {
         if (inWarningThreshold < 0L) {
@@ -368,7 +377,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     /**
      * Sets the name of the tidy output file
      * 
-     * @param inName
+     * @param inName The name of the file tidy will put its output to
      */
     public void setFilename(String inName) {
         setProperty(FILENAME_KEY, inName);
