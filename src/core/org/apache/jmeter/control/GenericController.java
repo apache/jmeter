@@ -207,7 +207,7 @@ public class GenericController extends AbstractTestElement implements Controller
 
     /**
      * If b is true, it means first is reset which means Controller has executed all its children 
-     * @param b
+     * @param b The flag, whether first is reseted
      */
     public void setFirst(boolean b) {
         first = b;

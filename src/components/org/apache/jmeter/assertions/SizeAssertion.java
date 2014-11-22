@@ -109,22 +109,40 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
 
     /**
      * Returns the size in bytes to be asserted.
+     * @return The allowed size
      */
     public String getAllowedSize() {
         return getPropertyAsString(SIZE_KEY);
     }
 
-    /***************************************************************************
-     * set the Operator
-     **************************************************************************/
+    /**
+     Set the operator used for the assertion. Has to be one of
+     <dl>
+     * <dt>EQUAL</dt><dd>1</dd>
+     * <dt>NOTEQUAL</dt><dd>2</dd>
+     * <dt>GREATERTHAN</dt><dd>3</dd>
+     * <dt>LESSTHAN</dt><dd>4</dd>
+     * <dt>GREATERTHANEQUAL</dt><dd>5</dd>
+     * <dt>LESSTHANEQUAL</dt><dd>6</dd>
+     * </dl>
+     * @param operator The operator to be used in the assertion
+     */
     public void setCompOper(int operator) {
         setProperty(new IntegerProperty(OPERATOR_KEY, operator));
 
     }
 
     /**
-     * Returns the operator to be asserted. EQUAL = 1, NOTEQUAL = 2 GREATERTHAN =
-     * 3,LESSTHAN = 4,GREATERTHANEQUAL = 5,LESSTHANEQUAL = 6
+     * Returns the operator to be asserted. 
+     * <dl>
+     * <dt>EQUAL</dt><dd>1</dd>
+     * <dt>NOTEQUAL</dt><dd>2</dd>
+     * <dt>GREATERTHAN</dt><dd>3</dd>
+     * <dt>LESSTHAN</dt><dd>4</dd>
+     * <dt>GREATERTHANEQUAL</dt><dd>5</dd>
+     * <dt>LESSTHANEQUAL</dt><dd>6</dd>
+     * </dl>
+     * @return The operator used for the assertion
      */
 
     public int getCompOper() {
@@ -140,6 +158,10 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
             setProperty(SIZE_KEY, size);
     }
 
+    /**
+     * Set the size that should be used in the assertion
+     * @param size The number of bytes
+     */
     public void setAllowedSize(long size) {
         setProperty(SIZE_KEY, Long.toString(size));
     }
@@ -149,7 +171,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
      * logical comparator set in setLogicalComparator().
      * 
      * Possible values are: equal, not equal, greater than, less than, greater
-     * than eqaul, less than equal, .
+     * than equal, less than equal.
      * 
      */
     private String compareSize(long resultSize) {

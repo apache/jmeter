@@ -88,6 +88,8 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     /**
      * Constructor for the FilePanel object.
+     * @param l The changelistener for this panel
+     * @param title The title of this panel
      */
     public FileListPanel(ChangeListener l, String title) {
         this.title = title;
@@ -130,7 +132,7 @@ public class FileListPanel extends JPanel implements ActionListener {
     /**
      * If the gui needs to enable/disable the FilePanel, call the method.
      *
-     * @param enable
+     * @param enable Flag whether FilePanel should be enabled
      */
     public void enableFile(boolean enable) {
         browse.setEnabled(enable);
@@ -139,7 +141,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     /**
      * Add a single file to the table
-     * @param f
+     * @param f The name of the file to be added
      */
     public void addFilename(String f) {
         tableModel.addRow(f);
