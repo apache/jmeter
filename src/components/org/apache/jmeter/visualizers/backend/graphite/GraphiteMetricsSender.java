@@ -1,0 +1,71 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package org.apache.jmeter.visualizers.backend.graphite;
+
+/**
+ * @since 2.13
+ */
+interface GraphiteMetricsSender {
+    final int SOCKET_CONNECT_TIMEOUT_MS = 1000;
+    final int SOCKET_TIMEOUT = 1000;
+
+
+    String CHARSET_NAME = "UTF-8"; //$NON-NLS-1$
+
+    final class MetricTuple {
+        String name;
+        long timestamp;
+        String value;
+        MetricTuple(String name, long timestamp, String value) {
+            this.name = name;
+            this.timestamp = timestamp;
+            this.value = value;
+        }
+    }
+    /**
+     * Convert the metric to a python tuple of the form:
+     *      (timestamp, (prefix.contextName.metricName, metricValue))
+     * And add it to the list of metrics. 
+     * @param timestamp in Seconds from 1970
+     * @param contextName
+     * @param metricName
+     * @param metricValue
+     */
+    public abstract void addMetric(long timestamp, String contextName,
+            String metricName, String metricValue);
+
+    /**
+     * 
+     * @param graphiteHost Host
+     * @param graphitePort Port
+     * @param prefix Root Data prefix
+     */
+    public void setup(String graphiteHost, int graphitePort, String prefix);
+    
+    /**
+     * Write metrics to Graphite using custom format
+     */
+    public abstract void writeAndSendMetrics();
+
+    /**
+     * Destroy sender
+     */
+    public abstract void destroy();
+
+}
