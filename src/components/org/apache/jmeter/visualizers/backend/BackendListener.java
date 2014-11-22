@@ -226,8 +226,8 @@ public class BackendListener extends AbstractTestElement
             boolean isDebugEnabled = LOGGER.isDebugEnabled();
             List<SampleResult> sampleResults = new ArrayList<SampleResult>(queue.size());
             try {
-                boolean eof = false;
-                while (!eof) {
+                boolean endOfLoop = false;
+                while (!endOfLoop) {
                     if(isDebugEnabled) {
                         LOGGER.debug("Thread:"+Thread.currentThread().getName()+" taking SampleResult from queue:"+queue.size());
                     }
@@ -235,7 +235,7 @@ public class BackendListener extends AbstractTestElement
                     if(isDebugEnabled) {
                         LOGGER.debug("Thread:"+Thread.currentThread().getName()+" took SampleResult:"+e+", isFinal:" + (e==FINAL_EVENT));
                     }
-                    while (!(eof = (e == FINAL_EVENT)) && e != null ) { // try to process as many as possible
+                    while (!(endOfLoop = (e == FINAL_EVENT)) && e != null ) { // try to process as many as possible
                         sampleResults.add(e);
                         if(isDebugEnabled) {
                             LOGGER.debug("Thread:"+Thread.currentThread().getName()+" polling from queue:"+queue.size());
@@ -255,7 +255,7 @@ public class BackendListener extends AbstractTestElement
                         backendListenerClient.handleSampleResults(sampleResults, context);
                         sampleResults.clear();
                     }
-                    if(!eof) {
+                    if(!endOfLoop) {
                         LockSupport.parkNanos(100);
                     }
                 }
