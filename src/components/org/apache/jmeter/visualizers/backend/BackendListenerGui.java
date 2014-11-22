@@ -58,7 +58,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     private static final long serialVersionUID = 4331668988576438604L;
 
     /** Logging */
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     /** A combo box allowing the user to choose a backend class. */
     private JComboBox classnameCombo;
@@ -122,7 +122,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
             possibleClasses.remove(BackendListener.class.getName() + "$ErrorBackendListenerClient");
         } catch (Exception e) {
-            log.debug("Exception getting interfaces.", e);
+            LOGGER.debug("Exception getting interfaces.", e);
         }
 
         JLabel label = new JLabel(JMeterUtils.getResString("backend_listener_classname")); // $NON-NLS-1$
@@ -174,7 +174,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 try {
                     testParams = client.getDefaultParameters();
                 } catch (AbstractMethodError e) {
-                    log.warn("BackendListenerClient doesn't implement "
+                    LOGGER.warn("BackendListenerClient doesn't implement "
                             + "getDefaultParameters.  Default parameters won't "
                             + "be shown.  Please update your client class: " + className);
                 }
@@ -202,7 +202,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
                 argsPanel.configure(newArgs);
             } catch (Exception e) {
-                log.error("Error getting argument list for " + className, e);
+                LOGGER.error("Error getting argument list for " + className, e);
             }
         }
     }
@@ -229,7 +229,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         if(checkContainsClassName(classnameCombo.getModel(), className)) {
             classnameCombo.setSelectedItem(className);
         } else {
-            log.error("Error setting class:'"+className+"' in BackendListener: "+getName()+
+            LOGGER.error("Error setting class:'"+className+"' in BackendListener: "+getName()+
                     ", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties");
         }
         queueSize.setText(Integer.toString(((BackendListener)config).getQueueSize()));
