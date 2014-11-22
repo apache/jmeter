@@ -133,7 +133,7 @@ public class BackendListenerContext {
      */
     public int getIntParameter(String name) throws NumberFormatException {
         if (params == null || !params.containsKey(name)) {
-            throw new NumberFormatException("No value for parameter named '" + name + "'.");
+            throw new IllegalArgumentException("No value for parameter named '" + name + "'.");
         }
 
         return Integer.parseInt(params.get(name));
