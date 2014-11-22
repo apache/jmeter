@@ -70,6 +70,8 @@ public class JMeterTreeModel extends DefaultTreeModel {
     /**
      * Returns a list of tree nodes that hold objects of the given class type.
      * If none are found, an empty list is returned.
+     * @param type The type of nodes, which are to be collected
+     * @return a list of tree nodes of the given <code>type</code>, or an empty list
      */
     public List<JMeterTreeNode> getNodesOfType(Class<?> type) {
         List<JMeterTreeNode> nodeList = new LinkedList<JMeterTreeNode>();
@@ -79,6 +81,8 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
     /**
      * Get the node for a given TestElement object.
+     * @param userObject The object to be found in this tree
+     * @return the node corresponding to the <code>userObject</code>
      */
     public JMeterTreeNode getNodeOf(TestElement userObject) {
         return traverseAndFind(userObject, (JMeterTreeNode) getRoot());
@@ -87,6 +91,20 @@ public class JMeterTreeModel extends DefaultTreeModel {
     /**
      * Adds the sub tree at the given node. Returns a boolean indicating whether
      * the added sub tree was a full test plan.
+     * 
+     * @param subTree
+     *            The {@link HashTree} which is to be inserted into
+     *            <code>current</code>
+     * @param current
+     *            The node in which the <code>subTree</code> is to be inserted.
+     *            Will be overridden, when an instance of {@link TestPlan} or
+     *            {@link WorkBench} is found in the subtree.
+     * @return newly created sub tree now found at <code>current</code>
+     * @throws IllegalUserActionException
+     *             when <code>current</code> is not an instance of
+     *             {@link AbstractConfigGui} and no instance of {@link TestPlan}
+     *             or {@link WorkBench} could be found in the
+     *             <code>subTree</code>
      */
     public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException {
         Iterator<Object> iter = subTree.list().iterator();
@@ -114,6 +132,15 @@ public class JMeterTreeModel extends DefaultTreeModel {
         return getCurrentSubTree(current);
     }
 
+    /**
+     * Add a {@link TestElement} to a {@link JMeterTreeNode}
+     * @param component The {@link TestElement} to be used as data for the newly created note
+     * @param node The {@link JMeterTreeNode} into which the newly created node is to be inserted
+     * @return new {@link JMeterTreeNode} for the given <code>component</code>
+     * @throws IllegalUserActionException
+     *             when the user object for the <code>node</code> is not an instance
+     *             of {@link AbstractConfigGui}
+     */
     public JMeterTreeNode addComponent(TestElement component, JMeterTreeNode node) throws IllegalUserActionException {
         if (node.getUserObject() instanceof AbstractConfigGui) {
             throw new IllegalUserActionException("This node cannot hold sub-elements");
@@ -135,7 +162,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
         // disable the loaded node
         try {
             newNode.setEnabled(component.isEnabled());
-        } catch (Exception e) { // TODO - can this eever happen?
+        } catch (Exception e) { // TODO - can this ever happen?
             newNode.setEnabled(true);
         }
 
@@ -175,6 +202,11 @@ public class JMeterTreeModel extends DefaultTreeModel {
         return null;
     }
 
+    /**
+     * Get the current sub tree for a {@link JMeterTreeNode}
+     * @param node The {@link JMeterTreeNode} from which the sub tree is to be taken 
+     * @return newly copied sub tree
+     */
     public HashTree getCurrentSubTree(JMeterTreeNode node) {
         ListedHashTree hashTree = new ListedHashTree(node);
         Enumeration<JMeterTreeNode> enumNode = node.children();
@@ -185,10 +217,18 @@ public class JMeterTreeModel extends DefaultTreeModel {
         return hashTree;
     }
 
+    /**
+     * Get the {@link TestPlan} from the root of this tree
+     * @return The {@link TestPlan} found at the root of this tree
+     */
     public HashTree getTestPlan() {
         return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
     }
 
+    /**
+     * Get the {@link WorkBench} from the root of this tree
+     * @return The {@link WorkBench} found at the root of this tree
+     */
     public HashTree getWorkBench() {
         return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(1));
     }

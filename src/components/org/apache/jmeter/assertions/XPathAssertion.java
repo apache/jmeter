@@ -156,7 +156,7 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
     /**
      * Set whether to ignore element whitespace
      *
-     * @param whitespace
+     * @param whitespace Flag whether whitespace elements should be ignored
      */
     public void setWhitespace(boolean whitespace) {
         setProperty(new BooleanProperty(WHITESPACE_KEY, whitespace));
@@ -165,7 +165,7 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
     /**
      * Set use validation
      *
-     * @param validate
+     * @param validate Flag whether validation should be used
      */
     public void setValidating(boolean validate) {
         setProperty(new BooleanProperty(VALIDATE_KEY, validate));
@@ -174,7 +174,7 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
     /**
      * Set whether this is namespace aware
      *
-     * @param namespace
+     * @param namespace Flag whether namespace should be used
      */
     public void setNamespace(boolean namespace) {
         setProperty(new BooleanProperty(NAMESPACE_KEY, namespace));
