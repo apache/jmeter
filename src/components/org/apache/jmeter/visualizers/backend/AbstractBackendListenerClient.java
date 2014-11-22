@@ -77,6 +77,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
 
     /**
      * Get a Logger instance which can be used by subclasses to log information.
+     * As this class is designed to be subclassed this is useful.
      *
      * @return a Logger instance which can be used for logging
      */
@@ -94,9 +95,8 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     }
 
     /**
-     * 
-     * @param sampleLabel
-     * @return SamplerMetric
+     * @param sampleLabel Name of sample used as key
+     * @return {@link SamplerMetric}
      */
     protected SamplerMetric getSamplerMetric(String sampleLabel) {
         SamplerMetric samplerMetric = metricsPerSampler.get(sampleLabel);
@@ -111,8 +111,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     }
     
     /**
-     * 
-     * @return Map<String, SamplerMetric>
+     * @return Map where key is SampleLabel and {@link SamplerMetric} is the metrics of this Sample
      */
     protected Map<String, SamplerMetric> getMetricsPerSampler() {
         return metricsPerSampler;
