@@ -359,7 +359,7 @@ public class BackendListener extends AbstractTestElement
         /**
          * Return SampleResult with data on error.
          *
-         * @see BackendListenerClient#runTest(JavaSamplerContext)
+         * @see BackendListenerClient#handleSampleResults(List, BackendListenerContext)
          */
         @Override
         public void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context) {
