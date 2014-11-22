@@ -3380,6 +3380,19 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
  </properties>
 </component>
 
+<component name="Backend Listener" index="&sect-num;.3.21"  width="777" height="266" screenshot="backend_listener.png">
+<description>
+The backend listener is an Asynchronous listener that enables you to plug custom implementations of <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a>.
+By default, a Graphite implementation is provided.
+</description>
+ <properties>
+ <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.</property>
+ <property name="Backend Listener implementation" required="Yes">Class of the BackendListenerClient implementation.</property>
+ <property name="Async Queue size" required="Yes">Size of the queue that holds the SampleResults while they are processed asynchronously.</property>
+ <property name="Parameters" required="Yes">Parameters of the BackendListenerClient implementation.</property>
+ </properties>
+</component>
+
 <a href="#">^</a>
 
 </section>

@@ -42,7 +42,7 @@ import org.apache.log.Logger;
  * sample of an entry.
  *
  */
-public class SampleResult implements Serializable {
+public class SampleResult implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 241L;
 
@@ -1348,5 +1348,14 @@ public class SampleResult implements Serializable {
      */
     public void cleanAfterSample() {
         this.responseDataAsString = null;
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalStateException("This should not happen");
+        }
     }
 }
