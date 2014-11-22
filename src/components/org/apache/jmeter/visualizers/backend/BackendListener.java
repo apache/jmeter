@@ -96,7 +96,7 @@ public class BackendListener extends AbstractTestElement
     private AtomicLong queueWaitTime; // how long we had to wait (nanoSeconds)
 
     // Create unique object as marker for end of queue
-    private transient static final SampleResult FINAL_EVENT = new SampleResult();
+    private transient static final SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
 
     /**
      * Create a BackendListener.
@@ -231,30 +231,26 @@ public class BackendListener extends AbstractTestElement
                     if(isDebugEnabled) {
                         LOGGER.debug("Thread:"+Thread.currentThread().getName()+" taking SampleResult from queue:"+queue.size());
                     }
-                    SampleResult e = queue.take();
+                    SampleResult sampleResult = queue.take();
                     if(isDebugEnabled) {
-                        LOGGER.debug("Thread:"+Thread.currentThread().getName()+" took SampleResult:"+e+", isFinal:" + (e==FINAL_EVENT));
+                        LOGGER.debug("Thread:"+Thread.currentThread().getName()+" took SampleResult:"+sampleResult+", isFinal:" + (sampleResult==FINAL_SAMPLE_RESULT));
                     }
-                    while (!(endOfLoop = (e == FINAL_EVENT)) && e != null ) { // try to process as many as possible
-                        sampleResults.add(e);
+                    while (!(endOfLoop = (sampleResult == FINAL_SAMPLE_RESULT)) && sampleResult != null ) { // try to process as many as possible
+                        sampleResults.add(sampleResult);
                         if(isDebugEnabled) {
                             LOGGER.debug("Thread:"+Thread.currentThread().getName()+" polling from queue:"+queue.size());
                         }
-                        e = queue.poll(); // returns null if nothing on queue currently
+                        sampleResult = queue.poll(); // returns null if nothing on queue currently
                         if(isDebugEnabled) {
-                            LOGGER.debug("Thread:"+Thread.currentThread().getName()+" took from queue:"+e+", isFinal:" + (e==FINAL_EVENT));
+                            LOGGER.debug("Thread:"+Thread.currentThread().getName()+" took from queue:"+sampleResult+", isFinal:" + (sampleResult==FINAL_SAMPLE_RESULT));
                         }
                     }
                     if(isDebugEnabled) {
                         LOGGER.debug("Thread:"+Thread.currentThread().getName()+
-                                " exiting with FINAL EVENT:"+(e == FINAL_EVENT)
-                                +", null:" + (e==null));
+                                " exiting with FINAL EVENT:"+(sampleResult == FINAL_SAMPLE_RESULT)
+                                +", null:" + (sampleResult==null));
                     }
-                    int size = sampleResults.size();
-                    if (size > 0) {
-                        backendListenerClient.handleSampleResults(sampleResults, context);
-                        sampleResults.clear();
-                    }
+                    sendToListener(backendListenerClient, context, sampleResults);
                     if(!endOfLoop) {
                         LockSupport.parkNanos(100);
                     }
@@ -263,18 +259,29 @@ public class BackendListener extends AbstractTestElement
                 // NOOP
             }
             // We may have been interrupted
-            int size = sampleResults.size();
-            if (size > 0) {
-                backendListenerClient.handleSampleResults(sampleResults, context);
-                sampleResults.clear();
-            }
+            sendToListener(backendListenerClient, context, sampleResults);
             LOGGER.info("Worker ended");
         }
     }
     
 
     /**
-     * Returns reference to <code>BackendListenerClient</code>.
+     * Send sampleResults to {@link BackendListenerClient}
+     * @param backendListenerClient 
+     * @param context {@link BackendListenerContext}
+     * @param sampleResults List of {@link SampleResult}
+     */
+    static final void sendToListener(final BackendListenerClient backendListenerClient, 
+            final BackendListenerContext context, 
+            final List<SampleResult> sampleResults) {
+        if (sampleResults.size() > 0) {
+            backendListenerClient.handleSampleResults(sampleResults, context);
+            sampleResults.clear();
+        }
+    }
+
+    /**
+     * Returns reference to {@link BackendListener}
      *
      *
      * @return BackendListenerClient reference.
@@ -283,14 +290,12 @@ public class BackendListener extends AbstractTestElement
         if (clientClass == null) { // failed to initialise the class
             return new ErrorBackendListenerClient();
         }
-        BackendListenerClient client;
         try {
-            client = (BackendListenerClient) clientClass.newInstance();
+            return (BackendListenerClient) clientClass.newInstance();
         } catch (Exception e) {
             LOGGER.error("Exception creating: " + clientClass, e);
-            client = new ErrorBackendListenerClient();
+            return new ErrorBackendListenerClient();
         }
-        return client;
     }
 
     /**
@@ -303,7 +308,7 @@ public class BackendListener extends AbstractTestElement
     @Override
     public void testEnded() {
         try {
-            queue.put(FINAL_EVENT);
+            queue.put(FINAL_SAMPLE_RESULT);
         } catch (Exception ex) {
             LOGGER.warn("testEnded() with exception:"+ex.getMessage(), ex);
         }
