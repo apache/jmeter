@@ -52,20 +52,20 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractBackendListenerClient implements BackendListenerClient {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
     
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<String, SamplerMetric>();
 
-    /* Implements BackendListenerClient.setupTest(JavaSamplerContext) */
+    /* Implements BackendListenerClient.setupTest(BackendListenerContext) */
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
-        log.debug(getClass().getName() + ": setupTest");
+        LOGGER.debug(getClass().getName() + ": setupTest");
     }
 
-    /* Implements BackendListenerClient.teardownTest(JavaSamplerContext) */
+    /* Implements BackendListenerClient.teardownTest(BackendListenerContext) */
     @Override
     public void teardownTest(BackendListenerContext context) throws Exception {
-        log.debug(getClass().getName() + ": teardownTest");
+        LOGGER.debug(getClass().getName() + ": teardownTest");
         metricsPerSampler.clear();
     }
 
@@ -81,7 +81,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
      * @return a Logger instance which can be used for logging
      */
     protected Logger getLogger() {
-        return log;
+        return LOGGER;
     }
 
     /* (non-Javadoc)
