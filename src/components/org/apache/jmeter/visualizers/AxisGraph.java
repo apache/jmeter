@@ -101,15 +101,15 @@ public class AxisGraph extends JPanel {
     }
 
     /**
-     * @param layout
+     * @param layout The {@link LayoutManager} to use
      */
     public AxisGraph(LayoutManager layout) {
         super(layout);
     }
 
     /**
-     * @param layout
-     * @param isDoubleBuffered
+     * @param layout The {@link LayoutManager} to use
+     * @param isDoubleBuffered Flag whether double buffering should be used
      */
     public AxisGraph(LayoutManager layout, boolean isDoubleBuffered) {
         super(layout, isDoubleBuffered);
@@ -117,7 +117,7 @@ public class AxisGraph extends JPanel {
 
     /**
      * Expects null array when no data  not empty array
-     * @param data
+     * @param data The data to be drawn
      */
     public void setData(double[][] data) {
         this.data = data;
@@ -141,7 +141,7 @@ public class AxisGraph extends JPanel {
 
     /**
      * Expects null array when no labels not empty array
-     * @param labels
+     * @param labels The labels for the x axis
      */
     public void setXAxisLabels(String[] labels) {
         this.xAxisLabels = labels;

@@ -82,15 +82,15 @@ public class LineGraph extends JPanel {
     }
 
     /**
-     * @param layout
+     * @param layout The {@link LayoutManager} to be used
      */
     public LineGraph(LayoutManager layout) {
         super(layout);
     }
 
     /**
-     * @param layout
-     * @param isDoubleBuffered
+     * @param layout The {@link LayoutManager} to be used
+     * @param isDoubleBuffered Flag whether double buffering should be used
      */
     public LineGraph(LayoutManager layout, boolean isDoubleBuffered) {
         super(layout, isDoubleBuffered);
@@ -183,9 +183,11 @@ public class LineGraph extends JPanel {
     }
 
     /**
-     * Since we only have 4 shapes, the method will start with the
-     * first shape and keep cycling through the shapes in order.
+     * Since we only have 4 shapes, the method will start with the first shape
+     * and keep cycling through the shapes in order.
+     * 
      * @param count
+     *            The number of shapes to be created
      * @return the first n shapes
      */
     public Shape[] createShapes(int count) {
@@ -209,9 +211,11 @@ public class LineGraph extends JPanel {
     }
 
     /**
-     *
+     * Create a given number of {@link Stroke}s
+     * 
      * @param count
-     * @return the first count strokes
+     *            The number of strokes to be created
+     * @return the first <code>count</code> strokes
      */
     public Stroke[] createStrokes(int count) {
         Stroke[] str = new Stroke[count];
@@ -231,9 +235,11 @@ public class LineGraph extends JPanel {
 
     /**
      * return an array of Paint with different colors. The current
-     * implementation will cycle through 12 colors if a line graph
-     * has more than 12 entries
+     * implementation will cycle through 12 colors if a line graph has more than
+     * 12 entries
+     * 
      * @param count
+     *            The number of {@link Paint}s to be created
      * @return an array of Paint with different colors
      */
     public Paint[] createPaint(int count) {
