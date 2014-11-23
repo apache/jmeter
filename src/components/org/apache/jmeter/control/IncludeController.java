@@ -84,7 +84,7 @@ public class IncludeController extends GenericController implements ReplaceableC
     /**
      * In the event an user wants to include an external JMX test plan
      * the GUI would call this.
-     * @param jmxfile
+     * @param jmxfile The path to the JMX test plan to include
      */
     public void setIncludePath(String jmxfile) {
         this.setProperty(INCLUDE_PATH,jmxfile);
