@@ -70,6 +70,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 
     /**
      * Constructor for the Graph object.
+     * @param model The container for samples and statistics
      */
     public Graph(CachingStatCalculator model) {
         this();

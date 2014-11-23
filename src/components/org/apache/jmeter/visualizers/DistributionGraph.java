@@ -60,6 +60,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 
     /**
      * Constructor for the Graph object.
+     * @param model The container for the aggregated sample data
      */
     public DistributionGraph(SamplingStatCalculator model) {
         this();

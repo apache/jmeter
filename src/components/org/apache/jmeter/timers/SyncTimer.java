@@ -74,9 +74,15 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
 
 
         /**
-         * @return int
+         * Wait until all threads called await on this timer
+         * 
+         * @return The arrival index of the current thread
          * @throws InterruptedException
+         *             when interrupted while waiting, or the interrupted status
+         *             is set on entering this method
          * @throws BrokenBarrierException
+         *             if the barrier is reset while waiting or broken on
+         *             entering or while waiting
          * @see java.util.concurrent.CyclicBarrier#await()
          */
         public int await() throws InterruptedException, BrokenBarrierException{
@@ -84,12 +90,21 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         }
         
         /**
+         * Wait until all threads called await on this timer
+         * 
          * @param timeout
+         *            The timeout in <code>timeUnit</code> units
          * @param timeUnit
-         * @return int
+         *            The time unit for the <code>timeout</code>
+         * @return The arrival index of the current thread
          * @throws InterruptedException
+         *             when interrupted while waiting, or the interrupted status
+         *             is set on entering this method
          * @throws BrokenBarrierException
-         * @throws TimeoutException 
+         *             if the barrier is reset while waiting or broken on
+         *             entering or while waiting
+         * @throws TimeoutException
+         *             if the specified time elapses
          * @see java.util.concurrent.CyclicBarrier#await()
          */
         public int await(long timeout, TimeUnit timeUnit) throws InterruptedException, BrokenBarrierException, TimeoutException {
