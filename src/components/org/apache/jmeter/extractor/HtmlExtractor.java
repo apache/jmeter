@@ -43,6 +43,10 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
 
     public static final String EXTRACTOR_JODD = "JODD"; //$NON-NLS-1$
 
+    /**
+     * Get the possible extractor implementations
+     * @return Array containing the names of the possible extractors.
+     */
     public static String[] getImplementations(){
         return new String[]{EXTRACTOR_JSOUP,EXTRACTOR_JODD};
     }
@@ -232,10 +236,21 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     }
     
 
+    /**
+     * Set the extractor. Has to be one of the list that can be obtained by
+     * {@link HtmlExtractor#getImplementations()}
+     * 
+     * @param attribute
+     *            The name of the extractor to be used
+     */
     public void setExtractor(String attribute) {
         setProperty(EXTRACTOR_IMPL, attribute);
     }
 
+    /**
+     * Get the name of the currently configured extractor
+     * @return The name of the extractor currently used
+     */
     public String getExtractor() {
         return getPropertyAsString(EXTRACTOR_IMPL); // $NON-NLS-1$
     }
@@ -267,9 +282,9 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
 
     /**
      * Set which Match to use. This can be any positive number, indicating the
-     * exact match to use, or 0, which is interpreted as meaning random.
+     * exact match to use, or <code>0</code>, which is interpreted as meaning random.
      *
-     * @param matchNumber
+     * @param matchNumber The number of the match to be used
      */
     public void setMatchNumber(int matchNumber) {
         setProperty(new IntegerProperty(MATCH_NUMBER, matchNumber));
@@ -290,12 +305,16 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     /**
      * Sets the value of the variable if no matches are found
      *
-     * @param defaultValue
+     * @param defaultValue The default value for the variable
      */
     public void setDefaultValue(String defaultValue) {
         setProperty(DEFAULT, defaultValue);
     }
 
+    /**
+     * Get the default value for the variable if no matches are found
+     * @return The default value for the variable
+     */
     public String getDefaultValue() {
         return getPropertyAsString(DEFAULT);
     }

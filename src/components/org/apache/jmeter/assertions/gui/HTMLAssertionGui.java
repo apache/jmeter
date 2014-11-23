@@ -149,6 +149,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
     /**
      * Implements JMeterGUIComponent.clearGui
+     * {@inheritDoc}
      */
     @Override
     public void clearGui() {
@@ -166,8 +167,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
     /**
      * Configures the associated test element.
-     *
-     * @param inElement
+     * {@inheritDoc}
      */
     @Override
     public void configure(TestElement inElement) {
@@ -265,7 +265,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     /**
      * This method is called if one of the threshold field looses the focus
      *
-     * @param inEvent
+     * @param inEvent The {@link FocusEvent} with detailed information about the focus loss
      */
     public void focusLost(FocusEvent inEvent) {
         log.debug("HTMLAssertionGui.focusLost() called");
@@ -308,6 +308,9 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     }
 
     /**
+     * Method gets called when one of the threshold fields gains focus
+     * 
+     * @param e The {@link FocusEvent} with detailed information about the focus gain
      * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
      */
     public void focusGained(FocusEvent e) {
