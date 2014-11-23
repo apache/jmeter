@@ -34,9 +34,9 @@ public class BarGraph {
     private Color backColor;
 
     /**
-     * @param resString
-     * @param checked
-     * @param backColor
+     * @param resString The label of this component
+     * @param checked Flag whether the corresponding checkbox should be checked
+     * @param backColor The color of the background
      */
     public BarGraph(String resString, boolean checked, Color backColor) {
         super();

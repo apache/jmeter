@@ -296,7 +296,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param smtpHost
      *            the smtp-server used to send the mail.
      * @throws MessagingException
+     *             if the building of the message fails
      * @throws AddressException
+     *             if any of the addresses is wrong
      */
     public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
             throws AddressException, MessagingException {
@@ -321,6 +323,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param user the login used to authenticate
      * @param password the password used to authenticate
      * @param mailAuthType {@link MailAuthType} Security policy
+     * @param debug Flag whether debug messages for the mail session should be generated
      * @throws AddressException If mail address is wrong
      * @throws MessagingException If building MimeMessage fails
      */
