@@ -38,6 +38,10 @@ import org.apache.log.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * Gui component for representing a xpath expression
+ *
+ */
 public class XPathPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 
@@ -74,6 +78,9 @@ public class XPathPanel extends JPanel {
         setDefaultValues();
     }
 
+    /**
+     * Set default values on this component
+     */
     public void setDefaultValues() {
         setXPath("/"); //$NON-NLS-1$
         setNegated(false);
@@ -91,7 +98,7 @@ public class XPathPanel extends JPanel {
     /**
      * Set the string that will be used in the xpath evaluation
      * 
-     * @param xpath
+     * @param xpath The string representing the xpath expression
      */
     public void setXPath(String xpath) {
         this.xpath.setInitialText(xpath);
@@ -109,7 +116,7 @@ public class XPathPanel extends JPanel {
     /**
      * Set this to true, if you want success when the xpath does not match.
      * 
-     * @param negated
+     * @param negated Flag whether xpath match should be negated
      */
     public void setNegated(boolean negated) {
         this.negated.setSelected(negated);
@@ -146,6 +153,12 @@ public class XPathPanel extends JPanel {
         return checkXPath;
     }
 
+    /**
+     * Returns the current {@link JSyntaxTextArea} for the xpath expression, or
+     * creates a new one, if none is found.
+     * 
+     * @return {@link JSyntaxTextArea} for the xpath expression
+     */
     public JSyntaxTextArea getXPathField() {
         if (xpath == null) {
             xpath = new JSyntaxTextArea(20, 80);

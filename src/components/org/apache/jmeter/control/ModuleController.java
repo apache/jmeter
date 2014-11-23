@@ -128,8 +128,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
     }
 
     /**
-     * Compute the replacement tree.
-     * @param context
+     * {@inheritDoc}
      */
     @Override
     public void resolveReplacementSubTree(JMeterTreeNode context) {
@@ -159,8 +158,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
     }
 
     /**
-     * Copies the controller's subelements into the execution tree
-     *
+     * {@inheritDoc}
      */
     @Override
     public HashTree getReplacementSubTree() {

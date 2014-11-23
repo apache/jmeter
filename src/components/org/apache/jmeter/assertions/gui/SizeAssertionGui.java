@@ -63,6 +63,9 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
 
     private int execState; // store the operator
 
+    /**
+     * Simple Constructor which initializes the gui component
+     */
     public SizeAssertionGui() {
         init();
     }
@@ -150,7 +153,18 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
     }
 
     /**
-     * Set the state of the radio Button
+     * Set the state of the radio Button.
+     * <p>
+     * Allowed states are
+     * <ul>
+     * <li>{@link SizeAssertion#EQUAL}</li>
+     * <li>{@link SizeAssertion#NOTEQUAL}</li>
+     * <li>{@link SizeAssertion#GREATERTHAN}</li>
+     * <li>{@link SizeAssertion#LESSTHAN}</li>
+     * <li>{@link SizeAssertion#GREATERTHANEQUAL}</li>
+     * <li>{@link SizeAssertion#LESSTHANEQUAL}</li>
+     * </ul>
+     * @param state One of the allowed states
      */
     public void setState(int state) {
         if (state == SizeAssertion.EQUAL) {
@@ -176,6 +190,17 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
 
     /**
      * Get the state of the radio Button
+     * <p>
+     * Possible states are
+     * <ul>
+     * <li>{@link SizeAssertion#EQUAL}</li>
+     * <li>{@link SizeAssertion#NOTEQUAL}</li>
+     * <li>{@link SizeAssertion#GREATERTHAN}</li>
+     * <li>{@link SizeAssertion#LESSTHAN}</li>
+     * <li>{@link SizeAssertion#GREATERTHANEQUAL}</li>
+     * <li>{@link SizeAssertion#LESSTHANEQUAL}</li>
+     * </ul>
+     * @return The current state of the radio Button
      */
     public int getState() {
         return execState;

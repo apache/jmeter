@@ -83,6 +83,7 @@ public class CriticalSectionController extends GenericController implements
 
     /**
      * constructor
+     * @param name The name of this controller
      */
     public CriticalSectionController(String name) {
         super();
@@ -91,6 +92,7 @@ public class CriticalSectionController extends GenericController implements
 
     /**
      * Condition Accessor - this is gonna be any string value
+     * @param name The name of the lock for this controller
      */
     public void setLockName(String name) {
         setProperty(new StringProperty(LOCK_NAME, name));

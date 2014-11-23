@@ -374,27 +374,46 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return matches.get(entry - 1);
     }
 
+    /**
+     * Set the regex to be used
+     * @param regex The string representation of the regex
+     */
     public void setRegex(String regex) {
         setProperty(REGEX, regex);
     }
 
+    /**
+     * Get the regex which is to be used
+     * @return string representing the regex
+     */
     public String getRegex() {
         return getPropertyAsString(REGEX);
     }
 
+    /**
+     * Set the prefix name of the variable to be used to store the regex matches
+     * @param refName prefix of the variables to be used
+     */
     public void setRefName(String refName) {
         setProperty(REFNAME, refName);
     }
 
+    /**
+     * Get the prefix name of the variable to be used to store the regex matches
+     * @return The prefix of the variables to be used
+     */
     public String getRefName() {
         return getPropertyAsString(REFNAME);
     }
 
     /**
      * Set which Match to use. This can be any positive number, indicating the
-     * exact match to use, or 0, which is interpreted as meaning random.
+     * exact match to use, or <code>0</code>, which is interpreted as meaning
+     * random.
      *
      * @param matchNumber
+     *            The number of the match to be used, or <code>0</code> if a
+     *            random match should be used.
      */
     public void setMatchNumber(int matchNumber) {
         setProperty(new IntegerProperty(MATCH_NUMBER, matchNumber));
@@ -415,12 +434,18 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     /**
      * Sets the value of the variable if no matches are found
      *
-     * @param defaultValue
+     * @param defaultValue The default value for the variable
      */
     public void setDefaultValue(String defaultValue) {
         setProperty(DEFAULT, defaultValue);
     }
 
+    /**
+     * Get the default value for the variable, which should be used, if no
+     * matches are found
+     * 
+     * @return The default value for the variable
+     */
     public String getDefaultValue() {
         return getPropertyAsString(DEFAULT);
     }
