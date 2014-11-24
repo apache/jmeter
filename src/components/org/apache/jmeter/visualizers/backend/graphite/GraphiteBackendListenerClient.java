@@ -66,7 +66,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private boolean summaryOnly;
     private String rootMetricsPrefix;
     private String samplersList = ""; //$NON-NLS-1$
-    private transient Set<String> samplersToFilter;
+    private Set<String> samplersToFilter;
     
 
     private GraphiteMetricsSender pickleMetricsManager;
