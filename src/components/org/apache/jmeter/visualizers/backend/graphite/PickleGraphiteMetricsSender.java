@@ -121,11 +121,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                         LOG.warn("Exception invalidating socketOutputStream connected to graphite server '"+socketConnectionInfos.getHost()+"':"+socketConnectionInfos.getPort(), e1);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Error writing to Graphite", e);
-                } else {
-                    LOG.warn("Error writing to Graphite:"+e.getMessage());
-                }
+                LOG.error("Error writing to Graphite:"+e.getMessage());
             }
             
             // if there was an error, we might miss some data. for now, drop those on the floor and
