@@ -305,7 +305,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     /**
      * Whether to include timers and pre/post processor time in overall sample.
-     * @param includeTimers
+     * @param includeTimers Flag whether timers and pre/post processor should be included in overall sample
      */
     public void setIncludeTimers(boolean includeTimers) {
         setProperty(INCLUDE_TIMERS, includeTimers, DEFAULT_VALUE_FOR_INCLUDE_TIMERS);

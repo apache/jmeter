@@ -49,6 +49,7 @@ public interface Controller extends TestElement {
     /**
      * Controllers have to notify listeners of when they begin an iteration
      * through their sub-elements.
+     * @param listener The {@link LoopIterationListener} to add
      */
     void addIterationListener(LoopIterationListener listener);
 

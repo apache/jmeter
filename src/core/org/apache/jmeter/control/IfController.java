@@ -33,7 +33,7 @@ import org.mozilla.javascript.Scriptable;
  * This is a Conditional Controller; it will execute the set of statements
  * (samplers/controllers, etc) while the 'condition' is true.
  * <p>
- * In a programming world - this is equivalant of :
+ * In a programming world - this is equivalent of :
  * <pre>
  * if (condition) {
  *          statements ....
@@ -74,6 +74,7 @@ public class IfController extends GenericController implements Serializable {
 
     /**
      * constructor
+     * @param condition The condition for this controller
      */
     public IfController(String condition) {
         super();
@@ -82,6 +83,7 @@ public class IfController extends GenericController implements Serializable {
 
     /**
      * Condition Accessor - this is gonna be like <code>${count} &lt; 10</code>
+     * @param condition The condition for this controller
      */
     public void setCondition(String condition) {
         setProperty(new StringProperty(CONDITION, condition));
@@ -89,6 +91,7 @@ public class IfController extends GenericController implements Serializable {
 
     /**
      * Condition Accessor - this is gonna be like <code>${count} &lt; 10</code>
+     * @return the condition associated with this controller
      */
     public String getCondition() {
         return getPropertyAsString(CONDITION);
