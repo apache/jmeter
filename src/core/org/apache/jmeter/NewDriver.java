@@ -185,9 +185,11 @@ public final class NewDriver {
     }
 
     /**
-     * Add a URL to the loader classpath only; does not update the system classpath.
+     * Add a URL to the loader classpath only; does not update the system
+     * classpath.
      *
      * @param url
+     *            The {@link URL} to add to the classpath
      */
     public static void addURL(URL url) {
         loader.addURL(url);
@@ -196,8 +198,11 @@ public final class NewDriver {
     /**
      * Add a directory or jar to the loader and system classpaths.
      *
-     * @param path to add to the loader and system classpath
+     * @param path
+     *            to add to the loader and system classpath
      * @throws MalformedURLException
+     *             if <code>path</code> can not be transformed to a valid
+     *             {@link URL}
      */
     public static void addPath(String path) throws MalformedURLException {
         File file = new File(path);

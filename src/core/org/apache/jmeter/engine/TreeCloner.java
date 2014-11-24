@@ -56,8 +56,7 @@ public class TreeCloner implements HashTreeTraverser {
     }
 
     /**
-     * @param node
-     * @param subTree {@link HashTree}
+     * {@inheritDoc}
      */
     @Override
     public final void addNode(Object node, HashTree subTree) {

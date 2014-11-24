@@ -270,6 +270,7 @@ public class JMeter implements JMeterPlugin {
      * startup JMeter.
      * 
      * Called reflectively by {@link NewDriver#main(String[])}
+     * @param args The arguments for JMeter
      */
     public void start(String[] args) {
 
@@ -844,7 +845,7 @@ public class JMeter implements JMeterPlugin {
     /**
      * Refactored from AbstractAction.java
      *
-     * @param tree
+     * @param tree The {@link HashTree} to convert
      */
     public static void convertSubTree(HashTree tree) {
         LinkedList<Object> copyList = new LinkedList<Object>(tree.list());
