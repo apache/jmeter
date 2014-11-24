@@ -105,11 +105,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                                 socketConnectionInfos.getHost()+"':"+socketConnectionInfos.getPort(), e1);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Error writing to Graphite", e);
-                } else {
-                    LOG.warn("Error writing to Graphite:"+e.getMessage());
-                }
+                LOG.error("Error writing to Graphite:"+e.getMessage());
             }
             // We drop metrics in all cases
             metrics.clear();
