@@ -153,7 +153,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         summaryOnly = context.getBooleanParameter("summaryOnly", true);
         samplersList = context.getParameter("samplersList", "");
         rootMetricsPrefix = context.getParameter("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
-        Class clazz = Class.forName(graphiteMetricsSenderClass);
+        Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
         this.pickleMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
         pickleMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
         String[] samplers = samplersList.split(",");
