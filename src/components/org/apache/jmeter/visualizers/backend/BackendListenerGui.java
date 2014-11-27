@@ -136,7 +136,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         classNamePanel.add(label);
         classNamePanel.add(classnameCombo);
 
-        queueSize = new JTextField("", 5);
+        queueSize = new JTextField("0", 5);  // TODO "0" is a hack to prevent NumberFormatException: For input string: ""
         queueSize.setName("Queue Size"); //$NON-NLS-1$
         JLabel queueSizeLabel = new JLabel(JMeterUtils.getResString("backend_listener_queue_size")); // $NON-NLS-1$
         queueSizeLabel.setLabelFor(queueSize);
@@ -277,6 +277,6 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         super.clearGui();
         argsPanel.clearGui();
         classnameCombo.setSelectedIndex(0);
-        queueSize.setText("");
+        queueSize.setText("0"); // TODO this is a hack to prevent NumberFormatException: For input string: ""
     }
 }
