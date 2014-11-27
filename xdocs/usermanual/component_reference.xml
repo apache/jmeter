@@ -523,10 +523,10 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <property name="Query Type" required="Yes">Set this according to the statement type:
             <ul>
             <li>Select Statement</li>
-            <li>Update Statement - use this for Inserts as well</li>
+            <li>Update Statement - use this for Inserts and Deletes as well</li>
             <li>Callable Statement</li>
             <li>Prepared Select Statement</li>
-            <li>Prepared Update Statement - use this for Inserts as well</li>
+            <li>Prepared Update Statement - use this for Inserts and Deletes as well</li>
             <li>Commit</li>
             <li>Rollback</li>
             <li>Autocommit(false)</li>
