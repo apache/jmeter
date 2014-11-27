@@ -90,8 +90,11 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     }
 
     /**
-     * Provides a default implementation for setting the comment property. It's unlikely
-     * developers will need to override.
+     * Provides a default implementation for setting the comment property. It's
+     * unlikely developers will need to override.
+     * 
+     * @param comment
+     *            The comment for the property
      */
     public void setComment(String comment) {
         commentPanel.setText(comment);
@@ -131,6 +134,8 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     /**
      * Provides a default implementation for the comment property. It's unlikely
      * developers will need to override.
+     * 
+     * @return The comment for the property
      */
     public String getComment() {
         if (getCommentPanel() != null) {

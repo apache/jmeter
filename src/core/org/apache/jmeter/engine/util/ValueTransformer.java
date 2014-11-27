@@ -30,8 +30,12 @@ interface ValueTransformer {
     /**
      * Transform the given property and return the new version.
      *
-     * @param property Property to be transformed
+     * @param property
+     *            Property to be transformed
      * @return the transformed property
+     * @throws InvalidVariableException
+     *             if something went wrong while computing variables or
+     *             functions
      */
     JMeterProperty transformValue(JMeterProperty property) throws InvalidVariableException;
 
