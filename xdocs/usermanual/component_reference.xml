@@ -536,7 +536,6 @@ the additional variables for rows 4, 5 and 6 will be removed.
             <note>
             When "Prepared Select Statement", "Prepared Update Statement" or "Callable Statement" types are selected, a Statement Cache per connection is used by JDBC Request. 
             It stores by default up to 100 PreparedStatements per connection, this can impact your database (Open Cursors). 
-            This can be changed by defining the property "jdbcsampler.nullmarker".
             </note>
         </property>
         <property name="SQL Query" required="Yes">
