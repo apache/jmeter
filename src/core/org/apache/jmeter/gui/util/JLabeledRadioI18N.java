@@ -176,7 +176,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
     /**
      * Set the group label from the resource name.
      *
-     * @param label_resource
+     * @param label_resource The text to be looked up and set
      */
     @Override
     public final void setLabel(String label_resource) {

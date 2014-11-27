@@ -677,6 +677,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     /**
      * Get a list of all installed LAFs plus CrossPlatform and System.
+     * 
+     * @return The list of available {@link LookAndFeelInfo}s
      */
     // This is also used by LookAndFeelCommand
     public static LookAndFeelInfo[] getAllLAFs() {

@@ -366,7 +366,7 @@ public final class MenuFactory {
      * @param menuInfo - collection of MenuInfo items
      * @param actionCommand - predefined string, e.g. ActionNames.ADD
      *     @see org.apache.jmeter.gui.action.ActionNames
-     * @param menuName
+     * @param menuName The name of the newly created menu
      * @return the menu
      */
     public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
@@ -575,8 +575,10 @@ public final class MenuFactory {
      * Used by Merge
      *
      * @param parentNode
-     * @param element - top-level test element to be added
-     *
+     *            The {@link JMeterTreeNode} to test, if a new element can be
+     *            added to it
+     * @param element
+     *            - top-level test element to be added
      * @return whether it is OK to add the element to this parent
      */
     public static boolean canAddTo(JMeterTreeNode parentNode, TestElement element) {
@@ -590,8 +592,10 @@ public final class MenuFactory {
      * Used by DragNDrop and Paste.
      *
      * @param parentNode
-     * @param nodes - array of nodes that are to be added
-     *
+     *            The {@link JMeterTreeNode} to test, if <code>nodes[]</code>
+     *            can be added to it
+     * @param nodes
+     *            - array of nodes that are to be added
      * @return whether it is OK to add the dragged nodes to this parent
      */
     public static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode nodes[]) {

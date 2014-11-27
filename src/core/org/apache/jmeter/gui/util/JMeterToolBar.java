@@ -66,7 +66,10 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     
     /**
      * Create the default JMeter toolbar
-     * @return the JMeter toolbar
+     * 
+     * @param visible
+     *            Flag whether toolbar should be visible
+     * @return the newly created {@link JMeterToolBar}
      */
     public static JMeterToolBar createToolbar(boolean visible) {
         JMeterToolBar toolBar = new JMeterToolBar();
@@ -221,7 +224,9 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     
     /**
      * Change state of buttons on local test
+     * 
      * @param started
+     *            Flag whether local test is started
      */
     public void setLocalTestStarted(boolean started) {
         Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(3);
@@ -234,7 +239,9 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     
     /**
      * Change state of buttons on remote test
+     * 
      * @param started
+     *            Flag whether the test is started
      */
     public void setRemoteTestStarted(boolean started) {
         Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(3);
@@ -246,8 +253,13 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
 
     /**
      * Change state of buttons after undo or redo
+     * 
      * @param canUndo
+     *            Flag whether the button corresponding to
+     *            {@link ActionNames#UNDO} should be enabled
      * @param canRedo
+     *            Flag whether the button corresponding to
+     *            {@link ActionNames#REDO} should be enabled
      */
     public void updateUndoRedoIcons(boolean canUndo, boolean canRedo) {
         Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(2);
@@ -257,8 +269,10 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     }
 
     /**
+     * Set buttons to a given state
      * 
-     * @param buttonStates Map<String, Boolean>
+     * @param buttonStates
+     *            {@link Map} of button names and their states
      */
     private void updateButtons(Map<String, Boolean> buttonStates) {
         Component[] components = getComponents();
