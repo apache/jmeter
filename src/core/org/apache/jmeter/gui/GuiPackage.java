@@ -674,6 +674,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * title and used on saving.
      *
      * @param f
+     *            The filepath of the current test plan
      */
     public void setTestPlanFile(String f) {
         testPlanFile = f;
@@ -758,7 +759,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Register process to stop on reload
+     * 
      * @param stoppable
+     *            The {@link Stoppable} to be registered
      */
     public void register(Stoppable stoppable) {
         stoppables.add(stoppable);
@@ -776,7 +779,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     /**
      * Set the menu item LoggerPanel.
-     * @param menuItemLoggerPanel
+     * @param menuItemLoggerPanel The menu item LoggerPanel
      */
     public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
         this.menuItemLoggerPanel = menuItemLoggerPanel;

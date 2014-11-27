@@ -270,6 +270,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
          *
          * @param anEvent
          *            the event
+         * @return always <code>true</code>
          */
         public boolean startCellEditing(EventObject anEvent) {
             return true;

@@ -48,8 +48,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     }
 
     /**
-     * Creates the default syntax highlighting text area.
-     * The following are set:
+     * Creates the default syntax highlighting text area. The following are set:
      * <ul>
      * <li>setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA)</li>
      * <li>setCodeFoldingEnabled(true)</li>
@@ -57,16 +56,18 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * <li>setLineWrap(true)</li>
      * <li>setWrapStyleWord(true)</li>
      * </ul>
+     * 
      * @param rows
+     *            The number of rows for the text area
      * @param cols
+     *            The number of columns for the text area
      */
     public JSyntaxTextArea(int rows, int cols) {
         this(rows, cols, false);
     }
 
     /**
-     * Creates the default syntax highlighting text area.
-     * The following are set:
+     * Creates the default syntax highlighting text area. The following are set:
      * <ul>
      * <li>setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA)</li>
      * <li>setCodeFoldingEnabled(true)</li>
@@ -74,9 +75,13 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * <li>setLineWrap(true)</li>
      * <li>setWrapStyleWord(true)</li>
      * </ul>
+     * 
      * @param rows
+     *            The number of rows for the text area
      * @param cols
-     * @param disableUndo true to disable undo manager, defaults to false
+     *            The number of columns for the text area
+     * @param disableUndo
+     *            true to disable undo manager, defaults to false
      */
     public JSyntaxTextArea(int rows, int cols, boolean disableUndo) {
         super(rows, cols);
@@ -90,7 +95,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     /**
      * Sets the language of the text area.
+     * 
      * @param language
+     *            The language to be set
      */
     public void setLanguage(String language) {
         if(language == null) {
@@ -124,7 +131,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     /**
      * Sets initial text resetting undo history
+     * 
      * @param string
+     *            The initial text to be set
      */
     public void setInitialText(String string) {
         setText(string);
