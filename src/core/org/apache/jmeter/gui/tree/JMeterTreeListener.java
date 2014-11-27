@@ -54,14 +54,24 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
     /**
      * Constructor for the JMeterTreeListener object.
+     * 
+     * @param model
+     *            The {@link JMeterTreeModel} for this listener
      */
     public JMeterTreeListener(JMeterTreeModel model) {
         this.model = model;
     }
 
+    /**
+     * Constructor for the {@link JMeterTreeListener} object
+     */
     public JMeterTreeListener() {
     }
 
+    /**
+     * Set the {@link JMeterTreeModel} for this listener
+     * @param m The {@link JMeterTreeModel} to be used
+     */
     public void setModel(JMeterTreeModel m) {
         model = m;
     }

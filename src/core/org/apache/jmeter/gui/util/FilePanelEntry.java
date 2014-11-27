@@ -99,7 +99,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     /**
      * If the gui needs to enable/disable the FilePanel, call the method.
      *
-     * @param enable
+     * @param enable The Flag whether the {@link FilePanel} should be enabled
      */
     public void enableFile(boolean enable) {
         browse.setEnabled(enable);

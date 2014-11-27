@@ -114,6 +114,15 @@ public final class ActionRouter implements ActionListener {
         performAction(e);
     }
 
+    /**
+     * Get the set of {@link Command}s registered under the name
+     * <code>actionName</code>
+     * 
+     * @param actionName
+     *            The name the {@link Command}s were registered
+     * @return a set with all registered {@link Command}s for
+     *         <code>actionName</code>
+     */
     public Set<Command> getAction(String actionName) {
         Set<Command> set = new HashSet<Command>();
         for (Command c : commands.get(actionName)) {
@@ -126,6 +135,17 @@ public final class ActionRouter implements ActionListener {
         return set;
     }
 
+    /**
+     * Get the {@link Command} registered under the name <code>actionName</code>,
+     * that is of {@link Class} <code>actionClass</code>
+     * 
+     * @param actionName
+     *            The name the {@link Command}s were registered
+     * @param actionClass
+     *            The class the {@link Command}s should be equal to
+     * @return The registered {@link Command} for <code>actionName</code>, or
+     *         <code>null</code> if none could be found
+     */
     public Command getAction(String actionName, Class<?> actionClass) {
         for (Command com : commands.get(actionName)) {
             if (com.getClass().equals(actionClass)) {
@@ -135,6 +155,17 @@ public final class ActionRouter implements ActionListener {
         return null;
     }
 
+    /**
+     * Get the {@link Command} registered under the name <code>actionName</code>
+     * , which class names are equal to <code>className</code>
+     * 
+     * @param actionName
+     *            The name the {@link Command}s were registered
+     * @param className
+     *            The name of the class the {@link Command}s should be equal to
+     * @return The {@link Command} for <code>actionName</code> or
+     *         <code>null</code> if none could be found
+     */
     public Command getAction(String actionName, String className) {
         for (Command com : commands.get(actionName)) {
             if (com.getClass().getName().equals(className)) {
@@ -196,6 +227,7 @@ public final class ActionRouter implements ActionListener {
      *            notifications for. Class must extend
      *            org.apache.jmeter.gui.action.Command.
      * @param listener
+     *            The {@link ActionListener} to be registered
      */
     public void addPostActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
@@ -216,7 +248,7 @@ public final class ActionRouter implements ActionListener {
      *            the Class of the command for which the listener will
      *            notifications for. Class must extend
      *            org.apache.jmeter.gui.action.Command.
-     * @param listener
+     * @param listener The {@link ActionListener} that should be deregistered
      */
     public void removePostActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
