@@ -228,10 +228,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @param node
      *            the test element which this GUI is being created for
      * @param guiClass
-     *            the fully qualifed class name of the GUI component which will
+     *            the fully qualified class name of the GUI component which will
      *            be created if it doesn't already exist
      * @param testClass
-     *            the fully qualifed class name of the test elements which have
+     *            the fully qualified class name of the test elements which have
      *            to be edited by the returned GUI component
      *
      * @return the GUI component corresponding to the specified test element
