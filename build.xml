@@ -818,28 +818,6 @@
     </javac>
   </target>
 
-  <target name="compile-rmi" depends="compile-jorphan,compile-core" description="Compile RMI stubs and skeletons.">
-    <rmic base="${build.core}" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl">
-      <classpath>
-        <pathelement location="${build.jorphan}"/>
-        <pathelement location="${build.core}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </rmic>
-    <rmic base="${build.core}" classname="org.apache.jmeter.samplers.RemoteSampleListenerImpl">
-      <classpath>
-        <pathelement location="${build.core}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </rmic>
-    <rmic base="${build.core}" classname="org.apache.jmeter.threads.RemoteThreadsListenerImpl">
-      <classpath>
-        <pathelement location="${build.core}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </rmic>
-  </target>
-
   <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components"
         description="Compile components specific to JMS sampling.">
     <mkdir dir="${build.jms}"/>
@@ -883,7 +861,7 @@
   </target>
 
   <target name="compile"
-  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb, compile-report"
+  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb, compile-report"
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">

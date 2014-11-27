@@ -211,6 +211,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <ch_section>Non-functional changes</ch_section>
 <ul>
 <li>Updated to jsoup-1.8.1.jar (from 1.7.3)</li>
+<li><bugzilla>57276</bugzilla> - RMIC no longer needed since Java 5</li>
 </ul>
 
 <ch_section>Thanks</ch_section>
