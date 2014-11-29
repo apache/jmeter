@@ -261,10 +261,7 @@ public class PackageTest extends TestCase {
     private static void findFile(File file, Set<String> set,
             FilenameFilter filenameFilter) {
         File[] foundFiles = file.listFiles(filenameFilter);
-        if (foundFiles == null) { // Better error than NPE
-            System.err.println("Not a directory: "+file);
-            return;
-        }
+        assertNotNull("Not a directory: "+file, foundFiles);
         for (File file2 : foundFiles) {
             if(file2.isDirectory()) {
                 findFile(file2, set, filenameFilter);
