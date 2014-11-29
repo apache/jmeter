@@ -37,7 +37,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -47,11 +46,8 @@ import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
-import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
-import org.apache.jorphan.reflect.Functor;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -68,18 +64,6 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
     private static final String SAVE_HEADERS   = "saveHeaders"; //$NON-NLS-1$
-
-    private static final String[] COLUMNS = {
-            "sampler_label",                 //$NON-NLS-1$
-            "aggregate_report_count",        //$NON-NLS-1$
-            "average",                       //$NON-NLS-1$
-            "aggregate_report_median",       //$NON-NLS-1$
-            "aggregate_report_90%_line",     //$NON-NLS-1$
-            "aggregate_report_min",          //$NON-NLS-1$
-            "aggregate_report_max",          //$NON-NLS-1$
-            "aggregate_report_error%",       //$NON-NLS-1$
-            "aggregate_report_rate",         //$NON-NLS-1$
-            "aggregate_report_bandwidth" };  //$NON-NLS-1$
 
     private final String TOTAL_ROW_LABEL
         = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
@@ -109,42 +93,10 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     public StatVisualizer() {
         super();
-        model = new ObjectTableModel(COLUMNS,
-                SamplingStatCalculator.class,
-                new Functor[] {
-                    new Functor("getLabel"),   //$NON-NLS-1$
-                    new Functor("getCount"),  //$NON-NLS-1$
-                    new Functor("getMeanAsNumber"),   //$NON-NLS-1$
-                    new Functor("getMedian"),  //$NON-NLS-1$
-                    new Functor("getPercentPoint",  //$NON-NLS-1$
-                            new Object[] { new Float(.900) }),
-                    new Functor("getMin"),  //$NON-NLS-1$
-                    new Functor("getMax"),   //$NON-NLS-1$
-                    new Functor("getErrorPercentage"),   //$NON-NLS-1$
-                    new Functor("getRate"),  //$NON-NLS-1$
-                    new Functor("getKBPerSecond")   //$NON-NLS-1$
-                },
-                new Functor[] { null, null, null, null, null, null, null, null, null, null },
-                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
-                              Long.class, Long.class, String.class, String.class, String.class });
+        model = StatGraphVisualizer.createObjectTableModel();
         clearData();
         init();
     }
-
-    // Column renderers
-    private static final TableCellRenderer[] RENDERERS =
-        new TableCellRenderer[]{
-            null, // Label
-            null, // count
-            null, // Mean
-            null, // median
-            null, // 90%
-            null, // Min
-            null, // Max
-            new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
-            new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
-            new NumberRenderer("#.0"),    // pageSize   //$NON-NLS-1$
-        };
 
     /** @deprecated - only for use in testing */
     @Deprecated
@@ -219,9 +171,9 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         // SortFilterModel mySortedModel =
         // new SortFilterModel(myStatTableModel);
         myJTable = new JTable(model);
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(StatGraphVisualizer.COLUMNS_MSG_PARAMETERS));
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
-        RendererUtils.applyRenderers(myJTable, RENDERERS);
+        RendererUtils.applyRenderers(myJTable, StatGraphVisualizer.RENDERERS);
         myScrollPane = new JScrollPane(myJTable);
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(myScrollPane, BorderLayout.CENTER);
