@@ -369,7 +369,13 @@ public class PackageTest extends TestCase {
             Map.Entry<Object,Object> entry = iterator.next();
             String key = (String)entry.getKey();
             if(!messagesFr.containsKey(key)) {
-                missingLabels.put(key,(String) entry.getValue());
+                String value = (String) entry.getValue();
+                // TODO improve check of values that don't need translation
+                if (value.matches("[\\d%]+")) {// numeric and % don't need translation
+                    System.out.println("Ignoring missing "+key+"="+value+" in "+languageBundle); // TODO convert to list and display at end
+                } else {
+                    missingLabels.put(key,(String) entry.getValue());
+                }
             }
         }
         if(!missingLabels.isEmpty()) {
