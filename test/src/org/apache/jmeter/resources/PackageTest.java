@@ -71,7 +71,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 
 public class PackageTest extends TestCase {
-    private static final String basedir = new File(System.getProperty("user.dir")).getParent();
+    private static final String basedir = new File(System.getProperty("user.dir")).getParent(); // assumes the test starts in the bin directory
 
     private static final File srcFiledir = new File(basedir,"src");
 
