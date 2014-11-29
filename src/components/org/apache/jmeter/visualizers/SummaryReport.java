@@ -144,7 +144,10 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         init();
     }
 
-    /** @deprecated - only for use in testing */
+    /**
+     * @return <code>true</code> iff all functors can be found
+     * @deprecated - only for use in testing
+     * */
     @Deprecated
     public static boolean testFunctors(){
         SummaryReport instance = new SummaryReport();

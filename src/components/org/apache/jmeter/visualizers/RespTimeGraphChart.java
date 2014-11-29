@@ -95,23 +95,30 @@ public class RespTimeGraphChart extends JPanel {
     protected float strokeWidth = 3.5f;
 
     /**
-    *
+    * Constructor
     */
    public RespTimeGraphChart() {
        super();
    }
 
-   /**
-    * @param layout
-    */
+    /**
+     * Constructor
+     * 
+     * @param layout
+     *            The {@link LayoutManager} to be used
+     */
    public RespTimeGraphChart(LayoutManager layout) {
        super(layout);
    }
 
-   /**
-    * @param layout
-    * @param isDoubleBuffered
-    */
+    /**
+     * Constructor
+     * 
+     * @param layout
+     *            The {@link LayoutManager} to be used
+     * @param isDoubleBuffered
+     *            Flag whether double buffering should be used
+     */
    public RespTimeGraphChart(LayoutManager layout, boolean isDoubleBuffered) {
        super(layout, isDoubleBuffered);
    }

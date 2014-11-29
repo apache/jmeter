@@ -98,7 +98,10 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         init();
     }
 
-    /** @deprecated - only for use in testing */
+    /**
+     * @return <code>true</code> iff all functors can be found
+     * @deprecated - only for use in testing
+     * */
     @Deprecated
     public static boolean testFunctors(){
         StatVisualizer instance = new StatVisualizer();
