@@ -2905,7 +2905,7 @@ compiled code must be available to JMeter (e.g. by adding it to the lib/ext dire
 </p>
 </component>
 
-<component name="Aggregate Report" index="&sect-num;.3.7"  width="784" height="287" screenshot="aggregate_report.png">
+<component name="Aggregate Report" index="&sect-num;.3.7"  width="1140" height="266" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your
 test.  For each request, it totals the response information and provides request count, min, max,
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
@@ -2922,12 +2922,20 @@ the Aggregate Report.
 </p>
 <p>
 Calculation of the <a href="glossary.html#Median">Median</a> and 90% Line (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>) values requires additional memory.
-For JMeter 2.3.4 and earlier, details of each sample were saved separately, which meant a lot of memory was needed.
 JMeter now combines samples with the same elapsed time, so far less memory is used.
 However, for samples that take more than a few seconds, the probability is that fewer samples will have identical times,
 in which case more memory will be needed.
+Note you can use this listener afterwards to reload a CSV or XML results file which is the recommended way to avoid performance impacts.
 See the <complink name="Summary Report"/> for a similar Listener that does not store individual samples and so needs constant memory.
 </p>
+<note>
+Starting with JMeter 2.12, you can configure the 3 percentile values you want to compute, this can be done by setting properties:
+<ul>
+    <li>aggregate_rpt_pct1: defaults to 90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
+    <li>aggregate_rpt_pct2: defaults to 95<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
+    <li>aggregate_rpt_pct3: defaults to 99<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
+</ul>
+</note>
 <ul>
 <li>Label - The label of the sample.
 If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
@@ -2939,6 +2947,10 @@ This allows identical labels from different thread groups to be collated separat
 50% of the samples took no more than this time; the remainder took at least as long.</li>
 <li>90% Line - 90% of the samples took no more than this time.
 The remaining samples took at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
+<li>95% Line - 95% of the samples took no more than this time.
+The remaining samples took at least as long as this. (95<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
+<li>99% Line - 99% of the samples took no more than this time.
+The remaining samples took at least as long as this. (99<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
 <li>Min - The shortest time for the samples with the same label</li>
 <li>Max - The longest time for the samples with the same label</li>
 <li>Error % - Percent of requests with errors</li>
@@ -2954,7 +2966,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 <div align="center">
 <p>
     The figure below shows an example of selecting the "Include group name" checkbox.
-<figure width="784" height="287" image="aggregate_report_grouped.png">Sample "Include group name" display</figure>
+<figure width="1140" height="276" image="aggregate_report_grouped.png">Sample "Include group name" display</figure>
 </p>
 </div>
 </component>
@@ -3034,7 +3046,7 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
-<component name="Aggregate Graph" index="&sect-num;.3.12"  width="893" height="713" screenshot="aggregate_graph.png">
+<component name="Aggregate Graph" index="&sect-num;.3.12"  width="1132" height="872" screenshot="aggregate_graph.png">
 <description>The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file.</description>
