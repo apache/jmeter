@@ -32,6 +32,11 @@ public interface ModelListener {
 
     /**
      * Informs the Visualizer that a message should be displayed.
+     * 
+     * @param messageString
+     *            The text to be displayed
+     * @param isError
+     *            Flag whether this message represents an error
      */
     void displayMessage(String messageString, boolean isError);
 }

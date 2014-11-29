@@ -21,6 +21,9 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.Color;
 
+/**
+ * Bean to represent information about a graph line
+ */
 public class RespTimeGraphLineBean {
 
     private String label;
@@ -28,8 +31,8 @@ public class RespTimeGraphLineBean {
     private Color lineColor;
 
     /**
-     * @param label
-     * @param lineColor
+     * @param label The label for this line
+     * @param lineColor The {@link Color} for this line
      */
     public RespTimeGraphLineBean(String label, Color lineColor) {
         super();

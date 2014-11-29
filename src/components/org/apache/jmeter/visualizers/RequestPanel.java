@@ -102,7 +102,7 @@ public class RequestPanel {
     /**
      * Put SamplerResult in all request view
      * 
-     * @param samplerResult
+     * @param samplerResult The {@link SampleResult} to be put in all {@link RequestView}s
      */
     public void setSamplerResult(SampleResult samplerResult) {
         for (RequestView requestView : listRequestView) {

@@ -19,6 +19,10 @@
 
 package org.apache.jmeter.visualizers;
 
+/**
+ * Bean to hold timing information about samples
+ *
+ */
 public class RespTimeGraphDataBean {
 
     private long startTime;
@@ -28,9 +32,14 @@ public class RespTimeGraphDataBean {
     private String samplerLabel;
 
     /**
+     * Constructor
+     * 
      * @param startTime
+     *            The start time of this Sample
      * @param time
+     *            The time elapsed for this sample
      * @param samplerLabel
+     *            The label for this sample
      */
     public RespTimeGraphDataBean(long startTime, long time, String samplerLabel) {
         super();
