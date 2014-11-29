@@ -57,7 +57,14 @@ public class FileReporter extends JPanel {
 
     private final Map<String, List<Integer>> data = new ConcurrentHashMap<String, List<Integer>>();
 
-    /** initalize a file reporter from a file */
+    /**
+     * Initialize a file reporter from a file
+     * 
+     * @param file
+     *            The name of the file to read from
+     * @throws IOException
+     *             when the corresponding file can not be opened or be read from
+     */
     public void init(String file) throws IOException {
         File datafile = new File(file);
         BufferedReader reader = null;
@@ -107,6 +114,13 @@ public class FileReporter extends JPanel {
         showPanel();
     }
 
+    /**
+     * Get the data currently assigned to a given key
+     * 
+     * @param key
+     *            The key for which the data should be given
+     * @return list of data for the given key
+     */
     public List<Integer> getData(String key) {
         return data.get(key);
     }
@@ -159,6 +173,9 @@ private static class GraphPanel extends JPanel {
 
     /**
      * Get the maximum for all the data.
+     * 
+     * @return the maximum of all data for all keys, or <code>0</code> if no
+     *         data is present
      */
     public float getMax() {
         float maxValue = 0;
@@ -178,6 +195,8 @@ private static class GraphPanel extends JPanel {
 
     /**
      * Get the minimum for all the data.
+     * @return the maximum of all data for all keys, or <code>9999999</code> if no
+     *         data is present
      */
     public float getMin() {
         float minValue = 9999999;
@@ -197,6 +216,8 @@ private static class GraphPanel extends JPanel {
 
     /**
      * Get the legend panel.
+     * 
+     * @return the newly created legend panel
      */
     public JPanel getLegend() {
         JPanel main = new JPanel();
@@ -231,6 +252,8 @@ private static class GraphPanel extends JPanel {
 
     /**
      * Get the stats panel.
+     * 
+     * @return a newly created stats panel
      */
     public JPanel getStats() {
         int total = 0;
@@ -292,6 +315,8 @@ private static class GraphPanel extends JPanel {
 
     /**
      * Gets the size of the biggest List.
+     * 
+     * @return the max size of all lists for all key
      */
     public int getDataWidth() {
         int size = 0;
