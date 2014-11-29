@@ -573,9 +573,10 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * We use this method to get the data, since we are using
      * ObjectTableModel, so the calling getDataVector doesn't
      * work as expected.
+     * @param model {@link ObjectTableModel}
      * @return the data from the model
      */
-    public List<List<Object>> getAllTableData() {
+    public static List<List<Object>> getAllTableData(ObjectTableModel model) {
         List<List<Object>> data = new ArrayList<List<Object>>();
         if (model.getRowCount() > 0) {
             for (int rw=0; rw < model.getRowCount(); rw++) {
@@ -614,7 +615,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             FileWriter writer = null;
             try {
                 writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
-                CSVSaveService.saveCSVStats(getAllTableData(),writer,saveHeaders.isSelected() ? COLUMNS : null);
+                CSVSaveService.saveCSVStats(getAllTableData(model),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
             } catch (FileNotFoundException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } catch (IOException e) {
@@ -684,6 +685,19 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 } catch (NumberFormatException nfe) { } // nothing to do
             }
         }
+    }
+
+    /**
+     * 
+     * @param keys I18N keys
+     * @return labels
+     */
+    static String[] getLabels(String[] keys) {
+        String[] labels = new String[keys.length];
+        for (int i = 0; i < labels.length; i++) {
+            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), COLUMNS_MSG_PARAMETERS[i]);
+        }
+        return labels;
     }
 
     private void actionMakeGraph() {
