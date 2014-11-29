@@ -22,7 +22,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 /**
- * Allows notification on events occuring during the sampling process.
+ * Allows notification on events occurring during the sampling process.
  * Specifically, when sampling is started, when a specific sample is obtained,
  * and when sampling is stopped.
  *
@@ -44,7 +44,7 @@ public interface RemoteSampleListener extends java.rmi.Remote {
     
     /**
      * This method is called remotely and fires a list of samples events
-     * recieved locally. The function is to reduce network load when using
+     * received locally. The function is to reduce network load when using
      * remote testing.
      *
      * @param samples
@@ -55,16 +55,28 @@ public interface RemoteSampleListener extends java.rmi.Remote {
 
     /**
      * A sample has started and stopped.
+     * 
+     * @param e
+     *            the event with data about the completed sample
+     * @throws RemoteException
      */
     void sampleOccurred(SampleEvent e) throws RemoteException;
 
     /**
      * A sample has started.
+     * 
+     * @param e
+     *            the event with data about the started sample
+     * @throws RemoteException
      */
     void sampleStarted(SampleEvent e) throws RemoteException;
 
     /**
      * A sample has stopped.
+     * 
+     * @param e
+     *            the event with data about the stopped sample
+     * @throws RemoteException
      */
     void sampleStopped(SampleEvent e) throws RemoteException;
 }

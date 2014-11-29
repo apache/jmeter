@@ -351,6 +351,7 @@ public class SaveService {
      *
      * @param evt sampleResult wrapped in a sampleEvent
      * @param writer output stream which must be created using {@link #getFileEncoding(String)}
+     * @throws IOException when writing data to output fails
      */
     // Used by ResultCollector.sampleOccurred(SampleEvent event)
     public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
@@ -382,6 +383,7 @@ public class SaveService {
     /**
      * @param elem test element
      * @param writer output stream which must be created using {@link #getFileEncoding(String)}
+     * @throws IOException when writing data to output fails
      */
     // Used by ResultCollector#recordStats()
     public synchronized static void saveTestElement(TestElement elem, Writer writer) throws IOException {
@@ -489,7 +491,7 @@ public class SaveService {
      *
      * @param reader of the file
      * @param resultCollectorHelper helper class to enable TestResultWrapperConverter to deliver the samples
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public static void loadTestResults(InputStream reader, ResultCollectorHelper resultCollectorHelper) throws IOException {
         // Get the InputReader to use
