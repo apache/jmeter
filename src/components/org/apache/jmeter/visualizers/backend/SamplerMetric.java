@@ -20,20 +20,19 @@ package org.apache.jmeter.visualizers.backend;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Sampler metric
  * @since 2.13
  */
 public class SamplerMetric {
-    // Limit to sliding window of 100 values 
-    private DescriptiveStatistics stats = new DescriptiveStatistics(100);
-    private int success;
-    private int failure;
-    private long maxTime=0L;
-    private long minTime=Long.MAX_VALUE;
-    private int maxActiveThreads = 0;
-    private int minActiveThreads = Integer.MAX_VALUE;
+    private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100); //$NON-NLS-1$
+    
+    // Limit to sliding window of SLIDING_WINDOW_SIZE values 
+    private DescriptiveStatistics responsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    private int successes;
+    private int failures;
     /**
      * 
      */
@@ -46,20 +45,15 @@ public class SamplerMetric {
      */
     public synchronized void add(SampleResult result) {
         if(result.isSuccessful()) {
-            success++;
+            successes++;
         } else {
-            failure++;
+            failures++;
         }
         long time = result.getTime();
-        int activeThreads = result.getAllThreads();
-        maxTime = Math.max(time, maxTime);
-        minTime = Math.min(time, minTime); 
-        maxActiveThreads = Math.max(maxActiveThreads, activeThreads);
-        minActiveThreads = Math.min(minActiveThreads, activeThreads);
         if(result.isSuccessful()) {
             // Should we also compute KO , all response time ?
             // only take successful requests for time computing
-            stats.addValue(time);
+            responsesStats.addValue(time);
         }
     }
     
@@ -67,14 +61,10 @@ public class SamplerMetric {
      * Reset metric except for percentile related data
      */
     public synchronized void resetForTimeInterval() {
-        // We don't clear stats as it will slide as per my understanding of 
+        // We don't clear responsesStats nor usersStats as it will slide as per my understanding of 
         // http://commons.apache.org/proper/commons-math/userguide/stat.html
-        success = 0;
-        failure = 0;
-        maxTime=0L;
-        minTime=Long.MAX_VALUE;
-        maxActiveThreads = 0;
-        minActiveThreads = Integer.MAX_VALUE;
+        successes = 0;
+        failures = 0;
     }
 
     /**
@@ -83,7 +73,7 @@ public class SamplerMetric {
      * @return The arithmetic mean of the stored values
      */
     public double getMean() {
-        return stats.getMean();
+        return responsesStats.getMean();
     }
     
     /**
@@ -95,7 +85,7 @@ public class SamplerMetric {
      *         values.
      */
     public double getPercentile(double percentile) {
-        return stats.getPercentile(percentile);
+        return responsesStats.getPercentile(percentile);
     }
 
     /**
@@ -104,7 +94,7 @@ public class SamplerMetric {
      * @return number of total requests
      */
     public int getTotal() {
-        return success+failure;
+        return successes+failures;
     }
     
     /**
@@ -112,8 +102,8 @@ public class SamplerMetric {
      * 
      * @return number of successful requests
      */
-    public int getSuccess() {
-        return success;
+    public int getSuccesses() {
+        return successes;
     }
 
     /**
@@ -121,43 +111,27 @@ public class SamplerMetric {
      * 
      * @return number of failed requests
      */
-    public int getFailure() {
-        return failure;
+    public int getFailures() {
+        return failures;
     }
 
     /**
-     * Get the maximal elapsed time for all requests
+     * Get the maximal elapsed time for requests within sliding window
      * 
      * @return the maximal elapsed time, or <code>0</code> if no requests have
      *         been added yet
      */
-    public long getMaxTime() {
-        return maxTime;
+    public double getMaxTime() {
+        return responsesStats.getMax();
     }
 
     /**
-     * Get the minimal elapsed time for all requests
+     * Get the minimal elapsed time for requests within sliding window
      * 
      * @return the minTime, or {@link Long#MAX_VALUE} if no requests have been
      *         added yet
      */
-    public long getMinTime() {
-        return minTime;
-    }
-
-    /**
-     * @return the max number of active threads for this test run, or
-     *         <code>0</code> if no samples have been added yet
-     */
-    public int getMaxActiveThreads() {
-        return maxActiveThreads;
-    }
-
-    /**
-     * @return the min number of active threads for this test run, or
-     *         {@link Integer#MAX_VALUE} if no samples have been added yet
-     */
-    public int getMinActiveThreads() {
-        return minActiveThreads;
+    public double getMinTime() {
+        return responsesStats.getMin();
     }
 }
