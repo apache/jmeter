@@ -53,6 +53,7 @@ import org.apache.log.Logger;
 public abstract class AbstractBackendListenerClient implements BackendListenerClient {
 
     private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private UserMetric userMetrics = new UserMetric();
     
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<String, SamplerMetric>();
 
@@ -117,4 +118,10 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
         return metricsPerSampler;
     }
 
+    /**
+     * @return UserMetric
+     */
+    protected UserMetric getUserMetrics() {
+        return userMetrics;
+    }
 }
