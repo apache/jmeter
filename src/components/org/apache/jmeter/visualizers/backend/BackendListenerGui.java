@@ -136,7 +136,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         classNamePanel.add(label);
         classNamePanel.add(classnameCombo);
 
-        queueSize = new JTextField("0", 5);  // TODO "0" is a hack to prevent NumberFormatException: For input string: ""
+        queueSize = new JTextField(BackendListener.DEFAULT_QUEUE_SIZE, 5);
         queueSize.setName("Queue Size"); //$NON-NLS-1$
         JLabel queueSizeLabel = new JLabel(JMeterUtils.getResString("backend_listener_queue_size")); // $NON-NLS-1$
         queueSizeLabel.setLabelFor(queueSize);
@@ -232,7 +232,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
             LOGGER.error("Error setting class:'"+className+"' in BackendListener: "+getName()+
                     ", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties");
         }
-        queueSize.setText(Integer.toString(((BackendListener)config).getQueueSize()));
+        queueSize.setText(((BackendListener)config).getQueueSize());
     }
 
     /**
@@ -265,7 +265,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         BackendListener backendListener = (BackendListener) config;
         backendListener.setArguments((Arguments) argsPanel.createTestElement());
         backendListener.setClassname(String.valueOf(classnameCombo.getSelectedItem()));
-        backendListener.setQueueSize(Integer.parseInt(queueSize.getText()));
+        backendListener.setQueueSize(queueSize.getText());
         
     }
 
@@ -277,6 +277,6 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         super.clearGui();
         argsPanel.clearGui();
         classnameCombo.setSelectedIndex(0);
-        queueSize.setText("0"); // TODO this is a hack to prevent NumberFormatException: For input string: ""
+        queueSize.setText(BackendListener.DEFAULT_QUEUE_SIZE);
     }
 }
