@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.visualizers.backend.graphite;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -48,7 +51,9 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final Logger LOGGER = LoggingManager.getLoggerForClass();
     private static final String DEFAULT_METRICS_PREFIX = "jmeter."; //$NON-NLS-1$
     private static final String CUMULATED_METRICS = "__cumulated__"; //$NON-NLS-1$
-    private static final String METRIC_ACTIVE_THREADS = "activeThreads"; //$NON-NLS-1$
+    private static final String METRIC_MAX_ACTIVE_THREADS = "maxActiveThreads"; //$NON-NLS-1$
+    private static final String METRIC_MIN_ACTIVE_THREADS = "minActiveThreads"; //$NON-NLS-1$
+    private static final String METRIC_MEAN_ACTIVE_THREADS = "meanActiveThreads"; //$NON-NLS-1$
     private static final String METRIC_STARTED_THREADS = "startedThreads"; //$NON-NLS-1$
     private static final String METRIC_STOPPED_THREADS = "stoppedThreads"; //$NON-NLS-1$
     private static final String METRIC_FAILED_REQUESTS = "failure"; //$NON-NLS-1$
@@ -56,10 +61,10 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_TOTAL_REQUESTS = "total"; //$NON-NLS-1$
     private static final String METRIC_MIN_RESPONSE_TIME = "min"; //$NON-NLS-1$
     private static final String METRIC_MAX_RESPONSE_TIME = "max"; //$NON-NLS-1$
-    private static final String METRIC_PERCENTILE90_RESPONSE_TIME = "percentile90"; //$NON-NLS-1$
-    private static final String METRIC_PERCENTILE95_RESPONSE_TIME = "percentile95"; //$NON-NLS-1$
+    private static final String METRIC_PERCENTILE_PREFIX = "percentile"; //$NON-NLS-1$
     private static final long ONE_SECOND = 1L;
     private static final int MAX_POOL_SIZE = 1;
+    private static final String DEFAULT_PERCENTILES = "90;95;99";
 
     private String graphiteHost;
     private int graphitePort;
@@ -67,6 +72,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private String rootMetricsPrefix;
     private String samplersList = ""; //$NON-NLS-1$
     private Set<String> samplersToFilter;
+    private HashMap<String, Float> percentiles;
     
 
     private GraphiteMetricsSender pickleMetricsManager;
@@ -93,7 +99,9 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         }
         
         ThreadCounts tc = JMeterContextService.getThreadCounts();
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_ACTIVE_THREADS, Integer.toString(tc.activeThreads));
+        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
+        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
+        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
         pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(tc.startedThreads));
         pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(tc.finishedThreads));
 
@@ -107,14 +115,16 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
      * @param metric
      */
     private void addMetrics(long timestamp, String contextName, SamplerMetric metric) {
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_FAILED_REQUESTS, Integer.toString(metric.getFailure()));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_SUCCESSFUL_REQUESTS, Integer.toString(metric.getSuccess()));
+        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_FAILED_REQUESTS, Integer.toString(metric.getFailures()));
+        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_SUCCESSFUL_REQUESTS, Integer.toString(metric.getSuccesses()));
         pickleMetricsManager.addMetric(timestamp, contextName, METRIC_TOTAL_REQUESTS, Integer.toString(metric.getTotal()));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_MIN_RESPONSE_TIME, Long.toString(metric.getMinTime()));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_MAX_RESPONSE_TIME, Long.toString(metric.getMaxTime()));
-        // TODO Make this customizable
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_PERCENTILE90_RESPONSE_TIME, Double.toString(metric.getPercentile(90)));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_PERCENTILE95_RESPONSE_TIME, Double.toString(metric.getPercentile(95)));
+        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_MIN_RESPONSE_TIME, Double.toString(metric.getMinTime()));
+        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_MAX_RESPONSE_TIME, Double.toString(metric.getMaxTime()));
+        for (Map.Entry<String, Float> entry : percentiles.entrySet()) {
+            pickleMetricsManager.addMetric(timestamp, contextName, 
+                    entry.getKey(), 
+                    Double.toString(metric.getPercentile(entry.getValue().floatValue())));            
+        }
     }
 
     /**
@@ -135,6 +145,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     public void handleSampleResults(List<SampleResult> sampleResults,
             BackendListenerContext context) {
         for (SampleResult sampleResult : sampleResults) {
+            getUserMetrics().add(sampleResult);
             if(!summaryOnly && samplersToFilter.contains(sampleResult.getSampleLabel())) {
                 SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
                 samplerMetric.add(sampleResult);
@@ -153,6 +164,22 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         summaryOnly = context.getBooleanParameter("summaryOnly", true);
         samplersList = context.getParameter("samplersList", "");
         rootMetricsPrefix = context.getParameter("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
+        String percentilesAsString = context.getParameter("percentiles", DEFAULT_METRICS_PREFIX);
+        String[]  percentilesStringArray = percentilesAsString.split(";");
+        percentiles = new HashMap<String, Float>(percentilesStringArray.length);
+        DecimalFormat format = new DecimalFormat("0.##");
+        for (int i = 0; i < percentilesStringArray.length; i++) {
+            if(!StringUtils.isEmpty(percentilesStringArray[i].trim())) {
+                try {
+                    Float percentileValue = Float.parseFloat(percentilesStringArray[i].trim());
+                    percentiles.put(
+                            METRIC_PERCENTILE_PREFIX+AbstractGraphiteMetricsSender.sanitizeString(format.format(percentileValue)),
+                            percentileValue);
+                } catch(Exception e) {
+                    LOGGER.error("Error parsing percentile:'"+percentilesStringArray[i]+"'");
+                }
+            }
+        }
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
         this.pickleMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
         pickleMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
@@ -189,6 +216,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         arguments.addArgument("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
         arguments.addArgument("summaryOnly", "true");
         arguments.addArgument("samplersList", "");
+        arguments.addArgument("percentiles", DEFAULT_PERCENTILES);
         return arguments;
     }
 }

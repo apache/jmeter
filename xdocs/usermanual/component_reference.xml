@@ -3402,6 +3402,19 @@ By default, a Graphite implementation is provided.
  <property name="Async Queue size" required="Yes">Size of the queue that holds the SampleResults while they are processed asynchronously.</property>
  <property name="Parameters" required="Yes">Parameters of the BackendListenerClient implementation.</property>
  </properties>
+ 
+ 
+     <p>The following parameters apply to the <b>GraphiteBackendListenerClient</b> implementation:</p>
+
+    <properties>
+        <property name="graphiteMetricsSender" required="Yes">org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender or org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</property>
+        <property name="graphiteHost" required="Yes">Graphite or InfluxDB or CollectD server port</property>
+        <property name="graphitePort" required="Yes">Graphite or InfluxDB or CollectD server port, defaults to 2003. Note PickleGraphiteMetricsSender can only talk to Graphite server.</property>
+        <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to ""jmeter."</property>
+        <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to true.</property>
+        <property name="samplersList" required="Yes">Comma separated list of samplers for which you want to report metrics to backend.</property>
+        <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
+    </properties>
 </component>
 
 <a href="#">^</a>
