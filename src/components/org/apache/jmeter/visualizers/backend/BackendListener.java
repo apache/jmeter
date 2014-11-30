@@ -87,7 +87,7 @@ public class BackendListener extends AbstractTestElement
     private transient BackendListenerClient backendListenerClient = null;
 
 
-    private static final int DEFAULT_QUEUE_SIZE = 5000;
+    public static final String DEFAULT_QUEUE_SIZE = "5000";
     
     private transient BlockingQueue<SampleResult> queue; // created by server in readResolve method
     
@@ -160,7 +160,15 @@ public class BackendListener extends AbstractTestElement
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug(whoAmI() + "\ttestStarted(" + host + ")");
         }
-        queue = new ArrayBlockingQueue<SampleResult>(getQueueSize()); 
+        int queueSize;
+        final String size = getQueueSize();
+        try {
+            queueSize = Integer.parseInt(size);
+        } catch (NumberFormatException nfe) {
+            LOGGER.warn("Invalid queue size '" + size + "' defaulting to " + DEFAULT_QUEUE_SIZE);
+            queueSize = Integer.parseInt(DEFAULT_QUEUE_SIZE);            
+        }
+        queue = new ArrayBlockingQueue<SampleResult>(queueSize); 
         initClass();
         queueWaits = new AtomicLong(0L);
         queueWaitTime = new AtomicLong(0L);
@@ -415,7 +423,7 @@ public class BackendListener extends AbstractTestElement
      * @param queueSize
      *            
      */
-    public void setQueueSize(int queueSize) {
+    public void setQueueSize(String queueSize) {
         setProperty(QUEUE_SIZE, queueSize, DEFAULT_QUEUE_SIZE);
     }
 
@@ -424,7 +432,7 @@ public class BackendListener extends AbstractTestElement
      *
      * @return int queueSize
      */
-    public int getQueueSize() {
-        return getPropertyAsInt(QUEUE_SIZE, DEFAULT_QUEUE_SIZE);
+    public String getQueueSize() {
+        return getPropertyAsString(QUEUE_SIZE, DEFAULT_QUEUE_SIZE);
     }
 }
