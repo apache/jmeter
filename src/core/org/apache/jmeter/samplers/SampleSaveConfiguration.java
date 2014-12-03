@@ -197,6 +197,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final String SUBRESULTS_PROP      = "jmeter.save.saveservice.subresults"; // $NON_NLS-1$
     private static final String ASSERTIONS_PROP      = "jmeter.save.saveservice.assertions"; // $NON_NLS-1$
     private static final String LATENCY_PROP         = "jmeter.save.saveservice.latency"; // $NON_NLS-1$
+    private static final String CONNECT_TIME_PROP    = "jmeter.save.saveservice.connect_time"; // $NON_NLS-1$
     private static final String SAMPLERDATA_PROP     = "jmeter.save.saveservice.samplerData"; // $NON_NLS-1$
     private static final String RESPONSEHEADERS_PROP = "jmeter.save.saveservice.responseHeaders"; // $NON_NLS-1$
     private static final String REQUESTHEADERS_PROP  = "jmeter.save.saveservice.requestHeaders"; // $NON_NLS-1$
@@ -215,7 +216,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // N.B. Remember to update the equals and hashCode methods when adding new variables.
 
     // Initialise values from properties
-    private boolean time = _time, latency = _latency, timestamp = _timestamp, success = _success, label = _label,
+    private boolean time = _time, latency = _latency, connectTime=_connectTime, timestamp = _timestamp, success = _success, label = _label,
             code = _code, message = _message, threadName = _threadName, dataType = _dataType, encoding = _encoding,
             assertions = _assertions, subresults = _subresults, responseData = _responseData,
             samplerData = _samplerData, xml = _xml, fieldNames = _fieldNames, responseHeaders = _responseHeaders,
@@ -249,7 +250,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     // Defaults from properties:
     private static final boolean _time, _timestamp, _success, _label, _code, _message, _threadName, _xml,
-            _responseData, _dataType, _encoding, _assertions, _latency, _subresults, _samplerData, _fieldNames,
+            _responseData, _dataType, _encoding, _assertions, _latency, _connectTime, _subresults, _samplerData, _fieldNames,
             _responseHeaders, _requestHeaders;
 
     private static final boolean _responseDataOnError;
@@ -302,6 +303,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         _subresults      = TRUE.equalsIgnoreCase(props.getProperty(SUBRESULTS_PROP, TRUE));
         _assertions      = TRUE.equalsIgnoreCase(props.getProperty(ASSERTIONS_PROP, TRUE));
         _latency         = TRUE.equalsIgnoreCase(props.getProperty(LATENCY_PROP, TRUE));
+        _connectTime     = TRUE.equalsIgnoreCase(props.getProperty(CONNECT_TIME_PROP, TRUE));
         _samplerData     = TRUE.equalsIgnoreCase(props.getProperty(SAMPLERDATA_PROP, FALSE));
         _responseHeaders = TRUE.equalsIgnoreCase(props.getProperty(RESPONSEHEADERS_PROP, FALSE));
         _requestHeaders  = TRUE.equalsIgnoreCase(props.getProperty(REQUESTHEADERS_PROP, FALSE));
@@ -440,6 +442,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         hostname = value;
         label = value;
         latency = value;
+        connectTime = value;
         message = value;
         printMilliseconds = _printMilliseconds;//is derived from properties only
         requestHeaders = value;
@@ -490,6 +493,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         SampleSaveConfiguration s = (SampleSaveConfiguration)obj;
         boolean primitiveValues = s.time == time &&
             s.latency == latency &&
+            s.connectTime == connectTime &&
             s.timestamp == timestamp &&
             s.success == success &&
             s.label == label &&
@@ -535,6 +539,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         int hash = 7;
         hash = 31 * hash + (time ? 1 : 0);
         hash = 31 * hash + (latency ? 1 : 0);
+        hash = 31 * hash + (connectTime ? 1 : 0);
         hash = 31 * hash + (timestamp ? 1 : 0);
         hash = 31 * hash + (success ? 1 : 0);
         hash = 31 * hash + (label ? 1 : 0);
@@ -632,6 +637,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     public void setLatency(boolean latency) {
         this.latency = latency;
+    }
+
+    public boolean saveConnectTime() {
+        return connectTime;
+    }
+
+    public void setConnectTime(boolean connectTime) {
+        this.connectTime= connectTime;
     }
 
     public boolean saveMessage() {
