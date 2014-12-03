@@ -90,7 +90,6 @@ import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.impl.conn.SchemeRegistryFactory;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
@@ -108,7 +107,6 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.sampler.HttpWebdav;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -247,6 +245,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
 
     private volatile boolean resetSSLContext;
+    private MeasuringConnectionManager connManager;
 
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
@@ -277,7 +276,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HTTPSampleResult res = createSampleResult(url, method);
 
         HttpClient httpClient = setupClient(url);
-        
+
+        this.connManager.setSample(res);
+
         HttpRequestBase httpRequest = null;
         try {
             URI uri = url.toURI();
@@ -643,10 +644,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (resolver == null) {
                 resolver = new SystemDefaultDnsResolver();
             }
-            PoolingClientConnectionManager poolingClientConnectionManager = new PoolingClientConnectionManager(
-                    SchemeRegistryFactory.createDefault(), resolver);
+            this.connManager = new MeasuringConnectionManager(SchemeRegistryFactory.createDefault(), resolver);
 
-            httpClient = new DefaultHttpClient(poolingClientConnectionManager, clientParams) {
+            httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
                 protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
                     return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false); // set retry count
