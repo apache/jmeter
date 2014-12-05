@@ -65,6 +65,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final long ONE_SECOND = 1L;
     private static final int MAX_POOL_SIZE = 1;
     private static final String DEFAULT_PERCENTILES = "90;95;99";
+    private static final String SEPARATOR = ";"; //$NON-NLS-1$
 
     private String graphiteHost;
     private int graphitePort;
@@ -72,7 +73,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private String rootMetricsPrefix;
     private String samplersList = ""; //$NON-NLS-1$
     private Set<String> samplersToFilter;
-    private HashMap<String, Float> percentiles;
+    private Map<String, Float> percentiles;
     
 
     private GraphiteMetricsSender pickleMetricsManager;
@@ -165,7 +166,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         samplersList = context.getParameter("samplersList", "");
         rootMetricsPrefix = context.getParameter("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
         String percentilesAsString = context.getParameter("percentiles", DEFAULT_METRICS_PREFIX);
-        String[]  percentilesStringArray = percentilesAsString.split(";");
+        String[]  percentilesStringArray = percentilesAsString.split(SEPARATOR);
         percentiles = new HashMap<String, Float>(percentilesStringArray.length);
         DecimalFormat format = new DecimalFormat("0.##");
         for (int i = 0; i < percentilesStringArray.length; i++) {
@@ -176,14 +177,14 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                             METRIC_PERCENTILE_PREFIX+AbstractGraphiteMetricsSender.sanitizeString(format.format(percentileValue)),
                             percentileValue);
                 } catch(Exception e) {
-                    LOGGER.error("Error parsing percentile:'"+percentilesStringArray[i]+"'");
+                    LOGGER.error("Error parsing percentile:'"+percentilesStringArray[i]+"'", e);
                 }
             }
         }
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
         this.pickleMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
         pickleMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
-        String[] samplers = samplersList.split(",");
+        String[] samplers = samplersList.split(SEPARATOR);
         samplersToFilter = new HashSet<String>();
         for (String samplerName : samplers) {
             samplersToFilter.add(samplerName);
