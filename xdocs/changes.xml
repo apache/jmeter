@@ -169,6 +169,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>General</h3>
 <ul>
+<li><bugzilla>57303</bugzilla> - commons-math3 dependency is missing in the jmeter lib package (nightly build)</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
