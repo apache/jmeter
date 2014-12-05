@@ -236,6 +236,11 @@ No
 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
 #end
 
+## Shorthand - automatically adds " - " before remaining text
+#macro ( bug $id)
+#bugzilla($id) - ##
+#end
+
 #macro ( contributor $id)
 Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&gt;
 #end
@@ -280,6 +285,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #scope ($node)
 #elseif ($node.getName().equals("bugzilla"))
 #bugzilla ($node)
+#elseif ($node.getName().equals("bug"))
+#bug ($node)
 #elseif ($node.getName().equals("contributor"))
 #contributor ($node)
 #elseif ($node.getName().equals("ch_section"))
