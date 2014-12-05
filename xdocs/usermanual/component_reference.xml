@@ -3391,7 +3391,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
  </properties>
 </component>
 
-<component name="Backend Listener" index="&sect-num;.3.21"  width="777" height="266" screenshot="backend_listener.png">
+<component name="Backend Listener" index="&sect-num;.3.21"  width="1138" height="352" screenshot="backend_listener.png">
 <description>
 The backend listener is an Asynchronous listener that enables you to plug custom implementations of <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a>.
 By default, a Graphite implementation is provided.
