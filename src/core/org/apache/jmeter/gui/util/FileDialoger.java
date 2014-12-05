@@ -189,7 +189,7 @@ public final class FileDialoger {
         String ext = ".jmx";//$NON-NLS-1$
         if (filename != null) {
             jfc.setDialogTitle(filename);
-            jfc.setSelectedFile(filename.lastIndexOf(System.getProperty("file.separator")) > 0 ?
+            jfc.setSelectedFile(filename.lastIndexOf(File.separator) > 0 ?
                     new File(filename) :
                     new File(lastJFCDirectory, filename));
             int i = -1;

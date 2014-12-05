@@ -37,7 +37,7 @@ import java.util.StringTokenizer;
  */
 public final class NewDriver {
 
-    private static final String CLASSPATH_SEPARATOR = System.getProperty("path.separator");// $NON-NLS-1$
+    private static final String CLASSPATH_SEPARATOR = File.pathSeparator;
 
     private static final String OS_NAME = System.getProperty("os.name");// $NON-NLS-1$
 
