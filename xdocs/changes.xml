@@ -216,6 +216,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <ul>
 <li>Updated to jsoup-1.8.1.jar (from 1.7.3)</li>
 <li><bug>57276</bug>RMIC no longer needed since Java 5</li>
+<li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
 </ul>
 
 <ch_section>Thanks</ch_section>

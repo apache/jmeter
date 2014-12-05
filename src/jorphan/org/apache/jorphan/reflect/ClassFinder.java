@@ -315,8 +315,7 @@ public final class ClassFinder {
     private static List<String> getClasspathMatches(String[] strPathsOrJars) {
         final String javaClassPath = System.getProperty("java.class.path"); // $NON-NLS-1$
         StringTokenizer stPaths =
-            new StringTokenizer(javaClassPath,
-                System.getProperty("path.separator")); // $NON-NLS-1$
+            new StringTokenizer(javaClassPath, File.pathSeparator);
         if (log.isDebugEnabled()) {
             log.debug("Classpath = " + javaClassPath);
             for (int i = 0; i < strPathsOrJars.length; i++) {
