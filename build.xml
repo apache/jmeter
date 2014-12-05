@@ -365,7 +365,7 @@
     <include name="${lib.dir}/${commons-jexl2.jar}"/>
     <include name="${lib.dir}/${commons-lang3.jar}"/>
     <include name="${lib.dir}/${commons-logging.jar}"/>
-    <include name="${lib.dir}/${commons-math3}"/>
+    <include name="${lib.dir}/${commons-math3.jar}"/>
     <include name="${lib.dir}/${commons-net.jar}"/>
     <include name="${lib.dir}/${commons-pool2.jar}"/>
     <include name="${lib.dir}/${dnsjava.jar}"/>
