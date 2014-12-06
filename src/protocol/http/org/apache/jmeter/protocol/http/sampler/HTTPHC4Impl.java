@@ -108,7 +108,6 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.sampler.HttpWebdav;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -179,7 +178,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
-    private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS = 
+    /**
+     * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
+     */
+    private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
         new ThreadLocal<Map<HttpClientKey, HttpClient>>(){
         @Override
         protected Map<HttpClientKey, HttpClient> initialValue() {
@@ -277,7 +279,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HTTPSampleResult res = createSampleResult(url, method);
 
         HttpClient httpClient = setupClient(url);
-        
+
         HttpRequestBase httpRequest = null;
         try {
             URI uri = url.toURI();
@@ -607,7 +609,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private HttpClient setupClient(URL url) {
 
-        Map<HttpClientKey, HttpClient> map = HTTPCLIENTS.get();
+        Map<HttpClientKey, HttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
         final String host = url.getHost();
         final String proxyHost = getProxyHost();
@@ -623,7 +625,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 useDynamicProxy ? getProxyUser() : PROXY_USER,
                 useDynamicProxy ? getProxyPass() : PROXY_PASS);
         
-        HttpClient httpClient = map.get(key);
+        HttpClient httpClient = mapHttpClientPerHttpClientKey.get(key);
 
         if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
             ((AbstractHttpClient) httpClient).clearRequestInterceptors(); 
@@ -698,7 +700,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
 
-            map.put(key, httpClient); // save the agent for next time round
+            mapHttpClientPerHttpClientKey.put(key, httpClient); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
@@ -1306,14 +1308,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
-        Map<HttpClientKey, HttpClient> map = HTTPCLIENTS.get();
-        if ( map != null ) {
-            for ( HttpClient cl : map.values() ) {
+        Map<HttpClientKey, HttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        if ( mapHttpClientPerHttpClientKey != null ) {
+            for ( HttpClient cl : mapHttpClientPerHttpClientKey.values() ) {
                 ((AbstractHttpClient) cl).clearRequestInterceptors(); 
                 ((AbstractHttpClient) cl).clearResponseInterceptors(); 
                 cl.getConnectionManager().shutdown();
             }
-            map.clear();
+            mapHttpClientPerHttpClientKey.clear();
         }
     }
 
