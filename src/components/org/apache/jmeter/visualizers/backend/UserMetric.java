@@ -20,6 +20,7 @@ package org.apache.jmeter.visualizers.backend;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -42,7 +43,7 @@ public class UserMetric {
      * @param result {@link SampleResult} to be used
      */
     public synchronized void add(SampleResult result) {
-        usersStats.addValue(result.getAllThreads());
+        usersStats.addValue(JMeterContextService.getThreadCounts().activeThreads);
     }
     
     /**
@@ -74,5 +75,19 @@ public class UserMetric {
      */
     public int getMinActiveThreads() {
         return (int) usersStats.getMax();
+    }
+
+    /**
+     * @return finished threads
+     */
+    public int getFinishedThreads() {
+        return JMeterContextService.getThreadCounts().finishedThreads;
+    }
+
+    /**
+     * @return started threads
+     */
+    public int getStartedThreads() {
+        return JMeterContextService.getThreadCounts().startedThreads;
     }
 }
