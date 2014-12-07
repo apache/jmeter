@@ -46,17 +46,19 @@ public class TableSample implements Serializable, Comparable<TableSample> {
 
     private final long latency;
 
+    private final long connect;
+
     /**
      * @deprecated for unit test code only
      */
     @Deprecated
     public TableSample() {
-        this(0, 1, 0, "", "", 0, true, 0, 0);
+        this(0, 1, 0, "", "", 0, true, 0, 0, 0);
     }
 
     public TableSample(long totalSamples, int sampleCount, long startTime, String threadName,
             String label,
-            long elapsed, boolean success, long bytes, long latency) {
+            long elapsed, boolean success, long bytes, long latency, long connect) {
         this.totalSamples = totalSamples;
         this.sampleCount = sampleCount;
         this.startTime = startTime;
@@ -67,6 +69,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
         this.bytes =  (sampleCount > 0) ? bytes/sampleCount : 0;
         this.success = success;
         this.latency = latency;
+        this.connect = connect;
     }
 
     // The following getters may appear not to be used - however they are invoked via the Functor class
@@ -141,4 +144,10 @@ public class TableSample implements Serializable, Comparable<TableSample> {
         return latency;
     }
 
+    /**
+     * @return the conneect time
+     */
+    public long getConnectTime() {
+        return connect;
+    }
 }
