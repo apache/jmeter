@@ -31,8 +31,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterContextService.ThreadCounts;
 import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
@@ -99,12 +97,11 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             metric.resetForTimeInterval();
         }
         
-        ThreadCounts tc = JMeterContextService.getThreadCounts();
         pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
         pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
         pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(tc.startedThreads));
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(tc.finishedThreads));
+        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(getUserMetrics().getStartedThreads()));
+        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(getUserMetrics().getFinishedThreads()));
 
         pickleMetricsManager.writeAndSendMetrics();
     }
