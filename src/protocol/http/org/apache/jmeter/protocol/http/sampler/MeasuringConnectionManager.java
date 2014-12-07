@@ -24,14 +24,11 @@ import java.util.concurrent.TimeUnit;
 
 public class MeasuringConnectionManager extends PoolingClientConnectionManager {
 
-    private final DnsResolver dnsResolver;
     private MeasuringConnectionRequest measuredConnection;
     private SampleResult sample;
 
     public MeasuringConnectionManager(SchemeRegistry aDefault, DnsResolver resolver) {
         super(aDefault, resolver);
-
-        dnsResolver = resolver;
     }
 
     @Override
@@ -51,7 +48,7 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
 
         public MeasuringConnectionRequest(ClientConnectionRequest res, SampleResult sample) {
             handler = res;
-            this.sample=sample;
+            this.sample = sample;
         }
 
         @Override
@@ -69,19 +66,15 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
     private class MeasuredConnection implements ManagedClientConnection {
         private final ManagedClientConnection handler;
         private final SampleResult sample;
-        private long connectedTime;
-        private long startedTime;
 
         public MeasuredConnection(ManagedClientConnection res, SampleResult sample) {
             handler = res;
-            this.sample=sample;
+            this.sample = sample;
         }
 
         @Override
         public void open(HttpRoute route, HttpContext context, HttpParams params) throws IOException {
-            startedTime = System.currentTimeMillis();
             handler.open(route, context, params);
-            connectedTime = System.currentTimeMillis();
             if (sample != null) {
                 sample.connectEnd();
             }
