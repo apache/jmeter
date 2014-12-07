@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package org.apache.jmeter.protocol.http.sampler;
 
 import org.apache.http.HttpConnectionMetrics;
@@ -22,6 +40,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Adapter for {@link PoolingClientConnectionManager}
+ * that wraps all connection requests into time-measured implementation {@link MeasuringConnectionRequest}
+ */
 public class MeasuringConnectionManager extends PoolingClientConnectionManager {
 
     private MeasuringConnectionRequest measuredConnection;
@@ -42,7 +64,10 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
         this.sample = sample;
     }
 
-    public class MeasuringConnectionRequest implements ClientConnectionRequest {
+    /**
+     * And adapter class to pass {@link SampleResult} into {@link MeasuredConnection}
+     */
+    private static class MeasuringConnectionRequest implements ClientConnectionRequest {
         private final ClientConnectionRequest handler;
         private final SampleResult sample;
 
@@ -63,7 +88,11 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
         }
     }
 
-    private class MeasuredConnection implements ManagedClientConnection {
+    /**
+     * An adapter for {@link ManagedClientConnection}
+     * that calls SampleResult.connectEnd after calling ManagedClientConnection.open
+     */
+    private static class MeasuredConnection implements ManagedClientConnection {
         private final ManagedClientConnection handler;
         private final SampleResult sample;
 
@@ -80,7 +109,7 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
             }
         }
 
-        // all following methods just wraps handler's
+        // ================= all following methods just wraps handler's =================
         @Override
         public boolean isSecure() {
             return handler.isSecure();
