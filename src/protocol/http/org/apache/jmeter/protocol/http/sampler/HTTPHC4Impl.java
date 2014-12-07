@@ -73,6 +73,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.ResponseContentEncoding;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.params.ConnRoutePNames;
@@ -122,6 +123,7 @@ import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.htmlparser.http.ConnectionManager;
 
 /**
  * HTTP Sampler using Apache HttpClient 4.x.
@@ -245,7 +247,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
 
     private volatile boolean resetSSLContext;
-    private MeasuringConnectionManager connManager;
 
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
@@ -277,7 +278,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         HttpClient httpClient = setupClient(url);
 
-        this.connManager.setSample(res);
+        ClientConnectionManager connMgr = httpClient.getConnectionManager();
+        if (connMgr instanceof MeasuringConnectionManager) {
+            ((MeasuringConnectionManager) connMgr).setSample(res);
+        }
 
         HttpRequestBase httpRequest = null;
         try {
@@ -644,7 +648,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (resolver == null) {
                 resolver = new SystemDefaultDnsResolver();
             }
-            this.connManager = new MeasuringConnectionManager(SchemeRegistryFactory.createDefault(), resolver);
+            ClientConnectionManager connManager = new MeasuringConnectionManager(SchemeRegistryFactory.createDefault(), resolver);
 
             httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
