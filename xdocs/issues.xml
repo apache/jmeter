@@ -44,6 +44,29 @@ Bugzilla - Enhancements only</a>
 </li>
 </ul>
 </section>
+<section name="Requesting an enhancement">
+<p>
+In most cases it is worth starting a discussion on the mailing list first.
+Bugzilla is good for tracking progress and supplying patches, but is unwieldy for longer discussions.
+</p> 
+<p>
+If you have not already done so, you need to register an account first, using the "New Account" link at the top of the
+main Bugzilla page: <a href="https://issues.apache.org/bugzilla/">https://issues.apache.org/bugzilla/</a>.
+</p>
+<p>
+Make sure you read and understand the information on the account creation page before signing up.
+</p>
+<p>
+Once logged in, click "File a bug" and select JMeter from the list
+Please set the severity to "enhancement".
+</p>
+<p>
+Please make sure that you describe the enhancement in sufficient detail. If necessary provide an example use-case.
+</p>
+<p>
+If you are providing a code patch, also provide a test case, and documentation on how to use the new feature (ideally as a documentation patch).
+</p>
+</section>
 <section name="Raising an Issue">
 <p>
 First check that the issue has not already been reported. 
@@ -60,7 +83,7 @@ Make sure you read and understand the information on the account creation page b
 Once logged in, click "File a bug" and select JMeter from the list.
 </p>
 </section>
-<section name="Required Information">
+<section name="Required Information for bug reporting">
 <p>
 Please make sure you provide sufficient information for others to be able to make use of the report effectively.
 Use the checklist below to guide you.
