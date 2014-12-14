@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +65,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final int MAX_POOL_SIZE = 1;
     private static final String DEFAULT_PERCENTILES = "90;95;99";
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
+    private static final Object LOCK = new Object();
 
     private String graphiteHost;
     private int graphitePort;
@@ -77,6 +79,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private GraphiteMetricsSender pickleMetricsManager;
 
     private ScheduledExecutorService scheduler;
+    private ScheduledFuture<?> timerHandle;
     
     public GraphiteBackendListenerClient() {
         super();
@@ -84,42 +87,50 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
 
     @Override
     public void run() {
+        sendMetrics();
+    }
+
+    /**
+     * Send metrics to Graphite
+     */
+    protected void sendMetrics() {
         // Need to convert millis to seconds for Graphite
-        long timestamp = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-        for (Map.Entry<String, SamplerMetric> entry : getMetricsPerSampler().entrySet()) {
-            SamplerMetric metric = entry.getValue();
-            if(entry.getKey().equals(CUMULATED_METRICS)) {
-                addMetrics(timestamp, CUMULATED_CONTEXT_NAME, metric);
-            } else {
-                addMetrics(timestamp, AbstractGraphiteMetricsSender.sanitizeString(entry.getKey()), metric);                
+        long timestampInSeconds = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+        synchronized (LOCK) {
+            for (Map.Entry<String, SamplerMetric> entry : getMetricsPerSampler().entrySet()) {
+                SamplerMetric metric = entry.getValue();
+                if(entry.getKey().equals(CUMULATED_METRICS)) {
+                    addMetrics(timestampInSeconds, CUMULATED_CONTEXT_NAME, metric);
+                } else {
+                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(entry.getKey()), metric);                
+                }
+                // We are computing on interval basis so cleanup
+                metric.resetForTimeInterval();
             }
-            // We are computing on interval basis so cleanup
-            metric.resetForTimeInterval();
-        }
-        
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(getUserMetrics().getStartedThreads()));
-        pickleMetricsManager.addMetric(timestamp, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(getUserMetrics().getFinishedThreads()));
+        }        
+        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
+        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
+        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
+        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(getUserMetrics().getStartedThreads()));
+        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(getUserMetrics().getFinishedThreads()));
 
         pickleMetricsManager.writeAndSendMetrics();
     }
 
 
     /**
-     * @param timestamp
-     * @param contextName
-     * @param metric
+     * @param timestampInSeconds long
+     * @param contextName String
+     * @param metric {@link SamplerMetric}
      */
-    private void addMetrics(long timestamp, String contextName, SamplerMetric metric) {
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_FAILED_REQUESTS, Integer.toString(metric.getFailures()));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_SUCCESSFUL_REQUESTS, Integer.toString(metric.getSuccesses()));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_TOTAL_REQUESTS, Integer.toString(metric.getTotal()));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_MIN_RESPONSE_TIME, Double.toString(metric.getMinTime()));
-        pickleMetricsManager.addMetric(timestamp, contextName, METRIC_MAX_RESPONSE_TIME, Double.toString(metric.getMaxTime()));
+    private void addMetrics(long timestampInSeconds, String contextName, SamplerMetric metric) {
+        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_FAILED_REQUESTS, Integer.toString(metric.getFailures()));
+        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_SUCCESSFUL_REQUESTS, Integer.toString(metric.getSuccesses()));
+        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_TOTAL_REQUESTS, Integer.toString(metric.getTotal()));
+        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_MIN_RESPONSE_TIME, Double.toString(metric.getMinTime()));
+        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_MAX_RESPONSE_TIME, Double.toString(metric.getMaxTime()));
         for (Map.Entry<String, Float> entry : percentiles.entrySet()) {
-            pickleMetricsManager.addMetric(timestamp, contextName, 
+            pickleMetricsManager.addMetric(timestampInSeconds, contextName, 
                     entry.getKey(), 
                     Double.toString(metric.getPercentile(entry.getValue().floatValue())));            
         }
@@ -142,14 +153,16 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void handleSampleResults(List<SampleResult> sampleResults,
             BackendListenerContext context) {
-        for (SampleResult sampleResult : sampleResults) {
-            getUserMetrics().add(sampleResult);
-            if(!summaryOnly && samplersToFilter.contains(sampleResult.getSampleLabel())) {
-                SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
-                samplerMetric.add(sampleResult);
+        synchronized (LOCK) {
+            for (SampleResult sampleResult : sampleResults) {
+                getUserMetrics().add(sampleResult);
+                if(!summaryOnly && samplersToFilter.contains(sampleResult.getSampleLabel())) {
+                    SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
+                    samplerMetric.add(sampleResult);
+                }
+                SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);
+                cumulatedMetrics.add(sampleResult);                    
             }
-            SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);
-            cumulatedMetrics.add(sampleResult);                    
         }
     }
 
@@ -188,17 +201,23 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         }
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Don't change this as metrics are per second
-        scheduler.scheduleAtFixedRate(this, ONE_SECOND, ONE_SECOND, TimeUnit.SECONDS);
+        this.timerHandle = scheduler.scheduleAtFixedRate(this, ONE_SECOND, ONE_SECOND, TimeUnit.SECONDS);
     }
 
     @Override
     public void teardownTest(BackendListenerContext context) throws Exception {
+        boolean cancelState = timerHandle.cancel(false);
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Canceled state:"+cancelState);
+        }
         scheduler.shutdown();
         try {
             scheduler.awaitTermination(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOGGER.error("Error waiting for end of scheduler");
         }
+        // Send last set of data before ending
+        sendMetrics();
         
         samplersToFilter.clear();
         pickleMetricsManager.destroy();
