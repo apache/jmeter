@@ -45,9 +45,9 @@ public class SamplerMetric {
      */
     public synchronized void add(SampleResult result) {
         if(result.isSuccessful()) {
-            successes++;
+            successes+=result.getSampleCount()-result.getErrorCount();
         } else {
-            failures++;
+            failures+=result.getErrorCount();
         }
         long time = result.getTime();
         if(result.isSuccessful()) {

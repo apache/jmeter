@@ -153,7 +153,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <h3>Listeners</h3>
 <ul>
 <li><bug>57262</bug>Aggregate Report, Aggregate Graph and Summary Report export : headers use keys instead of labels</li>
-<li><bug>57321</bug>BackendListener reports wrong number of Active Users in master-slave configuration (nightly build r1642603)</li>
+<li><bug>57321</bug>BackendListener reports partial results in master-slave configuration (nightly build r1642603)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
