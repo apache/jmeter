@@ -154,6 +154,8 @@ See  <bugzilla>56357</bugzilla> for details.
 <ul>
 <li><bug>57262</bug>Aggregate Report, Aggregate Graph and Summary Report export : headers use keys instead of labels</li>
 <li><bug>57321</bug>BackendListener reports partial results in master-slave configuration (nightly build r1642603)</li>
+<li><bug>57350</bug>BackendListener reports stale response time (Nightly Build r1645532). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57351</bug>Graphite Backend uses wrong default port for PlainText protocol (Nightly Build r1645532) . Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -223,13 +225,14 @@ See  <bugzilla>56357</bugzilla> for details.
 <ch_section>Thanks</ch_section>
 <p>We thank all contributors mentioned in bug and improvement sections above:
 <ul>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 
 <br/>
 We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
 <ul>
-<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Chaitanya Bhatt (bhatt.chaitanya@gmail.com) for his thorough testing of new BackendListener and Graphite Client implementation.</li>
 </ul>
 
 Apologies if we have omitted anyone else.
