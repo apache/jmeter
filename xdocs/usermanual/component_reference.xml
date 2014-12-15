@@ -589,6 +589,13 @@ the additional variables for rows 4, 5 and 6 will be removed.
         Each map contains the column name as the key and the column data as the value. Usage:<br></br>
         <code>columnValue = vars.getObject("resultObject").get(0).get("Column Name");</code>
         </property>
+        <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
+            <ul>
+                <li>Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a ResultSets when present on the list.</li>
+                <li>Store As Object - Variables of ResultSet type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the ResultSet </li>
+                <li>Count Records - Variables of ResultSet types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
+            </ul>
+        </property>
 </properties>
 
 <links>

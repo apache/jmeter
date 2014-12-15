@@ -186,6 +186,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>57322</bug>JDBC Test elements: add ResultHandler to deal with ResultSets(cursors) returned by callable statements</li>
 </ul>
 
 <h3>Controllers</h3>
