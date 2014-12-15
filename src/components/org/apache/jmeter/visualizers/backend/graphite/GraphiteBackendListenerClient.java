@@ -44,7 +44,7 @@ import org.apache.log.Logger;
  * @since 2.13
  */
 public class GraphiteBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
-    private static final int DEFAULT_PICKLE_PORT = 2004;
+    private static final int DEFAULT_PLAINTEXT_PROTOCOL_PORT = 2003;
     private static final String CUMULATED_CONTEXT_NAME = "cumulated";
 
     private static final Logger LOGGER = LoggingManager.getLoggerForClass();
@@ -76,7 +76,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private Map<String, Float> percentiles;
     
 
-    private GraphiteMetricsSender pickleMetricsManager;
+    private GraphiteMetricsSender graphiteMetricsManager;
 
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> timerHandle;
@@ -108,31 +108,36 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                 metric.resetForTimeInterval();
             }
         }        
-        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
-        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
-        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
-        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(getUserMetrics().getStartedThreads()));
-        pickleMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(getUserMetrics().getFinishedThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(getUserMetrics().getStartedThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(getUserMetrics().getFinishedThreads()));
 
-        pickleMetricsManager.writeAndSendMetrics();
+        graphiteMetricsManager.writeAndSendMetrics();
     }
 
 
     /**
+     * Add request metrics to metrics manager.
+     * Note if total number of requests is 0, no response time metrics are sent.
      * @param timestampInSeconds long
      * @param contextName String
      * @param metric {@link SamplerMetric}
      */
     private void addMetrics(long timestampInSeconds, String contextName, SamplerMetric metric) {
-        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_FAILED_REQUESTS, Integer.toString(metric.getFailures()));
-        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_SUCCESSFUL_REQUESTS, Integer.toString(metric.getSuccesses()));
-        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_TOTAL_REQUESTS, Integer.toString(metric.getTotal()));
-        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_MIN_RESPONSE_TIME, Double.toString(metric.getMinTime()));
-        pickleMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_MAX_RESPONSE_TIME, Double.toString(metric.getMaxTime()));
-        for (Map.Entry<String, Float> entry : percentiles.entrySet()) {
-            pickleMetricsManager.addMetric(timestampInSeconds, contextName, 
-                    entry.getKey(), 
-                    Double.toString(metric.getPercentile(entry.getValue().floatValue())));            
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_FAILED_REQUESTS, Integer.toString(metric.getFailures()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_SUCCESSFUL_REQUESTS, Integer.toString(metric.getSuccesses()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_TOTAL_REQUESTS, Integer.toString(metric.getTotal()));
+        // See https://issues.apache.org/bugzilla/show_bug.cgi?id=57350
+        if(metric.getTotal() > 0) { 
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_MIN_RESPONSE_TIME, Double.toString(metric.getMinTime()));
+            graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_MAX_RESPONSE_TIME, Double.toString(metric.getMaxTime()));
+            for (Map.Entry<String, Float> entry : percentiles.entrySet()) {
+                graphiteMetricsManager.addMetric(timestampInSeconds, contextName, 
+                        entry.getKey(), 
+                        Double.toString(metric.getPercentile(entry.getValue().floatValue())));            
+            }
         }
     }
 
@@ -171,7 +176,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         String graphiteMetricsSenderClass = context.getParameter("graphiteMetricsSender");
         
         graphiteHost = context.getParameter("graphiteHost");
-        graphitePort = context.getIntParameter("graphitePort", DEFAULT_PICKLE_PORT);
+        graphitePort = context.getIntParameter("graphitePort", DEFAULT_PLAINTEXT_PROTOCOL_PORT);
         summaryOnly = context.getBooleanParameter("summaryOnly", true);
         samplersList = context.getParameter("samplersList", "");
         rootMetricsPrefix = context.getParameter("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
@@ -192,8 +197,8 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             }
         }
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
-        this.pickleMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
-        pickleMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
+        this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
+        graphiteMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
         String[] samplers = samplersList.split(SEPARATOR);
         samplersToFilter = new HashSet<String>();
         for (String samplerName : samplers) {
@@ -220,7 +225,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         sendMetrics();
         
         samplersToFilter.clear();
-        pickleMetricsManager.destroy();
+        graphiteMetricsManager.destroy();
         super.teardownTest(context);
     }
 
@@ -229,7 +234,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         Arguments arguments = new Arguments();
         arguments.addArgument("graphiteMetricsSender", TextGraphiteMetricsSender.class.getName());
         arguments.addArgument("graphiteHost", "");
-        arguments.addArgument("graphitePort", Integer.toString(DEFAULT_PICKLE_PORT));
+        arguments.addArgument("graphitePort", Integer.toString(DEFAULT_PLAINTEXT_PROTOCOL_PORT));
         arguments.addArgument("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
         arguments.addArgument("summaryOnly", "true");
         arguments.addArgument("samplersList", "");
