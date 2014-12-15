@@ -88,18 +88,18 @@ public class Summariser extends AbstractTestElement
     private static final int INTERVAL_WINDOW = 5; // in seconds
 
     /**
-     * Lock used to protect accumulators update + instanceCount update
+     * Lock used to protect ACCUMULATORS update + INSTANCE_COUNT update
      */
-    private static final Object lock = new Object();
+    private static final Object LOCK = new Object();
 
     /*
      * This map allows summarisers with the same name to contribute to the same totals.
      */
-    //@GuardedBy("accumulators") - needed to ensure consistency between this and instanceCount
-    private static final Map<String, Totals> accumulators = new ConcurrentHashMap<String, Totals>();
+    //@GuardedBy("LOCK") - needed to ensure consistency between this and INSTANCE_COUNT
+    private static final Map<String, Totals> ACCUMULATORS = new ConcurrentHashMap<String, Totals>();
 
-    //@GuardedBy("accumulators")
-    private static int instanceCount; // number of active tests
+    //@GuardedBy("LOCK")
+    private static int INSTANCE_COUNT; // number of active tests
 
     /*
      * Cached copy of Totals for this instance.
@@ -122,9 +122,9 @@ public class Summariser extends AbstractTestElement
      */
     public Summariser() {
         super();
-        synchronized (lock) {
-            accumulators.clear();
-            instanceCount=0;
+        synchronized (LOCK) {
+            ACCUMULATORS.clear();
+            INSTANCE_COUNT=0;
         }
     }
 
@@ -336,14 +336,14 @@ public class Summariser extends AbstractTestElement
      */
     @Override
     public void testStarted(String host) {
-        synchronized (lock) {
+        synchronized (LOCK) {
             myName = getName();
-            myTotals = accumulators.get(myName);
+            myTotals = ACCUMULATORS.get(myName);
             if (myTotals == null){
                 myTotals = new Totals();
-                accumulators.put(myName, myTotals);
+                ACCUMULATORS.put(myName, myTotals);
             }
-            instanceCount++;
+            INSTANCE_COUNT++;
         }
     }
 
@@ -356,10 +356,10 @@ public class Summariser extends AbstractTestElement
     @Override
     public void testEnded(String host) {
         Set<Entry<String, Totals>> totals = null;
-        synchronized (lock) {
-            instanceCount--;
-            if (instanceCount <= 0){
-                totals = accumulators.entrySet();
+        synchronized (LOCK) {
+            INSTANCE_COUNT--;
+            if (INSTANCE_COUNT <= 0){
+                totals = ACCUMULATORS.entrySet();
             }
         }
         if (totals == null) {// We're not done yet
