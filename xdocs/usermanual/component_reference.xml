@@ -6303,8 +6303,11 @@ plan because they are likely to change between runs.
 </p>
 <h4>Authorization Manager</h4>
 <p>
-The Proxy server passes on any Authorization headers sent by the browser, but does not save them in the test plan.
-If the site requires Authorization, you will need to add an Authorization Manager and fill it in with the necessary entries.
+The HTTP(S) Test Script Recorder grabs "Authentication" header, tries to compute the Auth Policy. If Authorization Manager was added to target
+controller manually, HTTP(S) Test Script Recorder will find it and add authorization(matching ones will be removed). Otherwise
+Authorization Manager will be added to target controller with authorization object.
+You may have to fix automatically computed values after recording.
+
 </p>
 <h4>Uploading files</h4>
 <p>
