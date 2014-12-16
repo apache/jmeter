@@ -172,8 +172,8 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>General</h3>
 <ul>
-<li><bugzilla>57303</bugzilla> - commons-math3 dependency is missing in the jmeter lib package (nightly build)</li>
-<li><bugzilla>57306</bugzilla> - backend_listener.png is missing in the JMeter User Doc (affects nightly build)</li>
+<li><bug>57303</bug>commons-math3 dependency is missing in the jmeter lib package (nightly build)</li>
+<li><bug>57306</bug>backend_listener.png is missing in the JMeter User Doc (affects nightly build)</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
