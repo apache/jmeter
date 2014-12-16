@@ -448,7 +448,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     }
 
     /**
-     * Check if two authorization objects are equal
+     * Check if two authorization objects are equal ignoring username/password
      * @param a {@link Authorization}
      * @param b {@link Authorization}
      * @return true if a and b match
@@ -456,8 +456,6 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     private boolean match(Authorization a, Authorization b){
         return
                 a.getURL().equals(b.getURL())&&
-                a.getName().equals(b.getName())&&
-                a.getPass().equals(b.getPass())&&
                 a.getDomain().equals(b.getDomain())&&
                 a.getRealm().equals(b.getRealm())&&
                 a.getMechanism().equals(b.getMechanism());
