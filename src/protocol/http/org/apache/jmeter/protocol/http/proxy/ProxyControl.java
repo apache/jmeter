@@ -24,10 +24,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -38,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -58,12 +61,17 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.Authorization;
+import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
+import org.apache.jmeter.protocol.http.gui.AuthPanel;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -77,6 +85,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -107,6 +116,10 @@ public class ProxyControl extends GenericController {
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName();
 
     private static final String HEADER_PANEL = HeaderPanel.class.getName();
+
+    private static final String AUTH_PANEL = AuthPanel.class.getName();
+
+    private static final String AUTH_MANAGER = AuthManager.class.getName();
 
     public static final int DEFAULT_PORT = 8080;
 
@@ -146,6 +159,10 @@ public class ProxyControl extends GenericController {
     private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
 
     private static final String NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED = "ProxyControlGui.notify_child_sl_filtered"; // $NON-NLS-1$
+
+    private static final String BASIC_AUTH = "Basic"; // $NON-NLS-1$
+
+    private static final String DIGEST_AUTH = "Digest"; // $NON-NLS-1$
 
     //- JMX file attributes
 
@@ -340,7 +357,7 @@ public class ProxyControl extends GenericController {
         samplerDownloadImages = b;
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
-    
+
     public void setNotifyChildSamplerListenerOfFilteredSamplers(boolean b) {
         notifyChildSamplerListenersOfFilteredSamples = b;
         setProperty(new BooleanProperty(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, b));
@@ -426,7 +443,7 @@ public class ProxyControl extends GenericController {
     public boolean getNotifyChildSamplerListenerOfFilteredSamplers() {
         return getPropertyAsBoolean(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, true);
     }
-    
+
     public boolean getRegexMatch() {
         return getPropertyAsBoolean(REGEX_MATCH, false);
     }
@@ -551,6 +568,10 @@ public class ProxyControl extends GenericController {
                 sampler.setUseKeepAlive(useKeepAlive);
                 sampler.setImageParser(samplerDownloadImages);
 
+                Authorization authorization = createAuthorization(subConfigs, sampler);
+                if (authorization != null) {
+                    setAuthorization(authorization, myTarget);
+                }
                 placeSampler(sampler, subConfigs, myTarget);
             } else {
                 if(log.isDebugEnabled()) {
@@ -559,13 +580,77 @@ public class ProxyControl extends GenericController {
                 notifySampleListeners = notifyChildSamplerListenersOfFilteredSamples;
                 result.setSampleLabel("["+result.getSampleLabel()+"]");
             }
-        } 
+        }
         if(notifySampleListeners) {
             // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
             notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
         } else {
             log.debug("Sample not delivered to Child Sampler Listener based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
         }
+    }
+
+    /**
+     * Detect Header manager in subConfigs,
+     * Find(if any) Authorization header
+     * Construct Authentication object
+     * Removes Authorization if present 
+     *
+     * @param subConfigs {@link TestElement}[]
+     * @param sampler {@link HTTPSamplerBase}
+     * @return {@link Authorization}
+     */
+    private Authorization createAuthorization(final TestElement[] subConfigs, HTTPSamplerBase sampler) {
+        Header authHeader = null;
+        Authorization authorization = null;
+        // Iterate over subconfig elements searching for HeaderManager
+        for (TestElement te : subConfigs) {
+            if (te instanceof HeaderManager) {
+                List<TestElementProperty> headers = (ArrayList<TestElementProperty>) ((HeaderManager) te).getHeaders().getObjectValue();
+                for (Iterator<?> iterator = headers.iterator(); iterator.hasNext();) {
+                    TestElementProperty tep = (TestElementProperty) iterator
+                            .next();
+                    if (tep.getName().equals(HTTPConstants.HEADER_AUTHORIZATION)) {
+                        //Construct Authorization object from HEADER_AUTHORIZATION
+                        authHeader = (Header) tep.getObjectValue();
+                        String[] authHeaderContent = authHeader.getValue().split(" ");//$NON-NLS-1$
+                        String authType = null;
+                        String authCredentialsBase64 = null;
+                        if(authHeaderContent.length>=2) {
+                            authType = authHeaderContent[0];
+                            authCredentialsBase64 = authHeaderContent[1];
+                            authorization=new Authorization();
+                            try {
+                                authorization.setURL(sampler.getUrl().toExternalForm());
+                            } catch (MalformedURLException e) {
+                                log.error("Error filling url on authorization, message:"+e.getMessage(), e);
+                                authorization.setURL("${AUTH_BASE_URL}");//$NON-NLS-1$
+                            }
+                            // if HEADER_AUTHORIZATION contains "Basic"
+                            // then set Mechanism.BASIC_DIGEST, otherwise Mechanism.KERBEROS
+                            authorization.setMechanism(
+                                    authType.equals(BASIC_AUTH)||authType.equals(DIGEST_AUTH)?
+                                    AuthManager.Mechanism.BASIC_DIGEST:
+                                    AuthManager.Mechanism.KERBEROS);
+                            if(BASIC_AUTH.equals(authType)) {
+                                String authCred= new String(Base64.decodeBase64(authCredentialsBase64));
+                                String[] loginPassword = authCred.split(":"); //$NON-NLS-1$
+                                authorization.setUser(loginPassword[0]);
+                                authorization.setPass(loginPassword[1]);
+                            } else {
+                                // Digest or Kerberos
+                                authorization.setUser("${AUTH_LOGIN}");//$NON-NLS-1$
+                                authorization.setPass("${AUTH_PASSWORD}");//$NON-NLS-1$
+                                
+                            }
+                        }
+                        // remove HEADER_AUTHORIZATION from HeaderManager 
+                        // because it's useless after creating Authorization object
+                        iterator.remove();
+                    }
+                }
+            }
+        }
+        return authorization;
     }
 
     public void stopProxy() {
@@ -698,6 +783,31 @@ public class ProxyControl extends GenericController {
         }
         return true;
     }
+
+    /**
+     * Find if there is any AuthManager in JMeterTreeModel
+     * If there is no one, create and add it to tree
+     * Add authorization object to AuthManager
+     * @param authorization {@link Authorization}
+     * @param target {@link JMeterTreeNode}
+     */
+    private void setAuthorization(Authorization authorization, JMeterTreeNode target) {
+        JMeterTreeModel jmeterTreeModel = GuiPackage.getInstance().getTreeModel();
+        List<JMeterTreeNode> authManagerNodes = jmeterTreeModel.getNodesOfType(AuthManager.class);
+        if (authManagerNodes.size() == 0) {
+            try {
+                log.debug("Creating HTTP Authentication manager for authorization:"+authorization);
+                AuthManager authManager = newAuthorizationManager(authorization);
+                jmeterTreeModel.addComponent(authManager, target);
+            } catch (IllegalUserActionException e) {
+                log.error("Failed to add Authorization Manager to target node:" + target.getName(), e);
+            }
+        } else{
+            AuthManager authManager=(AuthManager)authManagerNodes.get(0).getTestElement();
+            authManager.addAuth(authorization);
+        }
+    }
+
     /**
      * Helper method to add a Response Assertion
      * Called from AWT Event thread
@@ -708,6 +818,21 @@ public class ProxyControl extends GenericController {
         ra.setName(JMeterUtils.getResString("assertion_title")); // $NON-NLS-1$
         ra.setTestFieldResponseData();
         model.addComponent(ra, node);
+    }
+
+    /**
+     * Construct AuthManager
+     * @param authorization
+     * @return
+     * @throws IllegalUserActionException
+     */
+    private AuthManager newAuthorizationManager(Authorization authorization) throws IllegalUserActionException {
+        AuthManager authManager = new AuthManager();
+        authManager.setProperty(TestElement.GUI_CLASS, AUTH_PANEL);
+        authManager.setProperty(TestElement.TEST_CLASS, AUTH_MANAGER);
+        authManager.setName("HTTP Authorization Manager");
+        authManager.addAuth(authorization);
+        return authManager;
     }
 
     /**

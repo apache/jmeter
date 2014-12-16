@@ -182,6 +182,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+<li><bug>25430</bug>HTTP(S) Test Script Recorder : Make it populate HTTP Authorisation Manager. Partly based on a patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -228,6 +229,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <ul>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+<li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 </ul>
 
 <br/>

@@ -256,8 +256,32 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     public void addConfigElement(ConfigElement config) {
     }
 
-    public void addAuth(Authorization auth) {
-        getAuthObjects().addItem(auth);
+    /**
+     * Add newAuthorization if it does not already exist
+     * @param newAuthorization
+     */
+    public void addAuth(Authorization newAuthorization) {
+        boolean alreadyExists=false;
+        PropertyIterator iter = getAuthObjects().iterator();
+        //iterate over authentication objects in manager
+        while (iter.hasNext()) {
+            Authorization authorization = (Authorization) iter.next().getObjectValue();
+            if (authorization == null) {
+                continue;
+            }
+            if (match(authorization,newAuthorization)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Found the same Authorization object:" + newAuthorization.toString());
+                }
+                //set true, if found the same one
+                alreadyExists=true;
+                break;
+            }
+        }
+        if(!alreadyExists){
+            // if there was no such auth object, add.
+            getAuthObjects().addItem(newAuthorization);
+        }
     }
 
     public void addAuth() {
@@ -419,8 +443,24 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         if (STRIP_PORT) {
             return true;
         }
-        return (url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT || 
+        return (url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT ||
                 url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT);
+    }
+
+    /**
+     * Check if two authorization objects are equal
+     * @param a {@link Authorization}
+     * @param b {@link Authorization}
+     * @return true if a and b match
+     */
+    private boolean match(Authorization a, Authorization b){
+        return
+                a.getURL().equals(b.getURL())&&
+                a.getName().equals(b.getName())&&
+                a.getPass().equals(b.getPass())&&
+                a.getDomain().equals(b.getDomain())&&
+                a.getRealm().equals(b.getRealm())&&
+                a.getMechanism().equals(b.getMechanism());
     }
 
     /** {@inheritDoc} */
