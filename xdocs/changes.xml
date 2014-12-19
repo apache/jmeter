@@ -175,6 +175,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><bug>57303</bug>commons-math3 dependency is missing in the jmeter lib package (nightly build)</li>
 <li><bug>57306</bug>backend_listener.png is missing in the JMeter User Doc (affects nightly build)</li>
 <li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57364</bug>Options &lt; Look And Feel does not update all windows LAF. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
