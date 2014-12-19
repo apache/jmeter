@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
@@ -63,6 +64,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Load;
 import org.apache.jmeter.gui.action.LoadRecentProject;
+import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -97,8 +99,16 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * Main JMeter class; processes options and starts the GUI, non-GUI or server as appropriate.
  */
 public class JMeter implements JMeterPlugin {
-
     private static final Logger log = LoggingManager.getLoggerForClass();
+    
+    static {
+        String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
+        try {
+            UIManager.setLookAndFeel(jMeterLaf);
+        } catch (Exception ex) {
+            log.warn("Could not set LAF to:"+jMeterLaf, ex);
+        }
+    }
 
     public static final int UDP_PORT_DEFAULT = 4445; // needed for ShutdownClient
 
