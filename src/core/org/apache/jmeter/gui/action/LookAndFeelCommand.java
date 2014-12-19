@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +32,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -135,7 +137,15 @@ public class LookAndFeelCommand implements Command {
         try {
             String className = ev.getActionCommand().substring(ActionNames.LAF_PREFIX.length()).replace('/', '.');
             UIManager.setLookAndFeel(className);
-            SwingUtilities.updateComponentTreeUI(GuiPackage.getInstance().getMainFrame());
+            for (Window w : Window.getWindows()) {
+                SwingUtilities.updateComponentTreeUI(w);
+                if (w.isDisplayable() &&
+                    (w instanceof Frame ? !((Frame)w).isResizable() :
+                    w instanceof Dialog ? !((Dialog)w).isResizable() :
+                    true)) {
+                    w.pack();
+                }
+            }
             PREFS.put(USER_PREFS_KEY, className);
         } catch (javax.swing.UnsupportedLookAndFeelException e) {
             JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
