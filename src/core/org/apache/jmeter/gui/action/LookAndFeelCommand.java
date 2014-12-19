@@ -57,7 +57,6 @@ public class LookAndFeelCommand implements Command {
         for (int i = 0; i < lfs.length; i++) {
             commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
         }
-
         try {
             String jMeterLaf = getJMeterLaf();
             UIManager.setLookAndFeel(jMeterLaf);
@@ -92,10 +91,8 @@ public class LookAndFeelCommand implements Command {
      * </ul>
      * @return LAF classname
      */
-    private static String getJMeterLaf(){
-        String laf;
-
-        laf = PREFS.get(USER_PREFS_KEY, null);
+    public static String getJMeterLaf(){
+        String laf = PREFS.get(USER_PREFS_KEY, null);
         if (laf != null) {
             return checkLafName(laf);            
         }
