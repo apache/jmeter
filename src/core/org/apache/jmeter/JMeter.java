@@ -101,15 +101,6 @@ import com.thoughtworks.xstream.converters.ConversionException;
 public class JMeter implements JMeterPlugin {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    static {
-        String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
-        try {
-            UIManager.setLookAndFeel(jMeterLaf);
-        } catch (Exception ex) {
-            log.warn("Could not set LAF to:"+jMeterLaf, ex);
-        }
-    }
-
     public static final int UDP_PORT_DEFAULT = 4445; // needed for ShutdownClient
 
     public static final String HTTP_PROXY_PASS = "http.proxyPass"; // $NON-NLS-1$
@@ -234,8 +225,15 @@ public class JMeter implements JMeterPlugin {
      * Starts up JMeter in GUI mode
      */
     private void startGui(String testFile) {
+        String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
+        try {
+            UIManager.setLookAndFeel(jMeterLaf);
+        } catch (Exception ex) {
+            log.warn("Could not set LAF to:"+jMeterLaf, ex);
+        }
 
         PluginManager.install(this, true);
+
         JMeterTreeModel treeModel = new JMeterTreeModel();
         JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
         treeLis.setActionHandler(ActionRouter.getInstance());
