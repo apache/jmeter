@@ -30,7 +30,6 @@ import java.util.prefs.Preferences;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
@@ -59,26 +58,19 @@ public class LookAndFeelCommand implements Command {
         for (int i = 0; i < lfs.length; i++) {
             commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
         }
-        try {
-            String jMeterLaf = getJMeterLaf();
-            UIManager.setLookAndFeel(jMeterLaf);
-            if (log.isInfoEnabled()) {
-                ArrayList<String> names=new ArrayList<String>();
-                for(UIManager.LookAndFeelInfo laf : lfs) {
-                    if (laf.getClassName().equals(jMeterLaf)) {
-                        names.add(laf.getName());
-                    }
-                }
-                if (names.size() > 0) {
-                    log.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
-                } else {
-                    log.info("Using look and feel: "+jMeterLaf);
+        String jMeterLaf = getJMeterLaf();
+        if (log.isInfoEnabled()) {
+            ArrayList<String> names=new ArrayList<String>();
+            for(UIManager.LookAndFeelInfo laf : lfs) {
+                if (laf.getClassName().equals(jMeterLaf)) {
+                    names.add(laf.getName());
                 }
             }
-        } catch (IllegalAccessException e) {
-        } catch (ClassNotFoundException e) {
-        } catch (InstantiationException e) {
-        } catch (UnsupportedLookAndFeelException e) {
+            if (names.size() > 0) {
+                log.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
+            } else {
+                log.info("Using look and feel: "+jMeterLaf);
+            }
         }
     }
 
