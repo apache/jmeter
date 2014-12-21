@@ -102,8 +102,12 @@ public class SaveGraphicsService {
      * TIFF.
      *
      * @param filename
+     *            name of the file to store the image into
      * @param type
+     *            of the image to be stored. Can be one of {@value #PNG} for PNG
+     *            or {@value #TIFF} for TIFF
      * @param component
+     *            to draw the image on
      */
     public void saveJComponent(String filename, int type, JComponent component) {
         Dimension size = component.getSize();
@@ -124,7 +128,9 @@ public class SaveGraphicsService {
      * Use Batik to save a PNG of the graph
      *
      * @param filename
+     *            name of the file to store the image into
      * @param image
+     *            to be stored
      */
     public void savePNGWithBatik(String filename, BufferedImage image) {
         File outfile = new File(filename);
@@ -147,7 +153,9 @@ public class SaveGraphicsService {
      * Use Batik to save a TIFF file of the graph
      *
      * @param filename
+     *            name of the file to store the image into
      * @param image
+     *            to be stored
      */
     public void saveTIFFWithBatik(String filename, BufferedImage image) {
         File outfile = new File(filename);

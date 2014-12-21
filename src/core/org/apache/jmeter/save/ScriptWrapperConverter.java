@@ -43,6 +43,8 @@ public class ScriptWrapperConverter implements Converter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     * 
+     * @return the version of the converter
      */
     public static String getVersion() {
         return "$Revision$"; // $NON-NLS-1$
