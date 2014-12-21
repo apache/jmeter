@@ -20,8 +20,7 @@ package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 import java.util.Arrays;
-
-import org.apache.jmeter.protocol.http.proxy.ProxyControl;
+    
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -83,7 +82,8 @@ public class SampleEvent implements Serializable {
     /**
      * Creates SampleEvent without saving any variables.
      * <p>
-     * Use by {@link ProxyControl} and {@link StatisticalSampleSender}.
+     * Use by {@link org.apache.jmeter.protocol.http.proxy.ProxyControl
+     * ProxyControl} and {@link StatisticalSampleSender}.
      *
      * @param result
      *            The SampleResult to be associated with this event
