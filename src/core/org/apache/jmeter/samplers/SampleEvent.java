@@ -21,6 +21,7 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -71,8 +72,9 @@ public class SampleEvent implements Serializable {
 
     private final boolean isTransactionSampleEvent;
 
-    /*
-     * Only for Unit tests
+    /**
+     * Constructor used for Unit tests only. Uses <code>null</code> for the
+     * associated {@link SampleResult} and the <code>threadGroup</code>-name.
      */
     public SampleEvent() {
         this(null, null);
@@ -80,22 +82,29 @@ public class SampleEvent implements Serializable {
 
     /**
      * Creates SampleEvent without saving any variables.
+     * <p>
+     * Use by {@link ProxyControl} and {@link StatisticalSampleSender}.
      *
-     * Use by Proxy and StatisticalSampleSender.
-     *
-     * @param result SampleResult
-     * @param threadGroup name
+     * @param result
+     *            The SampleResult to be associated with this event
+     * @param threadGroup
+     *            The name of the thread, the {@link SampleResult} was recorded
      */
     public SampleEvent(SampleResult result, String threadGroup) {
         this(result, threadGroup, HOSTNAME, false);
     }
 
     /**
-     * Contructor used for normal samples, saves variable values if any are defined.
+     * Constructor used for normal samples, saves variable values if any are
+     * defined.
      *
      * @param result
-     * @param threadGroup name
-     * @param jmvars Jmeter variables
+     *            The SampleResult to be associated with this event
+     * @param threadGroup
+     *            The name of the thread, the {@link SampleResult} was recorded
+     * @param jmvars
+     *            the {@link JMeterVariables} of the thread, the
+     *            {@link SampleResult} was recorded
      */
     public SampleEvent(SampleResult result, String threadGroup, JMeterVariables jmvars) {
         this(result, threadGroup, jmvars, false);
@@ -105,8 +114,12 @@ public class SampleEvent implements Serializable {
      * Only intended for use when loading results from a file.
      *
      * @param result
+     *            The SampleResult to be associated with this event
      * @param threadGroup
+     *            The name of the thread, the {@link SampleResult} was recorded
      * @param hostname
+     *            The name of the host, for which the {@link SampleResult} was
+     *            recorded
      */
     public SampleEvent(SampleResult result, String threadGroup, String hostname) {
        this(result, threadGroup, hostname, false);
@@ -122,9 +135,14 @@ public class SampleEvent implements Serializable {
 
     /**
      * @param result
+     *            The SampleResult to be associated with this event
      * @param threadGroup
+     *            The name of the thread, the {@link SampleResult} was recorded
      * @param jmvars
+     *            the {@link JMeterVariables} of the thread, the
+     *            {@link SampleResult} was recorded
      * @param isTransactionSampleEvent
+     *            Flag whether this event is an transaction sample event
      */
     public SampleEvent(SampleResult result, String threadGroup, JMeterVariables jmvars, boolean isTransactionSampleEvent) {
         this(result, threadGroup, HOSTNAME, isTransactionSampleEvent);
@@ -137,17 +155,35 @@ public class SampleEvent implements Serializable {
         }
     }
 
-    /** Return the number of variables defined */
+    /**
+     * Get the number of defined variables
+     * 
+     * @return the number of variables defined
+     */
     public static int getVarCount(){
         return variableNames.length;
     }
 
-    /** Get the nth variable name (zero-based) */
+    /**
+     * Get the nth variable name (zero-based)
+     * 
+     * @param i
+     *            specifies which variable name should be returned (zero-based)
+     * @return the variable name of the nth variable
+     */
     public static String getVarName(int i){
         return variableNames[i];
     }
 
-    /** Get the nth variable value (zero-based) */
+    /**
+     * Get the nth variable value (zero-based)
+     * 
+     * @param i
+     *            specifies which variable value should be returned (zero-based)
+     * @return the value of the nth variable
+     * @throws JMeterError
+     *             when an invalid index <code>i</code> was given
+     */
     public String getVarValue(int i){
         try {
             return values[i];
@@ -156,14 +192,29 @@ public class SampleEvent implements Serializable {
         }
     }
 
+    /**
+     * Get the {@link SampleResult} associated with this event
+     * 
+     * @return the associated {@link SampleResult}
+     */
     public SampleResult getResult() {
         return result;
     }
 
+    /**
+     * Get the name of the thread group for which this event was recorded
+     * 
+     * @return the name of the thread group
+     */
     public String getThreadGroup() {
         return threadGroup;
     }
 
+    /**
+     * Get the name of the host for which this event was recorded
+     * 
+     * @return the name of the host
+     */
     public String getHostname() {
         return hostname;
     }
