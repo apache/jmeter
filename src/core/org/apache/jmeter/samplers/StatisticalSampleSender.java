@@ -116,7 +116,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     /**
      * Checks if any sample events are still present in the sampleStore and
-     * sends them to the listener. Informs the listener of the testended.
+     * sends them to the listener. Informs the listener that the test ended.
      *
      * @param host the hostname that the test has ended on.
      */
@@ -134,9 +134,9 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     }
 
     /**
-     * Stores sample events untill either a time or sample threshold is
+     * Stores sample events until either a time or sample threshold is
      * breached. Both thresholds are reset if one fires. If only one threshold
-     * is set it becomes the only value checked against. When a threhold is
+     * is set it becomes the only value checked against. When a threshold is
      * breached the list of sample events is sent to a listener where the event
      * are fired locally.
      *
@@ -145,14 +145,14 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     @Override
     public void sampleOccurred(SampleEvent e) {
         synchronized (sampleStore) {
-            // Locate the statistical sample colector
+            // Locate the statistical sample collector
             String key = StatisticalSampleResult.getKey(e, keyOnThreadName);
             StatisticalSampleResult statResult = sampleTable.get(key);
             if (statResult == null) {
                 statResult = new StatisticalSampleResult(e.getResult());
                 // store the new statistical result collector
                 sampleTable.put(key, statResult);
-                // add a new wrapper samplevent
+                // add a new wrapper sampleevent
                 sampleStore
                         .add(new SampleEvent(statResult, e.getThreadGroup()));
             }

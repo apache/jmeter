@@ -19,7 +19,7 @@
 package org.apache.jmeter.samplers;
 
 /**
- * Allows notification on events occuring during the sampling process.
+ * Allows notification on events occurring during the sampling process.
  * Specifically, when sampling is started, when a specific sample is obtained,
  * and when sampling is stopped.
  *
