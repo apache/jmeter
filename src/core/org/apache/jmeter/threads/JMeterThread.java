@@ -437,6 +437,14 @@ public class JMeterThread implements Runnable, Interruptible {
                     result.setGroupThreads(threadGroup.getNumberOfThreads());
                     result.setAllThreads(JMeterContextService.getNumberOfThreads());
                     result.setThreadName(threadName);
+                    SampleResult[]subResults = result.getSubResults();
+                    if(subResults != null) {
+                        for (SampleResult subResult : subResults) {
+                            subResult.setGroupThreads(threadGroup.getNumberOfThreads());
+                            subResult.setAllThreads(JMeterContextService.getNumberOfThreads());
+                            subResult.setThreadName(threadName);
+                        }
+                    }
                     threadContext.setPreviousResult(result);
                     runPostProcessors(pack.getPostProcessors());
                     checkAssertions(pack.getAssertions(), result, threadContext);
