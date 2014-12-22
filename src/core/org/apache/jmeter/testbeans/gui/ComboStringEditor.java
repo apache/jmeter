@@ -262,7 +262,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
     }
 
     /**
-     * @param object
+     * @param object the initial edit value
      */
     public void setInitialEditValue(String object) {
         initialEditValue = object;
