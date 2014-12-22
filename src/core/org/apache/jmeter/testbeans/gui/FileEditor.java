@@ -56,7 +56,9 @@ public class FileEditor implements PropertyEditor, ActionListener {
     private final PropertyEditor editor;
 
     /**
-     * @throws IntrospectionException 
+     * @throws IntrospectionException
+     *             when introspection fails while creating a dummy
+     *             PropertyDescriptor
      * @deprecated Only for use by test cases
      */
     @Deprecated
@@ -64,6 +66,15 @@ public class FileEditor implements PropertyEditor, ActionListener {
         this(new PropertyDescriptor("dummy", null, null));
     }
 
+    /**
+     * Construct a {@link FileEditor} using the properties of the given
+     * {@link PropertyDescriptor}
+     * 
+     * @param descriptor
+     *            the {@link PropertyDescriptor} to be used. Must not be <code>null</code>
+     * @throws IllegalArgumentException
+     *             when <code>descriptor</code> is <code>null</code>
+     */
     public FileEditor(PropertyDescriptor descriptor) {
         if (descriptor == null) {
             throw new IllegalArgumentException("Descriptor must not be null");
@@ -107,7 +118,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     }
 
     /**
-     * @param listener
+     * {@inheritDoc}
      */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -163,8 +174,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     }
 
     /**
-     * @param gfx
-     * @param box
+     * {@inheritDoc}
      */
     @Override
     public void paintValue(Graphics gfx, Rectangle box) {
@@ -172,7 +182,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     }
 
     /**
-     * @param listener
+     * {@inheritDoc}
      */
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
@@ -180,8 +190,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     }
 
     /**
-     * @param text
-     * @throws java.lang.IllegalArgumentException
+     * {@inheritDoc}
      */
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
@@ -189,7 +198,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     }
 
     /**
-     * @param value
+     * {@inheritDoc}
      */
     @Override
     public void setValue(Object value) {

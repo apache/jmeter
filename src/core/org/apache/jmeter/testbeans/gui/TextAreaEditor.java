@@ -65,7 +65,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     }
 
     /**
-     * @param source
+     * @param source the source used for event firing
      */
     // TODO is this ever used?
     public TextAreaEditor(Object source) {
@@ -77,7 +77,11 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     }
 
     /**
+     * Construct a {@link TextAreaEditor} using the properties of a given
+     * {@link PropertyDescriptor}
+     * 
      * @param descriptor
+     *            to be used for the editor. Must not be <code>null</code>
      */
     public TextAreaEditor(PropertyDescriptor descriptor) {
         textUI = new JSyntaxTextArea(20, 20);
