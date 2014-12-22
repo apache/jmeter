@@ -54,8 +54,8 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
-import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.DNSCacheManager;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -1206,9 +1206,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         // Iterate through the URLs and download each image:
         if (urls != null && urls.hasNext()) {
             if (container == null) {
-                // TODO needed here because currently done on sample completion in JMeterThread,
-                // but that only catches top-level samples.
-                res.setThreadName(Thread.currentThread().getName());
                 container = new HTTPSampleResult(res);
                 container.addRawSubResult(res);
             }
