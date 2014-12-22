@@ -153,9 +153,6 @@ See  <bugzilla>56357</bugzilla> for details.
 <h3>Listeners</h3>
 <ul>
 <li><bug>57262</bug>Aggregate Report, Aggregate Graph and Summary Report export : headers use keys instead of labels</li>
-<li><bug>57321</bug>BackendListener reports partial results in master-slave configuration (nightly build r1642603)</li>
-<li><bug>57350</bug>BackendListener reports stale response time (Nightly Build r1645532). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57351</bug>Graphite Backend uses wrong default port for PlainText protocol (Nightly Build r1645532) . Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -172,8 +169,6 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>General</h3>
 <ul>
-<li><bug>57303</bug>commons-math3 dependency is missing in the jmeter lib package (nightly build)</li>
-<li><bug>57306</bug>backend_listener.png is missing in the JMeter User Doc (affects nightly build)</li>
 <li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bug>57364</bug>Options &lt; Look And Feel does not update all windows LAF. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
