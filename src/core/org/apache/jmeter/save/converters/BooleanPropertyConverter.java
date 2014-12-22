@@ -41,7 +41,7 @@ public class BooleanPropertyConverter implements Converter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {// superclass does not use types
-        return arg0.equals(BooleanProperty.class);
+        return BooleanProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */
