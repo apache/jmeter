@@ -368,13 +368,19 @@ public class PackageTest extends TestCase {
         for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
             Map.Entry<Object,Object> entry = iterator.next();
             String key = (String)entry.getKey();
+            final String I18NString = "[\\d% ]+";// numeric, space and % don't need translation
             if(!messagesFr.containsKey(key)) {
                 String value = (String) entry.getValue();
                 // TODO improve check of values that don't need translation
-                if (value.matches("[\\d%]+")) {// numeric and % don't need translation
-                    System.out.println("Ignoring missing "+key+"="+value+" in "+languageBundle); // TODO convert to list and display at end
+                if (value.matches(I18NString)) {
+                    // System.out.println("Ignoring missing "+key+"="+value+" in "+languageBundle); // TODO convert to list and display at end
                 } else {
                     missingLabels.put(key,(String) entry.getValue());
+                }
+            } else {
+                String value = (String) entry.getValue();
+                if (value.matches(I18NString)) {
+                    System.out.println("Unnecessary entry "+key+"="+value+" in "+languageBundle);
                 }
             }
         }
