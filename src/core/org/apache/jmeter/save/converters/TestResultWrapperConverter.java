@@ -45,13 +45,15 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     *
+     * @return the version of this converter
      */
     public static String getVersion() {
         return "$Revision$";  //$NON-NLS-1$
     }
 
     /**
-     * @param arg0
+     * @param arg0 the {@link Mapper} to be used
      */
     public TestResultWrapperConverter(Mapper arg0) {
         super(arg0);
