@@ -57,6 +57,7 @@ public class TestBeanHelper {
      * property value map.
      * <p>
      *
+     * @param el the TestElement to be prepared
      * @deprecated to limit it's usage in expectation of moving it elsewhere.
      */
     @Deprecated
@@ -158,8 +159,12 @@ public class TestBeanHelper {
      * Utility method that invokes a method and does the error handling around
      * the invocation.
      *
+     * @param invokee
+     *            the object on which the method should be invoked
      * @param method
+     *            the method which should be invoked
      * @param params
+     *            the parameters for the method
      * @return the result of the method invocation.
      */
     private static Object invokeOrBailOut(Object invokee, Method method, Object[] params) {
@@ -201,8 +206,8 @@ public class TestBeanHelper {
      * <li>no read method</li>
      * <li>no write method</li>
      * </ul>
-     * @param descriptor
-     * @return true if the descriptor should be ignored
+     * @param descriptor the {@link PropertyDescriptor} to be checked
+     * @return <code>true</code> if the descriptor should be ignored
      */
     public static boolean isDescriptorIgnored(PropertyDescriptor descriptor) {
         return descriptor.isHidden() 
