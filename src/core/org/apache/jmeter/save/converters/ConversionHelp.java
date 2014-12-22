@@ -102,6 +102,13 @@ public class ConversionHelp {
         }
     }
 
+    /**
+     * Decode a string if {@link #inVersion} equals <code>1.0</code>
+     * 
+     * @param p
+     *            the string to be decoded
+     * @return the newly decoded string
+     */
     public static String decode(String p) {
         if (!"1.0".equals(inVersion)) {//$NON-NLS-1$
             return p;
@@ -118,6 +125,18 @@ public class ConversionHelp {
         }
     }
 
+    /**
+     * Embed an array of bytes as a string with <code>encoding</code> in a
+     * xml-cdata section
+     * 
+     * @param chars
+     *            bytes to be encoded and embedded
+     * @param encoding
+     *            the encoding to be used
+     * @return the encoded string embedded in a xml-cdata section
+     * @throws UnsupportedEncodingException
+     *             when the bytes can not be encoded using <code>encoding</code>
+     */
     public static String cdata(byte[] chars, String encoding) throws UnsupportedEncodingException {
         StringBuilder buf = new StringBuilder("<![CDATA[");
         buf.append(new String(chars, encoding));
@@ -125,7 +144,9 @@ public class ConversionHelp {
         return buf.toString();
     }
 
-    // Names of properties that are handled specially
+    /**
+     *  Names of properties that are handled specially
+     */
     private static final Map<String, String> propertyToAttribute=new HashMap<String, String>();
 
     private static void mapentry(String prop, String att){
@@ -181,6 +202,14 @@ public class ConversionHelp {
         }
     }
 
+    /**
+     * Check whether <code>name</code> specifies a <em>special</em> property
+     * 
+     * @param name
+     *            the name of the property to be checked
+     * @return <code>true</code> if <code>name</code> is the name of a special
+     *         property
+     */
     public static boolean isSpecialProperty(String name) {
        return propertyToAttribute.containsKey(name);
     }
@@ -206,6 +235,7 @@ public class ConversionHelp {
      * 
      * @param reader where to read the value
      * @param context the unmarshalling context
+     * @param name the name of the property
      * 
      * @return the property value, updated if necessary.
      * @see #getUpgradePropertyValue(String, String, UnmarshallingContext)
@@ -258,8 +288,12 @@ public class ConversionHelp {
      * <li>TestElement.NAME</li>
      * <li>TestElement.ENABLED</li>
      * </ul>
+     * 
      * @param testElement
+     *            element for which the special properties should be saved
      * @param writer
+     *            {@link HierarchicalStreamWriter} in which the special
+     *            properties should be saved
      */
     public static void saveSpecialProperties(TestElement testElement, HierarchicalStreamWriter writer) {
         saveClass(testElement,writer,TestElement.GUI_CLASS);
@@ -276,8 +310,12 @@ public class ConversionHelp {
      * <li>TestElement.NAME</li>
      * <li>TestElement.ENABLED</li>
      * </ul>
+     * 
      * @param testElement
+     *            in which the special properties should be restored
      * @param reader
+     *            {@link HierarchicalStreamReader} from which the special
+     *            properties should be restored
      */
     public static void restoreSpecialProperties(TestElement testElement, HierarchicalStreamReader reader) {
         restoreClass(testElement,reader,TestElement.GUI_CLASS);

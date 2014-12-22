@@ -36,6 +36,8 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     * 
+     * @return the version of this converter
      */
     public static String getVersion() {
         return "$Revision$";  //$NON-NLS-1$
@@ -76,7 +78,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     }
 
     /**
-     * @param arg0
+     * @param arg0 the mapper
      */
     public MultiPropertyConverter(Mapper arg0) {
         super(arg0);
