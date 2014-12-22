@@ -53,7 +53,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
-        return arg0.equals(TestElementProperty.class);
+        return TestElementProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */
