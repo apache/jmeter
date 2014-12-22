@@ -291,7 +291,7 @@ public class FileServer {
      *
      * @param filename the filename or alias that was used to reserve the file
      * @return String containing the next line in the file
-     * @throws IOException
+     * @throws IOException when reading of the file fails, or the file was not reserved properly
      */
     public String readLine(String filename) throws IOException {
       return readLine(filename, true);
@@ -303,7 +303,7 @@ public class FileServer {
      * @param filename the filename or alias that was used to reserve the file
      * @param recycle - should file be restarted at EOF?
      * @return String containing the next line in the file (null if EOF reached and not recycle)
-     * @throws IOException
+     * @throws IOException when reading of the file fails, or the file was not reserved properly
      */
     public String readLine(String filename, boolean recycle) throws IOException {
         return readLine(filename, recycle, false);
@@ -315,7 +315,7 @@ public class FileServer {
      * @param recycle - should file be restarted at EOF?
      * @param firstLineIsNames - 1st line is fields names
      * @return String containing the next line in the file (null if EOF reached and not recycle)
-     * @throws IOException
+     * @throws IOException when reading of the file fails, or the file was not reserved properly
      */
     public synchronized String readLine(String filename, boolean recycle, 
             boolean firstLineIsNames) throws IOException {
@@ -351,6 +351,7 @@ public class FileServer {
      * @param firstLineIsNames whether the file contains a file header
      * @param delim the delimiter to use for parsing
      * @return the parsed line, will be empty if the file is at EOF
+     * @throws IOException when reading of the aliased file fails, or the file was not reserved properly
      */
     public synchronized String[] getParsedLine(String alias, boolean recycle, boolean firstLineIsNames, char delim) throws IOException {
         BufferedReader reader = getReader(alias, recycle, firstLineIsNames);
@@ -444,8 +445,8 @@ public class FileServer {
     }
 
     /**
-     * @param name
-     * @throws IOException
+     * @param name the name or alias of the file to be closed
+     * @throws IOException when closing of the aliased file fails
      */
     public synchronized void closeFile(String name) throws IOException {
         FileEntry fileEntry = files.get(name);
@@ -470,12 +471,19 @@ public class FileServer {
     }
 
     /**
-     * Method will get a random file in a base directory
-     * TODO hey, not sure this method belongs here.  FileServer is for threadsafe
-     * File access relative to current test's base directory.
+     * Method will get a random file in a base directory 
+     * <p>
+     * TODO hey, not sure this
+     * method belongs here. FileServer is for threadsafe File access relative to
+     * current test's base directory.
      *
      * @param basedir
-     * @return a random File from the basedir that matches one of the extensions
+     *            name of the directory in which the files can be found
+     * @param extensions
+     *            array of allowed extensions, if <code>null</code> is given,
+     *            any file be allowed
+     * @return a random File from the <code>basedir</code> that matches one of
+     *         the extensions
      */
     public File getRandomFile(String basedir, String[] extensions) {
         File input = null;
@@ -503,13 +511,15 @@ public class FileServer {
     }
     
     /**
-     * Resolve a file name that may be relative to the base directory.
-     * If the name begins with the value of the JMeter property
-     * "jmeter.save.saveservice.base_prefix" 
-     * - default "~/" - then the name is assumed to be relative to the basename.
+     * Resolve a file name that may be relative to the base directory. If the
+     * name begins with the value of the JMeter property
+     * "jmeter.save.saveservice.base_prefix" - default "~/" - then the name is
+     * assumed to be relative to the basename.
      * 
      * @param relativeName
-     * @return the updated file
+     *            filename that should be checked for
+     *            <code>jmeter.save.saveservice.base_prefix</code>
+     * @return the updated filename
      */
     public static String resolveBaseRelativeName(String relativeName) {
         if (relativeName.startsWith(BASE_PREFIX)){
