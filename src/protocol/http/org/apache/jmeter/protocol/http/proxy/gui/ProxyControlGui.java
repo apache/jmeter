@@ -919,8 +919,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         for (int i = 0; i < targetNodesModel.getSize(); i++) {
             choice = (TreeNodeWrapper) targetNodesModel.getElementAt(i);
             log.debug("Selecting item " + choice + " for model " + model + " in " + this);
-            if (choice.getTreeNode() == model.getTarget()) // .equals caused
-                                                            // NPE
+            if (choice.getTreeNode() == model.getTarget()) // .equals caused NPE
             {
                 break;
             }
