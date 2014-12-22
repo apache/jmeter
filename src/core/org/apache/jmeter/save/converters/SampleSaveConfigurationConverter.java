@@ -113,7 +113,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
-        return arg0.equals(SampleSaveConfiguration.class);
+        return SampleSaveConfiguration.class.equals(arg0);
     }
 
     /** {@inheritDoc} */

@@ -41,7 +41,7 @@ public class IntegerPropertyConverter implements Converter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
-        return arg0.equals(IntegerProperty.class);
+        return IntegerProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */

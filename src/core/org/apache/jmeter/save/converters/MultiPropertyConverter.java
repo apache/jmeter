@@ -46,7 +46,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
-        return arg0.equals(CollectionProperty.class) || arg0.equals(MapProperty.class);
+        return CollectionProperty.class.equals(arg0) || MapProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */
