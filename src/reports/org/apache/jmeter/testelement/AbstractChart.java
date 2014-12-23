@@ -87,9 +87,11 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     }
 
     /**
-     * The X data labels should be either the filename, date or some
-     * other series of values
+     * The X data labels should be either the filename, date or some other
+     * series of values
+     * 
      * @param label
+     *            the label of the x axis
      */
     public void setXLabel(String label) {
         setProperty(REPORT_CHART_X_LABEL,label);
@@ -114,10 +116,11 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     }
 
     /**
-     * The title is a the name for the chart. A page link will
-     * be generated using the title. The title will also be
-     * used for a page index.
+     * The title is a the name for the chart. A page link will be generated
+     * using the title. The title will also be used for a page index.
+     * 
      * @param title
+     *            the title of the chart
      */
     public void setTitle(String title) {
         setProperty(REPORT_CHART_TITLE,title);
@@ -133,9 +136,11 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     }
 
     /**
-     * The caption is a description for the chart explaining
-     * what the chart means.
+     * The caption is a description for the chart explaining what the chart
+     * means.
+     * 
      * @param caption
+     *            the caption of the chart
      */
     public void setCaption(String caption) {
         setProperty(REPORT_CHART_CAPTION,caption);
@@ -156,7 +161,9 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
 
     /**
      * set the width of the graph
+     * 
      * @param width
+     *            the width of the chart
      */
     public void setWidth(String width) {
         setProperty(REPORT_CHART_WIDTH,String.valueOf(width));
@@ -177,7 +184,9 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
 
     /**
      * set the height of the graph
+     * 
      * @param height
+     *            the height of the chart
      */
     public void setHeight(String height) {
         setProperty(REPORT_CHART_HEIGHT,String.valueOf(height));
@@ -203,18 +212,24 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
 
     /**
      * in case an user wants set the bufferdImage
+     * 
      * @param img
+     *            the {@link BufferedImage} to render into
      */
     public void setBufferedImage(BufferedImage img) {
         this.image = img;
     }
 
     /**
-     * convienance method for getting the selected value. Rather than use
-     * Method.invoke(Object,Object[]), it's simpler to just check which
-     * column is selected and call the method directly.
+     * Convenience method for getting the selected value. Rather than use
+     * Method.invoke(Object,Object[]), it's simpler to just check which column
+     * is selected and call the method directly.
+     * 
      * @param stat
-     * @return value
+     *            the container with the aggregated data
+     * @return the statistical value chosen from the container depending on the
+     *         x-axis, or {@link Double#NaN} if no corresponding stats could be
+     *         found
      */
     public double getValue(SamplingStatCalculator stat) {
         if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_50_PERCENT)) {

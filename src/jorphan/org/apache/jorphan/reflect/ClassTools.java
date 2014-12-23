@@ -34,7 +34,7 @@ public class ClassTools {
     /**
      * Call no-args constructor for a class.
      *
-     * @param className
+     * @param className name of the class to be constructed
      * @return an instance of the class
      * @throws JMeterException if class cannot be created
      */
@@ -54,7 +54,7 @@ public class ClassTools {
 
     /**
      * Call a class constructor with an integer parameter
-     * @param className
+     * @param className name of the class to be constructed
      * @param parameter (integer)
      * @return an instance of the class
      * @throws JMeterException if class cannot be created
@@ -82,8 +82,8 @@ public class ClassTools {
 
     /**
      * Call a class constructor with an String parameter
-     * @param className
-     * @param parameter (String)
+     * @param className the name of the class to construct
+     * @param parameter to be used for the construction of the class instance
      * @return an instance of the class
      * @throws JMeterException if class cannot be created
      */
@@ -114,10 +114,16 @@ public class ClassTools {
      * Invoke a public method on a class instance
      *
      * @param instance
+     *            object on which the method should be called
      * @param methodName
+     *            name of the method to be called
      * @throws SecurityException
+     *             if a security violation occurred while looking for the method
      * @throws IllegalArgumentException
+     *             if the method parameters (none given) do not match the
+     *             signature of the method
      * @throws JMeterException
+     *             if something went wrong in the invoked method
      */
     public static void invoke(Object instance, String methodName)
     throws SecurityException, IllegalArgumentException, JMeterException
