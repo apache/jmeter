@@ -31,8 +31,7 @@ import org.xml.sax.XMLReader;
  * Parse an XML file to obtain parameter name and value information for all
  * users defined in the XML file.
  *
- * This test element is deprecated. Test plans should use User Parameters instead.
- * @deprecated
+ * @deprecated This test element is deprecated. Test plans should use User Parameters instead.
  */
 @Deprecated
 public class UserParameterXMLParser {
@@ -43,6 +42,10 @@ public class UserParameterXMLParser {
      * @param xmlURI
      *            name of the XML to load users parameter data
      * @return all users name value pairs obtained from XML file
+     * @throws SAXException
+     *             when XML pointed to by <code>xmlURI</code> is not valid
+     * @throws IOException
+     *             when XML pointed to by <code>xmlURI</code> can not be read
      */
     public List<Map<String, String>> getXMLParameters(String xmlURI) throws SAXException, IOException {
         // create instances needed for parsing

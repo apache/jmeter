@@ -86,7 +86,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * set the initial context factory
      *
-     * @param icf
+     * @param icf the initial context factory
      */
     public void setJNDIIntialContextFactory(String icf) {
         setProperty(JNDI_INITIAL_CONTEXT_FAC, icf);
@@ -123,7 +123,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * set the connection factory for
      *
-     * @param factory
+     * @param factory the connection factory
      */
     public void setConnectionFactory(String factory) {
         setProperty(CONN_FACTORY, factory);
@@ -160,7 +160,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * set the username to login into the jms server if needed
      *
-     * @param user
+     * @param user the name of the user
      */
     public void setUsername(String user) {
         setProperty(PRINCIPAL, user);
@@ -178,7 +178,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * Set the password to login to the jms server
      *
-     * @param pwd
+     * @param pwd the password to use for login on the jms server
      */
     public void setPassword(String pwd) {
         setProperty(CREDENTIALS, pwd);
@@ -196,7 +196,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * set the number of iterations the sampler should aggregate
      *
-     * @param count
+     * @param count the number of iterations
      */
     public void setIterations(String count) {
         setProperty(ITERATIONS, count);
@@ -223,7 +223,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * Set whether authentication is required for JNDI
      *
-     * @param useAuth
+     * @param useAuth flag whether to use authentication
      */
     public void setUseAuth(boolean useAuth) {
         setProperty(USE_AUTH, useAuth);
@@ -267,9 +267,9 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     }
 
     /**
-     * if the sampler should use jndi.properties file, call the method with true
+     * if the sampler should use jndi.properties file, call the method with the string "true"
      *
-     * @param properties
+     * @param properties flag whether to use <em>jndi.properties</em> file
      */
     public void setUseJNDIProperties(String properties) {
         setProperty(USE_PROPERTIES_FILE, properties);
@@ -279,7 +279,8 @@ public abstract class BaseJMSSampler extends AbstractSampler {
      * return whether the sampler should use properties file instead of UI
      * parameters.
      *
-     * @return  whether the sampler should use properties file instead of UI parameters.
+     * @return the string "true" when the sampler should use properties file
+     *         instead of UI parameters, the string "false" otherwise.
      */
     public String getUseJNDIProperties() {
         return getPropertyAsString(USE_PROPERTIES_FILE);
@@ -297,7 +298,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * if the sampler should use a static destination, call the method with true
      *
-     * @param isStatic
+     * @param isStatic flag whether the destination is a static destination
      */
     public void setDestinationStatic(boolean isStatic) {
         setProperty(DESTINATION_STATIC, isStatic, DESTINATION_STATIC_DEFAULT);
