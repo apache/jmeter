@@ -55,7 +55,7 @@ public class ClassTools {
     /**
      * Call a class constructor with an integer parameter
      * @param className name of the class to be constructed
-     * @param parameter (integer)
+     * @param parameter the value to be used in the constructor
      * @return an instance of the class
      * @throws JMeterException if class cannot be created
      */
@@ -64,8 +64,8 @@ public class ClassTools {
         Object instance = null;
         try {
             Class<?> clazz = ClassUtils.getClass(className);
-            clazz.getConstructor(new Class [] {Integer.TYPE});
-            instance = ClassUtils.getClass(className).newInstance();
+            Constructor<?> constructor = clazz.getConstructor(Integer.TYPE);
+            instance = constructor.newInstance(parameter);
         } catch (ClassNotFoundException e) {
             throw new JMeterException(e);
         } catch (InstantiationException e) {
@@ -75,6 +75,10 @@ public class ClassTools {
         } catch (SecurityException e) {
             throw new JMeterException(e);
         } catch (NoSuchMethodException e) {
+            throw new JMeterException(e);
+        } catch (IllegalArgumentException e) {
+            throw new JMeterException(e);
+        } catch (InvocationTargetException e) {
             throw new JMeterException(e);
         }
         return instance;
