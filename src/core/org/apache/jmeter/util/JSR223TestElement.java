@@ -101,27 +101,27 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         final String scriptParameters = getParameters();
         // Use actual class name for log
         final Logger logger = LoggingManager.getLoggerForShortName(getClass().getName());
-        bindings.put("log", logger);
-        bindings.put("Label", label);
-        bindings.put("FileName", fileName);
-        bindings.put("Parameters", scriptParameters);
+        bindings.put("log", logger); // $NON-NLS-1$ (this name is fixed)
+        bindings.put("Label", label); // $NON-NLS-1$ (this name is fixed)
+        bindings.put("FileName", fileName); // $NON-NLS-1$ (this name is fixed)
+        bindings.put("Parameters", scriptParameters); // $NON-NLS-1$ (this name is fixed)
         String [] args=JOrphanUtils.split(scriptParameters, " ");//$NON-NLS-1$
-        bindings.put("args", args);
+        bindings.put("args", args); // $NON-NLS-1$ (this name is fixed)
         // Add variables for access to context and variables
         JMeterContext jmctx = JMeterContextService.getContext();
-        bindings.put("ctx", jmctx);
+        bindings.put("ctx", jmctx); // $NON-NLS-1$ (this name is fixed)
         JMeterVariables vars = jmctx.getVariables();
-        bindings.put("vars", vars);
+        bindings.put("vars", vars); // $NON-NLS-1$ (this name is fixed)
         Properties props = JMeterUtils.getJMeterProperties();
-        bindings.put("props", props);
+        bindings.put("props", props); // $NON-NLS-1$ (this name is fixed)
         // For use in debugging:
-        bindings.put("OUT", System.out);
+        bindings.put("OUT", System.out); // $NON-NLS-1$ (this name is fixed)
 
         // Most subclasses will need these:
         Sampler sampler = jmctx.getCurrentSampler();
-        bindings.put("sampler", sampler);
+        bindings.put("sampler", sampler); // $NON-NLS-1$ (this name is fixed)
         SampleResult prev = jmctx.getPreviousResult();
-        bindings.put("prev", prev);
+        bindings.put("prev", prev); // $NON-NLS-1$ (this name is fixed)
     }
 
 
@@ -150,8 +150,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                 try {
                     if (supportsCompilable) {
                         String cacheKey = 
-                                getScriptLanguage()+"#"+
-                                scriptFile.getAbsolutePath()+"#"+
+                                getScriptLanguage()+"#"+ // $NON-NLS-1$
+                                scriptFile.getAbsolutePath()+"#"+  // $NON-NLS-1$
                                         scriptFile.lastModified();
                         CompiledScript compiledScript = 
                                 compiledScriptsCache.get(cacheKey);
