@@ -172,10 +172,14 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     }
 
     /**
-     * the implementation checks if the Object is a treenode. If it is,
-     * it returns isLeaf(), otherwise it returns false.
+     * the implementation checks if the Object is a treenode. If it is, it
+     * returns {@link TreeNode#isLeaf() isLeaf()}, otherwise it returns
+     * <code>false</code>.
+     * 
      * @param node
-     * @return whether object is a leaf node or not
+     *            object to be checked for {@link TreeNode#isLeaf() isLeaf()}
+     * @return <code>true</code> if object is a leaf node, <code>false</code>
+     *         otherwise
      */
     public boolean isLeaf(Object node) {
         if (node instanceof TreeNode) {

@@ -68,7 +68,9 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
      * Is the assertion to be applied to the main (parent) sample?
      *
      * @param scope
-     * @return if the assertion is to be applied to the parent sample.
+     *            name of the scope to be checked
+     * @return <code>true</code> if the assertion is to be applied to the parent
+     *         sample.
      */
     public boolean isScopeParent(String scope) {
         return scope.equals(SCOPE_PARENT);
@@ -78,7 +80,9 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
      * Is the assertion to be applied to the sub-samples (children)?
      *
      * @param scope
-     * @return if the assertion is to be applied to the children.
+     *            name of the scope to be checked
+     * @return <code>true</code> if the assertion is to be applied to the
+     *         children.
      */
     public boolean isScopeChildren(String scope) {
         return scope.equals(SCOPE_CHILDREN);
@@ -88,7 +92,9 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
      * Is the assertion to be applied to the all samples?
      *
      * @param scope
-     * @return if the assertion is to be applied to the all samples.
+     *            name of the scope to be checked
+     * @return <code>true</code> if the assertion is to be applied to the all
+     *         samples.
      */
     public boolean isScopeAll(String scope) {
         return scope.equals(SCOPE_ALL);
@@ -98,7 +104,9 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
      * Is the assertion to be applied to the all samples?
      *
      * @param scope
-     * @return if the assertion is to be applied to the all samples.
+     *            name of the scope to be checked
+     * @return <code>true</code> if the assertion is to be applied to the all
+     *         samples.
      */
     public boolean isScopeVariable(String scope) {
         return scope.equals(SCOPE_VARIABLE);
@@ -107,7 +115,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
     /**
      * Is the assertion to be applied to the all samples?
      *
-     * @return if the assertion is to be applied to the all samples.
+     * @return <code>true</code> if the assertion is to be applied to the all samples.
      */
     protected boolean isScopeVariable() {
         return isScopeVariable(fetchScope());
