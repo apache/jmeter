@@ -65,7 +65,7 @@ public class ClassTools {
         try {
             Class<?> clazz = ClassUtils.getClass(className);
             Constructor<?> constructor = clazz.getConstructor(Integer.TYPE);
-            instance = constructor.newInstance(parameter);
+            instance = constructor.newInstance(Integer.valueOf(parameter));
         } catch (ClassNotFoundException e) {
             throw new JMeterException(e);
         } catch (InstantiationException e) {
