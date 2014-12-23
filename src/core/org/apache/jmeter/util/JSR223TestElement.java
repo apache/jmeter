@@ -143,7 +143,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         File scriptFile = new File(getFilename()); 
         // Hack: bsh-2.0b5.jar BshScriptEngine implements Compilable but throws "java.lang.Error: unimplemented"
         boolean supportsCompilable = scriptEngine instanceof Compilable 
-                && !(scriptEngine.getClass().getName().equals("bsh.engine.BshScriptEngine"));
+                && !(scriptEngine.getClass().getName().equals("bsh.engine.BshScriptEngine")); // $NON-NLS-1$
         if (!StringUtils.isEmpty(getFilename())) {
             if (scriptFile.exists() && scriptFile.canRead()) {
                 BufferedReader fileReader = null;
