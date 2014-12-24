@@ -140,7 +140,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-<li><bug>57835</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set</li>
+<li><bug>57385</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Other Samplers</h3>
