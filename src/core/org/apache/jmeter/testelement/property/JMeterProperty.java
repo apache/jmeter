@@ -61,6 +61,8 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
     /**
      * Tell the property to revert to the state at the time
      * setRunningVersion(true) was called.
+     *
+     * @param owner the owning element
      */
     void recoverRunningVersion(TestElement owner);
 

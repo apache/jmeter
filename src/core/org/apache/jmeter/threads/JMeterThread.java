@@ -153,6 +153,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /**
      * Enable the scheduler for this JMeterThread.
+     *
+     * @param sche
+     *            flag whether the scheduler should be enabled
      */
     public void setScheduled(boolean sche) {
         this.scheduler = sche;
@@ -839,6 +842,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /**
      * Returns the threadNum.
+     *
+     * @return the threadNum
      */
     public int getThreadNum() {
         return threadNum;
@@ -867,7 +872,7 @@ public class JMeterThread implements Runnable, Interruptible {
     /**
      * Save the engine instance for access to the stop methods
      *
-     * @param engine
+     * @param engine the engine which is used
      */
     public void setEngine(StandardJMeterEngine engine) {
         this.engine = engine;

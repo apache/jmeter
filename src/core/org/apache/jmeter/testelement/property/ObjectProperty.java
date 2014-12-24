@@ -64,7 +64,8 @@ public class ObjectProperty extends AbstractProperty {
     }
 
     /**
-     *
+     * Default constructor. Constructs an {@link ObjectProperty} with no name
+     * and a <code>null</code> value
      */
     public ObjectProperty() {
         super();
@@ -72,12 +73,25 @@ public class ObjectProperty extends AbstractProperty {
     }
 
     /**
+     * Constructs an instance with <code>name</code> as its name and a
+     * <code>null</code> value.
+     *
      * @param name
+     *            the name of this property
      */
     public ObjectProperty(String name) {
         super(name);
     }
 
+    /**
+     * Constructs an instance with <code>name</code> as its name and the giveN
+     * value.
+     *
+     * @param name
+     *            the name of this property
+     * @param p
+     *            the value for this property
+     */
     public ObjectProperty(String name, Object p) {
         super(name);
         value = p;
