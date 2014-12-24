@@ -52,7 +52,7 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
             JMeterUtils.getPropDefault("client.rmi.localport", 0); // $NON-NLS-1$
 
     /**
-     * @throws RemoteException
+     * @throws RemoteException if failed to export object
      */
     public RemoteThreadsListenerImpl() throws RemoteException {
         super(DEFAULT_LOCAL_PORT);

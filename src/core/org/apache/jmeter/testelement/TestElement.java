@@ -19,6 +19,7 @@
 package org.apache.jmeter.testelement;
 
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 
@@ -75,6 +76,8 @@ public interface TestElement extends Cloneable {
 
     /**
      * Returns true or false whether the element is the running version.
+     * 
+     * @return <code>true</code> if the element is the running version
      */
     boolean isRunningVersion();
 
@@ -98,21 +101,86 @@ public interface TestElement extends Cloneable {
 
     /**
      * Return a property as a boolean value.
+     *
+     * @param key
+     *            the name of the property to get
+     * @return the value of the property
      */
     boolean getPropertyAsBoolean(String key);
 
+    /**
+     * Return a property as a boolean value or a default value if no property
+     * could be found.
+     *
+     * @param key
+     *            the name of the property to get
+     * @param defaultValue
+     *            the default value to use
+     * @return the value of the property, or <code>defaultValue</code> if no
+     *         property could be found
+     */
     boolean getPropertyAsBoolean(String key, boolean defaultValue);
 
+    /**
+     * Return a property as a long value.
+     *
+     * @param key
+     *            the name of the property to get
+     * @return the value of the property
+     */
     long getPropertyAsLong(String key);
 
+    /**
+     * Return a property as a long value or a default value if no property
+     * could be found.
+     *
+     * @param key
+     *            the name of the property to get
+     * @param defaultValue
+     *            the default value to use
+     * @return the value of the property, or <code>defaultValue</code> if no
+     *         property could be found
+     */
     long getPropertyAsLong(String key, long defaultValue);
 
+    /**
+     * Return a property as an int value.
+     *
+     * @param key
+     *            the name of the property to get
+     * @return the value of the property
+     */
     int getPropertyAsInt(String key);
-
+    
+    /**
+     * Return a property as an int value or a default value if no property
+     * could be found.
+     *
+     * @param key
+     *            the name of the property to get
+     * @param defaultValue
+     *            the default value to use
+     * @return the value of the property, or <code>defaultValue</code> if no
+     *         property could be found
+     */
     int getPropertyAsInt(String key, int defaultValue);
 
+    /**
+     * Return a property as a float value.
+     *
+     * @param key
+     *            the name of the property to get
+     * @return the value of the property
+     */
     float getPropertyAsFloat(String key);
 
+    /**
+     * Return a property as a double value.
+     *
+     * @param key
+     *            the name of the property to get
+     * @return the value of the property
+     */
     double getPropertyAsDouble(String key);
 
     /**
@@ -122,6 +190,9 @@ public interface TestElement extends Cloneable {
      * making the TestElement Read- Only, but not as strict. Changes can be made
      * and the element can be modified, but the state of the element at the time
      * of the call to setRunningVersion() must be recoverable.
+     *
+     * @param run
+     *            flag whether this element should be the running version
      */
     void setRunningVersion(boolean run);
 
@@ -138,19 +209,45 @@ public interface TestElement extends Cloneable {
     // TODO - yet another ambiguous name - does it need changing?
     // See also: Clearable, JMeterGUIComponent
 
+    /**
+     * Return a property as a string value.
+     *
+     * @param key
+     *            the name of the property to get
+     * @return the value of the property
+     */
     String getPropertyAsString(String key);
 
+    /**
+     * Return a property as an string value or a default value if no property
+     * could be found.
+     *
+     * @param key
+     *            the name of the property to get
+     * @param defaultValue
+     *            the default value to use
+     * @return the value of the property, or <code>defaultValue</code> if no
+     *         property could be found
+     */
     String getPropertyAsString(String key, String defaultValue);
 
     /**
      * Sets and overwrites a property in the TestElement. This call will be
      * ignored if the TestElement is currently a "running version".
+     *
+     * @param property
+     *            the property to be set
      */
     void setProperty(JMeterProperty property);
 
     /**
      * Given the name of the property, returns the appropriate property from
      * JMeter. If it is null, a NullProperty object will be returned.
+     *
+     * @param propName
+     *            the name of the property to get
+     * @return {@link JMeterProperty} stored under the name, or
+     *         {@link NullProperty} if no property can be found
      */
     JMeterProperty getProperty(String propName);
 
@@ -161,6 +258,12 @@ public interface TestElement extends Cloneable {
      */
     PropertyIterator propertyIterator();
 
+    /**
+     * Remove property stored under the <code>key</code>
+     *
+     * @param key
+     *            name of the property to be removed
+     */
     void removeProperty(String key);
 
     // lifecycle methods
@@ -169,6 +272,9 @@ public interface TestElement extends Cloneable {
 
     /**
      * Convenient way to traverse a test element.
+     *
+     * @param traverser
+     *            The traverser that is notified of the contained elements
      */
     void traverse(TestElementTraverser traverser);
 
@@ -203,11 +309,28 @@ public interface TestElement extends Cloneable {
      */
     boolean canRemove();
 
+    /**
+     * Get the name of this test element
+     * @return name of this element
+     */
     String getName();
 
+    /**
+     * @param name
+     *            of this element
+     */
     void setName(String name);
 
+    /**
+     * @return comment associated with this element
+     */
     String getComment();
 
+    /**
+     * Associates a comment with this element
+     *
+     * @param comment
+     *            to be associated
+     */
     void setComment(String comment);
 }
