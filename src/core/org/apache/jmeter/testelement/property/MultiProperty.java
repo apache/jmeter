@@ -47,6 +47,8 @@ public abstract class MultiProperty extends AbstractProperty {
 
     /**
      * Add a property to the collection.
+     *
+     * @param prop the {@link JMeterProperty} to add
      */
     public abstract void addProperty(JMeterProperty prop);
 

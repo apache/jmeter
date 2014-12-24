@@ -29,6 +29,8 @@ public class WorkBench extends AbstractTestElement {
 
     /**
      * Constructor for the WorkBench object.
+     * @param name the name of this element
+     * @param isRootNode IGNORED
      */
     public WorkBench(String name, boolean isRootNode) {
         setName(name);

@@ -156,8 +156,12 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     }
 
     /**
-     * Set the classpath for the test plan
+     * Set the classpath for the test plan. If the classpath is made up from
+     * more then one path, the parts must be separated with
+     * {@link TestPlan#CLASSPATH_SEPARATOR}.
+     *
      * @param text
+     *            the classpath to be set
      */
     public void setTestPlanClasspath(String text) {
         setProperty(CLASSPATHS,text);
