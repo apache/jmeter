@@ -43,4 +43,11 @@ public final class TreeNodeWrapper {
     public String toString() {
         return label;
     }
+
+    /**
+     * @return the label
+     */
+    public String getLabel() {
+        return label;
+    }
 }

@@ -991,7 +991,7 @@ public class ProxyControl extends GenericController {
      * @return the tree node for the controller where the proxy must store the
      *         generated samplers.
      */
-    private JMeterTreeNode findTargetControllerNode() {
+    public JMeterTreeNode findTargetControllerNode() {
         JMeterTreeNode myTarget = getTarget();
         if (myTarget != null) {
             return myTarget;
