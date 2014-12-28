@@ -24,21 +24,20 @@ See Preferences/Java/Building/Output Folder/Filtered Resources
 
 Eclipse.classpath
 -----------------
-[This has been tested with Eclipse 3.2. It may not work with other versions.]
+[This has been tested with Eclipse 3.2 up to 4.3.2. It may not work with other versions.]
 
 The file eclipse.classpath is intended as a starter .classpath file 
-for building JMeter using Eclipse version 3.  Make sure to execute
-the ant download_jars task to download and install the jars referred
-to in the classpath before creating the Eclipse project.  
+for building JMeter using Eclipse version 3 to 4.3.  Make sure to execute
+the "ant download_jars" task to download and install the jars referred
+to in the classpath before creating the Eclipse project. 
+If you do after creating project, then don't forget to refresh Eclipse project. 
 
-Note that Eclipse does not handle RMI compilations, 
-nor is it easy to use for creating jar files.
-
+Note that Eclipse is not easy to use for creating jar files.
 However, it is easy to use Eclipse to run Ant.
 
 The following targets may prove useful:
 
-  compile-rmi - compiles the RMI files that Eclipse ignores
+  clean - Clean up to force a build from source
   package-only - creates the jars
   package - compiles everything and then packages it
   run_gui - compiles, packages, and then start the JMeter GUI from the jars
@@ -72,7 +71,7 @@ right click on it, and click "Run As --> Ant Build".
 
 Make sure you select the "package" target.
 
-This will compile any remaining classes (e.g. the RMI ones),
+This will compile any remaining classes,
 and then create all the jars.
 
 Now refresh the project (you should add this to the Ant build properties)
