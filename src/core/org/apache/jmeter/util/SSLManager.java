@@ -242,6 +242,8 @@ public abstract class SSLManager {
 
     /**
      * Static accessor for the SSLManager object. The SSLManager is a singleton.
+     *
+     * @return the singleton {@link SSLManager}
      */
     public static final synchronized SSLManager getInstance() {
         if (null == SSLManager.manager) {
@@ -267,6 +269,8 @@ public abstract class SSLManager {
 
     /**
      * Test whether SSL is supported or not.
+     *
+     * @return flag whether SSL is supported
      */
     public static final boolean isSSLSupported() {
         return SSLManager.isSSLSupported;
@@ -274,10 +278,17 @@ public abstract class SSLManager {
 
     /**
      * Configure Keystore
-     * @param preload 
-     * @param startIndex 
-     * @param endIndex 
-     * @param clientCertAliasVarName 
+     * 
+     * @param preload
+     *            flag whether the keystore should be opened within this method,
+     *            or the opening should be delayed
+     * @param startIndex
+     *            first index to consider for a key
+     * @param endIndex
+     *            last index to consider for a key
+     * @param clientCertAliasVarName
+     *            name of the default key, if empty the first key will be used
+     *            as default key
      */
     public void configureKeystore(boolean preload, int startIndex, int endIndex, String clientCertAliasVarName) {
         this.keystoreAliasStartIndex = startIndex;

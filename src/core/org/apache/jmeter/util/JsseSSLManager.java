@@ -173,11 +173,12 @@ public class JsseSSLManager extends SSLManager {
     }
 
     /**
-     * Returns the SSLContext we are using.
-     * This is either a context per thread,
+     * Returns the SSLContext we are using. This is either a context per thread,
      * or, for backwards compatibility, a single shared context.
      *
      * @return The Context value
+     * @throws GeneralSecurityException
+     *             when constructing the context fails
      */
     public SSLContext getContext() throws GeneralSecurityException {
         if (SHARED_SESSION_CONTEXT) {
@@ -211,11 +212,15 @@ public class JsseSSLManager extends SSLManager {
             this.threadlocal.set(null);
         }
     }
+    
     /*
-     *
+     * 
      * Creates new SSL context
+     * 
      * @return SSL context
-     * @throws GeneralSecurityException
+     * 
+     * @throws GeneralSecurityException when the algorithm for the context can
+     * not be found or the keys have problems
      */
     private SSLContext createContext() throws GeneralSecurityException {
         SSLContext context;

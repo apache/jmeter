@@ -101,7 +101,7 @@ public class XPathUtil {
      * @param namespace should the parser be namespace aware?
      * @param downloadDTDs if true, parser should attempt to resolve external entities
      * @return document builder
-     * @throws ParserConfigurationException
+     * @throws ParserConfigurationException if {@link DocumentBuilder} can not be created for the wanted configuration
      */
     public static DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace, boolean downloadDTDs)
             throws ParserConfigurationException {
@@ -134,10 +134,10 @@ public class XPathUtil {
      * @param isXml - is document already XML (Tidy only)
      * @param downloadDTDs - if true, try to download external DTDs
      * @return document
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     * @throws TidyException
+     * @throws ParserConfigurationException when no {@link DocumentBuilder} can be constructed for the wanted configuration
+     * @throws SAXException if parsing fails
+     * @throws IOException if an I/O error occurs while parsing
+     * @throws TidyException if a ParseError is detected and <code>report_errors</code> is <code>true</code>
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
             boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs)
@@ -161,10 +161,10 @@ public class XPathUtil {
      * @param downloadDTDs - if true, try to download external DTDs
      * @param tidyOut OutputStream for Tidy pretty-printing
      * @return document
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     * @throws TidyException
+     * @throws ParserConfigurationException if {@link DocumentBuilder} can not be created for the wanted configuration
+     * @throws SAXException if parsing fails
+     * @throws IOException if I/O error occurs while parsing
+     * @throws TidyException if a ParseError is detected and <code>report_errors</code> is <code>true</code>
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
             boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs, 
@@ -289,7 +289,7 @@ public class XPathUtil {
      * @param document {@link Document}
      * @param xPathExpression XPath expression
      * @return {@link NodeList}
-     * @throws TransformerException 
+     * @throws TransformerException when the internally used xpath engine fails
      */
     public static NodeList selectNodeList(Document document, String xPathExpression) throws TransformerException {
         XObject xObject = XPathAPI.eval(document, xPathExpression, getPrefixResolver(document));
@@ -302,7 +302,7 @@ public class XPathUtil {
      * @param xPathQuery XPath Query
      * @param matchStrings List of strings that will be filled
      * @param fragment return fragment
-     * @throws TransformerException
+     * @throws TransformerException when the internally used xpath engine fails
      */
     public static void putValuesForXPathInList(Document document, 
             String xPathQuery,
@@ -374,7 +374,7 @@ public class XPathUtil {
      * @param result {@link AssertionResult}
      * @param doc XML Document
      * @param xPathExpression XPath expression
-     * @param isNegated
+     * @param isNegated flag whether a non-match should be considered a success
      */
     public static void computeAssertionResult(AssertionResult result,
             Document doc, 
@@ -430,7 +430,7 @@ public class XPathUtil {
     
     /**
      * Formats XML
-     * @param xml
+     * @param xml string to format
      * @return String formatted XML
      */
     public static final String formatXml(String xml){

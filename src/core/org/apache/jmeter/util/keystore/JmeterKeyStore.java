@@ -48,8 +48,14 @@ public final class JmeterKeyStore {
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     private final KeyStore store;
+
+    /** first index to consider for a key */
     private final int startIndex;
+
+    /** last index to consider for a key */
     private final int endIndex;
+
+    /** name of the default alias */
     private String clientCertAliasVarName;
 
     private String[] names = new String[0]; // default empty array to prevent NPEs
@@ -60,6 +66,18 @@ public final class JmeterKeyStore {
     private int last_user;
 
 
+    /**
+     * @param type
+     *            type of the {@link KeyStore}
+     * @param startIndex which keys should be considered starting from <code>0</code>
+     * @param endIndex which keys should be considered up to <code>count - 1</code>
+     * @param clientCertAliasVarName name for the default key, if empty use the first key available
+     * @throws KeyStoreException
+     *             when the type of the keystore is not supported
+     * @throws IllegalArgumentException
+     *             when <code>startIndex</code> &lt; 0, <code>endIndex</code>
+     *             &lt; 0 or <code>endIndex</code> &lt; </code>startIndex</code>
+     */
     private JmeterKeyStore(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException {
         if (startIndex < 0 || endIndex < 0 || endIndex < startIndex) {
             throw new IllegalArgumentException("Invalid index(es). Start="+startIndex+", end="+endIndex);
@@ -71,12 +89,26 @@ public final class JmeterKeyStore {
     }
 
     /**
-     * Process the input stream
-     * @throws IOException 
-     * @throws CertificateException 
-     * @throws NoSuchAlgorithmException 
-     * @throws KeyStoreException 
-     * @throws UnrecoverableKeyException 
+     * Process the input stream and try to read the keys from the store
+     *
+     * @param is
+     *            {@link InputStream} from which the store should be loaded
+     * @param pword
+     *            the password used to check the integrity of the store
+     * @throws IOException
+     *             if there is a problem decoding or reading the store. A bad
+     *             password might be the cause for this, or an empty store
+     * @throws CertificateException
+     *             if any of the certificated in the store can not be loaded
+     * @throws NoSuchAlgorithmException
+     *             if the algorithm to check the integrity of the store can not
+     *             be found
+     * @throws KeyStoreException
+     *             if the store has not been initialized (should not happen
+     *             here)
+     * @throws UnrecoverableKeyException
+     *             if the key can not be recovered from the store (should not
+     *             happen here, either)
      */
     public void load(InputStream is, String pword) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
         char pw[] = pword==null ? null : pword.toCharArray();
@@ -133,6 +165,12 @@ public final class JmeterKeyStore {
 
     /**
      * Get the ordered certificate chain for a specific alias.
+     *
+     * @param alias
+     *            the alias for which the certificate chain should be given
+     * @return the certificate chain for the alias
+     * @throws IllegalArgumentException
+     *             if no chain could be found for the alias
      */
     public X509Certificate[] getCertificateChain(String alias) {
         X509Certificate[] result = this.certsByAlias.get(alias);
@@ -145,7 +183,12 @@ public final class JmeterKeyStore {
 
     /**
      * Get the next or only alias.
+     * 
      * @return the next or only alias.
+     * @throws IllegalArgumentException
+     *             if {@link JmeterKeyStore#clientCertAliasVarName
+     *             clientCertAliasVarName} is not empty and no key for this
+     *             alias could be found
      */
     public String getAlias() {
         if(!StringUtils.isEmpty(clientCertAliasVarName)) {
@@ -181,6 +224,12 @@ public final class JmeterKeyStore {
 
     /**
      * Return the private Key for a specific alias
+     *
+     * @param alias
+     *            the name of the alias for the private key
+     * @return the private key for the given <code>alias</code>
+     * @throws IllegalArgumentException
+     *             when no private key could be found
      */
     public PrivateKey getPrivateKey(String alias) {
         PrivateKey pk = this.privateKeyByAlias.get(alias);
@@ -192,12 +241,22 @@ public final class JmeterKeyStore {
 
     /**
      * Create a keystore which returns a range of aliases (if available)
-     * @param type store type (e.g. JKS)
-     * @param startIndex first index (from 0)
-     * @param endIndex last index (to count -1)
-     * @param clientCertAliasVarName 
+     * 
+     * @param type
+     *            store type (e.g. JKS)
+     * @param startIndex
+     *            first index (from 0)
+     * @param endIndex
+     *            last index (to count -1)
+     * @param clientCertAliasVarName
+     *            name of the default key to, if empty the first key will be
+     *            used as default key
      * @return the keystore
-     * @throws KeyStoreException 
+     * @throws KeyStoreException
+     *             when the type of the store is not supported
+     * @throws IllegalArgumentException
+     *             when <code>startIndex</code> &lt; 0, <code>endIndex</code>
+     *             &lt; 0, or <code>endIndex</code> &lt; <code>startIndex</code>
      */
     public static JmeterKeyStore getInstance(String type, int startIndex, int endIndex, String clientCertAliasVarName) throws KeyStoreException  {
         return new JmeterKeyStore(type, startIndex, endIndex, clientCertAliasVarName);
@@ -205,9 +264,12 @@ public final class JmeterKeyStore {
 
     /**
      * Create a keystore which returns the first alias only.
-     * @param type e.g. JKS
+     * 
+     * @param type
+     *            of the store e.g. JKS
      * @return the keystore
      * @throws KeyStoreException
+     *             when the type of the store is not supported
      */
     public static JmeterKeyStore getInstance(String type) throws KeyStoreException {
         return getInstance(type, 0, 0, null);
