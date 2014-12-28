@@ -59,7 +59,7 @@ public class XMLBuffer{
     /**
      * Open a tag; save on stack.
      *
-     * @param tagname
+     * @param tagname name of the tag
      * @return this
      */
     public XMLBuffer openTag(String tagname){
@@ -71,7 +71,7 @@ public class XMLBuffer{
     /**
      * Close top tag from stack.
      *
-     * @param tagname
+     * @param tagname name of the tag to close
      *
      * @return this
      *
@@ -89,8 +89,8 @@ public class XMLBuffer{
     /**
      * Add a complete tag with content.
      *
-     * @param tagname
-     * @param content
+     * @param tagname name of the tag
+     * @param content content to put in tag, or empty content, if an empty tag should be used
      * @return this
      */
     public XMLBuffer tag(String tagname, String content){
@@ -107,8 +107,8 @@ public class XMLBuffer{
     /**
      * Add a complete tag with content.
      *
-     * @param tagname
-     * @param content
+     * @param tagname name of the tag
+     * @param content content to put in tag, or empty content, if an empty tag should be used
      * @return this
      */
     public XMLBuffer tag(String tagname,StringBuilder content){

@@ -27,35 +27,41 @@ import org.apache.log.Logger;
 
 /**
  * Implements function call-backs.
- *
+ * <p>
  * Functors may be defined for instance objects or classes.
- *
+ * <p>
  * The method is created on first use, which allows the invokee (class or instance)
  * to be omitted from the constructor.
- *
+ * <p>
  * The class name takes precedence over the instance.
- *
+ * <p>
  * If a functor is created with a particular instance, then that is used for all future calls;
  * if an object is provided, it is ignored.
  * This allows easy override of the table model behaviour.
- *
+ * <p>
  * If an argument list is provided in the constructor, then that is ignored in subsequent invoke() calls.
- *
+ * <p>
  * Usage:
- * f = new Functor("methodName")
- * o = f.invoke(object) - OR -
- * o = f.invoke(object,params)
  *
- * f2 = new Functor(object,"methodName");
- * o = f2.invoke() - OR -
- * o = f2.invoke(params)
+ * <pre>
+ * f = new Functor("methodName");
+ * o = f.invoke(object); // - OR -
+ * o = f.invoke(object, params);
+ * </pre>
+ * 
+ * <pre>
+ * f2 = new Functor(object, "methodName");
+ * o = f2.invoke(); // - OR -
+ * o = f2.invoke(params);
+ * </pre>
  *
- * f3 = new Functor(class,"methodName");
- * o = f3.invoke(object) - will be ignored
- * o = f3.invoke() - OR -
- * o = f3.invoke(params)
- * o = f3.invoke(object,params) - object will be ignored
- *
+ * <pre>
+ * f3 = new Functor(class, "methodName");
+ * o = f3.invoke(object); // - will be ignored
+ * o = f3.invoke(); // - OR -
+ * o = f3.invoke(params);
+ * o = f3.invoke(object, params); // - object will be ignored
+ * </pre>
  */
 public class Functor {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -130,7 +136,7 @@ public class Functor {
      *
      * @param _invokee object on which to invoke the method
      * @param _methodName method name
-     * @param _types
+     * @param _types types of arguments to be used
      */
     public Functor(Object _invokee, String _methodName, Class<?>[] _types) {
         this(null, _invokee, _methodName, null, _types);
@@ -143,7 +149,7 @@ public class Functor {
      *
      * @param _clazz the class in which to find the method
      * @param _methodName method name
-     * @param _types
+     * @param _types types of arguments to be used
      */
     public Functor(Class<?> _clazz, String _methodName, Class<?>[] _types) {
         this(_clazz, null, _methodName, null, _types);
@@ -193,7 +199,7 @@ public class Functor {
      * which must be of the same type as the initial invokee.
      *
      * @param _methodName method name
-     * @param _args
+     * @param _args arguments to be used
      */
     public Functor(String _methodName, Object[] _args) {
         this(null, null, _methodName, _args, null);
@@ -308,12 +314,15 @@ public class Functor {
      *
      * If the invokee was provided at construction time, then this invokee will be ignored.
      * If actual arguments were provided at construction time, then arguments will be ignored.
+     * @param p_invokee invokee to use, if no class or invokee was provided at construction time
+     * @param p_args arguments to use
+     * @return result of invocation
      *
      */
     public Object invoke(Object p_invokee, Object[] p_args) {
         return doInvoke(clazz != null ? clazz : p_invokee.getClass(), // Use constructor class if present
                        invokee != null ? invokee : p_invokee, // use invokee if provided
-                        args != null? args : p_args);// use argumenrs if provided
+                        args != null? args : p_args);// use arguments if provided
     }
 
     /*
@@ -361,10 +370,13 @@ public class Functor {
 
     /**
      * Check if a read Functor method is valid.
+     * 
+     * @param _invokee
+     *            instance on which the method should be tested
      *
      * @deprecated ** for use by Unit test code only **
      *
-     * @return true if method exists
+     * @return <code>true</code> if method exists
      */
     @Deprecated
     public boolean checkMethod(Object _invokee){
@@ -379,10 +391,15 @@ public class Functor {
 
     /**
      * Check if a write Functor method is valid.
+     * 
+     * @param _invokee
+     *            instance on which the method should be tested
+     * @param c
+     *            type of parameter
      *
      * @deprecated ** for use by Unit test code only **
      *
-     * @return true if method exists
+     * @return <code>true</code> if method exists
      */
     @Deprecated
     public boolean checkMethod(Object _invokee, Class<?> c){
