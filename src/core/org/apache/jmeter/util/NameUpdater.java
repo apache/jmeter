@@ -181,7 +181,7 @@ public final class NameUpdater {
      * {@link org.apache.jmeter.save.SaveService#checkClasses() SaveService#checkClasses()}
      * only.
      * 
-     * @param key
+     * @param key name of the key to check
      * @return true if the key is in the map
      */
     public static boolean isMapped(String key) {

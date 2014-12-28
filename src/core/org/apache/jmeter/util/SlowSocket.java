@@ -50,14 +50,23 @@ public class SlowSocket extends Socket {
 
     /**
      *
-     * @param cps characters per second
-     * @param host hostname
-     * @param port port
-     * @param localAddr local address
-     * @param localPort local port
+     * @param cps
+     *            characters per second
+     * @param host
+     *            hostname
+     * @param port
+     *            port
+     * @param localAddr
+     *            local address
+     * @param localPort
+     *            local port
      *
      * @throws IOException
-     * @throws IllegalArgumentException if cps &lt;= 0
+     *             if an I/O error occurs during initialization
+     * @throws IllegalArgumentException
+     *             if cps &lt;= 0, or if the <code>port</code> or
+     *             <code>localPort</code> values lie outside of the allowed
+     *             range between <code>0</code> and <code>65535</code>
      */
     public SlowSocket(int cps, String host, int port, InetAddress localAddr, int localPort) throws IOException {
         super(host, port, localAddr, localPort);
@@ -69,13 +78,21 @@ public class SlowSocket extends Socket {
 
     /**
      *
-     * @param cps characters per second
-     * @param host hostname
-     * @param port port
+     * @param cps
+     *            characters per second
+     * @param host
+     *            hostname
+     * @param port
+     *            port
      *
      * @throws UnknownHostException
+     *             if the name of the host can not be determined automatically
      * @throws IOException
-     * @throws IllegalArgumentException if cps &lt;= 0
+     *             if an I/O error occurs during initialization
+     * @throws IllegalArgumentException
+     *             if cps &lt;= 0, or if the <code>port</code> or
+     *             <code>localPort</code> values lie outside of the allowed
+     *             range between <code>0</code> and <code>65535</code>
      */
     public SlowSocket(int cps, String host, int port) throws UnknownHostException, IOException {
         super(host, port);
@@ -88,7 +105,7 @@ public class SlowSocket extends Socket {
     /**
      * Added for use by SlowHC4SocketFactory.
      * 
-     * @param cps
+     * @param cps characters per second
      */
     public SlowSocket(int cps) {
         super();

@@ -22,10 +22,12 @@ import org.apache.jmeter.samplers.SampleResult;
 
 /**
  * Class to calculate various items that don't require all previous results to be saved:
- * - mean = average
- * - standard deviation
- * - minimum
- * - maximum
+ * <ul>
+ *   <li>mean = average</li>
+ *   <li>standard deviation</li>
+ *   <li>minimum</li>
+ *   <li>maximum</li>
+ * </ul>
  */
 public class Calculator {
 
@@ -70,7 +72,7 @@ public class Calculator {
     /**
      * Add the value for a single sample.
      * 
-     * @param newValue
+     * @param newValue the value for the new sample
      * 
      * @see #addValue(long, int)
      * @deprecated Use {@link #addSample(SampleResult)} instead
@@ -189,6 +191,8 @@ public class Calculator {
      * May be slightly skewed because it takes the timestamps of the first and
      * last samples as the total time passed, and the test may actually have
      * started before that start time and ended after that end time.
+     *
+     * @return throughput associated to this sampler in requests per second
      */
     public double getRate() {
         if (elapsedTime == 0) {

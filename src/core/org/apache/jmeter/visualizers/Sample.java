@@ -208,6 +208,7 @@ public class Sample implements Serializable, Comparable<Sample> {
     }
 
     /**
+     * @param format the format of the time to be used
      * @return the start time using the specified format
      * Intended for use from Functors
      */

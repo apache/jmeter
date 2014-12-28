@@ -33,6 +33,9 @@ public interface Visualizer {
     /**
      * This method is called by sampling thread to inform the visualizer about
      * the arrival of a new sample.
+     *
+     * @param sample
+     *            the newly arrived sample
      */
     void add(SampleResult sample);
 

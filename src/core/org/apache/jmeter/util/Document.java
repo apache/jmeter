@@ -41,9 +41,11 @@ public class Document {
         JMeterUtils.getPropDefault("document.max_size", 10 * 1024 * 1024); // $NON-NLS-1$
 
     /**
-     * Convert to text plain a lot of kind of document
-     * (like odt, ods, odp, doc(x), xls(x), ppt(x), pdf, mp3, mp4, etc.) with Apache Tika
-     * @param document 
+     * Convert to text plain a lot of kind of document (like odt, ods, odp,
+     * doc(x), xls(x), ppt(x), pdf, mp3, mp4, etc.) with Apache Tika
+     *
+     * @param document
+     *            binary representation of the document
      * @return text from document without format
      */
     public static String getTextFromDocument(byte[] document) {

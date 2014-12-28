@@ -38,6 +38,8 @@ public final class ColorHelper {
      * If all the components are the same value increment in the order of red,
      * green and blue.
      *
+     * @param col
+     *            {@link Color} to start with
      * @param inc
      *            value to increment the color components
      * @return the color after change
