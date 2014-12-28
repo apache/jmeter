@@ -54,7 +54,7 @@ public class KeyToolUtils {
 
     /**
      * Where to find the keytool application.
-     * If null, then keytool cannot be found.
+     * If <code>null</code>, then keytool cannot be found.
      */
     private static final String KEYTOOL_PATH;
 
@@ -133,10 +133,10 @@ public class KeyToolUtils {
      * @param alias the alias to use, not null
      * @param password the password to use for the store and the key
      * @param validity the validity period in days, greater than 0
-     * @param dname the dname value, if omitted use "cn=JMeter Proxy (DO NOT TRUST)"
+     * @param dname the <em>distinguished name</em> value, if omitted use "cn=JMeter Proxy (DO NOT TRUST)"
      * @param ext if not null, the extension (-ext) to add (e.g. "bc:c"). This requires Java 7.
      *
-     * @throws IOException
+     * @throws IOException if keytool was not configured or running keytool application fails
      */
     public static void genkeypair(final File keystore, String alias, final String password, int validity, String dname, String ext)
             throws IOException {
@@ -209,7 +209,7 @@ public class KeyToolUtils {
      * @param password the password for keystore and keys
      * @param validity the validity period in days, must be greater than 0
      *
-     * @throws IOException
+     * @throws IOException if keytool was not configured, running keytool application failed or copying the keys failed
      */
     public static void generateProxyCA(File keystore, String password,  int validity) throws IOException {
         File caCert_crt = new File(ROOT_CACERT_CRT);
@@ -267,7 +267,7 @@ public class KeyToolUtils {
      * @param host the host, e.g. jmeter.apache.org or *.apache.org; also used as the alias
      * @param validity the validity period for the generated keypair
      *
-     * @throws IOException
+     * @throws IOException if keytool was not configured or running keytool application failed
      *
      */
     public static void generateHostCert(File keystore, String password, String host, int validity) throws IOException {
@@ -301,9 +301,14 @@ public class KeyToolUtils {
     /**
      * List the contents of a keystore
      *
-     * @param keystore the keystore file
-     * @param storePass the keystore password
+     * @param keystore
+     *            the keystore file
+     * @param storePass
+     *            the keystore password
      * @return the output from the command "keytool -list -v"
+     * @throws IOException
+     *             if keytool was not configured or running keytool application
+     *             failed
      */
     public static String list(final File keystore, final String storePass) throws IOException {
         final File workingDir = keystore.getParentFile();
@@ -349,14 +354,22 @@ public class KeyToolUtils {
     /**
      * Helper method to simplify chaining keytool commands.
      *
-     * @param command the command, not null
-     * @param keystore the keystore, not nill
-     * @param password the password used for keystore and key, not null
-     * @param alias the alias, not null
-     * @param input where to source input, may be null
-     * @param output where to send output, may be null
-     * @param parameters additional parameters to the command, may be null
+     * @param command
+     *            the command, not null
+     * @param keystore
+     *            the keystore, not nill
+     * @param password
+     *            the password used for keystore and key, not null
+     * @param alias
+     *            the alias, not null
+     * @param input
+     *            where to source input, may be null
+     * @param output
+     *            where to send output, may be null
+     * @param parameters
+     *            additional parameters to the command, may be null
      * @throws IOException
+     *             if keytool is not configured or running it failed
      */
     private static void keytool(String command, File keystore, String password, String alias,
             InputStream input, OutputStream output, String ... parameters)
@@ -388,10 +401,20 @@ public class KeyToolUtils {
         }
     }
 
+    /**
+     * @return flag whether {@link KeyToolUtils#KEYTOOL_PATH KEYTOOL_PATH} is
+     *         configured (is not <code>null</code>)
+     */
     public static boolean haveKeytool() {
         return KEYTOOL_PATH != null;
     }
 
+    /**
+     * @return path to keytool binary
+     * @throws IOException
+     *             when {@link KeyToolUtils#KEYTOOL_PATH KEYTOOL_PATH} is
+     *             <code>null</code>
+     */
     private static String getKeyToolPath() throws IOException {
         if (KEYTOOL_PATH == null) {
             throw new IOException("keytool application cannot be found");

@@ -118,8 +118,8 @@ public class SystemCommand {
     /**
      * @param arguments List of strings, not null
      * @return return code
-     * @throws InterruptedException
-     * @throws IOException
+     * @throws InterruptedException when execution was interrupted
+     * @throws IOException when I/O error occurs while execution
      */
     public int run(List<String> arguments) throws InterruptedException, IOException {
         return run(arguments, stdin, stdout, stderr);
@@ -195,8 +195,8 @@ public class SystemCommand {
      * @param arguments1 first command to run
      * @param arguments2 second command to run
      * @return exit status
-     * @throws InterruptedException
-     * @throws IOException
+     * @throws InterruptedException when execution gets interrupted
+     * @throws IOException when I/O error occurs while execution
      */
     public int run(List<String> arguments1, List<String> arguments2) throws InterruptedException, IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream(); // capture the intermediate output

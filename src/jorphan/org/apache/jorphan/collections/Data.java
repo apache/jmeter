@@ -364,7 +364,7 @@ public class Data implements Serializable {
      * @param rs
      *            ResultSet passed in from a database query
      * @return a Data object
-     * @throws java.sql.SQLException
+     * @throws java.sql.SQLException when database access errors occur
      */
     public static Data getDataFromResultSet(ResultSet rs) throws SQLException {
         ResultSetMetaData meta = rs.getMetaData();
@@ -566,6 +566,11 @@ public class Data implements Serializable {
 
     /**
      * Sets the data for every row in the column.
+     *
+     * @param colName
+     *            name of the column
+     * @param value
+     *            value to be set
      */
     public void setColumnData(String colName, Object value) {
         List<Object> list = this.getColumnAsObjectArray(colName);
