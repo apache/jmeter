@@ -1,9 +1,40 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package org.apache.jmeter.reporters;
 
 import java.text.DecimalFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
 
+/**
+ * <p>
+ * Running sample data container. Just instantiate a new instance of this
+ * class, and then call {@link #addSample(SampleResult)} a few times, and pull
+ * the stats out with whatever methods you prefer.
+ * </p>
+ * <p>
+ * Please note that this class is not thread-safe.
+ * The calling class is responsible for ensuring thread safety if required.
+ * The caller needs to synchronize access in order to enure that variables are consistent.
+ * </p>
+ * @since 2.13
+ */
 class SummariserRunningSample {
 
     private final DecimalFormat errorFormatter = new DecimalFormat("#0.00%"); // $NON-NLS-1$
@@ -24,11 +55,11 @@ class SummariserRunningSample {
 
     private final String label;
 
-    private final int index;
-
-    public SummariserRunningSample(String label, int index) {
+    /**
+     * @param label
+     */
+    public SummariserRunningSample(String label) {
         this.label = label;
-        this.index = index;
         init();
     }
 
@@ -38,7 +69,6 @@ class SummariserRunningSample {
      */
     public SummariserRunningSample(SummariserRunningSample src) {
         label = src.label;
-        index = src.index;
         counter = src.counter;
         errorCount = src.errorCount;
         startTime = src.startTime;
@@ -58,10 +88,17 @@ class SummariserRunningSample {
         endTime = startTime;
     }
 
+    /**
+     * Clear at every interval
+     */
     public void clear() {
         init();
     }
 
+    /**
+     * Used for delta
+     * @param rs {@link SummariserRunningSample}
+     */
     public void addSample(SummariserRunningSample rs) {
         counter += rs.counter;
         errorCount += rs.errorCount;
@@ -76,6 +113,10 @@ class SummariserRunningSample {
         endTime = System.currentTimeMillis();
     }
 
+    /**
+     * Used for each SampleResult
+     * @param res {@link SampleResult}
+     */
     public void addSample(SampleResult res) {
         counter += res.getSampleCount();
         errorCount += res.getErrorCount();
@@ -93,10 +134,10 @@ class SummariserRunningSample {
 
     /**
      * Returns the number of samples that have been recorded by this instance of
-     * the RunningSample class.
+     * the {@link SummariserRunningSample} class.
      *
      * @return the number of samples that have been recorded by this instance of
-     *         the RunningSample class.
+     *         the {@link SummariserRunningSample} class.
      */
     public long getNumSamples() {
         return counter;
@@ -195,6 +236,9 @@ class SummariserRunningSample {
         return min;
     }
 
+    /**
+     * Set end time
+     */
     public void setEndTime() {
         endTime = System.currentTimeMillis();
     }
