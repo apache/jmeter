@@ -42,12 +42,12 @@ import org.apache.log.Logger;
 /**
  * Generate a summary of the test run so far to the log file and/or standard
  * output. Both running and differential totals are shown. Output is generated
- * every n seconds (default 3 minutes) on the appropriate time boundary, so that
+ * every n seconds (default 30 seconds (property summariser.interval)) on the appropriate time boundary, so that
  * multiple test runs on the same time will be synchronised.
  *
  * This is mainly intended for batch (non-GUI) runs
- *
- * Note that the RunningSample start and end times relate to the samples,
+ * FIXME : Docs below are outdated, need fixing
+ * Note that the {@link SummariserRunningSample} start and end times relate to the samples,
  * not the reporting interval.
  *
  * Since the first sample in a delta is likely to have started in the previous reporting interval,
