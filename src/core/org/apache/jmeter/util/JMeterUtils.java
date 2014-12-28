@@ -173,7 +173,9 @@ public class JMeterUtils implements UnitTestManager {
      * Load the JMeter properties file; if not found, then
      * default to "org/apache/jmeter/jmeter.properties" from the classpath
      *
+     * <p>
      * c.f. loadProperties
+     *
      * @param file Name of the file from which the JMeter properties should be loaded
      */
     public static void loadJMeterProperties(String file) {
@@ -259,7 +261,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Get a compiled expression from the pattern cache (READ_ONLY).
      *
-     * @param expression
+     * @param expression regular expression to be looked up
      * @return compiled pattern
      *
      * @throws MalformedCachePatternException (Runtime)
@@ -274,7 +276,7 @@ public class JMeterUtils implements UnitTestManager {
      * Get a compiled expression from the pattern cache.
      *
      * @param expression RE
-     * @param options e.g. READ_ONLY_MASK
+     * @param options e.g. {@link Perl5Compiler#READ_ONLY_MASK READ_ONLY_MASK}
      * @return compiled pattern
      *
      * @throws MalformedCachePatternException (Runtime)
@@ -714,8 +716,14 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * Creates the vector of alias strings.
+     * <p>
+     * The properties will be filtered by all values starting with
+     * <code>alias.</code>. The matching entries will be used for the new
+     * {@link Hashtable} while the prefix <code>alias.</code> will be stripped
+     * of the keys.
      *
      * @param properties
+     *            the input values
      * @return The Alias value
      */
     public static Hashtable<String, String> getAlias(Properties properties) {
@@ -747,10 +755,22 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Creates a table of strings for all the properties that start with a
      * common prefix.
+     * <p>
+     * So if you have {@link Properties} <code>prop</code> with two entries, say
+     * <ul>
+     * <li>this.test</li>
+     * <li>that.something</li>
+     * </ul>
+     * And would call this method with a <code>prefix</code> <em>this</em>, the
+     * result would be a new {@link Hashtable} with one entry, which key would
+     * be <em>test</em>.
      *
-     * @param properties input to search
-     * @param prefix to match against properties
-     * @return a Hashtable where the keys are the original keys with the prefix removed
+     * @param properties
+     *            input to search
+     * @param prefix
+     *            to match against properties
+     * @return a Hashtable where the keys are the original matching keys with
+     *         the prefix removed
      */
     public static Hashtable<String, String> getHashtable(Properties properties, String prefix) {
         Hashtable<String, String> t = new Hashtable<String, String>();
@@ -1205,7 +1225,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Find a file in the current directory or in the JMeter bin directory.
      *
-     * @param fileName
+     * @param fileName the name of the file to find
      * @return File object
      */
     public static File findFile(String fileName){

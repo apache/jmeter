@@ -41,7 +41,14 @@ public class BeanShellServer implements Runnable {
     private final String serverfile;
 
     /**
-     *
+     * Constructor which sets the port for this server and the path to an
+     * optional init file
+     * 
+     * @param port
+     *            the port for the server to use
+     * @param file
+     *            the path to an init file, or an empty string, if no init file
+     *            should be used
      */
     public BeanShellServer(int port, String file) {
         super();
