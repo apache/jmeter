@@ -76,6 +76,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * Creates a new HashTree and adds the given object as a top-level node.
      *
      * @param key
+     *            name of the new top-level node
      */
     public HashTree(Object key) {
         this(new HashMap<Object, HashTree>(), key);
@@ -191,7 +192,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * Adds all the nodes and branches of the given tree to this tree. Is like
      * merging two trees. Duplicates are ignored.
      *
-     * @param newTree
+     * @param newTree the tree to be added
      */
     public void add(HashTree newTree) {
         for (Object item : newTree.list()) {
@@ -216,6 +217,9 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     /**
      * Creates a new HashTree and adds all the objects in the given array as
      * top-level nodes in the tree.
+     *
+     * @param keys
+     *            array with names for the new top-level nodes
      */
     public HashTree(Object[] keys) {
         data = new HashMap<Object, HashTree>();
@@ -397,10 +401,13 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
 
     /**
-     * Adds an key into the HashTree at the current level.
+     * Adds an key into the HashTree at the current level. If a HashTree exists
+     * for the key already, no new tree will be added
      *
      * @param key
      *            key to be added to HashTree
+     * @return newly generated tree, if no tree was found for the given key;
+     *         existing key otherwise
      */
     public HashTree add(Object key) {
         if (!data.containsKey(key)) {
@@ -443,6 +450,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            key to be added
      * @param value
      *            value to be added as a key in the secondary node
+     * @return HashTree for which <code>value</code> is the key
      */
     public HashTree add(Object key, Object value) {
         return add(key).add(value);
@@ -544,6 +552,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            a list of objects representing a path
      * @param value
      *            Object to add as a node to bottom-most node
+     * @return HashTree for which <code>value</code> is the key
      */
     public HashTree add(Collection<?> treePath, Object value) {
         HashTree tree = addTreePath(treePath);
@@ -580,6 +589,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *
      * @param key
      *            Key used to find appropriate HashTree()
+     * @return the HashTree for <code>key</code>
      */
     public HashTree getTree(Object key) {
         return data.get(key);
@@ -762,6 +772,9 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     /**
      * Finds the given current key, and replaces it with the given new key. Any
      * tree structure found under the original key is moved to the new key.
+     *
+     * @param currentKey name of the key to be replaced
+     * @param newKey name of the new key
      */
     public void replaceKey(Object currentKey, Object newKey) {
         HashTree tree = getTree(currentKey);
@@ -817,7 +830,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
 
     /**
-     * Recurses down into the HashTree stucture using each subsequent key in the
+     * Recurses down into the HashTree structure using each subsequent key in the
      * treePath argument, and returns an array of keys of the HashTree object at
      * the end of the recursion. If the HashTree represented a file system, this
      * would be like getting a list of all the files in a directory specified by
@@ -939,6 +952,8 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * implementation will be given notification of each node visited.
      *
      * @see HashTreeTraverser
+     * @param visitor
+     *            the visitor that wants to traverse the tree
      */
     public void traverse(HashTreeTraverser visitor) {
         for (Object item : list()) {
