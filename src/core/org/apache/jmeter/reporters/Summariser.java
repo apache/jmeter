@@ -35,7 +35,6 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterContextService.ThreadCounts;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.RunningSample;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -147,9 +146,9 @@ public class Summariser extends AbstractTestElement
         /** Time of last summary (to prevent double reporting) */
         private long last = 0;
 
-        private final RunningSample delta = new RunningSample("DELTA",0);
+        private final SummariserRunningSample delta = new SummariserRunningSample("DELTA",0);
 
-        private final RunningSample total = new RunningSample("TOTAL",0);
+        private final SummariserRunningSample total = new SummariserRunningSample("TOTAL",0);
 
         /**
          * Add the delta values to the total values and clear the delta
@@ -172,8 +171,8 @@ public class Summariser extends AbstractTestElement
 
         long now = System.currentTimeMillis() / 1000;// in seconds
 
-        RunningSample myDelta = null;
-        RunningSample myTotal = null;
+        SummariserRunningSample myDelta = null;
+        SummariserRunningSample myTotal = null;
         boolean reportNow = false;
 
         /*
@@ -190,9 +189,9 @@ public class Summariser extends AbstractTestElement
                 reportNow = true;
 
                 // copy the data to minimise the synch time
-                myDelta = new RunningSample(myTotals.delta);
+                myDelta = new SummariserRunningSample(myTotals.delta);
                 myTotals.moveDelta();
-                myTotal = new RunningSample(myTotals.total);
+                myTotal = new SummariserRunningSample(myTotals.total);
 
                 myTotals.last = now; // stop double-reporting
             }
@@ -239,7 +238,7 @@ public class Summariser extends AbstractTestElement
      * @param string
      * @return the sunnary information
      */
-    private static String format(String name, RunningSample s, String type) {
+    private static String format(String name, SummariserRunningSample s, String type) {
         DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
         StringBuilder tmp = new StringBuilder(20); // for intermediate use
         StringBuilder sb = new StringBuilder(100); // output line buffer
@@ -369,6 +368,7 @@ public class Summariser extends AbstractTestElement
             String str;
             String name = entry.getKey();
             Totals total = entry.getValue();
+            total.delta.setEndTime(); // ensure delta has correct end time
             // Only print final delta if there were some samples in the delta
             // and there has been at least one sample reported previously
             if (total.delta.getNumSamples() > 0 && total.total.getNumSamples() >  0) {
@@ -380,7 +380,7 @@ public class Summariser extends AbstractTestElement
                     System.out.println(str);
                 }
             }
-            total.moveDelta();
+            total.moveDelta(); // This will update the total endTime
             str = format(name, total.total, "=");
             if (TOLOG) {
                 log.info(str);
