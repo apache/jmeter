@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.LogManager;
 
 import org.apache.avalon.excalibur.logger.LogKitLoggerManager;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -90,6 +91,8 @@ public final class LoggingManager {
      * this as the default from "log_file", default "jmeter.log" The default
      * priority is set from "log_level", with a default of INFO
      *
+     * @param properties
+     *            {@link Properties} to be used for initialization
      */
     public static void initializeLogging(Properties properties) {
         setFormat(properties);
@@ -202,6 +205,11 @@ public final class LoggingManager {
      * Handle LOG_PRIORITY.category=priority and LOG_FILE.category=file_name
      * properties. If the prefix is detected, then remove it to get the
      * category.
+     *
+     * @param appProperties
+     *            {@link Properties} that contain the
+     *            {@link LoggingManager#LOG_PRIORITY LOG_PRIORITY} and
+     *            {@link LoggingManager#LOG_FILE LOG_FILE} prefixed entries
      */
     public static void setLoggingLevels(Properties appProperties) {
         Iterator<?> props = appProperties.keySet().iterator();

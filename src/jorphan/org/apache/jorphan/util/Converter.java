@@ -35,8 +35,11 @@ public class Converter {
      * Convert the given value object to an object of the given type
      *
      * @param value
+     *            object to convert
      * @param toType
-     * @return Object
+     *            type to convert object to
+     * @return converted object or original value if no conversion could be
+     *         applied
      */
     public static Object convert(Object value, Class<?> toType) {
         if (value == null) {
@@ -74,11 +77,16 @@ public class Converter {
     }
 
     /**
-     * Converts the given object to a calendar object. Defaults to the current
-     * date if the given object can't be converted.
+     * Converts the given object to a calendar object. Defaults to the
+     * <code>defaultValue</code> if the given object can't be converted.
      *
      * @param date
-     * @return Calendar
+     *            object that should be converted to a {@link Calendar}
+     * @param defaultValue
+     *            default value that will be returned if <code>date</code> can
+     *            not be converted
+     * @return {@link Calendar} representing the given <code>date</code> or
+     *         <code>defaultValue</code> if conversion failed
      */
     public static Calendar getCalendar(Object date, Calendar defaultValue) {
         Calendar cal = new GregorianCalendar();
@@ -115,14 +123,45 @@ public class Converter {
         return cal;
     }
 
+    /**
+     * Converts the given object to a calendar object. Defaults to a calendar
+     * using the current time if the given object can't be converted.
+     *
+     * @param o
+     *            object that should be converted to a {@link Calendar}
+     * @return {@link Calendar} representing the given <code>o</code> or a new
+     *         {@link GregorianCalendar} using the current time if conversion
+     *         failed
+     */
     public static Calendar getCalendar(Object o) {
         return getCalendar(o, new GregorianCalendar());
     }
 
+    /**
+     * Converts the given object to a {@link Date} object. Defaults to the
+     * current time if the given object can't be converted.
+     *
+     * @param date
+     *            object that should be converted to a {@link Date}
+     * @return {@link Date} representing the given <code>date</code> or
+     *         the current time if conversion failed
+     */
     public static Date getDate(Object date) {
         return getDate(date, Calendar.getInstance().getTime());
     }
 
+    /**
+     * Converts the given object to a {@link Date} object. Defaults to the
+     * <code>defaultValue</code> if the given object can't be converted.
+     *
+     * @param date
+     *            object that should be converted to a {@link Date}
+     * @param defaultValue
+     *            default value that will be returned if <code>date</code> can
+     *            not be converted
+     * @return {@link Date} representing the given <code>date</code> or
+     *         <code>defaultValue</code> if conversion failed
+     */
     public static Date getDate(Object date, Date defaultValue) {
         Date val = null;
         if (date instanceof java.util.Date) {
@@ -156,6 +195,17 @@ public class Converter {
         return val;
     }
 
+    /**
+     * Convert object to float, or <code>defaultValue</code> if conversion
+     * failed
+     * 
+     * @param o
+     *            object to convert
+     * @param defaultValue
+     *            default value to use, when conversion failed
+     * @return converted float or <code>defaultValue</code> if conversion
+     *         failed
+     */
     public static float getFloat(Object o, float defaultValue) {
         try {
             if (o == null) {
@@ -170,10 +220,30 @@ public class Converter {
         }
     }
 
+    /**
+     * Convert object to float, or <code>0</code> if conversion
+     * failed
+     * 
+     * @param o
+     *            object to convert
+     * @return converted float or <code>0</code> if conversion
+     *         failed
+     */
     public static float getFloat(Object o) {
         return getFloat(o, 0);
     }
 
+    /**
+     * Convert object to double, or <code>defaultValue</code> if conversion
+     * failed
+     * 
+     * @param o
+     *            object to convert
+     * @param defaultValue
+     *            default value to use, when conversion failed
+     * @return converted double or <code>defaultValue</code> if conversion
+     *         failed
+     */
     public static double getDouble(Object o, double defaultValue) {
         try {
             if (o == null) {
@@ -188,14 +258,43 @@ public class Converter {
         }
     }
 
+    /**
+     * Convert object to double, or <code>0</code> if conversion
+     * failed
+     * 
+     * @param o
+     *            object to convert
+     * @return converted double or <code>0</code> if conversion
+     *         failed
+     */
     public static double getDouble(Object o) {
         return getDouble(o, 0);
     }
 
+    /**
+     * Convert object to boolean, or <code>false</code> if conversion
+     * failed
+     * 
+     * @param o
+     *            object to convert
+     * @return converted boolean or <code>false</code> if conversion
+     *         failed
+     */
     public static boolean getBoolean(Object o) {
         return getBoolean(o, false);
     }
 
+    /**
+     * Convert object to boolean, or <code>defaultValue</code> if conversion
+     * failed
+     * 
+     * @param o
+     *            object to convert
+     * @param defaultValue
+     *            default value to use, when conversion failed
+     * @return converted boolean or <code>defaultValue</code> if conversion
+     *         failed
+     */
     public static boolean getBoolean(Object o, boolean defaultValue) {
         if (o == null) {
             return defaultValue;
@@ -206,12 +305,14 @@ public class Converter {
     }
 
     /**
-     * Convert object to integer, return defaultValue if object is not
-     * convertible or is null.
+     * Convert object to integer, return <code>defaultValue</code> if object is not
+     * convertible or is <code>null</code>.
      *
      * @param o
+     *            object to convert
      * @param defaultValue
-     * @return int
+     *            default value to be used when no conversion can be done
+     * @return converted int or default value if conversion failed
      */
     public static int getInt(Object o, int defaultValue) {
         try {
@@ -227,10 +328,28 @@ public class Converter {
         }
     }
 
+    /**
+     * Convert object to char, or ' ' if no conversion can
+     * be applied
+     * 
+     * @param o
+     *            object to convert
+     * @return converted char or ' ' if conversion failed
+     */
     public static char getChar(Object o) {
         return getChar(o, ' ');
     }
 
+    /**
+     * Convert object to char, or <code>defaultValue</code> if no conversion can
+     * be applied
+     * 
+     * @param o
+     *            object to convert
+     * @param defaultValue
+     *            default value to use, when conversion failed
+     * @return converted char or <code>defaultValue</code> if conversion failed
+     */
     public static char getChar(Object o, char defaultValue) {
         try {
             if (o == null) {
@@ -255,23 +374,27 @@ public class Converter {
     }
 
     /**
-     * Converts object to an integer, defaults to 0 if object is not convertible
-     * or is null.
+     * Converts object to an integer, defaults to <code>0</code> if object is
+     * not convertible or is <code>null</code>.
      *
      * @param o
-     * @return int
+     *            object to convert
+     * @return converted int, or <code>0</code> if conversion failed
      */
     public static int getInt(Object o) {
         return getInt(o, 0);
     }
 
     /**
-     * Converts object to a long, return defaultValue if object is not
-     * convertible or is null.
+     * Converts object to a long, return <code>defaultValue</code> if object is
+     * not convertible or is <code>null</code>.
      *
      * @param o
+     *            object to convert
      * @param defaultValue
-     * @return long
+     *            default value to use, when conversion failed
+     * @return converted long or <code>defaultValue</code> when conversion
+     *         failed
      */
     public static long getLong(Object o, long defaultValue) {
         try {
@@ -288,16 +411,28 @@ public class Converter {
     }
 
     /**
-     * Converts object to a long, defaults to 0 if object is not convertible or
-     * is null
+     * Converts object to a long, defaults to <code>0</code> if object is not
+     * convertible or is <code>null</code>
      *
      * @param o
-     * @return long
+     *            object to convert
+     * @return converted long or <code>0</code> if conversion failed
      */
     public static long getLong(Object o) {
         return getLong(o, 0);
     }
 
+    /**
+     * Format a date using a given pattern
+     *
+     * @param date
+     *            date to format
+     * @param pattern
+     *            pattern to use for formatting
+     * @return formatted date, or empty string if date was <code>null</code>
+     * @throws IllegalArgumentException
+     *             when <code>pattern</code> is invalid
+     */
     public static String formatDate(Date date, String pattern) {
         if (date == null) {
             return "";
@@ -306,6 +441,17 @@ public class Converter {
         return format.format(date);
     }
 
+    /**
+     * Format a date using a given pattern
+     *
+     * @param date
+     *            date to format
+     * @param pattern
+     *            pattern to use for formatting
+     * @return formatted date, or empty string if date was <code>null</code>
+     * @throws IllegalArgumentException
+     *             when <code>pattern</code> is invalid
+     */
     public static String formatDate(java.sql.Date date, String pattern) {
         if (date == null) {
             return "";
@@ -314,14 +460,47 @@ public class Converter {
         return format.format(date);
     }
 
+    /**
+     * Format a date using a given pattern
+     *
+     * @param date
+     *            date to format
+     * @param pattern
+     *            pattern to use for formatting
+     * @return formatted date, or empty string if date was <code>null</code>
+     * @throws IllegalArgumentException
+     *             when <code>pattern</code> is invalid
+     */
     public static String formatDate(String date, String pattern) {
         return formatDate(getCalendar(date, null), pattern);
     }
 
+    /**
+     * Format a date using a given pattern
+     *
+     * @param date
+     *            date to format
+     * @param pattern
+     *            pattern to use for formatting
+     * @return formatted date, or empty string if date was <code>null</code>
+     * @throws IllegalArgumentException
+     *             when <code>pattern</code> is invalid
+     */
     public static String formatDate(Calendar date, String pattern) {
         return formatCalendar(date, pattern);
     }
 
+    /**
+     * Format a calendar using a given pattern
+     *
+     * @param date
+     *            calendar to format
+     * @param pattern
+     *            pattern to use for formatting
+     * @return formatted date, or empty string if date was <code>null</code>
+     * @throws IllegalArgumentException
+     *             when <code>pattern</code> is invalid
+     */
     public static String formatCalendar(Calendar date, String pattern) {
         if (date == null) {
             return "";
@@ -331,11 +510,15 @@ public class Converter {
     }
 
     /**
-     * Converts object to a String, return defaultValue if object is null.
+     * Converts object to a String, return <code>defaultValue</code> if object
+     * is <code>null</code>.
      *
      * @param o
+     *            object to convert
      * @param defaultValue
-     * @return String
+     *            default value to use when conversion failed
+     * @return converted String or <code>defaultValue</code> when conversion
+     *         failed
      */
     public static String getString(Object o, String defaultValue) {
         if (o == null) {
@@ -344,6 +527,15 @@ public class Converter {
         return o.toString();
     }
 
+    /**
+     * Replace newlines "\n" with <code>insertion</code>
+     * 
+     * @param v
+     *            String in which the newlines should be replaced
+     * @param insertion
+     *            new string which should be used instead of "\n"
+     * @return new string with newlines replaced by <code>insertion</code>
+     */
     public static String insertLineBreaks(String v, String insertion) {
         if (v == null) {
             return "";
@@ -365,12 +557,22 @@ public class Converter {
      * Converts object to a String, defaults to empty string if object is null.
      *
      * @param o
-     * @return String
+     *            object to convert
+     * @return converted String or empty string when conversion failed
      */
     public static String getString(Object o) {
         return getString(o, "");
     }
     
+    /**
+     * Converts an object to a {@link File}
+     * 
+     * @param o
+     *            object to convert (must be a {@link String} or a {@link File})
+     * @return converted file
+     * @throws IllegalArgumentException
+     *             when object can not be converted
+     */
     public static File getFile(Object o){
         if (o instanceof File) {
             return (File) o;
