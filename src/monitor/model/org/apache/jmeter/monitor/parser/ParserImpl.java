@@ -44,7 +44,7 @@ public abstract class ParserImpl implements Parser {
     private final ObjectFactory FACTORY;
 
     /**
-     *
+     * @param factory {@link ObjectFactory} to use
      */
     public ParserImpl(ObjectFactory factory) {
         super();
@@ -67,7 +67,7 @@ public abstract class ParserImpl implements Parser {
     /**
      * parse byte array and return Status object
      *
-     * @param bytes
+     * @param bytes bytes to be parsed
      * @return Status
      */
     @Override
@@ -89,7 +89,7 @@ public abstract class ParserImpl implements Parser {
     }
 
     /**
-     * @param content
+     * @param content text to be parsed
      * @return Status
      */
     @Override
@@ -112,6 +112,9 @@ public abstract class ParserImpl implements Parser {
 
     /**
      * @param result
+     *            {@link SampleResult} out of which the
+     *            {@link SampleResult#getResponseData() reponseData} will be
+     *            used for parsing
      * @return Status
      */
     @Override

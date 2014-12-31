@@ -18,6 +18,7 @@ package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.monitor.util.Stats;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
 /*
@@ -61,14 +62,28 @@ public class MonitorStats extends AbstractTestElement implements Serializable {
      * Default constructor
      *
      * @param health
+     *            Health of the server. Has to be one of {@link Stats#HEALTHY
+     *            HEALTHY}, {@link Stats#ACTIVE ACTIVE}, {@link Stats#WARNING
+     *            WARNING} or {@link Stats#DEAD DEAD}
      * @param load
+     *            load of the server as integer from a range in between 1 and
+     *            100
      * @param cpuload
+     *            cpu load of the server as integer from range between 1 and 100
      * @param memload
+     *            load of the server as integer from a range in between 1 and
+     *            100
      * @param threadload
+     *            thread load of the server as an integer from a range in
+     *            between 1 and 100
      * @param host
+     *            name of the host from which the status was taken
      * @param port
+     *            port from which the status was taken
      * @param protocol
+     *            over which the status was taken
      * @param time
+     *            time in milliseconds when this status was created
      */
     public MonitorStats(int health, int load, int cpuload, int memload, int threadload, String host, String port,
             String protocol, long time) {

@@ -142,7 +142,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     /**
      * Set the string label used to create an instance of the
      * test with the string constructor.
-     * @param constr
+     * @param constr the string passed to the constructor
      */
     public void setConstructorString(String constr)
     {
@@ -150,7 +150,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
-     * get the string passed to the string constructor
+     * @return the string passed to the string constructor
      */
     public String getConstructorString()
     {
@@ -158,23 +158,23 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
-     * Return the name of the method to test
+     * @return the name of the method to test
      */
     public String getMethod(){
         return getPropertyAsString(METHOD);
     }
 
     /**
-     * Method should add the JUnit testXXX method to the list at
+     * Method should add the JUnit <em>testXXX</em> method to the list at
      * the end, since the sequence matters.
-     * @param methodName
+     * @param methodName name of the method to test
      */
     public void setMethod(String methodName){
         setProperty(METHOD,methodName);
     }
 
     /**
-     * get the success message
+     * @return the success message
      */
     public String getSuccess(){
         return getPropertyAsString(SUCCESS);
@@ -182,30 +182,30 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * set the success message
-     * @param success
+     * @param success message to be used for success
      */
     public void setSuccess(String success){
         setProperty(SUCCESS,success);
     }
 
     /**
-     * get the success code defined by the user
+     * @return the success code defined by the user
      */
     public String getSuccessCode(){
         return getPropertyAsString(SUCCESSCODE);
     }
 
     /**
-     * set the succes code. the success code should
+     * Set the success code. The success code should
      * be unique.
-     * @param code
+     * @param code unique success code
      */
     public void setSuccessCode(String code){
         setProperty(SUCCESSCODE,code);
     }
 
     /**
-     * get the failure message
+     * @return the failure message
      */
     public String getFailure(){
         return getPropertyAsString(FAILURE);
@@ -213,14 +213,14 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * set the failure message
-     * @param fail
+     * @param fail the failure message
      */
     public void setFailure(String fail){
         setProperty(FAILURE,fail);
     }
 
     /**
-     * The failure code is used by other components
+     * @return The failure code that is used by other components
      */
     public String getFailureCode(){
         return getPropertyAsString(FAILURECODE);
@@ -228,14 +228,14 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * Provide some unique code to denote a type of failure
-     * @param code
+     * @param code unique code to denote the type of failure
      */
     public void setFailureCode(String code){
         setProperty(FAILURECODE,code);
     }
 
     /**
-     * return the descriptive error for the test
+     * @return the descriptive error for the test
      */
     public String getError(){
         return getPropertyAsString(ERROR);
@@ -244,16 +244,16 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     /**
      * provide a descriptive error for the test method. For
      * a description of the difference between failure and
-     * error, please refer to the following url
-     * http://junit.sourceforge.net/doc/faq/faq.htm#tests_9
-     * @param error
+     * error, please refer to the
+     * <a href="http://junit.sourceforge.net/doc/faq/faq.htm#tests_9">junit faq</a>
+     * @param error the description of the error
      */
     public void setError(String error){
         setProperty(ERROR,error);
     }
 
     /**
-     * return the error code for the test method. it should
+     * @return the error code for the test method. It should
      * be an unique error code.
      */
     public String getErrorCode(){
@@ -261,24 +261,24 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
-     * provide an unique error code for when the test
+     * Provide an unique error code for when the test
      * does not pass the assert test.
-     * @param code
+     * @param code unique error code
      */
     public void setErrorCode(String code){
         setProperty(ERRORCODE,code);
     }
 
     /**
-     * return the comma separated string for the filter
+     * @return the comma separated string for the filter
      */
     public String getFilterString(){
         return getPropertyAsString(FILTER);
     }
 
     /**
-     * set the filter string in comman separated format
-     * @param text
+     * set the filter string in comma separated format
+     * @param text comma separated filter
      */
     public void setFilterString(String text){
         setProperty(FILTER,text);
@@ -288,6 +288,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      * if the sample shouldn't call setup/teardown, the
      * method returns true. It's meant for onetimesetup
      * and onetimeteardown.
+     * 
+     * @return flag whether setup/teardown methods should not be called
      */
     public boolean getDoNotSetUpTearDown(){
         return getPropertyAsBoolean(DOSETUP);
@@ -295,7 +297,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * set the setup/teardown option
-     * @param setup
+     *
+     * @param setup flag whether the setup/teardown methods should not be called
      */
     public void setDoNotSetUpTearDown(boolean setup){
         setProperty(DOSETUP,String.valueOf(setup));
@@ -306,6 +309,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      * which means users have to explicitly set the sampler to
      * append the assert errors. Because of how junit works, there
      * should only be one error
+     *
+     * @return flag whether errors should be appended
      */
     public boolean getAppendError() {
         return getPropertyAsBoolean(APPEND_ERROR,false);
@@ -321,9 +326,11 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
-     * If append exception is not set, by default it is set to false.
-     * Users have to explicitly set it to true to see the exceptions
+     * If append exception is not set, by default it is set to <code>false</code>.
+     * Users have to explicitly set it to <code>true</code> to see the exceptions
      * in the result tree.
+     * 
+     * @return flag whether exceptions should be appended to the result tree
      */
     public boolean getAppendException() {
         return getPropertyAsBoolean(APPEND_EXCEPTION,false);
@@ -703,6 +710,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     /**
      * 
      * @param createOneInstancePerSample
+     *            flag whether a new instance for each call should be created
      */
     public void setCreateOneInstancePerSample(boolean createOneInstancePerSample) {
         this.setProperty(CREATE_INSTANCE_PER_SAMPLE, createOneInstancePerSample, CREATE_INSTANCE_PER_SAMPLE_DEFAULT);
