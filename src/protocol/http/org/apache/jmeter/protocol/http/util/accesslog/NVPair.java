@@ -38,8 +38,8 @@ public class NVPair {
      * The constructor takes a name and value which represent HTTP request
      * parameters.
      *
-     * @param name
-     * @param value
+     * @param name name of the request parameter
+     * @param value value of the request parameter
      */
     public NVPair(String name, String value) {
         this.NAME = name;
@@ -49,7 +49,7 @@ public class NVPair {
     /**
      * Set the name
      *
-     * @param name
+     * @param name name of the request parameter
      */
     public void setName(String name) {
         this.NAME = name;
@@ -58,7 +58,7 @@ public class NVPair {
     /**
      * Set the value
      *
-     * @param value
+     * @param value value of the request parameter
      */
     public void setValue(String value) {
         this.VALUE = value;

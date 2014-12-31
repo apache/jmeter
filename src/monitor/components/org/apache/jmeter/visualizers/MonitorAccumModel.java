@@ -86,7 +86,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * Method will look up the server in the map. The MonitorModel will be added
      * to an existing list, or a new one will be created.
      *
-     * @param model
+     * @param model the {@link MonitorModel} to be added
      */
     public void addSample(MonitorModel model) {
         this.current = model;
@@ -119,7 +119,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
     /**
      * Get all MonitorModels matching the URL.
      *
-     * @param url
+     * @param url to be matched against
      * @return list
      */
     public List<MonitorModel> getAllSamples(String url) {
@@ -134,7 +134,9 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * Get the MonitorModel matching the url.
      *
      * @param url
-     * @return list
+     *            to be matched against
+     * @return the first {@link MonitorModel} registered for this
+     *         <code>url</code>
      */
     public MonitorModel getSample(String url) {
         if (serverListMap.containsKey(url)) {
@@ -151,6 +153,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * not a monitor sample, the method will ignore it.
      *
      * @param sample
+     *            {@link SampleResult} with the result of the status request
      */
     public void addSample(SampleResult sample) {
         URL surl = null;
@@ -186,6 +189,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * object with the current timestamp and health "dead".
      *
      * @param url
+     *            URL from where the status should have come
      */
     public void noResponse(URL url) {
         notifyListeners(createNewMonitorModel(url));
@@ -196,6 +200,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * used when the server fails to respond fully, or is dead.
      *
      * @param url
+     *            URL from where the status should have come
      * @return new MonitorModel
      */
     public MonitorModel createNewMonitorModel(URL url) {
@@ -221,6 +226,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * notify the listeners with the MonitorModel object.
      *
      * @param model
+     *            the {@link MonitorModel} that should be sent to the listeners
      */
     public void notifyListeners(MonitorModel model) {
         for (int idx = 0; idx < listeners.size(); idx++) {
@@ -234,6 +240,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * listener of the change.
      *
      * @param listener
+     *            the {@link MonitorListener} that should be added
      */
     public void addListener(MonitorListener listener) {
         listeners.add(listener);
