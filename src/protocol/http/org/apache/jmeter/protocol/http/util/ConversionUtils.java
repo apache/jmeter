@@ -49,12 +49,15 @@ public class ConversionUtils {
     private static final String COLONSLASHSLASH = "://"; // $NON-NLS-1$
 
     /**
-     * Extract the encoding (charset) from the Content-Type,
-     * e.g. "text/html; charset=utf-8".
+     * Extract the encoding (charset) from the Content-Type, e.g.
+     * "text/html; charset=utf-8".
      *
      * @param contentType
-     * @return the charset encoding - or null, if none was found or the charset is not supported
-     * @throws IllegalCharsetNameException 
+     *            string from which the encoding should be extracted
+     * @return the charset encoding - or <code>null</code>, if none was found or
+     *         the charset is not supported
+     * @throws IllegalCharsetNameException
+     *             if the found charset is not supported
      */
     public static String getEncodingFromContentType(String contentType){
         String charSet = null;
@@ -95,7 +98,7 @@ public class ConversionUtils {
      * @param baseURL the base URL which is used to resolve missing protocol/host in the location
      * @param location the location, possibly with extraneous leading "../"
      * @return URL with extraneous ../ removed
-     * @throws MalformedURLException
+     * @throws MalformedURLException when the given <code>URL</code> is malformed
      * @see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690 - handling of 302 redirects with invalid relative paths</a>
      */
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
@@ -121,7 +124,7 @@ public class ConversionUtils {
     /**
      * @param url String Url to escape
      * @return String cleaned up url
-     * @throws Exception
+     * @throws Exception when given <code>url</code> leads to a malformed URL or URI
      */
     public static String escapeIllegalURLCharacters(String url) throws Exception{
         String decodeUrl = URLDecoder.decode(url,"UTF-8");
@@ -136,7 +139,7 @@ public class ConversionUtils {
      * Warning: it may not work on all unencoded URLs.
      * @param url non-encoded URL
      * @return URI which has been encoded as necessary
-     * @throws URISyntaxException
+     * @throws URISyntaxException if parts of the url form a non valid URI
      */
     public static final URI sanitizeUrl(URL url) throws URISyntaxException {
         try {
@@ -155,10 +158,11 @@ public class ConversionUtils {
 
     /**
      * collapses absolute or relative URLs containing '/..' converting
-     * http://host/path1/../path2 to http://host/path2 or /one/two/../three to
-     * /one/three
+     * <code>http://host/path1/../path2</code> to <code>http://host/path2</code>
+     * or <code>/one/two/../three</code> to
+     * <code>/one/three</code>
      * 
-     * @param url
+     * @param url in which the '/..'s should be removed
      * @return collapsed URL
      * @see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=49083">Bug 49083 - collapse /.. in redirect URLs</a>
      */
