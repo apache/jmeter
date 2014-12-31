@@ -54,7 +54,7 @@ public final class DOMPool {
     /**
      * Return a document.
      *
-     * @param key
+     * @param key key of the document
      * @return Document
      */
     public static Document getDocument(Object key) {
@@ -64,8 +64,8 @@ public final class DOMPool {
     /**
      * Add an object to the cache.
      *
-     * @param key
-     * @param data
+     * @param key key of the document
+     * @param data Document to store
      */
     public static void putDocument(Object key, Document data) {
         MEMCACHE.put(key, data);

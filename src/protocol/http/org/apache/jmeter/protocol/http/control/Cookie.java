@@ -62,7 +62,11 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * create the coookie
-     *
+     * @param name name of the cookie
+     * @param value value of the cookie
+     * @param domain domain for which the cookie is valid
+     * @param path  path for which the cookie is valid
+     * @param secure flag whether cookie is to be handled as 'secure'
      * @param expires - this is in seconds
      *
      */
@@ -72,7 +76,11 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * create the coookie
-     *
+     * @param name name of the cookie
+     * @param value value of the cookie
+     * @param domain domain for which the cookie is valid
+     * @param path path for which the cookie is valid
+     * @param secure flag whether cookie is to be handled as 'secure'
      * @param expires - this is in seconds
      * @param hasPath - was the path explicitly specified?
      * @param hasDomain - was the domain explicitly specified?
@@ -86,11 +94,11 @@ public class Cookie extends AbstractTestElement implements Serializable {
     /**
      * Create a JMeter Cookie.
      * 
-     * @param name
-     * @param value
-     * @param domain
-     * @param path
-     * @param secure
+     * @param name name of the cookie
+     * @param value value of the cookie
+     * @param domain domain for which the cookie is valid
+     * @param path path for which the cookie is valid
+     * @param secure flag whether cookie is to be handled as 'secure'
      * @param expires - this is in seconds
      * @param hasPath - was the path explicitly specified?
      * @param hasDomain - was the domain explicitly specified?
@@ -114,6 +122,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * get the value for this object.
+     *
+     * @return the value of this cookie
      */
     public String getValue() {
         return getPropertyAsString(VALUE);
@@ -121,6 +131,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * set the value for this object.
+     *
+     * @param value the value of this cookie
      */
     public void setValue(String value) {
         this.setProperty(VALUE, value);
@@ -128,6 +140,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * get the domain for this object.
+     *
+     * @return the domain for which this cookie is valid
      */
     public String getDomain() {
         return getPropertyAsString(DOMAIN);
@@ -135,6 +149,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * set the domain for this object.
+     *
+     * @param domain the domain for which this cookie is valid
      */
     public void setDomain(String domain) {
         setProperty(DOMAIN, domain);
@@ -169,6 +185,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * get the secure for this object.
+     *
+     * @return flag whether this cookie should be treated as a 'secure' cookie
      */
     public boolean getSecure() {
         return getPropertyAsBoolean(SECURE);
@@ -176,6 +194,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * set the secure for this object.
+     *
+     * @param secure flag whether this cookie should be treated as a 'secure' cookie
      */
     public void setSecure(boolean secure) {
         setProperty(new BooleanProperty(SECURE, secure));
@@ -183,6 +203,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * get the path for this object.
+     *
+     * @return the path for which this cookie is valid
      */
     public String getPath() {
         return getPropertyAsString(PATH);
@@ -190,6 +212,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     /**
      * set the path for this object.
+     *
+     * @param path the path for which this cookie is valid
      */
     public void setPath(String path) {
         setProperty(PATH, path);

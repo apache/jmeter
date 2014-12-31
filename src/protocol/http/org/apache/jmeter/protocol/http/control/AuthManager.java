@@ -134,6 +134,21 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      * Update an authentication record.
+     *
+     * @param index
+     *            index at which position the record should be set
+     * @param url
+     *            url for which the authentication record should be used
+     * @param user
+     *            name of the user
+     * @param pass
+     *            password of the user
+     * @param domain
+     *            domain of the user
+     * @param realm
+     *            realm of the site
+     * @param mechanism
+     *            authentication {@link Mechanism} to use
      */
     public void set(int index, String url, String user, String pass, String domain, String realm, Mechanism mechanism) {
         Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
@@ -170,6 +185,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      * Return the record at index i
+     *
+     * @param i
+     *            index of the record to get
+     * @return authorization record at index <code>i</code>
      */
     public Authorization get(int i) {
         return (Authorization) getAuthObjects().get(i).getObjectValue();
@@ -233,14 +252,25 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     }
 
     /**
-     * @return boolean true if an authorization is setup for url
+     * Tests whether an authorization record is available for a given URL
+     *
+     * @param url
+     *            {@link URL} for which an authorization record should be
+     *            available
+     * @return <code>true</code> if an authorization is setup for url,
+     *         <code>false</code> otherwise
      */
     public boolean hasAuthForURL(URL url) {
         return getAuthForURL(url) != null;
     }
     
     /**
-     * @return Subject if Auth Scheme uses Subject and an authorization is setup for url
+     * Get a {@link Subject} for a given URL, if available
+     *
+     * @param url
+     *            {@link URL} for which the subject was asked
+     * @return Subject if Auth Scheme uses Subject and an authorization is setup
+     *         for <code>url</code>, <code>null</code> otherwise
      */
     public Subject getSubjectForUrl(URL url) {
         Authorization authorization = getAuthForURL(url);
@@ -258,7 +288,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      * Add newAuthorization if it does not already exist
-     * @param newAuthorization
+     * @param newAuthorization authorization to be added
      */
     public void addAuth(Authorization newAuthorization) {
         boolean alreadyExists=false;
@@ -296,6 +326,11 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      * Save the authentication data to a file.
+     *
+     * @param authFile
+     *            path of the file to save the authentication data to
+     * @throws IOException
+     *             when writing to the file fails
      */
     public void save(String authFile) throws IOException {
         File file = new File(authFile);
@@ -319,6 +354,11 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      * Add authentication data from a file.
+     *
+     * @param authFile
+     *            path to the file to read the authentication data from
+     * @throws IOException
+     *             when reading the data fails
      */
     public void addFile(String authFile) throws IOException {
         File file = new File(authFile);
@@ -370,6 +410,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      * Remove an authentication record.
+     *
+     * @param index
+     *            index of the authentication record to remove
      */
     public void remove(int index) {
         getAuthObjects().remove(index);
@@ -389,6 +432,8 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     /**
      * Return the number of records.
+     *
+     * @return the number of records
      */
     public int getAuthCount() {
         return getAuthObjects().size();
