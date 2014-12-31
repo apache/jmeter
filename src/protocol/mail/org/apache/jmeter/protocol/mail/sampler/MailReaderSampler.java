@@ -394,7 +394,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
      * server. Either MailReaderSampler.TYPE_IMAP[S] or
      * MailReaderSampler.TYPE_POP3[S]. Default is MailReaderSampler.TYPE_POP3.
      *
-     * @param serverType
+     * @param serverType protocol to use
      */
     public void setServerType(String serverType) {
         setProperty(SERVER_TYPE, serverType);
@@ -454,7 +454,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     }
 
     /**
-     * @param password
+     * @param password the password to use
      */
     public void setPassword(String password) {
         setProperty(PASSWORD, password);

@@ -62,7 +62,7 @@ public class Stats {
      * threads. The current factor is 50/50.
      * <p>
      *
-     * @param stat
+     * @param stat status information about the server
      * @return calculated load value
      */
     public static int calculateLoad(Status stat) {
@@ -98,14 +98,16 @@ public class Stats {
      * Method should calculate if the server is: dead, active, warning or
      * healthy. We do this by looking at the current busy threads.
      * <ol>
-     * <li> free &gt; spare is healthy
-     * <li> free &lt; spare is active
-     * <li> busy threads &gt; 75% is warning
-     * <li> none of the above is dead
+     * <li>free &gt; spare is {@link Stats#HEALTHY healthy}</li>
+     * <li>free &lt; spare is {@link Stats#ACTIVE active}</li>
+     * <li>busy threads &gt; 75% is {@link Stats#WARNING warning}</li>
+     * <li>none of the above is {@link Stats#DEAD dead}</li>
      * </ol>
      *
-     * @param stat
-     * @return integer representing the status
+     * @param stat status information about the server
+     * @return integer representing the status (one of {@link Stats#HEALTHY
+     *         HEALTHY}, {@link Stats#ACTIVE ACTIVE}, {@link Stats#WARNING
+     *         WARNING} or {@link Stats#DEAD DEAD})
      */
     public static int calculateStatus(Status stat) {
         if (stat != null && stat.getConnector().size() > 0) {
@@ -133,7 +135,7 @@ public class Stats {
      * is an integer between 1 and 100. It is the percent memory used. Changed
      * this to be more like other system monitors. Peter Lin 2-11-05
      *
-     * @param stat
+     * @param stat status information about the jvm
      * @return memory load
      */
     public static int calculateMemoryLoad(Status stat) {
@@ -151,7 +153,7 @@ public class Stats {
      * Method will calculate the thread load: busy / max = load. The value is an
      * integer between 1 and 100. It is the percent busy.
      *
-     * @param stat
+     * @param stat status information about the server
      * @return thread load
      */
     public static int calculateThreadLoad(Status stat) {
