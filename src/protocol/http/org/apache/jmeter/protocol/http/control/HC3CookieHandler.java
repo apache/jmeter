@@ -39,7 +39,9 @@ public class HC3CookieHandler implements CookieHandler {
     private final transient CookieSpec cookieSpec;
 
     /**
-     * 
+     * @param policy
+     *            cookie policy to which to conform (see
+     *            {@link CookiePolicy#getCookieSpec(String)}
      */
     public HC3CookieHandler(String policy) {
         super();
@@ -68,7 +70,9 @@ public class HC3CookieHandler implements CookieHandler {
     /**
      * Get array of valid HttpClient cookies for the URL
      *
+     * @param cookiesCP cookies to consider
      * @param url the target URL
+     * @param allowVariableCookie flag whether to allow jmeter variables in cookie values
      * @return array of HttpClient cookies
      *
      */

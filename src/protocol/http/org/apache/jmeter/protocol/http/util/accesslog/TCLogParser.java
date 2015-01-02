@@ -130,7 +130,7 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * @param source
+     * @param source name of the source file
      */
     public TCLogParser(String source) {
         setSourceFile(source);
@@ -159,6 +159,7 @@ public class TCLogParser implements LogParser {
      * default, the parser uses the file in the log.
      *
      * @param file
+     *            flag whether to use the path from the log
      */
     public void setUseParsedFile(boolean file) {
         this.useFILE = file;

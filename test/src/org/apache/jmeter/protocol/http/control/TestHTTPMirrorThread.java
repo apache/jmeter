@@ -72,8 +72,14 @@ public class TestHTTPMirrorThread extends TestCase {
     }
 
     /**
-     * Utility method to handle starting the HttpMirrorServer for testing.
-     * Also used by TestHTTPSamplersAgainstHttpMirrorServer
+     * Utility method to handle starting the HttpMirrorServer for testing. Also
+     * used by TestHTTPSamplersAgainstHttpMirrorServer
+     * 
+     * @param port
+     *            port on which the mirror should be started
+     * @return newly created http mirror server
+     * @throws Exception
+     *             if something fails
      */
     public static HttpMirrorServer startHttpMirror(int port) throws Exception {
         HttpMirrorServer server = null;

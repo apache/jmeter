@@ -57,8 +57,8 @@ public class JsoupBasedHtmlParser extends HTMLParser {
         private URLPointer baseUrl;
 
         /**
-         * @param baseUrl
-         * @param urls
+         * @param baseUrl base url to extract possibly missing information from urls found in <code>urls</code>
+         * @param urls collection of urls to consider
          */
         public JMeterNodeVisitor(final URLPointer baseUrl, URLCollection urls) {
             this.urls = urls;

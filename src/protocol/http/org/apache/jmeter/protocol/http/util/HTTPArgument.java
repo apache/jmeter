@@ -50,6 +50,15 @@ public class HTTPArgument extends Argument implements Serializable {
 
     /**
      * Constructor for the Argument object.
+     * <p>
+     * The value is assumed to be not encoded.
+     *
+     * @param name
+     *            name of the paramter
+     * @param value
+     *            value of the parameter
+     * @param metadata
+     *            the separator to use between name and value
      */
     public HTTPArgument(String name, String value, String metadata) {
         this(name, value, false);
@@ -85,11 +94,27 @@ public class HTTPArgument extends Argument implements Serializable {
 
     /**
      * Constructor for the Argument object.
+     * <p>
+     * The value is assumed to be not encoded.
+     *
+     * @param name
+     *            name of the parameter
+     * @param value
+     *            value of the parameter
      */
     public HTTPArgument(String name, String value) {
         this(name, value, false);
     }
 
+    /**
+     * @param name
+     *            name of the parameter
+     * @param value
+     *            value of the parameter
+     * @param alreadyEncoded
+     *            <code>true</code> if the value is already encoded, in which
+     *            case they are decoded before storage
+     */
     public HTTPArgument(String name, String value, boolean alreadyEncoded) {
         // We assume the argument value is encoded according to the HTTP spec, i.e. UTF-8
         this(name, value, alreadyEncoded, EncoderCache.URL_ARGUMENT_ENCODING);
@@ -127,6 +152,18 @@ public class HTTPArgument extends Argument implements Serializable {
         setMetaData("=");
     }
 
+    /**
+     * Construct a new HTTPArgument instance
+     *
+     * @param name
+     *            the name of the parameter
+     * @param value
+     *            the value of the parameter
+     * @param metaData
+     *            the separator to use between name and value
+     * @param alreadyEncoded
+     *            true if the name and value is already encoded
+     */
     public HTTPArgument(String name, String value, String metaData, boolean alreadyEncoded) {
         // We assume the argument value is encoded according to the HTTP spec, i.e. UTF-8
         this(name, value, metaData, alreadyEncoded, EncoderCache.URL_ARGUMENT_ENCODING);
@@ -190,7 +227,7 @@ public class HTTPArgument extends Argument implements Serializable {
      *
      * @param contentEncoding the encoding to use when encoding the argument value
      * @return the argument value encoded in the specified encoding
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException of the encoding is not supported
      */
     public String getEncodedValue(String contentEncoding) throws UnsupportedEncodingException {
         if (isAlwaysEncoded()) {

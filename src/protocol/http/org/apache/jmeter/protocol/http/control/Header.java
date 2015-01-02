@@ -37,14 +37,19 @@ public class Header extends AbstractTestElement implements Serializable {
     private static final String VALUE = "Header.value"; //$NON-NLS-1$
 
     /**
-     * Create the header.
+     * Create the header. Uses an empty name and value as default
      */
     public Header() {
         this("", ""); //$NON-NLS-1$ $NON-NLS-2$
     }
 
     /**
-     * Create the coookie.
+     * Create the header.
+     *
+     * @param name
+     *            name of the header
+     * @param value
+     *            name of the header
      */
     public Header(String name, String value) {
         this.setName(name);
@@ -60,6 +65,8 @@ public class Header extends AbstractTestElement implements Serializable {
 
     /**
      * Get the name for this object.
+     *
+     * @return the name of this header
      */
     @Override
     public String getName() {
@@ -68,6 +75,8 @@ public class Header extends AbstractTestElement implements Serializable {
 
     /**
      * Set the name for this object.
+     *
+     * @param name the name of this header
      */
     @Override
     public void setName(String name) {
@@ -76,6 +85,8 @@ public class Header extends AbstractTestElement implements Serializable {
 
     /**
      * Get the value for this object.
+     *
+     * @return the value of this header
      */
     public String getValue() {
         return getPropertyAsString(VALUE);
@@ -83,6 +94,8 @@ public class Header extends AbstractTestElement implements Serializable {
 
     /**
      * Set the value for this object.
+     *
+     * @param value the value of this header
      */
     public void setValue(String value) {
         this.setProperty(VALUE, value);

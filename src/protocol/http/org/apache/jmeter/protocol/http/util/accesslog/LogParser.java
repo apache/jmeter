@@ -49,8 +49,9 @@ public interface LogParser {
      * 0 is returned. If the method is subsequently called again, it will
      * restart parsing at the beginning.
      *
-     * @param count
-     * @return int
+     * @param count max lines to parse, or <code>-1</code> for the entire file
+     * @param el {@link TestElement} to read lines into
+     * @return number of lines parsed
      */
     int parseAndConfigure(int count, TestElement el);
 

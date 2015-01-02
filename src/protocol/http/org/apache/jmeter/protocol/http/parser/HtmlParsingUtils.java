@@ -254,6 +254,17 @@ public final class HtmlParsingUtils {
      * Create a new Sampler based on an HREF string plus a contextual URL
      * object. Given that an HREF string might be of three possible forms, some
      * processing is required.
+     *
+     * @param parsedUrlString
+     *            the url from the href
+     * @param context
+     *            the context in which the href was found. This is used to
+     *            extract url information that might be missing in
+     *            <code>parsedUrlString</code>
+     * @return sampler with filled in information about the fully parsed url
+     * @throws MalformedURLException
+     *             when the given url (<code>parsedUrlString</code> plus
+     *             <code>context</code> is malformed)
      */
     public static HTTPSamplerBase createUrlFromAnchor(String parsedUrlString, URL context) throws MalformedURLException {
         if (log.isDebugEnabled()) {

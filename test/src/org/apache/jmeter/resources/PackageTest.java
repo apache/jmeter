@@ -234,7 +234,7 @@ public class PackageTest extends TestCase {
 
     /**
      * Find I18N resources in classpath
-     * @param srcFiledir
+     * @param srcFiledir directory in which the files reside
      * @return list of properties files subject to I18N
      */
     public static final String[] getResources(File srcFiledir) {
@@ -253,10 +253,16 @@ public class PackageTest extends TestCase {
     }
     
     /**
-     * Find resources matching filenamefiler and adds them to set removing everything before "/org"
+     * Find resources matching filenamefiler and adds them to set removing
+     * everything before "/org"
+     * 
      * @param file
+     *            directory in which the files reside
      * @param set
+     *            container into which the names of the files should be added
      * @param filenameFilter
+     *            filter that the files must satisfy to be included into
+     *            <code>set</code>
      */
     private static void findFile(File file, Set<String> set,
             FilenameFilter filenameFilter) {
@@ -327,7 +333,7 @@ public class PackageTest extends TestCase {
 
     /**
      * Check all messages are available in one language
-     * @throws Exception
+     * @throws Exception if something fails
      */
     public void checkI18n() throws Exception {
         Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();

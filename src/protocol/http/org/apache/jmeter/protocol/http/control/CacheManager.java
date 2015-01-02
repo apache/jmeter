@@ -134,10 +134,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * Save the Last-Modified, Etag, and Expires headers if the result is cacheable.
-     * Version for Commons HttpClient implementation.
+     * Save the Last-Modified, Etag, and Expires headers if the result is
+     * cacheable. Version for Commons HttpClient implementation.
+     *
      * @param method
-     * @param res result
+     *            {@link HttpMethod} to get header information from
+     * @param res
+     *            result to decide if result is cacheable
+     * @throws URIException
+     *             if extraction of the the uri from <code>method</code> fails
      */
     public void saveDetails(HttpMethod method, HTTPSampleResult res) throws URIException{
         if (isCacheable(res)){
@@ -152,10 +157,13 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * Save the Last-Modified, Etag, and Expires headers if the result is cacheable.
-     * Version for Apache HttpClient implementation.
+     * Save the Last-Modified, Etag, and Expires headers if the result is
+     * cacheable. Version for Apache HttpClient implementation.
+     *
      * @param method
-     * @param res result
+     *            {@link HttpResponse} to extract header information from
+     * @param res
+     *            result to decide if result is cacheable
      */
     public void saveDetails(HttpResponse method, HTTPSampleResult res) {
         if (isCacheable(res)){

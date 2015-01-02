@@ -84,6 +84,8 @@ public class TestCookieManager extends JMeterTestCase {
         /**
          * Test that the cookie domain field is actually handled as browsers do
          * (i.e.: host X matches domain .X):
+         *
+         * @throws Exception if something fails
          */
         public void testDomainHandling() throws Exception {
             URL url = new URL("http://jakarta.apache.org/");
@@ -103,6 +105,8 @@ public class TestCookieManager extends JMeterTestCase {
         /**
          * Test that we won't be tricked by similar host names (this was a past
          * bug, although it never got reported in the bug database):
+         *
+         * @throws Exception if something fails
          */
         public void testSimilarHostNames() throws Exception {
             URL url = new URL("http://ache.org/");
@@ -199,6 +203,8 @@ public class TestCookieManager extends JMeterTestCase {
          
         /** Tests missing cookie path for a trivial URL fetch from the domain 
          *  Note that this fails prior to a fix for BUG 38256
+         *
+         * @throws Exception if something fails
          */
         public void testMissingPath0() throws Exception {
             URL url = new URL("http://d.e.f/goo.html");
@@ -210,6 +216,8 @@ public class TestCookieManager extends JMeterTestCase {
         
         /** Tests missing cookie path for a non-trivial URL fetch from the 
          *  domain.  Note that this fails prior to a fix for BUG 38256
+         *
+         * @throws Exception if something fails
          */
         public void testMissingPath1() throws Exception {
             URL url = new URL("http://d.e.f/moo.html");
@@ -219,7 +227,10 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("test=moo", s);
         }
         
-        /** Tests explicit root path with a trivial URL fetch from the domain */
+        /** Tests explicit root path with a trivial URL fetch from the domain
+         *
+         * @throws Exception if something fails
+         */
         public void testRootPath0() throws Exception {
             URL url = new URL("http://d.e.f/goo.html");
             man.addCookieFromHeader("test=moo;path=/", url);
@@ -228,7 +239,10 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("test=moo", s);
         }
         
-        /** Tests explicit root path with a non-trivial URL fetch from the domain */
+        /** Tests explicit root path with a non-trivial URL fetch from the domain
+         *
+         * @throws Exception if something fails
+         */
         public void testRootPath1() throws Exception {
             URL url = new URL("http://d.e.f/moo.html");
             man.addCookieFromHeader("test=moo;path=/", url);

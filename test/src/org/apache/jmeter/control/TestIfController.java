@@ -36,7 +36,7 @@ public class TestIfController extends JMeterTestCase {
         
         /**
          * See Bug 56160
-         * @throws Exception
+         * @throws Exception if something fails
          */
         public void testStackOverflow() throws Exception {
             LoopController controller = new LoopController();
@@ -74,7 +74,7 @@ public class TestIfController extends JMeterTestCase {
         
         /**
          * See Bug 53768
-         * @throws Exception
+         * @throws Exception if something fails
          */
         public void testBug53768() throws Exception {
             LoopController controller = new LoopController();
@@ -216,7 +216,7 @@ public class TestIfController extends JMeterTestCase {
         
         /**
          * Test false return on sample3 (sample4 doesn't execute)
-         * @throws Exception
+         * @throws Exception if something fails
          */
         public void testEvaluateAllChildrenWithoutSubController() throws Exception {
             LoopController controller = new LoopController();
@@ -253,7 +253,7 @@ public class TestIfController extends JMeterTestCase {
         
         /**
          * test 2 loops with a sub generic controller (sample4 doesn't execute)
-         * @throws Exception
+         * @throws Exception if something fails
          */
         public void testEvaluateAllChildrenWithSubController() throws Exception {
             LoopController controller = new LoopController();

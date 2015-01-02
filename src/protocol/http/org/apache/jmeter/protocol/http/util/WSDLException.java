@@ -31,14 +31,14 @@ public class WSDLException extends Exception {
     }
 
     /**
-     * @param message
+     * @param message detailed error message to include in exception
      */
     public WSDLException(String message) {
         super(message);
     }
 
     /**
-     * @param exception
+     * @param exception exception to extract the detailed message from and include that message as detailed message in this exception
      */
     public WSDLException(Exception exception) {
         super(exception.getMessage());

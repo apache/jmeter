@@ -153,7 +153,15 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     /**
      * Save the static cookie data to a file.
+     * <p>
      * Cookies are only taken from the GUI - runtime cookies are not included.
+     *
+     * @param authFile
+     *            name of the file to store the cookies into. If the name is
+     *            relative, the system property <code>user.dir</code> will be
+     *            prepended
+     * @throws IOException
+     *             when writing to that file fails
      */
     public void save(String authFile) throws IOException {
         File file = new File(authFile);
@@ -178,6 +186,13 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     /**
      * Add cookie data from a file.
+     *
+     * @param cookieFile
+     *            name of the file to read the cookies from. If the name is
+     *            relative, the system property <code>user.dir</code> will be
+     *            prepended
+     * @throws IOException
+     *             if reading the file fails
      */
     public void addFile(String cookieFile) throws IOException {
         File file = new File(cookieFile);
@@ -263,6 +278,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     /**
      * Add a cookie.
+     *
+     * @param c cookie to be added
      */
     public void add(Cookie c) {
         String cv = c.getValue();
@@ -304,6 +321,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     /**
      * Remove a cookie.
+     *
+     * @param index index of the cookie to remove
      */
     public void remove(int index) {// TODO not used by GUI
         getCookies().remove(index);
@@ -311,6 +330,9 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     /**
      * Return the cookie at index i.
+     *
+     * @param i index of the cookie to get
+     * @return cookie at index <code>i</code>
      */
     public Cookie get(int i) {// Only used by GUI
         return (Cookie) getCookies().get(i).getObjectValue();

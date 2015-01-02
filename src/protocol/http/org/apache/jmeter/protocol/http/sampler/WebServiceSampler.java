@@ -72,7 +72,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
 
     private static final long serialVersionUID = 240L;
 
-    //+ JMX file attribut names - do not change!
+    //+ JMX file attribute names - do not change!
     private static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
     private static final String SOAP_ACTION = "Soap.Action"; //$NON-NLS-1$
@@ -96,7 +96,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     private static final String WSDL_URL = "WebserviceSampler.wsdl_url"; //$NON-NLS-1$
 
     private static final String TIMEOUT = "WebserviceSampler.timeout"; //$NON-NLS-1$
-    //- JMX file attribut names - do not change!
+    //- JMX file attribute names - do not change!
 
     private static final String PROXY_USER =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
@@ -117,14 +117,18 @@ public class WebServiceSampler extends HTTPSamplerBase  {
 
     /**
      * Set the path where XML messages are stored for random selection.
+     *
+     * @param path where XML messages are stored
      */
     public void setXmlPathLoc(String path) {
         setProperty(XML_PATH_LOC, path);
     }
 
     /**
-     * Get the path where XML messages are stored. this is the directory where
+     * Get the path where XML messages are stored. This is the directory where
      * JMeter will randomly select a file.
+     *
+     * @return path where XML messages are stored
      */
     public String getXmlPathLoc() {
         return getPropertyAsString(XML_PATH_LOC);
@@ -134,7 +138,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
      * it's kinda obvious, but we state it anyways. Set the xml file with a
      * string path.
      *
-     * @param filename
+     * @param filename path to xml file
      */
     public void setXmlFile(String filename) {
         setProperty(XML_DATA_FILE, filename);
@@ -174,7 +178,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set the XML data.
      *
-     * @param data
+     * @param data xml data
      */
     public void setXmlData(String data) {
         setProperty(XML_DATA, data);
@@ -192,7 +196,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set the soap action which should be in the form of an URN.
      *
-     * @param data
+     * @param data soap action
      */
     public void setSoapAction(String data) {
         setProperty(SOAP_ACTION, data);
@@ -210,7 +214,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set the maintain session option.
      *
-     * @param maintainSession
+     * @param maintainSession flag whether to maintain a session
      */
     public void setMaintainSession(boolean maintainSession) {
         setProperty(MAINTAIN_SESSION, maintainSession, MAINTAIN_SESSION_DEFAULT);
@@ -219,7 +223,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Get the maintain session option.
      *
-     * @return boolean cache
+     * @return flag whether to maintain a session
      */
     public boolean getMaintainSession() {
         return getPropertyAsBoolean(MAINTAIN_SESSION, MAINTAIN_SESSION_DEFAULT);
@@ -228,7 +232,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set the memory cache.
      *
-     * @param cache
+     * @param cache flag whether to use the memory cache
      */
     public void setMemoryCache(boolean cache) {
         setProperty(MEMORY_CACHE, String.valueOf(cache));
@@ -237,7 +241,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Get the memory cache.
      *
-     * @return boolean cache
+     * @return flag whether to use the memory cache
      */
     public boolean getMemoryCache() {
         return getPropertyAsBoolean(MEMORY_CACHE);
@@ -247,6 +251,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
      * Set whether the sampler should read the response or not.
      *
      * @param read
+     *            flag whether the response should be read
      */
     public void setReadResponse(boolean read) {
         setProperty(READ_RESPONSE, String.valueOf(read));
@@ -255,7 +260,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Return whether or not to read the response.
      *
-     * @return boolean
+     * @return flag whether the response should be read
      */
     public boolean getReadResponse() {
         return this.getPropertyAsBoolean(READ_RESPONSE);
@@ -264,7 +269,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set whether or not to use a proxy
      *
-     * @param proxy
+     * @param proxy flag whether to use a proxy
      */
     public void setUseProxy(boolean proxy) {
         setProperty(USE_PROXY, String.valueOf(proxy));
@@ -273,7 +278,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Return whether or not to use proxy
      *
-     * @return true if should use proxy
+     * @return <code>true</code> if a proxy should be used
      */
     public boolean getUseProxy() {
         return this.getPropertyAsBoolean(USE_PROXY);
@@ -282,7 +287,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set the proxy hostname
      *
-     * @param host
+     * @param host the hostname of the proxy
      */
     public void setProxyHost(String host) {
         setProperty(PROXY_HOST, host);
@@ -302,7 +307,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
     /**
      * Set the proxy port
      *
-     * @param port
+     * @param port the port of the proxy
      */
     public void setProxyPort(String port) {
         setProperty(PROXY_PORT, port);
@@ -320,7 +325,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
 
     /**
      *
-     * @param url
+     * @param url the URL of the WSDL
      */
     public void setWsdlURL(String url) {
         this.setProperty(WSDL_URL, url);

@@ -100,6 +100,12 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Save the header data to a file.
+     *
+     * @param headFile
+     *            name of the file to store headers into. If name is relative
+     *            the system property <code>user.dir</code> will be prepended
+     * @throws IOException
+     *             if writing the headers fails
      */
     public void save(String headFile) throws IOException {
         File file = new File(headFile);
@@ -121,6 +127,12 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Add header data from a file.
+     *
+     * @param headerFile
+     *            name of the file to read headers from. If name is relative the
+     *            system property <code>user.dir</code> will be prepended
+     * @throws IOException
+     *             if reading headers fails
      */
     public void addFile(String headerFile) throws IOException {
         File file = new File(headerFile);
@@ -157,6 +169,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Add a header.
+     *
+     * @param h {@link Header} to add
      */
     public void add(Header h) {
         getHeaders().addItem(h);
@@ -171,6 +185,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Remove a header.
+     *
+     * @param index index from the header to remove
      */
     public void remove(int index) {
         getHeaders().remove(index);
@@ -178,6 +194,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Return the number of headers.
+     *
+     * @return number of headers
      */
     public int size() {
         return getHeaders().size();
@@ -185,6 +203,10 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Return the header at index i.
+     *
+     * @param i
+     *            index of the header to get
+     * @return {@link Header} at index <code>i</code>
      */
     public Header get(int i) {
         return (Header) getHeaders().get(i).getObjectValue();
@@ -221,10 +243,10 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Set the SOAPHeader with the SOAPHTTPConnection object. We may or may not
-     * want to rename this to setHeaderObject(Object). Concievably, other
+     * want to rename this to setHeaderObject(Object). Conceivably, other
      * samplers may need this kind of functionality. 1-29-04 Peter Lin
      *
-     * @param header
+     * @param header soap header
      */
     public void setSOAPHeader(Object header) {
         this.SOAPHeader = header;
@@ -232,9 +254,16 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Merge the attributes with a another HeaderManager's attributes.
-     * @param element The object to be merged with
-     * @param preferLocalValues When both objects have a value for the
-     *        same attribute, this flag determines which value is preferresd.
+     * 
+     * @param element
+     *            The object to be merged with
+     * @param preferLocalValues
+     *            When both objects have a value for the same attribute, this
+     *            flag determines which value is preferred.
+     * @return merged HeaderManager
+     * @throws IllegalArgumentException
+     *             if <code>element</code> is not an instance of
+     *             {@link HeaderManager}
      */
     public HeaderManager merge(TestElement element, boolean preferLocalValues) {
         if (!(element instanceof HeaderManager)) {
