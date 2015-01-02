@@ -80,7 +80,12 @@ public interface Filter {
      * filtered or not.
      *
      * @param path
-     * @return boolean
+     *            log line that should be checked if it should to be filtered
+     *            out
+     * @param sampler
+     *            {@link TestElement} in which the line would be added
+     * @return boolean <code>true</code> if line should be filtered out,
+     *         <code>false</code> otherwise
      */
     boolean isFiltered(String path,TestElement sampler);
 

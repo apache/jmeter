@@ -42,8 +42,10 @@ final class XPathWrapper {
 
     /*
      * This Map serves two purposes:
-     * - maps names to  containers
-     * - ensures only one container per file across all threads
+     * <ul>
+     *   <li>maps names to  containers</li>
+     *   <li>ensures only one container per file across all threads</li>
+     * </ul>
      * The key is the concatenation of the file name and the XPath string
      */
     //@GuardedBy("fileContainers")
@@ -86,8 +88,8 @@ final class XPathWrapper {
     /**
      * Not thread-safe - must be called from a synchronized method.
      *
-     * @param file
-     * @param xpathString
+     * @param file name of the file
+     * @param xpathString xpath to look up in file
      * @return the next row from the file container
      */
     public static String getXPathString(String file, String xpathString) {

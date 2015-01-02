@@ -105,6 +105,7 @@ public class HttpRequestHdr {
      * @param in
      *            the stream to parse.
      * @return array of bytes from client.
+     * @throws IOException when reading the input stream fails
      */
     public byte[] parse(InputStream in) throws IOException {
         boolean inHeaders = true;

@@ -118,6 +118,8 @@ public interface Generator {
      * method wouldn't return anything. If the generator is used by a control
      * element, it should return the correct Sampler class with the required
      * fields set.
+     *
+     * @return prefilled sampler
      */
     Object generateRequest();
 

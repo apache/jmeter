@@ -30,10 +30,10 @@ import org.apache.log.Logger;
 
 /**
  * Collection class designed for handling URLs
- *
+ * <p>
  * Before a URL is added to the collection, it is wrapped in a URLString class.
  * The iterator unwraps the URL before return.
- *
+ * <p>
  * N.B. Designed for use by HTMLParser, so is not a full implementation - e.g.
  * does not support remove()
  *
@@ -45,6 +45,7 @@ public class URLCollection {
     /**
      * Creates a new URLCollection from an existing Collection
      *
+     * @param c collection to start with
      */
     public URLCollection(Collection<URLString> c) {
         coll = c;
@@ -63,12 +64,15 @@ public class URLCollection {
     }
 
     /**
-     * Convenience method for adding URLs to the collection If the url parameter
-     * is null, empty or URL is malformed, nothing is done
+     * Convenience method for adding URLs to the collection. If the url
+     * parameter is <code>null</code>, empty or URL is malformed, nothing is
+     * done
      *
      * @param url
      *            String, may be null or empty
      * @param baseUrl
+     *            base for <code>url</code> to add information, which might be
+     *            missing in <code>url</code>
      * @return boolean condition returned by the add() method of the underlying
      *         collection
      */

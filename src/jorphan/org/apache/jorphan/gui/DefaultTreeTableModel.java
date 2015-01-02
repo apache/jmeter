@@ -32,17 +32,17 @@ public class DefaultTreeTableModel extends AbstractTreeTableModel {
     }
 
     /**
-     * @param root
+     * @param root the {@link TreeNode} to use as root
      */
     public DefaultTreeTableModel(TreeNode root) {
         super(root);
     }
 
     /**
-     * @param headers
-     * @param readFunctors
-     * @param writeFunctors
-     * @param editorClasses
+     * @param headers the headers to use
+     * @param readFunctors the read functors to use
+     * @param writeFunctors the write functors to use
+     * @param editorClasses the editor classes to use
      */
     public DefaultTreeTableModel(String[] headers, Functor[] readFunctors,
             Functor[] writeFunctors, Class<?>[] editorClasses) {

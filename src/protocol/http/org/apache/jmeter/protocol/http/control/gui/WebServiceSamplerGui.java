@@ -447,7 +447,10 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
      * easily replace it with a different WSDL driver later on.
      *
      * @param url
-     * @param silent 
+     *            URL to the WSDL
+     * @param silent
+     *            flag whether errors parsing the WSDL should be shown to the
+     *            user. If <code>true</code> errors will be silently ignored
      * @return array of web methods
      */
     public String[] browseWSDL(String url, boolean silent) {

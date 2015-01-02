@@ -82,7 +82,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
      * it's kinda obvious, but we state it anyways. Set the xml file with a
      * string path.
      *
-     * @param filename
+     * @param filename path to the xml file
      */
     public void setXmlFile(String filename) {
         setProperty(XML_DATA_FILE, filename);

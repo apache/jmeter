@@ -101,7 +101,7 @@ public class JMeterVersionTest extends JMeterTestCase {
 
     /**
      * Check eclipse.classpath contains the jars declared in build.properties
-     * @throws Exception
+     * @throws Exception if something fails
      */
     public void testEclipse() throws Exception {
         final BufferedReader eclipse = new BufferedReader(

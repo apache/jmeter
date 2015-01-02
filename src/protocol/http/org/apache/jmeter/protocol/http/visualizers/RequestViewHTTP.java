@@ -223,6 +223,7 @@ public class RequestViewHTTP implements RequestView {
 
     /**
      * @param query
+     *            query to parse for param and value pairs
      * @return Map params and Svalue
      */
     //TODO: move to utils class (JMeterUtils?)
