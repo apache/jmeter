@@ -67,6 +67,10 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
      *            the argument name
      * @param value
      *            the argument value
+     * @param opcode
+     *            the operation to perform, may be one of <code>add</code>,
+     *            <code>delete</code>, <code>remove</code> or
+     *            <code>modify</code>.
      */
     public LDAPArgument(String name, String value, String opcode) {
         setProperty(new StringProperty(ARG_NAME, name));
@@ -81,6 +85,10 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
      *            the argument name
      * @param value
      *            the argument value
+     * @param opcode
+     *            the operation to perform, may be one of <code>add</code>,
+     *            <code>delete</code>, <code>remove</code> or
+     *            <code>modify</code>.
      * @param metadata
      *            the argument metadata
      */

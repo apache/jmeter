@@ -201,6 +201,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     /***************************************************************************
      * Sets the username attribute of the LDAP object
      *
+     * @param newUserDN
+     *            distinguished name of the user
      **************************************************************************/
 
     public void setUserDN(String newUserDN) {
@@ -220,6 +222,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     /***************************************************************************
      * Sets the password attribute of the LDAP object
      *
+     * @param newUserPw
+     *            password of the user
      **************************************************************************/
 
     public void setUserPw(String newUserPw) {
@@ -366,6 +370,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     /***************************************************************************
      * Sets the return objects attribute of the LDAPSampler object
      *
+     * @param newRobj
+     *            whether the objects should be returned
      **************************************************************************/
     public void setRetobj(String newRobj) {
         this.setProperty(RETOBJ, newRobj);

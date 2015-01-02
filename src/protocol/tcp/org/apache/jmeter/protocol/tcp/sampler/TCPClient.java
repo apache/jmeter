@@ -49,6 +49,7 @@ public interface TCPClient {
      *            OutputStream for socket
      * @param is -
      *            InputStream to be written to Socket
+     * @throws IOException when writing fails
      */
     void write(OutputStream os, InputStream is) throws IOException;
 
@@ -58,6 +59,7 @@ public interface TCPClient {
      *            OutputStream for socket
      * @param s -
      *            String to write
+     * @throws IOException when writing fails
      */
     void write(OutputStream os, String s) throws IOException;
 
