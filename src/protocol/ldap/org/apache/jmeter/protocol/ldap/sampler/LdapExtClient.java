@@ -63,13 +63,23 @@ public class LdapExtClient {
      * connect to server
      *
      * @param host
-     *            Description of Parameter
+     *            name of the server to connect
+     * @param port
+     *            port of the server to connect
+     * @param rootdn
+     *            base of the tree to operate on
      * @param username
-     *            Description of Parameter
+     *            name of the user to use for binding
      * @param password
-     *            Description of Parameter
+     *            password to use for binding
+     * @param connTimeOut
+     *            connection timeout for connecting the server see
+     *            "com.sun.jndi.ldap.connect.timeout"
+     * @param secure
+     *            flag whether ssl should be used
+     * @return newly created {@link DirContext}
      * @exception NamingException
-     *                Description of Exception
+     *                when creating the {@link DirContext} fails
      */
     public static DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, boolean secure)
             throws NamingException {
@@ -104,6 +114,9 @@ public class LdapExtClient {
 
     /**
      * disconnect from the server
+     *
+     * @param dirContext
+     *            context do disconnect (may be <code>null</code>)
      */
     public static void disconnect(DirContext dirContext) {
         if (dirContext == null) {
@@ -120,11 +133,34 @@ public class LdapExtClient {
 
     /***************************************************************************
      * Filter the data in the ldap directory for the given search base
+     * 
+     * @param dirContext
+     *            context to perform the search on
      *
      * @param searchBase
      *            base where the search should start
      * @param searchFilter
-     *            filter filter this value from the base
+     *            filter this value from the base
+     * @param scope
+     *            scope for search. May be one of
+     *            {@link SearchControls#OBJECT_SCOPE},
+     *            {@link SearchControls#ONELEVEL_SCOPE} or
+     *            {@link SearchControls#SUBTREE_SCOPE}
+     * @param countlim
+     *            max number of results to get, <code>0</code> for all entries
+     * @param timelim
+     *            max time to wait for entries (in milliseconds), <code>0</code>
+     *            for unlimited time
+     * @param attrs
+     *            list of attributes to return. If <code>null</code> all
+     *            attributes will be returned. If empty, none will be returned
+     * @param retobj
+     *            flag whether the objects should be returned
+     * @param deref
+     *            flag whether objects should be dereferenced
+     * @return result of the search
+     * @throws NamingException
+     *             when searching fails
      **************************************************************************/
     public static NamingEnumeration<SearchResult> searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
             int timelim, String[] attrs, boolean retobj, boolean deref) throws NamingException {
@@ -151,8 +187,15 @@ public class LdapExtClient {
     /***************************************************************************
      * Filter the data in the ldap directory
      *
+     * @param dirContext
+     *            the context to operate on
      * @param filter
      *            filter this value from the base
+     * @param entrydn
+     *            distinguished name of entry to compare
+     * @return result of the search
+     * @throws NamingException
+     *             when searching fails
      **************************************************************************/
     public static NamingEnumeration<SearchResult> compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
         if (dirContext == null) {
@@ -164,6 +207,15 @@ public class LdapExtClient {
 
     /***************************************************************************
      * ModDN the data in the ldap directory for the given search base
+     *
+     * @param dirContext
+     *            context to operate on
+     * @param ddn
+     *            distinguished name name of object to rename
+     * @param newdn
+     *            new distinguished name of object
+     * @throws NamingException
+     *             when renaming fails
      *
      **************************************************************************/
     public static void moddnOp(DirContext dirContext, String ddn, String newdn) throws NamingException {
@@ -177,10 +229,15 @@ public class LdapExtClient {
     /***************************************************************************
      * Modify the attribute in the ldap directory for the given string
      *
+     * @param dirContext
+     *            context to operate on
      * @param mods
-     *            add all the entry in to the ModificationItem
+     *            list of all the {@link ModificationItem}s to apply on
+     *            <code>string</code>
      * @param string
-     *            The string (dn) value
+     *            distinguished name of the object to modify
+     * @throws NamingException
+     *             when modification fails
      **************************************************************************/
     public static void modifyTest(DirContext dirContext, ModificationItem[] mods, String string) throws NamingException {
         if (dirContext == null) {
@@ -193,10 +250,15 @@ public class LdapExtClient {
     /***************************************************************************
      * Create the entry in the ldap directory for the given string
      *
+     * @param dirContext
+     *            context to operate on
      * @param attributes
      *            add all the attributes and values from the attributes object
      * @param string
-     *            The string (dn) value
+     *            distinguished name of the subcontext to create
+     * @return newly created subcontext
+     * @throws NamingException
+     *             when creating subcontext fails
      **************************************************************************/
     public static DirContext createTest(DirContext dirContext, Attributes attributes, String string)
             throws NamingException {
@@ -209,8 +271,12 @@ public class LdapExtClient {
     /***************************************************************************
      * Delete the attribute from the ldap directory
      *
+     * @param dirContext
+     *            context to operate on
      * @param string
-     *            The string (dn) value
+     *            distinguished name of the subcontext to destroy
+     * @throws NamingException
+     *             when destroying the subcontext fails
      **************************************************************************/
     public static void deleteTest(DirContext dirContext, String string) throws NamingException {
         if (dirContext == null) {

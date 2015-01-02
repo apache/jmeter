@@ -112,6 +112,8 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
     }
 
     /**
+     * @param model model to use
+     * @param graph graph to use
      *
      */
     public MonitorPerformancePanel(MonitorAccumModel model, MonitorGraph graph) {

@@ -117,7 +117,10 @@ public class SendMailCommand {
      *
      * @return Message-object to be sent to execute()-method
      * @throws MessagingException
+     *             when problems constructing or sending the mail occur
      * @throws IOException
+     *             when the mail content can not be read or truststore problems
+     *             are detected
      */
     public Message prepareMessage() throws MessagingException, IOException {
 
@@ -258,13 +261,18 @@ public class SendMailCommand {
     }
 
     /**
-     * Sends message to mailserver, waiting for delivery if using synchronous mode.
+     * Sends message to mailserver, waiting for delivery if using synchronous
+     * mode.
      *
      * @param message
      *            Message previously prepared by prepareMessage()
      * @throws MessagingException
+     *             when problems sending the mail arise
      * @throws IOException
+     *             TODO can not see how
      * @throws InterruptedException
+     *             when interrupted while waiting for delivery in synchronous
+     *             modus
      */
     public void execute(Message message) throws MessagingException, IOException, InterruptedException {
 
@@ -298,9 +306,14 @@ public class SendMailCommand {
     /**
      * Processes prepareMessage() and execute()
      *
-     * @throws InterruptedException 
-     * @throws IOException 
-     * @throws MessagingException 
+     * @throws InterruptedException
+     *             when interrupted while waiting for delivery in synchronous
+     *             modus
+     * @throws IOException
+     *             when the mail content can not be read or truststore problems
+     *             are detected
+     * @throws MessagingException
+     *             when problems constructing or sending the mail occur
      */
     public void execute() throws MessagingException, IOException, InterruptedException {
         execute(prepareMessage());
@@ -798,7 +811,7 @@ public class SendMailCommand {
     /**
      * Set the mail body.
      *
-     * @param body
+     * @param body the body of the mail
      */
     public void setMailBody(String body){
         mailBody = body;

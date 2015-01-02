@@ -69,24 +69,44 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
 
     /**
      * Constructor takes the necessary JNDI related parameters to create a
-     * connection and prepare to begin receiving messages.
-     * <br>
+     * connection and prepare to begin receiving messages. <br>
      * The caller must then invoke {@link #start()} to enable message reception.
-     * 
-     * @param useProps if true, use jndi.properties instead of 
-     * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
+     *
+     * @param useProps
+     *            if <code>true</code>, use <em>jndi.properties</em> instead of
+     *            <code>initialContextFactory</code>, <code>providerUrl</code>,
+     *            <code>securityPrincipal</code>,
+     *            <code>securityCredentials</code>
      * @param initialContextFactory
+     *            name of the initial context factory (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param providerUrl
+     *            url of the provider (will be ignored if <code>useProps</code>
+     *            is <code>true</code>)
      * @param connfactory
+     *            name of the object factory to look up in context
      * @param destinationName
+     *            name of the destination
      * @param durableSubscriptionId
+     *            id for a durable subscription (if empty or <code>null</code>
+     *            no durable subscription will be done)
      * @param clientId
-     * @param jmsSelector Message Selector
+     *            client id to use (may be empty or <code>null</code>)
+     * @param jmsSelector
+     *            Message Selector
      * @param useAuth
+     *            flag whether auth should be used (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param securityPrincipal
+     *            name of the principal to use for auth (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param securityCredentials
-     * @throws JMSException if could not create context or other problem occurred.
-     * @throws NamingException 
+     *            credentials for the principal (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
+     * @throws JMSException
+     *             if could not create context or other problem occurred.
+     * @throws NamingException
+     *             when lookup of context or destination fails
      */
     public ReceiveSubscriber(boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
@@ -100,25 +120,48 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
 
     /**
      * Constructor takes the necessary JNDI related parameters to create a
-     * connection and create an onMessageListener to prepare to begin receiving messages.
-     * <br>
+     * connection and create an onMessageListener to prepare to begin receiving
+     * messages. <br>
      * The caller must then invoke {@link #start()} to enable message reception.
-     * 
-     * @param queueSize maximum queue size, where a queueSize &lt;=0 means no limit
-     * @param useProps if true, use jndi.properties instead of 
-     * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
+     *
+     * @param queueSize
+     *            maximum queue size, where a <code>queueSize</code> &lt;=0
+     *            means no limit
+     * @param useProps
+     *            if <code>true</code>, use <em>jndi.properties</em> instead of
+     *            <code>initialContextFactory</code>, <code>providerUrl</code>,
+     *            <code>securityPrincipal</code>,
+     *            <code>securityCredentials</code>
      * @param initialContextFactory
+     *            name of the initial context factory (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param providerUrl
+     *            url of the provider (will be ignored if <code>useProps</code>
+     *            is <code>true</code>)
      * @param connfactory
+     *            name of the object factory to look up in context
      * @param destinationName
+     *            name of the destination
      * @param durableSubscriptionId
+     *            id for a durable subscription (if empty or <code>null</code>
+     *            no durable subscription will be done)
      * @param clientId
-     * @param jmsSelector Message Selector
+     *            client id to use (may be empty or <code>null</code>)
+     * @param jmsSelector
+     *            Message Selector
      * @param useAuth
+     *            flag whether auth should be used (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param securityPrincipal
+     *            name of the principal to use for auth (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param securityCredentials
-     * @throws JMSException if could not create context or other problem occurred.
-     * @throws NamingException 
+     *            credentials for the principal (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
+     * @throws JMSException
+     *             if could not create context or other problem occurred.
+     * @throws NamingException
+     *             when lookup of context or destination fails
      */
     public ReceiveSubscriber(int queueSize, boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
@@ -133,26 +176,51 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     
     /**
      * Constructor takes the necessary JNDI related parameters to create a
-     * connection and create an onMessageListener to prepare to begin receiving messages.
-     * <br/>
+     * connection and create an onMessageListener to prepare to begin receiving
+     * messages. <br/>
      * The caller must then invoke {@link #start()} to enable message reception.
-     * 
-     * @param queueSize maximum queue, where a queueSize &lt;=0 means no limit
-     * @param useProps if true, use jndi.properties instead of 
-     * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
+     *
+     * @param queueSize
+     *            maximum queue, where a queueSize &lt;=0 means no limit
+     * @param useProps
+     *            if <code>true</code>, use <em>jndi.properties</em> instead of
+     *            <code>initialContextFactory</code>, <code>providerUrl</code>,
+     *            <code>securityPrincipal</code>,
+     *            <code>securityCredentials</code>
      * @param initialContextFactory
+     *            name of the initial context factory (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param providerUrl
+     *            url of the provider (will be ignored if <code>useProps</code>
+     *            is <code>true</code>)
      * @param connfactory
+     *            name of the object factory to look up in context
      * @param destinationName
+     *            name of the destination
      * @param durableSubscriptionId
+     *            id for a durable subscription (if empty or <code>null</code>
+     *            no durable subscription will be done)
      * @param clientId
-     * @param jmsSelector Message Selector
+     *            client id to use (may be empty or <code>null</code>)
+     * @param jmsSelector
+     *            Message Selector
      * @param useAuth
+     *            flag whether auth should be used (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param securityPrincipal
+     *            name of the principal to use for auth (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
      * @param securityCredentials
-     * @param useMessageListener if true create an onMessageListener to prepare to begin receiving messages, otherwise queue will be null
-     * @throws JMSException if could not create context or other problem occurred.
-     * @throws NamingException 
+     *            credentials for the principal (will be ignored if
+     *            <code>useProps</code> is <code>true</code>)
+     * @param useMessageListener
+     *            if <code>true</code> create an onMessageListener to prepare to
+     *            begin receiving messages, otherwise queue will be
+     *            <code>null</code>
+     * @throws JMSException
+     *             if could not create context or other problem occurred.
+     * @throws NamingException
+     *             when lookup of context or destination fails
      */
     private ReceiveSubscriber(int queueSize, boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
@@ -222,7 +290,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
 
     /**
      * Calls Connection.start() to begin receiving inbound messages.
-     * @throws JMSException 
+     * @throws JMSException when starting the context fails
      */
     public void start() throws JMSException {
         log.debug("start()");
@@ -232,7 +300,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
 
     /**
      * Calls Connection.stop() to stop receiving inbound messages.
-     * @throws JMSException 
+     * @throws JMSException when stopping the context fails
      */
     public void stop() throws JMSException {
         log.debug("stop()");
@@ -241,13 +309,14 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     }
 
     /**
-     * Get the next message or null.
+     * Get the next message or <code>null</code>.
+     * <p>
      * Never blocks for longer than the specified timeout.
      * 
      * @param timeout in milliseconds
-     * @return the next message or null
+     * @return the next message or <code>null</code>
      * 
-     * @throws JMSException
+     * @throws JMSException when receiving the message fails
      */
     public Message getMessage(long timeout) throws JMSException {
         Message message = null;

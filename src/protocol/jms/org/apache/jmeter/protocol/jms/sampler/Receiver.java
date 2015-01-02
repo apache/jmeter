@@ -84,15 +84,23 @@ public final class Receiver implements Runnable {
 
     /**
      * Create a receiver to process responses.
-     * 
+     *
      * @param factory
+     *            connection factory to use
      * @param receiveQueue
+     *            name of the receiving queue
      * @param principal
+     *            user name to use for connecting to the queue
      * @param credentials
-     * @param useResMsgIdAsCorrelId true if should use JMSMessageId, false if should use JMSCorrelationId
-     * @param jmsSelector JMS selector
+     *            credentials to use for connecting to the queue
+     * @param useResMsgIdAsCorrelId
+     *            <code>true</code> if should use JMSMessageId,
+     *            <code>false</code> if should use JMSCorrelationId
+     * @param jmsSelector
+     *            JMS selector
      * @return the Receiver which will process the responses
      * @throws JMSException
+     *             when creating the receiver fails
      */
     public static Receiver createReceiver(ConnectionFactory factory, Destination receiveQueue,
             String principal, String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector)

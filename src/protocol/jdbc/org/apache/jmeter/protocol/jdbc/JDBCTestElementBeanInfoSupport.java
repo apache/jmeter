@@ -27,7 +27,7 @@ import org.apache.jmeter.testbeans.gui.TypeEditor;
 public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
 
     /**
-     *
+     * @param beanClass class to create bean info for
      */
     public JDBCTestElementBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass);

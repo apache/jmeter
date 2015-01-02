@@ -69,6 +69,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
     }
 
     /**
+     * @param model model to use
      *
      */
     public MonitorHealthPanel(MonitorAccumModel model) {
@@ -111,7 +112,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
 
     /**
      *
-     * @param model
+     * @param model information about monitored server
      */
     @Override
     public void addSample(MonitorModel model) {

@@ -87,6 +87,9 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
      *
+     * @param el
+     *            the test element to modify
+     *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el) {

@@ -358,6 +358,11 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * Set the client choice. There are two options: ReceiveSusbscriber and
      * OnMessageSubscriber.
+     *
+     * @param choice
+     *            the client to use. One of {@link JMSSubscriberGui#RECEIVE_RSC
+     *            RECEIVE_RSC} or {@link JMSSubscriberGui#ON_MESSAGE_RSC
+     *            ON_MESSAGE_RSC}
      */
     public void setClientChoice(String choice) {
         setProperty(CLIENT_CHOICE, choice);
@@ -366,7 +371,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * Return the client choice.
      *
-     * @return the client choice, either RECEIVE_RSC or ON_MESSAGE_RSC
+     * @return the client choice, either {@link JMSSubscriberGui#RECEIVE_RSC
+     *         RECEIVE_RSC} or {@link JMSSubscriberGui#ON_MESSAGE_RSC
+     *         ON_MESSAGE_RSC}
      */
     public String getClientChoice() {
         String choice = getPropertyAsString(CLIENT_CHOICE);
@@ -436,7 +443,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     
     /**
      * Separator for sampler results
+     *
      * @param text
+     *            separator to use for sampler results
      */
     public void setSeparator(String text) {
         setProperty(SEPARATOR, text, SEPARATOR_DEFAULT);
