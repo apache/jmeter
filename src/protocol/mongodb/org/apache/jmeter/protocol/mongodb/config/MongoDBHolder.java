@@ -42,8 +42,8 @@ public final class MongoDBHolder {
      * Get access to MongoDB object
      * @param varName String MongoDB source
      * @param dbName Mongo DB database name
-     * @param login
-     * @param password 
+     * @param login name to use for login
+     * @param password password to use for login
      * @return {@link DB}
      */
     public static DB getDBFromSource(String varName, String dbName, String login, String password) {

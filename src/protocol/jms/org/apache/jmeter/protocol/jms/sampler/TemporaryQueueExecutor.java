@@ -41,6 +41,9 @@ public class TemporaryQueueExecutor implements QueueExecutor {
      * @param destination
      *            the queue to send the message on
      * @throws JMSException
+     *             when internally used {@link QueueRequestor} can not be
+     *             constructed with <code>session</code> and
+     *             <code>destination</code>
      */
     public TemporaryQueueExecutor(QueueSession session, Queue destination) throws JMSException {
         requestor = new QueueRequestor(session, destination);

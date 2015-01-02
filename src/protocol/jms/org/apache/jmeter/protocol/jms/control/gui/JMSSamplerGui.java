@@ -148,7 +148,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     /**
      *
-     * @param element
+     * @param element the test element being created
      */
     @Override
     public void modifyTestElement(TestElement element) {

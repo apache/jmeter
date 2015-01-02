@@ -87,7 +87,10 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
     // private MonitorModel DATA;
 
     /**
+     * Creates a new server panel for a monitored server
      *
+     * @param model
+     *            information about the monitored server
      */
     public ServerPanel(MonitorModel model) {
         super();
@@ -108,7 +111,7 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
      * Init will create the JLabel widgets for the host, health, load and
      * timestamp.
      *
-     * @param model
+     * @param model information about the monitored server
      */
     private void init(MonitorModel model) {
         this.setLayout(new FlowLayout());

@@ -117,6 +117,8 @@ public class MultipartUrlConfig implements Serializable {
      * This method allows a proxy server to send over the raw text from a
      * browser's output stream to be parsed and stored correctly into the
      * UrlConfig object.
+     *
+     * @param queryString text to parse
      */
     public void parseArguments(String queryString) {
         String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary()); //$NON-NLS-1$

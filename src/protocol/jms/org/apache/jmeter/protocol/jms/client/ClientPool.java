@@ -44,7 +44,7 @@ public class ClientPool {
      * Add a ReceiveClient to the ClientPool. This is so that we can make sure
      * to close all clients and make sure all threads are destroyed.
      *
-     * @param client
+     * @param client the ReceiveClient to add
      */
     public static synchronized void addClient(Closeable client) {
         clients.add(client);

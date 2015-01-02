@@ -547,7 +547,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
     
     /**
-     * @param string
+     * @param string name of the initial context factory to use
      */
     public void setInitialContextFactory(String string) {
         setProperty(JNDI_INITIAL_CONTEXT_FACTORY, string);
@@ -555,7 +555,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
-     * @param string
+     * @param string url of the provider
      */
     public void setContextProvider(String string) {
         setProperty(JNDI_CONTEXT_PROVIDER_URL, string);

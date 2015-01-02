@@ -52,6 +52,20 @@ public class LdapClient {
 
     /**
      * Connect to server.
+     * 
+     * @param host
+     *            name of the ldap server
+     * @param port
+     *            port of the ldap server
+     * @param rootdn
+     *            base dn to start ldap operations from
+     * @param username
+     *            user name to use for binding
+     * @param password
+     *            password to use for binding
+     * @throws NamingException
+     *             if {@link InitialDirContext} can not be build using the above
+     *             parameters
      */
     public void connect(String host, String port, String rootdn, String username, String password)
             throws NamingException {
@@ -85,6 +99,10 @@ public class LdapClient {
      *            where the search should start
      * @param searchFilter
      *            filter this value from the base
+     * @return <code>true</code> when the search yields results,
+     *         <code>false</code> otherwise
+     * @throws NamingException
+     *             when searching fails
      */
     public boolean searchTest(String searchBase, String searchFilter) throws NamingException {
         // System.out.println("Base="+searchBase+" Filter="+searchFilter);
@@ -111,9 +129,10 @@ public class LdapClient {
      * Modify the attribute in the ldap directory for the given string.
      *
      * @param mods
-     *            add all the entry in to the ModificationItem
+     *            list of all {@link ModificationItem}s to apply
      * @param string
-     *            the string (dn) value
+     *            dn of the object to modify
+     * @throws NamingException when modification fails
      */
     public void modifyTest(ModificationItem[] mods, String string) throws NamingException {
         dirContext.modifyAttributes(string, mods);
@@ -126,6 +145,7 @@ public class LdapClient {
      *            add all the entry in to the basicattribute
      * @param string
      *            the string (dn) value
+     * @throws NamingException when creating subcontext fails
      */
     public void createTest(BasicAttributes basicattributes, String string) throws NamingException {
         // DirContext dc = //TODO perhaps return this?
@@ -137,6 +157,7 @@ public class LdapClient {
      *
      * @param string
      *            the string (dn) value
+     * @throws NamingException when destroying sub context fails
      */
     public void deleteTest(String string) throws NamingException {
         dirContext.destroySubcontext(string);

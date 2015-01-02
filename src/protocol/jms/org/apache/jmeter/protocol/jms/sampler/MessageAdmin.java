@@ -41,12 +41,27 @@ public class MessageAdmin {
     private MessageAdmin() {
     }
 
+    /**
+     * Get the singleton MessageAdmin object
+     * 
+     * @return singleton instance
+     */
     public static MessageAdmin getAdmin() {
         return SINGLETON;
     }
 
     /**
+     * Store a request under the given id, so that an arriving reply can be
+     * associated with this request and the waiting party can be signaled by
+     * means of a {@link CountDownLatch}
+     *
+     * @param id
+     *            id of the request
      * @param request
+     *            request object to store under id
+     * @param latch
+     *            communication latch to signal when a reply for this request
+     *            was received
      */
     public void putRequest(String id, Message request, CountDownLatch latch) {
         if (log.isDebugEnabled()) {
@@ -55,6 +70,16 @@ public class MessageAdmin {
         table.put(id, new PlaceHolder(request, latch));
     }
 
+    /**
+     * Try to associate a reply to a previously stored request. If a matching
+     * request is found, the owner of the request will be notified with the
+     * registered {@link CountDownLatch}
+     * 
+     * @param id
+     *            id of the request
+     * @param reply
+     *            object with the reply
+     */
     public void putReply(String id, Message reply) {
         PlaceHolder holder = table.get(id);
         if (log.isDebugEnabled()) {
