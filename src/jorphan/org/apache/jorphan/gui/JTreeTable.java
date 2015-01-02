@@ -34,31 +34,31 @@ public class JTreeTable extends JTable {
     }
 
     /**
-     * @param numRows
-     * @param numColumns
+     * @param numRows number of rows the table holds
+     * @param numColumns number of columns the table holds
      */
     public JTreeTable(int numRows, int numColumns) {
         super(numRows, numColumns);
     }
 
     /**
-     * @param dm
+     * @param dm the data model to use
      */
     public JTreeTable(TreeTableModel dm) {
         super(dm);
     }
 
     /**
-     * @param rowData
-     * @param columnNames
+     * @param rowData the data for the table
+     * @param columnNames the names for the columns
      */
     public JTreeTable(Object[][] rowData, Object[] columnNames) {
         super(rowData, columnNames);
     }
 
     /**
-     * @param rowData
-     * @param columnNames
+     * @param rowData the data for the table
+     * @param columnNames the names for the columns
      */
     public JTreeTable(Vector<?> rowData, Vector<?> columnNames) {
         super(rowData, columnNames);

@@ -556,6 +556,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * Add an argument which has already been encoded
+     *
+     * @param name name of the argument
+     * @param value value of the argument
      */
     public void addEncodedArgument(String name, String value) {
         this.addEncodedArgument(name, value, ARG_VAL_SEP);
@@ -923,7 +926,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * </p>
      *
      * @return The URL to be requested by this sampler.
-     * @throws MalformedURLException
+     * @throws MalformedURLException if url is malformed
      */
     public URL getUrl() throws MalformedURLException {
         StringBuilder pathAndQuery = new StringBuilder(100);
@@ -1692,16 +1695,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * Read response from the input stream, converting to MD5 digest if the useMD5 property is set.
-     *
+     * <p>
      * For the MD5 case, the result byte count is set to the size of the original response.
-     * 
+     * <p>
      * Closes the inputStream 
      * 
-     * @param sampleResult
-     * @param in input stream
+     * @param sampleResult sample to store information about the response into
+     * @param in input stream from which to read the response
      * @param length expected input length or zero
      * @return the response or the MD5 of the response
-     * @throws IOException
+     * @throws IOException if reading the result fails
      */
     public byte[] readResponse(SampleResult sampleResult, InputStream in, int length) throws IOException {
         try {
@@ -1759,18 +1762,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * JMeter 2.3.1 and earlier only had fields for one file on the GUI:
-     * - FILE_NAME
-     * - FILE_FIELD
-     * - MIMETYPE
+     * <ul>
+     *   <li>FILE_NAME</li>
+     *   <li>FILE_FIELD</li>
+     *   <li>MIMETYPE</li>
+     * </ul>
      * These were stored in their own individual properties.
-     *
+     * <p>
      * Version 2.3.3 introduced a list of files, each with their own path, name and mimetype.
-     *
+     * <p>
      * In order to maintain backwards compatibility of test plans, the 3 original properties
      * were retained; additional file entries are stored in an HTTPFileArgs class.
      * The HTTPFileArgs class was only present if there is more than 1 file; this means that
      * such test plans are backward compatible.
-     *
+     * <p>
      * Versions after 2.3.4 dispense with the original set of 3 properties.
      * Test plans that use them are converted to use a single HTTPFileArgs list.
      *
@@ -1808,6 +1813,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * set IP source to use - does not apply to Java HTTP implementation currently
+     *
+     * @param value IP source to use
      */
     public void setIpSource(String value) {
         setProperty(IP_SOURCE, value, "");
@@ -1815,6 +1822,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * get IP source to use - does not apply to Java HTTP implementation currently
+     *
+     * @return IP source to use
      */
     public String getIpSource() {
         return getPropertyAsString(IP_SOURCE,"");
@@ -1822,6 +1831,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
  
     /**
      * set IP/address source type to use
+     *
+     * @param value type of the IP/address source
      */
     public void setIpSourceType(int value) {
         setProperty(IP_SOURCE_TYPE, value, SOURCE_TYPE_DEFAULT);
@@ -1948,8 +1959,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         private final HTTPSampleResult result;
         private final CollectionProperty cookies;
         /**
-         * @param result
-         * @param cookies
+         * @param result {@link HTTPSampleResult} to hold
+         * @param cookies cookies to hold
          */
         public AsynSamplerResultHolder(HTTPSampleResult result, CollectionProperty cookies) {
             super();

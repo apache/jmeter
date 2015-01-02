@@ -46,8 +46,8 @@ public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
 
     /**
      * 
-     * @param davMethod
-     * @param uri
+     * @param davMethod method to use (has to be a Webdav method as identified by {@link #isWebdavMethod(String)})
+     * @param uri {@link URI} to use
      */
     public HttpWebdav(final String davMethod, final URI uri) {
         super();
@@ -62,7 +62,7 @@ public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
 
     /**
      * @param method Http Method
-     * @return true if method is a Webdav one
+     * @return <code>true</code> if method is a Webdav one
      */
     public static boolean isWebdavMethod(String method) {
         return WEBDAV_METHODS.contains(method);

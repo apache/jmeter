@@ -57,6 +57,8 @@ public class UserSequence implements Serializable {
      * <P>
      * ie a Set of Mapped "parameter names and parameter values" for each user
      * to be loaded into the sequencer.
+     *
+     * @param allUsers users and parameter data to be used
      */
     public UserSequence(List<Map<String, String>> allUsers) {
         this.allUsers = allUsers;

@@ -149,7 +149,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     /**
      * Save the GUI data in the HTTPSamplerBase element.
      *
-     * @param testElement
+     * @param testElement {@link TestElement} to modify
      */
     public void modifyTestElement(TestElement testElement) {
         GuiUtils.stopTableEditing(table);

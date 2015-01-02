@@ -149,10 +149,16 @@ public final class ClassFinder {
 
     /**
      * Convenience method for
-     * {@link #findClassesThatExtend(String[], Class[], boolean)}
-     * with the option to include inner classes in the search set to false.
+     * {@link #findClassesThatExtend(String[], Class[], boolean)} with the
+     * option to include inner classes in the search set to false.
      *
+     * @param paths
+     *            pathnames or jarfiles to search for classes
+     * @param superClasses
+     *            required parent class(es)
      * @return List of Strings containing discovered class names.
+     * @throws IOException
+     *             when scanning the classes fails
      */
     public static List<String> findClassesThatExtend(String[] paths, Class<?>[] superClasses)
         throws IOException {
@@ -191,6 +197,7 @@ public final class ClassFinder {
      * @param innerClasses - should we include inner classes?
      *
      * @return List containing discovered classes
+     * @throws IOException when scanning for classes fails
      */
     public static List<String> findClassesThatExtend(String[] strPathsOrJars,
             final Class<?>[] superClasses, final boolean innerClasses)
@@ -207,6 +214,7 @@ public final class ClassFinder {
      * @param notContains - classname should not contain this string
      *
      * @return List containing discovered classes
+     * @throws IOException when scanning classes fails
      */
     public static List<String> findClassesThatExtend(String[] strPathsOrJars,
             final Class<?>[] superClasses, final boolean innerClasses,
@@ -222,6 +230,7 @@ public final class ClassFinder {
      * @param innerClasses - should we include inner classes?
      *
      * @return List containing discovered classes
+     * @throws IOException when scanning classes fails
      */
     public static List<String> findAnnotatedClasses(String[] strPathsOrJars,
             final Class<? extends Annotation>[] annotations, final boolean innerClasses)
@@ -237,6 +246,7 @@ public final class ClassFinder {
      * @param annotations - required annotations
      *
      * @return List containing discovered classes
+     * @throws IOException when scanning classes fails
      */
     public static List<String> findAnnotatedClasses(String[] strPathsOrJars,
             final Class<? extends Annotation>[] annotations)
@@ -254,6 +264,7 @@ public final class ClassFinder {
      * @param annotations - true if classnames are annotations
      *
      * @return List containing discovered classes
+     * @throws IOException when scanning classes fails
      */
     public static List<String> findClassesThatExtend(String[] searchPathsOrJars,
                 final Class<?>[] classNames, final boolean innerClasses,

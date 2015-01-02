@@ -43,6 +43,7 @@ public interface CookieHandler {
      * @param cookiesCP {@link CollectionProperty} of {@link Cookie}
      * @param url
      *            URL of the request to which the returned header will be added.
+     * @param allowVariableCookie flag whether to allow jmeter variables in cookie values
      * @return the value string for the cookie header (goes after "Cookie: ").
      */
     String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,

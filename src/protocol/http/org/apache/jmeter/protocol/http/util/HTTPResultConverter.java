@@ -49,7 +49,7 @@ public class HTTPResultConverter extends SampleResultConverter {
     }
 
     /**
-     * @param arg0
+     * @param arg0 the mapper
      */
     public HTTPResultConverter(Mapper arg0) {
         super(arg0);
