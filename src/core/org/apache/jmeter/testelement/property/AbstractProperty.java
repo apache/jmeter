@@ -252,6 +252,8 @@ public abstract class AbstractProperty implements JMeterProperty {
     /**
      * Get the property type for this property. Used to convert raw values into
      * JMeterProperties.
+     *
+     * @return property type of this property
      */
     protected Class<? extends JMeterProperty> getPropertyType() {
         return getClass();
@@ -318,6 +320,10 @@ public abstract class AbstractProperty implements JMeterProperty {
     /**
      * Given a Map, it converts the Map into a collection of JMeterProperty
      * objects, appropriate for a MapProperty object.
+     *
+     * @param coll
+     *            Map to convert
+     * @return converted Map
      */
     protected Map<String, JMeterProperty> normalizeMap(Map<?,?> coll) {
         if (coll.isEmpty()) {
