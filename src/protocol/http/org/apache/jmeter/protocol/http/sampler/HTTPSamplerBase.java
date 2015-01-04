@@ -1546,9 +1546,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * an HTTPSamplerResult container parameter instead of a
      * boolean:areFollowingRedirect.
      *
-     * @param areFollowingRedirect
-     * @param frameDepth
-     * @param res
+     * @param areFollowingRedirect flag whether we are getting a redirect target
+     * @param frameDepth Depth of this target in the frame structure. Used only to prevent infinite recursion.
+     * @param res sample result to process
      * @return the sample result
      */
     protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect, int frameDepth, HTTPSampleResult res) {
@@ -1588,6 +1588,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * Determine if the HTTP status code is successful or not
      * i.e. in range 200 to 399 inclusive
      *
+     * @param code status code to check
      * @return whether in range 200-399 or not
      */
     protected boolean isSuccessCode(int code){
