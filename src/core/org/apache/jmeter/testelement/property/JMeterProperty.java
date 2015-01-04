@@ -26,7 +26,7 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
     /**
      * Returns whether the property is a running version.
      *
-     * @return boolean
+     * @return flag whether this property is a running version
      */
     boolean isRunningVersion();
 
@@ -34,14 +34,14 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
      * The name of the property. Typically this should match the name that keys
      * the property's location in the test elements Map.
      *
-     * @return String
+     * @return the name of the property
      */
     String getName();
 
     /**
      * Set the property name.
      *
-     * @param name
+     * @param name the name of the property
      */
     void setName(String name);
 
@@ -54,7 +54,7 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
      * value. A non-running version property will return functions as their
      * uncompiled string representation.
      *
-     * @param runningVersion
+     * @param runningVersion flag whether this property is a running version
      */
     void setRunningVersion(boolean runningVersion);
 
@@ -72,7 +72,7 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
      * But for collection properties and test element properties, more complex
      * behavior is required.
      *
-     * @param prop
+     * @param prop the property object to merge into this property
      */
     void mergeIn(JMeterProperty prop);
 

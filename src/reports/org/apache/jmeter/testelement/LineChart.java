@@ -112,9 +112,11 @@ public class LineChart extends AbstractChart {
     }
 
     /**
-     * Since we only have 4 shapes, the method will start with the
-     * first shape and keep cycling through the shapes in order.
+     * Since we only have 4 shapes, the method will start with the first shape
+     * and keep cycling through the shapes in order.
+     *
      * @param count
+     *            number of shapes to create
      * @return array of shapes
      */
     public Shape[] createShapes(int count) {
@@ -139,6 +141,7 @@ public class LineChart extends AbstractChart {
     /**
      *
      * @param count
+     *            number of strokes to create
      * @return array of strokes
      */
     public Stroke[] createStrokes(int count) {
