@@ -40,7 +40,7 @@ import org.apache.log.Logger;
 
 /**
  * Graphite based Listener using Pickle Protocol
- * @see http://graphite.readthedocs.org/en/latest/overview.html
+ * @see <a href="http://graphite.readthedocs.org/en/latest/overview.html">Graphite Overview</a>
  * @since 2.13
  */
 public class GraphiteBackendListenerClient extends AbstractBackendListenerClient implements Runnable {

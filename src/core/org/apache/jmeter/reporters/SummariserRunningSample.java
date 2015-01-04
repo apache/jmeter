@@ -31,7 +31,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * <p>
  * Please note that this class is not thread-safe.
  * The calling class is responsible for ensuring thread safety if required.
- * The caller needs to synchronize access in order to enure that variables are consistent.
+ * The caller needs to synchronize access in order to ensure that variables are consistent.
  * </p>
  * @since 2.13
  */
@@ -56,7 +56,7 @@ class SummariserRunningSample {
     private final String label;
 
     /**
-     * @param label
+     * @param label the label of this component
      */
     public SummariserRunningSample(String label) {
         this.label = label;
@@ -157,6 +157,8 @@ class SummariserRunningSample {
 
     /**
      * Returns the throughput associated to this sampler in requests per second.
+     *
+     * @return throughput associated to this sampler
      */
     public double getRate() {
         if (counter == 0) {

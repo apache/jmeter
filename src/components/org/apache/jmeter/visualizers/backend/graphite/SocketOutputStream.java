@@ -42,6 +42,8 @@ public class SocketOutputStream extends FilterOutputStream {
 
     /**
      * Return the underlying Socket
+     *
+     * @return the underlying {@link Socket}
      */
     public Socket getSocket() {
         return socket;

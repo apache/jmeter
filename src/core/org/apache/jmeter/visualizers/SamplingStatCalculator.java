@@ -24,7 +24,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.math.StatCalculatorLong;
 
 /**
- * Aggegate sample data container. Just instantiate a new instance of this
+ * Aggregate sample data container. Just instantiate a new instance of this
  * class, and then call {@link #addSample(SampleResult)} a few times, and pull
  * the stats out with whatever methods you prefer.
  *
@@ -85,6 +85,8 @@ public class SamplingStatCalculator {
      * May be slightly skewed because it takes the timestamps of the first and
      * last samples as the total time passed, and the test may actually have
      * started before that start time and ended after that end time.
+     *
+     * @return throughput associated with this sampler per second
      */
     public double getRate() {
         if (calculator.getCount() == 0) {
@@ -134,12 +136,19 @@ public class SamplingStatCalculator {
         return calculator.getTotalBytes() / (double) count;
     }
 
+    /**
+     * @return the label of this component
+     */
     public String getLabel() {
         return label;
     }
 
     /**
      * Records a sample.
+     *
+     * @param res
+     *            the sample to record
+     * @return newly created sample with current statistics
      *
      */
     public Sample addSample(SampleResult res) {

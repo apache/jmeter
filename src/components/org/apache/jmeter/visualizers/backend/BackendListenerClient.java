@@ -70,6 +70,7 @@ public interface BackendListenerClient {
      * @param context
      *            the context to run with. This provides access to
      *            initialization parameters.
+     * @throws Exception when setup fails
      */
     void setupTest(BackendListenerContext context) throws Exception;
 
@@ -100,6 +101,7 @@ public interface BackendListenerClient {
      * @param context
      *            the context to run with. This provides access to
      *            initialization parameters.
+     * @throws Exception when tear down fails
      */
     void teardownTest(BackendListenerContext context) throws Exception;
 
