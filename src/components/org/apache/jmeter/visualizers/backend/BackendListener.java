@@ -466,7 +466,7 @@ public class BackendListener extends AbstractTestElement
     /**
      * Sets the queue size
      *
-     * @param queueSize
+     * @param queueSize the size of the queue
      *            
      */
     public void setQueueSize(String queueSize) {

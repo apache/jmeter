@@ -154,7 +154,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      * Handle action events for this component. This method currently handles
      * events for the classname combo box.
      *
-     * @param evt
+     * @param event
      *            the ActionEvent to be handled
      */
     @Override
