@@ -43,9 +43,9 @@ interface GraphiteMetricsSender {
      *      (timestamp, (prefix.contextName.metricName, metricValue))
      * And add it to the list of metrics. 
      * @param timestamp in Seconds from 1970
-     * @param contextName
-     * @param metricName
-     * @param metricValue
+     * @param contextName name of the context of this metric
+     * @param metricName name of this metric
+     * @param metricValue value of this metric
      */
     public abstract void addMetric(long timestamp, String contextName,
             String metricName, String metricValue);
