@@ -158,7 +158,11 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     }
 
     /**
+     * Calculate the target time by adding the result of private method
+     * <code>calculateDelay()</code> to the given <code>currentTime</code>
+     * 
      * @param currentTime
+     *            time in ms
      * @return new Target time
      */
     // TODO - is this used? (apart from test code)

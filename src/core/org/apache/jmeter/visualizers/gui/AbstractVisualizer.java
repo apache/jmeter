@@ -193,6 +193,8 @@ public abstract class AbstractVisualizer
      * necessary if your visualizer requires a differently behaving
      * ResultCollector. Using these methods will allow maximum reuse of the
      * methods provided by AbstractVisualizer in this event.
+     *
+     * @return the associated collector
      */
     protected ResultCollector getModel() {
         return collector;
@@ -345,7 +347,7 @@ public abstract class AbstractVisualizer
      * model for the Visualizer. This is useful to allow maximum reuse of the
      * methods from AbstractVisualizer.
      *
-     * @param collector
+     * @param collector {@link ResultCollector} for the visualizer
      */
     protected void setModel(ResultCollector collector) {
         this.collector = collector;

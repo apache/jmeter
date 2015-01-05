@@ -45,8 +45,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * <p>
  * Example of how to use it is provided in the main method. An example is
  * provided below.
- * <p>
- *
  * <pre>
  * testf = new LogFilter();
  * String[] incl = { &quot;hello.html&quot;, &quot;index.html&quot;, &quot;/index.jsp&quot; };
@@ -69,8 +67,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * you if a string should be filtered. The second step is to filter the string,
  * which will return null if it is filtered and replace any part of the string
  * that should be replaced.
- * <p>
- *
  */
 
 public class LogFilter implements Filter, Serializable {
@@ -251,7 +247,7 @@ public class LogFilter implements Filter, Serializable {
      * throws an exception and tells the user the same filename is in both the
      * include and exclude array.
      *
-     * @param file
+     * @param file the file to filter
      * @return boolean
      */
     protected boolean filterFile(String file) {
@@ -321,7 +317,7 @@ public class LogFilter implements Filter, Serializable {
      * the method will return true if the text should be filtered. If not, it
      * will return false, which means it should not be filtered.
      *
-     * @param text
+     * @param text text to be checked
      * @return boolean
      */
     protected boolean filterPattern(String text) {
@@ -337,8 +333,8 @@ public class LogFilter implements Filter, Serializable {
      * By default, the method assumes the entry is not included, unless it
      * matches. In that case, it will return true.
      *
-     * @param text
-     * @return true if text is included
+     * @param text text to be checked
+     * @return <code>true</code> if text is included
      */
     protected boolean incPattern(String text) {
         this.USEFILE = false;
@@ -355,8 +351,8 @@ public class LogFilter implements Filter, Serializable {
      * The method assumes by default the text is not excluded. If the text
      * matches the pattern, it will then return true.
      *
-     * @param text
-     * @return true if text is excluded
+     * @param text text to be checked
+     * @return <code>true</code> if text is excluded
      */
     protected boolean excPattern(String text) {
         this.USEFILE = true;
