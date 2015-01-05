@@ -84,6 +84,7 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
             try {
                 conn = DataSourceElement.getConnection(getDataSource());
             } finally {
+                // FIXME: there is separate connect time field now
                 res.latencyEnd(); // use latency to measure connection time
             }
             res.setResponseHeaders(conn.toString());

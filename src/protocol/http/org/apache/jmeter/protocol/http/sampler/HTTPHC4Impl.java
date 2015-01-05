@@ -73,6 +73,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.ResponseContentEncoding;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.params.ConnRoutePNames;
@@ -90,7 +91,6 @@ import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.impl.conn.SchemeRegistryFactory;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
@@ -123,6 +123,7 @@ import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.htmlparser.http.ConnectionManager;
 
 /**
  * HTTP Sampler using Apache HttpClient 4.x.
@@ -654,10 +655,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (resolver == null) {
                 resolver = new SystemDefaultDnsResolver();
             }
-            PoolingClientConnectionManager poolingClientConnectionManager = new PoolingClientConnectionManager(
-                    SchemeRegistryFactory.createDefault(), resolver);
+            ClientConnectionManager connManager = new MeasuringConnectionManager(SchemeRegistryFactory.createDefault(), resolver);
 
-            httpClient = new DefaultHttpClient(poolingClientConnectionManager, clientParams) {
+            httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
                 protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
                     return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false); // set retry count

@@ -81,7 +81,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             "table_visualizer_sample_time", // $NON-NLS-1$
             "table_visualizer_status",      // $NON-NLS-1$
             "table_visualizer_bytes",       // $NON-NLS-1$
-            "table_visualizer_latency"};    // $NON-NLS-1$
+            "table_visualizer_latency",     // $NON-NLS-1$
+            "table_visualizer_connect"};    // $NON-NLS-1$
 
     private ObjectTableModel model = null;
 
@@ -125,18 +126,19 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         model = new ObjectTableModel(COLUMNS,
                 TableSample.class,         // The object used for each row
                 new Functor[] {
-                new Functor("getSampleNumberString"), // $NON-NLS-1$
-                new Functor("getStartTimeFormatted",  // $NON-NLS-1$
+                new Functor("getSampleNumberString"),  // $NON-NLS-1$
+                new Functor("getStartTimeFormatted",   // $NON-NLS-1$
                         new Object[]{format}),
-                new Functor("getThreadName"), // $NON-NLS-1$
-                new Functor("getLabel"), // $NON-NLS-1$
-                new Functor("getElapsed"), // $NON-NLS-1$
+                new Functor("getThreadName"),          // $NON-NLS-1$
+                new Functor("getLabel"),               // $NON-NLS-1$
+                new Functor("getElapsed"),             // $NON-NLS-1$
                 new SampleSuccessFunctor("isSuccess"), // $NON-NLS-1$
-                new Functor("getBytes"), // $NON-NLS-1$
-                new Functor("getLatency") }, // $NON-NLS-1$
-                new Functor[] { null, null, null, null, null, null, null, null },
+                new Functor("getBytes"),               // $NON-NLS-1$
+                new Functor("getLatency"),             // $NON-NLS-1$
+                new Functor("getConnectTime") },       // $NON-NLS-1$
+                new Functor[] { null, null, null, null, null, null, null, null, null },
                 new Class[] {
-                String.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Long.class, Long.class });
+                String.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Long.class, Long.class, Long.class });
         init();
     }
 
@@ -188,7 +190,9 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                             res.getTime(),
                             res.isSuccessful(),
                             res.getBytes(),
-                            res.getLatency());
+                            res.getLatency(),
+                            res.getConnectTime()
+                            );
                     model.addRow(newS);
                 }
                 updateTextFields(res);
