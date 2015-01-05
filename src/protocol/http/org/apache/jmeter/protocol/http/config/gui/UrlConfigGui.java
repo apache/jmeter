@@ -765,6 +765,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     /**
+     * Checks if no data is available in the selected tab
+     *
+     * @param oldSelectedIndex
+     *            the tab to check for data
      * @return true if neither Parameters tab nor Raw Body tab contain data
      */
     boolean noData(int oldSelectedIndex) {

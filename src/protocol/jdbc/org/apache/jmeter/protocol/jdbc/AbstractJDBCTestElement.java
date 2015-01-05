@@ -142,6 +142,10 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * Execute the test element.
      * 
      * @param conn a {@link SampleResult} in case the test should sample; <code>null</code> if only execution is requested
+     * @return the result of the execute command
+     * @throws SQLException if a database error occurs
+     * @throws UnsupportedEncodingException when the result can not be converted to the required charset
+     * @throws IOException when I/O error occurs
      * @throws UnsupportedOperationException if the user provided incorrect query type 
      */
     protected byte[] execute(Connection conn) throws SQLException, UnsupportedEncodingException, IOException, UnsupportedOperationException {
