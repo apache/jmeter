@@ -85,8 +85,8 @@ public final class GuiUtils {
     
     /**
      * Create a GUI component JLabel + JComboBox with a left and right margin (5px)
-     * @param label
-     * @param comboBox
+     * @param label the label
+     * @param comboBox the combo box
      * @return the JComponent (margin+JLabel+margin+JComboBox)
      */
     public static JComponent createLabelCombo(String label, JComboBox comboBox) {
@@ -102,6 +102,8 @@ public final class GuiUtils {
     /**
      * Stop any editing that is currently being done on the table. This will
      * save any changes that have already been made.
+     *
+     * @param table the table to stop on editing
      */
     public static void stopTableEditing(JTable table) {
         if (table.isEditing()) {
@@ -112,9 +114,12 @@ public final class GuiUtils {
     
     /**
      * Get pasted text from clipboard
+     *
      * @return String Pasted text
      * @throws UnsupportedFlavorException
+     *             if the clipboard data can not be get as a {@link String}
      * @throws IOException
+     *             if the clipboard data is no longer available
      */
     public static String getPastedText() throws UnsupportedFlavorException, IOException {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

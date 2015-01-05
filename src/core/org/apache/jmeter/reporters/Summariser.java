@@ -35,7 +35,6 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterContextService.ThreadCounts;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.RunningSample;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -43,12 +42,12 @@ import org.apache.log.Logger;
 /**
  * Generate a summary of the test run so far to the log file and/or standard
  * output. Both running and differential totals are shown. Output is generated
- * every n seconds (default 3 minutes) on the appropriate time boundary, so that
+ * every n seconds (default 30 seconds (property summariser.interval)) on the appropriate time boundary, so that
  * multiple test runs on the same time will be synchronised.
  *
  * This is mainly intended for batch (non-GUI) runs
- *
- * Note that the RunningSample start and end times relate to the samples,
+ * FIXME : Docs below are outdated, need fixing
+ * Note that the {@link SummariserRunningSample} start and end times relate to the samples,
  * not the reporting interval.
  *
  * Since the first sample in a delta is likely to have started in the previous reporting interval,
@@ -88,18 +87,18 @@ public class Summariser extends AbstractTestElement
     private static final int INTERVAL_WINDOW = 5; // in seconds
 
     /**
-     * Lock used to protect accumulators update + instanceCount update
+     * Lock used to protect ACCUMULATORS update + INSTANCE_COUNT update
      */
-    private static final Object lock = new Object();
+    private static final Object LOCK = new Object();
 
     /*
      * This map allows summarisers with the same name to contribute to the same totals.
      */
-    //@GuardedBy("accumulators") - needed to ensure consistency between this and instanceCount
-    private static final Map<String, Totals> accumulators = new ConcurrentHashMap<String, Totals>();
+    //@GuardedBy("LOCK") - needed to ensure consistency between this and INSTANCE_COUNT
+    private static final Map<String, Totals> ACCUMULATORS = new ConcurrentHashMap<String, Totals>();
 
-    //@GuardedBy("accumulators")
-    private static int instanceCount; // number of active tests
+    //@GuardedBy("LOCK")
+    private static int INSTANCE_COUNT; // number of active tests
 
     /*
      * Cached copy of Totals for this instance.
@@ -122,9 +121,9 @@ public class Summariser extends AbstractTestElement
      */
     public Summariser() {
         super();
-        synchronized (lock) {
-            accumulators.clear();
-            instanceCount=0;
+        synchronized (LOCK) {
+            ACCUMULATORS.clear();
+            INSTANCE_COUNT=0;
         }
     }
 
@@ -147,9 +146,9 @@ public class Summariser extends AbstractTestElement
         /** Time of last summary (to prevent double reporting) */
         private long last = 0;
 
-        private final RunningSample delta = new RunningSample("DELTA",0);
+        private final SummariserRunningSample delta = new SummariserRunningSample("DELTA");
 
-        private final RunningSample total = new RunningSample("TOTAL",0);
+        private final SummariserRunningSample total = new SummariserRunningSample("TOTAL");
 
         /**
          * Add the delta values to the total values and clear the delta
@@ -172,8 +171,8 @@ public class Summariser extends AbstractTestElement
 
         long now = System.currentTimeMillis() / 1000;// in seconds
 
-        RunningSample myDelta = null;
-        RunningSample myTotal = null;
+        SummariserRunningSample myDelta = null;
+        SummariserRunningSample myTotal = null;
         boolean reportNow = false;
 
         /*
@@ -190,9 +189,9 @@ public class Summariser extends AbstractTestElement
                 reportNow = true;
 
                 // copy the data to minimise the synch time
-                myDelta = new RunningSample(myTotals.delta);
+                myDelta = new SummariserRunningSample(myTotals.delta);
                 myTotals.moveDelta();
-                myTotal = new RunningSample(myTotals.total);
+                myTotal = new SummariserRunningSample(myTotals.total);
 
                 myTotals.last = now; // stop double-reporting
             }
@@ -235,11 +234,13 @@ public class Summariser extends AbstractTestElement
     }
 
     /**
-     * @param myTotal
-     * @param string
-     * @return the sunnary information
+     * Formats summariserRunningSample
+     * @param name Summariser name
+     * @param summariserRunningSample {@link SummariserRunningSample}
+     * @param type Type of summariser (difference or total)
+     * @return the summary information
      */
-    private static String format(String name, RunningSample s, String type) {
+    private static String format(String name, SummariserRunningSample summariserRunningSample, String type) {
         DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
         StringBuilder tmp = new StringBuilder(20); // for intermediate use
         StringBuilder sb = new StringBuilder(100); // output line buffer
@@ -247,9 +248,9 @@ public class Summariser extends AbstractTestElement
         sb.append(" ");
         sb.append(type);
         sb.append(" ");
-        sb.append(longToSb(tmp, s.getNumSamples(), 6));
+        sb.append(longToSb(tmp, summariserRunningSample.getNumSamples(), 6));
         sb.append(" in ");
-        long elapsed = s.getElapsed();
+        long elapsed = summariserRunningSample.getElapsed();
         long elapsedSec = (elapsed + 500) / 1000; // rounded seconds
         if (elapsedSec > 100       // No point displaying decimals (less than 1% error)
          || (elapsed - elapsedSec * 1000) < 50 // decimal would be zero
@@ -261,20 +262,20 @@ public class Summariser extends AbstractTestElement
         }
         sb.append("s = ");
         if (elapsed > 0) {
-            sb.append(doubleToSb(dfDouble, tmp, s.getRate(), 6, 1));
+            sb.append(doubleToSb(dfDouble, tmp, summariserRunningSample.getRate(), 6, 1));
         } else {
             sb.append("******");// Rate is effectively infinite
         }
         sb.append("/s Avg: ");
-        sb.append(longToSb(tmp, s.getAverage(), 5));
+        sb.append(longToSb(tmp, summariserRunningSample.getAverage(), 5));
         sb.append(" Min: ");
-        sb.append(longToSb(tmp, s.getMin(), 5));
+        sb.append(longToSb(tmp, summariserRunningSample.getMin(), 5));
         sb.append(" Max: ");
-        sb.append(longToSb(tmp, s.getMax(), 5));
+        sb.append(longToSb(tmp, summariserRunningSample.getMax(), 5));
         sb.append(" Err: ");
-        sb.append(longToSb(tmp, s.getErrorCount(), 5));
+        sb.append(longToSb(tmp, summariserRunningSample.getErrorCount(), 5));
         sb.append(" (");
-        sb.append(s.getErrorPercentageString());
+        sb.append(summariserRunningSample.getErrorPercentageString());
         sb.append(")");
         if ("+".equals(type)) {
             ThreadCounts tc = JMeterContextService.getThreadCounts();
@@ -336,14 +337,14 @@ public class Summariser extends AbstractTestElement
      */
     @Override
     public void testStarted(String host) {
-        synchronized (lock) {
+        synchronized (LOCK) {
             myName = getName();
-            myTotals = accumulators.get(myName);
+            myTotals = ACCUMULATORS.get(myName);
             if (myTotals == null){
                 myTotals = new Totals();
-                accumulators.put(myName, myTotals);
+                ACCUMULATORS.put(myName, myTotals);
             }
-            instanceCount++;
+            INSTANCE_COUNT++;
         }
     }
 
@@ -356,10 +357,10 @@ public class Summariser extends AbstractTestElement
     @Override
     public void testEnded(String host) {
         Set<Entry<String, Totals>> totals = null;
-        synchronized (lock) {
-            instanceCount--;
-            if (instanceCount <= 0){
-                totals = accumulators.entrySet();
+        synchronized (LOCK) {
+            INSTANCE_COUNT--;
+            if (INSTANCE_COUNT <= 0){
+                totals = ACCUMULATORS.entrySet();
             }
         }
         if (totals == null) {// We're not done yet
@@ -369,6 +370,7 @@ public class Summariser extends AbstractTestElement
             String str;
             String name = entry.getKey();
             Totals total = entry.getValue();
+            total.delta.setEndTime(); // ensure delta has correct end time
             // Only print final delta if there were some samples in the delta
             // and there has been at least one sample reported previously
             if (total.delta.getNumSamples() > 0 && total.total.getNumSamples() >  0) {
@@ -380,7 +382,7 @@ public class Summariser extends AbstractTestElement
                     System.out.println(str);
                 }
             }
-            total.moveDelta();
+            total.moveDelta(); // This will update the total endTime
             str = format(name, total.total, "=");
             if (TOLOG) {
                 log.info(str);

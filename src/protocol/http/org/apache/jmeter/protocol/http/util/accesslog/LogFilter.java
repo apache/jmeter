@@ -45,8 +45,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * <p>
  * Example of how to use it is provided in the main method. An example is
  * provided below.
- * <p>
- *
  * <pre>
  * testf = new LogFilter();
  * String[] incl = { &quot;hello.html&quot;, &quot;index.html&quot;, &quot;/index.jsp&quot; };
@@ -69,8 +67,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * you if a string should be filtered. The second step is to filter the string,
  * which will return null if it is filtered and replace any part of the string
  * that should be replaced.
- * <p>
- *
  */
 
 public class LogFilter implements Filter, Serializable {
@@ -139,6 +135,7 @@ public class LogFilter implements Filter, Serializable {
      * Give the filter a list of files to include
      *
      * @param filenames
+     *            list of files to include
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includeFiles(java.lang.String[])
      */
     @Override
@@ -153,6 +150,7 @@ public class LogFilter implements Filter, Serializable {
      * Give the filter a list of files to exclude
      *
      * @param filenames
+     *            list of files to exclude
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludeFiles(java.lang.String[])
      */
     @Override
@@ -169,6 +167,7 @@ public class LogFilter implements Filter, Serializable {
      * implementation is not complete.
      *
      * @param regexp
+     *            list of regular expressions
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includePattern(String[])
      */
     @Override
@@ -190,6 +189,7 @@ public class LogFilter implements Filter, Serializable {
      * implementation is not complete.
      *
      * @param regexp
+     *            list of regular expressions
      *
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludePattern(String[])
      */
@@ -211,13 +211,13 @@ public class LogFilter implements Filter, Serializable {
      * should be used. Therefore, the method will only return true if the entry
      * should be used. Since the interface defines both inclusion and exclusion,
      * that means by default inclusion filtering assumes all entries are
-     * excluded unless it matches. In the case of exlusion filtering, it assumes
+     * excluded unless it matches. In the case of exclusion filtering, it assumes
      * all entries are included unless it matches, which means it should be
      * excluded.
      *
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(String, TestElement)
-     * @param path
-     * @return boolean
+     * @param path path to be tested
+     * @return <code>true</code> if entry should be excluded
      */
     @Override
     public boolean isFiltered(String path,TestElement el) {
@@ -247,7 +247,7 @@ public class LogFilter implements Filter, Serializable {
      * throws an exception and tells the user the same filename is in both the
      * include and exclude array.
      *
-     * @param file
+     * @param file the file to filter
      * @return boolean
      */
     protected boolean filterFile(String file) {
@@ -267,6 +267,7 @@ public class LogFilter implements Filter, Serializable {
      * won't bother with the rest of the filenames in the array.
      *
      * @param text
+     *            name of the file to tested (must not be <code>null</code>)
      * @return boolean include
      */
     public boolean incFile(String text) {
@@ -290,6 +291,7 @@ public class LogFilter implements Filter, Serializable {
      * won't bother with the rest of the filenames in the array.
      *
      * @param text
+     *            name of the file to be tested (must not be null)
      * @return boolean exclude
      */
     public boolean excFile(String text) {
@@ -310,12 +312,12 @@ public class LogFilter implements Filter, Serializable {
     }
 
     /**
-     * The current implemenation assumes the user has checked the regular
+     * The current implementation assumes the user has checked the regular
      * expressions so that they don't cancel each other. The basic assumption is
      * the method will return true if the text should be filtered. If not, it
      * will return false, which means it should not be filtered.
      *
-     * @param text
+     * @param text text to be checked
      * @return boolean
      */
     protected boolean filterPattern(String text) {
@@ -331,8 +333,8 @@ public class LogFilter implements Filter, Serializable {
      * By default, the method assumes the entry is not included, unless it
      * matches. In that case, it will return true.
      *
-     * @param text
-     * @return true if text is included
+     * @param text text to be checked
+     * @return <code>true</code> if text is included
      */
     protected boolean incPattern(String text) {
         this.USEFILE = false;
@@ -349,8 +351,8 @@ public class LogFilter implements Filter, Serializable {
      * The method assumes by default the text is not excluded. If the text
      * matches the pattern, it will then return true.
      *
-     * @param text
-     * @return true if text is excluded
+     * @param text text to be checked
+     * @return <code>true</code> if text is excluded
      */
     protected boolean excPattern(String text) {
         this.USEFILE = true;
@@ -366,7 +368,7 @@ public class LogFilter implements Filter, Serializable {
     }
 
     /**
-     * Method uses indexOf to replace the old extension with the new extesion.
+     * Method uses indexOf to replace the old extension with the new extension.
      * It might be good to use regular expression, but for now this is a simple
      * method. The method isn't designed to replace multiple instances of the
      * text, since that isn't how file extensions work. If the string contains
@@ -374,7 +376,10 @@ public class LogFilter implements Filter, Serializable {
      * be replaced.
      *
      * @param text
-     * @return boolean
+     *            name of the file in which the extension should be replaced
+     *            (must not be null)
+     * @return <code>true</code> if the extension could be replaced,
+     *         <code>false</code> otherwise
      */
     public boolean replaceExtension(String text) {
         int pt = text.indexOf(this.OLDEXT);
@@ -412,7 +417,9 @@ public class LogFilter implements Filter, Serializable {
      * create a new pattern object from the string.
      *
      * @param pattern
-     * @return Pattern
+     *            string representation of the perl5 compatible regex pattern
+     * @return compiled Pattern, or <code>null</code> if no pattern could be
+     *         compiled
      */
     public Pattern createPattern(String pattern) {
         try {

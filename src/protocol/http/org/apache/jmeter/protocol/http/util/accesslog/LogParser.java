@@ -49,8 +49,9 @@ public interface LogParser {
      * 0 is returned. If the method is subsequently called again, it will
      * restart parsing at the beginning.
      *
-     * @param count
-     * @return int
+     * @param count max lines to parse, or <code>-1</code> for the entire file
+     * @param el {@link TestElement} to read lines into
+     * @return number of lines parsed
      */
     int parseAndConfigure(int count, TestElement el);
 
@@ -61,7 +62,7 @@ public interface LogParser {
      * clean it up is a bit tedious. One example of this is using the filter to
      * exclude any log entry that has a 505 response code.
      *
-     * @param filter
+     * @param filter {@link Filter} to use
      */
     void setFilter(Filter filter);
 
@@ -70,7 +71,7 @@ public interface LogParser {
      * using Class.newInstance(). Then the access log file is set using this
      * method.
      *
-     * @param source
+     * @param source name of the access log file
      */
     void setSourceFile(String source);
 }

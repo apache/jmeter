@@ -35,7 +35,6 @@ import org.apache.log.Logger;
  * Description: <br>
  * <br>
  * AccessLogSampler is responsible for a couple of things:
- * <p>
  * <ul>
  * <li>creating instances of Generator
  * <li>creating instances of Parser
@@ -85,6 +84,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 
     /**
      * Set the path where XML messages are stored for random selection.
+     *
+     * @param path path where to store XML messages
      */
     public void setLogFile(String path) {
         logFile = path;
@@ -93,6 +94,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     /**
      * Get the path where XML messages are stored. this is the directory where
      * JMeter will randomly select a file.
+     *
+     * @return path where XML messages are stored
      */
     public String getLogFile() {
         return logFile;
@@ -121,6 +124,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     /**
      * sample gets a new HTTPSampler from the generator and calls it's sample()
      * method.
+     *
+     * @return newly generated and called sample
      */
     public SampleResult sampleWithParser() {
         initFilter();

@@ -32,7 +32,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * Please note that this class is not thread-safe.
  * The calling class is responsible for ensuring thread safety if required.
  * Versions prior to 2.3.2 appeared to be thread-safe but weren't as label and index were not final.
- * Also the caller needs to synchronize access in order to enure that variables are consistent.
+ * Also the caller needs to synchronize access in order to ensure that variables are consistent.
  * </p>
  *
  */
@@ -60,6 +60,9 @@ public class RunningSample {
 
     /**
      * Use this constructor to create the initial instance
+     *
+     * @param label the label for this component
+     * @param index the index of this component
      */
     public RunningSample(String label, int index) {
         this.label = label;
@@ -120,6 +123,8 @@ public class RunningSample {
      * May be slightly skewed because it takes the timestamps of the first and
      * last samples as the total time passed, and the test may actually have
      * started before that start time and ended after that end time.
+     *
+     * @return throughput associated with this sampler per second
      */
     public double getRate() {
         if (counter == 0) {
@@ -140,6 +145,8 @@ public class RunningSample {
      * May be slightly skewed because it takes the timestamps of the first and
      * last samples as the total time passed, and the test may actually have
      * started before that start time and ended after that end time.
+     *
+     * @return throughput associated with this sampler per minute
      */
     public double getRatePerMin() {
         if (counter == 0) {
@@ -187,10 +194,16 @@ public class RunningSample {
         return rateFormatter.format(rate) + "/" + unit;
     }
 
+    /**
+     * @return the label for this component
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * @return the index of this component
+     */
     public int getIndex() {
         return index;
     }
@@ -198,6 +211,7 @@ public class RunningSample {
     /**
      * Records a sample.
      *
+     * @param res sample to record
      */
     public void addSample(SampleResult res) {
         long aTimeInMillis = res.getTime();
@@ -232,6 +246,8 @@ public class RunningSample {
     /**
      * Adds another RunningSample to this one.
      * Does not check if it has the same label and index.
+     *
+     * @param rs sample to add
      */
     public void addSample(RunningSample rs) {
         this.counter += rs.counter;

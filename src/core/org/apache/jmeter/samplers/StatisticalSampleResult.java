@@ -43,8 +43,8 @@ public class StatisticalSampleResult extends SampleResult implements
      *
      * @deprecated Needs to be replaced when multiple sample results are sorted out
      *
-     * @param stamp
-     * @param elapsed
+     * @param stamp this may be a start time or an end time (both in milliseconds)
+     * @param elapsed time in milliseconds
      */
     @Deprecated
     public StatisticalSampleResult(long stamp, long elapsed) {

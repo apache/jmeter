@@ -27,7 +27,7 @@ import org.apache.jmeter.testbeans.gui.TypeEditor;
 public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
 
     /**
-     *
+     * @param beanClass class to create bean info for
      */
     public JDBCTestElementBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass);
@@ -43,7 +43,8 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 "queryArgumentsTypes", // $NON-NLS-1$
                 "variableNames", // $NON-NLS-1$
                 "resultVariable", // $NON-NLS-1$
-                "queryTimeout" // $NON-NLS-1$
+                "queryTimeout", // $NON-NLS-1$
+                "resultSetHandler" // $NON-NLS-1$
                 });
 
         PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
@@ -61,6 +62,16 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
         p = property("variableNames"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
+
+        p = property("resultSetHandler"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, AbstractJDBCTestElement.RS_STORE_AS_STRING);
+        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p.setValue(TAGS,new String[]{
+                AbstractJDBCTestElement.RS_STORE_AS_STRING,
+                AbstractJDBCTestElement.RS_STORE_AS_OBJECT,
+                AbstractJDBCTestElement.RS_COUNT_RECORDS
+                });       
 
         p = property("resultVariable"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);

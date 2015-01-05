@@ -28,7 +28,6 @@ import org.apache.jmeter.samplers.Clearable;
 /**
  * MonitorGraph will draw the performance history of a given server. It displays
  * 4 lines:
- * <p>
  */
 public class MonitorGraph extends JComponent implements MonitorGuiListener, Clearable {
 

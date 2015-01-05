@@ -88,7 +88,7 @@ public class SampleResult implements Serializable, Cloneable {
      */
     public static final String BINARY = "bin"; // $NON-NLS-1$
 
-    /* empty arrays which can be returned instead of null */
+    /** empty array which can be returned instead of null */
     public static final byte[] EMPTY_BA = new byte[0];
 
     private static final SampleResult[] EMPTY_SR = new SampleResult[0];
@@ -364,9 +364,10 @@ public class SampleResult implements Serializable, Cloneable {
      * (used by StatVisualizerModel.Test)
      *
      * @param start
-     *            start time
+     *            start time in milliseconds since unix epoch
      * @param end
-     *            end time
+     *            end time in milliseconds since unix epoch
+     * @return sample with given start and end time
      */
     public static SampleResult createTestSample(long start, long end) {
         SampleResult res = new SampleResult();
@@ -379,8 +380,9 @@ public class SampleResult implements Serializable, Cloneable {
      * Create a sample with a specific elapsed time for test purposes, but don't
      * allow the times to be changed later
      *
-     * @param elapsed -
-     *            desired elapsed time
+     * @param elapsed
+     *            - desired elapsed time in milliseconds
+     * @return sample that starts 'now' and ends <code>elapsed</code> milliseconds later
      */
     public static SampleResult createTestSample(long elapsed) {
         long now = System.currentTimeMillis();
@@ -391,11 +393,14 @@ public class SampleResult implements Serializable, Cloneable {
      * Allow users to create a sample with specific timestamp and elapsed times
      * for cloning purposes, but don't allow the times to be changed later
      *
-     * Currently used by OldSaveService, CSVSaveService and StatisticalSampleResult
+     * Currently used by OldSaveService, CSVSaveService and
+     * StatisticalSampleResult
      *
-     * @param stamp -
-     *            this may be a start time or an end time
+     * @param stamp
+     *            this may be a start time or an end time (both in
+     *            milliseconds)
      * @param elapsed
+     *            time in milliseconds
      */
     public SampleResult(long stamp, long elapsed) {
         this();
@@ -406,7 +411,14 @@ public class SampleResult implements Serializable, Cloneable {
         return System.nanoTime() / 1000000;
     }
 
-    // Helper method to get 1 ms resolution timing.
+    /**
+     * Helper method to get 1 ms resolution timing.
+     * 
+     * @return the current time in milliseconds
+     * @throws RuntimeException
+     *             when <code>useNanoTime</code> is <code>true</code> but
+     *             <code>nanoTimeOffset</code> is not set
+     */
     public long currentTimeInMillis() {
         if (useNanoTime){
             if (nanoTimeOffset == Long.MIN_VALUE){
@@ -430,12 +442,16 @@ public class SampleResult implements Serializable, Cloneable {
         elapsedTime = elapsed;
     }
 
-    /*
+    /**
      * For use by SaveService only.
-     *
-     * @param stamp -
-     *            this may be a start time or an end time
+     * 
+     * @param stamp
+     *            this may be a start time or an end time (both in milliseconds)
      * @param elapsed
+     *            time in milliseconds
+     * @throws RuntimeException
+     *             when <code>startTime</code> or <code>endTime</code> has been
+     *             set already
      */
     public void setStampAndTime(long stamp, long elapsed) {
         if (startTime != 0 || endTime != 0){
@@ -447,8 +463,8 @@ public class SampleResult implements Serializable, Cloneable {
     /**
      * Set the "marked" flag to show that the result has been written to the file.
      *
-     * @param filename
-     * @return true if the result was previously marked
+     * @param filename the name of the file
+     * @return <code>true</code> if the result was previously marked
      */
     public synchronized boolean markFile(String filename) {
         return !files.add(filename);
@@ -568,6 +584,7 @@ public class SampleResult implements Serializable, Cloneable {
      * Add a subresult and adjust the parent byte count and end-time.
      * 
      * @param subResult
+     *            the {@link SampleResult} to be added
      */
     public void addSubResult(SampleResult subResult) {
         if(subResult == null) {
@@ -594,6 +611,7 @@ public class SampleResult implements Serializable, Cloneable {
      * Add a subresult to the collection without updating any parent fields.
      * 
      * @param subResult
+     *            the {@link SampleResult} to be added
      */
     public void addRawSubResult(SampleResult subResult){
         storeSubResult(subResult);
@@ -601,10 +619,13 @@ public class SampleResult implements Serializable, Cloneable {
 
     /**
      * Add a subresult read from a results file.
-     *
-     * As for addSubResult(), except that the fields don't need to be accumulated
+     * <p>
+     * As for {@link SampleResult#addSubResult(SampleResult)
+     * addSubResult(SampleResult)}, except that the fields don't need to be
+     * accumulated
      *
      * @param subResult
+     *            the {@link SampleResult} to be added
      */
     public void storeSubResult(SampleResult subResult) {
         if (subResults == null) {
@@ -950,10 +971,10 @@ public class SampleResult implements Serializable, Cloneable {
     }
 
     /**
-     * Stores the content-type string, e.g. "text/xml; charset=utf-8"
+     * Stores the content-type string, e.g. <code>text/xml; charset=utf-8</code>
      * @see #setEncodingAndType(String) which can be used to extract the charset.
      *
-     * @param string
+     * @param string the content-type to be set
      */
     public void setContentType(String string) {
         contentType = string;
@@ -1071,6 +1092,7 @@ public class SampleResult implements Serializable, Cloneable {
      * When a Sampler is working as a monitor
      *
      * @param monitor
+     *            flag whether this sampler is working as a monitor
      */
     public void setMonitor(boolean monitor) {
         isMonitor = monitor;
@@ -1138,10 +1160,11 @@ public class SampleResult implements Serializable, Cloneable {
      */
     /**
      * In the event the sampler does want to pass back the actual contents, we
-     * still want to calculate the throughput. The bytes is the bytes of the
+     * still want to calculate the throughput. The bytes are the bytes of the
      * response data.
      *
      * @param length
+     *            the number of bytes of the response data for this sample
      */
     public void setBytes(int length) {
         bytes = length;
@@ -1299,6 +1322,7 @@ public class SampleResult implements Serializable, Cloneable {
      * Set the headers size in bytes
      * 
      * @param size
+     *            the number of bytes of the header
      */
     public void setHeadersSize(int size) {
         this.headersSize = size;

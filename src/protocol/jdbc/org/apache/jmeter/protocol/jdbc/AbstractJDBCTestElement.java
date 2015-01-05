@@ -108,6 +108,10 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     static final String AUTOCOMMIT_FALSE = "AutoCommit(false)"; // $NON-NLS-1$
     static final String AUTOCOMMIT_TRUE  = "AutoCommit(true)"; // $NON-NLS-1$
 
+    static final String RS_STORE_AS_STRING = "Store as String"; // $NON-NLS-1$
+    static final String RS_STORE_AS_OBJECT = "Store as Object"; // $NON-NLS-1$
+    static final String RS_COUNT_RECORDS = "Count Records"; // $NON-NLS-1$
+
     private String query = ""; // $NON-NLS-1$
 
     private String dataSource = ""; // $NON-NLS-1$
@@ -116,6 +120,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private String queryArguments = ""; // $NON-NLS-1$
     private String queryArgumentsTypes = ""; // $NON-NLS-1$
     private String variableNames = ""; // $NON-NLS-1$
+    private String resultSetHandler = RS_STORE_AS_STRING; 
     private String resultVariable = ""; // $NON-NLS-1$
     private String queryTimeout = ""; // $NON-NLS-1$
 
@@ -242,6 +247,9 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     sb.append(i+1);
                     sb.append("] ");
                     sb.append(o);
+                    if( o instanceof java.sql.ResultSet && RS_COUNT_RECORDS.equals(resultSetHandler)) {
+                        sb.append(" ").append(countRows((ResultSet) o)).append(" rows");
+                    }
                     sb.append("\n");
                 }
             }
@@ -252,14 +260,37 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     String name = varnames[i].trim();
                     if (name.length()>0){ // Save the value in the variable if present
                         Object o = outputValues.get(i);
-                        jmvars.put(name, o == null ? null : o.toString());
+                        if( o instanceof java.sql.ResultSet ) { 
+                            ResultSet resultSet = (ResultSet) o;
+                            if(RS_STORE_AS_OBJECT.equals(resultSetHandler)) {
+                                jmvars.putObject(name, o);
+                            }
+                            else if( RS_COUNT_RECORDS.equals(resultSetHandler)) {
+                                jmvars.put(name,o.toString()+" "+countRows(resultSet)+" rows");
+                            }
+                            else {
+                                jmvars.put(name, o.toString());
+                            }
+                        }
+                        else {
+                            jmvars.put(name, o == null ? null : o.toString());
+                        }
                     }
                 }
             }
         }
         return sb.toString();
     }
-
+    
+    /**
+     * Count rows in result set
+     * @param resultSet {@link ResultSet}
+     * @return number of rows in resultSet
+     * @throws SQLException
+     */
+    private static final int countRows(ResultSet resultSet) throws SQLException {
+        return resultSet.last() ? resultSet.getRow() : 0;
+    }
 
     private int[] setArguments(PreparedStatement pstmt) throws SQLException, IOException {
         if (getQueryArguments().trim().length()==0) {
@@ -593,6 +624,20 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      */
     public void setVariableNames(String variableNames) {
         this.variableNames = variableNames;
+    }
+
+    /**
+     * @return the resultSetHandler
+     */
+    public String getResultSetHandler() {
+        return resultSetHandler;
+    }
+
+    /**
+     * @param resultSetHandler the resultSetHandler to set
+     */
+    public void setResultSetHandler(String resultSetHandler) {
+        this.resultSetHandler = resultSetHandler;
     }
 
     /**

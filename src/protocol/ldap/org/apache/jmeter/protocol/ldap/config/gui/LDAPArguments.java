@@ -102,6 +102,10 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
      *            the name of the argument
      * @param value
      *            the value of the argument
+     * @param opcode
+     *            the operation to perform, may be one of <code>add</code>,
+     *            <code>delete</code>, <code>remove</code> or
+     *            <code>modify</code>.
      */
     public void addArgument(String name, String value, String opcode) {
         addArgument(new LDAPArgument(name, value, opcode, null));
@@ -128,6 +132,10 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
      *            the name of the argument
      * @param value
      *            the value of the argument
+     * @param opcode
+     *            the operation to perform, may be one of <code>add</code>,
+     *            <code>delete</code>, <code>remove</code> or
+     *            <code>modify</code>.
      * @param metadata
      *            the metadata for the argument
      */

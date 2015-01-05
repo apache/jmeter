@@ -40,22 +40,22 @@ import org.apache.jmeter.testelement.TestElement;
 public interface Filter {
 
     /**
-     * @param oldextension
-     * @param newextension
+     * @param oldextension old extension
+     * @param newextension new extension
      */
     void setReplaceExtension(String oldextension, String newextension);
 
     /**
      * Include all files in the array.
      *
-     * @param filenames
+     * @param filenames names of files to include
      */
     void includeFiles(String[] filenames);
 
     /**
      * Exclude all files in the array
      *
-     * @param filenames
+     * @param filenames names of files to exclude
      */
     void excludeFiles(String[] filenames);
 
@@ -63,7 +63,7 @@ public interface Filter {
      * Include any log entry that contains the following regular expression
      * pattern.
      *
-     * @param regexp
+     * @param regexp list of regexp that match entries that should be included
      */
     void includePattern(String[] regexp);
 
@@ -71,7 +71,7 @@ public interface Filter {
      * Exclude any log entry that contains the following regular expression
      * pattern.
      *
-     * @param regexp
+     * @param regexp list of regexp that match entries that should be excluded
      */
     void excludePattern(String[] regexp);
 
@@ -80,7 +80,12 @@ public interface Filter {
      * filtered or not.
      *
      * @param path
-     * @return boolean
+     *            log line that should be checked if it should to be filtered
+     *            out
+     * @param sampler
+     *            {@link TestElement} in which the line would be added
+     * @return boolean <code>true</code> if line should be filtered out,
+     *         <code>false</code> otherwise
      */
     boolean isFiltered(String path,TestElement sampler);
 
@@ -90,7 +95,7 @@ public interface Filter {
      * is migrating from one platform to another and the file extension changes,
      * the filter provides an easy way to do it without spending a lot of time.
      *
-     * @param text
+     * @param text log line to be filtered
      * @return String
      */
     String filter(String text);

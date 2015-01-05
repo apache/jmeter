@@ -19,7 +19,7 @@
 package org.apache.jmeter.samplers;
 
 /**
- * Allows notification on events occuring during the sampling process.
+ * Allows notification on events occurring during the sampling process.
  * Specifically, when sampling is started, when a specific sample is obtained,
  * and when sampling is stopped.
  *
@@ -28,16 +28,25 @@ package org.apache.jmeter.samplers;
 public interface SampleListener {
     /**
      * A sample has started and stopped.
+     * 
+     * @param e
+     *            the {@link SampleEvent} that has occurred
      */
     void sampleOccurred(SampleEvent e);
 
     /**
      * A sample has started.
+     * 
+     * @param e
+     *            the {@link SampleEvent} that has started
      */
     void sampleStarted(SampleEvent e);
 
     /**
      * A sample has stopped.
+     * 
+     * @param e
+     *            the {@link SampleEvent} that has stopped
      */
     void sampleStopped(SampleEvent e);
 }

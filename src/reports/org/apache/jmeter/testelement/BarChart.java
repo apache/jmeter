@@ -53,7 +53,9 @@ public class BarChart extends AbstractChart {
 
     /**
      * Convert the data from SamplingStatCalculator to double array of array
+     * 
      * @param data
+     *            the data to convert
      * @return data values
      */
     public double[][] convertToDouble(List<SamplingStatCalculator> data) {

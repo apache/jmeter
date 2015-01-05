@@ -124,12 +124,19 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     private boolean showRawBodyPane;
 
+    /**
+     * Constructor which is setup to show HTTP implementation, raw body pane and
+     * sampler fields.
+     */
     public UrlConfigGui() {
         this(true);
     }
 
     /**
+     * Constructor which is setup to show HTTP implementation and raw body pane.
+     *
      * @param showSamplerFields
+     *            flag whether sampler fields should be shown.
      */
     public UrlConfigGui(boolean showSamplerFields) {
         this(showSamplerFields, true, true);
@@ -137,8 +144,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     /**
      * @param showSamplerFields
-     * @param showImplementation Show HTTP Implementation
-     * @param showRawBodyPane 
+     *            flag whether sampler fields should be shown
+     * @param showImplementation
+     *            Show HTTP Implementation
+     * @param showRawBodyPane
+     *            flag whether the raw body pane should be shown
      */
     public UrlConfigGui(boolean showSamplerFields, boolean showImplementation, boolean showRawBodyPane) {
         notConfigOnly=showSamplerFields;
@@ -190,7 +200,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     /**
      * Save the GUI values in the sampler.
      *
-     * @param element
+     * @param element {@link TestElement} to modify
      */
     public void modifyTestElement(TestElement element) {
         boolean useRaw = postContentTabbedPane.getSelectedIndex()==TAB_RAW_BODY;
@@ -637,8 +647,15 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         public void setSelectedIndex(int index) {
             setSelectedIndex(index, true);
         }
+        
         /**
          * Apply some check rules if check is true
+         *
+         * @param index
+         *            index to select
+         * @param check
+         *            flag whether to perform checks before setting the selected
+         *            index
          */
         public void setSelectedIndex(int index, boolean check) {
             int oldSelectedIndex = getSelectedIndex();

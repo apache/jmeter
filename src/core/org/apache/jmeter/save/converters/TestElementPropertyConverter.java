@@ -43,6 +43,8 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     * 
+     * @return the version of this converter
      */
     public static String getVersion() {
         return "$Revision$"; // $NON-NLS-1$
@@ -51,7 +53,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
-        return arg0.equals(TestElementProperty.class);
+        return TestElementProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */
@@ -136,7 +138,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
     }
 
     /**
-     * @param arg0
+     * @param arg0 the mapper
      */
     public TestElementPropertyConverter(Mapper arg0) {
         super(arg0);

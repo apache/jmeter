@@ -65,6 +65,12 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
      * while loop if a set number of lines is given.
      *
      * @param breader
+     *            reader to read lines from
+     * @param el
+     *            {@link TestElement} in which to add the parsed lines
+     * @param parseCount
+     *            max number of lines to parse
+     * @return number of read lines
      */
     protected int parse(FileServer breader, TestElement el, int parseCount) {
         int actualCount = 0;

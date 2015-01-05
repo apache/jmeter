@@ -99,6 +99,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     * 
+     * @return the version of this converter
      */
     public static String getVersion() {
         return "$Revision$"; //$NON-NLS-1$
@@ -125,9 +127,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Save the data of the sample result to a stream
+     *
      * @param writer
+     *            stream to save objects into
+     * @param context
+     *            context for xstream to allow nested objects
      * @param res
+     *            sample to be saved
      * @param save
+     *            configuration telling us what to save
      */
     protected void saveSamplerData(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
@@ -143,9 +152,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Save the response from the sample result into the stream
+     *
      * @param writer
+     *            stream to save objects into
+     * @param context
+     *            context for xstream to allow nested objects
      * @param res
+     *            sample to be saved
      * @param save
+     *            configuration telling us what to save
      */
     protected void saveResponseData(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
@@ -171,9 +187,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Save request headers from the sample result into the stream
+     *
      * @param writer
+     *            stream to save objects into
+     * @param context
+     *            context for xstream to allow nested objects
      * @param res
+     *            sample to be saved
      * @param save
+     *            configuration telling us what to save
      */
     protected void saveRequestHeaders(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
@@ -183,9 +206,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Save response headers from sample result into the stream
+     *
      * @param writer
+     *            stream to save objects into
+     * @param context
+     *            context for xstream to allow nested objects
      * @param res
+     *            sample to be saved
      * @param save
+     *            configuration telling us what to save
      */
     protected void saveResponseHeaders(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
@@ -195,10 +225,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Save sub results from sample result into the stream
+     *
      * @param writer
+     *            stream to save objects into
      * @param context
+     *            context for xstream to allow nested objects
      * @param res
+     *            sample to be saved
      * @param save
+     *            configuration telling us what to save
      */
     protected void saveSubResults(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
@@ -212,10 +248,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Save assertion results from the sample result into the stream
+     *
      * @param writer
+     *            stream to save objects into
      * @param context
+     *            context for xstream to allow nested objects
      * @param res
+     *            sample to be saved
      * @param save
+     *            configuration telling us what to save
      */
     protected void saveAssertions(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
@@ -228,9 +270,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Save attributes of the sample result to the stream
+     *
      * @param writer
+     *            stream to save objects into
+     * @param context
+     *            context for xstream to allow nested objects
      * @param res
+     *            sample to be saved
      * @param save
+     *            configuration telling us what to save
      */
     protected void setAttributes(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
@@ -293,9 +342,15 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
+     * Write a tag with with a content of <code>value</code> to the
+     * <code>writer</code>
+     * 
      * @param writer
+     *            writer to write the tag into
      * @param tag
+     *            name of the tag to use
      * @param value
+     *            content for tag
      */
     protected void writeString(HierarchicalStreamWriter writer, String tag, String value) {
         if (value != null) {
@@ -329,10 +384,11 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 
     /**
      *
-     * @param reader
-     * @param context
-     * @param res
-     * @return true if the item was processed (for HTTPResultConverter)
+     * @param reader stream from which the objects should be read
+     * @param context context for xstream to allow nested objects
+     * @param res sample result into which the information should be retrieved
+     * @param subItem sub item which should be added into <code>res</code>
+     * @return <code>true</code> if the item was processed (for HTTPResultConverter)
      */
     protected boolean retrieveItem(HierarchicalStreamReader reader, UnmarshallingContext context, SampleResult res,
             Object subItem) {
@@ -360,7 +416,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             res.setSamplerData((String) subItem);
         } else if (nodeName.equals(TAG_RESPONSE_FILE)) {
             res.setResultFileName((String) subItem);
-        // Don't try restoring the URL TODO: wy not?
+        // Don't try restoring the URL TODO: why not?
         } else {
             return false;
         }
@@ -368,8 +424,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
-     * @param reader
-     * @param res
+     * @param reader stream to read objects from
+     * @param context context for xstream to allow nested objects
+     * @param res sample result on which the attributes should be set
      */
     protected void retrieveAttributes(HierarchicalStreamReader reader, UnmarshallingContext context, SampleResult res) {
         res.setSampleLabel(ConversionHelp.decode(reader.getAttribute(ATT_LABEL)));
@@ -421,7 +478,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 
 
     /**
-     * @param arg0
+     * @param arg0 the mapper
      */
     public SampleResultConverter(Mapper arg0) {
         super(arg0);

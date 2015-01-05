@@ -179,7 +179,9 @@ public final class FileWrapper {
      * Gets the current row number (mainly for error reporting)
      *
      * @param file
-     * @return the current row number for this thread
+     *            name of the file for which the row number is asked
+     * @return the current row number for this thread, or <code>-1</code> if
+     *         <code>file</code> was not opened yet
      */
     public static int getCurrentRow(String file) {
 

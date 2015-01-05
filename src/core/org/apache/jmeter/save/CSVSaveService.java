@@ -128,6 +128,8 @@ public final class CSVSaveService {
      * @param resultCollector
      *            the parent collector
      * @throws IOException
+     *             when the file referenced by <code>filename</code> can't be
+     *             read correctly
      */
     public static void processSamples(String filename, Visualizer visualizer,
             ResultCollector resultCollector) throws IOException {
@@ -389,6 +391,8 @@ public final class CSVSaveService {
     /**
      * Generates the field names for the output file
      * 
+     * @param saveConfig
+     *            the configuration of what is to be saved
      * @return the field names as a string
      */
     public static String printableFieldNamesToString(
@@ -666,6 +670,7 @@ public final class CSVSaveService {
      * @param writer
      *            output file
      * @throws IOException
+     *             when writing to <code>writer</code> fails
      */
     public static void saveCSVStats(List<?> data, FileWriter writer)
             throws IOException {
@@ -685,6 +690,7 @@ public final class CSVSaveService {
      * @param headers
      *            header names (if non-null)
      * @throws IOException
+     *             when writing to <code>writer</code> fails
      */
     public static void saveCSVStats(List<?> data, FileWriter writer,
             String headers[]) throws IOException {
@@ -722,6 +728,7 @@ public final class CSVSaveService {
      * @param writer
      *            output file
      * @throws IOException
+     *             when writing to <code>writer</code> fails
      */
     public static void saveCSVStats(DefaultTableModel model, FileWriter writer)
             throws IOException {
@@ -730,8 +737,8 @@ public final class CSVSaveService {
 
     /**
      * Method saves aggregate statistics as CSV from a table model. Same as
-     * {@link #saveCSVStats(List, FileWriter, String[])} except that there is
-     * no need to create a List containing the data.
+     * {@link #saveCSVStats(List, FileWriter, String[])} except that there is no
+     * need to create a List containing the data.
      * 
      * @param model
      *            table model containing the data
@@ -740,6 +747,7 @@ public final class CSVSaveService {
      * @param saveHeaders
      *            whether or not to save headers
      * @throws IOException
+     *             when writing to <code>writer</code> fails
      */
     public static void saveCSVStats(DefaultTableModel model, FileWriter writer,
             boolean saveHeaders) throws IOException {

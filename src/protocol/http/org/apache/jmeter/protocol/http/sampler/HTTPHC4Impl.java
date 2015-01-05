@@ -434,13 +434,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Calls sendPostData if method is POST and sendEntityData if method is PUT or PATCH
+     * Calls {@link #sendPostData(HttpPost)} if method is <code>POST</code> and
+     * {@link #sendEntityData(HttpEntityEnclosingRequestBase)} if method is
+     * <code>PUT</code> or <code>PATCH</code>
+     * <p>
      * Field HTTPSampleResult#queryString of result is modified in the 2 cases
-     * @param method String HTTP method
-     * @param result {@link HTTPSampleResult}
-     * @param httpRequest {@link HttpRequestBase}
-     * @param localContext {@link HttpContext}
+     * 
+     * @param method
+     *            String HTTP method
+     * @param result
+     *            {@link HTTPSampleResult}
+     * @param httpRequest
+     *            {@link HttpRequestBase}
+     * @param localContext
+     *            {@link HttpContext}
      * @throws IOException
+     *             when posting data fails due to I/O
      */
     protected void handleMethod(String method, HTTPSampleResult result,
             HttpRequestBase httpRequest, HttpContext localContext) throws IOException {
@@ -729,10 +738,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * <li>Calls setConnectionHeaders to setup headers</li>
      * <li>Calls setConnectionCookie to setup Cookie</li>
      * </ul>
+     * 
      * @param url
+     *            {@link URL} of the request
      * @param httpRequest
+     *            http request for the request
      * @param res
+     *            sample result to set cookies on
      * @throws IOException
+     *             if hostname/ip to use could not be figured out
      */
     protected void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
         throws IOException {
@@ -963,7 +977,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * 
      * @param post {@link HttpPost}
      * @return String posted body if computable
-     * @throws IOException
+     * @throws IOException if sending the data fails due to I/O
      */
     protected String sendPostData(HttpPost post)  throws IOException {
         // Buffer to hold the post body, except file content

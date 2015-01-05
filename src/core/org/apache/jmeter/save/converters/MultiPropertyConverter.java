@@ -36,6 +36,8 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     * 
+     * @return the version of this converter
      */
     public static String getVersion() {
         return "$Revision$";  //$NON-NLS-1$
@@ -44,7 +46,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
-        return arg0.equals(CollectionProperty.class) || arg0.equals(MapProperty.class);
+        return CollectionProperty.class.equals(arg0) || MapProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */
@@ -76,7 +78,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     }
 
     /**
-     * @param arg0
+     * @param arg0 the mapper
      */
     public MultiPropertyConverter(Mapper arg0) {
         super(arg0);

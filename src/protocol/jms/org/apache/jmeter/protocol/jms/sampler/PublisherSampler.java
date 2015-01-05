@@ -269,7 +269,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      * The implementation uses TextFile to load the contents of the file and
      * returns a string.
      *
-     * @param path
+     * @param path path to the file to read in
      * @return the contents of the file
      */
     public String getFileContent(String path) {
@@ -404,6 +404,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      * set the source of the message
      *
      * @param choice
+     *            source of the messages. One of
+     *            {@link JMSPublisherGui#USE_FILE_RSC},
+     *            {@link JMSPublisherGui#USE_RANDOM_RSC} or
+     *            JMSPublisherGui#USE_TEXT_RSC
      */
     public void setConfigChoice(String choice) {
         setProperty(CONFIG_CHOICE, choice);
@@ -416,6 +420,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * return the source of the message
      * Converts from old JMX files which used the local language string
+     *
+     * @return source of the messages
      */
     public String getConfigChoice() {
         // Allow for the old JMX file which used the local language string
@@ -434,14 +440,14 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * set the type of the message
      *
-     * @param choice
+     * @param choice type of the message (Text, Object, Map)
      */
     public void setMessageChoice(String choice) {
         setProperty(MESSAGE_CHOICE, choice);
     }
 
     /**
-     * return the type of the message (Text, Object, Map)
+     * @return the type of the message (Text, Object, Map)
      *
      */
     public String getMessageChoice() {
@@ -451,14 +457,14 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * set the input file for the publisher
      *
-     * @param file
+     * @param file input file for the publisher
      */
     public void setInputFile(String file) {
         setProperty(INPUT_FILE, file);
     }
 
     /**
-     * return the path of the input file
+     * @return the path of the input file
      *
      */
     public String getInputFile() {
@@ -468,14 +474,14 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * set the random path for the messages
      *
-     * @param path
+     * @param path random path for the messages
      */
     public void setRandomPath(String path) {
         setProperty(RANDOM_PATH, path);
     }
 
     /**
-     * return the random path for messages
+     * @return the random path for messages
      *
      */
     public String getRandomPath() {
@@ -485,14 +491,14 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * set the text for the message
      *
-     * @param message
+     * @param message text for the message
      */
     public void setTextMessage(String message) {
         setProperty(TEXT_MSG, message);
     }
 
     /**
-     * return the text for the message
+     * @return the text for the message
      *
      */
     public String getTextMessage() {

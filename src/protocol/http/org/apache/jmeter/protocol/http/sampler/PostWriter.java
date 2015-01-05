@@ -44,7 +44,7 @@ public class PostWriter {
     private static final String DASH_DASH = "--";  // $NON-NLS-1$
     private static final byte[] DASH_DASH_BYTES = {'-', '-'};
 
-    /** The bounday string between multiparts */
+    /** The boundary string between multiparts */
     protected static final String BOUNDARY = "---------------------------7d159c1302d0y0"; // $NON-NLS-1$
 
     private static final byte[] CRLF = { 0x0d, 0x0A };
@@ -79,8 +79,13 @@ public class PostWriter {
     /**
      * Send POST data from Entry to the open connection.
      *
-     * @return the post body sent. Actual file content is not returned, it
-     * is just shown as a placeholder text "actual file content"
+     * @param connection
+     *            the open connection to use for sending data
+     * @param sampler
+     *            sampler to get information about what to send
+     * @return the post body sent. Actual file content is not returned, it is
+     *         just shown as a placeholder text "actual file content"
+     * @throws IOException when writing data fails
      */
     public String sendPostData(URLConnection connection, HTTPSamplerBase sampler) throws IOException {
         // Buffer to hold the post body, except file content

@@ -35,7 +35,7 @@ public class OrderPreservingLogParser extends SharedTCLogParser {
      * of lines parsed will depend the filter and number of lines in the log.
      * The method returns the actual lines parsed.
      * 
-     * @param count
+     * @param count number of max lines to read
      * @return lines parsed
      */
     @Override

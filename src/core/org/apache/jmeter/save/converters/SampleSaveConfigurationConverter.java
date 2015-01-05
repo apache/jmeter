@@ -103,6 +103,8 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     * 
+     * @return the version of this converter
      */
     public static String getVersion() {
         return "$Revision$"; // $NON-NLS-1$
@@ -111,7 +113,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
-        return arg0.equals(SampleSaveConfiguration.class);
+        return SampleSaveConfiguration.class.equals(arg0);
     }
 
     /** {@inheritDoc} */

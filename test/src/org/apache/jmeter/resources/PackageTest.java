@@ -234,7 +234,7 @@ public class PackageTest extends TestCase {
 
     /**
      * Find I18N resources in classpath
-     * @param srcFiledir
+     * @param srcFiledir directory in which the files reside
      * @return list of properties files subject to I18N
      */
     public static final String[] getResources(File srcFiledir) {
@@ -253,10 +253,16 @@ public class PackageTest extends TestCase {
     }
     
     /**
-     * Find resources matching filenamefiler and adds them to set removing everything before "/org"
+     * Find resources matching filenamefiler and adds them to set removing
+     * everything before "/org"
+     * 
      * @param file
+     *            directory in which the files reside
      * @param set
+     *            container into which the names of the files should be added
      * @param filenameFilter
+     *            filter that the files must satisfy to be included into
+     *            <code>set</code>
      */
     private static void findFile(File file, Set<String> set,
             FilenameFilter filenameFilter) {
@@ -327,7 +333,7 @@ public class PackageTest extends TestCase {
 
     /**
      * Check all messages are available in one language
-     * @throws Exception
+     * @throws Exception if something fails
      */
     public void checkI18n() throws Exception {
         Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();
@@ -368,13 +374,19 @@ public class PackageTest extends TestCase {
         for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
             Map.Entry<Object,Object> entry = iterator.next();
             String key = (String)entry.getKey();
+            final String I18NString = "[\\d% ]+";// numeric, space and % don't need translation
             if(!messagesFr.containsKey(key)) {
                 String value = (String) entry.getValue();
                 // TODO improve check of values that don't need translation
-                if (value.matches("[\\d%]+")) {// numeric and % don't need translation
-                    System.out.println("Ignoring missing "+key+"="+value+" in "+languageBundle); // TODO convert to list and display at end
+                if (value.matches(I18NString)) {
+                    // System.out.println("Ignoring missing "+key+"="+value+" in "+languageBundle); // TODO convert to list and display at end
                 } else {
                     missingLabels.put(key,(String) entry.getValue());
+                }
+            } else {
+                String value = (String) entry.getValue();
+                if (value.matches(I18NString)) {
+                    System.out.println("Unnecessary entry "+key+"="+value+" in "+languageBundle);
                 }
             }
         }

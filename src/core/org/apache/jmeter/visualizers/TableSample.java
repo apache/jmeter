@@ -101,6 +101,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     }
 
     /**
+     * @param format the format to be used on the time
      * @return the start time using the specified format
      * Intended for use from Functors
      */

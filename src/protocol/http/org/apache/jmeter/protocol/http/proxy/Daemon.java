@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,7 +75,9 @@ public class Daemon extends Thread implements Stoppable {
      * @param target
      *            the target which will receive the generated JMeter test
      *            components.
-     * @throws IOException 
+     * @throws IOException if an I/O error occurs opening the socket
+     * @throws IllegalArgumentException if <code>port</code> is outside the allowed range from <code>0</code> to <code>65535</code>
+     * @throws SocketException when something is wrong on the underlying protocol layer
      */
     public Daemon(int port, ProxyControl target) throws IOException {
         this(port, target, Proxy.class);
@@ -92,7 +95,9 @@ public class Daemon extends Thread implements Stoppable {
      * @param proxyClass
      *            the proxy class to use to handle individual requests. This
      *            class must be the {@link Proxy} class or a subclass.
-     * @throws IOException 
+     * @throws IOException if an I/O error occurs opening the socket
+     * @throws IllegalArgumentException if <code>port</code> is outside the allowed range from <code>0</code> to <code>65535</code>
+     * @throws SocketException when something is wrong on the underlying protocol layer
      */
     public Daemon(int port, ProxyControl target, Class<? extends Proxy> proxyClass) throws IOException {
         super("HTTP Proxy Daemon");

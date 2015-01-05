@@ -134,7 +134,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
      * @param bsh the interpreter, not {@code null}
      * @return the result of the script, may be {@code null}
      * 
-     * @throws JMeterException
+     * @throws JMeterException when working with the bsh fails
      */
     protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException{
         String fileName = getFilename();

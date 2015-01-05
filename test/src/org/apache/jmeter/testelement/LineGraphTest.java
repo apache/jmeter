@@ -34,7 +34,7 @@ public class LineGraphTest extends JMeterTestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
-     * @param arg0
+     * @param arg0 name of the test case
      */
     public LineGraphTest(String arg0) {
         super(arg0);

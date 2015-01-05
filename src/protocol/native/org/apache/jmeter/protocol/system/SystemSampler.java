@@ -197,13 +197,18 @@ public class SystemSampler extends AbstractSampler {
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
 
+    /**
+     * @return working directory to use for system commands
+     */
     public String getDirectory() {
         return getPropertyAsString(DIRECTORY, FileServer.getDefaultBase());
     }
-    
+
     /**
+     * Set the working directory to use for system commands
      * 
      * @param directory
+     *            working directory to use for system commands
      */
     public void setDirectory(String directory) {
         setProperty(DIRECTORY, directory, FileServer.getDefaultBase());

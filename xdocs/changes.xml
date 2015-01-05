@@ -140,6 +140,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+<li><bug>57385</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -153,6 +154,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <h3>Listeners</h3>
 <ul>
 <li><bug>57262</bug>Aggregate Report, Aggregate Graph and Summary Report export : headers use keys instead of labels</li>
+<li><bug>57346</bug>Summariser : The + (difference) reports show wrong elapsed time and throughput</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -169,8 +171,9 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>General</h3>
 <ul>
-<li><bugzilla>57303</bugzilla> - commons-math3 dependency is missing in the jmeter lib package (nightly build)</li>
-<li><bugzilla>57306</bugzilla> - backend_listener.png is missing in the JMeter User Doc (affects nightly build)</li>
+<li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57364</bug>Options &lt; Look And Feel does not update all windows LAF. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57394</bug>When constructing an instance with ClassTools#construct(String, int) the integer was ignored and the default constructor was used instead.</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -179,10 +182,13 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+<li><bug>25430</bug>HTTP(S) Test Script Recorder : Make it populate HTTP Authorisation Manager. Partly based on a patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><bug>57381</bug>HTTP(S) Test Script Recorder should display an error if Target Controller references a Recording Controller and no Recording Controller exists. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>57322</bug>JDBC Test elements: add ResultHandler to deal with ResultSets(cursors) returned by callable statements. Contributed by Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -214,21 +220,25 @@ See  <bugzilla>56357</bugzilla> for details.
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
-<li>Updated to jsoup-1.8.1.jar (from 1.7.3)</li>
+<li>Updated to jsoup-1.8.3.jar (from 1.7.3)</li>
 <li><bug>57276</bug>RMIC no longer needed since Java 5</li>
 <li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
+<li><bug>57389</bug>Fix potential NPE in converters</li>
 </ul>
 
 <ch_section>Thanks</ch_section>
 <p>We thank all contributors mentioned in bug and improvement sections above:
 <ul>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+<li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 </ul>
 
 <br/>
 We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
 <ul>
-<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Chaitanya Bhatt (bhatt.chaitanya@gmail.com) for his thorough testing of new BackendListener and Graphite Client implementation.</li>
 </ul>
 
 Apologies if we have omitted anyone else.

@@ -51,7 +51,6 @@ import org.apache.log.Logger;
  * BufferedReader. The implementation uses StringTokenizer to create tokens.
  * <p>
  * The parse algorithm is the following:
- * <p>
  * <ol>
  * <li> cleans the entry by looking for backslash "\"
  * <li> looks to see if GET or POST is in the line
@@ -72,8 +71,6 @@ import org.apache.log.Logger;
  * Tomcat uses common log format, so any webserver that uses the format should
  * work with this parser. Servers that are known to use non standard formats are
  * IIS and Netscape.
- * <p>
- *
  */
 
 public class TCLogParser implements LogParser {
@@ -130,7 +127,7 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * @param source
+     * @param source name of the source file
      */
     public TCLogParser(String source) {
         setSourceFile(source);
@@ -159,6 +156,7 @@ public class TCLogParser implements LogParser {
      * default, the parser uses the file in the log.
      *
      * @param file
+     *            flag whether to use the path from the log
      */
     public void setUseParsedFile(boolean file) {
         this.useFILE = file;
@@ -248,6 +246,7 @@ public class TCLogParser implements LogParser {
      * @param breader {@link BufferedReader} to read lines from
      * @param el {@link TestElement} to read lines into
      * @param parseCount number of lines to read
+     * @return number of lines parsed
      */
     protected int parse(BufferedReader breader, TestElement el, int parseCount) {
         int actualCount = 0;
@@ -288,6 +287,7 @@ public class TCLogParser implements LogParser {
      *
      * @param line single line to be parsed
      * @param el {@link TestElement} in which the line will be added
+     * @return number of lines parsed (zero or one, actually)
      */
     protected int parseLine(String line, TestElement el) {
         int count = 0;

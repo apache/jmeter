@@ -481,7 +481,7 @@ public final class JOrphanUtils {
      * @param length number of bytes to read
      *
      * @return the number of bytes actually read
-     * @throws IOException
+     * @throws IOException if some I/O errors occur
      */
     public static int read(InputStream is, byte[] buffer, int offset, int length) throws IOException {
         int remaining = length;

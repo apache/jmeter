@@ -53,7 +53,7 @@ public class FormCharSetFinder {
      * @param html the html to parse for form encodings
      * @param formEncodings the Map where form encodings should be added
      * @param pageEncoding the encoding used for the whole page
-     * @throws HTMLParseException
+     * @throws HTMLParseException when parsing the <code>html</code> fails
      */
     public void addFormActionsAndCharSet(String html, Map<String, String> formEncodings, String pageEncoding)
             throws HTMLParseException {

@@ -138,6 +138,7 @@ public abstract class HTMLParser {
      *            Base URL from which the HTML code was obtained
      * @param encoding Charset
      * @return an Iterator for the resource URLs
+     * @throws HTMLParseException when parsing the <code>html</code> fails
      */
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, String encoding) throws HTMLParseException {
         // The Set is used to ignore duplicated binary files.
@@ -173,7 +174,7 @@ public abstract class HTMLParser {
      * Malformed URLs can be reported to the caller by having the Iterator
      * return the corresponding RL String. Overall problems parsing the html
      * should be reported by throwing an HTMLParseException.
-     *
+     * <p>
      * N.B. The Iterator returns URLs, but the Collection will contain objects
      * of class URLString.
      *
@@ -187,6 +188,7 @@ public abstract class HTMLParser {
      *            URLCollection
      * @param encoding Charset
      * @return an Iterator for the resource URLs
+     * @throws HTMLParseException when parsing the <code>html</code> fails
      */
     public abstract Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection coll, String encoding)
             throws HTMLParseException;
@@ -195,7 +197,7 @@ public abstract class HTMLParser {
      * Get the URLs for all the resources that a browser would automatically
      * download following the download of the HTML content, that is: images,
      * stylesheets, javascript files, applets, etc...
-     *
+     * <p>
      * N.B. The Iterator returns URLs, but the Collection will contain objects
      * of class URLString.
      *
@@ -209,6 +211,7 @@ public abstract class HTMLParser {
      *            Collection - will contain URLString objects, not URLs
      * @param encoding Charset
      * @return an Iterator for the resource URLs
+     * @throws HTMLParseException when parsing the <code>html</code> fails
      */
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) throws HTMLParseException {
         return getEmbeddedResourceURLs(userAgent, html, baseUrl, new URLCollection(coll), encoding);

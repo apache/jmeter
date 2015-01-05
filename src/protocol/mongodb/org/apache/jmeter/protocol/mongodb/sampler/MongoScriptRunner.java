@@ -34,11 +34,15 @@ public class MongoScriptRunner {
     }
 
     /**
-     * 
+     * Evaluate a script on the database
+     *
      * @param db
+     *            database connection to use
      * @param script
-     * @return Object
+     *            script to evaluate on the database
+     * @return result of evaluation on the database
      * @throws Exception
+     *             when evaluation on the database fails
      */
     public Object evaluate(DB db, String script)
         throws Exception {

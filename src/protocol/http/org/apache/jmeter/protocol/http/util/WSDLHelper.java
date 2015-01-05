@@ -84,11 +84,24 @@ public class WSDLHelper {
 
     /**
      * Default constructor takes a string URL
+     *
+     * @param url
+     *            url to the wsdl
+     * @throws MalformedURLException
+     *             if <code>url</code> is malformed
      */
     public WSDLHelper(String url) throws MalformedURLException {
         this(url, null);
     }
 
+    /**
+     * @param url
+     *            url to the wsdl
+     * @param auth
+     *            {@link AuthManager} to use
+     * @throws MalformedURLException
+     *             if <code>url</code> is malformed
+     */
     public WSDLHelper(String url, AuthManager auth) throws MalformedURLException {
         WSDLURL = new URL(url);
         this.AUTH = auth;
@@ -106,6 +119,8 @@ public class WSDLHelper {
     /**
      * Return the protocol from the URL. this is needed, so that HTTPS works
      * as expected.
+     *
+     * @return protocol extracted from url
      */
     public String getProtocol() {
         return this.bindingURL.getProtocol();
@@ -113,6 +128,8 @@ public class WSDLHelper {
 
     /**
      * Return the host in the WSDL binding address
+     *
+     * @return host extracted from url
      */
     public String getBindingHost() {
         return this.bindingURL.getHost();
@@ -120,6 +137,8 @@ public class WSDLHelper {
 
     /**
      * Return the path in the WSDL for the binding address
+     *
+     * @return path extracted from url
      */
     public String getBindingPath() {
         return this.bindingURL.getPath();
@@ -127,6 +146,8 @@ public class WSDLHelper {
 
     /**
      * Return the port for the binding address
+     *
+     * @return port extracted from url
      */
     public int getBindingPort() {
         return this.bindingURL.getPort();
@@ -216,6 +237,8 @@ public class WSDLHelper {
      * Call this method to retrieve the WSDL. This method must be called,
      * otherwise a connection to the URL won't be made and the stream won't be
      * parsed.
+     *
+     * @throws WSDLException when parsing fails
      */
     public void parse() throws WSDLException {
         try {
@@ -235,6 +258,8 @@ public class WSDLHelper {
 
     /**
      * Get a list of the web methods as a string array.
+     *
+     * @return list of web methods
      */
     public String[] getWebMethods() {
         for (int idx = 0; idx < SOAPOPS.length; idx++) {
@@ -266,6 +291,10 @@ public class WSDLHelper {
 
     /**
      * Return the soap action matching the operation name.
+     *
+     * @param key
+     *            name of the operation
+     * @return associated action
      */
     public String getSoapAction(String key) {
         return this.ACTIONS.get(key);
@@ -273,6 +302,8 @@ public class WSDLHelper {
 
     /**
      * Get the wsdl document.
+     *
+     * @return wsdl document
      */
     public Document getWSDLDocument() {
         return WSDLDOC;
@@ -360,7 +391,7 @@ public class WSDLHelper {
      * Simple test for the class uses bidbuy.wsdl from Apache's soap driver
      * examples.
      *
-     * @param args
+     * @param args standard arguments for a main class (not used here)
      */
     public static void main(String[] args) {
         try {

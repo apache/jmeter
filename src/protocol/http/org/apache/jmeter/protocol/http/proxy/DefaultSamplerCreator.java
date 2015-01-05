@@ -116,7 +116,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @param request {@link HttpRequestHdr}
      * @param pageEncodings Map of page encodings
      * @param formEncodings Map of form encodings
-     * @throws Exception
+     * @throws Exception when something fails
      */
     protected void computeFromHeader(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
@@ -141,7 +141,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * Compute sampler informations from Request Header
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
-     * @throws Exception
+     * @throws Exception when something fails
      */
     protected void computeFromPostBody(HTTPSamplerBase sampler,
             HttpRequestHdr request) throws Exception {
@@ -345,6 +345,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @param request {@link HttpRequestHdr}
      * @param pageEncodings Map of page encodings
      * @param formEncodings Map of form encodings
+     * @param urlWithoutQuery the request URL without the query parameters
      * @return String content encoding
      */
     protected String computeContentEncoding(HttpRequestHdr request,

@@ -30,6 +30,8 @@ import org.apache.commons.lang3.mutable.MutableLong;
  * This class serves as a way to calculate the median, max, min etc. of a list of values.
  * It is not threadsafe.
  *
+ * @param <T> type parameter for the calculator
+ *
  */
 public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
@@ -114,6 +116,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * are below, the remaining 10% are above.
      *
      * @param percent
+     *            number representing the wished percent (between <code>0</code>
+     *            and <code>1.0</code>)
      * @return number of values less than the percentage
      */
     public T getPercentPoint(float percent) {
@@ -127,6 +131,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * are below, the remaining 10% are above.
      *
      * @param percent
+     *            number representing the wished percent (between <code>0</code>
+     *            and <code>1.0</code>)
      * @return the value which %percent% of the values are less than
      */
     public T getPercentPoint(double percent) {

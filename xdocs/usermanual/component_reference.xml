@@ -589,6 +589,13 @@ the additional variables for rows 4, 5 and 6 will be removed.
         Each map contains the column name as the key and the column data as the value. Usage:<br></br>
         <code>columnValue = vars.getObject("resultObject").get(0).get("Column Name");</code>
         </property>
+        <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
+            <ul>
+                <li>Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a ResultSets when present on the list.</li>
+                <li>Store As Object - Variables of ResultSet type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the ResultSet </li>
+                <li>Count Records - Variables of ResultSet types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
+            </ul>
+        </property>
 </properties>
 
 <links>
@@ -3408,9 +3415,9 @@ By default, a Graphite implementation is provided.
 
     <properties>
         <property name="graphiteMetricsSender" required="Yes">org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender or org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</property>
-        <property name="graphiteHost" required="Yes">Graphite or InfluxDB or CollectD server port</property>
-        <property name="graphitePort" required="Yes">Graphite or InfluxDB or CollectD server port, defaults to 2003. Note PickleGraphiteMetricsSender can only talk to Graphite server.</property>
-        <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to ""jmeter."</property>
+        <property name="graphiteHost" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) or CollectD (with Graphite plugin enabled) server port</property>
+        <property name="graphitePort" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) or CollectD (with Graphite plugin enabled) server port, defaults to 2003. Note PickleGraphiteMetricsSender (port 2004) can only talk to Graphite server.</property>
+        <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to "jmeter."</property>
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to true.</property>
         <property name="samplersList" required="Yes">Semicolon separated list of samplers for which you want to report metrics to backend.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
@@ -6296,8 +6303,11 @@ plan because they are likely to change between runs.
 </p>
 <h4>Authorization Manager</h4>
 <p>
-The Proxy server passes on any Authorization headers sent by the browser, but does not save them in the test plan.
-If the site requires Authorization, you will need to add an Authorization Manager and fill it in with the necessary entries.
+The HTTP(S) Test Script Recorder grabs "Authentication" header, tries to compute the Auth Policy. If Authorization Manager was added to target
+controller manually, HTTP(S) Test Script Recorder will find it and add authorization(matching ones will be removed). Otherwise
+Authorization Manager will be added to target controller with authorization object.
+You may have to fix automatically computed values after recording.
+
 </p>
 <h4>Uploading files</h4>
 <p>

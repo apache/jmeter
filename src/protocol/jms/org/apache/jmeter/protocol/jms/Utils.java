@@ -133,9 +133,12 @@ public final class Utils {
      * Method will lookup a given destination (topic/queue) using JNDI.
      *
      * @param context
-     * @param name the destination name
+     *            context to use for lookup
+     * @param name
+     *            the destination name
      * @return the destination, never null
-     * @throws NamingException if the name cannot be found as a Destination
+     * @throws NamingException
+     *             if the name cannot be found as a Destination
      */
     public static Destination lookupDestination(Context context, String name) throws NamingException {
         Object o = context.lookup(name);
@@ -146,12 +149,16 @@ public final class Utils {
     }
 
     /**
-     * Get value from Context environment taking into account non fully compliant
-     * JNDI implementations
+     * Get value from Context environment taking into account non fully
+     * compliant JNDI implementations
+     *
      * @param context
+     *            context to use
      * @param key
-     * @return String or null if context.getEnvironment() is not compliant
-     * @throws NamingException 
+     *            key to lookup in contexts environment
+     * @return String or <code>null</code> if context.getEnvironment() is not compliant
+     * @throws NamingException
+     *             if a naming problem occurs while getting the environment
      */
     public static final String getFromEnvironment(Context context, String key) throws NamingException {
         try {
@@ -173,10 +180,14 @@ public final class Utils {
      * Obtain the queue connection from the context and factory name.
      * 
      * @param ctx
+     *            context to use
      * @param factoryName
+     *            name of the object factory to look up in <code>context</code>
      * @return the queue connection
      * @throws JMSException
+     *             when creation of the connection fails
      * @throws NamingException
+     *             when lookup in context fails
      */
     public static Connection getConnection(Context ctx, String factoryName) throws JMSException, NamingException {
         Object objfac = null;

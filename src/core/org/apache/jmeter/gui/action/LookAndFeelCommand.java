@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,9 +30,7 @@ import java.util.prefs.Preferences;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -57,27 +58,19 @@ public class LookAndFeelCommand implements Command {
         for (int i = 0; i < lfs.length; i++) {
             commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
         }
-
-        try {
-            String jMeterLaf = getJMeterLaf();
-            UIManager.setLookAndFeel(jMeterLaf);
-            if (log.isInfoEnabled()) {
-                ArrayList<String> names=new ArrayList<String>();
-                for(UIManager.LookAndFeelInfo laf : lfs) {
-                    if (laf.getClassName().equals(jMeterLaf)) {
-                        names.add(laf.getName());
-                    }
-                }
-                if (names.size() > 0) {
-                    log.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
-                } else {
-                    log.info("Using look and feel: "+jMeterLaf);
+        String jMeterLaf = getJMeterLaf();
+        if (log.isInfoEnabled()) {
+            ArrayList<String> names=new ArrayList<String>();
+            for(UIManager.LookAndFeelInfo laf : lfs) {
+                if (laf.getClassName().equals(jMeterLaf)) {
+                    names.add(laf.getName());
                 }
             }
-        } catch (IllegalAccessException e) {
-        } catch (ClassNotFoundException e) {
-        } catch (InstantiationException e) {
-        } catch (UnsupportedLookAndFeelException e) {
+            if (names.size() > 0) {
+                log.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
+            } else {
+                log.info("Using look and feel: "+jMeterLaf);
+            }
         }
     }
 
@@ -85,17 +78,15 @@ public class LookAndFeelCommand implements Command {
      * Get LookAndFeel classname from the following properties:
      * <ul>
      * <li>User preferences key: "laf"</li>
-     * <li>jmeter.laf.&lt;os.name> - lowercased; spaces replaced by '_'</li>
-     * <li>jmeter.laf.&lt;os.family> - lowercased.</li>
+     * <li>jmeter.laf.&lt;os.name&gt; - lowercased; spaces replaced by '_'</li>
+     * <li>jmeter.laf.&lt;os.family&gt; - lowercased.</li>
      * <li>jmeter.laf</li>
      * <li>UIManager.getCrossPlatformLookAndFeelClassName()</li>
      * </ul>
      * @return LAF classname
      */
-    private static String getJMeterLaf(){
-        String laf;
-
-        laf = PREFS.get(USER_PREFS_KEY, null);
+    public static String getJMeterLaf(){
+        String laf = PREFS.get(USER_PREFS_KEY, null);
         if (laf != null) {
             return checkLafName(laf);            
         }
@@ -138,7 +129,15 @@ public class LookAndFeelCommand implements Command {
         try {
             String className = ev.getActionCommand().substring(ActionNames.LAF_PREFIX.length()).replace('/', '.');
             UIManager.setLookAndFeel(className);
-            SwingUtilities.updateComponentTreeUI(GuiPackage.getInstance().getMainFrame());
+            for (Window w : Window.getWindows()) {
+                SwingUtilities.updateComponentTreeUI(w);
+                if (w.isDisplayable() &&
+                    (w instanceof Frame ? !((Frame)w).isResizable() :
+                    w instanceof Dialog ? !((Dialog)w).isResizable() :
+                    true)) {
+                    w.pack();
+                }
+            }
             PREFS.put(USER_PREFS_KEY, className);
         } catch (javax.swing.UnsupportedLookAndFeelException e) {
             JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());

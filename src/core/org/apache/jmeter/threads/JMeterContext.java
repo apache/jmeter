@@ -164,8 +164,10 @@ public class JMeterContext {
     }
 
     /**
-     * if set to true a restart of the loop will occurs
+     * if set to <code>true</code> a restart of the loop will occurs
+     *
      * @param restartNextLoop
+     *            flag whether restart will occur
      */
     public void setRestartNextLoop(boolean restartNextLoop) {
         this.restartNextLoop = restartNextLoop;

@@ -68,9 +68,9 @@ public class LagartoBasedHtmlParser extends HTMLParser {
         private Stack<Boolean> enabled = new Stack<Boolean>();
 
         /**
-         * @param baseUrl 
-         * @param urls 
-         * @param ieVersion 
+         * @param baseUrl base url to add possibly missing information to urls found in <code>urls</code>
+         * @param urls collection of urls to consider
+         * @param ieVersion version number of IE to emulate
          */
         public JMeterTagVisitor(final URLPointer baseUrl, URLCollection urls, Float ieVersion) {
             this.urls = urls;

@@ -55,12 +55,13 @@ import org.apache.log.Logger;
  * Holds details of which sample attributes to save.
  *
  * The pop-up dialogue for this is created by the class SavePropertyDialog, which assumes:
- * For each field XXX
- * - methods have the signature "boolean saveXXX()"
- * - a corresponding "void setXXX(boolean)" method
- * - messages.properties contains the key save_XXX
- *
- *
+ * <p>
+ * For each field <em>XXX</em>
+ * <ul>
+ *  <li>methods have the signature "boolean save<em>XXX</em>()"</li>
+ *  <li>a corresponding "void set<em>XXX</em>(boolean)" method</li>
+ *  <li>messages.properties contains the key save_<em>XXX</em></li>
+ * </ul>
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final long serialVersionUID = 7L;
@@ -790,6 +791,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     /**
      * Only intended for use by OldSaveService (and test cases)
+     * 
+     * @param fmt
+     *            format of the date to be saved. If <code>null</code>
+     *            milliseconds since epoch will be printed
      */
     public void setFormatter(DateFormat fmt){
         printMilliseconds = (fmt == null); // maintain relationship

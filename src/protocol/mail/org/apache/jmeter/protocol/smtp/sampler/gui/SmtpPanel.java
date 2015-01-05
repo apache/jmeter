@@ -342,7 +342,7 @@ public class SmtpPanel extends JPanel {
     /**
      * Sets the property that defines if the subject header should be suppressed
      *
-     * @param emptySubject
+     * @param emptySubject flag whether subject header should be suppressed
      *
      */
     public void setSuppressSubject(boolean emptySubject) {
@@ -379,7 +379,7 @@ public class SmtpPanel extends JPanel {
     /**
      * Set whether mail server needs auth.
      *
-     * @param selected
+     * @param selected flag whether mail server needs auth
      */
     public void setUseAuth(boolean selected){
         cbUseAuth.setSelected(selected);

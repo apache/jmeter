@@ -128,7 +128,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     /**
      * Reset pack to its initial state
-     * @param pack
+     * @param pack the {@link SamplePackage} to reset
      */
     public void done(SamplePackage pack) {
         pack.recoverRunningVersion();

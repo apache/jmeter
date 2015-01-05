@@ -194,6 +194,8 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     /**
      * Get the number of active threads
+     *
+     * @return the number of active threads
      */
     public int getNumberOfThreads() {
         return numberOfThreads.get();

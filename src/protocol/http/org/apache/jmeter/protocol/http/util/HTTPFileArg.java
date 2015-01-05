@@ -55,6 +55,11 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
 
     /**
      * Constructor for the HTTPFileArg object with given path.
+     *
+     * @param path
+     *            path to the file to use
+     * @throws IllegalArgumentException
+     *             if <code>path</code> is <code>null</code>
      */
     public HTTPFileArg(String path) {
         this(path, "", "");
@@ -62,6 +67,15 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
 
     /**
      * Constructor for the HTTPFileArg object with full information.
+     *
+     * @param path
+     *            path of the file to use
+     * @param paramname
+     *            name of the http parameter to use for the file
+     * @param mimetype
+     *            mimetype of the file
+     * @throws IllegalArgumentException
+     *             if any parameter is <code>null</code>
      */
     public HTTPFileArg(String path, String paramname, String mimetype) {
         if (path == null || paramname == null || mimetype == null){
@@ -75,6 +89,15 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     /**
      * Constructor for the HTTPFileArg object with full information,
      * using existing properties
+     *
+     * @param path
+     *            path of the file to use
+     * @param paramname
+     *            name of the http parameter to use for the file
+     * @param mimetype
+     *            mimetype of the file
+     * @throws IllegalArgumentException
+     *             if any parameter is <code>null</code>
      */
     public HTTPFileArg(JMeterProperty path, JMeterProperty paramname, JMeterProperty mimetype) {
         if (path == null || paramname == null || mimetype == null){
@@ -93,6 +116,12 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
 
     /**
      * Copy Constructor.
+     *
+     * @param file
+     *            {@link HTTPFileArg} to get information about the path, http
+     *            parameter name and mimetype of the file
+     * @throws IllegalArgumentException
+     *             if any of those retrieved information is <code>null</code>
      */
     public HTTPFileArg(HTTPFileArg file) {
         this(file.getPath(), file.getParamName(), file.getMimeType());
@@ -170,6 +199,8 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
 
    /**
     * Gets the saved body header for the HTTPFileArg object.
+    *
+    * @return saved body header
     */
    public String getHeader() {
        return header;

@@ -219,6 +219,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     /**
      * Clean DNS cache each iteration
      *
+     * @param clear
+     *            flag whether DNS cache should be cleared on each iteration
      */
     public void setClearEachIteration(boolean clear) {
         setProperty(new BooleanProperty(CLEAR_CACHE_EACH_ITER, clear));

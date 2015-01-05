@@ -31,6 +31,8 @@ public class IntegerPropertyConverter implements Converter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     * 
+     * @return the version of this converter
      */
     public static String getVersion() {
         return "$Revision$"; // $NON-NLS-1$
@@ -39,7 +41,7 @@ public class IntegerPropertyConverter implements Converter {
     /** {@inheritDoc} */
     @Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
-        return arg0.equals(IntegerProperty.class);
+        return IntegerProperty.class.equals(arg0);
     }
 
     /** {@inheritDoc} */

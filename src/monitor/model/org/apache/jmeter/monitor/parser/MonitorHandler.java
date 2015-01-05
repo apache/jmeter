@@ -60,7 +60,7 @@ public class MonitorHandler extends DefaultHandler {
     // private List workerslist;
 
     /**
-     *
+     * @param factory {@link ObjectFactory} to use
      */
     public MonitorHandler(ObjectFactory factory) {
         super();
@@ -99,9 +99,11 @@ public class MonitorHandler extends DefaultHandler {
      * </p>
      *
      * @param uri
+     *            The namespace uri, or the empty string, if no namespace is available
      * @param localName
      *            The element type name.
      * @param qName
+     *            The qualified name, or the empty string (must not be <code>null</code>)
      * @param attributes
      *            The specified or defaulted attributes.
      * @exception org.xml.sax.SAXException
@@ -248,6 +250,7 @@ public class MonitorHandler extends DefaultHandler {
      * </p>
      *
      * @param uri
+     *            the namespace uri, or the empty string, if no namespace is available
      * @param localName
      *            The element type name.
      * @param qName
@@ -320,7 +323,7 @@ public class MonitorHandler extends DefaultHandler {
      * Convienance method for parsing long. If the string was not a number, the
      * method returns zero.
      *
-     * @param data
+     * @param data string representation of a {@link Long}
      * @return the value as a long
      */
     public long parseLong(String data) {
@@ -338,7 +341,7 @@ public class MonitorHandler extends DefaultHandler {
     /**
      * Convienance method for parsing integers.
      *
-     * @param data
+     * @param data string representation of an {@link Integer}
      * @return the value as an integer
      */
     public int parseInt(String data) {

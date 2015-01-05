@@ -27,8 +27,8 @@ public class SocketConnectionInfos {
     private int port;
     
     /**
-     * @param host
-     * @param port
+     * @param host the name of the host to connect to
+     * @param port the port to connect to
      */
     public SocketConnectionInfos(String host, int port) {
         super();

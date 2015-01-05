@@ -66,6 +66,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -486,6 +487,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private void startProxy() {
         ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
         modifyTestElement(model);
+        TreeNodeWrapper treeNodeWrapper = (TreeNodeWrapper)targetNodesModel.getSelectedItem();
+        if (JMeterUtils.getResString("use_recording_controller").equals(treeNodeWrapper.getLabel())) {
+            JMeterTreeNode targetNode = model.findTargetControllerNode();
+            if(targetNode == null || !(targetNode.getTestElement() instanceof RecordingController)) {
+                JOptionPane.showMessageDialog(this,
+                        JMeterUtils.getResString("proxy_cl_wrong_target_cl"), // $NON-NLS-1$
+                        JMeterUtils.getResString("error_title"), // $NON-NLS-1$
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
         // Proxy can take some while to start up; show a wating cursor
         Cursor cursor = getCursor();
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -919,8 +931,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         for (int i = 0; i < targetNodesModel.getSize(); i++) {
             choice = (TreeNodeWrapper) targetNodesModel.getElementAt(i);
             log.debug("Selecting item " + choice + " for model " + model + " in " + this);
-            if (choice.getTreeNode() == model.getTarget()) // .equals caused
-                                                            // NPE
+            if (choice.getTreeNode() == model.getTarget()) // .equals caused NPE
             {
                 break;
             }
