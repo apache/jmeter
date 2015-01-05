@@ -97,7 +97,18 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     // Provide access to HTTPSamplerBase methods
     
     /**
-     * Invokes {@link HTTPSamplerBase#errorResult(Throwable, HTTPSampleResult)}
+     * Populates the provided HTTPSampleResult with details from the Exception.
+     * Does not create a new instance, so should not be used directly to add a
+     * subsample.
+     * <p>
+     * See {@link HTTPSamplerBase#errorResult(Throwable, HTTPSampleResult)}
+     * 
+     * @param t
+     *            Exception representing the error.
+     * @param res
+     *            SampleResult to be modified
+     * @return the modified sampling result containing details of the Exception.
+     *         Invokes
      */
     protected HTTPSampleResult errorResult(Throwable t, HTTPSampleResult res) {
         return testElement.errorResult(t, res);
@@ -105,6 +116,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getArguments()}
+     *
+     * @return the arguments of the associated test element
      */
     protected Arguments getArguments() {
         return testElement.getArguments();
@@ -112,6 +125,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getAuthManager()}
+     *
+     * @return the {@link AuthManager} of the associated test element
      */
     protected AuthManager getAuthManager() {
         return testElement.getAuthManager();
@@ -119,6 +134,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getAutoRedirects()}
+     *
+     * @return flag whether to do auto redirects
      */
     protected boolean getAutoRedirects() {
         return testElement.getAutoRedirects();
@@ -126,6 +143,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getCacheManager()}
+     *
+     * @return the {@link CacheManager} of the associated test element
      */
     protected CacheManager getCacheManager() {
         return testElement.getCacheManager();
@@ -133,6 +152,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getConnectTimeout()}
+     *
+     * @return the connect timeout of the associated test element
      */
     protected int getConnectTimeout() {
         return testElement.getConnectTimeout();
@@ -148,6 +169,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getCookieManager()}
+     *
+     * @return the {@link CookieManager} of the associated test element
      */
     protected CookieManager getCookieManager() {
         return testElement.getCookieManager();
@@ -155,13 +178,24 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getHeaderManager()}
+     *
+     * @return the {@link HeaderManager} of the associated test element
      */
     protected HeaderManager getHeaderManager() {
         return testElement.getHeaderManager();
     }
 
     /**
+     * 
+     * Get the collection of files as a list.
+     * The list is built up from the filename/filefield/mimetype properties,
+     * plus any additional entries saved in the FILE_ARGS property.
+     * <p>
+     * If there are no valid file entries, then an empty list is returned.
+     * <p>
      * Invokes {@link HTTPSamplerBase#getHTTPFiles()}
+     *
+     * @return an array of file arguments (never <code>null</code>)
      */
     protected HTTPFileArg[] getHTTPFiles() {
         return testElement.getHTTPFiles();
@@ -169,6 +203,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getIpSource()}
+     *
+     * @return the configured ip source for the associated test element
      */
     protected String getIpSource() {
         return testElement.getIpSource();
@@ -177,9 +213,9 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     /**
      * Gets the IP source address (IP spoofing) if one has been provided.
      * 
-     * @return the IP source address to use (or null, if none provided or the device address could not be found)
-     * @throws UnknownHostException
-     * @throws SocketException 
+     * @return the IP source address to use (or <code>null</code>, if none provided or the device address could not be found)
+     * @throws UnknownHostException if the hostname/ip for {@link #getIpSource()} could not be resolved or not interface was found for it
+     * @throws SocketException if an I/O error occurs
      */
     protected InetAddress getIpSourceAddress() throws UnknownHostException, SocketException {
         final String ipSource = getIpSource();
@@ -219,6 +255,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getProxyHost()}
+     *
+     * @return the configured host to use as a proxy
      */
     protected String getProxyHost() {
         return testElement.getProxyHost();
@@ -226,6 +264,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getProxyPass()}
+     *
+     * @return the configured password to use for the proxy
      */
     protected String getProxyPass() {
         return testElement.getProxyPass();
@@ -233,6 +273,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getProxyPortInt()}
+     *
+     * @return the configured port to use for the proxy
      */
     protected int getProxyPortInt() {
         return testElement.getProxyPortInt();
@@ -240,6 +282,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getProxyUser()}
+     *
+     * @return the configured user to use for the proxy
      */
     protected String getProxyUser() {
         return testElement.getProxyUser();
@@ -247,6 +291,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getResponseTimeout()}
+     *
+     * @return the configured timeout for responses
      */
     protected int getResponseTimeout() {
         return testElement.getResponseTimeout();
@@ -257,6 +303,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * entity enclosing request such as POST, PUT or PATCH.
      * 
      * Invokes {@link HTTPSamplerBase#getSendFileAsPostBody()}
+     *
+     * @return flag whether to send a file as POST, PUT or PATCH
      */
     protected boolean getSendFileAsPostBody() {
         return testElement.getSendFileAsPostBody();
@@ -267,6 +315,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * entity enclosing request such as POST, PUT or PATCH.
      * 
      * Invokes {@link HTTPSamplerBase#getSendParameterValuesAsPostBody()}
+     *
+     * @return flag whether to send concatenated parameters as the entire body
      */
     protected boolean getSendParameterValuesAsPostBody() {
         return testElement.getSendParameterValuesAsPostBody();
@@ -274,13 +324,21 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getUseKeepAlive()}
+     *
+     * @return flag whether to use keep-alive for requests
      */
     protected boolean getUseKeepAlive() {
         return testElement.getUseKeepAlive();
     }
 
     /**
+     * Determine if we should use <code>multipart/form-data</code> or
+     * <code>application/x-www-form-urlencoded</code> for the post
+     * <p>
      * Invokes {@link HTTPSamplerBase#getUseMultipartForPost()}
+     *
+     * @return <code>true</code> if <code>multipart/form-data</code> should be
+     *         used and method is POST
      */
     protected boolean getUseMultipartForPost() {
         return testElement.getUseMultipartForPost();
@@ -288,6 +346,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#getDoBrowserCompatibleMultipart()}
+     *
+     * @return flag whether we should do browser compatible multiparts
      */
     protected boolean getDoBrowserCompatibleMultipart() {
         return testElement.getDoBrowserCompatibleMultipart();
@@ -295,6 +355,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#hasArguments()}
+     *
+     * @return flag whether we have arguments to send
      */
     protected boolean hasArguments() {
         return testElement.hasArguments();
@@ -302,20 +364,48 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#isMonitor()}
+     *
+     * @return flag whether monitor is enabled
      */
     protected boolean isMonitor() {
         return testElement.isMonitor();
     }
 
     /**
+     * Determine if the HTTP status code is successful or not i.e. in range 200
+     * to 399 inclusive
+     * <p>
      * Invokes {@link HTTPSamplerBase#isSuccessCode(int)}
+     *
+     * @param errorLevel
+     *            status code to check
+     * @return whether in range 200-399 or not
      */
     protected boolean isSuccessCode(int errorLevel) {
         return testElement.isSuccessCode(errorLevel);
     }
 
     /**
-     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
+     * Read response from the input stream, converting to MD5 digest if the
+     * useMD5 property is set.
+     * <p>
+     * For the MD5 case, the result byte count is set to the size of the
+     * original response.
+     * <p>
+     * Closes the inputStream
+     * <p>
+     * Invokes
+     * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
+     * 
+     * @param res
+     *            sample to store information about the response into
+     * @param instream
+     *            input stream from which to read the response
+     * @param responseContentLength
+     *            expected input length or zero
+     * @return the response or the MD5 of the response
+     * @throws IOException
+     *             if reading the result fails
      */
     protected byte[] readResponse(SampleResult res, InputStream instream,
             int responseContentLength) throws IOException {
@@ -323,7 +413,25 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
+     * Read response from the input stream, converting to MD5 digest if the
+     * useMD5 property is set.
+     * <p>
+     * For the MD5 case, the result byte count is set to the size of the
+     * original response.
+     * <p>
+     * Closes the inputStream
+     * <p>
      * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
+     * 
+     * @param res
+     *            sample to store information about the response into
+     * @param in
+     *            input stream from which to read the response
+     * @param contentLength
+     *            expected input length or zero
+     * @return the response or the MD5 of the response
+     * @throws IOException
+     *             when reading the result fails
      */
     protected byte[] readResponse(SampleResult res, BufferedInputStream in,
             int contentLength) throws IOException {
@@ -331,7 +439,24 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
-     * Invokes {@link HTTPSamplerBase#resultProcessing(boolean, int, HTTPSampleResult)}
+     * Follow redirects and download page resources if appropriate. this works,
+     * but the container stuff here is what's doing it. followRedirects() is
+     * actually doing the work to make sure we have only one container to make
+     * this work more naturally, I think this method - sample() - needs to take
+     * an HTTPSamplerResult container parameter instead of a
+     * boolean:areFollowingRedirect.
+     * <p>
+     * Invokes
+     * {@link HTTPSamplerBase#resultProcessing(boolean, int, HTTPSampleResult)}
+     *
+     * @param areFollowingRedirect
+     *            flag whether we are getting a redirect target
+     * @param frameDepth
+     *            Depth of this target in the frame structure. Used only to
+     *            prevent infinite recursion.
+     * @param res
+     *            sample result to process
+     * @return the sample result
      */
     protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect,
             int frameDepth, HTTPSampleResult res) {
@@ -340,6 +465,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     /**
      * Invokes {@link HTTPSamplerBase#setUseKeepAlive(boolean)}
+     *
+     * @param b flag whether to use keep-alive for requests
      */
     protected void setUseKeepAlive(boolean b) {
         testElement.setUseKeepAlive(b);

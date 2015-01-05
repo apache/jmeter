@@ -62,7 +62,7 @@ public interface LogParser {
      * clean it up is a bit tedious. One example of this is using the filter to
      * exclude any log entry that has a 505 response code.
      *
-     * @param filter
+     * @param filter {@link Filter} to use
      */
     void setFilter(Filter filter);
 
@@ -71,7 +71,7 @@ public interface LogParser {
      * using Class.newInstance(). Then the access log file is set using this
      * method.
      *
-     * @param source
+     * @param source name of the access log file
      */
     void setSourceFile(String source);
 }

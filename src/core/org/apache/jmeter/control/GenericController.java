@@ -137,25 +137,25 @@ public class GenericController extends AbstractTestElement implements Controller
      * </p>
      *
      * <p>
-     * If isDone, returns null.
+     * If {@link #isDone()} is <code>true</code>, returns null.
      * </p>
      *
      * <p>
      * Gets the list element using current pointer.
-     * If this is null, calls {@link #nextIsNull()}.
+     * If this is <code>null</code>, calls {@link #nextIsNull()}.
      * </p>
      *
      * <p>
-     * If the list element is a sampler, calls {@link #nextIsASampler(Sampler)},
+     * If the list element is a {@link Sampler}, calls {@link #nextIsASampler(Sampler)},
      * otherwise calls {@link #nextIsAController(Controller)}
      * </p>
      *
      * <p>
-     * If any of the called methods throws NextIsNullException, returns null,
+     * If any of the called methods throws {@link NextIsNullException}, returns <code>null</code>,
      * otherwise the value obtained above is returned.
      * </p>
      *
-     * @return the next sampler or null
+     * @return the next sampler or <code>null</code>
      */
     @Override
     public Sampler next() {
@@ -214,12 +214,13 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     /**
-     * Called by next() if the element is a Controller,
-     * and returns the next sampler from the controller.
-     * If this is null, then updates the current pointer and makes recursive call to next().
-     * @param controller
+     * Called by {@link #next()} if the element is a Controller, and returns the
+     * next sampler from the controller. If this is <code>null</code>, then
+     * updates the current pointer and makes recursive call to {@link #next()}.
+     * 
+     * @param controller the current <em>next</em> element
      * @return the next sampler
-     * @throws NextIsNullException
+     * @throws NextIsNullException when the end of the list has already been reached
      */
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
         Sampler sampler = controller.next();
@@ -231,13 +232,14 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     /**
-     * Increment the current pointer and return the element.
-     * Called by next() if the element is a sampler.
-     * (May be overriden by sub-classes).
+     * Increment the current pointer and return the element. Called by
+     * {@link #next()} if the element is a sampler. (May be overriden by
+     * sub-classes).
      *
      * @param element
+     *            the current <em>next</em> element
      * @return input element
-     * @throws NextIsNullException
+     * @throws NextIsNullException when the end of the list has already been reached
      */
     protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
         incrementCurrent();
@@ -245,11 +247,11 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     /**
-     * Called by next() when getCurrentElement() returns null.
+     * Called by {@link #next()} when {@link #getCurrentElement()} returns <code>null</code>.
      * Reinitialises the controller.
      *
      * @return null (always, for this class)
-     * @throws NextIsNullException
+     * @throws NextIsNullException when the end of the list has already been reached
      */
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
@@ -303,7 +305,9 @@ public class GenericController extends AbstractTestElement implements Controller
      * Empty implementation - does nothing.
      *
      * @param currentElement
+     *            the current element
      * @throws NextIsNullException
+     *             when the list has been completed already
      */
     protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
     }
