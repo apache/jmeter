@@ -158,7 +158,9 @@ public class HC4CookieHandler implements CookieHandler {
     /**
      * Get array of valid HttpClient cookies for the URL
      *
+     * @param cookiesCP property with all available cookies
      * @param url the target URL
+     * @param allowVariableCookie flag whether cookies may contain jmeter variables
      * @return array of HttpClient cookies
      *
      */

@@ -67,6 +67,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
     /**
      * Allow subclasses to provide their own Map.
+     * @param _map {@link Map} to use
      */
     protected HashTree(Map<Object, HashTree> _map) {
         this(_map, null);
@@ -661,7 +662,10 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * classes should override these methods and create the appropriate subclass
      * of HashTree.
      *
-     * @return HashTree
+     * @param key
+     *            object to use as the key for the top level
+     *
+     * @return newly created {@link HashTree}
      */
     protected HashTree createNewTree(Object key) {
         return new HashTree(key);
@@ -675,7 +679,9 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * classes should override these methods and create the appropriate subclass
      * of HashTree.
      *
-     * @return HashTree
+     * @param values objects to be added to the new {@link HashTree}
+     *
+     * @return newly created {@link HashTree}
      */
     protected HashTree createNewTree(Collection<?> values) {
         return new HashTree(values);

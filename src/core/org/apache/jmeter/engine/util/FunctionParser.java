@@ -51,6 +51,7 @@ class FunctionParser {
      * @param value string containing the function / variable references (if any)
      *
      * @return list of Strings or Objects representing functions
+     * @throws InvalidVariableException when evaluation of variables fail
      */
     LinkedList<Object> compileString(String value) throws InvalidVariableException {
         StringReader reader = new StringReader(value);
@@ -111,6 +112,7 @@ class FunctionParser {
      *
      * @param reader points to input after the "${"
      * @return the function or variable object (or a String)
+     * @throws InvalidVariableException when evaluation of variables fail
      */
     Object makeFunction(StringReader reader) throws InvalidVariableException {
         char[] current = new char[1];
@@ -178,6 +180,7 @@ class FunctionParser {
      * </ul>
      * @param reader a StringReader pointing to the current input location, just after "("
      * @return a list of CompoundVariable elements
+     * @throws InvalidVariableException when evaluation of variables fail
      */
     LinkedList<CompoundVariable> parseParams(StringReader reader) throws InvalidVariableException {
         LinkedList<CompoundVariable> result = new LinkedList<CompoundVariable>();

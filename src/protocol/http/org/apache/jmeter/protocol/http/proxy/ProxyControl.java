@@ -719,7 +719,8 @@ public class ProxyControl extends GenericController {
      * Filter the response based on the content type.
      * If no include nor exclude filter is specified, the result will be included
      *
-     * @param result the sample result to check, true means result will be kept
+     * @param result the sample result to check
+     * @return <code>true</code> means result will be kept
      */
     boolean filterContentType(SampleResult result) {
         String includeExp = getContentTypeInclude();

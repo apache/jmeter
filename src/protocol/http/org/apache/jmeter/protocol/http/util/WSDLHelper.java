@@ -194,7 +194,7 @@ public class WSDLHelper {
      * therefore external classes should use parse to get the resource at the
      * given location.
      *
-     * @throws IOException
+     * @throws IOException when I/O error occurs
      */
     protected void connect() throws IOException {
         CONN = WSDLURL.openConnection();
@@ -225,6 +225,10 @@ public class WSDLHelper {
     /**
      * Method is used internally to parse the InputStream and build the document
      * using javax.xml.parser API.
+     *
+     * @throws ParserConfigurationException When building {@link DocumentBuilder} fails
+     * @throws IOException when reading the document fails
+     * @throws SAXException when parsing the document fails
      */
     protected void buildDocument() throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();

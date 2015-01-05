@@ -50,35 +50,35 @@ public interface Generator {
     /**
      * The host is the name of the server.
      *
-     * @param host
+     * @param host name of the server
      */
     void setHost(String host);
 
     /**
      * This is the label for the request, which is used in the logs and results.
      *
-     * @param label
+     * @param label label of the request
      */
     void setLabel(String label);
 
     /**
      * The method is the HTTP request method. It's normally POST or GET.
      *
-     * @param post_get
+     * @param post_get method of the HTTP request
      */
     void setMethod(String post_get);
 
     /**
      * Set the request parameters
      *
-     * @param params
+     * @param params request parameter
      */
     void setParams(NVPair[] params);
 
     /**
      * The path is the web page you want to test.
      *
-     * @param path
+     * @param path path of the web page
      */
     void setPath(String path);
 
@@ -93,14 +93,14 @@ public interface Generator {
     /**
      * Set the querystring for the request if the method is GET.
      *
-     * @param querystring
+     * @param querystring query string of the request
      */
     void setQueryString(String querystring);
 
     /**
      * The source logs is the location where the access log resides.
      *
-     * @param sourcefile
+     * @param sourcefile path to the access log file
      */
     void setSourceLogs(String sourcefile);
 
@@ -108,7 +108,7 @@ public interface Generator {
      * The target can be either a java.io.File or a Sampler. We make it generic,
      * so that later on we can use these classes directly from a HTTPSampler.
      *
-     * @param target
+     * @param target target to generate into
      */
     void setTarget(Object target);
 

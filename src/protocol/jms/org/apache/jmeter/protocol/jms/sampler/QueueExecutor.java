@@ -32,9 +32,9 @@ public interface QueueExecutor {
      * Sends and receives a message.
      * 
      * @param request the message to send
-     * @param deliveryMode
-     * @param priority
-     * @param expiration
+     * @param deliveryMode the delivery mode to use
+     * @param priority the priority for this message
+     * @param expiration messages lifetime in ms
      * @return the received message or <code>null</code>
      * @throws JMSException
      *             in case of an exception from the messaging system
