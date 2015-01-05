@@ -263,6 +263,8 @@ public class Spline3 {
     /**
      * Test if the Jacobi resolution of the equation system converges. It's OK
      * if A has a strong diagonal.
+     *
+     * @return <code>true</code> if equation system converges
      */
     protected boolean converge() {
         boolean converge = true;
@@ -287,6 +289,13 @@ public class Spline3 {
 
     /**
      * Computes the current precision reached.
+     *
+     * @param oldX
+     *            old values
+     * @param newX
+     *            new values
+     * @return indicator of how different the old and new values are (always
+     *         zero or greater, the nearer to zero the more similar)
      */
     protected float precision(float[] oldX, float[] newX) {
         float N = 0F, D = 0F, erreur = 0F;

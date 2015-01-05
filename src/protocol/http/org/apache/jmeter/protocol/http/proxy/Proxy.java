@@ -137,7 +137,7 @@ public class Proxy extends Thread {
      *            the ProxyControl which will receive the generated sampler
      * @param _pageEncodings
      *            reference to the Map of Deamon, with mappings from page urls to encoding used
-     * @param formEncodingsEncodings
+     * @param _formEncodings
      *            reference to the Map of Deamon, with mappings from form action urls to encoding used
      */
     void configure(Socket _clientSocket, ProxyControl _target, Map<String, String> _pageEncodings, Map<String, String> _formEncodings) {

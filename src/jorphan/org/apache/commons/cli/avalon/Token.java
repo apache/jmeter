@@ -37,6 +37,11 @@ class Token {
 
     /**
      * New Token object with a type and value
+     *
+     * @param type
+     *            type of the token
+     * @param value
+     *            value of the token
      */
     Token(final int type, final String value) {
         m_type = type;
@@ -45,6 +50,8 @@ class Token {
 
     /**
      * Get the value of the token
+     *
+     * @return value of the token
      */
     final String getValue() {
         return m_value;
@@ -52,6 +59,8 @@ class Token {
 
     /**
      * Get the type of the token
+     *
+     * @return type of the token
      */
     final int getType() {
         return m_type;

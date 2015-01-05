@@ -214,6 +214,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *
      * @param conn
      *            URL from which to read response
+     * @param res
+     *            {@link SampleResult} to read response into
      * @return response content
      * @exception IOException
      *                if an I/O exception occurs
