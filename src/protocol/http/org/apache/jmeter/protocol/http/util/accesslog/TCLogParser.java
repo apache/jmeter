@@ -51,7 +51,6 @@ import org.apache.log.Logger;
  * BufferedReader. The implementation uses StringTokenizer to create tokens.
  * <p>
  * The parse algorithm is the following:
- * <p>
  * <ol>
  * <li> cleans the entry by looking for backslash "\"
  * <li> looks to see if GET or POST is in the line
@@ -72,8 +71,6 @@ import org.apache.log.Logger;
  * Tomcat uses common log format, so any webserver that uses the format should
  * work with this parser. Servers that are known to use non standard formats are
  * IIS and Netscape.
- * <p>
- *
  */
 
 public class TCLogParser implements LogParser {
