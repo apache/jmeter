@@ -260,7 +260,7 @@ public final class AllTests {
      * An overridable method that initializes the logging for the unit test run,
      * using the properties file passed in as the second argument.
      * 
-     * @param args
+     * @param args arguments to get the logging setup information from
      */
     protected static void initializeLogging(String[] args) {
         if (args.length >= 2) {
@@ -286,7 +286,7 @@ public final class AllTests {
      * was specified in the command-line arguments), and hands it the name of
      * the properties file to use to configure the system.
      * 
-     * @param args
+     * @param args arguments with the initialization parameter
      */
     protected static void initializeManager(String[] args) {
         if (args.length >= 3) {

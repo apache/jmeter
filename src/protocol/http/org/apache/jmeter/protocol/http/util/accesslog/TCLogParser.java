@@ -249,6 +249,7 @@ public class TCLogParser implements LogParser {
      * @param breader {@link BufferedReader} to read lines from
      * @param el {@link TestElement} to read lines into
      * @param parseCount number of lines to read
+     * @return number of lines parsed
      */
     protected int parse(BufferedReader breader, TestElement el, int parseCount) {
         int actualCount = 0;
@@ -289,6 +290,7 @@ public class TCLogParser implements LogParser {
      *
      * @param line single line to be parsed
      * @param el {@link TestElement} in which the line will be added
+     * @return number of lines parsed (zero or one, actually)
      */
     protected int parseLine(String line, TestElement el) {
         int count = 0;
