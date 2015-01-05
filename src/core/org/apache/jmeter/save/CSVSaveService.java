@@ -87,6 +87,7 @@ public final class CSVSaveService {
     private static final String CSV_URL = "URL"; // $NON-NLS-1$
     private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
     private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
+    private static final String CSV_CONNECT_TIME = "Connect"; // $NON-NLS-1$
     private static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
     private static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
     private static final String CSV_IDLETIME = "IdleTime"; // $NON-NLS-1$
@@ -350,6 +351,11 @@ public final class CSVSaveService {
                 text = parts[i++];
                 result.setIdleTime(Long.parseLong(text));
             }
+            if (saveConfig.saveConnectTime()) {
+                field = CSV_CONNECT_TIME;
+                text = parts[i++];
+                result.setConnectTime(Long.parseLong(text));
+            }
 
             if (i + saveConfig.getVarCount() < parts.length) {
                 log.warn("Line: " + lineNumber + ". Found " + parts.length
@@ -488,6 +494,11 @@ public final class CSVSaveService {
             text.append(delim);
         }
 
+        if (saveConfig.saveConnectTime()) {
+            text.append(CSV_CONNECT_TIME);
+            text.append(delim);
+        }
+
         for (int i = 0; i < SampleEvent.getVarCount(); i++) {
             text.append(VARIABLE_NAME_QUOTE_CHAR);
             text.append(SampleEvent.getVarName(i));
@@ -541,6 +552,7 @@ public final class CSVSaveService {
         headerLabelMethods.put(CSV_ERROR_COUNT, new Functor("setSampleCount"));
         headerLabelMethods.put(CSV_HOSTNAME, new Functor("setHostname"));
         headerLabelMethods.put(CSV_IDLETIME, new Functor("setIdleTime"));
+        headerLabelMethods.put(CSV_CONNECT_TIME, new Functor("setConnectTime"));
     }
 
     /**
@@ -949,6 +961,10 @@ public final class CSVSaveService {
 
         if (saveConfig.saveIdleTime()) {
             text.append(event.getResult().getIdleTime());
+        }
+
+        if (saveConfig.saveConnectTime()) {
+            text.append(sample.getConnectTime());
         }
 
         for (int i = 0; i < SampleEvent.getVarCount(); i++) {

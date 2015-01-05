@@ -77,6 +77,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     private static final String ATT_HOSTNAME          = "hn"; //$NON-NLS-1$
     private static final String ATT_LABEL             = "lb"; //$NON-NLS-1$
     private static final String ATT_LATENCY           = "lt"; //$NON-NLS-1$
+    private static final String ATT_CONNECT_TIME      = "ct"; //$NON-NLS-1$
 
     private static final String ATT_ALL_THRDS         = "na"; //$NON-NLS-1$
     private static final String ATT_GRP_THRDS         = "ng"; //$NON-NLS-1$
@@ -291,6 +292,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         if (save.saveLatency()) {
             writer.addAttribute(ATT_LATENCY, Long.toString(res.getLatency()));
         }
+        if (save.saveConnectTime()) {
+            writer.addAttribute(ATT_CONNECT_TIME, Long.toString(res.getConnectTime()));
+        }
         if (save.saveTimestamp()) {
             writer.addAttribute(ATT_TIME_STAMP, Long.toString(res.getTimeStamp()));
         }
@@ -441,6 +445,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
                 Converter.getLong(reader.getAttribute(ATT_TIME)));
         res.setIdleTime(Converter.getLong(reader.getAttribute(ATT_IDLETIME)));
         res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
+        res.setConnectTime(Converter.getLong(reader.getAttribute(ATT_CONNECT_TIME)));
         res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
         res.setSampleCount(Converter.getInt(reader.getAttribute(ATT_SAMPLE_COUNT),1)); // default is 1
         res.setErrorCount(Converter.getInt(reader.getAttribute(ATT_ERROR_COUNT),0)); // default is 0

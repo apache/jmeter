@@ -101,6 +101,7 @@ public class StatisticalSampleResult extends SampleResult implements
         this.setEndTime(Math.max(getEndTime(), res.getEndTime()));
 
         setLatency(getLatency()+ res.getLatency());
+        setConnectTime(getConnectTime()+ res.getConnectTime());
 
         elapsed += res.getTime();
     }
