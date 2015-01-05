@@ -178,7 +178,12 @@ public class SampleResult implements Serializable, Cloneable {
 
     /** time to first response */
     private long latency = 0;
-    
+
+    /**
+     * time to end connecting
+     */
+    private long connectTime = 0;
+
     /** Should thread start next iteration ? */
     private boolean startNextThreadLoop = false;
 
@@ -301,6 +306,7 @@ public class SampleResult implements Serializable, Cloneable {
         isMonitor = res.isMonitor;
         label = res.label;//OK
         latency = res.latency;
+        connectTime = res.connectTime;
         location = res.location;//OK
         parent = res.parent; // TODO ??
         pauseTime = res.pauseTime;
@@ -1204,6 +1210,29 @@ public class SampleResult implements Serializable, Cloneable {
      */
     public void setLatency(long latency) {
         this.latency = latency;
+    }
+
+    /**
+     * @return Returns the connect time.
+     */
+    public long getConnectTime() {
+        return connectTime;
+    }
+
+    /**
+     * Set the time to the end of connecting
+     */
+    public void connectEnd() {
+        connectTime = currentTimeInMillis() - startTime - idleTime;
+    }
+
+    /**
+     * This is only intended for use by SampleResultConverter!
+     *
+     * @param time The connect time to set.
+     */
+    public void setConnectTime(long time) {
+        this.connectTime = time;
     }
 
     /**
