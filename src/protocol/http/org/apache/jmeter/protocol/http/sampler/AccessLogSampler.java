@@ -35,7 +35,6 @@ import org.apache.log.Logger;
  * Description: <br>
  * <br>
  * AccessLogSampler is responsible for a couple of things:
- * <p>
  * <ul>
  * <li>creating instances of Generator
  * <li>creating instances of Parser
