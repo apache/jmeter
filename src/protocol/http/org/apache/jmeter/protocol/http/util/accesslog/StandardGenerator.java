@@ -50,8 +50,6 @@ import org.apache.log.Logger;
  * Then the samplers should be added to the thread group. Listeners shouldn't be
  * added and should be left up to the user. One option is to provide parameters,
  * so the user can pass the desired listener to the tool.
- * <p>
- *
  */
 
 public class StandardGenerator implements Generator, Serializable {

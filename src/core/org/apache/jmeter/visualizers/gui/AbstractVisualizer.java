@@ -97,8 +97,6 @@ import org.apache.log.Logger;
  * methods to create and modify your alternate ResultCollector. For an example
  * of this, see the
  * {@link org.apache.jmeter.visualizers.MailerVisualizer MailerVisualizer}.
- * <p>
- *
  */
 public abstract class AbstractVisualizer
     extends AbstractListenerGui
