@@ -48,6 +48,10 @@ browser or other application client.
 </p>
 
 <p>
+<a name="Connect"><b>Connect Time</b></a>. JMeter measures the time it took to estable the connection, including SSL handshake. Note that connect time is not automatically subtracted from <a href="#Latency">latency</a>.
+</p>
+
+<p>
 <a name="Median"><b>Median</b></a> is a number which divides the samples into two equal halves.
 Half of the samples are smaller than the median, and half are larger.
 [Some samples may equal the median.]

@@ -55,6 +55,7 @@ Summary
 <!-- <ch_title>Sample title</ch_title>
 <p>
 <ul>
+<li><bugzilla>48799</bugzilla> - Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 <li>Sample text</li>
 </ul>
 </p>

@@ -137,6 +137,7 @@ The full set of properties that affect result file output is shown below.
 #jmeter.save.saveservice.subresults=true
 #jmeter.save.saveservice.assertions=true
 #jmeter.save.saveservice.latency=true
+#jmeter.save.saveservice.connect_time=false
 #jmeter.save.saveservice.samplerData=false
 #jmeter.save.saveservice.responseHeaders=false
 #jmeter.save.saveservice.requestHeaders=false
@@ -304,6 +305,7 @@ The order of appearance of columns is fixed, and is as follows:
 <li>URL</li>
 <li>Filename - if Save Response to File was used</li>
 <li>latency - time to first response</li>
+<li>connect - time to establish connection</li>
 <li>encoding</li>
 <li>SampleCount - number of samples (1, unless multiple samples are aggregated)</li>
 <li>ErrorCount - number of errors (0 or 1, unless multiple samples are aggregated)</li>
@@ -427,6 +429,7 @@ The sample attributes have the following meaning:
 <tr><td>it</td><td>Idle Time = time not spent sampling (milliseconds) (generally 0)</td></tr>
 <tr><td>lb</td><td>Label</td></tr>
 <tr><td>lt</td><td>Latency = time to initial response (milliseconds) - not all samplers support this</td></tr>
+<tr><td>lt</td><td>Connect Time = time to establish the connection (milliseconds) - not all samplers support this</td></tr>
 <tr><td>na</td><td>Number of active threads for all thread groups</td></tr>
 <tr><td>ng</td><td>Number of active threads in this group</td></tr>
 <tr><td>rc</td><td>Response Code (e.g. 200)</td></tr>
