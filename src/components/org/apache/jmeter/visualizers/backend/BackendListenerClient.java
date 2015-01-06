@@ -70,24 +70,19 @@ public interface BackendListenerClient {
      * @param context
      *            the context to run with. This provides access to
      *            initialization parameters.
+     *            Context is readonly
      * @throws Exception when setup fails
      */
     void setupTest(BackendListenerContext context) throws Exception;
 
     /**
-     * Perform a single sample for each iteration. This method returns a
-     * {@link SampleResult} object. <code>SampleResult</code> has many
-     * fields which can be used. At a minimum, the test should use
-     * <code>SampleResult.sampleStart</code> and
-     * <code>SampleResult.sampleEnd</code>to set the time that the test
-     * required to execute. It is also a good idea to set the sampleLabel and
-     * the successful flag.
-     *
-     * @see org.apache.jmeter.samplers.SampleResult#sampleStart()
-     * @see org.apache.jmeter.samplers.SampleResult#sampleEnd()
-     * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
-     * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
-     *
+     * Handle sampleResults, this can be done in many ways:
+     * <ul>
+     * <li>Write to a file</li>
+     * <li>Write to a distant server</li>
+     * <li>...</li>
+     * </ul>
+     * @param sampleResults List of {@link SampleResult}
      * @param context
      *            the context to run with. This provides access to
      *            initialization parameters.
@@ -96,7 +91,7 @@ public interface BackendListenerClient {
     void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context);
 
     /**
-     * Do any clean-up required by this test at the end of a test run.
+     * Do any clean-up required at the end of a test run.
      *
      * @param context
      *            the context to run with. This provides access to
@@ -120,10 +115,12 @@ public interface BackendListenerClient {
     Arguments getDefaultParameters();
 
     /**
-     * 
-     * @param context
-     * @param result
-     * @return
+     * Create a copy of SampleResult, this method is here to allow customizing 
+     * what is kept in the copy, for example copy could remove some useless fields.
+     * Default to cloning
+     * @param context {@link BackendListenerContext}
+     * @param result {@link SampleResult}
+     * @return {@link SampleResult}
      */
     SampleResult createSampleResult(
             BackendListenerContext context, SampleResult result);
