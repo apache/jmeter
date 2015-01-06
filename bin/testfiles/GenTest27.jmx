@@ -942,7 +942,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -975,7 +974,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1008,7 +1006,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1055,7 +1052,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1088,7 +1084,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1123,7 +1118,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1163,7 +1157,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1205,7 +1198,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1246,7 +1238,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1279,7 +1270,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1312,7 +1302,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1345,7 +1334,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1378,7 +1366,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>

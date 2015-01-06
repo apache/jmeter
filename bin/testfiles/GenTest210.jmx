@@ -284,7 +284,6 @@
           <hashTree/>
           <MongoSourceElement guiclass="TestBeanGUI" testclass="MongoSourceElement" testname="MongoDB Source Config" enabled="true">
             <boolProp name="autoConnectRetry">false</boolProp>
-            <intProp name="connectTimeout">0</intProp>
             <stringProp name="connection"></stringProp>
             <intProp name="connectionsPerHost">10</intProp>
             <boolProp name="continueOnInsertError">false</boolProp>
@@ -970,7 +969,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1003,7 +1001,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1036,7 +1033,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1083,7 +1079,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1116,7 +1111,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1151,7 +1145,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1192,7 +1185,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1234,7 +1226,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1267,7 +1258,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1308,7 +1298,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1341,7 +1330,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1374,7 +1362,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1407,7 +1394,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
@@ -1440,7 +1426,6 @@
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
-                <connectTime>false</connectTime>
                 <timestamp>true</timestamp>
                 <success>true</success>
                 <label>true</label>
