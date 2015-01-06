@@ -70,16 +70,6 @@ public final class NullProperty extends AbstractProperty {
     }
 
     /**
-     * see JMeterProperty#isTemporary(TestElement)
-     * <p>TODO seems to be a relic from the past.
-     * @param owner IGNORED
-     * @return always <code>true</code>
-     */
-    public boolean isTemporary(TestElement owner) {
-        return true;
-    }
-
-    /**
      * @see JMeterProperty#mergeIn(JMeterProperty)
      */
     @Override
