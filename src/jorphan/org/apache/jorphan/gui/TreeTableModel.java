@@ -28,29 +28,39 @@ import javax.swing.table.TableModel;
 public interface TreeTableModel extends TableModel {
 
     /**
-     * The method is similar to getValueAt(int,int). Instead of int,
-     * the row is an object.
+     * The method is similar to getValueAt(int,int). Instead of int, the row is
+     * an object.
+     *
      * @param node
+     *            the node which value is to be fetched
      * @param col
+     *            the column of the node
      * @return the value at the column
      */
     Object getValueAt(Object node, int col);
 
     /**
-     * the method is similar to isCellEditable(int,int). Instead of int,
-     * the row is an object.
+     * the method is similar to isCellEditable(int,int). Instead of int, the row
+     * is an object.
+     *
      * @param node
+     *            the node which value is to be fetched
      * @param col
-     * @return if cell is editable
+     *            the column of the node
+     * @return <code>true</code> if cell is editable
      */
     boolean isCellEditable(Object node, int col);
 
     /**
-     * the method is similar to isCellEditable(int,int). Instead of int,
-     * the row is an object.
+     * the method is similar to isCellEditable(int,int). Instead of int, the row
+     * is an object.
+     *
      * @param val
+     *            the value to be set
      * @param node
+     *            the node which value is to be set
      * @param column
+     *            the column of the node
      */
     void setValueAt(Object val, Object node, int column);
 }

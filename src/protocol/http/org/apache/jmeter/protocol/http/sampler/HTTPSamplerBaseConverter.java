@@ -37,6 +37,8 @@ public class HTTPSamplerBaseConverter extends TestElementConverter {
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
+     *
+     * @return the version of this component
      */
     public static String getVersion() {
         return "$Revision$";  //$NON-NLS-1$

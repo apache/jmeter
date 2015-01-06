@@ -84,7 +84,10 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     /**
      * Processed by the RMI server code; acts as testStarted().
-     * @throws ObjectStreamException  
+     *
+     * @return this
+     * @throws ObjectStreamException
+     *             never
      */
     private Object readResolve() throws ObjectStreamException{
         log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // server        

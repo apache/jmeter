@@ -89,6 +89,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
      * Save the scope settings in the test element.
      *
      * @param testElement
+     *            the test element to save the settings into
      */
     protected void saveScopeSettings(AbstractScopedTestElement testElement) {
         if (scopePanel.isScopeParent()){
@@ -108,6 +109,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
      * Show the scope settings from the test element.
      *
      * @param testElement
+     *            the test element from which the settings should be shown
      */
     protected void showScopeSettings(AbstractScopedTestElement testElement) {
         showScopeSettings(testElement, false);
@@ -117,7 +119,9 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
      * Show the scope settings from the test element with variable scope
      *
      * @param testElement
+     *            the test element from which the settings should be shown
      * @param enableVariableButton
+     *            set true to enable the variable panel
      */
     protected void showScopeSettings(AbstractScopedTestElement testElement,
             boolean enableVariableButton) {

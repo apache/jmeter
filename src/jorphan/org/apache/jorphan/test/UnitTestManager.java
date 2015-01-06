@@ -35,6 +35,7 @@ public interface UnitTestManager {
      * need to configure your system prior to the unit tests running.
      *
      * @param filename
+     *            path to the configuration file
      */
     void initializeProperties(String filename);
 }

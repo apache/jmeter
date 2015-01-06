@@ -94,6 +94,9 @@ public abstract class SSLManager {
 
     /**
      * Default implementation of setting the Provider
+     *
+     * @param provider
+     *            the provider to use
      */
     protected void setProvider(Provider provider) {
         if (null != provider) {
@@ -105,6 +108,8 @@ public abstract class SSLManager {
      * Opens and initializes the KeyStore. If the password for the KeyStore is
      * not set, this method will prompt you to enter it. Unfortunately, there is
      * no PasswordEntryField available from JOptionPane.
+     *
+     * @return the configured {@link JmeterKeyStore}
      */
     protected synchronized JmeterKeyStore getKeyStore() {
         if (null == this.keyStore) {

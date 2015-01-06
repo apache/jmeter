@@ -191,7 +191,10 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     
     /**
      * Processed by the RMI server code; acts as testStarted().
-     * @throws ObjectStreamException  
+     *
+     * @return this
+     * @throws ObjectStreamException
+     *             never
      */
     private Object readResolve() throws ObjectStreamException{
         if (isClientConfigured()) {

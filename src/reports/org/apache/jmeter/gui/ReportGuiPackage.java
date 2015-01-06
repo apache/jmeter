@@ -340,8 +340,6 @@ public final class ReportGuiPackage implements LocaleChangeListener {
      * @throws IllegalAccessException
      *             if access rights do not allow the default constructor to be
      *             called
-     * @throws ClassNotFoundException
-     *             if the specified GUI class cannot be found
      */
     private JMeterGUIComponent getGuiFromCache(Class<?> guiClass, Class<?> testClass) throws InstantiationException,
             IllegalAccessException {
@@ -600,7 +598,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
      * Sets the filepath of the current test plan. It's shown in the main frame
      * title and used on saving.
      *
-     * @param f
+     * @param f the path of the file to save the test plan
      */
     public void setReportPlanFile(String f) {
         reportPlanFile = f;
