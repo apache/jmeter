@@ -49,8 +49,8 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
     private MeasuringConnectionRequest measuredConnection;
     private SampleResult sample;
 
-    public MeasuringConnectionManager(SchemeRegistry aDefault, DnsResolver resolver) {
-        super(aDefault, resolver);
+    public MeasuringConnectionManager(SchemeRegistry schemeRegistry, DnsResolver resolver) {
+        super(schemeRegistry, resolver);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
     }
 
     /**
-     * And adapter class to pass {@link SampleResult} into {@link MeasuredConnection}
+     * An adapter class to pass {@link SampleResult} into {@link MeasuredConnection}
      */
     private static class MeasuringConnectionRequest implements ClientConnectionRequest {
         private final ClientConnectionRequest handler;
