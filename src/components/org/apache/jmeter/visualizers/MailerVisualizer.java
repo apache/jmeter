@@ -397,12 +397,6 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         mailerModel.setToAddress(addressField.getText());
     }
 
-    // ////////////////////////////////////////////////////////////
-    //
-    // Methods to implement the ModelListener.
-    //
-    // ////////////////////////////////////////////////////////////
-
     /**
      * Notifies this Visualizer about model-changes. Causes the Visualizer to
      * query the model about its new state.
