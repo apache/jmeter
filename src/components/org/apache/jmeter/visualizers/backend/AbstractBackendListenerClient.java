@@ -88,7 +88,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     }
 
     /**
-     * @see org.apache.jmeter.visualizers.backend.BackendListenerClient#createSampleResult(org.apache.jmeter.samplers.SampleResult)
+     * {@inheritDoc}
      */
     @Override
     public SampleResult createSampleResult(BackendListenerContext context, SampleResult result) {
