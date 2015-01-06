@@ -74,13 +74,16 @@ public class JTLData implements Serializable, DataSet {
     }
 
     /**
-     * The purpose of the method is to make it convienant to pass a list
-     * of the URLs and return a list of the SamplingStatCalculators. If
-     * no URLs match, the list is empty.
-     * TODO - this method seems to be wrong - it does not agree with the Javadoc
-     * The SamplingStatCalculators will be returned in the same sequence
-     * as the url list.
+     * The purpose of the method is to make it convienant to pass a list of the
+     * URLs and return a list of the SamplingStatCalculators. If no URLs match,
+     * the list is empty.
+     * <p>
+     * TODO - this method seems to be wrong - it does not
+     * agree with the Javadoc The SamplingStatCalculators will be returned in
+     * the same sequence as the url list.
+     *
      * @param urls
+     *            the URLs for which to get statistics
      * @return array list of non-null entries (may be empty)
      */
     @SuppressWarnings({ "rawtypes", "unchecked" }) // Method is broken anyway
@@ -167,7 +170,7 @@ public class JTLData implements Serializable, DataSet {
     /**
      * The method will SamplingStatCalculator for the given URL. If the URL
      * doesn't exist, the method returns null.
-     * @param url
+     * @param url the URL for which to get statistics
      * @return data for this URL
      */
     @Override

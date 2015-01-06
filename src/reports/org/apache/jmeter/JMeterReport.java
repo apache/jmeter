@@ -296,7 +296,7 @@ public class JMeterReport implements JMeterPlugin {
 
     /**
      *
-     * @param args
+     * @param args the arguments to parse
      */
     public void start(String[] args) {
         CLArgsParser parser = new CLArgsParser(args, options);

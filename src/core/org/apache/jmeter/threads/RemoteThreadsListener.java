@@ -28,13 +28,13 @@ public interface RemoteThreadsListener extends java.rmi.Remote {
     
     /**
      * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
-     * @throws RemoteException
+     * @throws RemoteException when remote calling of the method fails
      */
     void threadStarted() throws RemoteException;
 
     /**
      * @see org.apache.jmeter.testelement.ThreadListener#threadFinished()
-     * @throws RemoteException
+     * @throws RemoteException when remote calling of the method fails
      */
     void threadFinished() throws RemoteException;
 }

@@ -60,8 +60,11 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
     }
 
     /**
-     * Constructor for the FilePanel object. No {@link ChangeListener} is registered.
+     * Constructor for the FilePanel object. No {@link ChangeListener} is
+     * registered.
+     *
      * @param title
+     *            the title of this component
      */
     public DirectoryPanel(String title) {
         this(title, null);

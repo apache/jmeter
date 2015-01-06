@@ -102,6 +102,9 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
     /**
      * Construct a BeanInfo for the given class.
+     *
+     * @param beanClass
+     *            class for which to construct a BeanInfo
      */
     protected BeanInfoSupport(Class<? extends TestBean> beanClass) {
         this.beanClass= beanClass;

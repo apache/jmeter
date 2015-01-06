@@ -48,6 +48,9 @@ public final class ReportFileDialoger {
      * the caller's responsibility to check to see if the selected file is
      * non-null.
      *
+     * @param exts
+     *            non <code>null</code> array of allowed file extensions. If
+     *            empty, all extensions are allowed
      * @return the JFileChooser that interacted with the user, after they are
      *         finished using it (accept or otherwise).
      */
@@ -92,6 +95,7 @@ public final class ReportFileDialoger {
      * the caller's responsibility to check to see if the selected file is
      * non-null.
      *
+     * @param filename name of selected file
      * @return the JFileChooser that interacted with the user, after they are
      *         finished using it (accept or otherwise).
      * @see #promptToOpenFile()
@@ -104,7 +108,10 @@ public final class ReportFileDialoger {
      * Get a JFileChooser with a new FileFilter.
      *
      * @param filename
+     *            name of a selected file
      * @param extensions
+     *            list of extensions to allow. If <code>null</code>, files with
+     *            <em>.jmx</em> extension will be allowed only
      * @return JFileChooser
      */
     public static JFileChooser promptToSaveFile(String filename, String[] extensions) {

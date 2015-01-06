@@ -95,7 +95,10 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
 
     /**
      * Processed by the RMI server code; acts as testStarted().
-     * @throws ObjectStreamException  
+     *
+     * @return this
+     * @throws ObjectStreamException
+     *             never
      */
     private Object readResolve() throws ObjectStreamException{
         log.info("Using DataStrippingSampleSender for this run");

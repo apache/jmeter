@@ -42,7 +42,7 @@ public interface ReplaceableController {
     /**
      * Compute the replacement tree.
      *
-     * @param context
+     * @param context the starting point of the replacement
      */
     void resolveReplacementSubTree(JMeterTreeNode context);
 }
