@@ -86,7 +86,8 @@ public interface TestElement extends Cloneable {
      * TestElement
      *
      * @param property
-     * @return boolean
+     *            the property to be tested
+     * @return <code>true</code> if property is temporary
      */
     boolean isTemporary(JMeterProperty property);
 

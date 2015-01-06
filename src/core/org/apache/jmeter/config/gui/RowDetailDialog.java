@@ -231,7 +231,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
 
     /**
      * Update model values
-     * @param actionEvent
+     * @param actionEvent the event that led to this call
      */
     protected void doUpdate(ActionEvent actionEvent) {
         tableModel.setValueAt(nameTF.getText(), selectedRow, 0);

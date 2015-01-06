@@ -34,11 +34,19 @@ public abstract class NumberProperty extends AbstractProperty {
 
     /**
      * Set the value of the property with a Number object.
+     *
+     * @param n the value to set
      */
     protected abstract void setNumberValue(Number n);
 
     /**
      * Set the value of the property with a String object.
+     *
+     * @param n
+     *            the number to set as a string representation
+     * @throws NumberFormatException
+     *             if the number <code>n</code> can not be converted to a
+     *             {@link Number}
      */
     protected abstract void setNumberValue(String n) throws NumberFormatException;
 

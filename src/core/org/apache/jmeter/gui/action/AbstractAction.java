@@ -45,7 +45,7 @@ public abstract class AbstractAction implements Command {
     abstract public Set<String> getActionNames();
 
     /**
-     * @param e
+     * @param e the event that led to the call of this method
      */
     protected void popupShouldSave(ActionEvent e) {
         log.debug("popupShouldSave");

@@ -60,7 +60,9 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
 
     /**
      * Processed by the RMI server code.
-     * @throws ObjectStreamException  
+     *
+     * @return this
+     * @throws ObjectStreamException never
      */
     private Object readResolve() throws ObjectStreamException{
         int capacity = getCapacity();

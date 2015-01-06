@@ -84,9 +84,15 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
     
     /**
-     * Uses the new HashTree if not null and adds the given object as a top-level node if not null
+     * Uses the new HashTree if not null and adds the given object as a
+     * top-level node if not null
+     *
      * @param _map
+     *            the map to be used. If <code>null</code> a new {@link HashMap}
+     *            will be created
      * @param key
+     *            the object to be used as the key for the root node (may be
+     *            <code>null</code>, in which case no root node will be created)
      */
     private HashTree(Map<Object, HashTree> _map, Object key) {
         if(_map != null) {
@@ -933,6 +939,13 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
     /**
      * Method readObject.
+     *
+     * @param ois
+     *            the stream to read the objects from
+     * @throws ClassNotFoundException
+     *             when the class for the deserialization can not be found
+     * @throws IOException
+     *             when I/O error occurs
      */
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
@@ -971,6 +984,9 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     /**
      * The recursive method that accomplishes the tree-traversal and performs
      * the callbacks to the HashTreeTraverser.
+     *
+     * @param visitor
+     *            the {@link HashTreeTraverser} to be notified
      */
     private void traverseInto(HashTreeTraverser visitor) {
 

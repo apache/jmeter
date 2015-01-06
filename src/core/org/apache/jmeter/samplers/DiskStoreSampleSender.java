@@ -144,7 +144,10 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
 
     /**
      * Processed by the RMI server code; acts as testStarted().
-     * @throws ObjectStreamException  
+     *
+     * @return this
+     * @throws ObjectStreamException
+     *             never
      */
     // TODO should errors be thrown back through RMI?
     private Object readResolve() throws ObjectStreamException{

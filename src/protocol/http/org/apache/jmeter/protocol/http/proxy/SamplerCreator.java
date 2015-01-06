@@ -49,7 +49,7 @@ public interface SamplerCreator {
      * @param request {@link HttpRequestHdr}
      * @param pageEncodings Map of page encodings
      * @param formEncodings Map of form encodings
-     * @throws Exception
+     * @throws Exception when something fails
      */
     void populateSampler(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
@@ -75,7 +75,7 @@ public interface SamplerCreator {
      * @param pageEncodings Map of page encodings
      * @param formEncodings Map of form encodings
      * @return {@link HTTPSamplerBase}
-     * @throws Exception
+     * @throws Exception when something fails
      * @since 2.9
      */
     HTTPSamplerBase createAndPopulateSampler(HttpRequestHdr request,

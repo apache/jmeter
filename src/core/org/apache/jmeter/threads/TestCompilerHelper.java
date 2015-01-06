@@ -40,7 +40,8 @@ public interface TestCompilerHelper {
      * Only for use by TestCompiler.
      * 
      * @param child
-     * @return true if the child was added
+     *            the {@link TestElement} to be added
+     * @return <code>true</code> if the child was added
      */
     boolean addTestElementOnce(TestElement child);
     

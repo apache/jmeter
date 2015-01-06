@@ -132,8 +132,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * @param scriptEngine ScriptEngine
      * @param bindings {@link Bindings} might be null
      * @return Object returned by script
-     * @throws IOException
-     * @throws ScriptException
+     * @throws IOException when reading the script fails
+     * @throws ScriptException when compiling or evaluation of the script fails
      */
     protected Object processFileOrScript(ScriptEngine scriptEngine, Bindings bindings) throws IOException, ScriptException {
         if (bindings == null) {

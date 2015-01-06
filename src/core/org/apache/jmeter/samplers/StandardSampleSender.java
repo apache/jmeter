@@ -75,7 +75,10 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
 
     /**
      * Processed by the RMI server code; acts as testStarted().
-     * @throws ObjectStreamException  
+     *
+     * @return this
+     * @throws ObjectStreamException
+     *             never
      */
     private Object readResolve() throws ObjectStreamException{
         log.info("Using StandardSampleSender for this test run");        

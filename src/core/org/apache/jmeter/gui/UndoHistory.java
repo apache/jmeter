@@ -56,7 +56,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * Avoid storing too many elements
      *
-     * @param <T>
+     * @param <T> Class that should be held in this container
      */
     private static class LimitedArrayList<T> extends ArrayList<T> {
         /**
@@ -224,7 +224,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * Load the undo item into acceptorModel tree
      *
      * @param acceptorModel tree to accept the data
-     * @param guiInstance
+     * @param guiInstance {@link GuiPackage} to be used
      */
     private void loadHistoricalTree(JMeterTreeModel acceptorModel, GuiPackage guiInstance) {
         HashTree newModel = history.get(position).getTree();
@@ -306,7 +306,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * Save tree expanded and selected state
      *
-     * @param guiPackage
+     * @param guiPackage {@link GuiPackage} to be used
      */
     private void saveTreeState(GuiPackage guiPackage) {
         savedExpanded.clear();
@@ -327,7 +327,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * Restore tree expanded and selected state
      *
-     * @param guiPackage
+     * @param guiInstance GuiPackage to be used
      */
     private void restoreTreeState(GuiPackage guiInstance) {
         final JTree tree = guiInstance.getMainFrame().getTree();
