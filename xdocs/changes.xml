@@ -227,6 +227,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><bug>57389</bug>Fix potential NPE in converters</li>
 <li><bug>57417</bug>Remove unused method isTemporary from NullProperty. This was a leftover from a refactoring done in 2003.</li>
 <li><bug>57418</bug>Remove unused constructor from Workbench</li>
+<li><bug>57419</bug>Remove unused interface ModelListener.</li>
 </ul>
 
 <ch_section>Thanks</ch_section>
