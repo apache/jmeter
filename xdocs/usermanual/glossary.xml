@@ -48,7 +48,7 @@ browser or other application client.
 </p>
 
 <p>
-<a name="Connect"><b>Connect Time</b></a>. JMeter measures the time it took to estable the connection, including SSL handshake. Note that connect time is not automatically subtracted from <a href="#Latency">latency</a>.
+<a name="Connect"><b>Connect Time</b></a>. JMeter measures the time it took to establish the connection, including SSL handshake. Note that connect time is not automatically subtracted from <a href="#Latency">latency</a>.
 </p>
 
 <p>
