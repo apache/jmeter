@@ -27,15 +27,6 @@ public class WorkBench extends AbstractTestElement {
 
     private static final boolean SAVE_WORKBENCH_DEFAULT = false;
 
-    /**
-     * Constructor for the WorkBench object.
-     * @param name the name of this element
-     * @param isRootNode IGNORED
-     */
-    public WorkBench(String name, boolean isRootNode) {
-        setName(name);
-    }
-
     public WorkBench() {
     }
 
