@@ -51,7 +51,9 @@ public class CPSPauser{
         long sleepMS = (bytes*MS_PER_SEC)/CPS;
         int  sleepNS = ((bytes*MS_PER_SEC)/CPS) % NS_PER_MS;
         try {
-            Thread.sleep(sleepMS,sleepNS);
+            if(sleepMS>0 || sleepNS>0) {
+                Thread.sleep(sleepMS,sleepNS);
+            }
         } catch (InterruptedException ignored) {
         }
     }
