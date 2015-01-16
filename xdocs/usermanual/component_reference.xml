@@ -3640,24 +3640,24 @@ This was an experimental feature and has been removed.
 <b>Kerberos Configuration:</b>
 <p>To configure Kerberos you need to setup at least two JVM system properties:
 <ul>
-    <li>-Djava.security.krb5.conf=krb5.conf</li>
-    <li>-Djava.security.auth.login.config=jaas.conf</li>
+    <li><code>-Djava.security.krb5.conf=krb5.conf</code></li>
+    <li><code>-Djava.security.auth.login.config=jaas.conf</code></li>
 </ul>
-You can also configure those two properties in file bin/system.properties.
-Look at the two sample configuration files (krb5.conf and jaas.conf) located in the jmeter bin folder for references to more documentation, and tweak them to match 
-your Kerberos configuration.
+You can also configure those two properties in the file <em>bin/system.properties</em>.
+Look at the two sample configuration files (<em>krb5.conf</em> and <em>jaas.conf</em>) located in the jmeter <em>bin</em> folder
+for references to more documentation, and tweak them to match your Kerberos configuration.
 </p>
 <p>
 When generating a SPN for Kerberos SPNEGO authentication IE and Firefox will omit the port number
 from the url. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
 number if it differs from the standard ones (<code>80</code> and <code>443</code>). That behavior
 can be emulated by setting the following jmeter property as below.
-<pre>
-In jmeter.properties or user.properties, set:
+</p>
+<p>
+In <em>jmeter.properties</em> or <em>user.properties</em>, set:
 <ul>
-<li>kerberos.spnego.strip_port=false</li>
+<li><code>kerberos.spnego.strip_port=false</code></li>
 </ul>
-</pre>
 </p>
 <br></br>
 <b>Controls:</b>
