@@ -76,8 +76,11 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         SampleResult result = event.getResult();
         if(result.isSuccessful()) {
             // Compute bytes before stripping
-            result.setBytes(result.getBytes());
-            result.setResponseData(new byte[0]);
+            stipResponse(result);
+            // see Bug 57449
+            for (SampleResult subResult : result.getSubResults()) {
+                stipResponse(subResult);                
+            }
         }
         if(decoratedSender == null)
         {
@@ -91,6 +94,15 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         {
             decoratedSender.sampleOccurred(event);
         }
+    }
+
+    /**
+     * Strip response but fill in bytes field.
+     * @param result {@link SampleResult}
+     */
+    private final void stipResponse(SampleResult result) {
+        result.setBytes(result.getBytes());
+        result.setResponseData(SampleResult.EMPTY_BA);
     }
 
     /**
