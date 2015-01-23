@@ -69,7 +69,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         IncludeController clone = (IncludeController) super.clone();
         clone.setIncludePath(this.getIncludePath());
         if (this.subtree != null) {
-            if (this.subtree.keySet().size() == 1) {
+            if (this.subtree.size() == 1) {
                 Iterator<Object> itr = this.subtree.keySet().iterator();
                 while (itr.hasNext()) {
                     this.sub = (TestElement) itr.next();
