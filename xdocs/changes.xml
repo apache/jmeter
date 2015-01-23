@@ -187,6 +187,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <ul>
 <li><bug>25430</bug>HTTP(S) Test Script Recorder : Make it populate HTTP Authorisation Manager. Partly based on a patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 <li><bug>57381</bug>HTTP(S) Test Script Recorder should display an error if Target Controller references a Recording Controller and no Recording Controller exists. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57488</bug>Performance : Improve SSLContext reset for Two-way SSL Authentication</>
 </ul>
 
 <h3>Other samplers</h3>
