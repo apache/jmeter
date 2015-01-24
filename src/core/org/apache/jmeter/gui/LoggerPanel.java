@@ -25,9 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
 
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -99,20 +96,14 @@ public class LoggerPanel extends JPanel implements LogTarget {
             @Override
             public void run() {
                 synchronized (textArea) {
-                    Document doc;
-                    try {
-                        doc = textArea.getDocument();
-                        Element root = doc.getDefaultRootElement();
-                        int lineCount = root.getElementCount();
-                        if (lineCount>LOGGER_PANEL_MAX_LINES_COUNT) {
-                            int end = root.getElement(lineCount-LOGGER_PANEL_MAX_LINES_COUNT-1).getEndOffset();
-                            doc.remove(0, end);
-                         }
-                        doc.insertString(doc.getLength(), format.format(logEvent), null);
-                        textArea.setCaretPosition(doc.getLength()-1);
-                    } catch (BadLocationException e) {
-                        // NOOP 
+                    textArea.append(format.format(logEvent));
+                    int currentLength = textArea.getText().length();
+                    // If LOGGER_PANEL_MAX_LENGTH is 0, it means all log events are kept
+                    if(LOGGER_PANEL_MAX_LENGTH != 0 && currentLength> LOGGER_PANEL_MAX_LENGTH) {
+                        textArea.setText(textArea.getText().substring(Math.max(0, currentLength-LOGGER_PANEL_MAX_LENGTH), 
+                                currentLength));
                     }
+                    textArea.setCaretPosition(textArea.getText().length());
                 }
             }
         });
