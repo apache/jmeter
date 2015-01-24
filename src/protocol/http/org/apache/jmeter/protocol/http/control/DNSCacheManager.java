@@ -42,7 +42,6 @@ import org.xbill.DNS.ExtendedResolver;
 import org.xbill.DNS.Lookup;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.Resolver;
-import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.TextParseException;
 import org.xbill.DNS.Type;
 
@@ -104,12 +103,17 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         clone.cache = new LinkedHashMap<String, InetAddress[]>();
         CollectionProperty dnsServers = getServers();
         try {
-            clone.resolver = new ExtendedResolver();
+            String[] serverNames = new String[dnsServers.size()];
             PropertyIterator dnsServIt = dnsServers.iterator();
+            int index=0;
             while (dnsServIt.hasNext()) {
-                String dnsServer = dnsServIt.next().getStringValue();
-                ((ExtendedResolver) clone.resolver).addResolver(new SimpleResolver(dnsServer));
+                serverNames[index] = dnsServIt.next().getStringValue();
+                index++;
             }
+            clone.resolver = new ExtendedResolver(serverNames);
+            log.debug("Using DNS Resolvers: "
+                    + Arrays.asList(((ExtendedResolver) clone.resolver)
+                            .getResolvers()));
             // resolvers will be chosen via round-robin
             ((ExtendedResolver) clone.resolver).setLoadBalance(true);
         } catch (UnknownHostException uhe) {
@@ -146,13 +150,13 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
      */
     private InetAddress[] requestLookup(String host) throws UnknownHostException {
         InetAddress[] addresses = null;
-        if (isCustomResolver() && ((ExtendedResolver) resolver).getResolvers().length > 1) {
+        if (isCustomResolver() && ((ExtendedResolver) resolver).getResolvers().length > 0) {
             try {
                 Lookup lookup = new Lookup(host, Type.A);
                 lookup.setCache(lookupCache);
                 lookup.setResolver(resolver);
                 Record[] records = lookup.run();
-                if (records.length == 0) {
+                if (records == null || records.length == 0) {
                     throw new UnknownHostException("Failed to resolve host name: " + host);
                 }
                 addresses = new InetAddress[records.length];
