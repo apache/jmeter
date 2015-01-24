@@ -27,8 +27,8 @@ logkit-2.0.jar
 oro-2.0.8.jar
 serializer-2.7.1.jar
 soap-2.3.1.jar
-tika-core-1.4.jar
-tika-parsers-1.4.jar
+tika-core-1.7.jar
+tika-parsers-1.7.jar
 xalan-2.7.1.jar
 xercesImpl-2.9.1.jar
 xml-apis-1.3.04.jar
