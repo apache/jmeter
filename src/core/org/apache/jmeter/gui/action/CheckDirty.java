@@ -91,10 +91,13 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
             GuiPackage guiPackage = GuiPackage.getInstance();
             JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
             removeMode = true;
-            for (int i = nodes.length - 1; i >= 0; i--) {
-                guiPackage.getTreeModel().getCurrentSubTree(nodes[i]).traverse(this);
+            try {
+                for (int i = nodes.length - 1; i >= 0; i--) {
+                    guiPackage.getTreeModel().getCurrentSubTree(nodes[i]).traverse(this);
+                }
+            } finally {
+                removeMode = false;
             }
-            removeMode = false;
         }
         // If we are merging in another test plan, we know the test plan is dirty now
         if(action.equals(ActionNames.SUB_TREE_MERGED)) {
@@ -103,9 +106,12 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         else {
             dirty = false;
             checkMode = true;
-            HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
-            wholeTree.traverse(this);
-            checkMode = false;
+            try {
+                HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+                wholeTree.traverse(this);
+            } finally {
+                checkMode = false;
+            }
         }
         GuiPackage.getInstance().setDirty(dirty);
     }
