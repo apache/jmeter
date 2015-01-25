@@ -53,6 +53,12 @@ public class ThreadLocalRandom extends Random {
      * unintentionally impact other usages by the thread.
      */
     boolean initialized;
+    
+    // Padding to help avoid memory contention among seed updates in
+    // different TLRs in the common case that they are located near
+    // each other.
+    @SuppressWarnings("unused")
+    private long pad0, pad1, pad2, pad3, pad4, pad5, pad6, pad7;
 
     /**
      * The actual ThreadLocal
