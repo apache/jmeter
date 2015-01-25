@@ -92,7 +92,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
          */
         @Override
         public void script(Tag tag, CharSequence body) {
-            if (!enabled.peek()) {
+            if (!enabled.peek().booleanValue()) {
                 return;
             }
             extractAttribute(tag, ATT_SRC);
@@ -105,7 +105,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
          */
         @Override
         public void tag(Tag tag) {
-            if (!enabled.peek()) {
+            if (!enabled.peek().booleanValue()) {
                 return;
             }
             TagType tagType = tag.getType();
