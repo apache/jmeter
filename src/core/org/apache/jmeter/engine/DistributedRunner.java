@@ -21,6 +21,9 @@ package org.apache.jmeter.engine;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -62,12 +65,15 @@ public class DistributedRunner {
     // NOTE: looks like this constructor is used only from non-Gui and Gui runs does not send props to remote...
     public DistributedRunner(Properties props) {
         remoteProps = props;
-        retriesNumber = JMeterUtils.getPropDefault(RETRIES_NUMBER, 0);
+        retriesNumber = JMeterUtils.getPropDefault(RETRIES_NUMBER, 1);
         continueOnFail = JMeterUtils.getPropDefault(CONTINUE_ON_FAIL, false);
         retriesDelay = JMeterUtils.getPropDefault(RETRIES_DELAY, 5000);
     }
 
-    public void init(List<String> hosts, HashTree tree) {
+    public void init(List<String> hostNames, HashTree tree) {
+        // converting list into mutable version
+        List<String> hosts = new LinkedList<String>(hostNames);
+
         for (int tryNo = 0; tryNo < retriesNumber; tryNo++) {
             if (tryNo > 0) {
                 println("Following remote engines will retry configuring: " + hosts);
@@ -79,7 +85,9 @@ public class DistributedRunner {
                 }
             }
 
-            for (String host : hosts) {
+            int idx = 0;
+            while (idx < hosts.size()) {
+                String host = hosts.get(idx);
                 println("Configuring remote engine: " + host);
                 JMeterEngine engine = getClientEngine(host.trim(), tree);
                 if (engine != null) {
@@ -87,6 +95,7 @@ public class DistributedRunner {
                     hosts.remove(host);
                 } else {
                     println("Failed to configure " + host);
+                    idx++;
                 }
             }
 
@@ -176,17 +185,30 @@ public class DistributedRunner {
     private JMeterEngine getClientEngine(String hostName, HashTree testTree) {
         JMeterEngine engine;
         try {
-            engine = new ClientJMeterEngine(hostName);
+            engine = createEngine(hostName);
+            engine.configure(testTree);
+            if (!remoteProps.isEmpty()) {
+                engine.setProperties(remoteProps);
+            }
+            return engine;
         } catch (Exception ex) {
             JMeterUtils.reportErrorToUser(ex.getMessage(),
                     JMeterUtils.getResString("remote_error_init") + ": " + hostName); // $NON-NLS-1$ $NON-NLS-2$
             return null;
         }
-        engine.configure(testTree);
-        if (!remoteProps.isEmpty()) {
-            engine.setProperties(remoteProps);
-        }
-        return engine;
+    }
+
+    /**
+     * A factory method that might be overridden for unit testing
+     *
+     * @param hostName address for engine
+     * @return engine instance
+     * @throws RemoteException
+     * @throws NotBoundException
+     * @throws MalformedURLException
+     */
+    protected JMeterEngine createEngine(String hostName) throws RemoteException, NotBoundException, MalformedURLException {
+        return new ClientJMeterEngine(hostName);
     }
 
     private void println(String s) {
