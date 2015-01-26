@@ -58,6 +58,20 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         obj.exit(hosts);
     }
 
+    public void testFailure2() throws Exception {
+        createJmeterEnv();
+        JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");
+        JMeterUtils.setProperty(DistributedRunner.RETRIES_DELAY, "1");
+        JMeterUtils.setProperty(DistributedRunner.CONTINUE_ON_FAIL, "false");
+        DistributedRunnerEmul obj = new DistributedRunnerEmul();
+        List<String> hosts = Arrays.asList("test1", "test2");
+        try {
+            obj.init(hosts, new HashTree());
+            fail();
+        } catch (RuntimeException ignored) {
+        }
+    }
+
     private class DistributedRunnerEmul extends DistributedRunner {
         public List<EmulatorEngine> engines = new LinkedList<EmulatorEngine>();
 
