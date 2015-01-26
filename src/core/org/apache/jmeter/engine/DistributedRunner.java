@@ -218,7 +218,8 @@ public class DistributedRunner {
 
     private void errln(String s, Exception e) {
         log.error(s, e);
-        stderr.println(s + ": " + e);
+        stderr.println(s + ": ");
+        e.printStackTrace(stderr);
     }
 
     public void setStdout(PrintStream stdout) {
