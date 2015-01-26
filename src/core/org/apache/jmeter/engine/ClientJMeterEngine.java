@@ -197,4 +197,8 @@ public class ClientJMeterEngine implements JMeterEngine {
     public boolean isActive() {
         return true;
     }
+
+    public String getHost() {
+        return host;
+    }
 }
