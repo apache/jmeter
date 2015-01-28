@@ -282,7 +282,24 @@ There are some JMeter properties that can be set to alter this behaviour.
 </subsection>
 
 
-
+<subsection name="&sect-num;.5 Dealing with nodes that failed starting" anchor="retries">
+  <p>
+    For a large-scale tests there is a chance that some part of remote servers will be unavailable or down. 
+    For example, when you use automation script to allocate many cloud machines and use them as generators,
+    some of requested machines might fail booting because of cloud's issues. 
+  </p>
+  <p>
+    First what you might want is to retry initialization attempts in hope that failed nodes just slightly delayed their boot. 
+    To enable retries, you should set <code>client.tries</code> property to total number of connection attempts. 
+    By default it does only one attempt. To control retry delay, set the <code>client.retries_delay</code> property
+    to number of milliseconds to sleep between attempts.
+  </p>
+    
+  <p>
+    Finally, you might still want to run the test with those generators that succeeded initialization and skipping failed nodes.
+    To enable that, set the <code>client.continue_on_fail=true</code> property.
+  </p>
+</subsection>
 
 </section>
 
