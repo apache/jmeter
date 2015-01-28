@@ -70,13 +70,13 @@ public class DistributedRunner {
         retriesDelay = JMeterUtils.getPropDefault(RETRIES_DELAY, 5000);
     }
 
-    public void init(List<String> hostNames, HashTree tree) {
+    public void init(List<String> addresses, HashTree tree) {
         // converting list into mutable version
-        List<String> hosts = new LinkedList<String>(hostNames);
+        List<String> addrs = new LinkedList<String>(addresses);
 
         for (int tryNo = 0; tryNo < retriesNumber; tryNo++) {
             if (tryNo > 0) {
-                println("Following remote engines will retry configuring: " + hosts);
+                println("Following remote engines will retry configuring: " + addrs);
                 println("Pausing befor retry for " + retriesDelay + "ms");
                 try {
                     Thread.sleep(retriesDelay);
@@ -86,26 +86,26 @@ public class DistributedRunner {
             }
 
             int idx = 0;
-            while (idx < hosts.size()) {
-                String host = hosts.get(idx);
-                println("Configuring remote engine: " + host);
-                JMeterEngine engine = getClientEngine(host.trim(), tree);
+            while (idx < addrs.size()) {
+                String address = addrs.get(idx);
+                println("Configuring remote engine: " + address);
+                JMeterEngine engine = getClientEngine(address.trim(), tree);
                 if (engine != null) {
-                    engines.put(host, engine);
-                    hosts.remove(host);
+                    engines.put(address, engine);
+                    addrs.remove(address);
                 } else {
-                    println("Failed to configure " + host);
+                    println("Failed to configure " + address);
                     idx++;
                 }
             }
 
-            if (hosts.size() == 0) {
+            if (addrs.size() == 0) {
                 break;
             }
         }
 
-        if (hosts.size() > 0) {
-            String msg = "Following remote engines could not be configured:" + hosts;
+        if (addrs.size() > 0) {
+            String msg = "Following remote engines could not be configured:" + addrs;
             if (!continueOnFail) {
                 throw new RuntimeException(msg);
             } else {
@@ -118,15 +118,19 @@ public class DistributedRunner {
     /**
      * Starts a remote testing engines
      *
-     * @param hosts list of the DNS names or IP addresses of the remote testing engines
+     * @param addresses list of the DNS names or IP addresses of the remote testing engines
      */
-    public void start(List<String> hosts) {
+    public void start(List<String> addresses) {
         println("Starting remote engines");
         long now = System.currentTimeMillis();
         println("Starting the test @ " + new Date(now) + " (" + now + ")");
-        for (String host : hosts) {
+        for (String address : addresses) {
             try {
-                engines.get(host).runTest();
+                if (engines.containsKey(address)) {
+                    engines.get(address).runTest();
+                } else {
+                    log.warn("Host not found in list of active engines: " + address);
+                }
             } catch (IllegalStateException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
             } catch (JMeterEngineException e) {
@@ -140,52 +144,65 @@ public class DistributedRunner {
      * Start all engines that were previously initiated
      */
     public void start() {
-        List<String> hosts = new LinkedList<String>();
-        hosts.addAll(engines.keySet());
-        start(hosts);
+        List<String> address = new LinkedList<String>();
+        address.addAll(engines.keySet());
+        start(address);
     }
 
 
-    public void stop(List<String> hosts) {
+    public void stop(List<String> addresses) {
         println("Stopping remote engines");
-        for (String host : hosts) {
+        for (String address : addresses) {
             try {
-                engines.get(host).stopTest(true);
+                if (engines.containsKey(address)) {
+                    engines.get(address).stopTest(true);
+                } else {
+                    log.warn("Host not found in list of active engines: " + address);
+                }
             } catch (RuntimeException e) {
-                errln("Failed to stop test on " + host, e);
+                errln("Failed to stop test on " + address, e);
             }
         }
         println("Remote engines have been stopped");
     }
 
-    public void shutdown(List<String> hosts) {
+    public void shutdown(List<String> addresses) {
         println("Shutting down remote engines");
-        for (String host : hosts) {
+        for (String address : addresses) {
             try {
-                engines.get(host).stopTest(false);
+                if (engines.containsKey(address)) {
+                    engines.get(address).stopTest(false);
+                } else {
+                    log.warn("Host not found in list of active engines: " + address);
+                }
+
             } catch (RuntimeException e) {
-                errln("Failed to shutdown test on " + host, e);
+                errln("Failed to shutdown test on " + address, e);
             }
         }
         println("Remote engines have been shut down");
     }
 
-    public void exit(List<String> hosts) {
+    public void exit(List<String> addresses) {
         println("Exiting remote engines");
-        for (String host : hosts) {
+        for (String address : addresses) {
             try {
-                engines.get(host).exit();
+                if (engines.containsKey(address)) {
+                    engines.get(address).exit();
+                } else {
+                    log.warn("Host not found in list of active engines: " + address);
+                }
             } catch (RuntimeException e) {
-                errln("Failed to exit on " + host, e);
+                errln("Failed to exit on " + address, e);
             }
         }
         println("Remote engines have been exited");
     }
 
-    private JMeterEngine getClientEngine(String hostName, HashTree testTree) {
+    private JMeterEngine getClientEngine(String address, HashTree testTree) {
         JMeterEngine engine;
         try {
-            engine = createEngine(hostName);
+            engine = createEngine(address);
             engine.configure(testTree);
             if (!remoteProps.isEmpty()) {
                 engine.setProperties(remoteProps);
@@ -193,7 +210,7 @@ public class DistributedRunner {
             return engine;
         } catch (Exception ex) {
             JMeterUtils.reportErrorToUser(ex.getMessage(),
-                    JMeterUtils.getResString("remote_error_init") + ": " + hostName); // $NON-NLS-1$ $NON-NLS-2$
+                    JMeterUtils.getResString("remote_error_init") + ": " + address); // $NON-NLS-1$ $NON-NLS-2$
             return null;
         }
     }
@@ -201,14 +218,14 @@ public class DistributedRunner {
     /**
      * A factory method that might be overridden for unit testing
      *
-     * @param hostName address for engine
+     * @param address address for engine
      * @return engine instance
      * @throws RemoteException
      * @throws NotBoundException
      * @throws MalformedURLException
      */
-    protected JMeterEngine createEngine(String hostName) throws RemoteException, NotBoundException, MalformedURLException {
-        return new ClientJMeterEngine(hostName);
+    protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException, MalformedURLException {
+        return new ClientJMeterEngine(address);
     }
 
     private void println(String s) {

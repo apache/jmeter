@@ -72,13 +72,27 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         }
     }
 
+    public void testFailure3() throws Exception {
+        createJmeterEnv();
+        JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");
+        JMeterUtils.setProperty(DistributedRunner.RETRIES_DELAY, "1");
+        JMeterUtils.setProperty(DistributedRunner.CONTINUE_ON_FAIL, "true");
+        DistributedRunnerEmul obj = new DistributedRunnerEmul();
+        List<String> hosts = Arrays.asList("test1", "test2");
+        obj.init(hosts, new HashTree());
+        obj.start(hosts);
+        obj.shutdown(hosts);
+        obj.stop(hosts);
+        obj.exit(hosts);
+    }
+
     private class DistributedRunnerEmul extends DistributedRunner {
         public List<EmulatorEngine> engines = new LinkedList<EmulatorEngine>();
 
         @Override
-        protected JMeterEngine createEngine(String hostName) throws RemoteException, NotBoundException, MalformedURLException {
+        protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException, MalformedURLException {
             EmulatorEngine engine = engines.remove(0);
-            engine.setHost(hostName);
+            engine.setHost(address);
             return engine;
         }
     }
