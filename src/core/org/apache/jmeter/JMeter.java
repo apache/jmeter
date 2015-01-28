@@ -31,7 +31,6 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -57,6 +56,7 @@ import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
+import org.apache.jmeter.engine.DistributedRunner;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
@@ -811,35 +811,16 @@ public class JMeter implements JMeterPlugin {
                 engines.add(engine);
             } else {
                 java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");//$NON-NLS-1$
-                List<String> failingEngines = new ArrayList<String>(st.countTokens());
+                List<String> hosts = new LinkedList<String>();
                 while (st.hasMoreElements()) {
-                    String el = (String) st.nextElement();
-                    println("Configuring remote engine for " + el);
-                    log.info("Configuring remote engine for " + el);
-                    JMeterEngine eng = doRemoteInit(el.trim(), tree);
-                    if (null != eng) {
-                        engines.add(eng);
-                    } else {
-                        failingEngines.add(el);
-                        println("Failed to configure "+el);
-                    }
+                    hosts.add((String) st.nextElement());
                 }
-                if (engines.isEmpty()) {
-                    println("No remote engines were started.");
-                    return;
-                }
-                if(failingEngines.size()>0) {
-                    throw new IllegalArgumentException("The following remote engines could not be configured:"+failingEngines);
-                }
-                println("Starting remote engines");
-                log.info("Starting remote engines");
-                long now=System.currentTimeMillis();
-                println("Starting the test @ "+new Date(now)+" ("+now+")");
-                for (JMeterEngine engine : engines) {
-                    engine.runTest();
-                }
-                println("Remote engines have been started");
-                log.info("Remote engines have been started");
+                
+                DistributedRunner distributedRunner=new DistributedRunner(this.remoteProps);
+                distributedRunner.setStdout(System.out);
+                distributedRunner.setStdErr(System.err);
+                distributedRunner.init(hosts, tree);
+                distributedRunner.start();
             }
             startUdpDdaemon(engines);
         } catch (Exception e) {
@@ -927,22 +908,6 @@ public class JMeter implements JMeterPlugin {
             rc = (ReplaceableController) item.clone();
         }
         return rc;
-    }
-
-    private JMeterEngine doRemoteInit(String hostName, HashTree testTree) {
-        JMeterEngine engine = null;
-        try {
-            engine = new ClientJMeterEngine(hostName);
-        } catch (Exception e) {
-            log.fatalError("Failure connecting to remote host: "+hostName, e);
-            System.err.println("Failure connecting to remote host: "+hostName+" "+e);
-            return null;
-        }
-        engine.configure(testTree);
-        if (!remoteProps.isEmpty()) {
-            engine.setProperties(remoteProps);
-        }
-        return engine;
     }
 
     /*
