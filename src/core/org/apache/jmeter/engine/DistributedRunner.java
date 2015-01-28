@@ -105,7 +105,7 @@ public class DistributedRunner {
 
         if (addrs.size() > 0) {
             String msg = "Following remote engines could not be configured:" + addrs;
-            if (!continueOnFail) {
+            if (!continueOnFail || engines.size() == 0) {
                 stop();
                 throw new RuntimeException(msg);
             } else {
@@ -217,7 +217,7 @@ public class DistributedRunner {
             }
             return engine;
         } catch (Exception ex) {
-            log.error("Failed to create engine at "+address, ex);
+            log.error("Failed to create engine at " + address, ex);
             JMeterUtils.reportErrorToUser(ex.getMessage(),
                     JMeterUtils.getResString("remote_error_init") + ": " + address); // $NON-NLS-1$ $NON-NLS-2$
             return null;
