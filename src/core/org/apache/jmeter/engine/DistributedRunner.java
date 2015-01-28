@@ -45,9 +45,9 @@ import org.apache.log.Logger;
 public class DistributedRunner {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static final String RETRIES_NUMBER = "rmi.retries_number"; // $NON-NLS-1$
-    public static final String RETRIES_DELAY = "rmi.retries_delay"; // $NON-NLS-1$
-    public static final String CONTINUE_ON_FAIL = "rmi.continue_on_fail"; // $NON-NLS-1$
+    public static final String RETRIES_NUMBER = "client.tries"; // $NON-NLS-1$
+    public static final String RETRIES_DELAY = "client.retries_delay"; // $NON-NLS-1$
+    public static final String CONTINUE_ON_FAIL = "client.continue_on_fail"; // $NON-NLS-1$
 
     private final Properties remoteProps;
     private final boolean continueOnFail;
@@ -62,7 +62,6 @@ public class DistributedRunner {
         this(new Properties());
     }
 
-    // NOTE: looks like this constructor is used only from non-Gui and Gui runs does not send props to remote...
     public DistributedRunner(Properties props) {
         remoteProps = props;
         retriesNumber = JMeterUtils.getPropDefault(RETRIES_NUMBER, 1);
@@ -77,7 +76,7 @@ public class DistributedRunner {
         for (int tryNo = 0; tryNo < retriesNumber; tryNo++) {
             if (tryNo > 0) {
                 println("Following remote engines will retry configuring: " + addrs);
-                println("Pausing befor retry for " + retriesDelay + "ms");
+                println("Pausing before retry for " + retriesDelay + "ms");
                 try {
                     Thread.sleep(retriesDelay);
                 } catch (InterruptedException e) {
@@ -107,6 +106,7 @@ public class DistributedRunner {
         if (addrs.size() > 0) {
             String msg = "Following remote engines could not be configured:" + addrs;
             if (!continueOnFail) {
+                stop();
                 throw new RuntimeException(msg);
             } else {
                 println(msg);
@@ -144,11 +144,10 @@ public class DistributedRunner {
      * Start all engines that were previously initiated
      */
     public void start() {
-        List<String> address = new LinkedList<String>();
-        address.addAll(engines.keySet());
-        start(address);
+        List<String> addresses = new LinkedList<String>();
+        addresses.addAll(engines.keySet());
+        start(addresses);
     }
-
 
     public void stop(List<String> addresses) {
         println("Stopping remote engines");
@@ -164,6 +163,15 @@ public class DistributedRunner {
             }
         }
         println("Remote engines have been stopped");
+    }
+
+    /**
+     * Stop all engines that were previously initiated
+     */
+    public void stop() {
+        List<String> addresses = new LinkedList<String>();
+        addresses.addAll(engines.keySet());
+        stop(addresses);
     }
 
     public void shutdown(List<String> addresses) {
@@ -209,6 +217,7 @@ public class DistributedRunner {
             }
             return engine;
         } catch (Exception ex) {
+            log.error("Failed to create engine at "+address, ex);
             JMeterUtils.reportErrorToUser(ex.getMessage(),
                     JMeterUtils.getResString("remote_error_init") + ": " + address); // $NON-NLS-1$ $NON-NLS-2$
             return null;
