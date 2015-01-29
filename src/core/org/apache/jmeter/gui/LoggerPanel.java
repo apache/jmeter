@@ -23,6 +23,7 @@ import java.awt.Insets;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
@@ -42,15 +43,13 @@ public class LoggerPanel extends JPanel implements LogTarget {
 
     private static final long serialVersionUID = 6911128494402594429L;
 
-    private JSyntaxTextArea textArea;
+    private final JTextArea textArea;
 
     private final PatternFormatter format;
 
     // Limit length of log content
     private static final int LOGGER_PANEL_MAX_LENGTH =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 80000); // $NON-NLS-1$
-    
-    private static final int LOGGER_PANEL_MAX_LINES_COUNT = LOGGER_PANEL_MAX_LENGTH / 80; // $NON-NLS-1$
     
     // Make panel handle event even if closed
     private static final boolean LOGGER_PANEL_RECEIVE_WHEN_CLOSED =
@@ -60,27 +59,37 @@ public class LoggerPanel extends JPanel implements LogTarget {
      * Pane for display JMeter log file
      */
     public LoggerPanel() {
-        init();
+        textArea = init();
         format = new PatternFormatter(LoggingManager.DEFAULT_PATTERN + "\n"); // $NON-NLS-1$
     }
 
-    private void init() {
+    private JTextArea init() {
         this.setLayout(new BorderLayout());
+        final JScrollPane areaScrollPane;
+        final JTextArea jTextArea;
 
-        // TEXTAREA
-        textArea = new JSyntaxTextArea(15, 80, true);
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
-        textArea.setCodeFoldingEnabled(false);
-        textArea.setAntiAliasingEnabled(false);
-        textArea.setEditable(false);
-        textArea.setLineWrap(false);
-        textArea.setLanguage("text");
-        textArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
-        JScrollPane areaScrollPane = new JTextScrollPane(textArea);
+        if (JMeterUtils.getPropDefault("loggerpanel.usejsyntaxtext", true)) {
+            // JSyntax Text Area
+            JSyntaxTextArea jSyntaxTextArea = new JSyntaxTextArea(15, 80, true);
+            jSyntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+            jSyntaxTextArea.setCodeFoldingEnabled(false);
+            jSyntaxTextArea.setAntiAliasingEnabled(false);
+            jSyntaxTextArea.setEditable(false);
+            jSyntaxTextArea.setLineWrap(false);
+            jSyntaxTextArea.setLanguage("text");
+            jSyntaxTextArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
+            areaScrollPane = new JTextScrollPane(jSyntaxTextArea);
+            jTextArea = jSyntaxTextArea;
+        } else {
+            // Plain text area
+            jTextArea =  new JTextArea(15, 80);
+            areaScrollPane = new JScrollPane(jTextArea);
+        }
 
         areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.add(areaScrollPane, BorderLayout.CENTER); 
+        this.add(areaScrollPane, BorderLayout.CENTER);
+        return jTextArea;
     }
 
     /* (non-Javadoc)
