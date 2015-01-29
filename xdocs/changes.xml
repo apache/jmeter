@@ -150,7 +150,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>Controllers</h3>
 <ul>
-<li><bug>57447</bug>Use only the user listed DNS Servers, when "use custom DNS resolver" option is enabled.
+<li><bug>57447</bug>Use only the user listed DNS Servers, when "use custom DNS resolver" option is enabled.</li>
 </ul>
 
 <h3>Listeners</h3>
