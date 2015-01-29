@@ -234,6 +234,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><bug>57418</bug>Remove unused constructor from Workbench</li>
 <li><bug>57419</bug>Remove unused interface ModelListener.</li>
 <li><bug>57466</bug>IncludeController : Remove an unneeded set creation. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li>Added property loggerpanel.usejsyntaxtext to disable the use of JSyntaxTextArea for the Console Logger (in case of memory or other issues)</li>
 </ul>
 
 <ch_section>Thanks</ch_section>
