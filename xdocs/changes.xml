@@ -56,6 +56,7 @@ Summary
 <p>
 <ul>
 <li><bugzilla>48799</bugzilla> - Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+<li><bugzilla>57500</bugzilla> - Introduce retry behavior for distributed testing. Implemented by Andrey Pokhilko and Dzimitry Kashlach and contributed by BlazeMeter Ltd.</li>
 <li>Sample text</li>
 </ul>
 </p>
@@ -243,6 +244,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
 <li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
 <li>Benoit Wiart (benoit.wiart at gmail.com)</li>
 </ul>
 
