@@ -69,7 +69,11 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         JMeterUtils.setProperty(DistributedRunner.CONTINUE_ON_FAIL, "true");
         DistributedRunnerEmul obj = new DistributedRunnerEmul();
         List<String> hosts = Arrays.asList("test1", "test2");
-        obj.init(hosts, new HashTree());
+        try {
+            obj.init(hosts, new HashTree());
+            fail();
+        } catch (RuntimeException ignored) {
+        }
         obj.start();
         obj.shutdown(hosts);
         obj.stop(hosts);
@@ -97,7 +101,11 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         JMeterUtils.setProperty(DistributedRunner.CONTINUE_ON_FAIL, "true");
         DistributedRunnerEmul obj = new DistributedRunnerEmul();
         List<String> hosts = Arrays.asList("test1", "test2");
-        obj.init(hosts, new HashTree());
+        try {
+            obj.init(hosts, new HashTree());
+            fail();
+        } catch (RuntimeException ignored) {
+        }
         obj.start(hosts);
         obj.shutdown(hosts);
         obj.stop(hosts);
