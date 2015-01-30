@@ -135,7 +135,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         if (userProp != null){
             p = JMeterUtils.loadProperties(userProp, defaultProps);
         } else {
-            p=defaultProps;
+            p = defaultProps;
         }
 
         String order = JMeterUtils.getPropDefault(TOOLBAR_LIST, p.getProperty(TOOLBAR_PROP_NAME));
@@ -191,13 +191,11 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      */
     private Map<String, Boolean> getCurrentButtonsStates() {
         Component[] components = getComponents();
-        Map<String, Boolean> buttonStates = 
-                new HashMap<String, Boolean>(components.length);
+        Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(components.length);
         for (int i = 0; i < components.length; i++) {
-            if(components[i]instanceof JButton) {
+            if (components[i] instanceof JButton) {
                 JButton button = (JButton) components[i];
-                buttonStates.put(button.getActionCommand(),  
-                        Boolean.valueOf(button.isEnabled()));
+                buttonStates.put(button.getActionCommand(), Boolean.valueOf(button.isEnabled()));
             }
         }
         return buttonStates;
@@ -209,15 +207,15 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     public void initButtonsState() {
         final boolean started = false;
         Map<String, Boolean> buttonStates = new HashMap<String, Boolean>();
-        buttonStates.put(ActionNames.ACTION_START,Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS,Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.ACTION_STOP,Boolean.valueOf(started));
-        buttonStates.put(ActionNames.ACTION_SHUTDOWN,Boolean.valueOf(started));
+        buttonStates.put(ActionNames.ACTION_START, Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.ACTION_STOP, Boolean.valueOf(started));
+        buttonStates.put(ActionNames.ACTION_SHUTDOWN, Boolean.valueOf(started));
         buttonStates.put(ActionNames.UNDO, Boolean.FALSE);
         buttonStates.put(ActionNames.REDO, Boolean.FALSE);
-        buttonStates.put(ActionNames.REMOTE_START_ALL,Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.REMOTE_STOP_ALL,Boolean.valueOf(started));
-        buttonStates.put(ActionNames.REMOTE_SHUT_ALL,Boolean.valueOf(started));
+        buttonStates.put(ActionNames.REMOTE_START_ALL, Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.REMOTE_STOP_ALL, Boolean.valueOf(started));
+        buttonStates.put(ActionNames.REMOTE_SHUT_ALL, Boolean.valueOf(started));
         updateButtons(buttonStates);
     }
     
@@ -230,10 +228,10 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      */
     public void setLocalTestStarted(boolean started) {
         Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(3);
-        buttonStates.put(ActionNames.ACTION_START,Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS,Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.ACTION_STOP,Boolean.valueOf(started));
-        buttonStates.put(ActionNames.ACTION_SHUTDOWN,Boolean.valueOf(started));
+        buttonStates.put(ActionNames.ACTION_START, Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.ACTION_STOP, Boolean.valueOf(started));
+        buttonStates.put(ActionNames.ACTION_SHUTDOWN, Boolean.valueOf(started));
         updateButtons(buttonStates);
     }
     
@@ -245,9 +243,9 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      */
     public void setRemoteTestStarted(boolean started) {
         Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(3);
-        buttonStates.put(ActionNames.REMOTE_START_ALL,Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.REMOTE_STOP_ALL,Boolean.valueOf(started));
-        buttonStates.put(ActionNames.REMOTE_SHUT_ALL,Boolean.valueOf(started));
+        buttonStates.put(ActionNames.REMOTE_START_ALL, Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.REMOTE_STOP_ALL, Boolean.valueOf(started));
+        buttonStates.put(ActionNames.REMOTE_SHUT_ALL, Boolean.valueOf(started));
         updateButtons(buttonStates);
     }
 
@@ -277,10 +275,10 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     private void updateButtons(Map<String, Boolean> buttonStates) {
         Component[] components = getComponents();
         for (int i = 0; i < components.length; i++) {
-            if(components[i]instanceof JButton) {
+            if (components[i] instanceof JButton) {
                 JButton button = (JButton) components[i];
                 Boolean enabled = buttonStates.get(button.getActionCommand());
-                if(enabled != null) {
+                if (enabled != null) {
                     button.setEnabled(enabled.booleanValue());
                 }
             }
