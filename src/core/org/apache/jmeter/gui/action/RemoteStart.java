@@ -20,15 +20,14 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
-
+import java.util.StringTokenizer;
 import org.apache.jmeter.JMeter;
-import org.apache.jmeter.engine.ClientJMeterEngine;
-import org.apache.jmeter.engine.JMeterEngine;
-import org.apache.jmeter.engine.JMeterEngineException;
+import org.apache.jmeter.engine.DistributedRunner;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -59,7 +58,7 @@ public class RemoteStart extends AbstractAction {
         commands.add(ActionNames.REMOTE_EXIT_ALL);
     }
 
-    private final Map<String, JMeterEngine> remoteEngines = new HashMap<String, JMeterEngine>();
+    private DistributedRunner distributedRunner = new DistributedRunner();
 
     public RemoteStart() {
     }
@@ -72,123 +71,37 @@ public class RemoteStart extends AbstractAction {
         }
         String action = e.getActionCommand();
         if (action.equals(ActionNames.REMOTE_STOP)) {
-            doRemoteStop(name, true);
+            GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
+            distributedRunner.stop(Arrays.asList(name));
         } else if (action.equals(ActionNames.REMOTE_SHUT)) {
-            doRemoteStop(name, false);
+            GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
+            distributedRunner.shutdown(Arrays.asList(name));
         } else if (action.equals(ActionNames.REMOTE_START)) {
             popupShouldSave(e);
-            doRemoteInit(name);
-            doRemoteStart(name);
+            distributedRunner.init(Arrays.asList(name), getTestTree());
+            distributedRunner.start(Arrays.asList(name));
         } else if (action.equals(ActionNames.REMOTE_START_ALL)) {
             popupShouldSave(e);
-            String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
-            java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
-            while (st.hasMoreElements()) {
-                String el = (String) st.nextElement();
-                doRemoteInit(el.trim());
-            }
-            st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
-            while (st.hasMoreElements()) {
-                String el = (String) st.nextElement();
-                doRemoteStart(el.trim());
-            }
+            distributedRunner.init(getRemoteHosts(), getTestTree());
+            distributedRunner.start();
         } else if (action.equals(ActionNames.REMOTE_STOP_ALL)) {
-            doRemoteStopAll(true);
+            distributedRunner.stop(getRemoteHosts());
         } else if (action.equals(ActionNames.REMOTE_SHUT_ALL)) {
-            doRemoteStopAll(false);
+            distributedRunner.shutdown(getRemoteHosts());
         } else if (action.equals(ActionNames.REMOTE_EXIT)) {
-            doRemoteExit(name);
+            distributedRunner.exit(Arrays.asList(name));
         } else if (action.equals(ActionNames.REMOTE_EXIT_ALL)) {
-            String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
-            java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
-            while (st.hasMoreElements()) {
-                String el = (String) st.nextElement();
-                doRemoteExit(el.trim());
-            }
+            distributedRunner.exit(getRemoteHosts());
         }
     }
 
-    private void doRemoteStopAll(boolean now) {
+    private List<String> getRemoteHosts() {
         String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
-        java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
-        while (st.hasMoreElements()) {
-            String el = (String) st.nextElement();
-            doRemoteStop(el.trim(), now);
-        }
-    }
-
-    /**
-     * Stops a remote testing engine
-     *
-     * @param name
-     *            the DNS name or IP address of the remote testing engine
-     *
-     */
-    private void doRemoteStop(String name, boolean now) {
-        GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
-        JMeterEngine engine = remoteEngines.get(name);
-        // Engine may be null if it has not correctly started
-        if(engine != null) {
-            engine.stopTest(now);
-        }
-    }
-
-    /**
-     * Exits a remote testing engine
-     *
-     * @param name
-     *            the DNS name or IP address of the remote testing engine
-     *
-     */
-    private void doRemoteExit(String name) {
-        JMeterEngine engine = remoteEngines.get(name);
-        if (engine == null) {
-            return;
-        }
-        // GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
-        engine.exit();
-    }
-
-    /**
-     * Starts a remote testing engine
-     *
-     * @param name
-     *            the DNS name or IP address of the remote testing engine
-     *
-     */
-    private void doRemoteStart(String name) {
-        JMeterEngine engine = remoteEngines.get(name);
-        if (engine != null) {
-            try {
-                engine.runTest();
-            } catch (IllegalStateException e) {
-                JMeterUtils.reportErrorToUser(e.getMessage(),JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
-            } catch (JMeterEngineException e) {
-                JMeterUtils.reportErrorToUser(e.getMessage(),JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
-            }
-        }
-    }
-
-    /**
-     * Initializes remote engines
-     */
-    private void doRemoteInit(String name) {
-        JMeterEngine engine = remoteEngines.get(name);
-        if (engine == null) {
-            try {
-                log.info("Initialising remote engine: "+name);
-                engine = new ClientJMeterEngine(name);
-                remoteEngines.put(name, engine);
-            } catch (Exception ex) {
-                log.error("Failed to initialise remote engine", ex);
-                JMeterUtils.reportErrorToUser(ex.getMessage(),
-                        JMeterUtils.getResString("remote_error_init") + ": " + name); // $NON-NLS-1$ $NON-NLS-2$
-                return;
-            }
-        } else {
-            engine.reset();
-        }
-        initEngine(engine);
+        StringTokenizer st = new StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
+        List<String> list = new LinkedList<String>();
+        while (st.hasMoreElements())
+            list.add((String) st.nextElement());
+        return list;
     }
 
     @Override
@@ -196,19 +109,13 @@ public class RemoteStart extends AbstractAction {
         return commands;
     }
 
-    /**
-     * Initializes test on engine.
-     *
-     * @param engine
-     *            remote engine object
-     */
-    private void initEngine(JMeterEngine engine) {
+    private HashTree getTestTree() {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
         testTree.add(testTree.getArray()[0], gui.getMainFrame());
         // Used for remote notification of threads start/stop,see BUG 54152
         testTree.add(testTree.getArray()[0], new RemoteThreadsListenerTestElement());
-        engine.configure(testTree);
+        return testTree;
     }
 }
