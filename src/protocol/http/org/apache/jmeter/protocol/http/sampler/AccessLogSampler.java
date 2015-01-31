@@ -52,7 +52,7 @@ import org.apache.log.Logger;
  * this sampler, so that I can take production logs to simulate production
  * traffic in a test environment. Doing so is desirable to study odd or unusual
  * behavior. It's also good to compare a new system against an existing system
- * to get near apples- to-apples comparison. I've been asked if benchmarks are
+ * to get near apples-to-apples comparison. I've been asked if benchmarks are
  * really fair comparisons just about every single time, so this helps me
  * accomplish that task.
  * <p>
