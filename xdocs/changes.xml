@@ -223,6 +223,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>General</h3>
 <ul>
+<li><bug>57518</bug>Icons for toolbar with several sizes</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
