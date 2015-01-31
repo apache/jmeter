@@ -75,7 +75,8 @@ public class LogFilter implements Filter, Serializable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** protected members used by class to filter * */
+    // protected members used by class to filter
+
     protected boolean CHANGEEXT = false;
 
     protected String OLDEXT = null;
