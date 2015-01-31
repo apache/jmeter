@@ -59,9 +59,7 @@ import org.apache.log.Logger;
  * FIXME Why is searchTF not getting focus correctly after having been setVisible(false) once
  */
 public class SearchTreeDialog extends JDialog implements ActionListener {
-    /**
-     *
-     */
+
     private static final long serialVersionUID = -4436834972710248247L;
 
     private static final Logger logger = LoggingManager.getLoggerForClass();
@@ -93,9 +91,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         JRootPane rootPane = new JRootPane();
         // Hide Window on ESC
         Action escapeAction = new AbstractAction("ESCAPE") {
-            /**
-             *
-             */
+
             private static final long serialVersionUID = -6543764044868772971L;
 
             @Override
@@ -105,9 +101,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         };
         // Do search on Enter
         Action enterAction = new AbstractAction("ENTER") {
-            /**
-             *
-             */
+
             private static final long serialVersionUID = -3661361497864527363L;
 
             @Override
@@ -172,7 +166,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==cancelButton) {
+        if (e.getSource()==cancelButton) {
             searchTF.requestFocusInWindow();
             this.setVisible(false);
             return;
@@ -186,7 +180,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
     private void doSearch(ActionEvent e) {
         boolean expand = e.getSource()==searchAndExpandButton;
         String wordToSearch = searchTF.getText();
-        if(StringUtils.isEmpty(wordToSearch)) {
+        if (StringUtils.isEmpty(wordToSearch)) {
             return;
         } else {
             this.lastSearch = wordToSearch;
@@ -196,7 +190,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
         // do search
         Searcher searcher = null;
-        if(isRegexpCB.isSelected()) {
+        if (isRegexpCB.isSelected()) {
             searcher = new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
         } else {
             searcher = new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
@@ -211,7 +205,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
                     List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
                     List<String> searchableTokens = searchable.getSearchableTokens();
                     boolean result = searcher.search(searchableTokens);
-                    if(result) {
+                    if (result) {
                         nodes.addAll(matchingNodes);
                     }
                 }

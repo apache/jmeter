@@ -81,10 +81,10 @@ public class Load implements Command {
             return;
         }
         final File selectedFile = chooser.getSelectedFile();
-        if(selectedFile != null) {
+        if (selectedFile != null) {
             final boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
             // We must ask the user if it is ok to close current project
-            if(!merging) { // i.e. it is OPEN
+            if (!merging) { // i.e. it is OPEN
                 if (!Close.performAction(e)) {
                     return;
                 }
@@ -121,25 +121,26 @@ public class Load implements Command {
         if (f != null) {
             InputStream reader = null;
             try {
-                    if (merging) {
-                        log.info("Merging file: " + f);
-                    } else {
-                        log.info("Loading file: " + f);
-                        // TODO should this be done even if not a full test plan?
-                        // and what if load fails?
-                        if(setDetails) {
-                            FileServer.getFileServer().setBaseForScript(f);
-                        }
+                if (merging) {
+                    log.info("Merging file: " + f);
+                } else {
+                    log.info("Loading file: " + f);
+                    // TODO should this be done even if not a full test plan?
+                    // and what if load fails?
+                    if (setDetails) {
+                        FileServer.getFileServer().setBaseForScript(f);
                     }
-                    reader = new FileInputStream(f);
-                    final HashTree tree = SaveService.loadTree(reader);
-                    final boolean isTestPlan = insertLoadedTree(e.getID(), tree, merging);
-    
-                    // don't change name if merging
-                    if (!merging && isTestPlan && setDetails) {
-                        // TODO should setBaseForScript be called here rather than above?
-                        guiPackage.setTestPlanFile(f.getAbsolutePath());
-                    }
+                }
+                reader = new FileInputStream(f);
+                final HashTree tree = SaveService.loadTree(reader);
+                final boolean isTestPlan = insertLoadedTree(e.getID(), tree, merging);
+
+                // don't change name if merging
+                if (!merging && isTestPlan && setDetails) {
+                    // TODO should setBaseForScript be called here rather than
+                    // above?
+                    guiPackage.setTestPlanFile(f.getAbsolutePath());
+                }
             } catch (NoClassDefFoundError ex) {// Allow for missing optional jars
                 reportError("Missing jar file", ex, true);
             } catch (ConversionException ex) {
@@ -204,7 +205,7 @@ public class Load implements Command {
         // Send different event wether we are merging a test plan into another test plan,
         // or loading a testplan from scratch
         ActionEvent actionEvent =
-            new ActionEvent(subTree.get(subTree.getArray()[subTree.size() - 1]), id, 
+            new ActionEvent(subTree.get(subTree.getArray()[subTree.size() - 1]), id,
                     merging ? ActionNames.SUB_TREE_MERGED : ActionNames.SUB_TREE_LOADED);
 
         ActionRouter.getInstance().actionPerformed(actionEvent);

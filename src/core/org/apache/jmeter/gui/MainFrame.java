@@ -196,6 +196,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         totalThreads = new JLabel("0"); // $NON-NLS-1$
         totalThreads.setToolTipText(JMeterUtils.getResString("total_threads_tooltip")); // $NON-NLS-1$
+
         activeThreads = new JLabel("0"); // $NON-NLS-1$
         activeThreads.setToolTipText(JMeterUtils.getResString("active_threads_tooltip")); // $NON-NLS-1$
 
@@ -206,9 +207,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         warnIndicator.setContentAreaFilled(false);
         warnIndicator.setBorderPainted(false);
         warnIndicator.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
         warnIndicator.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
         warnIndicator.addActionListener(this);
+
         errorsOrFatalsLabel = new JLabel("0"); // $NON-NLS-1$
         errorsOrFatalsLabel.setToolTipText(JMeterUtils.getResString("error_indicator_tooltip")); // $NON-NLS-1$
 
@@ -345,7 +346,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         }
         stoppingMessage = new EscapeDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
         String label = JMeterUtils.getResString("stopping_test"); //$NON-NLS-1
-        if(!StringUtils.isEmpty(host)) {
+        if (!StringUtils.isEmpty(host)) {
             label = label + JMeterUtils.getResString("stopping_test_host")+ ": " + host;
         }
         JLabel stopLabel = new JLabel(label); //$NON-NLS-1$$NON-NLS-2$
@@ -356,7 +357,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                if (stoppingMessage != null) {// TODO - how can this be null?
+                if (stoppingMessage != null) { // TODO - how can this be null?
                     stoppingMessage.setVisible(true);
                 }
             }
@@ -409,7 +410,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         activeThreads.setText("0"); // $NON-NLS-1$
         totalThreads.setText("0"); // $NON-NLS-1$
         menuBar.setRunning(true, host);
-        if(LOCAL.equals(host)) {
+        if (LOCAL.equals(host)) {
             toolbar.setLocalTestStarted(true);
         } else {
             toolbar.setRemoteTestStarted(true);
@@ -442,7 +443,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             JMeterContextService.endTest();
         }
         menuBar.setRunning(false, host);
-        if(LOCAL.equals(host)) {
+        if (LOCAL.equals(host)) {
             toolbar.setLocalTestStarted(false);
         } else {
             toolbar.setRemoteTestStarted(false);
@@ -640,7 +641,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         treevar.addTreeSelectionListener(treeListener);
         treevar.addMouseListener(treeListener);
         treevar.addKeyListener(treeListener);
-        
+
         // enable drag&drop, install a custom transfer handler
         treevar.setDragEnabled(true);
         treevar.setDropMode(DropMode.ON_OR_INSERT);
@@ -725,18 +726,18 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         @SuppressWarnings("unchecked")
         List<File> files = (List<File>)
                 tr.getTransferData(DataFlavor.javaFileListFlavor);
-        if(files.isEmpty()) {
+        if (files.isEmpty()) {
             return false;
         }
         File file = files.get(0);
-        if(!file.getName().endsWith(".jmx")) {
+        if (!file.getName().endsWith(".jmx")) {
             log.warn("Importing file:" + file.getName()+ "from DnD failed because file extension does not end with .jmx");
             return false;
         }
 
         ActionEvent fakeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ActionNames.OPEN);
         LoadDraggedFile.loadProject(fakeEvent, file);
-        
+
         return true;
     }
 
@@ -781,7 +782,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     @Override
     public void clearData() {
         logPanel.clear();
-        if(DISPLAY_ERROR_FATAL_COUNTER) {
+        if (DISPLAY_ERROR_FATAL_COUNTER) {
             errorsAndFatalsCounterLogTarget.clearData();
         }
     }
@@ -791,7 +792,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     @Override
     public void actionPerformed(ActionEvent event) {
-        if(event.getSource()==warnIndicator) {
+        if (event.getSource() == warnIndicator) {
             ActionRouter.getInstance().doActionNow(new ActionEvent(event.getSource(), event.getID(), ActionNames.LOGGER_PANEL_ENABLE_DISABLE));
         }
     }
