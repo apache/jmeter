@@ -35,7 +35,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -76,7 +75,6 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     @Override
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
-        KeyStroke stroke = KeyStrokes.ESC;
         javax.swing.Action escapeAction = new AbstractAction("ESCAPE") { 
 
             private static final long serialVersionUID = -4036804004190858925L;
@@ -88,7 +86,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         };
         rootPane.getActionMap().put(escapeAction.getValue(Action.NAME), escapeAction);
         InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap.put(stroke, escapeAction.getValue(Action.NAME));
+        inputMap.put(KeyStrokes.ESC, escapeAction.getValue(Action.NAME));
         return rootPane;
     }
 
