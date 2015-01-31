@@ -321,8 +321,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         if (menuBar.isSelected()) {
             MenuElement[] menuElement = menuBar.getSubElements();
             if (menuElement != null) {
-                for (int i = 0; i < menuElement.length; i++) {
-                    JMenu menu = (JMenu) menuElement[i];
+                for (MenuElement element : menuElement) {
+                    JMenu menu = (JMenu) element;
                     if (menu.isSelected()) {
                         menu.setPopupMenuVisible(false);
                         menu.setSelected(false);
@@ -702,9 +702,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         try {
             Transferable tr = dtde.getTransferable();
             DataFlavor[] flavors = tr.getTransferDataFlavors();
-            for (int i = 0; i < flavors.length; i++) {
+            for (DataFlavor flavor : flavors) {
                 // Check for file lists specifically
-                if (flavors[i].isFlavorJavaFileListType()) {
+                if (flavor.isFlavorJavaFileListType()) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                     try {
                         openJmxFilesFromDragAndDrop(tr);
