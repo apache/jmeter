@@ -227,20 +227,16 @@ public class PropertyControlGui extends AbstractConfigGui implements
      * Initialize the components and layout of this component.
      */
     private void init() {
-        JPanel p = this;
-
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
-        p = new JPanel();
 
+        JPanel p = new JPanel();
         p.setLayout(new BorderLayout());
-
         p.add(makeLabelPanel(), BorderLayout.NORTH);
         p.add(makeMainPanel(), BorderLayout.CENTER);
         // Force a minimum table height of 70 pixels
         p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
-        //p.add(makeButtonPanel(), BorderLayout.SOUTH);
 
         add(p, BorderLayout.CENTER);
         table.revalidate();
