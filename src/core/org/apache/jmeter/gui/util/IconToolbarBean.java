@@ -42,7 +42,7 @@ public final class IconToolbarBean {
      * @param strToSplit - the line value (i18n key, ActionNames ID, icon path, optional icon pressed path)
      * @throws JMeterException if error in parsing.
      */
-    IconToolbarBean(final String strToSplit) throws IllegalArgumentException {
+    IconToolbarBean(final String strToSplit, final String iconSize) throws IllegalArgumentException {
         if (strToSplit == null) {
             throw new IllegalArgumentException("Icon definition must not be null"); //$NON-NLS-1$
         }
@@ -50,8 +50,8 @@ public final class IconToolbarBean {
         if (tmp.length > 2) {
             this.i18nKey = tmp[0];
             this.actionName = tmp[1];
-            this.iconPath = tmp[2];
-            this.iconPathPressed = (tmp.length > 3) ? tmp[3] : tmp[2];
+            this.iconPath = tmp[2].replace("<SIZE>", iconSize); //$NON-NLS-1$
+            this.iconPathPressed = (tmp.length > 3) ? tmp[3].replace("<SIZE>", iconSize) : this.iconPath; //$NON-NLS-1$
         } else {
             throw new IllegalArgumentException("Incorrect argument format - expected at least 2 fields separated by " + ICON_FIELD_SEP);
         }

@@ -965,7 +965,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${build.core}" includes="**/*.class"
         excludes="**/BeanShellClient*.class,**/NewDriver*,**/DynamicClassLoader*"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/images/**"
-        excludes="**/*.properties"/>
+        excludes="**/*.properties,org/apache/jmeter/images/toolbar/icons-custom/**"/>
       <fileset dir="${src.core}" includes="**/*.properties">
         <exclude name="*eucJP*"/>
       </fileset>

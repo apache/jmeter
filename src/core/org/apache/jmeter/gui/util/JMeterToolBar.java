@@ -61,6 +61,10 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     protected static final String DEFAULT_TOOLBAR_PROPERTY_FILE = "org/apache/jmeter/images/toolbar/icons-toolbar.properties"; //$NON-NLS-1$
 
     protected static final String USER_DEFINED_TOOLBAR_PROPERTY_FILE = "jmeter.toolbar.icons"; //$NON-NLS-1$
+
+    protected static final String TOOLBAR_ICON_SIZE = "jmeter.toolbar.icons.size"; //$NON-NLS-1$
+
+    protected static final String DEFAULT_TOOLBAR_ICON_SIZE = "22x22"; //$NON-NLS-1$
     
     private static final String TOOLBAR_LIST = "jmeter.toolbar";
     
@@ -93,7 +97,11 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
                 if (iconToolbarBean == null) {
                     toolBar.addSeparator();
                 } else {
-                    toolBar.add(makeButtonItemRes(iconToolbarBean));
+                    try {
+                        toolBar.add(makeButtonItemRes(iconToolbarBean));
+                    } catch (Exception e) {
+                        log.warn(e.getMessage());
+                    }
                 }
             }
             toolBar.initButtonsState();
@@ -105,8 +113,11 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      * @param iconBean contains I18N key, ActionNames, icon path, optional icon path pressed
      * @return a button for toolbar
      */
-    private static JButton makeButtonItemRes(IconToolbarBean iconBean) {
+    private static JButton makeButtonItemRes(IconToolbarBean iconBean) throws Exception {
         final URL imageURL = JMeterUtils.class.getClassLoader().getResource(iconBean.getIconPath());
+        if (imageURL == null) {
+            throw new Exception("No icon for: " + iconBean.getActionName());
+        }
         JButton button = new JButton(new ImageIcon(imageURL));
         button.setToolTipText(JMeterUtils.getResString(iconBean.getI18nKey()));
         final URL imageURLPressed = JMeterUtils.class.getClassLoader().getResource(iconBean.getIconPathPressed());
@@ -150,6 +161,8 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         }
 
         String[] oList = order.split(TOOLBAR_ENTRY_SEP);
+        
+        String iconSize = JMeterUtils.getPropDefault(TOOLBAR_ICON_SIZE, DEFAULT_TOOLBAR_ICON_SIZE); 
 
         List<IconToolbarBean> listIcons = new ArrayList<IconToolbarBean>();
         for (String key : oList) {
@@ -163,7 +176,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
                     log.warn("No definition for toolbar entry: " + key);
                 } else {
                     try {
-                        IconToolbarBean itb = new IconToolbarBean(property);
+                        IconToolbarBean itb = new IconToolbarBean(property, iconSize);
                         listIcons.add(itb);
                     } catch (IllegalArgumentException e) {
                         // already reported by IconToolbarBean

@@ -100,7 +100,19 @@ It provides search with following options:
 <figure width="596" height="328" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
 
 </subsection>
+
+<subsection name="&sect-num;.4 Toolbar icons size" anchor="toolbar">
+<description>
+    <p>
+You can change the size of icons in the toolbar using the property <pre>jmeter.toolbar.icons.size</pre> with these values: 22x22 (default size), 32x32 or 48x48.
+    </p>
+</description>
+<figure width="296" height="95" image="icons-22x22.jpg">Icons with the size 22x22.</figure>
+<figure width="300" height="106" image="icons-32x32.jpg">Icons with the size 32x32.</figure>
+<figure width="365" height="120" image="icons-48x48.jpg">Icons with the size 48x48.</figure>
+</subsection>
 </section>
+
 
 </body>
 </document>
