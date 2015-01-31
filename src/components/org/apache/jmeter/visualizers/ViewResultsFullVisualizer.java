@@ -399,7 +399,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // could warn the user
             // if this happens and revert the choice if he doesn't confirm
             // he's ready to wait.
-            int len = res.getResponseData().length;
+            int len = res.getResponseDataAsString().length();
             if (MAX_DISPLAY_SIZE > 0 && len > MAX_DISPLAY_SIZE) {
                 StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE+100);
                 builder.append(JMeterUtils.getResString("view_results_response_too_large_message")) //$NON-NLS-1$
