@@ -52,10 +52,10 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Workbench test element to create a test plan containing samples of each test element
  * (apart from Threads and Test Fragment).
- * 
+ *<p>
  * The user creates a Thread Group, and the elements are created as child elements of
  * Simple Controllers.
- * 
+ *<p>
  * Note: the code currently runs on all versions of JMeter back to 2.2.
  * Beware of making changes that rely on more recent APIs.
  */
@@ -180,7 +180,7 @@ public class GenerateTreeGui extends AbstractConfigGui implements
      *            Node in the tree where we will add the Controller
      * @param name
      *            A name for the Controller
-     * @return the new node 
+     * @return the new node
      */
     private JMeterTreeNode addSimpleController(JMeterTreeModel model, JMeterTreeNode node, String name) {
         final TestElement sc = new GenericController();
@@ -236,7 +236,7 @@ public class GenerateTreeGui extends AbstractConfigGui implements
      *
      * @param type
      *            class of the node to be found
-     * @param treeModel 
+     * @param treeModel the tree to search in
      *
      * @return the first node of the given type in the test component tree, or
      *         <code>null</code> if none was found.
