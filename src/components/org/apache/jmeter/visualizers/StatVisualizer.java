@@ -63,23 +63,24 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
-    private static final String SAVE_HEADERS   = "saveHeaders"; //$NON-NLS-1$
+    private static final String SAVE_HEADERS = "saveHeaders"; //$NON-NLS-1$
 
-    private final String TOTAL_ROW_LABEL
-        = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
+    private final String TOTAL_ROW_LABEL = JMeterUtils
+            .getResString("aggregate_report_total_label"); //$NON-NLS-1$
 
     private JTable myJTable;
 
     private JScrollPane myScrollPane;
 
-    private final JButton saveTable =
-        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
+    private final JButton saveTable = new JButton(
+            JMeterUtils.getResString("aggregate_graph_save_table")); //$NON-NLS-1$
 
-    private final JCheckBox saveHeaders = // should header be saved with the data?
-        new JCheckBox(JMeterUtils.getResString("aggregate_graph_save_table_header"),true);    //$NON-NLS-1$
+    // should header be saved with the data?
+    private final JCheckBox saveHeaders = new JCheckBox(
+            JMeterUtils.getResString("aggregate_graph_save_table_header"), true); //$NON-NLS-1$
 
-    private final JCheckBox useGroupName =
-        new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
+    private final JCheckBox useGroupName = new JCheckBox(
+            JMeterUtils.getResString("aggregate_graph_use_group_name")); //$NON-NLS-1$
 
     private transient ObjectTableModel model;
 
@@ -138,7 +139,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                 synchronized(tot) {
                     tot.addSample(res);
                 }
-                model.fireTableDataChanged();                
+                model.fireTableDataChanged();
             }
         });
     }

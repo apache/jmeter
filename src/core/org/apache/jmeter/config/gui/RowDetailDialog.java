@@ -76,13 +76,13 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     private JButton nextButton;
 
     private JButton previousButton;
-    
+
     private JButton closeButton;
 
     private ObjectTableModel tableModel;
 
     private int selectedRow;
-    
+
     private boolean textChanged = true; // change to false after the first insert
 
 
@@ -102,9 +102,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         JRootPane rootPane = new JRootPane();
         // Hide Window on ESC
         Action escapeAction = new AbstractAction("ESCAPE") {
-            /**
-             *
-             */
+
             private static final long serialVersionUID = -8699034338969407625L;
 
             @Override
@@ -114,9 +112,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         };
         // Do update on Enter
         Action enterAction = new AbstractAction("ENTER") {
-            /**
-             *
-             */
+
             private static final long serialVersionUID = -1529005452976176873L;
 
             @Override
@@ -198,22 +194,22 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
-        if(action.equals(CLOSE)) {
+        if (action.equals(CLOSE)) {
             this.setVisible(false);
         }
-        else if(action.equals(NEXT)) {
+        else if (action.equals(NEXT)) {
             selectedRow++;
             previousButton.setEnabled(true);
             nextButton.setEnabled(selectedRow < tableModel.getRowCount()-1);
             setValues(selectedRow);
         }
-        else if(action.equals(PREVIOUS)) {
+        else if (action.equals(PREVIOUS)) {
             selectedRow--;
             nextButton.setEnabled(true);
             previousButton.setEnabled(selectedRow > 0);
             setValues(selectedRow);
         }
-        else if(action.equals(UPDATE)) {
+        else if (action.equals(UPDATE)) {
             doUpdate(e);
         }
     }
@@ -265,5 +261,5 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     public void changedUpdate(DocumentEvent e) {
         changeLabelButton();
     }
-    
+
 }
