@@ -70,8 +70,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 
     public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser"; // $NON-NLS-1$
 
-    /** private members used by class * */
-    private transient LogParser PARSER = null;
+    /* private members used by class */
+    private transient LogParser parser = null;
 
     // NOTUSED private Class PARSERCLASS = null;
     private String logFile, parserClassName, filterClassName;
@@ -133,7 +133,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         SampleResult res = null;
         try {
 
-            if (PARSER == null) {
+            if (parser == null) {
                 throw new JMeterException("No Parser available");
             }
             /*
@@ -146,7 +146,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             // person could use it that way if they have a
             // huge gigabyte log file and they only want to
             // use a quarter of the entries.
-            int thisCount = PARSER.parseAndConfigure(1, this);
+            int thisCount = parser.parseAndConfigure(1, this);
             if (thisCount < 0) // Was there an error?
             {
                 return errorResult(new Error("Problem parsing the log file"), new HTTPSampleResult());
@@ -194,13 +194,13 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      * parser and use different log parser.
      */
     public void instantiateParser() {
-        if (PARSER == null) {
+        if (parser == null) {
             try {
                 if (this.getParserClassName() != null && this.getParserClassName().length() > 0) {
                     if (this.getLogFile() != null && this.getLogFile().length() > 0) {
-                        PARSER = (LogParser) Class.forName(getParserClassName()).newInstance();
-                        PARSER.setSourceFile(this.getLogFile());
-                        PARSER.setFilter(filter);
+                        parser = (LogParser) Class.forName(getParserClassName()).newInstance();
+                        parser.setSourceFile(this.getLogFile());
+                        parser.setFilter(filter);
                     } else {
                         log.error("No log file specified");
                     }
@@ -311,10 +311,10 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
                     if (TestCloneable.class.isAssignableFrom(Class.forName(parserClassName)))
                     {
                         instantiateParser();
-                        s.PARSER = (LogParser)((TestCloneable)PARSER).clone();
+                        s.parser = (LogParser)((TestCloneable)parser).clone();
                         if (filter != null)
                         {
-                            s.PARSER.setFilter(s.filter);
+                            s.parser.setFilter(s.filter);
                         }
                     }
                 } catch (Exception e) {
@@ -330,8 +330,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     @Override
     public void testEnded() {
-        if (PARSER != null) {
-            PARSER.close();
+        if (parser != null) {
+            parser.close();
         }
         filter = null;
         started = false;
@@ -352,8 +352,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     @Override
     public void threadFinished() {
-        if(PARSER instanceof ThreadListener) {
-            ((ThreadListener)PARSER).threadFinished();
+        if(parser instanceof ThreadListener) {
+            ((ThreadListener)parser).threadFinished();
         }
         if(filter instanceof ThreadListener) {
             ((ThreadListener)filter).threadFinished();
