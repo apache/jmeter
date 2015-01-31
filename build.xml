@@ -142,7 +142,6 @@
       <class location="${dest.jar}/ApacheJMeter_monitors.jar"/>
       <class location="${dest.jar}/ApacheJMeter_native.jar"/>
       <class location="${dest.jar}/ApacheJMeter_mongodb.jar"/>
-      <class location="${dest.jar}/ApacheJMeter_report.jar"/>
       <class location="${dest.jar}/ApacheJMeter_tcp.jar"/>
       <class location="${dest.jar.jmeter}/ApacheJMeter.jar" />
       <sourcePath path="${src.jorphan}" />
@@ -150,7 +149,6 @@
       <sourcePath path="${src.jms}" />
       <sourcePath path="${src.native}" />
       <sourcePath path="${src.mongodb}" />
-      <sourcePath path="${src.report}" />
 
       <auxClasspath>
           <fileset dir="${lib.dir}">
@@ -214,7 +212,6 @@
   <property name="src.jms" value="src/protocol/jms"/>
   <property name="src.native" value="src/protocol/native"/>
   <property name="src.mongodb" value="src/protocol/mongodb"/>
-  <property name="src.report" value="src/reports"/>
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -242,7 +239,6 @@
     <pathelement location="${src.jms}"/>
     <pathelement location="${src.native}"/>
     <pathelement location="${src.mongodb}"/>
-    <pathelement location="${src.report}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -732,21 +728,6 @@
     </javac>
   </target>
 
-  <target name="compile-report" depends="compile-jorphan,compile-core,compile-components"
-    description="Compile report components.">
-    <mkdir dir="${build.report}"/>
-    <javac srcdir="${src.report}" destdir="${build.report}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
-           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
-      <include name="**/*.java"/>
-      <classpath>
-        <pathelement location="${build.jorphan}"/>
-        <pathelement location="${build.core}"/>
-        <pathelement location="${build.components}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </javac>
-  </target>
-
   <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to TCP sampling.">
     <mkdir dir="${build.tcp}"/>
     <javac srcdir="${src.tcp}" destdir="${build.tcp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
@@ -861,7 +842,7 @@
   </target>
 
   <target name="compile"
-  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb, compile-report"
+  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb"
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
@@ -1063,16 +1044,6 @@ run JMeter unless all the JMeter jars are added.
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.junit}" excludes="org/**/*" />
       <fileset dir="${src.junit}"   excludes="org/**/*" />
-    </jar>
-
-    <!-- report -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <zipfileset file="${resources.meta-inf}/default.notice"
-        fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
-        fullpath="META-INF/LICENSE" />
-      <fileset dir="${build.report}" includes="**/*.class" />
-      <fileset dir="${src.report}" includes="**/*.properties" />
     </jar>
 
     <!-- ldap -->
@@ -1959,7 +1930,6 @@ run JMeter unless all the JMeter jars are added.
     <deployfile stem="ApacheJMeter_mongodb"/>
     <deployfile stem="ApacheJMeter_monitors"/>
     <deployfile stem="ApacheJMeter_native"/>
-    <deployfile stem="ApacheJMeter_report"/>
     <deployfile stem="ApacheJMeter_tcp"/>
   </target>
 
