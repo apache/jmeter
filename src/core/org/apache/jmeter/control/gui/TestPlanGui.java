@@ -158,14 +158,14 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         super.configure(el);
         if (el instanceof TestPlan) {
             TestPlan tp = (TestPlan) el;
-        functionalMode.setSelected(tp.isFunctionalMode());
-        serializedMode.setSelected(tp.isSerialized());
-        tearDownOnShutdown.setSelected(tp.isTearDownOnShutdown());
-        final JMeterProperty udv = tp.getUserDefinedVariablesAsProperty();
-        if (udv != null) {
-            argsPanel.configure((Arguments) udv.getObjectValue());
-        }
-        browseJar.setFiles(tp.getTestPlanClasspathArray());
+            functionalMode.setSelected(tp.isFunctionalMode());
+            serializedMode.setSelected(tp.isSerialized());
+            tearDownOnShutdown.setSelected(tp.isTearDownOnShutdown());
+            final JMeterProperty udv = tp.getUserDefinedVariablesAsProperty();
+            if (udv != null) {
+                argsPanel.configure((Arguments) udv.getObjectValue());
+            }
+            browseJar.setFiles(tp.getTestPlanClasspathArray());
         }
     }
 

@@ -59,8 +59,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * Note: the code currently runs on all versions of JMeter back to 2.2.
  * Beware of making changes that rely on more recent APIs.
  */
-public class GenerateTreeGui extends AbstractConfigGui
-    implements ActionListener, UnsharedComponent {
+public class GenerateTreeGui extends AbstractConfigGui implements
+        ActionListener, UnsharedComponent {
 
     private static final long serialVersionUID = 1L;
 
@@ -119,7 +119,7 @@ public class GenerateTreeGui extends AbstractConfigGui
             JMeterTreeNode myTarget) {
         myTarget = addSimpleController(treeModel, myTarget, title);
         JPopupMenu jp = MenuFactory.makeMenu(menuKey, "").getPopupMenu();
-        for(Component comp : jp.getComponents()) {
+        for (Component comp : jp.getComponents()) {
             JMenuItem jmi = (JMenuItem) comp;
             try {
                 TestElement testElement = guiPackage.createTestElement(jmi.getName());
@@ -156,17 +156,16 @@ public class GenerateTreeGui extends AbstractConfigGui
         return labelPanel;
     }
 
-
     /**
      * Initialize the components and layout of this component.
      */
     private void init() {
         JPanel p = this;
 
-            setLayout(new BorderLayout(0, 5));
-            setBorder(makeBorder());
-            add(makeTitlePanel(), BorderLayout.NORTH);
-            p = new JPanel();
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        p = new JPanel();
 
         p.setLayout(new BorderLayout());
 
@@ -208,14 +207,14 @@ public class GenerateTreeGui extends AbstractConfigGui
         }
 
         volatile JMeterTreeNode newNode;
-        
+
         @Override
         public void run() {
             try {
                 newNode = model.addComponent(testElement, node);
             } catch (IllegalUserActionException e) {
                  throw new Error(e);
-            }               
+            }
         }
     }
 

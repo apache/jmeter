@@ -308,11 +308,11 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
                         initFilter();
                         s.filter = (Filter) ((TestCloneable) filter).clone();
                     }
-                    if(TestCloneable.class.isAssignableFrom(Class.forName(parserClassName)))
+                    if (TestCloneable.class.isAssignableFrom(Class.forName(parserClassName)))
                     {
                         instantiateParser();
                         s.PARSER = (LogParser)((TestCloneable)PARSER).clone();
-                        if(filter != null)
+                        if (filter != null)
                         {
                             s.PARSER.setFilter(s.filter);
                         }

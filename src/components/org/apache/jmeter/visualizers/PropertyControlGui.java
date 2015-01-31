@@ -53,8 +53,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
-public class PropertyControlGui extends AbstractConfigGui
-    implements ActionListener, UnsharedComponent {
+public class PropertyControlGui extends AbstractConfigGui implements
+        ActionListener, UnsharedComponent {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,7 +72,7 @@ public class PropertyControlGui extends AbstractConfigGui
     private static final String JMETER = "jmeter"; // $NON-NLS-1$
 
     private final JCheckBox systemButton = new JCheckBox("System");
-    
+
     private final JCheckBox jmeterButton = new JCheckBox("JMeter");
 
     private final JLabel tableLabel = new JLabel("Properties");
@@ -138,7 +138,7 @@ public class PropertyControlGui extends AbstractConfigGui
 
     private void setUpData(){
         tableModel.clearData();
-        Properties p=null;
+        Properties p = null;
         if (systemButton.isSelected()){
             p = System.getProperties();
         }
@@ -153,14 +153,14 @@ public class PropertyControlGui extends AbstractConfigGui
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
             @Override
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {
-                String m1,m2;
-                m1=(String)o1.getKey();
-                m2=(String)o2.getKey();
+                String m1, m2;
+                m1 = (String) o1.getKey();
+                m2 = (String) o2.getKey();
                 return m1.compareTo(m2);
             }
         });
         Iterator<Map.Entry<Object, Object>> i = al.iterator();
-        while(i.hasNext()){
+        while (i.hasNext()) {
             tableModel.addRow(i.next());
         }
 
@@ -170,6 +170,7 @@ public class PropertyControlGui extends AbstractConfigGui
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
     }
+
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
@@ -228,10 +229,10 @@ public class PropertyControlGui extends AbstractConfigGui
     private void init() {
         JPanel p = this;
 
-            setLayout(new BorderLayout(0, 5));
-            setBorder(makeBorder());
-            add(makeTitlePanel(), BorderLayout.NORTH);
-            p = new JPanel();
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        p = new JPanel();
 
         p.setLayout(new BorderLayout());
 
@@ -247,12 +248,13 @@ public class PropertyControlGui extends AbstractConfigGui
     private void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
                 new Functor[] {
-                new Functor(Map.Entry.class, "getKey"), // $NON-NLS-1$
-                new Functor(Map.Entry.class, "getValue") },  // $NON-NLS-1$
+                    new Functor(Map.Entry.class, "getKey"), // $NON-NLS-1$
+                    new Functor(Map.Entry.class, "getValue") // $NON-NLS-1$
+                },
                 new Functor[] {
-                null, //new Functor("setName"), // $NON-NLS-1$
-                new Functor(Map.Entry.class,"setValue", new Class[] { Object.class }) // $NON-NLS-1$
-            },
+                    null, //new Functor("setName"), // $NON-NLS-1$
+                    new Functor(Map.Entry.class,"setValue", new Class[] { Object.class }) // $NON-NLS-1$
+                },
                 new Class[] { String.class, String.class });
     }
 }

@@ -45,7 +45,6 @@ public class AddToTree implements Command {
         commandSet = Collections.unmodifiableSet(commands);
     }
 
-
     public AddToTree() {
     }
 
@@ -76,7 +75,7 @@ public class AddToTree implements Command {
             log.error("", err); // $NON-NLS-1$
             String msg = err.getMessage();
             if (msg == null) {
-                msg=err.toString();
+                msg = err.toString();
             }
             JMeterUtils.reportErrorToUser(msg);
         }
@@ -84,7 +83,7 @@ public class AddToTree implements Command {
             log.error("", err); // $NON-NLS-1$
             String msg = err.getMessage();
             if (msg == null) {
-                msg=err.toString();
+                msg = err.toString();
             }
             JMeterUtils.reportErrorToUser(msg);
         }
