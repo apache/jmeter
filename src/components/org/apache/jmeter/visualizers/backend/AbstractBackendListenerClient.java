@@ -92,8 +92,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
      */
     @Override
     public SampleResult createSampleResult(BackendListenerContext context, SampleResult result) {
-        SampleResult sampleResult = (SampleResult) result.clone();
-        return sampleResult;
+        return result;
     }
 
     /**
