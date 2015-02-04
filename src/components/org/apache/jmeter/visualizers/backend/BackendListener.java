@@ -169,6 +169,12 @@ public class BackendListener extends AbstractTestElement
         BackendListenerContext context = new BackendListenerContext(args);
 
         SampleResult sr = listenerClientData.client.createSampleResult(context, event.getResult());
+        if(sr == null) {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(getName()+"=>Dropping SampleResult:"+event.getResult());
+            }
+            return;
+        }
         try {
             if (!listenerClientData.queue.offer(sr)){ // we failed to add the element first time
                 listenerClientData.queueWaits.incrementAndGet();
