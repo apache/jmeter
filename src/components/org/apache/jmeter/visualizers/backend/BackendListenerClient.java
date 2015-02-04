@@ -117,7 +117,8 @@ public interface BackendListenerClient {
     /**
      * Create a copy of SampleResult, this method is here to allow customizing 
      * what is kept in the copy, for example copy could remove some useless fields.
-     * Default to cloning
+     * Note that if your return null, sampler is not put in queue.
+     * Defaults to cloning
      * @param context {@link BackendListenerContext}
      * @param result {@link SampleResult}
      * @return {@link SampleResult}
