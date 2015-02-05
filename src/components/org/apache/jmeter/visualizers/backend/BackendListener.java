@@ -57,7 +57,7 @@ public class BackendListener extends AbstractTestElement
         private BlockingQueue<SampleResult> queue;
         private AtomicLong queueWaits; // how many times we had to wait to queue a SampleResult        
         private AtomicLong queueWaitTime; // how long we had to wait (nanoSeconds)
-        // @GaurdedBy("LOCK")
+        // @GuardedBy("LOCK")
         private int instanceCount; // number of active tests
         private CountDownLatch latch;
     }
