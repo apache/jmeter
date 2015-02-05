@@ -61,7 +61,7 @@ public class BackendListener extends AbstractTestElement
         private int instanceCount; // number of active tests
         private CountDownLatch latch;
     }
-    
+
     /**
      * 
      */
@@ -83,7 +83,7 @@ public class BackendListener extends AbstractTestElement
      * Lock used to protect accumulators update + instanceCount update
      */
     private static final Object LOCK = new Object();
-    
+
     /**
      * Property key representing the arguments for the BackendListenerClient.
      */
@@ -96,16 +96,16 @@ public class BackendListener extends AbstractTestElement
     private Class<?> clientClass;
 
     public static final String DEFAULT_QUEUE_SIZE = "5000";
-    
+
     // Create unique object as marker for end of queue
     private transient static final SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
-    
+
     // Name of the test element. Set up by testStarted().
     private transient String myName;
-    
+
     // Holds listenerClientData for this test element
     private transient ListenerClientData listenerClientData;
-        
+
     /*
      * This is needed for distributed testing where there is 1 instance
      * per server. But we need the total to be shared.
@@ -122,7 +122,7 @@ public class BackendListener extends AbstractTestElement
             queuesByTestElementName.clear();
         }
 
-        setArguments(new Arguments());    
+        setArguments(new Arguments());
     }
 
     /*
@@ -142,7 +142,7 @@ public class BackendListener extends AbstractTestElement
             clientClass = Class.forName(name, false, Thread.currentThread().getContextClassLoader());
         } catch (Exception e) {
             LOGGER.error(whoAmI() + "\tException initialising: " + name, e);
-        }   
+        }
     }
 
     /**
@@ -188,25 +188,23 @@ public class BackendListener extends AbstractTestElement
             LOGGER.error("sampleOccurred, failed to queue the sample", err);
         }
     }
-    
-    
+
     /**
      * Thread that dequeus data from queue to send it to {@link BackendListenerClient}
      */
     private static final class Worker extends Thread {
-        
+
         private final ListenerClientData listenerClientData;
         private final BackendListenerContext context;
         private final BackendListenerClient backendListenerClient;
         private Worker(BackendListenerClient backendListenerClient, Arguments arguments, ListenerClientData listenerClientData){
             this.listenerClientData = listenerClientData;
             // Allow BackendListenerClient implementations to get access to test element name
-            arguments.addArgument(TestElement.NAME, getName()); 
+            arguments.addArgument(TestElement.NAME, getName());
             context = new BackendListenerContext(arguments);
             this.backendListenerClient = backendListenerClient;
         }
 
-        
         @Override
         public void run() {
             boolean isDebugEnabled = LOGGER.isDebugEnabled();
@@ -254,7 +252,6 @@ public class BackendListener extends AbstractTestElement
             }
         }
     }
-    
 
     /**
      * Send sampleResults to {@link BackendListenerClient}
@@ -304,14 +301,14 @@ public class BackendListener extends AbstractTestElement
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug(whoAmI() + "\ttestStarted(" + host + ")");
         }
-                
+
         int queueSize;
         final String size = getQueueSize();
         try {
             queueSize = Integer.parseInt(size);
         } catch (NumberFormatException nfe) {
             LOGGER.warn("Invalid queue size '" + size + "' defaulting to " + DEFAULT_QUEUE_SIZE);
-            queueSize = Integer.parseInt(DEFAULT_QUEUE_SIZE);            
+            queueSize = Integer.parseInt(DEFAULT_QUEUE_SIZE);
         }
 
         synchronized (LOCK) {
@@ -343,9 +340,9 @@ public class BackendListener extends AbstractTestElement
                 queuesByTestElementName.put(myName, listenerClientData);
             }
             listenerClientData.instanceCount++;
-        }        
+        }
     }
-    
+
     /**
      * Method called at the end of the test. This is called only on one instance
      * of BackendListener. This method will loop through all of the other
@@ -374,7 +371,7 @@ public class BackendListener extends AbstractTestElement
         }
         if (listenerClientData.queueWaits.get() > 0) {
             LOGGER.warn("QueueWaits: "+listenerClientData.queueWaits+"; QueueWaitTime: "+listenerClientData.queueWaitTime+
-                    " (nanoseconds), you may need to increase queue capacity, see property 'backend_queue_capacity'");            
+                    " (nanoseconds), you may need to increase queue capacity, see property 'backend_queue_capacity'");
         }
         try {
             listenerClientData.latch.await();
@@ -385,7 +382,7 @@ public class BackendListener extends AbstractTestElement
         }
     }
 
-    /** Implements TestStateListener.testEnded(String) 
+    /** Implements TestStateListener.testEnded(String)
      **/
     @Override
     public void testEnded() {
@@ -411,14 +408,13 @@ public class BackendListener extends AbstractTestElement
             Thread.yield();
         }
     }
-    
+
     /* (non-Javadoc)
      * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
      */
     @Override
     public void sampleStarted(SampleEvent e) {
         // NOOP
-        
     }
 
     /* (non-Javadoc)
@@ -427,7 +423,6 @@ public class BackendListener extends AbstractTestElement
     @Override
     public void sampleStopped(SampleEvent e) {
         // NOOP
-        
     }
 
     /**
@@ -469,12 +464,12 @@ public class BackendListener extends AbstractTestElement
     public String getClassname() {
         return getPropertyAsString(CLASSNAME);
     }
-    
+
     /**
      * Sets the queue size
      *
      * @param queueSize the size of the queue
-     *            
+     *
      */
     public void setQueueSize(String queueSize) {
         setProperty(QUEUE_SIZE, queueSize, DEFAULT_QUEUE_SIZE);
