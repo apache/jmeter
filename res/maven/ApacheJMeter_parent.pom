@@ -24,7 +24,7 @@ under the License.
     <name>Apache JMeter parent</name>
     <!-- Parent poms have to be packaged as pom, not jar -->
     <packaging>pom</packaging>
-    
+
     <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test
         functional behavior and measure performance. It was originally designed for testing Web Applications but has
         since expanded to other test functions.
@@ -198,9 +198,9 @@ under the License.
         <version>${commons-pool2.version}</version>
       </dependency>
       <dependency>
-	    <groupId>dnsjava</groupId>
-	    <artifactId>dnsjava</artifactId>
-	    <version>${dnsjava.version}</version>
+        <groupId>dnsjava</groupId>
+        <artifactId>dnsjava</artifactId>
+        <version>${dnsjava.version}</version>
       </dependency>
       <dependency>
         <groupId>excalibur-datasource</groupId>
@@ -404,7 +404,7 @@ under the License.
         <artifactId>slf4j-nop</artifactId>
         <version>${slf4j-nop.version}</version>
       </dependency>
-      <!-- Docs only; not needed for source or binary archives 
+      <!-- Docs only; not needed for source or binary archives
       <dependency>
         <groupId>org.apache.velocity</groupId>
         <artifactId>velocity</artifactId>
