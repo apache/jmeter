@@ -29,6 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,19 +122,28 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
     }
 
     private String process(String textToParse) {
-        List<String> result = new ArrayList<String>();
-        Extractor extractor = HtmlExtractor.getExtractorImpl(cssJqueryLabeledChoice.getText());
-        final int nbFound = extractor.extract(
-                cssJqueryField.getText(), attributeField.getText(), -1, textToParse, result, 0, null);
+        try {
+            List<String> result = new ArrayList<String>();
+            Extractor extractor = HtmlExtractor.getExtractorImpl(cssJqueryLabeledChoice.getText());
+            final int nbFound = extractor.extract(
+                    cssJqueryField.getText(), attributeField.getText(), -1, textToParse, result, 0, null);
 
-        // Construct a multi-line string with all matches
-        StringBuilder sb = new StringBuilder();
-        sb.append("Match count: ").append(nbFound).append("\n");
-        for (int j = 0; j < nbFound; j++) {
-            String mr = result.get(j);
-            sb.append("Match[").append(j+1).append("]=").append(mr).append("\n");
+            // Construct a multi-line string with all matches
+            StringBuilder sb = new StringBuilder();
+            sb.append("Match count: ").append(nbFound).append("\n");
+            for (int j = 0; j < nbFound; j++) {
+                String mr = result.get(j);
+                sb.append("Match[").append(j+1).append("]=").append(mr).append("\n");
+            }
+            return sb.toString();
+        } catch (Exception ex) {
+            StringBuilder sb = new StringBuilder();
+            String message = MessageFormat.format(
+                    JMeterUtils.getResString("cssjquery_tester_error") // $NON-NLS-1$
+                    , new Object[]{cssJqueryField.getText(), ex.getMessage()});
+            sb.append(message);
+            return sb.toString();
         }
-        return sb.toString();
 
     }
     /** {@inheritDoc} */
