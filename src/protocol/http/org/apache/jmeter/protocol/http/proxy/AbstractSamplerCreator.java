@@ -18,13 +18,16 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -141,5 +144,14 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
         HTTPSamplerBase sampler = createSampler(request, pageEncodings, formEncodings);
         populateSampler(sampler, request, pageEncodings, formEncodings);
         return sampler;
+    }
+
+    /**
+     * Default implementation returns an empty list
+     * @see SamplerCreator#createChildren(HTTPSamplerBase, SampleResult)
+     */
+    @Override
+    public List<TestElement> createChildren(HTTPSamplerBase sampler, SampleResult result) {
+        return Collections.emptyList();
     }
 }

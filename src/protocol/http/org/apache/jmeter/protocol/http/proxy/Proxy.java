@@ -32,7 +32,9 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.KeyManager;
@@ -167,6 +169,7 @@ public class Proxy extends Thread {
         if (isDebug) {
             log.debug(port + "====================================================================");
         }
+        SamplerCreator samplerCreator = null;
         try {
             // Now, parse initial request (in case it is a CONNECT request)
             byte[] ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
@@ -219,7 +222,7 @@ public class Proxy extends Thread {
                 }
             }
 
-            SamplerCreator samplerCreator = SAMPLERFACTORY.getSamplerCreator(request, pageEncodings, formEncodings);
+            samplerCreator = SAMPLERFACTORY.getSamplerCreator(request, pageEncodings, formEncodings);
             sampler = samplerCreator.createAndPopulateSampler(request, pageEncodings, formEncodings);
 
             /*
@@ -277,7 +280,17 @@ public class Proxy extends Thread {
             }
             if(result != null) // deliverSampler allows sampler to be null, but result must not be null
             {
-                target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
+                List<TestElement> children = new ArrayList<TestElement>();
+                if(captureHttpHeaders) {
+                    children.add(headers);
+                }
+                if(samplerCreator != null) {
+                    children.addAll(samplerCreator.createChildren(sampler, result));
+                } 
+                target.deliverSampler(sampler,
+                        children.isEmpty() ? null : (TestElement[]) children
+                                .toArray(new TestElement[children.size()]),
+                        result);
             }
             try {
                 clientSocket.close();
