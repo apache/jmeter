@@ -1143,7 +1143,7 @@ public final class CSVSaveService {
      * Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
      * 
      * @param line
-     *            input line
+     *            input line - not {@code null}
      * @param delim
      *            delimiter (e.g. comma)
      * @return array of strings
