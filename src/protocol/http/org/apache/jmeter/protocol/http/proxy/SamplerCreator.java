@@ -18,10 +18,12 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 
 /**
  * Factory of sampler
@@ -81,4 +83,15 @@ public interface SamplerCreator {
     HTTPSamplerBase createAndPopulateSampler(HttpRequestHdr request,
             Map<String, String> pageEncodings, Map<String, String> formEncodings)
                     throws Exception;
+
+    /**
+     * Create sampler children.
+     * This method can be used to add PostProcessor or ResponseAssertions by 
+     * implementations of {@link SamplerCreator}.
+     * Return empty list if nothing to create
+     * @param sampler {@link HTTPSamplerBase}
+     * @param result {@link SampleResult}
+     * @return List
+     */
+    List<TestElement> createChildren(HTTPSamplerBase sampler, SampleResult result);
 }
