@@ -287,6 +287,9 @@ public final class AllTests {
      * the properties file to use to configure the system.
      * 
      * @param args arguments with the initialization parameter
+     * arg[0] - not used
+     * arg[1] - relative name of properties file
+     * arg[2] - used as label
      */
     protected static void initializeManager(String[] args) {
         if (args.length >= 3) {
@@ -314,7 +317,7 @@ public final class AllTests {
      * of the module. No parameters can be passed in, so it is less flexible.
      */
     public static TestSuite suite() {
-        String args[] = { "../lib/ext", "./jmetertest.properties", "org.apache.jmeter.util.JMeterUtils" };
+        String args[] = { "../lib/ext", "./testfiles/jmetertest.properties", "org.apache.jmeter.util.JMeterUtils" };
 
         initializeManager(args);
         return suite(args[0]);
@@ -377,6 +380,7 @@ public final class AllTests {
             log.error("", e);
         }
         System.out.println("Created: "+tests+" tests including "+suites+" suites");
+        System.exit(0);
         return suite;
     }
 }
