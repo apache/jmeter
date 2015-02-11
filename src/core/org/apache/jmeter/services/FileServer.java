@@ -24,6 +24,7 @@ package org.apache.jmeter.services;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.Closeable;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -279,9 +280,16 @@ public class FileServer {
                 try {
                     fileEntry.headerLine=readLine(alias, false);
                 } catch (IOException e) {
+                    fileEntry.exception = e;
                     throw new IllegalArgumentException("Could not read file header line",e);
                 }
+                if (fileEntry.headerLine == null) {
+                    fileEntry.exception = new EOFException("File is empty: " + fileEntry.file);                    
+                }
             }
+        }
+        if (hasHeader && fileEntry.headerLine == null) {
+            throw new IllegalArgumentException("Could not read file header line", fileEntry.exception);            
         }
         return fileEntry.headerLine;
     }
@@ -500,6 +508,7 @@ public class FileServer {
 
     private static class FileEntry{
         private String headerLine;
+        private Throwable exception;
         private final File file;
         private Closeable inputOutputObject; 
         private final String charSetEncoding;
