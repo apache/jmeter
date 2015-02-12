@@ -181,6 +181,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><bug>57394</bug>When constructing an instance with ClassTools#construct(String, int) the integer was ignored and the default constructor was used instead.</li>
 <li><bug>57440</bug>OutOfMemoryError after introduction of JSyntaxTextArea in LoggerPanel due to disableUndo not being taken into account.</li>
 <li><bug>57569</bug>FileServer.reserveFile - inconsistent behaviour when hasHeader is true</li>
+<li><bug>57555</bug>Cannot use JMeter 2.12 as a maven dependency. Contributed by Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -251,6 +252,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 <li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
 <li>Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li>Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
 </ul>
 
 <br/>
