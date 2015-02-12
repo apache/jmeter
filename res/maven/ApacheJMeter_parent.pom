@@ -206,6 +206,16 @@ under the License.
         <groupId>excalibur-datasource</groupId>
         <artifactId>excalibur-datasource</artifactId>
         <version>${excalibur-datasource.version}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>excalibur-fortress</groupId>
+                <artifactId>excalibur-fortress-container-api</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>excalibur-fortress</groupId>
+                <artifactId>excalibur-fortress-meta</artifactId>
+            </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>excalibur-instrument</groupId>
