@@ -380,7 +380,6 @@ public final class AllTests {
             log.error("", e);
         }
         System.out.println("Created: "+tests+" tests including "+suites+" suites");
-        System.exit(0);
         return suite;
     }
 }
