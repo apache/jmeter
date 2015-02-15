@@ -143,6 +143,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
 <li><bug>57385</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57579</bug>NullPointerException error is raised on main sample if "RETURN_NO_SAMPLE" is used (default) and "Use Cache-Control / Expires header..." is checked in HTTP Cache Manager</li>
 </ul>
 
 <h3>Other Samplers</h3>

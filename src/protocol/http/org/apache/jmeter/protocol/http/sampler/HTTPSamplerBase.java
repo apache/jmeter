@@ -1142,7 +1142,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         SampleResult res = null;
         try {
             res = sample(getUrl(), getMethod(), false, 0);
-            res.setSampleLabel(getName());
+            if(res != null) {
+                res.setSampleLabel(getName());
+            }
             return res;
         } catch (Exception e) {
             return errorResult(e, new HTTPSampleResult());
@@ -1166,7 +1168,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param depth
      *            Depth of this target in the frame structure. Used only to
      *            prevent infinite recursion.
-     * @return results of the sampling
+     * @return results of the sampling, can be null if u is in CacheManager
      */
     protected abstract HTTPSampleResult sample(URL u,
             String method, boolean areFollowingRedirect, int depth);
@@ -1483,7 +1485,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 if (log.isDebugEnabled()) {
                     log.debug("Location as URL: " + url.toString());
                 }
-                lastRes = sample(url, method, true, frameDepth);
+                HTTPSampleResult tempRes = sample(url, method, true, frameDepth);
+                if(tempRes != null) {
+                    lastRes = tempRes;
+                } else {
+                    // Last url was in cache so tempRes is null
+                    break;
+                }
             } catch (MalformedURLException e) {
                 errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL
