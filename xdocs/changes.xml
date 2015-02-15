@@ -134,6 +134,8 @@ See  <bugzilla>56357</bugzilla> for details.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
+    <li>Since 2.13, Aggregate Graph, Summary Report and Aggregate Report now export percentages to %, before they exported the decimal value which differed from what was shown in GUI</li>
+    <li>Third party plugins may be impacted by fix of <bugzilla>57586</bugzilla>, ensure that your subclass of HttpTestSampleGui implements ItemListener if you relied on parent class doing so.</li>
 </ul>
 
 <!-- =================== Bug fixes =================== -->
