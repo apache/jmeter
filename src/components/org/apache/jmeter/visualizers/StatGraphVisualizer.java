@@ -28,6 +28,8 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -308,6 +310,23 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                             String.class, String.class });
     }
 
+    // Column formats
+    static final Format[] FORMATS =
+        new Format[]{
+            null, // Label
+            null, // count
+            null, // Mean
+            null, // median
+            null, // 90%
+            null, // 95%
+            null, // 99%
+            null, // Min
+            null, // Max
+            new DecimalFormat("#0.00%"), // Error %age //$NON-NLS-1$
+            new DecimalFormat("#.0"),      // Throughput //$NON-NLS-1$
+            new DecimalFormat("#.0")    // pageSize   //$NON-NLS-1$
+        };
+    
     // Column renderers
     static final TableCellRenderer[] RENDERERS =
         new TableCellRenderer[]{
@@ -574,9 +593,10 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * ObjectTableModel, so the calling getDataVector doesn't
      * work as expected.
      * @param model {@link ObjectTableModel}
+     * @param formats Array of {@link Format} array can contain null formatters in this case value is added as is
      * @return the data from the model
      */
-    public static List<List<Object>> getAllTableData(ObjectTableModel model) {
+    public static List<List<Object>> getAllTableData(ObjectTableModel model, Format[] formats) {
         List<List<Object>> data = new ArrayList<List<Object>>();
         if (model.getRowCount() > 0) {
             for (int rw=0; rw < model.getRowCount(); rw++) {
@@ -585,7 +605,11 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 data.add(column);
                 for (int idx=0; idx < cols; idx++) {
                     Object val = model.getValueAt(rw,idx);
-                    column.add(val);
+                    if(formats[idx] != null) {
+                        column.add(formats[idx].format(val));
+                    } else {
+                        column.add(val);
+                    }
                 }
             }
         }
@@ -615,7 +639,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             FileWriter writer = null;
             try {
                 writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
-                CSVSaveService.saveCSVStats(getAllTableData(model),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
+                CSVSaveService.saveCSVStats(getAllTableData(model, FORMATS),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
             } catch (FileNotFoundException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } catch (IOException e) {
