@@ -168,7 +168,9 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             }
             count = thisCount;
             res = sample();
-            res.setSampleLabel(toString());
+            if(res != null) {
+                res.setSampleLabel(toString());
+            }
         } catch (Exception e) {
             log.warn("Sampling failure", e);
             return errorResult(e, new HTTPSampleResult());
