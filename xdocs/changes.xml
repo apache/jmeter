@@ -207,6 +207,7 @@ See  <bugzilla>56357</bugzilla> for details.
 
 <h3>Controllers</h3>
 <ul>
+<li><bug>57561</bug>Module controller UI : Replace combobox by tree. Contributed by Maciej Franek (maciej.franek at gmail.com)</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -258,6 +259,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
 <li>Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li>Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
+<li>Maciej Franek (maciej.franek at gmail.com)</li>
 </ul>
 
 <br/>
