@@ -22,10 +22,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
@@ -110,16 +108,7 @@ public class TestSaveService extends JMeterTestCase {
 
         int [] orig = readFile(new BufferedReader(new FileReader(testFile)));
 
-        InputStream in = null;
-        HashTree tree = null;
-        try {
-            in = new FileInputStream(testFile);
-            tree = SaveService.loadTree(in);
-        } finally {
-            if(in != null) {
-                in.close();
-            }
-        }
+        HashTree tree = SaveService.loadTree(testFile);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
         try {
@@ -191,16 +180,14 @@ public class TestSaveService extends JMeterTestCase {
 
     public void testLoad() throws Exception {
         for (int i = 0; i < FILES_LOAD_ONLY.length; i++) {
-            InputStream in = null;
+            File file = findTestFile("testfiles/" + FILES_LOAD_ONLY[i]);
             try {
-                in = new FileInputStream(findTestFile("testfiles/" + FILES_LOAD_ONLY[i]));
-                HashTree tree =SaveService.loadTree(in);
+                HashTree tree =SaveService.loadTree(file);
                 assertNotNull(tree);
-            } finally {
-                if(in != null) {
-                    in.close();
-                }
+            } catch(IllegalArgumentException ex) {
+                fail("Exception loading "+file.getAbsolutePath());
             }
+            
         }
 
     }

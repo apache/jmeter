@@ -19,10 +19,8 @@
 package org.apache.jmeter.control;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -34,7 +32,6 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class IncludeController extends GenericController implements ReplaceableController {
@@ -124,7 +121,6 @@ public class IncludeController extends GenericController implements ReplaceableC
     protected HashTree loadIncludedElements() {
         // only try to load the JMX test plan if there is one
         final String includePath = getIncludePath();
-        InputStream reader = null;
         HashTree tree = null;
         if (includePath != null && includePath.length() > 0) {
             try {
@@ -142,8 +138,7 @@ public class IncludeController extends GenericController implements ReplaceableC
                     }
                 }
                 
-                reader = new FileInputStream(file);
-                tree = SaveService.loadTree(reader);
+                tree = SaveService.loadTree(file);
                 // filter the tree for a TestFragment.
                 tree = getProperBranch(tree);
                 removeDisabledItems(tree);
@@ -167,9 +162,6 @@ public class IncludeController extends GenericController implements ReplaceableC
                 }
                 JMeterUtils.reportErrorToUser(msg);
                 log.warn("Unexpected error", ex);
-            }
-            finally{
-                JOrphanUtils.closeQuietly(reader);
             }
         }
         return tree;
