@@ -198,6 +198,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><bug>57381</bug>HTTP(S) Test Script Recorder should display an error if Target Controller references a Recording Controller and no Recording Controller exists. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bug>57488</bug>Performance : Improve SSLContext reset for Two-way SSL Authentication</li>
 <li><bug>57565</bug>SamplerCreator : Add method to allow implementations to add children to created sampler</li>
+<li><bug>57606</bug>HTTPSamplerBase#errorResult changes the sample label on exception </li>
 </ul>
 
 <h3>Other samplers</h3>
