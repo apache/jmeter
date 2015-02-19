@@ -31,8 +31,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -177,15 +177,15 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         double msPerRequest = (MILLISEC_PER_MIN / getThroughput());
         switch (mode) {
         case AllActiveThreads: // Total number of threads
-            delay = (long) (JMeterContextService.getNumberOfThreads() * msPerRequest);
+            delay = Math.round(JMeterContextService.getNumberOfThreads() * msPerRequest);
             break;
 
         case AllActiveThreadsInCurrentThreadGroup: // Active threads in this group
-            delay = (long) (JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * msPerRequest);
+            delay = Math.round(JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * msPerRequest);
             break;
 
         case AllActiveThreads_Shared: // All threads - alternate calculation
-            delay = calculateSharedDelay(allThreadsInfo,(long) msPerRequest);
+            delay = calculateSharedDelay(allThreadsInfo,Math.round(msPerRequest));
             break;
 
         case AllActiveThreadsInCurrentThreadGroup_Shared: //All threads in this group - alternate calculation
@@ -199,12 +199,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
                     groupInfo = previous; // so use the existing one
                 }
             }
-            delay = calculateSharedDelay(groupInfo,(long) msPerRequest);
+            delay = calculateSharedDelay(groupInfo,Math.round(msPerRequest));
             break;
 
         case ThisThreadOnly:
         default: // e.g. 0
-            delay = (long) msPerRequest; // i.e. * 1
+            delay = Math.round(msPerRequest); // i.e. * 1
             break;
         }
         return delay;
