@@ -19,7 +19,6 @@
 package org.apache.jmeter.gui.action;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.util.HashSet;
 import java.util.Set;
@@ -107,13 +106,7 @@ public class TestLoad extends JMeterTestCase {
     }
 
     private HashTree getTree(File f) throws Exception {
-        FileInputStream fis = new FileInputStream(f);
-        HashTree tree = null;
-        try {
-            tree = SaveService.loadTree(fis);
-        } finally {
-            fis.close();
-        }
+        HashTree tree = SaveService.loadTree(f);
         return tree;
     }
 }

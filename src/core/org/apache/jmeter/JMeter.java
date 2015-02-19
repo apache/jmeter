@@ -53,10 +53,10 @@ import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
+import org.apache.jmeter.engine.DistributedRunner;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
-import org.apache.jmeter.engine.DistributedRunner;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
@@ -244,14 +244,12 @@ public class JMeter implements JMeterPlugin {
         main.setVisible(true);
         ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
         if (testFile != null) {
-            FileInputStream reader = null;
             try {
                 File f = new File(testFile);
                 log.info("Loading file: " + f);
                 FileServer.getFileServer().setBaseForScript(f);
 
-                reader = new FileInputStream(f);
-                HashTree tree = SaveService.loadTree(reader);
+                HashTree tree = SaveService.loadTree(f);
 
                 GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
 
@@ -262,8 +260,6 @@ public class JMeter implements JMeterPlugin {
             } catch (Exception e) {
                 log.error("Failure loading test file", e);
                 JMeterUtils.reportErrorToUser(e.toString());
-            } finally {
-                JOrphanUtils.closeQuietly(reader);
             }
         } else {
             JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
@@ -743,7 +739,6 @@ public class JMeter implements JMeterPlugin {
 
     // run test in batch mode
     private void runNonGui(String testFile, String logFile, boolean remoteStart, String remote_hosts_string) {
-        FileInputStream reader = null;
         try {
             File f = new File(testFile);
             if (!f.exists() || !f.isFile()) {
@@ -752,10 +747,7 @@ public class JMeter implements JMeterPlugin {
             }
             FileServer.getFileServer().setBaseForScript(f);
 
-            reader = new FileInputStream(f);
-            log.info("Loading file: " + f);
-
-            HashTree tree = SaveService.loadTree(reader);
+            HashTree tree = SaveService.loadTree(f);
 
             @SuppressWarnings("deprecation") // Deliberate use of deprecated ctor
             JMeterTreeModel treeModel = new JMeterTreeModel(new Object());// Create non-GUI version to avoid headless problems
@@ -826,8 +818,6 @@ public class JMeter implements JMeterPlugin {
         } catch (Exception e) {
             System.out.println("Error in NonGUIDriver " + e.toString());
             log.error("Error in NonGUIDriver", e);
-        } finally {
-            JOrphanUtils.closeQuietly(reader);
         }
     }
 

@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.protocol.http.modifier;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -48,12 +48,12 @@ public class TestAnchorModifier extends JMeterTestCase {
         }
 
         public void testProcessingHTMLFile(String HTMLFileName) throws Exception {
-            HTTPSamplerBase config = (HTTPSamplerBase) SaveService.loadTree(
-                    new FileInputStream(System.getProperty("user.dir") + "/testfiles/load_bug_list.jmx")).getArray()[0];
+            File file = new File(System.getProperty("user.dir") + "/testfiles/load_bug_list.jmx");
+            HTTPSamplerBase config = (HTTPSamplerBase) SaveService.loadTree(file).getArray()[0];
             config.setRunningVersion(true);
             HTTPSampleResult result = new HTTPSampleResult();
-            HTTPSamplerBase context = (HTTPSamplerBase) SaveService.loadTree(
-                    new FileInputStream(System.getProperty("user.dir") + "/testfiles/Load_JMeter_Page.jmx")).getArray()[0];
+            file = new File(System.getProperty("user.dir") + "/testfiles/Load_JMeter_Page.jmx");
+            HTTPSamplerBase context = (HTTPSamplerBase) SaveService.loadTree(file).getArray()[0];
             jmctx.setCurrentSampler(context);
             jmctx.setCurrentSampler(config);
             result.setResponseData(new TextFile(System.getProperty("user.dir") + HTMLFileName).getText(), null);
