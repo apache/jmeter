@@ -20,9 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,7 +42,6 @@ import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -119,7 +116,6 @@ public class Load implements Command {
 
         final GuiPackage guiPackage = GuiPackage.getInstance();
         if (f != null) {
-            InputStream reader = null;
             try {
                 if (merging) {
                     log.info("Merging file: " + f);
@@ -131,8 +127,7 @@ public class Load implements Command {
                         FileServer.getFileServer().setBaseForScript(f);
                     }
                 }
-                reader = new FileInputStream(f);
-                final HashTree tree = SaveService.loadTree(reader);
+                final HashTree tree = SaveService.loadTree(f);
                 final boolean isTestPlan = insertLoadedTree(e.getID(), tree, merging);
 
                 // don't change name if merging
@@ -150,8 +145,6 @@ public class Load implements Command {
                 reportError("Error reading file: ", ex, false);
             } catch (Exception ex) {
                 reportError("Unexpected error", ex, true);
-            } finally {
-                JOrphanUtils.closeQuietly(reader);
             }
             FileDialoger.setLastJFCDirectory(f.getParentFile().getAbsolutePath());
             guiPackage.updateCurrentGui();
