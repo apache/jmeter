@@ -201,6 +201,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><bug>57488</bug>Performance : Improve SSLContext reset for Two-way SSL Authentication</li>
 <li><bug>57565</bug>SamplerCreator : Add method to allow implementations to add children to created sampler</li>
 <li><bug>57606</bug>HTTPSamplerBase#errorResult changes the sample label on exception </li>
+<li><bug>57613</bug>HTTP Sampler : Added CalDAV verbs (REPORT, MKCALENDAR). Contributed by Richard Brigham (richard.brigham at teamaol.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -264,6 +265,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li>Benoit Wiart (benoit.wiart at gmail.com)</li>
 <li>Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
 <li>Maciej Franek (maciej.franek at gmail.com)</li>
+<li>Richard Brigham (richard.brigham at teamaol.com)</li>
 </ul>
 
 <br/>
