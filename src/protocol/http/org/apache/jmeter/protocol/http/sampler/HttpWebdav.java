@@ -39,7 +39,9 @@ public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
                     HTTPConstants.COPY,
                     HTTPConstants.MOVE,
                     HTTPConstants.LOCK,
-                    HTTPConstants.UNLOCK
+                    HTTPConstants.UNLOCK,
+                    HTTPConstants.REPORT,
+                    HTTPConstants.MKCALENDAR
             }));
     
     private String davMethod;
