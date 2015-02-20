@@ -238,7 +238,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         HTTPConstants.COPY,
         HTTPConstants.MOVE,
         HTTPConstants.LOCK,
-        HTTPConstants.UNLOCK
+        HTTPConstants.UNLOCK,
+        HTTPConstants.REPORT,
+        HTTPConstants.MKCALENDAR
         };
 
     private static final List<String> METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));

@@ -152,7 +152,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
          See Java bugs 6226610 and 6208335.
          </li>
          <li>It does not support virtual hosts.</li>
-         <li>It does not support the following methods: COPY, LOCK, MKCOL, MOVE, PATCH, PROPFIND, PROPPATCH, UNLOCK.</li>
+         <li>It does not support the following methods: COPY, LOCK, MKCOL, MOVE, PATCH, PROPFIND, PROPPATCH, UNLOCK, REPORT, MKCALENDAR.</li>
          <li>It does not support client based certificate testing with Keystore Config.</li>
          </ul>
          <p>Note: the FILE protocol is intended for testing purposes only.
@@ -226,7 +226,7 @@ https.default.protocol=SSLv3
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE, PATCH (not supported for
         JAVA implementation). With HttpClient4, the following methods related to WebDav are also allowed: COPY, LOCK, MKCOL, MOVE,
-        PROPFIND, PROPPATCH, UNLOCK.</property>
+        PROPFIND, PROPPATCH, UNLOCK, REPORT, MKCALENDAR.</property>
         <property name="Content Encoding" required="No">
         Content encoding to be used (for POST, PUT, PATCH and FILE). 
         This the the character encoding to be used, and is not related to the Content-Encoding HTTP header.
