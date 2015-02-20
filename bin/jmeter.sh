@@ -32,9 +32,9 @@ MINIMAL_VERSION=1.6.0
 
 # Check if Java is present and the minimal version requierement
 _java=`type java | awk '{ print $ NF }'`
-CURRENT_VERSION=$("$_java" -version 2>&1 | awk -F '"' '/version/ {print $2}')
-minimal_version=$(echo $MINIMAL_VERSION | awk -F'.' '{ print $2 }')
-current_version=$(echo $CURRENT_VERSION | awk -F'.' '{ print $2 }')
+CURRENT_VERSION=`"$_java" -version 2>&1 | awk -F'"' '/version/ {print $2}'`
+minimal_version=`echo $MINIMAL_VERSION | awk -F'.' '{ print $2 }'`
+current_version=`echo $CURRENT_VERSION | awk -F'.' '{ print $2 }'`
 if [ $current_version ]; then
         if [ $current_version -lt $minimal_version ]; then
                  echo "Error: Java version is too low to run JMeter. Needs at least Java >= ${MINIMAL_VERSION}." 
@@ -46,7 +46,7 @@ if [ $current_version ]; then
 fi
 
 JMETER_OPTS=""
-case $(uname) in
+case `uname` in
    Darwin*)
    # Add Mac-specific property - should be ignored elsewhere (Bug 47064)
    JMETER_OPTS="-Xdock:name=JMeter -Xdock:icon="`dirname $0`/../docs/images/logo.jpg" -Dapple.laf.useScreenMenuBar=true -Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS"

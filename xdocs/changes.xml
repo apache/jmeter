@@ -187,6 +187,7 @@ See  <bugzilla>56357</bugzilla> for details.
 <li><bug>57440</bug>OutOfMemoryError after introduction of JSyntaxTextArea in LoggerPanel due to disableUndo not being taken into account.</li>
 <li><bug>57569</bug>FileServer.reserveFile - inconsistent behaviour when hasHeader is true</li>
 <li><bug>57555</bug>Cannot use JMeter 2.12 as a maven dependency. Contributed by Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
+<li><bug>57608</bug>Fix start script compatibility with old Unix shells, e.g. on Solaris</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
