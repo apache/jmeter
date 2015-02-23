@@ -6254,7 +6254,7 @@ regex within parens, e.g <code>('.*?')</code> to match <code>'name'</code> out o
 The variables will be checked in random order. So ensure, that the potential matches don't overlap.
 Overlapping matchers would be <code>.*</code> (which matches anything) and <code>www</code> (which
 matches <code>www</code> only). Non-overlapping matchers would be <code>a+</code> (matches a sequence
-of <cod>a</cod>'s) and <code>b+</code> (matches a sequence of <code>b</code>'s).
+of <code>a</code>'s) and <code>b+</code> (matches a sequence of <code>b</code>'s).
 </note>
 
 <p>If you want to match a whole string only, enclose it in <code>(^</code> and <code>$)</code>, e.g. <code>(^thus$)</code>.
