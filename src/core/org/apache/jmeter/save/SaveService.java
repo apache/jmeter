@@ -508,6 +508,24 @@ public class SaveService {
     /**
      * Load a Test tree (JMX file)
      * @param file the JMX file
+     * @return the loaded tree or null if an error occurs
+     * @throws IOException if there is a problem reading the file or processing it
+     * @deprecated use {@link SaveService}{@link #loadTree(File)}
+     */
+    public static HashTree loadTree(InputStream reader) throws IOException {
+        try {
+            return readTree(reader, null);
+        } catch(IllegalArgumentException e) {
+            log.error("Problem loading XML, message:"+e.getMessage(), e);
+            return null;
+        } finally {
+            JOrphanUtils.closeQuietly(reader);
+        }
+    }
+    
+    /**
+     * Load a Test tree (JMX file)
+     * @param file the JMX file
      * @return the loaded tree
      * @throws IOException if there is a problem reading the file or processing it
      */
@@ -516,38 +534,62 @@ public class SaveService {
         InputStream reader = null;
         try {
             reader = new FileInputStream(file);
-            if (!reader.markSupported()) {
-                reader = new BufferedInputStream(reader);
-            }
-            reader.mark(Integer.MAX_VALUE);
-            ScriptWrapper wrapper = null;
-            try {
-                // Get the InputReader to use
-                InputStreamReader inputStreamReader = getInputStreamReader(reader);
-                wrapper = (ScriptWrapper) JMXSAVER.fromXML(inputStreamReader);
-                inputStreamReader.close();
-                if (wrapper == null){
-                    log.error("Problem loading XML: see above.");
-                    return null;
-                }
-                return wrapper.testPlan;
-            } catch (CannotResolveClassException e) {
-                if (e.getMessage().startsWith("node")) {
-                    log.info("Problem loading XML, trying Avalon format");
-                    reader.reset();
-                    return OldSaveService.loadSubTree(reader);                
-                }
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', cannot determine class for element: " + e, e);
-            } catch (NoClassDefFoundError e) {
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', missing class "+e , e);
-            } catch (ConversionException e) {
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', conversion error "+e , e);
-            }
+            return readTree(reader, file);
         } finally {
             JOrphanUtils.closeQuietly(reader);
         }
     }
 
+    /**
+     * 
+     * @param reader {@link InputStream} 
+     * @param file the JMX file used only for debug, can be null
+     * @return the loaded tree
+     * @throws IOException if there is a problem reading the file or processing it
+     */
+    private static final HashTree readTree(InputStream reader, File file) throws IOException {
+        if (!reader.markSupported()) {
+            reader = new BufferedInputStream(reader);
+        }
+        reader.mark(Integer.MAX_VALUE);
+        ScriptWrapper wrapper = null;
+        try {
+            // Get the InputReader to use
+            InputStreamReader inputStreamReader = getInputStreamReader(reader);
+            wrapper = (ScriptWrapper) JMXSAVER.fromXML(inputStreamReader);
+            inputStreamReader.close();
+            if (wrapper == null){
+                log.error("Problem loading XML: see above.");
+                return null;
+            }
+            return wrapper.testPlan;
+        } catch (CannotResolveClassException e) {
+            // FIXME We switching to JAVA7, use Multi-Catch Exceptions
+            if (e.getMessage().startsWith("node")) {
+                log.info("Problem loading XML, trying Avalon format");
+                reader.reset();
+                return OldSaveService.loadSubTree(reader);                
+            }
+            if(file != null) {
+                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', cannot determine class for element: " + e, e);
+            } else {
+                throw new IllegalArgumentException("Problem loading XML, cannot determine class for element: " + e, e);
+            }
+        } catch (NoClassDefFoundError e) {
+            if(file != null) {
+                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', missing class "+e , e);
+            } else {
+                throw new IllegalArgumentException("Problem loading XML, missing class "+e , e);
+            }
+        } catch (ConversionException e) {
+            if(file != null) {
+                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', conversion error "+e , e);
+            } else {
+                throw new IllegalArgumentException("Problem loading XML, conversion error "+e , e);
+            }
+        }
+
+    }
     private static InputStreamReader getInputStreamReader(InputStream inStream) {
         // Check if we have a encoding to use from properties
         Charset charset = getFileEncodingCharset();
