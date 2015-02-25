@@ -279,7 +279,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         HTTPSampleResult res = createSampleResult(url, method);
 
-        HttpClient httpClient = setupClient(url);
+        HttpClient httpClient = setupClient(url, res);
 
         HttpRequestBase httpRequest = null;
         try {
@@ -617,7 +617,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private HttpClient setupClient(URL url) {
+    private HttpClient setupClient(URL url, SampleResult res) {
 
         Map<HttpClientKey, HttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
@@ -715,6 +715,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
         }
+
+        MeasuringConnectionManager connectionManager = (MeasuringConnectionManager) httpClient.getConnectionManager();
+        connectionManager.setSample(res);
 
         // TODO - should this be done when the client is created?
         // If so, then the details need to be added as part of HttpClientKey
