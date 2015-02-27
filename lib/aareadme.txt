@@ -86,6 +86,11 @@ commons-pool2-2.3
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
 
+dnsjava-2.1.7
+-----------------
+http://www.dnsjava.org/download/
+- DNSCacheManager
+
 excalibur-datasource-1.1.1 (org.apache.avalon.excalibur.datasource)
 --------------------------
 - DataSourceElement (JDBC)
