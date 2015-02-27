@@ -130,6 +130,7 @@ Summary
 <li>Updated to jsoup-1.8.1.jar (from 1.7.3)</li>
 <li>Updated to tika-core and tika-parsers 1.7 (from 1.6)</li>
 <li>Updated to commons-codec-1.10.jar (from 1.9)</li>
+<li>Updated to dnsjava-2.1.7.jar (from 2.1.6)</li>
 <li><bug>57276</bug>RMIC no longer needed since Java 5</li>
 <li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
 <li><bug>57389</bug>Fix potential NPE in converters</li>
