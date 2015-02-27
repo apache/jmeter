@@ -57,7 +57,7 @@
     <classpathentry kind="lib" path="lib/commons-math3-3.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.3.jar"/>
     <classpathentry kind="lib" path="lib/commons-pool2-2.3.jar"/>
-	<classpathentry kind="lib" path="lib/dnsjava-2.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/dnsjava-2.1.7.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-datasource-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
