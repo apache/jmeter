@@ -28,7 +28,7 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
-commons-codec-1.9
+commons-codec-1.10
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - used by commons-httpclient-3.1
