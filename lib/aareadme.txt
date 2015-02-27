@@ -81,6 +81,11 @@ commons-net-3.3
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
 
+commons-pool2-2.3
+-----------------
+http://commons.apache.org/proper/commons-pool/download_pool.cgi
+- BackendListener
+
 excalibur-datasource-1.1.1 (org.apache.avalon.excalibur.datasource)
 --------------------------
 - DataSourceElement (JDBC)
