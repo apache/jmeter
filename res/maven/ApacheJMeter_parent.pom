@@ -87,7 +87,7 @@ under the License.
       <jodd-lagarto.version>3.6.4</jodd-lagarto.version>
       <jodd-log.version>3.6.4</jodd-log.version>
       <jsoup.version>1.8.1</jsoup.version>
-      <rhino.version>1.7R4</rhino.version>
+      <rhino.version>1.7R5</rhino.version>
       <junit.version>4.12</junit.version>
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
