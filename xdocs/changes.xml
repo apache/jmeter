@@ -134,6 +134,7 @@ Summary
 <li>Updated to jodd-3.6.4.jar (from 3.6.1)</li>
 <li>Updated to junit-4.12.jar (from 4.11)</li>
 <li>Updated to rhino-1.7R5 (from rhino-1.7R4)</li>
+<li>Updated to rsyntaxtextarea-2.5.6 (from rsyntaxtextarea-2.5.3)</li>
 <li><bug>57276</bug>RMIC no longer needed since Java 5</li>
 <li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
 <li><bug>57389</bug>Fix potential NPE in converters</li>
