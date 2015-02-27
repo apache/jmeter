@@ -370,6 +370,7 @@
     <include name="${lib.dir}/${excalibur-pool-api.jar}"/>
     <include name="${lib.dir}/${excalibur-pool-impl.jar}"/>
     <include name="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
+    <include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
@@ -445,6 +446,7 @@
     <pathelement location="${lib.dir}/${excalibur-pool-api.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-pool-impl.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
+  	<pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
@@ -2869,6 +2871,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="excalibur-pool-api"/>
         <process_jarfile jarname="excalibur-pool-impl"/>
         <process_jarfile jarname="excalibur-pool-instrumented"/>
+    	<process_jarfile jarname="freemarker"/>
         <process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
