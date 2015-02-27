@@ -58,7 +58,7 @@ under the License.
       <bcmail.version>1.49</bcmail.version>
       <bcprov.version>1.49</bcprov.version>
       <bcpkix.version>1.49</bcpkix.version>
-      <commons-codec.version>1.9</commons-codec.version>
+      <commons-codec.version>1.10</commons-codec.version>
       <commons-collections.version>3.2.1</commons-collections.version>
       <commons-httpclient.version>3.1</commons-httpclient.version>
       <commons-io.version>2.4</commons-io.version>
