@@ -66,9 +66,159 @@ Summary
 <figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
  -->
 
-<!--  =================== Known bugs =================== -->
+<!-- =================== Incompatible changes =================== -->
 
+<ch_section>Incompatible changes</ch_section>
 
+<ul>
+    <li>Since 2.13, Aggregate Graph, Summary Report and Aggregate Report now export percentages to %, before they exported the decimal value which differed from what was shown in GUI</li>
+    <li>Third party plugins may be impacted by fix of <bugzilla>57586</bugzilla>, ensure that your subclass of HttpTestSampleGui implements ItemListener if you relied on parent class doing so.</li>
+</ul>
+
+<!-- =================== Improvements =================== -->
+
+<ch_section>Improvements</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+<li><bug>25430</bug>HTTP(S) Test Script Recorder : Make it populate HTTP Authorisation Manager. Partly based on a patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><bug>57381</bug>HTTP(S) Test Script Recorder should display an error if Target Controller references a Recording Controller and no Recording Controller exists. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57488</bug>Performance : Improve SSLContext reset for Two-way SSL Authentication</li>
+<li><bug>57565</bug>SamplerCreator : Add method to allow implementations to add children to created sampler</li>
+<li><bug>57606</bug>HTTPSamplerBase#errorResult changes the sample label on exception </li>
+<li><bug>57613</bug>HTTP Sampler : Added CalDAV verbs (REPORT, MKCALENDAR). Contributed by Richard Brigham (richard.brigham at teamaol.com)</li>
+</ul>
+
+<h3>Other samplers</h3>
+<ul>
+    <li><bug>57322</bug>JDBC Test elements: add ResultHandler to deal with ResultSets(cursors) returned by callable statements. Contributed by Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+<li><bug>57561</bug>Module controller UI : Replace combobox by tree. Contributed by Maciej Franek (maciej.franek at gmail.com)</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li><bug>55932</bug>Create a Async BackendListener to allow easy plug of new listener (Graphite, JDBC, Console,...)</li>
+<li><bug>57246</bug>BackendListener : Create a Graphite implementation</li>
+<li><bug>57217</bug>Aggregate graph and Aggregate report improvements (3 configurable percentiles, same data in both, factor out code). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57537</bug>BackendListener : Allow implementations to drop samples</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+<li><bug>54453</bug>Performance enhancements : Replace Random by ThreadLocalRandom in __Random function</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li><bug>57518</bug>Icons for toolbar with several sizes</li>
+<li><bug>57605</bug>When there is an error loading Test Plan, SaveService.loadTree returns null leading to NPE in callers</li>
+</ul>
+<ch_section>Non-functional changes</ch_section>
+<ul>
+<li>Updated to jsoup-1.8.1.jar (from 1.7.3)</li>
+<li>Updated to tika-core and tika-parsers 1.7 (from 1.6)</li>
+<li><bug>57276</bug>RMIC no longer needed since Java 5</li>
+<li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
+<li><bug>57389</bug>Fix potential NPE in converters</li>
+<li><bug>57417</bug>Remove unused method isTemporary from NullProperty. This was a leftover from a refactoring done in 2003.</li>
+<li><bug>57418</bug>Remove unused constructor from Workbench</li>
+<li><bug>57419</bug>Remove unused interface ModelListener.</li>
+<li><bug>57466</bug>IncludeController : Remove an unneeded set creation. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li>Added property loggerpanel.usejsyntaxtext to disable the use of JSyntaxTextArea for the Console Logger (in case of memory or other issues)</li>
+<li><bug>57586</bug>HttpTestSampleGui: Remove interface ItemListener implementation</li>
+</ul>
+ 
+ <!-- =================== Bug fixes =================== -->
+
+<ch_section>Bug fixes</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+<li><bug>57385</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57579</bug>NullPointerException error is raised on main sample if "RETURN_NO_SAMPLE" is used (default) and "Use Cache-Control / Expires header..." is checked in HTTP Cache Manager</li>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+<li><bug>57447</bug>Use only the user listed DNS Servers, when "use custom DNS resolver" option is enabled.</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li><bug>57262</bug>Aggregate Report, Aggregate Graph and Summary Report export : headers use keys instead of labels</li>
+<li><bug>57346</bug>Summariser : The + (difference) reports show wrong elapsed time and throughput</li>
+<li><bug>57449</bug>Distributed Testing: Stripped modes do not strip responses from SubResults (affects load tests that use Download of embedded resources). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57562</bug>View Results Tree CSS/JQuery Tester : Nothing happens when there is an error in syntax and an exception occurs in jmeter.log</li>
+<li><bug>57514</bug>Aggregate Graph, Summary Report and Aggregate Report show wrong percentage reporting in saved file</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+<li><bug>57607</bug>Constant Throughput Timer : Wrong throughput computed in shared modes due to rounding error </li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57364</bug>Options &lt; Look And Feel does not update all windows LAF. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57394</bug>When constructing an instance with ClassTools#construct(String, int) the integer was ignored and the default constructor was used instead.</li>
+<li><bug>57440</bug>OutOfMemoryError after introduction of JSyntaxTextArea in LoggerPanel due to disableUndo not being taken into account.</li>
+<li><bug>57569</bug>FileServer.reserveFile - inconsistent behaviour when hasHeader is true</li>
+<li><bug>57555</bug>Cannot use JMeter 2.12 as a maven dependency. Contributed by Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
+<li><bug>57608</bug>Fix start script compatibility with old Unix shells, e.g. on Solaris</li>
+</ul>
+
+ <!--  =================== Thanks =================== -->
+
+<ch_section>Thanks</ch_section>
+<p>We thank all contributors mentioned in bug and improvement sections above:
+<ul>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+<li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
+<li>Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li>Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
+<li>Maciej Franek (maciej.franek at gmail.com)</li>
+<li>Richard Brigham (richard.brigham at teamaol.com)</li>
+</ul>
+
+<br/>
+We also thank bug reporters who helped us improve JMeter. <br/>
+For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
+<ul>
+<li>Chaitanya Bhatt (bhatt.chaitanya at gmail.com) for his thorough testing of new BackendListener and Graphite Client implementation.</li>
+<li>Marcelo Jara (marcelojara at hotmail.com) for his clear report on <bugzilla>57607</bugzilla>.</li>
+</ul>
+
+Apologies if we have omitted anyone else.
+ </p>
+ <!--  =================== Known bugs =================== -->
+ 
 <ch_section>Known bugs</ch_section>
 
 <ul>
@@ -128,156 +278,7 @@ See  <bugzilla>56357</bugzilla> for details.
 </li>
 
 </ul>
-
-<!-- =================== Incompatible changes =================== -->
-
-<ch_section>Incompatible changes</ch_section>
-
-<ul>
-    <li>Since 2.13, Aggregate Graph, Summary Report and Aggregate Report now export percentages to %, before they exported the decimal value which differed from what was shown in GUI</li>
-    <li>Third party plugins may be impacted by fix of <bugzilla>57586</bugzilla>, ensure that your subclass of HttpTestSampleGui implements ItemListener if you relied on parent class doing so.</li>
-</ul>
-
-<!-- =================== Bug fixes =================== -->
-
-<ch_section>Bug fixes</ch_section>
-
-<h3>HTTP Samplers and Test Script Recorder</h3>
-<ul>
-<li><bug>57385</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57579</bug>NullPointerException error is raised on main sample if "RETURN_NO_SAMPLE" is used (default) and "Use Cache-Control / Expires header..." is checked in HTTP Cache Manager</li>
-</ul>
-
-<h3>Other Samplers</h3>
-<ul>
-</ul>
-
-<h3>Controllers</h3>
-<ul>
-<li><bug>57447</bug>Use only the user listed DNS Servers, when "use custom DNS resolver" option is enabled.</li>
-</ul>
-
-<h3>Listeners</h3>
-<ul>
-<li><bug>57262</bug>Aggregate Report, Aggregate Graph and Summary Report export : headers use keys instead of labels</li>
-<li><bug>57346</bug>Summariser : The + (difference) reports show wrong elapsed time and throughput</li>
-<li><bug>57449</bug>Distributed Testing: Stripped modes do not strip responses from SubResults (affects load tests that use Download of embedded resources). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57562</bug>View Results Tree CSS/JQuery Tester : Nothing happens when there is an error in syntax and an exception occurs in jmeter.log</li>
-<li><bug>57514</bug>Aggregate Graph, Summary Report and Aggregate Report show wrong percentage reporting in saved file</li>
-</ul>
-
-<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>
-<li><bug>57607</bug>Constant Throughput Timer : Wrong throughput computed in shared modes due to rounding error </li>
-</ul>
-
-<h3>Functions</h3>
-<ul>
-</ul>
-
-<h3>I18N</h3>
-<ul>
-</ul>
-
-<h3>General</h3>
-<ul>
-<li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57364</bug>Options &lt; Look And Feel does not update all windows LAF. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57394</bug>When constructing an instance with ClassTools#construct(String, int) the integer was ignored and the default constructor was used instead.</li>
-<li><bug>57440</bug>OutOfMemoryError after introduction of JSyntaxTextArea in LoggerPanel due to disableUndo not being taken into account.</li>
-<li><bug>57569</bug>FileServer.reserveFile - inconsistent behaviour when hasHeader is true</li>
-<li><bug>57555</bug>Cannot use JMeter 2.12 as a maven dependency. Contributed by Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
-<li><bug>57608</bug>Fix start script compatibility with old Unix shells, e.g. on Solaris</li>
-</ul>
-
-<!-- =================== Improvements =================== -->
-
-<ch_section>Improvements</ch_section>
-
-<h3>HTTP Samplers and Test Script Recorder</h3>
-<ul>
-<li><bug>25430</bug>HTTP(S) Test Script Recorder : Make it populate HTTP Authorisation Manager. Partly based on a patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
-<li><bug>57381</bug>HTTP(S) Test Script Recorder should display an error if Target Controller references a Recording Controller and no Recording Controller exists. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57488</bug>Performance : Improve SSLContext reset for Two-way SSL Authentication</li>
-<li><bug>57565</bug>SamplerCreator : Add method to allow implementations to add children to created sampler</li>
-<li><bug>57606</bug>HTTPSamplerBase#errorResult changes the sample label on exception </li>
-<li><bug>57613</bug>HTTP Sampler : Added CalDAV verbs (REPORT, MKCALENDAR). Contributed by Richard Brigham (richard.brigham at teamaol.com)</li>
-</ul>
-
-<h3>Other samplers</h3>
-<ul>
-    <li><bug>57322</bug>JDBC Test elements: add ResultHandler to deal with ResultSets(cursors) returned by callable statements. Contributed by Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
-</ul>
-
-<h3>Controllers</h3>
-<ul>
-<li><bug>57561</bug>Module controller UI : Replace combobox by tree. Contributed by Maciej Franek (maciej.franek at gmail.com)</li>
-</ul>
-
-<h3>Listeners</h3>
-<ul>
-<li><bug>55932</bug>Create a Async BackendListener to allow easy plug of new listener (Graphite, JDBC, Console,...)</li>
-<li><bug>57246</bug>BackendListener : Create a Graphite implementation</li>
-<li><bug>57217</bug>Aggregate graph and Aggregate report improvements (3 configurable percentiles, same data in both, factor out code). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57537</bug>BackendListener : Allow implementations to drop samples</li>
-</ul>
-
-<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>
-</ul>
-
-<h3>Functions</h3>
-<ul>
-<li><bug>54453</bug>Performance enhancements : Replace Random by ThreadLocalRandom in __Random function</li>
-</ul>
-
-<h3>I18N</h3>
-<ul>
-</ul>
-
-<h3>General</h3>
-<ul>
-<li><bug>57518</bug>Icons for toolbar with several sizes</li>
-<li><bug>57605</bug>When there is an error loading Test Plan, SaveService.loadTree returns null leading to NPE in callers</li>
-</ul>
-<ch_section>Non-functional changes</ch_section>
-<ul>
-<li>Updated to jsoup-1.8.3.jar (from 1.7.3)</li>
-<li>Updated to tika-core and tika-parsers 1.7 (from 1.6)</li>
-<li><bug>57276</bug>RMIC no longer needed since Java 5</li>
-<li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
-<li><bug>57389</bug>Fix potential NPE in converters</li>
-<li><bug>57417</bug>Remove unused method isTemporary from NullProperty. This was a leftover from a refactoring done in 2003.</li>
-<li><bug>57418</bug>Remove unused constructor from Workbench</li>
-<li><bug>57419</bug>Remove unused interface ModelListener.</li>
-<li><bug>57466</bug>IncludeController : Remove an unneeded set creation. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
-<li>Added property loggerpanel.usejsyntaxtext to disable the use of JSyntaxTextArea for the Console Logger (in case of memory or other issues)</li>
-<li><bug>57586</bug>HttpTestSampleGui: Remove interface ItemListener implementation</li>
-</ul>
-
-<ch_section>Thanks</ch_section>
-<p>We thank all contributors mentioned in bug and improvement sections above:
-<ul>
-<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
-<li>Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
-<li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
-<li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
-<li>Benoit Wiart (benoit.wiart at gmail.com)</li>
-<li>Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
-<li>Maciej Franek (maciej.franek at gmail.com)</li>
-<li>Richard Brigham (richard.brigham at teamaol.com)</li>
-</ul>
-
-<br/>
-We also thank bug reporters who helped us improve JMeter. <br/>
-For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
-<ul>
-<li>Chaitanya Bhatt (bhatt.chaitanya at gmail.com) for his thorough testing of new BackendListener and Graphite Client implementation.</li>
-<li>Marcelo Jara (marcelojara at hotmail.com) for his clear report on <bugzilla>57607</bugzilla>.</li>
-</ul>
-
-Apologies if we have omitted anyone else.
- </p>
+ 
 </section> 
 </body> 
 </document>
