@@ -36,7 +36,7 @@ You may want to also download the source so it can be used by the IDE.
 
 <h2>Building JMeter</h2>
 <h3>Acquiring the source</h3>
-<p>The full source is distributed alongside the binary, it can also be downloaded from SVN or found on <a href="https://github.com/apache/jmeter">Apache JMeter Github Mirror</a> .</p>
+<p>The full source is distributed alongside the binary, it can also be downloaded from SVN or found on <a target="_blank" href="https://github.com/apache/jmeter">Apache JMeter Github Mirror</a> .</p>
 <p>
 The source archive and SVN do not contain any of the required library files. 
 These need to be downloaded by running the Ant command:
