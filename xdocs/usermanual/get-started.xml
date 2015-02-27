@@ -63,16 +63,6 @@ The other specific Test Plan sections are:
 various configuration elements (timers, listeners, assertions, and others) which give you more control
 over your Test Plans.</p>
 
-<subsection name="&sect-num;.0.1 Create Test Plan from Template" anchor="template">
-<p>You have the ability to create a new Test Plan from existing template.</p>
-<p>To do so you use the menu <b>File</b> &gt; <b>Templates...</b> or Templates icon:
-<figure image="template_menu.png">Templates icon item</figure>
-</p>
-<p>A popup appears, you can then choose a template among the list:
-<figure image="template_wizard.png">Templates popup</figure>
-</p>
-<p>A documentation for each template explains what to do once test plan is created from template.</p>
-</subsection>
 </section>
 
 <section name="&sect-num;.1 Requirements" anchor="requirements">
@@ -212,6 +202,7 @@ There are some additional scripts in the bin directory that you may find useful.
 Windows script files (the .CMD files require Win2K or later):
 <ul>
 <li>jmeter.bat - run JMeter (in GUI mode by default)</li>
+<li>jmeterw.cmd - run JMeter without the windows shell console (in GUI mode by default)</li>
 <li>jmeter-n.cmd - drop a JMX file on this to run a non-GUI test</li>
 <li>jmeter-n-r.cmd - drop a JMX file on this to run a non-GUI test remotely</li>
 <li>jmeter-t.cmd - drop a JMX file on this to load it in GUI mode</li>
@@ -238,7 +229,7 @@ Un*x script files; should work on most Linux/Unix systems:
 <ul>
 <li>jmeter - run JMeter (in GUI mode by default). Defines some JVM settings which may not work for all JVMs.</li>
 <li>jmeter-server - start JMeter in server mode (calls jmeter script with appropriate parameters)</li>
-<li>jmeter.sh - very basic JMeter script with no JVM options specified.</li>
+<li>jmeter.sh - very basic JMeter script (You may need to adapt JVM options like memory settings).</li>
 <li>mirror-server.sh - runs the JMeter Mirror Server in non-GUI mode</li>
 <li>shutdown.sh - Run the Shutdown client to stop a non-GUI instance gracefully</li>
 <li>stoptest.sh - Run the Shutdown client to stop a non-GUI instance abruptly</li>
@@ -285,7 +276,18 @@ and the java command silently ignores the CLASSPATH variable, and the -classpath
 [This occurs with all Java programs, not just JMeter.]</p>
 </subsection>
 
-<subsection name="&sect-num;.4.2 Using a HTTP(S) Test Script Recorder" anchor="proxy_server">
+<subsection name="&sect-num;.4.2 Create Test Plan from Template" anchor="template">
+<p>You have the ability to create a new Test Plan from existing template.</p>
+<p>To do so you use the menu <b>File</b> &gt; <b>Templates...</b> or Templates icon:
+<figure image="template_menu.png">Templates icon item</figure>
+</p>
+<p>A popup appears, you can then choose a template among the list:
+<figure image="template_wizard.png">Templates popup</figure>
+</p>
+<p>A documentation for each template explains what to do once test plan is created from template.</p>
+</subsection>
+
+<subsection name="&sect-num;.4.3 Using JMeter behing a proxy" anchor="proxy_server">
 <p>If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
 the firewall/proxy server hostname and port number.  To do so, run the jmeter[.bat] file
 from a command line with the following parameters:</p>
@@ -326,7 +328,7 @@ This is only used for recording HTTP or HTTPS browser sessions.
 This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.</note>
 </subsection>
 
-<subsection name="&sect-num;.4.3 Non-GUI Mode (Command Line mode)" anchor="non_gui">
+<subsection name="&sect-num;.4.4 Non-GUI Mode (Command Line mode)" anchor="non_gui">
 <p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
 the following command options:</p>
 <p>
@@ -350,7 +352,7 @@ Normally this is not necessary.
 </p>
 </subsection>
 
-<subsection name="&sect-num;.4.4 Server Mode" anchor="server">
+<subsection name="&sect-num;.4.5 Server Mode" anchor="server">
 <p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
 You can also use non-GUI mode to run remote tests.
 To start the server(s), run jmeter-server[.bat] on each server host.</p>
@@ -376,7 +378,7 @@ Normally this is not necessary.
 </p>
 </subsection>
 
-<subsection name="&sect-num;.4.5 Overriding Properties Via The Command Line" anchor="override">
+<subsection name="&sect-num;.4.6 Overriding Properties Via The Command Line" anchor="override">
 <p>Java system properties, JMeter properties, and logging properties can be overriden directly on the command line (instead of modifying jmeter.properties).
 To do so, use the following options:</p>
 <p>
@@ -400,7 +402,7 @@ jmeter -LDEBUG</pre>
     Attempts to use the -J flag to update log_level or log_file properties will have no effect.</b>
     </p>
 </subsection>
-<subsection name="&sect-num;.4.6 Logging and error messages" anchor="logging">
+<subsection name="&sect-num;.4.7 Logging and error messages" anchor="logging">
     <note>
     JMeter does not generally use pop-up dialog boxes for errors, as these would interfere with
     running tests. Nor does it report any error for a mis-spelt variable or function; instead the
@@ -445,7 +447,7 @@ jmeter -LDEBUG</pre>
 <p>The log file can be helpful in determining the cause of an error,
     as JMeter does not interrupt a test to display an error dialogue.</p>
 </subsection>
-<subsection name="&sect-num;.4.7 Full list of command-line options" anchor="options">
+<subsection name="&sect-num;.4.8 Full list of command-line options" anchor="options">
 <p>Invoking JMeter as "jmeter -?" will print a list of all the command-line options. 
 These are shown below.</p>
 <pre>
@@ -507,7 +509,7 @@ that was run in interactive mode.
 </p>
 </subsection>
 
-<subsection name="&sect-num;.4.8 non-GUI shutdown" anchor="shutdown">
+<subsection name="&sect-num;.4.9 non-GUI shutdown" anchor="shutdown">
 <p>
 Prior to version 2.5.1, JMeter invoked System.exit() when a non-GUI test completed.
 This caused problems for applications that invoke JMeter directly, so JMeter no longer invokes System.exit() 
