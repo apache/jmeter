@@ -25,18 +25,17 @@
      <body>
      <menu name="About">
        <item name="Overview"            href="/index.html"/>
-       <item name="Changes"             href="/changes.html"/>
-       <item name="Subscribe to What's New" href="http://projects.apache.org/feeds/rss/jmeter.xml"/>
        <item name="JMeter on Twitter"   href="http://twitter.com/ApacheJMeter" icon="twitter.png"/>
        <item name="Issue Tracking"      href="/issues.html"/>
+       <item name="Subscribe to What's New" href="http://projects.apache.org/feeds/rss/jmeter.xml"/>
        <item name="License"             href="http://www.apache.org/licenses/"/>
-       <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
      </menu>
      <menu name="Download">
          <item name="Download Releases"    href="/download_jmeter.cgi"/>
         <item name="Developer (Nightly) Builds"      href="/nightly.html"/>
      </menu>
      <menu name="Documentation">
+        <item name="Changes per version"             href="/changes.html"/>
         <item name="Get Started"         href="/usermanual/get-started.html"/>
         <item name="User Manual"         href="/usermanual/index.html"/>
         <item name="Best Practices"         href="/usermanual/best-practices.html"/>
@@ -55,6 +54,7 @@
         <item name="Extending JMeter"     href="/extending/jmeter_tutorial.pdf"/>
      </menu>
      <menu name="Community">
+        <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
         <item name="Mailing Lists"       href="/mail.html"/>
         <item name="SVN Repositories"    href="/svnindex.html"/>
      </menu>
