@@ -68,7 +68,7 @@ under the License.
       <commons-logging.version>1.2</commons-logging.version>
       <commons-math3.version>3.4.1</commons-math3.version>
       <commons-net.version>3.3</commons-net.version>
-      <commons-pool2.version>2.2</commons-pool2.version>
+      <commons-pool2.version>2.3</commons-pool2.version>
       <dnsjava.version>2.1.6</dnsjava.version>
       <excalibur-datasource.version>2.1</excalibur-datasource.version>
       <excalibur-instrument.version>1.0</excalibur-instrument.version>
