@@ -529,7 +529,7 @@ If set to 0, then JMeter does not start the daemon thread.
 
 <section name="&sect-num;.5 Configuring JMeter" anchor="configuring_jmeter">
 <p>If you wish to modify the properties with which JMeter runs you need to
-  either modify the jmeter.properties in the /bin directory or create
+  either modify the user.properties in the /bin directory or create
   your own copy of the jmeter.properties and specify it in the command line.
   </p>
   <note>
