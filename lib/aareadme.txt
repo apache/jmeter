@@ -156,7 +156,7 @@ jTidy-r938
 - org.xml.sax - various
 - XPathUtil (XPath assertion)
 
-junit 4.11
+junit 4.12
 -----------
 - unit tests, JUnit sampler
 

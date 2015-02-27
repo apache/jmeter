@@ -77,7 +77,7 @@
     <classpathentry kind="lib" path="lib/jodd-log-3.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
