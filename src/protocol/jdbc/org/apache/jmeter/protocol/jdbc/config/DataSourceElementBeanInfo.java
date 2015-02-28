@@ -108,11 +108,11 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
      * Currently supported tags and their values are:
      * <dl>
      * <dt>DEFAULT</dt><dd>-1</dd>
-     * <dt>TRANSACTION_NONE</dt><dd>{@value Connection#TRANSACTION_NONE}</dd>
-     * <dt>TRANSACTION_REAd_COMMITTED</dt><dd>{@value Connection#TRANSACTION_READ_COMMITTED}</dd>
-     * <dt>TRANSACTION_READ_UNCOMMITTED</dt><dd>{@value Connection#TRANSACTION_READ_UNCOMMITTED}</dd>
-     * <dt>TRANSACTION_REPEATABLE_READ</dt><dd>{@value Connection#TRANSACTION_REPEATABLE_READ}</dd>
-     * <dt>TRANSACTION_SERIALIZABLE</dt><dd>{@value Connection#TRANSACTION_SERIALIZABLE}</dd>
+     * <dt>TRANSACTION_NONE</dt><dd>{@value java.sql.Connection#TRANSACTION_NONE}</dd>
+     * <dt>TRANSACTION_REAd_COMMITTED</dt><dd>{@value java.sql.Connection#TRANSACTION_READ_COMMITTED}</dd>
+     * <dt>TRANSACTION_READ_UNCOMMITTED</dt><dd>{@value java.sql.Connection#TRANSACTION_READ_UNCOMMITTED}</dd>
+     * <dt>TRANSACTION_REPEATABLE_READ</dt><dd>{@value java.sql.Connection#TRANSACTION_REPEATABLE_READ}</dd>
+     * <dt>TRANSACTION_SERIALIZABLE</dt><dd>{@value java.sql.Connection#TRANSACTION_SERIALIZABLE}</dd>
      * </dl>
      * @param tag name of the transaction isolation mode
      * @return integer value of the given transaction isolation mode
