@@ -46,6 +46,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
     @Override
     public TestElement createTestElement() {
         TestFragmentController controller = new TestFragmentController();
+        setEnabled(false);
         modifyTestElement(controller);
         return controller;
     }
