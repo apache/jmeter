@@ -42,7 +42,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Adapter for {@link PoolingClientConnectionManager}
- * that wraps all connection requests into time-measured implementation {@link MeasuringConnectionRequest}
+ * that wraps all connection requests into time-measured implementation a private
+ * MeasuringConnectionRequest
  */
 public class MeasuringConnectionManager extends PoolingClientConnectionManager {
 
