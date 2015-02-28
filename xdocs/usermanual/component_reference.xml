@@ -6427,6 +6427,7 @@ The Test Fragment is used in conjunction with the <complink name="Include Contro
 </properties>
 <note>
 When using Test Fragment with <complink name="Module Controller"/>, ensure you disable the Test Fragment to avoid the execution of Test Fragment itself.
+This is done by default since JMeter 2.13.
 </note>
 </component>
 
