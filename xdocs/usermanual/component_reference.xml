@@ -5838,19 +5838,19 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 <component name="WorkBench" index="&sect-num;.9.3"  width="384" height="103" screenshot="workbench.png">
 <description>
 <p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
-When you save your test plan, WorkBench items are not saved with it. 
+When you save your test plan, WorkBench items are not saved with it by default unless you check "Save Workbench" option.
 Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p>
 <p>Certain test elements are only available on the WorkBench:</p>
-<properties>
-         <property name="Save WorkBench" required="No">
-                Allow to save the WorkBench's elements into the JMX file.
-        </property>
-</properties>
 <ul>
 <li><complink name="HTTP(S) Test Script Recorder"/></li>
 <li><complink name="HTTP Mirror Server"/></li>
 <li><complink name="Property Display"/></li>
 </ul>
+<properties>
+         <property name="Save WorkBench" required="No">
+                Allow to save the WorkBench's elements into the JMX file.
+        </property>
+</properties>
 </description>
 </component>
 
