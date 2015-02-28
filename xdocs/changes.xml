@@ -97,6 +97,7 @@ Summary
 <h3>Controllers</h3>
 <ul>
 <li><bug>57561</bug>Module controller UI : Replace combobox by tree. Contributed by Maciej Franek (maciej.franek at gmail.com)</li>
+<li><bug>57648</bug>TestFragment should be disabled when created. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Listeners</h3>
