@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -112,11 +113,14 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         obj.exit(hosts);
     }
 
-    private class DistributedRunnerEmul extends DistributedRunner {
+    private static class DistributedRunnerEmul extends DistributedRunner {
         public List<EmulatorEngine> engines = new LinkedList<EmulatorEngine>();
 
         @Override
         protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException, MalformedURLException {
+            if(engines.size()==0) {
+                throw new IllegalArgumentException("Throwing on Engine creation to simulate failure");
+            }
             EmulatorEngine engine = engines.remove(0);
             engine.setHost(address);
             return engine;
