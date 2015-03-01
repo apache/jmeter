@@ -797,8 +797,7 @@ public class JMeterUtils implements UnitTestManager {
     public static int getPropDefault(String propName, int defaultVal) {
         int ans;
         try {
-            ans = (Integer.valueOf(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim()))
-                    .intValue();
+            ans = Integer.parseInt(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim());
         } catch (Exception e) {
             log.warn("Unexpected value set for int property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
@@ -824,7 +823,7 @@ public class JMeterUtils implements UnitTestManager {
             } else if (strVal.equalsIgnoreCase("false") || strVal.equalsIgnoreCase("f")) { // $NON-NLS-1$  // $NON-NLS-2$
                 ans = false;
             } else {
-                ans = ((Integer.valueOf(strVal)).intValue() == 1);
+                ans = Integer.parseInt(strVal) == 1;
             }
         } catch (Exception e) {
             log.warn("Unexpected value set for boolean property:'"+propName+"', defaulting to:"+defaultVal);
@@ -845,7 +844,7 @@ public class JMeterUtils implements UnitTestManager {
     public static long getPropDefault(String propName, long defaultVal) {
         long ans;
         try {
-            ans = (Long.valueOf(appProperties.getProperty(propName, Long.toString(defaultVal)).trim())).longValue();
+            ans = Long.parseLong(appProperties.getProperty(propName, Long.toString(defaultVal)).trim());
         } catch (Exception e) {
             log.warn("Unexpected value set for long property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
