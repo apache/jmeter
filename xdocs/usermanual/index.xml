@@ -45,13 +45,14 @@
   <li><a href="#build-monitor-test-plan">+</a>...<a href="build-monitor-test-plan.html">13. Building a Monitor Test Plan</a></li>
   <li><a href="#listeners">+</a>...<a href="listeners.html">14. Listeners</a></li>
   <li><a href="#remote-test">+</a>...<a href="remote-test.html">15. Remote Testing</a></li>
-  <li><a href="#best-practices">+</a>...<a href="best-practices.html">16. Best Practices</a></li>
-  <li><a href="#boss">+</a>...<a href="boss.html">17. Help! My boss wants me to load test our web app!</a></li>
-  <li><a href="#component_reference">+</a>...<a href="component_reference.html">18. Component Reference</a></li>
-  <li><a href="#functions">+</a>...<a href="functions.html">19. Functions</a></li>
-  <li><a href="#regex">+</a>...<a href="regular_expressions.html">20. Regular Expressions</a></li>
-  <li><a href="#hints">+</a>...<a href="hints_and_tips.html">21. Hints and Tips</a></li>
-  <li><a href="#glossary">+</a>...<a href="glossary.html">22. Glossary</a></li>
+  <li><a href="#realtime-results">+</a>...<a href="realtime-results.html">16. Real time Results</a></li>
+  <li><a href="#best-practices">+</a>...<a href="best-practices.html">17. Best Practices</a></li>
+  <li><a href="#boss">+</a>...<a href="boss.html">18. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="#component_reference">+</a>...<a href="component_reference.html">19. Component Reference</a></li>
+  <li><a href="#functions">+</a>...<a href="functions.html">20. Functions</a></li>
+  <li><a href="#regex">+</a>...<a href="regular_expressions.html">21. Regular Expressions</a></li>
+  <li><a href="#hints">+</a>...<a href="hints_and_tips.html">22. Hints and Tips</a></li>
+  <li><a href="#glossary">+</a>...<a href="glossary.html">23. Glossary</a></li>
 </ul>
 </subsection>
 <subsection name="Detailed Section List" anchor="details">
