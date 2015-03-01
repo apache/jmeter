@@ -53,9 +53,7 @@ public class SocketOutputStreamPoolFactory
         super.destroyObject(socketConnectionInfos, socketOutputStream);
         SocketOutputStream outputStream = socketOutputStream.getObject();
         JOrphanUtils.closeQuietly(outputStream);
-        if(outputStream.getSocket() != null) {
-            JOrphanUtils.closeQuietly(outputStream.getSocket());
-        }
+        JOrphanUtils.closeQuietly(outputStream.getSocket());
     }
 
     /**
