@@ -109,6 +109,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
 
                 out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
                 out.write(header);
+                //pickleWriter is not close as it would close the underlying pooled out
                 Writer pickleWriter = new OutputStreamWriter(out, CHARSET_NAME);
                 pickleWriter.write(payload);
                 pickleWriter.flush();
