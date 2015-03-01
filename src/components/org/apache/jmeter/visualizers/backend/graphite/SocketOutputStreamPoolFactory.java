@@ -25,6 +25,7 @@ import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
 import org.apache.commons.pool2.KeyedPooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Pool Factory of {@link SocketOutputStream}
@@ -51,8 +52,10 @@ public class SocketOutputStreamPoolFactory
     public void destroyObject(SocketConnectionInfos socketConnectionInfos, PooledObject<SocketOutputStream> socketOutputStream) throws Exception {
         super.destroyObject(socketConnectionInfos, socketOutputStream);
         SocketOutputStream outputStream = socketOutputStream.getObject();
-        outputStream.close();
-        outputStream.getSocket().close();
+        JOrphanUtils.closeQuietly(outputStream);
+        if(outputStream.getSocket() != null) {
+            JOrphanUtils.closeQuietly(outputStream.getSocket());
+        }
     }
 
     /**
