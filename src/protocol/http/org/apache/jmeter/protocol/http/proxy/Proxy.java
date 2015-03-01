@@ -207,7 +207,8 @@ public class Proxy extends Thread {
                 try {
                     ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
                 } catch (IOException ioe) { // most likely this is because of a certificate error
-                    final String url = param.length>0 ?  " for '"+ param[0] +"'" : "";
+                    // param.length is 2 here
+                    final String url = " for '"+ param[0] +"'";
                     log.warn(port + "Problem with SSL certificate"+url+"? Ensure browser is set to accept the JMeter proxy cert: " + ioe.getMessage());
                     // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
                     result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**"); // Generate result (if nec.) and populate it
