@@ -55,8 +55,8 @@ Summary
 <!-- <ch_title>Sample title</ch_title>
 <p>
 <ul>
-<li><bugzilla>48799</bugzilla> - Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
-<li><bugzilla>57500</bugzilla> - Introduce retry behavior for distributed testing. Implemented by Andrey Pokhilko and Dzimitry Kashlach and contributed by BlazeMeter Ltd.</li>
+<li><bugzilla>48799</bugzilla>Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+<li><bugzilla>57500</bugzilla>Introduce retry behavior for distributed testing. Implemented by Andrey Pokhilko and Dzimitry Kashlach and contributed by BlazeMeter Ltd.</li>
 <li>Sample text</li>
 </ul>
 </p>
@@ -65,6 +65,60 @@ Summary
 <p>Sample text</p>
 <figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
  -->
+
+<ch_category>New Elements</ch_category>
+
+<ch_title>New Async BackendListener with Graphite implementation</ch_title>
+<p>A new Async BackendListener to allow send result data to a backend listener like Graphite.
+<figure width="913" height="293" image="changes/2.13/backend_listener_graphite.png"></figure>
+</p>
+
+<ch_category>Core Improvements</ch_category>
+
+<ch_title>Aggregate Graph and Report</ch_title>
+<p>The listeners Aggregate Graph and Aggregate Report show the 90 percentile (historical behavior), and now the 95 percentile and the 99 percentile.
+<figure width="801" height="681" image="changes/2.13/aggregate_graph_new_percentile.png"></figure>
+</p>
+
+<ch_title>Module Controller</ch_title>
+<p>The Module Controller shows the list of target in a tree view (instead of combo list).
+<figure width="306" height="372" image="changes/2.13/module_controller_tree_view.png"></figure>
+</p>
+
+<ch_title>HTTP Request</ch_title>
+<p>The CalDAV verbs REPORT and MKCALENDAR have been added in the HTTP Request sampler.
+<figure width="716" height="324" image="changes/2.13/new_methods_caldav.png"></figure>
+</p>
+
+<ch_title>JDBC Request</ch_title>
+<p>The ResultSet can be get as a object, this allow to handle more easily the results after in BeanShell, JSR223 scripts.
+<figure width="683" height="628" image="changes/2.13/jdbc_resultset_handler.png"></figure>
+</p>
+
+<ch_category>GUI Improvements</ch_category>
+
+<ch_title>Toolbar</ch_title>
+<p>The JMeter's toolbar have been refresh for some icons (start, toogle, etc.). Three size are now avialable for the icons: 22x22, 32x32 and 48x48.<br>
+The property to define your prefered size is:
+<pre>jmeter.toolbar.icons.size=value</pre>
+with the value 22x22 (default size), 32x32 or 48x48.</br></p>
+<p>The toolbar with 22x22 pixels icons
+<figure width="648" height="100" image="changes/2.13/toolbar_22x22.png"></figure>
+</p>
+
+<p>The toolbar with 32x32 pixels icons
+<figure width="825" height="112" image="changes/2.13/toolbar_32x32.png"></figure>
+</p>
+
+<p>The toolbar with 48x48 pixels icons
+<figure width="1115" height="130" image="changes/2.13/toolbar_48x48.png"></figure>
+</p>
+ 
+<ch_title>HTTP(S) Test Script Recorder</ch_title>
+<p>If your Test Plan does not contains a Recording Controller, a new warning message will appear if the
+ HTTP(S) Test Script Recorder is configured to send the samples into a Recording Controller.
+<figure width="858" height="386" image="changes/2.13/warning_message_proxy.png"></figure>
+</p>
 
 <!-- =================== Incompatible changes =================== -->
 
