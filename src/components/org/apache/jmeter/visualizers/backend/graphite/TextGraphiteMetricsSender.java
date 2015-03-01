@@ -85,7 +85,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
             SocketOutputStream out = null;
             try {
                 out = socketOutputStreamPool.borrowObject(socketConnectionInfos);
-                // pw is not close as it would close the underlying pooled out
+                // pw is not closed as it would close the underlying pooled out
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, CHARSET_NAME), false);
                 for (MetricTuple metric: metrics) {
                     pw.printf("%s %s %d%n", metric.name, metric.value, Long.valueOf(metric.timestamp));
