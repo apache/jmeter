@@ -231,11 +231,12 @@ public class HttpRequestHdr {
 
     private HeaderManager createHeaderManager() {
         HeaderManager manager = new HeaderManager();
-        for (String key : headers.keySet()) {
+        for (Map.Entry<String, Header> entry : headers.entrySet()) {
+            final String key = entry.getKey();
             if (!key.equals(PROXY_CONNECTION)
              && !key.equals(CONTENT_LENGTH)
              && !key.equalsIgnoreCase(HTTPConstants.HEADER_CONNECTION)) {
-                manager.add(headers.get(key));
+                manager.add(entry.getValue());
             }
         }
         manager.setName(JMeterUtils.getResString("header_manager_title")); // $NON-NLS-1$
