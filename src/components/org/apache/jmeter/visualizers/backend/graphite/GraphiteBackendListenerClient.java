@@ -108,8 +108,8 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                 metric.resetForTimeInterval();
             }
         }        
-        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
         graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
         graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(getUserMetrics().getStartedThreads()));
         graphiteMetricsManager.addMetric(timestampInSeconds, CUMULATED_CONTEXT_NAME, METRIC_STOPPED_THREADS, Integer.toString(getUserMetrics().getFinishedThreads()));
