@@ -109,7 +109,8 @@ In this document we will present the configuration setup to be able to graph and
            </tr>
            <tr>
                <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.percentile&lt;percentileValue&gt;</td>
-               <td>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value). By default listener computes percentiles 90%, 95% and 99%</td>            
+               <td>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/> 
+               By default listener computes percentiles 90%, 95% and 99%</td>            
            </tr>
     </table>
     <p>
@@ -127,7 +128,7 @@ In this document we will present the configuration setup to be able to graph and
 <subsection name="&sect-num;.2 InfluxDB" anchor="influxdb">
 <p>InfluxDB is an open-source, distributed,time-series database that allows to 
 easily store metrics.
-Installation and configuration is very easy, read this for more details <a href="http://influxdb.com/docs/v0.8/introduction/installation.html" target="_blank" >InfluxDB documentation</a>.
+Installation and configuration is very easy, read this for more details <a href="http://influxdb.com/docs/v0.8/introduction/installation.html" target="_blank" >InfluxDB documentation</a>.<br/>
 InfluxDB data can be easily viewed in a browser through either <a href="https://github.com/hakobera/influga"  target="_blank">Influga</a> or <a href="http://grafana.org/"  target="_blank">Grafana</a>.
 We will use Grafana in this case.
 </p>
@@ -176,8 +177,11 @@ We will use Grafana in this case.
       },
     </code><br/>
     <p>
-    Note that grafana has "grafanaDB:true". Also note that here we use root user for simplicity, it is better to dedicate a special user with less rights.
+    Note that grafana has "grafanaDB:true". Also note that here we use root user for simplicity, it is better to dedicate a special user with less rights.<br/>
+    Here is the kind of dashboard that you could obtain:
     </p>
+    <figure width="1912" height="957" image="grafana_dashboard.png">Grafana dashboard</figure> 
+    
     </subsection>
 </subsection>
 <subsection name="&sect-num;.3 Collectd" anchor="collectd">
