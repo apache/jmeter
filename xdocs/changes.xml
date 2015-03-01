@@ -69,20 +69,20 @@ Summary
 <ch_category>New Elements</ch_category>
 
 <ch_title>New Async BackendListener with Graphite implementation</ch_title>
-<p>A new Async BackendListener to allow send result data to a backend listener like Graphite.
+<p>A new Async BackendListener to allow send result data to a backend listener like Graphite.</p>
 <figure width="913" height="293" image="changes/2.13/backend_listener_graphite.png"></figure>
-</p>
+<figure width="1912" height="957" image="grafana_dashboard.png">Grafana dashboard</figure>
+<p>Read <a href="./usermanual/realtime-results.html" >this</a> for more details.</p>
 
 <ch_category>Core Improvements</ch_category>
 
 <ch_title>Aggregate Graph and Report</ch_title>
-<p>The listeners Aggregate Graph and Aggregate Report show the 90 percentile (historical behavior), and now the 95 percentile and the 99 percentile.
+<p>The listeners Aggregate Graph and Aggregate Report previously showed the 90 percentile (historical behavior), and now the 95 percentile and the 99 percentile.
 <figure width="801" height="681" image="changes/2.13/aggregate_graph_new_percentile.png"></figure>
 </p>
 
-<ch_title>Module Controller</ch_title>
-<p>The Module Controller shows the list of target in a tree view (instead of combo list).
-<figure width="306" height="372" image="changes/2.13/module_controller_tree_view.png"></figure>
+<ch_title>HTTP(S) Test Script Recorder</ch_title>
+<p>Now component is able to detect authentication schemas and automatically adds a pre-configured HTTP Authorization Manager.
 </p>
 
 <ch_title>HTTP Request</ch_title>
@@ -97,8 +97,13 @@ Summary
 
 <ch_category>GUI Improvements</ch_category>
 
+<ch_title>Module Controller</ch_title>
+<p>The Module Controller shows the target controller in a tree view (instead of combo list).
+<figure width="306" height="372" image="changes/2.13/module_controller_tree_view.png"></figure>
+</p>
+
 <ch_title>Toolbar</ch_title>
-<p>The JMeter's toolbar have been refresh for some icons (start, toogle, etc.). Three size are now avialable for the icons: 22x22, 32x32 and 48x48.<br>
+<p>JMeter's toolbar has been refreshed for some icons (start, toogle, etc.). Three sizes are now avialable for the icons: 22x22, 32x32 and 48x48.<br>
 The property to define your prefered size is:
 <pre>jmeter.toolbar.icons.size=value</pre>
 with the value 22x22 (default size), 32x32 or 48x48.</br></p>
