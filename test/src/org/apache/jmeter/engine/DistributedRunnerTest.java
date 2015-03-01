@@ -39,7 +39,7 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
     public static void createJmeterEnv() throws IOException {
         File propsFile;
         try {
-            propsFile = File.createTempFile("jmeter-plugins", ".properties");
+            propsFile = File.createTempFile("jmeter", ".properties");
             propsFile.deleteOnExit();
             JMeterUtils.loadJMeterProperties(propsFile.getAbsolutePath());
         } catch (IOException ex) {
