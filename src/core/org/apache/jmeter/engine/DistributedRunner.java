@@ -256,7 +256,7 @@ public class DistributedRunner {
         this.stderr = stdErr;
     }
 
-    private class SilentOutputStream extends OutputStream {
+    private static class SilentOutputStream extends OutputStream {
         @Override
         public void write(int b) throws IOException {
             // enjoy the silence
