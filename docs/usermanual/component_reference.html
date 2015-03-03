@@ -79,17 +79,13 @@ data-size="large">Follow</a>
 <ul>
 <li><a href="../index.html">Overview</a>
 </li>
-<li><a href="../changes.html">Changes</a>
-</li>
-<li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
-</li>
 <li><a href="http://twitter.com/ApacheJMeter">JMeter on Twitter</a>
 <img src="../images/twitter.png" align="top"/></li>
 <li><a href="../issues.html">Issue Tracking</a>
 </li>
-<li><a href="http://www.apache.org/licenses/">License</a>
+<li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
 </li>
-<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 </ul>
 <p><strong>Download</strong></p>
@@ -101,6 +97,10 @@ data-size="large">Follow</a>
 </ul>
 <p><strong>Documentation</strong></p>
 <ul>
+<li><a href="../changes.html">Changes per version</a>
+</li>
+<li><a href="../usermanual/get-started.html">Get Started</a>
+</li>
 <li><a href="../usermanual/index.html">User Manual</a>
 </li>
 <li><a href="../usermanual/best-practices.html">Best Practices</a>
@@ -110,8 +110,6 @@ data-size="large">Follow</a>
 <li><a href="../usermanual/functions.html">Functions Reference</a>
 </li>
 <li><a href="../api/index.html">Javadocs</a>
-</li>
-<li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
 </li>
 <li><a href="../building.html">Building JMeter and Add-Ons</a>
 </li>
@@ -135,6 +133,8 @@ data-size="large">Follow</a>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
+</li>
 <li><a href="../mail.html">Mailing Lists</a>
 </li>
 <li><a href="../svnindex.html">SVN Repositories</a>
@@ -243,6 +243,7 @@ data-size="large">Follow</a>
 <li><a href="#JSR223_Listener">JSR223 Listener</a></li>
 <li><a href="#Generate_Summary_Results">Generate Summary Results</a></li>
 <li><a href="#Comparison_Assertion_Visualizer">Comparison Assertion Visualizer</a></li>
+<li><a href="#Backend_Listener">Backend Listener</a></li>
 </ul>
 <li><a href="#config_elements">18.4 Configuration Elements</a></li>
 <ul>
@@ -624,7 +625,7 @@ Or, instead of manually adding HTTP Requests, you may want to use
         
 <p>
 <b>
-There are two different screens for defining the samplers:
+There are two different test elements used to define the samplers:
 </b>
 
         
@@ -710,7 +711,7 @@ It does not support virtual hosts.
 
          
 <li>
-It does not support the following methods: COPY, LOCK, MKCOL, MOVE, PATCH, PROPFIND, PROPPATCH, UNLOCK.
+It does not support the following methods: COPY, LOCK, MKCOL, MOVE, PATCH, PROPFIND, PROPPATCH, UNLOCK, REPORT, MKCALENDAR.
 </li>
 
          
@@ -935,7 +936,7 @@ No
 <td>Method</td>
 <td>GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE, PATCH (not supported for
         JAVA implementation). With HttpClient4, the following methods related to WebDav are also allowed: COPY, LOCK, MKCOL, MOVE,
-        PROPFIND, PROPPATCH, UNLOCK.
+        PROPFIND, PROPPATCH, UNLOCK, REPORT, MKCALENDAR.
 </td>
 <td>
 Yes
@@ -1764,7 +1765,7 @@ Select Statement
 
             
 <li>
-Update Statement - use this for Inserts as well
+Update Statement - use this for Inserts and Deletes as well
 </li>
 
             
@@ -1779,7 +1780,7 @@ Prepared Select Statement
 
             
 <li>
-Prepared Update Statement - use this for Inserts as well
+Prepared Update Statement - use this for Inserts and Deletes as well
 </li>
 
             
@@ -1816,7 +1817,6 @@ Edit - this should be a variable reference that evaluates to one of the above
 <tr><td>
             When "Prepared Select Statement", "Prepared Update Statement" or "Callable Statement" types are selected, a Statement Cache per connection is used by JDBC Request. 
             It stores by default up to 100 PreparedStatements per connection, this can impact your database (Open Cursors). 
-            This can be changed by defining the property "jdbcsampler.nullmarker".
             
 </td></tr>
 </table>
@@ -1981,6 +1981,36 @@ No
 <code>
 columnValue = vars.getObject("resultObject").get(0).get("Column Name");
 </code>
+
+        
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Handle ResultSet</td>
+<td>Defines how ResultSet returned from callable statements be handled:
+            
+<ul>
+
+                
+<li>
+Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a ResultSets when present on the list.
+</li>
+
+                
+<li>
+Store As Object - Variables of ResultSet type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the ResultSet 
+</li>
+
+                
+<li>
+Count Records - Variables of ResultSet types will be iterated through showing the count of records as result. Variables will be stored as Strings.
+</li>
+
+            
+</ul>
 
         
 </td>
@@ -9664,14 +9694,66 @@ th
 percentile
 </a>
 ) values requires additional memory.
-For JMeter 2.3.4 and earlier, details of each sample were saved separately, which meant a lot of memory was needed.
 JMeter now combines samples with the same elapsed time, so far less memory is used.
 However, for samples that take more than a few seconds, the probability is that fewer samples will have identical times,
 in which case more memory will be needed.
+Note you can use this listener afterwards to reload a CSV or XML results file which is the recommended way to avoid performance impacts.
 See the 
 <a href="../usermanual/component_reference.html#Summary_Report">Summary Report</a>
  for a similar Listener that does not store individual samples and so needs constant memory.
 
+</p>
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Starting with JMeter 2.12, you can configure the 3 percentile values you want to compute, this can be done by setting properties:
+
+<ul>
+
+    
+<li>
+aggregate_rpt_pct1: defaults to 90
+<sup>
+th
+</sup>
+ 
+<a href="glossary.html#Percentile">
+percentile
+</a>
+</li>
+
+    
+<li>
+aggregate_rpt_pct2: defaults to 95
+<sup>
+th
+</sup>
+ 
+<a href="glossary.html#Percentile">
+percentile
+</a>
+</li>
+
+    
+<li>
+aggregate_rpt_pct3: defaults to 99
+<sup>
+th
+</sup>
+ 
+<a href="glossary.html#Percentile">
+percentile
+</a>
+</li>
+
+
+</ul>
+
+
+</td></tr>
+</table>
 </p>
 
 
@@ -9708,7 +9790,35 @@ median
 
 <li>
 90% Line - 90% of the samples took no more than this time.
-The remaining samples at least as long as this. (90
+The remaining samples took at least as long as this. (90
+<sup>
+th
+</sup>
+ 
+<a href="glossary.html#Percentile">
+percentile
+</a>
+)
+</li>
+
+
+<li>
+95% Line - 95% of the samples took no more than this time.
+The remaining samples took at least as long as this. (95
+<sup>
+th
+</sup>
+ 
+<a href="glossary.html#Percentile">
+percentile
+</a>
+)
+</li>
+
+
+<li>
+99% Line - 99% of the samples took no more than this time.
+The remaining samples took at least as long as this. (99
 <sup>
 th
 </sup>
@@ -9762,7 +9872,7 @@ Times are in milliseconds.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='784' height='287' src="../images/screenshots/aggregate_report.png"/></div>
+<div align="center"><img width='1140' height='266' src="../images/screenshots/aggregate_report.png"/></div>
 <div align="center">
 
 
@@ -9770,7 +9880,7 @@ Times are in milliseconds.
 
     The figure below shows an example of selecting the "Include group name" checkbox.
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='784' height='287' src="../images/screenshots/aggregate_report_grouped.png"/><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='1140' height='276' src="../images/screenshots/aggregate_report_grouped.png"/><br>
 <font size="-1">Sample "Include group name" display
 </font></td></tr></table></p>
 
@@ -9963,7 +10073,7 @@ The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file.
 <p><b>Control Panel</b></p>
-<div align="center"><img width='893' height='713' src="../images/screenshots/aggregate_graph.png"/></div>
+<div align="center"><img width='1132' height='872' src="../images/screenshots/aggregate_graph.png"/></div>
 <div align="center">
 
 
@@ -11214,6 +11324,138 @@ Yes
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="Backend_Listener">18.3.21 Backend Listener</a>
+<a class="sectionlink" href="#Backend_Listener" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+The backend listener is an Asynchronous listener that enables you to plug custom implementations of 
+<a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">
+BackendListenerClient
+</a>
+.
+By default, a Graphite implementation is provided.
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='1138' height='352' src="../images/screenshots/backend_listener.png"/></div>
+<p>
+<b>Parameters</b>
+<a name="Backend_Listener_parms"/>
+<a class="sectionlink" href="#Backend_Listener_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Backend Listener implementation</td>
+<td>Class of the BackendListenerClient implementation.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Async Queue size</td>
+<td>Size of the queue that holds the SampleResults while they are processed asynchronously.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>Parameters of the BackendListenerClient implementation.
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
+<p>
+The following parameters apply to the 
+<b>
+GraphiteBackendListenerClient
+</b>
+ implementation:
+</p>
+<p>
+<b>Parameters</b>
+<a name="Backend_Listener_parms"/>
+<a class="sectionlink" href="#Backend_Listener_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>graphiteMetricsSender</td>
+<td>org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender or org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>graphiteHost</td>
+<td>Graphite or InfluxDB (with Graphite plugin enabled) or CollectD (with Graphite plugin enabled) server port
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>graphitePort</td>
+<td>Graphite or InfluxDB (with Graphite plugin enabled) or CollectD (with Graphite plugin enabled) server port, defaults to 2003. Note PickleGraphiteMetricsSender (port 2004) can only talk to Graphite server.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>rootMetricsPrefix</td>
+<td>Prefix of metrics sent to backend. Defaults to "jmeter."
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>summaryOnly</td>
+<td>Only send a summary with no detail. Defaults to true.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>samplersList</td>
+<td>Semicolon separated list of samplers for which you want to report metrics to backend.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>percentiles</td>
+<td>The percentiles you want to send to backend. List must be semicolon separated.
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
 <a href="#">
 ^
 </a>
@@ -11876,20 +12118,40 @@ To configure Kerberos you need to setup at least two JVM system properties:
 
     
 <li>
+<code>
 -Djava.security.krb5.conf=krb5.conf
+</code>
 </li>
 
     
 <li>
+<code>
 -Djava.security.auth.login.config=jaas.conf
+</code>
 </li>
 
 
 </ul>
 
-You can also configure those two properties in file bin/system.properties.
-Look at the two sample configuration files (krb5.conf and jaas.conf) located in the jmeter bin folder for references to more documentation, and tweak them to match 
-your Kerberos configuration.
+You can also configure those two properties in the file 
+<em>
+bin/system.properties
+</em>
+.
+Look at the two sample configuration files (
+<em>
+krb5.conf
+</em>
+ and 
+<em>
+jaas.conf
+</em>
+) located in the jmeter 
+<em>
+bin
+</em>
+ folder
+for references to more documentation, and tweak them to match your Kerberos configuration.
 
 </p>
 <p>
@@ -11911,22 +12173,30 @@ number if it differs from the standard ones (
 ). That behavior
 can be emulated by setting the following jmeter property as below.
 
-<pre>
+</p>
+<p>
 
-In jmeter.properties or user.properties, set:
+In 
+<em>
+jmeter.properties
+</em>
+ or 
+<em>
+user.properties
+</em>
+, set:
 
 <ul>
 
 
 <li>
+<code>
 kerberos.spnego.strip_port=false
+</code>
 </li>
 
 
 </ul>
-
-
-</pre>
 
 
 </p>
@@ -19458,31 +19728,13 @@ No
 
 <p>
 The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
-When you save your test plan, WorkBench items are not saved with it. 
+When you save your test plan, WorkBench items are not saved with it by default unless you check "Save Workbench" option.
 Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).
 </p>
 
 
 <p>
 Certain test elements are only available on the WorkBench:
-</p>
-
-
-<p>
-<b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
-<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
-<tr>
-<td>Save WorkBench</td>
-<td>
-                Allow to save the WorkBench's elements into the JMX file.
-        
-</td>
-<td>
-No
-</td>
-</tr>
-</table>
 </p>
 
 
@@ -19505,6 +19757,24 @@ No
 
 
 </ul>
+
+
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Save WorkBench</td>
+<td>
+                Allow to save the WorkBench's elements into the JMX file.
+        
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
 
 
 <p><b>Control Panel</b></p>
@@ -20675,9 +20945,9 @@ a+
 </code>
  (matches a sequence
 of 
-<cod>
+<code>
 a
-</cod>
+</code>
 's) and 
 <code>
 b+
@@ -20834,8 +21104,11 @@ Authorization Manager
 </h4>
 <p>
 
-The Proxy server passes on any Authorization headers sent by the browser, but does not save them in the test plan.
-If the site requires Authorization, you will need to add an Authorization Manager and fill it in with the necessary entries.
+The HTTP(S) Test Script Recorder grabs "Authentication" header, tries to compute the Auth Policy. If Authorization Manager was added to target
+controller manually, HTTP(S) Test Script Recorder will find it and add authorization(matching ones will be removed). Otherwise
+Authorization Manager will be added to target controller with authorization object.
+You may have to fix automatically computed values after recording.
+
 
 </p>
 <h4>
@@ -21275,6 +21548,7 @@ Yes
 When using Test Fragment with 
 <a href="../usermanual/component_reference.html#Module_Controller">Module Controller</a>
 , ensure you disable the Test Fragment to avoid the execution of Test Fragment itself.
+This is done by default since JMeter 2.13.
 
 </td></tr>
 </table>
@@ -21381,7 +21655,7 @@ If Test Plan is stopped, tearDown will not run even if option is checked.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2014, Apache Software Foundation
+Copyright &copy; 1999-2015, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -21395,6 +21669,7 @@ trademarks of the Apache Software Foundation.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 
