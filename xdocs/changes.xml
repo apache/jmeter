@@ -55,8 +55,6 @@ Summary
 <!-- <ch_title>Sample title</ch_title>
 <p>
 <ul>
-<li><bugzilla>48799</bugzilla>Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
-<li><bugzilla>57500</bugzilla>Introduce retry behavior for distributed testing. Implemented by Andrey Pokhilko and Dzimitry Kashlach and contributed by BlazeMeter Ltd.</li>
 <li>Sample text</li>
 </ul>
 </p>
@@ -147,6 +145,8 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <li><bug>57565</bug>SamplerCreator : Add method to allow implementations to add children to created sampler</li>
 <li><bug>57606</bug>HTTPSamplerBase#errorResult changes the sample label on exception </li>
 <li><bug>57613</bug>HTTP Sampler : Added CalDAV verbs (REPORT, MKCALENDAR). Contributed by Richard Brigham (richard.brigham at teamaol.com)</li>
+<li><bug>48799</bug>Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+<li><bug>57500</bug>Introduce retry behavior for distributed testing. Implemented by Andrey Pokhilko and Dzimitry Kashlach and contributed by BlazeMeter Ltd.</li>
 </ul>
 
 <h3>Other samplers</h3>
