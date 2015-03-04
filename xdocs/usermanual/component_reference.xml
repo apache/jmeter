@@ -3398,7 +3398,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
  </properties>
 </component>
 
-<component name="Backend Listener" index="&sect-num;.3.21"  width="1138" height="352" screenshot="backend_listener.png">
+<component name="Backend Listener" index="&sect-num;.3.21"  width="902" height="341" screenshot="backend_listener.png">
 <description>
 The backend listener is an Asynchronous listener that enables you to plug custom implementations of <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a>.
 By default, a Graphite implementation is provided.
@@ -3422,6 +3422,8 @@ By default, a Graphite implementation is provided.
         <property name="samplersList" required="Yes">Semicolon separated list of samplers for which you want to report metrics to backend.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
     </properties>
+    <p>Read <a href="realtime-results.html" >this</a> for more details.</p>
+    <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
 </component>
 
 <a href="#">^</a>
