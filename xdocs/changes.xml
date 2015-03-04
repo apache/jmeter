@@ -103,6 +103,10 @@ Summary
 <figure width="669" height="202" image="changes/2.13/distributed_retry.png"></figure>
 </p>
 
+<ch_title>Distributed Testing performance</ch_title>
+<p>Since JMeter 2.13, Stripping modes (default mode) now also strips responses from SubResults improving consumed network bandwidth.
+</p>
+
 <ch_category>GUI Improvements</ch_category>
 
 <ch_title>Module Controller</ch_title>
