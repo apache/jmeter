@@ -25,11 +25,11 @@
 
 <section name="1. Introduction" anchor="intro">
 <p>
-<b>Apache JMeter</b> is a 100% pure Java desktop application designed
+<b>Apache JMeter</b> is a 100% pure Java application designed
 to load test client/server software
 (such as a <a href="build-web-test-plan.html">web application</a>).  It may be used
 to test performance both on static and dynamic
-resources such as static files, Java Servlets, CGI scripts, Java objects, <a href="build-db-test-plan.html">databases</a>,
+resources such as static files, Java Servlets, ASP.NET, PHP, CGI scripts, Java objects, <a href="build-db-test-plan.html">databases</a>,
 <a href="build-ftp-test-plan.html">FTP servers</a>, and more. JMeter can be used to simulate a heavy
 load on a server, network or object to test its strength or to analyze
 overall performance under different load types.</p>
@@ -59,7 +59,7 @@ The primary goal of further developments will be:
 <li>Addition of FTPS and SFTP protocols</li>
 <li>Enhancements to Webservices protocols (SOAP Attachments)</li>
 <li>Enhancements to JMS protocol implementation</li>
-<li></li>
+<li>...</li>
 </ul>
 
 </p>
