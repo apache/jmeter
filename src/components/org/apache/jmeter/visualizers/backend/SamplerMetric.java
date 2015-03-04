@@ -29,8 +29,15 @@ import org.apache.jmeter.util.JMeterUtils;
 public class SamplerMetric {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100); //$NON-NLS-1$
     
+    // Response times for OK samples
     // Limit to sliding window of SLIDING_WINDOW_SIZE values 
-    private DescriptiveStatistics responsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    private DescriptiveStatistics okResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    // Response times for KO samples
+    // Limit to sliding window of SLIDING_WINDOW_SIZE values 
+    private DescriptiveStatistics koResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    // Response times for All samples
+    // Limit to sliding window of SLIDING_WINDOW_SIZE values 
+    private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
     private int successes;
     private int failures;
     /**
@@ -50,10 +57,13 @@ public class SamplerMetric {
             failures+=result.getErrorCount();
         }
         long time = result.getTime();
+        allResponsesStats.addValue(time);
         if(result.isSuccessful()) {
             // Should we also compute KO , all response time ?
             // only take successful requests for time computing
-            responsesStats.addValue(time);
+            okResponsesStats.addValue(time);
+        }else {
+            koResponsesStats.addValue(time);
         }
     }
     
@@ -65,27 +75,6 @@ public class SamplerMetric {
         // http://commons.apache.org/proper/commons-math/userguide/stat.html
         successes = 0;
         failures = 0;
-    }
-
-    /**
-     * Get the arithmetic mean of the stored values
-     * 
-     * @return The arithmetic mean of the stored values
-     */
-    public double getMean() {
-        return responsesStats.getMean();
-    }
-    
-    /**
-     * Returns an estimate for the requested percentile of the stored values.
-     * 
-     * @param percentile
-     *            the requested percentile (scaled from 0 - 100)
-     * @return Returns an estimate for the requested percentile of the stored
-     *         values.
-     */
-    public double getPercentile(double percentile) {
-        return responsesStats.getPercentile(percentile);
     }
 
     /**
@@ -121,8 +110,8 @@ public class SamplerMetric {
      * @return the maximal elapsed time, or <code>0</code> if no requests have
      *         been added yet
      */
-    public double getMaxTime() {
-        return responsesStats.getMax();
+    public double getOkMaxTime() {
+        return okResponsesStats.getMax();
     }
 
     /**
@@ -131,7 +120,110 @@ public class SamplerMetric {
      * @return the minTime, or {@link Long#MAX_VALUE} if no requests have been
      *         added yet
      */
-    public double getMinTime() {
-        return responsesStats.getMin();
+    public double getOkMinTime() {
+        return okResponsesStats.getMin();
+    }
+    
+    /**
+     * Get the arithmetic mean of the stored values
+     * 
+     * @return The arithmetic mean of the stored values
+     */
+    public double getOkMean() {
+        return okResponsesStats.getMean();
+    }
+    
+    /**
+     * Returns an estimate for the requested percentile of the stored values.
+     * 
+     * @param percentile
+     *            the requested percentile (scaled from 0 - 100)
+     * @return Returns an estimate for the requested percentile of the stored
+     *         values.
+     */
+    public double getOkPercentile(double percentile) {
+        return okResponsesStats.getPercentile(percentile);
+    }
+
+    /**
+     * Get the maximal elapsed time for requests within sliding window
+     * 
+     * @return the maximal elapsed time, or <code>0</code> if no requests have
+     *         been added yet
+     */
+    public double getKoMaxTime() {
+        return koResponsesStats.getMax();
+    }
+
+    /**
+     * Get the minimal elapsed time for requests within sliding window
+     * 
+     * @return the minTime, or {@link Long#MAX_VALUE} if no requests have been
+     *         added yet
+     */
+    public double getKoMinTime() {
+        return koResponsesStats.getMin();
+    }
+    
+    /**
+     * Get the arithmetic mean of the stored values
+     * 
+     * @return The arithmetic mean of the stored values
+     */
+    public double getKoMean() {
+        return koResponsesStats.getMean();
+    }
+    
+    /**
+     * Returns an estimate for the requested percentile of the stored values.
+     * 
+     * @param percentile
+     *            the requested percentile (scaled from 0 - 100)
+     * @return Returns an estimate for the requested percentile of the stored
+     *         values.
+     */
+    public double getKoPercentile(double percentile) {
+        return koResponsesStats.getPercentile(percentile);
+    }
+    
+    /**
+     * Get the maximal elapsed time for requests within sliding window
+     * 
+     * @return the maximal elapsed time, or <code>0</code> if no requests have
+     *         been added yet
+     */
+    public double getAllMaxTime() {
+        return allResponsesStats.getMax();
+    }
+
+    /**
+     * Get the minimal elapsed time for requests within sliding window
+     * 
+     * @return the minTime, or {@link Long#MAX_VALUE} if no requests have been
+     *         added yet
+     */
+    public double getAllMinTime() {
+        return allResponsesStats.getMin();
+    }
+    
+    /**
+     * Get the arithmetic mean of the stored values
+     * 
+     * @return The arithmetic mean of the stored values
+     */
+    public double getAllMean() {
+        return allResponsesStats.getMean();
+    }
+    
+    /**
+     * Returns an estimate for the requested percentile of the stored values.
+     * 
+     * @param percentile
+     *            the requested percentile (scaled from 0 - 100)
+     * @return Returns an estimate for the requested percentile of the stored
+     *         values.
+     */
+    public double getAllPercentile(double percentile) {
+        return allResponsesStats.getPercentile(percentile);
     }
 }

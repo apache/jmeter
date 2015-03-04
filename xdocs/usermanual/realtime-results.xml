@@ -38,10 +38,10 @@ This feature provides:
 <li>Live results</li>
 <li>Nice graphs for metrics</li>
 <li>Ability to compare 2 or more load tests</li>
-<li>Having monitoring data as long as JMeter results in the same backend</li>
+<li>Storing monitoring data as long as JMeter results in the same backend</li>
 <li>...</li>
 </ul>
-In this document we will present the configuration setup to be able to graph and historize the data in 3 different backends:
+In this document we will present the configuration setup to graph and historize the data in 3 different backends:
 <ul>
 <li>InfluxDB</li>
 <li>CollectD</li>
@@ -59,23 +59,23 @@ In this document we will present the configuration setup to be able to graph and
                <th>Description</th>
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.cumulated.minActiveThreads</td>
+               <td>&lt;rootMetricsPrefix&gt;.test.minAT</td>
                <td>Min active threads</td>            
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.cumulated.maxActiveThreads</td>
+               <td>&lt;rootMetricsPrefix&gt;.test.maxAT</td>
                <td>Max active threads</td>            
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.cumulated.meanActiveThreads</td>
+               <td>&lt;rootMetricsPrefix&gt;.test.meanAT</td>
                <td>Mean active threads</td>            
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.cumulated.startedThreads</td>
+               <td>&lt;rootMetricsPrefix&gt;.test.startedT</td>
                <td>Started threads</td>            
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.cumulated.stoppedThreads</td>
+               <td>&lt;rootMetricsPrefix&gt;.test.endedT</td>
                <td>Finished threads</td>            
            </tr>
     </table>
@@ -88,33 +88,62 @@ In this document we will present the configuration setup to be able to graph and
                <th>Description</th>
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.success</td>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</td>
                <td>Number of successful responses for sampler name</td>            
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.failure</td>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</td>
+               <td>Min response time for successful responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</td>
+               <td>Max response time for successful responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</td>
+               <td>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
+               By default listener computes percentiles 90%, 95% and 99%</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.count</td>
                <td>Number of failed responses for sampler name</td>            
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.total</td>
-               <td>Total number of requests for sampler name</td>            
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.min</td>
+               <td>Min response time for failed responses of sampler name</td>
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.min</td>
-               <td>Min response time for sampler name</td>            
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.max</td>
+               <td>Max response time for failed responses of sampler name</td>
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.max</td>
-               <td>Max response time for sampler name</td>            
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</td>
+               <td>Percentile computed for failed responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
+               By default listener computes percentiles 90%, 95% and 99%</td>            
            </tr>
            <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.percentile&lt;percentileValue&gt;</td>
-               <td>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/> 
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.count</td>
+               <td>Number of responses for sampler name</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.min</td>
+               <td>Min response time for responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.max</td>
+               <td>Max response time for responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</td>
+               <td>Percentile computed for responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
                By default listener computes percentiles 90%, 95% and 99%</td>            
            </tr>
     </table>
     <p>
-    By default JMeter sends only metrics for all samplers using "__cumulated__" as samplerName.
+    By default JMeter sends only metrics for all samplers using "all" as samplerName.
     </p>
     </subsection>
 </subsection>
@@ -122,7 +151,7 @@ In this document we will present the configuration setup to be able to graph and
     <p>
     To make JMeter send metrics to backend add a <a href="./component_reference.html#Backend_Listener" >BackendListener</a> using the GraphiteBackendListenerClient.
     </p>
-    <figure width="1138" height="352" image="backend_listener.png">Graphite configuration</figure>
+    <figure width="902" height="341" image="backend_listener.png">Graphite configuration</figure>
 </subsection>
 
 <subsection name="&sect-num;.2 InfluxDB" anchor="influxdb">
@@ -180,7 +209,7 @@ We will use Grafana in this case.
     Note that grafana has "grafanaDB:true". Also note that here we use root user for simplicity, it is better to dedicate a special user with less rights.<br/>
     Here is the kind of dashboard that you could obtain:
     </p>
-    <figure width="1912" height="957" image="grafana_dashboard.png">Grafana dashboard</figure> 
+    <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure> 
     
     </subsection>
 </subsection>
