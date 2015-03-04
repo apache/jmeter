@@ -74,6 +74,11 @@ Summary
 
 <ch_category>Core Improvements</ch_category>
 
+<ch_title>New connect time metric</ch_title>
+<p>Starting with this version a new metric called connectTime has been added. It represents the time to establish connection.</p>
+<figure width="1058" height="193" image="changes/2.13/connect_time_table.png"></figure>
+<figure width="665" height="651" image="changes/2.13/connect_time_tree.png"></figure>
+
 <ch_title>Aggregate Graph and Report</ch_title>
 <p>The listeners Aggregate Graph and Aggregate Report previously showed the 90 percentile (historical behavior), and now the 95 percentile and the 99 percentile.
 <figure width="801" height="681" image="changes/2.13/aggregate_graph_new_percentile.png"></figure>
@@ -91,6 +96,11 @@ Summary
 <ch_title>JDBC Request</ch_title>
 <p>The ResultSet can be get as a object, this allow to handle more easily the results after in BeanShell, JSR223 scripts.
 <figure width="683" height="628" image="changes/2.13/jdbc_resultset_handler.png"></figure>
+</p>
+
+<ch_title>Distributed Testing</ch_title>
+<p>To allow better usage of Distributed Testing in the cloud, retry behaviour has been added when starting test on servers.
+<figure width="669" height="202" image="changes/2.13/distributed_retry.png"></figure>
 </p>
 
 <ch_category>GUI Improvements</ch_category>
@@ -145,7 +155,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <li><bug>57565</bug>SamplerCreator : Add method to allow implementations to add children to created sampler</li>
 <li><bug>57606</bug>HTTPSamplerBase#errorResult changes the sample label on exception </li>
 <li><bug>57613</bug>HTTP Sampler : Added CalDAV verbs (REPORT, MKCALENDAR). Contributed by Richard Brigham (richard.brigham at teamaol.com)</li>
-<li><bug>48799</bug>Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+<li><bug>48799</bug>Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd. and Pieter Ennes (apache.org at spam.ennes.nl)</li>
 <li><bug>57500</bug>Introduce retry behavior for distributed testing. Implemented by Andrey Pokhilko and Dzimitry Kashlach and contributed by BlazeMeter Ltd.</li>
 </ul>
 
@@ -274,6 +284,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <li>Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
 <li>Maciej Franek (maciej.franek at gmail.com)</li>
 <li>Richard Brigham (richard.brigham at teamaol.com)</li>
+<li>Pieter Ennes (apache.org at spam.ennes.nl)</li>
 </ul>
 
 <br/>
