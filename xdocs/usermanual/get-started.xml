@@ -66,7 +66,7 @@ over your Test Plans.</p>
 </section>
 
 <section name="&sect-num;.1 Requirements" anchor="requirements">
-<p>JMeter requires your computing environment meets some minimum requirements.</p>
+<p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
 <note>JMeter requires a fully compliant JVM 6 or higher.  
@@ -78,7 +78,7 @@ JMeter because of JRE implementation issues.</p>
 <subsection name="&sect-num;.1.2 Operating Systems" anchor="os">
 <p>JMeter is a 100% Java application and should run correctly on any system
 that has a compliant Java implementation.</p>
-<p>Operating systems tested with JMeter can be view on  
+<p>Operating systems tested with JMeter can be viewed on  
 <a href="http://wiki.apache.org/jmeter/JMeterAndOperatingSystemsTested">this page</a>
 on JMeter wiki.</p>
 <p>Even if your OS is not listed on the wiki page, JMeter should run on it provided that the JVM is compliant.</p>
