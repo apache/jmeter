@@ -40,7 +40,7 @@ is off by default).  </p>
 <p>If you are not recording the data to file, this option makes no difference.</p>
 <p>You can also use the Configuration button on a listener to decide what fields to save.</p>
 
-<subsection name="&sect-num;.1 ThreadGroup" anchor="thread_group">
+<subsection name="&sect-num;.1 Thread Group" anchor="thread_group">
 <p>Thread group elements are the beginning points of any test plan.
 All controllers and samplers must be under a thread group.
 Other elements, e.g. Listeners, may be placed directly under the test plan,
