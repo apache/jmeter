@@ -144,17 +144,13 @@ There may also be some information on the <a href="http://wiki.apache.org/jmeter
 
 <subsection name="&sect-num;.2.7 Libraries for ActiveMQ JMS" anchor="libraries_activemq">
 <p>
-At the time of writing, the current version of ActiveMQ is 5.3.2.
-You will need to add the jar activemq-all-5.3.2.jar to your classpath, e.g. by storing it in the lib/ directory.
+You will need to add the jar activemq-all-X.X.X.jar to your classpath, e.g. by storing it in the lib/ directory.
 </p>
 <p>
-Alternatively, add the jar activemq-core-5.3.2.jar to the classpath; 
-this requires the javax/management/j2ee classes which can be found in the 
-Apache Geronimo jar geronimo-j2ee-management_1.0_spec-1.0.jar.
 The other required jars (such as commons-logging) are already included with JMeter. 
 </p>
 <p>
-See <a href="http://activemq.apache.org/initial-configuration.html">http://activemq.apache.org/initial-configuration.html</a>
+See <a href="http://activemq.apache.org/initial-configuration.html">ActiveMQ initial configuration page</a>
 for details.
 </p>
 </subsection>
