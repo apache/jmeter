@@ -174,8 +174,7 @@
  <li><a name="listeners"/><a href="listeners.html">14. Introduction to Listeners</a></li>
  <li><a name="remote-test"/><a href="remote-test.html">15. Remote Testing</a></li>
  <li><a name="best-practices"/><a href="best-practices.html">16. Best Practices</a></li>
-  <ul>    
-     <li><a href="best-practices.html#best_practices">16. Best Practices</a></li>
+  <ul>
      <li><a href="best-practices.html#use_latest_version">16.1 Always use latest version of JMeter</a></li>
      <li><a href="best-practices.html#sizing_threads">16.2 Use the correct Number of Threads</a></li>
      <li><a href="best-practices.html#put_cookie_manager">16.3 Where to Put the Cookie Manager</a></li>
