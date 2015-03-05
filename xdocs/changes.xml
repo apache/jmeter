@@ -69,8 +69,9 @@ Summary
 <ch_title>New Async BackendListener with Graphite implementation</ch_title>
 <p>A new Async BackendListener to allow send result data to a backend listener like Graphite.</p>
 <figure width="902" height="293" image="changes/2.13/backend_listener_graphite.png"></figure>
+<p>This is the kind of Live Dashboard you can obtain using <a href="http://grafana.org/" target="_blank" >Grafana</a> and <a href="http://influxdb.com/" target="_blank" >InfluxDB</a><br/>
+Read <a href="./usermanual/realtime-results.html" >this</a> for more details.</p>
 <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
-<p>Read <a href="./usermanual/realtime-results.html" >this</a> for more details.</p>
 
 <ch_category>Core Improvements</ch_category>
 
