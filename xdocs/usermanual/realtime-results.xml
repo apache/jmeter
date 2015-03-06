@@ -41,10 +41,9 @@ This feature provides:
 <li>Storing monitoring data as long as JMeter results in the same backend</li>
 <li>...</li>
 </ul>
-In this document we will present the configuration setup to graph and historize the data in 3 different backends:
+In this document we will present the configuration setup to graph and historize the data in 2 different backends:
 <ul>
 <li>InfluxDB</li>
-<li>CollectD</li>
 <li>Graphite</li>
 </ul>
 </p>
@@ -213,11 +212,8 @@ We will use Grafana in this case.
     
     </subsection>
 </subsection>
-<subsection name="&sect-num;.3 Collectd" anchor="collectd">
-<p>TODO.</p>
-</subsection>
 
-<subsection name="&sect-num;.4 Graphite" anchor="graphite">
+<subsection name="&sect-num;.3 Graphite" anchor="graphite">
 <p>TODO.</p>
 </subsection>
 
