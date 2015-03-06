@@ -32,9 +32,7 @@
     <br/>
     They are intended for use by developers and others wishing to help with resolving JMeter bugs.
     </p>
-    <p>
-    <span style="font-size : x-large"><b>These builds should not be used in production.</b></span>
-    </p>
+    <note><b>These builds should not be used in production.</b></note>
     <h2>Where are the nightly builds?</h2>
     <p>JMeter CI builds are currently run by Jenkins and Buildbot</p>
     <p>These are located at:
@@ -70,11 +68,11 @@ Unpack all the archives into the <b>same directory structure</b>.
 </p>
 
 <h2>Warning - please note!</h2>
-<p>
+<note>
     <span style="font-size : large">
     <b>The nightly builds may or may not work properly - or at all.</b>
     </span>
-</p>
+</note>
 <p>
     If there is a problem with a particular version, 
     it may be worth reporting this on the JMeter-dev mailing list and/or trying again in a day or two.
