@@ -71,7 +71,7 @@ Using different versions of Java may work - but is best avoided.
 <p>
 If the test uses any data files, note that these are not sent across by the client so
 make sure that these are available in the appropriate directory on each server.
-If necessary you can define different values for properties by editting the user.properties or system.properties
+If necessary you can define different values for properties by editing the user.properties or system.properties
 files on each server. These properties will be picked up when the server is started and may be
 used in the test plan to affect its behaviour (e.g. connecting to a different remote server).
 Alternatively use different content in any datafiles used by the test 
