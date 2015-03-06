@@ -429,7 +429,7 @@ The sample attributes have the following meaning:
 <tr><td>it</td><td>Idle Time = time not spent sampling (milliseconds) (generally 0)</td></tr>
 <tr><td>lb</td><td>Label</td></tr>
 <tr><td>lt</td><td>Latency = time to initial response (milliseconds) - not all samplers support this</td></tr>
-<tr><td>lt</td><td>Connect Time = time to establish the connection (milliseconds) - not all samplers support this</td></tr>
+<tr><td>ct</td><td>Connect Time = time to establish the connection (milliseconds) - not all samplers support this</td></tr>
 <tr><td>na</td><td>Number of active threads for all thread groups</td></tr>
 <tr><td>ng</td><td>Number of active threads in this group</td></tr>
 <tr><td>rc</td><td>Response Code (e.g. 200)</td></tr>
