@@ -201,6 +201,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <li><bug>57518</bug>Icons for toolbar with several sizes</li>
 <li><bug>57605</bug>When there is an error loading Test Plan, SaveService.loadTree returns null leading to NPE in callers</li>
 <li><bug>57269</bug>Drop org.apache.jmeter.reports package</li>
+<li><bug>53764</bug>Website : Create a new style for website</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
