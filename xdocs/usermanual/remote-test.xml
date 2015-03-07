@@ -31,12 +31,11 @@
 <section name="&sect-num;. Remote Testing">
 
 <p>In the event that your JMeter client machine is unable, performance-wise, to simulate 
-enough users to stress your server, an option exists to control multiple, remote JMeter
-engines from a single JMeter GUI client.  By running JMeter remotely, you can replicate 
+enough users to stress your server or is limited at network level, an option exists to control multiple, remote JMeter
+engines from a single JMeter client.  By running JMeter remotely, you can replicate 
 a test across many low-end computers and thus simulate a larger load on the server.  One
-instance of the JMeter GUI client can control any number of remote JMeter instances, and collect
+instance of the JMeter client can control any number of remote JMeter instances, and collect
 all the data from them.  This offers the following features: 
-
 
 <ul>
 <li>Saving of test samples to the local machine </li>
@@ -47,30 +46,34 @@ all the data from them.  This offers the following features:
 <note>
 Note: The same test plan is run by all the servers.
 JMeter does not distribute the load between servers, each runs the full test plan.
+So if you set 1000 Threads and have 6 JMeter server, you end up injecting 6000 Threads.
 </note>
 <p>
 However, remote mode does use more resources than running the same number of non-GUI tests independently.
 If many server instances are used, the client JMeter can become overloaded, as can the client network connection.
+This has been improved by switching to Stripped modes (see below) but you should always check that your client is not overloaded.
 </p>
 <p>Note that while you can execute the JMeterEngine on your application 
 server, you need to be mindful of the fact that this will be adding processing 
 overhead on the application server and thus your testing results will be 
 somewhat tainted.  The recommended approach is to have one or more machines on
 the same Ethernet segment as your application server that you configure to run
-the JMeter Engine.  This will minimise the impact of the network on the test 
+the JMeter Engine.  This will minimize the impact of the network on the test 
 results without impacting the performance of the application server 
 itself.
 </p>
 
 <p><b>Step 0: Configure the nodes</b></p>
 <p>
-Make sure that all the nodes (client and servers) are running exactly the same version of JMeter.
-As far as possible, also use the same version of Java on all systems.
-Using different versions of Java may work - but is best avoided.
+Make sure that all the nodes (client and servers) :
+<ul>
+    <li>are running exactly the same version of JMeter.</li>
+    <li>are using the same version of Java on all systems. Using different versions of Java may work but is discouraged.</li>
+</ul>
 </p>
 <p>
-If the test uses any data files, note that these are not sent across by the client so
-make sure that these are available in the appropriate directory on each server.
+If the test uses any data files, <b>note that these are not sent across by the client so
+make sure that these are available in the appropriate directory on each server</b>.
 If necessary you can define different values for properties by editing the user.properties or system.properties
 files on each server. These properties will be picked up when the server is started and may be
 used in the test plan to affect its behaviour (e.g. connecting to a different remote server).
@@ -87,7 +90,8 @@ To revert to the previous behaviour, define the JMeter property server.rmi.creat
 </p>
 <p>
 By default, RMI uses a dynamic port for the JMeter server engine. This can cause problems for firewalls,
-so versions of JMeter after 2.3.2 will check for the JMeter property <b>server.rmi.localport</b>.
+so with versions of JMeter after 2.3.2 you can define the JMeter property <b>server.rmi.localport</b> 
+to control this port number.
 If this is non-zero, it will be used as the local port number for the server engine.
 </p>
 <p><b>Step 2: Add the server IP to your client's Properties File</b></p>
@@ -99,7 +103,7 @@ instead to specify the remote host(s) to use. This has the same effect as using 
 <p>If you define the JMeter property server.exitaftertest=true, then the server will exit after it runs a single test.
 See also the -X flag (described below)
 </p>
-<p><b>Step 3a: Start the JMeter Client from a GUI client</b></p>
+<p><b>Step 3a: Start the JMeter Client from a GUI client to check configuration</b></p>
 <p>Now you are ready to start the controlling JMeter client. For MS-Windows, start the client with the script "bin/jmeter.bat".  For UNIX, 
 use the script "bin/jmeter".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
 (see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
@@ -108,7 +112,7 @@ normal JMeter start and stop menu items.</p>
 
 <p><b>Step 3b: Start the JMeter from a non-GUI Client</b></p>
 <p>
-As an alternative, you can start the remote server(s) from a non-GUI (command-line) client.
+GUI mode should only be used for debugging, as a better alternative, you should start the test on remote server(s) from a non-GUI (command-line) client.
 The command to do this is:
 <pre>
 jmeter -n -t script.jmx -r
@@ -117,10 +121,10 @@ jmeter -n -t script.jmx -R server1,server2...
 
 Other flags that may be useful:
 -Gproperty=value - define a property in all the servers (may appear more than once)
--Z - Exit remote servers at the end of the test.
+-X - Exit remote servers at the end of the test.
 </pre>
-The first example will start whatever servers are defined in the JMeter property remote_hosts;
-the second example will define remote_hosts from the list of servers and then run the remote servers.
+The first example will start the test on whatever servers are defined in the JMeter property remote_hosts;<br/>
+The second example will define remote_hosts from the list of servers and then start the test on the remote servers.
 <br/>
 The command-line client will exit when all the remote servers have stopped.
 </p>
@@ -139,7 +143,7 @@ directory.  Before running rmiregistry, make sure that the following jars are in
 <ul>
     <li>JMETER_HOME/lib/ext/ApacheJMeter_core.jar</li>
     <li>JMETER_HOME/lib/jorphan.jar</li>
-    <li>JMETER_HOME/lib/logkit-1.2.jar</li>
+    <li>JMETER_HOME/lib/logkit-2.0.jar</li>
 </ul>
 The 
 rmiregistry application needs access to certain JMeter classes.  Run rmiregistry with no parameters.  By default the 
@@ -231,13 +235,14 @@ continue.
 There are some JMeter properties that can be set to alter this behaviour.
 </p>
 <ul>
-<li>mode - sample sending mode - default is Standard. This should be set on the client node.</li>
+<li>mode - sample sending mode - default is StrippedBatch since 2.9. This should be set on the client node.</li>
     <ul>
     <li>Standard - send samples synchronously as soon as they are generated</li>
-    <li>Hold - hold samples in an array until the end of a run. This may use a lot of memory on the server.</li>
+    <li>Hold - hold samples in an array until the end of a run. This may use a lot of memory on the server and is discouraged.</li>
     <li>DiskStore - store samples in a disk file (under java.io.temp) until the end of a run. 
     The serialised data file is deleted on JVM exit. </li>
-    <li>Batch - send saved samples when either the count or time exceeds a threshold,
+    <li>StrippedDiskStore - remove responseData from succesful samples, and use DiskStore sender to send them.</li>
+    <li>Batch - send saved samples when either the count (num_sample_threshold) or time (time_threshold) exceeds a threshold,
     at which point the samples are sent synchronously.
     The thresholds can be configured on the server using the following properties:
     <ul>
@@ -268,12 +273,16 @@ There are some JMeter properties that can be set to alter this behaviour.
         The queue size can be adjusted by setting the JMeter property
         <b><code>asynch.batch.queue.size</code></b> (default 100) on the server node.
     </li>
+    <li>StrippedAsynch - remove responseData from succesful samples, and use Async sender to send them.</li>
     <li>Custom implementation : set the mode parameter to your custom sample sender class name.
     This must implement the interface SampleSender and have a constructor which takes a single
     parameter of type RemoteSampleListener. 
     </li>
     </ul>
 </ul>
+<note>Stripped mode family strips responseData so this means that some Elements that rely on the previous responseData being available will not work.<br/>
+This is not really a problem as there is always a more efficient way to implement this feature.
+</note>
 <p>The following properties apply to the Batch and Statistical modes:</p>
     <ul>
     <li>num_sample_threshold - number of samples in a batch (default 100)</li>
@@ -284,9 +293,10 @@ There are some JMeter properties that can be set to alter this behaviour.
 
 <subsection name="&sect-num;.5 Dealing with nodes that failed starting" anchor="retries">
   <p>
-    For a large-scale tests there is a chance that some part of remote servers will be unavailable or down. 
+    For large-scale tests there is a chance that some part of remote servers will be unavailable or down. 
     For example, when you use automation script to allocate many cloud machines and use them as generators,
     some of requested machines might fail booting because of cloud's issues. 
+    Since JMeter 2.13 there are new properties to control this behaviour.
   </p>
   <p>
     First what you might want is to retry initialization attempts in hope that failed nodes just slightly delayed their boot. 
