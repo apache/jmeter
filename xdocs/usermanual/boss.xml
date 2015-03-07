@@ -23,7 +23,8 @@
 <document prev="best-practices.html" next="component_reference.html" id="$Id$">
 
 <properties>
-  <author email="mramshaw@alumni.concordia.ca">Martin Ramshaw</author>
+  <author email="mramshaw at alumni.concordia.ca">Martin Ramshaw</author>
+  <author email="p.mouawad at ubik-ingenierie.com">Philippe Mouawad</author>
   <title>User's Manual: My boss wants me to...</title>
 </properties>
 
@@ -106,12 +107,19 @@ will become the limiting factor. So it's worth using the best hardware and
 software that you have available. Remember to include the hardware/software
 configuration in your published benchmarks.
 </p>
-<p>Don't forget JMeter batch mode. This can be useful if you have a powerful server 
-that supports Java but perhaps does not have a fast graphics implementation,
-or where you need to login remotely.
-Batch (non-GUI) mode can reduce the network traffic compared with using a remote display or client-server mode.
+<p><b>When you need a lot of machines or want to test the network latency, Cloud can help you.</b>
+JMeter can easily be installed on Cloud instances as it runs on nearly any architecture available in the Cloud.
+JMeter is also supported within Commercial Cloud PAAS if you don't want to manage it yourself. 
+</p>
+<p>Don't forget JMeter batch (NON-GUI) mode. This mode should be used during load testing for many reasons:
+<ul>
+<li>If you have a powerful server that supports Java but perhaps does not have a fast graphics implementation, or where you need to login remotely.</li>
+<li>Batch (non-GUI) mode can reduce the network traffic compared with using a remote display or client-server mode.</li>
+<li>Java AWT Thread used for GUI mode can alter injection behaviour by blocking sometimes</li>
+</ul>
 The batch log file can then be loaded into JMeter on a workstation for analysis, or you can
 use CSV output and import the data into a spreadsheet.</p>
+<note>Remember GUI mode is for Script creation and debugging, not for load testing</note>
 </subsection>
 <subsection name="&sect-num;.4 Tools" anchor="tools">
 <p>The following tools will all prove useful. It is definitely worthwhile to
@@ -145,45 +153,34 @@ and any supplied documentation).
     </p>
     </subsection>
 </subsection>
-<subsection name="&sect-num;.5 What other products are there ?" anchor="products">
-<p>There are a number of commercial products, which generally have fairly
-hefty pricetags. If you can justify it, these are probably the way to go.
-If, however, these products do not do exactly what you want, or you are on a
-limited budget, the following are worth a look. In fact, you should probably
-start by trying the Apache <b>ab</b> tool, as it may very well do the job
-if your requirements are not particularly complicated.
+<subsection name="&sect-num;.5 How can I enhance JMeter ?" anchor="plugins">
+<p>There a lot of open-source and commercial plugins that can enhance JMeter, let's mention here the main open-source ones:
 </p>
-    <subsection name="&sect-num;.5.1 Apache 'ab' tool" anchor="ab">
-    <p>
-    You should definitely start with this one. It handles HTTP 'get' requests
-    very well, and can be made to handle HTTP 'post' requests with a little
-    effort. Written in 'C', it performs very well, and offers good (if basic)
-    performance reporting.
+    <subsection name="&sect-num;.5.1 JMeter-Plugins" anchor="jmeter-plugins">
+    <p>This <a href="http://jmeter-plugins.org/" target="_blank">non official project</a> is THE companion to core JMeter.<br/>
+    It provides many useful extensions, among which:
+    <ul>
+    <li>Active Threads Over Time Graph Listener</li>
+    <li>Response Times vs Threads Graph Listener</li>
+    <li>Transaction Throughput vs Threads Graph Listener</li>
+    <li>GraphGenerator listener to create graphs at end of a load test</li>
+    <li>Selenium WebDriver Sampler</li>
+     <li>....</li>
+    </ul> 
     </p>
     </subsection>
-    <subsection name="&sect-num;.5.2 HttpUnit" anchor="httpunit">
-    <p>
-    This is worth a look. It is a library (and therefore of more interest to
-    developers) that can be used to perform HTTP tests/benchmarks. It is
-    intended to be used instead of a web browser (therefore no GUI) in
-    conjunction with <b>JUnit</b>.
-    </p>
+    <subsection name="&sect-num;.5.2 jmeter-maven-plugin" anchor="jmeter-maven-plugin">
+        <p>This <a href="http://jmeter.lazerycode.com/" target="_blank" >non official plugin</a> allows you to run your automated JMeter tests through Maven.</p>
     </subsection>
-    <subsection name="&sect-num;.5.3 Microsoft WAS" anchor="WAS">
-    <p>
-    This is definitely worth a look. It has an excellent user interface
-    but it may not do exactly what you want. If this is the case, be aware
-    that the functionality of this product is not likely to change.
-    </p>
+    <subsection name="&sect-num;.5.3 jmeter-maven-plgins" anchor="jmeter-performance-plugin">
+        <p>This <a href="https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin" target="_blank" >non official plugin</a> allows you to capture reports from JMeter and JUnit.<br/>
+        Jenkins will generate graphic charts with the trend report of performance and robustness.
+        It includes the feature of setting the final build status as good, unstable or failed, based on the reported error percentage.
+        </p>
     </subsection>
-    <subsection name="&sect-num;.5.4 JMeter" anchor="JMeter">
-    <p>
-    If you have non-standard requirements, then this solution offers an
-    open-source community to provide them (of course, if you are reading
-    <u>this</u>, you are probably already committed to this one). This
-    product is free to evolve along with your requirements.
-    </p>
-    </subsection>
+    <subsection name="&sect-num;.5.4 jmeter-ec2" anchor="jmeter-ec2">
+        <p>This <a href="https://github.com/oliverlloyd/jmeter-ec2" target="_blank" >non official plugin</a> automates running Apache JMeter on Amazon EC2</p>
+    </subsection>    
 </subsection>
 <subsection name="&sect-num;.6 Why Java ?" anchor="java">
 <p>Why not Perl or C ?
@@ -205,10 +202,6 @@ management code that you will need to benchmark your application. Java is
 aware of HTTP, FTP, and HTTPS - as well as RMI, IIOP, and JDBC (not to mention
 cookies, URL-encoding, and URL-rewriting). In addition Java gives you automatic
 garbage-collection, and byte-code level security.
-</p>
-<p>And once Microsoft moves to a CLR (common language run-time) a Windows Java
-solution will not be any slower than any other type of solution on the Windows
-platform.
 </p>
 </subsection>
 </section>
