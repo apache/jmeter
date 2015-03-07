@@ -70,7 +70,11 @@ h1, h2, h3, h4, h5, .title {
 
 .banner>iframe {
   width: 140px;
-  height: 140px;
+  height: 130px;
+}
+.banner>iframe>body {
+  margin: 0px;
+  padding: 0px;
 }
 
 body {
