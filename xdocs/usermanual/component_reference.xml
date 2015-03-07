@@ -4213,18 +4213,19 @@ GUI that they can use while developing new JMeter components.</p>
      You can then access com.mongodb.DB object in Beanshell or JSR223 Test Elements through the element <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a> 
      using this code<br/>
      
-    <code>
-    import com.mongodb.DB;<br/>
-    import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;<br/>
-    DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source", "value of property Database Name");<br/>
-    ...
-    </code>
+    <source>
+import com.mongodb.DB;
+import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;
+DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
+            "value of property Database Name");
+...
+    </source>
     </description>
     <properties>
         <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
         <property name="Server Address List" required="Yes">Mongo DB Servers</property>
         <property name="MongoDB Source" required="Yes">The name of the variable the connection is tied to.  
-        <b>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</b>
+        <note>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</note>
         </property>
         
         <property name="Keep Trying" required="No">
@@ -4347,15 +4348,17 @@ pattern. You can attach multiple assertions to any controller for additional fle
     Case is also significant. To override these settings, one can use the <i>extended regular expression</i> syntax.
     For example:
 </p>
-<pre>
-    (?i) - ignore case
-    (?s) - treat target as single line, i.e. "." matches new-line
-    (?is) - both the above
-    These can be used anywhere within the expression and remain in effect until overriden.  e.g.
-    (?i)apple(?-i) Pie - matches "ApPLe Pie", but not "ApPLe pIe"
-    (?s)Apple.+?Pie - matches Apple followed by Pie, which may be on a subsequent line.
-    Apple(?s).+?Pie - same as above, but it's probably clearer to use the (?s) at the start.  
-</pre>
+<dl>
+<dt><code>(?i)</code></dt><dd>ignore case</dd>
+<dt><code>(?s)</code></dt><dd>treat target as single line, i.e. "." matches new-line</dd>
+<dt><code>(?is)</code></dt><dd>both the above</dd>
+</dl>
+These can be used anywhere within the expression and remain in effect until overriden.  e.g.
+<dl>
+<dt><code>(?i)apple(?-i) Pie</code></dt><dd>matches "ApPLe Pie", but not "ApPLe pIe"</dd>
+<dt><code>(?s)Apple.+?Pie</code></dt><dd>matches Apple followed by Pie, which may be on a subsequent line.</dd>
+<dt><code>Apple(?s).+?Pie</code></dt><dd>same as above, but it's probably clearer to use the (?s) at the start.</dd>
+</dl>
 
 </description>
 <properties>
@@ -5979,13 +5982,13 @@ This certificate is not one of the certificates that browsers normally trust, an
 correct host.<br/>
 As a consequence: 
 <ul>
-<li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:<br/>
-<code>
+<li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:
+<source>
 1) The server's name "www.example.com" does not match the certificate's name
-   "JMeter Proxy (DO NOT TRUST)". Somebody may be trying to eavesdrop on you.<br/>
+   "JMeter Proxy (DO NOT TRUST)". Somebody may be trying to eavesdrop on you.
 2) The certificate for "JMeter Proxy (DO NOT TRUST)" is signed by the unknown Certificate Authority
-   "JMeter Proxy (DO NOT TRUST)". It is not possible to verify that this is a valid certificate.<br/>
-</code> <br/>
+   "JMeter Proxy (DO NOT TRUST)". It is not possible to verify that this is a valid certificate.
+</source>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.
 However, do not accept this certificate permanently; it should only be accepted temporarily.
