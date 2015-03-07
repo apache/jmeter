@@ -30,7 +30,7 @@
 
 <body>
 
-<section name="&sect-num;. Help! My boss wants me to load test our web app!" anchor="boss">
+<section name="&sect-num;. Help! My boss wants me to load test our application!" anchor="boss">
 <p>This is a fairly open-ended proposition. There are a number of questions to
 be asked first, and additionally a number of resources that will be needed. You
 will need some hardware to run the benchmarks/load-tests from. A number of
