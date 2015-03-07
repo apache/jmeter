@@ -215,8 +215,9 @@
     <xsl:param name="image" />
     <xsl:param name="width" />
     <xsl:param name="height" />
+    <xsl:param name="alt" />
     <xsl:variable name="name" select="concat($srcdir, '/', $image)" />
-    <a href="{$name}"><img src="{$name}" width="{$width}" height="{$height}" /></a>
+    <a href="{$name}"><img src="{$name}" width="{$width}" height="{$height}" alt="{$alt}" /></a>
   </xsl:template>
 
   <!-- Process a menu for the navigation bar -->
@@ -358,6 +359,7 @@
             <xsl:with-param name="image" select="@screenshot" />
             <xsl:with-param name="width" select="@width" />
             <xsl:with-param name="height" select="@height" />
+            <xsl:with-param name="alt" select="concat('Screenshot for ', @name)" />
           </xsl:call-template>
         </div>
       </xsl:if>
@@ -453,6 +455,7 @@
         <xsl:with-param name="image" select="@image" />
         <xsl:with-param name="width" select="@width" />
         <xsl:with-param name="height" select="@height" />
+        <xsl:with-param name="alt" select="text()"/>
       </xsl:call-template>
       <figcaption>
         <xsl:apply-templates />
