@@ -122,11 +122,11 @@ body {
   padding: 0;
 }
 
-.figure {
+figure {
   margin: 1em 2em;
 }
 
-.figure>a>img, .screenshot>a>img {
+figure>a>img, .screenshot>a>img {
   box-shadow: 10px 10px 10px 0 rgba(50, 50, 50, 0.25);
   overflow: auto;
   width: auto;
@@ -317,7 +317,7 @@ table {
     padding-left: 0px;
     margin-left: 0px;
   }
-  .figure {
+  figure {
     margin: 1em 0px;
   }
   .properties {
