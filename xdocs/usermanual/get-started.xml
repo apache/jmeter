@@ -360,7 +360,7 @@ To start the server(s), run jmeter-server[.bat] on each server host.</p>
 </p>
 <p>To run the test from the client in non-GUI mode, use the following command:</p>
 <pre>
-jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-Z]
+jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-X]
 where:
 -G is used to define JMeter properties to be set in the servers
 -X means exit the servers at the end of the test
