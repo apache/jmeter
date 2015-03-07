@@ -27,7 +27,7 @@ img {
 }
 
 .menu, h1, h2, h3, h4, h5, .go-top, .title {
-  font-family: "Sorts Mill Goudy";
+  font-family: "Merriweather";
 }
 
 h1, h2, h3, h4, h5, .title {
@@ -208,7 +208,7 @@ figure>a>img, .screenshot>a>img {
 
 th {
   border-bottom: 1px solid black;
-  font-family: "Sorts Mill Goudy";
+  font-family: "Merriweather";
   text-align: left;
 }
 
@@ -285,11 +285,11 @@ table {
 .pagelinks li {
   display: inline-block;
   margin: 1em;
-  font-family: "Sorts Mill Goudy";
+  font-family: "Merriweather";
 }
 
 .section-index {
-  font-family: "Sorts Mill Goudy";
+  font-family: "Merriweather";
   margin:;
   list-style: none;
 }
