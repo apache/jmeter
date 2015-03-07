@@ -51,7 +51,7 @@
         <!-- VIEWPORT -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
-          href='http://fonts.googleapis.com/css?family=Special+Elite:400normal'
+          href='http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400normal'
           rel='stylesheet' type='text/css'
         ></link>
         <link rel="stylesheet" type="text/css"
