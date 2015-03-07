@@ -253,7 +253,7 @@
       <a href="{$href}">
         <xsl:value-of select="@name" />
         <xsl:if test="@icon">
-          <img src="{concat($imgdir, '/', @icon)}" />
+          <img src="{concat($imgdir, '/', @icon)}" alt="{concat('Icon for ', @name)}"/>
         </xsl:if>
       </a>
     </li>
