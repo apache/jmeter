@@ -67,7 +67,11 @@ Summary
 <ch_category>New Elements</ch_category>
 
 <ch_title>New Async BackendListener with Graphite implementation</ch_title>
-<p>A new Async BackendListener to allow send result data to a backend listener like Graphite.</p>
+<p>A new Async BackendListener has been added to allow sending result data to a backend listener. 
+JMeter ships with a GraphiteBackendListenerClient that allows sending results to a <a href="http://graphite.wikidot.com/" target="_blank">Graphite</a> server using Pickle ot Plaintext protocols.
+You can implement your own backend by extending <a href="./api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html">AbstractBackendListenerClient</a>. This backend could be 
+a database (JDBC), a Message Oriented Middleware (JMS), a Webservice or anything you want.
+ </p>
 <figure width="902" height="293" image="changes/2.13/backend_listener_graphite.png"></figure>
 <p>This is the kind of Live Dashboard you can obtain using <a href="http://grafana.org/" target="_blank" >Grafana</a> and <a href="http://influxdb.com/" target="_blank" >InfluxDB</a><br/>
 Read <a href="./usermanual/realtime-results.html" >this</a> for more details.</p>
@@ -76,42 +80,62 @@ Read <a href="./usermanual/realtime-results.html" >this</a> for more details.</p
 <ch_category>Core Improvements</ch_category>
 
 <ch_title>New connect time metric</ch_title>
-<p>Starting with this version a new metric called connectTime has been added. It represents the time to establish connection.</p>
+<p>Starting with this version a new metric called connectTime has been added. It represents the time to establish connection.
+By default it is not saved to CSV or XML, to have it saved add to user.properties:<br/>
+<code>
+jmeter.save.saveservice.connect_time=true
+</code>
+</p>
 <figure width="1058" height="193" image="changes/2.13/connect_time_table.png"></figure>
 <figure width="665" height="651" image="changes/2.13/connect_time_tree.png"></figure>
 
 <ch_title>Aggregate Graph and Report</ch_title>
-<p>The listeners Aggregate Graph and Aggregate Report previously showed the 90 percentile (historical behavior), and now the 95 percentile and the 99 percentile.
+<p>The listeners Aggregate Graph and Aggregate Report previously showed only the 90 percentile (historical behavior), the 95 percentile and the 99 percentile have been added and are customizable.
+To setup the percentiles value you want, add to user.properties:<br/>
+<code>
+aggregate_rpt_pct1=90<br/>
+aggregate_rpt_pct2=95<br/>
+aggregate_rpt_pct3=99
+</code>
 <figure width="801" height="681" image="changes/2.13/aggregate_graph_new_percentile.png"></figure>
 </p>
 
 <ch_title>HTTP(S) Test Script Recorder</ch_title>
-<p>Now component is able to detect authentication schemas and automatically adds a pre-configured HTTP Authorization Manager.
+<p>Now component is able to detect authentication schemes and automatically adds a pre-configured HTTP Authorization Manager with the correct Mechanism.
 </p>
 
 <ch_title>HTTP Request</ch_title>
-<p>The CalDAV verbs REPORT and MKCALENDAR have been added in the HTTP Request sampler.
+<p>The CalDAV verbs (Calendar extensions to WebDAV) REPORT and MKCALENDAR have been added in the HTTP Request sampler.
 <figure width="716" height="324" image="changes/2.13/new_methods_caldav.png"></figure>
 </p>
 
 <ch_title>JDBC Request</ch_title>
-<p>The ResultSet can be get as a object, this allow to handle more easily the results after in BeanShell, JSR223 scripts.
+<p>The ResultSet can be get as a object, this allows to handle more easily the results after in BeanShell, JSR223 scripts...
 <figure width="683" height="628" image="changes/2.13/jdbc_resultset_handler.png"></figure>
 </p>
 
 <ch_title>Distributed Testing</ch_title>
 <p>To allow better usage of Distributed Testing in the cloud, retry behaviour has been added when starting test on servers.
+Read <a href="./usermanual/remote-test.html#retries" >this</a> for more details.
 <figure width="669" height="202" image="changes/2.13/distributed_retry.png"></figure>
 </p>
 
 <ch_title>Distributed Testing performance</ch_title>
-<p>Since JMeter 2.13, Stripping modes (default mode) now also strips responses from SubResults improving consumed network bandwidth.
+<p>Since JMeter 2.13, Stripping modes (StrippingBatch being the default mode) now also strip responses from SubResults improving consumed network bandwidth.
+</p>
+
+<ch_title>Documentation refresh</ch_title>
+<p>A new style has been setup and documentations have been refreshed particularly
+<ul>
+    <li><a href="./usermanual/build-ws-test-plan.html">Building a Webservice Test Plan</a></li>
+    <li><a href="./usermanual/boss.html">Help! My boss wants me to load test our application!</a></li>
+</ul>
 </p>
 
 <ch_category>GUI Improvements</ch_category>
 
 <ch_title>Module Controller</ch_title>
-<p>The Module Controller shows the target controller in a tree view (instead of combo list).
+<p>The Module Controller now shows the target controller in a tree view (instead of combo list).
 <figure width="306" height="372" image="changes/2.13/module_controller_tree_view.png"></figure>
 </p>
 
@@ -257,7 +281,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <ul>
 <li><bug>57607</bug>Constant Throughput Timer : Wrong throughput computed in shared modes due to rounding error </li>
 </ul>
-
+<!-- 
 <h3>Functions</h3>
 <ul>
 </ul>
@@ -265,7 +289,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <h3>I18N</h3>
 <ul>
 </ul>
-
+ -->
 <h3>General</h3>
 <ul>
 <li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
