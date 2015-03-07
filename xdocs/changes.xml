@@ -125,9 +125,11 @@ Read <a href="./usermanual/remote-test.html#retries" >this</a> for more details.
 </p>
 
 <ch_title>Documentation refresh</ch_title>
-<p>A new style has been setup and documentations have been refreshed particularly
+<p>A new style for website (responsive and more up to date) has been created by Felix Schumacher.
+Documentations have been refreshed particularly:
 <ul>
     <li><a href="./usermanual/build-ws-test-plan.html">Building a Webservice Test Plan</a></li>
+    <li><a href="./usermanual/best-practices.html">Best Practices</a></li>
     <li><a href="./usermanual/boss.html">Help! My boss wants me to load test our application!</a></li>
 </ul>
 </p>
