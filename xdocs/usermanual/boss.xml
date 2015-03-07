@@ -79,8 +79,7 @@ people are, so that you can ask them for help if you need it.
     no knowledge of the application [it is treated as a "black box"]
     while the second requires some knowledge of the application).
     It is not uncommon to discover problems with the application
-    during this process, so be prepared to defend your work.
-    </p>
+    during this process, so be prepared to defend your work.</p>
     </subsection>
 </subsection>
 <subsection name="&sect-num;.3 What platform should I use to run the benchmarks/load-tests ?" anchor="platform">
@@ -169,16 +168,16 @@ and any supplied documentation).
     </ul> 
     </p>
     </subsection>
-    <subsection name="&sect-num;.5.2 jmeter-maven-plugin" anchor="jmeter-maven-plugin">
+    <subsection name="&sect-num;.5.2 JMeter Plugin for Maven" anchor="jmeter-maven-plugin">
         <p>This <a href="http://jmeter.lazerycode.com/" target="_blank" >non official plugin</a> allows you to run your automated JMeter tests through Maven.</p>
     </subsection>
-    <subsection name="&sect-num;.5.3 jmeter-maven-plgins" anchor="jmeter-performance-plugin">
+    <subsection name="&sect-num;.5.3 JMeter Performance Plugin" anchor="jmeter-performance-plugin">
         <p>This <a href="https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin" target="_blank" >non official plugin</a> allows you to capture reports from JMeter and JUnit.<br/>
         Jenkins will generate graphic charts with the trend report of performance and robustness.
         It includes the feature of setting the final build status as good, unstable or failed, based on the reported error percentage.
         </p>
     </subsection>
-    <subsection name="&sect-num;.5.4 jmeter-ec2" anchor="jmeter-ec2">
+    <subsection name="&sect-num;.5.4 JMeter plugin for AWS" anchor="jmeter-ec2">
         <p>This <a href="https://github.com/oliverlloyd/jmeter-ec2" target="_blank" >non official plugin</a> automates running Apache JMeter on Amazon EC2</p>
     </subsection>    
 </subsection>
