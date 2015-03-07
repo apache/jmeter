@@ -30,10 +30,10 @@
 <section name="&sect-num;. Regular Expressions" anchor="regex">
 <subsection name="&sect-num;.1 Overview" anchor="overview">
 <p>
-JMeter includes the pattern matching software <a href="http://jakarta.apache.org/oro/">Apache Jakarta ORO</a>
+JMeter includes the pattern matching software <a href="http://attic.apache.org/projects/jakarta-oro.html">Apache Jakarta ORO</a>
 <br/>
 There is some documentation for this on the Jakarta web-site, for example 
-<a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">
+<a href="http://archimedes.fas.harvard.edu/scrapbook/jakarta-oro-2.0.6/docs/api/org/apache/oro/text/regex/package-summary.html">
 a summary of the pattern matching characters</a>
 </p>
 <p>
@@ -236,7 +236,7 @@ Since JMeter 2.4, the listener <a href="component_reference.html#View_Results_Tr
 include a RegExp Tester to test regular expressions directly on sampler response data. 
 </p>
 <p>
-There is a <a href="http://jakarta.apache.org/oro/demo.html">demo</a> applet for Apache JMeter ORO.
+There is a <a href="http://www.regexplanet.com/advanced/java/index.html">Website</a> to test Java Regular expressions.
 </p>
 <p>
 Another approach is to use a simple test plan to test the regular expressions.
