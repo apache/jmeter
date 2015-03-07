@@ -130,7 +130,7 @@
           </div>
           <div class="banner">
             <iframe src="http://www.apache.org/ads/button.html"
-              style="border-width:0;" frameborder="0" scrolling="no"
+              style="border-width:0;"
             ></iframe>
             <div class="clear"></div>
           </div>
@@ -138,8 +138,7 @@
         <div class="nav">
           <xsl:apply-templates select="$project/body/menu" />
         </div>
-        <div class="main">
-          <a name="content" />
+        <div class="main" id="content">
           <xsl:call-template name="pagelinks" />
           <xsl:if test="@index">
             <xsl:call-template name="section-index" />
@@ -262,6 +261,11 @@
   <xsl:template match="section">
     <div class="section">
       <h1>
+        <xsl:if test="@anchor">
+          <xsl:attribute name="id">
+            <xsl:value-of select="translate(normalize-space(@anchor), ' ', '_')" />
+          </xsl:attribute>
+        </xsl:if>
         <xsl:value-of select="@name" />
         <xsl:if test="@anchor">
           <xsl:call-template name="sectionlink">
@@ -274,8 +278,7 @@
   </xsl:template>
 
   <xsl:template match="ch_section">
-    <h2 class="ch_section">
-      <a name="{.}" />
+    <h2 class="ch_section" id="{.}">
       <xsl:apply-templates />
     </h2>
   </xsl:template>
@@ -297,6 +300,9 @@
       <h2>
         <xsl:value-of select="@name" />
         <xsl:if test="@anchor">
+          <xsl:attribute name="id">
+            <xsl:value-of select="translate(normalize-space(@anchor), ' ' , '_')" />
+          </xsl:attribute>
           <xsl:call-template name="sectionlink">
             <xsl:with-param name="anchor" select="@anchor" />
           </xsl:call-template>
@@ -326,20 +332,18 @@
 
   <xsl:template match="component">
     <div class="component">
-      <h2>
+      <h2 id="{translate(@name, ' ', '_')}">
         <xsl:value-of select="@name" />
         <xsl:if test="@was">
-          <a name="{@was}">
+          <a name="{translate(normalize-space(@was), ' ', '_')}">
             (was:
             <xsl:value-of select="@was" />
             )
           </a>
         </xsl:if>
-        <xsl:if test="@name">
-          <xsl:call-template name="sectionlink">
-            <xsl:with-param name="anchor" select="@name" />
-          </xsl:call-template>
-        </xsl:if>
+        <xsl:call-template name="sectionlink">
+          <xsl:with-param name="anchor" select="@name" />
+        </xsl:call-template>
       </h2>
       <xsl:if test="@useinstead">
         <div class="deprecated">
@@ -372,20 +376,25 @@
 
   <xsl:template name="sectionlink">
     <xsl:param name="anchor" />
-    <a name="{translate(normalize-space($anchor), ' ', '_')}" />
     <a class="sectionlink" href="#{translate(normalize-space($anchor), ' ', '_')}"
       title="Link to here"
     >&amp;para;</a>
   </xsl:template>
 
   <xsl:template match="properties">
+    <xsl:variable name="prop-count" select="count(preceding-sibling::properties) + 1" />
     <div class="properties">
       <h3>
+        <xsl:if test="name(..) = 'component'">
+          <xsl:attribute name="id">
+            <xsl:value-of select="concat(translate(normalize-space(../@name), ' ', '_'), '_parms', $prop-count)" />
+          </xsl:attribute>
+        </xsl:if>
         Parameters
         <xsl:if test="name(..) = 'component'">
           <xsl:call-template name="sectionlink">
             <xsl:with-param name="anchor"
-              select="concat(translate(normalize-space(../@name), ' ', '_'), '_parms')" />
+              select="concat(translate(normalize-space(../@name), ' ', '_'), '_parms', $prop-count)" />
           </xsl:call-template>
         </xsl:if>
       </h3>
@@ -449,7 +458,7 @@
   </xsl:template>
 
   <xsl:template match="figure">
-    <div class="figure">
+    <figure>
       <xsl:call-template name="image">
         <xsl:with-param name="srcdir" select="$sshotdir" />
         <xsl:with-param name="image" select="@image" />
@@ -460,7 +469,7 @@
       <figcaption>
         <xsl:apply-templates />
       </figcaption>
-    </div>
+    </figure>
   </xsl:template>
 
   <xsl:template match="bugzilla">
@@ -515,6 +524,9 @@
       <div class="title">
         <xsl:value-of select="@title" />
         <xsl:if test="@anchor">
+          <xsl:attribute name="id">
+            <xsl:value-of select="translate(normalize-space(@anchor), ' ', '_')" />
+          </xsl:attribute>
           <xsl:call-template name="sectionlink">
             <xsl:with-param name="anchor" select="@anchor" />
           </xsl:call-template>
