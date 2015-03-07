@@ -397,5 +397,12 @@ If the value is not known until the test starts, there are various options:
 </p>
 </section>
 
+<section name="&sect-num;.14 Managing properties" anchor="properties">
+<p>When you need to modify jmeter properties, ensure you don't modify jmeter.properties file, <b>instead copy the property from jmeter.properties and modify its value in user.properties file</b>.<br/>
+Doing so will ease you migration to the next version of JMeter. <br/>
+Note that in the documentation jmeter.properties is frequently mentioned but this should be understood as "Copy from jmeter.properties to user.properties the property you want to modify and do so in the latter file".</p>
+<note>user.properties file superseeds the properties defined in jmeter.properties</note>
+</section>
+
 </body>
 </document>
