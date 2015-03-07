@@ -130,7 +130,7 @@
           </div>
           <div class="banner">
             <iframe src="http://www.apache.org/ads/button.html"
-              style="border-width:0;"
+              style="border-width:0;" frameborder="0" scrolling="no"
             ></iframe>
             <div class="clear"></div>
           </div>
