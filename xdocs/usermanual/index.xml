@@ -188,6 +188,7 @@
      <li><a href="best-practices.html#parameterising_tests">16.11 Parameterising tests</a></li>
      <li><a href="best-practices.html#jsr223">16.12 JSR223 Elements</a></li>
      <li><a href="best-practices.html#sharing_variables">16.13 Sharing variables between threads and thread groups</a></li>
+     <li><a href="best-practices.html#properties">16.14 Managing properties</a></li>
   </ul>
  <li><a name="boss"/><a href="boss.html">17. Help! My boss wants me to load test our web app!</a></li>
 
