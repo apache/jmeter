@@ -1,0 +1,490 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+StatisticalSampleResult (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="StatisticalSampleResult (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/StandardSampleSender.html" title="class in org.apache.jmeter.samplers"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleSender.html" title="class in org.apache.jmeter.samplers"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/samplers/StatisticalSampleResult.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="StatisticalSampleResult.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_org.apache.jmeter.samplers.SampleResult">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.samplers</FONT>
+<BR>
+Class StatisticalSampleResult</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">org.apache.jmeter.samplers.SampleResult</A>
+      <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.samplers.StatisticalSampleResult</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>StatisticalSampleResult</B><DT>extends <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A><DT>implements <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A></DL>
+</PRE>
+
+<P>
+Aggregates sample results for use by the Statistical remote batch mode.
+ Samples are aggregated by the key defined by getKey().
+ TODO: merge error count into parent class?
+<P>
+
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.samplers.StatisticalSampleResult">Serialized Form</A></DL>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.samplers.SampleResult"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class org.apache.jmeter.samplers.<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#BINARY">BINARY</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#DEFAULT_ENCODING">DEFAULT_ENCODING</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#DEFAULT_HTTP_ENCODING">DEFAULT_HTTP_ENCODING</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#EMPTY_BA">EMPTY_BA</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#TEXT">TEXT</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult()">StatisticalSampleResult</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(long, long)">StatisticalSampleResult</A></B>(long&nbsp;stamp,
+                        long&nbsp;elapsed)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Needs to be replaced when multiple sample results are sorted out</I></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult)">StatisticalSampleResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a statistical sample result from an ordinary sample result.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult, boolean)">StatisticalSampleResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res,
+                        boolean&nbsp;unused)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>no longer necessary; use <A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult)"><CODE>StatisticalSampleResult(SampleResult)</CODE></A> instead</I></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#add(org.apache.jmeter.samplers.SampleResult)">add</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#getErrorCount()">getErrorCount</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the count of errors.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#getKey(org.apache.jmeter.samplers.SampleEvent, boolean)">getKey</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;event,
+       boolean&nbsp;keyOnThreadName)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generates the key to be used for aggregating samples as follows:<br>
+ <code>sampleLabel</code> "-" <code>[threadName|threadGroup]</code>
+ 
+ N.B. the key should agree with the fixed items that are saved in the sample.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;long</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#getTime()">getTime</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the time it took this sample to occur.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;long</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#getTimeStamp()">getTimeStamp</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the sample timestamp, which may be either the start time or the end time.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#setErrorCount(int)">setErrorCount</A></B>(int&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.samplers.SampleResult"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class org.apache.jmeter.samplers.<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#addAssertionResult(org.apache.jmeter.assertions.AssertionResult)">addAssertionResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#addRawSubResult(org.apache.jmeter.samplers.SampleResult)">addRawSubResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#addSubResult(org.apache.jmeter.samplers.SampleResult)">addSubResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#cleanAfterSample()">cleanAfterSample</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#clone()">clone</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#connectEnd()">connectEnd</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#createTestSample(long)">createTestSample</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#createTestSample(long, long)">createTestSample</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#currentTimeInMillis()">currentTimeInMillis</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getAllThreads()">getAllThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getAssertionResults()">getAssertionResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getBodySize()">getBodySize</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getBytes()">getBytes</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getConnectTime()">getConnectTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getContentType()">getContentType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncodingNoDefault()">getDataEncodingNoDefault</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncodingWithDefault()">getDataEncodingWithDefault</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncodingWithDefault(java.lang.String)">getDataEncodingWithDefault</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataType()">getDataType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getEndTime()">getEndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getGroupThreads()">getGroupThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getHeadersSize()">getHeadersSize</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getIdleTime()">getIdleTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getLatency()">getLatency</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getMediaType()">getMediaType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getParent()">getParent</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getRequestHeaders()">getRequestHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseCode()">getResponseCode</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseData()">getResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseDataAsString()">getResponseDataAsString</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseHeaders()">getResponseHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseMessage()">getResponseMessage</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResultFileName()">getResultFileName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSampleCount()">getSampleCount</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSampleLabel()">getSampleLabel</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSampleLabel(boolean)">getSampleLabel</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSamplerData()">getSamplerData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSaveConfig()">getSaveConfig</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getStartTime()">getStartTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSubResults()">getSubResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getURL()">getURL</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getUrlAsString()">getUrlAsString</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isMonitor()">isMonitor</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isResponseCodeOK()">isResponseCodeOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStampedAtStart()">isStampedAtStart</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStartNextThreadLoop()">isStartNextThreadLoop</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStopTest()">isStopTest</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStopTestNow()">isStopTestNow</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStopThread()">isStopThread</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isSuccessful()">isSuccessful</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#latencyEnd()">latencyEnd</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#markFile(java.lang.String)">markFile</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#removeAssertionResults()">removeAssertionResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#removeSubResults()">removeSubResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleEnd()">sampleEnd</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#samplePause()">samplePause</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleResume()">sampleResume</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleStart()">sampleStart</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setAllThreads(int)">setAllThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setBodySize(int)">setBodySize</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setBytes(int)">setBytes</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setConnectTime(long)">setConnectTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setContentType(java.lang.String)">setContentType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setDataEncoding(java.lang.String)">setDataEncoding</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setDataType(java.lang.String)">setDataType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setEncodingAndType(java.lang.String)">setEncodingAndType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setEndTime(long)">setEndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setGroupThreads(int)">setGroupThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setHeadersSize(int)">setHeadersSize</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setIdleTime(long)">setIdleTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setLatency(long)">setLatency</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setMonitor(boolean)">setMonitor</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setParent(org.apache.jmeter.samplers.SampleResult)">setParent</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setRequestHeaders(java.lang.String)">setRequestHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseCode(java.lang.String)">setResponseCode</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseCodeOK()">setResponseCodeOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(byte[])">setResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(java.lang.String)">setResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(java.lang.String, java.lang.String)">setResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseHeaders(java.lang.String)">setResponseHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseMessage(java.lang.String)">setResponseMessage</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseMessageOK()">setResponseMessageOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseOK()">setResponseOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResultFileName(java.lang.String)">setResultFileName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSampleCount(int)">setSampleCount</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSampleLabel(java.lang.String)">setSampleLabel</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSamplerData(java.lang.String)">setSamplerData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSaveConfig(org.apache.jmeter.samplers.SampleSaveConfiguration)">setSaveConfig</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStampAndTime(long, long)">setStampAndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStartNextThreadLoop(boolean)">setStartNextThreadLoop</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStartTime(long)">setStartTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStopTest(boolean)">setStopTest</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStopTestNow(boolean)">setStopTestNow</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStopThread(boolean)">setStopThread</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSuccessful(boolean)">setSuccessful</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setTimeStamp(long)">setTimeStamp</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setURL(java.net.URL)">setURL</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#storeSubResult(org.apache.jmeter.samplers.SampleResult)">storeSubResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#toString()">toString</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="StatisticalSampleResult()"><!-- --></A><H3>
+StatisticalSampleResult</H3>
+<PRE>
+public <B>StatisticalSampleResult</B>()</PRE>
+<DL>
+</DL>
+<HR>
+
+<A NAME="StatisticalSampleResult(long, long)"><!-- --></A><H3>
+StatisticalSampleResult</H3>
+<PRE>
+<FONT SIZE="-1"><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</A>
+</FONT>public <B>StatisticalSampleResult</B>(long&nbsp;stamp,
+                                          long&nbsp;elapsed)</PRE>
+<DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Needs to be replaced when multiple sample results are sorted out</I>
+<P>
+<DD>Allow OldSaveService to generate a suitable result when sample/error counts have been saved.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>stamp</CODE> - this may be a start time or an end time (both in milliseconds)<DD><CODE>elapsed</CODE> - time in milliseconds</DL>
+</DL>
+<HR>
+
+<A NAME="StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult)"><!-- --></A><H3>
+StatisticalSampleResult</H3>
+<PRE>
+public <B>StatisticalSampleResult</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res)</PRE>
+<DL>
+<DD>Create a statistical sample result from an ordinary sample result.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>res</CODE> - the sample result</DL>
+</DL>
+<HR>
+
+<A NAME="StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult, boolean)"><!-- --></A><H3>
+StatisticalSampleResult</H3>
+<PRE>
+<FONT SIZE="-1"><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</A>
+</FONT>public <B>StatisticalSampleResult</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res,
+                                          boolean&nbsp;unused)</PRE>
+<DL>
+<DD><B>Deprecated.</B>&nbsp;<I>no longer necessary; use <A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult)"><CODE>StatisticalSampleResult(SampleResult)</CODE></A> instead</I>
+<P>
+<DD>Create a statistical sample result from an ordinary sample result.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>res</CODE> - the sample result<DD><CODE>unused</CODE> - no longer used</DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="add(org.apache.jmeter.samplers.SampleResult)"><!-- --></A><H3>
+add</H3>
+<PRE>
+public void <B>add</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getTime()"><!-- --></A><H3>
+getTime</H3>
+<PRE>
+public long <B>getTime</B>()</PRE>
+<DL>
+<DD><B>Description copied from class: <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getTime()">SampleResult</A></CODE></B></DD>
+<DD>Get the time it took this sample to occur.
+<P>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getTime()">getTime</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>elapsed time in milliseonds</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getTimeStamp()"><!-- --></A><H3>
+getTimeStamp</H3>
+<PRE>
+public long <B>getTimeStamp</B>()</PRE>
+<DL>
+<DD><B>Description copied from class: <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getTimeStamp()">SampleResult</A></CODE></B></DD>
+<DD>Get the sample timestamp, which may be either the start time or the end time.
+<P>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getTimeStamp()">getTimeStamp</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>timeStamp in milliseconds<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getStartTime()"><CODE>SampleResult.getStartTime()</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getEndTime()"><CODE>SampleResult.getEndTime()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getErrorCount()"><!-- --></A><H3>
+getErrorCount</H3>
+<PRE>
+public int <B>getErrorCount</B>()</PRE>
+<DL>
+<DD><B>Description copied from class: <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getErrorCount()">SampleResult</A></CODE></B></DD>
+<DD>Returns the count of errors.
+<P>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getErrorCount()">getErrorCount</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>0 - or 1 if the sample failed
+ 
+ TODO do we need allow for nested samples?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setErrorCount(int)"><!-- --></A><H3>
+setErrorCount</H3>
+<PRE>
+public void <B>setErrorCount</B>(int&nbsp;e)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setErrorCount(int)">setErrorCount</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getKey(org.apache.jmeter.samplers.SampleEvent, boolean)"><!-- --></A><H3>
+getKey</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getKey</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;event,
+                            boolean&nbsp;keyOnThreadName)</PRE>
+<DL>
+<DD>Generates the key to be used for aggregating samples as follows:<br>
+ <code>sampleLabel</code> "-" <code>[threadName|threadGroup]</code>
+ <p>
+ N.B. the key should agree with the fixed items that are saved in the sample.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>event</CODE> - sample event whose key is to be calculated<DD><CODE>keyOnThreadName</CODE> - true if key should use thread name, otherwise use thread group
+<DT><B>Returns:</B><DD>the key to use for aggregating samples</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/StandardSampleSender.html" title="class in org.apache.jmeter.samplers"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleSender.html" title="class in org.apache.jmeter.samplers"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/samplers/StatisticalSampleResult.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="StatisticalSampleResult.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_org.apache.jmeter.samplers.SampleResult">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

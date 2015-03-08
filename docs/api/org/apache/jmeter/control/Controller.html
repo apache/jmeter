@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+Controller (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Controller (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/control/CriticalSectionController.html" title="class in org.apache.jmeter.control"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/control/Controller.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="Controller.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.control</FONT>
+<BR>
+Interface Controller</H2>
+<DL>
+<DT><B>All Superinterfaces:</B> <DD><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Implementing Classes:</B> <DD><A HREF="../../../../org/apache/jmeter/threads/AbstractThreadGroup.html" title="class in org.apache.jmeter.threads">AbstractThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/control/CriticalSectionController.html" title="class in org.apache.jmeter.control">CriticalSectionController</A>, <A HREF="../../../../org/apache/jmeter/control/ForeachController.html" title="class in org.apache.jmeter.control">ForeachController</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A>, <A HREF="../../../../org/apache/jmeter/control/IfController.html" title="class in org.apache.jmeter.control">IfController</A>, <A HREF="../../../../org/apache/jmeter/control/IncludeController.html" title="class in org.apache.jmeter.control">IncludeController</A>, <A HREF="../../../../org/apache/jmeter/control/InterleaveControl.html" title="class in org.apache.jmeter.control">InterleaveControl</A>, <A HREF="../../../../org/apache/jmeter/control/LoopController.html" title="class in org.apache.jmeter.control">LoopController</A>, <A HREF="../../../../org/apache/jmeter/control/ModuleController.html" title="class in org.apache.jmeter.control">ModuleController</A>, <A HREF="../../../../org/apache/jmeter/control/OnceOnlyController.html" title="class in org.apache.jmeter.control">OnceOnlyController</A>, <A HREF="../../../../org/apache/jmeter/threads/PostThreadGroup.html" title="class in org.apache.jmeter.threads">PostThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/proxy/ProxyControl.html" title="class in org.apache.jmeter.protocol.http.proxy">ProxyControl</A>, <A HREF="../../../../org/apache/jmeter/control/RandomController.html" title="class in org.apache.jmeter.control">RandomController</A>, <A HREF="../../../../org/apache/jmeter/control/RandomOrderController.html" title="class in org.apache.jmeter.control">RandomOrderController</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/RecordingController.html" title="class in org.apache.jmeter.protocol.http.control">RecordingController</A>, <A HREF="../../../../org/apache/jmeter/control/RunTime.html" title="class in org.apache.jmeter.control">RunTime</A>, <A HREF="../../../../org/apache/jmeter/threads/SetupThreadGroup.html" title="class in org.apache.jmeter.threads">SetupThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/control/SwitchController.html" title="class in org.apache.jmeter.control">SwitchController</A>, <A HREF="../../../../org/apache/jmeter/control/TestFragmentController.html" title="class in org.apache.jmeter.control">TestFragmentController</A>, <A HREF="../../../../org/apache/jmeter/threads/ThreadGroup.html" title="class in org.apache.jmeter.threads">ThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/control/ThroughputController.html" title="class in org.apache.jmeter.control">ThroughputController</A>, <A HREF="../../../../org/apache/jmeter/control/TransactionController.html" title="class in org.apache.jmeter.control">TransactionController</A>, <A HREF="../../../../org/apache/jmeter/control/WhileController.html" title="class in org.apache.jmeter.control">WhileController</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>Controller</B><DT>extends <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></DL>
+</PRE>
+
+<P>
+This interface is used by JMeterThread in the following manner:
+ <p>
+ <code>while (running &amp;&amp; (sampler = controller.next()) != null)</code>
+<P>
+
+<P>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.testelement.TestElement"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from interface org.apache.jmeter.testelement.<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#COMMENTS">COMMENTS</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#ENABLED">ENABLED</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#GUI_CLASS">GUI_CLASS</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#NAME">NAME</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#TEST_CLASS">TEST_CLASS</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/Controller.html#addIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">addIterationListener</A></B>(<A HREF="../../../../org/apache/jmeter/engine/event/LoopIterationListener.html" title="interface in org.apache.jmeter.engine.event">LoopIterationListener</A>&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Controllers have to notify listeners of when they begin an iteration
+ through their sub-elements.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/Controller.html#initialize()">initialize</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called to initialize a controller at the beginning of a test iteration.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/Controller.html#isDone()">isDone</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indicates whether the Controller is done delivering Samplers for the rest
+ of the test.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/Controller.html#next()">next</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivers the next Sampler or null</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/Controller.html#removeIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">removeIterationListener</A></B>(<A HREF="../../../../org/apache/jmeter/engine/event/LoopIterationListener.html" title="interface in org.apache.jmeter.engine.event">LoopIterationListener</A>&nbsp;iterationListener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unregister IterationListener</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/Controller.html#triggerEndOfLoop()">triggerEndOfLoop</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trigger end of loop condition on controller (used by Start Next Loop feature)</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.testelement.TestElement"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from interface org.apache.jmeter.testelement.<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#clear()">clear</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#clearTestElementChildren()">clearTestElementChildren</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#clone()">clone</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getComment()">getComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getName()">getName</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String, int)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String, long)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setEnabled(boolean)">setEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, boolean, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, int)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, int, int)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, long)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, long, long)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="next()"><!-- --></A><H3>
+next</H3>
+<PRE>
+<A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</A> <B>next</B>()</PRE>
+<DL>
+<DD>Delivers the next Sampler or null
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>org.apache.jmeter.samplers.Sampler or null</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isDone()"><!-- --></A><H3>
+isDone</H3>
+<PRE>
+boolean <B>isDone</B>()</PRE>
+<DL>
+<DD>Indicates whether the Controller is done delivering Samplers for the rest
+ of the test.
+
+ When the top-level controller returns true to JMeterThread,
+ the thread is complete.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>boolean</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)"><!-- --></A><H3>
+addIterationListener</H3>
+<PRE>
+void <B>addIterationListener</B>(<A HREF="../../../../org/apache/jmeter/engine/event/LoopIterationListener.html" title="interface in org.apache.jmeter.engine.event">LoopIterationListener</A>&nbsp;listener)</PRE>
+<DL>
+<DD>Controllers have to notify listeners of when they begin an iteration
+ through their sub-elements.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>listener</CODE> - The <A HREF="../../../../org/apache/jmeter/engine/event/LoopIterationListener.html" title="interface in org.apache.jmeter.engine.event"><CODE>LoopIterationListener</CODE></A> to add</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="initialize()"><!-- --></A><H3>
+initialize</H3>
+<PRE>
+void <B>initialize</B>()</PRE>
+<DL>
+<DD>Called to initialize a controller at the beginning of a test iteration.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="removeIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)"><!-- --></A><H3>
+removeIterationListener</H3>
+<PRE>
+void <B>removeIterationListener</B>(<A HREF="../../../../org/apache/jmeter/engine/event/LoopIterationListener.html" title="interface in org.apache.jmeter.engine.event">LoopIterationListener</A>&nbsp;iterationListener)</PRE>
+<DL>
+<DD>Unregister IterationListener
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>iterationListener</CODE> - <A HREF="../../../../org/apache/jmeter/engine/event/LoopIterationListener.html" title="interface in org.apache.jmeter.engine.event"><CODE>LoopIterationListener</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="triggerEndOfLoop()"><!-- --></A><H3>
+triggerEndOfLoop</H3>
+<PRE>
+void <B>triggerEndOfLoop</B>()</PRE>
+<DL>
+<DD>Trigger end of loop condition on controller (used by Start Next Loop feature)
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/control/CriticalSectionController.html" title="class in org.apache.jmeter.control"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/control/Controller.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="Controller.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

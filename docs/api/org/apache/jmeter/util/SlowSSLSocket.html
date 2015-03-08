@@ -1,0 +1,1626 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+SlowSSLSocket (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SlowSSLSocket (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/SlowSocket.html" title="class in org.apache.jmeter.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/SSLManager.html" title="class in org.apache.jmeter.util"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/util/SlowSSLSocket.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SlowSSLSocket.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.util</FONT>
+<BR>
+Class SlowSSLSocket</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">java.net.Socket</A>
+      <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">javax.net.ssl.SSLSocket</A>
+          <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.util.SlowSSLSocket</B>
+</PRE>
+<HR>
+<DL>
+<DT><PRE>public class <B>SlowSSLSocket</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></DL>
+</PRE>
+
+<P>
+"Slow" SSLsocket implementation to emulate dial-up modems etc
+
+ WARNING: the class relies on overriding all superclass methods in order to apply them to the input socket.
+ Any missing methods will access the superclass socket, which will probably be in the wrong state.
+<P>
+
+<P>
+<HR>
+
+<P>
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#SlowSSLSocket(javax.net.ssl.SSLSocket, int)">SlowSSLSocket</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A>&nbsp;sock,
+              int&nbsp;cps)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wrap an SSLSocket with slow input and output streams</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#addHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener)">addHandshakeCompletedListener</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/HandshakeCompletedListener.html?is-external=true" title="class or interface in javax.net.ssl">HandshakeCompletedListener</A>&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#bind(java.net.SocketAddress)">bind</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A>&nbsp;bindpoint)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#close()">close</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#connect(java.net.SocketAddress)">connect</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A>&nbsp;endpoint)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#connect(java.net.SocketAddress, int)">connect</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A>&nbsp;endpoint,
+        int&nbsp;timeout)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/nio/channels/SocketChannel.html?is-external=true" title="class or interface in java.nio.channels">SocketChannel</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getChannel()">getChannel</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getEnabledCipherSuites()">getEnabledCipherSuites</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getEnabledProtocols()">getEnabledProtocols</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getEnableSessionCreation()">getEnableSessionCreation</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">InetAddress</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getInetAddress()">getInetAddress</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getInputStream()">getInputStream</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getKeepAlive()">getKeepAlive</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">InetAddress</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getLocalAddress()">getLocalAddress</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getLocalPort()">getLocalPort</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getLocalSocketAddress()">getLocalSocketAddress</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getNeedClientAuth()">getNeedClientAuth</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getOOBInline()">getOOBInline</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getOutputStream()">getOutputStream</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getPort()">getPort</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getReceiveBufferSize()">getReceiveBufferSize</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getRemoteSocketAddress()">getRemoteSocketAddress</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getReuseAddress()">getReuseAddress</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getSendBufferSize()">getSendBufferSize</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSession.html?is-external=true" title="class or interface in javax.net.ssl">SSLSession</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getSession()">getSession</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getSoLinger()">getSoLinger</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getSoTimeout()">getSoTimeout</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getSupportedCipherSuites()">getSupportedCipherSuites</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getSupportedProtocols()">getSupportedProtocols</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getTcpNoDelay()">getTcpNoDelay</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getTrafficClass()">getTrafficClass</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getUseClientMode()">getUseClientMode</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#getWantClientAuth()">getWantClientAuth</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#isBound()">isBound</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#isClosed()">isClosed</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#isConnected()">isConnected</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#isInputShutdown()">isInputShutdown</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#isOutputShutdown()">isOutputShutdown</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#removeHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener)">removeHandshakeCompletedListener</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/HandshakeCompletedListener.html?is-external=true" title="class or interface in javax.net.ssl">HandshakeCompletedListener</A>&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#sendUrgentData(int)">sendUrgentData</A></B>(int&nbsp;data)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setEnabledCipherSuites(java.lang.String[])">setEnabledCipherSuites</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setEnabledProtocols(java.lang.String[])">setEnabledProtocols</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setEnableSessionCreation(boolean)">setEnableSessionCreation</A></B>(boolean&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setKeepAlive(boolean)">setKeepAlive</A></B>(boolean&nbsp;on)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setNeedClientAuth(boolean)">setNeedClientAuth</A></B>(boolean&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setOOBInline(boolean)">setOOBInline</A></B>(boolean&nbsp;on)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setReceiveBufferSize(int)">setReceiveBufferSize</A></B>(int&nbsp;size)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setReuseAddress(boolean)">setReuseAddress</A></B>(boolean&nbsp;on)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setSendBufferSize(int)">setSendBufferSize</A></B>(int&nbsp;size)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setSoLinger(boolean, int)">setSoLinger</A></B>(boolean&nbsp;on,
+            int&nbsp;linger)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setSoTimeout(int)">setSoTimeout</A></B>(int&nbsp;timeout)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setTcpNoDelay(boolean)">setTcpNoDelay</A></B>(boolean&nbsp;on)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setTrafficClass(int)">setTrafficClass</A></B>(int&nbsp;tc)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setUseClientMode(boolean)">setUseClientMode</A></B>(boolean&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#setWantClientAuth(boolean)">setWantClientAuth</A></B>(boolean&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#shutdownInput()">shutdownInput</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#shutdownOutput()">shutdownOutput</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#startHandshake()">startHandshake</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/SlowSSLSocket.html#toString()">toString</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_javax.net.ssl.SSLSocket"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class javax.net.ssl.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getSSLParameters()" title="class or interface in javax.net.ssl">getSSLParameters</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#setSSLParameters(javax.net.ssl.SSLParameters)" title="class or interface in javax.net.ssl">setSSLParameters</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.net.Socket"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.net.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setPerformancePreferences(int, int, int)" title="class or interface in java.net">setPerformancePreferences</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setSocketImplFactory(java.net.SocketImplFactory)" title="class or interface in java.net">setSocketImplFactory</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="SlowSSLSocket(javax.net.ssl.SSLSocket, int)"><!-- --></A><H3>
+SlowSSLSocket</H3>
+<PRE>
+public <B>SlowSSLSocket</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A>&nbsp;sock,
+                     int&nbsp;cps)</PRE>
+<DL>
+<DD>Wrap an SSLSocket with slow input and output streams
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>sock</CODE> - SSLSocket to be wrapped<DD><CODE>cps</CODE> - characters per second to emulate</DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="getOutputStream()"><!-- --></A><H3>
+getOutputStream</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</A> <B>getOutputStream</B>()
+                             throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getOutputStream()" title="class or interface in java.net">getOutputStream</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getInputStream()"><!-- --></A><H3>
+getInputStream</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</A> <B>getInputStream</B>()
+                           throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getInputStream()" title="class or interface in java.net">getInputStream</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener)"><!-- --></A><H3>
+addHandshakeCompletedListener</H3>
+<PRE>
+public void <B>addHandshakeCompletedListener</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/HandshakeCompletedListener.html?is-external=true" title="class or interface in javax.net.ssl">HandshakeCompletedListener</A>&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#addHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener)" title="class or interface in javax.net.ssl">addHandshakeCompletedListener</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getEnableSessionCreation()"><!-- --></A><H3>
+getEnableSessionCreation</H3>
+<PRE>
+public boolean <B>getEnableSessionCreation</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getEnableSessionCreation()" title="class or interface in javax.net.ssl">getEnableSessionCreation</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getEnabledCipherSuites()"><!-- --></A><H3>
+getEnabledCipherSuites</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[] <B>getEnabledCipherSuites</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getEnabledCipherSuites()" title="class or interface in javax.net.ssl">getEnabledCipherSuites</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getEnabledProtocols()"><!-- --></A><H3>
+getEnabledProtocols</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[] <B>getEnabledProtocols</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getEnabledProtocols()" title="class or interface in javax.net.ssl">getEnabledProtocols</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getNeedClientAuth()"><!-- --></A><H3>
+getNeedClientAuth</H3>
+<PRE>
+public boolean <B>getNeedClientAuth</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getNeedClientAuth()" title="class or interface in javax.net.ssl">getNeedClientAuth</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSession()"><!-- --></A><H3>
+getSession</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSession.html?is-external=true" title="class or interface in javax.net.ssl">SSLSession</A> <B>getSession</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getSession()" title="class or interface in javax.net.ssl">getSession</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSupportedCipherSuites()"><!-- --></A><H3>
+getSupportedCipherSuites</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[] <B>getSupportedCipherSuites</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getSupportedCipherSuites()" title="class or interface in javax.net.ssl">getSupportedCipherSuites</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSupportedProtocols()"><!-- --></A><H3>
+getSupportedProtocols</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[] <B>getSupportedProtocols</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getSupportedProtocols()" title="class or interface in javax.net.ssl">getSupportedProtocols</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getUseClientMode()"><!-- --></A><H3>
+getUseClientMode</H3>
+<PRE>
+public boolean <B>getUseClientMode</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getUseClientMode()" title="class or interface in javax.net.ssl">getUseClientMode</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getWantClientAuth()"><!-- --></A><H3>
+getWantClientAuth</H3>
+<PRE>
+public boolean <B>getWantClientAuth</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#getWantClientAuth()" title="class or interface in javax.net.ssl">getWantClientAuth</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="removeHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener)"><!-- --></A><H3>
+removeHandshakeCompletedListener</H3>
+<PRE>
+public void <B>removeHandshakeCompletedListener</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/HandshakeCompletedListener.html?is-external=true" title="class or interface in javax.net.ssl">HandshakeCompletedListener</A>&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#removeHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener)" title="class or interface in javax.net.ssl">removeHandshakeCompletedListener</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setEnableSessionCreation(boolean)"><!-- --></A><H3>
+setEnableSessionCreation</H3>
+<PRE>
+public void <B>setEnableSessionCreation</B>(boolean&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#setEnableSessionCreation(boolean)" title="class or interface in javax.net.ssl">setEnableSessionCreation</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setEnabledCipherSuites(java.lang.String[])"><!-- --></A><H3>
+setEnabledCipherSuites</H3>
+<PRE>
+public void <B>setEnabledCipherSuites</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#setEnabledCipherSuites(java.lang.String[])" title="class or interface in javax.net.ssl">setEnabledCipherSuites</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setEnabledProtocols(java.lang.String[])"><!-- --></A><H3>
+setEnabledProtocols</H3>
+<PRE>
+public void <B>setEnabledProtocols</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#setEnabledProtocols(java.lang.String[])" title="class or interface in javax.net.ssl">setEnabledProtocols</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setNeedClientAuth(boolean)"><!-- --></A><H3>
+setNeedClientAuth</H3>
+<PRE>
+public void <B>setNeedClientAuth</B>(boolean&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#setNeedClientAuth(boolean)" title="class or interface in javax.net.ssl">setNeedClientAuth</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUseClientMode(boolean)"><!-- --></A><H3>
+setUseClientMode</H3>
+<PRE>
+public void <B>setUseClientMode</B>(boolean&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#setUseClientMode(boolean)" title="class or interface in javax.net.ssl">setUseClientMode</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setWantClientAuth(boolean)"><!-- --></A><H3>
+setWantClientAuth</H3>
+<PRE>
+public void <B>setWantClientAuth</B>(boolean&nbsp;arg0)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#setWantClientAuth(boolean)" title="class or interface in javax.net.ssl">setWantClientAuth</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="startHandshake()"><!-- --></A><H3>
+startHandshake</H3>
+<PRE>
+public void <B>startHandshake</B>()
+                    throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true#startHandshake()" title="class or interface in javax.net.ssl">startHandshake</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/SSLSocket.html?is-external=true" title="class or interface in javax.net.ssl">SSLSocket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="bind(java.net.SocketAddress)"><!-- --></A><H3>
+bind</H3>
+<PRE>
+public void <B>bind</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A>&nbsp;bindpoint)
+          throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#bind(java.net.SocketAddress)" title="class or interface in java.net">bind</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="close()"><!-- --></A><H3>
+close</H3>
+<PRE>
+public void <B>close</B>()
+           throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#close()" title="class or interface in java.net">close</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="connect(java.net.SocketAddress, int)"><!-- --></A><H3>
+connect</H3>
+<PRE>
+public void <B>connect</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A>&nbsp;endpoint,
+                    int&nbsp;timeout)
+             throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#connect(java.net.SocketAddress, int)" title="class or interface in java.net">connect</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="connect(java.net.SocketAddress)"><!-- --></A><H3>
+connect</H3>
+<PRE>
+public void <B>connect</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A>&nbsp;endpoint)
+             throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#connect(java.net.SocketAddress)" title="class or interface in java.net">connect</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getChannel()"><!-- --></A><H3>
+getChannel</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/nio/channels/SocketChannel.html?is-external=true" title="class or interface in java.nio.channels">SocketChannel</A> <B>getChannel</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getChannel()" title="class or interface in java.net">getChannel</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getInetAddress()"><!-- --></A><H3>
+getInetAddress</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">InetAddress</A> <B>getInetAddress</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getInetAddress()" title="class or interface in java.net">getInetAddress</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getKeepAlive()"><!-- --></A><H3>
+getKeepAlive</H3>
+<PRE>
+public boolean <B>getKeepAlive</B>()
+                     throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getKeepAlive()" title="class or interface in java.net">getKeepAlive</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocalAddress()"><!-- --></A><H3>
+getLocalAddress</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/InetAddress.html?is-external=true" title="class or interface in java.net">InetAddress</A> <B>getLocalAddress</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getLocalAddress()" title="class or interface in java.net">getLocalAddress</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocalPort()"><!-- --></A><H3>
+getLocalPort</H3>
+<PRE>
+public int <B>getLocalPort</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getLocalPort()" title="class or interface in java.net">getLocalPort</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocalSocketAddress()"><!-- --></A><H3>
+getLocalSocketAddress</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A> <B>getLocalSocketAddress</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getLocalSocketAddress()" title="class or interface in java.net">getLocalSocketAddress</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getOOBInline()"><!-- --></A><H3>
+getOOBInline</H3>
+<PRE>
+public boolean <B>getOOBInline</B>()
+                     throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getOOBInline()" title="class or interface in java.net">getOOBInline</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPort()"><!-- --></A><H3>
+getPort</H3>
+<PRE>
+public int <B>getPort</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getPort()" title="class or interface in java.net">getPort</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getReceiveBufferSize()"><!-- --></A><H3>
+getReceiveBufferSize</H3>
+<PRE>
+public int <B>getReceiveBufferSize</B>()
+                         throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getReceiveBufferSize()" title="class or interface in java.net">getReceiveBufferSize</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getRemoteSocketAddress()"><!-- --></A><H3>
+getRemoteSocketAddress</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net">SocketAddress</A> <B>getRemoteSocketAddress</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getRemoteSocketAddress()" title="class or interface in java.net">getRemoteSocketAddress</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getReuseAddress()"><!-- --></A><H3>
+getReuseAddress</H3>
+<PRE>
+public boolean <B>getReuseAddress</B>()
+                        throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getReuseAddress()" title="class or interface in java.net">getReuseAddress</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSendBufferSize()"><!-- --></A><H3>
+getSendBufferSize</H3>
+<PRE>
+public int <B>getSendBufferSize</B>()
+                      throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getSendBufferSize()" title="class or interface in java.net">getSendBufferSize</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSoLinger()"><!-- --></A><H3>
+getSoLinger</H3>
+<PRE>
+public int <B>getSoLinger</B>()
+                throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getSoLinger()" title="class or interface in java.net">getSoLinger</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSoTimeout()"><!-- --></A><H3>
+getSoTimeout</H3>
+<PRE>
+public int <B>getSoTimeout</B>()
+                 throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getSoTimeout()" title="class or interface in java.net">getSoTimeout</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getTcpNoDelay()"><!-- --></A><H3>
+getTcpNoDelay</H3>
+<PRE>
+public boolean <B>getTcpNoDelay</B>()
+                      throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getTcpNoDelay()" title="class or interface in java.net">getTcpNoDelay</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getTrafficClass()"><!-- --></A><H3>
+getTrafficClass</H3>
+<PRE>
+public int <B>getTrafficClass</B>()
+                    throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#getTrafficClass()" title="class or interface in java.net">getTrafficClass</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isBound()"><!-- --></A><H3>
+isBound</H3>
+<PRE>
+public boolean <B>isBound</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#isBound()" title="class or interface in java.net">isBound</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isClosed()"><!-- --></A><H3>
+isClosed</H3>
+<PRE>
+public boolean <B>isClosed</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#isClosed()" title="class or interface in java.net">isClosed</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isConnected()"><!-- --></A><H3>
+isConnected</H3>
+<PRE>
+public boolean <B>isConnected</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#isConnected()" title="class or interface in java.net">isConnected</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isInputShutdown()"><!-- --></A><H3>
+isInputShutdown</H3>
+<PRE>
+public boolean <B>isInputShutdown</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#isInputShutdown()" title="class or interface in java.net">isInputShutdown</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isOutputShutdown()"><!-- --></A><H3>
+isOutputShutdown</H3>
+<PRE>
+public boolean <B>isOutputShutdown</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#isOutputShutdown()" title="class or interface in java.net">isOutputShutdown</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sendUrgentData(int)"><!-- --></A><H3>
+sendUrgentData</H3>
+<PRE>
+public void <B>sendUrgentData</B>(int&nbsp;data)
+                    throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#sendUrgentData(int)" title="class or interface in java.net">sendUrgentData</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setKeepAlive(boolean)"><!-- --></A><H3>
+setKeepAlive</H3>
+<PRE>
+public void <B>setKeepAlive</B>(boolean&nbsp;on)
+                  throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setKeepAlive(boolean)" title="class or interface in java.net">setKeepAlive</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setOOBInline(boolean)"><!-- --></A><H3>
+setOOBInline</H3>
+<PRE>
+public void <B>setOOBInline</B>(boolean&nbsp;on)
+                  throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setOOBInline(boolean)" title="class or interface in java.net">setOOBInline</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setReceiveBufferSize(int)"><!-- --></A><H3>
+setReceiveBufferSize</H3>
+<PRE>
+public void <B>setReceiveBufferSize</B>(int&nbsp;size)
+                          throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setReceiveBufferSize(int)" title="class or interface in java.net">setReceiveBufferSize</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setReuseAddress(boolean)"><!-- --></A><H3>
+setReuseAddress</H3>
+<PRE>
+public void <B>setReuseAddress</B>(boolean&nbsp;on)
+                     throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setReuseAddress(boolean)" title="class or interface in java.net">setReuseAddress</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSendBufferSize(int)"><!-- --></A><H3>
+setSendBufferSize</H3>
+<PRE>
+public void <B>setSendBufferSize</B>(int&nbsp;size)
+                       throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setSendBufferSize(int)" title="class or interface in java.net">setSendBufferSize</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSoLinger(boolean, int)"><!-- --></A><H3>
+setSoLinger</H3>
+<PRE>
+public void <B>setSoLinger</B>(boolean&nbsp;on,
+                        int&nbsp;linger)
+                 throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setSoLinger(boolean, int)" title="class or interface in java.net">setSoLinger</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSoTimeout(int)"><!-- --></A><H3>
+setSoTimeout</H3>
+<PRE>
+public void <B>setSoTimeout</B>(int&nbsp;timeout)
+                  throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setSoTimeout(int)" title="class or interface in java.net">setSoTimeout</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setTcpNoDelay(boolean)"><!-- --></A><H3>
+setTcpNoDelay</H3>
+<PRE>
+public void <B>setTcpNoDelay</B>(boolean&nbsp;on)
+                   throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setTcpNoDelay(boolean)" title="class or interface in java.net">setTcpNoDelay</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setTrafficClass(int)"><!-- --></A><H3>
+setTrafficClass</H3>
+<PRE>
+public void <B>setTrafficClass</B>(int&nbsp;tc)
+                     throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#setTrafficClass(int)" title="class or interface in java.net">setTrafficClass</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/SocketException.html?is-external=true" title="class or interface in java.net">SocketException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="shutdownInput()"><!-- --></A><H3>
+shutdownInput</H3>
+<PRE>
+public void <B>shutdownInput</B>()
+                   throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#shutdownInput()" title="class or interface in java.net">shutdownInput</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="shutdownOutput()"><!-- --></A><H3>
+shutdownOutput</H3>
+<PRE>
+public void <B>shutdownOutput</B>()
+                    throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#shutdownOutput()" title="class or interface in java.net">shutdownOutput</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="toString()"><!-- --></A><H3>
+toString</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>toString</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true#toString()" title="class or interface in java.net">toString</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/Socket.html?is-external=true" title="class or interface in java.net">Socket</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/SlowSocket.html" title="class in org.apache.jmeter.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/SSLManager.html" title="class in org.apache.jmeter.util"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/util/SlowSSLSocket.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SlowSSLSocket.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

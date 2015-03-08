@@ -1,0 +1,508 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+RemoteListenerWrapper (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RemoteListenerWrapper (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/Remoteable.html" title="interface in org.apache.jmeter.samplers"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html" title="interface in org.apache.jmeter.samplers"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/samplers/RemoteListenerWrapper.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="RemoteListenerWrapper.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.samplers</FONT>
+<BR>
+Class RemoteListenerWrapper</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">org.apache.jmeter.testelement.AbstractTestElement</A>
+      <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.samplers.RemoteListenerWrapper</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</A>, <A HREF="../../../../org/apache/jmeter/engine/util/NoThreadClone.html" title="interface in org.apache.jmeter.engine.util">NoThreadClone</A>, <A HREF="../../../../org/apache/jmeter/gui/Searchable.html" title="interface in org.apache.jmeter.gui">Searchable</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html" title="interface in org.apache.jmeter.testelement">TestStateListener</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>RemoteListenerWrapper</B><DT>extends <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A><DT>implements <A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html" title="interface in org.apache.jmeter.testelement">TestStateListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/engine/util/NoThreadClone.html" title="interface in org.apache.jmeter.engine.util">NoThreadClone</A></DL>
+</PRE>
+
+<P>
+Lars-Erik Helander provided the idea (and original implementation) for the
+ caching functionality (sampleStore).
+<P>
+
+<P>
+<DL>
+<DT><B>Version:</B></DT>
+  <DD>$Revision: 1595401 $</DD>
+<DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.samplers.RemoteListenerWrapper">Serialized Form</A></DL>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.testelement.TestElement"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from interface org.apache.jmeter.testelement.<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#COMMENTS">COMMENTS</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#ENABLED">ENABLED</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#GUI_CLASS">GUI_CLASS</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#NAME">NAME</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html#TEST_CLASS">TEST_CLASS</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#RemoteListenerWrapper()">RemoteListenerWrapper</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#RemoteListenerWrapper(org.apache.jmeter.samplers.RemoteSampleListener)">RemoteListenerWrapper</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html" title="interface in org.apache.jmeter.samplers">RemoteSampleListener</A>&nbsp;l)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">sampleOccurred</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sample has started and stopped.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#sampleStarted(org.apache.jmeter.samplers.SampleEvent)">sampleStarted</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sample has started.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#sampleStopped(org.apache.jmeter.samplers.SampleEvent)">sampleStopped</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sample has stopped.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#testEnded()">testEnded</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called once for all threads after the end of a test.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#testEnded(java.lang.String)">testEnded</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called once for all threads after the end of a test.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#testStarted()">testStarted</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called just before the start of the test from the main engine thread.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html#testStarted(java.lang.String)">testStarted</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called just before the start of the test from the main engine thread.</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.testelement.AbstractTestElement"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class org.apache.jmeter.testelement.<A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addPropertiesValues(java.util.List, java.util.Set)">addPropertiesValues</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty, boolean)">addProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTestElementChildren()">clearTestElementChildren</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String, int)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String, long)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getSearchableTokens()">getSearchableTokens</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setEnabled(boolean)">setEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, int)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, int, int)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, long)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, long, long)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="RemoteListenerWrapper(org.apache.jmeter.samplers.RemoteSampleListener)"><!-- --></A><H3>
+RemoteListenerWrapper</H3>
+<PRE>
+public <B>RemoteListenerWrapper</B>(<A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html" title="interface in org.apache.jmeter.samplers">RemoteSampleListener</A>&nbsp;l)</PRE>
+<DL>
+</DL>
+<HR>
+
+<A NAME="RemoteListenerWrapper()"><!-- --></A><H3>
+RemoteListenerWrapper</H3>
+<PRE>
+public <B>RemoteListenerWrapper</B>()</PRE>
+<DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="testStarted()"><!-- --></A><H3>
+testStarted</H3>
+<PRE>
+public void <B>testStarted</B>()</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testStarted()">TestStateListener</A></CODE></B></DD>
+<DD><p>
+ Called just before the start of the test from the main engine thread.
+
+ This is before the test elements are cloned.
+
+ Note that not all the test
+ variables will have been set up at this point.
+ </p>
+
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testStarted()">testStarted</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html" title="interface in org.apache.jmeter.testelement">TestStateListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/engine/StandardJMeterEngine.html#run()"><CODE>StandardJMeterEngine.run()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="testEnded()"><!-- --></A><H3>
+testEnded</H3>
+<PRE>
+public void <B>testEnded</B>()</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testEnded()">TestStateListener</A></CODE></B></DD>
+<DD><p>
+ Called once for all threads after the end of a test.
+
+ This will use the same element instances as at the start of the test.
+ </p>
+
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testEnded()">testEnded</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html" title="interface in org.apache.jmeter.testelement">TestStateListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/engine/StandardJMeterEngine.html#stopTest()"><CODE>StandardJMeterEngine.stopTest()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="testStarted(java.lang.String)"><!-- --></A><H3>
+testStarted</H3>
+<PRE>
+public void <B>testStarted</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testStarted(java.lang.String)">TestStateListener</A></CODE></B></DD>
+<DD><p>
+ Called just before the start of the test from the main engine thread.
+
+ This is before the test elements are cloned.
+
+ Note that not all the test
+ variables will have been set up at this point.
+ </p>
+
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testStarted(java.lang.String)">testStarted</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html" title="interface in org.apache.jmeter.testelement">TestStateListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>host</CODE> - name of host<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/engine/StandardJMeterEngine.html#run()"><CODE>StandardJMeterEngine.run()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="testEnded(java.lang.String)"><!-- --></A><H3>
+testEnded</H3>
+<PRE>
+public void <B>testEnded</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testEnded(java.lang.String)">TestStateListener</A></CODE></B></DD>
+<DD><p>
+ Called once for all threads after the end of a test.
+
+ This will use the same element instances as at the start of the test.
+ </p>
+
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html#testEnded(java.lang.String)">testEnded</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestStateListener.html" title="interface in org.apache.jmeter.testelement">TestStateListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>host</CODE> - name of host<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/engine/StandardJMeterEngine.html#stopTest()"><CODE>StandardJMeterEngine.stopTest()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sampleOccurred(org.apache.jmeter.samplers.SampleEvent)"><!-- --></A><H3>
+sampleOccurred</H3>
+<PRE>
+public void <B>sampleOccurred</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">SampleListener</A></CODE></B></DD>
+<DD>A sample has started and stopped.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">sampleOccurred</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the <A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers"><CODE>SampleEvent</CODE></A> that has occurred</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sampleStarted(org.apache.jmeter.samplers.SampleEvent)"><!-- --></A><H3>
+sampleStarted</H3>
+<PRE>
+public void <B>sampleStarted</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStarted(org.apache.jmeter.samplers.SampleEvent)">SampleListener</A></CODE></B></DD>
+<DD>A sample has started.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStarted(org.apache.jmeter.samplers.SampleEvent)">sampleStarted</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the <A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers"><CODE>SampleEvent</CODE></A> that has started</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sampleStopped(org.apache.jmeter.samplers.SampleEvent)"><!-- --></A><H3>
+sampleStopped</H3>
+<PRE>
+public void <B>sampleStopped</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStopped(org.apache.jmeter.samplers.SampleEvent)">SampleListener</A></CODE></B></DD>
+<DD>A sample has stopped.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStopped(org.apache.jmeter.samplers.SampleEvent)">sampleStopped</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the <A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers"><CODE>SampleEvent</CODE></A> that has stopped</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/Remoteable.html" title="interface in org.apache.jmeter.samplers"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html" title="interface in org.apache.jmeter.samplers"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/samplers/RemoteListenerWrapper.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="RemoteListenerWrapper.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

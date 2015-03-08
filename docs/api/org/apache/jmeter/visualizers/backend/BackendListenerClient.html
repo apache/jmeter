@@ -1,0 +1,369 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+BackendListenerClient (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="BackendListenerClient (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListener.html" title="class in org.apache.jmeter.visualizers.backend"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../index.html?org/apache/jmeter/visualizers/backend/BackendListenerClient.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="BackendListenerClient.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.visualizers.backend</FONT>
+<BR>
+Interface BackendListenerClient</H2>
+<DL>
+<DT><B>All Known Implementing Classes:</B> <DD><A HREF="../../../../../org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" title="class in org.apache.jmeter.visualizers.backend">AbstractBackendListenerClient</A>, <A HREF="../../../../../org/apache/jmeter/visualizers/backend/graphite/GraphiteBackendListenerClient.html" title="class in org.apache.jmeter.visualizers.backend.graphite">GraphiteBackendListenerClient</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>BackendListenerClient</B></DL>
+</PRE>
+
+<P>
+This interface defines the interactions between the BackendListener and external
+ Java programs which can be executed by JMeter. Any Java class which wants to
+ be executed as a JMeter test must implement this interface (either directly
+ or indirectly through AbstractBackendListenerClient).
+ <p>
+ JMeter will create one instance of a BackendListenerClient implementation for
+ each user/thread in the test. Additional instances may be created for
+ internal use by JMeter (for example, to find out what parameters are
+ supported by the client).
+ <p>
+ When the test is started, setupTest() will be called on each thread's
+ BackendListenerClient instance to initialize the client. Then handleSampleResult() will be
+ called for each SampleResult notification. Finally, teardownTest() will be called
+ to allow the client to do any necessary clean-up.
+ <p>
+ The JMeter BackendListener GUI allows a list of parameters to be defined for the
+ test. These are passed to the various test methods through the
+ <A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend"><CODE>BackendListenerContext</CODE></A>. A list of default parameters can be defined
+ through the getDefaultParameters() method. These parameters and any default
+ values associated with them will be shown in the GUI. Users can add other
+ parameters as well.
+ <p>
+ When possible, Listeners should extend <A HREF="../../../../../org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" title="class in org.apache.jmeter.visualizers.backend"><CODE>AbstractBackendListenerClient</CODE></A> rather than implementing BackendListenerClient
+ directly. This should protect your tests from future changes to the
+ interface. While it may be necessary to make changes to the BackendListenerClient
+ interface from time to time (therefore requiring changes to any
+ implementations of this interface), we intend to make this abstract class
+ provide reasonable default implementations of any new methods so that
+ subclasses do not necessarily need to be updated for new versions.
+ Implementing BackendListenerClient directly will continue to be supported for
+ cases where extending this class is not possible (for example, when the
+ client class is already a subclass of some other class).
+<P>
+
+<P>
+<DL>
+<DT><B>Since:</B></DT>
+  <DD>2.13</DD>
+</DL>
+<HR>
+
+<P>
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerClient.html#createSampleResult(org.apache.jmeter.visualizers.backend.BackendListenerContext, org.apache.jmeter.samplers.SampleResult)">createSampleResult</A></B>(<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context,
+                   <A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a copy of SampleResult, this method is here to allow customizing 
+ what is kept in the copy, for example copy could remove some useless fields.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerClient.html#getDefaultParameters()">getDefaultParameters</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Provide a list of parameters which this test supports.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerClient.html#handleSampleResults(java.util.List, org.apache.jmeter.visualizers.backend.BackendListenerContext)">handleSampleResults</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&gt;&nbsp;sampleResults,
+                    <A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Handle sampleResults, this can be done in many ways:
+ 
+ Write to a file
+ Write to a distant server
+ ...</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerClient.html#setupTest(org.apache.jmeter.visualizers.backend.BackendListenerContext)">setupTest</A></B>(<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Do any initialization required by this client.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerClient.html#teardownTest(org.apache.jmeter.visualizers.backend.BackendListenerContext)">teardownTest</A></B>(<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Do any clean-up required at the end of a test run.</TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="setupTest(org.apache.jmeter.visualizers.backend.BackendListenerContext)"><!-- --></A><H3>
+setupTest</H3>
+<PRE>
+void <B>setupTest</B>(<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context)
+               throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</A></PRE>
+<DL>
+<DD>Do any initialization required by this client. It is generally
+ recommended to do any initialization such as getting parameter values in
+ the setupTest method rather than the runTest method in order to add as
+ little overhead as possible to the test.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - the context to run with. This provides access to
+            initialization parameters.
+            Context is readonly
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</A></CODE> - when setup fails</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="handleSampleResults(java.util.List, org.apache.jmeter.visualizers.backend.BackendListenerContext)"><!-- --></A><H3>
+handleSampleResults</H3>
+<PRE>
+void <B>handleSampleResults</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&gt;&nbsp;sampleResults,
+                         <A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context)</PRE>
+<DL>
+<DD>Handle sampleResults, this can be done in many ways:
+ <ul>
+ <li>Write to a file</li>
+ <li>Write to a distant server</li>
+ <li>...</li>
+ </ul>
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>sampleResults</CODE> - List of <A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers"><CODE>SampleResult</CODE></A><DD><CODE>context</CODE> - the context to run with. This provides access to
+            initialization parameters.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="teardownTest(org.apache.jmeter.visualizers.backend.BackendListenerContext)"><!-- --></A><H3>
+teardownTest</H3>
+<PRE>
+void <B>teardownTest</B>(<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context)
+                  throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</A></PRE>
+<DL>
+<DD>Do any clean-up required at the end of a test run.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - the context to run with. This provides access to
+            initialization parameters.
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</A></CODE> - when tear down fails</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getDefaultParameters()"><!-- --></A><H3>
+getDefaultParameters</H3>
+<PRE>
+<A HREF="../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</A> <B>getDefaultParameters</B>()</PRE>
+<DL>
+<DD>Provide a list of parameters which this test supports. Any parameter
+ names and associated values returned by this method will appear in the
+ GUI by default so the user doesn't have to remember the exact names. The
+ user can add other parameters which are not listed here. If this method
+ returns null then no parameters will be listed. If the value for some
+ parameter is null then that parameter will be listed in the GUI with an
+ empty value.
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>a specification of the parameters used by this test which should
+         be listed in the GUI, or null if no parameters should be listed.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="createSampleResult(org.apache.jmeter.visualizers.backend.BackendListenerContext, org.apache.jmeter.samplers.SampleResult)"><!-- --></A><H3>
+createSampleResult</H3>
+<PRE>
+<A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A> <B>createSampleResult</B>(<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerContext</A>&nbsp;context,
+                                <A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result)</PRE>
+<DL>
+<DD>Create a copy of SampleResult, this method is here to allow customizing 
+ what is kept in the copy, for example copy could remove some useless fields.
+ Note that if it returns null, the sample result is not put in the queue.
+ Defaults to returning result.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - <A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend"><CODE>BackendListenerContext</CODE></A><DD><CODE>result</CODE> - <A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers"><CODE>SampleResult</CODE></A>
+<DT><B>Returns:</B><DD><A HREF="../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers"><CODE>SampleResult</CODE></A></DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListener.html" title="class in org.apache.jmeter.visualizers.backend"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../org/apache/jmeter/visualizers/backend/BackendListenerContext.html" title="class in org.apache.jmeter.visualizers.backend"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../index.html?org/apache/jmeter/visualizers/backend/BackendListenerClient.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="BackendListenerClient.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

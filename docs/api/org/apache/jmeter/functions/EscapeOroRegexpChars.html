@@ -1,0 +1,374 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+EscapeOroRegexpChars (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="EscapeOroRegexpChars (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/functions/EscapeHtml.html" title="class in org.apache.jmeter.functions"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/functions/EvalFunction.html" title="class in org.apache.jmeter.functions"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/functions/EscapeOroRegexpChars.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="EscapeOroRegexpChars.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.functions</FONT>
+<BR>
+Class EscapeOroRegexpChars</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">org.apache.jmeter.functions.AbstractFunction</A>
+      <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.functions.EscapeOroRegexpChars</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../../org/apache/jmeter/functions/Function.html" title="interface in org.apache.jmeter.functions">Function</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>EscapeOroRegexpChars</B><DT>extends <A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A></DL>
+</PRE>
+
+<P>
+Escape ORO meta characters
+<P>
+
+<P>
+<DL>
+<DT><B>Since:</B></DT>
+  <DD>2.9</DD>
+</DL>
+<HR>
+
+<P>
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/functions/EscapeOroRegexpChars.html#EscapeOroRegexpChars()">EscapeOroRegexpChars</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No-arg constructor.</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/functions/EscapeOroRegexpChars.html#execute(org.apache.jmeter.samplers.SampleResult, org.apache.jmeter.samplers.Sampler)">execute</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;previousResult,
+        <A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</A>&nbsp;currentSampler)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>
+ N.B. execute() should be synchronized if function is operating with non-thread-safe
+ objects (e.g. operates with files).</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/functions/EscapeOroRegexpChars.html#getArgumentDesc()">getArgumentDesc</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return a list of strings briefly describing each parameter your function
+ takes.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/functions/EscapeOroRegexpChars.html#getReferenceKey()">getReferenceKey</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return the name of your function.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/functions/EscapeOroRegexpChars.html#setParameters(java.util.Collection)">setParameters</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</A>&lt;<A HREF="../../../../org/apache/jmeter/engine/util/CompoundVariable.html" title="class in org.apache.jmeter.engine.util">CompoundVariable</A>&gt;&nbsp;parameters)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: This is always called even if no parameters are provided
+ (versions of JMeter after 2.3.1)</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.functions.AbstractFunction"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class org.apache.jmeter.functions.<A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#checkMinParameterCount(java.util.Collection, int)">checkMinParameterCount</A>, <A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#checkParameterCount(java.util.Collection, int)">checkParameterCount</A>, <A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#checkParameterCount(java.util.Collection, int, int)">checkParameterCount</A>, <A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#execute()">execute</A>, <A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#getVariables()">getVariables</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="EscapeOroRegexpChars()"><!-- --></A><H3>
+EscapeOroRegexpChars</H3>
+<PRE>
+public <B>EscapeOroRegexpChars</B>()</PRE>
+<DL>
+<DD>No-arg constructor.
+<P>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="execute(org.apache.jmeter.samplers.SampleResult, org.apache.jmeter.samplers.Sampler)"><!-- --></A><H3>
+execute</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>execute</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;previousResult,
+                      <A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</A>&nbsp;currentSampler)
+               throws <A HREF="../../../../org/apache/jmeter/functions/InvalidVariableException.html" title="class in org.apache.jmeter.functions">InvalidVariableException</A></PRE>
+<DL>
+<DD><p><b>
+ N.B. execute() should be synchronized if function is operating with non-thread-safe
+ objects (e.g. operates with files).
+ </b></p>
+ JMeter ensures setParameters() happens-before execute(): setParameters is executed in main thread,
+ and worker threads are started after that.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/functions/Function.html#execute(org.apache.jmeter.samplers.SampleResult, org.apache.jmeter.samplers.Sampler)">execute</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/functions/Function.html" title="interface in org.apache.jmeter.functions">Function</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#execute(org.apache.jmeter.samplers.SampleResult, org.apache.jmeter.samplers.Sampler)">execute</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>previousResult</CODE> - The previous <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers"><CODE>SampleResult</CODE></A><DD><CODE>currentSampler</CODE> - The current <A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers"><CODE>Sampler</CODE></A>
+<DT><B>Returns:</B><DD>The replacement value, which was generated by the function
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="../../../../org/apache/jmeter/functions/InvalidVariableException.html" title="class in org.apache.jmeter.functions">InvalidVariableException</A></CODE> - - when the variables for the function call can't be evaluated<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/functions/Function.html#execute(org.apache.jmeter.samplers.SampleResult, org.apache.jmeter.samplers.Sampler)"><CODE>Function.execute(SampleResult, Sampler)</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setParameters(java.util.Collection)"><!-- --></A><H3>
+setParameters</H3>
+<PRE>
+public void <B>setParameters</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</A>&lt;<A HREF="../../../../org/apache/jmeter/engine/util/CompoundVariable.html" title="class in org.apache.jmeter.engine.util">CompoundVariable</A>&gt;&nbsp;parameters)
+                   throws <A HREF="../../../../org/apache/jmeter/functions/InvalidVariableException.html" title="class in org.apache.jmeter.functions">InvalidVariableException</A></PRE>
+<DL>
+<DD>Note: This is always called even if no parameters are provided
+ (versions of JMeter after 2.3.1)
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/functions/Function.html#setParameters(java.util.Collection)">setParameters</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/functions/Function.html" title="interface in org.apache.jmeter.functions">Function</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#setParameters(java.util.Collection)">setParameters</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>parameters</CODE> - The parameters for the function call
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="../../../../org/apache/jmeter/functions/InvalidVariableException.html" title="class in org.apache.jmeter.functions">InvalidVariableException</A></CODE> - - when the variables for the function call can't be evaluated<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/functions/Function.html#setParameters(java.util.Collection)"><CODE>Function.setParameters(Collection)</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getReferenceKey()"><!-- --></A><H3>
+getReferenceKey</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getReferenceKey</B>()</PRE>
+<DL>
+<DD>Return the name of your function. Convention is to prepend "__" to the
+ name (ie "__regexFunction")
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/functions/Function.html#getReferenceKey()">getReferenceKey</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/functions/Function.html" title="interface in org.apache.jmeter.functions">Function</A></CODE><DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html#getReferenceKey()">getReferenceKey</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>The name of the funtion<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/functions/Function.html#getReferenceKey()"><CODE>Function.getReferenceKey()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getArgumentDesc()"><!-- --></A><H3>
+getArgumentDesc</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>getArgumentDesc</B>()</PRE>
+<DL>
+<DD>Return a list of strings briefly describing each parameter your function
+ takes. Please use JMeterUtils.getResString(resource_name) to grab a
+ resource string. Otherwise, your help text will be difficult to
+ internationalize.
+
+ This list is not optional. If you don't wish to write help, you must at
+ least return a List containing the correct number of blank strings, one
+ for each argument.
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>List with brief descriptions for each parameter the function takes</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/functions/EscapeHtml.html" title="class in org.apache.jmeter.functions"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/functions/EvalFunction.html" title="class in org.apache.jmeter.functions"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/functions/EscapeOroRegexpChars.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="EscapeOroRegexpChars.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

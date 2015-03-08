@@ -1,0 +1,410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+RemoteSampleListener (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RemoteSampleListener (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html" title="class in org.apache.jmeter.samplers"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListenerImpl.html" title="class in org.apache.jmeter.samplers"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/samplers/RemoteSampleListener.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="RemoteSampleListener.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.samplers</FONT>
+<BR>
+Interface RemoteSampleListener</H2>
+<DL>
+<DT><B>All Superinterfaces:</B> <DD><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/Remote.html?is-external=true" title="class or interface in java.rmi">Remote</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Implementing Classes:</B> <DD><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListenerImpl.html" title="class in org.apache.jmeter.samplers">RemoteSampleListenerImpl</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>RemoteSampleListener</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/Remote.html?is-external=true" title="class or interface in java.rmi">Remote</A></DL>
+</PRE>
+
+<P>
+Allows notification on events occurring during the sampling process.
+ Specifically, when sampling is started, when a specific sample is obtained,
+ and when sampling is stopped.
+<P>
+
+<P>
+<DL>
+<DT><B>Version:</B></DT>
+  <DD>$Revision: 1649775 $</DD>
+</DL>
+<HR>
+
+<P>
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#processBatch(java.util.List)">processBatch</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&gt;&nbsp;samples)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method is called remotely and fires a list of samples events
+ received locally.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">sampleOccurred</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sample has started and stopped.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#sampleStarted(org.apache.jmeter.samplers.SampleEvent)">sampleStarted</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sample has started.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#sampleStopped(org.apache.jmeter.samplers.SampleEvent)">sampleStopped</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sample has stopped.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#testEnded()">testEnded</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#testEnded(java.lang.String)">testEnded</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#testStarted()">testStarted</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListener.html#testStarted(java.lang.String)">testStarted</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="testStarted()"><!-- --></A><H3>
+testStarted</H3>
+<PRE>
+void <B>testStarted</B>()
+                 throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="testStarted(java.lang.String)"><!-- --></A><H3>
+testStarted</H3>
+<PRE>
+void <B>testStarted</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)
+                 throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="testEnded()"><!-- --></A><H3>
+testEnded</H3>
+<PRE>
+void <B>testEnded</B>()
+               throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="testEnded(java.lang.String)"><!-- --></A><H3>
+testEnded</H3>
+<PRE>
+void <B>testEnded</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;host)
+               throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="processBatch(java.util.List)"><!-- --></A><H3>
+processBatch</H3>
+<PRE>
+void <B>processBatch</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&gt;&nbsp;samples)
+                  throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD>This method is called remotely and fires a list of samples events
+ received locally. The function is to reduce network load when using
+ remote testing.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>samples</CODE> - the list of sample events to be fired locally.
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE> - when calling the remote method fails</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sampleOccurred(org.apache.jmeter.samplers.SampleEvent)"><!-- --></A><H3>
+sampleOccurred</H3>
+<PRE>
+void <B>sampleOccurred</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)
+                    throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD>A sample has started and stopped.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the event with data about the completed sample
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE> - when calling the remote method fails</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sampleStarted(org.apache.jmeter.samplers.SampleEvent)"><!-- --></A><H3>
+sampleStarted</H3>
+<PRE>
+void <B>sampleStarted</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)
+                   throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD>A sample has started.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the event with data about the started sample
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE> - when calling the remote method fails</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sampleStopped(org.apache.jmeter.samplers.SampleEvent)"><!-- --></A><H3>
+sampleStopped</H3>
+<PRE>
+void <B>sampleStopped</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;e)
+                   throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></PRE>
+<DL>
+<DD>A sample has stopped.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the event with data about the stopped sample
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/rmi/RemoteException.html?is-external=true" title="class or interface in java.rmi">RemoteException</A></CODE> - when calling the remote method fails</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html" title="class in org.apache.jmeter.samplers"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListenerImpl.html" title="class in org.apache.jmeter.samplers"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/samplers/RemoteSampleListener.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="RemoteSampleListener.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+org.apache.jmeter.protocol.http.sampler (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="org.apache.jmeter.protocol.http.sampler (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Package</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Class</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/proxy/gui/package-summary.html"><B>PREV PACKAGE</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/util/package-summary.html"><B>NEXT PACKAGE</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../index.html?org/apache/jmeter/protocol/http/sampler/package-summary.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="package-summary.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<H2>
+Package org.apache.jmeter.protocol.http.sampler
+</H2>
+
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Class Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/AccessLogSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">AccessLogSampler</A></B></TD>
+<TD>Description: <br>
+ <br>
+ AccessLogSampler is responsible for a couple of things:
+ 
+ creating instances of Generator
+ creating instances of Parser
+ triggering popup windows
+ calling Generator.generateRequest()
+ checking to make sure the classes are valid
+ making sure a class can be instantiated
+ 
+ The intent of this sampler is it uses the generator and parser to create a
+ HTTPSampler when it is needed.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/AccessLogSamplerBeanInfo.html" title="class in org.apache.jmeter.protocol.http.sampler">AccessLogSamplerBeanInfo</A></B></TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/AjpSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">AjpSampler</A></B></TD>
+<TD>Selector for the AJP/1.3 protocol
+ (i.e. what Tomcat uses with mod_jk)
+ It allows you to test Tomcat in AJP mode without
+ actually having Apache installed and configured</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPAbstractImpl</A></B></TD>
+<TD>Base class for HTTP implementations used by the HTTPSamplerProxy sampler.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HttpClientDefaultParameters.html" title="class in org.apache.jmeter.protocol.http.sampler">HttpClientDefaultParameters</A></B></TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPFileImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPFileImpl</A></B></TD>
+<TD>HTTP Sampler which can read from file: URLs</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC3Impl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHC3Impl</A></B></TD>
+<TD>HTTP sampler using Apache (Jakarta) Commons HttpClient 3.1.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHC4Impl</A></B></TD>
+<TD>HTTP Sampler using Apache HttpClient 4.x.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.HttpDelete.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHC4Impl.HttpDelete</A></B></TD>
+<TD>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHCAbstractImpl</A></B></TD>
+<TD>Common parent class for HttpClient implementations.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPJavaImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPJavaImpl</A></B></TD>
+<TD>A sampler which understands all the parts necessary to read statistics about
+ HTTP requests, including cookies and authentication.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampler</A></B></TD>
+<TD>A sampler which understands all the parts necessary to read statistics about
+ HTTP requests, including cookies and authentication.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampler2.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampler2</A></B></TD>
+<TD>A sampler which understands all the parts necessary to read statistics about
+ HTTP requests, including cookies and authentication.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBase</A></B></TD>
+<TD>Common constants and methods for HTTP samplers</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBaseBeanInfo.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBaseBeanInfo</A></B></TD>
+<TD>This is the BeanInfo class for the TestBean HTTPSamplerBase.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBaseConverter.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBaseConverter</A></B></TD>
+<TD>Class for XStream conversion of HTTPResult</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A></B></TD>
+<TD>This is a specialisation of the SampleResult class for the HTTP protocol.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerFactory.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerFactory</A></B></TD>
+<TD>Factory to return the appropriate HTTPSampler for use with classes that need
+ an HTTPSampler; also creates the implementations for use with HTTPSamplerProxy.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerProxy.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerProxy</A></B></TD>
+<TD>Proxy class that dispatches to the appropriate HTTP sampler.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HttpWebdav.html" title="class in org.apache.jmeter.protocol.http.sampler">HttpWebdav</A></B></TD>
+<TD>WebDav request</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/MeasuringConnectionManager.html" title="class in org.apache.jmeter.protocol.http.sampler">MeasuringConnectionManager</A></B></TD>
+<TD>Adapter for <CODE>PoolingClientConnectionManager</CODE>
+ that wraps all connection requests into time-measured implementation a private
+ MeasuringConnectionRequest</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/PostWriter.html" title="class in org.apache.jmeter.protocol.http.sampler">PostWriter</A></B></TD>
+<TD>Class for setting the necessary headers for a POST request, and sending the
+ body of the POST.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/PutWriter.html" title="class in org.apache.jmeter.protocol.http.sampler">PutWriter</A></B></TD>
+<TD>Class for setting the necessary headers for a PUT request, and sending the
+ body of the PUT.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/SoapSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">SoapSampler</A></B></TD>
+<TD>Commons HTTPClient based soap sampler</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/WebServiceSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">WebServiceSampler</A></B></TD>
+<TD>Sampler to handle Web Service requests.</TD>
+</TR>
+</TABLE>
+&nbsp;
+
+<P>
+
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Enum Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.SourceType.html" title="enum in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBase.SourceType</A></B></TD>
+<TD>&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+
+<P>
+<DL>
+</DL>
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Package</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Class</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/proxy/gui/package-summary.html"><B>PREV PACKAGE</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/util/package-summary.html"><B>NEXT PACKAGE</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../index.html?org/apache/jmeter/protocol/http/sampler/package-summary.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="package-summary.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

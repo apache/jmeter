@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+Searchable (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Searchable (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/SavePropertyDialog.html" title="class in org.apache.jmeter.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/ServerPanel.html" title="class in org.apache.jmeter.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/gui/Searchable.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="Searchable.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.gui</FONT>
+<BR>
+Interface Searchable</H2>
+<DL>
+<DT><B>All Known Implementing Classes:</B> <DD><A HREF="../../../../org/apache/jmeter/protocol/jdbc/processor/AbstractJDBCProcessor.html" title="class in org.apache.jmeter.protocol.jdbc.processor">AbstractJDBCProcessor</A>, <A HREF="../../../../org/apache/jmeter/protocol/jdbc/AbstractJDBCTestElement.html" title="class in org.apache.jmeter.protocol.jdbc">AbstractJDBCTestElement</A>, <A HREF="../../../../org/apache/jmeter/reporters/AbstractListenerElement.html" title="class in org.apache.jmeter.reporters">AbstractListenerElement</A>, <A HREF="../../../../org/apache/jmeter/samplers/AbstractSampler.html" title="class in org.apache.jmeter.samplers">AbstractSampler</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractScopedAssertion.html" title="class in org.apache.jmeter.testelement">AbstractScopedAssertion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractScopedTestElement.html" title="class in org.apache.jmeter.testelement">AbstractScopedTestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A>, <A HREF="../../../../org/apache/jmeter/threads/AbstractThreadGroup.html" title="class in org.apache.jmeter.threads">AbstractThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/AccessLogSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">AccessLogSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/AjpSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">AjpSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/AnchorModifier.html" title="class in org.apache.jmeter.protocol.http.modifier">AnchorModifier</A>, <A HREF="../../../../org/apache/jmeter/config/Argument.html" title="class in org.apache.jmeter.config">Argument</A>, <A HREF="../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/AuthManager.html" title="class in org.apache.jmeter.protocol.http.control">AuthManager</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/Authorization.html" title="class in org.apache.jmeter.protocol.http.control">Authorization</A>, <A HREF="../../../../org/apache/jmeter/visualizers/backend/BackendListener.html" title="class in org.apache.jmeter.visualizers.backend">BackendListener</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/sampler/BaseJMSSampler.html" title="class in org.apache.jmeter.protocol.jms.sampler">BaseJMSSampler</A>, <A HREF="../../../../org/apache/jmeter/assertions/BeanShellAssertion.html" title="class in org.apache.jmeter.assertions">BeanShellAssertion</A>, <A HREF="../../../../org/apache/jmeter/visualizers/BeanShellListener.html" title="class in org.apache.jmeter.visualizers">BeanShellListener</A>, <A HREF="../../../../org/apache/jmeter/extractor/BeanShellPostProcessor.html" title="class in org.apache.jmeter.extractor">BeanShellPostProcessor</A>, <A HREF="../../../../org/apache/jmeter/modifiers/BeanShellPreProcessor.html" title="class in org.apache.jmeter.modifiers">BeanShellPreProcessor</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/sampler/BeanShellSampler.html" title="class in org.apache.jmeter.protocol.java.sampler">BeanShellSampler</A>, <A HREF="../../../../org/apache/jmeter/util/BeanShellTestElement.html" title="class in org.apache.jmeter.util">BeanShellTestElement</A>, <A HREF="../../../../org/apache/jmeter/timers/BeanShellTimer.html" title="class in org.apache.jmeter.timers">BeanShellTimer</A>, <A HREF="../../../../org/apache/jmeter/assertions/BSFAssertion.html" title="class in org.apache.jmeter.assertions">BSFAssertion</A>, <A HREF="../../../../org/apache/jmeter/visualizers/BSFListener.html" title="class in org.apache.jmeter.visualizers">BSFListener</A>, <A HREF="../../../../org/apache/jmeter/extractor/BSFPostProcessor.html" title="class in org.apache.jmeter.extractor">BSFPostProcessor</A>, <A HREF="../../../../org/apache/jmeter/modifiers/BSFPreProcessor.html" title="class in org.apache.jmeter.modifiers">BSFPreProcessor</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/sampler/BSFSampler.html" title="class in org.apache.jmeter.protocol.java.sampler">BSFSampler</A>, <A HREF="../../../../org/apache/jmeter/util/BSFTestElement.html" title="class in org.apache.jmeter.util">BSFTestElement</A>, <A HREF="../../../../org/apache/jmeter/timers/BSFTimer.html" title="class in org.apache.jmeter.timers">BSFTimer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/CacheManager.html" title="class in org.apache.jmeter.protocol.http.control">CacheManager</A>, <A HREF="../../../../org/apache/jmeter/assertions/CompareAssertion.html" title="class in org.apache.jmeter.assertions">CompareAssertion</A>, <A HREF="../../../../org/apache/jmeter/config/ConfigTestElement.html" title="class in org.apache.jmeter.config">ConfigTestElement</A>, <A HREF="../../../../org/apache/jmeter/timers/ConstantThroughputTimer.html" title="class in org.apache.jmeter.timers">ConstantThroughputTimer</A>, <A HREF="../../../../org/apache/jmeter/timers/ConstantTimer.html" title="class in org.apache.jmeter.timers">ConstantTimer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/Cookie.html" title="class in org.apache.jmeter.protocol.http.control">Cookie</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/CookieManager.html" title="class in org.apache.jmeter.protocol.http.control">CookieManager</A>, <A HREF="../../../../org/apache/jmeter/modifiers/CounterConfig.html" title="class in org.apache.jmeter.modifiers">CounterConfig</A>, <A HREF="../../../../org/apache/jmeter/control/CriticalSectionController.html" title="class in org.apache.jmeter.control">CriticalSectionController</A>, <A HREF="../../../../org/apache/jmeter/config/CSVDataSet.html" title="class in org.apache.jmeter.config">CSVDataSet</A>, <A HREF="../../../../org/apache/jmeter/protocol/jdbc/config/DataSourceElement.html" title="class in org.apache.jmeter.protocol.jdbc.config">DataSourceElement</A>, <A HREF="../../../../org/apache/jmeter/extractor/DebugPostProcessor.html" title="class in org.apache.jmeter.extractor">DebugPostProcessor</A>, <A HREF="../../../../org/apache/jmeter/sampler/DebugSampler.html" title="class in org.apache.jmeter.sampler">DebugSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/DNSCacheManager.html" title="class in org.apache.jmeter.protocol.http.control">DNSCacheManager</A>, <A HREF="../../../../org/apache/jmeter/assertions/DurationAssertion.html" title="class in org.apache.jmeter.assertions">DurationAssertion</A>, <A HREF="../../../../org/apache/jmeter/examples/testbeans/example1/Example1.html" title="class in org.apache.jmeter.examples.testbeans.example1">Example1</A>, <A HREF="../../../../org/apache/jmeter/examples/testbeans/example2/Example2.html" title="class in org.apache.jmeter.examples.testbeans.example2">Example2</A>, <A HREF="../../../../org/apache/jmeter/examples/testbeans/example3/Example3.html" title="class in org.apache.jmeter.examples.testbeans.example3">Example3</A>, <A HREF="../../../../org/apache/jmeter/examples/sampler/ExampleSampler.html" title="class in org.apache.jmeter.examples.sampler">ExampleSampler</A>, <A HREF="../../../../org/apache/jmeter/control/ForeachController.html" title="class in org.apache.jmeter.control">ForeachController</A>, <A HREF="../../../../org/apache/jmeter/protocol/ftp/sampler/FTPSampler.html" title="class in org.apache.jmeter.protocol.ftp.sampler">FTPSampler</A>, <A HREF="../../../../org/apache/jmeter/timers/GaussianRandomTimer.html" title="class in org.apache.jmeter.timers">GaussianRandomTimer</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/Header.html" title="class in org.apache.jmeter.protocol.http.control">Header</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/HeaderManager.html" title="class in org.apache.jmeter.protocol.http.control">HeaderManager</A>, <A HREF="../../../../org/apache/jmeter/assertions/HTMLAssertion.html" title="class in org.apache.jmeter.assertions">HTMLAssertion</A>, <A HREF="../../../../org/apache/jmeter/extractor/HtmlExtractor.html" title="class in org.apache.jmeter.extractor">HtmlExtractor</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/util/HTTPArgument.html" title="class in org.apache.jmeter.protocol.http.util">HTTPArgument</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/util/HTTPFileArg.html" title="class in org.apache.jmeter.protocol.http.util">HTTPFileArg</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/util/HTTPFileArgs.html" title="class in org.apache.jmeter.protocol.http.util">HTTPFileArgs</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/HttpMirrorControl.html" title="class in org.apache.jmeter.protocol.http.control">HttpMirrorControl</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampler2.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampler2</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBase</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerProxy.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerProxy</A>, <A HREF="../../../../org/apache/jmeter/control/IfController.html" title="class in org.apache.jmeter.control">IfController</A>, <A HREF="../../../../org/apache/jmeter/control/IncludeController.html" title="class in org.apache.jmeter.control">IncludeController</A>, <A HREF="../../../../org/apache/jmeter/control/InterleaveControl.html" title="class in org.apache.jmeter.control">InterleaveControl</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/config/JavaConfig.html" title="class in org.apache.jmeter.protocol.java.config">JavaConfig</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/sampler/JavaSampler.html" title="class in org.apache.jmeter.protocol.java.sampler">JavaSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/jdbc/processor/JDBCPostProcessor.html" title="class in org.apache.jmeter.protocol.jdbc.processor">JDBCPostProcessor</A>, <A HREF="../../../../org/apache/jmeter/protocol/jdbc/processor/JDBCPreProcessor.html" title="class in org.apache.jmeter.protocol.jdbc.processor">JDBCPreProcessor</A>, <A HREF="../../../../org/apache/jmeter/protocol/jdbc/sampler/JDBCSampler.html" title="class in org.apache.jmeter.protocol.jdbc.sampler">JDBCSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperties.html" title="class in org.apache.jmeter.protocol.jms.sampler">JMSProperties</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperty.html" title="class in org.apache.jmeter.protocol.jms.sampler">JMSProperty</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html" title="class in org.apache.jmeter.protocol.jms.sampler">JMSSampler</A>, <A HREF="../../../../org/apache/jmeter/assertions/JSR223Assertion.html" title="class in org.apache.jmeter.assertions">JSR223Assertion</A>, <A HREF="../../../../org/apache/jmeter/visualizers/JSR223Listener.html" title="class in org.apache.jmeter.visualizers">JSR223Listener</A>, <A HREF="../../../../org/apache/jmeter/extractor/JSR223PostProcessor.html" title="class in org.apache.jmeter.extractor">JSR223PostProcessor</A>, <A HREF="../../../../org/apache/jmeter/modifiers/JSR223PreProcessor.html" title="class in org.apache.jmeter.modifiers">JSR223PreProcessor</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/sampler/JSR223Sampler.html" title="class in org.apache.jmeter.protocol.java.sampler">JSR223Sampler</A>, <A HREF="../../../../org/apache/jmeter/util/JSR223TestElement.html" title="class in org.apache.jmeter.util">JSR223TestElement</A>, <A HREF="../../../../org/apache/jmeter/timers/JSR223Timer.html" title="class in org.apache.jmeter.timers">JSR223Timer</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/sampler/JUnitSampler.html" title="class in org.apache.jmeter.protocol.java.sampler">JUnitSampler</A>, <A HREF="../../../../org/apache/jmeter/config/KeystoreConfig.html" title="class in org.apache.jmeter.config">KeystoreConfig</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/config/gui/LDAPArgument.html" title="class in org.apache.jmeter.protocol.ldap.config.gui">LDAPArgument</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/config/gui/LDAPArguments.html" title="class in org.apache.jmeter.protocol.ldap.config.gui">LDAPArguments</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/sampler/LDAPExtSampler.html" title="class in org.apache.jmeter.protocol.ldap.sampler">LDAPExtSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/sampler/LDAPSampler.html" title="class in org.apache.jmeter.protocol.ldap.sampler">LDAPSampler</A>, <A HREF="../../../../org/apache/jmeter/config/LoginConfig.html" title="class in org.apache.jmeter.config">LoginConfig</A>, <A HREF="../../../../org/apache/jmeter/control/LoopController.html" title="class in org.apache.jmeter.control">LoopController</A>, <A HREF="../../../../org/apache/jmeter/reporters/MailerModel.html" title="class in org.apache.jmeter.reporters">MailerModel</A>, <A HREF="../../../../org/apache/jmeter/reporters/MailerResultCollector.html" title="class in org.apache.jmeter.reporters">MailerResultCollector</A>, <A HREF="../../../../org/apache/jmeter/protocol/mail/sampler/MailReaderSampler.html" title="class in org.apache.jmeter.protocol.mail.sampler">MailReaderSampler</A>, <A HREF="../../../../org/apache/jmeter/assertions/MD5HexAssertion.html" title="class in org.apache.jmeter.assertions">MD5HexAssertion</A>, <A HREF="../../../../org/apache/jmeter/control/ModuleController.html" title="class in org.apache.jmeter.control">ModuleController</A>, <A HREF="../../../../org/apache/jmeter/protocol/mongodb/sampler/MongoScriptSampler.html" title="class in org.apache.jmeter.protocol.mongodb.sampler">MongoScriptSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/mongodb/config/MongoSourceElement.html" title="class in org.apache.jmeter.protocol.mongodb.config">MongoSourceElement</A>, <A HREF="../../../../org/apache/jmeter/visualizers/MonitorStats.html" title="class in org.apache.jmeter.visualizers">MonitorStats</A>, <A HREF="../../../../org/apache/jmeter/control/OnceOnlyController.html" title="class in org.apache.jmeter.control">OnceOnlyController</A>, <A HREF="../../../../org/apache/jmeter/testelement/OnErrorTestElement.html" title="class in org.apache.jmeter.testelement">OnErrorTestElement</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/ParamMask.html" title="class in org.apache.jmeter.protocol.http.modifier">ParamMask</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/ParamModifier.html" title="class in org.apache.jmeter.protocol.http.modifier">ParamModifier</A>, <A HREF="../../../../org/apache/jmeter/timers/PoissonRandomTimer.html" title="class in org.apache.jmeter.timers">PoissonRandomTimer</A>, <A HREF="../../../../org/apache/jmeter/threads/PostThreadGroup.html" title="class in org.apache.jmeter.threads">PostThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/proxy/ProxyControl.html" title="class in org.apache.jmeter.protocol.http.proxy">ProxyControl</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/sampler/PublisherSampler.html" title="class in org.apache.jmeter.protocol.jms.sampler">PublisherSampler</A>, <A HREF="../../../../org/apache/jmeter/control/RandomController.html" title="class in org.apache.jmeter.control">RandomController</A>, <A HREF="../../../../org/apache/jmeter/control/RandomOrderController.html" title="class in org.apache.jmeter.control">RandomOrderController</A>, <A HREF="../../../../org/apache/jmeter/timers/RandomTimer.html" title="class in org.apache.jmeter.timers">RandomTimer</A>, <A HREF="../../../../org/apache/jmeter/config/RandomVariableConfig.html" title="class in org.apache.jmeter.config">RandomVariableConfig</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/RecordingController.html" title="class in org.apache.jmeter.protocol.http.control">RecordingController</A>, <A HREF="../../../../org/apache/jmeter/extractor/RegexExtractor.html" title="class in org.apache.jmeter.extractor">RegexExtractor</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/RegExUserParameters.html" title="class in org.apache.jmeter.protocol.http.modifier">RegExUserParameters</A>, <A HREF="../../../../org/apache/jmeter/samplers/RemoteListenerWrapper.html" title="class in org.apache.jmeter.samplers">RemoteListenerWrapper</A>, <A HREF="../../../../org/apache/jmeter/samplers/RemoteSampleListenerWrapper.html" title="class in org.apache.jmeter.samplers">RemoteSampleListenerWrapper</A>, <A HREF="../../../../org/apache/jmeter/samplers/RemoteTestListenerWrapper.html" title="class in org.apache.jmeter.samplers">RemoteTestListenerWrapper</A>, <A HREF="../../../../org/apache/jmeter/threads/RemoteThreadsListenerWrapper.html" title="class in org.apache.jmeter.threads">RemoteThreadsListenerWrapper</A>, <A HREF="../../../../org/apache/jmeter/assertions/ResponseAssertion.html" title="class in org.apache.jmeter.assertions">ResponseAssertion</A>, <A HREF="../../../../org/apache/jmeter/reporters/ResultAction.html" title="class in org.apache.jmeter.reporters">ResultAction</A>, <A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>, <A HREF="../../../../org/apache/jmeter/reporters/ResultSaver.html" title="class in org.apache.jmeter.reporters">ResultSaver</A>, <A HREF="../../../../org/apache/jmeter/control/RunTime.html" title="class in org.apache.jmeter.control">RunTime</A>, <A HREF="../../../../org/apache/jmeter/util/ScriptingTestElement.html" title="class in org.apache.jmeter.util">ScriptingTestElement</A>, <A HREF="../../../../org/apache/jmeter/threads/SetupThreadGroup.html" title="class in org.apache.jmeter.threads">SetupThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/assertions/SizeAssertion.html" title="class in org.apache.jmeter.assertions">SizeAssertion</A>, <A HREF="../../../../org/apache/jmeter/assertions/SMIMEAssertionTestElement.html" title="class in org.apache.jmeter.assertions">SMIMEAssertionTestElement</A>, <A HREF="../../../../org/apache/jmeter/protocol/smtp/sampler/SmtpSampler.html" title="class in org.apache.jmeter.protocol.smtp.sampler">SmtpSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/SoapSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">SoapSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/sampler/SubscriberSampler.html" title="class in org.apache.jmeter.protocol.jms.sampler">SubscriberSampler</A>, <A HREF="../../../../org/apache/jmeter/assertions/SubstitutionElement.html" title="class in org.apache.jmeter.assertions">SubstitutionElement</A>, <A HREF="../../../../org/apache/jmeter/reporters/Summariser.html" title="class in org.apache.jmeter.reporters">Summariser</A>, <A HREF="../../../../org/apache/jmeter/control/SwitchController.html" title="class in org.apache.jmeter.control">SwitchController</A>, <A HREF="../../../../org/apache/jmeter/timers/SyncTimer.html" title="class in org.apache.jmeter.timers">SyncTimer</A>, <A HREF="../../../../org/apache/jmeter/protocol/system/SystemSampler.html" title="class in org.apache.jmeter.protocol.system">SystemSampler</A>, <A HREF="../../../../org/apache/jmeter/protocol/tcp/sampler/TCPSampler.html" title="class in org.apache.jmeter.protocol.tcp.sampler">TCPSampler</A>, <A HREF="../../../../org/apache/jmeter/sampler/TestAction.html" title="class in org.apache.jmeter.sampler">TestAction</A>, <A HREF="../../../../org/apache/jmeter/control/TestFragmentController.html" title="class in org.apache.jmeter.control">TestFragmentController</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestPlan.html" title="class in org.apache.jmeter.testelement">TestPlan</A>, <A HREF="../../../../org/apache/jmeter/threads/ThreadGroup.html" title="class in org.apache.jmeter.threads">ThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/control/ThroughputController.html" title="class in org.apache.jmeter.control">ThroughputController</A>, <A HREF="../../../../org/apache/jmeter/control/TransactionController.html" title="class in org.apache.jmeter.control">TransactionController</A>, <A HREF="../../../../org/apache/jmeter/control/TransactionSampler.html" title="class in org.apache.jmeter.control">TransactionSampler</A>, <A HREF="../../../../org/apache/jmeter/timers/UniformRandomTimer.html" title="class in org.apache.jmeter.timers">UniformRandomTimer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/URLRewritingModifier.html" title="class in org.apache.jmeter.protocol.http.modifier">URLRewritingModifier</A>, <A HREF="../../../../org/apache/jmeter/modifiers/UserParameters.html" title="class in org.apache.jmeter.modifiers">UserParameters</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/sampler/WebServiceSampler.html" title="class in org.apache.jmeter.protocol.http.sampler">WebServiceSampler</A>, <A HREF="../../../../org/apache/jmeter/control/WhileController.html" title="class in org.apache.jmeter.control">WhileController</A>, <A HREF="../../../../org/apache/jmeter/testelement/WorkBench.html" title="class in org.apache.jmeter.testelement">WorkBench</A>, <A HREF="../../../../org/apache/jmeter/assertions/XMLAssertion.html" title="class in org.apache.jmeter.assertions">XMLAssertion</A>, <A HREF="../../../../org/apache/jmeter/assertions/XMLSchemaAssertion.html" title="class in org.apache.jmeter.assertions">XMLSchemaAssertion</A>, <A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html" title="class in org.apache.jmeter.assertions">XPathAssertion</A>, <A HREF="../../../../org/apache/jmeter/extractor/XPathExtractor.html" title="class in org.apache.jmeter.extractor">XPathExtractor</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>Searchable</B></DL>
+</PRE>
+
+<P>
+Interface for nodes that are searchable.
+ <p>
+ A <A HREF="../../../../org/apache/jmeter/gui/Searchable.html" title="interface in org.apache.jmeter.gui"><CODE>Searchable</CODE></A> component will get asked for tokens, that should be used
+ in a search. These tokens will then be matched against a user given search
+ string.
+<P>
+
+<P>
+<HR>
+
+<P>
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/Searchable.html#getSearchableTokens()">getSearchableTokens</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a list of all tokens that should be visible to searching</TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="getSearchableTokens()"><!-- --></A><H3>
+getSearchableTokens</H3>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>getSearchableTokens</B>()
+                                 throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</A></PRE>
+<DL>
+<DD>Get a list of all tokens that should be visible to searching
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>List of searchable tokens
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</A></CODE> - when something fails while getting the searchable tokens</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/SavePropertyDialog.html" title="class in org.apache.jmeter.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/ServerPanel.html" title="class in org.apache.jmeter.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/gui/Searchable.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="Searchable.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

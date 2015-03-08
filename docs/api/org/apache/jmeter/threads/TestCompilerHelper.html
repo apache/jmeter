@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+TestCompilerHelper (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="TestCompilerHelper (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/threads/TestCompiler.html" title="class in org.apache.jmeter.threads"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/threads/ThreadGroup.html" title="class in org.apache.jmeter.threads"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/threads/TestCompilerHelper.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="TestCompilerHelper.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.threads</FONT>
+<BR>
+Interface TestCompilerHelper</H2>
+<DL>
+<DT><B>All Known Implementing Classes:</B> <DD><A HREF="../../../../org/apache/jmeter/threads/AbstractThreadGroup.html" title="class in org.apache.jmeter.threads">AbstractThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/control/CriticalSectionController.html" title="class in org.apache.jmeter.control">CriticalSectionController</A>, <A HREF="../../../../org/apache/jmeter/control/ForeachController.html" title="class in org.apache.jmeter.control">ForeachController</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A>, <A HREF="../../../../org/apache/jmeter/control/IfController.html" title="class in org.apache.jmeter.control">IfController</A>, <A HREF="../../../../org/apache/jmeter/control/IncludeController.html" title="class in org.apache.jmeter.control">IncludeController</A>, <A HREF="../../../../org/apache/jmeter/control/InterleaveControl.html" title="class in org.apache.jmeter.control">InterleaveControl</A>, <A HREF="../../../../org/apache/jmeter/control/LoopController.html" title="class in org.apache.jmeter.control">LoopController</A>, <A HREF="../../../../org/apache/jmeter/control/ModuleController.html" title="class in org.apache.jmeter.control">ModuleController</A>, <A HREF="../../../../org/apache/jmeter/control/OnceOnlyController.html" title="class in org.apache.jmeter.control">OnceOnlyController</A>, <A HREF="../../../../org/apache/jmeter/threads/PostThreadGroup.html" title="class in org.apache.jmeter.threads">PostThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/proxy/ProxyControl.html" title="class in org.apache.jmeter.protocol.http.proxy">ProxyControl</A>, <A HREF="../../../../org/apache/jmeter/control/RandomController.html" title="class in org.apache.jmeter.control">RandomController</A>, <A HREF="../../../../org/apache/jmeter/control/RandomOrderController.html" title="class in org.apache.jmeter.control">RandomOrderController</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/RecordingController.html" title="class in org.apache.jmeter.protocol.http.control">RecordingController</A>, <A HREF="../../../../org/apache/jmeter/control/RunTime.html" title="class in org.apache.jmeter.control">RunTime</A>, <A HREF="../../../../org/apache/jmeter/threads/SetupThreadGroup.html" title="class in org.apache.jmeter.threads">SetupThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/control/SwitchController.html" title="class in org.apache.jmeter.control">SwitchController</A>, <A HREF="../../../../org/apache/jmeter/control/TestFragmentController.html" title="class in org.apache.jmeter.control">TestFragmentController</A>, <A HREF="../../../../org/apache/jmeter/threads/ThreadGroup.html" title="class in org.apache.jmeter.threads">ThreadGroup</A>, <A HREF="../../../../org/apache/jmeter/control/ThroughputController.html" title="class in org.apache.jmeter.control">ThroughputController</A>, <A HREF="../../../../org/apache/jmeter/control/TransactionController.html" title="class in org.apache.jmeter.control">TransactionController</A>, <A HREF="../../../../org/apache/jmeter/control/WhileController.html" title="class in org.apache.jmeter.control">WhileController</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>TestCompilerHelper</B></DL>
+</PRE>
+
+<P>
+Bug 53796 - TestCompiler uses static Set which can grow huge
+ 
+ This interface is a means to allow the pair data to be saved with the parent
+ instance, thus allowing it to be garbage collected when the thread completes.
+ 
+ This uses a bit more memory, as each controller test element includes the data
+ structure to contain the child element. However, there is no need to store the
+ parent element.
+<P>
+
+<P>
+<DL>
+<DT><B>Since:</B></DT>
+  <DD>2.8</DD>
+</DL>
+<HR>
+
+<P>
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/threads/TestCompilerHelper.html#addTestElementOnce(org.apache.jmeter.testelement.TestElement)">addTestElementOnce</A></B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;child)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Add child test element only if it has not already been added.</TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="addTestElementOnce(org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+addTestElementOnce</H3>
+<PRE>
+boolean <B>addTestElementOnce</B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;child)</PRE>
+<DL>
+<DD>Add child test element only if it has not already been added.
+ <p>
+ Only for use by TestCompiler.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>child</CODE> - the <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement"><CODE>TestElement</CODE></A> to be added
+<DT><B>Returns:</B><DD><code>true</code> if the child was added</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/threads/TestCompiler.html" title="class in org.apache.jmeter.threads"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/threads/ThreadGroup.html" title="class in org.apache.jmeter.threads"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/threads/TestCompilerHelper.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="TestCompilerHelper.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

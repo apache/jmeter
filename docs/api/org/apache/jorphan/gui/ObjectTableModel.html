@@ -1,0 +1,728 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+ObjectTableModel (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="ObjectTableModel (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jorphan/gui/NumberRenderer.html" title="class in org.apache.jorphan.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jorphan/gui/RateRenderer.html" title="class in org.apache.jorphan.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jorphan/gui/ObjectTableModel.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="ObjectTableModel.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_javax.swing.table.DefaultTableModel">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jorphan.gui</FONT>
+<BR>
+Class ObjectTableModel</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true" title="class or interface in javax.swing.table">javax.swing.table.AbstractTableModel</A>
+      <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">javax.swing.table.DefaultTableModel</A>
+          <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jorphan.gui.ObjectTableModel</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>ObjectTableModel</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></DL>
+</PRE>
+
+<P>
+The ObjectTableModel is a TableModel whose rows are objects;
+ columns are defined as Functors on the object.
+<P>
+
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jorphan.gui.ObjectTableModel">Serialized Form</A></DL>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_javax.swing.table.DefaultTableModel"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class javax.swing.table.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#columnIdentifiers" title="class or interface in javax.swing.table">columnIdentifiers</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#dataVector" title="class or interface in javax.swing.table">dataVector</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_javax.swing.table.AbstractTableModel"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class javax.swing.table.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true" title="class or interface in javax.swing.table">AbstractTableModel</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#listenerList" title="class or interface in javax.swing.table">listenerList</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#ObjectTableModel(java.lang.String[], java.lang.Class, org.apache.jorphan.reflect.Functor[], org.apache.jorphan.reflect.Functor[], java.lang.Class[])">ObjectTableModel</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;headers,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;_objClass,
+                 <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;readFunctors,
+                 <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;writeFunctors,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;[]&nbsp;editorClasses)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ObjectTableModel is a TableModel whose rows are objects;
+ columns are defined as Functors on the object.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#ObjectTableModel(java.lang.String[], java.lang.Class, org.apache.jorphan.reflect.Functor[], org.apache.jorphan.reflect.Functor[], java.lang.Class[], boolean)">ObjectTableModel</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;headers,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;_objClass,
+                 <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;readFunctors,
+                 <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;writeFunctors,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;[]&nbsp;editorClasses,
+                 boolean&nbsp;cellEditable)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ObjectTableModel is a TableModel whose rows are objects;
+ columns are defined as Functors on the object.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#ObjectTableModel(java.lang.String[], org.apache.jorphan.reflect.Functor[], org.apache.jorphan.reflect.Functor[], java.lang.Class[])">ObjectTableModel</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;headers,
+                 <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;readFunctors,
+                 <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;writeFunctors,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;[]&nbsp;editorClasses)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ObjectTableModel is a TableModel whose rows are objects;
+ columns are defined as Functors on the object.</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#addRow(java.lang.Object)">addRow</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;value)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#checkFunctors(java.lang.Object, java.lang.Class)">checkFunctors</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;_value,
+              <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;caller)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Check all registered functors.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#clearData()">clearData</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#getColumnClass(int)">getColumnClass</A></B>(int&nbsp;arg0)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#getColumnCount()">getColumnCount</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#getColumnName(int)">getColumnName</A></B>(int&nbsp;col)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#getObjectList()">getObjectList</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#getRowCount()">getRowCount</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#getValueAt(int, int)">getValueAt</A></B>(int&nbsp;row,
+           int&nbsp;col)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#insertRow(java.lang.Object, int)">insertRow</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;value,
+          int&nbsp;index)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#isCellEditable(int, int)">isCellEditable</A></B>(int&nbsp;arg0,
+               int&nbsp;arg1)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</A>&lt;?&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#iterator()">iterator</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#moveRow(int, int, int)">moveRow</A></B>(int&nbsp;start,
+        int&nbsp;end,
+        int&nbsp;to)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#removeRow(int)">removeRow</A></B>(int&nbsp;row)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#setRows(java.lang.Iterable)">setRows</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</A>&lt;?&gt;&nbsp;rows)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/ObjectTableModel.html#setValueAt(java.lang.Object, int, int)">setValueAt</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;cellValue,
+           int&nbsp;row,
+           int&nbsp;col)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_javax.swing.table.DefaultTableModel"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class javax.swing.table.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#addColumn(java.lang.Object)" title="class or interface in javax.swing.table">addColumn</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#addColumn(java.lang.Object, java.lang.Object[])" title="class or interface in javax.swing.table">addColumn</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#addColumn(java.lang.Object, java.util.Vector)" title="class or interface in javax.swing.table">addColumn</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#addRow(java.lang.Object[])" title="class or interface in javax.swing.table">addRow</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#addRow(java.util.Vector)" title="class or interface in javax.swing.table">addRow</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#convertToVector(java.lang.Object[])" title="class or interface in javax.swing.table">convertToVector</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#convertToVector(java.lang.Object[][])" title="class or interface in javax.swing.table">convertToVector</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#getDataVector()" title="class or interface in javax.swing.table">getDataVector</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#insertRow(int, java.lang.Object[])" title="class or interface in javax.swing.table">insertRow</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#insertRow(int, java.util.Vector)" title="class or interface in javax.swing.table">insertRow</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#newDataAvailable(javax.swing.event.TableModelEvent)" title="class or interface in javax.swing.table">newDataAvailable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#newRowsAdded(javax.swing.event.TableModelEvent)" title="class or interface in javax.swing.table">newRowsAdded</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#rowsRemoved(javax.swing.event.TableModelEvent)" title="class or interface in javax.swing.table">rowsRemoved</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setColumnCount(int)" title="class or interface in javax.swing.table">setColumnCount</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setColumnIdentifiers(java.lang.Object[])" title="class or interface in javax.swing.table">setColumnIdentifiers</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setColumnIdentifiers(java.util.Vector)" title="class or interface in javax.swing.table">setColumnIdentifiers</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setDataVector(java.lang.Object[][], java.lang.Object[])" title="class or interface in javax.swing.table">setDataVector</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setDataVector(java.util.Vector, java.util.Vector)" title="class or interface in javax.swing.table">setDataVector</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setNumRows(int)" title="class or interface in javax.swing.table">setNumRows</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setRowCount(int)" title="class or interface in javax.swing.table">setRowCount</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_javax.swing.table.AbstractTableModel"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class javax.swing.table.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true" title="class or interface in javax.swing.table">AbstractTableModel</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#addTableModelListener(javax.swing.event.TableModelListener)" title="class or interface in javax.swing.table">addTableModelListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#findColumn(java.lang.String)" title="class or interface in javax.swing.table">findColumn</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#fireTableCellUpdated(int, int)" title="class or interface in javax.swing.table">fireTableCellUpdated</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#fireTableChanged(javax.swing.event.TableModelEvent)" title="class or interface in javax.swing.table">fireTableChanged</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#fireTableDataChanged()" title="class or interface in javax.swing.table">fireTableDataChanged</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#fireTableRowsDeleted(int, int)" title="class or interface in javax.swing.table">fireTableRowsDeleted</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#fireTableRowsInserted(int, int)" title="class or interface in javax.swing.table">fireTableRowsInserted</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#fireTableRowsUpdated(int, int)" title="class or interface in javax.swing.table">fireTableRowsUpdated</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#fireTableStructureChanged()" title="class or interface in javax.swing.table">fireTableStructureChanged</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#getListeners(java.lang.Class)" title="class or interface in javax.swing.table">getListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#getTableModelListeners()" title="class or interface in javax.swing.table">getTableModelListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#removeTableModelListener(javax.swing.event.TableModelListener)" title="class or interface in javax.swing.table">removeTableModelListener</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="ObjectTableModel(java.lang.String[], java.lang.Class, org.apache.jorphan.reflect.Functor[], org.apache.jorphan.reflect.Functor[], java.lang.Class[])"><!-- --></A><H3>
+ObjectTableModel</H3>
+<PRE>
+public <B>ObjectTableModel</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;headers,
+                        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;_objClass,
+                        <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;readFunctors,
+                        <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;writeFunctors,
+                        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;[]&nbsp;editorClasses)</PRE>
+<DL>
+<DD>The ObjectTableModel is a TableModel whose rows are objects;
+ columns are defined as Functors on the object.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>headers</CODE> - - Column names<DD><CODE>_objClass</CODE> - - Object class that will be used<DD><CODE>readFunctors</CODE> - - used to get the values<DD><CODE>writeFunctors</CODE> - - used to set the values<DD><CODE>editorClasses</CODE> - - class for each column</DL>
+</DL>
+<HR>
+
+<A NAME="ObjectTableModel(java.lang.String[], java.lang.Class, org.apache.jorphan.reflect.Functor[], org.apache.jorphan.reflect.Functor[], java.lang.Class[], boolean)"><!-- --></A><H3>
+ObjectTableModel</H3>
+<PRE>
+public <B>ObjectTableModel</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;headers,
+                        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;_objClass,
+                        <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;readFunctors,
+                        <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;writeFunctors,
+                        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;[]&nbsp;editorClasses,
+                        boolean&nbsp;cellEditable)</PRE>
+<DL>
+<DD>The ObjectTableModel is a TableModel whose rows are objects;
+ columns are defined as Functors on the object.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>headers</CODE> - - Column names<DD><CODE>_objClass</CODE> - - Object class that will be used<DD><CODE>readFunctors</CODE> - - used to get the values<DD><CODE>writeFunctors</CODE> - - used to set the values<DD><CODE>editorClasses</CODE> - - class for each column<DD><CODE>cellEditable</CODE> - - if cell must editable (false to allow double click on cell)</DL>
+</DL>
+<HR>
+
+<A NAME="ObjectTableModel(java.lang.String[], org.apache.jorphan.reflect.Functor[], org.apache.jorphan.reflect.Functor[], java.lang.Class[])"><!-- --></A><H3>
+ObjectTableModel</H3>
+<PRE>
+public <B>ObjectTableModel</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;headers,
+                        <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;readFunctors,
+                        <A HREF="../../../../org/apache/jorphan/reflect/Functor.html" title="class in org.apache.jorphan.reflect">Functor</A>[]&nbsp;writeFunctors,
+                        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;[]&nbsp;editorClasses)</PRE>
+<DL>
+<DD>The ObjectTableModel is a TableModel whose rows are objects;
+ columns are defined as Functors on the object.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>headers</CODE> - - Column names<DD><CODE>readFunctors</CODE> - - used to get the values<DD><CODE>writeFunctors</CODE> - - used to set the values<DD><CODE>editorClasses</CODE> - - class for each column</DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="iterator()"><!-- --></A><H3>
+iterator</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</A>&lt;?&gt; <B>iterator</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="clearData()"><!-- --></A><H3>
+clearData</H3>
+<PRE>
+public void <B>clearData</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addRow(java.lang.Object)"><!-- --></A><H3>
+addRow</H3>
+<PRE>
+public void <B>addRow</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;value)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="insertRow(java.lang.Object, int)"><!-- --></A><H3>
+insertRow</H3>
+<PRE>
+public void <B>insertRow</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;value,
+                      int&nbsp;index)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getColumnCount()"><!-- --></A><H3>
+getColumnCount</H3>
+<PRE>
+public int <B>getColumnCount</B>()</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true#getColumnCount()" title="class or interface in javax.swing.table">getColumnCount</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#getColumnCount()" title="class or interface in javax.swing.table">getColumnCount</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getColumnName(int)"><!-- --></A><H3>
+getColumnName</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getColumnName</B>(int&nbsp;col)</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true#getColumnName(int)" title="class or interface in javax.swing.table">getColumnName</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#getColumnName(int)" title="class or interface in javax.swing.table">getColumnName</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getRowCount()"><!-- --></A><H3>
+getRowCount</H3>
+<PRE>
+public int <B>getRowCount</B>()</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true#getRowCount()" title="class or interface in javax.swing.table">getRowCount</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#getRowCount()" title="class or interface in javax.swing.table">getRowCount</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getValueAt(int, int)"><!-- --></A><H3>
+getValueAt</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A> <B>getValueAt</B>(int&nbsp;row,
+                         int&nbsp;col)</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true#getValueAt(int, int)" title="class or interface in javax.swing.table">getValueAt</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#getValueAt(int, int)" title="class or interface in javax.swing.table">getValueAt</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isCellEditable(int, int)"><!-- --></A><H3>
+isCellEditable</H3>
+<PRE>
+public boolean <B>isCellEditable</B>(int&nbsp;arg0,
+                              int&nbsp;arg1)</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true#isCellEditable(int, int)" title="class or interface in javax.swing.table">isCellEditable</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#isCellEditable(int, int)" title="class or interface in javax.swing.table">isCellEditable</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="moveRow(int, int, int)"><!-- --></A><H3>
+moveRow</H3>
+<PRE>
+public void <B>moveRow</B>(int&nbsp;start,
+                    int&nbsp;end,
+                    int&nbsp;to)</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#moveRow(int, int, int)" title="class or interface in javax.swing.table">moveRow</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="removeRow(int)"><!-- --></A><H3>
+removeRow</H3>
+<PRE>
+public void <B>removeRow</B>(int&nbsp;row)</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#removeRow(int)" title="class or interface in javax.swing.table">removeRow</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setValueAt(java.lang.Object, int, int)"><!-- --></A><H3>
+setValueAt</H3>
+<PRE>
+public void <B>setValueAt</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;cellValue,
+                       int&nbsp;row,
+                       int&nbsp;col)</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true#setValueAt(java.lang.Object, int, int)" title="class or interface in javax.swing.table">setValueAt</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true#setValueAt(java.lang.Object, int, int)" title="class or interface in javax.swing.table">setValueAt</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/DefaultTableModel.html?is-external=true" title="class or interface in javax.swing.table">DefaultTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getColumnClass(int)"><!-- --></A><H3>
+getColumnClass</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt; <B>getColumnClass</B>(int&nbsp;arg0)</PRE>
+<DL>
+<DD>
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true#getColumnClass(int)" title="class or interface in javax.swing.table">getColumnClass</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/TableModel.html?is-external=true" title="class or interface in javax.swing.table">TableModel</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true#getColumnClass(int)" title="class or interface in javax.swing.table">getColumnClass</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/table/AbstractTableModel.html?is-external=true" title="class or interface in javax.swing.table">AbstractTableModel</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="checkFunctors(java.lang.Object, java.lang.Class)"><!-- --></A><H3>
+checkFunctors</H3>
+<PRE>
+public boolean <B>checkFunctors</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;_value,
+                             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;caller)</PRE>
+<DL>
+<DD>Check all registered functors.
+ <p>
+ <b>** only for use in unit test code **</b>
+ </p>
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>_value</CODE> - - an instance of the table model row data item
+ (if null, use the class passed to the constructor).<DD><CODE>caller</CODE> - - class of caller.
+<DT><B>Returns:</B><DD>false if at least one Functor cannot be found.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getObjectList()"><!-- --></A><H3>
+getObjectList</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A> <B>getObjectList</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setRows(java.lang.Iterable)"><!-- --></A><H3>
+setRows</H3>
+<PRE>
+public void <B>setRows</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</A>&lt;?&gt;&nbsp;rows)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jorphan/gui/NumberRenderer.html" title="class in org.apache.jorphan.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jorphan/gui/RateRenderer.html" title="class in org.apache.jorphan.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jorphan/gui/ObjectTableModel.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="ObjectTableModel.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_javax.swing.table.DefaultTableModel">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

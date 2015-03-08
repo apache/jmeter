@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+DynamicClassLoader (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="DynamicClassLoader (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../../org/apache/jmeter/JMeter.html" title="class in org.apache.jmeter"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../index.html?org/apache/jmeter/DynamicClassLoader.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="DynamicClassLoader.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter</FONT>
+<BR>
+Class DynamicClassLoader</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">java.lang.ClassLoader</A>
+      <IMG SRC="../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/security/SecureClassLoader.html?is-external=true" title="class or interface in java.security">java.security.SecureClassLoader</A>
+          <IMG SRC="../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true" title="class or interface in java.net">java.net.URLClassLoader</A>
+              <IMG SRC="../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.DynamicClassLoader</B>
+</PRE>
+<HR>
+<DL>
+<DT><PRE>public class <B>DynamicClassLoader</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true" title="class or interface in java.net">URLClassLoader</A></DL>
+</PRE>
+
+<P>
+This is a basic URL classloader for loading new resources
+ dynamically.
+
+ It allows public access to the addURL() method.
+
+ It also adds a convenience method to update the current thread classloader
+<P>
+
+<P>
+<HR>
+
+<P>
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../org/apache/jmeter/DynamicClassLoader.html#DynamicClassLoader(java.net.URL[])">DynamicClassLoader</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../org/apache/jmeter/DynamicClassLoader.html#DynamicClassLoader(java.net.URL[], java.lang.ClassLoader)">DynamicClassLoader</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls,
+                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</A>&nbsp;parent)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../org/apache/jmeter/DynamicClassLoader.html#DynamicClassLoader(java.net.URL[], java.lang.ClassLoader, java.net.URLStreamHandlerFactory)">DynamicClassLoader</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls,
+                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</A>&nbsp;parent,
+                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLStreamHandlerFactory.html?is-external=true" title="class or interface in java.net">URLStreamHandlerFactory</A>&nbsp;factory)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../org/apache/jmeter/DynamicClassLoader.html#addURL(java.net.URL)">addURL</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../org/apache/jmeter/DynamicClassLoader.html#updateLoader(java.net.URL[])">updateLoader</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.net.URLClassLoader"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.net.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true" title="class or interface in java.net">URLClassLoader</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#definePackage(java.lang.String, java.util.jar.Manifest, java.net.URL)" title="class or interface in java.net">definePackage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#findClass(java.lang.String)" title="class or interface in java.net">findClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#findResource(java.lang.String)" title="class or interface in java.net">findResource</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#findResources(java.lang.String)" title="class or interface in java.net">findResources</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#getPermissions(java.security.CodeSource)" title="class or interface in java.net">getPermissions</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#getURLs()" title="class or interface in java.net">getURLs</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#newInstance(java.net.URL[])" title="class or interface in java.net">newInstance</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#newInstance(java.net.URL[], java.lang.ClassLoader)" title="class or interface in java.net">newInstance</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.security.SecureClassLoader"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.security.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/security/SecureClassLoader.html?is-external=true" title="class or interface in java.security">SecureClassLoader</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/security/SecureClassLoader.html?is-external=true#defineClass(java.lang.String, byte[], int, int, java.security.CodeSource)" title="class or interface in java.security">defineClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/security/SecureClassLoader.html?is-external=true#defineClass(java.lang.String, java.nio.ByteBuffer, java.security.CodeSource)" title="class or interface in java.security">defineClass</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.ClassLoader"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#clearAssertionStatus()" title="class or interface in java.lang">clearAssertionStatus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#defineClass(byte[], int, int)" title="class or interface in java.lang">defineClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#defineClass(java.lang.String, byte[], int, int)" title="class or interface in java.lang">defineClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#defineClass(java.lang.String, byte[], int, int, java.security.ProtectionDomain)" title="class or interface in java.lang">defineClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#defineClass(java.lang.String, java.nio.ByteBuffer, java.security.ProtectionDomain)" title="class or interface in java.lang">defineClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#definePackage(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.net.URL)" title="class or interface in java.lang">definePackage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#findLibrary(java.lang.String)" title="class or interface in java.lang">findLibrary</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#findLoadedClass(java.lang.String)" title="class or interface in java.lang">findLoadedClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#findSystemClass(java.lang.String)" title="class or interface in java.lang">findSystemClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getPackage(java.lang.String)" title="class or interface in java.lang">getPackage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getPackages()" title="class or interface in java.lang">getPackages</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getParent()" title="class or interface in java.lang">getParent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getResource(java.lang.String)" title="class or interface in java.lang">getResource</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getResourceAsStream(java.lang.String)" title="class or interface in java.lang">getResourceAsStream</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getResources(java.lang.String)" title="class or interface in java.lang">getResources</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getSystemClassLoader()" title="class or interface in java.lang">getSystemClassLoader</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getSystemResource(java.lang.String)" title="class or interface in java.lang">getSystemResource</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getSystemResourceAsStream(java.lang.String)" title="class or interface in java.lang">getSystemResourceAsStream</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#getSystemResources(java.lang.String)" title="class or interface in java.lang">getSystemResources</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#loadClass(java.lang.String)" title="class or interface in java.lang">loadClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#loadClass(java.lang.String, boolean)" title="class or interface in java.lang">loadClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#resolveClass(java.lang.Class)" title="class or interface in java.lang">resolveClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#setClassAssertionStatus(java.lang.String, boolean)" title="class or interface in java.lang">setClassAssertionStatus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#setDefaultAssertionStatus(boolean)" title="class or interface in java.lang">setDefaultAssertionStatus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#setPackageAssertionStatus(java.lang.String, boolean)" title="class or interface in java.lang">setPackageAssertionStatus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true#setSigners(java.lang.Class, java.lang.Object[])" title="class or interface in java.lang">setSigners</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="DynamicClassLoader(java.net.URL[])"><!-- --></A><H3>
+DynamicClassLoader</H3>
+<PRE>
+public <B>DynamicClassLoader</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls)</PRE>
+<DL>
+</DL>
+<HR>
+
+<A NAME="DynamicClassLoader(java.net.URL[], java.lang.ClassLoader)"><!-- --></A><H3>
+DynamicClassLoader</H3>
+<PRE>
+public <B>DynamicClassLoader</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls,
+                          <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</A>&nbsp;parent)</PRE>
+<DL>
+</DL>
+<HR>
+
+<A NAME="DynamicClassLoader(java.net.URL[], java.lang.ClassLoader, java.net.URLStreamHandlerFactory)"><!-- --></A><H3>
+DynamicClassLoader</H3>
+<PRE>
+public <B>DynamicClassLoader</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls,
+                          <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</A>&nbsp;parent,
+                          <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLStreamHandlerFactory.html?is-external=true" title="class or interface in java.net">URLStreamHandlerFactory</A>&nbsp;factory)</PRE>
+<DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="addURL(java.net.URL)"><!-- --></A><H3>
+addURL</H3>
+<PRE>
+public void <B>addURL</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true#addURL(java.net.URL)" title="class or interface in java.net">addURL</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URLClassLoader.html?is-external=true" title="class or interface in java.net">URLClassLoader</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="updateLoader(java.net.URL[])"><!-- --></A><H3>
+updateLoader</H3>
+<PRE>
+public static void <B>updateLoader</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>[]&nbsp;urls)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>urls</CODE> - - list of URLs to add to the thread's classloader</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../../org/apache/jmeter/JMeter.html" title="class in org.apache.jmeter"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../index.html?org/apache/jmeter/DynamicClassLoader.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="DynamicClassLoader.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

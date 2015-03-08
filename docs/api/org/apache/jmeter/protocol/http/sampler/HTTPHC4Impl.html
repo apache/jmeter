@@ -1,0 +1,672 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+HTTPHC4Impl (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="HTTPHC4Impl (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC3Impl.html" title="class in org.apache.jmeter.protocol.http.sampler"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.HttpDelete.html" title="class in org.apache.jmeter.protocol.http.sampler"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../index.html?org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="HTTPHC4Impl.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.protocol.http.sampler</FONT>
+<BR>
+Class HTTPHC4Impl</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">org.apache.jmeter.protocol.http.sampler.HTTPAbstractImpl</A>
+      <IMG SRC="../../../../../../resources/inherit.gif" ALT="extended by "><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl</A>
+          <IMG SRC="../../../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.protocol.http.sampler.HTTPHC4Impl</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html" title="interface in org.apache.jmeter.protocol.http.util">HTTPConstantsInterface</A>, <A HREF="../../../../../../org/apache/jmeter/samplers/Interruptible.html" title="interface in org.apache.jmeter.samplers">Interruptible</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>HTTPHC4Impl</B><DT>extends <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHCAbstractImpl</A></DL>
+</PRE>
+
+<P>
+HTTP Sampler using Apache HttpClient 4.x.
+<P>
+
+<P>
+<HR>
+
+<P>
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+
+<A NAME="nested_class_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Nested Class Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.HttpDelete.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHC4Impl.HttpDelete</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class org.apache.jmeter.protocol.http.sampler.<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHCAbstractImpl</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#CPS_HTTP">CPS_HTTP</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#CPS_HTTPS">CPS_HTTPS</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#HTTP_VERSION">HTTP_VERSION</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#localAddress">localAddress</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#localHost">localHost</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#NONPROXY_HOSTS">NONPROXY_HOSTS</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#nonProxyHostFull">nonProxyHostFull</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#nonProxyHostSuffix">nonProxyHostSuffix</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#nonProxyHostSuffixSize">nonProxyHostSuffixSize</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#PROXY_DEFINED">PROXY_DEFINED</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#PROXY_DOMAIN">PROXY_DOMAIN</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#PROXY_HOST">PROXY_HOST</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#PROXY_PASS">PROXY_PASS</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#PROXY_PORT">PROXY_PORT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#PROXY_USER">PROXY_USER</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#SO_TIMEOUT">SO_TIMEOUT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#USE_CACHED_SSL_CONTEXT">USE_CACHED_SSL_CONTEXT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#USE_LOOPBACK">USE_LOOPBACK</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.protocol.http.sampler.HTTPAbstractImpl"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class org.apache.jmeter.protocol.http.sampler.<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPAbstractImpl</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#testElement">testElement</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.protocol.http.util.HTTPConstantsInterface"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from interface org.apache.jmeter.protocol.http.util.<A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html" title="interface in org.apache.jmeter.protocol.http.util">HTTPConstantsInterface</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#APPLICATION_X_WWW_FORM_URLENCODED">APPLICATION_X_WWW_FORM_URLENCODED</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#CACHE_CONTROL">CACHE_CONTROL</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#CONNECT">CONNECT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#CONNECTION_CLOSE">CONNECTION_CLOSE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#COPY">COPY</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#DATE">DATE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#DEFAULT_HTTP_PORT">DEFAULT_HTTP_PORT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#DEFAULT_HTTP_PORT_STRING">DEFAULT_HTTP_PORT_STRING</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#DEFAULT_HTTPS_PORT">DEFAULT_HTTPS_PORT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#DEFAULT_HTTPS_PORT_STRING">DEFAULT_HTTPS_PORT_STRING</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#DELETE">DELETE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#ENCODING_GZIP">ENCODING_GZIP</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#ETAG">ETAG</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#EXPIRES">EXPIRES</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#GET">GET</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEAD">HEAD</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_AUTHORIZATION">HEADER_AUTHORIZATION</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_CONNECTION">HEADER_CONNECTION</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_CONTENT_DISPOSITION">HEADER_CONTENT_DISPOSITION</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_CONTENT_ENCODING">HEADER_CONTENT_ENCODING</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_CONTENT_LENGTH">HEADER_CONTENT_LENGTH</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_CONTENT_TYPE">HEADER_CONTENT_TYPE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_COOKIE">HEADER_COOKIE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_HOST">HEADER_HOST</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_LOCAL_ADDRESS">HEADER_LOCAL_ADDRESS</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_LOCATION">HEADER_LOCATION</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HEADER_SET_COOKIE">HEADER_SET_COOKIE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#HTTP_1_1">HTTP_1_1</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#IF_MODIFIED_SINCE">IF_MODIFIED_SINCE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#IF_NONE_MATCH">IF_NONE_MATCH</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#KEEP_ALIVE">KEEP_ALIVE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#LAST_MODIFIED">LAST_MODIFIED</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#LOCK">LOCK</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#MKCALENDAR">MKCALENDAR</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#MKCOL">MKCOL</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#MOVE">MOVE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#MULTIPART_FORM_DATA">MULTIPART_FORM_DATA</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#OPTIONS">OPTIONS</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#PATCH">PATCH</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#POST">POST</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#PROPFIND">PROPFIND</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#PROPPATCH">PROPPATCH</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#PROTOCOL_HTTP">PROTOCOL_HTTP</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#PROTOCOL_HTTPS">PROTOCOL_HTTPS</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#PUT">PUT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#REPORT">REPORT</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#TRACE">TRACE</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#TRANSFER_ENCODING">TRANSFER_ENCODING</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPConstantsInterface.html#UNLOCK">UNLOCK</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected </CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#HTTPHC4Impl(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase)">HTTPHC4Impl</A></B>(<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBase</A>&nbsp;testElement)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#createSampleResult(java.net.URL, java.lang.String)">createSampleResult</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;method)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create HTTPSampleResult filling url, method and SampleLabel.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#getCharsetWithDefault(org.apache.http.params.HttpParams)">getCharsetWithDefault</A></B>(org.apache.http.params.HttpParams&nbsp;putParams)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If contentEncoding is not set by user, then Platform encoding will be used to convert to String</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#handleMethod(java.lang.String, org.apache.jmeter.protocol.http.sampler.HTTPSampleResult, org.apache.http.client.methods.HttpRequestBase, org.apache.http.protocol.HttpContext)">handleMethod</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;method,
+             <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A>&nbsp;result,
+             org.apache.http.client.methods.HttpRequestBase&nbsp;httpRequest,
+             org.apache.http.protocol.HttpContext&nbsp;localContext)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calls <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#sendPostData(org.apache.http.client.methods.HttpPost)"><CODE>sendPostData(HttpPost)</CODE></A> if method is <code>POST</code> and
+ <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#sendEntityData(org.apache.http.client.methods.HttpEntityEnclosingRequestBase)"><CODE>sendEntityData(HttpEntityEnclosingRequestBase)</CODE></A> if method is
+ <code>PUT</code> or <code>PATCH</code>
+ 
+ Field HTTPSampleResult#queryString of result is modified in the 2 cases</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#interrupt()">interrupt</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interrupt the current operation if possible.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#notifyFirstSampleAfterLoopRestart()">notifyFirstSampleAfterLoopRestart</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#sample(java.net.URL, java.lang.String, boolean, int)">sample</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+       <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;method,
+       boolean&nbsp;areFollowingRedirect,
+       int&nbsp;frameDepth)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#sendEntityData(org.apache.http.client.methods.HttpEntityEnclosingRequestBase)">sendEntityData</A></B>(org.apache.http.client.methods.HttpEntityEnclosingRequestBase&nbsp;entity)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates the entity data to be sent.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#sendPostData(org.apache.http.client.methods.HttpPost)">sendPostData</A></B>(org.apache.http.client.methods.HttpPost&nbsp;post)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#setConnectionCookie(org.apache.http.HttpRequest, java.net.URL, org.apache.jmeter.protocol.http.control.CookieManager)">setConnectionCookie</A></B>(org.apache.http.HttpRequest&nbsp;request,
+                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                    <A HREF="../../../../../../org/apache/jmeter/protocol/http/control/CookieManager.html" title="class in org.apache.jmeter.protocol.http.control">CookieManager</A>&nbsp;cookieManager)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Extracts all the required cookies for that particular URL request and
+ sets them in the <code>HttpMethod</code> passed in.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#setConnectionHeaders(org.apache.http.client.methods.HttpRequestBase, java.net.URL, org.apache.jmeter.protocol.http.control.HeaderManager, org.apache.jmeter.protocol.http.control.CacheManager)">setConnectionHeaders</A></B>(org.apache.http.client.methods.HttpRequestBase&nbsp;request,
+                     <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                     <A HREF="../../../../../../org/apache/jmeter/protocol/http/control/HeaderManager.html" title="class in org.apache.jmeter.protocol.http.control">HeaderManager</A>&nbsp;headerManager,
+                     <A HREF="../../../../../../org/apache/jmeter/protocol/http/control/CacheManager.html" title="class in org.apache.jmeter.protocol.http.control">CacheManager</A>&nbsp;cacheManager)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Extracts all the required non-cookie headers for that particular URL request and
+ sets them in the <code>HttpMethod</code> passed in</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#setDefaultRequestHeaders(org.apache.http.HttpRequest)">setDefaultRequestHeaders</A></B>(org.apache.http.HttpRequest&nbsp;request)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set any default request headers to include</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#setupRequest(java.net.URL, org.apache.http.client.methods.HttpRequestBase, org.apache.jmeter.protocol.http.sampler.HTTPSampleResult)">setupRequest</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+             org.apache.http.client.methods.HttpRequestBase&nbsp;httpRequest,
+             <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A>&nbsp;res)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Setup following elements on httpRequest:
+ 
+ ConnRoutePNames.LOCAL_ADDRESS enabling IP-SPOOFING
+ Socket and connection timeout
+ Redirect handling
+ Keep Alive header or Connection Close
+ Calls setConnectionHeaders to setup headers
+ Calls setConnectionCookie to setup Cookie
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#threadFinished()">threadFinished</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class org.apache.jmeter.protocol.http.sampler.<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPHCAbstractImpl</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#isDynamicProxy(java.lang.String, int)">isDynamicProxy</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#isNonProxy(java.lang.String)">isNonProxy</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#isNullOrEmptyTrimmed(java.lang.String)">isNullOrEmptyTrimmed</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#isPartialMatch(java.lang.String)">isPartialMatch</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHCAbstractImpl.html#isStaticProxy(java.lang.String)">isStaticProxy</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.protocol.http.sampler.HTTPAbstractImpl"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class org.apache.jmeter.protocol.http.sampler.<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPAbstractImpl</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#errorResult(java.lang.Throwable, org.apache.jmeter.protocol.http.sampler.HTTPSampleResult)">errorResult</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getArguments()">getArguments</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getAuthManager()">getAuthManager</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getAutoRedirects()">getAutoRedirects</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getCacheManager()">getCacheManager</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getConnectTimeout()">getConnectTimeout</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getContentEncoding()">getContentEncoding</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getCookieManager()">getCookieManager</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getDoBrowserCompatibleMultipart()">getDoBrowserCompatibleMultipart</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getHeaderManager()">getHeaderManager</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getHTTPFiles()">getHTTPFiles</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getIpSource()">getIpSource</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getIpSourceAddress()">getIpSourceAddress</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getProxyHost()">getProxyHost</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getProxyPass()">getProxyPass</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getProxyPortInt()">getProxyPortInt</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getProxyUser()">getProxyUser</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getResponseTimeout()">getResponseTimeout</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getSendFileAsPostBody()">getSendFileAsPostBody</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getSendParameterValuesAsPostBody()">getSendParameterValuesAsPostBody</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getUseKeepAlive()">getUseKeepAlive</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getUseMultipartForPost()">getUseMultipartForPost</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#hasArguments()">hasArguments</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#isMonitor()">isMonitor</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#isSuccessCode(int)">isSuccessCode</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#notifySSLContextWasReset()">notifySSLContextWasReset</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#readResponse(org.apache.jmeter.samplers.SampleResult, java.io.BufferedInputStream, int)">readResponse</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#readResponse(org.apache.jmeter.samplers.SampleResult, java.io.InputStream, int)">readResponse</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#resultProcessing(boolean, int, org.apache.jmeter.protocol.http.sampler.HTTPSampleResult)">resultProcessing</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#setUseKeepAlive(boolean)">setUseKeepAlive</A>, <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#updateSampleResultForResourceInCache(org.apache.jmeter.protocol.http.sampler.HTTPSampleResult)">updateSampleResultForResourceInCache</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="HTTPHC4Impl(org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase)"><!-- --></A><H3>
+HTTPHC4Impl</H3>
+<PRE>
+protected <B>HTTPHC4Impl</B>(<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBase</A>&nbsp;testElement)</PRE>
+<DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="sample(java.net.URL, java.lang.String, boolean, int)"><!-- --></A><H3>
+sample</H3>
+<PRE>
+protected <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A> <B>sample</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                                  <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;method,
+                                  boolean&nbsp;areFollowingRedirect,
+                                  int&nbsp;frameDepth)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#sample(java.net.URL, java.lang.String, boolean, int)">sample</A></CODE> in class <CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPAbstractImpl</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="handleMethod(java.lang.String, org.apache.jmeter.protocol.http.sampler.HTTPSampleResult, org.apache.http.client.methods.HttpRequestBase, org.apache.http.protocol.HttpContext)"><!-- --></A><H3>
+handleMethod</H3>
+<PRE>
+protected void <B>handleMethod</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;method,
+                            <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A>&nbsp;result,
+                            org.apache.http.client.methods.HttpRequestBase&nbsp;httpRequest,
+                            org.apache.http.protocol.HttpContext&nbsp;localContext)
+                     throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Calls <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#sendPostData(org.apache.http.client.methods.HttpPost)"><CODE>sendPostData(HttpPost)</CODE></A> if method is <code>POST</code> and
+ <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html#sendEntityData(org.apache.http.client.methods.HttpEntityEnclosingRequestBase)"><CODE>sendEntityData(HttpEntityEnclosingRequestBase)</CODE></A> if method is
+ <code>PUT</code> or <code>PATCH</code>
+ <p>
+ Field HTTPSampleResult#queryString of result is modified in the 2 cases
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>method</CODE> - String HTTP method<DD><CODE>result</CODE> - <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler"><CODE>HTTPSampleResult</CODE></A><DD><CODE>httpRequest</CODE> - <CODE>HttpRequestBase</CODE><DD><CODE>localContext</CODE> - <CODE>HttpContext</CODE>
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - when posting data fails due to I/O</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="createSampleResult(java.net.URL, java.lang.String)"><!-- --></A><H3>
+createSampleResult</H3>
+<PRE>
+protected <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A> <B>createSampleResult</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                                              <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;method)</PRE>
+<DL>
+<DD>Create HTTPSampleResult filling url, method and SampleLabel.
+ Monitor field is computed calling isMonitor()
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>url</CODE> - URL<DD><CODE>method</CODE> - HTTP Method
+<DT><B>Returns:</B><DD><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler"><CODE>HTTPSampleResult</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setupRequest(java.net.URL, org.apache.http.client.methods.HttpRequestBase, org.apache.jmeter.protocol.http.sampler.HTTPSampleResult)"><!-- --></A><H3>
+setupRequest</H3>
+<PRE>
+protected void <B>setupRequest</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                            org.apache.http.client.methods.HttpRequestBase&nbsp;httpRequest,
+                            <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSampleResult.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSampleResult</A>&nbsp;res)
+                     throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Setup following elements on httpRequest:
+ <ul>
+ <li>ConnRoutePNames.LOCAL_ADDRESS enabling IP-SPOOFING</li>
+ <li>Socket and connection timeout</li>
+ <li>Redirect handling</li>
+ <li>Keep Alive header or Connection Close</li>
+ <li>Calls setConnectionHeaders to setup headers</li>
+ <li>Calls setConnectionCookie to setup Cookie</li>
+ </ul>
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>url</CODE> - <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net"><CODE>URL</CODE></A> of the request<DD><CODE>httpRequest</CODE> - http request for the request<DD><CODE>res</CODE> - sample result to set cookies on
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - if hostname/ip to use could not be figured out</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setDefaultRequestHeaders(org.apache.http.HttpRequest)"><!-- --></A><H3>
+setDefaultRequestHeaders</H3>
+<PRE>
+protected void <B>setDefaultRequestHeaders</B>(org.apache.http.HttpRequest&nbsp;request)</PRE>
+<DL>
+<DD>Set any default request headers to include
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>request</CODE> - the HttpRequest to be used</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setConnectionCookie(org.apache.http.HttpRequest, java.net.URL, org.apache.jmeter.protocol.http.control.CookieManager)"><!-- --></A><H3>
+setConnectionCookie</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>setConnectionCookie</B>(org.apache.http.HttpRequest&nbsp;request,
+                                     <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                                     <A HREF="../../../../../../org/apache/jmeter/protocol/http/control/CookieManager.html" title="class in org.apache.jmeter.protocol.http.control">CookieManager</A>&nbsp;cookieManager)</PRE>
+<DL>
+<DD>Extracts all the required cookies for that particular URL request and
+ sets them in the <code>HttpMethod</code> passed in.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>request</CODE> - <code>HttpRequest</code> for the request<DD><CODE>url</CODE> - <code>URL</code> of the request<DD><CODE>cookieManager</CODE> - the <code>CookieManager</code> containing all the cookies
+<DT><B>Returns:</B><DD>a String containing the cookie details (for the response)
+ May be null</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setConnectionHeaders(org.apache.http.client.methods.HttpRequestBase, java.net.URL, org.apache.jmeter.protocol.http.control.HeaderManager, org.apache.jmeter.protocol.http.control.CacheManager)"><!-- --></A><H3>
+setConnectionHeaders</H3>
+<PRE>
+protected void <B>setConnectionHeaders</B>(org.apache.http.client.methods.HttpRequestBase&nbsp;request,
+                                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</A>&nbsp;url,
+                                    <A HREF="../../../../../../org/apache/jmeter/protocol/http/control/HeaderManager.html" title="class in org.apache.jmeter.protocol.http.control">HeaderManager</A>&nbsp;headerManager,
+                                    <A HREF="../../../../../../org/apache/jmeter/protocol/http/control/CacheManager.html" title="class in org.apache.jmeter.protocol.http.control">CacheManager</A>&nbsp;cacheManager)</PRE>
+<DL>
+<DD>Extracts all the required non-cookie headers for that particular URL request and
+ sets them in the <code>HttpMethod</code> passed in
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>request</CODE> - <code>HttpRequest</code> which represents the request<DD><CODE>url</CODE> - <code>URL</code> of the URL request<DD><CODE>headerManager</CODE> - the <code>HeaderManager</code> containing all the cookies
+            for this <code>UrlConfig</code><DD><CODE>cacheManager</CODE> - the CacheManager (may be null)</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sendPostData(org.apache.http.client.methods.HttpPost)"><!-- --></A><H3>
+sendPostData</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>sendPostData</B>(org.apache.http.client.methods.HttpPost&nbsp;post)
+                       throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>post</CODE> - <CODE>HttpPost</CODE>
+<DT><B>Returns:</B><DD>String posted body if computable
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - if sending the data fails due to I/O</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="sendEntityData(org.apache.http.client.methods.HttpEntityEnclosingRequestBase)"><!-- --></A><H3>
+sendEntityData</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>sendEntityData</B>(org.apache.http.client.methods.HttpEntityEnclosingRequestBase&nbsp;entity)
+                         throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Creates the entity data to be sent.
+ <p>
+ If there is a file entry with a non-empty MIME type we use that to
+ set the request Content-Type header, otherwise we default to whatever
+ header is present from a Header Manager.
+ <p>
+ If the content charset <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#getContentEncoding()"><CODE>HTTPAbstractImpl.getContentEncoding()</CODE></A> is null or empty 
+ we use the HC4 default provided by <CODE>HTTP.DEF_CONTENT_CHARSET</CODE> which is
+ ISO-8859-1.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>entity</CODE> - to be processed, e.g. PUT or PATCH
+<DT><B>Returns:</B><DD>the entity content, may be empty
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/UnsupportedEncodingException.html?is-external=true" title="class or interface in java.io">UnsupportedEncodingException</A></CODE> - for invalid charset name
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - cannot really occur for ByteArrayOutputStream methods</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getCharsetWithDefault(org.apache.http.params.HttpParams)"><!-- --></A><H3>
+getCharsetWithDefault</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getCharsetWithDefault</B>(org.apache.http.params.HttpParams&nbsp;putParams)</PRE>
+<DL>
+<DD>If contentEncoding is not set by user, then Platform encoding will be used to convert to String
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>putParams</CODE> - <CODE>HttpParams</CODE>
+<DT><B>Returns:</B><DD>String charset</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="notifyFirstSampleAfterLoopRestart()"><!-- --></A><H3>
+notifyFirstSampleAfterLoopRestart</H3>
+<PRE>
+protected void <B>notifyFirstSampleAfterLoopRestart</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#notifyFirstSampleAfterLoopRestart()">notifyFirstSampleAfterLoopRestart</A></CODE> in class <CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPAbstractImpl</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="threadFinished()"><!-- --></A><H3>
+threadFinished</H3>
+<PRE>
+protected void <B>threadFinished</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html#threadFinished()">threadFinished</A></CODE> in class <CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPAbstractImpl.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPAbstractImpl</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="interrupt()"><!-- --></A><H3>
+interrupt</H3>
+<PRE>
+public boolean <B>interrupt</B>()</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/samplers/Interruptible.html#interrupt()">Interruptible</A></CODE></B></DD>
+<DD>Interrupt the current operation if possible.
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD><code>true</code> if there was an operation to interrupt.</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC3Impl.html" title="class in org.apache.jmeter.protocol.http.sampler"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.HttpDelete.html" title="class in org.apache.jmeter.protocol.http.sampler"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../index.html?org/apache/jmeter/protocol/http/sampler/HTTPHC4Impl.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="HTTPHC4Impl.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

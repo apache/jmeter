@@ -1,0 +1,1441 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+SendMailCommand (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SendMailCommand (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/LocalTrustStoreSSLSocketFactory.html" title="class in org.apache.jmeter.protocol.smtp.sampler.protocol"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SynchronousTransportListener.html" title="class in org.apache.jmeter.protocol.smtp.sampler.protocol"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../../index.html?org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SendMailCommand.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.protocol.smtp.sampler.protocol</FONT>
+<BR>
+Class SendMailCommand</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.protocol.smtp.sampler.protocol.SendMailCommand</B>
+</PRE>
+<HR>
+<DL>
+<DT><PRE>public class <B>SendMailCommand</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></DL>
+</PRE>
+
+<P>
+This class performs all tasks necessary to send a message (build message,
+ prepare connection, send message). Provides getter-/setter-methods for an
+ SmtpSampler-object to configure transport and message settings. The
+ send-mail-command itself is started by the SmtpSampler-object.
+<P>
+
+<P>
+<HR>
+
+<P>
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#SendMailCommand()">SendMailCommand</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Standard-Constructor</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#addAttachment(java.io.File)">addAttachment</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A>&nbsp;attachment)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adds an attachment to current message - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#addHeader(java.lang.String, java.lang.String)">addHeader</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;headerName,
+          <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;headerValue)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adds a header-part to current HashMap of headers - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#clearAttachments()">clearAttachments</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clear all attachments for current message</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#clearHeaders()">clearHeaders</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deletes all current headers in HashMap</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#execute()">execute</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Processes prepareMessage() and execute()</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#execute(javax.mail.Message)">execute</A></B>(javax.mail.Message&nbsp;message)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sends message to mailserver, waiting for delivery if using synchronous
+ mode.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getAttachments()">getAttachments</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns all attachment for current message - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getConnectionTimeout()">getConnectionTimeout</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns connection timeout for the SMTP-connection - returns the
+ default connection timeout if no value has been supplied.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../../../../org/apache/jmeter/testelement/property/CollectionProperty.html" title="class in org.apache.jmeter.testelement.property">CollectionProperty</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getHeaders()">getHeaders</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns headers for current message - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getPassword()">getPassword</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns password to authenticate at the mailserver - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getReceiverBCC()">getReceiverBCC</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns receivers of current message as <CODE>InternetAddress</CODE> ("bcc") - standard
+ getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getReceiverCC()">getReceiverCC</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns receivers of current message as <CODE>InternetAddress</CODE> ("cc") - standard
+ getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getSender()">getSender</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns sender-address for current message - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getServerResponse()">getServerResponse</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getSmtpPort()">getSmtpPort</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns port to be used for SMTP-connection (standard 25 or 465) -
+ standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getSmtpServer()">getSmtpServer</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns FQDN or IP of SMTP-server to be used to send message - standard
+ getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getSubject()">getSubject</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns subject for current message - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getTimeout()">getTimeout</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns timeout for the SMTP-connection - returns the
+ default timeout if no value has been supplied.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getUsername()">getUsername</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns username to authenticate at the mailserver - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getUseSSL()">getUseSSL</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns if SSL is used to send message - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#getUseStartTLS()">getUseStartTLS</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns if StartTLS is used to transmit message - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#isEnforceStartTLS()">isEnforceStartTLS</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns if StartTLS is enforced to secure the connection, i.e. no
+ fallback is used (plain SMTP) - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#isSynchronousMode()">isSynchronousMode</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns if synchronous-mode is used for current message (i.e. time for
+ delivery, ... is measured) - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#isTrustAllCerts()">isTrustAllCerts</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns if sampler should trust all certificates - standard getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#isUseAuthentication()">isUseAuthentication</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns if authentication is used to access the mailserver - standard
+ getter</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;javax.mail.Message</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#prepareMessage()">prepareMessage</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prepares message prior to be sent via execute()-method, i.e. sets
+ properties such as protocol, authentication, etc.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setAttachments(java.util.List)">setAttachments</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A>&gt;&nbsp;attachments)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adds attachments to current message</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setConnectionTimeOut(java.lang.String)">setConnectionTimeOut</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;connectionTimeOut)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setEmlMessage(java.lang.String)">setEmlMessage</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;emlMessage)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets eml-message to be sent</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setEnableDebug(boolean)">setEnableDebug</A></B>(boolean&nbsp;selected)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setEnforceStartTLS(boolean)">setEnforceStartTLS</A></B>(boolean&nbsp;enforceStartTLS)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instructs object to enforce StartTLS and not to fallback to plain
+ SMTP-connection - to be called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setHeaderFields(org.apache.jmeter.testelement.property.CollectionProperty)">setHeaderFields</A></B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/property/CollectionProperty.html" title="class in org.apache.jmeter.testelement.property">CollectionProperty</A>&nbsp;headerFields)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets headers for current message</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setMailBody(java.lang.String)">setMailBody</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;body)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the mail body.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setPassword(java.lang.String)">setPassword</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;password)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets password to authenticate at the mailserver - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setPlainBody(boolean)">setPlainBody</A></B>(boolean&nbsp;plainBody)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set whether to send a plain body (i.e. not multipart/mixed)</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setReceiverBCC(java.util.List)">setReceiverBCC</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;receiverBCC)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets receivers of current message ("bcc") - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setReceiverCC(java.util.List)">setReceiverCC</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;receiverCC)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets receivers of current message ("cc") - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setReceiverTo(java.util.List)">setReceiverTo</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;receiverTo)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets receivers of current message ("to") - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setReplyTo(java.util.List)">setReplyTo</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;replyTo)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setSender(java.lang.String)">setSender</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;sender)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the sender-address for the current message - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setSmtpPort(java.lang.String)">setSmtpPort</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;smtpPort)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets port to be used for SMTP-connection (standard 25 or 465) - to be
+ called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setSmtpServer(java.lang.String)">setSmtpServer</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;smtpServer)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets FQDN or IP of SMTP-server to be used to send message - to be called
+ by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setSubject(java.lang.String)">setSubject</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;subject)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets subject for current message - called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setSynchronousMode(boolean)">setSynchronousMode</A></B>(boolean&nbsp;synchronousMode)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the use of synchronous-mode (i.e. time for delivery, ... is
+ measured) - to be called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setTimeOut(java.lang.String)">setTimeOut</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;timeOut)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setTrustAllCerts(boolean)">setTrustAllCerts</A></B>(boolean&nbsp;trustAllCerts)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Determines if SMTP-sampler should trust all certificates, no matter what
+ CA - to be called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setTrustStoreToUse(java.lang.String)">setTrustStoreToUse</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;trustStoreToUse)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the path to the local truststore to be used for SSL / StartTLS - to
+ be called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setUseAuthentication(boolean)">setUseAuthentication</A></B>(boolean&nbsp;useAuthentication)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets if authentication should be used to access the mailserver - to be
+ called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setUseEmlMessage(boolean)">setUseEmlMessage</A></B>(boolean&nbsp;sendEmlMessage)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setUseLocalTrustStore(boolean)">setUseLocalTrustStore</A></B>(boolean&nbsp;useLocalTrustStore)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assigns the object to use a local truststore for SSL / StartTLS - to be
+ called by SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setUsername(java.lang.String)">setUsername</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;username)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets username to authenticate at the mailserver - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setUseSSL(boolean)">setUseSSL</A></B>(boolean&nbsp;useSSL)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets SSL to secure the delivery channel for the message - to be called by
+ SmtpSampler-object</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html#setUseStartTLS(boolean)">setUseStartTLS</A></B>(boolean&nbsp;useStartTLS)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets StartTLS to secure the delivery channel for the message - to be
+ called by SmtpSampler-object</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="SendMailCommand()"><!-- --></A><H3>
+SendMailCommand</H3>
+<PRE>
+public <B>SendMailCommand</B>()</PRE>
+<DL>
+<DD>Standard-Constructor
+<P>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="prepareMessage()"><!-- --></A><H3>
+prepareMessage</H3>
+<PRE>
+public javax.mail.Message <B>prepareMessage</B>()
+                                  throws javax.mail.MessagingException,
+                                         <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Prepares message prior to be sent via execute()-method, i.e. sets
+ properties such as protocol, authentication, etc.
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Message-object to be sent to execute()-method
+<DT><B>Throws:</B>
+<DD><CODE>javax.mail.MessagingException</CODE> - when problems constructing or sending the mail occur
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - when the mail content can not be read or truststore problems
+             are detected</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="execute(javax.mail.Message)"><!-- --></A><H3>
+execute</H3>
+<PRE>
+public void <B>execute</B>(javax.mail.Message&nbsp;message)
+             throws javax.mail.MessagingException,
+                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A>,
+                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</A></PRE>
+<DL>
+<DD>Sends message to mailserver, waiting for delivery if using synchronous
+ mode.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>message</CODE> - Message previously prepared by prepareMessage()
+<DT><B>Throws:</B>
+<DD><CODE>javax.mail.MessagingException</CODE> - when problems sending the mail arise
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - TODO can not see how
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</A></CODE> - when interrupted while waiting for delivery in synchronous
+             modus</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="execute()"><!-- --></A><H3>
+execute</H3>
+<PRE>
+public void <B>execute</B>()
+             throws javax.mail.MessagingException,
+                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A>,
+                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</A></PRE>
+<DL>
+<DD>Processes prepareMessage() and execute()
+<P>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</A></CODE> - when interrupted while waiting for delivery in synchronous
+             modus
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - when the mail content can not be read or truststore problems
+             are detected
+<DD><CODE>javax.mail.MessagingException</CODE> - when problems constructing or sending the mail occur</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSmtpServer()"><!-- --></A><H3>
+getSmtpServer</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getSmtpServer</B>()</PRE>
+<DL>
+<DD>Returns FQDN or IP of SMTP-server to be used to send message - standard
+ getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>FQDN or IP of SMTP-server</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSmtpServer(java.lang.String)"><!-- --></A><H3>
+setSmtpServer</H3>
+<PRE>
+public void <B>setSmtpServer</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;smtpServer)</PRE>
+<DL>
+<DD>Sets FQDN or IP of SMTP-server to be used to send message - to be called
+ by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>smtpServer</CODE> - FQDN or IP of SMTP-server</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSender()"><!-- --></A><H3>
+getSender</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getSender</B>()</PRE>
+<DL>
+<DD>Returns sender-address for current message - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>sender-address</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSender(java.lang.String)"><!-- --></A><H3>
+setSender</H3>
+<PRE>
+public void <B>setSender</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;sender)</PRE>
+<DL>
+<DD>Sets the sender-address for the current message - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>sender</CODE> - Sender-address for current message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSubject()"><!-- --></A><H3>
+getSubject</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getSubject</B>()</PRE>
+<DL>
+<DD>Returns subject for current message - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Subject of current message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSubject(java.lang.String)"><!-- --></A><H3>
+setSubject</H3>
+<PRE>
+public void <B>setSubject</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;subject)</PRE>
+<DL>
+<DD>Sets subject for current message - called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>subject</CODE> - Subject for message of current message - may be null</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getUsername()"><!-- --></A><H3>
+getUsername</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getUsername</B>()</PRE>
+<DL>
+<DD>Returns username to authenticate at the mailserver - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Username for mailserver</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUsername(java.lang.String)"><!-- --></A><H3>
+setUsername</H3>
+<PRE>
+public void <B>setUsername</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;username)</PRE>
+<DL>
+<DD>Sets username to authenticate at the mailserver - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>username</CODE> - Username for mailserver</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPassword()"><!-- --></A><H3>
+getPassword</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getPassword</B>()</PRE>
+<DL>
+<DD>Returns password to authenticate at the mailserver - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Password for mailserver</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setPassword(java.lang.String)"><!-- --></A><H3>
+setPassword</H3>
+<PRE>
+public void <B>setPassword</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;password)</PRE>
+<DL>
+<DD>Sets password to authenticate at the mailserver - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>password</CODE> - Password for mailserver</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setReceiverTo(java.util.List)"><!-- --></A><H3>
+setReceiverTo</H3>
+<PRE>
+public void <B>setReceiverTo</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;receiverTo)</PRE>
+<DL>
+<DD>Sets receivers of current message ("to") - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>receiverTo</CODE> - List of receivers</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getReceiverCC()"><!-- --></A><H3>
+getReceiverCC</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt; <B>getReceiverCC</B>()</PRE>
+<DL>
+<DD>Returns receivers of current message as <CODE>InternetAddress</CODE> ("cc") - standard
+ getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>List of receivers</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setReceiverCC(java.util.List)"><!-- --></A><H3>
+setReceiverCC</H3>
+<PRE>
+public void <B>setReceiverCC</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;receiverCC)</PRE>
+<DL>
+<DD>Sets receivers of current message ("cc") - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>receiverCC</CODE> - List of receivers</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getReceiverBCC()"><!-- --></A><H3>
+getReceiverBCC</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt; <B>getReceiverBCC</B>()</PRE>
+<DL>
+<DD>Returns receivers of current message as <CODE>InternetAddress</CODE> ("bcc") - standard
+ getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>List of receivers</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setReceiverBCC(java.util.List)"><!-- --></A><H3>
+setReceiverBCC</H3>
+<PRE>
+public void <B>setReceiverBCC</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;receiverBCC)</PRE>
+<DL>
+<DD>Sets receivers of current message ("bcc") - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>receiverBCC</CODE> - List of receivers</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isUseAuthentication()"><!-- --></A><H3>
+isUseAuthentication</H3>
+<PRE>
+public boolean <B>isUseAuthentication</B>()</PRE>
+<DL>
+<DD>Returns if authentication is used to access the mailserver - standard
+ getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>True if authentication is used to access mailserver</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUseAuthentication(boolean)"><!-- --></A><H3>
+setUseAuthentication</H3>
+<PRE>
+public void <B>setUseAuthentication</B>(boolean&nbsp;useAuthentication)</PRE>
+<DL>
+<DD>Sets if authentication should be used to access the mailserver - to be
+ called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>useAuthentication</CODE> - Should authentication be used to access mailserver?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getUseSSL()"><!-- --></A><H3>
+getUseSSL</H3>
+<PRE>
+public boolean <B>getUseSSL</B>()</PRE>
+<DL>
+<DD>Returns if SSL is used to send message - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>True if SSL is used to transmit message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUseSSL(boolean)"><!-- --></A><H3>
+setUseSSL</H3>
+<PRE>
+public void <B>setUseSSL</B>(boolean&nbsp;useSSL)</PRE>
+<DL>
+<DD>Sets SSL to secure the delivery channel for the message - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>useSSL</CODE> - Should StartTLS be used to secure SMTP-connection?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getUseStartTLS()"><!-- --></A><H3>
+getUseStartTLS</H3>
+<PRE>
+public boolean <B>getUseStartTLS</B>()</PRE>
+<DL>
+<DD>Returns if StartTLS is used to transmit message - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>True if StartTLS is used to transmit message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUseStartTLS(boolean)"><!-- --></A><H3>
+setUseStartTLS</H3>
+<PRE>
+public void <B>setUseStartTLS</B>(boolean&nbsp;useStartTLS)</PRE>
+<DL>
+<DD>Sets StartTLS to secure the delivery channel for the message - to be
+ called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>useStartTLS</CODE> - Should StartTLS be used to secure SMTP-connection?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSmtpPort()"><!-- --></A><H3>
+getSmtpPort</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getSmtpPort</B>()</PRE>
+<DL>
+<DD>Returns port to be used for SMTP-connection (standard 25 or 465) -
+ standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Port to be used for SMTP-connection</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSmtpPort(java.lang.String)"><!-- --></A><H3>
+setSmtpPort</H3>
+<PRE>
+public void <B>setSmtpPort</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;smtpPort)</PRE>
+<DL>
+<DD>Sets port to be used for SMTP-connection (standard 25 or 465) - to be
+ called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>smtpPort</CODE> - Port to be used for SMTP-connection</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isTrustAllCerts()"><!-- --></A><H3>
+isTrustAllCerts</H3>
+<PRE>
+public boolean <B>isTrustAllCerts</B>()</PRE>
+<DL>
+<DD>Returns if sampler should trust all certificates - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>True if all Certificates are trusted</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setTrustAllCerts(boolean)"><!-- --></A><H3>
+setTrustAllCerts</H3>
+<PRE>
+public void <B>setTrustAllCerts</B>(boolean&nbsp;trustAllCerts)</PRE>
+<DL>
+<DD>Determines if SMTP-sampler should trust all certificates, no matter what
+ CA - to be called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>trustAllCerts</CODE> - Should all certificates be trusted?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setEnforceStartTLS(boolean)"><!-- --></A><H3>
+setEnforceStartTLS</H3>
+<PRE>
+public void <B>setEnforceStartTLS</B>(boolean&nbsp;enforceStartTLS)</PRE>
+<DL>
+<DD>Instructs object to enforce StartTLS and not to fallback to plain
+ SMTP-connection - to be called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>enforceStartTLS</CODE> - Should StartTLS be enforced?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isEnforceStartTLS()"><!-- --></A><H3>
+isEnforceStartTLS</H3>
+<PRE>
+public boolean <B>isEnforceStartTLS</B>()</PRE>
+<DL>
+<DD>Returns if StartTLS is enforced to secure the connection, i.e. no
+ fallback is used (plain SMTP) - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>True if StartTLS is enforced</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getHeaders()"><!-- --></A><H3>
+getHeaders</H3>
+<PRE>
+public <A HREF="../../../../../../../org/apache/jmeter/testelement/property/CollectionProperty.html" title="class in org.apache.jmeter.testelement.property">CollectionProperty</A> <B>getHeaders</B>()</PRE>
+<DL>
+<DD>Returns headers for current message - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>CollectionProperty of headers for current message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setHeaderFields(org.apache.jmeter.testelement.property.CollectionProperty)"><!-- --></A><H3>
+setHeaderFields</H3>
+<PRE>
+public void <B>setHeaderFields</B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/property/CollectionProperty.html" title="class in org.apache.jmeter.testelement.property">CollectionProperty</A>&nbsp;headerFields)</PRE>
+<DL>
+<DD>Sets headers for current message
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>headerFields</CODE> - CollectionProperty of headers for current message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addHeader(java.lang.String, java.lang.String)"><!-- --></A><H3>
+addHeader</H3>
+<PRE>
+public void <B>addHeader</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;headerName,
+                      <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;headerValue)</PRE>
+<DL>
+<DD>Adds a header-part to current HashMap of headers - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>headerName</CODE> - Key for current header<DD><CODE>headerValue</CODE> - Value for current header</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="clearHeaders()"><!-- --></A><H3>
+clearHeaders</H3>
+<PRE>
+public void <B>clearHeaders</B>()</PRE>
+<DL>
+<DD>Deletes all current headers in HashMap
+<P>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getAttachments()"><!-- --></A><H3>
+getAttachments</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A>&gt; <B>getAttachments</B>()</PRE>
+<DL>
+<DD>Returns all attachment for current message - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>List of attachments for current message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setAttachments(java.util.List)"><!-- --></A><H3>
+setAttachments</H3>
+<PRE>
+public void <B>setAttachments</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A>&gt;&nbsp;attachments)</PRE>
+<DL>
+<DD>Adds attachments to current message
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>attachments</CODE> - List of files to be added as attachments to current message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addAttachment(java.io.File)"><!-- --></A><H3>
+addAttachment</H3>
+<PRE>
+public void <B>addAttachment</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A>&nbsp;attachment)</PRE>
+<DL>
+<DD>Adds an attachment to current message - to be called by
+ SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>attachment</CODE> - File-object to be added as attachment to current message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="clearAttachments()"><!-- --></A><H3>
+clearAttachments</H3>
+<PRE>
+public void <B>clearAttachments</B>()</PRE>
+<DL>
+<DD>Clear all attachments for current message
+<P>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isSynchronousMode()"><!-- --></A><H3>
+isSynchronousMode</H3>
+<PRE>
+public boolean <B>isSynchronousMode</B>()</PRE>
+<DL>
+<DD>Returns if synchronous-mode is used for current message (i.e. time for
+ delivery, ... is measured) - standard getter
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>True if synchronous-mode is used</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSynchronousMode(boolean)"><!-- --></A><H3>
+setSynchronousMode</H3>
+<PRE>
+public void <B>setSynchronousMode</B>(boolean&nbsp;synchronousMode)</PRE>
+<DL>
+<DD>Sets the use of synchronous-mode (i.e. time for delivery, ... is
+ measured) - to be called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>synchronousMode</CODE> - Should synchronous-mode be used?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setTimeOut(java.lang.String)"><!-- --></A><H3>
+setTimeOut</H3>
+<PRE>
+public void <B>setTimeOut</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;timeOut)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>timeOut</CODE> - the timeOut to set</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getTimeout()"><!-- --></A><H3>
+getTimeout</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getTimeout</B>()</PRE>
+<DL>
+<DD>Returns timeout for the SMTP-connection - returns the
+ default timeout if no value has been supplied.
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Timeout to be set for SMTP-connection</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setConnectionTimeOut(java.lang.String)"><!-- --></A><H3>
+setConnectionTimeOut</H3>
+<PRE>
+public void <B>setConnectionTimeOut</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;connectionTimeOut)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>connectionTimeOut</CODE> - the connectionTimeOut to set</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getConnectionTimeout()"><!-- --></A><H3>
+getConnectionTimeout</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getConnectionTimeout</B>()</PRE>
+<DL>
+<DD>Returns connection timeout for the SMTP-connection - returns the
+ default connection timeout if no value has been supplied.
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Connection timeout to be set for SMTP-connection</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUseLocalTrustStore(boolean)"><!-- --></A><H3>
+setUseLocalTrustStore</H3>
+<PRE>
+public void <B>setUseLocalTrustStore</B>(boolean&nbsp;useLocalTrustStore)</PRE>
+<DL>
+<DD>Assigns the object to use a local truststore for SSL / StartTLS - to be
+ called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>useLocalTrustStore</CODE> - Should a local truststore be used?</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setTrustStoreToUse(java.lang.String)"><!-- --></A><H3>
+setTrustStoreToUse</H3>
+<PRE>
+public void <B>setTrustStoreToUse</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;trustStoreToUse)</PRE>
+<DL>
+<DD>Sets the path to the local truststore to be used for SSL / StartTLS - to
+ be called by SmtpSampler-object
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>trustStoreToUse</CODE> - Path to local truststore</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUseEmlMessage(boolean)"><!-- --></A><H3>
+setUseEmlMessage</H3>
+<PRE>
+public void <B>setUseEmlMessage</B>(boolean&nbsp;sendEmlMessage)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setEmlMessage(java.lang.String)"><!-- --></A><H3>
+setEmlMessage</H3>
+<PRE>
+public void <B>setEmlMessage</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;emlMessage)</PRE>
+<DL>
+<DD>Sets eml-message to be sent
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>emlMessage</CODE> - path to eml-message</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setMailBody(java.lang.String)"><!-- --></A><H3>
+setMailBody</H3>
+<PRE>
+public void <B>setMailBody</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;body)</PRE>
+<DL>
+<DD>Set the mail body.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>body</CODE> - the body of the mail</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setPlainBody(boolean)"><!-- --></A><H3>
+setPlainBody</H3>
+<PRE>
+public void <B>setPlainBody</B>(boolean&nbsp;plainBody)</PRE>
+<DL>
+<DD>Set whether to send a plain body (i.e. not multipart/mixed)
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>plainBody</CODE> - <code>true</code> if sending a plain body (i.e. not multipart/mixed)</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getServerResponse()"><!-- --></A><H3>
+getServerResponse</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getServerResponse</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setEnableDebug(boolean)"><!-- --></A><H3>
+setEnableDebug</H3>
+<PRE>
+public void <B>setEnableDebug</B>(boolean&nbsp;selected)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setReplyTo(java.util.List)"><!-- --></A><H3>
+setReplyTo</H3>
+<PRE>
+public void <B>setReplyTo</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;javax.mail.internet.InternetAddress&gt;&nbsp;replyTo)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/LocalTrustStoreSSLSocketFactory.html" title="class in org.apache.jmeter.protocol.smtp.sampler.protocol"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/smtp/sampler/protocol/SynchronousTransportListener.html" title="class in org.apache.jmeter.protocol.smtp.sampler.protocol"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../../index.html?org/apache/jmeter/protocol/smtp/sampler/protocol/SendMailCommand.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SendMailCommand.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

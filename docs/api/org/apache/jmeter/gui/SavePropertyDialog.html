@@ -1,0 +1,495 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+SavePropertyDialog (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SavePropertyDialog (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/OnErrorPanel.html" title="class in org.apache.jmeter.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/Searchable.html" title="interface in org.apache.jmeter.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/gui/SavePropertyDialog.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SavePropertyDialog.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;<A HREF="#nested_classes_inherited_from_class_javax.swing.JDialog">NESTED</A>&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_javax.swing.JDialog">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.gui</FONT>
+<BR>
+Class SavePropertyDialog</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">java.awt.Component</A>
+      <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">java.awt.Container</A>
+          <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true" title="class or interface in java.awt">java.awt.Window</A>
+              <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true" title="class or interface in java.awt">java.awt.Dialog</A>
+                  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true" title="class or interface in javax.swing">javax.swing.JDialog</A>
+                      <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.gui.SavePropertyDialog</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true" title="class or interface in java.awt.event">ActionListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/MenuContainer.html?is-external=true" title="class or interface in java.awt">MenuContainer</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/EventListener.html?is-external=true" title="class or interface in java.util">EventListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/accessibility/Accessible.html?is-external=true" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/RootPaneContainer.html?is-external=true" title="class or interface in javax.swing">RootPaneContainer</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/WindowConstants.html?is-external=true" title="class or interface in javax.swing">WindowConstants</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>SavePropertyDialog</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true" title="class or interface in javax.swing">JDialog</A><DT>implements <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true" title="class or interface in java.awt.event">ActionListener</A></DL>
+</PRE>
+
+<P>
+Generates Configure pop-up dialogue for Listeners from all methods in SampleSaveConfiguration
+ with the signature "boolean saveXXX()".
+ There must be a corresponding "void setXXX(boolean)" method, and a property save_XXX which is
+ used to name the field on the dialogue.
+<P>
+
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.gui.SavePropertyDialog">Serialized Form</A></DL>
+<HR>
+
+<P>
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+
+<A NAME="nested_class_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Nested Class Summary</B></FONT></TH>
+</TR>
+</TABLE>
+&nbsp;<A NAME="nested_classes_inherited_from_class_javax.swing.JDialog"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Nested classes/interfaces inherited from class javax.swing.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true" title="class or interface in javax.swing">JDialog</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.AccessibleJDialog.html?is-external=true" title="class or interface in javax.swing">JDialog.AccessibleJDialog</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<A NAME="nested_classes_inherited_from_class_java.awt.Dialog"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Nested classes/interfaces inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true" title="class or interface in java.awt">Dialog</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.AccessibleAWTDialog.html?is-external=true" title="class or interface in java.awt">Dialog.AccessibleAWTDialog</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.ModalExclusionType.html?is-external=true" title="class or interface in java.awt">Dialog.ModalExclusionType</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.ModalityType.html?is-external=true" title="class or interface in java.awt">Dialog.ModalityType</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<A NAME="nested_classes_inherited_from_class_java.awt.Window"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Nested classes/interfaces inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true" title="class or interface in java.awt">Window</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.AccessibleAWTWindow.html?is-external=true" title="class or interface in java.awt">Window.AccessibleAWTWindow</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<A NAME="nested_classes_inherited_from_class_java.awt.Container"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Nested classes/interfaces inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.AccessibleAWTContainer.html?is-external=true" title="class or interface in java.awt">Container.AccessibleAWTContainer</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<A NAME="nested_classes_inherited_from_class_java.awt.Component"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Nested classes/interfaces inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">Component</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.AccessibleAWTComponent.html?is-external=true" title="class or interface in java.awt">Component.AccessibleAWTComponent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.BaselineResizeBehavior.html?is-external=true" title="class or interface in java.awt">Component.BaselineResizeBehavior</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.BltBufferStrategy.html?is-external=true" title="class or interface in java.awt">Component.BltBufferStrategy</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.FlipBufferStrategy.html?is-external=true" title="class or interface in java.awt">Component.FlipBufferStrategy</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_javax.swing.JDialog"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class javax.swing.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true" title="class or interface in javax.swing">JDialog</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#accessibleContext" title="class or interface in javax.swing">accessibleContext</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#rootPane" title="class or interface in javax.swing">rootPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#rootPaneCheckingEnabled" title="class or interface in javax.swing">rootPaneCheckingEnabled</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_java.awt.Dialog"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true" title="class or interface in java.awt">Dialog</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#DEFAULT_MODALITY_TYPE" title="class or interface in java.awt">DEFAULT_MODALITY_TYPE</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_java.awt.Component"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">Component</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#BOTTOM_ALIGNMENT" title="class or interface in java.awt">BOTTOM_ALIGNMENT</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#CENTER_ALIGNMENT" title="class or interface in java.awt">CENTER_ALIGNMENT</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#LEFT_ALIGNMENT" title="class or interface in java.awt">LEFT_ALIGNMENT</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#RIGHT_ALIGNMENT" title="class or interface in java.awt">RIGHT_ALIGNMENT</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#TOP_ALIGNMENT" title="class or interface in java.awt">TOP_ALIGNMENT</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_javax.swing.WindowConstants"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from interface javax.swing.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/WindowConstants.html?is-external=true" title="class or interface in javax.swing">WindowConstants</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/WindowConstants.html?is-external=true#DISPOSE_ON_CLOSE" title="class or interface in javax.swing">DISPOSE_ON_CLOSE</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/WindowConstants.html?is-external=true#DO_NOTHING_ON_CLOSE" title="class or interface in javax.swing">DO_NOTHING_ON_CLOSE</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/WindowConstants.html?is-external=true#EXIT_ON_CLOSE" title="class or interface in javax.swing">EXIT_ON_CLOSE</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/WindowConstants.html?is-external=true#HIDE_ON_CLOSE" title="class or interface in javax.swing">HIDE_ON_CLOSE</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_java.awt.image.ImageObserver"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from interface java.awt.image.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true" title="class or interface in java.awt.image">ImageObserver</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#ABORT" title="class or interface in java.awt.image">ABORT</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#ALLBITS" title="class or interface in java.awt.image">ALLBITS</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#ERROR" title="class or interface in java.awt.image">ERROR</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#FRAMEBITS" title="class or interface in java.awt.image">FRAMEBITS</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#HEIGHT" title="class or interface in java.awt.image">HEIGHT</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#PROPERTIES" title="class or interface in java.awt.image">PROPERTIES</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#SOMEBITS" title="class or interface in java.awt.image">SOMEBITS</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/image/ImageObserver.html?is-external=true#WIDTH" title="class or interface in java.awt.image">WIDTH</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/SavePropertyDialog.html#SavePropertyDialog()">SavePropertyDialog</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/SavePropertyDialog.html#SavePropertyDialog(java.awt.Frame, java.lang.String, boolean, org.apache.jmeter.samplers.SampleSaveConfiguration)">SavePropertyDialog</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Frame.html?is-external=true" title="class or interface in java.awt">Frame</A>&nbsp;owner,
+                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;title,
+                   boolean&nbsp;modal,
+                   <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;s)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/SavePropertyDialog.html#actionPerformed(java.awt.event.ActionEvent)">actionPerformed</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionEvent.html?is-external=true" title="class or interface in java.awt.event">ActionEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/SavePropertyDialog.html#getSaveConfig()">getSaveConfig</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/SavePropertyDialog.html#setSaveConfig(org.apache.jmeter.samplers.SampleSaveConfiguration)">setSaveConfig</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_javax.swing.JDialog"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class javax.swing.<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true" title="class or interface in javax.swing">JDialog</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#addImpl(java.awt.Component, java.lang.Object, int)" title="class or interface in javax.swing">addImpl</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#createRootPane()" title="class or interface in javax.swing">createRootPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#dialogInit()" title="class or interface in javax.swing">dialogInit</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getAccessibleContext()" title="class or interface in javax.swing">getAccessibleContext</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getContentPane()" title="class or interface in javax.swing">getContentPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getDefaultCloseOperation()" title="class or interface in javax.swing">getDefaultCloseOperation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getGlassPane()" title="class or interface in javax.swing">getGlassPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getGraphics()" title="class or interface in javax.swing">getGraphics</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getJMenuBar()" title="class or interface in javax.swing">getJMenuBar</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getLayeredPane()" title="class or interface in javax.swing">getLayeredPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getRootPane()" title="class or interface in javax.swing">getRootPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#getTransferHandler()" title="class or interface in javax.swing">getTransferHandler</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#isDefaultLookAndFeelDecorated()" title="class or interface in javax.swing">isDefaultLookAndFeelDecorated</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#isRootPaneCheckingEnabled()" title="class or interface in javax.swing">isRootPaneCheckingEnabled</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#paramString()" title="class or interface in javax.swing">paramString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#processWindowEvent(java.awt.event.WindowEvent)" title="class or interface in javax.swing">processWindowEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#remove(java.awt.Component)" title="class or interface in javax.swing">remove</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#repaint(long, int, int, int, int)" title="class or interface in javax.swing">repaint</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setContentPane(java.awt.Container)" title="class or interface in javax.swing">setContentPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setDefaultCloseOperation(int)" title="class or interface in javax.swing">setDefaultCloseOperation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setDefaultLookAndFeelDecorated(boolean)" title="class or interface in javax.swing">setDefaultLookAndFeelDecorated</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setGlassPane(java.awt.Component)" title="class or interface in javax.swing">setGlassPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setJMenuBar(javax.swing.JMenuBar)" title="class or interface in javax.swing">setJMenuBar</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setLayeredPane(javax.swing.JLayeredPane)" title="class or interface in javax.swing">setLayeredPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setLayout(java.awt.LayoutManager)" title="class or interface in javax.swing">setLayout</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setRootPane(javax.swing.JRootPane)" title="class or interface in javax.swing">setRootPane</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setRootPaneCheckingEnabled(boolean)" title="class or interface in javax.swing">setRootPaneCheckingEnabled</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#setTransferHandler(javax.swing.TransferHandler)" title="class or interface in javax.swing">setTransferHandler</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JDialog.html?is-external=true#update(java.awt.Graphics)" title="class or interface in javax.swing">update</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.awt.Dialog"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true" title="class or interface in java.awt">Dialog</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#addNotify()" title="class or interface in java.awt">addNotify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#getModalityType()" title="class or interface in java.awt">getModalityType</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#getTitle()" title="class or interface in java.awt">getTitle</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#hide()" title="class or interface in java.awt">hide</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#isModal()" title="class or interface in java.awt">isModal</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#isResizable()" title="class or interface in java.awt">isResizable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#isUndecorated()" title="class or interface in java.awt">isUndecorated</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#setModal(boolean)" title="class or interface in java.awt">setModal</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#setModalityType(java.awt.Dialog.ModalityType)" title="class or interface in java.awt">setModalityType</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#setResizable(boolean)" title="class or interface in java.awt">setResizable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#setTitle(java.lang.String)" title="class or interface in java.awt">setTitle</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#setUndecorated(boolean)" title="class or interface in java.awt">setUndecorated</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#setVisible(boolean)" title="class or interface in java.awt">setVisible</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#show()" title="class or interface in java.awt">show</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dialog.html?is-external=true#toBack()" title="class or interface in java.awt">toBack</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.awt.Window"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true" title="class or interface in java.awt">Window</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#addPropertyChangeListener(java.beans.PropertyChangeListener)" title="class or interface in java.awt">addPropertyChangeListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#addPropertyChangeListener(java.lang.String, java.beans.PropertyChangeListener)" title="class or interface in java.awt">addPropertyChangeListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#addWindowFocusListener(java.awt.event.WindowFocusListener)" title="class or interface in java.awt">addWindowFocusListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#addWindowListener(java.awt.event.WindowListener)" title="class or interface in java.awt">addWindowListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#addWindowStateListener(java.awt.event.WindowStateListener)" title="class or interface in java.awt">addWindowStateListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#applyResourceBundle(java.util.ResourceBundle)" title="class or interface in java.awt">applyResourceBundle</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#applyResourceBundle(java.lang.String)" title="class or interface in java.awt">applyResourceBundle</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#createBufferStrategy(int)" title="class or interface in java.awt">createBufferStrategy</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#createBufferStrategy(int, java.awt.BufferCapabilities)" title="class or interface in java.awt">createBufferStrategy</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#dispose()" title="class or interface in java.awt">dispose</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getBufferStrategy()" title="class or interface in java.awt">getBufferStrategy</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getFocusableWindowState()" title="class or interface in java.awt">getFocusableWindowState</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getFocusCycleRootAncestor()" title="class or interface in java.awt">getFocusCycleRootAncestor</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getFocusOwner()" title="class or interface in java.awt">getFocusOwner</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getFocusTraversalKeys(int)" title="class or interface in java.awt">getFocusTraversalKeys</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getGraphicsConfiguration()" title="class or interface in java.awt">getGraphicsConfiguration</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getIconImages()" title="class or interface in java.awt">getIconImages</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getInputContext()" title="class or interface in java.awt">getInputContext</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getListeners(java.lang.Class)" title="class or interface in java.awt">getListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getLocale()" title="class or interface in java.awt">getLocale</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getModalExclusionType()" title="class or interface in java.awt">getModalExclusionType</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getMostRecentFocusOwner()" title="class or interface in java.awt">getMostRecentFocusOwner</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getOwnedWindows()" title="class or interface in java.awt">getOwnedWindows</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getOwner()" title="class or interface in java.awt">getOwner</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getOwnerlessWindows()" title="class or interface in java.awt">getOwnerlessWindows</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getToolkit()" title="class or interface in java.awt">getToolkit</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getWarningString()" title="class or interface in java.awt">getWarningString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getWindowFocusListeners()" title="class or interface in java.awt">getWindowFocusListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getWindowListeners()" title="class or interface in java.awt">getWindowListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getWindows()" title="class or interface in java.awt">getWindows</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#getWindowStateListeners()" title="class or interface in java.awt">getWindowStateListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isActive()" title="class or interface in java.awt">isActive</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isAlwaysOnTop()" title="class or interface in java.awt">isAlwaysOnTop</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isAlwaysOnTopSupported()" title="class or interface in java.awt">isAlwaysOnTopSupported</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isFocusableWindow()" title="class or interface in java.awt">isFocusableWindow</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isFocusCycleRoot()" title="class or interface in java.awt">isFocusCycleRoot</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isFocused()" title="class or interface in java.awt">isFocused</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isLocationByPlatform()" title="class or interface in java.awt">isLocationByPlatform</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#isShowing()" title="class or interface in java.awt">isShowing</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#pack()" title="class or interface in java.awt">pack</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#paint(java.awt.Graphics)" title="class or interface in java.awt">paint</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#postEvent(java.awt.Event)" title="class or interface in java.awt">postEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#processEvent(java.awt.AWTEvent)" title="class or interface in java.awt">processEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#processWindowFocusEvent(java.awt.event.WindowEvent)" title="class or interface in java.awt">processWindowFocusEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#processWindowStateEvent(java.awt.event.WindowEvent)" title="class or interface in java.awt">processWindowStateEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#removeNotify()" title="class or interface in java.awt">removeNotify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#removeWindowFocusListener(java.awt.event.WindowFocusListener)" title="class or interface in java.awt">removeWindowFocusListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#removeWindowListener(java.awt.event.WindowListener)" title="class or interface in java.awt">removeWindowListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#removeWindowStateListener(java.awt.event.WindowStateListener)" title="class or interface in java.awt">removeWindowStateListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#reshape(int, int, int, int)" title="class or interface in java.awt">reshape</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setAlwaysOnTop(boolean)" title="class or interface in java.awt">setAlwaysOnTop</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setBounds(int, int, int, int)" title="class or interface in java.awt">setBounds</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setBounds(java.awt.Rectangle)" title="class or interface in java.awt">setBounds</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setCursor(java.awt.Cursor)" title="class or interface in java.awt">setCursor</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setFocusableWindowState(boolean)" title="class or interface in java.awt">setFocusableWindowState</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setFocusCycleRoot(boolean)" title="class or interface in java.awt">setFocusCycleRoot</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setIconImage(java.awt.Image)" title="class or interface in java.awt">setIconImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setIconImages(java.util.List)" title="class or interface in java.awt">setIconImages</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setLocationByPlatform(boolean)" title="class or interface in java.awt">setLocationByPlatform</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setLocationRelativeTo(java.awt.Component)" title="class or interface in java.awt">setLocationRelativeTo</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setMinimumSize(java.awt.Dimension)" title="class or interface in java.awt">setMinimumSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setModalExclusionType(java.awt.Dialog.ModalExclusionType)" title="class or interface in java.awt">setModalExclusionType</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setSize(java.awt.Dimension)" title="class or interface in java.awt">setSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#setSize(int, int)" title="class or interface in java.awt">setSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Window.html?is-external=true#toFront()" title="class or interface in java.awt">toFront</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.awt.Container"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#add(java.awt.Component)" title="class or interface in java.awt">add</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#add(java.awt.Component, int)" title="class or interface in java.awt">add</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#add(java.awt.Component, java.lang.Object)" title="class or interface in java.awt">add</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#add(java.awt.Component, java.lang.Object, int)" title="class or interface in java.awt">add</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#add(java.lang.String, java.awt.Component)" title="class or interface in java.awt">add</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#addContainerListener(java.awt.event.ContainerListener)" title="class or interface in java.awt">addContainerListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#applyComponentOrientation(java.awt.ComponentOrientation)" title="class or interface in java.awt">applyComponentOrientation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#areFocusTraversalKeysSet(int)" title="class or interface in java.awt">areFocusTraversalKeysSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#countComponents()" title="class or interface in java.awt">countComponents</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#deliverEvent(java.awt.Event)" title="class or interface in java.awt">deliverEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#doLayout()" title="class or interface in java.awt">doLayout</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#findComponentAt(int, int)" title="class or interface in java.awt">findComponentAt</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#findComponentAt(java.awt.Point)" title="class or interface in java.awt">findComponentAt</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getAlignmentX()" title="class or interface in java.awt">getAlignmentX</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getAlignmentY()" title="class or interface in java.awt">getAlignmentY</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getComponent(int)" title="class or interface in java.awt">getComponent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getComponentAt(int, int)" title="class or interface in java.awt">getComponentAt</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getComponentAt(java.awt.Point)" title="class or interface in java.awt">getComponentAt</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getComponentCount()" title="class or interface in java.awt">getComponentCount</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getComponents()" title="class or interface in java.awt">getComponents</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getComponentZOrder(java.awt.Component)" title="class or interface in java.awt">getComponentZOrder</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getContainerListeners()" title="class or interface in java.awt">getContainerListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getFocusTraversalPolicy()" title="class or interface in java.awt">getFocusTraversalPolicy</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getInsets()" title="class or interface in java.awt">getInsets</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getLayout()" title="class or interface in java.awt">getLayout</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getMaximumSize()" title="class or interface in java.awt">getMaximumSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getMinimumSize()" title="class or interface in java.awt">getMinimumSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getMousePosition(boolean)" title="class or interface in java.awt">getMousePosition</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#getPreferredSize()" title="class or interface in java.awt">getPreferredSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#insets()" title="class or interface in java.awt">insets</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#invalidate()" title="class or interface in java.awt">invalidate</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#isAncestorOf(java.awt.Component)" title="class or interface in java.awt">isAncestorOf</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#isFocusCycleRoot(java.awt.Container)" title="class or interface in java.awt">isFocusCycleRoot</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#isFocusTraversalPolicyProvider()" title="class or interface in java.awt">isFocusTraversalPolicyProvider</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#isFocusTraversalPolicySet()" title="class or interface in java.awt">isFocusTraversalPolicySet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#layout()" title="class or interface in java.awt">layout</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#list(java.io.PrintStream, int)" title="class or interface in java.awt">list</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#list(java.io.PrintWriter, int)" title="class or interface in java.awt">list</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#locate(int, int)" title="class or interface in java.awt">locate</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#minimumSize()" title="class or interface in java.awt">minimumSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#paintComponents(java.awt.Graphics)" title="class or interface in java.awt">paintComponents</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#preferredSize()" title="class or interface in java.awt">preferredSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#print(java.awt.Graphics)" title="class or interface in java.awt">print</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#printComponents(java.awt.Graphics)" title="class or interface in java.awt">printComponents</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#processContainerEvent(java.awt.event.ContainerEvent)" title="class or interface in java.awt">processContainerEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#remove(int)" title="class or interface in java.awt">remove</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#removeAll()" title="class or interface in java.awt">removeAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#removeContainerListener(java.awt.event.ContainerListener)" title="class or interface in java.awt">removeContainerListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#setComponentZOrder(java.awt.Component, int)" title="class or interface in java.awt">setComponentZOrder</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#setFocusTraversalKeys(int, java.util.Set)" title="class or interface in java.awt">setFocusTraversalKeys</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#setFocusTraversalPolicy(java.awt.FocusTraversalPolicy)" title="class or interface in java.awt">setFocusTraversalPolicy</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#setFocusTraversalPolicyProvider(boolean)" title="class or interface in java.awt">setFocusTraversalPolicyProvider</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#setFont(java.awt.Font)" title="class or interface in java.awt">setFont</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#transferFocusBackward()" title="class or interface in java.awt">transferFocusBackward</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#transferFocusDownCycle()" title="class or interface in java.awt">transferFocusDownCycle</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#validate()" title="class or interface in java.awt">validate</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true#validateTree()" title="class or interface in java.awt">validateTree</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.awt.Component"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.awt.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">Component</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#action(java.awt.Event, java.lang.Object)" title="class or interface in java.awt">action</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#add(java.awt.PopupMenu)" title="class or interface in java.awt">add</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addComponentListener(java.awt.event.ComponentListener)" title="class or interface in java.awt">addComponentListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addFocusListener(java.awt.event.FocusListener)" title="class or interface in java.awt">addFocusListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addHierarchyBoundsListener(java.awt.event.HierarchyBoundsListener)" title="class or interface in java.awt">addHierarchyBoundsListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addHierarchyListener(java.awt.event.HierarchyListener)" title="class or interface in java.awt">addHierarchyListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addInputMethodListener(java.awt.event.InputMethodListener)" title="class or interface in java.awt">addInputMethodListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addKeyListener(java.awt.event.KeyListener)" title="class or interface in java.awt">addKeyListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addMouseListener(java.awt.event.MouseListener)" title="class or interface in java.awt">addMouseListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addMouseMotionListener(java.awt.event.MouseMotionListener)" title="class or interface in java.awt">addMouseMotionListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#addMouseWheelListener(java.awt.event.MouseWheelListener)" title="class or interface in java.awt">addMouseWheelListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#bounds()" title="class or interface in java.awt">bounds</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#checkImage(java.awt.Image, java.awt.image.ImageObserver)" title="class or interface in java.awt">checkImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#checkImage(java.awt.Image, int, int, java.awt.image.ImageObserver)" title="class or interface in java.awt">checkImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#coalesceEvents(java.awt.AWTEvent, java.awt.AWTEvent)" title="class or interface in java.awt">coalesceEvents</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#contains(int, int)" title="class or interface in java.awt">contains</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#contains(java.awt.Point)" title="class or interface in java.awt">contains</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#createImage(java.awt.image.ImageProducer)" title="class or interface in java.awt">createImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#createImage(int, int)" title="class or interface in java.awt">createImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#createVolatileImage(int, int)" title="class or interface in java.awt">createVolatileImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#createVolatileImage(int, int, java.awt.ImageCapabilities)" title="class or interface in java.awt">createVolatileImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#disable()" title="class or interface in java.awt">disable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#disableEvents(long)" title="class or interface in java.awt">disableEvents</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#dispatchEvent(java.awt.AWTEvent)" title="class or interface in java.awt">dispatchEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#enable()" title="class or interface in java.awt">enable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#enable(boolean)" title="class or interface in java.awt">enable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#enableEvents(long)" title="class or interface in java.awt">enableEvents</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#enableInputMethods(boolean)" title="class or interface in java.awt">enableInputMethods</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, boolean, boolean)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, byte, byte)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, char, char)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, double, double)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, float, float)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, int, int)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, long, long)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, java.lang.Object, java.lang.Object)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#firePropertyChange(java.lang.String, short, short)" title="class or interface in java.awt">firePropertyChange</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getBackground()" title="class or interface in java.awt">getBackground</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getBaseline(int, int)" title="class or interface in java.awt">getBaseline</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getBaselineResizeBehavior()" title="class or interface in java.awt">getBaselineResizeBehavior</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getBounds()" title="class or interface in java.awt">getBounds</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getBounds(java.awt.Rectangle)" title="class or interface in java.awt">getBounds</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getColorModel()" title="class or interface in java.awt">getColorModel</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getComponentListeners()" title="class or interface in java.awt">getComponentListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getComponentOrientation()" title="class or interface in java.awt">getComponentOrientation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getCursor()" title="class or interface in java.awt">getCursor</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getDropTarget()" title="class or interface in java.awt">getDropTarget</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getFocusListeners()" title="class or interface in java.awt">getFocusListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getFocusTraversalKeysEnabled()" title="class or interface in java.awt">getFocusTraversalKeysEnabled</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getFont()" title="class or interface in java.awt">getFont</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getFontMetrics(java.awt.Font)" title="class or interface in java.awt">getFontMetrics</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getForeground()" title="class or interface in java.awt">getForeground</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getHeight()" title="class or interface in java.awt">getHeight</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getHierarchyBoundsListeners()" title="class or interface in java.awt">getHierarchyBoundsListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getHierarchyListeners()" title="class or interface in java.awt">getHierarchyListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getIgnoreRepaint()" title="class or interface in java.awt">getIgnoreRepaint</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getInputMethodListeners()" title="class or interface in java.awt">getInputMethodListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getInputMethodRequests()" title="class or interface in java.awt">getInputMethodRequests</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getKeyListeners()" title="class or interface in java.awt">getKeyListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getLocation()" title="class or interface in java.awt">getLocation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getLocation(java.awt.Point)" title="class or interface in java.awt">getLocation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getLocationOnScreen()" title="class or interface in java.awt">getLocationOnScreen</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getMouseListeners()" title="class or interface in java.awt">getMouseListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getMouseMotionListeners()" title="class or interface in java.awt">getMouseMotionListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getMousePosition()" title="class or interface in java.awt">getMousePosition</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getMouseWheelListeners()" title="class or interface in java.awt">getMouseWheelListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getName()" title="class or interface in java.awt">getName</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getParent()" title="class or interface in java.awt">getParent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getPeer()" title="class or interface in java.awt">getPeer</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getPropertyChangeListeners()" title="class or interface in java.awt">getPropertyChangeListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getPropertyChangeListeners(java.lang.String)" title="class or interface in java.awt">getPropertyChangeListeners</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getSize()" title="class or interface in java.awt">getSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getSize(java.awt.Dimension)" title="class or interface in java.awt">getSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getTreeLock()" title="class or interface in java.awt">getTreeLock</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getWidth()" title="class or interface in java.awt">getWidth</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getX()" title="class or interface in java.awt">getX</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#getY()" title="class or interface in java.awt">getY</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#gotFocus(java.awt.Event, java.lang.Object)" title="class or interface in java.awt">gotFocus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#handleEvent(java.awt.Event)" title="class or interface in java.awt">handleEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#hasFocus()" title="class or interface in java.awt">hasFocus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#imageUpdate(java.awt.Image, int, int, int, int, int)" title="class or interface in java.awt">imageUpdate</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#inside(int, int)" title="class or interface in java.awt">inside</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isBackgroundSet()" title="class or interface in java.awt">isBackgroundSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isCursorSet()" title="class or interface in java.awt">isCursorSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isDisplayable()" title="class or interface in java.awt">isDisplayable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isDoubleBuffered()" title="class or interface in java.awt">isDoubleBuffered</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isEnabled()" title="class or interface in java.awt">isEnabled</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isFocusable()" title="class or interface in java.awt">isFocusable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isFocusOwner()" title="class or interface in java.awt">isFocusOwner</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isFocusTraversable()" title="class or interface in java.awt">isFocusTraversable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isFontSet()" title="class or interface in java.awt">isFontSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isForegroundSet()" title="class or interface in java.awt">isForegroundSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isLightweight()" title="class or interface in java.awt">isLightweight</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isMaximumSizeSet()" title="class or interface in java.awt">isMaximumSizeSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isMinimumSizeSet()" title="class or interface in java.awt">isMinimumSizeSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isOpaque()" title="class or interface in java.awt">isOpaque</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isPreferredSizeSet()" title="class or interface in java.awt">isPreferredSizeSet</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isValid()" title="class or interface in java.awt">isValid</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#isVisible()" title="class or interface in java.awt">isVisible</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#keyDown(java.awt.Event, int)" title="class or interface in java.awt">keyDown</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#keyUp(java.awt.Event, int)" title="class or interface in java.awt">keyUp</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#list()" title="class or interface in java.awt">list</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#list(java.io.PrintStream)" title="class or interface in java.awt">list</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#list(java.io.PrintWriter)" title="class or interface in java.awt">list</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#location()" title="class or interface in java.awt">location</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#lostFocus(java.awt.Event, java.lang.Object)" title="class or interface in java.awt">lostFocus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#mouseDown(java.awt.Event, int, int)" title="class or interface in java.awt">mouseDown</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#mouseDrag(java.awt.Event, int, int)" title="class or interface in java.awt">mouseDrag</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#mouseEnter(java.awt.Event, int, int)" title="class or interface in java.awt">mouseEnter</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#mouseExit(java.awt.Event, int, int)" title="class or interface in java.awt">mouseExit</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#mouseMove(java.awt.Event, int, int)" title="class or interface in java.awt">mouseMove</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#mouseUp(java.awt.Event, int, int)" title="class or interface in java.awt">mouseUp</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#move(int, int)" title="class or interface in java.awt">move</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#nextFocus()" title="class or interface in java.awt">nextFocus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#paintAll(java.awt.Graphics)" title="class or interface in java.awt">paintAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#prepareImage(java.awt.Image, java.awt.image.ImageObserver)" title="class or interface in java.awt">prepareImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#prepareImage(java.awt.Image, int, int, java.awt.image.ImageObserver)" title="class or interface in java.awt">prepareImage</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#printAll(java.awt.Graphics)" title="class or interface in java.awt">printAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processComponentEvent(java.awt.event.ComponentEvent)" title="class or interface in java.awt">processComponentEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processFocusEvent(java.awt.event.FocusEvent)" title="class or interface in java.awt">processFocusEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processHierarchyBoundsEvent(java.awt.event.HierarchyEvent)" title="class or interface in java.awt">processHierarchyBoundsEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processHierarchyEvent(java.awt.event.HierarchyEvent)" title="class or interface in java.awt">processHierarchyEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processInputMethodEvent(java.awt.event.InputMethodEvent)" title="class or interface in java.awt">processInputMethodEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processKeyEvent(java.awt.event.KeyEvent)" title="class or interface in java.awt">processKeyEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processMouseEvent(java.awt.event.MouseEvent)" title="class or interface in java.awt">processMouseEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processMouseMotionEvent(java.awt.event.MouseEvent)" title="class or interface in java.awt">processMouseMotionEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#processMouseWheelEvent(java.awt.event.MouseWheelEvent)" title="class or interface in java.awt">processMouseWheelEvent</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#remove(java.awt.MenuComponent)" title="class or interface in java.awt">remove</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeComponentListener(java.awt.event.ComponentListener)" title="class or interface in java.awt">removeComponentListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeFocusListener(java.awt.event.FocusListener)" title="class or interface in java.awt">removeFocusListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeHierarchyBoundsListener(java.awt.event.HierarchyBoundsListener)" title="class or interface in java.awt">removeHierarchyBoundsListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeHierarchyListener(java.awt.event.HierarchyListener)" title="class or interface in java.awt">removeHierarchyListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeInputMethodListener(java.awt.event.InputMethodListener)" title="class or interface in java.awt">removeInputMethodListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeKeyListener(java.awt.event.KeyListener)" title="class or interface in java.awt">removeKeyListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeMouseListener(java.awt.event.MouseListener)" title="class or interface in java.awt">removeMouseListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeMouseMotionListener(java.awt.event.MouseMotionListener)" title="class or interface in java.awt">removeMouseMotionListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removeMouseWheelListener(java.awt.event.MouseWheelListener)" title="class or interface in java.awt">removeMouseWheelListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removePropertyChangeListener(java.beans.PropertyChangeListener)" title="class or interface in java.awt">removePropertyChangeListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#removePropertyChangeListener(java.lang.String, java.beans.PropertyChangeListener)" title="class or interface in java.awt">removePropertyChangeListener</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#repaint()" title="class or interface in java.awt">repaint</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#repaint(int, int, int, int)" title="class or interface in java.awt">repaint</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#repaint(long)" title="class or interface in java.awt">repaint</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#requestFocus()" title="class or interface in java.awt">requestFocus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#requestFocus(boolean)" title="class or interface in java.awt">requestFocus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#requestFocusInWindow()" title="class or interface in java.awt">requestFocusInWindow</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#requestFocusInWindow(boolean)" title="class or interface in java.awt">requestFocusInWindow</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#resize(java.awt.Dimension)" title="class or interface in java.awt">resize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#resize(int, int)" title="class or interface in java.awt">resize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setBackground(java.awt.Color)" title="class or interface in java.awt">setBackground</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setComponentOrientation(java.awt.ComponentOrientation)" title="class or interface in java.awt">setComponentOrientation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setDropTarget(java.awt.dnd.DropTarget)" title="class or interface in java.awt">setDropTarget</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setEnabled(boolean)" title="class or interface in java.awt">setEnabled</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setFocusable(boolean)" title="class or interface in java.awt">setFocusable</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setFocusTraversalKeysEnabled(boolean)" title="class or interface in java.awt">setFocusTraversalKeysEnabled</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setForeground(java.awt.Color)" title="class or interface in java.awt">setForeground</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setIgnoreRepaint(boolean)" title="class or interface in java.awt">setIgnoreRepaint</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setLocale(java.util.Locale)" title="class or interface in java.awt">setLocale</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setLocation(int, int)" title="class or interface in java.awt">setLocation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setLocation(java.awt.Point)" title="class or interface in java.awt">setLocation</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setMaximumSize(java.awt.Dimension)" title="class or interface in java.awt">setMaximumSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setName(java.lang.String)" title="class or interface in java.awt">setName</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#setPreferredSize(java.awt.Dimension)" title="class or interface in java.awt">setPreferredSize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#show(boolean)" title="class or interface in java.awt">show</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#size()" title="class or interface in java.awt">size</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#toString()" title="class or interface in java.awt">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#transferFocus()" title="class or interface in java.awt">transferFocus</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true#transferFocusUpCycle()" title="class or interface in java.awt">transferFocusUpCycle</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="SavePropertyDialog()"><!-- --></A><H3>
+SavePropertyDialog</H3>
+<PRE>
+public <B>SavePropertyDialog</B>()</PRE>
+<DL>
+</DL>
+<HR>
+
+<A NAME="SavePropertyDialog(java.awt.Frame, java.lang.String, boolean, org.apache.jmeter.samplers.SampleSaveConfiguration)"><!-- --></A><H3>
+SavePropertyDialog</H3>
+<PRE>
+public <B>SavePropertyDialog</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Frame.html?is-external=true" title="class or interface in java.awt">Frame</A>&nbsp;owner,
+                          <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;title,
+                          boolean&nbsp;modal,
+                          <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;s)</PRE>
+<DL>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>owner</CODE> - The <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Frame.html?is-external=true" title="class or interface in java.awt"><CODE>Frame</CODE></A> from which the dialog is displayed<DD><CODE>title</CODE> - The string to be used as a title of this dialog<DD><CODE>modal</CODE> - specifies whether the dialog should be modal<DD><CODE>s</CODE> - The details, which sample attributes are to be saved
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/HeadlessException.html?is-external=true" title="class or interface in java.awt">HeadlessException</A></CODE> - - when run headless</DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="actionPerformed(java.awt.event.ActionEvent)"><!-- --></A><H3>
+actionPerformed</H3>
+<PRE>
+public void <B>actionPerformed</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionEvent.html?is-external=true" title="class or interface in java.awt.event">ActionEvent</A>&nbsp;e)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true#actionPerformed(java.awt.event.ActionEvent)" title="class or interface in java.awt.event">actionPerformed</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true" title="class or interface in java.awt.event">ActionListener</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSaveConfig()"><!-- --></A><H3>
+getSaveConfig</H3>
+<PRE>
+public <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A> <B>getSaveConfig</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Returns the saveConfig.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSaveConfig(org.apache.jmeter.samplers.SampleSaveConfiguration)"><!-- --></A><H3>
+setSaveConfig</H3>
+<PRE>
+public void <B>setSaveConfig</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>saveConfig</CODE> - The saveConfig to set.</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/OnErrorPanel.html" title="class in org.apache.jmeter.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/Searchable.html" title="interface in org.apache.jmeter.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/gui/SavePropertyDialog.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SavePropertyDialog.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;<A HREF="#nested_classes_inherited_from_class_javax.swing.JDialog">NESTED</A>&nbsp;|&nbsp;<A HREF="#fields_inherited_from_class_javax.swing.JDialog">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

@@ -1,0 +1,1081 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+TCLogParser (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="TCLogParser (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/StandardGenerator.html" title="class in org.apache.jmeter.protocol.http.util.accesslog"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;NEXT CLASS</FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../../index.html?org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="TCLogParser.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.protocol.http.util.accesslog</FONT>
+<BR>
+Class TCLogParser</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">LogParser</A></DD>
+</DL>
+<DL>
+<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/SharedTCLogParser.html" title="class in org.apache.jmeter.protocol.http.util.accesslog">SharedTCLogParser</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>TCLogParser</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A><DT>implements <A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">LogParser</A></DL>
+</PRE>
+
+<P>
+Description:<br>
+ <br>
+ Currently the parser only handles GET/POST requests. It's easy enough to add
+ support for other request methods by changing checkMethod. The is a complete
+ rewrite of a tool I wrote for myself earlier. The older algorithm was basic
+ and did not provide the same level of flexibility I want, so I wrote a new
+ one using a totally new algorithm. This implementation reads one line at a
+ time using BufferedReader. When it gets to the end of the file and the
+ sampler needs to get more requests, the parser will re-initialize the
+ BufferedReader. The implementation uses StringTokenizer to create tokens.
+ <p>
+ The parse algorithm is the following:
+ <ol>
+ <li> cleans the entry by looking for backslash "\"
+ <li> looks to see if GET or POST is in the line
+ <li> tokenizes using quotes "
+ <li> finds the token with the request method
+ <li> gets the string of the token and tokenizes it using space
+ <li> finds the first token beginning with slash character
+ <li> tokenizes the string using question mark "?"
+ <li> get the path from the first token
+ <li> returns the second token and checks it for parameters
+ <li> tokenizes the string using ampersand "&amp;"
+ <li> parses each token to name/value pairs
+ </ol>
+ <p>
+ Extending this class is fairly simple. Most access logs use the same format
+ starting from the request method. Therefore, changing the implementation of
+ cleanURL(string) method should be sufficient to support new log formats.
+ Tomcat uses common log format, so any webserver that uses the format should
+ work with this parser. Servers that are known to use non standard formats are
+ IIS and Netscape.
+<P>
+
+<P>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#decode">decode</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by default, we probably should decode the parameter values</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#FILENAME">FILENAME</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/Filter.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">Filter</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#FILTER">FILTER</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Handles to supporting classes</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#GET">GET</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#HEAD">HEAD</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected static&nbsp;org.apache.log.Logger</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#log">log</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#POST">POST</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html?is-external=true" title="class or interface in java.io">BufferedReader</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#READER">READER</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#RMETHOD">RMETHOD</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;protected members *</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#SOURCE">SOURCE</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#URL_PATH">URL_PATH</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The path to the access log file</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#useFILE">useFILE</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#TCLogParser()">TCLogParser</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#TCLogParser(java.lang.String)">TCLogParser</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;source)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#checkMethod(java.lang.String)">checkMethod</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;text)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The method checks for <code>POST</code>, <code>GET</code> and <code>HEAD</code> methods currently.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#checkParamFormat(java.lang.String)">checkParamFormat</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;text)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checks the string to see if it contains "&amp;" and "=".</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#checkURL(java.lang.String)">checkURL</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;url)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checks the string to make sure it has <code>/path/file?</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#cleanURL(java.lang.String)">cleanURL</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;entry)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The method cleans the URL using the following algorithm.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#close()">close</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close the any streams or readers.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#convertStringToJMRequest(java.lang.String, org.apache.jmeter.testelement.TestElement)">convertStringToJMRequest</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;text,
+                         <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convert a single line into XML</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/NVPair.html" title="class in org.apache.jmeter.protocol.http.util.accesslog">NVPair</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#convertStringtoNVPair(java.lang.String)">convertStringtoNVPair</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;stringparams)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parse the string parameters into NVPair[] array.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#decodeParameterValue()">decodeParameterValue</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decode the parameter values is to true by default</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#parse(java.io.BufferedReader, org.apache.jmeter.testelement.TestElement, int)">parse</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html?is-external=true" title="class or interface in java.io">BufferedReader</A>&nbsp;breader,
+      <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el,
+      int&nbsp;parseCount)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The method is responsible for reading each line, and breaking out of the
+ while loop if a set number of lines is given.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#parse(org.apache.jmeter.testelement.TestElement, int)">parse</A></B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el,
+      int&nbsp;parseCount)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parse the entire file.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#parseAndConfigure(int, org.apache.jmeter.testelement.TestElement)">parseAndConfigure</A></B>(int&nbsp;count,
+                  <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parse a set number of lines from the access log.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#parseLine(java.lang.String, org.apache.jmeter.testelement.TestElement)">parseLine</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;line,
+          <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parseLine calls the other parse methods to parse the given text.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/NVPair.html" title="class in org.apache.jmeter.protocol.http.util.accesslog">NVPair</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#parseOneParameter(java.lang.String)">parseOneParameter</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;parameter)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method expects name and value to be separated by an equal sign "=".</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#parseParameters(java.lang.String)">parseParameters</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;parameters)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method uses StringTokenizer to convert the string into single pairs.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#setDecodeParameterValues(boolean)">setDecodeParameterValues</A></B>(boolean&nbsp;decodeparams)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by default decode is set to true. if the parameters shouldn't be
+ decoded, call the method with false</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#setFilter(org.apache.jmeter.protocol.http.util.accesslog.Filter)">setFilter</A></B>(<A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/Filter.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">Filter</A>&nbsp;filter)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use the filter to include/exclude files in the access logs.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#setSourceFile(java.lang.String)">setSourceFile</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;source)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the source file.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#setUseParsedFile(boolean)">setUseParsedFile</A></B>(boolean&nbsp;file)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calls this method to set whether or not to use the path in the log.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#stripFile(java.lang.String, org.apache.jmeter.testelement.TestElement)">stripFile</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;url,
+          <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tokenize the URL into two tokens.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/StringTokenizer.html?is-external=true" title="class or interface in java.util">StringTokenizer</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#tokenize(java.lang.String, java.lang.String)">tokenize</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;line,
+         <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;delim)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parses the line using java.util.StringTokenizer.</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ FIELD DETAIL =========== -->
+
+<A NAME="field_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Field Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="log"><!-- --></A><H3>
+log</H3>
+<PRE>
+protected static final org.apache.log.Logger <B>log</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="GET"><!-- --></A><H3>
+GET</H3>
+<PRE>
+public static final <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>GET</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../../../constant-values.html#org.apache.jmeter.protocol.http.util.accesslog.TCLogParser.GET">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="POST"><!-- --></A><H3>
+POST</H3>
+<PRE>
+public static final <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>POST</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../../../constant-values.html#org.apache.jmeter.protocol.http.util.accesslog.TCLogParser.POST">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="HEAD"><!-- --></A><H3>
+HEAD</H3>
+<PRE>
+public static final <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>HEAD</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../../../constant-values.html#org.apache.jmeter.protocol.http.util.accesslog.TCLogParser.HEAD">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="RMETHOD"><!-- --></A><H3>
+RMETHOD</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>RMETHOD</B></PRE>
+<DL>
+<DD>protected members *
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="URL_PATH"><!-- --></A><H3>
+URL_PATH</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>URL_PATH</B></PRE>
+<DL>
+<DD>The path to the access log file
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="useFILE"><!-- --></A><H3>
+useFILE</H3>
+<PRE>
+protected boolean <B>useFILE</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="SOURCE"><!-- --></A><H3>
+SOURCE</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A> <B>SOURCE</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="FILENAME"><!-- --></A><H3>
+FILENAME</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>FILENAME</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="READER"><!-- --></A><H3>
+READER</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html?is-external=true" title="class or interface in java.io">BufferedReader</A> <B>READER</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="FILTER"><!-- --></A><H3>
+FILTER</H3>
+<PRE>
+protected <A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/Filter.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">Filter</A> <B>FILTER</B></PRE>
+<DL>
+<DD>Handles to supporting classes
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="decode"><!-- --></A><H3>
+decode</H3>
+<PRE>
+protected boolean <B>decode</B></PRE>
+<DL>
+<DD>by default, we probably should decode the parameter values
+<P>
+<DL>
+</DL>
+</DL>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="TCLogParser()"><!-- --></A><H3>
+TCLogParser</H3>
+<PRE>
+public <B>TCLogParser</B>()</PRE>
+<DL>
+</DL>
+<HR>
+
+<A NAME="TCLogParser(java.lang.String)"><!-- --></A><H3>
+TCLogParser</H3>
+<PRE>
+public <B>TCLogParser</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;source)</PRE>
+<DL>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>source</CODE> - name of the source file</DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="setDecodeParameterValues(boolean)"><!-- --></A><H3>
+setDecodeParameterValues</H3>
+<PRE>
+public void <B>setDecodeParameterValues</B>(boolean&nbsp;decodeparams)</PRE>
+<DL>
+<DD>by default decode is set to true. if the parameters shouldn't be
+ decoded, call the method with false
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>decodeparams</CODE> - flag whether parameters should be decoded</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="decodeParameterValue()"><!-- --></A><H3>
+decodeParameterValue</H3>
+<PRE>
+public boolean <B>decodeParameterValue</B>()</PRE>
+<DL>
+<DD>decode the parameter values is to true by default
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD><code>true</code> if parameter values should be decoded, <code>false</code> otherwise</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setUseParsedFile(boolean)"><!-- --></A><H3>
+setUseParsedFile</H3>
+<PRE>
+public void <B>setUseParsedFile</B>(boolean&nbsp;file)</PRE>
+<DL>
+<DD>Calls this method to set whether or not to use the path in the log. We
+ may want to provide the ability to filter the log file later on. By
+ default, the parser uses the file in the log.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>file</CODE> - flag whether to use the path from the log</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setFilter(org.apache.jmeter.protocol.http.util.accesslog.Filter)"><!-- --></A><H3>
+setFilter</H3>
+<PRE>
+public void <B>setFilter</B>(<A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/Filter.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">Filter</A>&nbsp;filter)</PRE>
+<DL>
+<DD>Use the filter to include/exclude files in the access logs. This is
+ provided as a convenience and reduce the need to spend hours cleaning up
+ log files.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html#setFilter(org.apache.jmeter.protocol.http.util.accesslog.Filter)">setFilter</A></CODE> in interface <CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">LogParser</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>filter</CODE> - <A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/Filter.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog"><CODE>Filter</CODE></A> to be used while reading the log lines</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSourceFile(java.lang.String)"><!-- --></A><H3>
+setSourceFile</H3>
+<PRE>
+public void <B>setSourceFile</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;source)</PRE>
+<DL>
+<DD>Sets the source file.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html#setSourceFile(java.lang.String)">setSourceFile</A></CODE> in interface <CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">LogParser</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>source</CODE> - name of the source file</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="parse(org.apache.jmeter.testelement.TestElement, int)"><!-- --></A><H3>
+parse</H3>
+<PRE>
+public int <B>parse</B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el,
+                 int&nbsp;parseCount)</PRE>
+<DL>
+<DD>parse the entire file.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>el</CODE> - TestElement to read the lines into<DD><CODE>parseCount</CODE> - number of max lines to read
+<DT><B>Returns:</B><DD>number of read lines, or <code>-1</code> if an error occurred while reading</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="parseAndConfigure(int, org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+parseAndConfigure</H3>
+<PRE>
+public int <B>parseAndConfigure</B>(int&nbsp;count,
+                             <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</PRE>
+<DL>
+<DD>parse a set number of lines from the access log. Keep in mind the number
+ of lines parsed will depend on the filter and number of lines in the log.
+ The method returns the actual number of lines parsed.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html#parseAndConfigure(int, org.apache.jmeter.testelement.TestElement)">parseAndConfigure</A></CODE> in interface <CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">LogParser</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>count</CODE> - number of lines to read<DD><CODE>el</CODE> - <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement"><CODE>TestElement</CODE></A> to read lines into
+<DT><B>Returns:</B><DD>lines parsed</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="parse(java.io.BufferedReader, org.apache.jmeter.testelement.TestElement, int)"><!-- --></A><H3>
+parse</H3>
+<PRE>
+protected int <B>parse</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html?is-external=true" title="class or interface in java.io">BufferedReader</A>&nbsp;breader,
+                    <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el,
+                    int&nbsp;parseCount)</PRE>
+<DL>
+<DD>The method is responsible for reading each line, and breaking out of the
+ while loop if a set number of lines is given.<br>
+ Note: empty lines will not be counted
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>breader</CODE> - <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html?is-external=true" title="class or interface in java.io"><CODE>BufferedReader</CODE></A> to read lines from<DD><CODE>el</CODE> - <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement"><CODE>TestElement</CODE></A> to read lines into<DD><CODE>parseCount</CODE> - number of lines to read
+<DT><B>Returns:</B><DD>number of lines parsed</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="parseLine(java.lang.String, org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+parseLine</H3>
+<PRE>
+protected int <B>parseLine</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;line,
+                        <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</PRE>
+<DL>
+<DD>parseLine calls the other parse methods to parse the given text.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>line</CODE> - single line to be parsed<DD><CODE>el</CODE> - <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement"><CODE>TestElement</CODE></A> in which the line will be added
+<DT><B>Returns:</B><DD>number of lines parsed (zero or one, actually)</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="cleanURL(java.lang.String)"><!-- --></A><H3>
+cleanURL</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>cleanURL</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;entry)</PRE>
+<DL>
+<DD>The method cleans the URL using the following algorithm.
+ <ol>
+ <li> check for double quotes
+ <li> check the request method
+ <li> tokenize using double quotes
+ <li> find first token containing request method
+ <li> tokenize string using space
+ <li> find first token that begins with "/"
+ </ol>
+ Example Tomcat log entry:
+ <p>
+ 127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] "GET /addrbook/ HTTP/1.1" 200
+ 1981
+ <p>
+ would result in the extracted url <code>/addrbook/</code>
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>entry</CODE> - line from which the url is to be extracted
+<DT><B>Returns:</B><DD>cleaned url</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="checkMethod(java.lang.String)"><!-- --></A><H3>
+checkMethod</H3>
+<PRE>
+public boolean <B>checkMethod</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;text)</PRE>
+<DL>
+<DD>The method checks for <code>POST</code>, <code>GET</code> and <code>HEAD</code> methods currently.
+ The other methods aren't supported yet.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>text</CODE> - text to be checked for HTTP method
+<DT><B>Returns:</B><DD><code>true</code> if method is supported, <code>false</code> otherwise</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="stripFile(java.lang.String, org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+stripFile</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>stripFile</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;url,
+                        <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</PRE>
+<DL>
+<DD>Tokenize the URL into two tokens. If the URL has more than one "?", the
+ parse may fail. Only the first two tokens are used. The first token is
+ automatically parsed and set at <A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html#URL_PATH"><CODE>URL_PATH</CODE></A>.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>url</CODE> - url which should be stripped from parameters<DD><CODE>el</CODE> - <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement"><CODE>TestElement</CODE></A> to parse url into
+<DT><B>Returns:</B><DD>String presenting the parameters, or <code>null</code> when none where found</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="checkURL(java.lang.String)"><!-- --></A><H3>
+checkURL</H3>
+<PRE>
+public boolean <B>checkURL</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;url)</PRE>
+<DL>
+<DD>Checks the string to make sure it has <code>/path/file?name=value</code> format. If
+ the string doesn't contains a "?", it will return <code>false</code>.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>url</CODE> - url to check for parameters
+<DT><B>Returns:</B><DD><code>true</code> if url contains a <code>?</code>,
+         <code>false</code> otherwise</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="checkParamFormat(java.lang.String)"><!-- --></A><H3>
+checkParamFormat</H3>
+<PRE>
+public boolean <B>checkParamFormat</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;text)</PRE>
+<DL>
+<DD>Checks the string to see if it contains "&amp;" and "=". If it does, return
+ <code>true</code>, so that it can be parsed.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>text</CODE> - text to be checked for <code>&amp;</code> and <code>=</code>
+<DT><B>Returns:</B><DD><code>true</code> if <code>text</code> contains both <code>&amp;</code>
+         and <code>=</code>, <code>false</code> otherwise</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="convertStringToJMRequest(java.lang.String, org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+convertStringToJMRequest</H3>
+<PRE>
+public void <B>convertStringToJMRequest</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;text,
+                                     <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</PRE>
+<DL>
+<DD>Convert a single line into XML
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>text</CODE> - to be be converted<DD><CODE>el</CODE> - <A HREF="../../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html" title="class in org.apache.jmeter.protocol.http.sampler"><CODE>HTTPSamplerBase</CODE></A> which consumes the <code>text</code></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="convertStringtoNVPair(java.lang.String)"><!-- --></A><H3>
+convertStringtoNVPair</H3>
+<PRE>
+public <A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/NVPair.html" title="class in org.apache.jmeter.protocol.http.util.accesslog">NVPair</A>[] <B>convertStringtoNVPair</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;stringparams)</PRE>
+<DL>
+<DD>Parse the string parameters into NVPair[] array. Once they are parsed, it
+ is returned. The method uses parseOneParameter(string) to convert each
+ pair.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>stringparams</CODE> - String with parameters to be parsed
+<DT><B>Returns:</B><DD>array of <A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/NVPair.html" title="class in org.apache.jmeter.protocol.http.util.accesslog"><CODE>NVPair</CODE></A>s</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="parseOneParameter(java.lang.String)"><!-- --></A><H3>
+parseOneParameter</H3>
+<PRE>
+protected <A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/NVPair.html" title="class in org.apache.jmeter.protocol.http.util.accesslog">NVPair</A> <B>parseOneParameter</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;parameter)</PRE>
+<DL>
+<DD>Method expects name and value to be separated by an equal sign "=". The
+ method uses StringTokenizer to make a NVPair object. If there happens to
+ be more than one "=" sign, the others are ignored. The chance of a string
+ containing more than one is unlikely and would not conform to HTTP spec.
+ I should double check the protocol spec to make sure this is accurate.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>parameter</CODE> - to be parsed
+<DT><B>Returns:</B><DD><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/NVPair.html" title="class in org.apache.jmeter.protocol.http.util.accesslog"><CODE>NVPair</CODE></A> with the parsed name and value of the parameter</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="parseParameters(java.lang.String)"><!-- --></A><H3>
+parseParameters</H3>
+<PRE>
+protected <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>parseParameters</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;parameters)</PRE>
+<DL>
+<DD>Method uses StringTokenizer to convert the string into single pairs. The
+ string should conform to HTTP protocol spec, which means the name/value
+ pairs are separated by the ampersand symbol "&amp;". Someone could write the
+ querystrings by hand, but that would be round about and go against the
+ purpose of this utility.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>parameters</CODE> - string to be parsed
+<DT><B>Returns:</B><DD>List of name/value pairs</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="tokenize(java.lang.String, java.lang.String)"><!-- --></A><H3>
+tokenize</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/StringTokenizer.html?is-external=true" title="class or interface in java.util">StringTokenizer</A> <B>tokenize</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;line,
+                                <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;delim)</PRE>
+<DL>
+<DD>Parses the line using java.util.StringTokenizer.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>line</CODE> - line to be parsed<DD><CODE>delim</CODE> - delimiter
+<DT><B>Returns:</B><DD>StringTokenizer constructed with <code>line</code> and <code>delim</code></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="close()"><!-- --></A><H3>
+close</H3>
+<PRE>
+public void <B>close</B>()</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html#close()">LogParser</A></CODE></B></DD>
+<DD>close the any streams or readers.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html#close()">close</A></CODE> in interface <CODE><A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/LogParser.html" title="interface in org.apache.jmeter.protocol.http.util.accesslog">LogParser</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../../../../org/apache/jmeter/protocol/http/util/accesslog/StandardGenerator.html" title="class in org.apache.jmeter.protocol.http.util.accesslog"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;NEXT CLASS</FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../../../index.html?org/apache/jmeter/protocol/http/util/accesslog/TCLogParser.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="TCLogParser.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

@@ -1,0 +1,2046 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+JMeterUtils (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="JMeterUtils (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/JMeterTreeNodeTransferable.html" title="class in org.apache.jmeter.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/JMeterVersion.html" title="class in org.apache.jmeter.util"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/util/JMeterUtils.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="JMeterUtils.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.util</FONT>
+<BR>
+Class JMeterUtils</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jmeter.util.JMeterUtils</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../../org/apache/jorphan/test/UnitTestManager.html" title="interface in org.apache.jorphan.test">UnitTestManager</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>JMeterUtils</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A><DT>implements <A HREF="../../../../org/apache/jorphan/test/UnitTestManager.html" title="interface in org.apache.jorphan.test">UnitTestManager</A></DL>
+</PRE>
+
+<P>
+This class contains the static utility methods used by JMeter.
+<P>
+
+<P>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#RES_KEY_PFX">RES_KEY_PFX</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#JMeterUtils()">JMeterUtils</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#addLocaleChangeListener(org.apache.jmeter.util.LocaleChangeListener)">addLocaleChangeListener</A></B>(<A HREF="../../../../org/apache/jmeter/util/LocaleChangeListener.html" title="interface in org.apache.jmeter.util">LocaleChangeListener</A>&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#clearMatcherMemory(org.apache.oro.text.regex.Perl5Matcher, org.apache.oro.text.regex.Pattern)">clearMatcherMemory</A></B>(org.apache.oro.text.regex.Perl5Matcher&nbsp;matcher,
+                   org.apache.oro.text.regex.Pattern&nbsp;pattern)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
+ the unzipped page size</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JButton.html?is-external=true" title="class or interface in javax.swing">JButton</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#createButton(java.lang.String, java.awt.event.ActionListener)">createButton</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true" title="class or interface in java.awt.event">ActionListener</A>&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a button with the netscape style</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JButton.html?is-external=true" title="class or interface in javax.swing">JButton</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#createSimpleButton(java.lang.String, java.awt.event.ActionListener)">createSimpleButton</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true" title="class or interface in java.awt.event">ActionListener</A>&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a button with the netscape style</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#findClassesThatExtend(java.lang.Class)">findClassesThatExtend</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;superClass)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convenience method for
+ <A HREF="../../../../org/apache/jorphan/reflect/ClassFinder.html#findClassesThatExtend(java.lang.String[], java.lang.Class[], boolean)"><CODE>ClassFinder.findClassesThatExtend(String[], Class[], boolean)</CODE></A>
+ with the option to include inner classes in the search set to false
+ and the path list is derived from JMeterUtils.getSearchPaths().</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#findFile(java.lang.String)">findFile</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;fileName)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Find a file in the current directory or in the JMeter bin directory.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#findInArray(java.lang.String[], java.lang.String)">findInArray</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;array,
+            <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;value)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finds a string in an array of strings and returns the</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Hashtable.html?is-external=true" title="class or interface in java.util">Hashtable</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>,<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getAlias(java.util.Properties)">getAlias</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates the vector of alias strings.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getControllers(java.util.Properties)">getControllers</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates a vector of SampleController plugins.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Hashtable.html?is-external=true" title="class or interface in java.util">Hashtable</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>,<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getHashtable(java.util.Properties, java.lang.String)">getHashtable</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;prefix)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates a table of strings for all the properties that start with a
+ common prefix.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/ImageIcon.html?is-external=true" title="class or interface in javax.swing">ImageIcon</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getImage(java.lang.String)">getImage</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This looks for the requested image in the classpath under
+ org.apache.jmeter.images.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/ImageIcon.html?is-external=true" title="class or interface in javax.swing">ImageIcon</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getImage(java.lang.String, java.lang.String)">getImage</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+         <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;description)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This looks for the requested image in the classpath under
+ org.apache.jmeter.images.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getJMeterBinDir()">getJMeterBinDir</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the JMeter bin directory - does not include the trailing separator.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getJMeterCopyright()">getJMeterCopyright</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the JMeter copyright.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getJMeterHome()">getJMeterHome</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the JMeter home directory - does not include the trailing separator.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getJMeterProperties()">getJMeterProperties</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This gets the currently defined appProperties.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getJMeterVersion()">getJMeterVersion</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the JMeter Version.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Locale.html?is-external=true" title="class or interface in java.util">Locale</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getLocale()">getLocale</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the current locale.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getLocaleString(java.lang.String)">getLocaleString</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;locale)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the locale name as a resource.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getLocalHostFullName()">getLocalHostFullName</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the cached result from calling
+ InetAddress.getLocalHost().getCanonicalHostName()</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getLocalHostIP()">getLocalHostIP</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the cached result from calling
+ InetAddress.getLocalHost().getHostAddress()</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getLocalHostName()">getLocalHostName</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the cached result from calling
+ InetAddress.getLocalHost().getHostName()</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;org.apache.oro.text.regex.Perl5Matcher</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getMatcher()">getMatcher</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets Perl5Matcher for this thread.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getParsedLabel(java.lang.String)">getParsedLabel</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To get I18N label from properties file</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;org.apache.oro.text.regex.Pattern</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getPattern(java.lang.String)">getPattern</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;expression)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a compiled expression from the pattern cache (READ_ONLY).</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;org.apache.oro.text.regex.Pattern</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getPattern(java.lang.String, int)">getPattern</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;expression,
+           int&nbsp;options)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a compiled expression from the pattern cache.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;org.apache.oro.text.PatternCacheLRU</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getPatternCache()">getPatternCache</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getPropDefault(java.lang.String, boolean)">getPropDefault</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+               boolean&nbsp;defaultVal)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a boolean value with default if not present.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getPropDefault(java.lang.String, int)">getPropDefault</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+               int&nbsp;defaultVal)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a int value with default if not present.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;long</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getPropDefault(java.lang.String, long)">getPropDefault</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+               long&nbsp;defaultVal)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a long value with default if not present.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getPropDefault(java.lang.String, java.lang.String)">getPropDefault</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+               <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;defaultVal)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a String value with default if not present.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getProperties(java.lang.String)">getProperties</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method is used by the init method to load the property file that may
+ even reside in the user space, or in the classpath under
+ org.apache.jmeter.jmeter.properties.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getProperty(java.lang.String)">getProperty</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the value of a JMeter property.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getRandomInt(int)">getRandomInt</A></B>(int&nbsp;r)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Provide random numbers</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getResourceFileAsText(java.lang.String)">getResourceFileAsText</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getResString(java.lang.String)">getResString</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the resource string for this key.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getResString(java.lang.String, java.util.Locale)">getResString</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key,
+             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Locale.html?is-external=true" title="class or interface in java.util">Locale</A>&nbsp;forcedLocale)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the resource string for this key in Locale.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getResString(java.lang.String, java.lang.String)">getResString</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key,
+             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;defaultValue)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Only intended for use in development; use
+             getResString(String) normally</I></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getSearchPaths()">getSearchPaths</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generate a list of paths to search.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getTestSamples(java.util.Properties, java.lang.String)">getTestSamples</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+               <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a string of class names for a particular SamplerController</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getTimers(java.util.Properties)">getTimers</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates the vector of Timers plugins.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getVector(java.util.Properties, java.lang.String)">getVector</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+          <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates a vector of strings for all the properties that start with a
+ common prefix.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getVisualizers(java.util.Properties)">getVisualizers</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates the vector of visualizer plugins.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/org/xml/sax/XMLReader.html?is-external=true" title="class or interface in org.xml.sax">XMLReader</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getXMLParser()">getXMLParser</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create an instance of an org.xml.sax.Parser based on the default props.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#helpGC()">helpGC</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Help GC by triggering GC and finalization</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#initializeProperties(java.lang.String)">initializeProperties</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your implementation will be handed the filename that was provided to
+ AllTests as a configuration file.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#initLocale()">initLocale</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initialise the JMeter Locale</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#initLogging()">initLogging</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initialise JMeter logging</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#instantiate(java.lang.String, java.lang.String)">instantiate</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;className,
+            <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;impls)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instatiate an object and guarantee its class.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#instantiate(java.util.Vector, java.lang.String)">instantiate</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;&nbsp;v,
+            <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;className)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instantiate a vector of classes</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#isExpertMode()">isExpertMode</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Determine whether we are in 'expert' mode.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#loadJMeterProperties(java.lang.String)">loadJMeterProperties</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Load the JMeter properties file; if not found, then
+ default to "org/apache/jmeter/jmeter.properties" from the classpath
+
+ 
+ c.f. loadProperties</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#loadProperties(java.lang.String)">loadProperties</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method loads a property file that may reside in the user space, or
+ in the classpath</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#loadProperties(java.lang.String, java.util.Properties)">loadProperties</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file,
+               <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;defaultProps)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method loads a property file that may reside in the user space, or
+ in the classpath</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>,<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#parseHeaders(java.lang.String)">parseHeaders</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;headers)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Split line into name/value pairs and remove colon ':'</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#removeLocaleChangeListener(org.apache.jmeter.util.LocaleChangeListener)">removeLocaleChangeListener</A></B>(<A HREF="../../../../org/apache/jmeter/util/LocaleChangeListener.html" title="interface in org.apache.jmeter.util">LocaleChangeListener</A>&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#reportErrorToUser(java.lang.String)">reportErrorToUser</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;errorMsg)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Report an error through a dialog box.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#reportErrorToUser(java.lang.String, java.lang.String)">reportErrorToUser</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;errorMsg,
+                  <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;titleMsg)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Report an error through a dialog box.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#runSafe(java.lang.Runnable)">runSafe</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang">Runnable</A>&nbsp;runnable)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run the runnable in AWT Thread if current thread is not AWT thread
+ otherwise runs call <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/SwingUtilities.html?is-external=true#invokeAndWait(java.lang.Runnable)" title="class or interface in javax.swing"><CODE>SwingUtilities.invokeAndWait(Runnable)</CODE></A></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#selJComboBoxItem(java.util.Properties, javax.swing.JComboBox, java.util.Vector, java.lang.String)">selJComboBoxItem</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JComboBox.html?is-external=true" title="class or interface in javax.swing">JComboBox</A>&nbsp;combo,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;?&gt;&nbsp;namVec,
+                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the selection of the JComboBox to the Object 'name' from the list in
+ namVec.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#setJMeterHome(java.lang.String)">setJMeterHome</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;home)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#setLocale(java.util.Locale)">setLocale</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Locale.html?is-external=true" title="class or interface in java.util">Locale</A>&nbsp;loc)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Changes the current locale: re-reads resource strings and notifies
+ listeners.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#setProperty(java.lang.String, java.lang.String)">setProperty</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+            <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propValue)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set a String value</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#unsplit(java.lang.Object[], java.lang.Object)">unsplit</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>[]&nbsp;splittee,
+        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;splitChar)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Takes an array of strings and a tokenizer character, and returns a string
+ of all the strings concatenated with the tokenizer string in between each
+ one.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#unsplit(java.lang.Object[], java.lang.Object, java.lang.String)">unsplit</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>[]&nbsp;splittee,
+        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;splitChar,
+        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;def)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Takes an array of strings and a tokenizer character, and returns a string
+ of all the strings concatenated with the tokenizer string in between each
+ one.</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ FIELD DETAIL =========== -->
+
+<A NAME="field_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Field Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="RES_KEY_PFX"><!-- --></A><H3>
+RES_KEY_PFX</H3>
+<PRE>
+public static final <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>RES_KEY_PFX</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../constant-values.html#org.apache.jmeter.util.JMeterUtils.RES_KEY_PFX">Constant Field Values</A></DL>
+</DL>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="JMeterUtils()"><!-- --></A><H3>
+JMeterUtils</H3>
+<PRE>
+public <B>JMeterUtils</B>()</PRE>
+<DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="getMatcher()"><!-- --></A><H3>
+getMatcher</H3>
+<PRE>
+public static org.apache.oro.text.regex.Perl5Matcher <B>getMatcher</B>()</PRE>
+<DL>
+<DD>Gets Perl5Matcher for this thread.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the <CODE>Perl5Matcher</CODE> for this thread</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getProperties(java.lang.String)"><!-- --></A><H3>
+getProperties</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A> <B>getProperties</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</PRE>
+<DL>
+<DD>This method is used by the init method to load the property file that may
+ even reside in the user space, or in the classpath under
+ org.apache.jmeter.jmeter.properties.
+
+ The method also initialises logging and sets up the default Locale
+
+ TODO - perhaps remove?
+ [still used
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>file</CODE> - the file to load
+<DT><B>Returns:</B><DD>the Properties from the file<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getJMeterProperties()"><CODE>getJMeterProperties()</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#loadJMeterProperties(java.lang.String)"><CODE>loadJMeterProperties(String)</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#initLogging()"><CODE>initLogging()</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#initLocale()"><CODE>initLocale()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="initLogging()"><!-- --></A><H3>
+initLogging</H3>
+<PRE>
+public static void <B>initLogging</B>()</PRE>
+<DL>
+<DD>Initialise JMeter logging
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="initLocale()"><!-- --></A><H3>
+initLocale</H3>
+<PRE>
+public static void <B>initLocale</B>()</PRE>
+<DL>
+<DD>Initialise the JMeter Locale
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="loadJMeterProperties(java.lang.String)"><!-- --></A><H3>
+loadJMeterProperties</H3>
+<PRE>
+public static void <B>loadJMeterProperties</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</PRE>
+<DL>
+<DD>Load the JMeter properties file; if not found, then
+ default to "org/apache/jmeter/jmeter.properties" from the classpath
+
+ <p>
+ c.f. loadProperties
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>file</CODE> - Name of the file from which the JMeter properties should be loaded</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="loadProperties(java.lang.String)"><!-- --></A><H3>
+loadProperties</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A> <B>loadProperties</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</PRE>
+<DL>
+<DD>This method loads a property file that may reside in the user space, or
+ in the classpath
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>file</CODE> - the file to load
+<DT><B>Returns:</B><DD>the Properties from the file, may be null (e.g. file not found)</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="loadProperties(java.lang.String, java.util.Properties)"><!-- --></A><H3>
+loadProperties</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A> <B>loadProperties</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file,
+                                        <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;defaultProps)</PRE>
+<DL>
+<DD>This method loads a property file that may reside in the user space, or
+ in the classpath
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>file</CODE> - the file to load<DD><CODE>defaultProps</CODE> - a set of default properties
+<DT><B>Returns:</B><DD>the Properties from the file; if it could not be processed, the defaultProps are returned.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPatternCache()"><!-- --></A><H3>
+getPatternCache</H3>
+<PRE>
+public static org.apache.oro.text.PatternCacheLRU <B>getPatternCache</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPattern(java.lang.String)"><!-- --></A><H3>
+getPattern</H3>
+<PRE>
+public static org.apache.oro.text.regex.Pattern <B>getPattern</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;expression)
+                                                    throws org.apache.oro.text.MalformedCachePatternException</PRE>
+<DL>
+<DD>Get a compiled expression from the pattern cache (READ_ONLY).
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>expression</CODE> - regular expression to be looked up
+<DT><B>Returns:</B><DD>compiled pattern
+<DT><B>Throws:</B>
+<DD><CODE>org.apache.oro.text.MalformedCachePatternException</CODE> - (Runtime)
+ This should be caught for expressions that may vary (e.g. user input)</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPattern(java.lang.String, int)"><!-- --></A><H3>
+getPattern</H3>
+<PRE>
+public static org.apache.oro.text.regex.Pattern <B>getPattern</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;expression,
+                                                           int&nbsp;options)
+                                                    throws org.apache.oro.text.MalformedCachePatternException</PRE>
+<DL>
+<DD>Get a compiled expression from the pattern cache.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>expression</CODE> - RE<DD><CODE>options</CODE> - e.g. <CODE>READ_ONLY_MASK</CODE>
+<DT><B>Returns:</B><DD>compiled pattern
+<DT><B>Throws:</B>
+<DD><CODE>org.apache.oro.text.MalformedCachePatternException</CODE> - (Runtime)
+ This should be caught for expressions that may vary (e.g. user input)</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="initializeProperties(java.lang.String)"><!-- --></A><H3>
+initializeProperties</H3>
+<PRE>
+public void <B>initializeProperties</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;file)</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jorphan/test/UnitTestManager.html#initializeProperties(java.lang.String)">UnitTestManager</A></CODE></B></DD>
+<DD>Your implementation will be handed the filename that was provided to
+ AllTests as a configuration file. It can hold whatever properties you
+ need to configure your system prior to the unit tests running.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jorphan/test/UnitTestManager.html#initializeProperties(java.lang.String)">initializeProperties</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jorphan/test/UnitTestManager.html" title="interface in org.apache.jorphan.test">UnitTestManager</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>file</CODE> - path to the configuration file</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="findClassesThatExtend(java.lang.Class)"><!-- --></A><H3>
+findClassesThatExtend</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>findClassesThatExtend</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</A>&lt;?&gt;&nbsp;superClass)
+                                          throws <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Convenience method for
+ <A HREF="../../../../org/apache/jorphan/reflect/ClassFinder.html#findClassesThatExtend(java.lang.String[], java.lang.Class[], boolean)"><CODE>ClassFinder.findClassesThatExtend(String[], Class[], boolean)</CODE></A>
+ with the option to include inner classes in the search set to false
+ and the path list is derived from JMeterUtils.getSearchPaths().
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>superClass</CODE> - - single class to search for
+<DT><B>Returns:</B><DD>List of Strings containing discovered class names.
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</A></CODE> - when the used <A HREF="../../../../org/apache/jorphan/reflect/ClassFinder.html" title="class in org.apache.jorphan.reflect"><CODE>ClassFinder</CODE></A> throws one while searching for the class</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSearchPaths()"><!-- --></A><H3>
+getSearchPaths</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[] <B>getSearchPaths</B>()</PRE>
+<DL>
+<DD>Generate a list of paths to search.
+ The output array always starts with
+ JMETER_HOME/lib/ext
+ and is followed by any paths obtained from the "search_paths" JMeter property.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>array of path strings</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getRandomInt(int)"><!-- --></A><H3>
+getRandomInt</H3>
+<PRE>
+public static int <B>getRandomInt</B>(int&nbsp;r)</PRE>
+<DL>
+<DD>Provide random numbers
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>r</CODE> - -
+            the upper bound (exclusive)
+<DT><B>Returns:</B><DD>a random <code>int</code></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setLocale(java.util.Locale)"><!-- --></A><H3>
+setLocale</H3>
+<PRE>
+public static void <B>setLocale</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Locale.html?is-external=true" title="class or interface in java.util">Locale</A>&nbsp;loc)</PRE>
+<DL>
+<DD>Changes the current locale: re-reads resource strings and notifies
+ listeners.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>loc</CODE> - -
+            new locale</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocale()"><!-- --></A><H3>
+getLocale</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Locale.html?is-external=true" title="class or interface in java.util">Locale</A> <B>getLocale</B>()</PRE>
+<DL>
+<DD>Gets the current locale.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>current locale</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addLocaleChangeListener(org.apache.jmeter.util.LocaleChangeListener)"><!-- --></A><H3>
+addLocaleChangeListener</H3>
+<PRE>
+public static void <B>addLocaleChangeListener</B>(<A HREF="../../../../org/apache/jmeter/util/LocaleChangeListener.html" title="interface in org.apache.jmeter.util">LocaleChangeListener</A>&nbsp;listener)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="removeLocaleChangeListener(org.apache.jmeter.util.LocaleChangeListener)"><!-- --></A><H3>
+removeLocaleChangeListener</H3>
+<PRE>
+public static void <B>removeLocaleChangeListener</B>(<A HREF="../../../../org/apache/jmeter/util/LocaleChangeListener.html" title="interface in org.apache.jmeter.util">LocaleChangeListener</A>&nbsp;listener)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getResString(java.lang.String)"><!-- --></A><H3>
+getResString</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getResString</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key)</PRE>
+<DL>
+<DD>Gets the resource string for this key.
+
+ If the resource is not found, a warning is logged
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>key</CODE> - the key in the resource file
+<DT><B>Returns:</B><DD>the resource string if the key is found; otherwise, return
+         "[res_key="+key+"]"</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getResString(java.lang.String, java.util.Locale)"><!-- --></A><H3>
+getResString</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getResString</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key,
+                                  <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Locale.html?is-external=true" title="class or interface in java.util">Locale</A>&nbsp;forcedLocale)</PRE>
+<DL>
+<DD>Gets the resource string for this key in Locale.
+
+ If the resource is not found, a warning is logged
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>key</CODE> - the key in the resource file<DD><CODE>forcedLocale</CODE> - Force a particular locale
+<DT><B>Returns:</B><DD>the resource string if the key is found; otherwise, return
+         "[res_key="+key+"]"<DT><B>Since:</B></DT>
+  <DD>2.7</DD>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getResString(java.lang.String, java.lang.String)"><!-- --></A><H3>
+getResString</H3>
+<PRE>
+<FONT SIZE="-1"><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</A>
+</FONT>public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getResString</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key,
+                                             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;defaultValue)</PRE>
+<DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Only intended for use in development; use
+             getResString(String) normally</I>
+<P>
+<DD>Gets the resource string for this key.
+
+ If the resource is not found, a warning is logged
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>key</CODE> - the key in the resource file<DD><CODE>defaultValue</CODE> - -
+            the default value
+<DT><B>Returns:</B><DD>the resource string if the key is found; otherwise, return the
+         default</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getParsedLabel(java.lang.String)"><!-- --></A><H3>
+getParsedLabel</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getParsedLabel</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;key)</PRE>
+<DL>
+<DD>To get I18N label from properties file
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>key</CODE> - in messages.properties
+<DT><B>Returns:</B><DD>I18N label without (if exists) last colon ':' and spaces</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocaleString(java.lang.String)"><!-- --></A><H3>
+getLocaleString</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getLocaleString</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;locale)</PRE>
+<DL>
+<DD>Get the locale name as a resource.
+ Does not log an error if the resource does not exist.
+ This is needed to support additional locales, as they won't be in existing messages files.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>locale</CODE> - name
+<DT><B>Returns:</B><DD>the locale display name as defined in the current Locale or the original string if not present</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getJMeterProperties()"><!-- --></A><H3>
+getJMeterProperties</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A> <B>getJMeterProperties</B>()</PRE>
+<DL>
+<DD>This gets the currently defined appProperties. It can only be called
+ after the <A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getProperties(java.lang.String)"><CODE>getProperties(String)</CODE></A> or <A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#loadJMeterProperties(java.lang.String)"><CODE>loadJMeterProperties(String)</CODE></A> 
+ method has been called.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>The JMeterProperties value, 
+         may be null if <A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#loadJMeterProperties(java.lang.String)"><CODE>loadJMeterProperties(String)</CODE></A> has not been called<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getProperties(java.lang.String)"><CODE>getProperties(String)</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#loadJMeterProperties(java.lang.String)"><CODE>loadJMeterProperties(String)</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getImage(java.lang.String)"><!-- --></A><H3>
+getImage</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/ImageIcon.html?is-external=true" title="class or interface in javax.swing">ImageIcon</A> <B>getImage</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</PRE>
+<DL>
+<DD>This looks for the requested image in the classpath under
+ org.apache.jmeter.images.&lt;name&gt;
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>name</CODE> - Description of Parameter
+<DT><B>Returns:</B><DD>The Image value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getImage(java.lang.String, java.lang.String)"><!-- --></A><H3>
+getImage</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/ImageIcon.html?is-external=true" title="class or interface in javax.swing">ImageIcon</A> <B>getImage</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+                                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;description)</PRE>
+<DL>
+<DD>This looks for the requested image in the classpath under
+ org.apache.jmeter.images.<em>&lt;name&gt;</em>, and also sets the description
+ of the image, which is useful if the icon is going to be placed
+ on the clipboard.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>name</CODE> - the name of the image<DD><CODE>description</CODE> - the description of the image
+<DT><B>Returns:</B><DD>The Image value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getResourceFileAsText(java.lang.String)"><!-- --></A><H3>
+getResourceFileAsText</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getResourceFileAsText</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getTimers(java.util.Properties)"><!-- --></A><H3>
+getTimers</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt; <B>getTimers</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</PRE>
+<DL>
+<DD>Creates the vector of Timers plugins.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - Description of Parameter
+<DT><B>Returns:</B><DD>The Timers value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getVisualizers(java.util.Properties)"><!-- --></A><H3>
+getVisualizers</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt; <B>getVisualizers</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</PRE>
+<DL>
+<DD>Creates the vector of visualizer plugins.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - Description of Parameter
+<DT><B>Returns:</B><DD>The Visualizers value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getControllers(java.util.Properties)"><!-- --></A><H3>
+getControllers</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt; <B>getControllers</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</PRE>
+<DL>
+<DD>Creates a vector of SampleController plugins.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - The properties with information about the samplers
+<DT><B>Returns:</B><DD>The Controllers value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getTestSamples(java.util.Properties, java.lang.String)"><!-- --></A><H3>
+getTestSamples</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[] <B>getTestSamples</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+                                      <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</PRE>
+<DL>
+<DD>Create a string of class names for a particular SamplerController
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - The properties with info about the samples.<DD><CODE>name</CODE> - The name of the sampler controller.
+<DT><B>Returns:</B><DD>The TestSamples value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getXMLParser()"><!-- --></A><H3>
+getXMLParser</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/org/xml/sax/XMLReader.html?is-external=true" title="class or interface in org.xml.sax">XMLReader</A> <B>getXMLParser</B>()</PRE>
+<DL>
+<DD>Create an instance of an org.xml.sax.Parser based on the default props.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>The XMLParser value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getAlias(java.util.Properties)"><!-- --></A><H3>
+getAlias</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Hashtable.html?is-external=true" title="class or interface in java.util">Hashtable</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>,<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>getAlias</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties)</PRE>
+<DL>
+<DD>Creates the vector of alias strings.
+ <p>
+ The properties will be filtered by all values starting with
+ <code>alias.</code>. The matching entries will be used for the new
+ <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Hashtable.html?is-external=true" title="class or interface in java.util"><CODE>Hashtable</CODE></A> while the prefix <code>alias.</code> will be stripped
+ of the keys.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - the input values
+<DT><B>Returns:</B><DD>The Alias value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getVector(java.util.Properties, java.lang.String)"><!-- --></A><H3>
+getVector</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>getVector</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+                                       <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</PRE>
+<DL>
+<DD>Creates a vector of strings for all the properties that start with a
+ common prefix.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - Description of Parameter<DD><CODE>name</CODE> - Description of Parameter
+<DT><B>Returns:</B><DD>The Vector value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getHashtable(java.util.Properties, java.lang.String)"><!-- --></A><H3>
+getHashtable</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Hashtable.html?is-external=true" title="class or interface in java.util">Hashtable</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>,<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>getHashtable</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+                                                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;prefix)</PRE>
+<DL>
+<DD>Creates a table of strings for all the properties that start with a
+ common prefix.
+ <p>
+ So if you have <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util"><CODE>Properties</CODE></A> <code>prop</code> with two entries, say
+ <ul>
+ <li>this.test</li>
+ <li>that.something</li>
+ </ul>
+ And would call this method with a <code>prefix</code> <em>this</em>, the
+ result would be a new <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Hashtable.html?is-external=true" title="class or interface in java.util"><CODE>Hashtable</CODE></A> with one entry, which key would
+ be <em>test</em>.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - input to search<DD><CODE>prefix</CODE> - to match against properties
+<DT><B>Returns:</B><DD>a Hashtable where the keys are the original matching keys with
+         the prefix removed</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPropDefault(java.lang.String, int)"><!-- --></A><H3>
+getPropDefault</H3>
+<PRE>
+public static int <B>getPropDefault</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+                                 int&nbsp;defaultVal)</PRE>
+<DL>
+<DD>Get a int value with default if not present.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>propName</CODE> - the name of the property.<DD><CODE>defaultVal</CODE> - the default value.
+<DT><B>Returns:</B><DD>The PropDefault value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPropDefault(java.lang.String, boolean)"><!-- --></A><H3>
+getPropDefault</H3>
+<PRE>
+public static boolean <B>getPropDefault</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+                                     boolean&nbsp;defaultVal)</PRE>
+<DL>
+<DD>Get a boolean value with default if not present.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>propName</CODE> - the name of the property.<DD><CODE>defaultVal</CODE> - the default value.
+<DT><B>Returns:</B><DD>The PropDefault value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPropDefault(java.lang.String, long)"><!-- --></A><H3>
+getPropDefault</H3>
+<PRE>
+public static long <B>getPropDefault</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+                                  long&nbsp;defaultVal)</PRE>
+<DL>
+<DD>Get a long value with default if not present.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>propName</CODE> - the name of the property.<DD><CODE>defaultVal</CODE> - the default value.
+<DT><B>Returns:</B><DD>The PropDefault value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getPropDefault(java.lang.String, java.lang.String)"><!-- --></A><H3>
+getPropDefault</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getPropDefault</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+                                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;defaultVal)</PRE>
+<DL>
+<DD>Get a String value with default if not present.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>propName</CODE> - the name of the property.<DD><CODE>defaultVal</CODE> - the default value.
+<DT><B>Returns:</B><DD>The PropDefault value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getProperty(java.lang.String)"><!-- --></A><H3>
+getProperty</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getProperty</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName)</PRE>
+<DL>
+<DD>Get the value of a JMeter property.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>propName</CODE> - the name of the property.
+<DT><B>Returns:</B><DD>the value of the JMeter property, or null if not defined</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setProperty(java.lang.String, java.lang.String)"><!-- --></A><H3>
+setProperty</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A> <B>setProperty</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propName,
+                                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;propValue)</PRE>
+<DL>
+<DD>Set a String value
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>propName</CODE> - the name of the property.<DD><CODE>propValue</CODE> - the value of the property
+<DT><B>Returns:</B><DD>the previous value of the property</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="selJComboBoxItem(java.util.Properties, javax.swing.JComboBox, java.util.Vector, java.lang.String)"><!-- --></A><H3>
+selJComboBoxItem</H3>
+<PRE>
+public static void <B>selJComboBoxItem</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</A>&nbsp;properties,
+                                    <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JComboBox.html?is-external=true" title="class or interface in javax.swing">JComboBox</A>&nbsp;combo,
+                                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;?&gt;&nbsp;namVec,
+                                    <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</PRE>
+<DL>
+<DD>Sets the selection of the JComboBox to the Object 'name' from the list in
+ namVec.
+ NOTUSED?
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>properties</CODE> - not used at the moment<DD><CODE>combo</CODE> - <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JComboBox.html?is-external=true" title="class or interface in javax.swing"><CODE>JComboBox</CODE></A> to work on<DD><CODE>namVec</CODE> - List of names, which are displayed in <code>combo</code><DD><CODE>name</CODE> - Name, that is to be selected. It has to be in <code>namVec</code></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="instantiate(java.lang.String, java.lang.String)"><!-- --></A><H3>
+instantiate</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A> <B>instantiate</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;className,
+                                 <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;impls)</PRE>
+<DL>
+<DD>Instatiate an object and guarantee its class.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>className</CODE> - The name of the class to instantiate.<DD><CODE>impls</CODE> - The name of the class it must be an instance of
+<DT><B>Returns:</B><DD>an instance of the class, or null if instantiation failed or the class did not implement/extend as required</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="instantiate(java.util.Vector, java.lang.String)"><!-- --></A><H3>
+instantiate</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&gt; <B>instantiate</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Vector.html?is-external=true" title="class or interface in java.util">Vector</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;&nbsp;v,
+                                         <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;className)</PRE>
+<DL>
+<DD>Instantiate a vector of classes
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>v</CODE> - Description of Parameter<DD><CODE>className</CODE> - Description of Parameter
+<DT><B>Returns:</B><DD>Description of the Returned Value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="createButton(java.lang.String, java.awt.event.ActionListener)"><!-- --></A><H3>
+createButton</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JButton.html?is-external=true" title="class or interface in javax.swing">JButton</A> <B>createButton</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+                                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true" title="class or interface in java.awt.event">ActionListener</A>&nbsp;listener)</PRE>
+<DL>
+<DD>Create a button with the netscape style
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>name</CODE> - Description of Parameter<DD><CODE>listener</CODE> - Description of Parameter
+<DT><B>Returns:</B><DD>Description of the Returned Value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="createSimpleButton(java.lang.String, java.awt.event.ActionListener)"><!-- --></A><H3>
+createSimpleButton</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JButton.html?is-external=true" title="class or interface in javax.swing">JButton</A> <B>createSimpleButton</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+                                         <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/event/ActionListener.html?is-external=true" title="class or interface in java.awt.event">ActionListener</A>&nbsp;listener)</PRE>
+<DL>
+<DD>Create a button with the netscape style
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>name</CODE> - Description of Parameter<DD><CODE>listener</CODE> - Description of Parameter
+<DT><B>Returns:</B><DD>Description of the Returned Value</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="reportErrorToUser(java.lang.String)"><!-- --></A><H3>
+reportErrorToUser</H3>
+<PRE>
+public static void <B>reportErrorToUser</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;errorMsg)</PRE>
+<DL>
+<DD>Report an error through a dialog box.
+ Title defaults to "error_title" resource string
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>errorMsg</CODE> - - the error message.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="reportErrorToUser(java.lang.String, java.lang.String)"><!-- --></A><H3>
+reportErrorToUser</H3>
+<PRE>
+public static void <B>reportErrorToUser</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;errorMsg,
+                                     <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;titleMsg)</PRE>
+<DL>
+<DD>Report an error through a dialog box.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>errorMsg</CODE> - - the error message.<DD><CODE>titleMsg</CODE> - - title string</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="findInArray(java.lang.String[], java.lang.String)"><!-- --></A><H3>
+findInArray</H3>
+<PRE>
+public static int <B>findInArray</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>[]&nbsp;array,
+                              <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;value)</PRE>
+<DL>
+<DD>Finds a string in an array of strings and returns the
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>array</CODE> - Array of strings.<DD><CODE>value</CODE> - String to compare to array values.
+<DT><B>Returns:</B><DD>Index of value in array, or -1 if not in array.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="unsplit(java.lang.Object[], java.lang.Object)"><!-- --></A><H3>
+unsplit</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>unsplit</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>[]&nbsp;splittee,
+                             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;splitChar)</PRE>
+<DL>
+<DD>Takes an array of strings and a tokenizer character, and returns a string
+ of all the strings concatenated with the tokenizer string in between each
+ one.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>splittee</CODE> - Array of Objects to be concatenated.<DD><CODE>splitChar</CODE> - Object to unsplit the strings with.
+<DT><B>Returns:</B><DD>Array of all the tokens.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="unsplit(java.lang.Object[], java.lang.Object, java.lang.String)"><!-- --></A><H3>
+unsplit</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>unsplit</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>[]&nbsp;splittee,
+                             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A>&nbsp;splitChar,
+                             <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;def)</PRE>
+<DL>
+<DD>Takes an array of strings and a tokenizer character, and returns a string
+ of all the strings concatenated with the tokenizer string in between each
+ one.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>splittee</CODE> - Array of Objects to be concatenated.<DD><CODE>splitChar</CODE> - Object to unsplit the strings with.<DD><CODE>def</CODE> - Default value to replace null values in array.
+<DT><B>Returns:</B><DD>Array of all the tokens.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getJMeterHome()"><!-- --></A><H3>
+getJMeterHome</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getJMeterHome</B>()</PRE>
+<DL>
+<DD>Get the JMeter home directory - does not include the trailing separator.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the home directory</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getJMeterBinDir()"><!-- --></A><H3>
+getJMeterBinDir</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getJMeterBinDir</B>()</PRE>
+<DL>
+<DD>Get the JMeter bin directory - does not include the trailing separator.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the bin directory</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setJMeterHome(java.lang.String)"><!-- --></A><H3>
+setJMeterHome</H3>
+<PRE>
+public static void <B>setJMeterHome</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;home)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getJMeterVersion()"><!-- --></A><H3>
+getJMeterVersion</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getJMeterVersion</B>()</PRE>
+<DL>
+<DD>Gets the JMeter Version.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the JMeter version string</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getJMeterCopyright()"><!-- --></A><H3>
+getJMeterCopyright</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getJMeterCopyright</B>()</PRE>
+<DL>
+<DD>Gets the JMeter copyright.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the JMeter copyright string</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isExpertMode()"><!-- --></A><H3>
+isExpertMode</H3>
+<PRE>
+public static boolean <B>isExpertMode</B>()</PRE>
+<DL>
+<DD>Determine whether we are in 'expert' mode. Certain features may be hidden
+ from user's view unless in expert mode.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>true iif we're in expert mode</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="findFile(java.lang.String)"><!-- --></A><H3>
+findFile</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</A> <B>findFile</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;fileName)</PRE>
+<DL>
+<DD>Find a file in the current directory or in the JMeter bin directory.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>fileName</CODE> - the name of the file to find
+<DT><B>Returns:</B><DD>File object</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocalHostIP()"><!-- --></A><H3>
+getLocalHostIP</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getLocalHostIP</B>()</PRE>
+<DL>
+<DD>Returns the cached result from calling
+ InetAddress.getLocalHost().getHostAddress()
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>String representation of local IP address</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocalHostName()"><!-- --></A><H3>
+getLocalHostName</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getLocalHostName</B>()</PRE>
+<DL>
+<DD>Returns the cached result from calling
+ InetAddress.getLocalHost().getHostName()
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>local host name</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLocalHostFullName()"><!-- --></A><H3>
+getLocalHostFullName</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getLocalHostFullName</B>()</PRE>
+<DL>
+<DD>Returns the cached result from calling
+ InetAddress.getLocalHost().getCanonicalHostName()
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>local host name in canonical form</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="parseHeaders(java.lang.String)"><!-- --></A><H3>
+parseHeaders</H3>
+<PRE>
+public static <A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>,<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>parseHeaders</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;headers)</PRE>
+<DL>
+<DD>Split line into name/value pairs and remove colon ':'
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>headers</CODE> - multi-line string headers
+<DT><B>Returns:</B><DD>a map name/value for each header</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="runSafe(java.lang.Runnable)"><!-- --></A><H3>
+runSafe</H3>
+<PRE>
+public static final void <B>runSafe</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang">Runnable</A>&nbsp;runnable)</PRE>
+<DL>
+<DD>Run the runnable in AWT Thread if current thread is not AWT thread
+ otherwise runs call <A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/SwingUtilities.html?is-external=true#invokeAndWait(java.lang.Runnable)" title="class or interface in javax.swing"><CODE>SwingUtilities.invokeAndWait(Runnable)</CODE></A>
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>runnable</CODE> - <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang"><CODE>Runnable</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="helpGC()"><!-- --></A><H3>
+helpGC</H3>
+<PRE>
+public static final void <B>helpGC</B>()</PRE>
+<DL>
+<DD>Help GC by triggering GC and finalization
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="clearMatcherMemory(org.apache.oro.text.regex.Perl5Matcher, org.apache.oro.text.regex.Pattern)"><!-- --></A><H3>
+clearMatcherMemory</H3>
+<PRE>
+public static final void <B>clearMatcherMemory</B>(org.apache.oro.text.regex.Perl5Matcher&nbsp;matcher,
+                                            org.apache.oro.text.regex.Pattern&nbsp;pattern)</PRE>
+<DL>
+<DD>Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
+ the unzipped page size
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>matcher</CODE> - <CODE>Perl5Matcher</CODE><DD><CODE>pattern</CODE> - Pattern</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/JMeterTreeNodeTransferable.html" title="class in org.apache.jmeter.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/util/JMeterVersion.html" title="class in org.apache.jmeter.util"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/util/JMeterUtils.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="JMeterUtils.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

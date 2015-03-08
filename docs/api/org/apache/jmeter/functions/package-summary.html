@@ -1,0 +1,430 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+org.apache.jmeter.functions (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="org.apache.jmeter.functions (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Package</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Class</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/extractor/gui/package-summary.html"><B>PREV PACKAGE</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/functions/gui/package-summary.html"><B>NEXT PACKAGE</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/functions/package-summary.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="package-summary.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<H2>
+Package org.apache.jmeter.functions
+</H2>
+Functions
+    Methods to be implemented
+    setParameters(Collection)
+    
+        <br></br>
+    execute(prevResult,currentSampler)
+    Note that either or both of the parameters may be null.
+<P>
+<B>See:</B>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#package_description"><B>Description</B></A>
+<P>
+
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Interface Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Function.html" title="interface in org.apache.jmeter.functions">Function</A></B></TD>
+<TD>Methods that a function must implement</TD>
+</TR>
+</TABLE>
+&nbsp;
+
+<P>
+
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Class Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A></B></TD>
+<TD>Provides common methods for all functions</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/BeanShell.html" title="class in org.apache.jmeter.functions">BeanShell</A></B></TD>
+<TD>A function which understands BeanShell</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/CharFunction.html" title="class in org.apache.jmeter.functions">CharFunction</A></B></TD>
+<TD>Function to generate chars from a list of decimal or hex values</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/CSVRead.html" title="class in org.apache.jmeter.functions">CSVRead</A></B></TD>
+<TD>The function represented by this class allows data to be read from CSV files.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/EscapeHtml.html" title="class in org.apache.jmeter.functions">EscapeHtml</A></B></TD>
+<TD>Function which escapes the characters in a <code>String</code> using HTML entities.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/EscapeOroRegexpChars.html" title="class in org.apache.jmeter.functions">EscapeOroRegexpChars</A></B></TD>
+<TD>Escape ORO meta characters</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/EvalFunction.html" title="class in org.apache.jmeter.functions">EvalFunction</A></B></TD>
+<TD>Function to evaluate a string which may contain variable or function references.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/EvalVarFunction.html" title="class in org.apache.jmeter.functions">EvalVarFunction</A></B></TD>
+<TD>Function to evaluate a string which may contain variable or function references.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/FileRowColContainer.html" title="class in org.apache.jmeter.functions">FileRowColContainer</A></B></TD>
+<TD>File data container for CSV (and similar delimited) files Data is accessible
+ via row and column number</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/FileToString.html" title="class in org.apache.jmeter.functions">FileToString</A></B></TD>
+<TD>FileToString Function to read a complete file into a String.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/FileWrapper.html" title="class in org.apache.jmeter.functions">FileWrapper</A></B></TD>
+<TD>This class wraps the FileRowColContainer for use across multiple threads.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/IntSum.html" title="class in org.apache.jmeter.functions">IntSum</A></B></TD>
+<TD>Provides an intSum function that adds two or more integer values.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/IterationCounter.html" title="class in org.apache.jmeter.functions">IterationCounter</A></B></TD>
+<TD>Counter that can be referenced anywhere in the Thread Group.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/JavaScript.html" title="class in org.apache.jmeter.functions">JavaScript</A></B></TD>
+<TD>javaScript function implementation that executes a piece of JavaScript (not Java!)</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Jexl2Function.html" title="class in org.apache.jmeter.functions">Jexl2Function</A></B></TD>
+<TD>A function which understands Commons JEXL2</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/JexlFunction.html" title="class in org.apache.jmeter.functions">JexlFunction</A></B></TD>
+<TD>A function which understands Commons JEXL</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/LogFunction.html" title="class in org.apache.jmeter.functions">LogFunction</A></B></TD>
+<TD>
+ Function to log a message.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/LogFunction2.html" title="class in org.apache.jmeter.functions">LogFunction2</A></B></TD>
+<TD>
+ Function to log a message.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/LongSum.html" title="class in org.apache.jmeter.functions">LongSum</A></B></TD>
+<TD>Provides a longSum function that adds two or more long values.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/MachineIP.html" title="class in org.apache.jmeter.functions">MachineIP</A></B></TD>
+<TD>Return Machine IP</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/MachineName.html" title="class in org.apache.jmeter.functions">MachineName</A></B></TD>
+<TD>Return Machine Host</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Property.html" title="class in org.apache.jmeter.functions">Property</A></B></TD>
+<TD>Function to get a JMeter property, and optionally store it
+
+ Parameters:
+  - property name
+  - variable name (optional)
+  - default value (optional)
+
+ Returns:
+ - the property value, but if not found:
+ - the default value, but if not defined:
+ - the property name itself</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Property2.html" title="class in org.apache.jmeter.functions">Property2</A></B></TD>
+<TD>Function to get a JMeter property, or a default.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Random.html" title="class in org.apache.jmeter.functions">Random</A></B></TD>
+<TD>Provides a Random function which returns a random long integer between a min
+ (first argument) and a max (second argument).</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/RandomString.html" title="class in org.apache.jmeter.functions">RandomString</A></B></TD>
+<TD>Provides a RandomString function which returns a random String of length (first argument) 
+ using characters (second argument)</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/RegexFunction.html" title="class in org.apache.jmeter.functions">RegexFunction</A></B></TD>
+<TD>Implements regular expression parsing of sample results and variables</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/SamplerName.html" title="class in org.apache.jmeter.functions">SamplerName</A></B></TD>
+<TD>Function to return the name of the current sampler.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/SetProperty.html" title="class in org.apache.jmeter.functions">SetProperty</A></B></TD>
+<TD>Function to set a JMeter property
+
+ Parameters: - property name - value
+
+ Usage:
+
+ Set the property value in the appropriate GUI by using the string:
+ ${__setProperty(propname,propvalue[,returnvalue?])}</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/SplitFunction.html" title="class in org.apache.jmeter.functions">SplitFunction</A></B></TD>
+<TD>Function to split a string into variables
+ 
+ Parameters:
+ 
+ String to split
+ Variable name prefix
+ String to split on (optional, default is comma)
+ 
+ 
+ Returns: the input string
+ 
+ Also sets the variables:
+ 
+ VARNAME - the input string
+ VARNAME_n - number of fields found
+ VARNAME_1..n - fields
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/StringFromFile.html" title="class in org.apache.jmeter.functions">StringFromFile</A></B></TD>
+<TD>StringFromFile Function to read a String from a text file.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/TestPlanName.html" title="class in org.apache.jmeter.functions">TestPlanName</A></B></TD>
+<TD>Returns Test Plan name</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/ThreadNumber.html" title="class in org.apache.jmeter.functions">ThreadNumber</A></B></TD>
+<TD>Function to return the current thread number.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/TimeFunction.html" title="class in org.apache.jmeter.functions">TimeFunction</A></B></TD>
+<TD>__time() function - returns the current time in milliseconds</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/UnEscape.html" title="class in org.apache.jmeter.functions">UnEscape</A></B></TD>
+<TD>Function to unescape any Java literals found in the String.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/UnEscapeHtml.html" title="class in org.apache.jmeter.functions">UnEscapeHtml</A></B></TD>
+<TD>Function to unescape a string containing entity escapes
+ to a string containing the actual Unicode characters corresponding to the escapes.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/UrlDecode.html" title="class in org.apache.jmeter.functions">UrlDecode</A></B></TD>
+<TD>Function to decode a application/x-www-form-urlencoded string.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/UrlEncode.html" title="class in org.apache.jmeter.functions">UrlEncode</A></B></TD>
+<TD>Function to encode a string to a application/x-www-form-urlencoded string.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Uuid.html" title="class in org.apache.jmeter.functions">Uuid</A></B></TD>
+<TD>Function to create a UUID
+
+ Parameters:
+ - None
+
+ Returns:
+ - A pseudo random UUID 4</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Variable.html" title="class in org.apache.jmeter.functions">Variable</A></B></TD>
+<TD>Function to get a JMeter Variable
+
+ Parameters:
+ - variable name
+
+ Returns:
+ - the variable value, but if not found
+ - the variable name itself</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/XPath.html" title="class in org.apache.jmeter.functions">XPath</A></B></TD>
+<TD>The function represented by this class allows data to be read from XML files.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/XPathFileContainer.html" title="class in org.apache.jmeter.functions">XPathFileContainer</A></B></TD>
+<TD>File data container for XML files Data is accessible via XPath</TD>
+</TR>
+</TABLE>
+&nbsp;
+
+<P>
+
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Exception Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/InvalidVariableException.html" title="class in org.apache.jmeter.functions">InvalidVariableException</A></B></TD>
+<TD>&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+
+<P>
+<A NAME="package_description"><!-- --></A><H2>
+Package org.apache.jmeter.functions Description
+</H2>
+
+<P>
+<h1>Functions</h1>
+    <h2>Methods to be implemented</h2>
+    setParameters(Collection)
+    
+        <br></br>
+    execute(prevResult,currentSampler)
+    Note that either or both of the parameters may be null.
+    
+    <h2>Calling sequence</h2>
+    When the test plan is prepared for running, one instance of the class is created for each occurrence
+    of a function call. The setParameters() method is then called on each instance.
+    Once the test is running, the execute method can be called by any thread, and is
+    therefore synchronized.
+    
+    This is unlike most of (all?) the JMeter test elements, which are created for each thread.
+    
+    Any context that needs to be maintained for a thread must be done using ThreadLocal or similar.
+<P>
+
+<P>
+<DL>
+</DL>
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Package</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <FONT CLASS="NavBarFont1">Class</FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/extractor/gui/package-summary.html"><B>PREV PACKAGE</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/functions/gui/package-summary.html"><B>NEXT PACKAGE</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/functions/package-summary.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="package-summary.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

@@ -1,0 +1,611 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+VerticalLayout (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="VerticalLayout (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;NEXT CLASS</FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../index.html?org/apache/jorphan/gui/layout/VerticalLayout.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="VerticalLayout.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jorphan.gui.layout</FONT>
+<BR>
+Class VerticalLayout</H2>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</A>
+  <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by "><B>org.apache.jorphan.gui.layout.VerticalLayout</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true" title="class or interface in java.awt">LayoutManager</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>VerticalLayout</B><DT>extends <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A><DT>implements <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true" title="class or interface in java.awt">LayoutManager</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</A></DL>
+</PRE>
+
+<P>
+A vertical layout manager similar to java.awt.FlowLayout. Like FlowLayout
+ components do not expand to fill available space except when the horizontal
+ alignment is <code>BOTH</code> in which case components are stretched
+ horizontally. Unlike FlowLayout, components will not wrap to form another
+ column if there isn't enough space vertically. VerticalLayout can optionally
+ anchor components to the top or bottom of the display area or center them
+ between the top and bottom. Revision date 04 April 1999
+<P>
+
+<P>
+<DL>
+<DT><B>Version:</B></DT>
+  <DD>$Revision: 1413254 $</DD>
+<DT><B>See Also:</B><DD><A HREF="../../../../../serialized-form.html#org.apache.jorphan.gui.layout.VerticalLayout">Serialized Form</A></DL>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#BOTH">BOTH</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The horizontal alignment constant that designates stretching the
+ component horizontally.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#BOTTOM">BOTTOM</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The anchoring constant that designates anchoring to the bottom of the
+ display area.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#CENTER">CENTER</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The horizontal alignment constant that designates centering.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#LEFT">LEFT</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The horizontal alignment constant that designates left justification.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#RIGHT">RIGHT</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The horizontal alignment constant that designates right justification.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#TOP">TOP</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The anchoring constant that designates anchoring to the top of the
+ display area.</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#VerticalLayout()">VerticalLayout</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructs an instance of VerticalLayout with a vertical vgap of 5
+ pixels, horizontal centering and anchored to the top of the display area.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#VerticalLayout(int)">VerticalLayout</A></B>(int&nbsp;vgap)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructs a VerticalLayout instance with horizontal centering, anchored
+ to the top with the specified vgap.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#VerticalLayout(int, int)">VerticalLayout</A></B>(int&nbsp;vgap,
+               int&nbsp;alignment)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructs a VerticalLayout instance anchored to the top with the
+ specified vgap and horizontal alignment.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#VerticalLayout(int, int, int)">VerticalLayout</A></B>(int&nbsp;vgap,
+               int&nbsp;alignment,
+               int&nbsp;anchor)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructs a VerticalLayout instance with the specified vgap, horizontal
+ alignment and anchoring</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#addLayoutComponent(java.lang.String, java.awt.Component)">addLayoutComponent</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+                   <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">Component</A>&nbsp;comp)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not used by this class.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#layoutContainer(java.awt.Container)">layoutContainer</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A>&nbsp;parent)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lays out the container.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dimension.html?is-external=true" title="class or interface in java.awt">Dimension</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#minimumLayoutSize(java.awt.Container)">minimumLayoutSize</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A>&nbsp;parent)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dimension.html?is-external=true" title="class or interface in java.awt">Dimension</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#preferredLayoutSize(java.awt.Container)">preferredLayoutSize</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A>&nbsp;parent)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#removeLayoutComponent(java.awt.Component)">removeLayoutComponent</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">Component</A>&nbsp;comp)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not used by this class.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jorphan/gui/layout/VerticalLayout.html#toString()">toString</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</A>, <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ FIELD DETAIL =========== -->
+
+<A NAME="field_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Field Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="CENTER"><!-- --></A><H3>
+CENTER</H3>
+<PRE>
+public static final int <B>CENTER</B></PRE>
+<DL>
+<DD>The horizontal alignment constant that designates centering. Also used to
+ designate center anchoring.
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../constant-values.html#org.apache.jorphan.gui.layout.VerticalLayout.CENTER">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="RIGHT"><!-- --></A><H3>
+RIGHT</H3>
+<PRE>
+public static final int <B>RIGHT</B></PRE>
+<DL>
+<DD>The horizontal alignment constant that designates right justification.
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../constant-values.html#org.apache.jorphan.gui.layout.VerticalLayout.RIGHT">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="LEFT"><!-- --></A><H3>
+LEFT</H3>
+<PRE>
+public static final int <B>LEFT</B></PRE>
+<DL>
+<DD>The horizontal alignment constant that designates left justification.
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../constant-values.html#org.apache.jorphan.gui.layout.VerticalLayout.LEFT">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="BOTH"><!-- --></A><H3>
+BOTH</H3>
+<PRE>
+public static final int <B>BOTH</B></PRE>
+<DL>
+<DD>The horizontal alignment constant that designates stretching the
+ component horizontally.
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../constant-values.html#org.apache.jorphan.gui.layout.VerticalLayout.BOTH">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="TOP"><!-- --></A><H3>
+TOP</H3>
+<PRE>
+public static final int <B>TOP</B></PRE>
+<DL>
+<DD>The anchoring constant that designates anchoring to the top of the
+ display area.
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../constant-values.html#org.apache.jorphan.gui.layout.VerticalLayout.TOP">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="BOTTOM"><!-- --></A><H3>
+BOTTOM</H3>
+<PRE>
+public static final int <B>BOTTOM</B></PRE>
+<DL>
+<DD>The anchoring constant that designates anchoring to the bottom of the
+ display area.
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../constant-values.html#org.apache.jorphan.gui.layout.VerticalLayout.BOTTOM">Constant Field Values</A></DL>
+</DL>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="VerticalLayout()"><!-- --></A><H3>
+VerticalLayout</H3>
+<PRE>
+public <B>VerticalLayout</B>()</PRE>
+<DL>
+<DD>Constructs an instance of VerticalLayout with a vertical vgap of 5
+ pixels, horizontal centering and anchored to the top of the display area.
+<P>
+</DL>
+<HR>
+
+<A NAME="VerticalLayout(int)"><!-- --></A><H3>
+VerticalLayout</H3>
+<PRE>
+public <B>VerticalLayout</B>(int&nbsp;vgap)</PRE>
+<DL>
+<DD>Constructs a VerticalLayout instance with horizontal centering, anchored
+ to the top with the specified vgap.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>vgap</CODE> - an int value indicating the vertical seperation of the
+            components</DL>
+</DL>
+<HR>
+
+<A NAME="VerticalLayout(int, int)"><!-- --></A><H3>
+VerticalLayout</H3>
+<PRE>
+public <B>VerticalLayout</B>(int&nbsp;vgap,
+                      int&nbsp;alignment)</PRE>
+<DL>
+<DD>Constructs a VerticalLayout instance anchored to the top with the
+ specified vgap and horizontal alignment.
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>vgap</CODE> - an int value indicating the vertical seperation of the
+            components<DD><CODE>alignment</CODE> - an int value which is one of <code>RIGHT, LEFT,
+                   CENTER, BOTH</code>
+            for the horizontal alignment.</DL>
+</DL>
+<HR>
+
+<A NAME="VerticalLayout(int, int, int)"><!-- --></A><H3>
+VerticalLayout</H3>
+<PRE>
+public <B>VerticalLayout</B>(int&nbsp;vgap,
+                      int&nbsp;alignment,
+                      int&nbsp;anchor)</PRE>
+<DL>
+<DD>Constructs a VerticalLayout instance with the specified vgap, horizontal
+ alignment and anchoring
+<P>
+<DL>
+<DT><B>Parameters:</B><DD><CODE>vgap</CODE> - an int value indicating the vertical seperation of the
+            components<DD><CODE>alignment</CODE> - an int value which is one of <code>RIGHT, LEFT, CENTER,
+                  BOTH</code>
+            for the horizontal alignment.<DD><CODE>anchor</CODE> - an int value which is one of <code>TOP, BOTTOM,
+                  CENTER</code>
+            indicating where the components are to appear if the display
+            area exceeds the minimum necessary.</DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="layoutContainer(java.awt.Container)"><!-- --></A><H3>
+layoutContainer</H3>
+<PRE>
+public void <B>layoutContainer</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A>&nbsp;parent)</PRE>
+<DL>
+<DD>Lays out the container.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true#layoutContainer(java.awt.Container)" title="class or interface in java.awt">layoutContainer</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true" title="class or interface in java.awt">LayoutManager</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="minimumLayoutSize(java.awt.Container)"><!-- --></A><H3>
+minimumLayoutSize</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dimension.html?is-external=true" title="class or interface in java.awt">Dimension</A> <B>minimumLayoutSize</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A>&nbsp;parent)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true#minimumLayoutSize(java.awt.Container)" title="class or interface in java.awt">minimumLayoutSize</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true" title="class or interface in java.awt">LayoutManager</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="preferredLayoutSize(java.awt.Container)"><!-- --></A><H3>
+preferredLayoutSize</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Dimension.html?is-external=true" title="class or interface in java.awt">Dimension</A> <B>preferredLayoutSize</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Container.html?is-external=true" title="class or interface in java.awt">Container</A>&nbsp;parent)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true#preferredLayoutSize(java.awt.Container)" title="class or interface in java.awt">preferredLayoutSize</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true" title="class or interface in java.awt">LayoutManager</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addLayoutComponent(java.lang.String, java.awt.Component)"><!-- --></A><H3>
+addLayoutComponent</H3>
+<PRE>
+public void <B>addLayoutComponent</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name,
+                               <A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">Component</A>&nbsp;comp)</PRE>
+<DL>
+<DD>Not used by this class.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true#addLayoutComponent(java.lang.String, java.awt.Component)" title="class or interface in java.awt">addLayoutComponent</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true" title="class or interface in java.awt">LayoutManager</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="removeLayoutComponent(java.awt.Component)"><!-- --></A><H3>
+removeLayoutComponent</H3>
+<PRE>
+public void <B>removeLayoutComponent</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/Component.html?is-external=true" title="class or interface in java.awt">Component</A>&nbsp;comp)</PRE>
+<DL>
+<DD>Not used by this class.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true#removeLayoutComponent(java.awt.Component)" title="class or interface in java.awt">removeLayoutComponent</A></CODE> in interface <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/awt/LayoutManager.html?is-external=true" title="class or interface in java.awt">LayoutManager</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="toString()"><!-- --></A><H3>
+toString</H3>
+<PRE>
+public <A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>toString</B>()</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</A></CODE> in class <CODE><A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;NEXT CLASS</FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../../index.html?org/apache/jorphan/gui/layout/VerticalLayout.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="VerticalLayout.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>

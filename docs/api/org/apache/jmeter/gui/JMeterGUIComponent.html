@@ -1,0 +1,562 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<TITLE>
+JMeterGUIComponent (Apache JMeter API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="JMeterGUIComponent (Apache JMeter API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/JMeterFileFilter.html" title="class in org.apache.jmeter.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/LoggerPanel.html" title="class in org.apache.jmeter.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/gui/JMeterGUIComponent.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="JMeterGUIComponent.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+org.apache.jmeter.gui</FONT>
+<BR>
+Interface JMeterGUIComponent</H2>
+<DL>
+<DT><B>All Superinterfaces:</B> <DD><A HREF="../../../../org/apache/jmeter/gui/ClearGui.html" title="interface in org.apache.jmeter.gui">ClearGui</A></DD>
+</DL>
+<DL>
+<DT><B>All Known Implementing Classes:</B> <DD><A HREF="../../../../org/apache/jmeter/assertions/gui/AbstractAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">AbstractAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/config/gui/AbstractConfigGui.html" title="class in org.apache.jmeter.config.gui">AbstractConfigGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/AbstractControllerGui.html" title="class in org.apache.jmeter.control.gui">AbstractControllerGui</A>, <A HREF="../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractListenerGui.html" title="class in org.apache.jmeter.visualizers.gui">AbstractListenerGui</A>, <A HREF="../../../../org/apache/jmeter/processor/gui/AbstractPostProcessorGui.html" title="class in org.apache.jmeter.processor.gui">AbstractPostProcessorGui</A>, <A HREF="../../../../org/apache/jmeter/processor/gui/AbstractPreProcessorGui.html" title="class in org.apache.jmeter.processor.gui">AbstractPreProcessorGui</A>, <A HREF="../../../../org/apache/jmeter/timers/gui/AbstractRandomTimerGui.html" title="class in org.apache.jmeter.timers.gui">AbstractRandomTimerGui</A>, <A HREF="../../../../org/apache/jmeter/samplers/gui/AbstractSamplerGui.html" title="class in org.apache.jmeter.samplers.gui">AbstractSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/gui/AbstractScopedJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractScopedJMeterGuiComponent</A>, <A HREF="../../../../org/apache/jmeter/threads/gui/AbstractThreadGroupGui.html" title="class in org.apache.jmeter.threads.gui">AbstractThreadGroupGui</A>, <A HREF="../../../../org/apache/jmeter/timers/gui/AbstractTimerGui.html" title="class in org.apache.jmeter.timers.gui">AbstractTimerGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html" title="class in org.apache.jmeter.visualizers.gui">AbstractVisualizer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/gui/AjpSamplerGui.html" title="class in org.apache.jmeter.protocol.http.control.gui">AjpSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/gui/AnchorModifierGui.html" title="class in org.apache.jmeter.protocol.http.modifier.gui">AnchorModifierGui</A>, <A HREF="../../../../org/apache/jmeter/config/gui/ArgumentsPanel.html" title="class in org.apache.jmeter.config.gui">ArgumentsPanel</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/AssertionGui.html" title="class in org.apache.jmeter.assertions.gui">AssertionGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/AssertionVisualizer.html" title="class in org.apache.jmeter.visualizers">AssertionVisualizer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/gui/AuthPanel.html" title="class in org.apache.jmeter.protocol.http.gui">AuthPanel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/backend/BackendListenerGui.html" title="class in org.apache.jmeter.visualizers.backend">BackendListenerGui</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/BeanShellAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">BeanShellAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/control/gui/BeanShellSamplerGui.html" title="class in org.apache.jmeter.protocol.java.control.gui">BeanShellSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/gui/CacheManagerGui.html" title="class in org.apache.jmeter.protocol.http.gui">CacheManagerGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/ComparisonVisualizer.html" title="class in org.apache.jmeter.visualizers">ComparisonVisualizer</A>, <A HREF="../../../../org/apache/jmeter/timers/gui/ConstantTimerGui.html" title="class in org.apache.jmeter.timers.gui">ConstantTimerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/gui/CookiePanel.html" title="class in org.apache.jmeter.protocol.http.gui">CookiePanel</A>, <A HREF="../../../../org/apache/jmeter/modifiers/gui/CounterConfigGui.html" title="class in org.apache.jmeter.modifiers.gui">CounterConfigGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/CriticalSectionControllerGui.html" title="class in org.apache.jmeter.control.gui">CriticalSectionControllerGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/DistributionGraphVisualizer.html" title="class in org.apache.jmeter.visualizers">DistributionGraphVisualizer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/gui/DNSCachePanel.html" title="class in org.apache.jmeter.protocol.http.gui">DNSCachePanel</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/DurationAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">DurationAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/examples/sampler/gui/ExampleSamplerGui.html" title="class in org.apache.jmeter.examples.sampler.gui">ExampleSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/ForeachControlPanel.html" title="class in org.apache.jmeter.control.gui">ForeachControlPanel</A>, <A HREF="../../../../org/apache/jmeter/protocol/ftp/config/gui/FtpConfigGui.html" title="class in org.apache.jmeter.protocol.ftp.config.gui">FtpConfigGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/ftp/control/gui/FtpTestSamplerGui.html" title="class in org.apache.jmeter.protocol.ftp.control.gui">FtpTestSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/timers/gui/GaussianRandomTimerGui.html" title="class in org.apache.jmeter.timers.gui">GaussianRandomTimerGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/GraphVisualizer.html" title="class in org.apache.jmeter.visualizers">GraphVisualizer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/gui/HeaderPanel.html" title="class in org.apache.jmeter.protocol.http.gui">HeaderPanel</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/HTMLAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">HTMLAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/extractor/gui/HtmlExtractorGui.html" title="class in org.apache.jmeter.extractor.gui">HtmlExtractorGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/gui/HTTPArgumentsPanel.html" title="class in org.apache.jmeter.protocol.http.gui">HTTPArgumentsPanel</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/config/gui/HttpDefaultsGui.html" title="class in org.apache.jmeter.protocol.http.config.gui">HttpDefaultsGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/gui/HttpMirrorControlGui.html" title="class in org.apache.jmeter.protocol.http.control.gui">HttpMirrorControlGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/gui/HttpTestSampleGui.html" title="class in org.apache.jmeter.protocol.http.control.gui">HttpTestSampleGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/IfControllerPanel.html" title="class in org.apache.jmeter.control.gui">IfControllerPanel</A>, <A HREF="../../../../org/apache/jmeter/control/gui/IncludeControllerGui.html" title="class in org.apache.jmeter.control.gui">IncludeControllerGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/InterleaveControlGui.html" title="class in org.apache.jmeter.control.gui">InterleaveControlGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/config/gui/JavaConfigGui.html" title="class in org.apache.jmeter.protocol.java.config.gui">JavaConfigGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/control/gui/JavaTestSamplerGui.html" title="class in org.apache.jmeter.protocol.java.control.gui">JavaTestSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/control/gui/JMSPublisherGui.html" title="class in org.apache.jmeter.protocol.jms.control.gui">JMSPublisherGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/control/gui/JMSSamplerGui.html" title="class in org.apache.jmeter.protocol.jms.control.gui">JMSSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/jms/control/gui/JMSSubscriberGui.html" title="class in org.apache.jmeter.protocol.jms.control.gui">JMSSubscriberGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/java/control/gui/JUnitTestSamplerGui.html" title="class in org.apache.jmeter.protocol.java.control.gui">JUnitTestSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/config/gui/LDAPArgumentsPanel.html" title="class in org.apache.jmeter.protocol.ldap.config.gui">LDAPArgumentsPanel</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/config/gui/LdapConfigGui.html" title="class in org.apache.jmeter.protocol.ldap.config.gui">LdapConfigGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/config/gui/LdapExtConfigGui.html" title="class in org.apache.jmeter.protocol.ldap.config.gui">LdapExtConfigGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/control/gui/LdapExtTestSamplerGui.html" title="class in org.apache.jmeter.protocol.ldap.control.gui">LdapExtTestSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/ldap/control/gui/LdapTestSamplerGui.html" title="class in org.apache.jmeter.protocol.ldap.control.gui">LdapTestSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/LogicControllerGui.html" title="class in org.apache.jmeter.control.gui">LogicControllerGui</A>, <A HREF="../../../../org/apache/jmeter/config/gui/LoginConfigGui.html" title="class in org.apache.jmeter.config.gui">LoginConfigGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/LoopControlPanel.html" title="class in org.apache.jmeter.control.gui">LoopControlPanel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/MailerVisualizer.html" title="class in org.apache.jmeter.visualizers">MailerVisualizer</A>, <A HREF="../../../../org/apache/jmeter/protocol/mail/sampler/gui/MailReaderSamplerGui.html" title="class in org.apache.jmeter.protocol.mail.sampler.gui">MailReaderSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/MD5HexAssertionGUI.html" title="class in org.apache.jmeter.assertions.gui">MD5HexAssertionGUI</A>, <A HREF="../../../../org/apache/jmeter/control/gui/ModuleControllerGui.html" title="class in org.apache.jmeter.control.gui">ModuleControllerGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/MonitorHealthVisualizer.html" title="class in org.apache.jmeter.visualizers">MonitorHealthVisualizer</A>, <A HREF="../../../../org/apache/jmeter/gui/NamePanel.html" title="class in org.apache.jmeter.gui">NamePanel</A>, <A HREF="../../../../org/apache/jmeter/config/gui/ObsoleteGui.html" title="class in org.apache.jmeter.config.gui">ObsoleteGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/OnceOnlyControllerGui.html" title="class in org.apache.jmeter.control.gui">OnceOnlyControllerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/gui/ParamModifierGui.html" title="class in org.apache.jmeter.protocol.http.modifier.gui">ParamModifierGui</A>, <A HREF="../../../../org/apache/jmeter/timers/gui/PoissonRandomTimerGui.html" title="class in org.apache.jmeter.timers.gui">PoissonRandomTimerGui</A>, <A HREF="../../../../org/apache/jmeter/threads/gui/PostThreadGroupGui.html" title="class in org.apache.jmeter.threads.gui">PostThreadGroupGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/PropertyControlGui.html" title="class in org.apache.jmeter.visualizers">PropertyControlGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/proxy/gui/ProxyControlGui.html" title="class in org.apache.jmeter.protocol.http.proxy.gui">ProxyControlGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/RandomControlGui.html" title="class in org.apache.jmeter.control.gui">RandomControlGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/RandomOrderControllerGui.html" title="class in org.apache.jmeter.control.gui">RandomOrderControllerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/gui/RecordController.html" title="class in org.apache.jmeter.protocol.http.control.gui">RecordController</A>, <A HREF="../../../../org/apache/jmeter/extractor/gui/RegexExtractorGui.html" title="class in org.apache.jmeter.extractor.gui">RegexExtractorGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/gui/RegExUserParametersGui.html" title="class in org.apache.jmeter.protocol.http.modifier.gui">RegExUserParametersGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/RespTimeGraphVisualizer.html" title="class in org.apache.jmeter.visualizers">RespTimeGraphVisualizer</A>, <A HREF="../../../../org/apache/jmeter/reporters/gui/ResultActionGui.html" title="class in org.apache.jmeter.reporters.gui">ResultActionGui</A>, <A HREF="../../../../org/apache/jmeter/reporters/gui/ResultSaverGui.html" title="class in org.apache.jmeter.reporters.gui">ResultSaverGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/RunTimeGui.html" title="class in org.apache.jmeter.control.gui">RunTimeGui</A>, <A HREF="../../../../org/apache/jmeter/threads/gui/SetupThreadGroupGui.html" title="class in org.apache.jmeter.threads.gui">SetupThreadGroupGui</A>, <A HREF="../../../../org/apache/jmeter/config/gui/SimpleConfigGui.html" title="class in org.apache.jmeter.config.gui">SimpleConfigGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/SimpleDataWriter.html" title="class in org.apache.jmeter.visualizers">SimpleDataWriter</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/SizeAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">SizeAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/SMIMEAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">SMIMEAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/smtp/sampler/gui/SmtpSamplerGui.html" title="class in org.apache.jmeter.protocol.smtp.sampler.gui">SmtpSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/gui/SoapSamplerGui.html" title="class in org.apache.jmeter.protocol.http.control.gui">SoapSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/SplineVisualizer.html" title="class in org.apache.jmeter.visualizers">SplineVisualizer</A>, <A HREF="../../../../org/apache/jmeter/visualizers/StatGraphVisualizer.html" title="class in org.apache.jmeter.visualizers">StatGraphVisualizer</A>, <A HREF="../../../../org/apache/jmeter/visualizers/StatVisualizer.html" title="class in org.apache.jmeter.visualizers">StatVisualizer</A>, <A HREF="../../../../org/apache/jmeter/reporters/gui/SummariserGui.html" title="class in org.apache.jmeter.reporters.gui">SummariserGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/SummaryReport.html" title="class in org.apache.jmeter.visualizers">SummaryReport</A>, <A HREF="../../../../org/apache/jmeter/control/gui/SwitchControllerGui.html" title="class in org.apache.jmeter.control.gui">SwitchControllerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/system/gui/SystemSamplerGui.html" title="class in org.apache.jmeter.protocol.system.gui">SystemSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/TableVisualizer.html" title="class in org.apache.jmeter.visualizers">TableVisualizer</A>, <A HREF="../../../../org/apache/jmeter/protocol/tcp/config/gui/TCPConfigGui.html" title="class in org.apache.jmeter.protocol.tcp.config.gui">TCPConfigGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/tcp/control/gui/TCPSamplerGui.html" title="class in org.apache.jmeter.protocol.tcp.control.gui">TCPSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/sampler/gui/TestActionGui.html" title="class in org.apache.jmeter.sampler.gui">TestActionGui</A>, <A HREF="../../../../org/apache/jmeter/testbeans/gui/TestBeanGUI.html" title="class in org.apache.jmeter.testbeans.gui">TestBeanGUI</A>, <A HREF="../../../../org/apache/jmeter/control/gui/TestFragmentControllerGui.html" title="class in org.apache.jmeter.control.gui">TestFragmentControllerGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/TestPlanGui.html" title="class in org.apache.jmeter.control.gui">TestPlanGui</A>, <A HREF="../../../../org/apache/jmeter/threads/gui/ThreadGroupGui.html" title="class in org.apache.jmeter.threads.gui">ThreadGroupGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/ThroughputControllerGui.html" title="class in org.apache.jmeter.control.gui">ThroughputControllerGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/TransactionControllerGui.html" title="class in org.apache.jmeter.control.gui">TransactionControllerGui</A>, <A HREF="../../../../org/apache/jmeter/timers/gui/UniformRandomTimerGui.html" title="class in org.apache.jmeter.timers.gui">UniformRandomTimerGui</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/modifier/gui/URLRewritingModifierGui.html" title="class in org.apache.jmeter.protocol.http.modifier.gui">URLRewritingModifierGui</A>, <A HREF="../../../../org/apache/jmeter/modifiers/gui/UserParametersGui.html" title="class in org.apache.jmeter.modifiers.gui">UserParametersGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/ViewResultsFullVisualizer.html" title="class in org.apache.jmeter.visualizers">ViewResultsFullVisualizer</A>, <A HREF="../../../../org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.html" title="class in org.apache.jmeter.protocol.http.control.gui">WebServiceSamplerGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/WhileControllerGui.html" title="class in org.apache.jmeter.control.gui">WhileControllerGui</A>, <A HREF="../../../../org/apache/jmeter/control/gui/WorkBenchGui.html" title="class in org.apache.jmeter.control.gui">WorkBenchGui</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/XMLAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">XMLAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/XMLSchemaAssertionGUI.html" title="class in org.apache.jmeter.assertions.gui">XMLSchemaAssertionGUI</A>, <A HREF="../../../../org/apache/jmeter/assertions/gui/XPathAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">XPathAssertionGui</A>, <A HREF="../../../../org/apache/jmeter/extractor/gui/XPathExtractorGui.html" title="class in org.apache.jmeter.extractor.gui">XPathExtractorGui</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public interface <B>JMeterGUIComponent</B><DT>extends <A HREF="../../../../org/apache/jmeter/gui/ClearGui.html" title="interface in org.apache.jmeter.gui">ClearGui</A></DL>
+</PRE>
+
+<P>
+Implementing this interface indicates that the class is a JMeter GUI
+ Component. A JMeter GUI Component is essentially the GUI display code
+ associated with a JMeter Test Element. The writer of the component must take
+ care to make the component be consistent with the rest of JMeter's GUI look
+ and feel and behavior. Use of the provided abstract classes is highly
+ recommended to make this task easier.
+<P>
+
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui"><CODE>AbstractJMeterGuiComponent</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/config/gui/AbstractConfigGui.html" title="class in org.apache.jmeter.config.gui"><CODE>AbstractConfigGui</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/assertions/gui/AbstractAssertionGui.html" title="class in org.apache.jmeter.assertions.gui"><CODE>AbstractAssertionGui</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/control/gui/AbstractControllerGui.html" title="class in org.apache.jmeter.control.gui"><CODE>AbstractControllerGui</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/timers/gui/AbstractTimerGui.html" title="class in org.apache.jmeter.timers.gui"><CODE>AbstractTimerGui</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html" title="class in org.apache.jmeter.visualizers.gui"><CODE>AbstractVisualizer</CODE></A>, 
+<A HREF="../../../../org/apache/jmeter/samplers/gui/AbstractSamplerGui.html" title="class in org.apache.jmeter.samplers.gui"><CODE>AbstractSamplerGui</CODE></A></DL>
+<HR>
+
+<P>
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#configure(org.apache.jmeter.testelement.TestElement)">configure</A></B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;element)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The GUI must be able to extract the data from the TestElement and update
+ all GUI fields to represent those data.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JPopupMenu.html?is-external=true" title="class or interface in javax.swing">JPopupMenu</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#createPopupMenu()">createPopupMenu</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a user right-clicks on the component in the test tree, or selects
+ the edit menu when the component is selected, the component will be asked
+ to return a JPopupMenu that provides all the options available to the
+ user from this component.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#createTestElement()">createTestElement</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JMeter test components are separated into a model and a GUI
+ representation.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getDocAnchor()">getDocAnchor</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the component's document anchor name.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getLabelResource()">getLabelResource</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the component's resource name, which getStaticLabel uses to derive
+ the component's label in the local language.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getMenuCategories()">getMenuCategories</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is the list of add menu categories this gui component will be
+ available under.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getName()">getName</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the name of the JMeter GUI component.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getStaticLabel()">getStaticLabel</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the component's label.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#isEnabled()">isEnabled</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test GUI elements can be disabled, in which case they do not become part
+ of the test when run.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)">modifyTestElement</A></B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;element)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GUI components are responsible for populating TestElements they create
+ with the data currently held in the GUI components.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#setEnabled(boolean)">setEnabled</A></B>(boolean&nbsp;enabled)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set whether this component is enabled.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#setName(java.lang.String)">setName</A></B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the name of the JMeter GUI Component.</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.gui.ClearGui"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from interface org.apache.jmeter.gui.<A HREF="../../../../org/apache/jmeter/gui/ClearGui.html" title="interface in org.apache.jmeter.gui">ClearGui</A></B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><A HREF="../../../../org/apache/jmeter/gui/ClearGui.html#clearGui()">clearGui</A></CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="setName(java.lang.String)"><!-- --></A><H3>
+setName</H3>
+<PRE>
+void <B>setName</B>(<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&nbsp;name)</PRE>
+<DL>
+<DD>Sets the name of the JMeter GUI Component. The name of the component is
+ used in the Test Tree as the name of the tree node.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>name</CODE> - the name of the component</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getName()"><!-- --></A><H3>
+getName</H3>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getName</B>()</PRE>
+<DL>
+<DD>Gets the name of the JMeter GUI component. The name of the component is
+ used in the Test Tree as the name of the tree node.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the name of the component</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getStaticLabel()"><!-- --></A><H3>
+getStaticLabel</H3>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getStaticLabel</B>()</PRE>
+<DL>
+<DD>Get the component's label. This label is used in drop down lists that
+ give the user the option of choosing one type of component in a list of
+ many. It should therefore be a descriptive name for the end user to see.
+ It must be unique to the class.
+
+ It is also used by Help to find the appropriate location in the
+ documentation.
+
+ Normally getLabelResource() should be overridden instead of
+ this method; the definition of this method in AbstractJMeterGuiComponent
+ is intended for general use.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>GUI label for the component.<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getLabelResource()"><CODE>getLabelResource()</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getLabelResource()"><!-- --></A><H3>
+getLabelResource</H3>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getLabelResource</B>()</PRE>
+<DL>
+<DD>Get the component's resource name, which getStaticLabel uses to derive
+ the component's label in the local language. The resource name is fixed,
+ and does not vary with the selected language.
+
+ Normally this method should be overriden in preference to overriding
+ getStaticLabel(). However where the resource name is not available or required,
+ getStaticLabel() may be overridden instead.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the resource name</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getDocAnchor()"><!-- --></A><H3>
+getDocAnchor</H3>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A> <B>getDocAnchor</B>()</PRE>
+<DL>
+<DD>Get the component's document anchor name. Used by Help to find the
+ appropriate location in the documentation
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>Document anchor (#ref) for the component.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="createTestElement()"><!-- --></A><H3>
+createTestElement</H3>
+<PRE>
+<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A> <B>createTestElement</B>()</PRE>
+<DL>
+<DD>JMeter test components are separated into a model and a GUI
+ representation. The model holds the data and the GUI displays it. The GUI
+ class is responsible for knowing how to create and initialize with data
+ the model class that it knows how to display, and this method is called
+ when new test elements are created.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>the Test Element object that the GUI component represents.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="modifyTestElement(org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+modifyTestElement</H3>
+<PRE>
+void <B>modifyTestElement</B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;element)</PRE>
+<DL>
+<DD>GUI components are responsible for populating TestElements they create
+ with the data currently held in the GUI components. This method should
+ overwrite whatever data is currently in the TestElement as it is called
+ after a user has filled out the form elements in the gui with new
+ information.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>element</CODE> - the TestElement to modify</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isEnabled()"><!-- --></A><H3>
+isEnabled</H3>
+<PRE>
+boolean <B>isEnabled</B>()</PRE>
+<DL>
+<DD>Test GUI elements can be disabled, in which case they do not become part
+ of the test when run.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>true if the element should be part of the test run, false
+         otherwise</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setEnabled(boolean)"><!-- --></A><H3>
+setEnabled</H3>
+<PRE>
+void <B>setEnabled</B>(boolean&nbsp;enabled)</PRE>
+<DL>
+<DD>Set whether this component is enabled.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>enabled</CODE> - true for enabled, false for disabled.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="createPopupMenu()"><!-- --></A><H3>
+createPopupMenu</H3>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/javax/swing/JPopupMenu.html?is-external=true" title="class or interface in javax.swing">JPopupMenu</A> <B>createPopupMenu</B>()</PRE>
+<DL>
+<DD>When a user right-clicks on the component in the test tree, or selects
+ the edit menu when the component is selected, the component will be asked
+ to return a JPopupMenu that provides all the options available to the
+ user from this component.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>a JPopupMenu appropriate for the component.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="configure(org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+configure</H3>
+<PRE>
+void <B>configure</B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;element)</PRE>
+<DL>
+<DD>The GUI must be able to extract the data from the TestElement and update
+ all GUI fields to represent those data. This method is called to allow
+ JMeter to show the user the GUI that represents the test element's data.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>element</CODE> - the TestElement to configure</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getMenuCategories()"><!-- --></A><H3>
+getMenuCategories</H3>
+<PRE>
+<A HREF="http://docs.oracle.com/javase/6/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</A>&lt;<A HREF="http://docs.oracle.com/javase/6/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</A>&gt; <B>getMenuCategories</B>()</PRE>
+<DL>
+<DD>This is the list of add menu categories this gui component will be
+ available under. For instance, if this represents a Controller, then the
+ MenuFactory.CONTROLLERS category should be in the returned collection.
+ When a user right-clicks on a tree element and looks through the "add"
+ menu, which category your GUI component shows up in is determined by
+ which categories are returned by this method. Most GUI's belong to only
+ one category, but it is possible for a component to exist in multiple
+ categories.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>a Collection of Strings, where each element is one of the
+         constants defined in MenuFactory<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/gui/util/MenuFactory.html" title="class in org.apache.jmeter.gui.util"><CODE>MenuFactory</CODE></A></DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+<b>Apache JMeter</b></EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/JMeterFileFilter.html" title="class in org.apache.jmeter.gui"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../../../org/apache/jmeter/gui/LoggerPanel.html" title="class in org.apache.jmeter.gui"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../../../index.html?org/apache/jmeter/gui/JMeterGUIComponent.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="JMeterGUIComponent.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#xA9; 1998-2015 Apache Software Foundation. All Rights Reserved.
+</BODY>
+</HTML>
