@@ -76,24 +76,21 @@
         <li><a href="get-started.html#opt_email">2.2.3 Email Support</a></li>
         <li><a href="get-started.html#opt_ssl">2.2.4 SSL Encryption</a></li>
         <li><a href="get-started.html#opt_jdbc">2.2.5 JDBC Driver</a></li>
-        <li><a href="get-started.html#opt_soap">2.2.6 Apache SOAP</a></li>
-        <li><a href="get-started.html#opt_beanshell">2.2.7 BeanShell</a></li>
-        <li><a href="get-started.html#libraries_activemq">2.2.8 Libraries for ActiveMQ 3.0</a></li>
+        <li><a href="get-started.html#opt_jms">2.2.6 JMS client</a></li>
+        <li><a href="get-started.html#libraries_activemq">2.2.7 Libraries for ActiveMQ JMS</a></li>
      </ul>
      <li><a href="get-started.html#install">2.3 Installation</a></li>
-     <ul>
-        <li><a href="get-started.html#download_release">2.3.1 Downloading the Latest Release</a></li>
-        <li><a href="get-started.html#download_nightly">2.3.2 Downloading Nightly Builds</a></li>
-     </ul>
      <li><a href="get-started.html#running">2.4 Running JMeter</a></li>
      <ul>
         <li><a href="get-started.html#classpath">2.4.1 JMeter's Classpath</a></li>
-        <li><a href="get-started.html#proxy_server">2.4.2 Using a Proxy Server</a></li>
-        <li><a href="get-started.html#non_gui">2.4.3 Non-GUI Mode</a></li>
-        <li><a href="get-started.html#server">2.4.4 Distributed Mode</a></li>
-        <li><a href="get-started.html#override">2.4.5 Overriding Properties Via The Command Line</a></li>
-        <li><a href="get-started.html#logging">2.4.6 Logging and Error Messages</a></li>
-        <li><a href="get-started.html#options">2.4.7 Full list of command-line options</a></li>
+        <li><a href="get-started.html#template">2.4.2 Create Test Plan from Template</a></li>
+        <li><a href="get-started.html#proxy_server">2.4.3 Using JMeter behing a proxy</a></li>
+        <li><a href="get-started.html#non_gui">2.4.4 Non-GUI Mode</a></li>
+        <li><a href="get-started.html#server">2.4.5 Server Mode</a></li>
+        <li><a href="get-started.html#override">2.4.6 Overriding Properties Via The Command Line</a></li>
+        <li><a href="get-started.html#logging">2.4.7 Logging and Error Messages</a></li>
+        <li><a href="get-started.html#options">2.4.8 Full list of command-line options</a></li>
+        <li><a href="get-started.html#shutdown">2.4.9 non-GUI shutdown</a></li>
      </ul>
      <li><a href="get-started.html#configuring_jmeter">2.5 Configuring JMeter</a></li>
   </ul>
@@ -104,7 +101,8 @@
      <li><a href="build-test-plan.html#config_element">3.3 Configuring Tree Elements</a></li>
      <li><a href="build-test-plan.html#save">3.4 Saving the Test Plan</a></li>
      <li><a href="build-test-plan.html#run">3.5 Running a Test Plan</a></li>
-     <li><a href="build-test-plan.html#error_reporting">3.6 Error reporting</a></li>
+     <li><a href="build-test-plan.html#stop">3.6 Stopping a Test</a></li>
+     <li><a href="build-test-plan.html#error_reporting">3.7 Error reporting</a></li>
   </ul>
   <li><a name="test_plan"/><a href="test_plan.html">4. Elements of a Test Plan</a></li>
   <ul>
@@ -113,6 +111,7 @@
      <ul>
         <li><a href="test_plan.html#samplers">4.2.1 Samplers</a></li>
         <li><a href="test_plan.html#logic_controller">4.2.2 Logic Controllers</a></li>
+        <li><a href="test_plan.html#test_fragments">4.2.3 Test Fragments</a></li>
      </ul>
      <li><a href="test_plan.html#listeners">4.3 Listeners</a></li>
      <li><a href="test_plan.html#timers">4.4 Timers</a></li>
@@ -158,7 +157,8 @@
     <li><a href="build-ldap-test-plan.html#add_login">9a.2 Adding Login Config Element</a></li>
     <li><a href="build-ldap-test-plan.html#add_defaults">9a.3 Adding LDAP Request Defaults</a></li>
     <li><a href="build-ldap-test-plan.html#add_requests">9a.4 Adding LDAP Requests</a></li>
-    <li><a href="build-ldap-test-plan.html#add_listener">9a.5 Adding a Listener to View/Store the Test Results</a></li>
+    <li><a href="build-ldap-test-plan.html#ResponseAssertion">9a.5 Adding a Response Assertion</a></li>
+    <li><a href="build-ldap-test-plan.html#add_listener">9a.6 Adding a Listener to View/Store the Test Results</a></li>
   </ul>
  <li><a name="build-ldapext-test-plan"/><a href="build-ldap-test-plan.html">9b. Building an Extended LDAP Test Plan</a></li>
   <ul>
@@ -171,20 +171,24 @@
  <li><a name="build-jms-point-to-point-test-plan"/><a href="build-jms-point-to-point-test-plan.html">11. Building a JMS Point to point Test Plan</a></li>
  <li><a name="build-jms-topic-test-plan"/><a href="build-jms-topic-test-plan.html">12. Building a JMS topic Test Plan</a></li>
  <li><a name="build-monitor-test-plan"/><a href="build-monitor-test-plan.html">13. Building a Monitor Test Plan</a></li>
- <li><a name="listeners"/><a href="listeners.html">14. Listeners</a></li>
+ <li><a name="listeners"/><a href="listeners.html">14. Introduction to Listeners</a></li>
  <li><a name="remote-test"/><a href="remote-test.html">15. Remote Testing</a></li>
  <li><a name="best-practices"/><a href="best-practices.html">16. Best Practices</a></li>
   <ul>
-     <li><a href="best-practices.html#limit_threads">16.1 Limit the Number of Threads</a></li>
-     <li><a href="best-practices.html#put_cookie_manager">16.2 Where to Put the Cookie Manager</a></li>
-     <li><a href="best-practices.html#put_auth_manager">16.3 Where to Put the Authorization Manager</a></li>
-     <li><a href="best-practices.html#proxy_server">16.4 Using the HTTP(S) Test Script Recorder to record test scripts</a></li>
-     <li><a href="best-practices.html#user_variables">16.5 User variables</a></li>
-     <li><a href="best-practices.html#lean_mean">16.6 Reducing resource requirements</a></li>
-     <li><a href="best-practices.html#beanshell_server">16.7 BeanShell server</a></li>
-     <li><a href="best-practices.html#bsh_scripting">16.8 BeanShell scripting</a></li>
-     <li><a href="best-practices.html#developing_scripts">16.9 Developing script functions in BeanShell, Javascript or Jexl etc.</a></li>
-     <li><a href="best-practices.html#parameterising_tests">16.10 Parameterising tests</a></li>
+     <li><a href="best-practices.html#use_latest_version">16.1 Always use latest version of JMeter</a></li>
+     <li><a href="best-practices.html#sizing_threads">16.2 Use the correct Number of Threads</a></li>
+     <li><a href="best-practices.html#put_cookie_manager">16.3 Where to Put the Cookie Manager</a></li>
+     <li><a href="best-practices.html#put_auth_manager">16.4 Where to Put the Authorization Manager</a></li>
+     <li><a href="best-practices.html#proxy_server">16.5 Using the HTTP(S) Test Script Recorder</a></li>
+     <li><a href="best-practices.html#user_variables">16.6 User variables</a></li>
+     <li><a href="best-practices.html#lean_mean">16.7 Reducing resource requirements</a></li>
+     <li><a href="best-practices.html#beanshell_server">16.8 BeanShell server</a></li>
+     <li><a href="best-practices.html#bsh_scripting">16.9 BeanShell scripting</a></li>
+     <li><a href="best-practices.html#developing_scripts">16.10 Developing script functions in BeanShell, Javascript or Jexl etc.</a></li>
+     <li><a href="best-practices.html#parameterising_tests">16.11 Parameterising tests</a></li>
+     <li><a href="best-practices.html#jsr223">16.12 JSR223 Elements</a></li>
+     <li><a href="best-practices.html#sharing_variables">16.13 Sharing variables between threads and thread groups</a></li>
+     <li><a href="best-practices.html#properties">16.14 Managing properties</a></li>
   </ul>
  <li><a name="boss"/><a href="boss.html">17. Help! My boss wants me to load test our web app!</a></li>
 

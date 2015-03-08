@@ -23,7 +23,7 @@
   <body>
     <section name="Apache JMeter&amp;trade;">
     <p>
-      The <b>Apache JMeter&amp;trade;</b> desktop application is open source software,
+      The <b>Apache JMeter&amp;trade;</b> application is open source software,
       a 100% pure Java application designed
       to load test functional behavior and measure performance.  It was
       originally designed for testing Web Applications but has
@@ -32,7 +32,7 @@
     <h2>What can I do with it?</h2>
     <p>
       Apache JMeter may be used to test performance both on static and dynamic
-      resources (Files, Web dynamic languages - PHP, Java, ASP.NET, etc. -, Java Objects, Data Bases and
+      resources (Webservices (SOAP/REST), Web dynamic languages - PHP, Java, ASP.NET, Files, etc. -, Java Objects, Data Bases and
       Queries, FTP Servers and more). It can be used to simulate a heavy
 load on a server, group of servers, network or object to test its strength or to analyze
 overall performance under different load types. You can use it to make a
@@ -45,7 +45,7 @@ behavior under heavy concurrent load.
     <li>Ability to load and performance test many different server/protocol types:
         <ul>
         <li>Web - HTTP, HTTPS</li>
-        <li>SOAP</li>
+        <li>SOAP / REST</li>
         <li>FTP</li>
         <li>Database via JDBC</li>
         <li>LDAP</li>
@@ -64,7 +64,7 @@ behavior under heavy concurrent load.
     <li><b>Highly Extensible core:</b>
       <ul>
         <li>Pluggable Samplers allow unlimited testing capabilities.</li>
-        <li>Several load statistics may be choosen with <b>pluggable timers</b>.</li>
+        <li>Several load statistics may be chosen with <b>pluggable timers</b>.</li>
         <li>Data analysis and <b>visualization plugins</b> allow great extensibility
         as well as personalization.</li>
         <li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>

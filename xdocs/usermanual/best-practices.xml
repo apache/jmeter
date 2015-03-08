@@ -34,7 +34,8 @@
 
 <section name="&sect-num;.1 Always use latest version of JMeter" anchor="use_latest_version">
 <p>The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version. <br/>
-Ensure you always read <a href="../changes.html">changes list</a> to be aware of new improvements and components:
+Ensure you always read <a href="../changes.html">changes list</a> to be aware of new improvements and components.
+You should absolutely avoid using versions that are older than 3 versions before the last one.
 </p>
 </section>
 
@@ -105,7 +106,7 @@ with "${server}".
 
 </p>
 <p>
-If JMeter does not record any samples, check that the brower really is using the proxy.
+If JMeter does not record any samples, check that the browser really is using the proxy.
 If the browser works OK even if JMeter is not running, then the browser cannot be using the proxy.
 Some browsers ignore proxy settings for localhost or 127.0.0.1; try using the local hostname or IP instead.
 </p>
@@ -365,7 +366,7 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 <section name="&sect-num;.12 JSR223 Elements" anchor="jsr223">
 <p>
 For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the Compilable interface.
-Groovy scripting engine implements Compilable. However neither Beanshell nor Javascript do so as of release date of JMeter 2.10, so it is 
+Groovy scripting engine implements Compilable. However neither Beanshell nor Javascript do so as of release date of JMeter 2.13, so it is 
 recommended to avoid them for intensive load testing. 
 [Note: Beanshell implements the Compilable interface but it has not been coded - the method just throws an Exception.
 JMeter has an explicit work-round for this bug.]
@@ -394,6 +395,13 @@ If the value is not known until the test starts, there are various options:
 <li>Write your own Java classes</li>
 </ul>
 </p>
+</section>
+
+<section name="&sect-num;.14 Managing properties" anchor="properties">
+<p>When you need to modify jmeter properties, ensure you don't modify jmeter.properties file, <b>instead copy the property from jmeter.properties and modify its value in user.properties file</b>.<br/>
+Doing so will ease you migration to the next version of JMeter. <br/>
+Note that in the documentation jmeter.properties is frequently mentioned but this should be understood as "Copy from jmeter.properties to user.properties the property you want to modify and do so in the latter file".</p>
+<note>user.properties file superseeds the properties defined in jmeter.properties</note>
 </section>
 
 </body>

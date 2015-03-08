@@ -1,0 +1,398 @@
+/*
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+.main {
+  font-family: DejaVu Sans, Helvetica, sans-serif;
+  width: 60em;
+}
+
+img {
+  border: 0;
+  width: auto;
+  max-width: 95%;
+  height: auto;
+}
+
+.menu, h1, h2, h3, h4, h5, .go-top, .title {
+  font-family: "Merriweather";
+}
+
+h1, h2, h3, h4, h5, .title {
+  border-bottom: 0.2rem solid orange;
+}
+
+.title>.title {
+  border-bottom: 0px;
+}
+
+.footer {
+  background-color: #444;
+  border-top: 1px solid black;
+  color: white;
+  margin-top: 3em;
+  padding: 2em 0 1em;
+  text-align: center;
+  box-shadow: 0 -8px 21px 0 rgba(0, 0, 0, 0.2);
+}
+
+.menu {
+  border: 1px solid lightgray;
+  box-shadow: 5px 5px 10px rgba(20, 20, 20, 0.3);
+  list-style: outside none none;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+.menu+.menu {
+  margin-top: 1.5em;
+}
+
+.menu img {
+  margin-left: 0.3em;
+  vertical-align: middle;
+  width: auto;
+  max-width: 95%;
+  height: auto;
+}
+
+.banner>iframe {
+  width: 240px;
+  height: 70px;
+}
+.banner>iframe>body {
+  margin: 0px;
+  padding: 0px;
+}
+.banner>iframe img {
+  width: auto;
+  max-width: 100%
+  height: auto;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+.section
+          pre {
+  background: none repeat scroll 0 0 lightblue;
+  border: 1px solid gray;
+  padding: 0.3rem;
+  margin: 0.3rem;
+  font-family: dejavu sans mono, monospace, sans-serif;
+  overflow: auto;
+}
+
+.code {
+  background: none repeat scroll 0 0 lightblue;
+  padding: 0.1em;
+  font-family: dejavu sans mono, monospace, sans-serif;
+}
+
+.required-Yes>span {
+  font-weight: bold;
+}
+
+.deprecated, .note {
+  background: none repeat scroll 0 0 #fee;
+  border: 1px solid #dbb;
+  margin: 1em;
+  padding: 1em;
+}
+
+.component {
+  background: none repeat scroll 0 0 #fff;
+  margin: 1em;
+  padding: 0.4em;
+}
+
+.subsection {
+  background: none repeat scroll 0 0 white;
+  margin: 1em;
+  padding: 1em;
+}
+
+.screenshot {
+  margin: 2em;
+  padding: 0;
+}
+
+figure {
+  margin: 1em 2em;
+}
+
+figure>a>img, .screenshot>a>img {
+  box-shadow: 10px 10px 10px 0 rgba(50, 50, 50, 0.25);
+  overflow: auto;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.clear {
+  clear: both;
+}
+
+.nostyle {
+  border: 1px solid black;
+}
+
+.title {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+.example {
+  background: none repeat scroll 0 0 lightgray;
+  border: 1px solid gray;
+  clear: both;
+  padding: 1em;
+  margin: 1em;
+}
+
+.property .name, .property
+          .description, .property
+          .required {
+  display: inline-block;
+}
+
+.property .name {
+  font-style: italic;
+  vertical-align: top;
+  width: 20%;
+  word-wrap: break-word;
+}
+
+.property .description {
+  vertical-align: top;
+  width: 60%;
+}
+
+.property .required {
+  vertical-align: top;
+  width: 20%;
+}
+
+.property+.property {
+  margin-top: 0.5em;
+}
+
+.required.req-false {
+  font-weight: lighter;
+}
+
+.go-top {
+  margin: 1em 0;
+  font-size: 120%;
+}
+
+.properties {
+  background: none repeat scroll 0 0 lightgoldenrodyellow;
+  border: 1px solid darksalmon;
+  margin: 1em;
+  padding: 1em;
+}
+
+.properties .title {
+  font-size: 100%;
+}
+
+th {
+  border-bottom: 1px solid black;
+  font-family: "Merriweather";
+  text-align: left;
+}
+
+td {
+  vertical-align: top;
+}
+
+tr+tr {
+  margin-top: 0.2em;
+}
+
+table {
+  border-bottom: 2px solid;
+  border-top: 2px solid;
+}
+
+.nav {
+  display: inline-block;
+  max-width: 20em;
+  vertical-align: top;
+  width: 33%;
+}
+
+.main {
+  display: inline-block;
+  margin-left: 2em;
+  max-width: 60em;
+  width: 60%;
+}
+
+.header {
+  clear: both;
+  display: table;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-shadow: 0px 5px 33px 0px rgba(0, 0, 0, 0.2);
+  padding: 0.1rem 0em 0.2rem;
+  border-bottom: 1px solid gray;
+}
+
+.header>div {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.header>div+.header>div {
+  text-align: center;
+}
+
+.sectionlink {
+  display: none;
+}
+
+:hover>.sectionlink {
+  display: inline;
+  color: orange;
+}
+
+.pagelinks {
+  list-style: none;
+}
+
+.pagelinks li {
+  display: inline-block;
+  margin: 1em;
+}
+
+.pagelinks>li {
+  border: 1px solid #bbb;
+  box-shadow: 5px 5px 5px rgba(20, 20, 20, 0.2);
+  padding: 0.5em 1em;
+}
+
+.pagelinks li {
+  display: inline-block;
+  margin: 1em;
+  font-family: "Merriweather";
+}
+
+.section-index {
+  font-family: "Merriweather";
+  margin:;
+  list-style: none;
+}
+
+.section-index>li {
+  margin: 1em;
+  padding: 1em;
+  border: 1px solid #bbb;
+  box-shadow: 5px 5px 5px rgba(20, 20, 20, 0.2);
+}
+
+.hidden {
+  display: none;
+}
+
+@media screen and (max-width: 900px) {
+  .nav {
+    display: block;
+    width: 95%;
+    max-width: 95%;
+  }
+  .main {
+    display: block;
+    width: 95%;
+    max-width: 95%;
+    margin-left: 0.5em;
+  }
+  .section-index, pagelinks {
+    padding-left: 0px;
+    margin-left: 0px;
+  }
+  figure {
+    margin: 1em 0px;
+  }
+  .properties {
+    margin: 1rem 0px;
+  }
+  .property .name, .property
+          .description, .property
+          .required {
+    display: block;
+    width: 100%;
+  }
+  .property .required {
+    border-bottom: 1px solid #ddd;
+  }
+  .property .required::before {
+    content: 'R: ';
+  }
+  .property .name::before {
+    content: 'N: ';
+  }
+  .property .description::before {
+    content: 'D: ';
+  }
+  .header {
+    display: block;
+  }
+  .header span {
+    display: inline;
+  }
+  .pagelinks li {
+    margin: 0.5rem;
+  }
+  .header>div {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%
+  }
+  .header>div+.header>div {
+    text-align: center;
+  }
+  .menu ul {
+    display: none;
+  }
+  .menu li:hover>ul {
+    display: block;
+  }
+  .section-index ul {
+    display: none;
+  }
+  .section-index li:hover>ul {
+    display: block;
+  }
+  .subsection {
+    padding: 0.3rem;
+    margin: 0.1rem;
+  }
+  .header > .twitter {
+   width: 100%;
+   text-align: center;
+  }
+  .header > .twitter > div {
+    display: inline;
+    width: 50%;
+  }
+  .header > .banner {
+    width: 100%;
+    text-align: center;
+  }
+}

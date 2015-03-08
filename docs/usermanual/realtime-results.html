@@ -1,0 +1,229 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Live Statistics</title><meta name="author" value="Philippe Mouawad"><meta name="email" value="p.mouawad at ubik-ingenierie.com"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="../images/asf-logo.png" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img src="../images/logo.jpg" alt="Apache JMeter"></a></div><div class="twitter"><div><a href="https://twitter.com/share" class="twitter-share-button" data-text="Powerful Load Testing with Apache #JMeter" data-via="ApacheJMeter" data-lang="en-gb" data-size="large">Tweet</a><script>
+            (function(d,s,id){
+              var js,
+                  fjs=d.getElementsByTagName(s)[0],
+                  p=/^http:/.test(d.location)?'http':'https';
+              if (!d.getElementById(id)) {
+                  js=d.createElement(s);
+                  js.id=id;
+                  js.src=p+'://platform.twitter.com/widgets.js';
+                  fjs.parentNode.insertBefore(js,fjs);
+              }
+            })(document, 'script', 'twitter-wjs');
+              </script></div><div><a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button" data-show-count="false" data-lang="en-gb" data-size="large">Follow</a><script>(function(d,s,id){
+                var js,
+                    fjs=d.getElementsByTagName(s)[0],
+                    p=/^http:/.test(d.location)?'http':'https';
+                if (!d.getElementById(id)) {
+                    js=d.createElement(s);
+                    js.id=id;
+                    js.src=p+'://platform.twitter.com/widgets.js';
+                    fjs.parentNode.insertBefore(js,fjs);
+                }
+            })(document, 'script', 'twitter-wjs');
+              </script></div></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://twitter.com/ApacheJMeter">JMeter on Twitter<img src="../images/twitter.png" alt="Icon for JMeter on Twitter"></a></li><li><a href="../issues.html">Issue Tracking</a></li><li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../nightly.html">Developer (Nightly) Builds</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Documentation</div><ul><li><a href="../changes.html">Changes per version</a></li><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="../building.html">Building JMeter and Add-Ons</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Community</div><ul><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">SVN Repositories</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><ul class="pagelinks"><li><a href="live-statistics.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="component_reference.html">Next &gt;</a></li></ul><div class="section"><h1 id="realtime-results">17. Real-time results<a class="sectionlink" href="#realtime-results" title="Link to here">&para;</a></h1>
+<p>Since JMeter 2.13 you can get realtime results sent to a backend through the 
+<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice...) implementing <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html">AbstractBackendListenerClient</a>.<br>
+JMeter ships with a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br>
+This feature provides:
+<ul>
+<li>Live results</li>
+<li>Nice graphs for metrics</li>
+<li>Ability to compare 2 or more load tests</li>
+<li>Storing monitoring data as long as JMeter results in the same backend</li>
+<li>...</li>
+</ul>
+In this document we will present the configuration setup to graph and historize the data in 2 different backends:
+<ul>
+<li>InfluxDB</li>
+<li>Graphite</li>
+</ul>
+</p>
+<div class="subsection"><h2>17.1 Metrics exposed<a class="sectionlink" href="#metrics" title="Link to here">&para;</a></h2>
+    <div class="subsection"><h2>17.1.1 Thread/Virtual Users metrics<a class="sectionlink" href="#metrics-threads" title="Link to here">&para;</a></h2>
+    <p>
+    Threads metrics are the following:
+    </p>
+    <table>
+           <tr>
+               <th>Metric Name</th>
+               <th>Description</th>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.test.minAT</td>
+               <td>Min active threads</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.test.maxAT</td>
+               <td>Max active threads</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.test.meanAT</td>
+               <td>Mean active threads</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.test.startedT</td>
+               <td>Started threads</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.test.endedT</td>
+               <td>Finished threads</td>            
+           </tr>
+    </table>
+    </div>
+    <div class="subsection"><h2>17.1.2 Response times metrics<a class="sectionlink" href="#metrics-response-times" title="Link to here">&para;</a></h2>
+    <p>Response times metrics are the following:</p>
+    <table>
+           <tr>
+               <th>Metric Name</th>
+               <th>Description</th>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</td>
+               <td>Number of successful responses for sampler name</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</td>
+               <td>Min response time for successful responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</td>
+               <td>Max response time for successful responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</td>
+               <td>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br>
+               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
+               By default listener computes percentiles 90%, 95% and 99%</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.count</td>
+               <td>Number of failed responses for sampler name</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.min</td>
+               <td>Min response time for failed responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.max</td>
+               <td>Max response time for failed responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</td>
+               <td>Percentile computed for failed responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br>
+               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
+               By default listener computes percentiles 90%, 95% and 99%</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.count</td>
+               <td>Number of responses for sampler name</td>            
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.min</td>
+               <td>Min response time for responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.max</td>
+               <td>Max response time for responses of sampler name</td>
+           </tr>
+           <tr>
+               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</td>
+               <td>Percentile computed for responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br>
+               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
+               By default listener computes percentiles 90%, 95% and 99%</td>            
+           </tr>
+    </table>
+    <p>
+    By default JMeter sends only metrics for all samplers using "all" as samplerName.
+    </p>
+    </div>
+</div>
+<div class="subsection"><h2>17.2 JMeter configuration<a class="sectionlink" href="#jmeter-configuration" title="Link to here">&para;</a></h2>
+    <p>
+    To make JMeter send metrics to backend add a <a href="./component_reference.html#Backend_Listener">BackendListener</a> using the GraphiteBackendListenerClient.
+    </p>
+    <figure><a href="../images/screenshots/backend_listener.png"><img src="../images/screenshots/backend_listener.png" width="902" height="341" alt="Graphite configuration"></a><figcaption>Graphite configuration</figcaption></figure>
+</div>
+
+<div class="subsection"><h2>17.2 InfluxDB<a class="sectionlink" href="#influxdb" title="Link to here">&para;</a></h2>
+<p>InfluxDB is an open-source, distributed,time-series database that allows to 
+easily store metrics.
+Installation and configuration is very easy, read this for more details <a href="http://influxdb.com/docs/v0.8/introduction/installation.html" target="_blank">InfluxDB documentation</a>.<br>
+InfluxDB data can be easily viewed in a browser through either <a href="https://github.com/hakobera/influga" target="_blank">Influga</a> or <a href="http://grafana.org/" target="_blank">Grafana</a>.
+We will use Grafana in this case.
+</p>
+    <div class="subsection"><h2>17.2.1 InfluxDB graphite listener configuration<a class="sectionlink" href="#influxdb_configuration" title="Link to here">&para;</a></h2>
+    <p>To enable Graphite listener in InfluxDB, edit files /opt/influxdb/shared/config.toml or /usr/local/etc/influxdb.conf, find "input_plugins.graphite" and set this:
+    </p>
+    <span class="code">
+  # Configure the graphite api<br>
+  [input_plugins.graphite]<br>
+  enabled = true<br>
+  address = "0.0.0.0" # If not set, is actually set to bind-address.<br>
+  port = 2003<br>
+  database = "jmeter"  # store graphite data in this database<br>
+  # udp_enabled = true # enable udp interface on the same port as the tcp interface<br>    
+    </span>
+    </div>
+    <div class="subsection"><h2>17.2.2 InfluxDB database configuration<a class="sectionlink" href="#influxdb_db_configuration" title="Link to here">&para;</a></h2>
+    <p>Connect to InfluxDB admin console and create 2 databases:
+    <ul>
+        <li>grafana : Used by Grafana to store the dashboards we will create</li>
+        <li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config element in influxdb.conf or config.toml</li>
+    </ul>
+    </p>
+    </div>
+    <div class="subsection"><h2>17.2.3 Grafana configuration<a class="sectionlink" href="#grafana_configuration" title="Link to here">&para;</a></h2>
+    <p>
+    Installing grafana is just a matter of putting the unzipped bundle behind an Apache HTTP server.<br>
+    Read <a href="http://grafana.org/docs/" targer="_blank">documentation</a> for more details.
+    Open config.js file and find datasources element, and edit it like this:<br>
+    </p>
+    <span class="code">
+      datasources: {<br>
+        influxdb: {<br>
+          type: 'influxdb',<br>
+          url: "http://localhost:8086/db/jmeter",<br>
+          username: 'root',<br>
+          password: 'root',<br>
+        },
+        grafana: {<br>
+          type: 'influxdb',<br>
+          url: "http://localhost:8086/db/grafana",<br>
+          username: 'root',<br>
+          password: 'root',<br>
+          grafanaDB: true<br>
+        },<br>
+      },
+    </span><br>
+    <p>
+    Note that grafana has "grafanaDB:true". Also note that here we use root user for simplicity, it is better to dedicate a special user with less rights.<br>
+    Here is the kind of dashboard that you could obtain:
+    </p>
+    <figure><a href="../images/screenshots/grafana_dashboard.png"><img src="../images/screenshots/grafana_dashboard.png" width="1265" height="581" alt="Grafana dashboard"></a><figcaption>Grafana dashboard</figcaption></figure> 
+    
+    </div>
+</div>
+
+<div class="subsection"><h2>17.3 Graphite<a class="sectionlink" href="#graphite" title="Link to here">&para;</a></h2>
+<p>TODO.</p>
+</div>
+
+
+</div><ul class="pagelinks"><li><a href="live-statistics.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="component_reference.html">Next &gt;</a></li></ul></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2015
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div></body></html>

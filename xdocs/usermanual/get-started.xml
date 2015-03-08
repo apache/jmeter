@@ -66,7 +66,7 @@ over your Test Plans.</p>
 </section>
 
 <section name="&sect-num;.1 Requirements" anchor="requirements">
-<p>JMeter requires your computing environment meets some minimum requirements.</p>
+<p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
 <note>JMeter requires a fully compliant JVM 6 or higher.  
@@ -78,7 +78,7 @@ JMeter because of JRE implementation issues.</p>
 <subsection name="&sect-num;.1.2 Operating Systems" anchor="os">
 <p>JMeter is a 100% Java application and should run correctly on any system
 that has a compliant Java implementation.</p>
-<p>Operating systems tested with JMeter can be view on  
+<p>Operating systems tested with JMeter can be viewed on  
 <a href="http://wiki.apache.org/jmeter/JMeterAndOperatingSystemsTested">this page</a>
 on JMeter wiki.</p>
 <p>Even if your OS is not listed on the wiki page, JMeter should run on it provided that the JVM is compliant.</p>
@@ -144,17 +144,13 @@ There may also be some information on the <a href="http://wiki.apache.org/jmeter
 
 <subsection name="&sect-num;.2.7 Libraries for ActiveMQ JMS" anchor="libraries_activemq">
 <p>
-At the time of writing, the current version of ActiveMQ is 5.3.2.
-You will need to add the jar activemq-all-5.3.2.jar to your classpath, e.g. by storing it in the lib/ directory.
+You will need to add the jar activemq-all-X.X.X.jar to your classpath, e.g. by storing it in the lib/ directory.
 </p>
 <p>
-Alternatively, add the jar activemq-core-5.3.2.jar to the classpath; 
-this requires the javax/management/j2ee classes which can be found in the 
-Apache Geronimo jar geronimo-j2ee-management_1.0_spec-1.0.jar.
 The other required jars (such as commons-logging) are already included with JMeter. 
 </p>
 <p>
-See <a href="http://activemq.apache.org/initial-configuration.html">http://activemq.apache.org/initial-configuration.html</a>
+See <a href="http://activemq.apache.org/initial-configuration.html">ActiveMQ initial configuration page</a>
 for details.
 </p>
 </subsection>
@@ -364,7 +360,7 @@ To start the server(s), run jmeter-server[.bat] on each server host.</p>
 </p>
 <p>To run the test from the client in non-GUI mode, use the following command:</p>
 <pre>
-jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-Z]
+jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-X]
 where:
 -G is used to define JMeter properties to be set in the servers
 -X means exit the servers at the end of the test

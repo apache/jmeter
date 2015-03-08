@@ -1021,17 +1021,15 @@ are two interfaces you have to implement:</p>
 HTTPSampler. The servername, port and get images are set by AccessLogSampler. Next,
 the parser is called with integer 1, telling it to parse one entry. After that,
 HTTPSampler.sample() is called to make the request.
-<code>
-<pre>
-            samp = (HTTPSampler) GENERATOR.generateRequest();
-            samp.setDomain(this.getDomain());
-            samp.setPort(this.getPort());
-            samp.setImageParser(this.isImageParser());
-            PARSER.parse(1);
-            res = samp.sample();
-            res.setSampleLabel(samp.toString());
-</pre>
-</code>
+<source>
+samp = (HTTPSampler) GENERATOR.generateRequest();
+samp.setDomain(this.getDomain());
+samp.setPort(this.getPort());
+samp.setImageParser(this.isImageParser());
+PARSER.parse(1);
+res = samp.sample();
+res.setSampleLabel(samp.toString());
+</source>
 The required methods in LogParser are:
 <ul>
 <li>setGenerator(Generator)</li>
@@ -1687,42 +1685,51 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 The current implementation supports standard Junit convention and extensions. It also
 includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
 JavaSampler with some differences.
-<br></br>1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
-<br></br>2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
-In versions of JMeter after 2.3.1, you can also use the "user.classpath" property to specify where to look for TestCase classes. 
-<br></br>3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
-<br></br>4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
-<br></br>5. Each time the test method is called, Jmeter will pass the result to the listeners.
-<br></br>6. Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.
-<br></br>7. The sampler reports unexpected exceptions as errors.
+<ul>
+<li>rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.</li>
+<li>Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
+In versions of JMeter after 2.3.1, you can also use the "user.classpath" property to specify where to look for TestCase classes.</li>
+<li>Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.</li>
+<li>The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.</li>
+<li>Each time the test method is called, Jmeter will pass the result to the listeners.</li>
+<li>Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.</li>
+<li>The sampler reports unexpected exceptions as errors.
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
 creates 1 instance per sampler and reuses it.
-This can be changed with checkbox "Create a new instance per sample".<br></br>
-The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:&lt;br>
-&lt;br>
-Empty Constructor:&lt;br>
-public class myTestCase {&lt;br>
-  public myTestCase() {}&lt;br>
-}&lt;br>
-&lt;br>
-String Constructor:&lt;br>
-public class myTestCase {&lt;br>
-  public myTestCase(String text) {&lt;br>
-    super(text);&lt;br>
-  }&lt;br>
-}&lt;br>
-By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.&lt;br>
-General Guidelines<br></br>
+This can be changed with checkbox "Create a new instance per sample".</li>
+</ul>
+The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:
+<example title="Junit Constructors" anchor="junit_constructor_example">
+Empty Constructor:
+<pre>
+public class myTestCase {
+  public myTestCase() {}
+}
+</pre>
+String Constructor:
+<pre>
+public class myTestCase {
+  public myTestCase(String text) {
+    super(text);
+  }
+}
+</pre>
+</example>
+By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.
+<note>
+<h3>General Guidelines</h3>
 If you use setUp and tearDown, make sure the methods are declared public. If you do not, the test may not run properly.
 <br></br>
-Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.&lt;br>
-&lt;br>
-1. Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static memebers.&lt;br>
-2. Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a descrete operation, it makes it easier to combine test methods to create new test plans.&lt;br>
-3. Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.&lt;br>
-4. If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.&lt;br>
-5. Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.
+Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.
+<ul>
+<li>Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static memebers.</li>
+<li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a descrete operation, it makes it easier to combine test methods to create new test plans.</li>
+<li>Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.</li>
+<li>If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.</li>
+<li>Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.</li>
+</ul>
+</note>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -2730,7 +2737,7 @@ Further details on the precise meaning of the statistical terms can be found on 
  <p>The value displayed on the top left of graph is the max of 90th percentile of response time.</p>
 </component>
 
-<component name="Spline Visualizer" index="&sect-num;.3.4"  width="581" height="440" screenshot="spline_visualizer.png">
+<component name="Spline Visualizer" index="&sect-num;.3.4"  width="737" height="489" screenshot="spline_visualizer.png">
 <note>
 Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
 during Test Plan debugging and Validation.
@@ -2749,7 +2756,7 @@ This needs to be borne in mind when comparing graphs.
 </description>
 </component>
 
-<component name="Assertion Results" index="&sect-num;.3.5"  width="658" height="277" screenshot="assertion_results.png">
+<component name="Assertion Results" index="&sect-num;.3.5"  width="954" height="365" screenshot="assertion_results.png">
 <description>
 <note>
 Assertion Results MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
@@ -3060,7 +3067,7 @@ the graph as a PNG file.</description>
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
-<figure width="900" height="442" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
+<figure width="1147" height="420" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
 </p>
 </div>
 <p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
@@ -3187,7 +3194,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="Summary Report" index="&sect-num;.3.16"  width="784" height="287" screenshot="summary_report.png">
+<component name="Summary Report" index="&sect-num;.3.16"  width="926" height="324" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
@@ -3224,7 +3231,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 <div align="center">
 <p>
     The figure below shows an example of selecting the "Include group name" checkbox.
-<figure width="784" height="287" image="summary_report_grouped.png">Sample "Include group name" display</figure>
+<figure width="923" height="325" image="summary_report_grouped.png">Sample "Include group name" display</figure>
 </p>
 </div>
 </component>
@@ -3398,7 +3405,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
  </properties>
 </component>
 
-<component name="Backend Listener" index="&sect-num;.3.21"  width="1138" height="352" screenshot="backend_listener.png">
+<component name="Backend Listener" index="&sect-num;.3.21"  width="902" height="341" screenshot="backend_listener.png">
 <description>
 The backend listener is an Asynchronous listener that enables you to plug custom implementations of <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a>.
 By default, a Graphite implementation is provided.
@@ -3415,13 +3422,15 @@ By default, a Graphite implementation is provided.
 
     <properties>
         <property name="graphiteMetricsSender" required="Yes">org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender or org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</property>
-        <property name="graphiteHost" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) or CollectD (with Graphite plugin enabled) server port</property>
-        <property name="graphitePort" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) or CollectD (with Graphite plugin enabled) server port, defaults to 2003. Note PickleGraphiteMetricsSender (port 2004) can only talk to Graphite server.</property>
+        <property name="graphiteHost" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server host</property>
+        <property name="graphitePort" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server port, defaults to 2003. Note PickleGraphiteMetricsSender (port 2004) can only talk to Graphite server.</property>
         <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to "jmeter."</property>
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to true.</property>
         <property name="samplersList" required="Yes">Semicolon separated list of samplers for which you want to report metrics to backend.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
     </properties>
+    <p>Read <a href="realtime-results.html" >this</a> for more details.</p>
+    <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
 </component>
 
 <a href="#">^</a>
@@ -4204,18 +4213,19 @@ GUI that they can use while developing new JMeter components.</p>
      You can then access com.mongodb.DB object in Beanshell or JSR223 Test Elements through the element <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a> 
      using this code<br/>
      
-    <code>
-    import com.mongodb.DB;<br/>
-    import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;<br/>
-    DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source", "value of property Database Name");<br/>
-    ...
-    </code>
+    <source>
+import com.mongodb.DB;
+import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;
+DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
+            "value of property Database Name");
+...
+    </source>
     </description>
     <properties>
         <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
         <property name="Server Address List" required="Yes">Mongo DB Servers</property>
         <property name="MongoDB Source" required="Yes">The name of the variable the connection is tied to.  
-        <b>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</b>
+        <note>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</note>
         </property>
         
         <property name="Keep Trying" required="No">
@@ -4299,9 +4309,9 @@ GUI that they can use while developing new JMeter components.</p>
     to either the main sample, the sub-samples or both. 
     The default is to apply the assertion to the main sample only.
     If the Assertion supports this option, then there will be an entry on the GUI which looks like the following:
-    <figure width="533" height="55" image="assertion/assertionscope.png">Assertion Scope</figure>
+    <figure width="658" height="54" image="assertion/assertionscope.png">Assertion Scope</figure>
     or the following
-    <figure width="756" height="55" image="assertion/assertionscopevar.png">Assertion Scope</figure>
+    <figure width="841" height="55" image="assertion/assertionscopevar.png">Assertion Scope</figure>
     If a sub-sampler fails and the main sample is successful,
     then the main sample will be set to failed status and an Assertion Result will be added.
     If the JMeter variable option is used, it is assumed to relate to the main sample, and
@@ -4338,15 +4348,17 @@ pattern. You can attach multiple assertions to any controller for additional fle
     Case is also significant. To override these settings, one can use the <i>extended regular expression</i> syntax.
     For example:
 </p>
-<pre>
-    (?i) - ignore case
-    (?s) - treat target as single line, i.e. "." matches new-line
-    (?is) - both the above
-    These can be used anywhere within the expression and remain in effect until overriden.  e.g.
-    (?i)apple(?-i) Pie - matches "ApPLe Pie", but not "ApPLe pIe"
-    (?s)Apple.+?Pie - matches Apple followed by Pie, which may be on a subsequent line.
-    Apple(?s).+?Pie - same as above, but it's probably clearer to use the (?s) at the start.  
-</pre>
+<dl>
+<dt><code>(?i)</code></dt><dd>ignore case</dd>
+<dt><code>(?s)</code></dt><dd>treat target as single line, i.e. "." matches new-line</dd>
+<dt><code>(?is)</code></dt><dd>both the above</dd>
+</dl>
+These can be used anywhere within the expression and remain in effect until overriden.  e.g.
+<dl>
+<dt><code>(?i)apple(?-i) Pie</code></dt><dd>matches "ApPLe Pie", but not "ApPLe pIe"</dd>
+<dt><code>(?s)Apple.+?Pie</code></dt><dd>matches Apple followed by Pie, which may be on a subsequent line.</dd>
+<dt><code>Apple(?s).+?Pie</code></dt><dd>same as above, but it's probably clearer to use the (?s) at the start.</dd>
+</dl>
 
 </description>
 <properties>
@@ -5970,13 +5982,13 @@ This certificate is not one of the certificates that browsers normally trust, an
 correct host.<br/>
 As a consequence: 
 <ul>
-<li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:<br/>
-<code>
+<li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:
+<source>
 1) The server's name "www.example.com" does not match the certificate's name
-   "JMeter Proxy (DO NOT TRUST)". Somebody may be trying to eavesdrop on you.<br/>
+   "JMeter Proxy (DO NOT TRUST)". Somebody may be trying to eavesdrop on you.
 2) The certificate for "JMeter Proxy (DO NOT TRUST)" is signed by the unknown Certificate Authority
-   "JMeter Proxy (DO NOT TRUST)". It is not possible to verify that this is a valid certificate.<br/>
-</code> <br/>
+   "JMeter Proxy (DO NOT TRUST)". It is not possible to verify that this is a valid certificate.
+</source>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.
 However, do not accept this certificate permanently; it should only be accepted temporarily.

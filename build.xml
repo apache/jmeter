@@ -2293,23 +2293,39 @@ run JMeter unless all the JMeter jars are added.
     </javadoc>
 </target>
 
-  <target name="docs-site" depends="init-docs" if="AnakiaTask.present" description="Generate browsable HTML documentation in web-site format.">
-    <taskdef name="anakia" classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask"/>
+  <target name="docs-site" depends="init-docs" description="Generate browsable HTML documentation in web-site format.">
+    <mkdir dir="${dest.docs}" />
     <!-- The extending pages are rather out of date (and not linked from elsewhere) -->
-    <anakia basedir="${src.docs}" destdir="${dest.docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml"
-        excludes="**/stylesheets/** extending.xml extending/*.xml"
-        includes="**/*.xml" lastModifiedCheck="${anakia.lastModifiedCheck}" velocityPropertiesFile="${src.docs}/velocity.properties"/>
-    <echo level="info">Fixing EOL</echo>
-    <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
-    <echo level="info">Removing unnecessary &lt;/br> tags</echo>
-    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
-    <echo level="info">Copying files</echo>
-    <copy todir="${dest.docs}/css">
-      <fileset dir="${src.css}"/>
-    </copy>
+    <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}" destdir="${dest.docs}"
+      excludes="extending.xml" includes="*.xml">
+      <param name="relative-path" expression="." />
+      <param name="subdir" expression="" />
+      <param name="year" expression="${year}" />
+    </xslt>
+    <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/usermanual" destdir="${dest.docs}/usermanual"
+      excludes="extending.xml" includes="*.xml">
+      <param name="relative-path" expression=".." />
+      <param name="subdir" expression="usermanual" />
+      <param name="year" expression="${year}" />
+    </xslt>
+    <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/localising" destdir="${dest.docs}/localising"
+      includes="*.xml">
+      <param name="relative-path" expression=".." />
+      <param name="subdir" expression="usermanual" />
+      <param name="year" expression="${year}" />
+    </xslt>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}" excludes="logo.xcf,logo.svg"/>
     </copy>
+    <copy todir="${dest.docs}/css">
+      <fileset dir="${src.css}"/>
+    </copy>
+    <echo level="info">Fixing EOL</echo>
+    <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
+    <echo level="info">Remove superfluos &amp;amp;</echo>
+    <replace encoding="iso-8859-1" dir="${dest.docs}" includes="**/*.html" token="&amp;amp;" value="&amp;"/>
+    <echo level="info">Removing unnecessary &lt;/br> tags</echo>
+    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
     <copy todir="${dest.docs}/demos">
       <fileset dir="${src.demos}"/>
     </copy>
