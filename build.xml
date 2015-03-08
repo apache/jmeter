@@ -2297,19 +2297,14 @@ run JMeter unless all the JMeter jars are added.
     <mkdir dir="${dest.docs}" />
     <!-- The extending pages are rather out of date (and not linked from elsewhere) -->
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}" destdir="${dest.docs}"
-      excludes="extending.xml" includes="*.xml">
+      excludes="**/stylesheets/** extending.xml extending/*.xml"
+      includes="**/*.xml">
       <param name="relative-path" expression="." />
       <param name="subdir" expression="" />
       <param name="year" expression="${year}" />
     </xslt>
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/usermanual" destdir="${dest.docs}/usermanual"
       excludes="extending.xml" includes="*.xml">
-      <param name="relative-path" expression=".." />
-      <param name="subdir" expression="usermanual" />
-      <param name="year" expression="${year}" />
-    </xslt>
-    <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/localising" destdir="${dest.docs}/localising"
-      includes="*.xml">
       <param name="relative-path" expression=".." />
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
