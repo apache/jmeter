@@ -2737,7 +2737,7 @@ Further details on the precise meaning of the statistical terms can be found on 
  <p>The value displayed on the top left of graph is the max of 90th percentile of response time.</p>
 </component>
 
-<component name="Spline Visualizer" index="&sect-num;.3.4"  width="581" height="440" screenshot="spline_visualizer.png">
+<component name="Spline Visualizer" index="&sect-num;.3.4"  width="737" height="489" screenshot="spline_visualizer.png">
 <note>
 Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
 during Test Plan debugging and Validation.
@@ -2756,7 +2756,7 @@ This needs to be borne in mind when comparing graphs.
 </description>
 </component>
 
-<component name="Assertion Results" index="&sect-num;.3.5"  width="658" height="277" screenshot="assertion_results.png">
+<component name="Assertion Results" index="&sect-num;.3.5"  width="954" height="365" screenshot="assertion_results.png">
 <description>
 <note>
 Assertion Results MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
@@ -3067,7 +3067,7 @@ the graph as a PNG file.</description>
 <div align="center">
 <p>
     The figure below shows an example of settings to draw this graph.
-<figure width="900" height="442" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
+<figure width="1147" height="420" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
 </p>
 </div>
 <p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
@@ -3194,7 +3194,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="Summary Report" index="&sect-num;.3.16"  width="784" height="287" screenshot="summary_report.png">
+<component name="Summary Report" index="&sect-num;.3.16"  width="926" height="324" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
@@ -3231,7 +3231,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 <div align="center">
 <p>
     The figure below shows an example of selecting the "Include group name" checkbox.
-<figure width="784" height="287" image="summary_report_grouped.png">Sample "Include group name" display</figure>
+<figure width="923" height="325" image="summary_report_grouped.png">Sample "Include group name" display</figure>
 </p>
 </div>
 </component>
@@ -4309,9 +4309,9 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     to either the main sample, the sub-samples or both. 
     The default is to apply the assertion to the main sample only.
     If the Assertion supports this option, then there will be an entry on the GUI which looks like the following:
-    <figure width="533" height="55" image="assertion/assertionscope.png">Assertion Scope</figure>
+    <figure width="658" height="54" image="assertion/assertionscope.png">Assertion Scope</figure>
     or the following
-    <figure width="756" height="55" image="assertion/assertionscopevar.png">Assertion Scope</figure>
+    <figure width="841" height="55" image="assertion/assertionscopevar.png">Assertion Scope</figure>
     If a sub-sampler fails and the main sample is successful,
     then the main sample will be set to failed status and an Assertion Result will be added.
     If the JMeter variable option is used, it is assumed to relate to the main sample, and
