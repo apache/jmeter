@@ -90,7 +90,7 @@
               </a>
             </div>
           </xsl:if>
-          <div>
+          <div class="twitter">
             <div>
               <a href="https://twitter.com/share" class="twitter-share-button"
                 data-text="Powerful Load Testing with Apache #JMeter"
@@ -129,7 +129,7 @@
             </div>
           </div>
           <div class="banner">
-            <iframe src="http://www.apache.org/ads/button.html"
+            <iframe src="http://www.apache.org/ads/bannerbar.html"
               style="border-width:0;" frameborder="0" scrolling="no"
             ></iframe>
             <div class="clear"></div>
