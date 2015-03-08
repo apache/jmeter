@@ -1,716 +1,194 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
-
-<!-- Content Stylesheet for Site -->
-
-
-<!-- start the processing -->
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="../css/style.css"/>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-
-<title>Apache JMeter - User's Manual: Building an FTP Test Plan</title>
-</head>
-
-<body bgcolor="#ffffff" text="#000000" link="#525D76">
-<table width="100%" cellspacing="0" border="0">
-<tr>
-<td width="90%" align="left">
-<table border="0" cellspacing="0">
-<tr>
-<td width="10%">
-<a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="../images/asf-logo.png" border="0"/></a>
-</td>
-<td align="left" width="40%">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="http://jmeter.apache.org/"><img width="182" height="88" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
-</td>
-</tr>
-</table>
-</td>
-<td align="left" width="50%">
-<table cellspacing="0" align="right" border="0">
-<tr>
-<td align="left"> <a href="https://twitter.com/share"
-class="twitter-share-button"
-data-text="Powerful Load Testing with
-Apache #JMeter" data-via="ApacheJMeter"
-data-lang="en-gb" data-size="large">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</td>
-<td align="right"> <a
-href="https://twitter.com/ApacheJMeter"
-class="twitter-follow-button"
-data-show-count="false" data-lang="en-gb"
-data-size="large">Follow</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</td>
-</tr>
-</table>
-</td></tr>
-</table>
-
-<table border="0" width="100%" cellspacing="4">
-<tr><td colspan="2">
-<hr noshade size="1"/>
-</td></tr>
-<tr>
-<!-- LEFT SIDE NAVIGATION -->
-<td width="20%" valign="top" nowrap="true">
-<table border="0" width="100%" cellspacing="0">
-<tr><td>
-<p><strong>About</strong></p>
-<ul>
-<li><a href="../index.html">Overview</a>
-</li>
-<li><a href="http://twitter.com/ApacheJMeter">JMeter on Twitter</a>
-<img src="../images/twitter.png" align="top"/></li>
-<li><a href="../issues.html">Issue Tracking</a>
-</li>
-<li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a>
-</li>
-<li><a href="http://www.apache.org/licenses/">License</a>
-</li>
-</ul>
-<p><strong>Download</strong></p>
-<ul>
-<li><a href="../download_jmeter.cgi">Download Releases</a>
-</li>
-<li><a href="../nightly.html">Developer (Nightly) Builds</a>
-</li>
-</ul>
-<p><strong>Documentation</strong></p>
-<ul>
-<li><a href="../changes.html">Changes per version</a>
-</li>
-<li><a href="../usermanual/get-started.html">Get Started</a>
-</li>
-<li><a href="../usermanual/index.html">User Manual</a>
-</li>
-<li><a href="../usermanual/best-practices.html">Best Practices</a>
-</li>
-<li><a href="../usermanual/component_reference.html">Component Reference</a>
-</li>
-<li><a href="../usermanual/functions.html">Functions Reference</a>
-</li>
-<li><a href="../api/index.html">Javadocs</a>
-</li>
-<li><a href="../building.html">Building JMeter and Add-Ons</a>
-</li>
-<li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
-</li>
-<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
-</li>
-</ul>
-<p><strong>Tutorials (PDF format)</strong></p>
-<ul>
-<li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a>
-</li>
-<li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a>
-</li>
-<li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a>
-</li>
-<li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
-</li>
-<li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a>
-</li>
-</ul>
-<p><strong>Community</strong></p>
-<ul>
-<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
-</li>
-<li><a href="../mail.html">Mailing Lists</a>
-</li>
-<li><a href="../svnindex.html">SVN Repositories</a>
-</li>
-</ul>
-<p><strong>Foundation</strong></p>
-<ul>
-<li><a href="http://www.apache.org/">ASF</a>
-</li>
-<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a>
-</li>
-<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
-</li>
-<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
-</li>
-</ul>
-</td></tr>
-<tr><td>
-<iframe src="http://www.apache.org/ads/button.html" style="border-width:0; float: left;" frameborder="0" scrolling="no"></iframe>
-</td></tr>
-</table>
-</td>
-<td width="80%" align="left" valign="top">
-<table>
-<tr>
-<td bgcolor="#525D76">
-<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="build-ldap-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="build-db-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
-</td>
-</tr>
-</table>
-<br>
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
-<tr><td bgcolor="#525D76">
-<font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="building"><strong>8. Building an FTP Test Plan</strong></a><a class="sectionlink" href="#building" title="Link to here">&para;</a></font>
-</td></tr>
-<tr><td>
-<blockquote>
-<p>
-In this section, you will learn how to create a basic
-
-<a href="build-test-plan.html">
-Test Plan
-</a>
- to test an FTP site.  You will
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Building an FTP Test Plan</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="../images/asf-logo.png" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img src="../images/logo.jpg" alt="Apache JMeter"></a></div><div class="twitter"><div><a href="https://twitter.com/share" class="twitter-share-button" data-text="Powerful Load Testing with Apache #JMeter" data-via="ApacheJMeter" data-lang="en-gb" data-size="large">Tweet</a><script>
+            (function(d,s,id){
+              var js,
+                  fjs=d.getElementsByTagName(s)[0],
+                  p=/^http:/.test(d.location)?'http':'https';
+              if (!d.getElementById(id)) {
+                  js=d.createElement(s);
+                  js.id=id;
+                  js.src=p+'://platform.twitter.com/widgets.js';
+                  fjs.parentNode.insertBefore(js,fjs);
+              }
+            })(document, 'script', 'twitter-wjs');
+              </script></div><div><a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button" data-show-count="false" data-lang="en-gb" data-size="large">Follow</a><script>(function(d,s,id){
+                var js,
+                    fjs=d.getElementsByTagName(s)[0],
+                    p=/^http:/.test(d.location)?'http':'https';
+                if (!d.getElementById(id)) {
+                    js=d.createElement(s);
+                    js.id=id;
+                    js.src=p+'://platform.twitter.com/widgets.js';
+                    fjs.parentNode.insertBefore(js,fjs);
+                }
+            })(document, 'script', 'twitter-wjs');
+              </script></div></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://twitter.com/ApacheJMeter">JMeter on Twitter<img src="../images/twitter.png" alt="Icon for JMeter on Twitter"></a></li><li><a href="../issues.html">Issue Tracking</a></li><li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../nightly.html">Developer (Nightly) Builds</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Documentation</div><ul><li><a href="../changes.html">Changes per version</a></li><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="../building.html">Building JMeter and Add-Ons</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Community</div><ul><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">SVN Repositories</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><ul class="pagelinks"><li><a href="build-db-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-ldap-test-plan.html">Next &gt;</a></li></ul><div class="section"><h1 id="building">8. Building an FTP Test Plan<a class="sectionlink" href="#building" title="Link to here">&para;</a></h1>
+<p>In this section, you will learn how to create a basic
+<a href="build-test-plan.html">Test Plan</a> to test an FTP site.  You will
 create four users that send requests for two files on a FTP site.
 Also, you will tell the users to run their tests twice. So, the total number of
-requests is (4 users) x (2 requests) x (repeat 2 times) = 16 FTP requests.
-</p>
-<p>
-To construct the Test Plan, you will use the following elements:
+requests is (4 users) x (2 requests) x (repeat 2 times) = 16 FTP requests.</p>
+<p>To construct the Test Plan, you will use the following elements:
+<a href="test_plan.html#thread_group">Thread Group</a>,
+<a href="../usermanual/component_reference.html#FTP_Request">FTP Request</a>,
+<a href="../usermanual/component_reference.html#FTP_Request_Defaults">FTP Request Defaults</a>, and
+<a href="../usermanual/component_reference.html#View_Results_in_Table">View Results in Table</a>.</p>
 
-<a href="test_plan.html#thread_group">
-Thread Group
-</a>
-,
-
-<a href="../usermanual/component_reference.html#FTP_Request">FTP Request</a>
-,
-
-<a href="../usermanual/component_reference.html#FTP_Request_Defaults">FTP Request Defaults</a>
-, and
-
-<a href="../usermanual/component_reference.html#View_Results_in_Table">View Results in Table</a>
-.
-</p>
-</blockquote>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
-<tr><td bgcolor="#525D76">
-<font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="adding_users"><strong>8.1 Adding Users</strong></a><a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></font>
-</td></tr>
-<tr><td>
-<blockquote>
-<p>
-The first step you want to do with every JMeter Test Plan is to add a
-
-<a href="test_plan.html#thread_group">
-Thread Group
-</a>
- element.  The Thread Group tells
+</div><div class="section"><h1 id="adding_users">8.1 Adding Users<a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></h1>
+<p>The first step you want to do with every JMeter Test Plan is to add a
+<a href="test_plan.html#thread_group">Thread Group</a> element.  The Thread Group tells
 JMeter the number of users you want to simulate, how often the users should send
-requests, and the how many requests they should send.
-</p>
-<p>
-Go ahead and add the Thread Group element by first selecting the Test Plan,
+requests, and the how many requests they should send.</p>
+
+<p>Go ahead and add the Thread Group element by first selecting the Test Plan,
 clicking your right mouse button to get the Add menu, and then select
+<b>Add</b> --&gt; <b>ThreadGroup.</b></p>
 
-<b>
-Add
-</b>
- --> 
-<b>
-ThreadGroup.
-</b>
-</p>
-<p>
-You should now see the 
-<b>
-Thread Group
-</b>
- element under 
-<b>
-Test Plan.
-</b>
-  If you do not
+<p>You should now see the <b>Thread Group</b> element under <b>Test Plan.</b>  If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
+<b>Test Plan</b> element.</p>
 
-<b>
-Test Plan
-</b>
- element.
-</p>
-<p>
-Next, you need to modify the default properties.  Select the 
-<b>
-Thread Group
-</b>
- element
+<p>Next, you need to modify the default properties.  Select the <b>Thread Group</b> element
 in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure 8.1
-below)
-</p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/webtest/threadgroup.png"/><br>
-<font size="-1">
-Figure 8.1. Thread Group with Default Values
-</font></td></tr></table></p>
-<p>
-Start by providing a more descriptive name for our 
-<b>
-Thread Group.
-</b>
- In the name
-field, enter 'FTP Users'.
-</p>
-<p>
-Next, increase the number of users to 4.
-</p>
-<p>
-In the next field, the 
-<i>
-Ramp-Up
-</i>
- Period, leave the the default value of 0
-seconds.  This property tells JMeter how long to delay between starting each
-user. For example, if you enter a 
-<i>
-Ramp-Up
-</i>
- Period of 5 seconds, JMeter will
-finish starting all of your users by the end of the 5 seconds.  So, if we have
-5 users and a 5 second 
-<i>
-Ramp-Up
-</i>
- Period, then the delay between starting users
-would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
-value to 0, then JMeter will immediately start all of your users.
-</p>
-<p>
-Finally, enter a value of 2 in
-the 
-<i>
-Loop Count
-</i>
- field.  This property tells JMeter how many times to repeat your
-test. To have JMeter repeatedly run your 
-<b>
-Test Plan,
-</b>
- select the 
-<i>
-Forever
-</i>
+below)</p>
 
-checkbox.
-</p>
-<p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>In most applications, you have to manually accept
+<figure><a href="../images/screenshots/webtest/threadgroup.png"><img src="../images/screenshots/webtest/threadgroup.png" width="" height="" alt="
+Figure 8.1. Thread Group with Default Values"></a><figcaption>
+Figure 8.1. Thread Group with Default Values</figcaption></figure>
+
+<p>Start by providing a more descriptive name for our <b>Thread Group.</b> In the name
+field, enter 'FTP Users'.</p>
+
+<p>Next, increase the number of users to 4.</p>
+
+<p>In the next field, the <i>Ramp-Up</i> Period, leave the the default value of 0
+seconds.  This property tells JMeter how long to delay between starting each
+user. For example, if you enter a <i>Ramp-Up</i> Period of 5 seconds, JMeter will
+finish starting all of your users by the end of the 5 seconds.  So, if we have
+5 users and a 5 second <i>Ramp-Up</i> Period, then the delay between starting users
+would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
+value to 0, then JMeter will immediately start all of your users.</p>
+
+<p>Finally, enter a value of 2 in
+the <i>Loop Count</i> field.  This property tells JMeter how many times to repeat your
+test. To have JMeter repeatedly run your <b>Test Plan,</b> select the <i>Forever</i>
+checkbox.</p>
+
+<div class="clear"></div><div class="note">In most applications, you have to manually accept
 changes you make in a Control Panel.  However, in JMeter, the Control Panel
 automatically accepts your changes as you make them.  If you change the
 name of an element, the tree will be updated with the new text after you
-leave the Control Panel (for example, when selecting another tree element).
-</td></tr>
-</table>
-</p>
-<p>
-See Figure 8.2 for the completed FTP Users Thread Group.
-</p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ftptest/threadgroup2.png"/><br>
-<font size="-1">
-Figure 8.2. FTP Users Thread Group
-</font></td></tr></table></p>
-</blockquote>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
-<tr><td bgcolor="#525D76">
-<font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="adding_defaults"><strong>8.2 Adding Default FTP Request Properties</strong></a><a class="sectionlink" href="#adding_defaults" title="Link to here">&para;</a></font>
-</td></tr>
-<tr><td>
-<blockquote>
-<p>
-Now that we have defined our users, it is time define the tasks that they
+leave the Control Panel (for example, when selecting another tree element).</div><div class="clear"></div>
+
+<p>See Figure 8.2 for the completed FTP Users Thread Group.</p>
+
+<figure><a href="../images/screenshots/ftptest/threadgroup2.png"><img src="../images/screenshots/ftptest/threadgroup2.png" width="" height="" alt="
+Figure 8.2. FTP Users Thread Group"></a><figcaption>
+Figure 8.2. FTP Users Thread Group</figcaption></figure>
+
+</div><div class="section"><h1 id="adding_defaults">8.2 Adding Default FTP Request Properties<a class="sectionlink" href="#adding_defaults" title="Link to here">&para;</a></h1>
+<p>Now that we have defined our users, it is time define the tasks that they
 will be performing.  In this section, you will specify the default settings
-for your FTP requests.  And then, in section 8.3, you will add 
-<b>
-FTP Request
-</b>
+for your FTP requests.  And then, in section 8.3, you will add <b>FTP Request</b>
+elements which use some of the default settings you specified here.</p>
 
-elements which use some of the default settings you specified here.
+<p>Begin by selecting the FTP Users element. Click your right mouse button
+to get the Add menu, and then select <b>Add</b> --&gt; <b>Config Element</b> --&gt; <b>FTP Request
+Defaults.</b> Then, select this new element to view its Control Panel (see Figure 8.3).
 </p>
-<p>
-Begin by selecting the FTP Users element. Click your right mouse button
-to get the Add menu, and then select 
-<b>
-Add
-</b>
- --> 
-<b>
-Config Element
-</b>
- --> 
-<b>
-FTP Request
-Defaults.
-</b>
- Then, select this new element to view its Control Panel (see Figure 8.3).
 
-</p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ftptest/ftp-defaults.png"/><br>
-<font size="-1">
-Figure 8.3. FTP Request Defaults
-</font></td></tr></table></p>
-<p>
+<figure><a href="../images/screenshots/ftptest/ftp-defaults.png"><img src="../images/screenshots/ftptest/ftp-defaults.png" width="" height="" alt="
+Figure 8.3. FTP Request Defaults"></a><figcaption>
+Figure 8.3. FTP Request Defaults</figcaption></figure>
 
-Like most JMeter elements, the 
-<a href="../usermanual/component_reference.html#FTP_Request_Defaults">FTP Request Defaults</a>
- Control
+<p>
+Like most JMeter elements, the <a href="../usermanual/component_reference.html#FTP_Request_Defaults">FTP Request Defaults</a> Control
 Panel has a name field that you can modify.  In this example, leave this field with
-the default value.
-</p>
-<p>
-Skip to the next field, which is the FTP Server's Server Name/IP. For the
+the default value.</p>
+
+<p>Skip to the next field, which is the FTP Server's Server Name/IP. For the
 Test Plan that you are building, all FTP requests will be sent to the same
 FTP server, ftp.domain.com in this case.  Enter this domain name into the field.
 This is the only field that we will specify a default, so leave the remaining
-fields with their default values.
-</p>
-<p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>The FTP Request Defaults element does not tell JMeter
+fields with their default values.</p>
+
+<div class="clear"></div><div class="note">The FTP Request Defaults element does not tell JMeter
 to send an FTP request.  It simply defines the default values that the
-FTP Request elements use.
-</td></tr>
-</table>
-</p>
-<p>
-See Figure 8.4 for the completed FTP Request Defaults element
-</p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ftptest/ftp-defaults2.png"/><br>
-<font size="-1">
-Figure 8.4. FTP Defaults for our Test Plan
-</font></td></tr></table></p>
-</blockquote>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
-<tr><td bgcolor="#525D76">
-<font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="adding_requests"><strong>8.3 Adding FTP Requests</strong></a><a class="sectionlink" href="#adding_requests" title="Link to here">&para;</a></font>
-</td></tr>
-<tr><td>
-<blockquote>
-<p>
-In our 
-<b>
-Test Plan
-</b>
-, we need to make two 
-<b>
-FTP requests
-</b>
-.
-</p>
-<p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>JMeter sends requests in the order that they appear in the tree.
-</td></tr>
-</table>
-</p>
-<p>
-Start by adding the first 
-<a href="../usermanual/component_reference.html#FTP_Request">FTP Request</a>
+FTP Request elements use.</div><div class="clear"></div>
 
-to the FTP Users element (
-<b>
-Add
-</b>
- --> 
-<b>
-Sampler
-</b>
- --> 
-<b>
-FTP Request
-</b>
-).
-Then, select the 
-<b>
-FTP Request
-</b>
- element in the tree and edit the following properties
+<p>See Figure 8.4 for the completed FTP Request Defaults element</p>
+
+<figure><a href="../images/screenshots/ftptest/ftp-defaults2.png"><img src="../images/screenshots/ftptest/ftp-defaults2.png" width="" height="" alt="
+Figure 8.4. FTP Defaults for our Test Plan"></a><figcaption>
+Figure 8.4. FTP Defaults for our Test Plan</figcaption></figure>
+
+</div><div class="section"><h1 id="adding_requests">8.3 Adding FTP Requests<a class="sectionlink" href="#adding_requests" title="Link to here">&para;</a></h1>
+
+<p>In our <b>Test Plan</b>, we need to make two <b>FTP requests</b>.</p>
+
+<div class="clear"></div><div class="note">JMeter sends requests in the order that they appear in the tree.</div><div class="clear"></div>
+
+<p>Start by adding the first <a href="../usermanual/component_reference.html#FTP_Request">FTP Request</a>
+to the FTP Users element (<b>Add</b> --&gt; <b>Sampler</b> --&gt; <b>FTP Request</b>).
+Then, select the <b>FTP Request</b> element in the tree and edit the following properties
 (see Figure 8.5):
-
 <ol>
-
-
-<li>
-Change the 
-<i>
-Name
-</i>
- to "File1".
-</li>
-
-
-<li>
-Change the 
-<i>
-Remote File
-</i>
- field to "/directory/file1.txt".
-</li>
-
-
-<li>
-Change the 
-<i>
-Username
-</i>
- field to "anonymous".
-</li>
-
-
-<li>
-Change the 
-<i>
-Password
-</i>
- field to "anonymous@test.com".
-</li>
-
-
+<li>Change the <i>Name</i> to "File1".</li>
+<li>Change the <i>Remote File</i> field to "/directory/file1.txt".</li>
+<li>Change the <i>Username</i> field to "anonymous".</li>
+<li>Change the <i>Password</i> field to "anonymous@test.com".</li>
 </ol>
-
-
 </p>
-<p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>You do not have to set the 
-<i>
-Server Name
-</i>
- field because you already specified
-this value in the 
-<b>
-FTP Request Defaults
-</b>
- element.
-</td></tr>
-</table>
-</p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ftptest/ftp-request.png"/><br>
-<font size="-1">
-Figure 8.5. FTP Request for file1
-</font></td></tr></table></p>
-<p>
-Next, add the second 
-<b>
-FTP Request
-</b>
- and edit the following properties (see
+
+<div class="clear"></div><div class="note">You do not have to set the <i>Server Name</i> field because you already specified
+this value in the <b>FTP Request Defaults</b> element.</div><div class="clear"></div>
+
+<figure><a href="../images/screenshots/ftptest/ftp-request.png"><img src="../images/screenshots/ftptest/ftp-request.png" width="" height="" alt="
+Figure 8.5. FTP Request for file1"></a><figcaption>
+Figure 8.5. FTP Request for file1</figcaption></figure>
+
+<p>Next, add the second <b>FTP Request</b> and edit the following properties (see
 Figure 8.6:
-
 <ol>
-
-
-<li>
-Change the 
-<i>
-Name
-</i>
- to "File2".
-</li>
-
-
-<li>
-Change the 
-<i>
-Remote File
-</i>
- field to "/directory/file2.txt".
-</li>
-
-
-<li>
-Change the 
-<i>
-Username
-</i>
- field to "anonymous".
-</li>
-
-
-<li>
-Change the 
-<i>
-Password
-</i>
- field to "anonymous@test.com".
-</li>
-
-
+<li>Change the <i>Name</i> to "File2".</li>
+<li>Change the <i>Remote File</i> field to "/directory/file2.txt".</li>
+<li>Change the <i>Username</i> field to "anonymous".</li>
+<li>Change the <i>Password</i> field to "anonymous@test.com".</li>
 </ol>
-
-
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ftptest/ftp-request2.png"/><br>
-<font size="-1">
-Figure 8.6. FTP Request for file2
-</font></td></tr></table></p>
-</blockquote>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<table border="0" cellspacing="0" cellpadding="2" width="100%">
-<tr><td bgcolor="#525D76">
-<font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="adding_listener"><strong>8.4 Adding a Listener to View/Store the Test Results</strong></a><a class="sectionlink" href="#adding_listener" title="Link to here">&para;</a></font>
-</td></tr>
-<tr><td>
-<blockquote>
-<p>
-The final element you need to add to your 
-<b>
-Test Plan
-</b>
- is a
- 
-<a href="component_reference.html#listeners">
-Listener
-</a>
-. This element is
-responsible for storing all of the results of your 
-<b>
-FTP requests
-</b>
- in a file and presenting
-a visual model of the data.
-</p>
-<p>
-Select the FTP Users element and add a 
-<a href="../usermanual/component_reference.html#View_Results_in_Table">View Results in Table</a>
 
-listener (
-<b>
-Add
-</b>
- --> 
-<b>
-Listener
-</b>
- --> 
-<b>
-View Results in Table
-</b>
-).
-</p>
-<p>
-Run your test and view the results.
-</p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ftptest/ftp-results.png"/><br>
-<font size="-1">
-Figure 8.7. View Results in Table Listener
-</font></td></tr></table></p>
-</blockquote>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<br>
-<table>
-<tr>
-<td bgcolor="#525D76">
-<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="build-ldap-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="build-db-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-<tr><td colspan="2">
-<hr noshade size="1"/>
-</td></tr>
-<tr><td colspan="2">
-<div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2015, Apache Software Foundation
-</em></font></div>
-</td></tr>
-<tr><td colspan="2">
-<div align="center"><font color="#525D76" size="-1">
-Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
-trademarks of the Apache Software Foundation.
-</font>
-</div>
-</td></tr>
-</table>
-</body>
-</html>
-<!-- end the processing -->
+<figure><a href="../images/screenshots/ftptest/ftp-request2.png"><img src="../images/screenshots/ftptest/ftp-request2.png" width="" height="" alt="
+Figure 8.6. FTP Request for file2"></a><figcaption>
+Figure 8.6. FTP Request for file2</figcaption></figure>
 
+</div><div class="section"><h1 id="adding_listener">8.4 Adding a Listener to View/Store the Test Results<a class="sectionlink" href="#adding_listener" title="Link to here">&para;</a></h1>
+<p>The final element you need to add to your <b>Test Plan</b> is a
+ <a href="component_reference.html#listeners">Listener</a>. This element is
+responsible for storing all of the results of your <b>FTP requests</b> in a file and presenting
+a visual model of the data.</p>
 
+<p>Select the FTP Users element and add a <a href="../usermanual/component_reference.html#View_Results_in_Table">View Results in Table</a>
+listener (<b>Add</b> --&gt; <b>Listener</b> --&gt; <b>View Results in Table</b>).</p>
+<p>Run your test and view the results.</p>
 
+<figure><a href="../images/screenshots/ftptest/ftp-results.png"><img src="../images/screenshots/ftptest/ftp-results.png" width="" height="" alt="
+Figure 8.7. View Results in Table Listener"></a><figcaption>
+Figure 8.7. View Results in Table Listener</figcaption></figure>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div><ul class="pagelinks"><li><a href="build-db-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-ldap-test-plan.html">Next &gt;</a></li></ul></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2015
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div></body></html>

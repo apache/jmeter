@@ -69,12 +69,17 @@ h1, h2, h3, h4, h5, .title {
 }
 
 .banner>iframe {
-  width: 140px;
-  height: 130px;
+  width: 240px;
+  height: 70px;
 }
 .banner>iframe>body {
   margin: 0px;
   padding: 0px;
+}
+.banner>iframe img {
+  width: auto;
+  max-width: 100%
+  height: auto;
 }
 
 body {
@@ -308,13 +313,13 @@ table {
 @media screen and (max-width: 900px) {
   .nav {
     display: block;
-    width: 100%;
-    max-width: 100%;
+    width: 95%;
+    max-width: 95%;
   }
   .main {
     display: block;
-    width: 100%;
-    max-width: 100%;
+    width: 95%;
+    max-width: 95%;
     margin-left: 0.5em;
   }
   .section-index, pagelinks {
@@ -373,5 +378,21 @@ table {
   }
   .section-index li:hover>ul {
     display: block;
+  }
+  .subsection {
+    padding: 0.3rem;
+    margin: 0.1rem;
+  }
+  .header > .twitter {
+   width: 100%;
+   text-align: center;
+  }
+  .header > .twitter > div {
+    display: inline;
+    width: 50%;
+  }
+  .header > .banner {
+    width: 100%;
+    text-align: center;
   }
 }
