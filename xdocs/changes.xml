@@ -147,15 +147,15 @@ The property to define your prefered size is:
 <pre>jmeter.toolbar.icons.size=value</pre>
 with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <p>The toolbar with 22x22 pixels icons
-<figure width="648" height="100" image="changes/2.13/toolbar_22x22.png"></figure>
+<figure width="417" height="116" image="changes/2.13/toolbar_22x22.png"></figure>
 </p>
 
 <p>The toolbar with 32x32 pixels icons
-<figure width="825" height="112" image="changes/2.13/toolbar_32x32.png"></figure>
+<figure width="533" height="130" image="changes/2.13/toolbar_32x32.png"></figure>
 </p>
 
 <p>The toolbar with 48x48 pixels icons
-<figure width="1115" height="130" image="changes/2.13/toolbar_48x48.png"></figure>
+<figure width="716" height="143" image="changes/2.13/toolbar_48x48.png"></figure>
 </p>
  
 <ch_title>HTTP(S) Test Script Recorder</ch_title>
