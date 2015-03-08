@@ -2308,6 +2308,12 @@ run JMeter unless all the JMeter jars are added.
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
     </xslt>
+    <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/localising" destdir="${dest.docs}/localising"
+      includes="*.xml">
+      <param name="relative-path" expression=".." />
+      <param name="subdir" expression="usermanual" />
+      <param name="year" expression="${year}" />
+    </xslt>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}" excludes="logo.xcf,logo.svg"/>
     </copy>
