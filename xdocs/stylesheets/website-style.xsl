@@ -222,7 +222,7 @@
   <!-- Process a menu for the navigation bar -->
   <xsl:template match="menu">
     <ul class="menu">
-      <li>
+      <li onClick="return true">
         <div class="menu-title">
           <xsl:value-of select="@name" />
         </div>
