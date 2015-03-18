@@ -18,10 +18,10 @@
 -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '16'>
+<!ENTITY sect-num '17'>
 ]>
 
-<document prev="remote-test.html" next="boss.html" id="$Id$">
+<document prev="realtime-results.html" next="boss.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Best Practices</title>
