@@ -173,30 +173,30 @@
  <li><a name="build-monitor-test-plan"/><a href="build-monitor-test-plan.html">13. Building a Monitor Test Plan</a></li>
  <li><a name="listeners"/><a href="listeners.html">14. Introduction to Listeners</a></li>
  <li><a name="remote-test"/><a href="remote-test.html">15. Remote Testing</a></li>
- <li><a name="best-practices"/><a href="best-practices.html">16. Best Practices</a></li>
+ <li><a name="realtime-results"/><a href="realtime-results.html">16. Real time Results</a></li>
+ <li><a name="best-practices"/><a href="best-practices.html">17. Best Practices</a></li>
   <ul>
-     <li><a href="best-practices.html#use_latest_version">16.1 Always use latest version of JMeter</a></li>
-     <li><a href="best-practices.html#sizing_threads">16.2 Use the correct Number of Threads</a></li>
-     <li><a href="best-practices.html#put_cookie_manager">16.3 Where to Put the Cookie Manager</a></li>
-     <li><a href="best-practices.html#put_auth_manager">16.4 Where to Put the Authorization Manager</a></li>
-     <li><a href="best-practices.html#proxy_server">16.5 Using the HTTP(S) Test Script Recorder</a></li>
-     <li><a href="best-practices.html#user_variables">16.6 User variables</a></li>
-     <li><a href="best-practices.html#lean_mean">16.7 Reducing resource requirements</a></li>
-     <li><a href="best-practices.html#beanshell_server">16.8 BeanShell server</a></li>
-     <li><a href="best-practices.html#bsh_scripting">16.9 BeanShell scripting</a></li>
-     <li><a href="best-practices.html#developing_scripts">16.10 Developing script functions in BeanShell, Javascript or Jexl etc.</a></li>
-     <li><a href="best-practices.html#parameterising_tests">16.11 Parameterising tests</a></li>
-     <li><a href="best-practices.html#jsr223">16.12 JSR223 Elements</a></li>
-     <li><a href="best-practices.html#sharing_variables">16.13 Sharing variables between threads and thread groups</a></li>
-     <li><a href="best-practices.html#properties">16.14 Managing properties</a></li>
+     <li><a href="best-practices.html#use_latest_version">17.1 Always use latest version of JMeter</a></li>
+     <li><a href="best-practices.html#sizing_threads">17.2 Use the correct Number of Threads</a></li>
+     <li><a href="best-practices.html#put_cookie_manager">17.3 Where to Put the Cookie Manager</a></li>
+     <li><a href="best-practices.html#put_auth_manager">17.4 Where to Put the Authorization Manager</a></li>
+     <li><a href="best-practices.html#proxy_server">17.5 Using the HTTP(S) Test Script Recorder</a></li>
+     <li><a href="best-practices.html#user_variables">17.6 User variables</a></li>
+     <li><a href="best-practices.html#lean_mean">17.7 Reducing resource requirements</a></li>
+     <li><a href="best-practices.html#beanshell_server">17.8 BeanShell server</a></li>
+     <li><a href="best-practices.html#bsh_scripting">17.9 BeanShell scripting</a></li>
+     <li><a href="best-practices.html#developing_scripts">17.10 Developing script functions in BeanShell, Javascript or Jexl etc.</a></li>
+     <li><a href="best-practices.html#parameterising_tests">17.11 Parameterising tests</a></li>
+     <li><a href="best-practices.html#jsr223">17.12 JSR223 Elements</a></li>
+     <li><a href="best-practices.html#sharing_variables">17.13 Sharing variables between threads and thread groups</a></li>
+     <li><a href="best-practices.html#properties">17.14 Managing properties</a></li>
   </ul>
- <li><a name="boss"/><a href="boss.html">17. Help! My boss wants me to load test our web app!</a></li>
-
- <li><a name="component_reference"/><a href="component_reference.html">18. Component Reference</a></li>
- <li><a name="functions"/><a href="functions.html">19. Functions</a></li>
- <li><a name="regex"/><a href="regular_expressions.html">20. Regular Expressions</a></li>
- <li><a name="hints"/><a href="hints_and_tips.html">21. Hints and Tips</a></li>
- <li><a name="glossary"/><a href="glossary.html">22. Glossary</a></li>
+ <li><a name="boss"/><a href="boss.html">18. Help! My boss wants me to load test our web app!</a></li>
+ <li><a name="component_reference"/><a href="component_reference.html">19. Component Reference</a></li>
+ <li><a name="functions"/><a href="functions.html">20. Functions</a></li>
+ <li><a name="regex"/><a href="regular_expressions.html">21. Regular Expressions</a></li>
+ <li><a name="hints"/><a href="hints_and_tips.html">22. Hints and Tips</a></li>
+ <li><a name="glossary"/><a href="glossary.html">23. Glossary</a></li>
 </ul>
 </subsection>
 
