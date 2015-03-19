@@ -283,7 +283,7 @@ and the java command silently ignores the CLASSPATH variable, and the -classpath
 <p>A documentation for each template explains what to do once test plan is created from template.</p>
 </subsection>
 
-<subsection name="&sect-num;.4.3 Using JMeter behing a proxy" anchor="proxy_server">
+<subsection name="&sect-num;.4.3 Using JMeter behind a proxy" anchor="proxy_server">
 <p>If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
 the firewall/proxy server hostname and port number.  To do so, run the jmeter[.bat] file
 from a command line with the following parameters:</p>
