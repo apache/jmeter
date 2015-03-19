@@ -54,7 +54,7 @@ Plan).</p>-->
 <p>The first step you want to do with every JMeter Test Plan is to add a
 <a href="test_plan.html#thread_group">Thread Group</a> element.  The Thread Group tells
 JMeter the number of users you want to simulate, how often the users should send
-requests, and the how many requests they should send.</p>
+requests, and how many requests they should send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
 clicking your right mouse button to get the Add menu, and then select
@@ -112,7 +112,7 @@ elements which use some of the default settings you specified here.</p>
 
 <p>Begin by selecting the JMeter Users (Thread Group) element. Click your right mouse button
 to get the Add menu, and then select Add --&gt; Config Element --&gt; HTTP Request
-Defaults. Then, select this new element to view its Control Panel (see Figure &sect-num;.3).
+Defaults. Then select this new element to view its Control Panel (see Figure &sect-num;.3).
 </p>
 
 <figure width="1037" height="511" image="webtest/http-defaults1.png">
