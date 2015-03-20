@@ -298,11 +298,13 @@
   <xsl:template match="subsection">
     <div class="subsection">
       <h2>
-        <xsl:value-of select="@name" />
         <xsl:if test="@anchor">
           <xsl:attribute name="id">
             <xsl:value-of select="translate(normalize-space(@anchor), ' ' , '_')" />
           </xsl:attribute>
+        </xsl:if>
+        <xsl:value-of select="@name" />
+        <xsl:if test="@anchor">
           <xsl:call-template name="sectionlink">
             <xsl:with-param name="anchor" select="@anchor" />
           </xsl:call-template>
