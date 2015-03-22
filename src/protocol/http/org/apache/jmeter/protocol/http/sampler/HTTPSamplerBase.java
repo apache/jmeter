@@ -1383,7 +1383,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private void setParentSampleSuccess(HTTPSampleResult res, boolean initialValue) {
         if(!IGNORE_FAILED_EMBEDDED_RESOURCES) {
             res.setSuccessful(initialValue);
-            res.setResponseMessage("Embedded resource download error"); //$NON-NLS-1$
+            if(!initialValue) {
+                res.setResponseMessage("Embedded resource download error"); //$NON-NLS-1$
+            }
         }
     }
 
