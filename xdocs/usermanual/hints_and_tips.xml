@@ -66,21 +66,17 @@ You can use these to determine the correct property setting to change the loggin
 <p>
 It is sometimes very useful to see Log messages to debug dynamic scripting languages like BeanShell or
 groovy used in JMeter.
-Since version 2.6, you can view log messages directly in JMeter GUI, to do so:
+Since version 2.6, you can view log messages directly in JMeter GUI, to do so:</p>
 <ul>
 <li>use menu Options &gt; Log Viewer, a log console will appear at the bottom of the interface</li>
 <li>Or click on the Warning icon in the upper right corner of GUI</li>
 </ul>
-By default this log console is disabled, you can enable it by changing in jmeter.properties:
-<ul>
-<li>jmeter.loggerpanel.display=true</li>
-</ul>
+By default this log console is disabled, you can enable it by changing in <code>jmeter.properties</code>:
+<source>jmeter.loggerpanel.display=true</source>
 
 To avoid using too much memory, this components limits the number of characters used by this panel:
-<ul>
-<li>jmeter.loggerpanel.maxlength=80000</li>
-</ul>
-</p>
+
+<source>jmeter.loggerpanel.maxlength=80000</source>
 </subsection>
 
 <subsection name="&sect-num;.3 Searching" anchor="searching">
@@ -88,11 +84,12 @@ To avoid using too much memory, this components limits the number of characters 
 It is sometimes hard to find in a Test Plan tree and elements using a variable or containing a certain URL or parameter.
 A new feature is now available since 2.6, you can access it in Menu Search.
 It provides search with following options:
-<ul>
-<li>Case Sensitive : Makes search case sensitive</li>
-<li>Regexp : Is text to search a regexp, if so Regexp will be searched in Tree of components, example "\btest\b" will match any component that contains test in searchable elements of the component</li>
-</ul>
 </p>
+<dl>
+<dt><code>Case sensitive</code></dt><dd>Makes search case sensitive</dd>
+<dt><code>Regular exp.</code></dt><dd>Is text to search a regexp, if so Regexp will be searched in Tree of components, example "<code>\btest\b</code>"
+will match any component that contains test in searchable elements of the component</dd>
+</dl>
 
 <figure width="663" height="300" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
 <figure width="667" height="319" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
@@ -104,15 +101,15 @@ It provides search with following options:
 <subsection name="&sect-num;.4 Toolbar icons size" anchor="toolbar">
 <description>
     <p>
-You can change the size of icons in the toolbar using the property <pre>jmeter.toolbar.icons.size</pre> with these values: 22x22 (default size), 32x32 or 48x48.
+You can change the size of icons in the toolbar using the property <source>jmeter.toolbar.icons.size</source> with these
+values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</code>.
     </p>
 </description>
-<figure width="296" height="95" image="icons-22x22.jpg">Icons with the size 22x22.</figure>
-<figure width="300" height="106" image="icons-32x32.jpg">Icons with the size 32x32.</figure>
-<figure width="365" height="120" image="icons-48x48.jpg">Icons with the size 48x48.</figure>
+<figure width="296" height="95" image="icons-22x22.jpg">Icons with the size <code>22x22</code>.</figure>
+<figure width="300" height="106" image="icons-32x32.jpg">Icons with the size <code>32x32</code>.</figure>
+<figure width="365" height="120" image="icons-48x48.jpg">Icons with the size <code>48x48</code>.</figure>
 </subsection>
 </section>
-
 
 </body>
 </document>
