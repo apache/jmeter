@@ -52,97 +52,50 @@ In this document we will present the configuration setup to graph and historize 
     <p>
     Threads metrics are the following:
     </p>
-    <table>
-           <tr>
-               <th>Metric Name</th>
-               <th>Description</th>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.test.minAT</td>
-               <td>Min active threads</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.test.maxAT</td>
-               <td>Max active threads</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.test.meanAT</td>
-               <td>Mean active threads</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.test.startedT</td>
-               <td>Started threads</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.test.endedT</td>
-               <td>Finished threads</td>            
-           </tr>
-    </table>
+    <dl>
+      <dh><code>&lt;rootMetricsPrefix&gt;.test.minAT</code></dh><dd>Min active threads</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.test.maxAT</code></dh><dd>Max active threads</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.test.meanAT</code></dh><dd>Mean active threads</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.test.startedT</code></dh><dd>Started threads</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.test.endedT</code></dh><dd>Finished threads</dd>
+    </dl>
     </subsection>
     <subsection name="&sect-num;.1.2 Response times metrics" anchor="metrics-response-times">
     <p>Response times metrics are the following:</p>
-    <table>
-           <tr>
-               <th>Metric Name</th>
-               <th>Description</th>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</td>
-               <td>Number of successful responses for sampler name</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</td>
-               <td>Min response time for successful responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</td>
-               <td>Max response time for successful responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</td>
-               <td>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
-               By default listener computes percentiles 90%, 95% and 99%</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.count</td>
-               <td>Number of failed responses for sampler name</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.min</td>
-               <td>Min response time for failed responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.max</td>
-               <td>Max response time for failed responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</td>
-               <td>Percentile computed for failed responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
-               By default listener computes percentiles 90%, 95% and 99%</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.count</td>
-               <td>Number of responses for sampler name</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.min</td>
-               <td>Min response time for responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.max</td>
-               <td>Max response time for responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</td>
-               <td>Percentile computed for responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
-               By default listener computes percentiles 90%, 95% and 99%</td>            
-           </tr>
-    </table>
+    <dl>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</code></dh>
+      <dd>Number of successful responses for sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</code></dh>
+      <dd>Min response time for successful responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</code></dh>
+      <dd>Max response time for successful responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</code></dh>
+      <dd>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.   
+      By default listener computes percentiles 90%, 95% and 99%</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.count</code></dh>
+      <dd>Number of failed responses for sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.min</code></dh>
+      <dd>Min response time for failed responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.max</code></dh>
+      <dd>Max response time for failed responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</code></dh>
+      <dd>Percentile computed for failed responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.
+      By default listener computes percentiles 90%, 95% and 99%</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.count</code></dh>
+      <dd>Number of responses for sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.min</code></dh>
+      <dd>Min response time for responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.max</code></dh>
+      <dd>Max response time for responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</code></dh>
+      <dd>Percentile computed for responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.
+      By default listener computes percentiles 90%, 95% and 99%</dd>
+    </dl>
     <p>
-    By default JMeter sends only metrics for all samplers using "all" as samplerName.
+    By default JMeter sends only metrics for all samplers using "<code>all</code>" as samplerName.
     </p>
     </subsection>
 </subsection>
@@ -161,23 +114,25 @@ InfluxDB data can be easily viewed in a browser through either <a href="https://
 We will use Grafana in this case.
 </p>
     <subsection name="&sect-num;.2.1 InfluxDB graphite listener configuration" anchor="influxdb_configuration">
-    <p>To enable Graphite listener in InfluxDB, edit files /opt/influxdb/shared/config.toml or /usr/local/etc/influxdb.conf, find "input_plugins.graphite" and set this:
+    <p>To enable Graphite listener in InfluxDB, edit files <code>/opt/influxdb/shared/config.toml</code> or <code>/usr/local/etc/influxdb.conf</code>,
+    find "<code>input_plugins.graphite</code>" and set this:
     </p>
-    <code>
-  # Configure the graphite api<br/>
-  [input_plugins.graphite]<br/>
-  enabled = true<br/>
-  address = "0.0.0.0" # If not set, is actually set to bind-address.<br/>
-  port = 2003<br/>
-  database = "jmeter"  # store graphite data in this database<br/>
-  # udp_enabled = true # enable udp interface on the same port as the tcp interface<br/>    
-    </code>
+    <source>
+# Configure the graphite api
+[input_plugins.graphite]
+enabled = true
+address = "0.0.0.0" # If not set, is actually set to bind-address.
+port = 2003
+database = "jmeter"  # store graphite data in this database
+# udp_enabled = true # enable udp interface on the same port as the tcp interface
+    </source>
     </subsection>
     <subsection name="&sect-num;.2.2 InfluxDB database configuration" anchor="influxdb_db_configuration">
-    <p>Connect to InfluxDB admin console and create 2 databases:
+    <p>Connect to InfluxDB admin console and create two databases:
     <ul>
         <li>grafana : Used by Grafana to store the dashboards we will create</li>
-        <li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config element in influxdb.conf or config.toml</li>
+        <li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config
+        element in <code>influxdb.conf</code> or <code>config.toml</code></li>
     </ul>
     </p>
     </subsection>
@@ -185,29 +140,30 @@ We will use Grafana in this case.
     <p>
     Installing grafana is just a matter of putting the unzipped bundle behind an Apache HTTP server.<br/>
     Read <a href="http://grafana.org/docs/" targer="_blank">documentation</a> for more details.
-    Open config.js file and find datasources element, and edit it like this:<br/>
+    Open <code>config.js</code> file and find <code>datasources</code> element, and edit it like this:<br/>
     </p>
-    <code>
-      datasources: {<br/>
-        influxdb: {<br/>
-          type: 'influxdb',<br/>
-          url: "http://localhost:8086/db/jmeter",<br/>
-          username: 'root',<br/>
-          password: 'root',<br/>
-        },
-        grafana: {<br/>
-          type: 'influxdb',<br/>
-          url: "http://localhost:8086/db/grafana",<br/>
-          username: 'root',<br/>
-          password: 'root',<br/>
-          grafanaDB: true<br/>
-        },<br/>
-      },
-    </code><br/>
-    <p>
-    Note that grafana has "grafanaDB:true". Also note that here we use root user for simplicity, it is better to dedicate a special user with less rights.<br/>
+    <source>
+datasources: {
+  influxdb: {
+    type: 'influxdb',
+    url: "http://localhost:8086/db/jmeter",
+    username: 'root',
+    password: 'root',
+  },
+  grafana: {
+    type: 'influxdb',
+    url: "http://localhost:8086/db/grafana",
+    username: 'root',
+    password: 'root',
+    grafanaDB: true
+  },
+},
+    </source>
+    <note>
+    Note that grafana has "<code>grafanaDB:true</code>". Also note that here we use <code>root</code> user for simplicity
+    It is better to dedicate a special user with less rights.
+    </note>
     Here is the kind of dashboard that you could obtain:
-    </p>
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure> 
     
     </subsection>
