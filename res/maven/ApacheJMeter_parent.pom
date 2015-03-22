@@ -183,7 +183,7 @@ under the License.
         <version>${commons-logging.version}</version>
       </dependency>
       <dependency>
-        <groupId>commons-math3</groupId>
+        <groupId>org.apache.commons</groupId>
         <artifactId>commons-math3</artifactId>
         <version>${commons-math3.version}</version>
       </dependency>
@@ -193,8 +193,8 @@ under the License.
         <version>${commons-net.version}</version>
       </dependency>
       <dependency>
-        <groupId>commons-pool2</groupId>
-        <artifactId>commons-pool2</artifactId>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-pool2</artifactId>
         <version>${commons-pool2.version}</version>
       </dependency>
       <dependency>
