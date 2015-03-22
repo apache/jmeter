@@ -143,6 +143,7 @@ Summary
 </ul>
  -->
 <h3>General</h3>
+    <li><bug>57734</bug>Maven transient dependencies are incorrect for 2.13</li>
 <ul>
 
 </ul>
