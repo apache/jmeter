@@ -80,8 +80,8 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         <property name="Local File:" required="Yes, if uploading (*)">File to upload, or destination for downloads (defaults to remote file name).</property>
         <property name="Local File Contents:" required="Yes, if uploading (*)">Provides the contents for the upload, overrides the Local File property.</property>
         <property name="get(RETR) / put(STOR)" required="Yes">Whether to retrieve or upload a file.</property>
-        <property name="Use Binary mode ?" required="Yes">Check this to use Binary mode (default Ascii)</property>
-        <property name="Save File in Response ?" required="Yes, if downloading">
+        <property name="Use Binary mode?" required="Yes">Check this to use Binary mode (default Ascii)</property>
+        <property name="Save File in Response?" required="Yes, if downloading">
         Whether to store contents of retrieved file in response data.
         If the mode is Ascii, then the contents will be visible in the Tree View Listener.
         </property>
@@ -3618,7 +3618,7 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-        <property name="Clear auth on each iteration ?" required="Yes">Used by Kerberos authentication. If checked, authentication will be done on each iteration of Main Thread Group loop even if it has already been done in a previous one.
+        <property name="Clear auth on each iteration?" required="Yes">Used by Kerberos authentication. If checked, authentication will be done on each iteration of Main Thread Group loop even if it has already been done in a previous one.
         This is usually useful if each main thread group iteration represents behaviour of one Virtual User.
         </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
@@ -6403,9 +6403,9 @@ The values can be seen in the <complink name="View Results Tree"/> Listener Resp
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="JMeter Properties" required="Yes">Include JMeter properties ?</property>
-        <property name="JMeter Variables" required="Yes">Include JMeter variables ?</property>
-        <property name="System Properties" required="Yes">Include System properties ?</property>
+        <property name="JMeter Properties" required="Yes">Include JMeter properties?</property>
+        <property name="JMeter Variables" required="Yes">Include JMeter variables?</property>
+        <property name="System Properties" required="Yes">Include System properties?</property>
 </properties>
 </component>
 

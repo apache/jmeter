@@ -38,15 +38,15 @@ tools will prove useful. There are a number of products to consider.  And finall
 why is Java a good choice to implement a load-testing/Benchmarking product.
 </p>
 <subsection name="&sect-num;.1 Questions to ask" anchor="questions">
-<p>What is our anticipated average number of users (normal load) ?
+<p>What is our anticipated average number of users (normal load)?
 </p>
-<p>What is our anticipated peak number of users ?
+<p>What is our anticipated peak number of users?
 </p>
 <p>When is a good time to load-test our application (i.e. off-hours or week-ends),
-bearing in mind that this may very well crash one or more of our servers ?
+bearing in mind that this may very well crash one or more of our servers?
 </p>
-<p>Does our application have state ? If so, how does our application manage it
-(cookies, session-rewriting, or some other method) ?
+<p>Does our application have state? If so, how does our application manage it
+(cookies, session-rewriting, or some other method)?
 </p>
 <p>What is the testing intended to achieve?</p>
 </subsection>
@@ -57,17 +57,17 @@ already have your work cut out for you, it is worth knowing who the following
 people are, so that you can ask them for help if you need it.
 </p>
     <subsection name="&sect-num;.2.1 Network" anchor="network">
-    <p>Who knows our network topology ? If you run into any firewall or
+    <p>Who knows our network topology? If you run into any firewall or
     proxy issues, this will become very important. As well, a private
     testing network (which will therefore have very low network latency)
     would be a very nice thing. Knowing who can set one up for you
     (if you feel that this is necessary) will be very useful. If the
     application doesn't scale as expected, who can add additional
-    hardware ?
+    hardware?
     </p>
     </subsection>
     <subsection name="&sect-num;.2.2 Application" anchor="application">
-    <p>Who knows how our application functions ? The normal sequence is
+    <p>Who knows how our application functions? The normal sequence is
     <ul>
         <li>test (low-volume - can we benchmark our application?)</li>
         <li>benchmark (the average number of users)</li>
@@ -82,7 +82,7 @@ people are, so that you can ask them for help if you need it.
     during this process, so be prepared to defend your work.</p>
     </subsection>
 </subsection>
-<subsection name="&sect-num;.3 What platform should I use to run the benchmarks/load-tests ?" anchor="platform">
+<subsection name="&sect-num;.3 What platform should I use to run the benchmarks/load-tests?" anchor="platform">
 <p>This should be a widely-used piece of hardware, with a standard
 (i.e. vanilla) software installation. Remember, if you publish your results,
 the first thing your clients will do is hire a graduate student to verify them.
@@ -152,7 +152,7 @@ and any supplied documentation).
     </p>
     </subsection>
 </subsection>
-<subsection name="&sect-num;.5 How can I enhance JMeter ?" anchor="plugins">
+<subsection name="&sect-num;.5 How can I enhance JMeter?" anchor="plugins">
 <p>There a lot of open-source and commercial plugins that can enhance JMeter, let's mention here the main open-source ones:
 </p>
     <subsection name="&sect-num;.5.1 JMeter-Plugins" anchor="jmeter-plugins">
@@ -181,8 +181,8 @@ and any supplied documentation).
         <p>This <a href="https://github.com/oliverlloyd/jmeter-ec2" target="_blank" >non official plugin</a> automates running Apache JMeter on Amazon EC2</p>
     </subsection>    
 </subsection>
-<subsection name="&sect-num;.6 Why Java ?" anchor="java">
-<p>Why not Perl or C ?
+<subsection name="&sect-num;.6 Why Java?" anchor="java">
+<p>Why not Perl or C?
 </p>
 <p>Well, Perl might be a very good choice except that the Benchmark package
 seems to give fairly fuzzy results. Also, simulating multiple users with
