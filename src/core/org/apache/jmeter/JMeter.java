@@ -327,6 +327,8 @@ public class JMeter implements JMeterPlugin {
             logProperty("os.arch"); //$NON-NLS-1$
             logProperty("os.version"); //$NON-NLS-1$
             logProperty("file.encoding"); // $NON-NLS-1$
+            log.info("Max memory     ="+ Runtime.getRuntime().maxMemory());
+            log.info("Available Processors ="+ Runtime.getRuntime().availableProcessors());
             log.info("Default Locale=" + Locale.getDefault().getDisplayName());
             log.info("JMeter  Locale=" + JMeterUtils.getLocale().getDisplayName());
             log.info("JMeterHome="     + JMeterUtils.getJMeterHome());
