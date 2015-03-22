@@ -30,6 +30,364 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <p><b>Changes sections are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>  
 
+<!--  =================== 2.13 =================== -->
+
+<h1>Version 2.13</h1>
+
+Summary
+<ul>
+<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
+<li><a href="#Known bugs">Known bugs</a></li>
+<li><a href="#Incompatible changes">Incompatible changes</a></li>
+<li><a href="#Bug fixes">Bug fixes</a></li>
+<li><a href="#Improvements">Improvements</a></li>
+<li><a href="#Non-functional changes">Non-functional changes</a></li>
+<li><a href="#Thanks">Thanks</a></li>
+
+</ul>
+
+<ch_section>New and Noteworthy</ch_section>
+
+<!-- <ch_category>Improvements</ch_category> -->
+<!-- <ch_title>Sample title</ch_title>
+<p>
+<ul>
+<li>Sample text</li>
+</ul>
+</p>
+
+<ch_title>Sample title</ch_title>
+<p>Sample text</p>
+<figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
+ -->
+
+<ch_category>New Elements</ch_category>
+
+<ch_title>New Async BackendListener with Graphite implementation</ch_title>
+<p>A new Async BackendListener has been added to allow sending result data to a backend listener. 
+JMeter ships with a GraphiteBackendListenerClient that allows sending results to a <a href="http://graphite.wikidot.com/" target="_blank">Graphite</a> server using Pickle ot Plaintext protocols.
+You can implement your own backend by extending <a href="./api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html">AbstractBackendListenerClient</a>. This backend could be 
+a database (JDBC), a Message Oriented Middleware (JMS), a Webservice or anything you want.
+ </p>
+<figure width="902" height="293" image="changes/2.13/backend_listener_graphite.png"></figure>
+<p>This is the kind of Live Dashboard you can obtain using <a href="http://grafana.org/" target="_blank" >Grafana</a> and <a href="http://influxdb.com/" target="_blank" >InfluxDB</a><br/>
+Read <a href="./usermanual/realtime-results.html" >this</a> for more details.</p>
+<figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
+
+<ch_category>Core Improvements</ch_category>
+
+<ch_title>New connect time metric</ch_title>
+<p>Starting with this version a new metric called connectTime has been added. It represents the time to establish connection.
+By default it is not saved to CSV or XML, to have it saved add to user.properties:<br/>
+<code>
+jmeter.save.saveservice.connect_time=true
+</code>
+</p>
+<figure width="1058" height="193" image="changes/2.13/connect_time_table.png"></figure>
+<figure width="665" height="651" image="changes/2.13/connect_time_tree.png"></figure>
+
+<ch_title>Aggregate Graph and Report</ch_title>
+<p>The listeners Aggregate Graph and Aggregate Report previously showed only the 90 percentile (historical behavior), the 95 percentile and the 99 percentile have been added and are customizable.
+To setup the percentiles value you want, add to user.properties:<br/>
+<code>
+aggregate_rpt_pct1=90<br/>
+aggregate_rpt_pct2=95<br/>
+aggregate_rpt_pct3=99
+</code>
+<figure width="801" height="681" image="changes/2.13/aggregate_graph_new_percentile.png"></figure>
+</p>
+
+<ch_title>HTTP(S) Test Script Recorder</ch_title>
+<p>Now component is able to detect authentication schemes and automatically adds a pre-configured HTTP Authorization Manager with the correct Mechanism.
+</p>
+
+<ch_title>HTTP Request</ch_title>
+<p>The CalDAV verbs (Calendar extensions to WebDAV) REPORT and MKCALENDAR have been added in the HTTP Request sampler.
+<figure width="716" height="324" image="changes/2.13/new_methods_caldav.png"></figure>
+</p>
+
+<ch_title>JDBC Request</ch_title>
+<p>The ResultSet can be get as a object, this allows to handle more easily the results after in BeanShell, JSR223 scripts...
+<figure width="683" height="628" image="changes/2.13/jdbc_resultset_handler.png"></figure>
+</p>
+
+<ch_title>Distributed Testing</ch_title>
+<p>To allow better usage of Distributed Testing in the cloud, retry behaviour has been added when starting test on servers.
+Read <a href="./usermanual/remote-test.html#retries" >this</a> for more details.
+<figure width="669" height="202" image="changes/2.13/distributed_retry.png"></figure>
+</p>
+
+<ch_title>Distributed Testing performance</ch_title>
+<p>Since JMeter 2.13, Stripping modes (StrippingBatch being the default mode) now also strip responses from SubResults improving consumed network bandwidth.
+</p>
+
+<ch_title>Documentation refresh</ch_title>
+<p>A new style for website (responsive and more up to date) has been created by Felix Schumacher.
+Documentations have been refreshed particularly:
+<ul>
+    <li><a href="./usermanual/build-ws-test-plan.html">Building a Webservice Test Plan</a></li>
+    <li><a href="./usermanual/best-practices.html">Best Practices</a></li>
+    <li><a href="./usermanual/boss.html">Help! My boss wants me to load test our application!</a></li>
+</ul>
+</p>
+
+<ch_category>GUI Improvements</ch_category>
+
+<ch_title>Module Controller</ch_title>
+<p>The Module Controller now shows the target controller in a tree view (instead of combo list).
+<figure width="306" height="372" image="changes/2.13/module_controller_tree_view.png"></figure>
+</p>
+
+<ch_title>Toolbar</ch_title>
+<p>JMeter's toolbar has been refreshed for some icons (start, toogle, etc.). Three sizes are now avialable for the icons: 22x22, 32x32 and 48x48.<br>
+The property to define your prefered size is:
+<pre>jmeter.toolbar.icons.size=value</pre>
+with the value 22x22 (default size), 32x32 or 48x48.</br></p>
+<p>The toolbar with 22x22 pixels icons
+<figure width="417" height="116" image="changes/2.13/toolbar_22x22.png"></figure>
+</p>
+
+<p>The toolbar with 32x32 pixels icons
+<figure width="533" height="130" image="changes/2.13/toolbar_32x32.png"></figure>
+</p>
+
+<p>The toolbar with 48x48 pixels icons
+<figure width="716" height="143" image="changes/2.13/toolbar_48x48.png"></figure>
+</p>
+ 
+<ch_title>HTTP(S) Test Script Recorder</ch_title>
+<p>If your Test Plan does not contains a Recording Controller, a new warning message will appear if the
+ HTTP(S) Test Script Recorder is configured to send the samples into a Recording Controller.
+<figure width="858" height="386" image="changes/2.13/warning_message_proxy.png"></figure>
+</p>
+
+<!-- =================== Incompatible changes =================== -->
+
+<ch_section>Incompatible changes</ch_section>
+
+<ul>
+    <li>Since 2.13, Aggregate Graph, Summary Report and Aggregate Report now export percentages to %, before they exported the decimal value which differed from what was shown in GUI</li>
+    <li>Third party plugins may be impacted by fix of <bugzilla>57586</bugzilla>, ensure that your subclass of HttpTestSampleGui implements ItemListener if you relied on parent class doing so.</li>
+    <li>Report package has been removed, ApacheJMeter_report.jar is not generated anymore as a consequence, see <bugzilla>57269</bugzilla></li>
+</ul>
+
+<!-- =================== Improvements =================== -->
+
+<ch_section>Improvements</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+<li><bug>25430</bug>HTTP(S) Test Script Recorder : Make it populate HTTP Authorization Manager. Partly based on a patch from Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><bug>57381</bug>HTTP(S) Test Script Recorder should display an error if Target Controller references a Recording Controller and no Recording Controller exists. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57488</bug>Performance : Improve SSLContext reset for Two-way SSL Authentication</li>
+<li><bug>57565</bug>SamplerCreator : Add method to allow implementations to add children to created sampler</li>
+<li><bug>57606</bug>HTTPSamplerBase#errorResult changes the sample label on exception </li>
+<li><bug>57613</bug>HTTP Sampler : Added CalDAV verbs (REPORT, MKCALENDAR). Contributed by Richard Brigham (richard.brigham at teamaol.com)</li>
+<li><bug>48799</bug>Add time to establish connection to available sample metrics. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd. and Pieter Ennes (apache.org at spam.ennes.nl)</li>
+<li><bug>57500</bug>Introduce retry behavior for distributed testing. Implemented by Andrey Pokhilko and Dzimitry Kashlach and contributed by BlazeMeter Ltd.</li>
+</ul>
+
+<h3>Other samplers</h3>
+<ul>
+    <li><bug>57322</bug>JDBC Test elements: add ResultHandler to deal with ResultSets(cursors) returned by callable statements. Contributed by Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+<li><bug>57561</bug>Module controller UI : Replace combobox by tree. Contributed by Maciej Franek (maciej.franek at gmail.com)</li>
+<li><bug>57648</bug>TestFragment should be disabled when created. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li><bug>55932</bug>Create a Async BackendListener to allow easy plug of new listener (Graphite, JDBC, Console,...)</li>
+<li><bug>57246</bug>BackendListener : Create a Graphite implementation</li>
+<li><bug>57217</bug>Aggregate graph and Aggregate report improvements (3 configurable percentiles, same data in both, factor out code). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57537</bug>BackendListener : Allow implementations to drop samples</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+<li><bug>54453</bug>Performance enhancements : Replace Random by ThreadLocalRandom in __Random function</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li><bug>57518</bug>Icons for toolbar with several sizes</li>
+<li><bug>57605</bug>When there is an error loading Test Plan, SaveService.loadTree returns null leading to NPE in callers</li>
+<li><bug>57269</bug>Drop org.apache.jmeter.reports package</li>
+<li><bug>53764</bug>Website : Create a new style for website</li>
+</ul>
+<ch_section>Non-functional changes</ch_section>
+<ul>
+<li>Updated to jsoup-1.8.1.jar (from 1.7.3)</li>
+<li>Updated to tika-core and tika-parsers 1.7 (from 1.6)</li>
+<li>Updated to commons-codec-1.10.jar (from 1.9)</li>
+<li>Updated to dnsjava-2.1.7.jar (from 2.1.6)</li>
+<li>Updated to jodd-3.6.4.jar (from 3.6.1)</li>
+<li>Updated to junit-4.12.jar (from 4.11)</li>
+<li>Updated to rhino-1.7R5 (from 1.7R4)</li>
+<li>Updated to rsyntaxtextarea-2.5.6 (from 2.5.3)</li>
+<li>Updated to slf4j-1.7.10 (from 1.7.5)</li>
+<li><bug>57276</bug>RMIC no longer needed since Java 5</li>
+<li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
+<li><bug>57389</bug>Fix potential NPE in converters</li>
+<li><bug>57417</bug>Remove unused method isTemporary from NullProperty. This was a leftover from a refactoring done in 2003.</li>
+<li><bug>57418</bug>Remove unused constructor from Workbench</li>
+<li><bug>57419</bug>Remove unused interface ModelListener.</li>
+<li><bug>57466</bug>IncludeController : Remove an unneeded set creation. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li>Added property loggerpanel.usejsyntaxtext to disable the use of JSyntaxTextArea for the Console Logger (in case of memory or other issues)</li>
+<li><bug>57586</bug>HttpTestSampleGui: Remove interface ItemListener implementation</li>
+</ul>
+ 
+ <!-- =================== Bug fixes =================== -->
+
+<ch_section>Bug fixes</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+<li><bug>57385</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57579</bug>NullPointerException error is raised on main sample if "RETURN_NO_SAMPLE" is used (default) and "Use Cache-Control / Expires header..." is checked in HTTP Cache Manager</li>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+<li><bug>57447</bug>Use only the user listed DNS Servers, when "use custom DNS resolver" option is enabled.</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li><bug>57262</bug>Aggregate Report, Aggregate Graph and Summary Report export : headers use keys instead of labels</li>
+<li><bug>57346</bug>Summariser : The + (difference) reports show wrong elapsed time and throughput</li>
+<li><bug>57449</bug>Distributed Testing: Stripped modes do not strip responses from SubResults (affects load tests that use Download of embedded resources). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57562</bug>View Results Tree CSS/JQuery Tester : Nothing happens when there is an error in syntax and an exception occurs in jmeter.log</li>
+<li><bug>57514</bug>Aggregate Graph, Summary Report and Aggregate Report show wrong percentage reporting in saved file</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+<li><bug>57607</bug>Constant Throughput Timer : Wrong throughput computed in shared modes due to rounding error </li>
+</ul>
+<!-- 
+<h3>Functions</h3>
+<ul>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+ -->
+<h3>General</h3>
+<ul>
+<li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57364</bug>Options &lt; Look And Feel does not update all windows LAF. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57394</bug>When constructing an instance with ClassTools#construct(String, int) the integer was ignored and the default constructor was used instead.</li>
+<li><bug>57440</bug>OutOfMemoryError after introduction of JSyntaxTextArea in LoggerPanel due to disableUndo not being taken into account.</li>
+<li><bug>57569</bug>FileServer.reserveFile - inconsistent behaviour when hasHeader is true</li>
+<li><bug>57555</bug>Cannot use JMeter 2.12 as a maven dependency. Contributed by Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
+<li><bug>57608</bug>Fix start script compatibility with old Unix shells, e.g. on Solaris</li>
+</ul>
+
+ <!--  =================== Thanks =================== -->
+
+<ch_section>Thanks</ch_section>
+<p>We thank all contributors mentioned in bug and improvement sections above:
+<ul>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+<li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
+<li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
+<li>Benoit Wiart (benoit.wiart at gmail.com)</li>
+<li>Pascal Schumacher (pascal.schumacher at t-systems.com)</li>
+<li>Maciej Franek (maciej.franek at gmail.com)</li>
+<li>Richard Brigham (richard.brigham at teamaol.com)</li>
+<li>Pieter Ennes (apache.org at spam.ennes.nl)</li>
+</ul>
+
+<br/>
+We also thank bug reporters who helped us improve JMeter. <br/>
+For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
+<ul>
+<li>Chaitanya Bhatt (bhatt.chaitanya at gmail.com) for his thorough testing of new BackendListener and Graphite Client implementation.</li>
+<li>Marcelo Jara (marcelojara at hotmail.com) for his clear report on <bugzilla>57607</bugzilla>.</li>
+</ul>
+
+Apologies if we have omitted anyone else.
+ </p>
+ <!--  =================== Known bugs =================== -->
+ 
+<ch_section>Known bugs</ch_section>
+
+<ul>
+<li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</li>
+
+<li>
+The numbers that appear to the left of the green box are the number of active threads / total number of threads, 
+the total number of threads only applies to a locally run test, otherwise it will show 0 (see <bugzilla>55510</bugzilla>).
+</li>
+
+<li>
+Note that there is a <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6396599 ">bug in Java</a>
+on some Linux systems that manifests itself as the following error when running the test cases or JMeter itself:
+<pre>
+ [java] WARNING: Couldn't flush user prefs:
+ java.util.prefs.BackingStoreException:
+ java.lang.IllegalArgumentException: Not supported: indent-number
+</pre>
+This does not affect JMeter operation. This issue is fixed since Java 7b05.
+</li>
+
+<li>
+Note that under some windows systems you may have this WARNING:
+<pre>
+java.util.prefs.WindowsPreferences 
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
+x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+</pre>
+The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
+</li>
+
+<li>
+With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may not work correctly (shift between mouse's click and the menu). 
+This is a known Java bug (see  <bugzilla>54477</bugzilla>). 
+A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
+</li>
+
+<li>
+With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry. 
+This is a known Java bug, see Bug <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
+A workaround is to use a Java 7 update 40 runtime which fixes this issue.
+</li>
+
+<li>
+You may encounter the following error: <i>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</i>
+ if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
+ algorithm using MD2 (like md2WithRSAEncryption) or with a SSL certificate with a size lower than 1024 bits.
+This error is related to increased security in Java 7 version u16 (MD2) and version u40 (Certificate size lower than 1024 bits), and Java 8 too.
+<br></br>
+To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing 
+the Java <b>jdk.certpath.disabledAlgorithms</b> property. Remove the MD2 value or the constraint on size, depending on your case.
+<br></br>
+This property is in this file:
+<pre>JAVA_HOME/jre/lib/security/java.security</pre>
+See  <bugzilla>56357</bugzilla> for details.
+</li>
+
+</ul>
+
 <!--  =================== 2.12 =================== -->
 
 <h1>Version 2.12</h1>
