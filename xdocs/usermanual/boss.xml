@@ -97,8 +97,8 @@ you have a little more money, there are commercial linuxes.
 This may be worth it if you need the support.
 </p>
 <p>
-For non-Windows platforms, investigate "ulimit -n unlimited" with a view to
-including it in your user account startup scripts (.bashrc or .cshrc scripts
+For non-Windows platforms, investigate "<code>ulimit -n unlimited</code>" with a view to
+including it in your user account startup scripts (<code>.bashrc</code> or <code>.cshrc</code> scripts
 for the testing account).
 </p>
 <p>As you progress to larger-scale benchmarks/load-tests, this platform
@@ -129,21 +129,21 @@ and any supplied documentation).
     <subsection name="&sect-num;.4.1 ping" anchor="ping">
     <p>
     This can be used to establish whether or not you can reach your
-    target site. Options can be specified so that 'ping' provides the
-    same type of route reporting as 'traceroute'.
+    target site. Options can be specified so that '<code>ping</code>' provides the
+    same type of route reporting as '<code>traceroute</code>'.
     </p>
     </subsection>
     <subsection name="&sect-num;.4.2 nslookup/dig" anchor="dig">
     <p>
-    While the <u>user</u> will normally use a human-readable internet
-    address, <u>you</u> may wish to avoid the overhead of DNS lookups when
+    While the <b>user</b> will normally use a human-readable internet
+    address, <b>you</b> may wish to avoid the overhead of DNS lookups when
     performing benchmarking/load-testing. These can be used to determine
     the unique address (dotted quad) of your target site.
     </p>
     </subsection>
     <subsection name="&sect-num;.4.3 traceroute" anchor="traceroute">
     <p>
-    If you cannot "ping" your target site, this may be used to determine 
+    If you cannot "<code>ping</code>" your target site, this may be used to determine 
     the problem (possibly a firewall or a proxy). It can also be used
     to estimate the overall network latency (running locally should give
     the lowest possible network latency - remember that your users will
@@ -192,7 +192,7 @@ be processes). However, the Perl community is very large. If you find that
 someone has already written something that seems useful, this could be a very
 good solution.
 </p>
-<p>C, of course, is a very good choice (check out the Apache <b>ab</b> tool).
+<p>C, of course, is a very good choice (check out the Apache <code>ab</code> tool).
 But be prepared to write all of the custom networking, threading, and state
 management code that you will need to benchmark your application.
 </p>
