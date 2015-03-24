@@ -125,8 +125,8 @@ jmeter -n -t script.jmx -R server1,server2...
 </source>
 Other flags that may be useful:
 <dl>
-<dh><source>-Gproperty=value</source></dh><dd>define a property in all the servers (may appear more than once)</dd>
-<dh><source>-X</source></dh><dd>Exit remote servers at the end of the test.</dd>
+<dh><code>-Gproperty=value</code></dh><dd>define a property in all the servers (may appear more than once)</dd>
+<dh><code>-X</code></dh><dd>Exit remote servers at the end of the test.</dd>
 </dl>
 The first example will start the test on whatever servers are defined in the JMeter property <code>remote_hosts</code>;<br/>
 The second example will define <code>remote_hosts</code> from the list of servers and then start the test on the remote servers.
