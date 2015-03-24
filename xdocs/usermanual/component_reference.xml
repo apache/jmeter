@@ -38,7 +38,7 @@
     To avoid these artifacts, use the form <br></br>, which Java does seem to handle OK.
 
  -->
-<section name="&sect-num;.0 Introduction" anchor="introduction">
+<section name="&sect-num; Introduction" anchor="introduction">
 <description>
 <p>
 
