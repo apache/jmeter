@@ -40,7 +40,7 @@ is off by default).  </p>
 <p>If you are not recording the data to file, this option makes no difference.</p>
 <p>You can also use the Configuration button on a listener to decide what fields to save.</p>
 
-<div class="subsection"><h2>4.1 Thread Group<a class="sectionlink" href="#thread_group" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="thread_group">4.1 Thread Group<a class="sectionlink" href="#thread_group" title="Link to here">&para;</a></h2>
 <p>Thread group elements are the beginning points of any test plan.
 All controllers and samplers must be under a thread group.
 Other elements, e.g. Listeners, may be placed directly under the test plan,
@@ -83,7 +83,7 @@ Start with Ramp-up = number of threads and adjust up or down as needed.
      Note that delay overrides start-time, and duration over-rides end-time.</p>
 </div>
 
-<div class="subsection"><h2>4.2 Controllers<a class="sectionlink" href="#controllers" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="controllers">4.2 Controllers<a class="sectionlink" href="#controllers" title="Link to here">&para;</a></h2>
 
 <p>
 JMeter has two types of Controllers: Samplers and Logical Controllers.
@@ -104,7 +104,7 @@ For more information, see <a href="#logic_controller">Logical Controllers</a>.</
 
 </div>
 
-<div class="subsection"><h2>4.2.1 Samplers<a class="sectionlink" href="#samplers" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="samplers">4.2.1 Samplers<a class="sectionlink" href="#samplers" title="Link to here">&para;</a></h2>
 
 <p>
 Samplers tell JMeter to send requests to a server and wait for a response.
@@ -144,7 +144,7 @@ expressions.</p>
 <p><a href="component_reference.html#samplers">JMeter's built-in samplers</a></p>
 </div>
 
-<div class="subsection"><h2>4.2.2 Logic Controllers<a class="sectionlink" href="#logic_controller" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="logic_controller">4.2.2 Logic Controllers<a class="sectionlink" href="#logic_controller" title="Link to here">&para;</a></h2>
 <p>Logic Controllers let you customize the logic that JMeter uses to
 decide when to send requests.
 Logic Controllers can change the order of requests coming from their
@@ -224,7 +224,7 @@ will share the same cookies.</p>
 Logic Controllers</a>.</p>
 </div>
 
-<div class="subsection"><h2>4.2.3 Test Fragments<a class="sectionlink" href="#test_fragments" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="test_fragments">4.2.3 Test Fragments<a class="sectionlink" href="#test_fragments" title="Link to here">&para;</a></h2>
 <p>The Test Fragment element is a special type of <a href="#controllers">controller</a> that
 exists on the Test Plan tree at the same level as the Thread Group element.  It is distinguished
 from a Thread Group in that it is not executed unless it is 
@@ -233,7 +233,7 @@ referenced by either a <a href="../usermanual/component_reference.html#Module_Co
 <p>This element is purely for code re-use within Test Plans and was introduced in Version 2.5</p>
 </div>
 
-<div class="subsection"><h2>4.3 Listeners<a class="sectionlink" href="#listeners" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="listeners">4.3 Listeners<a class="sectionlink" href="#listeners" title="Link to here">&para;</a></h2>
 <p>Listeners provide access to the information JMeter gathers about the test cases while
 JMeter runs.  The  <a href="../usermanual/component_reference.html#Graph_Results">Graph Results</a> listener plots the response times on a graph.  
 The "View Results Tree" Listener shows details of sampler requests and responses, and can display basic HTML and XML representations of the response.
@@ -256,7 +256,7 @@ They will collect data only from elements at or below their level.
 that come with JMeter.</p>
 </div>
 
-<div class="subsection"><h2>4.4 Timers<a class="sectionlink" href="#timers" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="timers">4.4 Timers<a class="sectionlink" href="#timers" title="Link to here">&para;</a></h2>
 
 <p>By default, a JMeter thread sends requests without pausing between each request.
 We recommend that you specify a delay by adding one of the available timers to
@@ -276,7 +276,7 @@ To provide a pause at a single place in a test plan, one can use the <a href="..
 </p>
 </div>
 
-<div class="subsection"><h2>4.5 Assertions<a class="sectionlink" href="#assertions" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="assertions">4.5 Assertions<a class="sectionlink" href="#assertions" title="Link to here">&para;</a></h2>
 
 <p>Assertions allow you to assert facts about responses received from the
 server being tested. Using an assertion, you can essentially "test" that your
@@ -303,7 +303,7 @@ and will count towards the error %age for example in the Aggregate and Summary r
 </p>
 </div>
 
-<div class="subsection"><h2>4.6 Configuration Elements<a class="sectionlink" href="#config_elements" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="config_elements">4.6 Configuration Elements<a class="sectionlink" href="#config_elements" title="Link to here">&para;</a></h2>
 <p>A configuration element works closely with a Sampler.  Although it does not send requests
 (except for <a href="../usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder</a>), it can add to or modify requests.</p>
 
@@ -327,21 +327,21 @@ For simplicity, it is suggested that the element is placed only at the start of 
 </div><div class="clear"></div>
 </div>
 
-<div class="subsection"><h2>4.7 Pre-Processor Elements<a class="sectionlink" href="#preprocessors" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="preprocessors">4.7 Pre-Processor Elements<a class="sectionlink" href="#preprocessors" title="Link to here">&para;</a></h2>
 <p>A Pre-Processor executes some action prior to a Sampler Request being made. 
 If a Pre-Processor is attached to a Sampler element, then it will execute just prior to that sampler element running. 
 A Pre-Processor is most often used to modify the settings of a Sample Request just before it runs, or to update variables that aren't extracted from response text.  
 See the <a href="test_plan.html#scoping_rules"><b>scoping rules</b></a> for more details on when Pre-Processors are executed.</p>
 </div>
 
-<div class="subsection"><h2>4.8 Post-Processor Elements<a class="sectionlink" href="#postprocessors" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="postprocessors">4.8 Post-Processor Elements<a class="sectionlink" href="#postprocessors" title="Link to here">&para;</a></h2>
 <p>A Post-Processor executes some action after a Sampler Request has been made.
 If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.
 A Post-Processor is most often used to process the response data, often to extract values from it.  
 See the <a href="test_plan.html#scoping_rules"><b>scoping rules</b></a> for more details on when Post-Processors are executed.</p>
 </div>
 
-<div class="subsection"><h2>4.9 Execution order<a class="sectionlink" href="#executionorder" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="executionorder">4.9 Execution order<a class="sectionlink" href="#executionorder" title="Link to here">&para;</a></h2>
 <ol start="0">
 <li>Configuration elements</li>
 <li>Pre-Processors</li>
@@ -394,7 +394,7 @@ Assertion 1
 </p>
 </div>
 
-<div class="subsection"><h2>4.10 Scoping Rules<a class="sectionlink" href="#scoping_rules" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="scoping_rules">4.10 Scoping Rules<a class="sectionlink" href="#scoping_rules" title="Link to here">&para;</a></h2>
 <p>
 The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:</p>
 <figure><a href="../images/screenshots/scoping1.png"><img src="../images/screenshots/scoping1.png" width="" height="" alt="Example test tree"></a><figcaption>Example test tree</figcaption></figure>
@@ -421,7 +421,7 @@ only one Manager is used, but there is currently no way to specify <b>which</b> 
 </div>
 
 
-<div class="subsection"><h2>4.11 Properties and Variables<a class="sectionlink" href="#properties" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="properties">4.11 Properties and Variables<a class="sectionlink" href="#properties" title="Link to here">&para;</a></h2>
 
 <p>
 JMeter <b>properties</b> are defined in jmeter.properties (see <a href="get-started.html#configuring_jmeter">Gettting Started - Configuring JMeter</a> for more details).
@@ -457,7 +457,7 @@ These are global to the test plan, so can be used to pass information between th
 <div class="clear"></div><div class="note">Both variables and properties are case-sensitive.</div><div class="clear"></div>
 </div>
 
-<div class="subsection"><h2>4.12 Using Variables to parameterise tests<a class="sectionlink" href="#using_variables" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="using_variables">4.12 Using Variables to parameterise tests<a class="sectionlink" href="#using_variables" title="Link to here">&para;</a></h2>
 <p>
 Variables don't have to vary - they can be defined once, and if left alone, will not change value.
 So you can use them as short-hand for expressions that appear frequently in a test plan.

@@ -129,7 +129,7 @@ The second example will define remote_hosts from the list of servers and then st
 The command-line client will exit when all the remote servers have stopped.
 </p>
 
-<div class="subsection"><h2>15.1 Doing it Manually<a class="sectionlink" href="#detail_instructions" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="detail_instructions">15.1 Doing it Manually<a class="sectionlink" href="#detail_instructions" title="Link to here">&para;</a></h2>
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).  Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>
 <p><b>Step 1a: Start the RMI Registry</b></p>
 <p>
@@ -155,7 +155,7 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 
 <p>Steps 2 and 3 remain the same.</p>
 </div>
-<div class="subsection"><h2>15.2 Tips<a class="sectionlink" href="#tips" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="tips">15.2 Tips<a class="sectionlink" href="#tips" title="Link to here">&para;</a></h2>
 <p>
 JMeter/RMI requires a connection from the client to the server. This will use the port you chose, default 1099.<br>
 JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client.<br>
@@ -198,7 +198,7 @@ in remote testing, since JMeter 2.6:</p>
  loopback interface is now allowed to be used if it has been specified directly using the Java System Property "java.rmi.server.hostname" parameter.</li>
 </ul>
 </div>
-<div class="subsection"><h2>15.3 Using a different port<a class="sectionlink" href="#portchange" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="portchange">15.3 Using a different port<a class="sectionlink" href="#portchange" title="Link to here">&para;</a></h2>
 <p>By default, JMeter uses the standard RMI port 1099. It is possible to change this. For this to work successfully, all the following need to agree:</p>
 <ul>
 <li>On the server, start rmiregistry using the new port number</li>
@@ -226,7 +226,7 @@ The chosen port will be logged in the server jmeter.log file (rmiregistry does n
 </p>
 </div>
 
-<div class="subsection"><h2>15.4 Using a different sample sender<a class="sectionlink" href="#sendermode" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="sendermode">15.4 Using a different sample sender<a class="sectionlink" href="#sendermode" title="Link to here">&para;</a></h2>
 <p>
 Listeners in the test plan send their results back to the client JMeter which writes the results to the specified files
 By default, samples are sent back synchronously as they are generated.
@@ -291,7 +291,7 @@ This is not really a problem as there is always a more efficient way to implemen
 </div>
 
 
-<div class="subsection"><h2>15.5 Dealing with nodes that failed starting<a class="sectionlink" href="#retries" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="retries">15.5 Dealing with nodes that failed starting<a class="sectionlink" href="#retries" title="Link to here">&para;</a></h2>
   <p>
     For large-scale tests there is a chance that some part of remote servers will be unavailable or down. 
     For example, when you use automation script to allocate many cloud machines and use them as generators,

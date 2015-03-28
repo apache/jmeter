@@ -128,7 +128,7 @@ Alternatively, just use / instead for the path separator - e.g. C:/test/${test} 
         <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
 </table>
 <p></p>
-<div class="subsection"><h2>20.1 What can functions do<a class="sectionlink" href="#what_can_do" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="what_can_do">20.1 What can functions do<a class="sectionlink" href="#what_can_do" title="Link to here">&para;</a></h2>
 <p>There are two kinds of functions: user-defined static values (or variables), and built-in functions.<br>
 User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
@@ -151,7 +151,7 @@ request throughout the course of the test. </p>
 Each occurrence of a function call in a test plan is handled by a separate function instance.</div><div class="clear"></div>
 </div>
 
-<div class="subsection"><h2>20.2 Where can functions and variables be used?<a class="sectionlink" href="#where" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="where">20.2 Where can functions and variables be used?<a class="sectionlink" href="#where" title="Link to here">&para;</a></h2>
 <p>
 Functions and variables can be written into any field of any test component (apart from the TestPlan - see below).
 Some fields do not allow random strings 
@@ -194,7 +194,7 @@ SELECT item from table where name=${VAR}
 </div><div class="clear"></div>
 </div>
 
-<div class="subsection"><h2>20.3 How to reference variables and functions<a class="sectionlink" href="#how" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="how">20.3 How to reference variables and functions<a class="sectionlink" href="#how" title="Link to here">&para;</a></h2>
 <p>Referencing a variable in a test element is done by bracketing the variable name with '${' and '}'.</p>
 <p>Functions are referenced in the same manner, but by convention, the names of
 functions begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
@@ -246,7 +246,7 @@ that can be used to display the values of variables etc in the Tree View Listene
 variable will override the built-in function.</div><div class="clear"></div>
 </div>
 
-<div class="subsection"><h2>20.4 The Function Helper Dialog<a class="sectionlink" href="#function_helper" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="function_helper">20.4 The Function Helper Dialog<a class="sectionlink" href="#function_helper" title="Link to here">&para;</a></h2>
 <p>The Function Helper dialog is available from JMeter's Tools menu.</p>
 <figure><a href="../images/screenshots/function_helper_dialog.png"><img src="../images/screenshots/function_helper_dialog.png" width="831" height="305" alt="Function Helper Dialog"></a><figcaption>Function Helper Dialog</figcaption></figure>
 <p>Using the Function Helper, you can select a function from the pull down, and assign
@@ -257,7 +257,7 @@ functions take different arguments.</p>
 for you to copy-paste into your test plan wherever you like.</p>
 </div>
 
-<div class="subsection"><h2>20.5 Functions<a class="sectionlink" href="#functions" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="functions">20.5 Functions<a class="sectionlink" href="#functions" title="Link to here">&para;</a></h2>
 
 <div class="component"><h2 id="__regexFunction">__regexFunction<a class="sectionlink" href="#__regexFunction" title="Link to here">&para;</a></h2>
 <div class="description"><p>The Regex Function is used to parse the previous response (or the value of a variable) using any regular
@@ -1345,7 +1345,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 
 </div>
 
-<div class="subsection"><h2>20.6 Pre-defined Variables<a class="sectionlink" href="#predefinedvars" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="predefinedvars">20.6 Pre-defined Variables<a class="sectionlink" href="#predefinedvars" title="Link to here">&para;</a></h2>
 <p>
 Most variables are set by calling functions or by test elements such as User Defined Variables; 
 in which case the user has full control over the variable name that is used.
@@ -1359,7 +1359,7 @@ Note: this is updated after PostProcessors and Assertions have been run.
 <li>START variables (see next section)</li>
 </ul>
 </div>
-<div class="subsection"><h2>20.6 Pre-defined Properties<a class="sectionlink" href="#predefinedprops" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="predefinedprops">20.6 Pre-defined Properties<a class="sectionlink" href="#predefinedprops" title="Link to here">&para;</a></h2>
 <p>
 The set of JMeter properties is initialised from the system properties defined when JMeter starts;
 additional JMeter properties are defined in jmeter.properties, user.properties or on the command line.

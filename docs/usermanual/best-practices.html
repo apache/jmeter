@@ -234,7 +234,7 @@ For example:
 java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 </pre>
 </div><div class="section"><h1 id="bsh_scripting">17.9 BeanShell scripting<a class="sectionlink" href="#bsh_scripting" title="Link to here">&para;</a></h1>
-<div class="subsection"><h2>17.9.1 Overview<a class="sectionlink" href="#bsh_overview" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="bsh_overview">17.9.1 Overview<a class="sectionlink" href="#bsh_overview" title="Link to here">&para;</a></h2>
 <p>
 Each BeanShell test element has its own copy of the interpreter (for each thread).
 If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
@@ -256,7 +256,7 @@ bsh% exit(); // or use EOF key (e.g. ^Z or ^D)
 </pre>
 </p>
 </div>
-<div class="subsection"><h2>17.9.2 Sharing Variables<a class="sectionlink" href="#bsh_variables" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="bsh_variables">17.9.2 Sharing Variables<a class="sectionlink" href="#bsh_variables" title="Link to here">&para;</a></h2>
 <p>
 Variables can be defined in startup (initialisation) scripts.
 These will be retained across invocations of the test element, unless the reset option is used.\

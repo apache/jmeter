@@ -67,14 +67,14 @@ over your Test Plans.</p>
 </div><div class="section"><h1 id="requirements">2.1 Requirements<a class="sectionlink" href="#requirements" title="Link to here">&para;</a></h1>
 <p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
-<div class="subsection"><h2>2.1.1 Java Version<a class="sectionlink" href="#java_versions" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="java_versions">2.1.1 Java Version<a class="sectionlink" href="#java_versions" title="Link to here">&para;</a></h2>
 <div class="clear"></div><div class="note">JMeter requires a fully compliant JVM 6 or higher.  
 </div><div class="clear"></div>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
 </div>
 
-<div class="subsection"><h2>2.1.2 Operating Systems<a class="sectionlink" href="#os" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="os">2.1.2 Operating Systems<a class="sectionlink" href="#os" title="Link to here">&para;</a></h2>
 <p>JMeter is a 100% Java application and should run correctly on any system
 that has a compliant Java implementation.</p>
 <p>Operating systems tested with JMeter can be viewed on  
@@ -86,25 +86,25 @@ on JMeter wiki.</p>
 <p>If you plan on doing JMeter development, then you will need one or more optional packages listed below.</p>
 
 
-<div class="subsection"><h2>2.2.1 Java Compiler<a class="sectionlink" href="#opt_compiler" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="opt_compiler">2.2.1 Java Compiler<a class="sectionlink" href="#opt_compiler" title="Link to here">&para;</a></h2>
 <p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 6 or higher.</p>
 </div>
 
-<div class="subsection"><h2>2.2.2 SAX XML Parser<a class="sectionlink" href="#opt_sax" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="opt_sax">2.2.2 SAX XML Parser<a class="sectionlink" href="#opt_sax" title="Link to here">&para;</a></h2>
 <p>JMeter comes with Apache's <a href="http://xml.apache.org/">Xerces XML parser</a>. You have the option of telling JMeter
 to use a different XML parser. To do so, include the classes for the third-party parser in JMeter's <a href="#classpath">classpath</a>,
 and update the <a href="#configuring_jmeter">jmeter.properties</a> file with the full classname of the parser
 implementation.</p>
 </div>
 
-<div class="subsection"><h2>2.2.3 Email Support<a class="sectionlink" href="#opt_email" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="opt_email">2.2.3 Email Support<a class="sectionlink" href="#opt_email" title="Link to here">&para;</a></h2>
 <p>JMeter has extensive Email capabilities. 
 It can send email based on test results, and has a POP3(S)/IMAP(S) sampler.
 It also has an SMTP(S) sampler.
 </p>
 </div>
 
-<div class="subsection"><h2>2.2.4 SSL Encryption<a class="sectionlink" href="#opt_ssl" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="opt_ssl">2.2.4 SSL Encryption<a class="sectionlink" href="#opt_ssl" title="Link to here">&para;</a></h2>
 <p>To test a web server using SSL encryption (HTTPS), JMeter requires that an
 implementation of SSL be provided, as is the case with Sun Java 1.4 and above.
 If your version of Java does not include SSL support, then it is possible to add an external implementation.
@@ -125,13 +125,13 @@ The SMTP sampler can optionally use a local trust store or trust all certificate
 </p>
 </div>
 
-<div class="subsection"><h2>2.2.5 JDBC Driver<a class="sectionlink" href="#opt_jdbc" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="opt_jdbc">2.2.5 JDBC Driver<a class="sectionlink" href="#opt_jdbc" title="Link to here">&para;</a></h2>
 <p>You will need to add your database vendor's JDBC driver to the <a href="#classpath">classpath</a> if you want to do JDBC testing.
 Make sure the file is a jar file, not a zip.
 </p>
 </div>
 
-<div class="subsection"><h2>2.2.6 JMS client<a class="sectionlink" href="#opt_jms" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="opt_jms">2.2.6 JMS client<a class="sectionlink" href="#opt_jms" title="Link to here">&para;</a></h2>
 <p>
 JMeter now includes the JMS API from Apache Geronimo, so you just need to add the appropriate JMS Client implementation
 jar(s) from the JMS provider. Please refer to their documentation for details. 
@@ -139,7 +139,7 @@ There may also be some information on the <a href="http://wiki.apache.org/jmeter
 </p>
 </div>
 
-<div class="subsection"><h2>2.2.7 Libraries for ActiveMQ JMS<a class="sectionlink" href="#libraries_activemq" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="libraries_activemq">2.2.7 Libraries for ActiveMQ JMS<a class="sectionlink" href="#libraries_activemq" title="Link to here">&para;</a></h2>
 <p>
 You will need to add the jar activemq-all-X.X.X.jar to your classpath, e.g. by storing it in the lib/ directory.
 </p>
@@ -233,7 +233,7 @@ JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
 </pre>
 will override the HEAP settings in the script.
 </p>
-<div class="subsection"><h2>2.4.1 JMeter's Classpath<a class="sectionlink" href="#classpath" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="classpath">2.4.1 JMeter's Classpath<a class="sectionlink" href="#classpath" title="Link to here">&para;</a></h2>
 <p>JMeter automatically finds classes from jars in the following directories:</p>
 <ul>
 <li>JMETER_HOME/lib - used for utility jars</li>
@@ -265,7 +265,7 @@ and the java command silently ignores the CLASSPATH variable, and the -classpath
 [This occurs with all Java programs, not just JMeter.]</p>
 </div>
 
-<div class="subsection"><h2>2.4.2 Create Test Plan from Template<a class="sectionlink" href="#template" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="template">2.4.2 Create Test Plan from Template<a class="sectionlink" href="#template" title="Link to here">&para;</a></h2>
 <p>You have the ability to create a new Test Plan from existing template.</p>
 <p>To do so you use the menu <b>File</b> &gt; <b>Templates...</b> or Templates icon:
 <figure><a href="../images/screenshots/template_menu.png"><img src="../images/screenshots/template_menu.png" width="" height="" alt="Templates icon item"></a><figcaption>Templates icon item</figcaption></figure>
@@ -276,7 +276,7 @@ and the java command silently ignores the CLASSPATH variable, and the -classpath
 <p>A documentation for each template explains what to do once test plan is created from template.</p>
 </div>
 
-<div class="subsection"><h2>2.4.3 Using JMeter behing a proxy<a class="sectionlink" href="#proxy_server" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="proxy_server">2.4.3 Using JMeter behing a proxy<a class="sectionlink" href="#proxy_server" title="Link to here">&para;</a></h2>
 <p>If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
 the firewall/proxy server hostname and port number.  To do so, run the jmeter[.bat] file
 from a command line with the following parameters:</p>
@@ -317,7 +317,7 @@ This is only used for recording HTTP or HTTPS browser sessions.
 This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.</div><div class="clear"></div>
 </div>
 
-<div class="subsection"><h2>2.4.4 Non-GUI Mode (Command Line mode)<a class="sectionlink" href="#non_gui" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="non_gui">2.4.4 Non-GUI Mode (Command Line mode)<a class="sectionlink" href="#non_gui" title="Link to here">&para;</a></h2>
 <p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
 the following command options:</p>
 <p>
@@ -341,7 +341,7 @@ Normally this is not necessary.
 </p>
 </div>
 
-<div class="subsection"><h2>2.4.5 Server Mode<a class="sectionlink" href="#server" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="server">2.4.5 Server Mode<a class="sectionlink" href="#server" title="Link to here">&para;</a></h2>
 <p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
 You can also use non-GUI mode to run remote tests.
 To start the server(s), run jmeter-server[.bat] on each server host.</p>
@@ -367,7 +367,7 @@ Normally this is not necessary.
 </p>
 </div>
 
-<div class="subsection"><h2>2.4.6 Overriding Properties Via The Command Line<a class="sectionlink" href="#override" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="override">2.4.6 Overriding Properties Via The Command Line<a class="sectionlink" href="#override" title="Link to here">&para;</a></h2>
 <p>Java system properties, JMeter properties, and logging properties can be overriden directly on the command line (instead of modifying jmeter.properties).
 To do so, use the following options:</p>
 <p>
@@ -391,7 +391,7 @@ jmeter -LDEBUG</pre>
     Attempts to use the -J flag to update log_level or log_file properties will have no effect.</b>
     </p>
 </div>
-<div class="subsection"><h2>2.4.7 Logging and error messages<a class="sectionlink" href="#logging" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="logging">2.4.7 Logging and error messages<a class="sectionlink" href="#logging" title="Link to here">&para;</a></h2>
     <div class="clear"></div><div class="note">
     JMeter does not generally use pop-up dialog boxes for errors, as these would interfere with
     running tests. Nor does it report any error for a mis-spelt variable or function; instead the
@@ -436,7 +436,7 @@ jmeter -LDEBUG</pre>
 <p>The log file can be helpful in determining the cause of an error,
     as JMeter does not interrupt a test to display an error dialogue.</p>
 </div>
-<div class="subsection"><h2>2.4.8 Full list of command-line options<a class="sectionlink" href="#options" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="options">2.4.8 Full list of command-line options<a class="sectionlink" href="#options" title="Link to here">&para;</a></h2>
 <p>Invoking JMeter as "jmeter -?" will print a list of all the command-line options. 
 These are shown below.</p>
 <pre>
@@ -498,7 +498,7 @@ that was run in interactive mode.
 </p>
 </div>
 
-<div class="subsection"><h2>2.4.9 non-GUI shutdown<a class="sectionlink" href="#shutdown" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="shutdown">2.4.9 non-GUI shutdown<a class="sectionlink" href="#shutdown" title="Link to here">&para;</a></h2>
 <p>
 Prior to version 2.5.1, JMeter invoked System.exit() when a non-GUI test completed.
 This caused problems for applications that invoke JMeter directly, so JMeter no longer invokes System.exit() 

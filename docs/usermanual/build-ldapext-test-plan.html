@@ -66,7 +66,7 @@ cn=c:\\\\log.txt to add an entry with a name like cn=c:\log.txt
 </p>
 
 
-    <div class="subsection"><h2>9b.1 Adding Users<a class="sectionlink" href="#ext_adding_users" title="Link to here">&para;</a></h2>
+    <div class="subsection"><h2 id="ext_adding_users">9b.1 Adding Users<a class="sectionlink" href="#ext_adding_users" title="Link to here">&para;</a></h2>
 <p>
 The first step you want to do with every JMeter Test Plan is to add a Thread Group element.
 The Thread Group tells JMeter the number of users you want to simulate, how often the users should send
@@ -85,7 +85,7 @@ Figure 9b.1. Thread Group with Default Values</figcaption></figure>
 
 </p>
 </div>
-    <div class="subsection"><h2>9b.2 Adding LDAP Extended Request Defaults<a class="sectionlink" href="#add_ldapext_defaults" title="Link to here">&para;</a></h2>
+    <div class="subsection"><h2 id="add_ldapext_defaults">9b.2 Adding LDAP Extended Request Defaults<a class="sectionlink" href="#add_ldapext_defaults" title="Link to here">&para;</a></h2>
 <p>
 Begin by selecting the LDAP Ext Users element. Click your right mouse button
 to get the <b>Add</b> menu, and then select <b>Add </b>&gt;<b>Config Element</b>&gt;<b>LDAP Extended Request Defaults</b>. Then,
@@ -107,7 +107,7 @@ field that you can modify. In this example, leave this field with the default va
             </p>
             We will not enter any default values here, as we will build a very small testplan, so we will explain all the different fields when we add the LDAP Extended samplers.
 </div>
-<div class="subsection"><h2>9b.3 Adding LDAP Requests<a class="sectionlink" href="#add_extrequests" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_extrequests">9b.3 Adding LDAP Requests<a class="sectionlink" href="#add_extrequests" title="Link to here">&para;</a></h2>
 <p>
 In our Test Plan, we want to use all 9 LDAP requests.
 </p>
@@ -150,7 +150,7 @@ Sampler</b>&gt;<b>LDAP Ext Request</b>). Then, select the <b>LDAP Ext Request</b
 and edit the following properties.</p>
 
 
-<div class="subsection"><h2>9b.3.1 Adding a Thread bind Request<a class="sectionlink" href="#add_threadbind" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_threadbind">9b.3.1 Adding a Thread bind Request<a class="sectionlink" href="#add_threadbind" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -191,7 +191,7 @@ Figure 9b.3.1. Thread Bind example</figcaption></figure>
 </p>
 </div>
 
-<div class="subsection"><h2>9b.3.2 Adding a search Request<a class="sectionlink" href="#add_searchreq" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_searchreq">9b.3.2 Adding a search Request<a class="sectionlink" href="#add_searchreq" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -249,7 +249,7 @@ Figure 9b.3.2. search request example"></a><figcaption>
 Figure 9b.3.2. search request example</figcaption></figure>
 </p></div>
 
-<div class="subsection"><h2>9b.3.3 Adding a Compare Request<a class="sectionlink" href="#add_comparereq" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_comparereq">9b.3.3 Adding a Compare Request<a class="sectionlink" href="#add_comparereq" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -273,7 +273,7 @@ Figure 9b.3.3. Compare example</figcaption></figure>
 </p>
 </div>
 
-<div class="subsection"><h2>9b.3.4 Adding a Single bind/unbind<a class="sectionlink" href="#add_sbind" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_sbind">9b.3.4 Adding a Single bind/unbind<a class="sectionlink" href="#add_sbind" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -299,7 +299,7 @@ Figure 9b.3.4. Single bind/unbind example</figcaption></figure>
 </p>
 </div>
 
-<div class="subsection"><h2>9b.3.5 Adding an Add Request<a class="sectionlink" href="#add_addreq" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_addreq">9b.3.5 Adding an Add Request<a class="sectionlink" href="#add_addreq" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -326,7 +326,7 @@ Figure 9b.3.5. Add request example</figcaption></figure>
 </p>
 </div>
 
-<div class="subsection"><h2>9b.3.6 Adding a Modify Request<a class="sectionlink" href="#add_modreq" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_modreq">9b.3.6 Adding a Modify Request<a class="sectionlink" href="#add_modreq" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -371,7 +371,7 @@ Figure 9b.3.6. Modify example</figcaption></figure>
 </p>
 </div>
 
-<div class="subsection"><h2>9b.3.7 Adding a Rename Request (moddn)<a class="sectionlink" href="#add_moddn" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_moddn">9b.3.7 Adding a Rename Request (moddn)<a class="sectionlink" href="#add_moddn" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -401,7 +401,7 @@ Figure 9b.3.8. Rename example</figcaption></figure>
 </p>
 </div>
 
-<div class="subsection"><h2>9b.3.8 Adding a Delete Request<a class="sectionlink" href="#add_delreq" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_delreq">9b.3.8 Adding a Delete Request<a class="sectionlink" href="#add_delreq" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -424,7 +424,7 @@ Figure 9b.3.7. Delete example</figcaption></figure>
 </p>
 </div>
 
-<div class="subsection"><h2>9b.3.9 Adding an unbind Request<a class="sectionlink" href="#add_unbind" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_unbind">9b.3.9 Adding an unbind Request<a class="sectionlink" href="#add_unbind" title="Link to here">&para;</a></h2>
 <p>
    <ol>
 <li>
@@ -444,7 +444,7 @@ Figure 9b.3.9. Unbind example</figcaption></figure>
 </div>
 </div>
 
-<div class="subsection"><h2>9b.4 Adding a Listener to View/Store the Test Results<a class="sectionlink" href="#add_ldapext_listener" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="add_ldapext_listener">9b.4 Adding a Listener to View/Store the Test Results<a class="sectionlink" href="#add_ldapext_listener" title="Link to here">&para;</a></h2>
 <p>
 The final element you need to add to your Test Plan is a Listener.
  This element is responsible for storing all of the results of your LDAP
