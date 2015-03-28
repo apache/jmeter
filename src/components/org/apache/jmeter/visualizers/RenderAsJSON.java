@@ -31,7 +31,7 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
     private static final String NORMAL_CHARACTER_REGEX = "[^\"\\\\]";  // $NON-NLS-1$
 
-    private static final String STRING_REGEX = "\"(" + ESC_CHAR_REGEX + "|" + NORMAL_CHARACTER_REGEX + ")*\""; // $NON-NLS-1$
+    private static final String STRING_REGEX = "\"(" + ESC_CHAR_REGEX + "|" + NORMAL_CHARACTER_REGEX + ")*+\""; // $NON-NLS-1$
 
     // This 'other value' regex is deliberately weak, even accepting an empty string, to be useful when reporting malformed data.
     private static final String OTHER_VALUE_REGEX = "[^\\{\\[\\]\\}\\,]*"; // $NON-NLS-1$

@@ -106,6 +106,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>54826</bug>Don't fail on long strings in JSON responses when displaying them as JSON in View Results Tree.</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
