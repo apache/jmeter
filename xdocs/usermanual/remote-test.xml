@@ -99,10 +99,10 @@ If this is non-zero, it will be used as the local port number for the server eng
 <p>Edit the properties file <i>on the controlling JMeter machine</i>.  In <code>JMETER_HOME/bin/jmeter.properties</code>,
 find the property named, "<code>remote_hosts</code>", and
 add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.</p>
-<p>Note that you can use the -R <a href="get-started.html#override">command line option</a>
+<p>Note that you can use the <code>-R</code> <a href="get-started.html#override">command line option</a>
 instead to specify the remote host(s) to use. This has the same effect as using <code>-r</code> and <code>-Jremote_hosts={serverlist}</code>.
     E.g. </p><source>jmeter -Rhost1,127.0.0.1,host2</source>
-<p>If you define the JMeter property server.exitaftertest=true, then the server will exit after it runs a single test.
+<p>If you define the JMeter property <code>server.exitaftertest=true</code>, then the server will exit after it runs a single test.
 See also the <code>-X</code> flag (described below)
 </p>
 <p><b>Step 3a: Start the JMeter Client from a GUI client to check configuration</b></p>
