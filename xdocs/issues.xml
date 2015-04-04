@@ -32,14 +32,14 @@ It's also worth checking first on the JMeter user mailing list; others may alrea
 <section name="Known Bugs"> 
 <ul>
 <li>
-<a href="http://issues.apache.org/bugzilla/buglist.cgi?query_format=specific&amp;order=relevance+desc&amp;bug_status=__open__&amp;product=JMeter&amp;content=">
+<a href="http://bz.apache.org/bugzilla/buglist.cgi?query_format=specific&amp;order=relevance+desc&amp;bug_status=__open__&amp;product=JMeter&amp;content=">
 Bugzilla - All open bugs</a>
 </li>
 <li>
-<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Regression&amp;bug_severity=Minor&amp;bug_severity=Trivial&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
+<a href="http://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Regression&amp;bug_severity=Minor&amp;bug_severity=Trivial&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
 Bugzilla - Open bugs (excluding enhancements)</a></li>
 <li>
-<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Enhancement&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
+<a href="http://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Enhancement&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
 Bugzilla - Enhancements only</a>
 </li>
 </ul>
@@ -51,7 +51,7 @@ Bugzilla is good for tracking progress and supplying patches, but is unwieldy fo
 </p> 
 <p>
 If you have not already done so, you need to register an account first, using the "New Account" link at the top of the
-main Bugzilla page: <a href="https://issues.apache.org/bugzilla/">https://issues.apache.org/bugzilla/</a>.
+main Bugzilla page: <a href="https://bz.apache.org/bugzilla/">https://bz.apache.org/bugzilla/</a>.
 </p>
 <p>
 Make sure you read and understand the information on the account creation page before signing up.
@@ -74,7 +74,7 @@ If reporting a bug, are you sure it really is a bug in JMeter, not just a misund
 </p>
 <p>
 If you have not already done so, you need to register an account first, using the "New Account" link at the top of the
-main Bugzilla page: <a href="https://issues.apache.org/bugzilla/">https://issues.apache.org/bugzilla/</a>.
+main Bugzilla page: <a href="https://bz.apache.org/bugzilla/">https://bz.apache.org/bugzilla/</a>.
 </p>
 <p>
 Make sure you read and understand the information on the account creation page before signing up.
@@ -90,7 +90,7 @@ Use the checklist below to guide you.
 </p>
 <ul>
 <li>JMeter version</li>
-<li>Java version (output from java -version)</li>
+li>Java version (output from java -version)</li>
 <li>OS version</li>
 <li>jmeter.log file (unlikely to contain sensitive information, but check before uploading)</li>
 <li>JMX file if relevant (redact any sensitive information first), providing a simplified Test Plan (using DEBUG sampler) will ensure BUG is fixed much more rapidely than without it</li>
@@ -108,8 +108,8 @@ Please do not use @author tags (credit will be given in the changes file).
 <li>In the case of patches for new features, please also provide documentation patches if at all possible. 
 Components are documented in xdocs/usermanual/component_reference.xml.</li>
 </ul>
-<p><b>See also the following <a href="https://issues.apache.org/bugwritinghelp.html">Bug writing guidelines</a>,
-also the terms and conditions noted on the <a href="https://issues.apache.org/bugzilla/createaccount.cgi">Bugzilla account creation page.</a></b></p>
+<p><b>See also the following <a href="https://bz.apache.org/bugwritinghelp.html">Bug writing guidelines</a>,
+also the terms and conditions noted on the <a href="https://bz.apache.org/bugzilla/createaccount.cgi">Bugzilla account creation page.</a></b></p>
 </section>
 </body>
 </document>

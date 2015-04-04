@@ -95,7 +95,7 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
         /*
          * Get round problems parsing <META http-equiv='content-type'
          * content='text/html; charset=utf-8'> See
-         * http://issues.apache.org/bugzilla/show_bug.cgi?id=23315
+         * http://bz.apache.org/bugzilla/show_bug.cgi?id=23315
          *
          * Is this due to a bug in Java?
          */
@@ -111,7 +111,7 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
             resultsScrollPane.setViewportView(results);
         } catch (NumberFormatException e) {
             // Java Bug : http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=9001188.
-            // See https://issues.apache.org/bugzilla/show_bug.cgi?id=54586
+            // See https://bz.apache.org/bugzilla/show_bug.cgi?id=54586
             log.warn("An error occured rendering html code", e);
             results.setText("Failed to render HTML: " + e.getMessage() +", use Text renderer");            
         }

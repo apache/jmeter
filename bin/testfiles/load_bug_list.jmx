@@ -210,7 +210,7 @@
           </elementProp>
         </collectionProp>
       </elementProp>
-      <stringProp name="HTTPSampler.domain">issues.apache.org</stringProp>
+      <stringProp name="HTTPSampler.domain">bz.apache.org</stringProp>
       <stringProp name="HTTPSampler.port">80</stringProp>
       <stringProp name="HTTPSampler.protocol">http</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"></stringProp>
