@@ -66,7 +66,7 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
                 return errorResult(ex, new HTTPSampleResult());
             }
         }
-        // see https://issues.apache.org/bugzilla/show_bug.cgi?id=51380
+        // see https://bz.apache.org/bugzilla/show_bug.cgi?id=51380
         if(notifyFirstSampleAfterLoopRestart) {
             impl.notifyFirstSampleAfterLoopRestart();
             notifyFirstSampleAfterLoopRestart = false;

@@ -1586,7 +1586,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 // downloaded for the sample made for the redirected url
                 // otherwise, use null so the container is created if necessary unless
                 // the flag is false, in which case revert to broken 2.1 behaviour 
-                // Bug 51939 -  https://issues.apache.org/bugzilla/show_bug.cgi?id=51939
+                // Bug 51939 -  https://bz.apache.org/bugzilla/show_bug.cgi?id=51939
                 if(!wasRedirected) {
                     HTTPSampleResult container = (HTTPSampleResult) (
                             areFollowingRedirect ? res.getParent() : SEPARATE_CONTAINER ? null : res);

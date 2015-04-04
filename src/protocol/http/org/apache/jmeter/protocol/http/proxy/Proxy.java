@@ -271,7 +271,7 @@ public class Proxy extends Thread {
              */
             if (headers != null) {
                 headers.removeHeaderNamed(HTTPConstants.HEADER_COOKIE);// Always remove cookies
-                // See https://issues.apache.org/bugzilla/show_bug.cgi?id=25430
+                // See https://bz.apache.org/bugzilla/show_bug.cgi?id=25430
                 // HEADER_AUTHORIZATION won't be removed, it will be used
                 // for creating Authorization Manager
                 // Remove additional headers

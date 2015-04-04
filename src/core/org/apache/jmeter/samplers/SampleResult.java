@@ -588,7 +588,7 @@ public class SampleResult implements Serializable, Cloneable {
      */
     public void addSubResult(SampleResult subResult) {
         if(subResult == null) {
-            // see https://issues.apache.org/bugzilla/show_bug.cgi?id=54778
+            // see https://bz.apache.org/bugzilla/show_bug.cgi?id=54778
             return;
         }
         String tn = getThreadName();

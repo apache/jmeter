@@ -233,7 +233,7 @@ No
 #end
 ##
 #macro ( bugzilla $id)
-<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
+<a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
 #end
 
 ## Shorthand - automatically adds " - " before remaining text

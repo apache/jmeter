@@ -155,7 +155,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_COUNT, Integer.toString(metric.getSuccesses()));
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_KO_COUNT, Integer.toString(metric.getFailures()));
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_COUNT, Integer.toString(metric.getTotal()));
-        // See https://issues.apache.org/bugzilla/show_bug.cgi?id=57350
+        // See https://bz.apache.org/bugzilla/show_bug.cgi?id=57350
         if(metric.getTotal() > 0) { 
             if(metric.getSuccesses()>0) {
                 graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_MIN_RESPONSE_TIME, Double.toString(metric.getOkMinTime()));

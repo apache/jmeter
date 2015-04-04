@@ -92,7 +92,7 @@ public class URLCollection {
             }
             // No point in adding the URL as String as it will result in null 
             // returned during iteration, see URLString
-            // See https://issues.apache.org/bugzilla/show_bug.cgi?id=55092
+            // See https://bz.apache.org/bugzilla/show_bug.cgi?id=55092
             return false;
         }
         return b;

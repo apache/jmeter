@@ -26,7 +26,7 @@
           </elementProp>
           <elementProp name="bugzilla_host" elementType="Argument">
             <stringProp name="Argument.name">bugzilla_host</stringProp>
-            <stringProp name="Argument.value">issues.apache.org</stringProp>
+            <stringProp name="Argument.value">bz.apache.org</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -185,7 +185,7 @@
             <stringProp name="TestPlan.comments">Shows how to extract bug id from a link in response</stringProp>
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">bugId</stringProp>
-            <stringProp name="RegexExtractor.regex">https://issues.apache.org/bugzilla/show_bug.cgi\?id=([^&quot;]+?)&quot;</stringProp>
+            <stringProp name="RegexExtractor.regex">https://bz.apache.org/bugzilla/show_bug.cgi\?id=([^&quot;]+?)&quot;</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">nv_bugId</stringProp>
             <stringProp name="RegexExtractor.match_number">0</stringProp>
