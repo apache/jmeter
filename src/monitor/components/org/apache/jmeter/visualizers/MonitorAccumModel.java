@@ -174,7 +174,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
                 } 
                 // This part of code throws NullPointerException
                 // Don't think Monitor results can be loaded from files
-                // see https://issues.apache.org/bugzilla/show_bug.cgi?id=51810
+                // see https://bz.apache.org/bugzilla/show_bug.cgi?id=51810
 //                else {
 //                    noResponse(surl);
 //                }

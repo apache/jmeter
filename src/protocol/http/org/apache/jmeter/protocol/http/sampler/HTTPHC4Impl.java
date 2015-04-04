@@ -158,7 +158,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * Special interceptor made to keep metrics when connection is released for some method like HEAD
      * Otherwise calling directly ((HttpConnection) localContext.getAttribute(ExecutionContext.HTTP_CONNECTION)).getMetrics();
      * would throw org.apache.http.impl.conn.ConnectionShutdownException
-     * See https://issues.apache.org/jira/browse/HTTPCLIENT-1081
+     * See https://bz.apache.org/jira/browse/HTTPCLIENT-1081
      */
     private static final HttpResponseInterceptor METRICS_SAVER = new HttpResponseInterceptor(){
         @Override

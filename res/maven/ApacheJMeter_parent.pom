@@ -41,7 +41,7 @@ under the License.
     </licenses>
     <issueManagement>
         <system>bugzilla</system>
-        <url>https://issues.apache.org/bugzilla/describecomponents.cgi?product=JMeter</url>
+        <url>https://bz.apache.org/bugzilla/describecomponents.cgi?product=JMeter</url>
     </issueManagement>
     <scm>
         <connection>http://svn.apache.org/repos/asf/jmeter/trunk/</connection>

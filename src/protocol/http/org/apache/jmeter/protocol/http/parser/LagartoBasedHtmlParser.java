@@ -218,7 +218,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             lagartoParser.parse(tagVisitor);
             return coll.iterator();
         } catch (LagartoException e) {
-            // TODO is it the best way ? https://issues.apache.org/bugzilla/show_bug.cgi?id=55634
+            // TODO is it the best way ? https://bz.apache.org/bugzilla/show_bug.cgi?id=55634
             if(log.isDebugEnabled()) {
                 log.debug("Error extracting embedded resource URLs from:'"+baseUrl+"', probably not text content, message:"+e.getMessage());
             }

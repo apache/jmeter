@@ -99,7 +99,7 @@ public class ConversionUtils {
      * @param location the location, possibly with extraneous leading "../"
      * @return URL with extraneous ../ removed
      * @throws MalformedURLException when the given <code>URL</code> is malformed
-     * @see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690 - handling of 302 redirects with invalid relative paths</a>
+     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690 - handling of 302 redirects with invalid relative paths</a>
      */
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
         URL initial = new URL(baseURL,location);
@@ -164,7 +164,7 @@ public class ConversionUtils {
      * 
      * @param url in which the '/..'s should be removed
      * @return collapsed URL
-     * @see <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=49083">Bug 49083 - collapse /.. in redirect URLs</a>
+     * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=49083">Bug 49083 - collapse /.. in redirect URLs</a>
      */
     public static String removeSlashDotDot(String url)
     {

@@ -132,7 +132,7 @@ public class TestValueReplacer extends JMeterTestCase {
          * Here, the string contains a valid variable reference, so all
          * backslashes are also processed.
          * 
-         * See https://issues.apache.org/bugzilla/show_bug.cgi?id=53534
+         * See https://bz.apache.org/bugzilla/show_bug.cgi?id=53534
          */
         public void testReplaceFunctionWithBackslash() throws Exception {
             ValueReplacer replacer = new ValueReplacer();
