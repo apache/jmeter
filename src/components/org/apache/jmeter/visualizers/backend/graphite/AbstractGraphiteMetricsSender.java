@@ -31,8 +31,11 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
 
     /**
-     * @return GenericKeyedObjectPool
-     * 
+     * Create a new keyed pool of {@link SocketOutputStream}s using a
+     * {@link SocketOutputStreamPoolFactory}. The keys for the pool are
+     * {@link SocketConnectionInfos} instances.
+     *
+     * @return GenericKeyedObjectPool the newly generated pool
      */
     protected GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> createSocketOutputStreamPool() {
         GenericKeyedObjectPoolConfig config = new GenericKeyedObjectPoolConfig();
@@ -55,8 +58,10 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
      * <li>'\\' by '-'</li>
      * <li>'.' by '_'</li>
      * </ul>
+     * 
      * @param s
-     * @return
+     *            text to be sanitized
+     * @return the sanitized text
      */
     static final String sanitizeString(String s) {
         // String#replace uses regexp
