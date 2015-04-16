@@ -106,7 +106,6 @@ Summary
 
 <h3>General</h3>
 <ul>
-    <li><bug>54826</bug>Don't fail on long strings in JSON responses when displaying them as JSON in View Results Tree.</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
@@ -147,11 +146,10 @@ Summary
 </ul>
 
 <h3>General</h3>
+<ul>
     <li><bug>54826</bug>Don't fail on long strings in JSON responses when displaying them as JSON in View Results Tree.</li>
     <li><bug>57734</bug>Maven transient dependencies are incorrect for 2.13</li>
     <li><bug>57821</bug>Command-line option "-X --remoteexit" doesn't work since 2.13 (regression related to <bugzilla>57500</bugzilla>)</li>
-<ul>
-
 </ul>
 
  <!--  =================== Thanks =================== -->
