@@ -138,7 +138,7 @@ Summary
 
 <h3>Functions</h3>
 <ul>
-<li><bug>57825</bug>__Random function fails if min value is equal to max value (regression related to <bug>54453</bug>)</li>
+<li><bug>57825</bug>__Random function fails if min value is equal to max value (regression related to <bugzilla>54453</bugzilla>)</li>
 </ul>
 
 <h3>I18N</h3>
@@ -148,6 +148,7 @@ Summary
 <h3>General</h3>
     <li><bug>54826</bug>Don't fail on long strings in JSON responses when displaying them as JSON in View Results Tree.</li>
     <li><bug>57734</bug>Maven transient dependencies are incorrect for 2.13</li>
+    <li><bug>57821</bug>Command-line option "-X --remoteexit" doesn't work since 2.13 (regression related to <bugzilla>57500</bugzilla>)</li>
 <ul>
 
 </ul>
