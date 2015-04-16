@@ -837,8 +837,19 @@ public class PackageTest extends JMeterTestCase {
         Random r = new Random();
         Collection<CompoundVariable> parms = makeParams("0","10000000000","VAR");
         r.setParameters(parms);
-        //String s = 
+        String s = 
             r.execute(null,null);
+        long l = Long.parseLong(s);
+        assertTrue(l>=0 && l<=10000000000L);
+        
+        
+        parms = makeParams("1","1","VAR");
+        r.setParameters(parms);
+        s = 
+            r.execute(null,null);
+        l = Long.parseLong(s);
+        assertTrue(l==1);
+
     }
 
     public void variableTest1() throws Exception {
