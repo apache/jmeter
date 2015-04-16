@@ -24,12 +24,14 @@ import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -261,5 +263,12 @@ public class DistributedRunner {
         public void write(int b) throws IOException {
             // enjoy the silence
         }
+    }
+
+    /**
+     * @return {@link Collection} of {@link JMeterEngine}
+     */
+    public Collection<? extends JMeterEngine> getEngines() {
+        return engines.values();
     }
 }

@@ -814,6 +814,7 @@ public class JMeter implements JMeterPlugin {
                 distributedRunner.setStdout(System.out);
                 distributedRunner.setStdErr(System.err);
                 distributedRunner.init(hosts, tree);
+                engines.addAll(distributedRunner.getEngines());
                 distributedRunner.start();
             }
             startUdpDdaemon(engines);
