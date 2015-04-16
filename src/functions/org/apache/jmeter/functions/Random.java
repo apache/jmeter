@@ -62,7 +62,7 @@ public class Random extends AbstractFunction {
         long min = Long.parseLong(minimum.execute().trim());
         long max = Long.parseLong(maximum.execute().trim());
 
-        long rand = ThreadLocalRandom.current().nextLong(min, max);
+        long rand = ThreadLocalRandom.current().nextLong(min, max+1);
 
         String randString = Long.toString(rand);
 
