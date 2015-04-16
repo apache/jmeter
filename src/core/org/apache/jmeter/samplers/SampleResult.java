@@ -809,7 +809,8 @@ public class SampleResult implements Serializable, Cloneable {
 
     // List of types that are known to be ascii, although they may appear to be binary
     private static final String[] NON_BINARY_TYPES = {
-        "video/f4m",       //$NON-NLS-1$ (Flash Media Manifest)
+        "audio/x-mpegurl",  //$NON-NLS-1$ (HLS Media Manifest)
+        "video/f4m"         //$NON-NLS-1$ (Flash Media Manifest)
         };
 
     /*
