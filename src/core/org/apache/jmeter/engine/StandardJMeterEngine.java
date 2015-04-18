@@ -446,7 +446,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
 
         notifyTestListenersOfEnd(testListeners);
-
+        JMeterContextService.endTest();
         if (JMeter.isNonGUI() && SYSTEM_EXIT_FORCED) {
             log.info("Forced JVM shutdown requested at end of test");
             System.exit(0);
