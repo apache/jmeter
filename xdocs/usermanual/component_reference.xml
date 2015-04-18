@@ -663,7 +663,9 @@ This will not have any impact on existing Test plans.
 </component>
 
 <component name="SOAP/XML-RPC Request" index="&sect-num;.1.5"  width="426" height="276" screenshot="soap_sampler.png">
-
+<note>
+See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up to date way of test SOAP and REST Webservices
+</note>
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
 used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
 POST content. 
@@ -697,6 +699,9 @@ Or set Content-Length to -1 to force chunked encoding.
 </component>
 
 <component name="WebService(SOAP) Request (DEPRECATED)" useinstead="HTTP_Request" index="&sect-num;.1.6" width="943" height="648" screenshot="webservice_sampler.png">
+<note>
+See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up to date way of test SOAP and REST Webservices
+</note>
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
  It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
  The sampler uses Apache SOAP driver to serialize the message and set the header
