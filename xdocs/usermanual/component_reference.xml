@@ -3236,7 +3236,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 </div>
 </component>
 
-<component name="Save Responses to a file" index="&sect-num;.3.17"  width="358" height="225" screenshot="savetofile.png">
+<component name="Save Responses to a file" index="&sect-num;.3.17"  width="488" height="251" screenshot="savetofile.png">
     <description>
         <p>
         This test element can be placed anywhere in the test plan.
@@ -3276,6 +3276,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
  <property name="Save Successful Responses only" required="Yes">If selected, then only successful responses are saved</property>
  <property name="Don't add number to prefix" required="Yes">If selected, then no number is added to the prefix. If you select this option, make sure that the prefix is unique or the file may be overwritten.</property>
  <property name="Don't add suffix" required="Yes">If selected, then no suffix is added. If you select this option, make sure that the prefix is unique or the file may be overwritten.</property>
+ <property name="Minimum Length of sequence number" required="No">If "Don't add number to prefix" is not checked, then numbers added to prefix will be padded by 0 so that prefix is has size of this value.Defaults to 0.</property>
  </properties>
 </component>
 
