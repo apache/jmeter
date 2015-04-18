@@ -11,6 +11,12 @@
   language governing permissions and limitations under the License. -->
 <!-- Content Stylesheet for "jmeter-site" -->
 
+<!DOCTYPE xsl:stylesheet [
+  <!ENTITY copy  "&#x000A9;">
+  <!ENTITY nbsp  "&#160;">
+  <!ENTITY ndash "&#x02013;">
+  <!ENTITY para  "&#x000B6;">
+]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="3.0"
 >
@@ -148,8 +154,8 @@
         </div>
         <div class="footer">
           <div class="copyright">
-            Copyright &amp;copy;
-            1999 &amp;ndash;
+            Copyright &copy;
+            1999 &ndash;
             <xsl:value-of select="$year" />
             , Apache Software Foundation
           </div>
@@ -380,7 +386,7 @@
     <xsl:param name="anchor" />
     <a class="sectionlink" href="#{translate(normalize-space($anchor), ' ', '_')}"
       title="Link to here"
-    >&amp;para;</a>
+    >&para;</a>
   </xsl:template>
 
   <xsl:template match="properties">

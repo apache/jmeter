@@ -2322,8 +2322,6 @@ run JMeter unless all the JMeter jars are added.
     </copy>
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
-    <echo level="info">Remove superfluos &amp;amp;</echo>
-    <replace encoding="iso-8859-1" dir="${dest.docs}" includes="**/*.html" token="&amp;amp;" value="&amp;"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
     <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
     <copy todir="${dest.docs}/demos">
