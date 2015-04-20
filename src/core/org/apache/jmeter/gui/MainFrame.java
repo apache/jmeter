@@ -47,11 +47,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DropMode;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -63,6 +66,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -72,15 +76,19 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.LoadDraggedFile;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.tree.JMeterTreeTransferHandler;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.gui.util.JMeterToolBar;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestElement;
@@ -647,7 +655,49 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         treevar.setDropMode(DropMode.ON_OR_INSERT);
         treevar.setTransferHandler(new JMeterTreeTransferHandler());
 
+        addQuickComponentHotkeys(treevar);
+
         return treevar;
+    }
+
+    private void addQuickComponentHotkeys(JTree treevar) {
+        Action quickComponent = new AbstractAction("Quick Component") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String propname = "gui.quick_" + actionEvent.getActionCommand();
+                String comp = JMeterUtils.getProperty(propname);
+                log.debug("Event " + propname + ": " + comp);
+
+                GuiPackage guiPackage = GuiPackage.getInstance();
+                try {
+                    guiPackage.updateCurrentNode();
+                    TestElement testElement = guiPackage.createTestElement(comp);
+                    JMeterTreeNode parentNode = guiPackage.getCurrentNode();
+                    while (!MenuFactory.canAddTo(parentNode, testElement)) {
+                        parentNode = (JMeterTreeNode) parentNode.getParent();
+                        log.warn("Parent " + parentNode);
+                        log.warn("Parent-parent " + parentNode.getParent());
+                    }
+                    if (parentNode.getParent() == null) {
+                        throw new IllegalUserActionException("Cannot add element on very top level");
+                    }
+                    JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
+                    guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
+                } catch (Exception err) {
+                    log.error("Failed to perform quick component add: " + comp, err); // $NON-NLS-1$
+                }
+            }
+        };
+
+        InputMap inputMap = treevar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        KeyStroke[] keyStrokes = new KeyStroke[]{KeyStrokes.CTRL_0,
+                KeyStrokes.CTRL_1, KeyStrokes.CTRL_2, KeyStrokes.CTRL_3,
+                KeyStrokes.CTRL_4, KeyStrokes.CTRL_5, KeyStrokes.CTRL_6,
+                KeyStrokes.CTRL_7, KeyStrokes.CTRL_8, KeyStrokes.CTRL_9,};
+        for (int n = 0; n < 9; n++) {
+            treevar.getActionMap().put(ActionNames.QUICK_COMPONENT + String.valueOf(n), quickComponent);
+            inputMap.put(keyStrokes[n], ActionNames.QUICK_COMPONENT + String.valueOf(n));
+        }
     }
 
     /**
