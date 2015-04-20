@@ -76,7 +76,6 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
@@ -668,6 +667,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 String comp = JMeterUtils.getProperty(propname);
                 log.debug("Event " + propname + ": " + comp);
 
+                if (comp == null) {
+                    log.warn("No component set through property: " + propname);
+                    return;
+                }
+
                 GuiPackage guiPackage = GuiPackage.getInstance();
                 try {
                     guiPackage.updateCurrentNode();
@@ -675,14 +679,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                     JMeterTreeNode parentNode = guiPackage.getCurrentNode();
                     while (!MenuFactory.canAddTo(parentNode, testElement)) {
                         parentNode = (JMeterTreeNode) parentNode.getParent();
-                        log.warn("Parent " + parentNode);
-                        log.warn("Parent-parent " + parentNode.getParent());
                     }
                     if (parentNode.getParent() == null) {
-                        throw new IllegalUserActionException("Cannot add element on very top level");
+                        log.debug("Cannot add element on very top level");
+                    } else {
+                        JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
+                        guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
                     }
-                    JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
-                    guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
                 } catch (Exception err) {
                     log.error("Failed to perform quick component add: " + comp, err); // $NON-NLS-1$
                 }
