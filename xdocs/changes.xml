@@ -106,6 +106,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+<li><bug>TBD</bug> Shortcuts (Ctrl+1 .. Ctrl+9) to quick add elements into test plan. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
