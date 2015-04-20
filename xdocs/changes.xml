@@ -109,6 +109,7 @@ Summary
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
+<li>Updated to tika-core and tika-parsers 1.8 (from 1.7)</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
