@@ -54,7 +54,7 @@
 	<classpathentry kind="lib" path="lib/commons-jexl-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/commons-math3-3.4.1.jar"/>
+    <classpathentry kind="lib" path="lib/commons-math3-3.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.3.jar"/>
     <classpathentry kind="lib" path="lib/commons-pool2-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/dnsjava-2.1.7.jar"/>
