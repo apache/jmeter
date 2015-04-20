@@ -71,7 +71,7 @@ commons-logging-1.2
 http://commons.apache.org/downloads/download_logging.cgi
 - httpclient
 
-commons-math3-3.4.1
+commons-math3-3.5
 -----------------
 http://commons.apache.org/proper/commons-math/download_math.cgi
 - BackendListener
