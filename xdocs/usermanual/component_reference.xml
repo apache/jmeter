@@ -508,22 +508,20 @@ C_#=2 (number of rows)
 C_1=column 3, row 1
 C_2=column 3, row 2
 </pre>
-If the Select statement returns zero rows, then the A_# and C_# variables would be set to 0, and no other variables would be set.
+If the Select statement returns zero rows, then the <code>A_#</code> and <code>C_#</code> variables would be set to <code>0</code>, and no other variables would be set.
 </p>
 <p>
-Old variables are cleared if necessary - e.g. if the first select retrieves 6 rows and a second select returns only 3 rows,
-the additional variables for rows 4, 5 and 6 will be removed.
+Old variables are cleared if necessary - e.g. if the first select retrieves six rows and a second select returns only three rows,
+the additional variables for rows four, five and six will be removed.
 </p>
-<p>
-<b>Note:</b> The latency time is set from the time it took to acquire a connection.
-</p>
+<note>The latency time is set from the time it took to acquire a connection.</note>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Variable Name" required="Yes">
         Name of the JMeter variable that the connection pool is bound to.
-        This must agree with the 'Variable Name' field of a JDBC Connection Configuration.
+        This must agree with the '<code>Variable Name</code>' field of a <complink name="JDBC Connection Configuration"/>.
         </property>
         <property name="Query Type" required="Yes">Set this according to the statement type:
             <ul>
@@ -539,66 +537,66 @@ the additional variables for rows 4, 5 and 6 will be removed.
             <li>Edit - this should be a variable reference that evaluates to one of the above</li>
             </ul>
             <note>
-            When "Prepared Select Statement", "Prepared Update Statement" or "Callable Statement" types are selected, a Statement Cache per connection is used by JDBC Request. 
-            It stores by default up to 100 PreparedStatements per connection, this can impact your database (Open Cursors). 
+            When "<code>Prepared Select Statement</code>", "<code>Prepared Update Statement</code>" or "<code>Callable Statement</code>" types are selected, a Statement Cache per connection is used by JDBC Request. 
+            It stores by default up to 100 PreparedStatements per connection, this can impact your database (Open Cursors).
             </note>
         </property>
         <property name="SQL Query" required="Yes">
         SQL query.
-        Do not enter a trailing semi-colon.
-        There is generally no need to use { and } to enclose Callable statements;
-        however they mey be used if the database uses a non-standard syntax.
-        [The JDBC driver automatically converts the statement if necessary when it is enclosed in {}].
+        <note>Do not enter a trailing semi-colon.</note>
+        There is generally no need to use <code>{</code> and <code>}</code> to enclose Callable statements;
+        however they may be used if the database uses a non-standard syntax.
+        [The JDBC driver automatically converts the statement if necessary when it is enclosed in <code>{}</code>].
         For example:
         <ul>
-        <li>select * from t_customers where id=23</li>
-        <li>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null,?, ?, null, null, null)
+        <li><code>select * from t_customers where id=23</code></li>
+        <li><code>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null,?, ?, null, null, null)</code>
         <ul>
-        <li>Parameter values: tablename,filename</li>
-        <li>Parameter types:  VARCHAR,VARCHAR</li>
+        <li>Parameter values: <code>tablename</code>,<code>filename</code></li>
+        <li>Parameter types:  <code>VARCHAR</code>,<code>VARCHAR</code></li>
         </ul>
         </li>
         The second example assumes you are using Apache Derby.
         </ul>
         </property>
         <property name="Parameter values" required="Yes, if a prepared or callable statement has parameters">
-        Comma-separated list of parameter values. Use ]NULL[ to indicate a NULL parameter.
-        (If required, the null string can be changed by defining the property "jdbcsampler.nullmarker".)
+        Comma-separated list of parameter values. Use <code>]NULL[</code> to indicate a <code>NULL</code> parameter.
+        (If required, the null string can be changed by defining the property "<code>jdbcsampler.nullmarker</code>".)
         <br></br>
         The list must be enclosed in double-quotes if any of the values contain a comma or double-quote,
         and any embedded double-quotes must be doubled-up, for example:
-        <pre>"Dbl-Quote: "" and Comma: ,"</pre>
-        <note>There must be as many values as there are placeholders in the statement even if your parameters are OUT ones, be sure to set a value even if the value will not be used (for example in a CallableStatement).</note>
+        <source>"Dbl-Quote: "" and Comma: ,"</source>
+        <note>There must be as many values as there are placeholders in the statement even if your parameters are <code>OUT</code> ones, be sure to set a value even if the value will not be used (for example in a CallableStatement).</note>
         </property>
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
-        Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE) or integer values of Constants when for example you use custom database types proposed by driver (-10 for OracleTypes.CURSOR for example).<br/>
-        These are defined as fields in the class java.sql.Types, see for example:<br/>
+        Comma-separated list of SQL parameter types (e.g. <code>INTEGER</code>, <code>DATE</code>, <code>VARCHAR</code>, <code>DOUBLE</code>) or integer values of Constants when for example you use custom database types proposed by driver (<code>-10</code> for <code>OracleTypes.CURSOR</code> for example).<br/>
+        These are defined as fields in the class <code>java.sql.Types</code>, see for example:<br/>
         <a href="http://docs.oracle.com/javase/6/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
-        [Note: JMeter will use whatever types are defined by the runtime JVM, 
+        [Note: JMeter will use whatever types are defined by the runtime JVM,
         so if you are running on a different JVM, be sure to check the appropriate document]<br/>
-        <b>If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
-        appropriate parameter types, e.g. instead of "INTEGER", use "INOUT INTEGER".</b> <br/>
-        If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
+        <b>If the callable statement has <code>INOUT</code> or <code>OUT</code> parameters, then these must be indicated by prefixing the
+        appropriate parameter types, e.g. instead of "<code>INTEGER</code>", use "<code>INOUT INTEGER</code>".</b> <br/>
+        If not specified, "<code>IN</code>" is assumed, i.e. "<code>DATE</code>" is the same as "<code>IN DATE</code>".
         <br></br>
-        If the type is not one of the fields found in java.sql.Types, versions of JMeter after 2.3.2 also
-        accept the corresponding integer number, e.g. since OracleTypes.CURSOR == -10, you can use "INOUT -10".
+        If the type is not one of the fields found in <code>java.sql.Types</code>, versions of JMeter after 2.3.2 also
+        accept the corresponding integer number, e.g. since <code>OracleTypes.CURSOR == -10</code>, you can use "<code>INOUT -10</code>".
         <br></br>
         There must be as many types as there are placeholders in the statement.
         </property>
         <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements, Prepared Select Statements or CallableStatement. 
-        Note that when used with CallableStatement, list of variables must be in the same sequence as the OUT parameters returned by the call.
-        If there are less variable names than OUT parameters only as many results shall be stored in the thread-context variables as variable names were supplied. 
-        If more variable names than OUT parameters exist, the additional variables will be ignored</property>
+        Note that when used with CallableStatement, list of variables must be in the same sequence as the <code>OUT</code> parameters returned by the call.
+        If there are less variable names than <code>OUT</code> parameters only as many results shall be stored in the thread-context variables as variable names were supplied.
+        If more variable names than <code>OUT</code> parameters exist, the additional variables will be ignored</property>
         <property name="Result Variable Name" required="No">
         If specified, this will create an Object variable containing a list of row maps.
         Each map contains the column name as the key and the column data as the value. Usage:<br></br>
-        <code>columnValue = vars.getObject("resultObject").get(0).get("Column Name");</code>
+        <source>columnValue = vars.getObject("resultObject").get(0).get("Column Name");</source>
         </property>
         <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
             <ul>
-                <li>Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a ResultSets when present on the list.</li>
-                <li>Store As Object - Variables of ResultSet type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the ResultSet </li>
-                <li>Count Records - Variables of ResultSet types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
+                <li>Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list.</li>
+                <li>Store As Object - Variables of <code>ResultSet</code> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <code>ResultSet</code> </li>
+                <li>Count Records - Variables of <code>ResultSet</code> types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
             </ul>
         </property>
 </properties>
