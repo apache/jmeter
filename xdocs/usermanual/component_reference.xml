@@ -612,22 +612,22 @@ the additional variables for rows four, five and six will be removed.
 <component name="Java Request" index="&sect-num;.1.4"  width="563" height="347" screenshot="java_request.png">
 
 <description><p>This sampler lets you control a java class that implements the
-<b><code>org.apache.jmeter.protocol.java.sampler.JavaSamplerClient</code></b> interface.
+<code>org.apache.jmeter.protocol.java.sampler.JavaSamplerClient</code> interface.
 By writing your own implementation of this interface,
 you can use JMeter to harness multiple threads, input parameter control, and
 data collection.</p>
 <p>The pull-down menu provides the list of all such implementations found by
 JMeter in its classpath.  The parameters can then be specified in the
-table below - as defined by your implementation.  Two simple examples (JavaTest and SleepTest) are provided.
+table below - as defined by your implementation.  Two simple examples (<code>JavaTest</code> and <code>SleepTest</code>) are provided.
 </p>
 <p>
-The JavaTest example sampler can be useful for checking test plans, because it allows one to set
+The <code>JavaTest</code> example sampler can be useful for checking test plans, because it allows one to set
 values in almost all the fields. These can then be used by Assertions, etc.
 The fields allow variables to be used, so the values of these can readily be seen.
 </p>
 </description>
 
-<note>Since JMeter 2.8, if the method teardownTest is not overriden by a subclass of AbstractJavaSamplerClient, its teardownTest method will not be called.
+<note>Since JMeter 2.8, if the method <code>teardownTest</code> is not overriden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </note>
@@ -643,23 +643,23 @@ This will not have any impact on existing Test plans.
         are sent as Strings. See below for specific settings.</property>
     </properties>
 
-    <p>The following parameters apply to the <b>SleepTest</b> and <b>JavaTest</b> implementations:</p>
+    <p>The following parameters apply to the <code>SleepTest</code> and <code>JavaTest</code> implementations:</p>
 
     <properties>
         <property name="Sleep_time" required="Yes">How long to sleep for (ms)</property>
         <property name="Sleep_mask" required="Yes">How much "randomness" to add:<br></br>
-            The sleep time is calculated as follows:<br></br>
-            totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
+            The sleep time is calculated as follows:
+            <source>totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)</source>
         </property>
     </properties>
 
-    <p>The following parameters apply additionaly to the <b>JavaTest</b> implementation:</p>
+    <p>The following parameters apply additionaly to the <code>JavaTest</code> implementation:</p>
 
     <properties>
-        <property name="Label" required="No">The label to use. If provided, overrides Name</property>
+        <property name="Label" required="No">The label to use. If provided, overrides <code>Name</code></property>
         <property name="ResponseCode" required="No">If provided, sets the SampleResult ResponseCode.</property>
         <property name="ResponseMessage" required="No">If provided, sets the SampleResult ResponseMessage.</property>
-        <property name="Status" required="No">If provided, sets the SampleResult Status. If this equals "OK" (ignoring case) then the status is set to success, otherwise the sample is marked as failed.</property>
+        <property name="Status" required="No">If provided, sets the SampleResult Status. If this equals "<code>OK</code>" (ignoring case) then the status is set to success, otherwise the sample is marked as failed.</property>
         <property name="SamplerData" required="No">If provided, sets the SampleResult SamplerData.</property>
         <property name="ResultData" required="No">If provided, sets the SampleResult ResultData.</property>
     </properties>
