@@ -46,7 +46,7 @@
  <note>
  Several test elements use JMeter properties to control their behaviour.
  These properties are normally resolved when the class is loaded.
- This generally occurs before the test plan starts, so it's not possible to change the settings by using the __setProperty() function.
+ This generally occurs before the test plan starts, so it's not possible to change the settings by using the <code>__setProperty()</code> function.
 </note>
 <p>
 </p>
@@ -57,7 +57,7 @@
 <description>
     <p>
     Samplers perform the actual work of JMeter.
-    Each sampler (except Test Action) generates one or more sample results.
+    Each sampler (except <complink name="Test Action" />) generates one or more sample results.
     The sample results have various attributes (success/fail, elapsed time, data size etc) and can be viewed in the various listeners.
     </p>
 </description>
@@ -75,7 +75,8 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.</property>
-        <property name="Port" required="No">Port to use. If this is  >0, then this specific port is used, otherwise JMeter uses the default FTP port.</property>
+        <property name="Port" required="No">Port to use. If this is <code>&gt;0</code>, then this specific port is used,
+           otherwise JMeter uses the default FTP port.</property>
         <property name="Remote File:" required="Yes">File to retrieve or name of destination file to upload.</property>
         <property name="Local File:" required="Yes, if uploading (*)">File to upload, or destination for downloads (defaults to remote file name).</property>
         <property name="Local File Contents:" required="Yes, if uploading (*)">Provides the contents for the upload, overrides the Local File property.</property>
@@ -83,7 +84,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         <property name="Use Binary mode?" required="Yes">Check this to use Binary mode (default Ascii)</property>
         <property name="Save File in Response?" required="Yes, if downloading">
         Whether to store contents of retrieved file in response data.
-        If the mode is Ascii, then the contents will be visible in the Tree View Listener.
+        If the mode is Ascii, then the contents will be visible in the <complink name="View Results Tree"/>.
         </property>
         <property name="Username" required="Usually">FTP account username.</property>
         <property name="Password" required="Usually">FTP account password. N.B. This will be visible in the test plan.</property>
@@ -114,7 +115,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         </ul>
         <p>
         The default parser is htmlparser.
-        This can be changed by using the property "htmlparser.classname" - see jmeter.properties for details.
+        This can be changed by using the property "<code>htmlparser.classname</code>" - see <code>jmeter.properties</code> for details.
         </p>
         <p>If you are going to send multiple requests to the same web server, consider
         using an <complink name="HTTP Request Defaults"/>
@@ -126,75 +127,75 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         them.  This can save you time if you have a lot of HTTP requests or requests with many
         parameters.</p>
 
-        <p><b>There are two different test elements used to define the samplers:</b>
+        <p><b>There are two different test elements used to define the samplers:</b></p>
         <ul>
         <li>AJP/1.3 Sampler - uses the Tomcat mod_jk protocol (allows testing of Tomcat in AJP mode without needing Apache httpd)
         The AJP Sampler does not support multiple file upload; only the first file will be used.
         </li>
-        <li>HTTP Request - this has an implementation drop-down box, which selects the HTTP protocol implementation to be used:</li>
-        <ul>
-        <li>Java - uses the HTTP implementation provided by the JVM. 
-        This has some limitations in comparison with the HttpClient implementations - see below.</li>
-        <li>HTTPClient3.1 - uses Apache Commons HttpClient 3.1. 
-        This is no longer being developed, and support for this may be dropped in a future JMeter release.</li>
-        <li>HTTPClient4 - uses Apache HttpComponents HttpClient 4.x.</li>
-        <li>Blank Value - does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on jmeter.httpsampler property defined in jmeter.properties</li>
+        <li>HTTP Request - this has an implementation drop-down box, which selects the HTTP protocol implementation to be used:
+          <dl>
+            <dt>Java</dt><dd>uses the HTTP implementation provided by the JVM.
+            This has some limitations in comparison with the HttpClient implementations - see below.</dd>
+            <dt>HTTPClient3.1</dt><dd>uses Apache Commons HttpClient 3.1.
+            This is no longer being developed, and support for this may be dropped in a future JMeter release.</dd>
+            <dt>HTTPClient4</dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
+            <dt>Blank Value</dt><dd>does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on <code>jmeter.httpsampler</code> property defined in <code>jmeter.properties</code></dd>
+          </dl>
+        </li>
         </ul>
-        </ul>
-         </p>
          <p>The Java HTTP implementation has some limitations:</p>
          <ul>
-         <li>There is no control over how connections are re-used. 
+         <li>There is no control over how connections are re-used.
          When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
-         <li>The API is best suited to single-threaded usage - various settings 
+         <li>The API is best suited to single-threaded usage - various settings
          are defined via system properties, and therefore apply to all connections.</li>
-         <li>There is a bug in the handling of HTTPS via a Proxy (the CONNECT is not handled correctly).
+         <li>There is a bug in the handling of HTTPS via a Proxy (the <code>CONNECT</code> is not handled correctly).
          See Java bugs 6226610 and 6208335.
          </li>
          <li>It does not support virtual hosts.</li>
-         <li>It does not support the following methods: COPY, LOCK, MKCOL, MOVE, PATCH, PROPFIND, PROPPATCH, UNLOCK, REPORT, MKCALENDAR.</li>
+         <li>It does not support the following methods: <code>COPY</code>, <code>LOCK</code>, <code>MKCOL</code>, <code>MOVE</code>,
+             <code>PATCH</code>, <code>PROPFIND</code>, <code>PROPPATCH</code>, <code>UNLOCK</code>, <code>REPORT</code>, <code>MKCALENDAR</code>.</li>
          <li>It does not support client based certificate testing with Keystore Config.</li>
          </ul>
-         <p>Note: the FILE protocol is intended for testing purposes only.
+         <p>Note: the <code>FILE</code> protocol is intended for testing purposes only.
          It is handled by the same code regardless of which HTTP Sampler is used.</p>
         <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
          you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
          For normal logins (i.e. where the user enters login information in a form), you will need to work out what the form submit button does,
-         and create an HTTP request with the appropriate method (usually POST) 
-         and the appropriate parameters from the form definition. 
+         and create an HTTP request with the appropriate method (usually <code>POST</code>) 
+         and the appropriate parameters from the form definition.
          If the page uses HTTP, you can use the JMeter Proxy to capture the login sequence.
         </p>
         <p>
         In versions of JMeter up to 2.2, only a single SSL context was used for all threads and samplers.
         This did not generate the proper load for multiple users.
         A separate SSL context is now used for each thread.
-        To revert to the original behaviour, set the JMeter property:
-<pre>
+        To revert to the original behaviour, set the JMeter property:</p>
+<source>
 https.sessioncontext.shared=true
-</pre>
+</source>
         By default, the SSL context is retained for the duration of the test.
         In versions of JMeter from 2.5.1, the SSL session can be optionally reset for each test iteration.
         To enable this, set the JMeter property:
-<pre>
+<source>
 https.use.cached.ssl.context=false
-</pre>
-        Note: this does not apply to the Java HTTP implementation.
-        </p>
-        <p>
+</source>
+        <note>
+         Note: this does not apply to the Java HTTP implementation.
+        </note>
         JMeter defaults to the SSL protocol level TLS.
-        If the server needs a different level, e.g. SSLv3, change the JMeter property, for example:
-<pre>
+        If the server needs a different level, e.g. <code>SSLv3</code>, change the JMeter property, for example:
+<source>
 https.default.protocol=SSLv3
-</pre> 
-        </p>
+</source>
         <p>
-        JMeter also allows one to enable additional protocols, by changing the property <tt>https.socket.protocols</tt>.
+        JMeter also allows one to enable additional protocols, by changing the property <code>https.socket.protocols</code>.
         </p>
         <p>If the request uses cookies, then you will also need an
         <complink name="HTTP Cookie Manager"/>.  You can
-        add either of these elements to the Thread Group or the HTTP Request.  If you have
+        add either of these elements to the Thread Group or the HTTP Request. If you have
         more than one HTTP Request that needs authorizations or cookies, then add the
-        elements to the Thread Group.  That way, all HTTP Request controllers will share the
+        elements to the Thread Group. That way, all HTTP Request controllers will share the
         same Authorization Manager and Cookie Manager elements.</p>
 
         <p>If the request uses a technique called "URL Rewriting" to maintain sessions,
@@ -205,110 +206,112 @@ https.default.protocol=SSLv3
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server" required="Yes, unless provided by HTTP Request Defaults">
-            Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]
-            Note: in JMeter 2.5 (and later) if the "Host" header is defined in a Header Manager, then this will be used
+            Domain name or IP address of the web server. e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.]
+            Note: in JMeter 2.5 (and later) if the "<code>Host</code>" header is defined in a Header Manager, then this will be used
             as the virtual host name.
         </property>
-        <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
+        <property name="Port" required="No">Port the web server is listening to. Default: <code>80</code></property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
-        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. 
+        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.
         Note that this applies to each wait for a response. If the server response is sent in several chunks, the overall
         elapsed time may be longer than the timeout.
-        A <complink name="Duration Assertion"/> can be used to detect responses that take too long to complete.
+        <p>A <complink name="Duration Assertion"/> can be used to detect responses that take too long to complete.</p>
         </property>
-        <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
+        <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the <code>http://</code> prefix.]</property>
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
         <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
-        <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1</code>, <code>HttpClient4</code>.
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the HttpClient4 implementation is used.</property>
-        <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
-        <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE, PATCH (not supported for
-        JAVA implementation). With HttpClient4, the following methods related to WebDav are also allowed: COPY, LOCK, MKCOL, MOVE,
-        PROPFIND, PROPPATCH, UNLOCK, REPORT, MKCALENDAR.</property>
+        <property name="Protocol" required="No"><code>HTTP</code>, <code>HTTPS</code> or <code>FILE</code>. Default: <code>HTTP</code></property>
+        <property name="Method" required="Yes"><code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>TRACE</code>,
+          <code>OPTIONS</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> (not supported for
+          <code>JAVA</code> implementation). With <code>HttpClient4</code>, the following methods related to WebDav are
+          also allowed: <code>COPY</code>, <code>LOCK</code>, <code>MKCOL</code>, <code>MOVE</code>,
+          <code>PROPFIND</code>, <code>PROPPATCH</code>, <code>UNLOCK</code>, <code>REPORT</code>, <code>MKCALENDAR</code>.</property>
         <property name="Content Encoding" required="No">
-        Content encoding to be used (for POST, PUT, PATCH and FILE). 
+        Content encoding to be used (for <code>POST</code>, <code>PUT</code>, <code>PATCH</code> and <code>FILE</code>).
         This the the character encoding to be used, and is not related to the Content-Encoding HTTP header.
         </property>
         <property name="Redirect Automatically" required="No">
         Sets the underlying http protocol handler to automatically follow redirects,
         so they are not seen by JMeter, and thus will not appear as samples.
-        Should only be used for GET and HEAD requests.
-        The HttpClient sampler will reject attempts to use it for POST or PUT.
-        <b>Warning: see below for information on cookie and header handling.</b>
+        Should only be used for <code>GET</code> and <code>HEAD</code> requests.
+        The HttpClient sampler will reject attempts to use it for <code>POST</code> or <code>PUT</code>.
+        <note>Warning: see below for information on cookie and header handling.</note>
         </property>
         <property name="Follow Redirects" required="No">
-        This only has any effect if "Redirect Automatically" is not enabled.
+        This only has any effect if "<code>Redirect Automatically</code>" is not enabled.
         If set, the JMeter sampler will check if the response is a redirect and follow it if so.
         The initial redirect and further responses will appear as additional samples.
         The URL and data fields of the parent sample will be taken from the final (non-redirected)
         sample, but the parent byte count and elapsed time include all samples.
         The latency is taken from the initial response (versions of JMeter after 2.3.4 - previously it was zero).
-        Note that the HttpClient sampler may log the following message:<br/>
-        "Redirect requested but followRedirects is disabled"<br/>
+        Note that the HttpClient sampler may log the following message:
+        <source>"Redirect requested but followRedirects is disabled"</source>
         This can be ignored.
         <br/>
-        In versions after 2.3.4, JMeter will collapse paths of the form '/../segment' in
-        both absolute and relative redirect URLs. For example http://host/one/../two => http://host/two.
+        In versions after 2.3.4, JMeter will collapse paths of the form '<code>/../segment</code>' in
+        both absolute and relative redirect URLs. For example <code>http://host/one/../two</code> will be collapsed into <code>http://host/two</code>.
         If necessary, this behaviour can be suppressed by setting the JMeter property
         <code>httpsampler.redirect.removeslashdotdot=false</code>
         </property>
-        <property name="Use KeepAlive" required="No">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
+        <property name="Use KeepAlive" required="No">JMeter sets the Connection: <code>keep-alive</code> header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control.
                   It does work with the Apache HttpComponents HttpClient implementations.</property>
         <property name="Use multipart/form-data for HTTP POST" required="No">
-        Use a multipart/form-data or application/x-www-form-urlencoded post request
+        Use a <code>multipart/form-data</code> or <code>application/x-www-form-urlencoded</code> post request
         </property>
         <property name="Browser-compatible headers" required="No">
-        When using multipart/form-data, this suppresses the Content-Type and 
-        Content-Transfer-Encoding headers; only the Content-Disposition header is sent.
+        When using <code>multipart/form-data</code>, this suppresses the <code>Content-Type</code> and
+        <code>Content-Transfer-Encoding</code> headers; only the <code>Content-Disposition</code> header is sent.
         </property>
-        <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
+        <property name="Path" required="Yes">The path to resource (for example, <code>/servlets/myServlet</code>). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.
-<b>
-As a special case, if the path starts with "http://" or "https://" then this is used as the full URL.
-</b>
-In this case, the server, port and protocol fields are ignored; parameters are also ignored for GET and DELETE methods.
-Also please note that the path is not encoded - apart from replacing spaces with %20 -
-so unsafe characters may need to be encoded to avoid errors such as URISyntaxException.
+<note>
+As a special case, if the path starts with "<code>http://</code>" or "<code>https://</code>" then this is used as the full URL.
+</note>
+In this case, the server, port and protocol fields are ignored; parameters are also ignored for <code>GET</code> and <code>DELETE</code> methods.
+Also please note that the path is not encoded - apart from replacing spaces with <code>%20</code> -
+so unsafe characters may need to be encoded to avoid errors such as <code>URISyntaxException</code>.
 </property>
         <property name="Send Parameters With the Request" required="No">The query string will
-        be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
-        <i>value</i>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
+        be generated from the list of parameters you provide.  Each parameter has a <code>name</code> and
+        <code>value</code>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
         don't expect an equals when the value is the empty string).  The query string will be generated in the correct fashion, depending on
-        the choice of "Method" you made (ie if you chose GET or DELETE, the query string will be
-        appended to the URL, if POST or PUT, then it will be sent separately).  Also, if you are
+        the choice of "Method" you made (ie if you chose <code>GET</code> or <code>DELETE</code>, the query string will be
+        appended to the URL, if <code>POST</code> or <code>PUT</code>, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
         <b>See below for some further information on parameter handling.</b>
         <p>
         Additionally, you can specify whether each parameter should be URL encoded.  If you are not sure what this
         means, it is probably best to select it.  If your values contain characters such as the following then encoding is usually required.:
+        </p>
         <ul>
             <li>ASCII Control Chars</li>
             <li>Non-ASCII characters</li>
-            <li>Reserved characters:URLs use some characters for special use in defining their syntax. When these characters are not used in their special role inside a URL, they need to be encoded, example : '$', '&amp;', '+', ',' , '/', ':', ';', '=', '?', '@'</li>
-            <li>Unsafe characters: Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should also always be encoded, example : ' ', '&lt;', '&gt;', '#', '%', ...</li>
+            <li>Reserved characters:URLs use some characters for special use in defining their syntax. When these characters are not used in their special role inside a URL, they need to be encoded, example : '<code>$</code>', '<code>&amp;</code>', '<code>+</code>', '<code>,</code>' , '<code>/</code>', '<code>:</code>', '<code>;</code>', '<code>=</code>', '<code>?</code>', '<code>@</code>'</li>
+            <li>Unsafe characters: Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should also always be encoded, example : '<code> </code>', '<code>&lt;</code>', '<code>&gt;</code>', '<code>#</code>', '<code>%</code>', ...</li>
         </ul>
-        </p>
         </property>
         <property name="File Path:" required="No">Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <p>
-        If it is a POST or PUT or PATCH request and there is a single file whose 'Parameter name' attribute (below) is omitted, 
+        If it is a <code>POST</code> or <code>PUT</code> or <code>PATCH</code> request and there is a single file whose 'Parameter name' attribute (below) is omitted, 
         then the file is sent as the entire body
-        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for POST requests
-        after version 2.2, and also for PUT requests after version 2.3.
+        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for <code>POST</code> requests
+        after version 2.2, and also for <code>PUT</code> requests after version 2.3.
         <b>See below for some further information on parameter handling.</b>
         </p>
         </property>
-        <property name="Parameter name:" required="No">Value of the "name" web request parameter.</property>
-        <property name="MIME Type" required="No">MIME type (for example, text/plain).
-        If it is a POST or PUT or PATCH request and either the 'name' attribute (below) are omitted or the request body is
+        <property name="Parameter name:" required="No">Value of the "<code>name</code>" web request parameter.</property>
+        <property name="MIME Type" required="No">MIME type (for example, <code>text/plain</code>).
+        If it is a <code>POST</code> or <code>PUT</code> or <code>PATCH</code> request and either the '<code>name</code>' attribute (below) are omitted or the request body is
         constructed from parameter values only, then the value of this field is used as the value of the
-        content-type request header.
+        <code>content-type</code> request header.
         </property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
@@ -322,8 +325,8 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
        </property>
         <property name="Embedded URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
-        So if you only want to download embedded resources from http://example.com/, use the expression:
-        http://example\.com/.*
+        So if you only want to download embedded resources from <code>http://example.com/</code>, use the expression:
+        <code>http://example\.com/.*</code>
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
         <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
@@ -334,8 +337,8 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <li>Select <i>IP/Hostname</i> to use a specific IP address or a (local) hostname</li>
         <li>Select <i>Device</i> to pick the first available address for that interface which
         this may be either IPv4 or IPv6</li>
-        <li>Select <i>Device IPv4</i>To select the IPv4 address of the device name (like eth0, lo, em0, etc.)</li>
-        <li>Select <i>Device IPv6</i>To select the IPv6 address of the device name (like eth0, lo, em0, etc.)</li>
+        <li>Select <i>Device IPv4</i> to select the IPv4 address of the device name (like <code>eth0</code>, <code>lo</code>, <code>em0</code>, etc.)</li>
+        <li>Select <i>Device IPv6</i> to select the IPv6 address of the device name (like <code>eth0</code>, <code>lo</code>, <code>em0</code>, etc.)</li>
         </ul>
         </property>
         <property name="Source address field" required="No">
@@ -343,30 +346,30 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         This property is used to enable IP Spoofing.
         It override the default local IP address for this sample.
         The JMeter host must have multiple IP addresses (i.e. IP aliases, network interfaces, devices).
-        The value can be a host name, IP address, or a network interface device such as "eth0" or "lo" or "wlan0".<br></br>
-        If the property <b>httpclient.localaddress</b> is defined, that is used for all HttpClient requests.
+        The value can be a host name, IP address, or a network interface device such as "<code>eth0</code>" or "<code>lo</code>" or "<code>wlan0</code>".<br></br>
+        If the property <code>httpclient.localaddress</code> is defined, that is used for all HttpClient requests.
         </property>
 </properties>
-<p>
-<b>N.B.</b> when using Automatic Redirection, cookies are only sent for the initial URL.
+<note>
+When using Automatic Redirection, cookies are only sent for the initial URL.
 This can cause unexpected behaviour for web-sites that redirect to a local server.
-E.g. if www.example.com redirects to www.example.co.uk.
+E.g. if <code>www.example.com</code> redirects to <code>www.example.co.uk</code>.
 In this case the server will probably return cookies for both URLs, but JMeter will only see the cookies for the last
-host, i.e. www.example.co.uk. If the next request in the test plan uses www.example.com, 
-rather than www.example.co.uk, it will not get the correct cookies.
+host, i.e. <code>www.example.co.uk</code>. If the next request in the test plan uses <code>www.example.com</code>,
+rather than <code>www.example.co.uk</code>, it will not get the correct cookies.
 Likewise, Headers are sent for the initial request, and won't be sent for the redirect.
 This is generally only a problem for manually created test plans,
 as a test plan created using a recorder would continue from the redirected URL.
-</p>
+</note>
 <p>
 <b>Parameter Handling:</b><br></br>
-For the POST and PUT method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
+For the <code>POST</code> and <code>PUT</code> method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
 then the body is created by concatenating all the value(s) of the parameters.
 Note that the values are concatenated without adding any end-of-line characters.
-These can be added by using the __char() function in the value fields.
+These can be added by using the <code>__char()</code> function in the value fields.
 This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
-See also the MIME Type above how you can control the content-type request header that is sent.
+See also the MIME Type above how you can control the <code>content-type</code> request header that is sent.
 <br></br>
 For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
@@ -375,18 +378,19 @@ then the parameter is ignored. This allows the use of optional parameters define
 <br/>
 <p>Since JMeter 2.6, you have the option to switch to Post Body when a request has only unnamed parameters
 (or no parameters at all).
-This option is useful in the following cases (amongst others):
+This option is useful in the following cases (amongst others):</p>
 <ul>
 <li>GWT RPC HTTP Request</li>
 <li>JSON REST HTTP Request</li>
 <li>XML REST HTTP Request</li>
 <li>SOAP HTTP Request</li>
 </ul>
+<note>
 Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the Post Body tab of data.
-</p>
+</note>
 <p>
-In Post Body mode, each line will be sent with CRLF appended, apart from the last line.
-To send a CRLF after the last line of data, just ensure that there is an empty line following it.
+In Post Body mode, each line will be sent with <code>CRLF</code> appended, apart from the last line.
+To send a <code>CRLF</code> after the last line of data, just ensure that there is an empty line following it.
 (This cannot be seen, except by noting whether the cursor can be placed on the subsequent line.)
 </p>
 <figure width="902" height="421" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
@@ -395,75 +399,76 @@ To send a CRLF after the last line of data, just ensure that there is an empty l
 
 <p>
 <b>Method Handling:</b><br></br>
-The POST, PUT and PATCH request methods work similarly, except that the PUT and PATCH methods do not support multipart requests
+The <code>POST</code>, <code>PUT</code> and <code>PATCH</code> request methods work similarly, except that the <code>PUT</code> and <code>PATCH</code> methods do not support multipart requests
 or file upload.
-The PUT and PATCH method body must be provided as one of the following:
+The <code>PUT</code> and <code>PATCH</code> method body must be provided as one of the following:</p>
 <ul>
 <li>define the body as a file with empty Parameter name field; in which case the MIME Type is used as the Content-Type</li>
 <li>define the body as parameter value(s) with no name</li>
 <li>use the Post Body tab</li>
 </ul>
-If you define any parameters with a name in either the sampler or Http
+<p>
+If you define any parameters with a name in either the sampler or HTTP
 defaults then nothing is sent.
-PUT and PATCH require a Content-Type. 
+<code>PUT</code> and <code>PATCH</code> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
-The GET and DELETE request methods work similarly to each other.
+The <code>GET</code> and <code>DELETE</code> request methods work similarly to each other.
 </p>
-<p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
+<p>Upto and including JMeter 2.1.1, only responses with the content-type "<code>text/html</code>" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
-JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is a list of parser ids,
- e.g. <b>htmlParser</b> and <b>wmlParser</b>. For each id found, JMeter checks two further properties:</p>
+JMeter 2.1.2 introduces the a new property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
+ e.g. <code>htmlParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
  <ul>
- <li>id.types - a list of content types</li>
- <li>id.className - the parser to be used to extract the embedded resources</li>
+ <li><code>id.types</code> - a list of content types</li>
+ <li><code>id.className</code> - the parser to be used to extract the embedded resources</li>
  </ul>
- <p>See jmeter.properties file for the details of the settings. 
- If the HTTPResponse.parser property is not set, JMeter reverts to the previous behaviour,
- i.e. only text/html responses will be scanned</p>
+ <p>See <code>jmeter.properties</code> file for the details of the settings.
+ If the <code>HTTPResponse.parser</code> property is not set, JMeter reverts to the previous behaviour,
+ i.e. only <code>text/html</code> responses will be scanned</p>
 <b>Emulating slow connections:</b><br></br>
-HttpClient31, HttpClient4 and Java Sampler support emulation of slow connections; see the following entries in jmeter.properties:
-<pre>
-# Define characters per second > 0 to emulate slow connections
+<code>HttpClient31</code>, <code>HttpClient4</code> and <code>Java</code> Sampler support emulation of slow connections; see the following entries in <code>jmeter.properties</code>:
+<source>
+# Define characters per second &gt; 0 to emulate slow connections
 #httpclient.socket.http.cps=0
 #httpclient.socket.https.cps=0
-</pre>
+</source>
 <p><b>Response size calculation</b><br></br>
 Optional properties to allow change the method to get response size:<br></br>
 <ul><li>Gets the real network size in bytes for the body response
-<pre>sampleresult.getbytes.body_real_size=true</pre></li>
+<source>sampleresult.getbytes.body_real_size=true</source></li>
 <li>Add HTTP headers to full response size
-<pre>sampleresult.getbytes.headers_size=true</pre></li></ul>
+<source>sampleresult.getbytes.headers_size=true</source></li></ul>
 
 <note>
-The Java and HttpClient3 inplementations do not include transport overhead such as
+The <code>Java</code> and <code>HttpClient3</code> inplementations do not include transport overhead such as
 chunk headers in the response body size.<br></br>
-The HttpClient4 implementation does include the overhead in the response body size,
+The <code>HttpClient4</code> implementation does include the overhead in the response body size,
 so the value may be greater than the number of bytes in the response content.
 </note>
 
-<note>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
-<br></br>To return to settings before version 2.5, set the two properties to false.</note>
+<note>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/deflate mode).
+<br></br>To return to settings before version 2.5, set the two properties to <code>false</code>.</note>
 </p>
 <p>
 <b>Retry handling</b><br></br>
-In version 2.5 of JMeter, the HttpClient4 and Commons HttpClient 3.1 samplers used the default retry count, which was 3.
-In later versions, the retry count has been set to 1, which is what the Java implementation appears to do.
+In version 2.5 of JMeter, the HttpClient4 and Commons HttpClient 3.1 samplers used the default retry count, which was <code>3</code>.
+In later versions, the retry count has been set to <code>1</code>, which is what the Java implementation appears to do.
 The retry count can be overridden by setting the relevant JMeter property, for example:
-<pre>
+<source>
 httpclient4.retrycount=3
 httpclient3.retrycount=3
-</pre>
+</source>
 </p>
 <p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br></br>
-You may encounter the following error: <i>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</i>
+You may encounter the following error: <code>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</code>
  if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
- algorithm using MD2 (like md2WithRSAEncryption) or with a SSL certificate with a size lower than 1024 bits.
+ algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
 </p><p>
 This error is related to increased security in Java 7 version u16 (MD2) and version u40 (Certificate size lower than 1024 bits), and Java 8 too.
 </p><p>
-To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing 
-the Java <b>jdk.certpath.disabledAlgorithms</b> property. Remove the MD2 value or the constraint on size, depending on your case.
+To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
+the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.
 </p><p>
 This property is in this file:
 <pre>JAVA_HOME/jre/lib/security/java.security</pre>
