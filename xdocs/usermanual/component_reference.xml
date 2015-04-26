@@ -799,7 +799,7 @@ Webservice Soap Sampler assumes that empty response means failure.
 
   <p>There are four test scenarios of testing LDAP. The tests are given below:</p>
   <ol>
-    <li>Add Test</li>
+    <li>Add Test
       <ol>
         <li>Inbuilt test :
           <p>This will add a pre-defined entry in the LDAP Server and calculate
@@ -814,7 +814,8 @@ Webservice Soap Sampler assumes that empty response means failure.
           test.</p>
         </li>
       </ol>
-    <li>Modify Test</li>
+    </li>
+    <li>Modify Test
       <ol>
         <li>Inbuilt test :
           <p>This will create a pre-defined entry first, then will modify the
@@ -829,7 +830,8 @@ Webservice Soap Sampler assumes that empty response means failure.
           Server.</p>
         </li>
       </ol>
-    <li>Search Test</li>
+    </li>
+    <li>Search Test
       <ol>
         <li>Inbuilt test :
           <p>This will create the entry first, then will search if the attributes
@@ -842,7 +844,8 @@ Webservice Soap Sampler assumes that empty response means failure.
           Server. The execution time is  calculated.</p>
         </li>
       </ol>
-    <li>Delete Test</li>
+    </li>
+    <li>Delete Test
       <ol>
         <li>Inbuilt test :
           <p>This will create a pre-defined entry first, then it will be deleted
@@ -853,6 +856,7 @@ Webservice Soap Sampler assumes that empty response means failure.
           should be available in the LDAP Server. The execution time is calculated.</p>
         </li>
       </ol>
+    </li>
   </ol>
   <properties>
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
