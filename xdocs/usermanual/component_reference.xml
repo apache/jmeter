@@ -861,19 +861,21 @@ Webservice Soap Sampler assumes that empty response means failure.
   <properties>
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     <property name="Server Name or IP" required="Yes">Domain name or IP address of the LDAP server.
-      JMeter assumes the LDAP server is listening on the default port(389).</property>
-    <property name="Port" required="Yes">default port(389).</property>
-    <property name="root DN" required="Yes">DN for the server to communicate</property>
+      JMeter assumes the LDAP server is listening on the default port (<code>389</code>).</property>
+    <property name="Port" required="Yes">Port to connect to (default is <code>389</code>).</property>
+    <property name="root DN" required="Yes">Base DN to use for ldap operations</property>
     <property name="Username" required="Usually">LDAP server username.</property>
     <property name="Password" required="Usually">LDAP server password. (N.B. this is stored unencrypted in the test plan)</property>
-    <property name="Entry DN" required="Yes">the name of the context to create or Modify; may not be empty Example: do you want to add cn=apache,ou=test
-      you have to add in table name=cn, value=apache
+    <property name="Entry DN" required="Yes, if User Defined Test and Add Test or Modify Test is selected">the name of the context to create or Modify; may not be empty.
+     <note>You have to set the right attributes of the object yourself. So if you want to add <code>cn=apache,ou=test</code>
+      you have to add in the table <code>name</code> and <code>value</code> to <code>cn</code> and <code>apache</code>.
+     </note>
     </property>
-    <property name="Delete" required="Yes">the name of the context to Delete; may not be empty</property>
-    <property name="Search base" required="Yes">the name of the context or object to search</property>
-    <property name="Search filter" required="Yes"> the filter expression to use for the search; may not be null</property>
-    <property name="add test" required="Yes"> this name, value pair to added in the given context object</property>
-    <property name="modify test" required="Yes"> this name, value pair to add or modify in the given context object</property>
+    <property name="Delete" required="Yes, if User Defined Test and Delete Test is selected">the name of the context to Delete; may not be empty</property>
+    <property name="Search base" required="Yes, if User Defined Test and Search Test is selected">the name of the context or object to search</property>
+    <property name="Search filter" required="Yes, if User Defined Test and Search Test is selected"> the filter expression to use for the search; may not be null</property>
+    <property name="add test" required="Yes, if User Defined Test and add Test is selected">Use these <code>name</code>, <code>value</code> pairs for creation of the new object in the given context</property>
+    <property name="modify test" required="Yes, if User Defined Test and Modify Test is selected">Use these <code>name</code>, <code>value</code> pairs for modification of the given context object</property>
   </properties>
 
   <links>
