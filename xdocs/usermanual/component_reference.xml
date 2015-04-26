@@ -730,18 +730,18 @@ See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up
  <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
  cache is checked, it will not iterate to the next value. That means all the requests
  will use the first value.</p>
- <p>Make sure you use &amp;lt;soap:Envelope rather than &amp;lt;Envelope. For example:</p>
- <pre>
-&amp;lt;?xml version="1.0" encoding="utf-8"?>
-&amp;lt;soap:Envelope 
+ <p>Make sure you use <code>&lt;soap:Envelope</code> rather than <code>&lt;Envelope</code>. For example:</p>
+ <source>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;soap:Envelope 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-&amp;lt;soap:Body>
-&amp;lt;foo xmlns="http://clients-xlmns"/>
-&amp;lt;/soap:Body>
-&amp;lt;/soap:Envelope>
-</pre>
+xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+&lt;soap:Body&gt;
+&lt;foo xmlns="http://clients-xlmns"/&gt;
+&lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;
+</source>
 <note>The SOAP library that is used does not support SOAP 1.2, only SOAP 1.1. 
 Also the library does not provide access to the HTTP response code (e.g. 200) or message (e.g. OK). 
 To get round this, versions of JMeter after 2.3.2 check the returned message length.
