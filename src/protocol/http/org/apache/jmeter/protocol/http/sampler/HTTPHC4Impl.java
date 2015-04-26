@@ -411,15 +411,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
         } catch (IOException e) {
-            res.sampleEnd();
             log.debug("IOException", e);
-           // pick up headers if failed to execute the request
+            if (res.getEndTime() == 0) {
+                res.sampleEnd();
+            }
+            // pick up headers if failed to execute the request
+            if (res.getRequestHeaders() != null) {
+                log.debug("Overwriting request old headers: " + res.getRequestHeaders());
+            }
             res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
             errorResult(e, res);
             return res;
         } catch (RuntimeException e) {
-            res.sampleEnd();
             log.debug("RuntimeException", e);
+            if (res.getEndTime() == 0) {
+                res.sampleEnd();
+            }
             errorResult(e, res);
             return res;
         } finally {
