@@ -132,6 +132,10 @@ $value.content
 <img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align"/>
 #end
 
+#macro ( code $value)
+<tt class="code">$escape.getText($value.getText())</tt>
+#end
+
 #macro ( source $value)
 <div align="left">
 <table cellspacing="4" cellpadding="0" border="0">
@@ -268,6 +272,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #example ($node)
 #elseif ($node.getName().equals("source"))
 #source ($node)
+#elseif ($node.getName().equals("code"))
+#code ($node)
 #elseif ($node.getName().equals("table"))
 #table ($node)
 #elseif ($node.getName().equals("component"))
@@ -528,6 +534,9 @@ $comp.getAttributeValue("index")
 #set ($id = $root.getAttributeValue("id"))
 
 <title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
+<style>
+  .code { font-weight: bold; }
+</style>
 </head>
 
 <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">
