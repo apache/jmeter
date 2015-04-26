@@ -801,13 +801,13 @@ Webservice Soap Sampler assumes that empty response means failure.
   <ol>
     <li>Add Test
       <ol>
-        <li>Inbuilt test :
+        <li>Inbuilt test:
           <p>This will add a pre-defined entry in the LDAP Server and calculate
           the execution time. After execution of the test, the created entry will be
           deleted from the LDAP
           Server.</p>
         </li>
-        <li>User defined test :
+        <li>User defined test:
           <p>This will add the entry in the LDAP Server. User has to enter all the
           attributes in the table.The entries are collected from the table to add. The
           execution time is calculated. The created entry will not be deleted after the
@@ -817,13 +817,13 @@ Webservice Soap Sampler assumes that empty response means failure.
     </li>
     <li>Modify Test
       <ol>
-        <li>Inbuilt test :
+        <li>Inbuilt test:
           <p>This will create a pre-defined entry first, then will modify the
           created entry in the LDAP Server.And calculate the execution time. After
           execution
           of the test, the created entry will be deleted from the LDAP Server.</p>
         </li>
-        <li>User defined test
+        <li>User defined test:
           <p>This will modify the entry in the LDAP Server. User has to enter all the
           attributes in the table. The entries are collected from the table to modify.
           The execution time is calculated. The entry will not be deleted from the LDAP
@@ -833,12 +833,12 @@ Webservice Soap Sampler assumes that empty response means failure.
     </li>
     <li>Search Test
       <ol>
-        <li>Inbuilt test :
+        <li>Inbuilt test:
           <p>This will create the entry first, then will search if the attributes
           are available. It calculates the execution time of the search query. At the
           end of  the execution,created entry will be deleted from the LDAP Server.</p>
         </li>
-        <li>User defined test
+        <li>User defined test:
           <p>This will search the user defined entry(Search filter) in the Search
           base (again, defined by the user). The entries should be available in the LDAP
           Server. The execution time is  calculated.</p>
@@ -847,11 +847,11 @@ Webservice Soap Sampler assumes that empty response means failure.
     </li>
     <li>Delete Test
       <ol>
-        <li>Inbuilt test :
+        <li>Inbuilt test:
           <p>This will create a pre-defined entry first, then it will be deleted
           from the LDAP Server. The execution time is calculated.</p>
         </li>
-        <li>User defined test
+        <li>User defined test:
           <p>This will delete the user-defined entry in the LDAP Server. The entries
           should be available in the LDAP Server. The execution time is calculated.</p>
         </li>
