@@ -58,7 +58,7 @@
     <p>
     Samplers perform the actual work of JMeter.
     Each sampler (except <complink name="Test Action" />) generates one or more sample results.
-    The sample results have various attributes (success/fail, elapsed time, data size etc) and can be viewed in the various listeners.
+    The sample results have various attributes (success/fail, elapsed time, data size etc. and can be viewed in the various listeners.
     </p>
 </description>
 <component name="FTP Request" index="&sect-num;.1.1" width="861" height="278" screenshot="ftptest/ftp-request.png">
@@ -81,10 +81,10 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         <property name="Local File:" required="Yes, if uploading (*)">File to upload, or destination for downloads (defaults to remote file name).</property>
         <property name="Local File Contents:" required="Yes, if uploading (*)">Provides the contents for the upload, overrides the Local File property.</property>
         <property name="get(RETR) / put(STOR)" required="Yes">Whether to retrieve or upload a file.</property>
-        <property name="Use Binary mode?" required="Yes">Check this to use Binary mode (default Ascii)</property>
+        <property name="Use Binary mode?" required="Yes">Check this to use Binary mode (default ASCII)</property>
         <property name="Save File in Response?" required="Yes, if downloading">
         Whether to store contents of retrieved file in response data.
-        If the mode is Ascii, then the contents will be visible in the <complink name="View Results Tree"/>.
+        If the mode is ASCII, then the contents will be visible in the <complink name="View Results Tree"/>.
         </property>
         <property name="Username" required="Usually">FTP account username.</property>
         <property name="Password" required="Usually">FTP account password. N.B. This will be visible in the test plan.</property>
@@ -206,7 +206,7 @@ https.default.protocol=SSLv3
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server" required="Yes, unless provided by HTTP Request Defaults">
-            Domain name or IP address of the web server. e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.]
+            Domain name or IP address of the web server, e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.]
             Note: in JMeter 2.5 (and later) if the "<code>Host</code>" header is defined in a Header Manager, then this will be used
             as the virtual host name.
         </property>
@@ -280,7 +280,7 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         be generated from the list of parameters you provide.  Each parameter has a <code>name</code> and
         <code>value</code>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
         don't expect an equals when the value is the empty string).  The query string will be generated in the correct fashion, depending on
-        the choice of "Method" you made (ie if you chose <code>GET</code> or <code>DELETE</code>, the query string will be
+        the choice of "Method" you made (i.e. if you chose <code>GET</code> or <code>DELETE</code>, the query string will be
         appended to the URL, if <code>POST</code> or <code>PUT</code>, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
@@ -414,9 +414,9 @@ defaults then nothing is sent.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
 The <code>GET</code> and <code>DELETE</code> request methods work similarly to each other.
 </p>
-<p>Upto and including JMeter 2.1.1, only responses with the content-type "<code>text/html</code>" were scanned for
+<p>Up to and including JMeter 2.1.1, only responses with the content-type "<code>text/html</code>" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
-JMeter 2.1.2 introduces the a new property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
+JMeter 2.1.2 introduces the new property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
  e.g. <code>htmlParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
  <ul>
  <li><code>id.types</code> - a list of content types</li>
@@ -606,7 +606,7 @@ the additional variables for rows four, five and six will be removed.
         <complink name="JDBC Connection Configuration"/>
 </links>
 <note>Versions of JMeter after 2.3.2 use UTF-8 as the character encoding. Previously the platform default was used.</note>
-<note>Ensure Variable Name is unique accross Test Plan.</note>
+<note>Ensure Variable Name is unique across Test Plan.</note>
 </component>
 
 <component name="Java Request" index="&sect-num;.1.4"  width="563" height="347" screenshot="java_request.png">
@@ -653,7 +653,7 @@ This will not have any impact on existing Test plans.
         </property>
     </properties>
 
-    <p>The following parameters apply additionaly to the <code>JavaTest</code> implementation:</p>
+    <p>The following parameters apply additionally to the <code>JavaTest</code> implementation:</p>
 
     <properties>
         <property name="Label" required="No">The label to use. If provided, overrides <code>Name</code></property>
@@ -772,7 +772,7 @@ If this is zero, then the request is marked as failed.
         When using external files, setting this causes the file to be processed once and caches the result.
         This may use a lot of memory if there are many different large files.
         </property>
-        <property name="Read SOAP Response" required="No">Read the SOAP reponse (consumes performance). Permit to have assertions or post-processors</property>
+        <property name="Read SOAP Response" required="No">Read the SOAP response (consumes performance). Permit to have assertions or post-processors</property>
         <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
         <property name="Server Name or IP" required="No">Proxy hostname</property>
         <property name="Port Number" required="No">Proxy host port</property>
@@ -979,7 +979,7 @@ Webservice Soap Sampler assumes that empty response means failure.
       <property name="Scope" required="No">Use 0 for baseobject-, 1 for onelevel- and 2 for a subtree search. (Default=0)</property>
       <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=0, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode 4</property>
       <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in miliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is 0, which means no limit)</property>
-      <property name="Attributes" required="No">Specify the attributes you want to have returned, seperated by a semicolon. An empty field will return all attributes</property>
+      <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
       <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=false</property>
       <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
      </properties>
@@ -1210,7 +1210,7 @@ The following script will show the values of all the variables in the ResponseDa
 return getVariables();
 </pre>
 <p>
-For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> etc) please check the Javadoc or the source code.
+For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> etc. please check the Javadoc or the source code.
 Beware however that misuse of any methods can cause subtle faults that may be difficult to find ...
 </p>
 </component>
@@ -1309,7 +1309,7 @@ To benefit from this feature:
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
     <li>Or Use Script Text and fill in script cache key property, ensure it is unique across Test Plan as JMeter will use it to cache result of compilation.
     <note>When using this feature, ensure you script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
-    <note>To benefit fomr Caching and compilation, language engine used for scripting must implement JSR223 Compilable interface (Groovy is one of these, java, beanshell and javascript are not)</note>
+    <note>To benefit from Caching and compilation, language engine used for scripting must implement JSR223 Compilable interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
 </ul>
 Cache size is controlled by the following jmeter property (jmeter.properties):
@@ -1398,7 +1398,7 @@ e.g. props.get("START.HMS"); props.put("PROP1","1234");
         that up to the suffix. If any such text is found, it is used to set the response code.
         The response message is then fetched from the properties file (if provided).
         <br></br>
-        For example, if the prefix = "[" and the suffix = "]", then the following repsonse:
+        For example, if the prefix = "[" and the suffix = "]", then the following response:
         <br></br>
         [J28] XI123,23,GBP,CR
         <br></br>
@@ -1505,7 +1505,7 @@ The Object message is implemented since 2.7 and works as follow:
 <ul>
 <li>Put the JAR that contains your object and its dependencies in jmeter_home/lib/ folder</li>
 <li>Serialize your object as XML using XStream</li>
-<li>Either put result in a file suffixed with .txt or .obj or put XML content direclty in Text Area</li>  
+<li>Either put result in a file suffixed with .txt or .obj or put XML content directly in Text Area</li>  
 </ul>
 Note that if message is in a file, replacement of properties will not occur while it will if you use Text Area.
 </note>
@@ -1671,7 +1671,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
   </property>
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
-      time, the specific testcase failes and the specific reply message received after the timeout is discarded.
+      time, the specific testcase fails and the specific reply message received after the timeout is discarded.
       Default value is 2000 ms.
   </property>
   <property name="Expiration" required="No">
@@ -1751,8 +1751,8 @@ If you use setUp and tearDown, make sure the methods are declared public. If you
 <br></br>
 Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.
 <ul>
-<li>Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static memebers.</li>
-<li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a descrete operation, it makes it easier to combine test methods to create new test plans.</li>
+<li>Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static members.</li>
+<li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a discrete operation, it makes it easier to combine test methods to create new test plans.</li>
 <li>Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.</li>
 <li>If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.</li>
 <li>Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.</li>
@@ -1851,7 +1851,7 @@ The current implementation is quite basic, and is mainly intended for debugging 
 <component name="Test Action" index="&sect-num;.1.18" width="467" height="184" screenshot="test_action.png">
 <description>
 The Test Action sampler is a sampler that is intended for use in a conditional controller.
-Rather than generate a sample, the test element eithers pauses or stops the selected target.
+Rather than generate a sample, the test element either pauses or stops the selected target.
 <p>This sampler can also be useful in conjunction with the Transaction Controller, as it allows
 pauses to be included without needing to generate a sample. 
 For variable delays, set the pause time to zero, and add a Timer as a child.</p>
@@ -1877,7 +1877,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 <description>
 <p>
 The SMTP Sampler can send mail messages using SMTP/SMTPS protocol. 
-It is possible to set security propocols for the connection (SSL and TLS), as well as user authentication. 
+It is possible to set security protocols for the connection (SSL and TLS), as well as user authentication. 
 If a security protocol is used a verification on the server certificate will occur. <br></br>
 Two alternatives to handle this verification are available:<br></br>
 </p>
@@ -2008,7 +2008,7 @@ MongoDB Script is more suitable for functionnal testing or test setup (setup/tea
 <links>
         <complink name="MongoDB Source Config"/>
 </links>
-<note>Ensure Variable Name is unique accross Test Plan.</note>
+<note>Ensure Variable Name is unique across Test Plan.</note>
 </component>
 
 <a href="#">^</a>
@@ -2092,7 +2092,7 @@ during further iterations through the test plan.</p>
 
 <p>The Once Only Controller will now execute always during the first iteration of any looping parent controller.  
 Thus, if the Once Only Controller is placed under a Loop Controller specified to loop 5 times, then the Once Only Controller will execute only on the first iteration through the Loop Controller 
-(ie, every 5 times).  
+(i.e. every 5 times).  
 Note this means the Once Only Controller will still behave as previously expected if put under a Thread Group (runs only once per test per Thread), 
 but now the user has more flexibility in the use of the Once Only Controller.</p>
 
@@ -2232,8 +2232,8 @@ setting is reset when a parent Loop Controller restarts.
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Execution Style" required="Yes">Whether the controller will run in percent executions or total executions mode.</property>
-        <property name="Throughput" required="Yes">A number.  for percent execution mode, a number from 0-100 that indicates the percentage of times the controller will execute.  "50" means the controller will execute during half the iterations throught the test plan.  for total execution mode, the number indicates the total number of times the controller will execute.</property>
-        <property name="Per User" required="No">If checked, per user will cause the controller to calculate whether it should execute on a per user (per thread) basis.  if unchecked, then the calculation will be global for all users.  for example, if using total execution mode, and uncheck "per user", then the number given for throughput will be the total number of executions made.  if "per user" is checked, then the total number of executions would be the number of users times the number given for throughput.</property>
+        <property name="Throughput" required="Yes">A number.  For percent execution mode, a number from 0-100 that indicates the percentage of times the controller will execute.  "50" means the controller will execute during half the iterations through the test plan.  For total execution mode, the number indicates the total number of times the controller will execute.</property>
+        <property name="Per User" required="No">If checked, per user will cause the controller to calculate whether it should execute on a per user (per thread) basis.  If unchecked, then the calculation will be global for all users.  For example, if using total execution mode, and uncheck "per user", then the number given for throughput will be the total number of executions made.  If "per user" is checked, then the total number of executions would be the number of users times the number given for throughput.</property>
 </properties>
 
 </component>
@@ -2288,7 +2288,7 @@ setting is reset when a parent Loop Controller restarts.
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
     <property name="Condition (default Javascript)" required="Yes">By default the condition is interpreted as <b>Javascript</b> code that returns "true" or "false",
-    but this can be overriden (see below)</property>
+    but this can be overridden (see below)</property>
     <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "true" (case is ignored).
     For example, <code>${FOUND}</code> or <code>${__jexl(${VAR} > 100)}</code>.
     Unlike the Javascript case, the condition is only checked to see if it matches "true" (case is ignored). 
@@ -2465,7 +2465,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.
 </p>
 <p>
-A test plan fragment consists of a Controller and all the test elements (samplers etc) contained in it. 
+A test plan fragment consists of a Controller and all the test elements (samplers etc. contained in it. 
 The fragment can be located in any Thread Group, or on the <complink name="WorkBench" />.
 If the fragment is located in a Thread Group, then its Controller can be disabled to prevent the fragment being run
 except by the Module Controller. 
@@ -2563,7 +2563,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
         Also, the sub-samples do not appear in CSV log files, but they can be saved to XML files.
         </p>
         <note>
-        In parent mode, Assertions (etc) can be added to the Transaction Controller.
+        In parent mode, Assertions (etc.) can be added to the Transaction Controller.
         However by default they will be applied to both the individual samples and the overall transaction sample.
         To limit the scope of the Assertions, use a Simple Controller to contain the samples, and add the Assertions
         to the Simple Controller.
@@ -2599,7 +2599,7 @@ be saved under the Recording Controller.</p>
 
 <component name="Critical Section Controller" index="&sect-num;.2.17" width="469" height="129" screenshot="logic-controller/critical-section-controller.png">
 <description>
-<p>The Critical Section Controller ensures that its children elements (samplers/controllers, etc) will be executed
+<p>The Critical Section Controller ensures that its children elements (samplers/controllers, etc.) will be executed
 by only one thread as a named lock will be taken before executing children of controller.</p>
 </description>
 <p>
@@ -2697,7 +2697,7 @@ see the <a href="listeners.html#csvlogformat">CSV log</a> format or
 the <a href="listeners.html#xmlformat2.1">XML log</a> format.
 </p>
 <note>The entries in jmeter.properties are used to define the defaults; 
-these can be overriden for individual listeners by using the Configure button,
+these can be overridden for individual listeners by using the Configure button,
 as shown below. 
 The settings in jmeter.properties also apply to the listener that is added
 by using the -l command-line flag.
@@ -2956,7 +2956,7 @@ test.  For each request, it totals the response information and provides request
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
 Once the test is done, the throughput is the actual through for the duration of the entire test.
 <p>
-The thoughput is calculated from the point of view of the sampler target 
+The throughput is calculated from the point of view of the sampler target 
 (e.g. the remote server in the case of HTTP samples).
 JMeter takes into account the total time over which the requests have been generated.
 If other samplers and timers are in the same thread, these will increase the total time,
@@ -3105,7 +3105,7 @@ the graph as a PNG file.</description>
 <properties>
         <property name="Column settings" required="Yes"><ul>
         <li><u>Columns to display:</u> Choose the column(s) to display in graph.</li>
-        <li><u>Rectangles color:</u> Clic on right color rectangle open a popup dialog to choose a custom color for column.</li>
+        <li><u>Rectangles color:</u> Click on right color rectangle open a popup dialog to choose a custom color for column.</li>
         <li><u>Foreground color</u> Allow to change the value text color.</li>
         <li><u>Value font:</u> Allow to define font settings for the text.</li>
         <li><u>Draw outlines bar?</u> To draw or not the border line on bar chart</li>
@@ -3222,14 +3222,14 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>sampleEvent (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+<p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
 <component name="Summary Report" index="&sect-num;.3.16"  width="926" height="324" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
-The thoughput is calculated from the point of view of the sampler target 
+The throughput is calculated from the point of view of the sampler target 
 (e.g. the remote server in the case of HTTP samples).
 JMeter takes into account the total time over which the requests have been generated.
 If other samplers and timers are in the same thread, these will increase the total time,
@@ -3394,7 +3394,7 @@ label =   697 in  80.3s =    8.7/s Avg:  1136 Min:  1000 Max:  1250 Err:     0 (
 label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (0.00%)
 label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
 </pre>
-The "label" is the the name of the element.
+The "label" is the name of the element.
 The "+" means that the line is a delta line, i.e. shows the changes since the last output.<br/>
 The "=" means that the line is a totals line, i.e. it shows the running total.<br/>
 Entries in the jmeter log file also include time-stamps.
@@ -3483,7 +3483,7 @@ By default, a Graphite implementation is provided.
     <p>
     CSV Data Set Config is used to read lines from a file, and split them into variables.
     It is easier to use than the __CSVRead() and _StringFromFile() functions.
-    It is well suited to handling large numbers of variables, and is also useful for tesing with
+    It is well suited to handling large numbers of variables, and is also useful for testing with
     "random" and unique values.
     Generating unique random values at run-time is expensive in terms of CPU and memory, so just create the data
     in advance of the test. If necessary, the "random" data from the file can be used in conjunction with
@@ -3527,7 +3527,7 @@ By default, a Graphite implementation is provided.
     As this is after configuration processing is completed,
     they cannot be used for some configuration items - such as JDBC Config - 
     that process their contents at configuration time (see <bugzilla>40394</bugzilla>)
-    However the variables do work in the HTTP Auth Manager, as the username etc are processed at run-time.
+    However the variables do work in the HTTP Auth Manager, as the username etc. are processed at run-time.
     </note>
     <p>
     As a special case, the string "\t" (without quotes) in the delimiter field is treated as a Tab.
@@ -3564,7 +3564,7 @@ By default, a Graphite implementation is provided.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
   so they will retain their previous value (if any).</property>
   <property name="Allow quoted data?" required="Yes">Should the CSV file allow values to be quoted?
-  If enabled, then values can be enclosed in <code>"</code> - double-quote - allowing values to contain a delimeter.
+  If enabled, then values can be enclosed in <code>"</code> - double-quote - allowing values to contain a delimiter.
   </property>
   <property name="Recycle on EOF?" required="Yes">Should the file be re-read from the beginning on reaching EOF? (default is true)</property>
   <property name="Stop thread on EOF?" required="Yes">Should the thread be stopped on EOF, if Recycle is false? (default is false)</property>
@@ -3591,7 +3591,7 @@ By default, a Graphite implementation is provided.
     <note>DNS Cache Manager is designed for using in the root of Thread Group or Test Plan. Do not place it as child element of particular HTTP Sampler
     </note>
     <note>DNS Cache Manager working only with the HTTP request using HTTPClient4 implementation.</note>
-    <description><p>The DNS Cache Manager element allows to test applications, which have several servers behind load balancers (CDN, etc), 
+    <description><p>The DNS Cache Manager element allows to test applications, which have several servers behind load balancers (CDN, etc.), 
     when user receives content from different IP's. By default JMeter uses JVM DNS cache. That's why
     only one server from the cluster receives load. DNS Cache Manager resolves name for each thread separately each iteration and
     saves results of resolving to its internal DNS Cache, which independent from both JVM and OS DNS caches.
