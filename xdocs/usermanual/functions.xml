@@ -19,6 +19,9 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '20'>
+<!ENTITY ccedil   "&#x000E7;" >
+<!ENTITY eacute   "&#x000E9;" >
+<!ENTITY yen      "&#x000A5;" >
 ]>
 
 <document prev="component_reference.html" next="regular_expressions.html" id="$Id$">
@@ -298,8 +301,8 @@ replacement string") parsed by this function</li>
         <property name="First argument" required="Yes">The first argument is the regular expression
         to be applied to the response data.  It will grab all matches.  Any parts of this expression
         that you wish to use in your template string, be sure to surround in parentheses.  Example:
-        <code>&amp;lt;a href="(.*)"&amp;gt;</code>.  This will grab the value of the link and store it as the first group (there is
-        only 1 group).  Another example: <code>&amp;lt;input type="hidden" name="(.*)" value="(.*)"&amp;gt;</code>.  This will
+        <code>&lt;a href="(.*)"&gt;</code>.  This will grab the value of the link and store it as the first group (there is
+        only 1 group).  Another example: <code>&lt;input type="hidden" name="(.*)" value="(.*)"&gt;</code>.  This will
         grab the name as the first group, and the value as the second group.  These values can be used
         in your template string</property>
         <property name="Second argument" required="Yes">This is the template string that will replace
@@ -1078,7 +1081,7 @@ i.intValue(); // or use i.longValue()
 <br/>
 <code>${__char(13,10)}</code> = <code>${__char(0xD,0xA)}</code> = <code>${__char(015,012)}</code> = <code>CRLF</code>
 <br/>
-<code>${__char(165)}</code> = <code>&amp;#165;</code> (yen)
+<code>${__char(165)}</code> = <code>&yen;</code> (yen)
  </p>
 </component>
 
@@ -1113,12 +1116,12 @@ to a string containing the actual Unicode characters corresponding to the escape
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example, the string <code>"&amp;#38;lt;Fran&amp;#38;ccedil;ais&amp;#38;gt;"</code>
-will become <code>"&amp;lt;Fran&amp;ccedil;ais&amp;gt;"</code>.
+For example, the string <code>"&#38;lt;Fran&#38;ccedil;ais&#38;gt;"</code>
+will become <code>"&lt;Fran&ccedil;ais&gt;"</code>.
 </p>
 <p>
 If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
-e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>">&amp;zzzz;x"</code>.
+e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>"&gt;&amp;zzzz;x"</code>.
 </p>
     <p>
     Uses StringEscapeUtils#unescapeHtml(String) from Commons Lang.
@@ -1139,9 +1142,9 @@ Function which escapes the characters in a String using HTML entities.
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example,<code>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</code>
+For example,<code>&quot;bread&quot; &amp; &quot;butter&quot;</code>
 becomes:
-<code>&amp;#38;quot;bread&amp;#38;quot; &amp;#38;amp; &amp;#38;quot;butter&amp;#38;quot;</code>.
+<code>&#38;quot;bread&#38;quot; &#38;amp; &#38;quot;butter&#38;quot;</code>.
 </p>
     <p>
     Uses StringEscapeUtils#escapeHtml(String) from Commons Lang.
@@ -1163,7 +1166,7 @@ Note: use UTF-8 as the encoding scheme.
 </p>
 <p>
 For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code> would get converted to
- <code>Word &quot;school&quot; is &quot;&amp;eacute;cole&quot; in french</code>.
+ <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code>.
 </p>
     <p>
     Uses Java class <a href="http://docs.oracle.com/javase/6/docs/api/java/net/URLDecoder.html">URLDecoder</a>.
@@ -1183,7 +1186,7 @@ For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</c
 Function to encode a string to a application/x-www-form-urlencoded string.
 </p>
 <p>
-For example, the string <code>Word &quot;school&quot; is &quot;&amp;eacute;cole&quot; in french</code> would get converted to
+For example, the string <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code> would get converted to
  <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code>.
 </p>
     <p>
