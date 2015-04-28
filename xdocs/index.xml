@@ -15,15 +15,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-
+<!DOCTYPE document [
+  <!ENTITY trade "&#x02122;">
+]>
 <document>
   <properties>
-     <title>Apache JMeter&amp;trade;</title>
+     <title>Apache JMeter&trade;</title>
   </properties>
   <body>
-    <section name="Apache JMeter&amp;trade;">
+    <section name="Apache JMeter&trade;">
     <p>
-      The <b>Apache JMeter&amp;trade;</b> application is open source software,
+      The <b>Apache JMeter&trade;</b> application is open source software,
       a 100% pure Java application designed
       to load test functional behavior and measure performance.  It was
       originally designed for testing Web Applications but has
