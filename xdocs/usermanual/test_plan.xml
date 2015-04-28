@@ -291,7 +291,7 @@ you can indicate that the response is to contain the text, or that it should mat
 the whole response.</p>
 
 <p>You can add an assertion to any Sampler. For example, you can
-add an assertion to a HTTP Request that checks for the text, "&amp;lt;/HTML&amp;gt;".  JMeter
+add an assertion to a HTTP Request that checks for the text, "<code>&lt;/HTML&gt;</code>".  JMeter
 will then check that the text is present in the HTTP response.  If JMeter cannot find the
 text, then it will mark this as a failed request.</p>
 

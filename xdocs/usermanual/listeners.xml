@@ -106,7 +106,6 @@ jmeter.save.saveservice.default_delimiter=|
 The full set of properties that affect result file output is shown below.
 </p>
 <code>
-<pre>
 #---------------------------------------------------------------------------
 # Results file configuration
 #---------------------------------------------------------------------------
@@ -186,11 +185,10 @@ sampleresult.timestamp.start=true
 # to ensure that the correct data is available at the client.
 
 # Optional xml processing instruction for line 2 of the file:
-#jmeter.save.saveservice.xml_pi=&amp;lt;?xml-stylesheet type="text/xsl" href="sample.xsl"?>
+#jmeter.save.saveservice.xml_pi=&lt;?xml-stylesheet type="text/xsl" href="sample.xsl"?&gt;
 
 # Prefix used to identify filenames that are relative to the current base
 #jmeter.save.saveservice.base_prefix=~/
-</pre>
 </code></p>
 <p>
 The date format to be used for the timestamp_format is described in <a
@@ -320,90 +318,90 @@ The order of appearance of columns is fixed, and is as follows:
 <p>
 The format of the updated XML (2.1) is as follows (line breaks will be different):
 </p>
-<pre>
-&amp;lt;?xml version="1.0" encoding="UTF-8"?>
-&amp;lt;testResults version="1.2">
+<source>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;testResults version="1.2"&gt;
 
 -- HTTP Sample, with nested samples 
 
-&amp;lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" 
+&lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" 
      lb="HTTP Request" rc="200" rm="OK" 
-     tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407">
-  &amp;lt;httpSample t="170" lt="170" ts="1144371015471" s="true" 
+     tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407"&gt;
+  &lt;httpSample t="170" lt="170" ts="1144371015471" s="true" 
         lb="http://www.apache.org/style/style.css" rc="200" rm="OK" 
-        tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002">
-    &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
+        tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002"&gt;
+    &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
 ...
 Content-Type: text/css
-&amp;lt;/responseHeader>
-    &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
-    &amp;lt;responseData class="java.lang.String">body, td, th {
+&lt;/responseHeader&gt;
+    &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
+    &lt;responseData class="java.lang.String"&gt;body, td, th {
     font-size: 95%;
     font-family: Arial, Geneva, Helvetica, sans-serif;
     color: black;
     background-color: white;
 }
 ...
-&amp;lt;/responseData>
-    &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
-    &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
-    &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
-    &amp;lt;url>http://www.apache.org/style/style.css&amp;lt;/url>
-  &amp;lt;/httpSample>
-  &amp;lt;httpSample t="200" lt="180" ts="1144371015641" s="true" 
+&lt;/responseData&gt;
+    &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
+    &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
+    &lt;queryString class="java.lang.String"&gt;&lt;/queryString&gt;
+    &lt;url&gt;http://www.apache.org/style/style.css&lt;/url&gt;
+  &lt;/httpSample&gt;
+  &lt;httpSample t="200" lt="180" ts="1144371015641" s="true" 
      lb="http://www.apache.org/images/asf_logo_wide.gif" 
-     rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866">
-    &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
+     rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866"&gt;
+    &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
 ...
 Content-Type: image/gif
-&amp;lt;/responseHeader>
-    &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
-    &amp;lt;responseData class="java.lang.String">http://www.apache.org/asf.gif&amp;lt;/responseData>
-      &amp;lt;responseFile class="java.lang.String">Mixed1.html&amp;lt;/responseFile>
-    &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
-    &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
-    &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
-    &amp;lt;url>http://www.apache.org/asf.gif&amp;lt;/url>
-  &amp;lt;/httpSample>
-  &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
+&lt;/responseHeader&gt;
+    &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
+    &lt;responseData class="java.lang.String"&gt;http://www.apache.org/asf.gif&lt;/responseData&gt;
+      &lt;responseFile class="java.lang.String"&gt;Mixed1.html&lt;/responseFile&gt;
+    &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
+    &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
+    &lt;queryString class="java.lang.String"&gt;&lt;/queryString&gt;
+    &lt;url&gt;http://www.apache.org/asf.gif&lt;/url&gt;
+  &lt;/httpSample&gt;
+  &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:13 GMT
 ...
 Content-Type: text/html; charset=ISO-8859-1
-&amp;lt;/responseHeader>
-  &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
-  &amp;lt;responseData class="java.lang.String">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
+&lt;/responseHeader&gt;
+  &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
+  &lt;responseData class="java.lang.String"&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
                &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
 ...
-&amp;amp;lt;html&amp;amp;gt;
- &amp;amp;lt;head&amp;amp;gt;
+&lt;html&gt;
+ &lt;head&gt;
 ...
- &amp;amp;lt;/head&amp;amp;gt;
- &amp;amp;lt;body&amp;amp;gt;        
+ &lt;/head&gt;
+ &lt;body&gt;        
 ...
- &amp;amp;lt;/body&amp;amp;gt;
-&amp;amp;lt;/html&amp;amp;gt;
-&amp;lt;/responseData>
-  &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
-  &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
-  &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
-  &amp;lt;url>http://www.apache.org/&amp;lt;/url>
-&amp;lt;/httpSample>
+ &lt;/body&gt;
+&lt;/html&gt;
+&lt;/responseData&gt;
+  &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
+  &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
+  &lt;queryString class="java.lang.String"&gt;&lt;/queryString&gt;
+  &lt;url&gt;http://www.apache.org/&lt;/url&gt;
+&lt;/httpSample&gt;
 
 -- nonHTTPP Sample
 
-&amp;lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler"
-    rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10">
-  &amp;lt;responseHeader class="java.lang.String">&amp;lt;/responseHeader>
-  &amp;lt;requestHeader class="java.lang.String">&amp;lt;/requestHeader>
-  &amp;lt;responseData class="java.lang.String">Listen 1-1&amp;lt;/responseData>
-  &amp;lt;responseFile class="java.lang.String">Mixed2.unknown&amp;lt;/responseFile>
-  &amp;lt;samplerData class="java.lang.String">ssssss&amp;lt;/samplerData>
-&amp;lt;/sample>
+&lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler"
+    rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10"&gt;
+  &lt;responseHeader class="java.lang.String"&gt;&lt;/responseHeader&gt;
+  &lt;requestHeader class="java.lang.String"&gt;&lt;/requestHeader&gt;
+  &lt;responseData class="java.lang.String"&gt;Listen 1-1&lt;/responseData&gt;
+  &lt;responseFile class="java.lang.String"&gt;Mixed2.unknown&lt;/responseFile&gt;
+  &lt;samplerData class="java.lang.String"&gt;ssssss&lt;/samplerData&gt;
+&lt;/sample&gt;
 
-&amp;lt;/testResults>
-</pre>
+&lt;/testResults&gt;
+</source>
 <p>
 Note that the sample node name may be either "sample" or "httpSample".
 </p>
