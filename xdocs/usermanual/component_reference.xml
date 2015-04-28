@@ -3878,7 +3878,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
         <i>value</i>.  The query string will be generated in the correct fashion, depending on
-        the choice of "Method" you made (ie if you chose GET, the query string will be
+        the choice of "Method" you made (i.e. if you chose GET, the query string will be
         appended to the URL, if POST, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.</property>
@@ -3973,7 +3973,7 @@ instead. (see figures 12 and 13).</p>
         Maximum number of connections allowed in the pool.
         In most cases, <b>set this to zero (0)</b>.
         This means that each thread will get its own pool with a single connection in it, i.e.
-        the connections are not shared betweeen threads.
+        the connections are not shared between threads.
         <br />
         If you really want to use shared pooling (why?), then set the max count to the same as the number of threads
         to ensure threads don't wait on each other.
@@ -3984,7 +3984,7 @@ instead. (see figures 12 and 13).</p>
         <property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
         <property name="Keep-alive" required="Yes">The keep-alive is used enable a mechanism to monitor the health of connections. If a connection has not been used for Max Connection Age (ms) then before returning the connection from a call to getConnection(), the connection is first used to ping the database to make sure that it is still alive. 
         Setting the age allows the 5 second age to be overridden. Validation Query will be used to test it.</property>
-        <property name="Max Connection Age (ms)" required="Yes">Controls the age mentionned in "Keep-Alive" property. It means connections not used for more than Max Connection Age will be tested</property>
+        <property name="Max Connection Age (ms)" required="Yes">Controls the age mentioned in "Keep-Alive" property. It means connections not used for more than Max Connection Age will be tested</property>
         <property name="Validation Query" required="Yes">A simple query used to determine if the database is still
         responding.</property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
@@ -4002,7 +4002,7 @@ If JMeter reports <b>No suitable driver</b>, then this could mean either:
 </p>
 <ul>
 <li>The driver class was not found. In this case, there will be a log message such as <tt>DataSourceElement: Could not load driver: {classname} java.lang.ClassNotFoundException: {classname}</tt></li>
-<li>The driver class was found, but the class does not support the connection string. This could be because of a syntax error in the connection string, or because the the wrong classname was used.</li>
+<li>The driver class was found, but the class does not support the connection string. This could be because of a syntax error in the connection string, or because the wrong classname was used.</li>
 </ul>
 If the database server is not running or is not accessible, then JMeter will report a <b>java.net.ConnectException</b>.
 <table>
@@ -4217,7 +4217,7 @@ with the start, continuing on like that until the test is ended.  </p>
         <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
         as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
         <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
-        own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
+        own counter?  If unchecked, the counter is global (i.e., user #1 will get value "1", and user #2 will get value "2" on
         the first iteration).  If checked, each user has an independent counter.</property>
         <property name="Reset counter on each Thread Group Iteration" required="No">This option is only available when counter is tracked per User, if checked, 
         counter will be reset to Start value on each Thread Group iteration. This can be useful when Counter is inside a Loop Controller.</property>
@@ -4391,7 +4391,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
 <dt><code>(?s)</code></dt><dd>treat target as single line, i.e. "." matches new-line</dd>
 <dt><code>(?is)</code></dt><dd>both the above</dd>
 </dl>
-These can be used anywhere within the expression and remain in effect until overriden.  e.g.
+These can be used anywhere within the expression and remain in effect until overridden. E.g.
 <dl>
 <dt><code>(?i)apple(?-i) Pie</code></dt><dd>matches "ApPLe Pie", but not "ApPLe pIe"</dd>
 <dt><code>(?s)Apple.+?Pie</code></dt><dd>matches Apple followed by Pie, which may be on a subsequent line.</dd>
@@ -4524,7 +4524,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p><p>
-Note that a different Interpreter is used for each independent occurence of the assertion
+Note that a different Interpreter is used for each independent occurrence of the assertion
 in each thread in a test script, but the same Interpreter is used for subsequent invocations.
 This means that variables persist across calls to the assertion.
 </p>
@@ -4763,9 +4763,9 @@ please ensure that you select "Store the message using MIME (raw)" otherwise the
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Verify Signature" required="Yes">If selected, the asertion will verify if it is a valid signature according to the parameters defined in the Signer Certificate box.</property>
+    <property name="Verify Signature" required="Yes">If selected, the assertion will verify if it is a valid signature according to the parameters defined in the Signer Certificate box.</property>
     <property name="Message not signed" required="Yes">Whether or not to expect a signature in the message</property>
-    <property name="Signer Cerificate" required="Yes">"No Check" means that it wil not perform signature verification. "Check values" is used to verify the signature against the inputs provided. And "Certificate file" will perform the verification against a specific certificate file.</property>
+    <property name="Signer Cerificate" required="Yes">"No Check" means that it will not perform signature verification. "Check values" is used to verify the signature against the inputs provided. And "Certificate file" will perform the verification against a specific certificate file.</property>
     <property name="Message Position" required="Yes">
     The Mail sampler can retrieve multiple messages in a single sample.
     Use this field to specify which message will be checked.
@@ -4810,7 +4810,7 @@ requests, use this timer.</p></description>
 <component name="Gaussian Random Timer" index="&sect-num;.6.2" width="372" height="156" screenshot="timers/gauss_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
-of the time intervals ocurring near a particular value.  
+of the time intervals occurring near a particular value.  
 The total delay is the sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0) times
 the deviation value you specify, and the offset value.
 Another way to explain it, in Gaussian Random Timer, the variation around constant offset has a gaussian curve distribution. 
@@ -4835,7 +4835,7 @@ is the sum of the random value and the offset value.</p></description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
-  <property name="Random Delay Maximum" required="Yes">Maxium random number of milliseconds to
+  <property name="Random Delay Maximum" required="Yes">Maximum random number of milliseconds to
 pause.</property>
   <property name="Constant Delay Offset" required="Yes">Number of milliseconds to pause in addition
 to the random delay.</property>
@@ -4876,9 +4876,9 @@ Note that the throughput value should not be changed too often during a test
     <li>all active threads (shared) - as above; each thread is delayed based on when any thread last ran.</li>
    </ul>
   </property>
-  <p>The shared and non-shared algorithms both aim to generate the desired thoughput, and will produce similar results.
+  <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.
   The shared algorithm should generate a more accurate overall transaction rate.
-  The non-shared algortihm should generate a more even spread of transactions across threads.</p>
+  The non-shared algorithm should generate a more even spread of transactions across threads.</p>
 </properties>
 </component>
 
@@ -4895,7 +4895,7 @@ points of the test plan.
 <properties>
   <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
   <property name="Number of Simultaneous Users to Group by" required="Yes">Number of threads to release at once. Setting it to 0 is equivalent to setting it to Number of threads in Thread Group.</property>
-  <property name="Timeout in milliseconds" required="No">If set to 0, Timer will wait for the number of threads to reach the value in "Number of Simultaneous Users to Group", if superior to 0, then timer will wait at max "Timeout in milliseconds" if number of Threads does not reach if ater the timeout interval the number of users waiting is not reached, timer will stop waiting. Defaults to 0</property>
+  <property name="Timeout in milliseconds" required="No">If set to 0, Timer will wait for the number of threads to reach the value in "Number of Simultaneous Users to Group". If superior to 0, then timer will wait at max "Timeout in milliseconds" for the number of Threads. If after the timeout interval the number of users waiting is not reached, timer will stop waiting. Defaults to 0</property>
 </properties>
 <note>
 If timeout in milliseconds is set to 0 and number of threads never reaches "Number of Simultaneous Users to Group by" then Test will pause infinitely.
@@ -4955,7 +4955,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+<p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
 
@@ -5011,7 +5011,7 @@ For details, see <complink name="BSF Timer"/>.
 <component name="Poisson Random Timer" index="&sect-num;.6.9" width="341" height="182" screenshot="timers/poisson_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
-of the time intervals ocurring near a particular value.  The total delay is the
+of the time intervals occurring near a particular value.  The total delay is the
 sum of the Poisson distributed value, and the offset value.</p></description>
 
 
@@ -5150,7 +5150,7 @@ user_4, etc.</p></description>
         <property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts
         with the Lower Bound value.</property>
         <property name="Increment" required="Yes">Value to increment the counter by each time through.</property>
-        <property name="ID Suffix" required="No">A string value to add as suffix to every generated vaue.</property>
+        <property name="ID Suffix" required="No">A string value to add as suffix to every generated value.</property>
 </properties>
 </component>
 
@@ -5170,7 +5170,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Update Once Per Iteration" required="Yes">A flag to indicate whether the User Paramters element
+        <property name="Update Once Per Iteration" required="Yes">A flag to indicate whether the User Parameters element
         should update its variables only once per iteration.  if you embed functions into the UP, then you may need greater
         control over how often the values of the variables are updated.  Keep this box checked to ensure the values are
         updated each time through the UP's parent controller.  Uncheck the box, and the UP will update the parameters for 
@@ -5221,7 +5221,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+<p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
 <component name="BSF PreProcessor" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
@@ -5390,7 +5390,7 @@ generate the template string, and store the result into the given variable name.
         <note>Note that this option highly impacts performances, so use it only when absolutely necessary and be aware of its impacts</note>
         </li>
         <li>Body as a Document - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).
-        <note>Note that the Body as a Document option can impact performances, so ensure it is Ok for your test</note>
+        <note>Note that the Body as a Document option can impact performances, so ensure it is OK for your test</note>
         </li>
         <li>Request Headers - may not be present for non-HTTP samples</li>
         <li>Response Headers - may not be present for non-HTTP samples</li>
@@ -5450,7 +5450,7 @@ generate the template string, and store the result into the given variable name.
 </p>
     <ul>
         <li>refName_matchNr - the number of matches found; could be 0</li>
-        <li>refName_n, where n = 1,2,3 etc - the strings as generated by the template</li>
+        <li>refName_n, where n = 1,2,3 etc. - the strings as generated by the template</li>
         <li>refName_n_gm, where m=0,1,2 - the groups for match n</li>
         <li>refName - always set to the default value</li>
         <li>refName_gn - not set</li>
@@ -5620,7 +5620,7 @@ extracting the node as text or attribute value and store the result into the giv
    <p>Note: The next refName_n variable is set to null - e.g. if there are 2 matches, then refName_3 is set to null,
    and if there are no matches, then refName_1 is set to null.
    </p>
-   <p>XPath is query language targeted primarily for XSLT transformations. However it is usefull as generic query language for structured data too. See 
+   <p>XPath is query language targeted primarily for XSLT transformations. However it is useful as generic query language for structured data too. See 
        <a href="http://www.topxml.com/xsl/xpathref.asp">XPath Reference</a> or <a href="http://www.w3.org/TR/xpath">XPath specification</a> for more information. Here are few examples:
    </p>
   <dl> 
@@ -5707,7 +5707,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>data - (byte [])- gives access to the current sample data</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+<p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
 <component name="BSF PostProcessor" index="&sect-num;.8.6"  width="844" height="633" screenshot="bsf_postprocessor.png">
@@ -6148,7 +6148,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         as a comma-separated list of headers.
         </property>
         <property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
-        <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, ie it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b. More information below in the paragraph about "User Defined Variable replacement".</property>
+        <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b. More information below in the paragraph about "User Defined Variable replacement".</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
         <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?<br/>
@@ -6167,7 +6167,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
         those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
         left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
-        etc are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
+        etc. are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
         recorded</b>.</property>
         <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
         <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
@@ -6242,8 +6242,8 @@ proxy.binary.filesuffix=.binary
 do this, create a timer directly within the HTTP(S) Test Script Recorder component.
 The proxy will place a copy of this timer into each sample it records, or into
 the first sample of each group if you're using grouping. This copy will then be
-scanned for occurences of variable ${T} in its properties, and any such
-occurences will be replaced by the time gap from the previous sampler
+scanned for occurrences of variable ${T} in its properties, and any such
+occurrences will be replaced by the time gap from the previous sampler
 recorded (in milliseconds).</p>
 
 <p>When you are ready to begin, hit &quot;start&quot;.</p>
@@ -6279,13 +6279,13 @@ Practices with the HTTP(S) Test Script Recorder</a> for more info.</p>
 <h4>User Defined Variable replacement</h4>
 <p>Similarly, if the HTTP(S) Test Script Recorder finds <complink name="User Defined Variables"/> (UDV) directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
-will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
+will have any occurrences of the values of those variables replaced by the corresponding variable. Again, you can
 place User Defined Variables directly within the HTTP(S) Test Script Recorder to override the values to be replaced. See
 <a href="best-practices.html#proxy_server"> Best Practices with the Test Script Recorder</a> for more info.</p>
 
 <note>Please note that matching is case-sensitive.</note>
 
-<p>Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
+<p>Replacement by Variables: by default, the Proxy server looks for all occurrences of UDV values. 
 If you define the variable <code>WEB</code> with the value <code>www</code>, for example,
 the string <code>www</code> will be replaced by <code>${WEB}</code> wherever it is found.
 To avoid this happening everywhere, set the "Regex Matching" check-box.
@@ -6308,7 +6308,7 @@ of <code>a</code>'s) and <code>b+</code> (matches a sequence of <code>b</code>'s
 </note>
 
 <p>If you want to match a whole string only, enclose it in <code>(^</code> and <code>$)</code>, e.g. <code>(^thus$)</code>.
-The parens are neccessary, since the normally added boundary characters will prevent <code>^</code> and
+The parens are necessary, since the normally added boundary characters will prevent <code>^</code> and
 <code>$</code> to match.</p>
 
 <p>If you want to match <code>/images</code> at the start of a string only, use the value <code>(^/images)</code>.
