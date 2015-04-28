@@ -886,7 +886,7 @@ Webservice Soap Sampler assumes that empty response means failure.
 </component>
 
 <component name="LDAP Extended Request" index="&sect-num;.1.8" width="619" height="371" screenshot="ldapext_request.png">
-  <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
+  <description>This Sampler can send all 8 different LDAP requests to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Extended Request Defaults"/>
@@ -894,131 +894,133 @@ Webservice Soap Sampler assumes that empty response means failure.
       LDAP Request.</p> </description>
 
    <p>There are nine test operations defined. These operations are given below:</p>
-    <ol>
-      <li><b>Thread bind</b></li>
-      <p>Any LDAP request is part of an LDAP session, so the first thing that should be done is starting a session to the LDAP server.
-       For starting this session a thread bind is used, which is equal to the LDAP "bind" operation.
-       The user is requested to give a username (Distinguished name) and password, 
-       which will be used to initiate a session.
-       When no password, or the wrong password is specified, an anonymous session is started. Take care,
-       omitting the password will not fail this test, a wrong password will. 
-       (N.B. this is stored unencrypted in the test plan)</p>
-     <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-     <property name="Servername" required="Yes">The name (or IP-address) of the LDAP server.</property>
-     <property name="Port" required="No">The port number that the LDAP server is listening to. If this is omitted 
-     JMeter assumes the LDAP server is listening on the default port(389).</property>
-     <property name="DN" required="No">The distinguished name of the base object that will be used for any subsequent operation. 
-     It can be used as a starting point for all operations. You cannot start any operation on a higher level than this DN!</property>
-     <property name="Username" required="No">Full distinguished name of the user as which you want to bind.</property>
-     <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error and revert to an anonymous bind. (N.B. this is stored unencrypted in the test plan)</property>
-    </properties>
- <br />       
-      <li><b>Thread unbind</b></li>
-      <p>This is simply the operation to end a session. 
-      It is equal to the LDAP "unbind" operation.</p>
-     <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-    </properties>
-     
- <br />       
-      <li><b>Single bind/unbind</b></li>
-        <p> This is a combination of the LDAP "bind" and "unbind" operations.
+    <dl>
+      <dt><b>Thread bind</b></dt>
+      <dd>
+        <p>Any LDAP request is part of an LDAP session, so the first thing that should be done is starting a session to the LDAP server.
+        For starting this session a thread bind is used, which is equal to the LDAP "<code>bind</code>" operation.
+        The user is requested to give a <code>username</code> (Distinguished name) and <code>password</code>,
+        which will be used to initiate a session.
+        When no password, or the wrong password is specified, an anonymous session is started. Take care,
+        omitting the password will not fail this test, a wrong password will.
+        (N.B. this is stored unencrypted in the test plan)</p>
+        <properties>
+          <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+          <property name="Servername" required="Yes">The name (or IP-address) of the LDAP server.</property>
+          <property name="Port" required="No">The port number that the LDAP server is listening to. If this is omitted
+            JMeter assumes the LDAP server is listening on the default port(389).</property>
+          <property name="DN" required="No">The distinguished name of the base object that will be used for any subsequent operation.
+            It can be used as a starting point for all operations. You cannot start any operation on a higher level than this DN!</property>
+          <property name="Username" required="No">Full distinguished name of the user as which you want to bind.</property>
+          <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind.
+            If it is incorrect, the sampler will return an error and revert to an anonymous bind. (N.B. this is stored unencrypted in the test plan)</property>
+        </properties>
+      </dd>
+      <dt><b>Thread unbind</b></dt>
+      <dd>
+        <p>This is simply the operation to end a session.
+        It is equal to the LDAP "<code>unbind</code>" operation.</p>
+        <properties>
+          <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+        </properties>
+      </dd>
+      <dt><b>Single bind/unbind</b></dt>
+      <dd>
+        <p> This is a combination of the LDAP "<code>bind</code>" and "<code>unbind</code>" operations.
         It can be used for an authentication request/password check for any user. It will open an new session, just to
         check the validity of the user/password combination, and end the session again.</p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Username" required="Yes">Full distinguished name of the user as which you want to bind.</property>
-     <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error. (N.B. this is stored unencrypted in the test plan)</property>
-     </properties>
-
- <br />       
-      <li><b>Rename entry</b></li>
-       <p>This is the LDAP "moddn" operation. It can be used to rename an entry, but 
-       also for moving an entry or a complete subtree to a different place in 
-       the LDAP tree.  </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Old entry name" required="Yes">The current distinguished name of the object you want to rename or move, 
-      relative to the given DN in the thread bind operation.</property>
-     <property name="New distinguished name" required="Yes">The new distinguished name of the object you want to rename or move, 
-      relative to the given DN in the thread bind operation.</property>
-     </properties>
-       
- <br />       
-        <li><b>Add test</b></li>
-       <p>This is the ldap "add" operation. It can be used to add any kind of 
-       object to the LDAP server.  </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry DN" required="Yes">Distinguished name of the object you want to add, relative to the given DN in the thread bind operation.</property>
-     <property name="Add test" required="Yes">A list of attributes and their values you want to use for the object.
-     If you need to add a multiple value attribute, you need to add the same attribute with their respective 
-     values several times to the list.</property>
-     </properties>
-       
- <br />       
-      <li><b>Delete test</b></li>
-       <p> This is the LDAP "delete" operation, it can be used to delete an 
-       object from the LDAP tree </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Delete" required="Yes">Distinguished name of the object you want to delete, relative to the given DN in the thread bind operation.</property>
-      </properties>
-       
- <br />       
-      <li><b>Search test</b></li>
-       <p>This is the LDAP "search" operation, and will be used for defining searches.  </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Search base" required="No">Distinguished name of the subtree you want your 
-      search to look in, relative to the given DN in the thread bind operation.</property>
-      <property name="Search Filter" required="Yes">searchfilter, must be specified in LDAP syntax.</property>
-      <property name="Scope" required="No">Use 0 for baseobject-, 1 for onelevel- and 2 for a subtree search. (Default=0)</property>
-      <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=0, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode 4</property>
-      <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in miliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is 0, which means no limit)</property>
-      <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
-      <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=false</property>
-      <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
-     </properties>
-
- <br />       
-      <li><b>Modification test</b></li>
-       <p>This is the LDAP "modify" operation. It can be used to modify an object. It
+        <properties>
+          <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+          <property name="Username" required="Yes">Full distinguished name of the user as which you want to bind.</property>
+          <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind.
+            If it is incorrect, the sampler will return an error. (N.B. this is stored unencrypted in the test plan)</property>
+        </properties>
+      </dd>
+      <dt><b>Rename entry</b></dt>
+      <dd>
+       <p>This is the LDAP "<code>moddn</code>" operation. It can be used to rename an entry, but
+       also for moving an entry or a complete subtree to a different place in
+       the LDAP tree.</p>
+       <properties>
+         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+         <property name="Old entry name" required="Yes">The current distinguished name of the object you want to rename or move,
+           relative to the given DN in the thread bind operation.</property>
+         <property name="New distinguished name" required="Yes">The new distinguished name of the object you want to rename or move,
+           relative to the given DN in the thread bind operation.</property>
+       </properties>
+     </dd>
+     <dt><b>Add test</b></dt>
+     <dd>
+       <p>This is the ldap "<code>add</code>" operation. It can be used to add any kind of
+       object to the LDAP server.</p>
+       <properties>
+         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+         <property name="Entry DN" required="Yes">Distinguished name of the object you want to add, relative to the given DN in the thread bind operation.</property>
+         <property name="Add test" required="Yes">A list of attributes and their values you want to use for the object.
+           If you need to add a multiple value attribute, you need to add the same attribute with their respective
+           values several times to the list.</property>
+       </properties>
+     </dd>
+     <dt><b>Delete test</b></dt>
+     <dd>
+       <p> This is the LDAP "<code>delete</code>" operation, it can be used to delete an
+       object from the LDAP tree</p>
+       <properties>
+         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+         <property name="Delete" required="Yes">Distinguished name of the object you want to delete, relative to the given DN in the thread bind operation.</property>
+       </properties>
+     </dd>
+     <dt><b>Search test</b></dt>
+     <dd>
+       <p>This is the LDAP "<code>search</code>" operation, and will be used for defining searches.</p>
+       <properties>
+         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+         <property name="Search base" required="No">Distinguished name of the subtree you want your
+           search to look in, relative to the given DN in the thread bind operation.</property>
+         <property name="Search Filter" required="Yes">searchfilter, must be specified in LDAP syntax.</property>
+         <property name="Scope" required="No">Use <code>0</code> for baseobject-, <code>1</code> for onelevel- and <code>2</code> for a subtree search. (Default=<code>0</code>)</property>
+         <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=<code>0</code>, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode <code>4</code></property>
+         <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in miliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is <code>0</code>, which means no limit)</property>
+         <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
+         <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=<code>false</code></property>
+         <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
+       </properties>
+     </dd>
+     <dt><b>Modification test</b></dt>
+     <dd>
+       <p>This is the LDAP "<code>modify</code>" operation. It can be used to modify an object. It
        can be used to add, delete or replace values of an attribute. </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry name" required="Yes">Distinguished name of the object you want to modify, relative 
-      to the given DN in the thread bind operation</property>
-     <property name="Modification test" required="Yes">The attribute-value-opCode triples. The opCode can be any 
-     valid LDAP operationCode (add, delete/remove or replace). If you don't specify a value with a delete operation,
-     all values of the given attribute will be deleted. If you do specify a value in a delete operation, only 
-     the given value will be deleted. If this value is non-existent, the sampler will fail the test.</property>
-     </properties>
-       
- <br />       
-      <li><b>Compare</b></li>
-       <p>This is the LDAP "compare" operation. It can be used to compare the value 
-       of a given attribute with some already known value. In reality this is mostly 
+       <properties>
+         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+         <property name="Entry name" required="Yes">Distinguished name of the object you want to modify, relative 
+           to the given DN in the thread bind operation</property>
+         <property name="Modification test" required="Yes">The attribute-value-opCode triples. The opCode can be any
+           valid LDAP operationCode (<code>add</code>, <code>delete</code>/<code>remove</code> or <code>replace</code>).
+           If you don't specify a value with a <code>delete</code> operation,
+           all values of the given attribute will be deleted. If you do specify a value in a <code>delete</code> operation, only
+           the given value will be deleted. If this value is non-existent, the sampler will fail the test.</property>
+       </properties>
+     </dd>
+     <dt><b>Compare</b></dt>
+     <dd>
+       <p>This is the LDAP "<code>compare</code>" operation. It can be used to compare the value
+       of a given attribute with some already known value. In reality this is mostly
        used to check whether a given person is a member of some group. In such a case
-        you can compare the DN of the user as a given value, with the values in the
-         attribute "member" of an object of the type groupOfNames.
-         If the compare operation fails, this test fails with errorcode 49.</p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry DN" required="Yes">The current distinguished name of the object of 
-      which you want  to compare an attribute, relative to the given DN in the thread bind operation.</property>
-     <property name="Compare filter" required="Yes">In the form "attribute=value"</property>
-     </properties>
-    </ol>
-       
-    <links>
-      <link href="build-ldapext-test-plan.html">Building an LDAP Test Plan</link>
-      <complink name="LDAP Extended Request Defaults"/>
-    </links>
-
+       you can compare the DN of the user as a given value, with the values in the
+       attribute "<code>member</code>" of an object of the type <code>groupOfNames</code>.
+       If the compare operation fails, this test fails with errorcode <code>49</code>.</p>
+       <properties>
+         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+         <property name="Entry DN" required="Yes">The current distinguished name of the object of
+           which you want  to compare an attribute, relative to the given DN in the thread bind operation.</property>
+         <property name="Compare filter" required="Yes">In the form "<code>attribute=value</code>"</property>
+       </properties>
+     </dd>
+   </dl>
+   <links>
+     <link href="build-ldapext-test-plan.html">Building an LDAP Test Plan</link>
+     <complink name="LDAP Extended Request Defaults"/>
+   </links>
 </component>
 
 
