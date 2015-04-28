@@ -16,6 +16,7 @@
   <!ENTITY nbsp  "&#160;">
   <!ENTITY ndash "&#x02013;">
   <!ENTITY para  "&#x000B6;">
+  <!ENTITY trade "&#x02122;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="3.0"
