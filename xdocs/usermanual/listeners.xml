@@ -389,7 +389,7 @@ Content-Type: text/html; charset=ISO-8859-1
   &lt;url&gt;http://www.apache.org/&lt;/url&gt;
 &lt;/httpSample&gt;
 
--- nonHTTPP Sample
+-- non HTTP Sample
 
 &lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler"
     rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10"&gt;

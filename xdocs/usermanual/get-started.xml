@@ -114,7 +114,7 @@ If your version of Java does not include SSL support, then it is possible to add
 Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  
 Also, update <a href="#configuring_jmeter"><code>system.properties</code></a> to register the SSL Provider.</p>
 <p>
-JMeter HTTP defaults to protocol level TLS. This can be changed by editting the JMeter property 
+JMeter HTTP defaults to protocol level TLS. This can be changed by editing the JMeter property 
 <code>https.default.protocol</code> in <code>jmeter.properties</code> or <code>user.properties</code>.
 </p>
 <p><b>The JMeter HTTP samplers are configured to accept all certificates,
@@ -386,7 +386,7 @@ Normally this is not necessary.
 </subsection>
 
 <subsection name="&sect-num;.4.6 Overriding Properties Via The Command Line" anchor="override">
-<p>Java system properties, JMeter properties, and logging properties can be overriden directly on the command line
+<p>Java system properties, JMeter properties, and logging properties can be overridden directly on the command line
 (instead of modifying <code>jmeter.properties</code>).
 To do so, use the following options:</p>
 <dl>
@@ -521,7 +521,7 @@ Prior to version 2.5.1, JMeter invoked <code>System.exit()</code> when a non-GUI
 This caused problems for applications that invoke JMeter directly, so JMeter no longer invokes <code>System.exit()</code>
 for a normal test completion. [Some fatal errors may still invoke <code>System.exit()</code>]
 JMeter will exit all the non-daemon threads it starts, but it is possible that some non-daemon threads
-may still remain; these will prevent the JVM from exitting.
+may still remain; these will prevent the JVM from exiting.
 To detect this situation, JMeter starts a new daemon thread just before it exits.
 This daemon thread waits a short while; if it returns from the wait, then clearly the
 JVM has not been able to exit, and the thread prints a message to say why.

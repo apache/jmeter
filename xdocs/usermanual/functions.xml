@@ -151,7 +151,7 @@ run.  This could be used to replace the DOMAIN field of all HTTP requests, for e
 matter to change a test to target a different server with the same test.
 </p>
 <p>
-Note that variables cannot currently be nested; i.e <code>${Var${N}}</code> does not work.
+Note that variables cannot currently be nested; i.e. <code>${Var${N}}</code> does not work.
 The <code>__V</code> (variable) function (versions after 2.2) can be used to do this: <code>${__V(Var${N})}</code>.
 In earlier JMeter versions one can use <code>${__BeanShell(vars.get("Var${N}")}</code>.
 </p>
@@ -198,7 +198,7 @@ Configuration elements are processed by a separate thread.
 Therefore functions such as <code>__threadNum</code> do not work properly in elements such as User Defined Variables.
 Also note that variables defined in a UDV element are not available until the element has been processed.
 </p>
-<note>When using variable/function references in SQL code (etc),
+<note>When using variable/function references in SQL code (etc.),
 remember to include any necessary quotes for text strings,
 i.e. use
 <source>
@@ -258,7 +258,7 @@ The <code>__logn()</code> function reference can be used anywhere in the test pl
 Alternatively, the Java Request sampler can be used to create a sample containing variable references;
 the output will be shown in the appropriate Listener.
 For versions of JMeter later than 2.3, there is a <complink name="Debug Sampler"/> 
-that can be used to display the values of variables etc in the Tree View Listener.
+that can be used to display the values of variables etc. in the Tree View Listener.
 </p>
 <note><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
 variable will override the built-in function.</note>
@@ -307,7 +307,7 @@ replacement string") parsed by this function</li>
         in your template string</property>
         <property name="Second argument" required="Yes">This is the template string that will replace
         the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
-        <code>$[group_number]$</code>.  Ie: <code>$1$</code>, or <code>$2$</code>.  Your template can be any string.</property>
+        <code>$[group_number]$</code>.  I.e.: <code>$1$</code>, or <code>$2$</code>.  Your template can be any string.</property>
         <property name="Third argument" required="No, default=1">The third argument tells JMeter which match
         to use.  Your regular expression might find numerous matches.  You have four choices:
                 <ul><li>An integer - Tells JMeter to use that match.  '<code>1</code>' for the first found match, '<code>2</code>' for the
@@ -488,7 +488,7 @@ Examples:<br></br>
     See the documentation for DecimalFormat for full details.<br></br>
     If the path name does not contain any special formatting characters,
     the current sequence number will be appended to the name, otherwise
-    the number will be inserted aaccording to the fomatting instructions.<br></br>
+    the number will be inserted according to the formatting instructions.<br></br>
     If the start sequence number is omitted, and the end sequence number is specified,
     the sequence number is interpreted as a loop count, and the file will be used at most "<code>end</code>" times.
     In this case the filename is not formatted.
@@ -779,7 +779,7 @@ For example:
 </b>
 </p>
 <note>
-Note that a different Interpreter is used for each independent occurence of the function
+Note that a different Interpreter is used for each independent occurrence of the function
 in a test script, but the same Interpreter is used for subsequent invocations.
 This means that variables persist across calls to the function.
 </note>
