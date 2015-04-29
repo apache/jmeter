@@ -39,7 +39,7 @@ all the data from them.  This offers the following features:
 
 <ul>
 <li>Saving of test samples to the local machine </li>
-<li>Managment of multiple JMeterEngines from a single machine </li>
+<li>Management of multiple JMeterEngines from a single machine </li>
 <li>No need to copy the test plan to each server - the client sends it to all the servers</li>
 </ul>
 </p>
@@ -144,7 +144,7 @@ and follow the instructions below.
 </p>
 <p>JMeter uses Remote Method Invocation (RMI) as the remote communication mechanism.  Therefore, you need
 to run the RMI Registry application (which is named, "<code>rmiregistry</code>") that comes with the JDK and is located in the "<code>bin</code>"
-directory.  Before running <code>rmiregistry</code>, make sure that the following jars are in your system claspath:
+directory.  Before running <code>rmiregistry</code>, make sure that the following jars are in your system classpath:
 <ul>
     <li><code>JMETER_HOME/lib/ext/ApacheJMeter_core.jar</code></li>
     <li><code>JMETER_HOME/lib/jorphan.jar</code></li>
@@ -185,7 +185,7 @@ rmiregistry -J-Dsun.rmi.log.debug=true \
 For example: "<code>jmeter -s -Dsun.rmi.loader.logLevel=verbose</code>" (i.e. omit the <code>-J</code> prefixes).
 Alternatively the properties can be defined in the <code>system.properties</code> file.
 </p>
-<p>The solution to the problem is to remove the loopbacks <code>127.0.0.1</code> and <code>127.0.0.2</code> from <code>etc/hosts</code>.
+<p>The solution to the problem is to remove the loopbacks <code>127.0.0.1</code> and <code>127.0.0.2</code> from <code>/etc/hosts</code>.
 What happens is <code>jmeter-server</code> can't connect to rmiregistry if <code>127.0.0.2</code> loopback is not available.
 Use the following settings to fix the problem.</p>
 <p> Replace</p>
@@ -252,7 +252,7 @@ There are some JMeter properties that can be set to alter this behaviour.
     <dh><code>Hold</code></dh><dd>hold samples in an array until the end of a run. This may use a lot of memory on the server and is discouraged.</dd>
     <dh><code>DiskStore</code></dh><dd>store samples in a disk file (under <code>java.io.temp</code>) until the end of a run. 
     The serialised data file is deleted on JVM exit.</dd>
-    <dh><code>StrippedDiskStore</code></dh><dd>remove responseData from succesful samples, and use DiskStore sender to send them.</dd>
+    <dh><code>StrippedDiskStore</code></dh><dd>remove responseData from successful samples, and use DiskStore sender to send them.</dd>
     <dh><code>Batch</code></dh><dd>send saved samples when either the count (num_sample_threshold) or time (time_threshold) exceeds a threshold,
     at which point the samples are sent synchronously.
     The thresholds can be configured on the server using the following properties:
@@ -274,8 +274,8 @@ There are some JMeter properties that can be set to alter this behaviour.
       </ul>
     Other fields that vary between samples are lost. 
     </dd>
-    <dh><code>Stripped</code></dh><dd>remove responseData from succesful samples</dd>
-    <dh><code>StrippedBatch</code></dh><dd>remove responseData from succesful samples, and use Batch sender to send them.</dd>
+    <dh><code>Stripped</code></dh><dd>remove responseData from successful samples</dd>
+    <dh><code>StrippedBatch</code></dh><dd>remove responseData from successful samples, and use Batch sender to send them.</dd>
     <dh><code>Asynch</code></dh><dd>samples are temporarily stored in a local queue. A separate worker thread sends the samples.
         This allows the test thread to continue without waiting for the result to be sent back to the client.
         However, if samples are being created faster than they can be sent, the queue will eventually fill up,
@@ -284,7 +284,7 @@ There are some JMeter properties that can be set to alter this behaviour.
         The queue size can be adjusted by setting the JMeter property
         <code>asynch.batch.queue.size</code> (default <code>100</code>) on the server node.
     </dd>
-    <dh><code>StrippedAsynch</code></dh><dd>remove responseData from succesful samples, and use Async sender to send them.</dd>
+    <dh><code>StrippedAsynch</code></dh><dd>remove responseData from successful samples, and use Async sender to send them.</dd>
     <dh><code>Custom implementation</code></dh><dd>set the mode parameter to your custom sample sender class name.
     This must implement the interface <code>SampleSender</code> and have a constructor which takes a single
     parameter of type <code>RemoteSampleListener</code>. 

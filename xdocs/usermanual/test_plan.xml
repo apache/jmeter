@@ -192,7 +192,7 @@ two different searches.  However, we want to re-load the search page itself betw
 each search.  We could do this by having 4 simple HTTP request elements (load search,
 search "A", load search, search "B").  Instead, we use the <complink name="Interleave
 Controller"/> which passes on one child request each time through the test.  It keeps the
-ordering (ie - it doesn't pass one on at random, but "remembers" its place) of its
+ordering (i.e. it doesn't pass one on at random, but "remembers" its place) of its
 child elements.  Interleaving 2 child requests may be overkill, but there could easily have
 been 8, or 20 child requests.</p>
 
@@ -411,7 +411,7 @@ that Controller.  In the following test tree:</p>
 <p>Another example, this time using Timers:</p>
 <figure image="scoping3.png">complex example</figure>
 <p>In this example, the requests are named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
-<p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc, and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
+<p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc., and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
 <b>
 The Configuration elements Header Manager, Cookie Manager and Authorization manager are
 treated differently from the Configuration Default elements.

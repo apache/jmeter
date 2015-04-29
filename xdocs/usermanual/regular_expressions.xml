@@ -70,7 +70,7 @@ combinations - and '<code>alp</code>' is not the same as '<code>alphabet</code>'
 Unlike Perl, there is no need to (i.e. do not) enclose the regular expression in <code>//</code>.
 </note>
 <p>
-So how does one use the modifiers <code>ismx</code> etc if there is no trailing <code>/</code>? 
+So how does one use the modifiers <code>ismx</code> etc. if there is no trailing <code>/</code>? 
 The solution is to use <i>extended regular expressions</i>, i.e. <code>/abc/i</code> becomes <code>(?i)abc</code>.
 See also <a href="#placement">Placement of modifiers</a> below.
 </p>
@@ -115,7 +115,7 @@ Suppose you want to match the following portion of a web-page:<br/>
 <code>name="file.name" value="readme.txt"</code> 
 and you want to extract both <code>file.name</code> and <code>readme.txt</code>.
 <br/>
-A suitable reqular expression would be:
+A suitable regular expression would be:
 <br/>
 <code>name="([^"]+)" value="([^"]+)"</code>
 <br/>
@@ -174,7 +174,7 @@ and the '<code>$</code>' metacharacter matches at the end of every line.</p>
 <subsection name="&sect-num;.4 Meta characters" anchor="meta_chars">
 <p>
 Regular expressions use certain characters as meta characters - these characters have a special meaning to the RE engine.
-Such characters must be escaped by preceeding them with <code>\</code> (backslash) in order to treat them as ordinary characters.
+Such characters must be escaped by preceding them with <code>\</code> (backslash) in order to treat them as ordinary characters.
 Here is a list of the meta characters and their meaning (please check the ORO documentation if in doubt).
 </p>
 <dl>
