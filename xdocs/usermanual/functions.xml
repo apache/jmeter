@@ -315,7 +315,7 @@ replacement string") parsed by this function</li>
                 <li>RAND - Tells JMeter to choose a match at random.</li>
                 <li>ALL - Tells JMeter to use all matches, and create a template string for each one and then
                 append them all together.  This option is little used.</li>
-                <li>A float number between 0 and 1 - tells JMeter to find the Xth match using the formula:
+                <li>A float number between 0 and 1 - tells JMeter to find the X<sup>th</sup> match using the formula:
                 (number_of_matches_found * float_number) rounded to nearest integer.</li>
                 </ul></property>
         <property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
@@ -388,7 +388,7 @@ The reference name is now optional, but it must not be a valid integer.
 <properties>
         <property name="First argument" required="Yes">The first int value.</property>
         <property name="Second argument" required="Yes">The second int value.</property>
-        <property name="nth argument" required="No">The nth int value.</property>
+        <property name="nth argument" required="No">The n<sup>th</sup> int value.</property>
         <property name="last argument" required="No">A reference name for reusing the value computed by this function. 
                 If specified, the reference name must contain at least one non-numeric character otherwise it will
                 be treated as another int value to be added.
@@ -403,7 +403,7 @@ The reference name is now optional, but it must not be a valid integer.
 <properties>
         <property name="First argument" required="Yes">The first long value.</property>
         <property name="Second argument" required="Yes">The second long value.</property>
-        <property name="nth argument" required="No">The nth long value.</property>
+        <property name="nth argument" required="No">The n<sup>th</sup> long value.</property>
         <property name="last argument" required="No">A reference name for reusing the value computed by this function. 
                 If specified, the reference name must contain at least one non-numeric character otherwise it will
                 be treated as another long value to be added.

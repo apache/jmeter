@@ -2887,7 +2887,7 @@ Match[3][1]=JMeterCommitters
 <br/>
 The first number in [] is the match number; the second number is the group. 
 Group [0] is whatever matched the whole RE.
-Group [1] is whatever matched the 1st group, i.e. (JMeter\w*) in this case.
+Group [1] is whatever matched the 1<sup>st</sup> group, i.e. (JMeter\w*) in this case.
 See Figure 9b (below).
 <br/></td></tr>
 <tr><td><b>Text</b></td>
@@ -5377,8 +5377,8 @@ generate the template string, and store the result into the given variable name.
         Matching is applied to all qualifying samples in turn.
         For example if there is a main sample and 3 sub-samples, each of which contains a single match for the regex,
         (i.e. 4 matches in total).
-        For match number = 3, Sub-samples only, the extractor will match the 3rd sub-sample.
-        For match number = 3, Main sample and sub-samples, the extractor will match the 2nd sub-sample (1st match is main sample).
+        For match number = 3, Sub-samples only, the extractor will match the 3<sup>rd</sup> sub-sample.
+        For match number = 3, Main sample and sub-samples, the extractor will match the 2<sup>nd</sup> sub-sample (1<sup>st</sup> match is main sample).
         For match number = 0 or negative, all qualifying samples will be processed.
         For match number > 0, matching will stop as soon as enough matches have been found.
         </property>
@@ -5413,7 +5413,7 @@ generate the template string, and store the result into the given variable name.
         <property name="Match No." required="Yes">Indicates which match to use.  The regular expression may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
-                <li>A positive number N means to select the nth match.</li>
+                <li>A positive number N means to select the n<sup>th</sup> match.</li>
                 <li> Negative numbers are used in conjunction with the ForEach controller - see below.</li>
             </ul>
         </property>
@@ -5483,8 +5483,8 @@ extracting the node as text or attribute value and store the result into the giv
         Matching is applied to all qualifying samples in turn.
         For example if there is a main sample and 3 sub-samples, each of which contains a single match for the regex,
         (i.e. 4 matches in total).
-        For match number = 3, Sub-samples only, the extractor will match the 3rd sub-sample.
-        For match number = 3, Main sample and sub-samples, the extractor will match the 2nd sub-sample (1st match is main sample).
+        For match number = 3, Sub-samples only, the extractor will match the 3<sup>rd</sup> sub-sample.
+        For match number = 3, Main sample and sub-samples, the extractor will match the 2<sup>nd</sup> sub-sample (1<sup>st</sup> match is main sample).
         For match number = 0 or negative, all qualifying samples will be processed.
         For match number > 0, matching will stop as soon as enough matches have been found.
         </property>
@@ -5522,7 +5522,7 @@ extracting the node as text or attribute value and store the result into the giv
         <property name="Match No." required="Yes">Indicates which match to use.  The CSS/JQuery selector may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
-                <li>A positive number N means to select the nth match.</li>
+                <li>A positive number N means to select the n<sup>th</sup> match.</li>
                 <li> Negative numbers are used in conjunction with the ForEach controller - see below.</li>
             </ul>
         </property>
@@ -5616,7 +5616,7 @@ extracting the node as text or attribute value and store the result into the giv
    <ul>
    <li>refName - set to first (or only) match; if no match, then set to default</li>
    <li>refName_matchNr - set to number of matches (may be 0)</li>
-   <li>refName_n - n=1,2,3 etc. Set to the 1st, 2nd 3rd match etc. 
+   <li>refName_n - n=1,2,3 etc. Set to the 1<sup>st</sup>, 2<sup>nd</sup> 3<sup>rd</sup> match etc. 
    </li>
    </ul>
    <p>Note: The next refName_n variable is set to null - e.g. if there are 2 matches, then refName_3 is set to null,
@@ -5629,7 +5629,7 @@ extracting the node as text or attribute value and store the result into the giv
    <dt>/html/head/title</dt>
      <dd>extracts title element from HTML response</dd>
    <dt>/book/page[2]</dt>
-     <dd>extracts 2nd page from a book</dd>
+     <dd>extracts 2<sup>nd</sup> page from a book</dd>
    <dt>/book/page</dt>
      <dd>extracts all pages from a book</dd>
      <dt>//form[@name='countryForm']//select[@name='country']/option[text()='Czech Republic'])/@value</dt>
@@ -6132,7 +6132,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
              <li>Do not group samplers: store all recorded samplers sequentially, without any grouping.</li>
              <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
              <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
-             <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
+             <li>Store 1<sup>st</sup> sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
              <li>Put each group in a new transaction controller: create a new <complink name="Transaction Controller"/> for each group, and store all samplers for that group in it.</li>
            </ul>
            The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
