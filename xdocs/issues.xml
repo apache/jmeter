@@ -93,7 +93,7 @@ Use the checklist below to guide you.
 <li>Java version (output from <code>java -version</code>)</li>
 <li>OS version</li>
 <li><code>jmeter.log</code> file (unlikely to contain sensitive information, but check before uploading)</li>
-<li>JMX file if relevant (redact any sensitive information first), providing a simplified Test Plan (using <complink name="Debug Sampler"/>) will ensure BUG is fixed much more rapidely than without it</li>
+<li>JMX file if relevant (redact any sensitive information first), providing a simplified Test Plan (using <complink name="Debug Sampler"/>) will ensure BUG is fixed much more rapidly than without it</li>
 <li>JTL file if relevant (may need to redact sensitive information)</li>
 <li>For a suspected bug, describe what you did, what happened, and how this differs from what you expected to happen.
 Does it happen every time?
