@@ -24,7 +24,7 @@
 <note>
 <b>Note to developers:</b>
 This is a very brief overview. 
-There is more infomation on the <a href="http://wiki.apache.org/jmeter">JMeter Wiki</a> or in <code>eclipse.readme</code> in root folder of sources.
+There is more information on the <a href="http://wiki.apache.org/jmeter">JMeter Wiki</a> or in <code>eclipse.readme</code> in root folder of sources.
 </note>
 <h2>Building Add-Ons</h2>
 <p>
@@ -68,7 +68,7 @@ install the dependent jars, you can configure Eclipse. The easiest way to do thi
 file with the <code>eclipse.classpath</code> file provided with JMeter. This will set up the source-paths and most of the libraries.
 </p>
 <p>
-Ensure your read <code>eclipse.readme</code> for project configuration.
+Ensure you read <code>eclipse.readme</code> for project configuration.
 </p>
 </section>
 </body>
