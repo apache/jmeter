@@ -495,7 +495,7 @@ Examples:<br></br>
 </component>
 
 <component index="&sect-num;.5.6a" name="__machineName">
-<description><p>The machineName function returns the local host name</p></description>
+<description><p>The machineName function returns the local host name. This uses the Java method InetAddress.getLocalHost() and passes it to getHostName()</p></description>
 
 <properties>
         <property name="Variable Name" required="No">A reference name for reusing the value
@@ -504,7 +504,7 @@ Examples:<br></br>
 </component>
 
 <component index="&sect-num;.5.6b" name="__machineIP">
-<description><p>The machineIP function returns the local IP address</p></description>
+<description><p>The machineIP function returns the local IP address. This uses the Java method InetAddress.getLocalHost() and passes it to getHostAddress()</p></description>
 
 <properties>
         <property name="Variable Name" required="No">A reference name for reusing the value
