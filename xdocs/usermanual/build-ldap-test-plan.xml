@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '9a'>
+<!ENTITY rarr     "&#x02192;" >
 ]>
 
 <document prev="build-ftp-test-plan.html" next="build-ldapext-test-plan.html" id="$Id$">
@@ -46,7 +47,7 @@ repeat 4 times) = 40 LDAP requests. To construct the Test Plan, you will use the
 The Thread Group tells JMeter the number of users you want to simulate, how often the users should send
 requests, and the how many requests  they should send.</p>
                 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan, clicking your
-right mouse button to get the <b>Add</b> menu, and then select <b>Add</b>&gt;<b>ThreadGroup</b>. You should now see the
+right mouse button to get the <b>Add</b> menu, and then select <b>Add</b>&rarr;<b>ThreadGroup</b>. You should now see the
 Thread Group element under Test Plan. If you do not see the element, then "expand" the Test Plan tree by
 clicking on the Test Plan element.
 <figure image="ldaptest/threadgroup.png">
@@ -56,7 +57,7 @@ Figure &sect-num;.1. Thread Group and final test tree</figure>
 </section>
     <section name="&sect-num;.2 Adding Login Config Element" anchor="add_login">
         <p>Begin by selecting the <b>LDAP Users</b> element. Click your right mouse
-button to get the Add menu, and then select <b>Add</b>&gt;<b>Config Element</b>&gt;<b>Login Config Element</b>.
+button to get the Add menu, and then select <b>Add</b>&rarr;<b>Config Element</b>&rarr;<b>Login Config Element</b>.
 Then,  select this new element to view its Control Panel.</p>
         <p>Like most JMeter elements, the <b>Login  Config Element</b>'s Control Panel has a name
 field that you can modify. In this example, leave this field with the default value.</p>
@@ -72,7 +73,7 @@ field that you can modify. In this example, leave this field with the default va
 
     <section name="&sect-num;.3 Adding LDAP Request Defaults" anchor="add_defaults">
                 <p>Begin by selecting the LDAP Users element. Click your right mouse button
-to get the <b>Add</b> menu, and then select <b>Add</b>&gt;<b>Config Element</b>&gt;<b>LDAP Request Defaults</b>. Then,
+to get the <b>Add</b> menu, and then select <b>Add</b>&rarr;<b>Config Element</b>&rarr;<b>LDAP Request Defaults</b>. Then,
 select this new element to view its Control Panel.</p>
         <p>Like most JMeter elements, the <b>LDAP Request Defaults</b> Control Panel has a name
 field that you can modify. In this example, leave this field with the default value.</p>
@@ -98,8 +99,8 @@ field that you can modify. In this example, leave this field with the default va
 
         </ol>
         <p>JMeter sends requests in the order that you add them to the tree.
-Start by adding the first LDAP Request to the LDAP Users element (<b>Add</b>&gt;<b>
-Sampler</b>&gt;<b>LDAP Request</b>). Then, select the LDAP Request  element in the tree
+Start by adding the first LDAP Request to the LDAP Users element (<b>Add</b>&rarr;<b>
+Sampler</b>&rarr;<b>LDAP Request</b>). Then, select the LDAP Request  element in the tree
 and edit the following properties</p>
         <ol>
             <li>Rename to "Add" this element</li>
@@ -142,7 +143,7 @@ properties</p>
 <section name="&sect-num;.5 Adding a Response Assertion" anchor="ResponseAssertion">
                <p>You can add a Response Assertion element.
  This element will check the received response data by verifying if the response text is "successful".
-  (<b>Add</b>&gt;<b>Assertion</b>&gt;<b>Response Assertion</b>).<br>Note: A this position in the tree,
+  (<b>Add</b>&rarr;<b>Assertion</b>&rarr;<b>Response Assertion</b>).<br>Note: A this position in the tree,
   the Response Assertion will be executed for each LDAP Request.</br></p>
           <ol>
             <li>Select <b>Text Response</b> Radio button in <b>Response Field to Test</b> group</li>
@@ -156,7 +157,7 @@ properties</p>
                <p>The final element you need to add to your Test Plan is a Listener.
  This element is responsible for storing all of the results of your LDAP
 requests in a file  and presenting a visual model of the data. Select the LDAP
-Users element and add a View Results in Table (<b>Add</b>&gt;<b>Listener</b>&gt;<b>View Results in Table</b>)</p>
+Users element and add a View Results in Table (<b>Add</b>&rarr;<b>Listener</b>&rarr;<b>View Results in Table</b>)</p>
 <figure image="ldaptest/viewtable.png">
   Figure &sect-num;.6 View Results in Table Listener</figure>
 

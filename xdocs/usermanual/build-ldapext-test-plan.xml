@@ -18,6 +18,7 @@
 
 <!DOCTYPE document[
 <!ENTITY sect-num '9b'>
+<!ENTITY rarr     "&#x02192;" >
 ]>
 
 <document prev="build-ldap-test-plan.html" next="build-ws-test-plan.html" id="$Id$">
@@ -76,7 +77,7 @@ requests, and the how many requests  they should send.
 </p>
 <p>
 Go ahead and add the <code>Thread Group</code> element by first selecting the <code>Test Plan</code>, clicking your
-right mouse button to get the <code>Add</code> menu, and then select <code>Add</code>&gt;<code>Threads (Users)</code>&gt;<code>Thread Group</code>. 
+right mouse button to get the <code>Add</code> menu, and then select <code>Add</code>&rarr;<code>Threads (Users)</code>&rarr;<code>Thread Group</code>. 
 You should now see the <code>Thread Group</code> element under <code>Test Plan</code>. If you do not see the element, then "expand" the Test Plan tree by
 clicking on the Test Plan element.
 </p>
@@ -89,7 +90,7 @@ Figure &sect-num;.1. Thread Group with Default Values</figure>
     <subsection name="&sect-num;.2 Adding LDAP Extended Request Defaults" anchor="add_ldapext_defaults">
 <p>
 Begin by selecting the LDAP Ext Users element. Click your right mouse button
-to get the <code>Add</code> menu, and then select <code>Add</code>&gt;<code>Config Element</code>&gt;<code>LDAP Extended Request Defaults</code>. Then,
+to get the <code>Add</code> menu, and then select <code>Add</code>&rarr;<code>Config Element</code>&rarr;<code>LDAP Extended Request Defaults</code>. Then,
 select this new element to view its Control Panel.
 </p>
 <p>
@@ -145,8 +146,8 @@ JMeter sends requests in the order that you add them to the tree.
 </p>
 <p>
 Adding a requests always start by:<br/>
-Adding the <code>LDAP Extended Request</code> to the LDAP Ext Users element (<code>Add</code>&gt;
-<code>Sampler</code>&gt;<code>LDAP Ext Request</code>). Then, select the <code>LDAP Ext Request</code> element in the tree
+Adding the <code>LDAP Extended Request</code> to the LDAP Ext Users element (<code>Add</code>&rarr;
+<code>Sampler</code>&rarr;<code>LDAP Ext Request</code>). Then, select the <code>LDAP Ext Request</code> element in the tree
 and edit the following properties.</p>
 
 
@@ -442,7 +443,7 @@ Figure &sect-num;.3.9. Unbind example</figure>
 The final element you need to add to your Test Plan is a Listener.
  This element is responsible for storing all of the results of your LDAP
 requests in a file  and presenting a visual model of the data. Select the Thread group
-element and add a <code>View Results Tree</code> (<code>Add</code>&gt;<code>Listener</code>&gt;<code>View Results Tree</code>)
+element and add a <code>View Results Tree</code> (<code>Add</code>&rarr;<code>Listener</code>&rarr;<code>View Results Tree</code>)
 </p>
 <p>
 <figure image="ldaptest/extviewtree.png">
