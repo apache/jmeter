@@ -18,6 +18,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '13'>
+<!ENTITY rarr     "&#x02192;" >
 ]>
 <document prev="build-jms-topic-test-plan.html" next="listeners.html" id="$Id$">
 
@@ -55,7 +56,7 @@ single server is bad and can create significant stress.
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
 clicking your right mouse button to get the Add menu, and then select
-Add --&gt; ThreadGroup.</p>
+Add &rarr; ThreadGroup.</p>
 
 <p>You should now see the Thread Group element under Test Plan.  If you do not
 see the element, "expand" the Test Plan tree by clicking on the Test Plan element.</p>
@@ -69,7 +70,7 @@ Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <section name="&sect-num;.2 HTTP Auth Manager" anchor="adding_auth">
 <p>Add the <complink name="HTTP Authorization Manager"/> to the Thread Group element
-(Add --&gt; Config element --&gt; HTTP Authorization Manager). Enter the username
+(Add &rarr; Config element &rarr; HTTP Authorization Manager). Enter the username
 and password for your webserver. Important note: the monitor only works with
 Tomcat5 build 5.0.19 and newer. For instructions on how to setup Tomcat, please
 refer to tomcat 5 documentation.</p>
@@ -83,7 +84,7 @@ refer to tomcat 5 documentation.</p>
 <section name="&sect-num;.3 Adding HTTP Request" anchor="adding_request">
 
 <p>Add the <complink name="HTTP Request"/> to the Thread Group element
-(Add --&gt; Sampler --&gt; HTTP Request). Then, select the HTTP Request element
+(Add &rarr; Sampler &rarr; HTTP Request). Then, select the HTTP Request element
 in the tree and edit the following properties):
 <ol>
 <li>Change the Name field to "Server Status".</li>
@@ -100,7 +101,7 @@ in the tree and edit the following properties):
 
 <section name="&sect-num;.4 Adding Constant Timer" anchor="adding_timer">
 
-<p>Add a timer to this thread group (Add --&gt; Timer --&gt; Constant Timer).
+<p>Add a timer to this thread group (Add &rarr; Timer &rarr; Constant Timer).
 Enter 5000 milliseconds in the "Thread Delay" box. In general, using intervals shorter
 than 5 seconds will add stress to your server. Find out what is an acceptable interval
 before you deploy the monitor in your production environment.</p>
@@ -114,7 +115,7 @@ before you deploy the monitor in your production environment.</p>
  the raw data and statistics, make sure you use different filenames.</p>
 
 <p>Select the thread group element and add a <complink name="Simple Data Writer"/> listener
-(Add --&gt; Listener --&gt; Simple Data Writer).  Next, you need to specify a directory
+(Add &rarr; Listener &rarr; Simple Data Writer).  Next, you need to specify a directory
 and filename of the output file.  You can either type it into the filename field, or
 select the Browse button and browse to a directory and then enter a filename.</p>
 
@@ -123,7 +124,7 @@ select the Browse button and browse to a directory and then enter a filename.</p
 <section name="&sect-num;.6 Adding Monitor Results" anchor="add_monitor_listener">
 
 <p>Add the <a href="component_reference.html#listeners">Listener</a> by selecting the
-test plan element (Add --&gt; Listener -- &gt; Monitor Results). 
+test plan element (Add &rarr; Listener &rarr; Monitor Results). 
 <br></br>
 By default, the Listener will select the results from the first connector in the sample response.
 The Connector prefix field can be used to select a different connector.

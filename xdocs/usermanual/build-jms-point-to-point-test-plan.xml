@@ -16,7 +16,10 @@
    limitations under the License.
 -->
 
-<!DOCTYPE document[<!ENTITY sect-num '11'>]>
+<!DOCTYPE document[
+<!ENTITY sect-num '11'>
+<!ENTITY rarr     "&#x02192;" >
+]>
 
 <document prev="build-ws-test-plan.html" next="build-jms-topic-test-plan.html" id="$Id$">
 
@@ -64,7 +67,7 @@ requests, and the how many requests they should send.
 
             <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
 clicking your right mouse button to get the Add menu, and then select
-Add --&gt; ThreadGroup.</p>
+Add &rarr; ThreadGroup.</p>
 
             <p>You should now see the Thread Group element under Test Plan.  If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
@@ -109,7 +112,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
         <section name="&sect-num;.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
 
             <p>Start by adding the sampler <complink name="JMS Point-to-Point"/>
-to the Point-to-Point element (Add --&gt; Sampler --&gt; JMS Point-to-Point).
+to the Point-to-Point element (Add &rarr; Sampler &rarr; JMS Point-to-Point).
 Then, select the JMS Point-to-Point sampler element in the tree.
  In building the example a configuration will be provided that works with ActiveMQ 3.0.
             </p>
@@ -201,8 +204,8 @@ a visual model of the data.
             </p>
 
             <p>Select the Thread Group element and add a
-                <complink name="Graph Results"/> listener (Add --&gt; Listener
---&gt; Graph Results).  Next, you need to specify a directory and filename of the
+                <complink name="Graph Results"/> listener (Add &rarr; Listener
+&rarr; Graph Results).  Next, you need to specify a directory and filename of the
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.
             </p>
