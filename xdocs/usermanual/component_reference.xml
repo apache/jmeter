@@ -1039,20 +1039,20 @@ common log format can use the AccessLogSampler. Server that use common log forma
 Tomcat, Resin, Weblogic, and SunOne. Common log format looks
 like this:</p>
 <source>127.0.0.1 - - [21/Oct/2003:05:37:21 -0500] "GET /index.jsp?%2Findex.jsp= HTTP/1.1" 200 8343</source>
-<note>The current implementation of the parser only looks at the text within the quotes that contains one of the HTTP protocol methods (GET, PUT, POST, DELETE...).
+<note>The current implementation of the parser only looks at the text within the quotes that contains one of the HTTP protocol methods (<code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code>...).
 Everything else is stripped out and ignored. For example, the response code is completely
 ignored by the parser. </note>
 <p>For the future, it might be nice to filter out entries that
-do not have a response code of 200. Extending the sampler should be fairly simple. There
+do not have a response code of <code>200</code>. Extending the sampler should be fairly simple. There
 are two interfaces you have to implement:</p>
 <ul>
-<li>org.apache.jmeter.protocol.http.util.accesslog.LogParser</li>
-<li>org.apache.jmeter.protocol.http.util.accesslog.Generator</li>
+<li><code>org.apache.jmeter.protocol.http.util.accesslog.LogParser</code></li>
+<li><code>org.apache.jmeter.protocol.http.util.accesslog.Generator</code></li>
 </ul>
 <p>The current implementation of AccessLogSampler uses the generator to create a new
 HTTPSampler. The servername, port and get images are set by AccessLogSampler. Next,
-the parser is called with integer 1, telling it to parse one entry. After that,
-HTTPSampler.sample() is called to make the request.</p>
+the parser is called with integer <code>1</code>, telling it to parse one entry. After that,
+<code>HTTPSampler.sample()</code> is called to make the request.</p>
 <source>
 samp = (HTTPSampler) GENERATOR.generateRequest();
 samp.setDomain(this.getDomain());
@@ -1062,15 +1062,15 @@ PARSER.parse(1);
 res = samp.sample();
 res.setSampleLabel(samp.toString());
 </source>
-The required methods in LogParser are:
+The required methods in <code>LogParser</code> are:
 <ul>
-<li>setGenerator(Generator)</li>
-<li>parse(int)</li> 
+<li><code>setGenerator(Generator)</code></li>
+<li><code>parse(int)</code></li> 
 </ul>
 <p>
-Classes implementing Generator interface should provide concrete implementation
+Classes implementing <code>Generator</code> interface should provide concrete implementation
 for all the methods. For an example of how to implement either interface, refer to
-StandardGenerator and TCLogParser.
+<code>StandardGenerator</code> and <code>TCLogParser</code>.
 </p>
 </description>
 
@@ -1083,18 +1083,18 @@ StandardGenerator and TCLogParser.
         <property name="Location of log file" required="Yes">The location of the access log file.</property>
 </properties>
 <p>
-The TCLogParser processes the access log independently for each thread.
-The SharedTCLogParser and OrderPreservingLogParser share access to the file, 
+The <code>TCLogParser</code> processes the access log independently for each thread.
+The <code>SharedTCLogParser</code> and <code>OrderPreservingLogParser</code> share access to the file, 
 i.e. each thread gets the next entry in the log.
 </p>
 <p>
-The SessionFilter is intended to handle Cookies across threads. 
+The <code>SessionFilter</code> is intended to handle Cookies across threads. 
 It does not filter out any entries, but modifies the cookie manager so that the cookies for a given IP are
 processed by a single thread at a time. If two threads try to process samples from the same client IP address,
 then one will be forced to wait until the other has completed.
 </p>
 <p>
-The LogFilter is intended to allow access log entries to be filtered by filename and regex,
+The <code>LogFilter</code> is intended to allow access log entries to be filtered by filename and regex,
 as well as allowing for the replacement of file extensions. However, it is not currently possible
 to configure this via the GUI, so it cannot really be used.
 </p>
