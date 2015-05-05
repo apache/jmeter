@@ -42,6 +42,7 @@
 	<classpathentry kind="src" output="build/protocol/mongodb" path="src/protocol/mongodb"/>
 	<classpathentry kind="src" output="build/protocol/native" path="src/protocol/native"/>
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
+	<classpathentry kind="src" output="build/protocol/jini" path="src/protocol/jini"/>
 	<classpathentry kind="src" output="build/test" path="test/src"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
