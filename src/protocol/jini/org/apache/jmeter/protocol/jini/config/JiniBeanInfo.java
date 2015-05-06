@@ -34,13 +34,11 @@ public class JiniBeanInfo extends BeanInfoSupport {
 
         createPropertyGroup("remoteServiceDetails", new String[] { "rmiRegistryUrl", "serviceName", "serviceInterface" });
 
-        createPropertyGroup("methodDetails", new String[] { "methodName", "methodParamTypes", "methodArguments" });
-
         PropertyDescriptor p = property("remoteServiceConfiguration");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, Boolean.FALSE);
         p.setValue(DEFAULT, "");
         p = property("rmiRegistryUrl");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, Boolean.FALSE);
         p.setValue(DEFAULT, "jini://localhost:4160");
         p = property("serviceName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -48,17 +46,7 @@ public class JiniBeanInfo extends BeanInfoSupport {
         p = property("serviceInterface");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "com.foo.MyService");
-        p = property("methodName");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "someMethod");
-        p = property("methodParamTypes");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "java.lang.Long,java.lang.String");
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 
-        p = property("methodArguments");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "1,abc");
     }
 
 }
