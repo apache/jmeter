@@ -29,9 +29,6 @@ public class JiniTestElement extends AbstractTestElement implements ConfigElemen
     private transient String rmiRegistryUrl;
     private transient String serviceName;
     private transient String serviceInterface;
-    private transient String methodName;
-    private transient String methodParamTypes;
-    private transient String methodArguments;
 
     @Override
     public void testStarted() {
@@ -99,30 +96,6 @@ public class JiniTestElement extends AbstractTestElement implements ConfigElemen
 
     public void setServiceInterface(String serviceInterface) {
         this.serviceInterface = serviceInterface;
-    }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
-    }
-
-    public String getMethodParamTypes() {
-        return methodParamTypes;
-    }
-
-    public void setMethodParamTypes(String methodParamTypes) {
-        this.methodParamTypes = methodParamTypes;
-    }
-
-    public String getMethodArguments() {
-        return methodArguments;
-    }
-
-    public void setMethodArguments(String methodArguments) {
-        this.methodArguments = methodArguments;
     }
 
 }

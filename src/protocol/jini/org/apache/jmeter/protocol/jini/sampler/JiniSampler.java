@@ -18,35 +18,35 @@
 
 package org.apache.jmeter.protocol.jini.sampler;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
-import org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement;
-import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
  * A sampler which understands JDBC database requests.
  *
  */
-public class JiniSampler extends AbstractJDBCTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
+public class JiniSampler extends AbstractTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(Arrays.asList(new String[] { "org.apache.jmeter.config.gui.SimpleConfigGui" }));
 
     private static final long serialVersionUID = 1L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private String methodName;
+    private String methodParamTypes;
+    private String methodArguments;
 
     public JiniSampler() {
     }
@@ -60,7 +60,7 @@ public class JiniSampler extends AbstractJDBCTestElement implements Sampler, Tes
         res.setSamplerData(toString());
         res.setDataType(SampleResult.TEXT);
         res.setContentType("text/plain"); // $NON-NLS-1$
-        res.setDataEncoding(ENCODING);
+        // res.setDataEncoding(ENCODING);
 
         // Assume we will be successful
         res.setSuccessful(true);
@@ -68,35 +68,35 @@ public class JiniSampler extends AbstractJDBCTestElement implements Sampler, Tes
         res.setResponseCodeOK();
 
         res.sampleStart();
-        Connection conn = null;
-
-        try {
-            if (JOrphanUtils.isBlank(getDataSource())) {
-                throw new IllegalArgumentException("Variable Name must not be null in " + getName());
-            }
-
-            try {
-                conn = DataSourceElement.getConnection(getDataSource());
-            } finally {
-                // FIXME: there is separate connect time field now
-                res.latencyEnd(); // use latency to measure connection time
-            }
-            res.setResponseHeaders(conn.toString());
-            res.setResponseData(execute(conn));
-        } catch (SQLException ex) {
-            final String errCode = Integer.toString(ex.getErrorCode());
-            res.setResponseMessage(ex.toString());
-            res.setResponseCode(ex.getSQLState() + " " + errCode);
-            res.setResponseData(ex.getMessage().getBytes());
-            res.setSuccessful(false);
-        } catch (Exception ex) {
-            res.setResponseMessage(ex.toString());
-            res.setResponseCode("000");
-            res.setResponseData(ex.getMessage().getBytes());
-            res.setSuccessful(false);
-        } finally {
-            close(conn);
-        }
+        // Connection conn = null;
+        //
+        // try {
+        // if (JOrphanUtils.isBlank(getDataSource())) {
+        // throw new
+        // IllegalArgumentException("Variable Name must not be null in " +
+        // getName());
+        // }
+        //
+        // try {
+        // conn = DataSourceElement.getConnection(getDataSource());
+        // } finally {
+        // // FIXME: there is separate connect time field now
+        // res.latencyEnd(); // use latency to measure connection time
+        // }
+        // res.setResponseHeaders(conn.toString());
+        // res.setResponseData(execute(conn));
+        // } catch (SQLException ex) {
+        // final String errCode = Integer.toString(ex.getErrorCode());
+        // res.setResponseMessage(ex.toString());
+        // res.setResponseCode(ex.getSQLState() + " " + errCode);
+        // res.setResponseData(ex.getMessage().getBytes());
+        // res.setSuccessful(false);
+        // } catch (Exception ex) {
+        // res.setResponseMessage(ex.toString());
+        // res.setResponseCode("000");
+        // res.setResponseData(ex.getMessage().getBytes());
+        // res.setSuccessful(false);
+        // }
 
         // TODO: process warnings? Set Code and Message to success?
         res.sampleEnd();
@@ -108,4 +108,29 @@ public class JiniSampler extends AbstractJDBCTestElement implements Sampler, Tes
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
     }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getMethodParamTypes() {
+        return methodParamTypes;
+    }
+
+    public void setMethodParamTypes(String methodParamTypes) {
+        this.methodParamTypes = methodParamTypes;
+    }
+
+    public String getMethodArguments() {
+        return methodArguments;
+    }
+
+    public void setMethodArguments(String methodArguments) {
+        this.methodArguments = methodArguments;
+    }
+
 }
