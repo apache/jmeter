@@ -24,62 +24,41 @@ package org.apache.jmeter.protocol.jini.config;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
-import org.apache.jmeter.testbeans.gui.TypeEditor;
 
 public class JiniBeanInfo extends BeanInfoSupport {
 
     public JiniBeanInfo() {
         super(JiniTestElement.class);
 
-        createPropertyGroup("varName", new String[] { "dataSource" });
+        createPropertyGroup("varName", new String[] { "remoteServiceConfiguration" });
 
-        createPropertyGroup("pool", new String[] { "poolMax", "timeout", "trimInterval", "autocommit", "transactionIsolation" });
+        createPropertyGroup("remoteServiceDetails", new String[] { "rmiRegistryUrl", "serviceName", "serviceInterface" });
 
-        createPropertyGroup("keep-alive", new String[] { "keepAlive", "connectionAge", "checkQuery" });
+        createPropertyGroup("methodDetails", new String[] { "methodName", "methodParamTypes", "methodArguments" });
 
-        createPropertyGroup("database", new String[] { "dbUrl", "driver", "username", "password" });
-
-        PropertyDescriptor p = property("dataSource");
+        PropertyDescriptor p = property("remoteServiceConfiguration");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("poolMax");
+        p = property("rmiRegistryUrl");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "10");
-        p = property("timeout");
+        p.setValue(DEFAULT, "jini://localhost:4160");
+        p = property("serviceName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "10000");
-        p = property("trimInterval");
+        p.setValue(DEFAULT, "MyService");
+        p = property("serviceInterface");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "60000");
-        p = property("autocommit");
+        p.setValue(DEFAULT, "com.foo.MyService");
+        p = property("methodName");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
-        p = property("transactionIsolation");
+        p.setValue(DEFAULT, "someMethod");
+        p = property("methodParamTypes");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "DEFAULT");
+        p.setValue(DEFAULT, "java.lang.Long,java.lang.String");
         p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 
-        p = property("keepAlive");
+        p = property("methodArguments");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
-        p = property("connectionAge");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "5000");
-        p = property("checkQuery");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "Select 1");
-        p = property("dbUrl");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
-        p = property("driver");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
-        p = property("username");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
-        p = property("password", TypeEditor.PasswordEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "");
+        p.setValue(DEFAULT, "1,abc");
     }
 
 }

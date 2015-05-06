@@ -25,6 +25,14 @@ public class JiniTestElement extends AbstractTestElement implements ConfigElemen
 
     private static final long serialVersionUID = 1L;
 
+    private transient String remoteServiceConfiguration;
+    private transient String rmiRegistryUrl;
+    private transient String serviceName;
+    private transient String serviceInterface;
+    private transient String methodName;
+    private transient String methodParamTypes;
+    private transient String methodArguments;
+
     @Override
     public void testStarted() {
         // TODO Auto-generated method stub
@@ -59,6 +67,62 @@ public class JiniTestElement extends AbstractTestElement implements ConfigElemen
     public boolean expectsModification() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    public String getRemoteServiceConfiguration() {
+        return remoteServiceConfiguration;
+    }
+
+    public void setRemoteServiceConfiguration(String remoteServiceConfiguration) {
+        this.remoteServiceConfiguration = remoteServiceConfiguration;
+    }
+
+    public String getRmiRegistryUrl() {
+        return rmiRegistryUrl;
+    }
+
+    public void setRmiRegistryUrl(String rmiRegistryUrl) {
+        this.rmiRegistryUrl = rmiRegistryUrl;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getServiceInterface() {
+        return serviceInterface;
+    }
+
+    public void setServiceInterface(String serviceInterface) {
+        this.serviceInterface = serviceInterface;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getMethodParamTypes() {
+        return methodParamTypes;
+    }
+
+    public void setMethodParamTypes(String methodParamTypes) {
+        this.methodParamTypes = methodParamTypes;
+    }
+
+    public String getMethodArguments() {
+        return methodArguments;
+    }
+
+    public void setMethodArguments(String methodArguments) {
+        this.methodArguments = methodArguments;
     }
 
 }

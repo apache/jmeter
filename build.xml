@@ -212,6 +212,7 @@
   <property name="src.jms" value="src/protocol/jms"/>
   <property name="src.native" value="src/protocol/native"/>
   <property name="src.mongodb" value="src/protocol/mongodb"/>
+  <property name="src.jini" value="src/protocol/jini"/>	
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -261,6 +262,7 @@
   <property name="build.jms" value="build/protocol/jms"/>
   <property name="build.native" value="build/protocol/native"/>
   <property name="build.mongodb" value="build/protocol/mongodb"/>
+  <property name="build.jini" value="build/protocol/jini"/>
   <property name="build.test" value="build/test"/>
   <property name="build.res" value="build/res"/>
 
@@ -739,7 +741,7 @@
     </javac>
   </target>
 
-  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp" description="Compile all protocol-specific components."/>
+  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp,compile-jini" description="Compile all protocol-specific components."/>
 
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
@@ -829,6 +831,19 @@
         description="Compile components specific to MongoDB sampling.">
     <mkdir dir="${build.mongodb}"/>
     <javac srcdir="${src.mongodb}" destdir="${build.mongodb}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="compile-jini" depends="compile-jorphan,compile-core" description="Compile components specific to JINI sampling.">
+    <mkdir dir="${build.jini}"/>
+    <javac srcdir="${src.jini}" destdir="${build.jini}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
@@ -1119,6 +1134,16 @@ run JMeter unless all the JMeter jars are added.
         fullpath="META-INF/LICENSE" />
       <fileset dir="${build.mongodb}" includes="**/*.class" />
       <fileset dir="${src.mongodb}" includes="**/*.properties" />
+    </jar>
+
+    <!-- jini -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_jini.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
+      <zipfileset file="${resources.meta-inf}/default.notice"
+        fullpath="META-INF/NOTICE" />
+      <zipfileset file="${resources.meta-inf}/default.license"
+        fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.jini}" includes="**/*.class" />
+      <fileset dir="${src.jini}" includes="**/*.properties" />
     </jar>
 
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
