@@ -1106,13 +1106,13 @@ to configure this via the GUI, so it cannot really be used.
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
-The test element supports the ThreadListener and TestListener interface methods.
+The test element supports the <code>ThreadListener</code> and <code>TestListener</code> interface methods.
 These must be defined in the initialisation file.
-See the file BeanShellListeners.bshrc for example definitions.
+See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </p>
 <p>
-From JMeter version 2.5.1, the BeanShell sampler also supports the Interruptible interface.
-The interrupt() method can be defined in the script or the init file.
+From JMeter version 2.5.1, the BeanShell sampler also supports the <code>Interruptible</code> interface.
+The <code>interrupt()</code> method can be defined in the script or the init file.
 </p>
     </description>
 <properties>
@@ -1127,23 +1127,23 @@ The interrupt() method can be defined in the script or the init file.
     This is intended for use with script files; for scripts defined in the GUI, you can use whatever
     variable and function references you need within the script itself.
     The parameters are stored in the following variables:
-    <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>bsh.args - String array containing parameters, split on white-space</li>
-    </ul></property>
+    <dl>
+        <dt><code>Parameters</code></dt><dd>string containing the parameters as a single variable</dd>
+        <dt><code>bsh.args</code></dt><dd>String array containing parameters, split on white-space</dd>
+    </dl></property>
     <property name="Script file" required="No">A file containing the BeanShell script to run.
-    The file name is stored in the script variable FileName</property>
+    The file name is stored in the script variable <code>FileName</code></property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. 
-    The return value (if not null) is stored as the sampler result.</property>
+    The return value (if not <code>null</code>) is stored as the sampler result.</property>
 </properties>
-<p>
+<note>
 N.B. Each Sampler instance has its own BeanShell interpeter,
 and Samplers are only called from a single thread
-</p><p>
-If the property "beanshell.sampler.init" is defined, it is passed to the Interpreter
+</note><p>
+If the property "<code>beanshell.sampler.init</code>" is defined, it is passed to the Interpreter
 as the name of a sourced file.
 This can be used to define common methods and variables. 
-There is a sample init file in the bin directory: BeanShellSampler.bshrc.
+There is a sample init file in the bin directory: <code>BeanShellSampler.bshrc</code>.
 </p><p>
 If a script file is supplied, that will be used, otherwise the script will be used.</p>
 <note>
@@ -1152,46 +1152,51 @@ so the references will only be resolved once.
 Variable and function references in script files will be passed
 verbatim to the interpreter, which is likely to cause a syntax error.
 In order to use runtime variables, please use the appropriate props methods,
-e.g. props.get("START.HMS"); props.put("PROP1","1234");
+e.g.<code>props.get("START.HMS"); props.put("PROP1","1234");</code>
 <br/>
 BeanShell does not currently support Java 5 syntax such as generics and the enhanced for loop.
 </note>
-        <p>Before invoking the script, some variables are set up in the BeanShell interpreter:
-            </p>
-                <p>The contents of the Parameters field is put into the variable "Parameters".
+        <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
+        <p>The contents of the Parameters field is put into the variable "<code>Parameters</code>".
             The string is also split into separate tokens using a single space as the separator, and the resulting list
-            is stored in the String array bsh.args.</p>
-            <p>The full list of BeanShell variables that is set up is as follows:</p>
+            is stored in the String array <code>bsh.args</code>.</p>
+        <p>The full list of BeanShell variables that is set up is as follows:</p>
         <ul>
-        <li>log - the Logger</li>
-        <li>Label - the Sampler label</li>
-        <li>FileName - the file name, if any</li>
-        <li>Parameters - text from the Parameters field</li>
-        <li>bsh.args - the parameters, split as described above</li>
-        <li>SampleResult - pointer to the current SampleResult</li>
-            <li>ResponseCode = 200</li>
-            <li>ResponseMessage = "OK"</li>
-            <li>IsSuccess = true</li>
-            <li>ctx - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
-            <li>vars - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
-            <li>props - JMeterProperties (class java.util.Properties)- e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+        <li><code>log</code> - the Logger</li>
+        <li><code>Label</code> - the Sampler label</li>
+        <li><code>FileName</code> - the file name, if any</li>
+        <li><code>Parameters</code> - text from the Parameters field</li>
+        <li><code>bsh.args</code> - the parameters, split as described above</li>
+        <li><code>SampleResult</code> - pointer to the current SampleResult</li>
+            <li><code>ResponseCode</code> defaults to <code>200</code></li>
+            <li><code>ResponseMessage</code> defaults to "<code>OK</code>"</li>
+            <li><code>IsSuccess</code> defaults to <code>true</code></li>
+            <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
+            <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. 
+               <source>vars.get("VAR1");
+vars.put("VAR2","value");
+vars.remove("VAR3");
+vars.putObject("OBJ1",new Object());</source></li>
+            <li><code>props</code> - JMeterProperties (class <code>java.util.Properties</code>) - e.g.
+                <source>props.get("START.HMS");
+props.put("PROP1","1234");</source></li>
         </ul>
         <p>When the script completes, control is returned to the Sampler, and it copies the contents
-            of the following script variables into the corresponding variables in the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>:</p>
+            of the following script variables into the corresponding variables in the <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a>:</p>
             <ul>
-            <li>ResponseCode - for example 200</li>
-            <li>ResponseMessage - for example "OK"</li>
-            <li>IsSuccess - true/false</li>
+            <li><code>ResponseCode</code> - for example <code>200</code></li>
+            <li><code>ResponseMessage</code> - for example "<code>OK</code>"</li>
+            <li><code>IsSuccess</code> - <code>true</code> or <code>false</code></li>
             </ul>
             <p>The SampleResult ResponseData is set from the return value of the script.
             Since version 2.1.2, if the script returns null, it can set the response directly, by using the method 
-            SampleResult.setResponseData(data), where data is either a String or a byte array.
-            The data type defaults to "text", but can be set to binary by using the method
-            SampleResult.setDataType(SampleResult.BINARY).
+            <code>SampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
+            The data type defaults to "<code>text</code>", but can be set to binary by using the method
+            <code>SampleResult.setDataType(SampleResult.BINARY)</code>.
             </p>
-            <p>The SampleResult variable gives the script full access to all the fields and
-                methods in the SampleResult. For example, the script has access to the methods
-                setStopThread(boolean) and setStopTest(boolean).
+            <p>The <code>SampleResult</code> variable gives the script full access to all the fields and
+                methods in the <code>SampleResult</code>. For example, the script has access to the methods
+                <code>setStopThread(boolean)</code> and <code>setStopTest(boolean)</code>.
 
                 Here is a simple (not very useful!) example script:</p>
 
@@ -1205,14 +1210,14 @@ return "Data from sample with Label "+Label;
 SampleResult.setResponseData("My data");
 return null;
 </source>
-<p>Another example:<br></br> ensure that the property <b>beanshell.sampler.init=BeanShellSampler.bshrc</b> is defined in jmeter.properties. 
-The following script will show the values of all the variables in the ResponseData field:
+<p>Another example:<br></br> ensure that the property <b>beanshell.sampler.init=BeanShellSampler.bshrc</b> is defined in <code>jmeter.properties</code>. 
+The following script will show the values of all the variables in the <code>ResponseData</code> field:
 </p>
-<pre>
+<source>
 return getVariables();
-</pre>
+</source>
 <p>
-For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> etc.) please check the Javadoc or the source code.
+For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html"><code>JMeterVariables</code></a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a> etc.) please check the Javadoc or the source code.
 Beware however that misuse of any methods can cause subtle faults that may be difficult to find ...
 </p>
 </component>
