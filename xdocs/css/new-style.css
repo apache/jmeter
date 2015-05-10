@@ -19,6 +19,18 @@
   width: 60em;
 }
 
+a {
+  color: brown;
+}
+
+.menu a {
+  text-decoration-line: none;
+}
+
+a:hover {
+  color: black;
+}
+
 img {
   border: 0;
   width: auto;
@@ -51,9 +63,10 @@ h1, h2, h3, h4, h5, .title {
 .menu {
   border: 1px solid lightgray;
   box-shadow: 5px 5px 10px rgba(20, 20, 20, 0.3);
-  list-style: outside none none;
+  list-style: none;
   margin: 0.5em;
   padding: 0.5em;
+  font-size: 90%;
 }
 
 .menu+.menu {
@@ -66,6 +79,11 @@ h1, h2, h3, h4, h5, .title {
   width: auto;
   max-width: 95%;
   height: auto;
+}
+
+.menu ul {
+  list-style: outside;
+  padding-left: 1.5rem;
 }
 
 .banner>iframe {
@@ -232,9 +250,9 @@ table {
 
 .nav {
   display: inline-block;
-  max-width: 20em;
+  max-width: 20rem;
   vertical-align: top;
-  width: 33%;
+  width: 25%;
 }
 
 .main {
@@ -310,11 +328,86 @@ table {
   display: none;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1000px) {
+  .nav {
+  width: 100%;
+  max-width: 100%;
+  border-bottom: 1px solid #808080;
+  box-shadow: 0px 20px 15px -15px rgba(20,20,20,0.2);
+}
+.header {
+  box-shadow: none;
+  margin-bottom: 0px;
+}
+.menu {
+  display: inline-block;
+  width: auto;
+  border: 0px;
+  box-shadow: none;
+  margin: 0px;
+}
+.menu + .menu {
+  margin-top: 0.2rem;
+}
+.menu ul {
+  display: none;
+  position: absolute;
+  padding: 1rem;
+  box-shadow: 10px 10px 10px rgba(20,20,20,0.2);
+  border: 1px solid #808080;
+  list-style: none;
+}
+
+.menu li:hover ul {
+  display: block;
+  background: white;
+}
+ .main {
+ width: auto;
+ max-width: 95%;
+ margin: 0.5rem;
+ }
+ .header {
+    display: block;
+  }
+  .header span {
+    display: inline;
+  }
+  .pagelinks li {
+    margin: 0.5rem;
+  }
+  .header>div {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%
+  }
+  .header>div+.header>div {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    box-shadow: none;
+    margin-bottom: 0px;
+  }
   .nav {
     display: block;
-    width: 95%;
-    max-width: 95%;
+    width: 100%;
+    max-width: 100%;
+    border-bottom: 1px solid #808080;
+    box-shadow: 0px 15px 10px -10px rgba(20,20,20,0.2);
+  }
+  .menu {
+    box-shadow: none;
+    display: block;
+    border: 0px;
+    padding: 0.2rem 0.5rem;
+    margin: 0.2rem 0.5rem;
+  }
+  .menu + .menu {
+    margin-top: 0.2rem;
+    border-top: 1px solid orange;
   }
   .main {
     display: block;
@@ -369,6 +462,10 @@ table {
   }
   .menu ul {
     display: none;
+    position: relative;
+    box-shadow: none;
+    border: 0px;
+    padding: 0.1rem 1rem;
   }
   .menu li:hover>ul {
     display: block;
