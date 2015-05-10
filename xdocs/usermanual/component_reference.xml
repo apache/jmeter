@@ -1322,8 +1322,8 @@ To benefit from this feature:
 <ul>
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
     <li>Or Use Script Text and fill in script cache key property, ensure it is unique across Test Plan as JMeter will use it to cache result of compilation.
-    <note>When using this feature, ensure you script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
-    <note>To benefit from Caching and compilation, language engine used for scripting must implement JSR223 Compilable interface (Groovy is one of these, java, beanshell and javascript are not)</note>
+    <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
+    <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 Compilable interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
 </ul>
 Cache size is controlled by the following jmeter property (jmeter.properties):
