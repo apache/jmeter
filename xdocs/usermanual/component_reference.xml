@@ -1323,17 +1323,15 @@ To benefit from this feature:
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
     <li>Or Use Script Text and fill in script cache key property, ensure it is unique across Test Plan as JMeter will use it to cache result of compilation.
     <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
-    <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 Compilable interface (Groovy is one of these, java, beanshell and javascript are not)</note>
+    <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
 </ul>
-Cache size is controlled by the following jmeter property (jmeter.properties):
-<ul>
-<li>jsr223.compiled_scripts_cache_size=100</li>
-</ul>
+Cache size is controlled by the following jmeter property (<code>jmeter.properties</code>):
+<source>jsr223.compiled_scripts_cache_size=100</source>
 For details, see <complink name="BSF Sampler"/>.
-<note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
+<note>Unlike the <complink name="BeanShell Sampler" />, the interpreter is not saved between invocations.</note>
 <note>
-Since JMeter 2.8, JSR223 Test Elements using Script file or Script text + cache key are now Compiled if ScriptEngine supports this feature, this enables great performance enhancements.
+Since JMeter 2.8, JSR223 Test Elements using Script file or Script text + cache key are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
 </note>
 </description>
 <note>
@@ -1342,7 +1340,8 @@ so the references will only be resolved once.
 Variable and function references in script files will be passed
 verbatim to the interpreter, which is likely to cause a syntax error.
 In order to use runtime variables, please use the appropriate props methods,
-e.g. props.get("START.HMS"); props.put("PROP1","1234");
+e.g. <source>props.get("START.HMS");
+props.put("PROP1","1234");</source>
 </note>
 </component>
 
