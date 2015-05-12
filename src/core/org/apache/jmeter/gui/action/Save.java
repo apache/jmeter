@@ -21,15 +21,27 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
@@ -56,8 +68,35 @@ import org.apache.log.Logger;
 public class Save implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final List<File> EMPTY_FILE_LIST = Collections.emptyList();
+    
+    private static final String JMX_BACKUP_ON_SAVE = "jmeter.gui.action.save.backup_on_save"; // $NON-NLS-1$
+
+    private static final String JMX_BACKUP_DIRECTORY = "jmeter.gui.action.save.backup_directory"; // $NON-NLS-1$
+    
+    private static final String JMX_BACKUP_MAX_HOURS = "jmeter.gui.action.save.keep_backup_max_hours"; // $NON-NLS-1$
+    
+    private static final String JMX_BACKUP_MAX_COUNT = "jmeter.gui.action.save.keep_backup_max_count"; // $NON-NLS-1$
+    
     public static final String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
 
+    private static final String DEFAULT_BACKUP_DIRECTORY = JMeterUtils.getJMeterHome() + "/backups"; //$NON-NLS-1$
+    
+    // Whether we should keep backups for save JMX files. Default is to enable backup
+    private static final boolean BACKUP_ENABLED = JMeterUtils.getPropDefault(JMX_BACKUP_ON_SAVE, true);
+    
+    // Path to the backup directory
+    private static final String BACKUP_DIRECTORY = JMeterUtils.getPropDefault(JMX_BACKUP_DIRECTORY, DEFAULT_BACKUP_DIRECTORY);
+    
+    // Backup files expiration in hours. Default is to never expire (zero value).
+    private static final int BACKUP_MAX_HOURS = JMeterUtils.getPropDefault(JMX_BACKUP_MAX_HOURS, 0);
+    
+    // Max number of backup files. Default is to limit to 10 backups max.
+    private static final int BACKUP_MAX_COUNT = JMeterUtils.getPropDefault(JMX_BACKUP_MAX_COUNT, 10);
+
+    // NumberFormat to format version number in backup file names
+    private static final DecimalFormat BACKUP_VERSION_FORMATER = new DecimalFormat("000000"); //$NON-NLS-1$
+    
     private static final Set<String> commands = new HashSet<String>();
 
     static {
@@ -166,7 +205,16 @@ public class Save implements Command {
                 GuiPackage.getInstance().setTestPlanFile(updateFile);
             }
         }
-
+        
+        // backup existing file according to jmeter/user.properties settings
+        List<File> expiredBackupFiles = EMPTY_FILE_LIST;
+        File fileToBackup = new File(updateFile);
+        try {
+            expiredBackupFiles = createBackupFile(fileToBackup);
+        } catch (Exception ex) {
+            log.error("Failed to create a backup for " + fileToBackup.getName(), ex); //$NON-NLS-1$
+        }
+        
         try {
             convertSubTree(subTree);
         } catch (Exception err) {
@@ -181,6 +229,16 @@ public class Save implements Command {
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
                 ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
             }
+            
+            // delete expired backups : here everything went right so we can
+            // proceed to deletion
+            for (File expiredBackupFile : expiredBackupFiles) {
+                try {
+                    FileUtils.deleteQuietly(expiredBackupFile);
+                } catch (Exception ex) {
+                    log.warn("Failed to delete backup file " + expiredBackupFile.getName()); //$NON-NLS-1$
+                }
+            }
         } catch (Throwable ex) {
             log.error("Error saving tree:", ex);
             if (ex instanceof Error){
@@ -194,6 +252,145 @@ public class Save implements Command {
             JOrphanUtils.closeQuietly(ostream);
         }
         GuiPackage.getInstance().updateCurrentGui();
+    }
+    
+    /**
+     * <p>
+     * Create a backup copy of the specified file whose name will be
+     * <code>{baseName}-{version}.jmx</code><br>
+     * Where :<br>
+     * <code>{baseName}</code> is the name of the file to backup without its
+     * <code>.jmx</code> extension. For a file named <code>testplan.jmx</code>
+     * it would then be <code>testplan</code><br>
+     * <code>{version}</code> is the version number automatically incremented
+     * after the higher version number of pre-existing backup files. <br>
+     * <br>
+     * Example: <code>testplan-000028.jmx</code> <br>
+     * <br>
+     * If <code>jmeter.gui.action.save.backup_directory</code> is <b>not</b>
+     * set, then backup files will be created in
+     * <code>${JMETER_HOME}/backups</code>
+     * </p>
+     * <p>
+     * Backup process is controlled by the following jmeter/user properties :<br>
+     * <table border=1>
+     * <tr>
+     * <th align=left>Property</th>
+     * <th align=left>Type/Value</th>
+     * <th align=left>Description</th>
+     * </tr>
+     * <tr>
+     * <td><code>jmeter.gui.action.save.backup_on_save</code></td>
+     * <td><code>true|false</code></td>
+     * <td>Enables / Disables backup</td>
+     * </tr>
+     * <tr>
+     * <td><code>jmeter.gui.action.save.backup_directory</code></td>
+     * <td><code>/path/to/backup/directory</code></td>
+     * <td>Set the directory path where backups will be stored upon save. If not
+     * set then backups will be created in <code>${JMETER_HOME}/backups</code><br>
+     * If that directory does not exist, it will be created</td>
+     * </tr>
+     * <tr>
+     * <td><code>jmeter.gui.action.save.keep_backup_max_hours</code></td>
+     * <td><code>integer</code></td>
+     * <td>Maximum number of hours to preserve backup files. Backup files whose
+     * age exceeds that limit should be deleted and will be added to this method
+     * returned list</td>
+     * </tr>
+     * <tr>
+     * <td><code>jmeter.gui.action.save.keep_backup_max_count</code></td>
+     * <td><code>integer</code></td>
+     * <td>Max number of backup files to be preserved. Exceeding backup files
+     * should be deleted and will be added to this method returned list. Only
+     * the most recent files will be preserved.</td>
+     * </tr>
+     * </table>
+     * </p>
+     * 
+     * @param fileToBackup
+     *            The file to create a backup from
+     * @return A list of expired backup files selected according to the above
+     *         properties and that should be deleted after the save operation
+     *         has performed successfully
+     */
+    private List<File> createBackupFile(File fileToBackup) {
+        if (!BACKUP_ENABLED) {
+            return EMPTY_FILE_LIST;
+        }
+        char versionSeparator = '-'; //$NON-NLS-1$
+        String baseName = fileToBackup.getName();
+        // remove .jmx extension if any
+        baseName = baseName.endsWith(JMX_FILE_EXTENSION) ? baseName.substring(0, baseName.length() - JMX_FILE_EXTENSION.length()) : baseName;
+        // get a file to the backup directory
+        File backupDir = new File(BACKUP_DIRECTORY);
+        backupDir.mkdirs();
+        if (!backupDir.isDirectory()) {
+            log.error("Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <" + backupDir.getAbsolutePath() + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+
+        // select files matching
+        // {baseName}{versionSeparator}{version}{jmxExtension}
+        // where {version} is a 6 digits number
+        String backupPatternRegex = Pattern.quote(baseName + versionSeparator) + "([\\d]{6})" + Pattern.quote(JMX_FILE_EXTENSION); //$NON-NLS-1$
+        Pattern backupPattern = Pattern.compile(backupPatternRegex);
+        // create a file filter that select files matching a given regex pattern
+        IOFileFilter patternFileFilter = new PrivatePatternFileFilter(backupPattern);
+        // get all backup files in the backup directory
+        List<File> backupFiles = new ArrayList<File>(FileUtils.listFiles(backupDir, patternFileFilter, null));
+        // find the highest version number among existing backup files (this
+        // should be the more recent backup)
+        int lastVersionNumber = 0;
+        for (File backupFile : backupFiles) {
+            Matcher matcher = backupPattern.matcher(backupFile.getName());
+            if (matcher.find() && matcher.groupCount() > 0) {
+                // parse version number from the backup file name
+                // should never fail as it matches the regex
+                int version = Integer.parseInt(matcher.group(1));
+                lastVersionNumber = Math.max(lastVersionNumber, version);
+            }
+        }
+        // find expired backup files
+        List<File> expiredFiles = new ArrayList<File>();
+        if (BACKUP_MAX_HOURS > 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.HOUR_OF_DAY, -BACKUP_MAX_HOURS);
+            long expiryDate = cal.getTime().getTime();
+            // select expired files that should be deleted
+            IOFileFilter expiredFileFilter = FileFilterUtils.ageFileFilter(expiryDate, true);
+            expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
+        }
+        // sort backups from by their last modified time
+        Collections.sort(backupFiles, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                long diff = o1.lastModified() - o2.lastModified();
+                // convert the long to an int in order to comply with the method
+                // contract
+                return diff < 0 ? -1 : diff > 0 ? 1 : 0;
+            }
+        });
+        // backup name is of the form
+        // {baseName}{versionSeparator}{version}{jmxExtension}
+        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1) + JMX_FILE_EXTENSION;
+        File backupFile = new File(backupDir, backupName);
+        // create file backup
+        try {
+            FileUtils.copyFile(fileToBackup, backupFile);
+        } catch (IOException e) {
+            log.error("Failed to backup file :" + fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
+            return EMPTY_FILE_LIST;
+        }
+        // add the fresh new backup file (list is still sorted here)
+        backupFiles.add(backupFile);
+        // unless max backups is not set, ensure that we don't keep more backups
+        // than required
+        if (BACKUP_MAX_COUNT > 0 && backupFiles.size() > BACKUP_MAX_COUNT) {
+            // keep the most recent files in the limit of the specified max
+            // count
+            expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
+        }
+        return expiredFiles;
     }
 
     /**
@@ -221,4 +418,27 @@ public class Save implements Command {
             tree.replaceKey(item, testElement);
         }
     }
+    
+    private static class PrivatePatternFileFilter implements IOFileFilter {
+        
+        private Pattern pattern;
+        
+        public PrivatePatternFileFilter(Pattern pattern) {
+            if(pattern == null) {
+                throw new IllegalArgumentException("pattern cannot be null !"); //$NON-NLS-1$
+            }
+            this.pattern = pattern;
+        }
+        
+        @Override
+        public boolean accept(File dir, String fileName) {
+            return pattern.matcher(fileName).matches();
+        }
+        
+        @Override
+        public boolean accept(File file) {
+            return accept(file.getParentFile(), file.getName());
+        }
+    }
+    
 }

@@ -109,6 +109,32 @@ values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</co
 <figure width="300" height="106" image="icons-32x32.jpg">Icons with the size <code>32x32</code>.</figure>
 <figure width="365" height="120" image="icons-48x48.jpg">Icons with the size <code>48x48</code>.</figure>
 </subsection>
+
+<subsection name="&sect-num;.5 Autosave process configuration" anchor="autosave">
+<description>
+    <p>Since JMeter 2.14, JMeter automatically saves up to 10 backups of every saved jmx files. When enabled, just before the .jmx is saved,
+    it will be backed up to the ${JMETER_HOME}/backups subfolder. Backup files are named after the saved jmx file and assigned a
+    version number that is automatically incremented, ex: test-plan-000001.jmx, test-plan-000002.jmx, test-plan-000003.jmx, etc.
+    To control auto-backup, add the following properties to user.properties.
+    To enable/disable auto-backup, set the following property to true/false (default is true): 
+    <source>jmeter.gui.action.save.backup_on_save=false</source>
+    The backup directory can also be set to a different location. Setting the following property to the path of the desired directory
+    will cause backup files to be stored inside instead of the ${JMETER_HOME}/backups folder. If the specified directory does not exist
+    it will be created. Leaving this property unset will cause the ${JMETER_HOME}/backups folder to be used.
+    <source>jmeter.gui.action.save.backup_directory=/path/to/backups/dir</source>
+    You can also configure the maximum time (in hours) that backup files should be preserved since the most recent save time.
+    By default a zero expiration time is set which instructs JMeter to preserve backup files for ever.
+    Use the following property to control max preservation time :
+    <source>jmeter.gui.action.save.keep_backup_max_hours=0</source>
+    You can set the maximum number of backup files that should be preserved. By default 10 backups will be kept.
+    Setting this to zero will cause the backups to never being deleted (unless keep_backup_max_hours is set to a non nul value)
+    Maximum backup files selection is processed _after_ time expiration selection, so even if you set 1 year as the expiry time, only the max_count
+    most recent backups files will be kept.
+    <source>jmeter.gui.action.save.keep_backup_max_count=10</source>
+    </p>
+</description>
+</subsection>
+
 </section>
 
 </body>
