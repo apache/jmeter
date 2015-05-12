@@ -106,6 +106,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+<li><bug>57913</bug>Automated backups of last saved JMX files. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
@@ -162,6 +163,7 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 <ul>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Benoit Vatan (benoit.vatan at gmail.com)</li>
 </ul>
 
 <br/>
