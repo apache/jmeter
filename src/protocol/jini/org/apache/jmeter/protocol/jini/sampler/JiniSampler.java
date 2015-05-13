@@ -24,12 +24,14 @@ import java.util.Set;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
+import org.apache.jmeter.protocol.jini.config.JiniConnectionDetails;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -44,6 +46,7 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private String configurationName;
     private String methodName;
     private String methodParamTypes;
     private String methodArguments;
@@ -54,6 +57,23 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
     @Override
     public SampleResult sample(Entry e) {
         log.debug("sampling jini");
+
+        System.out.println("configurationName=" + configurationName);
+
+        Object poolObject = JMeterContextService.getContext().getVariables().getObject(configurationName);
+        if (poolObject == null) {
+            throw new RuntimeException("No Jini configuration found named: '" + configurationName + "', ensure Variable Name matches Variable Name of Jini Configuration");
+        } else {
+            if (poolObject instanceof JiniConnectionDetails) {
+                JiniConnectionDetails jiniConnectionDetails = (JiniConnectionDetails) poolObject;
+                System.out.println("JiniSampler.sample() JiniConnectionDetails:" + jiniConnectionDetails);
+            } else {
+                String errorMsg = "Found object stored under variable:'" + configurationName + "' with class:" + poolObject.getClass().getName() + " and value: '" + poolObject
+                        + " but it's not a " + JiniConnectionDetails.class.getName() + ", check you're not already using this name as another variable";
+                log.error(errorMsg);
+                throw new RuntimeException(errorMsg);
+            }
+        }
 
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
@@ -107,6 +127,14 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+
+    public String getConfigurationName() {
+        return configurationName;
+    }
+
+    public void setConfigurationName(String configurationName) {
+        this.configurationName = configurationName;
     }
 
     public String getMethodName() {

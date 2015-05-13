@@ -18,60 +18,74 @@ package org.apache.jmeter.protocol.jini.config;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 public class JiniTestElement extends AbstractTestElement implements ConfigElement, TestStateListener, TestBean {
 
     private static final long serialVersionUID = 1L;
 
-    private transient String remoteServiceConfiguration;
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private transient String configurationName;
     private transient String rmiRegistryUrl;
     private transient String serviceName;
     private transient String serviceInterface;
 
     @Override
     public void testStarted() {
-        // TODO Auto-generated method stub
+        this.setRunningVersion(true);
+        TestBeanHelper.prepare(this);
+        JMeterVariables variables = getThreadContext().getVariables();
 
+        System.out.println("JiniTestElement.testStarted() configurationName=" + configurationName);
+        if (JOrphanUtils.isBlank(configurationName)) {
+            throw new IllegalArgumentException("Variable Name must not be empty for element:" + getName());
+        } else if (variables.getObject(configurationName) != null) {
+            log.error("Jini configuration already defined for: " + configurationName);
+        } else {
+            synchronized (this) {
+                variables.putObject(configurationName, new JiniConnectionDetails(rmiRegistryUrl, serviceName, serviceInterface));
+            }
+        }
     }
 
     @Override
     public void testStarted(String host) {
-        // TODO Auto-generated method stub
-
+        testStarted();
     }
 
     @Override
     public void testEnded() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void testEnded(String host) {
-        // TODO Auto-generated method stub
-
+        testEnded();
     }
 
     @Override
     public void addConfigElement(ConfigElement config) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public boolean expectsModification() {
-        // TODO Auto-generated method stub
         return false;
     }
 
-    public String getRemoteServiceConfiguration() {
-        return remoteServiceConfiguration;
+    public String getConfigurationName() {
+        return configurationName;
     }
 
-    public void setRemoteServiceConfiguration(String remoteServiceConfiguration) {
-        this.remoteServiceConfiguration = remoteServiceConfiguration;
+    public void setConfigurationName(String configurationName) {
+        this.configurationName = configurationName;
     }
 
     public String getRmiRegistryUrl() {
