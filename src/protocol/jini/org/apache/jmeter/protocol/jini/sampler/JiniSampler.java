@@ -18,13 +18,14 @@
 
 package org.apache.jmeter.protocol.jini.sampler;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
-import org.apache.jmeter.protocol.jini.config.JiniConnectionDetails;
+import org.apache.jmeter.protocol.jini.config.JiniConfiguration;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -55,30 +56,22 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
     }
 
     @Override
-    public SampleResult sample(Entry e) {
+    public SampleResult sample(Entry entry) {
         log.debug("sampling jini");
 
         System.out.println("configurationName=" + configurationName);
 
-        Object poolObject = JMeterContextService.getContext().getVariables().getObject(configurationName);
-        if (poolObject == null) {
-            throw new RuntimeException("No Jini configuration found named: '" + configurationName + "', ensure Variable Name matches Variable Name of Jini Configuration");
-        } else {
-            if (poolObject instanceof JiniConnectionDetails) {
-                JiniConnectionDetails jiniConnectionDetails = (JiniConnectionDetails) poolObject;
-                System.out.println("JiniSampler.sample() JiniConnectionDetails:" + jiniConnectionDetails);
-            } else {
-                String errorMsg = "Found object stored under variable:'" + configurationName + "' with class:" + poolObject.getClass().getName() + " and value: '" + poolObject
-                        + " but it's not a " + JiniConnectionDetails.class.getName() + ", check you're not already using this name as another variable";
-                log.error(errorMsg);
-                throw new RuntimeException(errorMsg);
-            }
+        try {
+            Object result = invokeRemoteMethod();
+        } catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
         res.setSamplerData(toString());
-        res.setDataType(SampleResult.TEXT);
+        res.setDataType(SampleResult.BINARY);
         res.setContentType("text/plain"); // $NON-NLS-1$
         // res.setDataEncoding(ENCODING);
 
@@ -161,4 +154,91 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
         this.methodArguments = methodArguments;
     }
 
+    private JiniConfiguration getJiniConfiguration() {
+        Object poolObject = JMeterContextService.getContext().getVariables().getObject(configurationName);
+        if (poolObject == null) {
+            throw new RuntimeException("No Jini configuration found named: '" + configurationName + "', ensure Variable Name matches Variable Name of Jini Configuration");
+        } else {
+            if (poolObject instanceof JiniConfiguration) {
+                JiniConfiguration jiniConnectionDetails = (JiniConfiguration) poolObject;
+                System.out.println("JiniSampler.getJiniConfiguration() JiniConnectionDetails:" + jiniConnectionDetails);
+                return jiniConnectionDetails;
+            } else {
+                String errorMsg = "Found object stored under variable:'" + configurationName + "' with class:" + poolObject.getClass().getName() + " and value: '" + poolObject
+                        + " but it's not a " + JiniConfiguration.class.getName() + ", check you're not already using this name as another variable";
+                log.error(errorMsg);
+                throw new RuntimeException(errorMsg);
+            }
+        }
+    }
+
+    private Object invokeRemoteMethod() throws NoSuchMethodException, SecurityException, ClassNotFoundException {
+        JiniConfiguration jiniConfiguration = getJiniConfiguration();
+        Class<?>[] methodArgumentTypes = getMethodArgumentTypes();
+
+        Method remoteMethod = Class.forName(jiniConfiguration.getServiceInterface()).getDeclaredMethod(methodName, methodArgumentTypes);
+
+        Object[] methodArguments = getMethodArguments(methodArgumentTypes);
+
+        return null;
+
+    }
+
+    private Class<?>[] getMethodArgumentTypes() throws ClassNotFoundException {
+        if (methodParamTypes == null || methodParamTypes.trim().length() == 0) {
+            return null;
+        }
+        String[] classNames = methodParamTypes.split(",");
+        Class<?>[] classes = new Class<?>[classNames.length];
+        for (int i = 0; i < classNames.length; i++) {
+            String className = classNames[i];
+            classes[i] = Class.forName(className);
+        }
+        return classes;
+    }
+
+    private Object[] getMethodArguments(Class<?>[] methodArgumentTypes) {
+        if (methodArguments == null || methodArguments.trim().length() == 0) {
+            if (methodArgumentTypes != null) {
+                throw new IllegalArgumentException("The no. of arguments were 0, but the no. of argument types were " + methodArgumentTypes.length);
+            }
+            return null;
+        }
+
+        String[] methodArgumentsAsStrings = methodArguments.split(",");
+
+        if (methodArgumentsAsStrings.length != methodArgumentTypes.length) {
+            throw new IllegalArgumentException("the no. of arguments and their types do not match");
+        }
+
+        Object[] methodArguments = new Object[methodArgumentsAsStrings.length];
+
+        for (int i = 0; i < methodArgumentsAsStrings.length; i++) {
+            String methodArgumentsAsString = methodArgumentsAsStrings[i];
+            methodArguments[i] = getObjectFromString(methodArgumentsAsString, methodArgumentTypes[i]);
+        }
+
+        return methodArguments;
+
+    }
+
+    private Object getObjectFromString(String methodArgumentsAsString, Class<?> methodArgumentType) {
+        if (methodArgumentsAsString.trim().length() == 0) {
+            return null;
+        } else if (methodArgumentType == String.class) {
+            return methodArgumentsAsString;
+        } else if (methodArgumentType == Integer.class) {
+            return Integer.valueOf(methodArgumentsAsString);
+        } else if (methodArgumentType == Long.class) {
+            return Long.valueOf(methodArgumentsAsString);
+        } else if (methodArgumentType == Float.class) {
+            return Float.valueOf(methodArgumentsAsString);
+        } else if (methodArgumentType == Double.class) {
+            return Double.valueOf(methodArgumentsAsString);
+        } else if (methodArgumentType.isAssignableFrom(Enum.class)) {
+            return Enum.valueOf((Class<? extends Enum>) methodArgumentType, methodArgumentsAsString);
+        } else {
+            throw new UnsupportedOperationException("The class " + methodArgumentType.getName() + " is not yet supprted");
+        }
+    }
 }

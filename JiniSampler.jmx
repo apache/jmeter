@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.8" jmeter="2.14-SNAPSHOT.20150512">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1431488997000</longProp>
+        <longProp name="ThreadGroup.end_time">1431488997000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <org.apache.jmeter.protocol.jini.sampler.JiniSampler guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.jini.sampler.JiniSampler" testname="JiniSampler" enabled="true">
+          <stringProp name="configurationName">abcd</stringProp>
+          <stringProp name="methodArguments">wwwwwwwwwwwwww</stringProp>
+          <stringProp name="methodName">qqqqqqqqqqqqqqqq</stringProp>
+          <stringProp name="methodParamTypes">rrrrrrrrrrrrrrrr</stringProp>
+        </org.apache.jmeter.protocol.jini.sampler.JiniSampler>
+        <hashTree/>
+        <org.apache.jmeter.protocol.jini.config.JiniTestElement guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.jini.config.JiniTestElement" testname="JiniTestElement" enabled="true">
+          <stringProp name="configurationName">abcd</stringProp>
+          <stringProp name="rmiRegistryUrl">localhost</stringProp>
+          <stringProp name="serviceInterface">aaaaaaaaaaa</stringProp>
+          <stringProp name="serviceName">bbbbbbbbbbbbbbbbb</stringProp>
+        </org.apache.jmeter.protocol.jini.config.JiniTestElement>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

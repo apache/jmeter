@@ -1,12 +1,12 @@
 package org.apache.jmeter.protocol.jini.config;
 
-public class JiniConnectionDetails {
+public class JiniConfiguration {
 
     private final String rmiRegistryUrl;
     private final String serviceName;
     private final String serviceInterface;
 
-    public JiniConnectionDetails(String rmiRegistryUrl, String serviceName, String serviceInterface) {
+    public JiniConfiguration(String rmiRegistryUrl, String serviceName, String serviceInterface) {
         this.rmiRegistryUrl = rmiRegistryUrl;
         this.serviceName = serviceName;
         this.serviceInterface = serviceInterface;
@@ -42,7 +42,7 @@ public class JiniConnectionDetails {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        JiniConnectionDetails other = (JiniConnectionDetails) obj;
+        JiniConfiguration other = (JiniConfiguration) obj;
         if (rmiRegistryUrl == null) {
             if (other.rmiRegistryUrl != null)
                 return false;

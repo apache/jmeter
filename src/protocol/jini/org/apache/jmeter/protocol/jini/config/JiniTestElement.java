@@ -50,7 +50,7 @@ public class JiniTestElement extends AbstractTestElement implements ConfigElemen
             log.error("Jini configuration already defined for: " + configurationName);
         } else {
             synchronized (this) {
-                variables.putObject(configurationName, new JiniConnectionDetails(rmiRegistryUrl, serviceName, serviceInterface));
+                variables.putObject(configurationName, new JiniConfiguration(rmiRegistryUrl, serviceName, serviceInterface));
             }
         }
     }
