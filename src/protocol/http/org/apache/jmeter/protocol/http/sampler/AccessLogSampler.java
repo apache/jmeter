@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import org.apache.jmeter.protocol.http.control.CookieManager;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
 import org.apache.jmeter.samplers.Entry;
@@ -66,7 +67,7 @@ import org.apache.log.Logger;
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
+    private static final long serialVersionUID = 233L; // Remember to change this when the class changes ...
 
     public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser"; // $NON-NLS-1$
 
@@ -277,6 +278,24 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     public void setPortString(String port) {
         super.setProperty(HTTPSamplerBase.PORT, port);
+    }
+    
+
+    public void setProtocol(String value) {
+        setProperty(PROTOCOL, value.toLowerCase(java.util.Locale.ENGLISH));
+    }
+
+    /**
+     * Gets the protocol, with default.
+     *
+     * @return the protocol
+     */
+    public String getProtocol() {
+        String protocol = getPropertyAsString(PROTOCOL);
+        if (protocol == null || protocol.length() == 0 ) {
+            return HTTPConstants.PROTOCOL_HTTP;
+        }
+        return protocol;
     }
 
     /**
