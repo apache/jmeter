@@ -1077,6 +1077,7 @@ for all the methods. For an example of how to implement either interface, refer 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
+        <property name="Protocol" required="No (defaults to http">Scheme</property>
         <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
         <property name="Log parser class" required="Yes (default provided)">The log parser class is responsible for parsing the logs.</property>
         <property name="Filter" required="No">The filter class is used to filter out certain lines.</property>
