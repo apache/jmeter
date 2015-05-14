@@ -43,7 +43,7 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
         log.debug("Entered access log sampler bean info");
         try {
             createPropertyGroup("defaults",  // $NON-NLS-1$
-                    new String[] { "domain", "portString", "imageParsing" });// $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+                    new String[] { "protocol", "domain", "portString", "imageParsing" });// $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$ $NON-NLS-4$
 
             createPropertyGroup("plugins",  // $NON-NLS-1$
                     new String[] { "parserClassName", "filterClassName" }); // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
@@ -80,6 +80,10 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
             p = property("domain"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.TRUE);
             p.setValue(DEFAULT, "");
+
+            p = property("protocol"); // $NON-NLS-1$
+            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+            p.setValue(DEFAULT, "http"); // $NON-NLS-1$
 
             p = property("portString"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.TRUE);
