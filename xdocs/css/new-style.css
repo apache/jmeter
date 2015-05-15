@@ -116,8 +116,9 @@ body {
 }
 
 .code {
-  background: none repeat scroll 0 0 lightblue;
   padding: 0.1em;
+  font-weight: bold;
+  color: brown;
   font-family: dejavu sans mono, monospace, sans-serif;
 }
 
