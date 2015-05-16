@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.8" jmeter="2.14-SNAPSHOT.20150512">
+<jmeterTestPlan version="1.2" properties="2.8" jmeter="2.14-SNAPSHOT.20150516">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Jini Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+      <stringProp name="TestPlan.user_define_classpath">/kaaj/apache-jmeter/rmi-api-1.0-SNAPSHOT.jar</stringProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
@@ -27,17 +27,17 @@
       </ThreadGroup>
       <hashTree>
         <org.apache.jmeter.protocol.jini.sampler.JiniSampler guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.jini.sampler.JiniSampler" testname="JiniSampler" enabled="true">
-          <stringProp name="configurationName">abcd</stringProp>
-          <stringProp name="methodArguments">wwwwwwwwwwwwww</stringProp>
-          <stringProp name="methodName">qqqqqqqqqqqqqqqq</stringProp>
-          <stringProp name="methodParamTypes">rrrrrrrrrrrrrrrr</stringProp>
+          <stringProp name="configurationName">BankServiceJiniConfig</stringProp>
+          <stringProp name="methodArguments">MARITAL_STATUS</stringProp>
+          <stringProp name="methodName">getBankDetails</stringProp>
+          <stringProp name="methodParamTypes">com.swayam.demo.rmi.shared.api.dto.BankDetailGroups</stringProp>
         </org.apache.jmeter.protocol.jini.sampler.JiniSampler>
         <hashTree/>
         <org.apache.jmeter.protocol.jini.config.JiniTestElement guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.jini.config.JiniTestElement" testname="JiniTestElement" enabled="true">
-          <stringProp name="configurationName">abcd</stringProp>
-          <stringProp name="rmiRegistryUrl">localhost</stringProp>
-          <stringProp name="serviceInterface">aaaaaaaaaaa</stringProp>
-          <stringProp name="serviceName">bbbbbbbbbbbbbbbbb</stringProp>
+          <stringProp name="configurationName">BankServiceJiniConfig</stringProp>
+          <stringProp name="rmiRegistryUrl">jini://localhost:6670</stringProp>
+          <stringProp name="serviceInterface">com.swayam.demo.rmi.shared.api.service.BankDetailService</stringProp>
+          <stringProp name="serviceName">BankDetailService</stringProp>
         </org.apache.jmeter.protocol.jini.config.JiniTestElement>
         <hashTree/>
       </hashTree>

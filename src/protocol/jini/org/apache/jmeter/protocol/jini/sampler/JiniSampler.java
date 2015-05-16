@@ -19,9 +19,14 @@
 package org.apache.jmeter.protocol.jini.sampler;
 
 import java.lang.reflect.Method;
+import java.rmi.Remote;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import net.jini.core.discovery.LookupLocator;
+import net.jini.core.lookup.ServiceTemplate;
+import net.jini.lookup.entry.Name;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
@@ -63,7 +68,8 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
 
         try {
             Object result = invokeRemoteMethod();
-        } catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+            System.out.println("result: " + result);
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -172,7 +178,7 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
         }
     }
 
-    private Object invokeRemoteMethod() throws NoSuchMethodException, SecurityException, ClassNotFoundException {
+    private Object invokeRemoteMethod() throws Exception {
         JiniConfiguration jiniConfiguration = getJiniConfiguration();
         Class<?>[] methodArgumentTypes = getMethodArgumentTypes();
 
@@ -180,8 +186,17 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
 
         Object[] methodArguments = getMethodArguments(methodArgumentTypes);
 
-        return null;
+        Remote remoteObject = lookupRemoteService(jiniConfiguration.getRmiRegistryUrl(), jiniConfiguration.getServiceName(), jiniConfiguration.getServiceInterface());
 
+        return remoteMethod.invoke(remoteObject, methodArguments);
+
+    }
+
+    private Remote lookupRemoteService(String jiniUrl, String serviceName, String serviceInterface) throws Exception {
+        LookupLocator lookupLocator = new LookupLocator(jiniUrl);
+        return (Remote) lookupLocator.getRegistrar().lookup(new ServiceTemplate(null,
+                new Class[] { Class.forName(serviceInterface) },
+                new net.jini.core.entry.Entry[] { new Name(serviceName) }));
     }
 
     private Class<?>[] getMethodArgumentTypes() throws ClassNotFoundException {
@@ -235,7 +250,7 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
             return Float.valueOf(methodArgumentsAsString);
         } else if (methodArgumentType == Double.class) {
             return Double.valueOf(methodArgumentsAsString);
-        } else if (methodArgumentType.isAssignableFrom(Enum.class)) {
+        } else if (Enum.class.isAssignableFrom(methodArgumentType)) {
             return Enum.valueOf((Class<? extends Enum>) methodArgumentType, methodArgumentsAsString);
         } else {
             throw new UnsupportedOperationException("The class " + methodArgumentType.getName() + " is not yet supprted");
