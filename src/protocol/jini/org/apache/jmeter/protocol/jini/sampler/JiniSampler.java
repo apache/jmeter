@@ -64,15 +64,9 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
     public SampleResult sample(Entry entry) {
         log.debug("sampling jini");
 
-        System.out.println("configurationName=" + configurationName);
+        log.info("configurationName=" + configurationName);
 
-        try {
-            Object result = invokeRemoteMethod();
-            System.out.println("result: " + result);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        JiniConfiguration jiniConfiguration = getJiniConfiguration();
 
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
@@ -87,35 +81,26 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
         res.setResponseCodeOK();
 
         res.sampleStart();
-        // Connection conn = null;
-        //
-        // try {
-        // if (JOrphanUtils.isBlank(getDataSource())) {
-        // throw new
-        // IllegalArgumentException("Variable Name must not be null in " +
-        // getName());
-        // }
-        //
-        // try {
-        // conn = DataSourceElement.getConnection(getDataSource());
-        // } finally {
-        // // FIXME: there is separate connect time field now
-        // res.latencyEnd(); // use latency to measure connection time
-        // }
-        // res.setResponseHeaders(conn.toString());
-        // res.setResponseData(execute(conn));
-        // } catch (SQLException ex) {
-        // final String errCode = Integer.toString(ex.getErrorCode());
-        // res.setResponseMessage(ex.toString());
-        // res.setResponseCode(ex.getSQLState() + " " + errCode);
-        // res.setResponseData(ex.getMessage().getBytes());
-        // res.setSuccessful(false);
-        // } catch (Exception ex) {
-        // res.setResponseMessage(ex.toString());
-        // res.setResponseCode("000");
-        // res.setResponseData(ex.getMessage().getBytes());
-        // res.setSuccessful(false);
-        // }
+
+        try {
+            Remote remoteObject;
+
+            try {
+                remoteObject = lookupRemoteService(jiniConfiguration.getRmiRegistryUrl(), jiniConfiguration.getServiceName(), jiniConfiguration.getServiceInterface());
+            } finally {
+                // FIXME: there is separate connect time field now
+                res.latencyEnd(); // use latency to measure connection time
+            }
+
+            Object result = invokeRemoteMethod(jiniConfiguration, remoteObject);
+            // res.setResponseHeaders(jiniConfiguration);
+            res.setResponseData(result.toString().getBytes());
+        } catch (Exception ex) {
+            res.setResponseMessage(ex.toString());
+            res.setResponseCode("-1");
+            res.setResponseData(ex.getMessage().getBytes());
+            res.setSuccessful(false);
+        }
 
         // TODO: process warnings? Set Code and Message to success?
         res.sampleEnd();
@@ -167,7 +152,7 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
         } else {
             if (poolObject instanceof JiniConfiguration) {
                 JiniConfiguration jiniConnectionDetails = (JiniConfiguration) poolObject;
-                System.out.println("JiniSampler.getJiniConfiguration() JiniConnectionDetails:" + jiniConnectionDetails);
+                log.info("JiniSampler.getJiniConfiguration() JiniConnectionDetails:" + jiniConnectionDetails);
                 return jiniConnectionDetails;
             } else {
                 String errorMsg = "Found object stored under variable:'" + configurationName + "' with class:" + poolObject.getClass().getName() + " and value: '" + poolObject
@@ -178,15 +163,13 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
         }
     }
 
-    private Object invokeRemoteMethod() throws Exception {
-        JiniConfiguration jiniConfiguration = getJiniConfiguration();
+    private Object invokeRemoteMethod(JiniConfiguration jiniConfiguration, Remote remoteObject) throws Exception {
+
         Class<?>[] methodArgumentTypes = getMethodArgumentTypes();
 
         Method remoteMethod = Class.forName(jiniConfiguration.getServiceInterface()).getDeclaredMethod(methodName, methodArgumentTypes);
 
         Object[] methodArguments = getMethodArguments(methodArgumentTypes);
-
-        Remote remoteObject = lookupRemoteService(jiniConfiguration.getRmiRegistryUrl(), jiniConfiguration.getServiceName(), jiniConfiguration.getServiceInterface());
 
         return remoteMethod.invoke(remoteObject, methodArguments);
 
@@ -237,6 +220,7 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
 
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Object getObjectFromString(String methodArgumentsAsString, Class<?> methodArgumentType) {
         if (methodArgumentsAsString.trim().length() == 0) {
             return null;
