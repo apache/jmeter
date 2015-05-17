@@ -94,8 +94,10 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
 
             Object result = invokeRemoteMethod(jiniConfiguration, remoteObject);
             // res.setResponseHeaders(jiniConfiguration);
-            res.setResponseData(result.toString().getBytes());
+            // res.setResponseData(result.toString().getBytes());
+			res.setResponseData("OK");
         } catch (Exception ex) {
+			ex.printStackTrace();
             res.setResponseMessage(ex.toString());
             res.setResponseCode("-1");
             res.setResponseData(ex.getMessage().getBytes());
