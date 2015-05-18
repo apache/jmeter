@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="2.8" jmeter="2.14-SNAPSHOT.20150517">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Normal Jini Test Plan" enabled="true">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Jini Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <stringProp name="TestPlan.user_define_classpath">D:\personal\code\jmeter\jmeter\distribution\rmi-api-1.0-SNAPSHOT.jar</stringProp>
+      <stringProp name="TestPlan.user_define_classpath">/kaaj/apache-river/jini-in-a-war/master/rmi-client/target/appassembler/lib/rmi-api-1.0-SNAPSHOT.jar</stringProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
@@ -70,7 +70,7 @@
               <threadCounts>true</threadCounts>
             </value>
           </objProp>
-          <stringProp name="filename">D:\personal\code\jmeter\jmeter\distribution\JiniNormal.csv</stringProp>
+          <stringProp name="filename">/kaaj/apache-jmeter/jmeter/distribution/JiniWeb.csv</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
@@ -103,7 +103,7 @@
               <threadCounts>true</threadCounts>
             </value>
           </objProp>
-          <stringProp name="filename">D:\personal\code\jmeter\jmeter\distribution\JiniNormal.csv</stringProp>
+          <stringProp name="filename">/kaaj/apache-jmeter/jmeter/distribution/JiniWeb.csv</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
@@ -136,7 +136,7 @@
               <threadCounts>true</threadCounts>
             </value>
           </objProp>
-          <stringProp name="filename">D:\personal\code\jmeter\jmeter\distribution\JiniNormal.csv</stringProp>
+          <stringProp name="filename">/kaaj/apache-jmeter/jmeter/distribution/JiniWeb.csv</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
