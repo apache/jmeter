@@ -23,6 +23,9 @@ import java.rmi.Remote;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import net.jini.core.discovery.LookupLocator;
 import net.jini.core.lookup.ServiceTemplate;
@@ -236,6 +239,14 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
             return Float.valueOf(methodArgumentsAsString);
         } else if (methodArgumentType == Double.class) {
             return Double.valueOf(methodArgumentsAsString);
+        } else if (methodArgumentType == Date.class) {
+			String format = "yyyy-MM-dd";
+			SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+			try {
+				return dateFormat.parse(methodArgumentsAsString);
+			} catch(ParseException e){
+				throw new RuntimeException("could not format the given date: " + methodArgumentsAsString + ". Expecting the date to be in the format: " + format, e);
+			}            
         } else if (Enum.class.isAssignableFrom(methodArgumentType)) {
             return Enum.valueOf((Class<? extends Enum>) methodArgumentType, methodArgumentsAsString);
         } else {
