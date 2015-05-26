@@ -1351,92 +1351,96 @@ props.put("PROP1","1234");</source>
         <p>
         The TCP Sampler opens a TCP/IP connection to the specified server.
         It then sends the text, and waits for a response.
-        <br></br>
-        If "Re-use connection" is selected, connections are shared between Samplers in the same thread,
+        </p><p>
+        If "<code>Re-use connection</code>" is selected, connections are shared between Samplers in the same thread,
         provided that the exact same host name string and port are used. 
         Different hosts/port combinations will use different connections, as will different threads. 
-        If both of "Re-use connection" and "Close connection" are selected, the socket will be closed after running the sampler. 
+        If both of "<code>Re-use connection</code>" and "<code>Close connection</code>" are selected, the socket will be closed after running the sampler. 
         On the next sampler, another socket will be created. You may want to close a socket at the end of each thread loop.
-        <br></br>
-        If an error is detected - or "Re-use connection" is not selected - the socket is closed. 
+        </p><p>
+        If an error is detected - or "<code>Re-use connection</code>" is not selected - the socket is closed.
         Another socket will be reopened on the next sample.
-        <br></br>
+        </p><p>
         The following properties can be used to control its operation:
         </p>
-        <ul>
-            <li>tcp.status.prefix - text that precedes a status number</li>
-            <li>tcp.status.suffix - text that follows a status number</li>
-            <li>tcp.status.properties - name of property file to convert status codes to messages</li>
-            <li>tcp.handler - Name of TCP Handler class (default TCPClientImpl) - only used if not specified on the GUI</li>
-        </ul>
-        The class that handles the connection is defined by the GUI, failing that the property tcp.handler. 
-        If not found, the class is then searched for in the package org.apache.jmeter.protocol.tcp.sampler.
+        <dl>
+            <dt><code>tcp.status.prefix</code></dt><dd>text that precedes a status number</dd>
+            <dt><code>tcp.status.suffix</code></dt><dd>text that follows a status number</dd>
+            <dt><code>tcp.status.properties</code></dt><dd>name of property file to convert status codes to messages</dd>
+            <dt><code>tcp.handler</code></dt><dd>Name of TCP Handler class (default <code>TCPClientImpl</code>) - only used if not specified on the GUI</dd>
+        </dl>
+        The class that handles the connection is defined by the GUI, failing that the property <code>tcp.handler</code>.
+        If not found, the class is then searched for in the package <code>org.apache.jmeter.protocol.tcp.sampler</code>.
         <p>
         Users can provide their own implementation.
-        The class must extend org.apache.jmeter.protocol.tcp.sampler.TCPClient.
+        The class must extend <code>org.apache.jmeter.protocol.tcp.sampler.TCPClient</code>.
         </p>
         <p>
         The following implementations are currently provided.
         </p>
         <ul>
-        <li>TCPClientImpl</li>
-        <li>BinaryTCPClientImpl</li>
-        <li>LengthPrefixedBinaryTCPClientImpl</li>
+        <li><code>TCPClientImpl</code></li>
+        <li><code>BinaryTCPClientImpl</code></li>
+        <li><code>LengthPrefixedBinaryTCPClientImpl</code></li>
         </ul>
         The implementations behave as follows:
-        <p><b>TCPClientImpl</b><br></br>
+        <dl>
+        <dt><code>TCPClientImpl</code></dt>
+        <dd>
         This implementation is fairly basic.
         When reading the response, it reads until the end of line byte, if this is defined
-        by setting the property <b>tcp.eolByte</b>, otherwise until the end of the input stream.
-        You can control charset encoding by setting <b>tcp.charset</b>, which will default to Platform default encoding.
-        </p>
-        <p><b>BinaryTCPClientImpl</b><br></br>
+        by setting the property <code>tcp.eolByte</code>, otherwise until the end of the input stream.
+        You can control charset encoding by setting <code>tcp.charset</code>, which will default to Platform default encoding.
+        </dd>
+        <dt><code>BinaryTCPClientImpl</code></dt>
+        <dd>
         This implementation converts the GUI input, which must be a hex-encoded string, into binary,
         and performs the reverse when reading the response.
         When reading the response, it reads until the end of message byte, if this is defined
-        by setting the property <b>tcp.BinaryTCPClient.eomByte</b>, otherwise until the end of the input stream.
-        </p>
-        <p><b>LengthPrefixedBinaryTCPClientImpl</b><br></br>
+        by setting the property <code>tcp.BinaryTCPClient.eomByte</code>, otherwise until the end of the input stream.
+        </dd>
+        <dt><code>LengthPrefixedBinaryTCPClientImpl</code></dt>
+        <dd>
         This implementation extends BinaryTCPClientImpl by prefixing the binary message data with a binary length byte.
         The length prefix defaults to 2 bytes.
-        This can be changed by setting the property <b>tcp.binarylength.prefix.length</b>.
-        </p>
-        <p><b>Timeout handling</b>
+        This can be changed by setting the property <code>tcp.binarylength.prefix.length</code>.
+        </dd>
+        <dt><b>Timeout handling</b></dt>
+        <dd>
         If the timeout is set, the read will be terminated when this expires. 
-        So if you are using an eolByte/eomByte, make sure the timeout is sufficiently long,
-        otherwise the read will be terminated early.    
-        </p>
-        <p><b>Response handling</b>
-        <br></br>
-        If tcp.status.prefix is defined, then the response message is searched for the text following
+        So if you are using an <code>eolByte</code>/<code>eomByte</code>, make sure the timeout is sufficiently long,
+        otherwise the read will be terminated early.
+        </dd>
+        <dt><b>Response handling</b></dt>
+        <dd>
+        If <code>tcp.status.prefix</code> is defined, then the response message is searched for the text following
         that up to the suffix. If any such text is found, it is used to set the response code.
         The response message is then fetched from the properties file (if provided).
-        <br></br>
-        For example, if the prefix = "[" and the suffix = "]", then the following response:
-        <br></br>
-        [J28] XI123,23,GBP,CR
-        <br></br>
-        would have the response code J28.
-        <br></br>
-        Response codes in the range "400"-"499" and "500"-"599" are currently regarded as failures;
+        <example title="Usage of pre- and suffix" anchor="tcp-prefix-example">
+        For example, if the prefix = "<code>[</code>" and the suffix = "<code>]</code>", then the following response:
+        <source>[J28] XI123,23,GBP,CR</source>
+        would have the response code <code>J28</code>.
+        </example>
+        Response codes in the range "<code>400</code>"-"<code>499</code>" and "<code>500</code>"-"<code>599</code>" are currently regarded as failures;
         all others are successful. [This needs to be made configurable!]
-        </p>
+        </dd>
+        </dl>
 <note>The login name/password are not used by the supplied TCP implementations.</note>
         <br></br>
         Sockets are disconnected at the end of a test run.
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="TCPClient classname" required="No">Name of the TCPClient class. Defaults to the property tcp.handler, failing that TCPClientImpl.</property>
+  <property name="TCPClient classname" required="No">Name of the TCPClient class. Defaults to the property <code>tcp.handler</code>, failing that <code>TCPClientImpl</code>.</property>
   <property name="ServerName or IP" required="Yes">Name or IP of TCP server</property>
   <property name="Port Number" required="Yes">Port to be used</property>
   <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
   <property name="Close connection" required="Yes">If selected, the connection will be closed after running the sampler.</property>
-  <property name="SO_LINGER" required="No">Enable/disable SO_LINGER with the specified linger time in seconds when a socket is created. If you set "SO_LINGER" value as 0, you may prevent large numbers of sockets sitting around with a TIME_WAIT status.</property>
-  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range -128 to +127 to skip eol checking. You may set this in jmeter.properties file as well with eolByte property. If you set this in TCP Sampler Config and in jmeter.properties file at the same time, the setting value in the TCP Sampler Config will be used.</property>
-  <property name="Connect Timeout" required="No">Connect Timeout (milliseconds, 0 disables).</property>
-  <property name="Response Timeout" required="No">Response Timeout (milliseconds, 0 disables).</property>
-  <property name="Set Nodelay" required="Yes">See java.net.Socket.setTcpNoDelay().
+  <property name="SO_LINGER" required="No">Enable/disable <code>SO_LINGER</code> with the specified linger time in seconds when a socket is created. If you set "<code>SO_LINGER</code>" value as <code>0</code>, you may prevent large numbers of sockets sitting around with a <code>TIME_WAIT</code> status.</property>
+  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range <code>-128</code> to <code>+127</code> to skip <code>eol</code> checking. You may set this in <code>jmeter.properties</code> file as well with <code>eolByte</code> property. If you set this in TCP Sampler Config and in <code>jmeter.properties</code> file at the same time, the setting value in the TCP Sampler Config will be used.</property>
+  <property name="Connect Timeout" required="No">Connect Timeout (milliseconds, <code>0</code> disables).</property>
+  <property name="Response Timeout" required="No">Response Timeout (milliseconds, <code>0</code> disables).</property>
+  <property name="Set NoDelay" required="Yes">See <code>java.net.Socket.setTcpNoDelay()</code>.
   If selected, this will disable Nagle's algorithm, otherwise Nagle's algorithm will be used.</property>
   <property name="Text to Send" required="Yes">Text to be sent</property>
   <property name="Login User" required="No">User Name - not used by default implementation</property>
