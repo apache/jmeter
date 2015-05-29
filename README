@@ -22,6 +22,7 @@
    o  MongoDB (NoSQL)
    o  Native commands or shell scripts
    o  TCP
+   o  AJP
 
   Full multithreading framework allows concurrent sampling by many threads and simultaneous sampling of different functions by separate thread groups.
   Careful GUI design allows faster Test Plan building and debugging.
