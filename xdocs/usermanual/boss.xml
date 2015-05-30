@@ -23,8 +23,7 @@
 <document prev="best-practices.html" next="component_reference.html" id="$Id$">
 
 <properties>
-  <author email="mramshaw at alumni.concordia.ca">Martin Ramshaw</author>
-  <author email="p.mouawad at ubik-ingenierie.com">Philippe Mouawad</author>
+  <author email="dev@jmeter.apache.org">JMeter developers</author>
   <title>User's Manual: My boss wants me to...</title>
 </properties>
 
@@ -153,33 +152,17 @@ and any supplied documentation).
     </subsection>
 </subsection>
 <subsection name="&sect-num;.5 How can I enhance JMeter ?" anchor="plugins">
-<p>There a lot of open-source and commercial plugins that can enhance JMeter, let's mention here the main open-source ones:
+<p>There a lot of open-source and commercial providers who provide JMeter plugins or other resources for use with JMeter.
+Some of these are listed on the JMeter Wiki.
+They are listed under several categories:
+<ul>
+<li><a href="http://wiki.apache.org/jmeter/JMeterPlugins">JMeterPlugins</a> - plugins for extending JMeter</li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterAddons">JMeterAddons</a> - addons for use with JMeter, e.g. plugins for browsers, Maven and Jenkins.</li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterServices">JMeterServices</a> - 3rd party services, e.g. cloud-based JMeter</li>
+</ul>
+Note that appearance of these on the Wiki does not imply any endorsement by the Apache JMeter project.
+Any requests for support should be directed to the relevant supplier.
 </p>
-    <subsection name="&sect-num;.5.1 JMeter-Plugins" anchor="jmeter-plugins">
-    <p>This <a href="http://jmeter-plugins.org/" target="_blank">non official project</a> is THE companion to core JMeter.<br/>
-    It provides many useful extensions, among which:
-    <ul>
-    <li>Active Threads Over Time Graph Listener</li>
-    <li>Response Times vs Threads Graph Listener</li>
-    <li>Transaction Throughput vs Threads Graph Listener</li>
-    <li>GraphGenerator listener to create graphs at end of a load test</li>
-    <li>Selenium WebDriver Sampler</li>
-     <li>....</li>
-    </ul> 
-    </p>
-    </subsection>
-    <subsection name="&sect-num;.5.2 JMeter Plugin for Maven" anchor="jmeter-maven-plugin">
-        <p>This <a href="http://jmeter.lazerycode.com/" target="_blank" >non official plugin</a> allows you to run your automated JMeter tests through Maven.</p>
-    </subsection>
-    <subsection name="&sect-num;.5.3 JMeter Performance Plugin" anchor="jmeter-performance-plugin">
-        <p>This <a href="https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin" target="_blank" >non official plugin</a> allows you to capture reports from JMeter and JUnit.<br/>
-        Jenkins will generate graphic charts with the trend report of performance and robustness.
-        It includes the feature of setting the final build status as good, unstable or failed, based on the reported error percentage.
-        </p>
-    </subsection>
-    <subsection name="&sect-num;.5.4 JMeter plugin for AWS" anchor="jmeter-ec2">
-        <p>This <a href="https://github.com/oliverlloyd/jmeter-ec2" target="_blank" >non official plugin</a> automates running Apache JMeter on Amazon EC2</p>
-    </subsection>    
 </subsection>
 <subsection name="&sect-num;.6 Why Java ?" anchor="java">
 <p>Why not Perl or C ?
