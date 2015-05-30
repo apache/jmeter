@@ -496,7 +496,7 @@ Examples:<br>
 <div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="__machineName">__machineName<a class="sectionlink" href="#__machineName" title="Link to here">&para;</a></h2>
-<div class="description"><p>The machineName function returns the local host name</p></div>
+<div class="description"><p>The machineName function returns the local host name. This uses the Java method InetAddress.getLocalHost() and passes it to getHostName()</p></div>
 
 <div class="properties"><h3 id="__machineName_parms1">
         Parameters
@@ -507,7 +507,7 @@ Examples:<br>
 <div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="__machineIP">__machineIP<a class="sectionlink" href="#__machineIP" title="Link to here">&para;</a></h2>
-<div class="description"><p>The machineIP function returns the local IP address</p></div>
+<div class="description"><p>The machineIP function returns the local IP address. This uses the Java method InetAddress.getLocalHost() and passes it to getHostAddress()</p></div>
 
 <div class="properties"><h3 id="__machineIP_parms1">
         Parameters
@@ -1191,7 +1191,7 @@ Function which escapes the characters in a String using HTML entities.
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example,<span class="code">&quot;bread&quot; &amp; &quot;butter&quot;</span>
+For example,<span class="code">&quot;bread&quot; & &quot;butter&quot;</span>
 becomes:
 <span class="code">&#38;quot;bread&#38;quot; &#38;amp; &#38;quot;butter&#38;quot;</span>.
 </p>
