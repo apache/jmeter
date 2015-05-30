@@ -1,7 +1,7 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
 <html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
           -
-          User's Manual: My boss wants me to...</title><meta name="author" value="Martin Ramshaw"><meta name="email" value="mramshaw at alumni.concordia.ca"><meta name="author" value="Philippe Mouawad"><meta name="email" value="p.mouawad at ubik-ingenierie.com"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+          User's Manual: My boss wants me to...</title><meta name="author" value="JMeter developers"><meta name="email" value="dev@jmeter.apache.org"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
             APACHE LOGO
           --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="../images/asf-logo.png" alt="Logo ASF"></a></div><!--
               PROJECT LOGO
@@ -151,33 +151,17 @@ and any supplied documentation).
     </div>
 </div>
 <div class="subsection"><h2 id="plugins">18.5 How can I enhance JMeter ?<a class="sectionlink" href="#plugins" title="Link to here">&para;</a></h2>
-<p>There a lot of open-source and commercial plugins that can enhance JMeter, let's mention here the main open-source ones:
+<p>There a lot of open-source and commercial providers who provide JMeter plugins or other resources for use with JMeter.
+Some of these are listed on the JMeter Wiki.
+They are listed under several categories:
+<ul>
+<li><a href="http://wiki.apache.org/jmeter/JMeterPlugins">JMeterPlugins</a> - plugins for extending JMeter</li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterAddons">JMeterAddons</a> - addons for use with JMeter, e.g. plugins for browsers, Maven and Jenkins.</li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterServices">JMeterServices</a> - 3rd party services, e.g. cloud-based JMeter</li>
+</ul>
+Note that appearance of these on the Wiki does not imply any endorsement by the Apache JMeter project.
+Any requests for support should be directed to the relevant supplier.
 </p>
-    <div class="subsection"><h2 id="jmeter-plugins">18.5.1 JMeter-Plugins<a class="sectionlink" href="#jmeter-plugins" title="Link to here">&para;</a></h2>
-    <p>This <a href="http://jmeter-plugins.org/" target="_blank">non official project</a> is THE companion to core JMeter.<br>
-    It provides many useful extensions, among which:
-    <ul>
-    <li>Active Threads Over Time Graph Listener</li>
-    <li>Response Times vs Threads Graph Listener</li>
-    <li>Transaction Throughput vs Threads Graph Listener</li>
-    <li>GraphGenerator listener to create graphs at end of a load test</li>
-    <li>Selenium WebDriver Sampler</li>
-     <li>....</li>
-    </ul> 
-    </p>
-    </div>
-    <div class="subsection"><h2 id="jmeter-maven-plugin">18.5.2 JMeter Plugin for Maven<a class="sectionlink" href="#jmeter-maven-plugin" title="Link to here">&para;</a></h2>
-        <p>This <a href="http://jmeter.lazerycode.com/" target="_blank">non official plugin</a> allows you to run your automated JMeter tests through Maven.</p>
-    </div>
-    <div class="subsection"><h2 id="jmeter-performance-plugin">18.5.3 JMeter Performance Plugin<a class="sectionlink" href="#jmeter-performance-plugin" title="Link to here">&para;</a></h2>
-        <p>This <a href="https://wiki.jenkins-ci.org/display/JENKINS/Performance+Plugin" target="_blank">non official plugin</a> allows you to capture reports from JMeter and JUnit.<br>
-        Jenkins will generate graphic charts with the trend report of performance and robustness.
-        It includes the feature of setting the final build status as good, unstable or failed, based on the reported error percentage.
-        </p>
-    </div>
-    <div class="subsection"><h2 id="jmeter-ec2">18.5.4 JMeter plugin for AWS<a class="sectionlink" href="#jmeter-ec2" title="Link to here">&para;</a></h2>
-        <p>This <a href="https://github.com/oliverlloyd/jmeter-ec2" target="_blank">non official plugin</a> automates running Apache JMeter on Amazon EC2</p>
-    </div>    
 </div>
 <div class="subsection"><h2 id="java">18.6 Why Java ?<a class="sectionlink" href="#java" title="Link to here">&para;</a></h2>
 <p>Why not Perl or C ?
