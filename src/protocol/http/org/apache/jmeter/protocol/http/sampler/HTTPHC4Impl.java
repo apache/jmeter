@@ -145,7 +145,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
             long duration = super.getKeepAliveDuration(response, context);
-            if (duration <= 0) {// none found by the superclass
+            if (duration <= 0 && IDLE_TIMEOUT > 0) {// none found by the superclass
                 log.debug("Setting keepalive to " + IDLE_TIMEOUT);
                 return IDLE_TIMEOUT;
             }
