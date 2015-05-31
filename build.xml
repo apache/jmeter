@@ -2320,12 +2320,17 @@ run JMeter unless all the JMeter jars are added.
     <copy todir="${dest.docs}/css">
       <fileset dir="${src.css}"/>
     </copy>
+    <!--
+    Note: it's vital that the Javadoc files are excluded from any fixes applied here.
+    Any fixes to Javadoc files need to be done in the docs-api target only.
+    Otherwise the output from the build will depend on which is done first.
+    -->
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Remove superfluos &amp;amp;</echo>
-    <replace encoding="iso-8859-1" dir="${dest.docs}" includes="**/*.html" token="&amp;amp;" value="&amp;"/>
+    <replace encoding="iso-8859-1" dir="${dest.docs}" includes="**/*.html" excludes="api/**" token="&amp;amp;" value="&amp;"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
-    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
+    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" excludes="api/**" token="&lt;/br>" value=""/>
     <copy todir="${dest.docs}/demos">
       <fileset dir="${src.demos}"/>
     </copy>
