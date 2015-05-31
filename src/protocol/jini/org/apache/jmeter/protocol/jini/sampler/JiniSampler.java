@@ -20,12 +20,12 @@ package org.apache.jmeter.protocol.jini.sampler;
 
 import java.lang.reflect.Method;
 import java.rmi.Remote;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.jini.core.discovery.LookupLocator;
 import net.jini.core.lookup.ServiceTemplate;
@@ -45,10 +45,11 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * A sampler which understands JDBC database requests.
+ * A Sampler for testing a Jini server.
  *
  */
 public class JiniSampler extends AbstractTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
+
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(Arrays.asList(new String[] { "org.apache.jmeter.config.gui.SimpleConfigGui" }));
 
     private static final long serialVersionUID = 1L;
@@ -98,9 +99,9 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
             Object result = invokeRemoteMethod(jiniConfiguration, remoteObject);
             // res.setResponseHeaders(jiniConfiguration);
             // res.setResponseData(result.toString().getBytes());
-			res.setResponseData("OK");
+            res.setResponseData("OK");
         } catch (Exception ex) {
-			ex.printStackTrace();
+            log.error("Rmi call failed", ex);
             res.setResponseMessage(ex.toString());
             res.setResponseCode("-1");
             res.setResponseData(ex.getMessage().getBytes());
@@ -240,13 +241,13 @@ public class JiniSampler extends AbstractTestElement implements Sampler, TestBea
         } else if (methodArgumentType == Double.class) {
             return Double.valueOf(methodArgumentsAsString);
         } else if (methodArgumentType == Date.class) {
-			String format = "yyyy-MM-dd";
-			SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-			try {
-				return dateFormat.parse(methodArgumentsAsString);
-			} catch(ParseException e){
-				throw new RuntimeException("could not format the given date: " + methodArgumentsAsString + ". Expecting the date to be in the format: " + format, e);
-			}            
+            String format = "yyyy-MM-dd";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+            try {
+                return dateFormat.parse(methodArgumentsAsString);
+            } catch (ParseException e) {
+                throw new RuntimeException("could not format the given date: " + methodArgumentsAsString + ". Expecting the date to be in the format: " + format, e);
+            }
         } else if (Enum.class.isAssignableFrom(methodArgumentType)) {
             return Enum.valueOf((Class<? extends Enum>) methodArgumentType, methodArgumentsAsString);
         } else {

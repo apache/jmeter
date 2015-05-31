@@ -16,9 +16,6 @@
  *
  */
 
-/*
- * Created on May 15, 2004
- */
 package org.apache.jmeter.protocol.jini.config;
 
 import java.beans.PropertyDescriptor;

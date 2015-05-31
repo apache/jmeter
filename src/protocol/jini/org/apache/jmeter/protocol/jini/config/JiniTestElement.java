@@ -43,7 +43,7 @@ public class JiniTestElement extends AbstractTestElement implements ConfigElemen
         TestBeanHelper.prepare(this);
         JMeterVariables variables = getThreadContext().getVariables();
 
-        System.out.println("JiniTestElement.testStarted() configurationName=" + configurationName);
+        log.info("JiniTestElement.testStarted() configurationName=" + configurationName);
         if (JOrphanUtils.isBlank(configurationName)) {
             throw new IllegalArgumentException("Variable Name must not be empty for element:" + getName());
         } else if (variables.getObject(configurationName) != null) {
