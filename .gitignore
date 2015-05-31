@@ -1,7 +1,0 @@
-*log.*
-*.log
-*~
-**build
-**lib
-**bin
-**.settings
