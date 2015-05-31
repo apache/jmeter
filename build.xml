@@ -2295,21 +2295,22 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="docs-site" depends="init-docs" description="Generate browsable HTML documentation in web-site format.">
     <mkdir dir="${dest.docs}" />
+  	<!-- Must use force="true" for the xslt tasks otherwise reruns will cause too many &amp; entities to be replaced -->
     <!-- The extending pages are rather out of date (and not linked from elsewhere) -->
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}" destdir="${dest.docs}"
-      excludes="extending.xml" includes="*.xml">
+      excludes="extending.xml" includes="*.xml" force="true">
       <param name="relative-path" expression="." />
       <param name="subdir" expression="" />
       <param name="year" expression="${year}" />
     </xslt>
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/usermanual" destdir="${dest.docs}/usermanual"
-      includes="*.xml">
+      includes="*.xml" force="true">
       <param name="relative-path" expression=".." />
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
     </xslt>
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/localising" destdir="${dest.docs}/localising"
-      includes="*.xml">
+      includes="*.xml" force="true">
       <param name="relative-path" expression=".." />
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
@@ -2327,6 +2328,7 @@ run JMeter unless all the JMeter jars are added.
     -->
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
+    <!-- N.B. this is not idempotent, so must use force with xslt tasks -->
     <echo level="info">Remove superfluos &amp;amp;</echo>
     <replace encoding="iso-8859-1" dir="${dest.docs}" includes="**/*.html" excludes="api/**" token="&amp;amp;" value="&amp;"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
