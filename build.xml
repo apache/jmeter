@@ -443,8 +443,8 @@
     <pathelement location="${lib.dir}/${commons-logging.jar}"/>
     <pathelement location="${lib.dir}/${commons-math3.jar}"/>
     <pathelement location="${lib.dir}/${commons-net.jar}"/>
-  	<pathelement location="${lib.dir}/${commons-pool2.jar}"/>
-  	<pathelement location="${lib.dir}/${dnsjava.jar}"/>
+    <pathelement location="${lib.dir}/${commons-pool2.jar}"/>
+    <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-datasource.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-instrument.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
@@ -2260,11 +2260,11 @@ run JMeter unless all the JMeter jars are added.
     <copy todir="${dest.docs}/css">
       <fileset dir="${src.css}"/>
     </copy>
-  	<!-- 
-  	Note: it's vital that the Javadoc files are excluded from any fixes applied here.
-  	Any fixes to Javadoc files need to be done in the docs-api target only.
-  	Otherwise the output from the build will depend on which is done first.
-  	-->
+    <!-- 
+    Note: it's vital that the Javadoc files are excluded from any fixes applied here.
+    Any fixes to Javadoc files need to be done in the docs-api target only.
+    Otherwise the output from the build will depend on which is done first.
+    -->
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
@@ -2550,7 +2550,7 @@ run JMeter unless all the JMeter jars are added.
           <param name="batchtest.variable" value="sample_variables"/>
           <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
       </antcall>
-  	
+
       <antcall target="batchtest">
           <param name="batchtest.name" value="Bug56811"/>
       </antcall>
@@ -2820,7 +2820,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="commons-logging"/>
         <process_jarfile jarname="commons-math3"/>
         <process_jarfile jarname="commons-net"/>
-    	<process_jarfile jarname="commons-pool2"/>
+        <process_jarfile jarname="commons-pool2"/>
         <process_jarfile jarname="dnsjava"/>
         <process_jarfile jarname="excalibur-datasource"/>
         <process_jarfile jarname="excalibur-instrument"/>
@@ -2965,7 +2965,7 @@ run JMeter unless all the JMeter jars are added.
         </checkstyle>
 
     </target>
-  
+
     <target name="sign_dist"
       description="Sign release artifacts in dist and dist/maven.  Usage: ant sign_dist -Dgpg.keyname=key-id [-Dgpg.secretKeyring=path-to-keyring]      ">
       <scriptdef name="gpg" language="beanshell">
