@@ -235,7 +235,7 @@ public class ProxyControl extends GenericController {
         } else {
             if (!KeyToolUtils.haveKeytool()) {
                 KEYSTORE_MODE = KeystoreMode.NONE;
-            } else if (KeyToolUtils.SUPPORTS_HOST_CERT && USE_DYNAMIC_KEYS) {
+            } else if (USE_DYNAMIC_KEYS) {
                 KEYSTORE_MODE = KeystoreMode.DYNAMIC_KEYSTORE;
                 log.info("HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file " + CERT_PATH_ABS);
             } else {

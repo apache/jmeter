@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -117,24 +116,19 @@ public class KeyToolUtils {
     private static final String ROOTCA_ALIAS = ":root_ca:";  // $NON-NLS-1$
     private static final String INTERMEDIATE_CA_ALIAS = ":intermediate_ca:";  // $NON-NLS-1$
 
-    /** Does this class support generation of host certificates? */
-    public static final boolean SUPPORTS_HOST_CERT = SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_7);
-    // i.e. does keytool support -gencert and -ext ?
-
     private KeyToolUtils() {
         // not instantiable
     }
 
     /**
      * Generate a self-signed keypair using the algorithm "RSA".
-     * Requires Java 7 or later if the "ext" parameter is not null.
      *
      * @param keystore the keystore; if it already contains the alias the command will fail
      * @param alias the alias to use, not null
      * @param password the password to use for the store and the key
      * @param validity the validity period in days, greater than 0
      * @param dname the <em>distinguished name</em> value, if omitted use "cn=JMeter Proxy (DO NOT TRUST)"
-     * @param ext if not null, the extension (-ext) to add (e.g. "bc:c"). This requires Java 7.
+     * @param ext if not null, the extension (-ext) to add (e.g. "bc:c").
      *
      * @throws IOException if keytool was not configured or running keytool application fails
      */
@@ -160,7 +154,7 @@ public class KeyToolUtils {
         arguments.add(password);
         arguments.add("-validity"); // $NON-NLS-1$
         arguments.add(Integer.toString(validity));
-        if (ext != null) { // Requires Java 7
+        if (ext != null) {
             arguments.add("-ext"); // $NON-NLS-1$
             arguments.add(ext);
         }
@@ -203,7 +197,6 @@ public class KeyToolUtils {
      * (signed by the Root CA certificate) that can be used to sign server certificates.
      * The Root CA certificate file is exported to the same directory as the keystore
      * in formats suitable for Firefox/Chrome/IE (.crt) and Opera (.usr).
-     * Requires Java 7 or later.
      *
      * @param keystore the keystore in which to store everything
      * @param password the password for keystore and keys
@@ -230,11 +223,11 @@ public class KeyToolUtils {
         if (fileExists) {
             log.warn("If problems occur when recording SSL, delete the files manually and retry.");
         }
-        // Create the self-signed keypairs (requires Java 7 for -ext flag)
+        // Create the self-signed keypairs
         KeyToolUtils.genkeypair(keystore, ROOTCA_ALIAS, password, validity, DNAME_ROOT_CA_KEY, "bc:c");
         KeyToolUtils.genkeypair(keystore, INTERMEDIATE_CA_ALIAS, password, validity, DNAME_INTERMEDIATE_CA_KEY, "bc:c");
 
-        // Create cert for CA using root (requires Java 7 for gencert)
+        // Create cert for CA using root
         ByteArrayOutputStream certReqOut = new ByteArrayOutputStream();
         // generate the request
         KeyToolUtils.keytool("-certreq", keystore, password, INTERMEDIATE_CA_ALIAS, null, certReqOut);
@@ -260,7 +253,6 @@ public class KeyToolUtils {
 
     /**
      * Create a host certificate signed with the CA certificate.
-     * Requires Java 7 or later.
      *
      * @param keystore the keystore to use
      * @param password the password to use for the keystore and keys
@@ -281,7 +273,7 @@ public class KeyToolUtils {
             int validity, String alias, String subject) throws IOException {
         String dname = "cn=" + subject + ", o=JMeter Proxy (TEMPORARY TRUST ONLY)";
         KeyToolUtils.genkeypair(keystore, alias, password, validity, dname, null);
-        //rem generate cert for DOMAIN using CA (requires Java7 for gencert) and import it
+        //rem generate cert for DOMAIN using CA and import it
 
         // get the certificate request
         ByteArrayOutputStream certReqOut = new ByteArrayOutputStream();
