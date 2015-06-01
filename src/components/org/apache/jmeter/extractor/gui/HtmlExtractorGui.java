@@ -62,7 +62,7 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
 
     private JLabeledTextField refNameField;
 
-    private JComboBox extractorImplName;
+    private JComboBox<String> extractorImplName;
 
 
     public HtmlExtractorGui() {
@@ -157,12 +157,12 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
         JPanel panel = new HorizontalPanel();
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("html_extractor_type"))); //$NON-NLS-1$
         
-        DefaultComboBoxModel m = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> m = new DefaultComboBoxModel<>();
         for (String s : HtmlExtractor.getImplementations()){
             m.addElement(s);
         }
         m.addElement(USE_DEFAULT_EXTRACTOR_IMPL);
-        extractorImplName = new JComboBox(m);
+        extractorImplName = new JComboBox<>(m);
         extractorImplName.setSelectedItem(HtmlExtractor.DEFAULT_EXTRACTOR);
         JLabel label2 = new JLabel(JMeterUtils.getResString("html_extractor_type")); // $NON-NLS-1$
         label2.setLabelFor(extractorImplName);

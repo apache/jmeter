@@ -342,7 +342,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
         private static final long serialVersionUID = 1L;
 
         public TypeCellEditor() {
-            super(new JComboBox(new Object[]{
+            super(new JComboBox<>(new Object[]{
                     Boolean.class.getName(),
                     Byte.class.getName(),
                     Short.class.getName(),

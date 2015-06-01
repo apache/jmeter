@@ -71,7 +71,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private JTextField sourceIpAddr; // does not apply to Java implementation
     
-    private JComboBox sourceIpType = new JComboBox(HTTPSamplerBase.getSourceTypeList());
+    private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
 
     private final boolean isAJP;
     

@@ -60,9 +60,10 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      */
     private String initialEditValue;
 
-    private final JComboBox combo;
+    // Cannot use <String> here because combo can contain EDIT and UNDEFINED
+    private final JComboBox<Object> combo;
 
-    private final DefaultComboBoxModel model;
+    private final DefaultComboBoxModel<Object> model;
 
     /*
      * Map of translations for tags; only created if there is at least
@@ -109,7 +110,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
 
         tags = pTags == null ? ArrayUtils.EMPTY_STRING_ARRAY : pTags.clone();
 
-        model = new DefaultComboBoxModel();
+        model = new DefaultComboBoxModel<>();
 
         if (rb != null && tags.length > 0) {
             validTranslations=new HashMap<String, String>();
@@ -137,7 +138,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
             model.addElement(EDIT);
         }
 
-        combo = new JComboBox(model);
+        combo = new JComboBox<>(model);
         combo.addItemListener(this);
         combo.setEditable(false);
     }

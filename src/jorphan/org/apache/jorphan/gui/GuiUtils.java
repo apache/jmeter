@@ -89,7 +89,7 @@ public final class GuiUtils {
      * @param comboBox the combo box
      * @return the JComponent (margin+JLabel+margin+JComboBox)
      */
-    public static JComponent createLabelCombo(String label, JComboBox comboBox) {
+    public static JComponent createLabelCombo(String label, JComboBox<?> comboBox) {
         JPanel labelCombo = new JPanel();
         labelCombo.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JLabel caption = new JLabel(label);
