@@ -40,7 +40,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 
     private final JLabel mLabel = new JLabel();
 
-    private final JComboBox choiceList;
+    private final JComboBox<String> choiceList;
 
     // Maybe move to vector if MT problems occur
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
@@ -52,13 +52,13 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      */
     public JLabeledChoice() {
         super();
-        choiceList = new JComboBox();
+        choiceList = new JComboBox<>();
         init();
     }
 
     public JLabeledChoice(String pLabel, boolean editable) {
         super();
-        choiceList = new JComboBox();
+        choiceList = new JComboBox<>();
         mLabel.setText(pLabel);
         choiceList.setEditable(editable);
         init();
@@ -85,7 +85,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     public JLabeledChoice(String pLabel, String[] items, boolean editable) {
         super();
         mLabel.setText(pLabel);
-        choiceList = new JComboBox(items);
+        choiceList = new JComboBox<>(items);
         choiceList.setEditable(editable);
         init();
     }
@@ -285,7 +285,7 @@ public String getToolTipText() {
     private class AddListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Object item = choiceList.getSelectedItem();
+            String item = (String) choiceList.getSelectedItem();
             int index = choiceList.getSelectedIndex();
             if (!item.equals(choiceList.getItemAt(index))) {
                 choiceList.addItem(item);

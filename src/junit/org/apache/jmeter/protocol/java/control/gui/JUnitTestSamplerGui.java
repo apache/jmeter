@@ -132,8 +132,8 @@ implements ChangeListener, ActionListener, ItemListener
     private JCheckBox createInstancePerSample = new JCheckBox(JMeterUtils.getResString("junit_create_instance_per_sample")); //$NON-NLS-1$
 
     /** A combo box allowing the user to choose a test class. */
-    private JComboBox classnameCombo;
-    private JComboBox methodName;
+    private JComboBox<String> classnameCombo;
+    private JComboBox<String> methodName;
 
     private final transient ClassLoader contextClassLoader =
         Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
@@ -184,7 +184,7 @@ implements ChangeListener, ActionListener, ItemListener
             ClassFilter filter = new ClassFilter();
             filter.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
             // change the classname drop down
-            Object[] clist = filter.filterArray(classList);
+            String[] clist = filter.filterArray(classList);
             for (int idx=0; idx < clist.length; idx++) {
                 classnameCombo.addItem(clist[idx]);
             }
@@ -200,12 +200,12 @@ implements ChangeListener, ActionListener, ItemListener
         JLabel label =
             new JLabel(JMeterUtils.getResString("protocol_java_classname")); //$NON-NLS-1$
 
-        classnameCombo = new JComboBox();
+        classnameCombo = new JComboBox<>();
         classnameCombo.addActionListener(this);
         classnameCombo.setEditable(false);
         label.setLabelFor(classnameCombo);
 
-        methodName = new JComboBox();
+        methodName = new JComboBox<>();
         methodName.addActionListener(this);
         methodLabel.setLabelFor(methodName);
 

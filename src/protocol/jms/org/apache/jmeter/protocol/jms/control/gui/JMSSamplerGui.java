@@ -99,7 +99,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         queueConnectionFactory.setText(""); // $NON-NLS-1$
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
-        ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
+        ((JComboBox<?>) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
         expiration.setText("");  // $NON-NLS-1$
         priority.setText("");  // $NON-NLS-1$
@@ -167,7 +167,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
 
-        JComboBox box = (JComboBox) oneWay.getComponentList().get(1);
+        JComboBox<?> box = (JComboBox<?>) oneWay.getComponentList().get(1);
         String selected = null;
         if (sampler.isOneway()) {
             selected = JMeterUtils.getResString("jms_request"); //$NON-NLS-1$
