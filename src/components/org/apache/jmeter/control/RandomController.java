@@ -19,8 +19,7 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
-
-import org.apache.jmeter.util.ThreadLocalRandom;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Controller that rans randomly one of it's children on each iteration
