@@ -33,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -61,7 +62,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     /** A combo box allowing the user to choose a backend class. */
-    private JComboBox classnameCombo;
+    private JComboBox<String> classnameCombo;
     
     /**
      * A field allowing the user to specify the size of Queue
@@ -127,7 +128,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
         JLabel label = new JLabel(JMeterUtils.getResString("backend_listener_classname")); // $NON-NLS-1$
 
-        classnameCombo = new JComboBox(possibleClasses.toArray());
+        classnameCombo = new JComboBox<>(possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         classnameCombo.addActionListener(this);
         classnameCombo.setEditable(false);
         label.setLabelFor(classnameCombo);
@@ -241,7 +242,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      * @param className String class name
      * @return boolean true if model contains className
      */
-    private static final boolean checkContainsClassName(ComboBoxModel model, String className) {
+    private static final boolean checkContainsClassName(ComboBoxModel<?> model, String className) {
         int size = model.getSize();
         Set<String> set = new HashSet<String>(size);
         for (int i = 0; i < size; i++) {

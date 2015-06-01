@@ -916,7 +916,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param namVec List of names, which are displayed in <code>combo</code>
      * @param name Name, that is to be selected. It has to be in <code>namVec</code>
      */
-    public static void selJComboBoxItem(Properties properties, JComboBox combo, Vector<?> namVec, String name) {
+    public static void selJComboBoxItem(Properties properties, JComboBox<?> combo, Vector<?> namVec, String name) {
         int idx = namVec.indexOf(name);
         combo.setSelectedIndex(idx);
         // Redisplay.
