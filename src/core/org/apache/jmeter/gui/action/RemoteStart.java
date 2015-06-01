@@ -32,12 +32,8 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 public class RemoteStart extends AbstractAction {
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String LOCAL_HOST = "127.0.0.1"; // $NON-NLS-1$
 
