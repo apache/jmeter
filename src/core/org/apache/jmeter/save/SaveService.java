@@ -564,7 +564,6 @@ public class SaveService {
             }
             return wrapper.testPlan;
         } catch (CannotResolveClassException e) {
-            // FIXME We switching to JAVA7, use Multi-Catch Exceptions
             if (e.getMessage().startsWith("node")) {
                 log.info("Problem loading XML, trying Avalon format");
                 reader.reset();
@@ -575,17 +574,11 @@ public class SaveService {
             } else {
                 throw new IllegalArgumentException("Problem loading XML, cannot determine class for element: " + e, e);
             }
-        } catch (NoClassDefFoundError e) {
+        } catch (ConversionException|NoClassDefFoundError e) {
             if(file != null) {
                 throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', missing class "+e , e);
             } else {
                 throw new IllegalArgumentException("Problem loading XML, missing class "+e , e);
-            }
-        } catch (ConversionException e) {
-            if(file != null) {
-                throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', conversion error "+e , e);
-            } else {
-                throw new IllegalArgumentException("Problem loading XML, conversion error "+e , e);
             }
         }
 
