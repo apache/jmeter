@@ -130,9 +130,8 @@ class SMIMEAssertion {
                     + e.getMessage());
         } catch (SMIMEException e) {
             res.setFailure(true);
-            res
-                    .setFailureMessage("Cannot extract signed body part from signature: "
-                            + e.getMessage());
+            res.setFailureMessage("Cannot extract signed body part from signature: "
+                    + e.getMessage());
         } catch (IOException e) { // should never happen
             log.error("Cannot read mime message content: " + e.getMessage(), e);
             res.setError(true);
