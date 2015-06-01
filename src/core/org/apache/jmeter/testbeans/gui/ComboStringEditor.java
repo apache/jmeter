@@ -29,6 +29,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -48,8 +49,6 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 class ComboStringEditor extends PropertyEditorSupport implements ItemListener, ClearGui {
-
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
      * The list of options to be offered by this editor.
@@ -108,7 +107,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
 
     ComboStringEditor(String []pTags, boolean noEdit, boolean noUndefined, ResourceBundle rb) {
 
-        tags = pTags == null ? EMPTY_STRING_ARRAY : pTags.clone();
+        tags = pTags == null ? ArrayUtils.EMPTY_STRING_ARRAY : pTags.clone();
 
         model = new DefaultComboBoxModel();
 
