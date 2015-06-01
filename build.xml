@@ -333,8 +333,8 @@
   <!-- Compilation parameters -->
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
-  <property name="target.java.version" value="1.6"/>
-  <property name="src.java.version" value="1.6"/>
+  <property name="target.java.version" value="1.7"/>
+  <property name="src.java.version" value="1.7"/>
   <property name="encoding" value="UTF-8"/>
   <!-- Set test encoding to the same default, but allow override -->
   <property name="test.encoding" value="${encoding}"/>
@@ -2170,6 +2170,9 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="docs-api" description="Generate the API documentation.">
+    <available property="jdk1.7+" classname="java.lang.AutoCloseable"/> 
+    <fail unless="jdk1.7+"
+          message="Must use Java 7 or later for creating the Javadocs"/>
     <tstamp>
       <!-- Used to ensure end-year is up to date -->
       <format property="THISYEAR" pattern="yyyy"/>
@@ -2203,77 +2206,8 @@ run JMeter unless all the JMeter jars are added.
       <classpath refid="classpath"/>
       <link href="http://docs.oracle.com/javase/6/docs/api/"/>
     </javadoc>
-    <patch-javadoc dir="${dest.docs.api}" docencoding="${javadoc.encoding}"/>
+    <!-- No need for Javadoc patch (CVE-2013-1571) now we are using Java 7 minimum -->
   </target>
-
-  <!-- Macro copied from: http://svn.apache.org/repos/asf/tomcat/tc7.0.x/trunk/build.xml r1495881 -->
-      <!--
-        Patch frame injection bugs in javadoc generated files - see CVE-2013-1571,
-        http://www.kb.cert.org/vuls/id/225657
-
-        This macro works together with the javadoc task on Ant and should be invoked
-        directly after its execution to patch broken javadocs, e.g.:
-        <patch-javadoc dir="..." docencoding="UTF-8"/>
-        Please make sure that the docencoding parameter uses the same charset as
-        javadoc's docencoding. Default is the platform default encoding (like the
-        javadoc task).
-        The specified dir is the destination directory of the javadoc task.
-      -->
-      <macrodef name="patch-javadoc">
-        <attribute name="dir"/>
-        <attribute name="docencoding" default="${file.encoding}"/>
-        <sequential>
-          <replace encoding="@{docencoding}" summary="true" taskname="patch-javadoc">
-            <restrict>
-              <fileset dir="@{dir}" casesensitive="false"
-                  includes="**/index.html,**/index.htm,**/toc.html,**/toc.htm"/>
-              <!-- TODO: add encoding="@{docencoding}" to contains check, when we
-                   are on ANT 1.9.0: -->
-              <not>
-                <contains text="function validURL(url) {" casesensitive="true" />
-              </not>
-            </restrict>
-            <replacetoken><![CDATA[function loadFrames() {]]></replacetoken>
-            <replacevalue expandProperties="false"><![CDATA[if (targetPage != "" && !validURL(targetPage))
-            targetPage = "undefined";
-    function validURL(url) {
-        var pos = url.indexOf(".html");
-        if (pos == -1 || pos != url.length - 5)
-            return false;
-        var allowNumber = false;
-        var allowSep = false;
-        var seenDot = false;
-        for (var i = 0; i < url.length - 5; i++) {
-            var ch = url.charAt(i);
-            if ('a' <= ch && ch <= 'z' ||
-                    'A' <= ch && ch <= 'Z' ||
-                    ch == '$' ||
-                    ch == '_') {
-                allowNumber = true;
-                allowSep = true;
-            } else if ('0' <= ch && ch <= '9'
-                    || ch == '-') {
-                if (!allowNumber)
-                     return false;
-            } else if (ch == '/' || ch == '.') {
-                if (!allowSep)
-                    return false;
-                allowNumber = false;
-                allowSep = false;
-                if (ch == '.')
-                     seenDot = true;
-                if (ch == '/' && seenDot)
-                     return false;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-    function loadFrames() {]]></replacevalue>
-          </replace>
-        </sequential>
-      </macrodef>
 
 <!--
     Run Doccheck: See http://java.sun.com/j2se/javadoc/doccheck/docs/DocCheck.html
