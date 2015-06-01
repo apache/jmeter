@@ -33,12 +33,12 @@
       ant clean install
 
     To update documentation
-      ant docs-site
-      ant docs-printable
+      ant docs-site [-Ddocs.force=true]
+      ant docs-printable [-Ddocs.force=true]
     To build API documentation (Javadoc)
       ant docs-api
     To build all the docs
-      ant docs-all
+      ant docs-all [-Ddocs.force=true]
 
     To build all and package up the files for distribution
       ant distribution -Djmeter.version=vvvv [-Dsvn.revision=nnnnn]
@@ -294,8 +294,14 @@
   <property name="dest.docs" value="docs"/>
   <property name="dest.printable_docs" value="printable_docs"/>
 
+  <!-- Whether to force docs to be rebuilt -->
+  <property name="docs.force" value="false"/>
+
   <!-- Default is for Anakia to only rebuild if the target file is older than the source -->
-  <property name="anakia.lastModifiedCheck" value="true"/>
+  <condition property="anakia.lastModifiedCheck" value="true" else="false">
+    <!-- docs.force uses the opposite sense to the anakia check -->
+    <isfalse value="${docs.force}"/>
+  </condition>
 
   <!-- Directory where jars needed for creating documentation live -->
   <property name="lib.doc" value="lib/doc"/>
@@ -2297,19 +2303,19 @@ run JMeter unless all the JMeter jars are added.
     <mkdir dir="${dest.docs}" />
     <!-- The extending pages are rather out of date (and not linked from elsewhere) -->
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}" destdir="${dest.docs}"
-      excludes="extending.xml" includes="*.xml">
+      force="${docs.force}" excludes="extending.xml" includes="*.xml">
       <param name="relative-path" expression="." />
       <param name="subdir" expression="" />
       <param name="year" expression="${year}" />
     </xslt>
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/usermanual" destdir="${dest.docs}/usermanual"
-      includes="*.xml">
+      force="${docs.force}" includes="*.xml">
       <param name="relative-path" expression=".." />
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
     </xslt>
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/localising" destdir="${dest.docs}/localising"
-      includes="*.xml">
+      force="${docs.force}" includes="*.xml">
       <param name="relative-path" expression=".." />
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
