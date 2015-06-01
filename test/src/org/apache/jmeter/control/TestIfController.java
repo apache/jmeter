@@ -23,7 +23,6 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.modifiers.CounterConfig;
 import org.apache.jmeter.sampler.DebugSampler;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -129,10 +128,10 @@ public class TestIfController extends JMeterTestCase {
             try {
 
                 Sampler sampler = controller.next();
-                SampleResult sampleResult1 = sampler.sample(null);
+                sampler.sample(null);
                 assertEquals("0", vars.get("VAR1"));
                 sampler = controller.next();
-                SampleResult sampleResult2 = sampler.sample(null);
+                sampler.sample(null);
                 assertEquals("0", vars.get("VAR1"));
                 
 
