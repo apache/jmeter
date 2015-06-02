@@ -117,6 +117,7 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.SlowHC4SSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -1026,7 +1027,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             ViewableFileBody[] fileBodies = new ViewableFileBody[files.length];
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
-                fileBodies[i] = new ViewableFileBody(new File(file.getPath()), file.getMimeType());
+                
+                File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
+                fileBodies[i] = new ViewableFileBody(reservedFile, file.getMimeType());
                 multiPart.addPart(file.getParamName(),fileBodies[i]);
             }
 
@@ -1229,7 +1232,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             hasEntityBody = true;
 
             // If getSendFileAsPostBody returned true, it's sure that file is not null
-            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath())); // no need for content-type here
+            File reservedFile = FileServer.getFileServer().getResolvedFile(files[0].getPath());
+            FileEntity fileRequestEntity = new FileEntity(reservedFile); // no need for content-type here
             entity.setEntity(fileRequestEntity);
         }
         // If none of the arguments have a name specified, we

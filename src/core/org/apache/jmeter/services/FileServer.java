@@ -36,7 +36,6 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.save.CSVSaveService;
@@ -267,9 +266,9 @@ public class FileServer {
         }
         FileEntry fileEntry = files.get(alias);
         if (fileEntry == null) {
-            File f = new File(filename);
+            File f = resolveFileFromPath(filename);
             fileEntry =
-                new FileEntry(f.isAbsolute() ? f : new File(base, filename),null,charsetName);
+                new FileEntry(f,null,charsetName);
             if (filename.equals(alias)){
                 log.info("Stored: "+filename);
             } else {
@@ -294,7 +293,16 @@ public class FileServer {
         return fileEntry.headerLine;
     }
 
-   /**
+    private File resolveFileFromPath(String filename) {
+        File f = new File(filename);
+        if (f.isAbsolute() || f.exists()) {
+            return f;
+        } else {
+            return new File(base, filename);
+        }
+    }
+
+    /**
      * Get the next line of the named file, recycle by default.
      *
      * @param filename the filename or alias that was used to reserve the file
@@ -504,6 +512,11 @@ public class FileServer {
             }
         }
         return input;
+    }
+
+    public File getResolvedFile(String path) {
+        reserveFile(path);
+        return files.get(path).file;
     }
 
     private static class FileEntry{
