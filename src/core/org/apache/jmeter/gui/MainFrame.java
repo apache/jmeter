@@ -90,6 +90,7 @@ import org.apache.jmeter.gui.util.JMeterToolBar;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -675,7 +676,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 GuiPackage guiPackage = GuiPackage.getInstance();
                 try {
                     guiPackage.updateCurrentNode();
-                    TestElement testElement = guiPackage.createTestElement(comp);
+                    TestElement testElement = guiPackage.createTestElement(SaveService.aliasToClass(comp));
                     JMeterTreeNode parentNode = guiPackage.getCurrentNode();
                     while (!MenuFactory.canAddTo(parentNode, testElement)) {
                         parentNode = (JMeterTreeNode) parentNode.getParent();
@@ -687,7 +688,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                         guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
                     }
                 } catch (Exception err) {
-                    log.error("Failed to perform quick component add: " + comp, err); // $NON-NLS-1$
+                    log.warn("Failed to perform quick component add: " + comp, err); // $NON-NLS-1$
                 }
             }
         };
