@@ -33,12 +33,12 @@
       ant clean install
 
     To update documentation
-      ant docs-site
-      ant docs-printable
+      ant docs-site [-Ddocs.force=true]
+      ant docs-printable [-Ddocs.force=true]
     To build API documentation (Javadoc)
       ant docs-api
     To build all the docs
-      ant docs-all
+      ant docs-all [-Ddocs.force=true]
 
     To build all and package up the files for distribution
       ant distribution -Djmeter.version=vvvv [-Dsvn.revision=nnnnn]
@@ -294,8 +294,14 @@
   <property name="dest.docs" value="docs"/>
   <property name="dest.printable_docs" value="printable_docs"/>
 
+  <!-- Whether to force docs to be rebuilt -->
+  <property name="docs.force" value="false"/>
+
   <!-- Default is for Anakia to only rebuild if the target file is older than the source -->
-  <property name="anakia.lastModifiedCheck" value="true"/>
+  <condition property="anakia.lastModifiedCheck" value="true" else="false">
+    <!-- docs.force uses the opposite sense to the anakia check -->
+    <isfalse value="${docs.force}"/>
+  </condition>
 
   <!-- Directory where jars needed for creating documentation live -->
   <property name="lib.doc" value="lib/doc"/>
@@ -327,8 +333,8 @@
   <!-- Compilation parameters -->
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
-  <property name="target.java.version" value="1.6"/>
-  <property name="src.java.version" value="1.6"/>
+  <property name="target.java.version" value="1.7"/>
+  <property name="src.java.version" value="1.7"/>
   <property name="encoding" value="UTF-8"/>
   <!-- Set test encoding to the same default, but allow override -->
   <property name="test.encoding" value="${encoding}"/>
@@ -437,8 +443,8 @@
     <pathelement location="${lib.dir}/${commons-logging.jar}"/>
     <pathelement location="${lib.dir}/${commons-math3.jar}"/>
     <pathelement location="${lib.dir}/${commons-net.jar}"/>
-  	<pathelement location="${lib.dir}/${commons-pool2.jar}"/>
-  	<pathelement location="${lib.dir}/${dnsjava.jar}"/>
+    <pathelement location="${lib.dir}/${commons-pool2.jar}"/>
+    <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-datasource.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-instrument.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
@@ -2164,6 +2170,9 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="docs-api" description="Generate the API documentation.">
+    <available property="jdk1.7+" classname="java.lang.AutoCloseable"/> 
+    <fail unless="jdk1.7+"
+          message="Must use Java 7 or later for creating the Javadocs"/>
     <tstamp>
       <!-- Used to ensure end-year is up to date -->
       <format property="THISYEAR" pattern="yyyy"/>
@@ -2197,77 +2206,8 @@ run JMeter unless all the JMeter jars are added.
       <classpath refid="classpath"/>
       <link href="http://docs.oracle.com/javase/6/docs/api/"/>
     </javadoc>
-    <patch-javadoc dir="${dest.docs.api}" docencoding="${javadoc.encoding}"/>
+    <!-- No need for Javadoc patch (CVE-2013-1571) now we are using Java 7 minimum -->
   </target>
-
-  <!-- Macro copied from: http://svn.apache.org/repos/asf/tomcat/tc7.0.x/trunk/build.xml r1495881 -->
-      <!--
-        Patch frame injection bugs in javadoc generated files - see CVE-2013-1571,
-        http://www.kb.cert.org/vuls/id/225657
-
-        This macro works together with the javadoc task on Ant and should be invoked
-        directly after its execution to patch broken javadocs, e.g.:
-        <patch-javadoc dir="..." docencoding="UTF-8"/>
-        Please make sure that the docencoding parameter uses the same charset as
-        javadoc's docencoding. Default is the platform default encoding (like the
-        javadoc task).
-        The specified dir is the destination directory of the javadoc task.
-      -->
-      <macrodef name="patch-javadoc">
-        <attribute name="dir"/>
-        <attribute name="docencoding" default="${file.encoding}"/>
-        <sequential>
-          <replace encoding="@{docencoding}" summary="true" taskname="patch-javadoc">
-            <restrict>
-              <fileset dir="@{dir}" casesensitive="false"
-                  includes="**/index.html,**/index.htm,**/toc.html,**/toc.htm"/>
-              <!-- TODO: add encoding="@{docencoding}" to contains check, when we
-                   are on ANT 1.9.0: -->
-              <not>
-                <contains text="function validURL(url) {" casesensitive="true" />
-              </not>
-            </restrict>
-            <replacetoken><![CDATA[function loadFrames() {]]></replacetoken>
-            <replacevalue expandProperties="false"><![CDATA[if (targetPage != "" && !validURL(targetPage))
-            targetPage = "undefined";
-    function validURL(url) {
-        var pos = url.indexOf(".html");
-        if (pos == -1 || pos != url.length - 5)
-            return false;
-        var allowNumber = false;
-        var allowSep = false;
-        var seenDot = false;
-        for (var i = 0; i < url.length - 5; i++) {
-            var ch = url.charAt(i);
-            if ('a' <= ch && ch <= 'z' ||
-                    'A' <= ch && ch <= 'Z' ||
-                    ch == '$' ||
-                    ch == '_') {
-                allowNumber = true;
-                allowSep = true;
-            } else if ('0' <= ch && ch <= '9'
-                    || ch == '-') {
-                if (!allowNumber)
-                     return false;
-            } else if (ch == '/' || ch == '.') {
-                if (!allowSep)
-                    return false;
-                allowNumber = false;
-                allowSep = false;
-                if (ch == '.')
-                     seenDot = true;
-                if (ch == '/' && seenDot)
-                     return false;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-    function loadFrames() {]]></replacevalue>
-          </replace>
-        </sequential>
-      </macrodef>
 
 <!--
     Run Doccheck: See http://java.sun.com/j2se/javadoc/doccheck/docs/DocCheck.html
@@ -2297,19 +2237,19 @@ run JMeter unless all the JMeter jars are added.
     <mkdir dir="${dest.docs}" />
     <!-- The extending pages are rather out of date (and not linked from elsewhere) -->
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}" destdir="${dest.docs}"
-      excludes="extending.xml" includes="*.xml">
+      force="${docs.force}" excludes="extending.xml" includes="*.xml">
       <param name="relative-path" expression="." />
       <param name="subdir" expression="" />
       <param name="year" expression="${year}" />
     </xslt>
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/usermanual" destdir="${dest.docs}/usermanual"
-      excludes="extending.xml" includes="*.xml">
+      force="${docs.force}" includes="*.xml">
       <param name="relative-path" expression=".." />
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
     </xslt>
     <xslt style="xdocs/stylesheets/website-style.xsl" basedir="${src.docs}/localising" destdir="${dest.docs}/localising"
-      includes="*.xml">
+      force="${docs.force}" includes="*.xml">
       <param name="relative-path" expression=".." />
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
@@ -2320,10 +2260,15 @@ run JMeter unless all the JMeter jars are added.
     <copy todir="${dest.docs}/css">
       <fileset dir="${src.css}"/>
     </copy>
+    <!-- 
+    Note: it's vital that the Javadoc files are excluded from any fixes applied here.
+    Any fixes to Javadoc files need to be done in the docs-api target only.
+    Otherwise the output from the build will depend on which is done first.
+    -->
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
-    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
+    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" excludes="api/**" token="&lt;/br>" value=""/>
     <copy todir="${dest.docs}/demos">
       <fileset dir="${src.demos}"/>
     </copy>
@@ -2605,7 +2550,7 @@ run JMeter unless all the JMeter jars are added.
           <param name="batchtest.variable" value="sample_variables"/>
           <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
       </antcall>
-  	
+
       <antcall target="batchtest">
           <param name="batchtest.name" value="Bug56811"/>
       </antcall>
@@ -2875,7 +2820,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="commons-logging"/>
         <process_jarfile jarname="commons-math3"/>
         <process_jarfile jarname="commons-net"/>
-    	<process_jarfile jarname="commons-pool2"/>
+        <process_jarfile jarname="commons-pool2"/>
         <process_jarfile jarname="dnsjava"/>
         <process_jarfile jarname="excalibur-datasource"/>
         <process_jarfile jarname="excalibur-instrument"/>
@@ -3020,7 +2965,7 @@ run JMeter unless all the JMeter jars are added.
         </checkstyle>
 
     </target>
-  
+
     <target name="sign_dist"
       description="Sign release artifacts in dist and dist/maven.  Usage: ant sign_dist -Dgpg.keyname=key-id [-Dgpg.secretKeyring=path-to-keyring]      ">
       <scriptdef name="gpg" language="beanshell">

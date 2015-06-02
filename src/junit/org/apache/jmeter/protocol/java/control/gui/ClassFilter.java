@@ -20,6 +20,8 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 class ClassFilter {
 
     private String[] pkgs = new String[0];
@@ -44,17 +46,17 @@ class ClassFilter {
         return inc;
     }
 
-    Object[] filterArray(List<String> items) {
-        ArrayList<Object> newlist = new ArrayList<Object>();
+    String[] filterArray(List<String> items) {
+        ArrayList<String> newlist = new ArrayList<>();
         for (String item : items) {
             if (include(item)) {
                 newlist.add(item);
             }
         }
         if (newlist.size() > 0) {
-            return newlist.toArray();
+            return newlist.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
         } else {
-            return new Object[0];
+            return ArrayUtils.EMPTY_STRING_ARRAY;
         }
     }
 

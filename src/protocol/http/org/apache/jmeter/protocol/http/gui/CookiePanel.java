@@ -89,7 +89,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private JCheckBox clearEachIteration;
 
-    private JComboBox selectHandlerPanel;
+    private JComboBox<String> selectHandlerPanel;
 
     private HashMap<String, String> handlerMap = new HashMap<String, String>();
 
@@ -398,10 +398,10 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      * Create the drop-down list to changer render
      * @return List of all render (implement ResultsRender)
      */
-    private JComboBox createComboHandler() {
-        ComboBoxModel nodesModel = new DefaultComboBoxModel();
+    private JComboBox<String> createComboHandler() {
+        ComboBoxModel<String> nodesModel = new DefaultComboBoxModel<>();
         // drop-down list for renderer
-        selectHandlerPanel = new JComboBox(nodesModel);
+        selectHandlerPanel = new JComboBox<String>(nodesModel);
         selectHandlerPanel.setActionCommand(HANDLER_COMMAND);
         selectHandlerPanel.addActionListener(this);
 

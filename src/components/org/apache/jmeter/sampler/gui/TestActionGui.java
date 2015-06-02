@@ -41,7 +41,7 @@ public class TestActionGui extends AbstractSamplerGui {
     private static final long serialVersionUID = 240L;
 
     // Gui components
-    private JComboBox targetBox;
+    private JComboBox<String> targetBox;
 
     // private ButtonGroup actionButtons;
     private JRadioButton pauseButton;
@@ -163,10 +163,10 @@ public class TestActionGui extends AbstractSamplerGui {
         // Target
         HorizontalPanel targetPanel = new HorizontalPanel();
         targetPanel.add(new JLabel(targetLabel));
-        DefaultComboBoxModel targetModel = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> targetModel = new DefaultComboBoxModel<>();
         targetModel.addElement(threadTarget);
         targetModel.addElement(testTarget);
-        targetBox = new JComboBox(targetModel);
+        targetBox = new JComboBox<>(targetModel);
         targetBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

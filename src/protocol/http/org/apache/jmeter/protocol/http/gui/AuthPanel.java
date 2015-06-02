@@ -428,7 +428,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         private static final long serialVersionUID = 6085773573067229265L;
         
         public MechanismCellEditor() {
-            super(new JComboBox(Mechanism.values()));
+            super(new JComboBox<>(Mechanism.values()));
         }
     }
 

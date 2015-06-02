@@ -113,7 +113,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      * Whether to group requests together based on inactivity separation periods --
      * and how to handle such grouping afterwards.
      */
-    private JComboBox groupingMode;
+    private JComboBox<String> groupingMode;
 
     /**
      * Add an Assertion to the first sample of each set
@@ -133,7 +133,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     /**
      * The list of sampler type names to choose from
      */
-    private JComboBox samplerTypeName;
+    private JComboBox<String> samplerTypeName;
 
     /**
      * Set/clear the Redirect automatically box on the samplers (default is false)
@@ -163,14 +163,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     /**
      * List of available target controllers
      */
-    private JComboBox targetNodes;
+    private JComboBox<Object> targetNodes;
     
     /**
      * Notify child Listener of Filtered Samplers
      */
     private JCheckBox notifyChildSamplerListenerOfFilteredSamplersCB;
 
-    private DefaultComboBoxModel targetNodesModel;
+    private DefaultComboBoxModel<Object> targetNodesModel;
 
     private ProxyControl model;
 
@@ -707,12 +707,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private JPanel createHTTPSamplerPanel() {
-        DefaultComboBoxModel m = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> m = new DefaultComboBoxModel<>();
         for (String s : HTTPSamplerFactory.getImplementations()){
             m.addElement(s);
         }
         m.addElement(USE_DEFAULT_HTTP_IMPL);
-        samplerTypeName = new JComboBox(m);
+        samplerTypeName = new JComboBox<>(m);
         samplerTypeName.setPreferredSize(new Dimension(150, 20));
         samplerTypeName.setSelectedItem(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName.addItemListener(this);
@@ -753,8 +753,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private JPanel createTargetPanel() {
-        targetNodesModel = new DefaultComboBoxModel();
-        targetNodes = new JComboBox(targetNodesModel);
+        targetNodesModel = new DefaultComboBoxModel<>();
+        targetNodes = new JComboBox<>(targetNodesModel);
         targetNodes.setPrototypeDisplayValue(""); // $NON-NLS-1$ // Bug 56303 fixed the width of combo list
         JPopupMenu popup = (JPopupMenu) targetNodes.getUI().getAccessibleChild(targetNodes, 0); // get popup element
         JScrollPane scrollPane = findScrollPane(popup);
@@ -786,7 +786,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private JPanel createGroupingPanel() {
-        DefaultComboBoxModel m = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> m = new DefaultComboBoxModel<>();
         // Note: position of these elements in the menu *must* match the
         // corresponding ProxyControl.GROUPING_* values.
         m.addElement(JMeterUtils.getResString("grouping_no_groups")); // $NON-NLS-1$
@@ -794,7 +794,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         m.addElement(JMeterUtils.getResString("grouping_in_controllers")); // $NON-NLS-1$
         m.addElement(JMeterUtils.getResString("grouping_store_first_only")); // $NON-NLS-1$
         m.addElement(JMeterUtils.getResString("grouping_in_transaction_controllers")); // $NON-NLS-1$
-        groupingMode = new JComboBox(m);
+        groupingMode = new JComboBox<>(m);
         groupingMode.setPreferredSize(new Dimension(150, 20));
         groupingMode.setSelectedIndex(0);
         groupingMode.addItemListener(this);
