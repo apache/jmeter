@@ -24,7 +24,6 @@ package org.apache.jmeter.services;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.apache.jmeter.junit.JMeterTestCase;
 
 public class TestFileServer extends JMeterTestCase {
@@ -155,5 +154,18 @@ public class TestFileServer extends JMeterTestCase {
         } catch (IllegalArgumentException e) {
             assertTrue("Expected EOF", e.getCause() instanceof java.io.EOFException);
         }
+    }
+
+    public void testResolvingPaths() {
+        final File anchor = new File(findTestPath("testfiles/empty.csv"));
+
+        // absolute
+        assertTrue(FS.getResolvedFile(anchor.getAbsolutePath()).exists());
+
+        // relative
+        assertTrue(FS.getResolvedFile(anchor.getParentFile().getPath() + "/../testfiles/empty.csv").exists());
+        // test-plan-relative
+        FS.setBaseForScript(anchor);
+        assertTrue(FS.getResolvedFile(anchor.getName()).exists());
     }
 }
