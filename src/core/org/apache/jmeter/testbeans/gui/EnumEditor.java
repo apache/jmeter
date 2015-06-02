@@ -36,18 +36,18 @@ import org.apache.jmeter.gui.ClearGui;
  */
 class EnumEditor extends PropertyEditorSupport implements ClearGui {
 
-    private final JComboBox combo;
+    private final JComboBox<String> combo;
 
-    private final DefaultComboBoxModel model;
+    private final DefaultComboBoxModel<String> model;
 
     private final int defaultIndex;
 
     public EnumEditor(final PropertyDescriptor descriptor, final Class<? extends Enum<?>> enumClazz, final ResourceBundle rb) {
-        model = new DefaultComboBoxModel();
-        combo = new JComboBox(model);
+        model = new DefaultComboBoxModel<>();
+        combo = new JComboBox<>(model);
         combo.setEditable(false);
         for(Enum<?> e : enumClazz.getEnumConstants()) {
-            model.addElement(rb.getObject(e.toString()));
+            model.addElement((String) rb.getObject(e.toString()));
         }
         Object def = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
         if (def instanceof Integer) {

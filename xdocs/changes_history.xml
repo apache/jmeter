@@ -15,6 +15,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+<!DOCTYPE document [
+  <!ENTITY oacute "&#x000F3;">
+  <!ENTITY THORN  "&#x000DE;">
+]>
 <document>   
 <properties>     
     <author email="dev AT jmeter.apache.org">JMeter developers</author>     
@@ -189,7 +193,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>57322</bug>JDBC Test elements: add ResultHandler to deal with ResultSets(cursors) returned by callable statements. Contributed by Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+    <li><bug>57322</bug>JDBC Test elements: add ResultHandler to deal with ResultSets(cursors) returned by callable statements. Contributed by Yngvi &THORN;&oacute;r Sigurj&oacute;nsson (blitzkopf at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -306,7 +310,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <p>We thank all contributors mentioned in bug and improvement sections above:
 <ul>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
-<li>Yngvi &amp;THORN;&amp;oacute;r Sigurj&amp;oacute;nsson (blitzkopf at gmail.com)</li>
+<li>Yngvi &THORN;&oacute;r Sigurj&oacute;nsson (blitzkopf at gmail.com)</li>
 <li>Dzmitry Kashlach (dzmitrykashlach at gmail.com)</li>
 <li><a href="http://blazemeter.com">BlazeMeter Ltd.</a></li>
 <li>Benoit Wiart (benoit.wiart at gmail.com)</li>
@@ -1348,7 +1352,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li><bugzilla>54627</bugzilla> - JMeter Proxy GUI: Type of sampler setting takes the whole screen when there are samplers with long names.</li>
-<li><bugzilla>54629</bugzilla> - HTMLParser does not extract &amp;lt;object&amp;gt; tag urls.</li>
+<li><bugzilla>54629</bugzilla> - HTMLParser does not extract &lt;object&gt; tag urls.</li>
 <li><bugzilla>55023</bugzilla> - SSL Context reuse feature (51380) adversely affects non-ssl request performance/throughput. based on analysis by Brent Cromarty (brent.cromarty at yahoo.ca)</li>
 <li><bugzilla>55092</bugzilla> - Log message "WARN - jmeter.protocol.http.sampler.HTTPSamplerBase: Null URL detected (should not happen)" displayed when embedded resource URL is malformed.</li>
 <li><bugzilla>55161</bugzilla> - Useless processing in SoapSampler.setPostHeaders. Contributed by Adrian Nistor (nistor1 at illinois.edu)</li>
@@ -1474,7 +1478,7 @@ If you use any plugin or third-party code that depends on it, you need to add it
 
 <h3>Listeners</h3>
 <ul>
-<li><bugzilla>54532</bugzilla> - Improve Response Time Graph Y axis scale with huge values or small values (&amp;lt; 1000ms). Add a new field to define increment scale. Contributed by Milamber based on patch by Luca Maragnani (luca.maragnani at gmail.com)</li>
+<li><bugzilla>54532</bugzilla> - Improve Response Time Graph Y axis scale with huge values or small values (&lt; 1000ms). Add a new field to define increment scale. Contributed by Milamber based on patch by Luca Maragnani (luca.maragnani at gmail.com)</li>
 <li><bugzilla>54576</bugzilla> - View Results Tree : Add a CSS/JQuery Tester.</li>
 <li><bugzilla>54777</bugzilla> - Improve Performance of default ResultCollector. Based on patch by Mikhail Epikhin (epihin-m at yandex.ru)</li>
 <li><bugzilla>55389</bugzilla> - Show IP source address in request data</li>

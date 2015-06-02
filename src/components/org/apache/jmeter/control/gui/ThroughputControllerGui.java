@@ -38,7 +38,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class ThroughputControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 
-    private JComboBox styleBox;
+    private JComboBox<String> styleBox;
 
     private int style;
 
@@ -128,10 +128,10 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         setBorder(makeBorder());
         add(makeTitlePanel());
 
-        DefaultComboBoxModel styleModel = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> styleModel = new DefaultComboBoxModel<>();
         styleModel.addElement(BYNUMBER_LABEL);
         styleModel.addElement(BYPERCENT_LABEL);
-        styleBox = new JComboBox(styleModel);
+        styleBox = new JComboBox<>(styleModel);
         styleBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -19,6 +19,9 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '20'>
+<!ENTITY ccedil   "&#x000E7;" >
+<!ENTITY eacute   "&#x000E9;" >
+<!ENTITY yen      "&#x000A5;" >
 ]>
 
 <document prev="component_reference.html" next="regular_expressions.html" id="$Id$">
@@ -148,7 +151,7 @@ run.  This could be used to replace the DOMAIN field of all HTTP requests, for e
 matter to change a test to target a different server with the same test.
 </p>
 <p>
-Note that variables cannot currently be nested; i.e <code>${Var${N}}</code> does not work.
+Note that variables cannot currently be nested; i.e. <code>${Var${N}}</code> does not work.
 The <code>__V</code> (variable) function (versions after 2.2) can be used to do this: <code>${__V(Var${N})}</code>.
 In earlier JMeter versions one can use <code>${__BeanShell(vars.get("Var${N}")}</code>.
 </p>
@@ -195,7 +198,7 @@ Configuration elements are processed by a separate thread.
 Therefore functions such as <code>__threadNum</code> do not work properly in elements such as User Defined Variables.
 Also note that variables defined in a UDV element are not available until the element has been processed.
 </p>
-<note>When using variable/function references in SQL code (etc),
+<note>When using variable/function references in SQL code (etc.),
 remember to include any necessary quotes for text strings,
 i.e. use
 <source>
@@ -255,7 +258,7 @@ The <code>__logn()</code> function reference can be used anywhere in the test pl
 Alternatively, the Java Request sampler can be used to create a sample containing variable references;
 the output will be shown in the appropriate Listener.
 For versions of JMeter later than 2.3, there is a <complink name="Debug Sampler"/> 
-that can be used to display the values of variables etc in the Tree View Listener.
+that can be used to display the values of variables etc. in the Tree View Listener.
 </p>
 <note><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
 variable will override the built-in function.</note>
@@ -298,13 +301,13 @@ replacement string") parsed by this function</li>
         <property name="First argument" required="Yes">The first argument is the regular expression
         to be applied to the response data.  It will grab all matches.  Any parts of this expression
         that you wish to use in your template string, be sure to surround in parentheses.  Example:
-        <code>&amp;lt;a href="(.*)"&amp;gt;</code>.  This will grab the value of the link and store it as the first group (there is
-        only 1 group).  Another example: <code>&amp;lt;input type="hidden" name="(.*)" value="(.*)"&amp;gt;</code>.  This will
+        <code>&lt;a href="(.*)"&gt;</code>.  This will grab the value of the link and store it as the first group (there is
+        only 1 group).  Another example: <code>&lt;input type="hidden" name="(.*)" value="(.*)"&gt;</code>.  This will
         grab the name as the first group, and the value as the second group.  These values can be used
         in your template string</property>
         <property name="Second argument" required="Yes">This is the template string that will replace
         the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
-        <code>$[group_number]$</code>.  Ie: <code>$1$</code>, or <code>$2$</code>.  Your template can be any string.</property>
+        <code>$[group_number]$</code>.  I.e.: <code>$1$</code>, or <code>$2$</code>.  Your template can be any string.</property>
         <property name="Third argument" required="No, default=1">The third argument tells JMeter which match
         to use.  Your regular expression might find numerous matches.  You have four choices:
                 <ul><li>An integer - Tells JMeter to use that match.  '<code>1</code>' for the first found match, '<code>2</code>' for the
@@ -312,7 +315,7 @@ replacement string") parsed by this function</li>
                 <li>RAND - Tells JMeter to choose a match at random.</li>
                 <li>ALL - Tells JMeter to use all matches, and create a template string for each one and then
                 append them all together.  This option is little used.</li>
-                <li>A float number between 0 and 1 - tells JMeter to find the Xth match using the formula:
+                <li>A float number between 0 and 1 - tells JMeter to find the X<sup>th</sup> match using the formula:
                 (number_of_matches_found * float_number) rounded to nearest integer.</li>
                 </ul></property>
         <property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
@@ -385,7 +388,7 @@ The reference name is now optional, but it must not be a valid integer.
 <properties>
         <property name="First argument" required="Yes">The first int value.</property>
         <property name="Second argument" required="Yes">The second int value.</property>
-        <property name="nth argument" required="No">The nth int value.</property>
+        <property name="nth argument" required="No">The n<sup>th</sup> int value.</property>
         <property name="last argument" required="No">A reference name for reusing the value computed by this function. 
                 If specified, the reference name must contain at least one non-numeric character otherwise it will
                 be treated as another int value to be added.
@@ -400,7 +403,7 @@ The reference name is now optional, but it must not be a valid integer.
 <properties>
         <property name="First argument" required="Yes">The first long value.</property>
         <property name="Second argument" required="Yes">The second long value.</property>
-        <property name="nth argument" required="No">The nth long value.</property>
+        <property name="nth argument" required="No">The n<sup>th</sup> long value.</property>
         <property name="last argument" required="No">A reference name for reusing the value computed by this function. 
                 If specified, the reference name must contain at least one non-numeric character otherwise it will
                 be treated as another long value to be added.
@@ -485,7 +488,7 @@ Examples:<br></br>
     See the documentation for DecimalFormat for full details.<br></br>
     If the path name does not contain any special formatting characters,
     the current sequence number will be appended to the name, otherwise
-    the number will be inserted aaccording to the fomatting instructions.<br></br>
+    the number will be inserted according to the formatting instructions.<br></br>
     If the start sequence number is omitted, and the end sequence number is specified,
     the sequence number is interpreted as a loop count, and the file will be used at most "<code>end</code>" times.
     In this case the filename is not formatted.
@@ -498,7 +501,7 @@ Examples:<br></br>
 </component>
 
 <component index="&sect-num;.5.6a" name="__machineName">
-<description><p>The machineName function returns the local host name</p></description>
+<description><p>The machineName function returns the local host name. This uses the Java method InetAddress.getLocalHost() and passes it to getHostName()</p></description>
 
 <properties>
         <property name="Variable Name" required="No">A reference name for reusing the value
@@ -507,7 +510,7 @@ Examples:<br></br>
 </component>
 
 <component index="&sect-num;.5.6b" name="__machineIP">
-<description><p>The machineIP function returns the local IP address</p></description>
+<description><p>The machineIP function returns the local IP address. This uses the Java method InetAddress.getLocalHost() and passes it to getHostAddress()</p></description>
 
 <properties>
         <property name="Variable Name" required="No">A reference name for reusing the value
@@ -776,7 +779,7 @@ For example:
 </b>
 </p>
 <note>
-Note that a different Interpreter is used for each independent occurence of the function
+Note that a different Interpreter is used for each independent occurrence of the function
 in a test script, but the same Interpreter is used for subsequent invocations.
 This means that variables persist across calls to the function.
 </note>
@@ -1078,7 +1081,7 @@ i.intValue(); // or use i.longValue()
 <br/>
 <code>${__char(13,10)}</code> = <code>${__char(0xD,0xA)}</code> = <code>${__char(015,012)}</code> = <code>CRLF</code>
 <br/>
-<code>${__char(165)}</code> = <code>&amp;#165;</code> (yen)
+<code>${__char(165)}</code> = <code>&yen;</code> (yen)
  </p>
 </component>
 
@@ -1113,12 +1116,12 @@ to a string containing the actual Unicode characters corresponding to the escape
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example, the string <code>"&amp;#38;lt;Fran&amp;#38;ccedil;ais&amp;#38;gt;"</code>
-will become <code>"&amp;lt;Fran&amp;ccedil;ais&amp;gt;"</code>.
+For example, the string <code>"&#38;lt;Fran&#38;ccedil;ais&#38;gt;"</code>
+will become <code>"&lt;Fran&ccedil;ais&gt;"</code>.
 </p>
 <p>
 If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
-e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>">&amp;zzzz;x"</code>.
+e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>"&gt;&amp;zzzz;x"</code>.
 </p>
     <p>
     Uses StringEscapeUtils#unescapeHtml(String) from Commons Lang.
@@ -1139,9 +1142,9 @@ Function which escapes the characters in a String using HTML entities.
 Supports HTML 4.0 entities.
 </p>
 <p>
-For example,<code>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</code>
+For example,<code>&quot;bread&quot; &amp; &quot;butter&quot;</code>
 becomes:
-<code>&amp;#38;quot;bread&amp;#38;quot; &amp;#38;amp; &amp;#38;quot;butter&amp;#38;quot;</code>.
+<code>&#38;quot;bread&#38;quot; &#38;amp; &#38;quot;butter&#38;quot;</code>.
 </p>
     <p>
     Uses StringEscapeUtils#escapeHtml(String) from Commons Lang.
@@ -1163,7 +1166,7 @@ Note: use UTF-8 as the encoding scheme.
 </p>
 <p>
 For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code> would get converted to
- <code>Word &quot;school&quot; is &quot;&amp;eacute;cole&quot; in french</code>.
+ <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code>.
 </p>
     <p>
     Uses Java class <a href="http://docs.oracle.com/javase/6/docs/api/java/net/URLDecoder.html">URLDecoder</a>.
@@ -1183,7 +1186,7 @@ For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</c
 Function to encode a string to a application/x-www-form-urlencoded string.
 </p>
 <p>
-For example, the string <code>Word &quot;school&quot; is &quot;&amp;eacute;cole&quot; in french</code> would get converted to
+For example, the string <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code> would get converted to
  <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code>.
 </p>
     <p>

@@ -407,7 +407,7 @@ If the value is not known until the test starts, there are various options:
 Doing so will ease you migration to the next version of JMeter. <br/>
 Note that in the documentation <code>jmeter.properties</code> is frequently mentioned but this should be understood as
 "Copy from jmeter.properties to user.properties the property you want to modify and do so in the latter file".</p>
-<note><code>user.properties</code> file superseeds the properties defined in <code>jmeter.properties</code></note>
+<note><code>user.properties</code> file supersedes the properties defined in <code>jmeter.properties</code></note>
 </section>
 
 </body>

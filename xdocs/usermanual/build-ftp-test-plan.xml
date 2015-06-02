@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '8'>
+<!ENTITY rarr     "&#x02192;" >
 ]>
 
 <document prev="build-db-test-plan.html" next="build-ldap-test-plan.html" id="$Id$">
@@ -51,7 +52,7 @@ requests, and the how many requests they should send.</p>
 
 <p>Go ahead and add the Thread Group element by first selecting the Test Plan,
 clicking your right mouse button to get the Add menu, and then select
-<b>Add</b> --&gt; <b>ThreadGroup.</b></p>
+<b>Add</b> &rarr; <b>ThreadGroup.</b></p>
 
 <p>You should now see the <b>Thread Group</b> element under <b>Test Plan.</b>  If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
@@ -103,7 +104,7 @@ for your FTP requests.  And then, in section &sect-num;.3, you will add <b>FTP R
 elements which use some of the default settings you specified here.</p>
 
 <p>Begin by selecting the FTP Users element. Click your right mouse button
-to get the Add menu, and then select <b>Add</b> --&gt; <b>Config Element</b> --&gt; <b>FTP Request
+to get the Add menu, and then select <b>Add</b> &rarr; <b>Config Element</b> &rarr; <b>FTP Request
 Defaults.</b> Then, select this new element to view its Control Panel (see Figure &sect-num;.3).
 </p>
 
@@ -139,7 +140,7 @@ Figure &sect-num;.4. FTP Defaults for our Test Plan</figure>
 <note>JMeter sends requests in the order that they appear in the tree.</note>
 
 <p>Start by adding the first <complink name="FTP Request"/>
-to the FTP Users element (<b>Add</b> --&gt; <b>Sampler</b> --&gt; <b>FTP Request</b>).
+to the FTP Users element (<b>Add</b> &rarr; <b>Sampler</b> &rarr; <b>FTP Request</b>).
 Then, select the <b>FTP Request</b> element in the tree and edit the following properties
 (see Figure &sect-num;.5):
 <ol>
@@ -178,7 +179,7 @@ responsible for storing all of the results of your <b>FTP requests</b> in a file
 a visual model of the data.</p>
 
 <p>Select the FTP Users element and add a <complink name="View Results in Table"/>
-listener (<b>Add</b> --&gt; <b>Listener</b> --&gt; <b>View Results in Table</b>).</p>
+listener (<b>Add</b> &rarr; <b>Listener</b> &rarr; <b>View Results in Table</b>).</p>
 <p>Run your test and view the results.</p>
 
 <figure image="ftptest/ftp-results.png">

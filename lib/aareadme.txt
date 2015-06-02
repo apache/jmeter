@@ -71,7 +71,7 @@ commons-logging-1.2
 http://commons.apache.org/downloads/download_logging.cgi
 - httpclient
 
-commons-math3-3.4.1
+commons-math3-3.5
 -----------------
 http://commons.apache.org/proper/commons-math/download_math.cgi
 - BackendListener
@@ -201,7 +201,7 @@ soap-2.3.1
 ----------
 - WebServiceSampler ONLY
 
-tika-1.7
+tika-1.8
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor

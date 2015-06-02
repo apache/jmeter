@@ -32,6 +32,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
@@ -59,7 +60,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** A combo box allowing the user to choose a test class. */
-    private JComboBox classnameCombo;
+    private JComboBox<String> classnameCombo;
 
     /**
      * Indicates whether or not the name of this component should be displayed
@@ -141,7 +142,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 
         JLabel label = new JLabel(JMeterUtils.getResString("protocol_java_classname")); // $NON-NLS-1$
 
-        classnameCombo = new JComboBox(possibleClasses.toArray());
+        classnameCombo = new JComboBox<>(possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
         classnameCombo.addActionListener(this);
         classnameCombo.setEditable(false);
         label.setLabelFor(classnameCombo);
@@ -242,11 +243,11 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
      * @param className String class name
      * @return boolean
      */
-    private static final boolean checkContainsClassName(ComboBoxModel model, String className) {
+    private static final boolean checkContainsClassName(ComboBoxModel<String> model, String className) {
         int size = model.getSize();
         Set<String> set = new HashSet<String>(size);
         for (int i = 0; i < size; i++) {
-            set.add((String)model.getElementAt(i));
+            set.add(model.getElementAt(i));
         }
         return set.contains(className);
     }
