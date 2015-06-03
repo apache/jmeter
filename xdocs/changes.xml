@@ -108,6 +108,7 @@ Summary
 <h3>General</h3>
 <ul>
 <li><bug>57913</bug>Automated backups of last saved JMX files. Contributed by Benoit Vatan (benoit.vatan at gmail.com)</li>
+<li><bug>57988</bug> Shortcuts (Ctrl+1 .. Ctrl+9) to quick add elements into test plan. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
