@@ -149,6 +149,58 @@ values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</co
 </description>
 </subsection>
 
+    <subsection name="&sect-num;.5 Adding Elements with Hotkeys" anchor="component_hotkeys">
+        <p>
+            When you do intense scripting with JMeter, there is a way to add elements to test plan quickly
+            with keyboard shortcuts. Default bindings are:
+        </p>
+        <dl>
+            <dt>
+                <code>Ctrl+0</code>
+            </dt>
+            <dd>Thread Group</dd>
+            <dt>
+                <code>Ctrl+1</code>
+            </dt>
+            <dd>HTTP Request</dd>
+            <dt>
+                <code>Ctrl+2</code>
+            </dt>
+            <dd>Regular Expression Extractor</dd>
+            <dt>
+                <code>Ctrl+3</code>
+            </dt>
+            <dd>Response Assertion</dd>
+            <dt>
+                <code>Ctrl+4</code>
+            </dt>
+            <dd>Constant Timer</dd>
+            <dt>
+                <code>Ctrl+5</code>
+            </dt>
+            <dd>Test Action</dd>
+            <dt>
+                <code>Ctrl+6</code>
+            </dt>
+            <dd>JSR223 PostProcessor</dd>
+            <dt>
+                <code>Ctrl+7</code>
+            </dt>
+            <dd>JSR223 PreProcessor</dd>
+            <dt>
+                <code>Ctrl+8</code>
+            </dt>
+            <dd>Debug Sampler</dd>
+            <dt>
+                <code>Ctrl+9</code>
+            </dt>
+            <dd>View Results Tree</dd>
+        </dl>
+        <p>
+            To change these binding, please find "gui.quick_*" properties within jmeter.properties file as example,
+            it is recommended to put overrides for them into user.properties file.
+        </p>
+    </subsection>
 </section>
 
 </body>
