@@ -75,6 +75,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.LoopbackHttpClientSocketFactory;
 import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -770,7 +771,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             // Add any files
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
-                File inputFile = new File(file.getPath());
+                File inputFile = FileServer.getFileServer().getResolvedFile(file.getPath());
                 // We do not know the char set of the file to be uploaded, so we set it to null
                 ViewableFilePart filePart = new ViewableFilePart(file.getParamName(), inputFile, file.getMimeType(), null);
                 filePart.setCharSet(null); // We do not know what the char set of the file is
@@ -986,7 +987,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             hasPutBody = true;
 
             // If getSendFileAsPostBody returned true, it's sure that file is not null
-            FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(files[0].getPath()),null);
+            File reservedFile = FileServer.getFileServer().getResolvedFile(files[0].getPath());
+            FileRequestEntity fileRequestEntity = new FileRequestEntity(reservedFile,null);
             put.setRequestEntity(fileRequestEntity);
         }
         // If none of the arguments have a name specified, we
