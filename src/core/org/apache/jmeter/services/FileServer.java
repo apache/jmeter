@@ -267,9 +267,7 @@ public class FileServer {
         }
         FileEntry fileEntry = files.get(alias);
         if (fileEntry == null) {
-            File f = new File(filename);
-            fileEntry =
-                new FileEntry(f.isAbsolute() ? f : new File(base, filename),null,charsetName);
+            fileEntry = new FileEntry(resolveFileFromPath(filename), null, charsetName);
             if (filename.equals(alias)){
                 log.info("Stored: "+filename);
             } else {
@@ -294,7 +292,23 @@ public class FileServer {
         return fileEntry.headerLine;
     }
 
-   /**
+    /**
+     * Resolves file name into {@link File} instance.
+     * When filename is not absolute and not found from current workind dir,
+     * it tries to find it under current base directory
+     * @param filename original file name
+     * @return {@link File} instance
+     */
+    private File resolveFileFromPath(String filename) {
+        File f = new File(filename);
+        if (f.isAbsolute() || f.exists()) {
+            return f;
+        } else {
+            return new File(base, filename);
+        }
+    }
+
+    /**
      * Get the next line of the named file, recycle by default.
      *
      * @param filename the filename or alias that was used to reserve the file
@@ -504,6 +518,17 @@ public class FileServer {
             }
         }
         return input;
+    }
+
+    /**
+     * Get {@link File} instance for provided file path,
+     * resolve file location relative to base dir or script dir when needed
+     * @param path original path to file, maybe relative
+     * @return {@link File} instance 
+     */
+    public File getResolvedFile(String path) {
+        reserveFile(path);
+        return files.get(path).file;
     }
 
     private static class FileEntry{
