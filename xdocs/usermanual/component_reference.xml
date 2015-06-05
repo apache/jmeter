@@ -1461,41 +1461,41 @@ props.put("PROP1","1234");</source>
     </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="use JNDI properties file" required="Yes">use jndi.properties. 
-  Note that the file must be on the classpath - e.g. by updating the user.classpath JMeter property.
-  If this option is not selected, JMeter uses the "JNDI Initial Context Factory" and "Provider URL" fields
+  <property name="use JNDI properties file" required="Yes">use <code>jndi.properties</code>. 
+  Note that the file must be on the classpath - e.g. by updating the <code>user.classpath</code> JMeter property.
+  If this option is not selected, JMeter uses the "<code>JNDI Initial Context Factory</code>" and "<code>Provider URL</code>" fields
   to create the connection.
   </property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
   <property name="Provider URL" required="Yes, unless using jndi.properties">The URL for the jms provider</property>
   <property name="Destination" required="Yes">The message destination (topic or queue name)</property>
-  <property name="Setup" required="Yes">The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
+  <property name="Setup" required="Yes">The destination setup type. With <code>At startup</code>, the destination name is static (i.e. always same name during the test), with <code>Each sample</code>, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Expiration" required="No">
       The expiration time (in milliseconds) of the message before it becomes obsolete.
-      If you do not specify an expiration time, the default value is 0 (never expires). 
+      If you do not specify an expiration time, the default value is <code>0</code> (never expires). 
   </property>
   <property name="Priority" required="No">
-      The priority level of the message. There are ten priority levels from 0 (lowest) to 9 (highest). 
-      If you do not specify a priority level, the default level is 4. 
+      The priority level of the message. There are ten priority levels from <code>0</code> (lowest) to <code>9</code> (highest). 
+      If you do not specify a priority level, the default level is <code>4</code>. 
   </property>
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
   <property name="Message source" required="Yes">Where to obtain the message:
-  <ul>
-    <li>From File : means the referenced file will be read and reused by all samples</li>
-    <li>Random File from folder specified below : means a random file will be selected from folder specified below, this folder must contain either files with extension .dat for Bytes Messages, or files with extension .txt or .obj for Object or Text messages</li>
-    <li>Text area : The Message to use either for Text or Object message</li>
-  </ul>  
+  <dl>
+    <dt><code>From File</code></dt><dd>means the referenced file will be read and reused by all samples</dd>
+    <dt><code>Random File from folder specified below</code></dt><dd>means a random file will be selected from folder specified below, this folder must contain either files with extension <code>.dat</code> for Bytes Messages, or files with extension <code>.txt</code> or <code>.obj</code> for Object or Text messages</dd>
+    <dt><code>Text area</code></dt><dd>The Message to use either for Text or Object message</dd>
+  </dl>
   </property>
   <property name="Message type" required="Yes">Text, Map, Object message or Bytes Message</property>
   <property name="Use non-persistent delivery mode?" required="No">
-      Whether to set DeliveryMode.NON_PERSISTENT (defaults to false)
+      Whether to set <code>DeliveryMode.NON_PERSISTENT</code> (defaults to <code>false</code>)
   </property>
   <property name="JMS Properties" required="No">
       The JMS Properties are properties specific for the underlying messaging system.
-      You can setup the name, the value and the class (type) of value. Default type is String.
+      You can setup the name, the value and the class (type) of value. Default type is <code>String</code>.
       For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
       webservices through JMS.
   </property>
@@ -1507,11 +1507,11 @@ Each line must have 3 fields, delimited by commas.
 The fields are:</p>
 <ul>
 <li>Name of entry</li>
-<li>Object class name, e.g. "String" (assumes java.lang package if not specified)</li>
+<li>Object class name, e.g. "<code>String</code>" (assumes <code>java.lang</code> package if not specified)</li>
 <li>Object string value</li>
 </ul>
 For each entry, JMeter adds an Object with the given name.
-The value is derived by creating an instance of the class, and using the valueOf(String) method to convert the value if necessary.
+The value is derived by creating an instance of the class, and using the <code>valueOf(String)</code> method to convert the value if necessary.
 For example:
 <source>
 name,String,Example
@@ -1521,9 +1521,9 @@ This is a very simple implementation; it is not intended to support all possible
 <note> 
 The Object message is implemented since 2.7 and works as follow:
 <ul>
-<li>Put the JAR that contains your object and its dependencies in jmeter_home/lib/ folder</li>
+<li>Put the JAR that contains your object and its dependencies in <code>jmeter_home/lib/</code> folder</li>
 <li>Serialize your object as XML using XStream</li>
-<li>Either put result in a file suffixed with .txt or .obj or put XML content directly in Text Area</li>  
+<li>Either put result in a file suffixed with <code>.txt</code> or <code>.obj</code> or put XML content directly in Text Area</li>  
 </ul>
 Note that if message is in a file, replacement of properties will not occur while it will if you use Text Area.
 </note>
@@ -1538,12 +1538,12 @@ The following table shows some values which may be useful when configuring JMS:
 <th>Value(s)</th>
 <th>Comment</th>
 </tr>
-<tr><td>Context Factory</td><td>org.apache.activemq.jndi.ActiveMQInitialContextFactory</td><td>.</td></tr>
-<tr><td>Provider URL</td><td>vm://localhost</td><td></td></tr>
-<tr><td>Provider URL</td><td>vm:(broker:(vm://localhost)?persistent=false)</td><td>Disable persistence</td></tr>
-<tr><td>Queue Reference</td><td>dynamicQueues/QUEUENAME</td>
+<tr><td>Context Factory</td><td><code>org.apache.activemq.jndi.ActiveMQInitialContextFactory</code></td><td>.</td></tr>
+<tr><td>Provider URL</td><td><code>vm://localhost</code></td><td></td></tr>
+<tr><td>Provider URL</td><td><code>vm:(broker:(vm://localhost)?persistent=false)</code></td><td>Disable persistence</td></tr>
+<tr><td>Queue Reference</td><td><code>dynamicQueues/QUEUENAME</code></td>
 <td><a href="http://activemq.apache.org/jndi-support.html#JNDISupport-Dynamicallycreatingdestinations">Dynamically define</a> the QUEUENAME to JNDI</td></tr>
-<tr><td>Topic Reference</td><td>dynamicTopics/TOPICNAME</td>
+<tr><td>Topic Reference</td><td><code>dynamicTopics/TOPICNAME</code></td>
 <td><a href="http://activemq.apache.org/jndi-support.html#JNDISupport-Dynamicallycreatingdestinations">Dynamically define</a> the TOPICNAME to JNDI</td></tr>
 </table>
 </component>
