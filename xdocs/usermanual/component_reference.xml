@@ -1620,13 +1620,13 @@ completed, so the net effect was similar to the <code>MessageListener.onMessage(
         It is different from pub/sub messages and is generally used for handling transactions.
         </p>
         <p>
-        <b>Request Only</b> will typically used to put load on a JMS System.<br></br>
-        <b>Request Response</b> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br></br>
+        <code>Request Only</code> will typically be used to put load on a JMS System.<br></br>
+        <code>Request Response</code> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br></br>
         </p>
         <p>
-        Versions of JMeter after 2.3.2 use the properties java.naming.security.[principal|credentials] - if present -
+        Versions of JMeter after 2.3.2 use the properties <code>java.naming.security.[principal|credentials]</code> - if present -
         when creating the Queue Connection. If this behaviour is not desired, set the JMeter property
-        <b>JMSSampler.useSecurity.properties=false</b>
+        <code>JMSSampler.useSecurity.properties=false</code>
         </p>
         <br></br>
 <note>JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory</note>
@@ -1640,7 +1640,7 @@ completed, so the net effect was similar to the <code>MessageListener.onMessage(
     This is the JNDI name of the queue to which the messages are sent.
   </property>
   <property name="JNDI Name Reply queue" required="No">
-    The JNDI name of the receiving queue. If a value is provided here and the communication style is Request Response
+    The JNDI name of the receiving queue. If a value is provided here and the communication style is <code>Request Response</code>
     this queue will be monitored for responses to the requests sent.
   </property>
   <property name="JMS Selector" required="No">
@@ -1648,38 +1648,38 @@ completed, so the net effect was similar to the <code>MessageListener.onMessage(
     messages that respect the Selector condition. Syntax uses subpart of SQL 92.
   </property>
   <property name="Communication style" required="Yes">
-    The Communication style can be <b>Request Only</b> (also known as Fire and Forget) or <b>Request Response</b>:
-    <ul>
-    <li><b>Request Only</b> will only send messages and will not monitor replies. As such it can be used to put load on a system.</li>
-    <li><b>Request Response</b> will send messages and monitor the replies it receives. Behaviour depends on the value of the JNDI Name Reply Queue.
+    The Communication style can be <code>Request Only</code> (also known as Fire and Forget) or <code>Request Response</code>:
+    <dl>
+    <dt><code>Request Only</code></dt><dd> will only send messages and will not monitor replies. As such it can be used to put load on a system.</dd>
+    <dt><code>Request Response</code></dt><dd> will send messages and monitor the replies it receives. Behaviour depends on the value of the JNDI Name Reply Queue.
     If JNDI Name Reply Queue has a value, this queue is used to monitor the results. Matching of request and reply is done with
     the message id of the request and the correlation id of the reply. If the JNDI Name Reply Queue is empty, then
     temporary queues will be used for the communication between the requestor and the server.
     This is very different from the fixed reply queue. With temporary queues the sending thread will block until the reply message has been received.
-    With <b>Request Response</b> mode, you need to have a Server that listens to messages sent to Request Queue and sends replies to 
-    queue referenced by <code>message.getJMSReplyTo()</code>.</li>
-    </ul>
+    With <code>Request Response</code> mode, you need to have a Server that listens to messages sent to Request Queue and sends replies to 
+    queue referenced by <code>message.getJMSReplyTo()</code>.</dd>
+    </dl>
   </property>
   <property name="Use alternate fields for message correlation" required="Yes">
     These check-boxes select the fields which will be used for matching the response message with the original request.
-    <ul>
-    <li><b>Use Request Message Id</b> - if selected, the request JMSMessageID will be used, 
+    <dl>
+    <dt><code>Use Request Message Id</code></dt><dd>if selected, the request JMSMessageID will be used, 
     otherwise the request JMSCorrelationID will be used. 
-    In the latter case the correlation id must be specified in the request.</li>
-    <li><b>Use Response Message Id</b> - if selected, the response JMSMessageID will be used, 
+    In the latter case the correlation id must be specified in the request.</dd>
+    <dt><code>Use Response Message Id</code></dt><dd>if selected, the response JMSMessageID will be used, 
     otherwise the response JMSCorrelationID will be used.
-    </li>
-    </ul>
+    </dd>
+    </dl>
     There are two frequently used JMS Correlation patterns:
-    <ul>
-    <li>JMS Correlation ID Pattern - 
-    i.e. match request and response on their correlation Ids
-    => deselect both checkboxes, and provide a correlation id.</li>
-    <li>JMS Message ID Pattern -
-    i.e. match request message id with response correlation id
+    <dl>
+    <dt>JMS Correlation ID Pattern</dt>
+    <dd> i.e. match request and response on their correlation Ids
+    => deselect both checkboxes, and provide a correlation id.</dd>
+    <dt>JMS Message ID Pattern</dt>
+    <dd>i.e. match request message id with response correlation id
     => select "Use Request Message Id" only.
-    </li>
-    </ul>
+    </dd>
+    </dl>
     In both cases the JMS application is responsible for populating the correlation ID as necessary.
     <note>if the same queue is used to send and receive messages, 
     then the response message will be the same as the request message.
@@ -1690,25 +1690,25 @@ completed, so the net effect was similar to the <code>MessageListener.onMessage(
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase fails and the specific reply message received after the timeout is discarded.
-      Default value is 2000 ms.
+      Default value is <code>2000</code> ms.
   </property>
   <property name="Expiration" required="No">
       The expiration time (in milliseconds) of the message before it becomes obsolete.
-      If you do not specify an expiration time, the default value is 0 (never expires). 
+      If you do not specify an expiration time, the default value is <code>0</code> (never expires). 
   </property>
   <property name="Priority" required="No">
-      The priority level of the message. There are ten priority levels from 0 (lowest) to 9 (highest). 
-      If you do not specify a priority level, the default level is 4. 
+      The priority level of the message. There are ten priority levels from <code>0</code> (lowest) to <code>9</code> (highest). 
+      If you do not specify a priority level, the default level is <code>4</code>. 
   </property>
   <property name="Use non-persistent delivery mode?" required="Yes">
-      Whether to set DeliveryMode.NON_PERSISTENT.
+      Whether to set <code>DeliveryMode.NON_PERSISTENT</code>.
   </property>
   <property name="Content" required="No">
       The content of the message.
   </property>
   <property name="JMS Properties" required="No">
       The JMS Properties are properties specific for the underlying messaging system.
-      You can setup the name, the value and the class (type) of value. Default type is String.
+      You can setup the name, the value and the class (type) of value. Default type is <code>String</code>.
       For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
       webservices through JMS.
   </property>
