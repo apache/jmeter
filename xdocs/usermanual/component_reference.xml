@@ -1728,14 +1728,14 @@ completed, so the net effect was similar to the <code>MessageListener.onMessage(
 
 <component name="JUnit Request" index="&sect-num;.1.16"  width="397" height="536" screenshot="junit_sampler.png">
 <description>
-The current implementation supports standard Junit convention and extensions. It also
+The current implementation supports standard JUnit convention and extensions. It also
 includes extensions like <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>. The sampler works like the
 <complink name="Java Request" /> with some differences.
 <ul>
-<li>rather than use Jmeter's test interface, it scans the jar files for classes extending junit's <code>TestCase</code> class. That includes any class or subclass.</li>
-<li>Junit test jar files should be placed in <code>jmeter/lib/junit</code> instead of <code>/lib</code> directory.
+<li>rather than use Jmeter's test interface, it scans the jar files for classes extending JUnit's <code>TestCase</code> class. That includes any class or subclass.</li>
+<li>JUnit test jar files should be placed in <code>jmeter/lib/junit</code> instead of <code>/lib</code> directory.
 In versions of JMeter after 2.3.1, you can also use the "<code>user.classpath</code>" property to specify where to look for <code>TestCase</code> classes.</li>
-<li>Junit sampler does not use name/value pairs for configuration like the <complink name="Java Request" />. The sampler assumes <code>setUp</code> and <code>tearDown</code> will configure the test correctly.</li>
+<li>JUnit sampler does not use name/value pairs for configuration like the <complink name="Java Request" />. The sampler assumes <code>setUp</code> and <code>tearDown</code> will configure the test correctly.</li>
 <li>The sampler measures the elapsed time only for the test method and does not include <code>setUp</code> and <code>tearDown</code>.</li>
 <li>Each time the test method is called, Jmeter will pass the result to the listeners.</li>
 <li>Support for <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code> is done as a method. Since Jmeter is multi-threaded, we cannot call <code>oneTimeSetUp</code>/<code>oneTimeTearDown</code> the same way Maven does it.</li>
@@ -1746,7 +1746,7 @@ creates 1 instance per sampler and reuses it.
 This can be changed with checkbox "<code>Create a new instance per sample</code>".</li>
 </ul>
 The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:
-<example title="Junit Constructors" anchor="junit_constructor_example">
+<example title="JUnit Constructors" anchor="junit_constructor_example">
 Empty Constructor:
 <source>
 public class myTestCase {
@@ -1767,11 +1767,11 @@ By default, Jmeter will provide some default values for the success/failure code
 <h3>General Guidelines</h3>
 If you use <code>setUp</code> and <code>tearDown</code>, make sure the methods are declared public. If you do not, the test may not run properly.
 <br></br>
-Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.
+Here are some general guidelines for writing JUnit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.
 <ul>
 <li>Write the <code>setUp</code> and <code>tearDown</code> methods so they are thread safe. This generally means avoid using static members.</li>
 <li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a discrete operation, it makes it easier to combine test methods to create new test plans.</li>
-<li>Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.</li>
+<li>Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default JUnit behavior.</li>
 <li>If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.</li>
 <li>Each sampler creates an instance of the test class, so write your test so the setup happens in <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>.</li>
 </ul>
