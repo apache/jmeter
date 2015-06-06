@@ -3054,7 +3054,7 @@ httpclient3.retrycount=3
 <li><bugzilla>51821</bugzilla> - Add short-cut for Enabling / Disabling (sub)tree or branches in test plan.</li>
 <li><bugzilla>47921</bugzilla> - Variables not released for GC after JMeterThread exits.</li>
 <li><bugzilla>51839</bugzilla> - "... end of run" printed prematurely</li>
-<li><bugzilla>51847</bugzilla> - Some Junit tests are Locale sensitive and fail if Locale is different from US</li>
+<li><bugzilla>51847</bugzilla> - Some JUnit tests are Locale sensitive and fail if Locale is different from US</li>
 <li><bugzilla>51855</bugzilla> - Parent samples may have slightly inaccurate elapsed times</li>
 <li><bugzilla>51880</bugzilla> - The shutdown command is not working if I invoke it before all the thread are started</li>
 <li>Remote Shut host menu item was not being enabled.</li>
