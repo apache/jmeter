@@ -662,6 +662,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     private void addQuickComponentHotkeys(JTree treevar) {
         Action quickComponent = new AbstractAction("Quick Component") {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String propname = "gui.quick_" + actionEvent.getActionCommand();
