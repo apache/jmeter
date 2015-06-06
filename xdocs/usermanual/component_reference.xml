@@ -1874,18 +1874,18 @@ Rather than generate a sample, the test element either pauses or stops the selec
 pauses to be included without needing to generate a sample. 
 For variable delays, set the pause time to zero, and add a Timer as a child.</p>
 <p>
-The "Stop" action stops the thread or test after completing any samples that are in progress.
-The "Stop Now" action stops the test without waiting for samples to complete; it will interrupt any active samples.
+The "<code>Stop</code>" action stops the thread or test after completing any samples that are in progress.
+The "<code>Stop Now</code>" action stops the test without waiting for samples to complete; it will interrupt any active samples.
 If some threads fail to stop within the 5 second time-limit, a message will be displayed in GUI mode.
-You can try using the Stop command to see if this will stop the threads, but if not, you should exit JMeter.
+You can try using the <code>Stop</code> command to see if this will stop the threads, but if not, you should exit JMeter.
 In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 second time limit.
-[This can be changed using the JMeter property <code>jmeterengine.threadstop.wait</code>]
+<note>The time to wait can be changed using the JMeter property <code>jmeterengine.threadstop.wait</code>. The time is given in milliseconds.</note>
 </p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Target" required="Yes">Current Thread / All Threads (ignored for Pause)</property>
-  <property name="Action" required="Yes">Pause / Stop / Stop Now / Go to next loop iteration</property>
+  <property name="Target" required="Yes"><code>Current Thread</code> / <code>All Threads</code> (ignored for Pause)</property>
+  <property name="Action" required="Yes"><code>Pause</code> / <code>Stop</code> / <code>Stop Now</code> / <code>Go to next loop iteration</code></property>
   <property name="Duration" required="Yes, if Pause is selected">How long to pause for (milliseconds)</property>
 </properties>
 </component>
