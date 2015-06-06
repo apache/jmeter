@@ -1967,32 +1967,32 @@ This means that the sampler settings will not be portable between OSes.
 </p>
 <p>
 Many OSes have some built-in commands which are not provided as separate executables. 
-For example the Windows DIR command is part of the command interpreter (CMD.EXE).
+For example the Windows <code>DIR</code> command is part of the command interpreter (<code>CMD.EXE</code>).
 These built-ins cannot be run as independent programs, but have to be provided as arguments to the appropriate command interpreter.
 </p>
 <p>
-For example, the Windows command-line: <b><code>DIR C:\TEMP</code></b> needs to be specified as follows:
+For example, the Windows command-line: <code>DIR C:\TEMP</code> needs to be specified as follows:
 </p>
-<source>
-command:   CMD
-Param 1:   /C
-Param 2:   DIR
-Param 3:   C:\TEMP
-</source>
+<dl>
+<dt>Command:</dt><dd><code>CMD</code></dd>
+<dt>Param 1:</dt><dd><code>/C</code></dd>
+<dt>Param 2:</dt><dd><code>DIR</code></dd>
+<dt>Param 3:</dt><dd><code>C:\TEMP</code></dd>
+</dl>
 </description>
 <properties>
 <property name="Command" required="Yes">The program name to execute.</property>
-<property name="Working directory" required="No">Directory from which command will be executed, defaults to folder referenced by "user.dir" System property</property>
+<property name="Working directory" required="No">Directory from which command will be executed, defaults to folder referenced by "<code>user.dir</code>" System property</property>
 <property name="Command Parameters" required="No">Parameters passed to the program name.</property>
 <property name="Environment Parameters" required="No">Key/Value pairs added to environment when running command.</property>
-<property name="Standard input (stdin)" required="No">Name of file from which input is to be taken (STDIN).</property>
-<property name="Standard output (stdout" required="No">Name of output file for standard output (STDOUT). 
+<property name="Standard input (stdin)" required="No">Name of file from which input is to be taken (<code>STDIN</code>).</property>
+<property name="Standard output (stdout" required="No">Name of output file for standard output (<code>STDOUT</code>). 
 If omitted, output is captured and returned as the response data.</property>
-<property name="Standard error (stderr)" required="No">Name of output file for standard error (STDERR). 
+<property name="Standard error (stderr)" required="No">Name of output file for standard error (<code>STDERR</code>). 
 If omitted, output is captured and returned as the response data.</property>
-<property name="Check Return Code" required="No">If checked, sampler will compare return code with Expected Return Code.</property>
-<property name="Expected Return Code" required="No">Expected return code for System Call, required if "Check Return Code" is checked.</property>
-<property name="Timeout" required="No">Timeout for command in milliseconds, defaults to 0, which means NO timeout.
+<property name="Check Return Code" required="No">If checked, sampler will compare return code with <code>Expected Return Code</code>.</property>
+<property name="Expected Return Code" required="No">Expected return code for System Call, required if "<code>Check Return Code</code>" is checked.</property>
+<property name="Timeout" required="No">Timeout for command in milliseconds, defaults to <code>0</code>, which means <em>no</em> timeout.
 If the timeout expires before the command finishes, JMeter will attempt to kill the OS process.
 </property>
 </properties>
