@@ -1729,58 +1729,58 @@ completed, so the net effect was similar to the <code>MessageListener.onMessage(
 <component name="JUnit Request" index="&sect-num;.1.16"  width="397" height="536" screenshot="junit_sampler.png">
 <description>
 The current implementation supports standard Junit convention and extensions. It also
-includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
-JavaSampler with some differences.
+includes extensions like <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>. The sampler works like the
+<complink name="Java Request" /> with some differences.
 <ul>
-<li>rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.</li>
-<li>Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
-In versions of JMeter after 2.3.1, you can also use the "user.classpath" property to specify where to look for TestCase classes.</li>
-<li>Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.</li>
-<li>The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.</li>
+<li>rather than use Jmeter's test interface, it scans the jar files for classes extending junit's <code>TestCase</code> class. That includes any class or subclass.</li>
+<li>Junit test jar files should be placed in <code>jmeter/lib/junit</code> instead of <code>/lib</code> directory.
+In versions of JMeter after 2.3.1, you can also use the "<code>user.classpath</code>" property to specify where to look for <code>TestCase</code> classes.</li>
+<li>Junit sampler does not use name/value pairs for configuration like the <complink name="Java Request" />. The sampler assumes <code>setUp</code> and <code>tearDown</code> will configure the test correctly.</li>
+<li>The sampler measures the elapsed time only for the test method and does not include <code>setUp</code> and <code>tearDown</code>.</li>
 <li>Each time the test method is called, Jmeter will pass the result to the listeners.</li>
-<li>Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.</li>
+<li>Support for <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code> is done as a method. Since Jmeter is multi-threaded, we cannot call <code>oneTimeSetUp</code>/<code>oneTimeTearDown</code> the same way Maven does it.</li>
 <li>The sampler reports unexpected exceptions as errors.
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
 creates 1 instance per sampler and reuses it.
-This can be changed with checkbox "Create a new instance per sample".</li>
+This can be changed with checkbox "<code>Create a new instance per sample</code>".</li>
 </ul>
 The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:
 <example title="Junit Constructors" anchor="junit_constructor_example">
 Empty Constructor:
-<pre>
+<source>
 public class myTestCase {
   public myTestCase() {}
 }
-</pre>
+</source>
 String Constructor:
-<pre>
+<source>
 public class myTestCase {
   public myTestCase(String text) {
     super(text);
   }
 }
-</pre>
+</source>
 </example>
 By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.
 <note>
 <h3>General Guidelines</h3>
-If you use setUp and tearDown, make sure the methods are declared public. If you do not, the test may not run properly.
+If you use <code>setUp</code> and <code>tearDown</code>, make sure the methods are declared public. If you do not, the test may not run properly.
 <br></br>
 Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.
 <ul>
-<li>Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static members.</li>
+<li>Write the <code>setUp</code> and <code>tearDown</code> methods so they are thread safe. This generally means avoid using static members.</li>
 <li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a discrete operation, it makes it easier to combine test methods to create new test plans.</li>
 <li>Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.</li>
 <li>If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.</li>
-<li>Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.</li>
+<li>Each sampler creates an instance of the test class, so write your test so the setup happens in <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>.</li>
 </ul>
 </note>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Search for JUnit4 annotations" required="Yes">Select this to search for JUnit 4 tests (@Test annotations)</property>
-  <property name="Package filter" required="">Comma separated list of packages to show. Example, org.apache.jmeter,junit.framework.</property>
+  <property name="Search for JUnit4 annotations" required="Yes">Select this to search for JUnit4 tests (<code>@Test</code> annotations)</property>
+  <property name="Package filter" required="">Comma separated list of packages to show. Example, <code>org.apache.jmeter</code>,<code>junit.framework</code>.</property>
   <property name="Class name" required="Yes">Fully qualified name of the JUnit test class.</property>
   <property name="Constructor string" required="">String pass to the string constructor. If a string is set, the sampler will use the
    string constructor instead of the empty constructor.</property>
@@ -1791,27 +1791,27 @@ Here are some general guidelines for writing Junit tests so they work well with 
   <property name="Failure code" required="">An unique code indicating the test failed.</property>
   <property name="Error message" required="">A description for errors.</property>
   <property name="Error code" required="">Some code for errors. Does not need to be unique.</property>
-  <property name="Do not call setUp and tearDown" required="Yes">Set the sampler not to call setUp and tearDown.
-   By default, setUp and tearDown should be called. Not calling those methods could affect the test and make it inaccurate.
-    This option should only be used with calling oneTimeSetUp and oneTimeTearDown. If the selected method is oneTimeSetUp or oneTimeTearDown,
+  <property name="Do not call setUp and tearDown" required="Yes">Set the sampler not to call <code>setUp</code> and <code>tearDown</code>.
+   By default, <code>setUp</code> and <code>tearDown</code> should be called. Not calling those methods could affect the test and make it inaccurate.
+    This option should only be used with calling <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>. If the selected method is <code>oneTimeSetUp</code> or <code>oneTimeTearDown</code>,
      this option should be checked.</property>
   <property name="Append assertion errors" required="Yes">Whether or not to append assertion errors to the response message.</property>
-  <property name="Append runtime exceptions" required="Yes">Whether or not to append runtime exceptions to the response message. Only applies if "Append assertion errors" is not selected.</property>
-  <property name="Create a new Instance per sample" required="Yes">Whether or not to create a new JUnit instance for each sample. Defaults to false, meaning JUnit TestCase is created one and reused.</property>
+  <property name="Append runtime exceptions" required="Yes">Whether or not to append runtime exceptions to the response message. Only applies if "<code>Append assertion errors</code>" is not selected.</property>
+  <property name="Create a new Instance per sample" required="Yes">Whether or not to create a new JUnit instance for each sample. Defaults to false, meaning JUnit <code>TestCase</code> is created one and reused.</property>
 </properties>
 <p>
 The following JUnit4 annotations are recognised:
 </p>
-<ul>
-<li>@Test - used to find test methods and classes. The "expected" and "timeout" attributes are supported.</li>
-<li>@Before - treated the same as setUp() in JUnit3</li>
-<li>@After - treated the same as tearDown() in JUnit3</li>
-<li>@BeforeClass, @AfterClass - treated as test methods so they can be run independently as required</li>
-</ul>
-<p>
+<dl>
+<dt><code>@Test</code></dt><dd>used to find test methods and classes. The "<code>expected</code>" and "<code>timeout</code>" attributes are supported.</dd>
+<dt><code>@Before</code></dt><dd>treated the same as <code>setUp()</code> in JUnit3</dd>
+<dt><code>@After</code></dt><dd>treated the same as <code>tearDown()</code> in JUnit3</dd>
+<dt><code>@BeforeClass</code>, <code>@AfterClass</code></dt><dd>treated as test methods so they can be run independently as required</dd>
+</dl>
+<note>
 Note that JMeter currently runs the test methods directly, rather than leaving it to JUnit.
-This is to allow the setUp/tearDown methods to be excluded from the sample time. 
-</p>
+This is to allow the <code>setUp</code>/<code>tearDown</code> methods to be excluded from the sample time.
+</note>
 </component>
 
 <component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="547" height="409" screenshot="mailreader_sampler.png">
