@@ -1822,7 +1822,7 @@ The Mail Reader Sampler can read (and optionally delete) mail messages using POP
 </description>
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-<property name="Server Type" required="Yes">The protocol used by the provider: e.g. pop3, pop3s, imap, imaps.
+<property name="Server Type" required="Yes">The protocol used by the provider: e.g. <code>pop3</code>, <code>pop3s</code>, <code>imap</code>, <code>imaps</code>.
 or another string representing the server protocol.
 For example <code>file</code> for use with the read-only mail file provider.
 The actual provider names for POP3 and IMAP are <code>pop3</code> and <code>imap</code>
@@ -1838,7 +1838,7 @@ The actual provider names for POP3 and IMAP are <code>pop3</code> and <code>imap
 <property name="Store the message using MIME" required="Yes">Whether to store the message as MIME. 
 If so, then the entire raw message is stored in the Response Data; the headers are not stored as they are available in the data. 
 If not, the message headers are stored as Response Headers. 
-A few headers are stored (Date, To, From, Subject) in the body.
+A few headers are stored (<code>Date</code>, <code>To</code>, <code>From</code>, <code>Subject</code>) in the body.
 </property>
 <property name="Use no security features" required="">Indicates that the connection to the server does not use any security protocol.</property>
 <property name="Use SSL" required="">Indicates that the connection to the server must use the SSL protocol.</property>
@@ -1856,7 +1856,7 @@ Messages are stored as subsamples of the main sampler.
 In versions of JMeter after 2.3.4, multipart message parts are stored as subsamples of the message.
 </p>
 <p>
-<b>Special handling for "file" protocol:</b><br></br>
+<b>Special handling for "<code>file</code>" protocol:</b><br></br>
 The <code>file</code> JavaMail provider can be used to read raw messages from files.
 The <code>server</code> field is used to specify the path to the parent of the <code>folder</code>.
 Individual message files should be stored with the name <code>n.msg</code>,
