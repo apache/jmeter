@@ -1899,10 +1899,10 @@ It is possible to set security protocols for the connection (SSL and TLS), as we
 If a security protocol is used a verification on the server certificate will occur. <br></br>
 Two alternatives to handle this verification are available:<br></br>
 </p>
-<ul>
-<li>Trust all certificates. This will ignore certificate chain verification</li>
-<li>Use a local truststore. With this option the certificate chain will be validated against the local truststore file.</li>
-</ul>
+<dl>
+<dt><code>Trust all certificates</code></dt><dd>This will ignore certificate chain verification</dd>
+<dt><code>Use a local truststore</code></dt><dd>With this option the certificate chain will be validated against the local truststore file.</dd>
+</dl>
 </description>
 <properties>
 <property name="Server" required="Yes">Hostname or IP address of the server. See below for use with <code>file</code> protocol.</property>
@@ -1912,10 +1912,10 @@ Defaults are: SMTP=25, SSL=465, StartTLS=587
 <property name="Connection timeout" required="No">Connection timeout value in milliseconds (socket level). Default is infinite timeout.</property>
 <property name="Read timeout" required="No">Read timeout value in milliseconds (socket level). Default is infinite timeout.</property>
 <property name="Address From" required="Yes">The from address that will appear in the e-mail</property>
-<property name="Address To" required="Yes, unless CC or BCC is specified">The destination e-mail address (multiple values separated by ";")</property>
-<property name="Address To CC" required="No">Carbon copy destinations e-mail address (multiple values separated by ";")</property>
-<property name="Address To BCC" required="No">Blind carbon copy destinations e-mail address (multiple values separated by ";")</property>
-<property name="Address Reply-To" required="No">Alternate Reply-To address (multiple values separated by ";")</property>
+<property name="Address To" required="Yes, unless CC or BCC is specified">The destination e-mail address (multiple values separated by "<code>;</code>")</property>
+<property name="Address To CC" required="No">Carbon copy destinations e-mail address (multiple values separated by "<code>;</code>")</property>
+<property name="Address To BCC" required="No">Blind carbon copy destinations e-mail address (multiple values separated by "<code>;</code>")</property>
+<property name="Address Reply-To" required="No">Alternate Reply-To address (multiple values separated by "<code>;</code>")</property>
 <property name="Use Auth" required="">Indicates if the SMTP server requires user authentication</property>
 <property name="Username" required="">User login name</property>
 <property name="Password" required="">User login password (N.B. this is stored unencrypted in the test plan)</property>
@@ -1930,20 +1930,22 @@ Relative paths are resolved against the current directory.
 <br />Failing that, against the directory containing the test script (JMX file).
 </property>
 <property name="Subject" required="">The e-mail message subject.</property>
-<property name="Suppress Subject Header" required="">If selected, the "Subject:" header is omitted from the mail that is sent. 
-This is different from sending an empty "Subject:" header, though some e-mail clients may display it identically.</property>
-<property name="Include timestamp in subject" required="">Includes the System.currentTimemilis() in the subject line.</property>
+<property name="Suppress Subject Header" required="">If selected, the "<code>Subject:</code>" header is omitted from the mail that is sent. 
+This is different from sending an empty "<code>Subject:</code>" header, though some e-mail clients may display it identically.</property>
+<property name="Include timestamp in subject" required="">Includes the <code>System.currentTimemilis()</code> in the subject line.</property>
 <property name="Add Header" required="No">Additional headers can be defined using this button.</property>
 <property name="Message" required="">The message body.</property>
 <property name="Send plain body (i.e. not multipart/mixed)">
-If selected, then send the body as a plain message, i.e. not multipart/mixed, if possible.
+If selected, then send the body as a plain message, i.e. not <code>multipart/mixed</code>, if possible.
 If the message body is empty and there is a single file, then send the file contents as the message body.
-Note: If the message body is not empty, and there is at least one attached file, then the body is sent as multipart/mixed.
+<note>
+Note: If the message body is not empty, and there is at least one attached file, then the body is sent as <code>multipart/mixed</code>.
+</note>
 </property>
 <property name="Attach files" required="">Files to be attached to the message.</property>
-<property name="Send .eml" required="">If set, the .eml file will be sent instead of the entries in the Subject, Message, and Attached files</property>
+<property name="Send .eml" required="">If set, the <code>.eml</code> file will be sent instead of the entries in the <code>Subject</code>, <code>Message</code>, and <code>Attach file(s)</code> fields</property>
 <property name="Calculate message size" required="">Calculates the message size and stores it in the sample result.</property>
-<property name="Enable debug logging?" required="">If set, then the "mail.debug" property is set to "true"</property>
+<property name="Enable debug logging?" required="">If set, then the "<code>mail.debug</code>" property is set to "<code>true</code>"</property>
 </properties>
 </component>
 
