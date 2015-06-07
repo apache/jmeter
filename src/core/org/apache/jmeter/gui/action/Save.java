@@ -315,7 +315,7 @@ public class Save implements Command {
      *         has performed successfully
      */
     private List<File> createBackupFile(File fileToBackup) {
-        if (!BACKUP_ENABLED) {
+        if (!BACKUP_ENABLED || !fileToBackup.exists()) {
             return EMPTY_FILE_LIST;
         }
         char versionSeparator = '-'; //$NON-NLS-1$
