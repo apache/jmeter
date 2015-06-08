@@ -39,8 +39,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.net.ssl.SSLContext;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -136,6 +138,17 @@ public class SendMailCommand {
         // set timeout
         props.setProperty("mail." + protocol + ".timeout", getTimeout());
         props.setProperty("mail." + protocol + ".connectiontimeout", getConnectionTimeout());
+
+        if (useStartTLS || useSSL) {
+            try {
+                String allProtocols = StringUtils.join(
+                    SSLContext.getDefault().getSupportedSSLParameters().getProtocols(), " ");
+                logger.info("Use ssl/tls protocols for mail: " + allProtocols);
+                props.setProperty("mail.smtp.ssl.protocols", allProtocols);
+            } catch (Exception e) {
+                logger.error("Problem setting ssl/tls protocols for mail", e);
+            }
+        }
 
         if (enableDebug) {
             props.setProperty("mail.debug","true");
