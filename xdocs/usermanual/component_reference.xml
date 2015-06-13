@@ -2003,16 +2003,16 @@ If the timeout expires before the command finishes, JMeter will attempt to kill 
 <p>Before using this you need to set up a
 <complink name="MongoDB Source Config"/> Configuration element
 </p>
-<note>This Element currently uses com.mongodb.DB#eval which takes a global write lock causing a performance impact on the database, see <a href="http://docs.mongodb.org/manual/reference/method/db.eval/">db.eval()</a>. 
+<note>This Element currently uses <code>com.mongodb.DB#eval</code> which takes a global write lock causing a performance impact on the database, see <a href="http://docs.mongodb.org/manual/reference/method/db.eval/"><code>db.eval()</code></a>.
 So it is better to avoid using this element for load testing and use JSR223+Groovy scripting using <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a> instead.
-MongoDB Script is more suitable for functionnal testing or test setup (setup/teardown threads)</note>
+MongoDB Script is more suitable for functional testing or test setup (setup/teardown threads)</note>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="MongoDB Source" required="Yes">
         Name of the JMeter variable that the MongoDB connection is bound to.
-        This must agree with the 'MongoDB Source' field of a MongoDB Source Config.
+        This must agree with the '<code>MongoDB Source</code>' field of a MongoDB Source Config.
         </property>
         <property name="Database Name" required="Yes">Database Name, will be used in your script
         </property>
