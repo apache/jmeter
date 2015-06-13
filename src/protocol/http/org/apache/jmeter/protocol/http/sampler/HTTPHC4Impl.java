@@ -105,6 +105,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.apache.jmeter.NewDriver;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -213,7 +214,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Process Apache HttpClient parameters file
         String file=JMeterUtils.getProperty("hc.parameters.file"); // $NON-NLS-1$
         if (file != null) {
-            HttpClientDefaultParameters.load(file, DEFAULT_HTTP_PARAMS);
+            log.info("Loading hc parameters file from:"+file);
+            HttpClientDefaultParameters.load(NewDriver.getJMeterDir() + File.separator
+                    + "bin" + File.separator // $NON-NLS-1$
+                    + file, DEFAULT_HTTP_PARAMS);
         }
 
         // Set up HTTP scheme override if necessary
@@ -416,7 +420,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (res.getEndTime() == 0) {
                 res.sampleEnd();
             }
-            // pick up headers if failed to execute the request
+           // pick up headers if failed to execute the request
             if (res.getRequestHeaders() != null) {
                 log.debug("Overwriting request old headers: " + res.getRequestHeaders());
             }
