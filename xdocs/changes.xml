@@ -241,6 +241,12 @@ Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on 
 This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a> 
 The fix is to use a JDK7_u79 or JDK8_u45 or upper.
 </li>
+
+<li>
+View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
+This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a> 
+The fix is to use a JDK9 b65 or upper.
+</li>
 </ul>
  
 </section> 
