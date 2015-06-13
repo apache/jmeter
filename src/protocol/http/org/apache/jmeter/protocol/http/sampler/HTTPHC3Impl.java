@@ -64,7 +64,6 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.io.input.CountingInputStream;
-import org.apache.jmeter.NewDriver;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -137,10 +136,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         // Process Commons HttpClient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
         if (file != null) {
-            log.info("Loading httpclient parameters file from:"+file);
-            HttpClientDefaultParameters.load(NewDriver.getJMeterDir() + File.separator
-                    + "bin" + File.separator // $NON-NLS-1$
-                    + file, params);
+            HttpClientDefaultParameters.load(file, params);
         }
 
         // If the pre-emptive parameter is undefined, then we can set it as needed

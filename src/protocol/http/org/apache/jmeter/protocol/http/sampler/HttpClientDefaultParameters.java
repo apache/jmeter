@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.jmeter.NewDriver;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -104,8 +105,18 @@ public class HttpClientDefaultParameters {
     }
 
     private static void load(String file, GenericHttpParams params){
-        log.info("Reading httpclient parameters from "+file);
-        File f = new File(file);
+        log.info("Trying httpclient parameters from "+file);
+        File f = new File(file);        
+        if(! (f.exists() && f.canRead())) {
+            f = new File(NewDriver.getJMeterDir() + File.separator
+                    + "bin" + File.separator + file); // $NON-NLS-1$
+            log.info(file + " httpclient parameters does not exist, trying "+f.getAbsolutePath());
+            if(! (f.exists() && f.canRead())) {
+                log.error("Cannot parameters file for HttpClient:"+ file);
+                return;
+            }
+        }
+        log.info("Reading httpclient parameters from "+f.getAbsolutePath());
         InputStream is = null;
         Properties props = new Properties();
         try {
