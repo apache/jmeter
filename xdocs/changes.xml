@@ -217,12 +217,6 @@ The fix is to run JMeter as Administrator, it will create the registry key for y
 </li>
 
 <li>
-With Java 1.6 and Gnome 3 on Linux systems, the JMeter menu may not work correctly (shift between mouse's click and the menu). 
-This is a known Java bug (see  <bugzilla>54477</bugzilla>). 
-A workaround is to use a Java 7 runtime (OpenJDK or Oracle JDK).
-</li>
-
-<li>
 With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry. 
 This is a known Java bug, see Bug <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
 A workaround is to use a Java 7 update 40 runtime which fixes this issue.
