@@ -253,12 +253,7 @@ public final class NewDriver {
         }
 
         try {
-            Class<?> initialClass;
-            if (args != null && args.length > 0 && args[0].equals("report")) {// $NON-NLS-1$
-                initialClass = loader.loadClass("org.apache.jmeter.JMeterReport");// $NON-NLS-1$
-            } else {
-                initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
-            }
+            Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
             Object instance = initialClass.newInstance();
             Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
             startup.invoke(instance, new Object[] { args });
