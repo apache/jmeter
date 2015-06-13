@@ -218,7 +218,7 @@ The fix is to run JMeter as Administrator, it will create the registry key for y
 
 <li>
 With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry. 
-This is a known Java bug, see Bug <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
+This is a known Java bug, see Bug <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
 A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 </li>
 
@@ -236,6 +236,11 @@ This property is in this file:
 See  <bugzilla>56357</bugzilla> for details.
 </li>
 
+<li>
+Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
+This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a> 
+The fix is to use a JDK7_u79 or JDK8_u45 or upper.
+</li>
 </ul>
  
 </section> 
