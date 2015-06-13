@@ -2204,13 +2204,14 @@ two Interleave Controllers inside of it.</p>
 
 <p>The outer Interleave Controller alternates between the
 two inner ones.  Then, each inner Interleave Controller alternates between each of the HTTP Requests.  Each JMeter
-thread will send the requests in the following order: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.
-Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
+thread will send the requests in the following order: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
+<p>Note, the File Reporter is configured to store the results in a file named "<code>interleave-test2.dat</code>" in the current directory.</p>
 
 <figure width="204" height="247" image="logic-controller/interleave3.png">
         Figure 3 - Interleave Controller Example 3
 </figure>
-<p>If the two interleave controllers under the main interleave controller were instead simple controllers, then the order would be: Home Page, CVS Page, Interleaved, Bug Page, FAQ Page, Interleaved.  However, if "ignore sub-controller blocks" was checked on the main interleave controller, then the order would be: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
+<p>If the two interleave controllers under the main interleave controller were instead simple controllers, then the order would be: Home Page, CVS Page, Interleaved, Bug Page, FAQ Page, Interleaved.</p>
+<p>However, if "<code>ignore sub-controller blocks</code>" was checked on the main interleave controller, then the order would be: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
 </example>
 </component>
 
@@ -2247,8 +2248,13 @@ what results any given interaction will give</note>
 <b>This controller is badly named, as it does not control throughput.</b>
 Please refer to the <complink name="Constant Throughput Timer"/> for an element that can be used to adjust the throughput.
 </p>
-<p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.  Percent executions causes the controller to execute a certain percentage of the iterations through the test plan.  Total
-executions causes the controller to stop executing after a certain number of executions have occurred.  Like the Once Only Controller, this
+<p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.</p>
+<dl>
+  <dt><code>Percent executions</code></dt><dd>causes the controller to execute a certain percentage of the iterations through the test plan.</dd>
+  <dt><code>Total executions</code></dt><dd>causes the controller to stop executing after a certain number of executions have occurred.</dd>
+</dl>
+<p>
+Like the Once Only Controller, this
 setting is reset when a parent Loop Controller restarts.
 </p>
 </description>
@@ -2256,8 +2262,8 @@ setting is reset when a parent Loop Controller restarts.
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Execution Style" required="Yes">Whether the controller will run in percent executions or total executions mode.</property>
-        <property name="Throughput" required="Yes">A number.  For percent execution mode, a number from 0-100 that indicates the percentage of times the controller will execute.  "50" means the controller will execute during half the iterations through the test plan.  For total execution mode, the number indicates the total number of times the controller will execute.</property>
-        <property name="Per User" required="No">If checked, per user will cause the controller to calculate whether it should execute on a per user (per thread) basis.  If unchecked, then the calculation will be global for all users.  For example, if using total execution mode, and uncheck "per user", then the number given for throughput will be the total number of executions made.  If "per user" is checked, then the total number of executions would be the number of users times the number given for throughput.</property>
+        <property name="Throughput" required="Yes">A number.  For percent execution mode, a number from <code>0</code>-<code>100</code> that indicates the percentage of times the controller will execute.  "<code>50</code>" means the controller will execute during half the iterations through the test plan.  For total execution mode, the number indicates the total number of times the controller will execute.</property>
+        <property name="Per User" required="No">If checked, per user will cause the controller to calculate whether it should execute on a per user (per thread) basis.  If unchecked, then the calculation will be global for all users.  For example, if using total execution mode, and uncheck "<code>per user</code>", then the number given for throughput will be the total number of executions made.  If "<code>per user</code>" is checked, then the total number of executions would be the number of users times the number given for throughput.</property>
 </properties>
 
 </component>
@@ -2284,58 +2290,54 @@ setting is reset when a parent Loop Controller restarts.
         </p>
         <p>
         Versions of JMeter after 2.3.2 allow the script to be processed as a variable expression, rather than requiring Javascript.
-        It was always possible to use functions and variables in the Javascript condition, so long as they evaluated to "true" or "false";
+        It was always possible to use functions and variables in the Javascript condition, so long as they evaluated to "<code>true</code>" or "<code>false</code>";
         now this can be done without the overhead of using Javascript as well. For example, previously one could use the condition:
-        <code>${__jexl(${VAR} == 23)}</code> and this would be evaluated as true/false, the result would then be passed to Javascript
-        which would then return true/false. If the Variable Expression option is selected, then the expression is evaluated
-        and compared with "true", without needing to use Javascript. 
+        <code>${__jexl(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to Javascript
+        which would then return <code>true</code>/<code>false</code>. If the Variable Expression option is selected, then the expression is evaluated
+        and compared with "<code>true</code>", without needing to use Javascript.
         Also, variable expressions can return any value, whereas the
-        Javascript condition must return "true"/"false" or an error is logged.
+        Javascript condition must return "<code>true</code>"/"<code>false</code>" or an error is logged.
         </p>
         <note>
         No variables are made available to the script when the condition is interpreted as Javascript.
-        If you need access to such variables, then select "Interpret Condition as Variable Expression?" and use
-        a __javaScript() function call. You can then use the objects "vars", "log", "ctx" etc. in the script.
+        If you need access to such variables, then select "<code>Interpret Condition as Variable Expression?</code>" and use
+        a <code>__javaScript()</code> function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
         </note>
         <note>
-        To test if a variable is undefined (or null) do the following, suppose var is named myVar, expression will be:
-        <br></br>
-        <code>"${myVar}" == "\${myVar}"</code>
-        <br></br>
+        To test if a variable is undefined (or null) do the following, suppose var is named <code>myVar</code>, expression will be:
+        <source>"${myVar}" == "\${myVar}"</source>
         Or use:
-        <br></br>
-        <code>"${myVar}" != "\${myVar}"</code>
-        <br></br>
+        <source>"${myVar}" != "\${myVar}"</source>
         to test if a variable is defined and is not null.
         </note>
     </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-    <property name="Condition (default Javascript)" required="Yes">By default the condition is interpreted as <b>Javascript</b> code that returns "true" or "false",
+    <property name="Condition (default Javascript)" required="Yes">By default the condition is interpreted as <b>Javascript</b> code that returns "<code>true</code>" or "<code>false</code>",
     but this can be overridden (see below)</property>
-    <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "true" (case is ignored).
-    For example, <code>${FOUND}</code> or <code>${__jexl(${VAR} > 100)}</code>.
-    Unlike the Javascript case, the condition is only checked to see if it matches "true" (case is ignored). 
+    <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "<code>true</code>" (case is ignored).
+    For example, <code>${FOUND}</code> or <code>${__jexl(${VAR} &gt; 100)}</code>.
+    Unlike the Javascript case, the condition is only checked to see if it matches "<code>true</code>" (case is ignored).
     </property>
     <property name="Evaluate for all children" required="Yes">
     Should condition be evaluated for all children?
     If not checked, then the condition is only evaluated on entry.
     </property>
 </properties>
-    <p><b>Examples (Javascript):</b>
-    </p>
+    <example title="Examples (Javascript)" anchor="example_if_javascript">
         <ul>
-            <li>${COUNT} &lt; 10</li>
-            <li>"${VAR}" == "abcd"</li>
-            <li>${JMeterThread.last_sample_ok} (check if last sample succeeded)</li>
+            <li><code>${COUNT} &lt; 10</code></li>
+            <li><code>"${VAR}" == "abcd"</code></li>
+            <li><code>${JMeterThread.last_sample_ok}</code> (check if last sample succeeded)</li>
         </ul>
-        If there is an error interpreting the code, the condition is assumed to be false, and a message is logged in jmeter.log.
-    <p><b>Examples (Variable Expression):</b>
-    </p>
+        If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
+    </example>
+    <example title="Examples (Variable Expression)" anchor="example_if_variable">
         <ul>
-            <li>${__jexl(${COUNT} &lt; 10)}</li>
-            <li>${RESULT}</li>
+            <li><code>${__jexl(${COUNT} &lt; 10)}</code></li>
+            <li><code>${RESULT}</code></li>
         </ul>
+    </example>
 </component>
 
 
