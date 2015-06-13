@@ -2056,9 +2056,10 @@ In this example, we created a Test Plan that sends two Ant HTTP requests and two
 Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
 Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
 processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the
-following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
+following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.</p>
+<p>
 Note, the File Reporter
-is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
+is configured to store the results in a file named "<code>simple-test.dat</code>" in the current directory.</p>
 <figure width="546" height="222" image="logic-controller/simple-example.png">Figure 6 Simple Controller Example</figure>
 
 </example>
@@ -2069,7 +2070,7 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
 Loop Controller with a loop count of two, and configure the Thread Group loop
-count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
+count to three, JMeter will send a total of <code>2 * 3 = 6</code> HTTP Requests.
 </p></description>
 
 <properties>
@@ -2078,10 +2079,10 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
                 The number of times the subelements of this controller will be iterated each time
                 through a test run.
                 <p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
-                element behaves slightly differently.  Unless set to forever, it stops the test after
+                element behaves slightly different.  Unless set to forever, it stops the test after
                 the given number of iterations have been done.</p>
-                <note>When using a function in this field, be aware it may be evaluated multiple times. 
-                Example using __Random will evaluate it to a different value for each child samplers of Loop Controller and result into unwanted behaviour.</note></property>
+                <note>When using a function in this field, be aware it may be evaluated multiple times.
+                Example using <code>__Random</code> will evaluate it to a different value for each child samplers of Loop Controller and result into unwanted behaviour.</note></property>
 </properties>
 
 <example title="Looping Example" anchor="loop_example">
@@ -2098,8 +2099,9 @@ Controller.  You can see that we added one HTTP Request to the Thread Group and
 another HTTP Request to a Loop Controller.  We configured the Loop Controller
 with a loop count value of five.</p>
 <p>JMeter will send the requests in the following order: Home Page, News Page,
-News Page, News Page, News Page, and News Page. Note, the File Reporter
-is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
+News Page, News Page, News Page, and News Page.</p>
+<p>Note, the File Reporter
+is configured to store the results in a file named "<code>loop-test.dat</code>" in the current directory.</p>
 
 </example>
 
@@ -2112,7 +2114,8 @@ during further iterations through the test plan.</p>
 
 <p>The Once Only Controller will now execute always during the first iteration of any looping parent controller.  
 Thus, if the Once Only Controller is placed under a Loop Controller specified to loop 5 times, then the Once Only Controller will execute only on the first iteration through the Loop Controller 
-(i.e. every 5 times).  
+(i.e. every 5 times).</p>
+<p>
 Note this means the Once Only Controller will still behave as previously expected if put under a Thread Group (runs only once per test per Thread), 
 but now the user has more flexibility in the use of the Once Only Controller.</p>
 
@@ -2131,10 +2134,11 @@ Although we configured the Thread Group to iterate three times, each JMeter thre
 sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
 <figure width="348" height="131" image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
 <p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
-Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
+Bug Page, Bug Page.</p>
+<p>Note, the File Reporter is configured to store the results in a file named "<code>loop-test.dat</code>" in the current directory.</p>
 
 </example>
-<note>The behaviour of the Once Only controller under anything other than the 
+<note>The behaviour of the Once Only controller under anything other than the
 Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
