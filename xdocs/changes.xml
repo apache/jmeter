@@ -164,6 +164,7 @@ Summary
     <li><bug>57734</bug>Maven transient dependencies are incorrect for 2.13</li>
     <li><bug>57821</bug>Command-line option "-X --remoteexit" doesn't work since 2.13 (regression related to <bugzilla>57500</bugzilla>)</li>
     <li><bug>57731</bug>TESTSTART.MS has always the value of the first Test started in Server mode in NON GUI Distributed testing</li>
+    <li><bug>58016</bug> Error type casting using external SSL Provider. Contributed by Kirill Yankov (myworkpostbox at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -174,6 +175,7 @@ Summary
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
 <li>Jérémie Lesage (jeremie.lesage at jeci.fr)</li>
+<li>Kirill Yankov (myworkpostbox at gmail.com)</li>
 </ul>
 
 <br/>
@@ -253,5 +255,5 @@ The fix is to use JDK9 b65 or later.
 </ul>
  
 </section> 
-</body>
+</body> 
 </document>
