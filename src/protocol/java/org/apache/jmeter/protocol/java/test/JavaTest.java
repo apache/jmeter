@@ -282,8 +282,8 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
 
         if (resultData != null && resultData.length() > 0) {
             results.setResponseData(resultData, null);
-            results.setDataType(SampleResult.TEXT);
         }
+        results.setDataType(SampleResult.TEXT); // It's always text type even if empty
 
         // Record sample start time.
         results.sampleStart();
