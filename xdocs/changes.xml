@@ -142,6 +142,7 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
+<li><bug>58033</bug> SampleResultConverter should note that it cannot record non-TEXT data</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

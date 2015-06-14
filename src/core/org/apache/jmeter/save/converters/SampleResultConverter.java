@@ -171,10 +171,12 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             try {
                 if (SampleResult.TEXT.equals(res.getDataType())){
                     writer.setValue(new String(res.getResponseData(), res.getDataEncodingWithDefault()));
+                } else {
+                    writer.setValue("Non-TEXT response data, cannot record: (" + res.getDataType() + ")");                    
                 }
                 // Otherwise don't save anything - no point
             } catch (UnsupportedEncodingException e) {
-                writer.setValue("Unsupported encoding in response data, can't record.");
+                writer.setValue("Unsupported encoding in response data, cannot record: " + e);
             }
             writer.endNode();
         }
