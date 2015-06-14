@@ -456,6 +456,7 @@ See <a href="#sample_variables">Sample variables</a> (above) for more informatio
 As shown above, the response data can be saved in the XML log file if required.
 However, this can make the file rather large, and the text has to be encoded so
 that it is still valid XML. Also, images cannot be included.
+Only sample responses with the type TEXT can be saved.
 <br/>
 Another solution is to use the Post-Processor <complink name="Save_Responses_to_a_file">Save Responses to a file</complink>.
 This generates a new file for each sample, and saves the file name with the sample.
