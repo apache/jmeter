@@ -35,6 +35,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -283,7 +284,7 @@ public class JsseSSLManager extends SSLManager {
      * selecting the proper key and certificate based on the keystore available.
      *
      */
-    private static class WrappedX509KeyManager implements X509KeyManager {
+    private static class WrappedX509KeyManager extends X509ExtendedKeyManager {
 
         /**
          * The parent X509KeyManager.
