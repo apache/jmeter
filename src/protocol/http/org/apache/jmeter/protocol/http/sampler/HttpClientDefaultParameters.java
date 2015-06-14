@@ -112,7 +112,7 @@ public class HttpClientDefaultParameters {
                     + "bin" + File.separator + file); // $NON-NLS-1$
             log.info(file + " httpclient parameters does not exist, trying "+f.getAbsolutePath());
             if(! (f.exists() && f.canRead())) {
-                log.error("Cannot parameters file for HttpClient:"+ file);
+                log.error("Cannot read parameters file for HttpClient: "+ file);
                 return;
             }
         }
