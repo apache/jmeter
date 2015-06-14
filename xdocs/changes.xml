@@ -240,16 +240,17 @@ See  <bugzilla>56357</bugzilla> for details.
 <li>
 Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
 This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a> 
-The fix is to use a JDK7_u79 or JDK8_u45 or upper.
+The fix is to use JDK7_u79, JDK8_u45 or later.
 </li>
 
 <li>
 View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
-This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a> 
-The fix is to use a JDK9 b65 or upper.
+This is due to a known Java bug which fails to parse "px" units in row/col attributes.
+See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a> 
+The fix is to use JDK9 b65 or later.
 </li>
 </ul>
  
 </section> 
-</body> 
+</body>
 </document>
