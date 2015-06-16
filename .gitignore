@@ -1,0 +1,23 @@
+# Directory trees to ignore
+backups/
+build/
+dist/
+local/
+printable_docs/
+reports/
+site/
+target/
+
+# specific files to ignore
+*.log
+.checkstyle
+.classpath
+.externalToolBuilders
+.fbwarnings
+.fbprefs
+.pmd
+.project
+.settings
+
+build-local.properties
+jmeter-fb.*
