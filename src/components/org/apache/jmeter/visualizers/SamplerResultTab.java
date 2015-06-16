@@ -236,6 +236,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsBuff.append(JMeterUtils.getResString("view_results_size_body_in_bytes")).append(sampleResult.getBodySize()).append(NL); //$NON-NLS-1$
                 statsBuff.append(JMeterUtils.getResString("view_results_sample_count")).append(sampleResult.getSampleCount()).append(NL); //$NON-NLS-1$
                 statsBuff.append(JMeterUtils.getResString("view_results_error_count")).append(sampleResult.getErrorCount()).append(NL); //$NON-NLS-1$
+                statsBuff.append(JMeterUtils.getResString("view_results_datatype")).append(sampleResult.getDataType()).append(NL); //$NON-NLS-1$
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                 statsBuff.setLength(0); // reset for reuse
 
