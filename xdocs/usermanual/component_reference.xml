@@ -2350,37 +2350,37 @@ setting is reset when a parent Loop Controller restarts.
 <component name="While Controller" index="&sect-num;.2.10" width="362" height="102" screenshot="whilecontroller.png">
     <description>
 <p>
-The While Controller runs its children until the condition is "false".
+The While Controller runs its children until the condition is "<code>false</code>".
 </p>
 
 <p>Possible condition values:</p>
 <ul>
 <li>blank - exit loop when last sample in loop fails</li>
-<li>LAST - exit loop when last sample in loop fails. 
+<li><code>LAST</code> - exit loop when last sample in loop fails.
 If the last sample just before the loop failed, don't enter loop.</li>
-<li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "false"</li>
+<li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "<code>false</code>"</li>
 </ul>
 <note>
-The condition can be any variable or function that eventually evaluates to the string "false". 
+The condition can be any variable or function that eventually evaluates to the string "<code>false</code>".
 This allows the use of JavaScript, BeanShell, properties or variables as needed.
 </note>
 <br></br>
 <note>
-Note that the is evaluated twice, once before starting sampling children and once at end of children sampling, so putting
-non idempotent functions in Condition (like __counter) can introduce issues.
+Note that the condition is evaluated twice, once before starting sampling children and once at end of children sampling, so putting
+non idempotent functions in Condition (like <code>__counter</code>) can introduce issues.
 </note>
 <br></br>
 For example:
 <ul>
-    <li>${VAR} - where VAR is set to false by some other test element</li>
-    <li>${__javaScript(${C}==10)}</li>
-    <li>${__javaScript("${VAR2}"=="abcd")}</li>
-    <li>${_P(property)} - where property is set to "false" somewhere else</li>
+    <li><code>${VAR}</code> - where <code>VAR</code> is set to false by some other test element</li>
+    <li><code>${__javaScript(${C}==10)}</code></li>
+    <li><code>${__javaScript("${VAR2}"=="abcd")}</code></li>
+    <li><code>${_P(property)}</code> - where property is set to "<code>false</code>" somewhere else</li>
 </ul>
     </description>
 <properties>
     <property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-    <property name="Condition" required="Yes">blank, LAST, or variable/function</property>
+    <property name="Condition" required="Yes">blank, <code>LAST</code>, or variable/function</property>
 </properties>
 </component>
 
@@ -2391,16 +2391,16 @@ The Switch Controller acts like the <complink name="Interleave Controller"/>
 in that it runs one of the subordinate elements on each iteration, but rather than
 run them in sequence, the controller runs the element defined by the switch value.
 </p>
-<p>
+<note>
 Note: In versions of JMeter after 2.3.1, the switch value can also be a name.
-</p>
+</note>
 <p>If the switch value is out of range, it will run the zeroth element, 
 which therefore acts as the default for the numeric case.
 It also runs the zeroth element if the value is the empty string.</p>
 <p>
 If the value is non-numeric (and non-empty), then the Switch Controller looks for the
 element with the same name (case is significant).
-If none of the names match, then the element named "default" (case not significant) is selected.
+If none of the names match, then the element named "<code>default</code>" (case not significant) is selected.
 If there is no default, then no element is selected, and the controller will not run anything.
 </p>
 </description>
@@ -2416,26 +2416,26 @@ When you add samplers (or controllers) to a ForEach controller, every sample sam
 is executed one or more times, where during every loop the variable has a new value.
 The input should consist of several variables, each extended with an underscore and a number.
 Each such variable must have a value.
-So for example when the input variable has the name inputVar, the following variables should have been defined:</p>
+So for example when the input variable has the name <code>inputVar</code>, the following variables should have been defined:</p>
         <ul>
-        <li>inputVar_1 = wendy</li>
-        <li>inputVar_2 = charles</li>
-        <li>inputVar_3 = peter</li>
-        <li>inputVar_4 = john</li>
+        <li><code>inputVar_1 = wendy</code></li>
+        <li><code>inputVar_2 = charles</code></li>
+        <li><code>inputVar_3 = peter</code></li>
+        <li><code>inputVar_4 = john</code></li>
         </ul>
-        <p>Note: the "_" separator is now optional.</p>
+        <p>Note: the "<code>_</code>" separator is now optional.</p>
 <p>
-When the return variable is given as "returnVar", the collection of samplers and controllers under the ForEach controller will be executed 4 consecutive times,
+When the return variable is given as "<code>returnVar</code>", the collection of samplers and controllers under the ForEach controller will be executed <code>4</code> consecutive times,
 with the return variable having the respective above values, which can then be used in the samplers.
 </p>
 <p>
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
-By omitting the "_" separator, the ForEach Controller can be used to loop through the groups by using
-the input variable refName_g, and can also loop through all the groups in all the matches
-by using an input variable of the form refName_${C}_g, where C is a counter variable.
+By omitting the "<code>_</code>" separator, the ForEach Controller can be used to loop through the groups by using
+the input variable <code>refName_g</code>, and can also loop through all the groups in all the matches
+by using an input variable of the form <code>refName_${C}_g</code>, where <code>C</code> is a counter variable.
 </p>
-<note>The ForEach Controller does not run any samples if inputVar_1 is null.
+<note>The ForEach Controller does not run any samples if <code>inputVar_1</code> is <code>null</code>.
 This would be the case if the Regular Expression returned no matches.</note>
 </description>
 
@@ -2446,7 +2446,7 @@ This would be the case if the Regular Expression returned no matches.</note>
         <property name="End index for loop" required="No">End index (inclusive) for loop over variables</property>
         <property name="Output variable" required="Yes">
                 The name of the variable which can be used in the loop for replacement in the samplers</property>
-        <property required="Yes" name="Use Separator">If not checked, the "_" separator is omitted.</property>
+        <property required="Yes" name="Use Separator">If not checked, the "<code>_</code>" separator is omitted.</property>
 </properties>
 
 <example title="ForEach Example" anchor="foreach_example">
@@ -2461,7 +2461,7 @@ only once and sends another HTTP Request to every link that can be found on the 
 one. You can see that we added one HTTP Request to the Thread Group and
 another HTTP Request to the ForEach Controller.</p>
 <p>After the first HTTP request, a regular expression extractor is added, which extracts all the html links
-out of the return page and puts them in the inputVar variable</p>
+out of the return page and puts them in the <code>inputVar</code> variable</p>
 <p>In the ForEach loop, a HTTP sampler is added which requests all the links that were extracted from the first returned HTML page.
 </p></example>
 <example title="ForEach Example" anchor="foreach_example2">
@@ -2472,15 +2472,15 @@ so no samples are run by the second ForEach Controller</p>
 <figure width="198" height="253" image="logic-controller/foreach-example2.png">Figure 8 - ForEach Controller Example 2</figure>
 <p>The Thread Group has a single thread and a loop count of two.
 </p><p>
-Sample 1 uses the JavaTest Sampler to return the string "a b c d".
-</p><p>The Regex Extractor uses the expression <b>(\w)\s</b> which matches a letter followed by a space,
-and returns the letter (not the space). Any matches are prefixed with the string "inputVar".
-</p><p>The ForEach Controller extracts all variables with the prefix "inputVar_", and executes its
-sample, passing the value in the variable "returnVar". In this case it will set the variable to the values "a" "b" and "c" in turn.
-</p><p>The For 1 Sampler is another Java Sampler which uses the return variable "returnVar" as part of the sample Label
+Sample 1 uses the JavaTest Sampler to return the string "<code>a b c d</code>".
+</p><p>The Regex Extractor uses the expression <code>(\w)\s</code> which matches a letter followed by a space,
+and returns the letter (not the space). Any matches are prefixed with the string "<code>inputVar</code>".
+</p><p>The ForEach Controller extracts all variables with the prefix "<code>inputVar_</code>", and executes its
+sample, passing the value in the variable "<code>returnVar</code>". In this case it will set the variable to the values "<code>a</code>" "<code>b</code>" and "<code>c</code>" in turn.
+</p><p>The <code>For 1</code> Sampler is another Java Sampler which uses the return variable "<code>returnVar</code>" as part of the sample Label
 and as the sampler Data.
-</p><p>Sample 2, Regex 2 and For 2 are almost identical, except that the Regex has been changed to "(\w)\sx",
-which clearly won't match. Thus the For 2 Sampler will not be run.
+</p><p><code>Sample 2</code>, <code>Regex 2</code> and <code>For 2</code> are almost identical, except that the Regex has been changed to "<code>(\w)\sx</code>",
+which clearly won't match. Thus the <code>For 2</code> Sampler will not be run.
 </p>
 </example>
 </component>
@@ -2517,7 +2517,7 @@ For this reason it is best to ensure that the Controller name is changed from th
 otherwise a duplicate may be accidentally created when new elements are added to the test plan. 
 </p>
 </description>
-<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
+<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan <code>.jmx</code> files.  Any such test will fail.</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
@@ -2533,8 +2533,8 @@ underneath the Test Plan and add any desired samplers, controllers etc. below it
 Then save the Test Plan.  The file is now ready to be included as part of other Test Plans.
 </p>
 <p>
-For convenience, a Thread Group can also be added in the external JMX file for debugging purposes.
-A Module Controller can be used to reference the Test Fragment.  The Thread Group will be ignored during the 
+For convenience, a <complink name="Thread Group" /> can also be added in the external JMX file for debugging purposes.
+A <complink name="Module Controller" /> can be used to reference the Test Fragment.  The <complink name="Thread Group" /> will be ignored during the 
 include process.
 </p>
 <p>
@@ -2543,15 +2543,15 @@ test plan, not the included file, otherwise they are not guaranteed to work.
 </p>
 <note>
 This element does not support variables/functions in the filename field.<br></br>
-However, if the property <b>includecontroller.prefix</b> is defined, 
+However, if the property <code>includecontroller.prefix</code> is defined, 
 the contents are used to prefix the pathname.
 </note>
 <note>
-When using IncludeController and including the same JMX file, ensure you name the IncludeController differently to avoid facing known issue <bugzilla>50898</bugzilla>.
+When using Include Controller and including the same JMX file, ensure you name the Include Controller differently to avoid facing known issue <bugzilla>50898</bugzilla>.
 </note>
 <p>
-If the file cannot be found at the location given by prefix+filename, then the controller
-attempts to open the fileName relative to the JMX launch directory (versions of JMeter after 2.3.4).
+If the file cannot be found at the location given by <code>prefix</code>+<code>Filename</code>, then the controller
+attempts to open the <code>Filename</code> relative to the JMX launch directory (versions of JMeter after 2.3.4).
 </p>
 </description>
 <properties>
@@ -2566,11 +2566,11 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
         sample which measures the overall time taken to perform the nested test elements.
         </p>
         <note>
-        Note: when the check box "Include duration of timer and pre-post processors in generated sample" is checked,
+        Note: when the check box "<code>Include duration of timer and pre-post processors in generated sample</code>" is checked,
         the time includes all processing within the controller scope, not just the samples.
         </note>
         <p>
-        For JMeter versions after 2.3, there are two modes of operation
+        For JMeter versions after 2.3, there are two modes of operation:
         </p>
         <ul>
         <li>additional sample is added after the nested samples</li>
@@ -2604,7 +2604,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
     </property>
     <property name="Include duration of timer and pre-post processors in generated sample" required="Yes">
     Whether to include timer, pre- and post-processing delays in the generated sample.
-    Default is false (since JMeter 2.11, in previous versions the default value is true).
+    Default is <code>false</code> (since JMeter 2.11, in previous versions the default value is <code>true</code>).
     </property>
 </properties>
 </component>
@@ -2633,8 +2633,8 @@ by only one thread as a named lock will be taken before executing children of co
     that:
 </p>
     <ul>
-        <li>DS2-${__threadNum} is executed only by one thread at a time</li>
-        <li>DS4-${__threadNum} is executed only by one thread at a time</li>
+        <li><code>DS2-${__threadNum}</code> is executed only by one thread at a time</li>
+        <li><code>DS4-${__threadNum}</code> is executed only by one thread at a time</li>
     </ul>
 <figure width="248" height="241" image="logic-controller/critical-section-controller-tp.png">Test Plan using Critical Section Controller</figure>
 
