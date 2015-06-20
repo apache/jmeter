@@ -3003,43 +3003,43 @@ See the <complink name="Summary Report"/> for a similar Listener that does not s
 <note>
 Starting with JMeter 2.12, you can configure the 3 percentile values you want to compute, this can be done by setting properties:
 <ul>
-    <li>aggregate_rpt_pct1: defaults to 90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
-    <li>aggregate_rpt_pct2: defaults to 95<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
-    <li>aggregate_rpt_pct3: defaults to 99<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
+    <li><code>aggregate_rpt_pct1</code>: defaults to 90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
+    <li><code>aggregate_rpt_pct2</code>: defaults to 95<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
+    <li><code>aggregate_rpt_pct3</code>: defaults to 99<sup>th</sup> <a href="glossary.html#Percentile">percentile</a></li>
 </ul>
 </note>
 <ul>
-<li>Label - The label of the sample.
-If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
+<li><code>Label</code> - The label of the sample.
+If "<code>Include group name in label?</code>" is selected, then the name of the thread group is added as a prefix.
 This allows identical labels from different thread groups to be collated separately if required.
 </li>
-<li># Samples - The number of samples with the same label</li>
-<li>Average - The average time of a set of results</li>
-<li>Median - The <a href="glossary.html#Median">median</a> is the time in the middle of a set of results.
+<li><code># Samples</code> - The number of samples with the same label</li>
+<li><code>Average</code> - The average time of a set of results</li>
+<li><code>Median</code> - The <a href="glossary.html#Median">median</a> is the time in the middle of a set of results.
 50% of the samples took no more than this time; the remainder took at least as long.</li>
-<li>90% Line - 90% of the samples took no more than this time.
+<li><code>90% Line</code> - 90% of the samples took no more than this time.
 The remaining samples took at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
-<li>95% Line - 95% of the samples took no more than this time.
+<li><code>95% Line</code> - 95% of the samples took no more than this time.
 The remaining samples took at least as long as this. (95<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
-<li>99% Line - 99% of the samples took no more than this time.
+<li><code>99% Line</code> - 99% of the samples took no more than this time.
 The remaining samples took at least as long as this. (99<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
-<li>Min - The shortest time for the samples with the same label</li>
+<li><code>Min</code> - The shortest time for the samples with the same label</li>
 <li>Max - The longest time for the samples with the same label</li>
-<li>Error % - Percent of requests with errors</li>
-<li>Throughput - the <a href="glossary.html#Throughput">Throughput</a> is measured in requests per second/minute/hour.
+<li><code>Error %</code> - Percent of requests with errors</li>
+<li><code>Throughput</code> - the <a href="glossary.html#Throughput">Throughput</a> is measured in requests per second/minute/hour.
 The time unit is chosen so that the displayed rate is at least 1.0.
 When the throughput is saved to a CSV file, it is expressed in requests/second,
 i.e. 30.0 requests/minute is saved as 0.5.
 </li>
-<li>Kb/sec - The throughput measured in Kilobytes per second</li>
+<li><code>Kb/sec</code> - The throughput measured in Kilobytes per second</li>
 </ul>
 <p>Times are in milliseconds.</p>
 </description>
 <div align="center">
 <p>
-    The figure below shows an example of selecting the "Include group name" checkbox.
+    The figure below shows an example of selecting the "<code>Include group name</code>" checkbox.
 </p>
-<figure width="1140" height="276" image="aggregate_report_grouped.png">Sample "Include group name" display</figure>
+<figure width="1140" height="276" image="aggregate_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
 </div>
 </component>
 
@@ -3048,7 +3048,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 Like the <complink name="View Results Tree"/>, this visualizer uses a lot of memory.
 <p>
 By default, it only displays the main (parent) samples; it does not display the sub-samples (child samples).
-Versions of JMeter after 2.5.1 have a "Child Samples?" check-box.
+Versions of JMeter after 2.5.1 have a "<code>Child Samples?</code>" check-box.
 If this is selected, then the sub-samples are displayed instead of the main samples.  
 </p>
 </description>
@@ -3058,9 +3058,9 @@ If this is selected, then the sub-samples are displayed instead of the main samp
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.
-When running in non-GUI mode, the -l flag can be used to create a data file.
+When running in non-GUI mode, the <code>-l</code> flag can be used to create a data file.
 The fields to save are defined by JMeter properties.
-See the jmeter.properties file for details.
+See the <code>jmeter.properties</code> file for details.
 </description>
 </component>
 
@@ -3069,8 +3069,8 @@ See the jmeter.properties file for details.
 <p>Monitor Results is a new Visualizer for displaying server
 status. It is designed for Tomcat 5, but any servlet container
 can port the status servlet and use this monitor. There are two primary
-tabs for the monitor. The first is the "Health" tab, which will show the
-status of one or more servers. The second tab labled "Performance" shows
+tabs for the monitor. The first is the "<code>Health</code>" tab, which will show the
+status of one or more servers. The second tab labled "<code>Performance</code>" shows
 the performance for one server for the last 1000 samples. The equations
 used for the load calculation is included in the Visualizer.</p>
 <p>Currently, the primary limitation of the monitor is system memory. A
@@ -3103,7 +3103,7 @@ during Test Plan debugging and Validation.
 </note>
 
 <p>The distribution graph will display a bar for every unique response time. Since the
-granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
+granularity of <code>System.currentTimeMillis()</code> is 10 milliseconds, the 90% threshold should be
 within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
 What this means is 50% of the response times finished between 0 and the line. The same
 is true of 90% line. Several tests with Tomcat were performed using 30 threads for 600K
@@ -3128,22 +3128,25 @@ the graph as a PNG file.</description>
 </p>
 <figure width="1147" height="420" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
 </div>
-<p><i>Please note: All this parameters <b>aren't</b> saved in JMeter jmx script.</i></p>
+<note>Please note: All this parameters <em>aren't</em> saved in JMeter jmx script.</note>
 <properties>
-        <property name="Column settings" required="Yes"><ul>
-        <li><u>Columns to display:</u> Choose the column(s) to display in graph.</li>
-        <li><u>Rectangles color:</u> Click on right color rectangle open a popup dialog to choose a custom color for column.</li>
-        <li><u>Foreground color</u> Allow to change the value text color.</li>
-        <li><u>Value font:</u> Allow to define font settings for the text.</li>
-        <li><u>Draw outlines bar?</u> To draw or not the border line on bar chart</li>
-        <li><u>Show number grouping?</u> Show or not the number grouping in Y Axis labels.</li>
-        <li><u>Value labels vertical?</u> Change orientation for value label. (Default is horizontal)</li>
-        <li><u>Column label selection:</u> Filter by result label. A regular expression can be used, example: <i>.*Transaction.*</i>
-        <br></br>Before display the graph, click on <b>Apply filter</b> button to refresh internal data.</li></ul></property>
-        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "Aggregate Graph". 
-        The button <b>Synchronize with name</b> define the title with the label of the listener. And define font settings for graph title</property>
+        <property name="Column settings" required="Yes">
+        <ul>
+        <li><code>Columns to display:</code> Choose the column(s) to display in graph.</li>
+        <li><code>Rectangles color:</code> Click on right color rectangle open a popup dialog to choose a custom color for column.</li>
+        <li><code>Foreground color</code> Allow to change the value text color.</li>
+        <li><code>Value font:</code> Allow to define font settings for the text.</li>
+        <li><code>Draw outlines bar?</code> To draw or not the border line on bar chart</li>
+        <li><code>Show number grouping?</code> Show or not the number grouping in Y Axis labels.</li>
+        <li><code>Value labels vertical?</code> Change orientation for value label. (Default is horizontal)</li>
+        <li><code>Column label selection:</code> Filter by result label. A regular expression can be used, example: <code>.*Transaction.*</code>
+        <br></br>Before display the graph, click on <code>Apply filter</code> button to refresh internal data.</li>
+        </ul>
+        </property>
+        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "<code>Aggregate Graph</code>". 
+        The button <code>Synchronize with name</code> define the title with the label of the listener. And define font settings for graph title</property>
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
-        Use Width and Height fields to define a custom size. The unit is pixel. </property>
+        Use <code>Width</code> and <code>Height</code> fields to define a custom size. The unit is pixel. </property>
         <property name="X Axis settings" required="No">Define the max length of X Axis label (in pixel).</property>
         <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis.</property>
         <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
@@ -3161,17 +3164,17 @@ If many samples exist for the same timestamp, the mean value is displayed.
 </p>
 <figure width="919" height="481" image="response_time_graph_settings.png">Response time graph settings</figure>
 </div>
-<p><i>Please note: All this parameters are saved in JMeter .jmx file.</i></p>
+<note>Please note: All this parameters are saved in JMeter <code>.jmx</code> file.</note>
 <properties>
         <property name="Interval (ms)" required="Yes">The time in milli-seconds for X axis interval. Samples are grouped according to this value.
-        Before display the graph, click on <b>Apply interval</b> button to refresh internal data.</property>
-        <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex.<i>.*Transaction.*</i>. 
-        Before display the graph, click on <b>Apply filter</b> button to refresh internal data.</property>
-        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "Response Time Graph". 
-        The button <b>Synchronize with name</b> define the title with the label of the listener. And define font settings for graph title</property>
-        <property name="Line settings" required="Yes">Define the width of the line. Define the type of each value point. Choose <i>none</i> to have a line without mark</property>
+        Before display the graph, click on <code>Apply interval</code> button to refresh internal data.</property>
+        <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex. <code>.*Transaction.*</code>. 
+        Before display the graph, click on <code>Apply filter</code> button to refresh internal data.</property>
+        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "<code>Response Time Graph</code>". 
+        The button <code>Synchronize with name</code> define the title with the label of the listener. And define font settings for graph title</property>
+        <property name="Line settings" required="Yes">Define the width of the line. Define the type of each value point. Choose <code>none</code> to have a line without mark</property>
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
-        Use Width and Height fields to define a custom size. The unit is pixel. </property>
+        Use <code>Width</code> and <code>Height</code> fields to define a custom size. The unit is pixel. </property>
         <property name="X Axis settings" required="No">Customize the date format of  X axis label.
         The syntax is the Java <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
         <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis in milli-seconds. Define the increment for the scale (in ms) Show or not the number grouping in Y Axis labels.</property>
@@ -3196,7 +3199,7 @@ failed responses from the server.</p></description>
 
         <property name="Host" required="No">IP address or host name of SMTP server (email redirector)
         server.</property>
-        <property name="Port" required="No">Port of SMTP server (defaults to 25).</property>
+        <property name="Port" required="No">Port of SMTP server (defaults to <code>25</code>).</property>
         <property name="Login" required="No">Login used to authenticate.</property>
         <property name="Password" required="No">Password used to authenticate.</property>
         <property name="Connection security" required="No">Type of encryption for SMTP authentication (SSL, TLS or none).</property>
