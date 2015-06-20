@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '19'>
+<!ENTITY rarr     "&#x02192;" >
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
   prev="boss.html" next="functions.html" id="$Id$">
@@ -2663,7 +2664,7 @@ The saving and reading of test results is generic.  The various
 listeners have a panel whereby one can specify the file to
 which the results will be written (or read from).
 By default, the results are stored as XML
-files, typically with a ".jtl" extension.
+files, typically with a "<code>.jtl</code>" extension.
 Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).
 </p>
 <p>
@@ -2679,11 +2680,11 @@ To read existing results and display them, use the file panel Browse button to o
 Versions of JMeter up to 2.3.2 <b>used to clear any current data</b> before loading the new file.<br></br>
 This is no longer done, thus <b>allowing files to be merged</b>.
 If the previous behaviour is required, 
-use the menu item Run/Clear (Ctrl+Shift+E) or Run/Clear All (Ctrl+E) before loading the file.
+use the menu item <code>Run</code> &rarr; <code>Clear</code> (Ctrl+Shift+E) or <code>Run</code> &rarr; <code>Clear All</code> (Ctrl+E) before loading the file.
 </p>
 <p>Results can be read from XML or CSV format files.
 When reading from CSV results files, the header (if present) is used to determine which fields are present.
-<b>In order to interpret a header-less CSV file correctly, the appropriate properties must be set in jmeter.properties.</b>
+<b>In order to interpret a header-less CSV file correctly, the appropriate properties must be set in <code>jmeter.properties</code>.</b>
 </p>
 <note>
 The file name can contain function and/or variable references.
@@ -2722,11 +2723,11 @@ For details of the contents of the output files,
 see the <a href="listeners.html#csvlogformat">CSV log</a> format or
 the <a href="listeners.html#xmlformat2.1">XML log</a> format.
 </p>
-<note>The entries in jmeter.properties are used to define the defaults; 
+<note>The entries in <code>jmeter.properties</code> are used to define the defaults; 
 these can be overridden for individual listeners by using the Configure button,
 as shown below. 
-The settings in jmeter.properties also apply to the listener that is added
-by using the -l command-line flag.
+The settings in <code>jmeter.properties</code> also apply to the listener that is added
+by using the <code>-l</code> command-line flag.
 </note>
 <p>
     The figure below shows an example of the result file configuration panel
@@ -2735,15 +2736,15 @@ by using the -l command-line flag.
 <properties>
         <property name="Filename" required="No">Name of the file containing sample results.
         The file name can be specified using either a relative or an absolute path name.
-        Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+        Relative paths are resolved relative to the current working directory (which defaults to the <code>bin/</code> directory).
         Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
-        If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+        If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
         then the path is assumed to be relative to the JMX file location. 
         </property>
         <property name="Browse..." required="No">File Browse Button</property>
         <property name="Errors" required="No">Select this to write/read only results with errors</property>
         <property name="Successes" required="No">Select this to write/read only results without errors.
-        If neither Errors nor Successes is selected, then all results are processed.</property>
+        If neither <code>Errors</code> nor <code>Successes</code> is selected, then all results are processed.</property>
         <property name="Configure" required="No">Configure Button, see below</property>
 </properties>
 </description>
@@ -2753,11 +2754,11 @@ by using the -l command-line flag.
 <p>
 Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
 The defaults are defined as described in  the <a href="listeners.html#defaults">Listener Default Configuration</a> documentation.
-Items with (CSV) after the name only apply to the CSV format; items with (XML) only apply to XML format.
+Items with (<code>CSV</code>) after the name only apply to the CSV format; items with (<code>XML</code>) only apply to XML format.
 CSV format cannot currently be used to save any items that include line-breaks.
 </p>
 <p>
-Note that cookies, method and the query string are saved as part of the "Sampler Data" option.
+Note that cookies, method and the query string are saved as part of the "<code>Sampler Data</code>" option.
 </p>
 </description>
 </component>
@@ -2769,7 +2770,7 @@ Graph Results MUST NOT BE USED during load test as it consumes a lot of resource
 during Test Plan debugging and Validation.
 </note>
 <p>The Graph Results listener generates a simple graph that plots all sample times.  Along
-the bottom of the graph, the current sample (black), the current average of all samples(blue), the
+the bottom of the graph, the current sample (black), the current average of all samples (blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
 <p>The throughput number represents the actual number of requests/minute the server handled.  This calculation
 includes any delays you added to your test and JMeter's own internal processing time.  The advantage
@@ -2783,15 +2784,15 @@ Further details on the precise meaning of the statistical terms can be found on 
  - e.g. Wikipedia - or by consulting a book on statistics.
  </p>
  <ul>
- <li>Data - plot the actual data values</li>
- <li>Average - plot the Average</li>
- <li>Median - plot the <a href="glossary.html#Median">Median</a> (midway value)</li>
- <li>Deviation - plot the <a href="glossary.html#StandardDeviation">Standard Deviation</a> (a measure of the variation)</li>
- <li>Throughput - plot the number of samples per unit of time</li>
+ <li><code>Data</code> - plot the actual data values</li>
+ <li><code>Average</code> - plot the Average</li>
+ <li><code>Median</code> - plot the <a href="glossary.html#Median">Median</a> (midway value)</li>
+ <li><code>Deviation</code> - plot the <a href="glossary.html#StandardDeviation">Standard Deviation</a> (a measure of the variation)</li>
+ <li><code>Throughput</code> - plot the number of samples per unit of time</li>
  </ul>
  <p>The individual figures at the bottom of the display are the current values. 
- "Latest Sample" is the current elapsed sample time, shown on the graph as "Data".</p>
- <p>The value displayed on the top left of graph is the max of 90th percentile of response time.</p>
+ "<code>Latest Sample</code>" is the current elapsed sample time, shown on the graph as "<code>Data</code>".</p>
+ <p>The value displayed on the top left of graph is the max of 90<sup>th</sup> percentile of response time.</p>
 </component>
 
 <component name="Spline Visualizer" index="&sect-num;.3.4"  width="737" height="489" screenshot="spline_visualizer.png">
@@ -2838,20 +2839,20 @@ The View Results Tree shows a tree of all sample responses, allowing you to view
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
 Note that the Request panel only shows the headers added by JMeter.
-It does not show any headers (such as Host) that may be added by the HTTP protocol implementation.
+It does not show any headers (such as <code>Host</code>) that may be added by the HTTP protocol implementation.
 <p>
 There are several ways to view the response, selectable by a drop-down box at the bottom of the left hand panel.</p>
 
 <table>
 <tr><th><b>Renderer</b></th><th><b>Description</b></th></tr>
-<tr><td><b>CSS/JQuery Tester</b></td>
+<tr><td><code>CSS/JQuery Tester</code></td>
 <td>The <i>CSS/JQuery Tester</i> only works for text responses. It shows the plain text in the upper panel.
-The "Test" button allows the user to apply the CSS/JQuery to the upper panel and the results
+The "<code>Test</code>" button allows the user to apply the CSS/JQuery to the upper panel and the results
 will be displayed in the lower panel.<br/>
 The engine of CSS/JQuery expression can be JSoup or Jodd, syntax of these 2 implementation differs slightly.<br/>
-For example, the Selector <b>a[class=sectionlink]</b> with attribute <b>href</b> applied to the current JMeter functions page gives the following output:
+For example, the Selector <code>a[class=sectionlink]</code> with attribute <code>href</code> applied to the current JMeter functions page gives the following output:
 <br/>
-<pre>
+<source>
 Match count: 74
 Match[1]=#functions
 Match[2]=#what_can_do
@@ -2863,96 +2864,96 @@ Match[7]=#__regexFunction
 Match[8]=#__regexFunction_parms
 Match[9]=#__counter
 ... and so on ...
-</pre>
+</source>
 <br/></td></tr>
-<tr><td><b>Document</b></td>
+<tr><td><code>Document</code></td>
 <td>The <i>Document view</i> will show the extract text from various type of documents like Microsoft Office
 (Word, Excel, PowerPoint 97-2003, 2007-2010 (openxml), Apache OpenOffice (writer, calc, impress), HTML,
 gzip, jar/zip files (list of content), and some meta-data on "multimedia" files like mp3, mp4, flv, etc. The complete list of 
 support format is available on <a href="http://tika.apache.org/1.2/formats.html">Apache Tika format page.</a>
 <br/><br/>
-<b>Note:</b> A requirement to the <i>Document view</i> is to download the <a href="http://tika.apache.org/download.html">
-Apache Tika binary package</a> (tika-app-x.x.jar) and put this in JMETER_HOME/lib directory.
+<b>Note:</b> A requirement to the <code>Document view</code> is to download the <a href="http://tika.apache.org/download.html">
+Apache Tika binary package</a> (<code>tika-app-x.x.jar</code>) and put this in <code>JMETER_HOME/lib</code> directory.
 <br/><br/>
 If the document is larger than 10 MB, then it won't be displayed.
-To change this limit, set the JMeter property <b>document.max_size</b> (unit is byte) or set to 0 to remove the limit.
+To change this limit, set the JMeter property <code>document.max_size</code> (unit is byte) or set to <code>0</code> to remove the limit.
 <br/></td></tr>
-<tr><td><b>HTML</b></td>
+<tr><td><code>HTML</code></td>
 <td>The <i>HTML view</i> attempts to render the response as
 HTML.  The rendered HTML is likely to compare poorly to the view one
 would get in any web browser; however, it does provide a quick
 approximation that is helpful for initial result evaluation.<br/>
 Images, style-sheets, etc. aren't downloaded. 
 <br/></td></tr>
-<tr><td><b>HTML (download resources)</b></td>
+<tr><td><code>HTML (download resources)</code></td>
 <td>If the <i>HTML (download resources) view</i> option is selected, the renderer
 may download images, style-sheets, etc. referenced by the HTML code. 
 <br/></td></tr>
-<tr><td><b>JSON</b></td>
+<tr><td><code>JSON</code></td>
 <td>The <i>JSON view</i> will show the response in tree style (also handles JSON embedded in JavaScript).
 <br/></td></tr>
-<tr><td><b>Regexp Tester</b></td>
+<tr><td><code>Regexp Tester</code></td>
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
-The "Test" button allows the user to apply the Regular Expression to the upper panel and the results
+The "<code>Test</code>" button allows the user to apply the Regular Expression to the upper panel and the results
 will be displayed in the lower panel.<br/>
 The engine of regular expression is the same that the Regular Expression Extractor.<br/>
-For example, the RE <b>(JMeter\w*).*</b> applied to the current JMeter home page gives the following output:
+For example, the RE <code>(JMeter\w*).*</code> applied to the current JMeter home page gives the following output:
 <br/>
 <source>
 Match count: 26
-Match[1][0]=JMeter - Apache JMeter&lt;/title>
+Match[1][0]=JMeter - Apache JMeter&lt;/title&gt;
 Match[1][1]=JMeter
-Match[2][0]=JMeter" title="JMeter" border="0"/>&lt;/a>
+Match[2][0]=JMeter" title="JMeter" border="0"/&gt;lt;/a&gt;
 Match[2][1]=JMeter
-Match[3][0]=JMeterCommitters">Contributors&lt;/a>
+Match[3][0]=JMeterCommitters"&gt;Contributors&lt;/a&gt;
 Match[3][1]=JMeterCommitters
 ... and so on ...
 </source>
 <br/>
-The first number in [] is the match number; the second number is the group. 
-Group [0] is whatever matched the whole RE.
-Group [1] is whatever matched the 1<sup>st</sup> group, i.e. (JMeter\w*) in this case.
+The first number in <code>[]</code> is the match number; the second number is the group. 
+Group <code>[0]</code> is whatever matched the whole RE.
+Group <code>[1]</code> is whatever matched the 1<sup>st</sup> group, i.e. <code>(JMeter\w*)</code> in this case.
 See Figure 9b (below).
 <br/></td></tr>
-<tr><td><b>Text</b></td>
+<tr><td><code>Text</code></td>
 <td>
 The default <i>Text view</i> shows all of the text contained in the response. 
-Note that this will only work if the response content-type is considered to be text.
-If the content-type begins with any of the following, it is considered as binary,
+Note that this will only work if the response <code>content-type</code> is considered to be text.
+If the <code>content-type</code> begins with any of the following, it is considered as binary,
 otherwise it is considered to be text.
-<pre>
+<source>
 image/
 audio/
 video/
-</pre>
+</source>
 <br/></td></tr>
-<tr><td><b>XML</b></td>
+<tr><td><code>XML</code></td>
 <td>The <i>XML view</i> will show response in tree style. 
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
 <br/></td></tr>
-<tr><td><b>XPath Tester</b></td>
+<tr><td><code>XPath Tester</code></td>
 <td>The <i>XPath Tester</i> only works for text responses. It shows the plain text in the upper panel.
-The "Test" button allows the user to apply the XPath query to the upper panel and the results
+The "<code>Test</code>" button allows the user to apply the XPath query to the upper panel and the results
 will be displayed in the lower panel.<br/>
 </td></tr>
 </table>
-<p><i>Scroll automatically?</i> option permit to have last node display in tree selection</p>
+<p><code>Scroll automatically?</code> option permit to have last node display in tree selection</p>
 <p>
-With <i>Search</i> option, most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
-in the display above. For example the Control panel screenshot below shows one result of searching for "Java".
+With <code>Search</code> option, most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
+in the display above. For example the Control panel screenshot below shows one result of searching for "<code>Java</code>".
 Note that the search operates on the visible text, so you may get different results when searching
 the Text and HTML views.
 <br/>Note: The regular expression uses the Java engine (not ORO engine like the Regular Expression Extractor or Regexp Tester view).
 </p>
 <p>
-If there is no content-type provided, then the content
+If there is no <code>content-type</code> provided, then the content
 will not be displayed in the any of the Response Data panels.
 You can use <complink name="Save Responses to a file"/> to save the data in this case.
 Note that the response data will still be available in the sample result,
 so can still be accessed using Post-Processors.
 </p>
 <p>If the response data is larger than 200K, then it won't be displayed.
-To change this limit, set the JMeter property <b>view.results.tree.max_size</b>.
+To change this limit, set the JMeter property <code>view.results.tree.max_size</code>.
 You can also use save the entire response to a file using
 <complink name="Save Responses to a file"/>.
 </p>
@@ -2960,7 +2961,7 @@ You can also use save the entire response to a file using
 Additional renderers can be created.
 The class must implement the interface <code>org.apache.jmeter.visualizers.ResultRenderer</code>
 and/or extend the abstract class <code>org.apache.jmeter.visualizers.SamplerResultTab</code>, and the
-compiled code must be available to JMeter (e.g. by adding it to the lib/ext directory).
+compiled code must be available to JMeter (e.g. by adding it to the <code>lib/ext</code> directory).
 </p>
 </description>
 <p>
