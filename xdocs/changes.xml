@@ -114,7 +114,7 @@ Summary
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
-<li>Updated to tika-core and tika-parsers 1.8 (from 1.7)</li>
+<li>Updated to tika-core and tika-parsers 1.9 (from 1.7)</li>
 <li>Updated to commons-math3 3.5 (from 3.4.1)</li>
 <li>Updated to commons-pool2 2.4.1 (from 2.3)</li>
 <li><bug>57981</bug>Require a minimum of Java 7.</li>
