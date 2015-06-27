@@ -178,9 +178,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
                 } else {
                     throw new IllegalArgumentException("Negative value for timeout:"+timeoutInMs+" in Synchronizing Timer "+getName());
                 }
-            } catch (InterruptedException e) {
-                return 0;
-            } catch (BrokenBarrierException e) {
+            } catch (InterruptedException|BrokenBarrierException e) {
                 return 0;
             } catch (TimeoutException e) {
                 LOGGER.warn("SyncTimer "+ getName() + " timeouted waiting for users after:"+getTimeoutInMs()+"ms");
