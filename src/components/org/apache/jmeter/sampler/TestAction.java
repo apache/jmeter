@@ -109,9 +109,9 @@ public class TestAction extends AbstractSampler implements Interruptible {
     }
 
     private void pause(String mili_s) {
-        int milis;
+        long milis;
         try {
-            milis=Integer.parseInt(mili_s);
+            milis=Long.parseLong(mili_s);
         } catch (NumberFormatException e){
             log.warn("Could not create number from "+mili_s);
             milis=0;
