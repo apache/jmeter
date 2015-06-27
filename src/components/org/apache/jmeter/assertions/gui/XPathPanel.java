@@ -205,14 +205,10 @@ public class XPathPanel extends JPanel {
             log.warn(e.getLocalizedMessage());
             success = false;
             ret = e.getLocalizedMessage();
-        } catch (ParserConfigurationException e) {
-            success = false;
-            ret = e.getLocalizedMessage();
-        } catch (TransformerException e) {
+        } catch (ParserConfigurationException|TransformerException e) {
             success = false;
             ret = e.getLocalizedMessage();
         }
-
         if (showDialog) {
             JOptionPane.showMessageDialog(null, (success) ? JMeterUtils.getResString("xpath_assertion_valid") : ret, //$NON-NLS-1$
                     (success) ? JMeterUtils.getResString("xpath_assertion_valid") : JMeterUtils //$NON-NLS-1$
