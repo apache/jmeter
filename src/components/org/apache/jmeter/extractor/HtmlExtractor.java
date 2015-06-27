@@ -91,7 +91,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         if (previousResult == null) {
             return;
         }
-        log.debug("HtmlExtractor processing result");
+        log.debug("HtmlExtractor "+getName()+":processing result");
 
         // Fetch some variables
         JMeterVariables vars = context.getVariables();
@@ -116,7 +116,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 try {
                     prevCount = Integer.parseInt(prevString);
                 } catch (NumberFormatException e1) {
-                    log.warn("Could not parse "+prevString+" "+e1);
+                    log.warn(getName()+":Could not parse "+prevString+" "+e1);
                 }
             }
             int matchCount=0;// Number of refName_n variable sets to keep
@@ -145,11 +145,11 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                     vars.remove(refName_n);
                 }
             } catch (RuntimeException e) {
-                log.warn("Error while generating result");
+                log.warn(getName()+":Error while generating result");
             }
 
         } catch (RuntimeException e) {
-            log.warn("Error while generating result");
+            log.warn(getName()+":Error while generating result");
         }
 
     }
