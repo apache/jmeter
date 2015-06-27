@@ -3195,7 +3195,7 @@ failed responses from the server.</p></description>
         is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
         <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
         <property name="Failure Limit" required="Yes">Once this number of failed responses is exceeded, a failure
-        email is sent - i.e. set the count to 0 to send an e-mail on the first failure.</property>
+        email is sent - i.e. set the count to <code>0</code> to send an e-mail on the first failure.</property>
 
         <property name="Host" required="No">IP address or host name of SMTP server (email redirector)
         server.</property>
@@ -3219,9 +3219,9 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
-The test element supports the ThreadListener and TestListener methods.
+The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
 These should be defined in the initialisation file.
-See the file BeanShellListeners.bshrc for example definitions.
+See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </p>
 </description>
 <properties>
@@ -3234,25 +3234,28 @@ See the file BeanShellListeners.bshrc for example definitions.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
-    <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>bsh.args - String array containing parameters, split on white-space</li>
-    </ul></property>
+    <dl>
+        <dt><code>Parameters</code></dt><dd>string containing the parameters as a single variable</dd>
+        <dt><code>bsh.args</code></dt><dd>String array containing parameters, split on white-space</dd>
+    </dl></property>
     <property name="Script file" required="No">A file containing the BeanShell script to run.
-    The file name is stored in the script variable FileName</property>
+    The file name is stored in the script variable <code>FileName</code></property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
-<li>log - (Logger) - can be used to write to the log file</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
-<li>sampleEvent (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
+<li><code>log</code> - (Logger) - can be used to write to the log file</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+</source></li>
+<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>sampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
+<li><code>sampleEvent</code> (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
+<p>If the property <code>beanshell.listener.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
 <component name="Summary Report" index="&sect-num;.3.16"  width="926" height="324" screenshot="summary_report.png">
@@ -3269,31 +3272,31 @@ It is important to choose the sampler labels correctly to get the best results f
 the Report.
 </p>
 <ul>
-<li>Label - The label of the sample.
-If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
+<li><code>Label</code> - The label of the sample.
+If "<code>Include group name in label?</code>" is selected, then the name of the thread group is added as a prefix.
 This allows identical labels from different thread groups to be collated separately if required.
 </li>
-<li># Samples - The number of samples with the same label</li>
-<li>Average - The average elapsed time of a set of results</li>
-<li>Min - The lowest elapsed time for the samples with the same label</li>
-<li>Max - The longest elapsed time for the samples with the same label</li>
-<li>Std. Dev. - the <a href="glossary.html#StandardDeviation">Standard Deviation</a> of the sample elapsed time</li>
-<li>Error % - Percent of requests with errors</li>
-<li>Throughput - the <a href="glossary.html#Throughput">Throughput</a> is measured in requests per second/minute/hour.
-The time unit is chosen so that the displayed rate is at least 1.0.
+<li><code># Samples</code> - The number of samples with the same label</li>
+<li><code>Average</code> - The average elapsed time of a set of results</li>
+<li><code>Min</code> - The lowest elapsed time for the samples with the same label</li>
+<li><code>Max</code> - The longest elapsed time for the samples with the same label</li>
+<li><code>Std. Dev.</code> - the <a href="glossary.html#StandardDeviation">Standard Deviation</a> of the sample elapsed time</li>
+<li><code>Error %</code> - Percent of requests with errors</li>
+<li><code>Throughput</code> - the <a href="glossary.html#Throughput">Throughput</a> is measured in requests per second/minute/hour.
+The time unit is chosen so that the displayed rate is at least <code>1.0</code>.
 When the throughput is saved to a CSV file, it is expressed in requests/second,
-i.e. 30.0 requests/minute is saved as 0.5.
+i.e. 30.0 requests/minute is saved as <code>0.5</code>.
 </li>
-<li>Kb/sec - The throughput measured in Kilobytes per second</li>
-<li>Avg. Bytes - average size of the sample response in bytes. (in JMeter 2.2 it wrongly showed the value in kB)</li>
+<li><code>Kb/sec</code> - The throughput measured in Kilobytes per second</li>
+<li><code>Avg. Bytes</code> - average size of the sample response in bytes. (in JMeter 2.2 it wrongly showed the value in kB)</li>
 </ul>
 <p>Times are in milliseconds.</p>
 </description>
 <div align="center">
 <p>
-    The figure below shows an example of selecting the "Include group name" checkbox.
+    The figure below shows an example of selecting the "<code>Include group name</code>" checkbox.
 </p>
-<figure width="923" height="325" image="summary_report_grouped.png">Sample "Include group name" display</figure>
+<figure width="923" height="325" image="summary_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
 </div>
 </component>
 
@@ -3307,7 +3310,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
         <complink name="View Results Tree"/> Listener.
         The file name is created from the specified prefix, plus a number (unless this is disabled, see below).
         The file extension is created from the document type, if known.
-        If not known, the file extension is set to 'unknown'.
+        If not known, the file extension is set to '<code>unknown</code>'.
         If numbering is disabled, and adding a suffix is disabled, then the file prefix is
         taken as the entire file name. This allows a fixed file name to be generated if required.
         The generated file name is stored in the sample response, and can be saved
@@ -3322,22 +3325,22 @@ i.e. 30.0 requests/minute is saved as 0.5.
  <properties>
  <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
  <property name="Filename Prefix" required="Yes">Prefix for the generated file names; this can include a directory name.
-        Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+        Relative paths are resolved relative to the current working directory (which defaults to the <code>bin/</code> directory).
         Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
-        If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+        If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
         then the path is assumed to be relative to the JMX file location. 
  </property>
  <property name="Variable Name" required="No">
  Name of a variable in which to save the generated file name (so it can be used later in the test plan).
  If there are sub-samples then a numeric suffix is added to the variable name.
- E.g. if the variable name is FILENAME, then the parent sample file name is saved in the variable FILENAME, 
- and the filenames for the child samplers are saved in FILENAME1, FILENAME2 etc.
+ E.g. if the variable name is <code>FILENAME</code>, then the parent sample file name is saved in the variable <code>FILENAME</code>, 
+ and the filenames for the child samplers are saved in <code>FILENAME1</code>, <code>FILENAME2</code> etc.
  </property>
  <property name="Save Failed Responses only" required="Yes">If selected, then only failed responses are saved</property>
  <property name="Save Successful Responses only" required="Yes">If selected, then only successful responses are saved</property>
  <property name="Don't add number to prefix" required="Yes">If selected, then no number is added to the prefix. If you select this option, make sure that the prefix is unique or the file may be overwritten.</property>
  <property name="Don't add suffix" required="Yes">If selected, then no suffix is added. If you select this option, make sure that the prefix is unique or the file may be overwritten.</property>
- <property name="Minimum Length of sequence number" required="No">If "Don't add number to prefix" is not checked, then numbers added to prefix will be padded by 0 so that prefix is has size of this value.Defaults to 0.</property>
+ <property name="Minimum Length of sequence number" required="No">If "<code>Don't add number to prefix</code>" is not checked, then numbers added to prefix will be padded by <code>0</code> so that prefix is has size of this value. Defaults to <code>0</code>.</property>
  </properties>
 </component>
 
