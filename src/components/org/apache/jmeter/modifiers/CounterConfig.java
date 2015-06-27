@@ -138,8 +138,6 @@ public class CounterConfig extends AbstractTestElement
             try {
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);
-            } catch (NumberFormatException ignored) {
-                log.warn("Error formating "+value + " at format:"+format+", using default");
             } catch (IllegalArgumentException ignored) {
                 log.warn("Error formating "+value + " at format:"+format+", using default");
             }
