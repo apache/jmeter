@@ -46,11 +46,7 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
             bindings.put("AssertionResult", result);
             processFileOrScript(scriptEngine, bindings);
             result.setError(false);
-        } catch (IOException e) {
-            log.error("Problem in JSR223 script "+getName(), e);
-            result.setError(true);
-            result.setFailureMessage(e.toString());
-        } catch (ScriptException e) {
+        } catch (IOException|ScriptException e) {
             log.error("Problem in JSR223 script "+getName(), e);
             result.setError(true);
             result.setFailureMessage(e.toString());
