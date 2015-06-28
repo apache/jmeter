@@ -107,9 +107,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             }                    
         } catch (EOFException err) {
             // expected
-        } catch (IOException err) {
-            log.error("returning sample", err);
-        } catch (ClassNotFoundException err) {
+        } catch (IOException|ClassNotFoundException err) {
             log.error("returning sample", err);
         } finally {
             try {
