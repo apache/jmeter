@@ -139,13 +139,7 @@ public class LookAndFeelCommand implements Command {
                 }
             }
             PREFS.put(USER_PREFS_KEY, className);
-        } catch (javax.swing.UnsupportedLookAndFeelException e) {
-            JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
-        } catch (InstantiationException e) {
-            JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
-        } catch (ClassNotFoundException e) {
-            JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
-        } catch (IllegalAccessException e) {
+        } catch (javax.swing.UnsupportedLookAndFeelException|InstantiationException|ClassNotFoundException|IllegalAccessException e) {
             JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
         }
     }
