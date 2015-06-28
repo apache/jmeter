@@ -2578,7 +2578,8 @@ attempts to open the <code>Filename</code> relative to the JMX launch directory 
         <li>additional sample is added as a parent of the nested samples</li>
         </ul>
         <p>
-        The generated sample time includes all the times for the nested samplers, <b>and any timers etc.</b>
+        The generated sample time includes all the times for the nested samplers excluding by default (since 2.11) timers and processing time of pre/post processors 
+        unless checkbox "<code>Include duration of timer and pre-post processors in generated sample</code>" is checked.
         Depending on the clock resolution, it may be slightly longer than the sum of the individual samplers plus timers.
         The clock might tick after the controller recorded the start time but before the first sample starts.
         Similarly at the end.
