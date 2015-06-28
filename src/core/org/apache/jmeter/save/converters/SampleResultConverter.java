@@ -469,8 +469,6 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             }
             outstream.close();
             res.setResponseData(outstream.toByteArray());
-        } catch (FileNotFoundException e) {
-            log.warn(e.getLocalizedMessage());
         } catch (IOException e) {
             log.warn(e.getLocalizedMessage());
         } finally {
