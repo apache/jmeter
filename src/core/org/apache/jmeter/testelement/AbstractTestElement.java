@@ -79,9 +79,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             }
             clonedElement.setRunningVersion(runningVersion);
             return clonedElement;
-        } catch (InstantiationException e) {
-            throw new AssertionError(e); // clone should never return null
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException|IllegalAccessException e) {
             throw new AssertionError(e); // clone should never return null
         }
     }
