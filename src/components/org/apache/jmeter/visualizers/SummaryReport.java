@@ -276,8 +276,6 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
                 writer = new FileWriter(chooser.getSelectedFile());
                 CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, FORMATS),writer, 
                         saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS) : null);
-            } catch (FileNotFoundException e) {
-                JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } finally {
