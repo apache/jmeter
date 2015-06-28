@@ -93,9 +93,7 @@ public class ScriptWrapperConverter implements Converter {
         // Catch errors and rethrow as ConversionException so we get location details
         try {
             wrap.testPlan = (HashTree) context.convertAnother(wrap, getNextType(reader));
-        } catch (NoClassDefFoundError e) {
-            throw createConversionException(e);
-        } catch (Exception e) {
+        } catch (NoClassDefFoundError|Exception e) {
             throw createConversionException(e);
         }
         return wrap;

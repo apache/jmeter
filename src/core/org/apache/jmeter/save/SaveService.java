@@ -253,19 +253,8 @@ public class SaveService {
                                 registerConverter(key, JMXSAVER, false);
                                 registerConverter(key, JTLSAVER, false);
                             }
-                        } catch (IllegalAccessException e1) {
-                            log.warn("Can't register a converter: " + key, e1);
-                        } catch (InstantiationException e1) {
-                            log.warn("Can't register a converter: " + key, e1);
-                        } catch (ClassNotFoundException e1) {
-                            log.warn("Can't register a converter: " + key, e1);
-                        } catch (IllegalArgumentException e1) {
-                            log.warn("Can't register a converter: " + key, e1);
-                        } catch (SecurityException e1) {
-                            log.warn("Can't register a converter: " + key, e1);
-                        } catch (InvocationTargetException e1) {
-                            log.warn("Can't register a converter: " + key, e1);
-                        } catch (NoSuchMethodException e1) {
+                        } catch (IllegalAccessException|InstantiationException|ClassNotFoundException|IllegalArgumentException|
+                                SecurityException|InvocationTargetException|NoSuchMethodException e1) {
                             log.warn("Can't register a converter: " + key, e1);
                         }
                     }
