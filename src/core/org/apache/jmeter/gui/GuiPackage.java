@@ -351,13 +351,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                     "Missing jar? See log file." ,
                     JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e.toString(), e); // Probably a missing jar
-        } catch (ClassNotFoundException e) {
-            log.error("Problem retrieving gui for " + objClass, e);
-            throw new RuntimeException(e.toString(), e); // Programming error: bail out.
-        } catch (InstantiationException e) {
-            log.error("Problem retrieving gui for " + objClass, e);
-            throw new RuntimeException(e.toString(), e); // Programming error: bail out.
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException|InstantiationException|IllegalAccessException e) {
             log.error("Problem retrieving gui for " + objClass, e);
             throw new RuntimeException(e.toString(), e); // Programming error: bail out.
         }
