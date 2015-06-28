@@ -245,10 +245,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 if (editorClass != null) {
                     try {
                         propertyEditor = (PropertyEditor) editorClass.newInstance();
-                    } catch (InstantiationException e) {
-                        log.error("Can't create property editor.", e);
-                        throw new Error(e.toString());
-                    } catch (IllegalAccessException e) {
+                    } catch (InstantiationException|IllegalAccessException e) {
                         log.error("Can't create property editor.", e);
                         throw new Error(e.toString());
                     }
