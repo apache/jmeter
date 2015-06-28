@@ -363,11 +363,7 @@ public final class CSVSaveService {
                         + ". Extra fields have been ignored.");
             }
 
-        } catch (NumberFormatException e) {
-            log.warn("Error parsing field '" + field + "' at line "
-                    + lineNumber + " " + e);
-            throw new JMeterError(e);
-        } catch (ParseException e) {
+        } catch (NumberFormatException|ParseException e) {
             log.warn("Error parsing field '" + field + "' at line "
                     + lineNumber + " " + e);
             throw new JMeterError(e);
