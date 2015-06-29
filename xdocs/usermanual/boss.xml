@@ -100,6 +100,12 @@ For non-Windows platforms, investigate "<code>ulimit -n unlimited</code>" with a
 including it in your user account startup scripts (<code>.bashrc</code> or <code>.cshrc</code> scripts
 for the testing account).
 </p>
+<p>
+Also note that some Linux/Unix editions are intended for server use.
+These generally have minimal or no GUI support.
+Such OSes should be OK for running JMeter in non-GUI mode, but JMeter GUI mode probably won't work
+unless you install a minimal GUI environment.
+</p>
 <p>As you progress to larger-scale benchmarks/load-tests, this platform
 will become the limiting factor. So it's worth using the best hardware and
 software that you have available. Remember to include the hardware/software
