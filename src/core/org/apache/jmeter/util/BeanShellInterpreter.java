@@ -71,7 +71,7 @@ public class BeanShellInterpreter {
                     new Class[] { string, object });
             source = clazz.getMethod("source", //$NON-NLS-1$
                     new Class[] { string });
-        } catch (ClassNotFoundException|SecurityException|NoSuchMethodException e) {
+        } catch (ClassNotFoundException|SecurityException | NoSuchMethodException e) {
             log.error("Beanshell Interpreter not found", e);
         } finally {
             bshEval = eval;
@@ -112,7 +112,7 @@ public class BeanShellInterpreter {
         }
         try {
             bshInstance = bshClass.newInstance();
-        } catch (InstantiationException|IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             log.error("Can't instantiate BeanShell", e);
             throw new ClassNotFoundException("Can't instantiate BeanShell", e);
         } 
@@ -161,7 +161,7 @@ public class BeanShellInterpreter {
         final String errorString = "Error invoking bsh method: ";
         try {
             r = m.invoke(bshInstance, o);
-        } catch (IllegalArgumentException|IllegalAccessException e) { // Programming error
+        } catch (IllegalArgumentException | IllegalAccessException e) { // Programming error
             final String message = errorString + m.getName();
             log.error(message);
             throw new JMeterError(message, e);

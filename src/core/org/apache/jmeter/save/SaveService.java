@@ -253,8 +253,8 @@ public class SaveService {
                                 registerConverter(key, JMXSAVER, false);
                                 registerConverter(key, JTLSAVER, false);
                             }
-                        } catch (IllegalAccessException|InstantiationException|ClassNotFoundException|IllegalArgumentException|
-                                SecurityException|InvocationTargetException|NoSuchMethodException e1) {
+                        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IllegalArgumentException|
+                                SecurityException | InvocationTargetException | NoSuchMethodException e1) {
                             log.warn("Can't register a converter: " + key, e1);
                         }
                     }
@@ -563,7 +563,7 @@ public class SaveService {
             } else {
                 throw new IllegalArgumentException("Problem loading XML, cannot determine class for element: " + e, e);
             }
-        } catch (ConversionException|NoClassDefFoundError e) {
+        } catch (ConversionException | NoClassDefFoundError e) {
             if(file != null) {
                 throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', missing class "+e , e);
             } else {

@@ -133,7 +133,7 @@ public class DistributedRunner {
                 } else {
                     log.warn("Host not found in list of active engines: " + address);
                 }
-            } catch (IllegalStateException|JMeterEngineException e) {
+            } catch (IllegalStateException | JMeterEngineException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
             }
         }

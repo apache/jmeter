@@ -404,10 +404,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                         }
                     }
                 }
-            } catch (IOException|JMeterError|RuntimeException|OutOfMemoryError e) {
+            } catch (IOException | JMeterError | RuntimeException | OutOfMemoryError e) {
                 // FIXME Why do we catch OOM ?
                 log.warn("Problem reading JTL file: "+file);
-            } catch (ConfigurationException|SAXException e) { // Avalon only
+            } catch (ConfigurationException | SAXException e) { // Avalon only
                 log.warn("Problem reading Avalon JTL file: "+file,e);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
