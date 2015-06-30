@@ -770,7 +770,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                     return;
                 }
             }
-        } catch (UnsupportedFlavorException|IOException e) {
+        } catch (UnsupportedFlavorException | IOException e) {
             log.warn("Dnd failed" , e);
         }
 
@@ -861,7 +861,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 final Field awtAppClassName = xtoolkit.getDeclaredField("awtAppClassName"); // $NON-NLS-1$
                 awtAppClassName.setAccessible(true);
                 awtAppClassName.set(null, DEFAULT_APP_NAME);
-            } catch (NoSuchFieldException|IllegalAccessException nsfe) {
+            } catch (NoSuchFieldException | IllegalAccessException nsfe) {
                 log.warn("Error awt title: " + nsfe); // $NON-NLS-1$
             }
        }

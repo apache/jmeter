@@ -205,7 +205,7 @@ public class XPathPanel extends JPanel {
             log.warn(e.getLocalizedMessage());
             success = false;
             ret = e.getLocalizedMessage();
-        } catch (ParserConfigurationException|TransformerException e) {
+        } catch (ParserConfigurationException | TransformerException e) {
             success = false;
             ret = e.getLocalizedMessage();
         }

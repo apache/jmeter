@@ -170,7 +170,7 @@ public class TestBeanHelper {
     private static Object invokeOrBailOut(Object invokee, Method method, Object[] params) {
         try {
             return method.invoke(invokee, params);
-        } catch (IllegalArgumentException|IllegalAccessException|InvocationTargetException e) {
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
             throw new Error(createMessage(invokee, method, params), e);
         }
     }

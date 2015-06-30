@@ -141,47 +141,47 @@ public class PowerTableModel extends DefaultTableModel {
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { String.class });
                 return constr.newInstance(new Object[] { "" });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Integer.TYPE });
                 return constr.newInstance(new Object[] { Integer.valueOf(0) });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Long.TYPE });
                 return constr.newInstance(new Object[] { Long.valueOf(0L) });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Boolean.TYPE });
                 return constr.newInstance(new Object[] { Boolean.FALSE });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Float.TYPE });
                 return constr.newInstance(new Object[] { Float.valueOf(0F) });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Double.TYPE });
                 return constr.newInstance(new Object[] { Double.valueOf(0D) });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Character.TYPE });
                 return constr.newInstance(new Object[] { Character.valueOf(' ') });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Byte.TYPE });
                 return constr.newInstance(new Object[] { Byte.valueOf(Byte.MIN_VALUE) });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Short.TYPE });
                 return constr.newInstance(new Object[] { Short.valueOf(Short.MIN_VALUE) });
-            } catch (NoSuchMethodException|InstantiationException|IllegalAccessException|InvocationTargetException ignored) {
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
             }
         }
         return "";
