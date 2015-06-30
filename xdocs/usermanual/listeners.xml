@@ -122,6 +122,9 @@ The full set of properties that affect result file output is shown below.
 # assertion_results_failure_message only affects CSV output
 #jmeter.save.saveservice.assertion_results_failure_message=false
 #
+# legitimate values: none, first, all
+#jmeter.save.saveservice.assertion_results=none
+#
 #jmeter.save.saveservice.data_type=true
 #jmeter.save.saveservice.label=true
 #jmeter.save.saveservice.response_code=true
@@ -149,23 +152,10 @@ The full set of properties that affect result file output is shown below.
 #jmeter.save.saveservice.sample_count=false
 #jmeter.save.saveservice.idle_time=false
 
-# Timestamp format
+# Timestamp format - this only affects CSV output files
 # legitimate values: none, ms, or a format suitable for SimpleDateFormat
 #jmeter.save.saveservice.timestamp_format=ms
 #jmeter.save.saveservice.timestamp_format=yyyy/MM/dd HH:mm:ss.SSS
-
-# Put the start time stamp in logs instead of the end
-sampleresult.timestamp.start=true
-
-# Whether to use System.nanoTime() - otherwise only use System.currentTimeMillis()
-#sampleresult.useNanoTime=true
-
-# Use a background thread to calculate the nanoTime offset
-# Set this to &lt;= 0 to disable the background thread
-#sampleresult.nanoThreadSleep=5000
-
-# legitimate values: none, first, all
-#jmeter.save.saveservice.assertion_results=none
 
 # For use with Comma-separated value (CSV) files or other formats
 # where the fields' values are separated by specified delimiters.
@@ -174,6 +164,8 @@ sampleresult.timestamp.start=true
 # For TAB, since JMeter 2.3 one can use:
 #jmeter.save.saveservice.default_delimiter=\t
 
+# Only applies to CSV format files:
+# Print field names as first line in CSV
 #jmeter.save.saveservice.print_field_names=false
 
 # Optional list of JMeter variable names whose values are to be saved in the result data files.
@@ -189,6 +181,22 @@ sampleresult.timestamp.start=true
 
 # Prefix used to identify filenames that are relative to the current base
 #jmeter.save.saveservice.base_prefix=~/
+
+# AutoFlush on each line written in XML or CSV output
+# Setting this to true will result in less test results data loss in case of Crash
+# but with impact on performances, particularly for intensive tests (low or no pauses)
+# Since JMeter 2.10, this is false by default
+#jmeter.save.saveservice.autoflush=false
+
+# Put the start time stamp in logs instead of the end
+sampleresult.timestamp.start=true
+
+# Whether to use System.nanoTime() - otherwise only use System.currentTimeMillis()
+#sampleresult.useNanoTime=true
+
+# Use a background thread to calculate the nanoTime offset
+# Set this to &lt;= 0 to disable the background thread
+#sampleresult.nanoThreadSleep=5000
 </code></p>
 <p>
 The date format to be used for the timestamp_format is described in <a
