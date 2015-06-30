@@ -114,7 +114,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
                     if (!functors.containsKey(actionCommand)) {
                         functors.put(actionCommand, new Functor(actionCommand));
                     }
-                } catch (IllegalAccessException|InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     log.warn("Problem creating save config dialog", e);
                 }
             }

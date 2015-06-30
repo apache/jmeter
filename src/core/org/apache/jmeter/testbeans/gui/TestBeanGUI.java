@@ -187,7 +187,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     private Customizer createCustomizer() {
         try {
             return (Customizer) customizerClass.newInstance();
-        } catch (InstantiationException|IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             log.error("Could not instantiate customizer of class " + customizerClass, e);
             throw new Error(e.toString());
         }
@@ -223,7 +223,7 @@ public TestElement createTestElement() {
             modifyTestElement(element); // put the default values back into the
             // new element
             return element;
-        } catch (InstantiationException|IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             log.error("Can't create test element", e);
             throw new Error(e.toString()); // Programming error. Don't
                                             // continue.
