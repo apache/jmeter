@@ -3356,34 +3356,37 @@ The BSF Listener allows BSF script code to be applied to sample results.
     <property name="Language" required="Yes">The BSF language to be used</property>
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
-    <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>args - String array containing parameters, split on white-space</li>
-    </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <dl>
+        <dt><code>Parameters</code></dt><dd>string containing the parameters as a single variable</dd>
+        <dt><code>args</code></dt><dd>String array containing parameters, split on white-space</dd>
+    </dl></property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>
-The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+The script (or file) is processed using the <code>BSFEngine.exec()</code> method, which does not return a value.
 </p>
 <p>
 Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
 </p>
-<ul>
-<li>log - (Logger) - can be used to write to the log file</li>
-<li>Label - the String Label</li>
-<li>Filename - the script file name (if any)</li>
-<li>Parameters - the parameters (as a String)</li>
-<li>args[] - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</li>
-<li>sampleEvent - (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</li>
-<li>sampler - (Sampler)- gives access to the last sampler</li>
-<li>OUT - System.out - e.g. OUT.println("message")</li>
-</ul>
+<dl>
+<dt><code>log</code></dt><dd>(Logger) - can be used to write to the log file</dd>
+<dt><code>Label</code></dt><dd>the String Label</dd>
+<dt><code>FileName</code></dt><dd>the script file name (if any)</dd>
+<dt><code>Parameters</code></dt><dd>the parameters (as a String)</dd>
+<dt><code>args[]</code></dt><dd>the parameters as a String array (split on whitespace)</dd>
+<dt><code>ctx</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</dd>
+<dt><code>vars</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+vars.getObject("OBJ2");</source></dd>
+<dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
+<dt>sampleResult, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
+<dt>sampleEvent</dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
+<dt><code>sampler</code></dt><dd>(Sampler)- gives access to the last sampler</dd>
+<dt><code>OUT</code></dt><dd><code>System.out</code> - e.g. <code>OUT.println("message")</code></dd>
+</dl>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
@@ -3400,10 +3403,10 @@ For details, see <complink name="BSF Listener"/>.
     <description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
-Output is generated every n seconds (default 30 seconds) on the appropriate
+Output is generated every <code>n</code> seconds (default 30 seconds) on the appropriate
 time boundary, so that multiple test runs on the same time will be synchronised.
-See jmeter.properties file for the summariser configuration items:
-<pre>
+See <code>jmeter.properties</code> file for the summariser configuration items:
+<source>
 # Define the following property to automatically start a summariser with that name
 # (applies to non-GUI mode only)
 #summariser.name=summary
@@ -3416,10 +3419,10 @@ See jmeter.properties file for the summariser configuration items:
 #
 # Write messages to System.out
 #summariser.out=true
-</pre>
+</source>
 This element is mainly intended for batch (non-GUI) runs.
 The output looks like the following:
-<pre>
+<source>
 label +   171 in  20.3s =    8.4/s Avg:  1129 Min:  1000 Max:  1250 Err:     0 (0.00%)
 label +   263 in  31.3s =    8.4/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
 label =   434 in  50.4s =    8.6/s Avg:  1135 Min:  1000 Max:  1250 Err:     0 (0.00%)
@@ -3427,15 +3430,15 @@ label +   263 in  31.0s =    8.5/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (
 label =   697 in  80.3s =    8.7/s Avg:  1136 Min:  1000 Max:  1250 Err:     0 (0.00%)
 label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (0.00%)
 label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
-</pre>
-The "label" is the name of the element.
-The "+" means that the line is a delta line, i.e. shows the changes since the last output.<br/>
-The "=" means that the line is a totals line, i.e. it shows the running total.<br/>
+</source>
+The "<code>label</code>" is the name of the element.
+The <code>"+"</code> means that the line is a delta line, i.e. shows the changes since the last output.<br/>
+The <code>"="</code> means that the line is a totals line, i.e. it shows the running total.<br/>
 Entries in the jmeter log file also include time-stamps.
-The example "806 in  91.6s =    8.8/s" means that there were 806 samples recorded in 91.6 seconds,
+The example "<code>806 in  91.6s =    8.8/s</code>" means that there were 806 samples recorded in 91.6 seconds,
 and that works out at 8.8 samples per second.<br/>
-The Avg (Average), Min(imum) and Max(imum) times are in milliseconds.<br/>
-"Err" means number of errors (also shown as percentage).<br/>
+The <code>Avg</code> (Average), <code>Min</code> (Minimum) and <code>Max</code> (Maximum) times are in milliseconds.<br/>
+"<code>Err</code>" means number of errors (also shown as percentage).<br/>
 The last two lines will appear at the end of a test.
 They will not be synchronised to the appropriate time boundary.
 Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
@@ -3449,14 +3452,14 @@ Different summary groupings can be implemented
 by using suitable labels and adding the summarisers to appropriate parts of the test plan.
 </p>
 <note>
-In Non-GUI mode by default a Generate Summary Results listener named "summariser" is configured, if you have already added one to your Test Plan, ensure you name it differently 
-otherwise results will be accumulated under this label (summary) leading to wrong results (sum of total samples + samples located under the Parent of Generate Summary Results listener).
+In Non-GUI mode by default a Generate Summary Results listener named "<code>summariser</code>" is configured, if you have already added one to your Test Plan, ensure you name it differently 
+otherwise results will be accumulated under this label (summary) leading to wrong results (sum of total samples + samples located under the Parent of Generate Summary Results listener).<br/>
 This is not a bug but a design choice allowing to summarize across thread groups.
 </note>
     </description>
  <properties>
  <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.
- It appears as the "label" in the output. Details for all elements with the same label will be added together.
+ It appears as the "<code>label</code>" in the output. Details for all elements with the same label will be added together.
  </property>
  </properties>
 </component>
