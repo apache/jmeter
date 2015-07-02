@@ -3375,7 +3375,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <dt><code>Label</code></dt><dd>the String Label</dd>
 <dt><code>FileName</code></dt><dd>the script file name (if any)</dd>
 <dt><code>Parameters</code></dt><dd>the parameters (as a String)</dd>
-<dt><code>args[]</code></dt><dd>the parameters as a String array (split on whitespace)</dd>
+<dt><code>args</code></dt><dd>the parameters as a String array (split on whitespace)</dd>
 <dt><code>ctx</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</dd>
 <dt><code>vars</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
@@ -4736,7 +4736,7 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>Label - the String Label</li>
 <li>Filename - the script file name (if any)</li>
 <li>Parameters - the parameters (as a String)</li>
-<li>args[] - the parameters as a String array (split on whitespace)</li>
+<li>args - the parameters as a String array (split on whitespace)</li>
 <li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
@@ -5288,7 +5288,7 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>Label - the String Label</li>
 <li>Filename - the script file name (if any)</li>
 <li>Parameters - the parameters (as a String)</li>
-<li>args[] - the parameters as a String array (split on whitespace)</li>
+<li>args - the parameters as a String array (split on whitespace)</li>
 <li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
@@ -5777,7 +5777,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>Label - the String Label</li>
 <li>Filename - the script file name (if any)</li>
 <li>Parameters - the parameters (as a String)</li>
-<li>args[] - the parameters as a String array (split on whitespace)</li>
+<li>args - the parameters as a String array (split on whitespace)</li>
 <li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
