@@ -29,11 +29,11 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class UniformRandomTimer extends RandomTimer implements Serializable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     @Override
     public long delay() {
-        return (long) Math.abs((this.random.nextDouble() * getRange()) + super.delay());
+        return (long) Math.abs((getRandom().nextDouble() * getRange()) + super.delay());
     }
 
     @Override
