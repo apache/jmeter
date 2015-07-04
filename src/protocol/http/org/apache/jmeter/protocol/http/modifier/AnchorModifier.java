@@ -23,7 +23,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -52,8 +52,6 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
-
-    private static final Random rand = new Random();
 
     public AnchorModifier() {
     }
@@ -91,7 +89,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         addFormUrls(html, result, sampler, potentialLinks);
         addFramesetUrls(html, result, sampler, potentialLinks);
         if (potentialLinks.size() > 0) {
-            HTTPSamplerBase url = potentialLinks.get(rand.nextInt(potentialLinks.size()));
+            HTTPSamplerBase url = potentialLinks.get(ThreadLocalRandom.current().nextInt(potentialLinks.size()));
             if (log.isDebugEnabled()) {
                 log.debug("Selected: "+url.toString());
             }
@@ -134,7 +132,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         }
 
         if (possibleReplacements.size() > 0) {
-            replacementArg = possibleReplacements.get(rand.nextInt(possibleReplacements.size()));
+            replacementArg = possibleReplacements.get(ThreadLocalRandom.current().nextInt(possibleReplacements.size()));
             arg.setName(replacementArg.getName());
             arg.setValue(replacementArg.getValue());
             if (log.isDebugEnabled()) {

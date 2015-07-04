@@ -38,9 +38,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
-import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -106,9 +106,6 @@ public class JMeterUtils implements UnitTestManager {
             return new Perl5Matcher();
         }
     };
-
-    // Provide Random numbers to whomever wants one
-    private static final Random rand = new Random();
 
     /**
      * Gets Perl5Matcher for this thread.
@@ -337,7 +334,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return a random <code>int</code>
      */
     public static int getRandomInt(int r) {
-        return rand.nextInt(r);
+        return ThreadLocalRandom.current().nextInt(r);
     }
 
     /**

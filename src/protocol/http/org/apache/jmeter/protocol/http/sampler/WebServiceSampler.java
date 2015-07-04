@@ -31,7 +31,7 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -108,11 +108,6 @@ public class WebServiceSampler extends HTTPSamplerBase  {
 
     public static final boolean MAINTAIN_SESSION_DEFAULT = true;
 
-    /*
-     * Random class for generating random numbers.
-     */
-    private final Random RANDOM = new Random();
-
     private String fileContents = null;
 
     /**
@@ -166,7 +161,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
             File src = new File(this.getXmlPathLoc());
             if (src.isDirectory() && src.list() != null) {
                 File [] fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }, false));
-                File one = fileList[RANDOM.nextInt(fileList.length)];
+                File one = fileList[ThreadLocalRandom.current().nextInt(fileList.length)];
                 // return the absolutePath of the file
                 return one.getAbsolutePath();
             }

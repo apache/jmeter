@@ -35,7 +35,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
@@ -82,8 +82,6 @@ public class FileServer {
     private final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
     private static final FileServer server = new FileServer();
-
-    private final Random random = new Random();
 
     // volatile needed to ensure safe publication
     private volatile String scriptName;
@@ -514,7 +512,7 @@ public class FileServer {
             if (src.isDirectory() && src.list() != null) {
                 File[] lfiles = src.listFiles(new JMeterFileFilter(extensions));
                 int count = lfiles.length;
-                input = lfiles[random.nextInt(count)];
+                input = lfiles[ThreadLocalRandom.current().nextInt(count)];
             }
         }
         return input;
