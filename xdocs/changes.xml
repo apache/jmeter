@@ -69,6 +69,7 @@ Summary
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
+    <li>In RandomTimer class, protected instance timer has been replaced by getTimer() protected method, this is related to <bugzilla>58100</bugzilla>. This may impact 3rd party plugins.</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
