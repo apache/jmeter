@@ -20,6 +20,7 @@ package org.apache.jmeter.timers;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.jmeter.testelement.property.DoubleProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -31,17 +32,14 @@ import org.apache.jmeter.testelement.property.StringProperty;
  *
  */
 public abstract class RandomTimer extends ConstantTimer implements Timer, Serializable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     public static final String RANGE = "RandomTimer.range";
-
-    protected final Random random;
 
     /**
      * No-arg constructor.
      */
     public RandomTimer() {
-        this.random = new Random();
     }
 
     /**
@@ -65,5 +63,11 @@ public abstract class RandomTimer extends ConstantTimer implements Timer, Serial
     public double getRange() {
         return this.getPropertyAsDouble(RANGE);
     }
-
+    
+    /**
+     * @return {@link Random} Thread local Random
+     */
+    protected Random getRandom() {
+        return ThreadLocalRandom.current();
+    }
 }

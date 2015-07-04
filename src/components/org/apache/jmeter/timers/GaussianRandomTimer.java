@@ -29,11 +29,11 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class GaussianRandomTimer extends RandomTimer implements Serializable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     @Override
     public long delay() {
-        return (long) Math.abs((this.random.nextGaussian() * getRange()) + super.delay());
+        return (long) Math.abs((getRandom().nextGaussian() * getRange()) + super.delay());
     }
 
     @Override
