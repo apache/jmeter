@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -1283,6 +1284,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     log.warn("Concurrent download resources selected, "// $NON-NLS-1$
                             + "but pool size value is bad. Use default value");// $NON-NLS-1$
                 }
+                final String parentThreadName = Thread.currentThread().getName();
                 // Thread pool Executor to get resources 
                 // use a LinkedBlockingQueue, note: max pool size doesn't effect
                 final ThreadPoolExecutor exec = new ThreadPoolExecutor(
@@ -1301,6 +1303,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                                         }
                                     }
                                 });
+                                t.setName(parentThreadName+"-ResDownload-" + t.getName()); //$NON-NLS-1$
+                                t.setDaemon(true);
                                 return t;
                             }
                         });
