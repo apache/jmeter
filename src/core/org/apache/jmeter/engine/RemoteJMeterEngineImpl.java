@@ -91,6 +91,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
             if( host==null ) {
                 localHost = InetAddress.getLocalHost();
             } else {
+                log.info("Resolving by name the value of System property 'java.rmi.server.hostname':"+host);
                 localHost = InetAddress.getByName(host);
             }
         } catch (UnknownHostException e1) {
