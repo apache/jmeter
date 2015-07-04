@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -56,10 +56,6 @@ public class RegexFunction extends AbstractFunction {
     public static final String KEY = "__regexFunction"; //$NON-NLS-1$
 
     private Object[] values;// Parameters are stored here
-
-    // Using the same Random across threads might result in pool performance
-    // It might make sense to use ThreadLocalRandom or ThreadLocal<Random>
-    private static final Random rand = new Random();
 
     private static final List<String> desc = new LinkedList<String>();
 
@@ -187,7 +183,7 @@ public class RegexFunction extends AbstractFunction {
             }
             return value.toString();
         } else if (valueIndex.equals(RAND)) {
-            MatchResult result = collectAllMatches.get(rand.nextInt(collectAllMatches.size()));
+            MatchResult result = collectAllMatches.get(ThreadLocalRandom.current().nextInt(collectAllMatches.size()));
             return generateResult(result, name, tmplt, vars);
         } else {
             try {
