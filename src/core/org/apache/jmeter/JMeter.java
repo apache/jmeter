@@ -1110,7 +1110,7 @@ public class JMeter implements JMeterPlugin {
 
     private static void waitForSignals(final List<JMeterEngine> engines, DatagramSocket socket) {
         byte[] buf = new byte[80];
-        System.out.println("Waiting for possible shutdown message on port "+socket.getLocalPort());
+        System.out.println("Waiting for possible Shutdown/StopTestNow/Heapdump message on port "+socket.getLocalPort());
         DatagramPacket request = new DatagramPacket(buf, buf.length);
         try {
             while(true) {
