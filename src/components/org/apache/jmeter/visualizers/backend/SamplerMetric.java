@@ -40,6 +40,8 @@ public class SamplerMetric {
     private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
     private int successes;
     private int failures;
+	private int hits;
+	
     /**
      * 
      */
@@ -51,7 +53,7 @@ public class SamplerMetric {
      * @param result {@link SampleResult} to be used
      */
     public synchronized void add(SampleResult result) {
-        if(result.isSuccessful()) {
+    	if(result.isSuccessful()) {
             successes+=result.getSampleCount()-result.getErrorCount();
         } else {
             failures+=result.getErrorCount();
@@ -65,6 +67,21 @@ public class SamplerMetric {
         }else {
             koResponsesStats.addValue(time);
         }
+    } 
+   
+    
+    public void addHits(SampleResult res) {    	
+    	SampleResult[] subResults = res.getSubResults();
+        if (!isFromTransactionControler(res)) {
+            hits += 1;                 
+        }
+        for (int i = 0; i < subResults.length; i++) {            
+        	addHits(subResults[i]);
+        }
+    }
+    
+    private boolean isFromTransactionControler(SampleResult res) {
+        return res.getResponseMessage() != null && res.getResponseMessage().startsWith("Number of samples in transaction");
     }
     
     /**
@@ -75,6 +92,7 @@ public class SamplerMetric {
         // http://commons.apache.org/proper/commons-math/userguide/stat.html
         successes = 0;
         failures = 0;
+        hits = 0;
     }
 
     /**
@@ -102,6 +120,10 @@ public class SamplerMetric {
      */
     public int getFailures() {
         return failures;
+    }
+    
+    public int getHits(){
+    	return hits;
     }
 
     /**
@@ -226,4 +248,6 @@ public class SamplerMetric {
     public double getAllPercentile(double percentile) {
         return allResponsesStats.getPercentile(percentile);
     }
+
+	
 }

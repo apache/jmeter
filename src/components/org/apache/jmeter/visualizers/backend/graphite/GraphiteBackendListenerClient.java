@@ -63,6 +63,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_OK_PREFIX = "ok"; //$NON-NLS-1$
     private static final String METRIC_KO_PREFIX = "ko"; //$NON-NLS-1$
     private static final String METRIC_ALL_PREFIX = "a";
+    private static final String METRIC_HITS_PREFIX = "hits";
 
     
     private static final String METRIC_COUNT = "count"; //$NON-NLS-1$
@@ -81,6 +82,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String METRIC_KO_PERCENTILE_PREFIX = METRIC_KO_PREFIX+METRIC_SEPARATOR+METRIC_PERCENTILE;
 
     private static final String METRIC_ALL_COUNT             = METRIC_ALL_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
+    private static final String METRIC_ALL_HITS_COUNT        = METRIC_HITS_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
     private static final String METRIC_ALL_MIN_RESPONSE_TIME = METRIC_ALL_PREFIX+METRIC_SEPARATOR+METRIC_MIN_RESPONSE_TIME;
     private static final String METRIC_ALL_MAX_RESPONSE_TIME = METRIC_ALL_PREFIX+METRIC_SEPARATOR+METRIC_MAX_RESPONSE_TIME;
     private static final String METRIC_ALL_PERCENTILE_PREFIX = METRIC_ALL_PREFIX+METRIC_SEPARATOR+METRIC_PERCENTILE;
@@ -155,7 +157,9 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_COUNT, Integer.toString(metric.getSuccesses()));
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_KO_COUNT, Integer.toString(metric.getFailures()));
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_COUNT, Integer.toString(metric.getTotal()));
-        // See https://bz.apache.org/bugzilla/show_bug.cgi?id=57350
+        if(contextName == ALL_CONTEXT_NAME)
+        	graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_ALL_HITS_COUNT, Integer.toString(metric.getHits()));
+        // See https://issues.apache.org/bugzilla/show_bug.cgi?id=57350
         if(metric.getTotal() > 0) { 
             if(metric.getSuccesses()>0) {
                 graphiteMetricsManager.addMetric(timestampInSeconds, contextName, METRIC_OK_MIN_RESPONSE_TIME, Double.toString(metric.getOkMinTime()));
@@ -212,9 +216,9 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                     SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
                     samplerMetric.add(sampleResult);
                 }
-                SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);
-                cumulatedMetrics.add(sampleResult);                    
-            }
+                SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);                
+                cumulatedMetrics.add(sampleResult); 
+                cumulatedMetrics.addHits(sampleResult);            }
         }
     }
 
