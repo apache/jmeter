@@ -82,7 +82,7 @@
         <![CDATA[<h1>Template showing how to Load Test MongoDB code using MongoDB Java Driver</h1>
         <h2>JMeter Configuration</h2>
             <ul>
-                <li>Download groovy from <a href="http://groovy.codehaus.org/Download" >Groovy Download</a></li>
+                <li>Download groovy from <a href="http://groovy-lang.org/download.html" >Groovy Download</a></li>
                 <li>Add the groovy-all-XXX.jar in jmeter/lib folder, it is usually located in embeddable folder</li>
                 <li>Restart JMeter</li>
                 <li>Configure the <b>Server address list</b>, and tune <b>MongoDB options</b> in MongoDB Source Config</li>
@@ -175,6 +175,28 @@
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html" >http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html</a></li>
             </ul>       
+        ]]></description>
+    </template>
+    <template isTestPlan="true">
+        <name>Building a JMS Topic (ActiveMQ) Publishing Test Plan</name>
+        <fileName>/bin/templates/jmsPublishTemplate.jmx</fileName>
+        <description><![CDATA[
+        <h1>Template showing how to publish to a JMS Topic in ActiveMQ</h1>
+        <h2>JMeter Configuration</h2>
+        <p>
+            <ul>
+                <li>Add ActiveMQ jars to jmeter/lib folder</li>
+                <li>Adapt User Defined Variables to your configuration</li>
+            </ul>
+        </p>
+        <h2>Useful links</h2>
+        <p>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/build-jms-topic-test-plan.html" >Building a JMS Topic Test Plan</a></li>
+                <li><a href="http://activemq.apache.org/jndi-support.html" >ActiveMQ Configuration</a></li>
+            </ul>
+        </p>
+        
         ]]></description>
     </template>
 </templates>
