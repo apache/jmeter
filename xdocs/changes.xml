@@ -125,6 +125,7 @@ Summary
 <li>Updated to jodd-3.6.6.jar (from 3.6.4)</li>
 <li>Updated to jsoup-1.8.2 (from 1.8.1)</li>
 <li>Updated to rsyntaxtextarea-2.5.7 (from 2.5.6)</li>
+<li>Updated to slf4j-1.7.12 (from 1.7.10)</li>
 <li><bug>57981</bug>Require a minimum of Java 7.</li>
 </ul>
  
