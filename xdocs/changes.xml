@@ -123,6 +123,7 @@ Summary
 <li>Updated to commons-lang 3.4 (from 3.3.2)</li>
 <li>Updated to rhino-1.7.7 (from 1.7R5)</li>
 <li>Updated to jodd-3.6.6.jar (from 3.6.4)</li>
+<li>Updated to jsoup-1.8.2 (from 1.8.1)</li>
 <li><bug>57981</bug>Require a minimum of Java 7.</li>
 </ul>
  
