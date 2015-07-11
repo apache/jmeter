@@ -139,7 +139,7 @@ jodd-log-3.6.6
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jsoup-1.8.1
+jsoup-1.8.2
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
