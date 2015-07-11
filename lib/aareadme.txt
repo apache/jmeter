@@ -231,7 +231,7 @@ http://xerces.apache.org/xerces2-j/download.cgi
 
 The x* jars above are used for XML handling
 
-xmlgraphics-commons-1.5 (org.apache.xmlgraphics.image.codec)
+xmlgraphics-commons-2.0.1 (org.apache.xmlgraphics.image.codec)
 ------------------
 http://xmlgraphics.apache.org/commons/download.html
 - SaveGraphicsService
