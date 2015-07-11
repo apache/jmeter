@@ -1,4 +1,4 @@
-http://xstream.codehaus.org/license.html
+http://x-stream.github.io/license.html
 
 XStream is open source software, made available under a BSD license.
 
