@@ -126,7 +126,7 @@ public class TransactionSampler extends AbstractSampler {
         this.transactionDone = true;
         // Set the overall status for the transaction sample
         // TODO: improve, e.g. by adding counts to the SampleResult class
-        transactionSampleResult.setResponseMessage("Number of samples in transaction : "
+        transactionSampleResult.setResponseMessage(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX
                         + calls + ", number of failing samples : "
                         + noFailingSamples);
         if (transactionSampleResult.isSuccessful()) {
