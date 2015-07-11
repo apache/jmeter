@@ -1330,7 +1330,6 @@ To benefit from this feature:
 </ul>
 Cache size is controlled by the following jmeter property (<code>jmeter.properties</code>):
 <source>jsr223.compiled_scripts_cache_size=100</source>
-For details, see <complink name="BSF Sampler"/>.
 <note>Unlike the <complink name="BeanShell Sampler" />, the interpreter is not saved between invocations.</note>
 <note>
 Since JMeter 2.8, JSR223 Test Elements using Script file or Script text + cache key are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
@@ -1345,6 +1344,65 @@ In order to use runtime variables, please use the appropriate props methods,
 e.g. <source>props.get("START.HMS");
 props.put("PROP1","1234");</source>
 </note>
+<properties>
+    <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
+    <property name="Scripting Language" required="Yes">Name of the JSR223 scripting language to be used.
+      <note>N.B. Not all the languages in the drop-down list are supported by default.
+        The following are supported: jexl, javascript, xslt.
+        Others may be available if the appropriate jar is installed in the JMeter lib directory.
+      </note>
+    </property>
+    <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
+    <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
+    <property name="Script" required="Yes (unless script file is provided)">Script to be passed to JSR223 language</property>
+</properties>
+<p>
+If a script file is supplied, that will be used, otherwise the script will be used.</p>
+
+<p>
+Before invoking the script, some variables are set up.
+Note that these are JSR223 variables - i.e. they can be used directly in the script.
+</p>
+<ul>
+<li><code>log</code> - the Logger</li>
+<li><code>Label</code> - the Sampler label</li>
+<li><code>FileName</code> - the file name, if any</li>
+<li><code>Parameters</code> - text from the Parameters field</li>
+<li><code>args</code> - the parameters, split as described above</li>
+<li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
+<li><code>sampler</code> - pointer to current Sampler</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. 
+  <source>vars.get("VAR1");
+vars.put("VAR2","value");
+vars.remove("VAR3");
+vars.putObject("OBJ1",new Object());</source></li>
+<li><code>props</code> - JMeterProperties  (class <code>java.util.Properties</code>) - e.g. 
+  <source>props.get("START.HMS");
+props.put("PROP1","1234");</source></li>
+<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
+</ul>
+<p>
+The <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> ResponseData is set from the return value of the script.
+If the script returns <code>null</code>, it can set the response directly, by using the method 
+<code>SampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
+The data type defaults to "<code>text</code>", but can be set to binary by using the method
+<code>SampleResult.setDataType(SampleResult.BINARY)</code>.
+</p>
+<p>
+The SampleResult variable gives the script full access to all the fields and
+methods in the SampleResult. For example, the script has access to the methods
+<code>setStopThread(boolean)</code> and <code>setStopTest(boolean)</code>.
+</p>
+<p>
+Unlike the BeanShell Sampler, the JSR223 Sampler does not set the <code>ResponseCode</code>, <code>ResponseMessage</code> and sample status via script variables.
+Currently the only way to changes these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
+</p>
+<ul>
+<li><code>SampleResult.setSuccessful(true/false)</code></li>
+<li><code>SampleResult.setResponseCode("code")</code></li>
+<li><code>SampleResult.setResponseMessage("message")</code></li>
+</ul>
 </component>
 
 <component name="TCP Sampler" index="&sect-num;.1.12"  width="827" height="521" screenshot="tcpsampler.png">
@@ -3394,9 +3452,42 @@ vars.getObject("OBJ2");</source></dd>
 <description>
 <p>
 The JSR223 Listener allows JSR223 script code to be applied to sample results.
-For details, see <complink name="BSF Listener"/>.
 </p>
 </description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Language" required="Yes">The JSR223 language to be used</property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <dl>
+        <dt><code>Parameters</code></dt><dd>string containing the parameters as a single variable</dd>
+        <dt><code>args</code></dt><dd>String array containing parameters, split on white-space</dd>
+    </dl></property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
+    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
+</properties>
+<p>
+Before invoking the script, some variables are set up.
+Note that these are JSR223 variables - i.e. they can be used directly in the script.
+</p>
+<dl>
+<dt><code>log</code></dt><dd>(Logger) - can be used to write to the log file</dd>
+<dt><code>Label</code></dt><dd>the String Label</dd>
+<dt><code>FileName</code></dt><dd>the script file name (if any)</dd>
+<dt><code>Parameters</code></dt><dd>the parameters (as a String)</dd>
+<dt><code>args</code></dt><dd>the parameters as a String array (split on whitespace)</dd>
+<dt><code>ctx</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</dd>
+<dt><code>vars</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+vars.getObject("OBJ2");</source></dd>
+<dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
+<dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
+<dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
+<dt><code>sampler</code></dt><dd>(Sampler)- gives access to the last sampler</dd>
+<dt><code>OUT</code></dt><dd><code>System.out</code> - e.g. <code>OUT.println("message")</code></dd>
+</dl>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="Generate Summary Results" index="&sect-num;.3.19"  width="358" height="131" screenshot="summary.png">
