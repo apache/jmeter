@@ -43,6 +43,11 @@ import org.apache.log.Logger;
  *
  */
 public class TransactionController extends GenericController implements SampleListener, Controller, Serializable {
+    /**
+     * Used to identify Transaction Controller Parent Sampler
+     */
+    static final String NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX = "Number of samples in transaction : ";
+
     private static final long serialVersionUID = 233L;
     
     private static final String TRUE = Boolean.toString(true); // i.e. "true"
@@ -203,7 +208,7 @@ public class TransactionController extends GenericController implements SampleLi
                 }
                 res.setIdleTime(pauseTime+res.getIdleTime());
                 res.sampleEnd();
-                res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
+                res.setResponseMessage(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX + calls + ", number of failing samples : " + noFailingSamples);
                 if(res.isSuccessful()) {
                     res.setResponseCodeOK();
                 }
@@ -217,6 +222,15 @@ public class TransactionController extends GenericController implements SampleLi
 
         return returnValue;
     }
+    
+    /**
+     * @param res {@link SampleResult}
+     * @return true if res is the ParentSampler transactions
+     */
+    public static final boolean isFromTransactionController(SampleResult res) {
+        return res.getResponseMessage() != null && 
+                res.getResponseMessage().startsWith(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX);
+    }
 
     /**
      * @see org.apache.jmeter.control.GenericController#triggerEndOfLoop()
@@ -228,7 +242,7 @@ public class TransactionController extends GenericController implements SampleLi
                 res.setIdleTime(pauseTime+res.getIdleTime());
                 res.sampleEnd();
                 res.setSuccessful(TRUE.equals(JMeterContextService.getContext().getVariables().get(JMeterThread.LAST_SAMPLE_OK)));
-                res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
+                res.setResponseMessage(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX + calls + ", number of failing samples : " + noFailingSamples);
                 notifyListeners();
             }
         } else {

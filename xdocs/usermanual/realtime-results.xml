@@ -80,67 +80,41 @@ In this document we will present the configuration setup to graph and historize 
     </table>
     </subsection>
     <subsection name="&sect-num;.1.2 Response times metrics" anchor="metrics-response-times">
-    <p>Response times metrics are the following:</p>
-    <table>
-           <tr>
-               <th>Metric Name</th>
-               <th>Description</th>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</td>
-               <td>Number of successful responses for sampler name</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</td>
-               <td>Min response time for successful responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</td>
-               <td>Max response time for successful responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</td>
-               <td>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
-               By default listener computes percentiles 90%, 95% and 99%</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.count</td>
-               <td>Number of failed responses for sampler name</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.min</td>
-               <td>Min response time for failed responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.max</td>
-               <td>Max response time for failed responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</td>
-               <td>Percentile computed for failed responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
-               By default listener computes percentiles 90%, 95% and 99%</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.count</td>
-               <td>Number of responses for sampler name</td>            
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.min</td>
-               <td>Min response time for responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.max</td>
-               <td>Max response time for responses of sampler name</td>
-           </tr>
-           <tr>
-               <td>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</td>
-               <td>Percentile computed for responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-               When percentile contains a comma for example "99.9", dot is sanitized by "_" leading to 99_9.   
-               By default listener computes percentiles 90%, 95% and 99%</td>            
-           </tr>
-    </table>
+    <p>Response related metrics are the following:</p>
+    <dl>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</code></dh>
+      <dd>Number of successful responses for sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.h.count</code></dh>
+      <dd>Server hits per seconds, this metric cumulates Sample Result and Sub results (if using Transaction Controller, "Generate parent sampler" should be unchecked)</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</code></dh>
+      <dd>Min response time for successful responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</code></dh>
+      <dd>Max response time for successful responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</code></dh>
+      <dd>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.   
+      By default listener computes percentiles 90%, 95% and 99%</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.count</code></dh>
+      <dd>Number of failed responses for sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.min</code></dh>
+      <dd>Min response time for failed responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.max</code></dh>
+      <dd>Max response time for failed responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</code></dh>
+      <dd>Percentile computed for failed responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.
+      By default listener computes percentiles 90%, 95% and 99%</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.count</code></dh>
+      <dd>Number of responses for sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.min</code></dh>
+      <dd>Min response time for responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.max</code></dh>
+      <dd>Max response time for responses of sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</code></dh>
+      <dd>Percentile computed for responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
+      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.
+      By default listener computes percentiles 90%, 95% and 99%</dd>
+    </dl>
     <p>
     By default JMeter sends only metrics for all samplers using "all" as samplerName.
     </p>
