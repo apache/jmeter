@@ -1354,6 +1354,7 @@ props.put("PROP1","1234");</source>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
     <property name="Script" required="Yes (unless script file is provided)">Script to be passed to JSR223 language</property>
 </properties>
 <p>
@@ -3464,6 +3465,7 @@ The JSR223 Listener allows JSR223 script code to be applied to sample results.
         <dt><code>args</code></dt><dd>String array containing parameters, split on white-space</dd>
     </dl></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>
@@ -4847,9 +4849,41 @@ If an error is detected, the script should use AssertionResult.setFailureMessage
 <description>
 <p>
 The JSR223 Assertion allows JSR223 script code to be used to check the status of the previous sample.
-For details, see <complink name="BSF Assertion"/>.
 </p>
 </description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Language" required="Yes">The JSR223 language to be used</property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul></property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
+</properties>
+<p>The following variables are set up for use by the script:</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>Label - the String Label</li>
+<li>Filename - the script file name (if any)</li>
+<li>Parameters - the parameters (as a String)</li>
+<li>args - the parameters as a String array (split on whitespace)</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
+<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>SampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
+<li>AssertionResult - the assertion result</li>
+</ul>
+<p>
+The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
+If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
+</p>
+<p>For futher details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="Compare Assertion" index="&sect-num;.5.12"  width="292" height="296" screenshot="assertion/compare.png">
@@ -5131,9 +5165,41 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 <description>
 <p>
 The JSR223 Timer can be used to generate a delay using a JSR223 scripting language,
-For details, see <complink name="BSF Timer"/>.
 </p>
 </description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="ScriptLanguage" required="Yes">
+        The scripting language to be used.
+    </property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul>
+    </property>
+    <property name="Script file" required="No">
+    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
+     The return value is converted to a long integer and used as the number of milliseconds to wait.
+     </property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script" required="Yes (unless script file is provided)">
+        The script. The return value is used as the number of milliseconds to wait.
+    </property>
+</properties>
+<p>Before invoking the script, some variables are set up in the script interpreter:</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>sampler - the current Sampler</li>
+<li>Label - the name of the Timer</li>
+<li>Filename - the file name (if any)</li>
+<li>OUT - System.out</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="Poisson Random Timer" index="&sect-num;.6.9" width="341" height="182" screenshot="timers/poisson_random_timer.png">
@@ -5393,9 +5459,35 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <description>
 <p>
 The JSR223 PreProcessor allows JSR223 script code to be applied before taking a sample.
-For details, see <complink name="BSF PreProcessor"/>.
 </p>
 </description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Language" required="Yes">The JSR223 language to be used</property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul></property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
+</properties>
+<p>The following JSR223 variables are set up for use by the script:</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>Label - the String Label</li>
+<li>Filename - the script file name (if any)</li>
+<li>Parameters - the parameters (as a String)</li>
+<li>args - the parameters as a String array (split on whitespace)</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
+<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="JDBC PreProcessor" index="&sect-num;.7.9">
@@ -5883,9 +5975,39 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <description>
 <p>
 The JSR223 PostProcessor allows JSR223 script code to be applied after taking a sample.
-For details, see the <complink name="BSF PostProcessor"/>.
 </p>
 </description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Language" required="Yes">The JSR223 language to be used</property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul></property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
+</properties>
+<p>
+Before invoking the script, some variables are set up.
+Note that these are JSR223 variables - i.e. they can be used directly in the script.
+</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>Label - the String Label</li>
+<li>Filename - the script file name (if any)</li>
+<li>Parameters - the parameters (as a String)</li>
+<li>args - the parameters as a String array (split on whitespace)</li>
+<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
+<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="JDBC PostProcessor" index="&sect-num;.8.8">
