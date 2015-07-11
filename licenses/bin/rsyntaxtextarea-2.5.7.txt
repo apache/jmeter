@@ -1,4 +1,4 @@
-http://fifesoft.com/rsyntaxtextarea/RSyntaxTextArea.License.txt
+https://github.com/bobbylight/RSyntaxTextArea/blob/master/src/main/dist/RSyntaxTextArea.License.txt
 
 Copyright (c) 2012, Robert Futrell
 All rights reserved.
