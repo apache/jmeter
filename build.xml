@@ -2872,6 +2872,11 @@ run JMeter unless all the JMeter jars are added.
       <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
 
+    <!-- Update a jar (clean, download, package in one shot.-->
+    <target name="update_jar" depends="clean, download_jars, package">
+    </target>
+    	
+
     <!-- Download all missing jars.-->
     <target name="download_jars" description="Download any missing jar files">
         <!-- build.dir may be needed as a temporary work area -->
