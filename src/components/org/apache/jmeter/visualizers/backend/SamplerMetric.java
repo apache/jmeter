@@ -19,6 +19,7 @@
 package org.apache.jmeter.visualizers.backend;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -40,6 +41,7 @@ public class SamplerMetric {
     private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
     private int successes;
     private int failures;
+    private int hits;
     /**
      * 
      */
@@ -65,6 +67,21 @@ public class SamplerMetric {
         }else {
             koResponsesStats.addValue(time);
         }
+        addHits(result);
+    }
+
+    /**
+     * Compute hits from res
+     * @param res {@link SampleResult}
+     */
+    private void addHits(SampleResult res) {     
+        SampleResult[] subResults = res.getSubResults();
+        if (!TransactionController.isFromTransactionController(res)) {
+            hits += 1;                 
+        }
+        for (int i = 0; i < subResults.length; i++) {            
+            addHits(subResults[i]);
+        }
     }
     
     /**
@@ -75,6 +92,7 @@ public class SamplerMetric {
         // http://commons.apache.org/proper/commons-math/userguide/stat.html
         successes = 0;
         failures = 0;
+        hits = 0;
     }
 
     /**
@@ -225,5 +243,13 @@ public class SamplerMetric {
      */
     public double getAllPercentile(double percentile) {
         return allResponsesStats.getPercentile(percentile);
+    }
+
+    /**
+     * Returns hits to server
+     * @return the hits
+     */
+    public int getHits() {
+        return hits;
     }
 }

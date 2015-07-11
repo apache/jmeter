@@ -61,10 +61,12 @@ In this document we will present the configuration setup to graph and historize 
     </dl>
     </subsection>
     <subsection name="&sect-num;.1.2 Response times metrics" anchor="metrics-response-times">
-    <p>Response times metrics are the following:</p>
+    <p>Response related metrics are the following:</p>
     <dl>
       <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</code></dh>
       <dd>Number of successful responses for sampler name</dd>
+      <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.h.count</code></dh>
+      <dd>Server hits per seconds, this metric cumulates Sample Result and Sub results (if using Transaction Controller, "Generate parent sampler" should be unchecked)</dd>
       <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</code></dh>
       <dd>Min response time for successful responses of sampler name</dd>
       <dh><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</code></dh>
