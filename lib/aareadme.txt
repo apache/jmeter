@@ -144,7 +144,7 @@ jsoup-1.8.1
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-rhino-1.7R5
+rhino-1.7.7
 --------
 http://www.mozilla.org/rhino/download.html
 - javascript function
