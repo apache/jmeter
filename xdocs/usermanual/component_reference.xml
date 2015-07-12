@@ -3894,7 +3894,7 @@ If the requested document has not changed since it was cached, then the response
 Likewise if the Expires date is in the future.
 This may cause problems for Assertions.
 </p>
-
+<note>Responses with a Vary header will not be cached.</note>
 </description>
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
