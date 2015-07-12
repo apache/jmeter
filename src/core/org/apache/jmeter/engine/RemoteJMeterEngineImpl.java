@@ -89,6 +89,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
         try {
             if( host==null ) {
+                log.info("System property 'java.rmi.server.hostname' is not defined, using localHost address");
                 localHost = InetAddress.getLocalHost();
             } else {
                 log.info("Resolving by name the value of System property 'java.rmi.server.hostname':"+host);
