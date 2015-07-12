@@ -75,6 +75,7 @@ public interface HTTPConstantsInterface {
     String LAST_MODIFIED = "Last-Modified"; // $NON-NLS-1$
     String EXPIRES = "Expires"; // $NON-NLS-1$
     String CACHE_CONTROL = "Cache-Control";  //e.g. public, max-age=259200
-    String DATE = "Date";  //e.g. Date Header of response 
+    String DATE = "Date";  //e.g. Date Header of response
+    String VARY = "Vary"; // $NON-NLS-1$
 
 }

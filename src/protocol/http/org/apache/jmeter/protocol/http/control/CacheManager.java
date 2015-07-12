@@ -122,7 +122,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param res result
      */
     public void saveDetails(URLConnection conn, HTTPSampleResult res){
-        if (isCacheable(res)){
+        if (isCacheable(res) && !hasVaryHeader(conn)){
             String lastModified = conn.getHeaderField(HTTPConstants.LAST_MODIFIED);
             String expires = conn.getHeaderField(HTTPConstants.EXPIRES);
             String etag = conn.getHeaderField(HTTPConstants.ETAG);
@@ -131,6 +131,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String date = conn.getHeaderField(HTTPConstants.DATE);
             setCache(lastModified, cacheControl, expires, etag, url, date);
         }
+    }
+
+    private boolean hasVaryHeader(URLConnection conn) {
+        return conn.getHeaderField(HTTPConstants.VARY) != null;
     }
 
     /**
@@ -145,7 +149,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      *             if extraction of the the uri from <code>method</code> fails
      */
     public void saveDetails(HttpMethod method, HTTPSampleResult res) throws URIException{
-        if (isCacheable(res)){
+        if (isCacheable(res) && !hasVaryHeader(method)){
             String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
             String etag = getHeader(method ,HTTPConstants.ETAG);
@@ -154,6 +158,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String date = getHeader(method, HTTPConstants.DATE);
             setCache(lastModified, cacheControl, expires, etag, url, date);
         }
+    }
+
+    private boolean hasVaryHeader(HttpMethod method) {
+        return getHeader(method, HTTPConstants.VARY) != null;
     }
 
     /**
@@ -166,7 +174,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      *            result to decide if result is cacheable
      */
     public void saveDetails(HttpResponse method, HTTPSampleResult res) {
-        if (isCacheable(res)){
+        if (isCacheable(res) && !hasVaryHeader(method)){
             String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
             String etag = getHeader(method ,HTTPConstants.ETAG);
@@ -174,6 +182,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String date = getHeader(method, HTTPConstants.DATE);
             setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date); // TODO correct URL?
         }
+    }
+
+    private boolean hasVaryHeader(HttpResponse method) {
+        return getHeader(method, HTTPConstants.VARY) != null;
     }
 
     // helper method to save the cache entry
