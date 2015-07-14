@@ -1242,7 +1242,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         log.warn("Null URL detected (should not happen)");
                     } else {
                         String urlstr = url.toString();
-                        String urlStrEnc=encodeSpaces(urlstr);
+                        String urlStrEnc=escapeIllegalURLCharacters(encodeSpaces(urlstr));
                         if (!urlstr.equals(urlStrEnc)){// There were some spaces in the URL
                             try {
                                 url = new URL(urlStrEnc);
@@ -1351,6 +1351,23 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return res;
     }
     
+    /**
+     * @param url URL to escape
+     * @return escaped url
+     */
+    private String escapeIllegalURLCharacters(String url) {
+        try {    
+            String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
+            if(log.isDebugEnabled()) {
+                log.debug("Successfully escaped url:'"+url +"' to:'"+escapedUrl+"'");
+            }
+            return escapedUrl;
+        } catch (Exception e1) {
+            log.error("Error escaping URL:'"+url+"', message:"+e1.getMessage());
+            return url;
+        }
+    }
+
     /**
      * Extract User-Agent header value
      * @param sampleResult HTTPSampleResult
