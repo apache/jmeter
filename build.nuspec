@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+	<metadata>
+		<id>tr-jmeter</id>
+		<version>2.13</version>
+		<authors>open source</authors>
+		<description>jMeter 2.13 with modifications to calculate the server hits/sec</description>
+		<language>en-US</language>
+		<projectUrl>http://jmeter.apache.org/</projectUrl>
+		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+	</metadata>
+	<files>
+		<file src="bin\**" exclude="bin\testfiles\**" target="bin" />
+		<file src="docs\**" target="docs" />
+		<file src="extras\**" target="extras" />
+		<file src="lib\**" target="lib" />
+		<file src="licenses\**" target="licenses" />
+		<file src="xdocs\**" target="xdocs" />
+		<file src="LICENSE" />
+		<file src="NOTICE" />
+		<file src="README" />	
+	</files>
+</package>
