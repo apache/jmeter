@@ -144,7 +144,7 @@ public class SendMailCommand {
                 String allProtocols = StringUtils.join(
                     SSLContext.getDefault().getSupportedSSLParameters().getProtocols(), " ");
                 logger.info("Use ssl/tls protocols for mail: " + allProtocols);
-                props.setProperty("mail.smtp.ssl.protocols", allProtocols);
+                props.setProperty("mail." + protocol + ".ssl.protocols", allProtocols);
             } catch (Exception e) {
                 logger.error("Problem setting ssl/tls protocols for mail", e);
             }
