@@ -155,7 +155,8 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
      * Converts (X)HTML response to DOM object Tree.
      * This version cares of charset of response.
      * @param unicodeData
-     * @return
+     * @param extractor
+     * @return Document
      *
      */
     private Document parseResponse(String unicodeData, XPathExtractor extractor)
