@@ -826,7 +826,7 @@ public class ProxyControl extends GenericController {
     /**
      * Construct AuthManager
      * @param authorization
-     * @return
+     * @return AuthManager
      * @throws IllegalUserActionException
      */
     private AuthManager newAuthorizationManager(Authorization authorization) throws IllegalUserActionException {
