@@ -11,11 +11,13 @@
 	</metadata>
 	<files>
 		<file src="bin\**" exclude="bin\testfiles\**" target="bin" />
-		<file src="docs\**" target="docs" />
+		<file src="docs\api\**" target="docs\api" />
+		<file src="docs\css\**" target="docs\css" />
+		<file src="docs\images\**" target="docs\images" />
 		<file src="extras\**" target="extras" />
 		<file src="lib\**" target="lib" />
 		<file src="licenses\**" target="licenses" />
-		<file src="xdocs\**" target="xdocs" />
+		<file src="printable_docs\**" target="printable_docs" />
 		<file src="LICENSE" />
 		<file src="NOTICE" />
 		<file src="README" />	
