@@ -1356,6 +1356,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return escaped url
      */
     private String escapeIllegalURLCharacters(String url) {
+        if (url == null || url.toLowerCase().startsWith("file:")) {
+            return url;
+        }
         try {
             String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
             if(log.isDebugEnabled()) {
