@@ -1356,7 +1356,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return escaped url
      */
     private String escapeIllegalURLCharacters(String url) {
-        try {    
+        try {
             String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
             if(log.isDebugEnabled()) {
                 log.debug("Successfully escaped url:'"+url +"' to:'"+escapedUrl+"'");
