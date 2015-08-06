@@ -1456,7 +1456,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Delete work directory (may not exist) -->
     <delete dir="${dist.dir}/lf" quiet="true"/>
 
-    <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+    <gzip destfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}.tar"/>
     <antcall target="_hash">
@@ -1467,7 +1467,7 @@ run JMeter unless all the JMeter jars are added.
         <param name="eoltype" value="crlf"/>
         <param name="fileset" value="dist_bin_files_native"/>
     </antcall>
-    <zip  zipfile="${dist.dir}/${pack.name}.zip">
+    <zip  destfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_bin_files_non_native"/>
       </zipfileset>
@@ -1497,7 +1497,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Delete work directory (may not exist) -->
     <delete dir="${dist.dir}/lf" quiet="true"/>
 
-    <gzip zipfile="${dist.dir}/${pack.name}_src.tgz" src="${dist.dir}/${pack.name}_src.tar" />
+    <gzip destfile="${dist.dir}/${pack.name}_src.tgz" src="${dist.dir}/${pack.name}_src.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}_src.tar"/>
     <antcall target="_hash">
@@ -1509,7 +1509,7 @@ run JMeter unless all the JMeter jars are added.
         <param name="fileset" value="dist_src_files_native"/>
     </antcall>
 
-    <zip  zipfile="${dist.dir}/${pack.name}_src.zip">
+    <zip  destfile="${dist.dir}/${pack.name}_src.zip">
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
          <patternset refid="dist_src_files_native"/>
       </zipfileset>
@@ -2021,10 +2021,10 @@ run JMeter unless all the JMeter jars are added.
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
-    <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+    <gzip destfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}.tar"/>
-    <zip  zipfile="${dist.dir}/${pack.name}.zip">
+    <zip  destfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.binaries.native"/>
       </zipfileset>
@@ -2045,10 +2045,10 @@ run JMeter unless all the JMeter jars are added.
         <patternset refid="external.jars"/>
       </tarfileset>
     </tar>
-    <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+    <gzip destfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}.tar"/>
-    <zip  zipfile="${dist.dir}/${pack.name}.zip">
+    <zip  destfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="external.jars.notices"/>
       </zipfileset>
@@ -2064,10 +2064,10 @@ run JMeter unless all the JMeter jars are added.
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
       <tarfileset includes="${dest.docs.api}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
-    <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+    <gzip destfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}.tar"/>
-    <zip  zipfile="${dist.dir}/${pack.name}.zip">
+    <zip  destfile="${dist.dir}/${pack.name}.zip">
        <zipfileset includes="${dest.docs.api}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
     </target>
@@ -2083,10 +2083,10 @@ run JMeter unless all the JMeter jars are added.
         <patternset refid="dist.sources.non.native"/>
       </tarfileset>
     </tar>
-    <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+    <gzip destfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}.tar"/>
-    <zip  zipfile="${dist.dir}/${pack.name}.zip">
+    <zip  destfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources.native"/>
       </zipfileset>
@@ -2099,7 +2099,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Create a zip of all resource files for translators -->
     <target name="pack-resources">
         <mkdir dir="${dist.dir}"/>
-        <zip  zipfile="${dist.dir}/resources.zip">
+        <zip  destfile="${dist.dir}/resources.zip">
           <zipfileset dir="." defaultexcludes="yes">
             <patternset excludes="${src.dir}/examples/**" />
             <patternset includes="${src.dir}/**/*Resources.properties" />
