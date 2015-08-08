@@ -20,8 +20,10 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -55,7 +57,8 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
      * Set used to register instances which implement tearDownTest.
      * This is used so that the JavaSamplerClient can be notified when the test ends.
      */
-    private static final Set<JavaSampler> TEAR_DOWN_SET = new HashSet<JavaSampler>();
+    private static final Set<JavaSampler> TEAR_DOWN_SET = 
+            Collections.newSetFromMap(new ConcurrentHashMap<JavaSampler,Boolean>());
 
     /**
      * Property key representing the classname of the JavaSamplerClient to user.
