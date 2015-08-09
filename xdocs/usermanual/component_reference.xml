@@ -3750,7 +3750,7 @@ restricted using server authentication.  You see this type of authentication whe
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter
 transmits the login information when it encounters this type of page.</p>
 <p>
-The Authorisation headers may not be shown in the Tree View Listener "Request" tab.
+The Authorisation headers may not be shown in the Tree View Listener "<code>Request</code>" tab.
 The Java implementation does pre-emptive authentication, but it does not
 return the Authorization header when JMeter fetches the headers.
 The Commons HttpClient (3.1) implementation defaults to pre-emptive and the header will be shown.
@@ -3762,14 +3762,13 @@ In versions of JMeter after 2.2, the HttpClient sampler defaults to pre-emptive 
 if the setting has not been defined. To disable this, set the values as below, in which case
 authentication will only be performed in response to a challenge.
 </p>
-<pre>
-jmeter.properties:
-httpclient.parameters.file=httpclient.parameters
-
-httpclient.parameters:
-http.authentication.preemptive$Boolean=false
-</pre>
+<p>
+In the file <code>jmeter.properties</code> set <code>httpclient.parameters.file=httpclient.parameters</code>
+and in <code>httpclient.parameters</code> set <code>http.authentication.preemptive$Boolean=false</code>
+</p>
+<note>
 Note: the above settings only apply to the HttpClient sampler (and the SOAP samplers, which use Httpclient).
+</note>
 <note>
 When looking for a match against a URL, JMeter checks each entry in turn, and stops when it finds the first match.
 Thus the most specific URLs should appear first in the list, followed by less specific ones.
@@ -3785,27 +3784,26 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
         This is usually useful if each main thread group iteration represents behaviour of one Virtual User.
         </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
-say you specify a Base URL of "http://jmeter.apache.org/restricted/" with a username of "jmeter" and
-a password of "jmeter".  If you send an HTTP request to the URL
-"http://jmeter.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
-information for the user named, "jmeter".</property>
+say you specify a Base URL of "<code>http://jmeter.apache.org/restricted/</code>" with a <code>Username</code> of "<code>jmeter</code>" and
+a <code>Password</code> of "<code>jmeter</code>".  If you send an HTTP request to the URL
+"<code>http://jmeter.apache.org/restricted/ant/myPage.html</code>", the Authorization Manager sends the login
+information for the user named, "<code>jmeter</code>".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
   <property name="Password" required="Yes">The password for the user. (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Domain" required="No">The domain to use for NTLM.</property>
   <property name="Realm" required="No">The realm to use for NTLM.</property>
   <property name="Mechanism" required="No">Type of authentication to perform. JMeter can perform different types of authentications based on used Http Samplers:
-<table>
-<tr><th>Sampler</th><th>Authentications</th></tr>
-<tr><td>Java</td><td>BASIC</td></tr>
-<tr><td>HttpClient 3.1</td><td>BASIC, DIGEST</td></tr>
-<tr><td>HttpClient 4</td><td>BASIC, DIGEST and Kerberos</td></tr>
-</table>
+<dl>
+<dt>Java</dt><dd><code>BASIC</code></dd>
+<dt>HttpClient 3.1</dt><dd><code>BASIC</code> and <code>DIGEST</code></dd>
+<dt>HttpClient 4</dt><dd><code>BASIC</code>, <code>DIGEST</code> and <code>Kerberos</code></dd>
+</dl>
 </property>
 </properties>
 <note>
 The Realm only applies to the HttpClient sampler.
-In JMeter 2.2, the domain and realm did not have separate columns, and were encoded as part of
-the user name in the form: [domain\]username[@realm].
+In JMeter 2.2, the <code>domain</code> and <code>realm</code> did not have separate columns, and were encoded as part of
+the user name in the form: <code>[domain\]username[@realm]</code>.
 This was an experimental feature and has been removed.
 </note>
 <br></br>
@@ -3816,8 +3814,8 @@ This was an experimental feature and has been removed.
     <li><code>-Djava.security.auth.login.config=jaas.conf</code></li>
 </ul>
 <p>
-You can also configure those two properties in the file <em>bin/system.properties</em>.
-Look at the two sample configuration files (<em>krb5.conf</em> and <em>jaas.conf</em>) located in the jmeter <em>bin</em> folder
+You can also configure those two properties in the file <code>bin/system.properties</code>.
+Look at the two sample configuration files (<code>krb5.conf</code> and <code>jaas.conf</code>) located in the jmeter <code>bin</code> folder
 for references to more documentation, and tweak them to match your Kerberos configuration.
 </p>
 <p>
@@ -3827,7 +3825,7 @@ number if it differs from the standard ones (<code>80</code> and <code>443</code
 can be emulated by setting the following jmeter property as below.
 </p>
 <p>
-In <em>jmeter.properties</em> or <em>user.properties</em>, set:
+In <code>jmeter.properties</code> or <code>user.properties</code>, set:
 </p>
 <ul>
 <li><code>kerberos.spnego.strip_port=false</code></li>
@@ -3835,11 +3833,11 @@ In <em>jmeter.properties</em> or <em>user.properties</em>, set:
 <br></br>
 <b>Controls:</b>
 <ul>
-  <li>Add Button - Add an entry to the authorization table.</li>
-  <li>Delete Button - Delete the currently selected table entry.</li>
-  <li>Load Button - Load a previously saved authorization table and add the entries to the existing
+  <li><code>Add</code> Button - Add an entry to the authorization table.</li>
+  <li><code>Delete</code> Button - Delete the currently selected table entry.</li>
+  <li><code>Load</code> Button - Load a previously saved authorization table and add the entries to the existing
 authorization table entries.</li>
-  <li>Save As Button - Save the current authorization table to a file.</li>
+  <li><code>Save As</code> Button - Save the current authorization table to a file.</li>
 </ul>
 
 <note>When you save the Test Plan, JMeter automatically saves all of the authorization
@@ -3849,11 +3847,11 @@ table entries - including any passwords, which are not encrypted.</note>
 
 <p><a href="../demos/AuthManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan on a local server that sends three HTTP requests, two requiring a login and the
 other is open to everyone.  See figure 10 to see the makeup of our Test Plan.  On our server, we have a restricted
-directory named, "secret", which contains two files, "index.html" and "index2.html".  We created a login id named, "kevin",
-which has a password of "spot".  So, in our Authorization Manager, we created an entry for the restricted directory and
-a username and password (see figure 11).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests
-to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
-"/index.html".</p>
+directory named, "<code>secret</code>", which contains two files, "<code>index.html</code>" and "<code>index2.html</code>".  We created a login id named, "<code>kevin</code>",
+which has a password of "<code>spot</code>".  So, in our Authorization Manager, we created an entry for the restricted directory and
+a username and password (see figure 11).  The two HTTP requests named "<code>SecretPage1</code>" and "<code>SecretPage2</code>" make requests
+to "<code>/secret/index.html</code>" and "<code>/secret/index2.html</code>".  The other HTTP request, named "<code>NoSecretPage</code>" makes a request to
+"<code>/index.html</code>".</p>
 
 <figure width="289" height="201" image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
 <figure width="641" height="329" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
@@ -3872,29 +3870,29 @@ be able to run it.  However, you can use it as a reference in constructing your 
 <p>
 The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope to simulate browser cache feature.
 Each Virtual User thread has its own Cache. By default, Cache Manager will store up to 5000 items in cache per Virtual User thread, using LRU algorithm. 
-Use property "maxSize" to modify this value. Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt -Xmx option accordingly.
+Use property "<code>maxSize</code>" to modify this value. Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt the <code>-Xmx</code> jvm option accordingly.
 </p>
 <p>
-If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag (and Expired if relevant) values are saved for the URL.
+If a sample is successful (i.e. has response code <code>2xx</code>) then the <code>Last-Modified</code> and <code>Etag</code> (and <code>Expired</code> if relevant) values are saved for the URL.
 Before executing the next sample, the sampler checks to see if there is an entry in the cache, 
-and if so, the If-Last-Modified and If-None-Match conditional headers are set for the request.
+and if so, the <code>If-Last-Modified</code> and <code>If-None-Match</code> conditional headers are set for the request.
 </p>
 <p>
-Additionally, if the "Use Cache-Control/Expires header" option is selected, then the Cache-Control/Expires value is checked against the current time.
-If the request is a GET request, and the timestamp is in the future, then the sampler returns immediately,
+Additionally, if the "<code>Use Cache-Control/Expires header</code>" option is selected, then the <code>Cache-Control</code>/<code>Expires</code> value is checked against the current time.
+If the request is a <code>GET</code> request, and the timestamp is in the future, then the sampler returns immediately,
 without requesting the URL from the remote server. This is intended to emulate browser behaviour.
-Note that if Cache-Control header is "no-cache", the response will be stored in cache as pre-expired,
-so will generate a conditional GET request.
-If Cache-Control has any other value, 
-the "max-age" expiry option is processed to compute entry lifetime, if missing then expire header will be used, if also missing entry will be cached 
-as specified in <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a> section 13.2.4. using Last-Modified time and response Date.
+Note that if <code>Cache-Control</code> header is "<code>no-cache</code>", the response will be stored in cache as pre-expired,
+so will generate a conditional <code>GET</code> request.
+If <code>Cache-Control</code> has any other value, 
+the "<code>max-age</code>" expiry option is processed to compute entry lifetime, if missing then expire header will be used, if also missing entry will be cached 
+as specified in <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616</a> section 13.2.4. using <code>Last-Modified</code> time and response Date.
 </p>
-<p>
+<note>
 If the requested document has not changed since it was cached, then the response body will be empty.
-Likewise if the Expires date is in the future.
+Likewise if the <code>Expires</code> date is in the future.
 This may cause problems for Assertions.
-</p>
-<note>Responses with a Vary header will not be cached.</note>
+</note>
+<note>Responses with a <code>Vary</code> header will not be cached.</note>
 </description>
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
