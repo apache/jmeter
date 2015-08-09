@@ -455,7 +455,7 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 Defaults to "<code>StringFromFile_</code>".
         </property>
         <property name="Start sequence number" required="No">Initial Sequence number (if omitted, the End sequence number is treated as a loop count)</property>
-        <property name="End   sequence number" required="No">Final sequence number (if omitted, seqence numbers can increase without limit)</property>
+        <property name="End   sequence number" required="No">Final sequence number (if omitted, sequence numbers can increase without limit)</property>
 </properties>
 <p>The file name parameter is resolved when the file is opened or re-opened.</p>
 <p>The reference name parameter (if supplied) is resolved every time the function is executed.</p>
@@ -918,7 +918,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
         <property name="Format" required="No">
         The format to be passed to SimpleDateFormat.
         The function supports various shorthand aliases, see below.
-        If ommitted, the function returns the current time in milliseconds since the epoch.
+        If omitted, the function returns the current time in milliseconds since the epoch.
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>

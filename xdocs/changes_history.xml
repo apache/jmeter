@@ -143,8 +143,8 @@ Documentations have been refreshed particularly:
 </p>
 
 <ch_title>Toolbar</ch_title>
-<p>JMeter's toolbar has been refreshed for some icons (start, toogle, etc.). Three sizes are now avialable for the icons: 22x22, 32x32 and 48x48.<br>
-The property to define your prefered size is:
+<p>JMeter's toolbar has been refreshed for some icons (start, toogle, etc.). Three sizes are now available for the icons: 22x22, 32x32 and 48x48.<br>
+The property to define your preferred size is:
 <pre>jmeter.toolbar.icons.size=value</pre>
 with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <p>The toolbar with 22x22 pixels icons
@@ -459,7 +459,7 @@ Only one instance of the section will be executed at the same time during the te
 <figure width="989" height="406" image="changes/2.12/13_webdav.png"></figure>
 
 <ch_title>Better handling of embedded resources</ch_title>
-<p>When download embedded resources is checked, JMeter now uses User Agent header to download or not resources embedded within conditionnal comments as per <a href="http://msdn.microsoft.com/en-us/library/ms537512%28v=vs.85%29.aspx" target="_blank">About conditional comments</a>.</p>
+<p>When download embedded resources is checked, JMeter now uses User Agent header to download or not resources embedded within conditional comments as per <a href="http://msdn.microsoft.com/en-us/library/ms537512%28v=vs.85%29.aspx" target="_blank">About conditional comments</a>.</p>
 
 <ch_title>Ability to customize Cache Manager (Browser cache simulation) handling of cached resources</ch_title>
 <p>You can now configure the behaviour of JMeter when a resource is found in Cache, this can be controlled with <i>cache_manager.cached_resource_mode</i> property</p>
@@ -1316,7 +1316,7 @@ with <i>Body Data</i>, see also the Template <i>Building a SOAP Webservice Test 
 
 <li>
 In previous versions, <b>IncludeController</b> could run Test Elements located inside a <b>Thread Group</b>, this behaviour (<i>which was not documented</i>) 
-ould result in weird behaviour, it has been removed in this version (see <bugzilla>55464</bugzilla>). 
+could result in weird behaviour, it has been removed in this version (see <bugzilla>55464</bugzilla>). 
 The correct way to include Test Elements is to use <b>Test Fragment</b> as stated in documentation of <b>Include Controller</b>.
 </li>
 
@@ -2062,7 +2062,7 @@ Furthermore it doesn't put anymore in Cache deprecated entries for "no-cache" re
 </p>
 
 <p>
-A major change has occured on JSR223 Test Elements, previously variables set up before script execution where stored in ScriptEngineManager which was created once per execution, 
+A major change has occurred on JSR223 Test Elements, previously variables set up before script execution where stored in ScriptEngineManager which was created once per execution, 
 now ScriptEngineManager is a singleton shared by all JSR223 elements and only ScriptEngine is created once per execution, variables set up before script execution are now stored 
 in Bindings created on each execution, see <bugzilla>53365</bugzilla>.
 </p>
@@ -2203,7 +2203,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 <li><bugzilla>53418</bugzilla> - New Option "Delay thread creation until needed" that will create and start threads when needed instead of creating them on Test startup</li>
 <li><bugzilla>42245</bugzilla> - Show clear passwords in HTTP Authorization Manager</li>
 <li><bugzilla>53616</bugzilla> - Display 'Apache JMeter' title in app title bar in Gnome 3</li>
-<li><bugzilla>53759</bugzilla> - ClientJMeterEngine perfoms unnecessary traverse using SearchByClass(TestListener)</li>
+<li><bugzilla>53759</bugzilla> - ClientJMeterEngine performs unnecessary traverse using SearchByClass(TestListener)</li>
 <li><bugzilla>52601</bugzilla> - CTRL + F for the new Find feature</li>
 <li><bugzilla>53796</bugzilla> - TestCompiler uses static Set which can grow huge</li>
 <li><bugzilla>53673</bugzilla> - Add JMeter version in the jmx file</li>
@@ -2294,7 +2294,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 </p>
 
 <h3>New Visual Indicator of number of ERROR/FATAL messages in logs</h3>
-<p>Indicator shows number of ERROR/FATAL messsages in logs, it can be clicked to toggle Log Viewer panel
+<p>Indicator shows number of ERROR/FATAL messages in logs, it can be clicked to toggle Log Viewer panel
 <figure width="815" height="633" image="changes/2.7/16_log_errors_counter.png"></figure>
 </p>
 
@@ -3927,7 +3927,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 "Counter" is now shown as a Configuration element.
 </li>
 <li><bugzilla>41608</bugzilla> - misleading warning log message removed</li>
-<li><bugzilla>46359</bugzilla> - BSF JavaScript Preprocessor cannot access sampler variable on first interation (Implement temporary work-round for BSF-22)</li>
+<li><bugzilla>46359</bugzilla> - BSF JavaScript Preprocessor cannot access sampler variable on first iteration (Implement temporary work-round for BSF-22)</li>
 <li><bugzilla>46407</bugzilla> - BSF elements do not load script files, attempt to interpret filename as script</li>
 <li>Better handling of Exceptions during test shutdown</li>
 <li>Fix potential thread safety issue in JMeterThread class</li>
@@ -3974,7 +3974,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 <li>Add BSF Listener element</li>
 <li><bugzilla>47176</bugzilla> -  Monitor Results : improve load status graphic</li>
 <li><bugzilla>40045</bugzilla> - Allow Results monitor to select a specific connector</li>
-<li>Read XML JTL files more efficiently - pass samples to visualisers as they are read, rather than saving them all and then processing them</li>
+<li>Read XML JTL files more efficiently - pass samples to visualizers as they are read, rather than saving them all and then processing them</li>
 </ul>
 
 <h3>Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -4574,7 +4574,7 @@ Some of the main enhancements are:
 </p>
 <ul>
 <li>Htmlparser 2.0 now used for parsing</li>
-<li>HTTP Authorisation now supports domain and realm</li>
+<li>HTTP Authorization now supports domain and realm</li>
 <li>HttpClient options can be specified via httpclient.parameters file</li>
 <li>HttpClient now behaves the same as Java Http for SSL certificates</li>
 <li>HTTP Mirror Server to allow local testing of HTTP samplers</li>
@@ -4626,7 +4626,7 @@ The original behaviour can be restored by setting the following JMeter property:
 jmeterthread.reversePostProcessors=true
 </p>
 <p>
-The HTTP Authorisation Manager now has extra columns for domain and realm, 
+The HTTP Authorization Manager now has extra columns for domain and realm, 
 so the temporary work-round of using '\' and '@' in the username to delimit the domain and realm
 has been removed.
 </p>
@@ -4671,7 +4671,7 @@ It was unused so far, and used the only Sun-specific class in JMeter.
 
 <h4>New functionality/improvements:</h4>
 <ul>
-<li>Add Domain and Realm support to HTTP Authorisation Manager</li>
+<li>Add Domain and Realm support to HTTP Authorization Manager</li>
 <li>HttpClient now behaves the same as the JDK http sampler for invalid certificates etc</li>
 <li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
 <li><bugzilla>33964</bugzilla> - Http Requests can send a file as the entire post body if name/type are omitted</li>
@@ -5143,7 +5143,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <h4>New functionality:</h4>
 <ul>
 <li>While Controller</li>
-<li>BeanShell intilisation scripts</li>
+<li>BeanShell initialisation scripts</li>
 <li>Result Saver can optionally save failed results only</li>
 <li>Display as HTML has option not to download frames and images etc</li>
 <li>Multiple Tree elements can now be enabled/disabled/copied/pasted at once</li>
@@ -5391,7 +5391,7 @@ test engine code.</li>
     <li>Fixed bug that caused cookies not to be read if header name case not as expected.</li> 
     <li>Clone entries before sending to sampler - prevents relocations from messing up 
         information across threads</li> 
-    <li>Minor bug fix to convenience dialog for adding paramters to test sample.  
+    <li>Minor bug fix to convenience dialog for adding parameters to test sample.  
         Bug prevented entries in dialog from appearing in test sample.</li> 
     <li>Added xerces.jar to distribution</li> 
     <li>Added junit.jar to distribution and created a few tests.</li> 
