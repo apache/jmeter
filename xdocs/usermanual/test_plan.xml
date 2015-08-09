@@ -398,7 +398,7 @@ Assertion 1
 
 <subsection name="&sect-num;.10 Scoping Rules" anchor="scoping_rules">
 <p>
-The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:</p>
+The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Processors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:</p>
 <figure image="scoping1.png">Example test tree</figure>
 <p>The order of requests will be, One, Two, Three, Four.</p>
 <p>Some controllers affect the order of their subelements, and you can read about these specific controllers in <a href="component_reference.html">the component reference</a>.</p>
@@ -426,7 +426,7 @@ only one Manager is used, but there is currently no way to specify <b>which</b> 
 <subsection name="&sect-num;.11 Properties and Variables" anchor="properties">
 
 <p>
-JMeter <b>properties</b> are defined in jmeter.properties (see <a href="get-started.html#configuring_jmeter">Gettting Started - Configuring JMeter</a> for more details).
+JMeter <b>properties</b> are defined in jmeter.properties (see <a href="get-started.html#configuring_jmeter">Getting Started - Configuring JMeter</a> for more details).
 <br></br>
 Properties are global to jmeter, and are mostly used to define some of the defaults JMeter uses.
 For example the property remote_hosts defines the servers that JMeter will try to run remotely.
