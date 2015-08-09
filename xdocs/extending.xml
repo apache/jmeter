@@ -73,7 +73,7 @@ Timers provide a framework for delaying in between samples.  This is important i
 <dt><code>delay()</code> wait for a Timer specific amount of time</dt>
 <dd>JMeter calls this function prior to every sample.  The Timer should wait for a period of time and then return.</dd>
 <dt><code>set()</code> prepare for sampling</dt>
-<dd>JMeter calls this function prior to the begining of a test session.  The timer should initialize itself, read any values from its UI and prepare for operation.
+<dd>JMeter calls this function prior to the beginning of a test session.  The timer should initialize itself, read any values from its UI and prepare for operation.
 </dd>
 </dl>
 </p>
@@ -84,7 +84,7 @@ The sampler controller is by far the most complicated, but also the most powerfu
 <dl>
 <dt><code>start()</code></dt>
 <dd>
-JMeter calls this immediatly prior to starting a test.  It is most often use to disable the SamplerController's GUI.
+JMeter calls this immediately prior to starting a test.  It is most often use to disable the SamplerController's GUI.
 </dd>
 <dt><code>stop()</code></dt>
 <dd>

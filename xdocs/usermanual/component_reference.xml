@@ -981,7 +981,7 @@ Webservice Soap Sampler assumes that empty response means failure.
          <property name="Search Filter" required="Yes">searchfilter, must be specified in LDAP syntax.</property>
          <property name="Scope" required="No">Use <code>0</code> for baseobject-, <code>1</code> for onelevel- and <code>2</code> for a subtree search. (Default=<code>0</code>)</property>
          <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=<code>0</code>, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode <code>4</code></property>
-         <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in miliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is <code>0</code>, which means no limit)</property>
+         <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in milliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is <code>0</code>, which means no limit)</property>
          <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
          <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=<code>false</code></property>
          <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
@@ -1139,7 +1139,7 @@ The <code>interrupt()</code> method can be defined in the script or the init fil
     The return value (if not <code>null</code>) is stored as the sampler result.</property>
 </properties>
 <note>
-N.B. Each Sampler instance has its own BeanShell interpeter,
+N.B. Each Sampler instance has its own BeanShell interpreter,
 and Samplers are only called from a single thread
 </note><p>
 If the property "<code>beanshell.sampler.init</code>" is defined, it is passed to the Interpreter
@@ -1992,7 +1992,7 @@ Relative paths are resolved against the current directory.
 <property name="Subject" required="">The e-mail message subject.</property>
 <property name="Suppress Subject Header" required="">If selected, the "<code>Subject:</code>" header is omitted from the mail that is sent. 
 This is different from sending an empty "<code>Subject:</code>" header, though some e-mail clients may display it identically.</property>
-<property name="Include timestamp in subject" required="">Includes the <code>System.currentTimemilis()</code> in the subject line.</property>
+<property name="Include timestamp in subject" required="">Includes the <code>System.currentTimemillis()</code> in the subject line.</property>
 <property name="Add Header" required="No">Additional headers can be defined using this button.</property>
 <property name="Message" required="">The message body.</property>
 <property name="Send plain body (i.e. not multipart/mixed)">
@@ -3750,7 +3750,7 @@ restricted using server authentication.  You see this type of authentication whe
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter
 transmits the login information when it encounters this type of page.</p>
 <p>
-The Authorisation headers may not be shown in the Tree View Listener "<code>Request</code>" tab.
+The Authorization headers may not be shown in the Tree View Listener "<code>Request</code>" tab.
 The Java implementation does pre-emptive authentication, but it does not
 return the Authorization header when JMeter fetches the headers.
 The Commons HttpClient (3.1) implementation defaults to pre-emptive and the header will be shown.
@@ -4312,7 +4312,7 @@ however the minimum and maximum values can be any long values so long as the ran
   <property name="Minimum Value" required="Yes">The minimum value (long) of the generated random number.</property>
   <property name="Maximum Value" required="Yes">The maximum value (long) of the generated random number.</property>
   <property name="Random Seed" required="No">The seed for the random number generator. Default is the current time in milliseconds. 
-  If you use the same seed value with Per Thread set to true, you will get the same value for earch Thread as per 
+  If you use the same seed value with Per Thread set to true, you will get the same value for each Thread as per 
   <a href="http://docs.oracle.com/javase/6/docs/api/java/util/Random.html" >Random</a> class.
   </property>
   <property name="Per Thread(User)?" required="Yes">If False, the generator is shared between all threads in the thread group.
@@ -4840,7 +4840,7 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
 If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
 </p>
-<p>For futher details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="JSR223 Assertion" index="&sect-num;.5.11">
@@ -4881,7 +4881,7 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
 If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
 </p>
-<p>For futher details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
 <component name="Compare Assertion" index="&sect-num;.5.12"  width="292" height="296" screenshot="assertion/compare.png">
@@ -6250,7 +6250,7 @@ This has the advantage that even embedded HTTPS resources can be intercepted, an
 JMeter needs to use the keytool application to create the keystore entries. 
 Versions of JMeter after 2.10 include code to check that keytool is available by looking in various standard places.
 If JMeter is unable to find the keytool application, it will report an error.
-If necessary, the systen property <code>keytool.directory</code> can be used to tell JMeter where to find keytool.
+If necessary, the system property <code>keytool.directory</code> can be used to tell JMeter where to find keytool.
 This should be defined in the file <code>system.properties</code>.
 </p>
 <p>
@@ -6627,7 +6627,7 @@ For more details see "Extending JMeter".
 <component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="671" height="174" screenshot="mirrorserver.png">
 <description>
 <p>
-The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
+The HTTP Mirror Server is a very simple HTTP server - it simply mirrors the data sent to it.
 This is useful for checking the content of HTTP requests.
 </p>
 <p>

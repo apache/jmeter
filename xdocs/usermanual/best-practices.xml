@@ -197,7 +197,7 @@ This is what you should see in the JMeter console:
 Startup script running
 Startup script completed
 Httpd started on port: 9000
-Sessiond started on port: 9001
+Session started on port: 9001
 </source>
 <p>
 There is a sample script (<code>extras/remote.bsh</code>) you can use to test the server.
@@ -274,11 +274,11 @@ Some long-running tests may cause the interpreter to use lots of memory; if this
 <p>
 You can test BeanShell scripts outside JMeter by using the command-line interpreter:
 <source>
-$ java -cp bsh-xxx.jar[;other jars as needed] bsh.Interperter file.bsh [parameters]
+$ java -cp bsh-xxx.jar[;other jars as needed] bsh.Interpreter file.bsh [parameters]
 </source>
 or
 <source>
-$ java -cp bsh-xxx.jar bsh.Interperter
+$ java -cp bsh-xxx.jar bsh.Interpreter
 bsh% source("file.bsh");
 bsh% exit(); // or use EOF key (e.g. ^Z or ^D)
 </source>

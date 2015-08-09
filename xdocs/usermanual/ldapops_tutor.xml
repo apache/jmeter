@@ -34,7 +34,7 @@
     The relative distinguished name (RDN) is the last part of the DN, eg. cn=admin.<br/>
     The characteristics of an object are determined by the objectClasses, which can be seen as a collection of attributes.<br/>
     The type of an object is determined by the "structural objectClass" eg person, organizationalUnit or country.<br/>
-    The attributes contain the data of an object, eg mailadress, name, streetadress etc. Each attribute can have 0, 1 or more values.
+    The attributes contain the data of an object, eg mailaddress, name, streetaddress etc. Each attribute can have 0, 1 or more values.
     </p>
 <subsection name="1 Bind operation" anchor="bind">
     <p>

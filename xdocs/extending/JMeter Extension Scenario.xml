@@ -27,7 +27,7 @@
 
 <section name="JMeter Extension Scenario">
 <p>The purpose of this tutorial is to
-describe the general steps involved in a JMeter extension scenerio. The
+describe the general steps involved in a JMeter extension scenario. The
 <a href="index.html">JMeter documentation</a> describes what must be done on a microscopic level but does
 not provide an overall idea of the process. That is the intent of this brief
 article. The JMeter extension documentation should be consulted for details.</p>

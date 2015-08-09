@@ -261,7 +261,7 @@ then define the property <code>user.classpath</code> or <code>plugin_dependency_
 in <code>jmeter.properties</code>. See below for an explanation of the differences.
 </p>
 <p>
-Other jars (such as JDBC, JMS implementations and any other support libaries needed by the JMeter code)
+Other jars (such as JDBC, JMS implementations and any other support libraries needed by the JMeter code)
 should be placed in the <code>lib</code> directory - not the <code>lib/ext</code> directory,
 or added to <code>user.classpath</code>.</p>
 <note>JMeter will only find <code>.jar</code> files, not <code>.zip</code>.</note>

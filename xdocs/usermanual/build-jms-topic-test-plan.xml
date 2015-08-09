@@ -49,7 +49,7 @@ Topic messaging is generally used in cases where a message is published by a pro
 consumed by multiple subscribers.  Queue messaging is generally used for transactions
 where the sender expects a response.  Messaging systems are quite different from
 normal HTTP requests. In HTTP, a single user sends a request and gets a response.
-Messaging system can work in sychronous and asynchronous mode.  A JMS sampler needs 
+Messaging system can work in synchronous and asynchronous mode.  A JMS sampler needs 
 the JMS implementation jar files; for example, from Apache ActiveMQ.  
 See <a href="#libraries_activemq">here</a> for the list of jars provided by ActiveMQ 3.0.</p>
 
