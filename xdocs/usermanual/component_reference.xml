@@ -3574,20 +3574,20 @@ By default, a Graphite implementation is provided.
 </description>
  <properties>
  <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.</property>
- <property name="Backend Listener implementation" required="Yes">Class of the BackendListenerClient implementation.</property>
+ <property name="Backend Listener implementation" required="Yes">Class of the <code>BackendListenerClient</code> implementation.</property>
  <property name="Async Queue size" required="Yes">Size of the queue that holds the SampleResults while they are processed asynchronously.</property>
- <property name="Parameters" required="Yes">Parameters of the BackendListenerClient implementation.</property>
+ <property name="Parameters" required="Yes">Parameters of the <code>BackendListenerClient</code> implementation.</property>
  </properties>
  
  
-     <p>The following parameters apply to the <b>GraphiteBackendListenerClient</b> implementation:</p>
+     <p>The following parameters apply to the <code>GraphiteBackendListenerClient</code> implementation:</p>
 
     <properties>
-        <property name="graphiteMetricsSender" required="Yes">org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender or org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</property>
+        <property name="graphiteMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender</code> or <code>org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</code></property>
         <property name="graphiteHost" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server host</property>
-        <property name="graphitePort" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server port, defaults to 2003. Note PickleGraphiteMetricsSender (port 2004) can only talk to Graphite server.</property>
-        <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to "jmeter."</property>
-        <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to true.</property>
+        <property name="graphitePort" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server port, defaults to <code>2003</code>. Note <code>PickleGraphiteMetricsSender</code> (port <code>2004</code>) can only talk to Graphite server.</property>
+        <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to "<code>jmeter</code>."</property>
+        <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to <code>true</code>.</property>
         <property name="samplersList" required="Yes">Semicolon separated list of samplers for which you want to report metrics to backend.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
     </properties>
@@ -3612,10 +3612,10 @@ By default, a Graphite implementation is provided.
 <description>
     <p>
     CSV Data Set Config is used to read lines from a file, and split them into variables.
-    It is easier to use than the __CSVRead() and _StringFromFile() functions.
+    It is easier to use than the <code>__CSVRead()</code> and <code>_StringFromFile()</code> functions.
     It is well suited to handling large numbers of variables, and is also useful for testing with
-    "random" and unique values.
-    Generating unique random values at run-time is expensive in terms of CPU and memory, so just create the data
+    "random" and unique values.</p>
+    <p>Generating unique random values at run-time is expensive in terms of CPU and memory, so just create the data
     in advance of the test. If necessary, the "random" data from the file can be used in conjunction with
     a run-time parameter to create different sets of values from each run - e.g. using concatenation - which is
     much cheaper than generating everything at run-time.
@@ -3623,7 +3623,7 @@ By default, a Graphite implementation is provided.
     <p>
     Versions of JMeter after 2.3.1 allow values to be quoted; this allows the value to contain a delimiter.
     Previously it was necessary to choose a delimiter that was not used in any values.
-    If "allow quoted data" is enabled, a value may be enclosed in double-quotes.
+    If "<code>allow quoted data</code>" is enabled, a value may be enclosed in double-quotes.
     These are removed. To include double-quotes within a quoted field, use two double-quotes.
     For example:
     </p>
@@ -3635,7 +3635,7 @@ By default, a Graphite implementation is provided.
 </source>
     <p>
     Versions of JMeter after 2.3.4 support CSV files which have a header line defining the column names.
-    To enable this, leave the "Variable Names" field empty. The correct delimiter must be provided.
+    To enable this, leave the "<code>Variable Names</code>" field empty. The correct delimiter must be provided.
     </p>
     <p>
     Versions of JMeter after 2.7 support CSV files with quoted data that includes new-lines.
@@ -3650,27 +3650,27 @@ By default, a Graphite implementation is provided.
     <p>
     See the description of the Share mode below for additional options (JMeter 2.3.2+).
     If you want each thread to have its own set of values, then you will need to create a set of files,
-    one for each thread. For example test1.csv, test2.csv,... testn.csv. Use the filename 
-    <code>test${__threadNum}.csv</code> and set the "Sharing mode" to "Current thread".
+    one for each thread. For example <code>test1.csv</code>, <code>test2.csv</code>,... <code>testn.csv</code>. Use the filename 
+    <code>test${__threadNum}.csv</code> and set the "<code>Sharing mode</code>" to "<code>Current thread</code>".
     </p>
     <note>CSV Dataset variables are defined at the start of each test iteration.
     As this is after configuration processing is completed,
     they cannot be used for some configuration items - such as JDBC Config - 
     that process their contents at configuration time (see <bugzilla>40394</bugzilla>)
-    However the variables do work in the HTTP Auth Manager, as the username etc. are processed at run-time.
+    However the variables do work in the HTTP Auth Manager, as the <code>username</code> etc. are processed at run-time.
     </note>
     <p>
-    As a special case, the string "\t" (without quotes) in the delimiter field is treated as a Tab.
+    As a special case, the string "<code>\t</code>" (without quotes) in the delimiter field is treated as a Tab.
     </p>
     <p>
-    When the end of file (EOF) is reached, and the recycle option is true, reading starts again with the first line of the file.
+    When the end of file (<code>EOF</code>) is reached, and the recycle option is <code>true</code>, reading starts again with the first line of the file.
     </p>
     <p>
-    If the recycle option is false, and stopThread is false, then all the variables are set to <code>&lt;EOF&gt;</code> when the end of file is reached.
-    This value can be changed by setting the JMeter property <b>csvdataset.eofstring</b>.
+    If the recycle option is <code>false</code>, and stopThread is <code>false</code>, then all the variables are set to <code>&lt;EOF&gt;</code> when the end of file is reached.
+    This value can be changed by setting the JMeter property <code>csvdataset.eofstring</code>.
     </p>
     <p>
-    If the Recycle option is false, and Stop Thread is true, then reaching EOF will cause the thread to be stopped.
+    If the Recycle option is <code>false</code>, and Stop Thread is <code>true</code>, then reaching <code>EOF</code> will cause the thread to be stopped.
     </p>
 </description>
 <properties>
@@ -3680,9 +3680,9 @@ By default, a Graphite implementation is provided.
   <b>For distributed testing, the CSV file must be stored on the server host system in the correct relative directory to where the jmeter server is started.</b>
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
   unless the remote server has the same directory structure.
-  If the same physical file is referenced in two different ways - e.g. csvdata.txt and ./csvdata.txt -
+  If the same physical file is referenced in two different ways - e.g. <code>csvdata.txt</code> and <code>./csvdata.txt</code> -
   then these are treated as different files.
-  If the OS does not distinguish between upper and lower case, csvData.TXT would also be opened separately. 
+  If the OS does not distinguish between upper and lower case, <code>csvData.TXT</code> would also be opened separately. 
   </property>
   <property name="File Encoding" required="No">The encoding to be used to read the file, if not the platform default.</property>
   <property name="Variable Names" required="Yes">List of variable names (comma-delimited).
@@ -3696,14 +3696,14 @@ By default, a Graphite implementation is provided.
   <property name="Allow quoted data?" required="Yes">Should the CSV file allow values to be quoted?
   If enabled, then values can be enclosed in <code>"</code> - double-quote - allowing values to contain a delimiter.
   </property>
-  <property name="Recycle on EOF?" required="Yes">Should the file be re-read from the beginning on reaching EOF? (default is true)</property>
-  <property name="Stop thread on EOF?" required="Yes">Should the thread be stopped on EOF, if Recycle is false? (default is false)</property>
+  <property name="Recycle on EOF?" required="Yes">Should the file be re-read from the beginning on reaching <code>EOF</code>? (default is <code>true</code>)</property>
+  <property name="Stop thread on EOF?" required="Yes">Should the thread be stopped on <code>EOF</code>, if Recycle is false? (default is <code>false</code>)</property>
   <property name="Sharing mode" required="Yes">
   <ul>
-  <li>All threads - (the default) the file is shared between all the threads.</li>
-  <li>Current thread group - each file is opened once for each thread group in which the element appears</li>
-  <li>Current thread - each file is opened separately for each thread</li>
-  <li>Identifier - all threads sharing the same identifier share the same file.
+  <li><code>All threads</code> - (the default) the file is shared between all the threads.</li>
+  <li><code>Current thread group</code> - each file is opened once for each thread group in which the element appears</li>
+  <li><code>Current thread</code> - each file is opened separately for each thread</li>
+  <li><code>Identifier</code> - all threads sharing the same identifier share the same file.
   So for example if you have 4 thread groups, you could use a common id for two or more of the groups
   to share the file between them.
   Or you could use the thread number to share the file between the same thread numbers in different thread groups.
@@ -3731,7 +3731,7 @@ By default, a Graphite implementation is provided.
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
     <property name="Clear cache each Iteration" required="No">If selected, DNS cache of every  Thread is cleared each time new iteration is started.</property>
     <property name="Use system DNS resolver" required="N/A">System DNS resolver will be used. For correct work edit
-       $JAVA_HOME/jre/lib/security/java.security and add <pre>networkaddress.cache.ttl=0</pre> 
+       <code>$JAVA_HOME/jre/lib/security/java.security</code> and add <code>networkaddress.cache.ttl=0</code> 
     </property>
     <property name="Use custom DNS resolver" required="N/A">Custom DNS resolver(from dnsjava library) will be used.</property>
     <property name="Hostname or IP address" required="No">List of DNS servers to use. If empty, network configuration DNS will used.</property>
