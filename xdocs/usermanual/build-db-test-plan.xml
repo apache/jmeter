@@ -77,7 +77,7 @@ table. In the example shown here, the database is 'cloud' and the table name is
 
 <p>Next, increase the number of users to 50.</p>
 
-<p>In the next field, the Ramp-Up Period, leave the the value of 10
+<p>In the next field, the Ramp-Up Period, leave the value of 10
 seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 10 seconds, JMeter will
 finish starting all of your users by the end of the 10 seconds.  So, if we have

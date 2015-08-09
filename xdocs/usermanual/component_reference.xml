@@ -233,7 +233,7 @@ https.default.protocol=SSLv3
           <code>PROPFIND</code>, <code>PROPPATCH</code>, <code>UNLOCK</code>, <code>REPORT</code>, <code>MKCALENDAR</code>.</property>
         <property name="Content Encoding" required="No">
         Content encoding to be used (for <code>POST</code>, <code>PUT</code>, <code>PATCH</code> and <code>FILE</code>).
-        This the the character encoding to be used, and is not related to the Content-Encoding HTTP header.
+        This is the character encoding to be used, and is not related to the Content-Encoding HTTP header.
         </property>
         <property name="Redirect Automatically" required="No">
         Sets the underlying http protocol handler to automatically follow redirects,
