@@ -143,7 +143,7 @@ Documentations have been refreshed particularly:
 </p>
 
 <ch_title>Toolbar</ch_title>
-<p>JMeter's toolbar has been refreshed for some icons (start, toogle, etc.). Three sizes are now available for the icons: 22x22, 32x32 and 48x48.<br>
+<p>JMeter's toolbar has been refreshed for some icons (start, toggle, etc.). Three sizes are now available for the icons: 22x22, 32x32 and 48x48.<br>
 The property to define your preferred size is:
 <pre>jmeter.toolbar.icons.size=value</pre>
 with the value 22x22 (default size), 32x32 or 48x48.</br></p>
