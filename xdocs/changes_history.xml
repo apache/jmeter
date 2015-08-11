@@ -69,7 +69,7 @@ Summary
 
 <ch_title>New Async BackendListener with Graphite implementation</ch_title>
 <p>A new Async BackendListener has been added to allow sending result data to a backend listener. 
-JMeter ships with a GraphiteBackendListenerClient that allows sending results to a <a href="http://graphite.wikidot.com/" target="_blank">Graphite</a> server using Pickle ot Plaintext protocols.
+JMeter ships with a GraphiteBackendListenerClient that allows sending results to a <a href="http://graphite.wikidot.com/" target="_blank">Graphite</a> server using Pickle or Plaintext protocols.
 You can implement your own backend by extending <a href="./api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html">AbstractBackendListenerClient</a>. This backend could be 
 a database (JDBC), a Message Oriented Middleware (JMS), a Webservice or anything you want.
  </p>
@@ -610,7 +610,7 @@ for details on configuring this component.</li>
 <li><bugzilla>55999</bugzilla> - Scroll bar on jms point-to-point sampler does not work when content exceeds display</li>
 <li><bugzilla>56198</bugzilla> - JMSSampler : NullPointerException is thrown when JNDI underlying implementation of JMS provider does not comply with Context.getEnvironment contract</li>
 <li><bugzilla>56428</bugzilla> - MailReaderSampler - should it use mail.pop3s.* properties?</li>
-<li><bugzilla>46932</bugzilla> - Alias given in select statement is not used as column header in response data for a JDBC request.Based on report and analysis of Nicola Ambrosetti</li>
+<li><bugzilla>46932</bugzilla> - Alias given in select statement is not used as column header in response data for a JDBC request. Based on report and analysis of Nicola Ambrosetti</li>
 <li><bugzilla>56539</bugzilla> - Mail reader sampler: When Number of messages to retrieve is superior to 1, Number of samples should only show 1 not the number of messages retrieved</li>
 <li><bugzilla>56809</bugzilla> - JMSSampler closes InitialContext too early. Contributed by Bradford Hovinen (hovinen at gmail.com)</li>
 <li><bugzilla>56761</bugzilla> - JMeter tries to stop already stopped JMS connection and displays "The connection is closed"</li>
