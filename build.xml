@@ -2266,9 +2266,9 @@ run JMeter unless all the JMeter jars are added.
     Otherwise the output from the build will depend on which is done first.
     -->
     <echo level="info">Fixing EOL</echo>
-    <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
+    <fixcrlf encoding="utf-8" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
-    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" excludes="api/**" token="&lt;/br>" value=""/>
+    <replace encoding="utf-8" dir="${dest.docs}/" includes="**/*.html" excludes="api/**" token="&lt;/br>" value=""/>
     <copy todir="${dest.docs}/demos">
       <fileset dir="${src.demos}"/>
     </copy>
@@ -2290,9 +2290,9 @@ run JMeter unless all the JMeter jars are added.
         excludes="**/stylesheets/** extending.xml extending/*.xml"
         includes="**/*.xml" lastModifiedCheck="${anakia.lastModifiedCheck}" velocityPropertiesFile="${src.docs}/velocity.properties"/>
     <echo level="info">Fixing EOL</echo>
-    <fixcrlf encoding="iso-8859-1" srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
+    <fixcrlf encoding="utf-8" srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
-    <replace encoding="iso-8859-1" dir="${dest.printable_docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
+    <replace encoding="utf-8" dir="${dest.printable_docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
     <!--
     Share images with non-printable version
     Means printable version won't work on web-site
