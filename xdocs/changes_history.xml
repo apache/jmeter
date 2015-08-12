@@ -18,6 +18,7 @@
 <!DOCTYPE document [
   <!ENTITY oacute "&#x000F3;">
   <!ENTITY THORN  "&#x000DE;">
+  <!ENTITY rarr   "&#x02192;">
 ]>
 <document>   
 <properties>     
@@ -2826,7 +2827,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <li><bugzilla>50438</bugzilla> - code calculates average with integer math, expecting double value</li>
 <li><bugzilla>52469</bugzilla> - Changes in Support of SSH-Tunneling of RMI traffic for Remote Testing</li>
 <li><bugzilla>52466</bugzilla> - Upgrade Test Plan feature : NameUpdater does not upgrade properties</li>
-<li><bugzilla>52503</bugzilla> - Unify File->Close and Window close file saving behaviour</li>
+<li><bugzilla>52503</bugzilla> - Unify File&rarr;Close and Window close file saving behaviour</li>
 <li><bugzilla>52537</bugzilla> - Help does not scroll to correct anchor when file is first loaded</li>
 </ul>
 
@@ -3006,7 +3007,7 @@ httpclient3.retrycount=3
 <li><bugzilla>51863</bugzilla> - Lots of ESTABLISHED connections with HttpClient 4 implementation (vs HttpClient 3.1 impl)</li>
 <li><bugzilla>51750</bugzilla> - Retrieve all embedded resources doesn't follow IFRAME</li>
 <li><bugzilla>51752</bugzilla> - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
-<li><bugzilla>39219</bugzilla> - HTTP Server: You can't stop it after File->Open</li>
+<li><bugzilla>39219</bugzilla> - HTTP Server: You can't stop it after File&rarr;Open</li>
 <li><bugzilla>51775</bugzilla> - Port number duplicates in Host header when capturing by HttpClient (3.1 and 4.x)</li>
 <li><bugzilla>50617</bugzilla> - Monitor Results legend show "dead" server although values from the server are retrieved</li>
 </ul>
@@ -4416,7 +4417,7 @@ This corrects discrepancies between Summary Report and Aggregate Report throughp
 <h4>Improvements</h4>
 <ul>
 <li>Add run_gui Ant target, to package and then start the JMeter GUI from Ant</li>
-<li>Add File->Revert to easily drop the current changes and reload the project file currently loaded</li>
+<li>Add File&rarr;Revert to easily drop the current changes and reload the project file currently loaded</li>
 <li><bugzilla>31366</bugzilla> - Remember recently opened file(s)</li>
 <li><bugzilla>43351</bugzilla> - Add support for Parameters and script file to all BeanShell test elements</li>
 <li>SaveService no longer needs to instantiate classes</li>
