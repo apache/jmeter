@@ -18,6 +18,7 @@
 
 <!DOCTYPE document[
 <!ENTITY sect-num '2'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
 
 <document prev="intro.html" next="build-test-plan.html" id="$Id$">
@@ -217,7 +218,7 @@ For example:
 </p>
 <source>
 set JVM_ARGS="-Xms1024m -Xmx1024m -Dpropname=propvalue"
-jmeter -t test.jmx ...
+jmeter -t test.jmx &hellip;
 </source>
 
 <p>
@@ -276,7 +277,7 @@ options when <code>-jar</code> is used.
 
 <subsection name="&sect-num;.4.2 Create Test Plan from Template" anchor="template">
 <p>You have the ability to create a new Test Plan from existing template.</p>
-<p>To do so you use the menu <b>File</b> &gt; <b>Templates...</b> or Templates icon:
+<p>To do so you use the menu <b>File</b> &gt; <b>Templates&hellip;</b> or Templates icon:
 <figure image="template_menu.png">Templates icon item</figure>
 </p>
 <p>A popup appears, you can then choose a template among the list:
@@ -436,7 +437,7 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
         e.g. for the test plan <code>Test27.jmx</code> the log file is set to <code>Test27.log</code>.
         </p>
         <p>When running on Windows, the file may appear as just <b>jmeter</b> unless you have set Windows to show file extensions.
-        [Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
+        [Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files &hellip;]
         </p>
         <p>As well as recording errors, the <code>jmeter.log</code> file records some information about the test run. For example:</p>
 <source>
@@ -497,7 +498,7 @@ These are shown below.</p>
         e.g. jorphan=INFO or jmeter.util=DEBUG
 -r, --runremote (non-GUI only)
         Start remote servers (as defined by the jmeter property remote_hosts)
--R, --remotestart  server1,... (non-GUI only)
+-R, --remotestart  server1, &hellip; (non-GUI only)
         Start these remote servers (overrides remote_hosts)
 -d, --homedir {argument}
         the jmeter home directory to use

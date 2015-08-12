@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '19'>
+<!ENTITY hellip   "&#x02026;" >
 <!ENTITY rarr     "&#x02192;" >
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
@@ -294,7 +295,7 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
             <li>ASCII Control Chars</li>
             <li>Non-ASCII characters</li>
             <li>Reserved characters:URLs use some characters for special use in defining their syntax. When these characters are not used in their special role inside a URL, they need to be encoded, example : '<code>$</code>', '<code>&amp;</code>', '<code>+</code>', '<code>,</code>' , '<code>/</code>', '<code>:</code>', '<code>;</code>', '<code>=</code>', '<code>?</code>', '<code>@</code>'</li>
-            <li>Unsafe characters: Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should also always be encoded, example : '<code> </code>', '<code>&lt;</code>', '<code>&gt;</code>', '<code>#</code>', '<code>%</code>', ...</li>
+            <li>Unsafe characters: Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should also always be encoded, example : '<code> </code>', '<code>&lt;</code>', '<code>&gt;</code>', '<code>#</code>', '<code>%</code>', &hellip;</li>
         </ul>
         </property>
         <property name="File Path:" required="No">Name of the file to send.  If left blank, JMeter
@@ -1031,7 +1032,7 @@ Webservice Soap Sampler assumes that empty response means failure.
 <center><h2>(Beta Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
-request it accepted. This means every image, css file, javascript file, html file.... 
+request it accepted. This means every image, css file, javascript file, html file, &hellip;
 The current implementation is complete, but some features have not been enabled. 
 There is a filter for the access log parser, but I haven't figured out how to link to the pre-processor. 
 Once I do, changes to the sampler will be made to enable that functionality.</p>
@@ -1040,7 +1041,7 @@ common log format can use the AccessLogSampler. Server that use common log forma
 Tomcat, Resin, Weblogic, and SunOne. Common log format looks
 like this:</p>
 <source>127.0.0.1 - - [21/Oct/2003:05:37:21 -0500] "GET /index.jsp?%2Findex.jsp= HTTP/1.1" 200 8343</source>
-<note>The current implementation of the parser only looks at the text within the quotes that contains one of the HTTP protocol methods (<code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code>...).
+<note>The current implementation of the parser only looks at the text within the quotes that contains one of the HTTP protocol methods (<code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code>, &hellip;).
 Everything else is stripped out and ignored. For example, the response code is completely
 ignored by the parser. </note>
 <p>For the future, it might be nice to filter out entries that
@@ -1220,7 +1221,7 @@ return getVariables();
 </source>
 <p>
 For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html"><code>JMeterVariables</code></a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a> etc.) please check the Javadoc or the source code.
-Beware however that misuse of any methods can cause subtle faults that may be difficult to find ...
+Beware however that misuse of any methods can cause subtle faults that may be difficult to find.
 </p>
 </component>
 
@@ -2223,7 +2224,7 @@ Group to loop, here is the sequence in which JMeter sends the requests:
 <tr valign="top"><td>3</td><td>JMeter sends the third HTTP Request.</td></tr>
 <tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request.</td></tr>
 <tr valign="top"><td>5</td><td>JMeter sends the second HTTP Request.</td></tr>
-<tr valign="top"><td>(and so on)</td><td>...</td></tr>
+<tr valign="top"><td>(and so on)</td><td>&hellip;</td></tr>
 </table>
 -->
 <example title="Simple Interleave Example" anchor="simple_interleave_example">
@@ -2801,7 +2802,7 @@ by using the <code>-l</code> command-line flag.
         If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
         then the path is assumed to be relative to the JMX file location. 
         </property>
-        <property name="Browse..." required="No">File Browse Button</property>
+        <property name="Browse &hellip;" required="No">File Browse Button</property>
         <property name="Errors" required="No">Select this to write/read only results with errors</property>
         <property name="Successes" required="No">Select this to write/read only results without errors.
         If neither <code>Errors</code> nor <code>Successes</code> is selected, then all results are processed.</property>
@@ -2923,7 +2924,7 @@ Match[6]=#functions
 Match[7]=#__regexFunction
 Match[8]=#__regexFunction_parms
 Match[9]=#__counter
-... and so on ...
+&hellip; and so on &hellip;
 </source>
 <br/></td></tr>
 <tr><td><code>Document</code></td>
@@ -2967,7 +2968,7 @@ Match[2][0]=JMeter" title="JMeter" border="0"/&gt;lt;/a&gt;
 Match[2][1]=JMeter
 Match[3][0]=JMeterCommitters"&gt;Contributors&lt;/a&gt;
 Match[3][1]=JMeterCommitters
-... and so on ...
+&hellip; and so on &hellip;
 </source>
 <br/>
 The first number in <code>[]</code> is the match number; the second number is the group. 
@@ -3650,7 +3651,7 @@ By default, a Graphite implementation is provided.
     <p>
     See the description of the Share mode below for additional options (JMeter 2.3.2+).
     If you want each thread to have its own set of values, then you will need to create a set of files,
-    one for each thread. For example <code>test1.csv</code>, <code>test2.csv</code>,... <code>testn.csv</code>. Use the filename 
+    one for each thread. For example <code>test1.csv</code>, <code>test2.csv</code>, &hellip;, <code>test<em>n</em>.csv</code>. Use the filename 
     <code>test${__threadNum}.csv</code> and set the "<code>Sharing mode</code>" to "<code>Current thread</code>".
     </p>
     <note>CSV Dataset variables are defined at the start of each test iteration.
@@ -4141,7 +4142,7 @@ If the database server is not running or is not accessible, then JMeter will rep
 OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</td></tr>
 <tr><td>Ingres (2006)</td><td>ingres.jdbc.IngresDriver</td><td>jdbc:ingres://host:port/db[;attr=value]</td></tr>
 <tr><td>SQL Server (MS JDBC driver)</td><td>com.microsoft.sqlserver.jdbc.SQLServerDriver</td><td>jdbc:sqlserver://host:port;DatabaseName=dbname</td></tr>
-<tr><td>Apache Derby</td><td>org.apache.derby.jdbc.ClientDriver</td><td>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]</td></tr>
+<tr><td>Apache Derby</td><td>org.apache.derby.jdbc.ClientDriver</td><td>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</td></tr>
 </table>
 <note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
 </component>
@@ -4281,8 +4282,8 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "Name"
-      column is what you'll need to place inside the brackets in ${...} constructs to use the variables later on. The
-      whole ${...} will then be replaced by the string in the "Value" column.</property>
+      column is what you'll need to place inside the brackets in <code>${&hellip;}</code> constructs to use the variables later on. The
+      whole <code>${&hellip;}</code> will then be replaced by the string in the "<code>Value</code>" column.</property>
 </properties>
 </component>
 
@@ -4382,7 +4383,7 @@ import com.mongodb.DB;
 import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;
 DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
             "value of property Database Name");
-...
+&hellip;
     </source>
     </description>
     <properties>
@@ -4782,7 +4783,7 @@ you can provide a Properties file which contains mappings for the namespace pref
 <ul>
 <li>prefix1=Full Namespace 1</li>
 <li>prefix2=Full Namespace 2</li>
-<li>...</li>
+<li>&hellip;</li>
 </ul>
 
 You reference this file in jmeter.properties file using the property:
@@ -5720,7 +5721,7 @@ extracting the node as text or attribute value and store the result into the giv
             <li>ancestor child:child elements that descend from ancestor, e.g. .body p finds p elements anywhere under a block with class "body"</li>
             <li>:lt(n): find elements whose sibling index (i.e. its position in the DOM tree relative to its parent) is less than n; e.g. td:lt(3)</li>
             <li>:contains(text): find elements that contain the given text. The search is case-insensitive; e.g. p:contains(jsoup)</li>
-            <li>...</li>
+            <li>&hellip;</li>
         </ul>
         For more details on syntax, see:
             <ul>
@@ -6337,7 +6338,7 @@ Choose the following options:
 <li>Advanced / Certificates</li>
 <li>View Certificates</li>
 <li>Authorities</li>
-<li>Import ...</li>
+<li>Import &hellip;</li>
 <li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.crt</code>, press Open</li>
 <li>Click View and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
 <li>If OK, select "Trust this CA to identify web sites", and press OK</li>
@@ -6350,13 +6351,13 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
 <ul>
 <li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.crt</code>, and open it</li>
 <li>Click on the "Details" tab and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
-<li>If OK, go back to the "General" tab, and click on "Install Certificate ..." and follow the Wizard prompts</li>
+<li>If OK, go back to the "General" tab, and click on "Install Certificate &hellip;" and follow the Wizard prompts</li>
 </ul>
 <h5>Installing the certificate in Opera</h5>
 <ul>
 <li>Tools / Preferences / Advanced / Security</li>
-<li>Manage Certificates...</li>
-<li>Select "Intermediate" tab, click "Import..."</li>
+<li>Manage Certificates &hellip;</li>
+<li>Select "Intermediate" tab, click "Import &hellip;"</li>
 <li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.usr</code>, and open it</li>
 <li></li>
 </ul>
@@ -6378,7 +6379,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
              <li>Do not group samplers: store all recorded samplers sequentially, without any grouping.</li>
              <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
              <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
-             <li>Store 1<sup>st</sup> sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
+             <li>Store 1<sup>st</sup> sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources &hellip;" flags will be turned on in those samplers.</li>
              <li>Put each group in a new transaction controller: create a new <complink name="Transaction Controller"/> for each group, and store all samplers for that group in it.</li>
            </ul>
            The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
@@ -6560,11 +6561,11 @@ The parens are necessary, since the normally added boundary characters will prev
 <code>$</code> to match.</p>
 
 <p>If you want to match <code>/images</code> at the start of a string only, use the value <code>(^/images)</code>.
-Jakarta ORO also supports zero-width look-ahead, so one can match <code>/images/...</code>
+Jakarta ORO also supports zero-width look-ahead, so one can match <code>/images/&hellip;</code>
 but retain the trailing <code>/</code> in the output by using <code>(^/images(?=/))</code>".</p>
 
 <note>
-Note that the current version of Jakara ORO does not support look-behind - i.e. <code>(?&lt;=...)</code> or <code>(?&lt;!...)</code>.
+Note that the current version of Jakara ORO does not support look-behind - i.e. <code>(?&lt;=&hellip;)</code> or <code>(?&lt;!&hellip;)</code>.
 </note>
 
 <p>Look out for overlapping matchers. For example the value <code>.*</code> as a regex in a variable named
@@ -6616,7 +6617,7 @@ either by copying the files there or by starting JMeter in the directory contain
 </p>
 <h4>Recording HTTP Based Non Textual Protocols not natively available in JMeter</h4>
 <p>
-You may have to record an HTTP protocol that is not handled by default by JMeter (Custom Binary Protocol, Adobe Flex, Microsoft Silverlight... ).
+You may have to record an HTTP protocol that is not handled by default by JMeter (Custom Binary Protocol, Adobe Flex, Microsoft Silverlight, &hellip; ).
 Although JMeter does not provide a native proxy implementation to record these protocols, you have the ability to
 record these protocols by implementing a custom SamplerCreator. This Sampler Creator will translate the binary format into a HTTPSamplerBase subclass
 that can be added to the JMeter Test Case.
@@ -6647,7 +6648,7 @@ Note that you can get more control over the responses by adding an HTTP Header M
 <properties>
         <property name="X-Sleep" required="No">Time to sleep in ms before sending response</property>
         <property name="X-SetCookie" required="No">Cookies to be set on response</property>
-        <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status responses</a>, example 200 OK, 500 Internal Server Error ....</property>
+        <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status responses</a>, example 200 OK, 500 Internal Server Error, &hellip;.</property>
         <property name="X-ResponseLength" required="No">Size of response, this trims the response to the requested size if that is less than the total size</property>
         <property name="X-SetHeaders" required="No">Pipe separated list of headers, example:<br/> 
         <code>headerA=valueA|headerB=valueB</code> would set headerA to valueA and headerB to valueB.        

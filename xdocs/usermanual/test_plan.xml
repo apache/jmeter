@@ -18,6 +18,7 @@
 
 <!DOCTYPE document[
 <!ENTITY sect-num '4'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
 
 <document prev="build-test-plan.html" next="build-web-test-plan.html" id="$Id$">
@@ -494,7 +495,7 @@ LOOPS            ${__P(loops,20)}
 </pre>
 You can then change some or all of the values on the command-line as follows:
 <pre>
-jmeter ... -Jhost=www3.example.org -Jloops=13
+jmeter &hellip; -Jhost=www3.example.org -Jloops=13
 </pre>
 </p>
 </subsection>

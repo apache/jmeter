@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY release '2.13'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
     
 <document>   
@@ -118,8 +119,8 @@
         </p>
         <ul>
           <li class="download"><a href="[preferred]/jmeter/">browse download area</a></li>
-          <li><a href="https://archive.apache.org/dist/jmeter/">Apache JMeter archives...</a></li>
-          <li><a href="https://archive.apache.org/dist/jakarta/jmeter/">Apache Jakarta JMeter archives...</a></li>
+          <li><a href="https://archive.apache.org/dist/jmeter/">Apache JMeter archives&hellip;</a></li>
+          <li><a href="https://archive.apache.org/dist/jakarta/jmeter/">Apache Jakarta JMeter archives&hellip;</a></li>
         </ul>
     </section>
     <section name="Verification of downloads">

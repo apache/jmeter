@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '14'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
 
 <document prev="build-monitor-test-plan.html" next="remote-test.html" id="$Id$">
@@ -340,7 +341,7 @@ The format of the updated XML (2.1) is as follows (line breaks will be different
         tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002"&gt;
     &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
-...
+&hellip;
 Content-Type: text/css
 &lt;/responseHeader&gt;
     &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
@@ -350,7 +351,7 @@ Content-Type: text/css
     color: black;
     background-color: white;
 }
-...
+&hellip;
 &lt;/responseData&gt;
     &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
     &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
@@ -362,7 +363,7 @@ Content-Type: text/css
      rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866"&gt;
     &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
-...
+&hellip;
 Content-Type: image/gif
 &lt;/responseHeader&gt;
     &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
@@ -375,19 +376,19 @@ Content-Type: image/gif
   &lt;/httpSample&gt;
   &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:13 GMT
-...
+&hellip;
 Content-Type: text/html; charset=ISO-8859-1
 &lt;/responseHeader&gt;
   &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
   &lt;responseData class="java.lang.String"&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
                &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
-...
+&hellip;
 &lt;html&gt;
  &lt;head&gt;
-...
+&hellip;
  &lt;/head&gt;
  &lt;body&gt;        
-...
+&hellip;
  &lt;/body&gt;
 &lt;/html&gt;
 &lt;/responseData&gt;
@@ -473,7 +474,7 @@ The data will be retrieved from the file if necessary when the sample log file i
 </p>
 </section>
 <section name="&sect-num;.9 Loading (reading) response data" anchor="loading">
-<p>To view an existing results file, you can use the File "Browse..." button to select a file.
+<p>To view an existing results file, you can use the File "Browse&hellip;" button to select a file.
 If necessary, just create a dummy testplan with the appropriate Listener in it.
 </p>
 <p>Results can be read from XML or CSV format files.

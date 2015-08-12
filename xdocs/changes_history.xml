@@ -16,6 +16,7 @@
    limitations under the License.
 -->
 <!DOCTYPE document [
+  <!ENTITY hellip "&#x02026;">
   <!ENTITY oacute "&#x000F3;">
   <!ENTITY THORN  "&#x000DE;">
   <!ENTITY rarr   "&#x02192;">
@@ -112,7 +113,7 @@ aggregate_rpt_pct3=99
 </p>
 
 <ch_title>JDBC Request</ch_title>
-<p>The ResultSet can be get as a object, this allows to handle more easily the results after in BeanShell, JSR223 scripts...
+<p>The ResultSet can be get as a object, this allows to handle more easily the results after in BeanShell, JSR223 scripts, &hellip;
 <figure width="683" height="628" image="changes/2.13/jdbc_resultset_handler.png"></figure>
 </p>
 
@@ -205,7 +206,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 
 <h3>Listeners</h3>
 <ul>
-<li><bug>55932</bug>Create a Async BackendListener to allow easy plug of new listener (Graphite, JDBC, Console,...)</li>
+<li><bug>55932</bug>Create a Async BackendListener to allow easy plug of new listener (Graphite, JDBC, Console, &hellip;)</li>
 <li><bug>57246</bug>BackendListener : Create a Graphite implementation</li>
 <li><bug>57217</bug>Aggregate graph and Aggregate report improvements (3 configurable percentiles, same data in both, factor out code). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bug>57537</bug>BackendListener : Allow implementations to drop samples</li>
@@ -260,7 +261,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
 <li><bug>57385</bug>Getting empty thread name in xml result for HTTP requests with "Follow Redirects" set. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-<li><bug>57579</bug>NullPointerException error is raised on main sample if "RETURN_NO_SAMPLE" is used (default) and "Use Cache-Control / Expires header..." is checked in HTTP Cache Manager</li>
+<li><bug>57579</bug>NullPointerException error is raised on main sample if "RETURN_NO_SAMPLE" is used (default) and "Use Cache-Control / Expires header&hellip;" is checked in HTTP Cache Manager</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -360,7 +361,7 @@ Note that under some windows systems you may have this WARNING:
 <pre>
 java.util.prefs.WindowsPreferences 
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
-x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
 </pre>
 The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
 </li>
@@ -542,7 +543,7 @@ Note that under some windows systems you may have this WARNING:
 <pre>
 java.util.prefs.WindowsPreferences 
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
-x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
 </pre>
 The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
 </li>
@@ -850,7 +851,7 @@ field lets you select the certificate you want to send to server to authenticate
 <figure width="1287" height="386" image="changes/2.11/06_summariser.png"></figure>
 </p>
 
-<ch_title>Transaction Controller:Change default property "Include duration of timer..." for newly created element</ch_title>
+<ch_title>Transaction Controller:Change default property "Include duration of timer&hellip;" for newly created element</ch_title>
 <p>Starting from 2.11, Transaction Controller is configured by default to exclude processing time of pre/post processors as long as timers pause.</p>
 <p>
 <figure width="628" height="140" image="changes/2.11/02_transaction_controller.png"></figure>
@@ -941,7 +942,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Controllers</h3>
 <ul>
-<li><bugzilla>55816</bugzilla> - Transaction Controller with "Include duration of timer..." unchecked does not ignore processing time of last child sampler</li>
+<li><bugzilla>55816</bugzilla> - Transaction Controller with "Include duration of timer&hellip;" unchecked does not ignore processing time of last child sampler</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -984,7 +985,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 
 <h3>Controllers</h3>
 <ul>
-<li><bugzilla>55854</bugzilla> - Transaction Controller:Change default property "Include duration of timer..." for newly created element</li>
+<li><bugzilla>55854</bugzilla> - Transaction Controller:Change default property "Include duration of timer&hellip;" for newly created element</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -1610,7 +1611,7 @@ it allows using either JODD or JSOUP implementations</h4>
 <p>Result: the title of the page in a JMeter variable
 <figure width="719" height="171" image="changes/2.9/01_css_jquery_extractor_resul.png"></figure>
 </p>
-<h4>* JMeter can now handle different types of documents (PDF, MsOffice files, Apache OpenOffice's files...)
+<h4>* JMeter can now handle different types of documents (PDF, MsOffice files, Apache OpenOffice's files, &hellip;)
  within different elements </h4>
 <ul>
     <li>Regular Expression Extractor, extract text from documents</li>
@@ -1649,7 +1650,7 @@ using a reference extracted by Regular Expression Extractor from a previous resp
 <h4>* Memory and performance improvements</h4>
 <p>Significant improvements have been done in this version on memory usage per Thread and CPU when more 
 than one Post Processor is used as child of a Sampler</p>
-<p>JSR223 Elements (enable using Groovy, Scala... as scripting languages) have been improved to enable caching 
+<p>JSR223 Elements (enable using Groovy, Scala, &hellip; as scripting languages) have been improved to enable caching 
 of Compilation results when scripts are passed in Text area</p>
 <figure width="841" height="470" image="changes/2.9/12_jsr223_sampler.png"></figure>
 
@@ -1695,7 +1696,7 @@ this list can be configured through property : <i>proxy.excludes.suggested</i>
 
 <h3><u>HTTP Proxy Server recording:</u></h3>
 <p>* HTTP Proxy Server now automatically uses HTTP Request with Raw Post Body mode for 
-samples that only have one unnamed argument (JSON, XML, GWT...)</p>
+samples that only have one unnamed argument (JSON, XML, GWT, &hellip;)</p>
 <p>* HTTP Proxy Server does not force user to select the type of Sampler in HTTP Sampler Settings,
  this allows easier switch between implementations as Sampler do not have this information set anymore</p>
  <p>
@@ -1943,7 +1944,7 @@ Cookie Manager has now the default HC3.1 implementation and a new choice HC4 imp
 
 <h4>Memory and performance improvements</h4>
 <p>Significant improvements have been done in this version on memory usage of JMeterThread</p>
-<p>JSR223 Elements (enable using Groovy, scala... as scripting languages) have been improved to enable:
+<p>JSR223 Elements (enable using Groovy, scala, &hellip; as scripting languages) have been improved to enable:
 <ul>
     <li>usage of Compilable interface when available to boost CPU usage</li>
     <li>caching of Compilation when scripts are used as Files</li>
@@ -1994,7 +1995,7 @@ Previously the default was the HTTP Java implementation (i.e. the implementation
 </p>
 
 <h4>Aggregate Graph</h4>
-<p>Small improvements: legend at left or right is now on 1 column (instead of 1 large line), ...
+<p>Small improvements: legend at left or right is now on 1 column (instead of 1 large line), &hellip;
 <figure width="989" height="418" image="changes/2.8/07_aggregate_graph_legend_left_right.png"></figure>
 </p>
 
@@ -2482,7 +2483,7 @@ When calling "Clear All" command, if Log Viewer is displayed its content will be
 <li><bugzilla>45839</bugzilla> - Test Action : Allow premature exit from a loop</li>
 <li><bugzilla>52614</bugzilla> - MailerModel.sendMail has strange way to calculate debug setting</li>
 <li><bugzilla>52782</bugzilla> - Add a detail button on parameters table to show detail of a Row</li>
-<li><bugzilla>52674</bugzilla> - Proxy : Add a Sampler Creator to allow plugging HTTP based samplers using potentially non textual POST Body (AMF, Silverlight...) and customizing them for others</li>
+<li><bugzilla>52674</bugzilla> - Proxy : Add a Sampler Creator to allow plugging HTTP based samplers using potentially non textual POST Body (AMF, Silverlight, &hellip;) and customizing them for others</li>
 <li><bugzilla>52934</bugzilla> - GUI : Open Test plan with the tree expanded to the testplan level and no further and select the root of the tree</li>
 <li><bugzilla>52941</bugzilla> - Improvements of HTML report design generated by JMeter Ant task extra</li>
 <li><bugzilla>53042</bugzilla> - Introduce a new method in Sampler interface to allow Sampler to decide wether a config element applies to Sampler</li>
@@ -2819,7 +2820,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <li><bugzilla>52217</bugzilla> - ViewResultsFullVisualizer : Synchronization issues on root and treeModel</li>
 <li><bugzilla>43294</bugzilla> - XPath Extractor namespace problems</li>
 <li><bugzilla>52224</bugzilla> - TestBeanHelper does not support NOT_UNDEFINED == Boolean.FALSE</li>
-<li><bugzilla>52279</bugzilla> - Switching to another language loses icons in Tree and logs error Can't obtain GUI class from ...</li>
+<li><bugzilla>52279</bugzilla> - Switching to another language loses icons in Tree and logs error Can't obtain GUI class from &hellip;</li>
 <li><bugzilla>52280</bugzilla> - The menu item Options / Choose Language does not change all the displayed text to the new language</li>
 <li><bugzilla>52376</bugzilla> - StatCalculator#addValue(T val, int sampleCount) should use long, not int</li>
 <li><bugzilla>49374</bugzilla> - Encoding of embedded element URLs depend on the file.encoding property</li>
@@ -3054,7 +3055,7 @@ httpclient3.retrycount=3
 <li><bugzilla>51831</bugzilla> - Cannot disable UDP server or change the maximum UDP port</li>
 <li><bugzilla>51821</bugzilla> - Add short-cut for Enabling / Disabling (sub)tree or branches in test plan.</li>
 <li><bugzilla>47921</bugzilla> - Variables not released for GC after JMeterThread exits.</li>
-<li><bugzilla>51839</bugzilla> - "... end of run" printed prematurely</li>
+<li><bugzilla>51839</bugzilla> - "&hellip; end of run" printed prematurely</li>
 <li><bugzilla>51847</bugzilla> - Some JUnit tests are Locale sensitive and fail if Locale is different from US</li>
 <li><bugzilla>51855</bugzilla> - Parent samples may have slightly inaccurate elapsed times</li>
 <li><bugzilla>51880</bugzilla> - The shutdown command is not working if I invoke it before all the thread are started</li>
@@ -5416,7 +5417,7 @@ test engine code.</li>
     <li>Thread groups have been added, allowing a user to setup multiple test to run   
         concurrently, and to allow sharing of test samples between those tests.</li>   
     <li>It is now possible to save and load test samples.</li>   
-    <li>....and many more minor changes/improvements...</li> 
+    <li>&hellip; and many more minor changes/improvements &hellip;</li> 
 </ul> 
 </p> 
 <p> 

@@ -18,13 +18,14 @@
 
 <!DOCTYPE document[
 <!ENTITY sect-num '18'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
 
 <document prev="best-practices.html" next="component_reference.html" id="$Id$">
 
 <properties>
   <author email="dev@jmeter.apache.org">JMeter developers</author>
-  <title>User's Manual: My boss wants me to...</title>
+  <title>User's Manual: My boss wants me to &hellip;</title>
 </properties>
 
 <body>
