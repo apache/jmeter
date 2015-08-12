@@ -481,9 +481,9 @@ Examples:<br></br>
     <b>To prevent a formatting character from being interpreted,
     enclose it in single quotes. Note that "<code>.</code>" is a formatting character,
     and must be enclosed in single quotes</b>
-    (though <code>#</code>. and <code>000</code>. work as expected in locales where the decimal point is also "<code>.</code>")
+    (though <code>#.</code> and <code>000.</code> work as expected in locales where the decimal point is also "<code>.</code>")
     <br></br>
-    In other locales (e.g. fr), the decimal point is "<code>,</code>" - which means that "<code>#.</code>"
+    In other locales (e.g. <code>fr</code>), the decimal point is "<code>,</code>" - which means that "<code>#.</code>"
     becomes "<code>nnn,</code>".<br></br>
     See the documentation for DecimalFormat for full details.<br></br>
     If the path name does not contain any special formatting characters,
