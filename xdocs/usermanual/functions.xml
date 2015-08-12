@@ -21,6 +21,7 @@
 <!ENTITY sect-num '20'>
 <!ENTITY ccedil   "&#x000E7;" >
 <!ENTITY eacute   "&#x000E9;" >
+<!ENTITY hellip   "&#x02026;" >
 <!ENTITY yen      "&#x000A5;" >
 ]>
 
@@ -473,12 +474,12 @@ Defaults to "<code>StringFromFile_</code>".
 Here are a few format strings and the corresponding sequences they will generate.
 <dl>
   <dt><code>pin#'.'dat</code></dt><dd>Will generate the digits without leading zeros and treat the dot literally like<br />
-    <code>pin1.dat</code>, ..., <code>pin9.dat</code>, <code>pin10.dat</code>, ..., <code>pin9999.dat</code></dd>
+    <code>pin1.dat</code>, &hellip;, <code>pin9.dat</code>, <code>pin10.dat</code>, &hellip;, <code>pin9999.dat</code></dd>
   <dt><code>pin000'.'dat</code></dt><dd>Will generate leading zeros while keeping the dot. When the numbers start having more digits
     then those three digits that this format suggests, the sequence will use more digits as can be seen in<br />
-    <code>pin001.dat</code>, ... <code>pin099.dat</code>, ..., <code>pin999.dat</code>, ..., <code>pin9999.dat</code></dd>
+    <code>pin001.dat</code>, &hellip; <code>pin099.dat</code>, &hellip;, <code>pin999.dat</code>, &hellip;, <code>pin9999.dat</code></dd>
   <dt><code>pin'.'dat#</code></dt><dd>Will append digits without leading zeros while keeping the dot and generate<br />
-    <code>pin.dat1</code>, ..., <code>pin.dat9</code>, ..., <code>pin.dat999</code></dd>
+    <code>pin.dat1</code>, &hellip;, <code>pin.dat9</code>, &hellip;, <code>pin.dat999</code></dd>
 </dl>
 </example>
 <p>
@@ -748,9 +749,9 @@ the second would return <code>1</code> and the last would return <code>www.dummy
 </p>
 For example:
 <dl>
-  <dt><code>${__log(Message)}</code></dt><dd>written to the log file as   "<code>...thread Name : Message</code>"</dd>
+  <dt><code>${__log(Message)}</code></dt><dd>written to the log file as   "<code> &hellip; thread Name : Message</code>"</dd>
   <dt><code>${__log(Message,OUT)}</code></dt><dd>written to console window</dd>
-  <dt><code>${__log(${VAR},,,VAR=)}</code></dt><dd>written to log file as "<code>...thread Name VAR=value</code>"</dd>
+  <dt><code>${__log(${VAR},,,VAR=)}</code></dt><dd>written to log file as "<code> &hellip; thread Name VAR=value</code>"</dd>
 </dl>
 </component>
 

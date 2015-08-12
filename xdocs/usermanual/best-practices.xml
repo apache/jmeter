@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '17'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
 
 <document prev="realtime-results.html" next="boss.html" id="$Id$">
@@ -115,7 +116,7 @@ The error "unknown_ca" probably means that you are trying to record HTTPS, and t
 JMeter Proxy server certificate.
 </p>
 <!--TODO: Describe how to use this to record against one server[name]
-and run against another. Actually, this particular example may be beter for the HTTP Request Defaults...
+and run against another. Actually, this particular example may be beter for the HTTP Request Defaults&hellip;
 a good similar example for the variables is http vs. https.-->
 <!--SUMMARY of all TODO's above: we need some actual usage to identify best practices
 with this new features.-->
@@ -209,7 +210,7 @@ the output should look like:
 <source>
 $ java -jar ../lib/bshclient.jar localhost 9000 ../extras/remote.bsh
 Connecting to BSH server on localhost:9000
-Reading responses from server ...
+Reading responses from server &hellip;
 BeanShell 2.0b5 - by Pat Niemeyer (pat@pat.net)
 bsh % remote.bsh starting
 user.home = C:\Documents and Settings\User
@@ -228,7 +229,7 @@ Setting property 'EXAMPLE' to '8'.
 Setting property 'EXAMPLE' to '9'.
 EXAMPLE = 9
 remote.bsh ended
-bsh % ... disconnected from server.
+bsh % &hellip; disconnected from server.
 </source>
 </p>
 <p>
@@ -360,7 +361,7 @@ One solution to this is to define the Test Plan variable in terms of a property,
 for example <code>LOOPS=${__P(loops,10))}</code>.
 This uses the value of the property "<code>loops</code>", defaulting to <code>10</code> if the property is not found.
 The "<code>loops</code>" property can then be defined on the JMeter command-line:
-<source>jmeter ... -Jloops=12 ...</source>
+<source>jmeter &hellip; -Jloops=12 &hellip;</source>
 If there are a lot of properties that need to be changed together,
 then one way to achieve this is to use a set of property files.
 The appropriate property file can be passed in to JMeter using the <code>-q</code> command-line option.

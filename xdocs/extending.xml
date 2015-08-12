@@ -15,6 +15,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+<!DOCTYPE document
+[
+<!ENTITY hellip   "&#x02026;" >
+]>
 <document>
   <properties>
     <title>Extending JMeter</title>
@@ -68,7 +72,7 @@ visualizer for display.
 </p>
 <p>
 <h3>Timers</h3>
-Timers provide a framework for delaying in between samples.  This is important in order to obtain a true balanced load on a function rather than a calm-STORM-calm-STORM-calm... pattern.  Timers contain two methods:
+Timers provide a framework for delaying in between samples.  This is important in order to obtain a true balanced load on a function rather than a calm-STORM-calm-STORM-calm-&hellip; pattern.  Timers contain two methods:
 <dl>
 <dt><code>delay()</code> wait for a Timer specific amount of time</dt>
 <dd>JMeter calls this function prior to every sample.  The Timer should wait for a period of time and then return.</dd>
