@@ -460,21 +460,27 @@ Defaults to "<code>StringFromFile_</code>".
 <p>The file name parameter is resolved when the file is opened or re-opened.</p>
 <p>The reference name parameter (if supplied) is resolved every time the function is executed.</p>
 <p><b>Using sequence numbers:</b></p>
-<p>When using the optional sequence numbers, the path name is used as the format string for java.text.DecimalFormat.
+<p>When using the optional sequence numbers, the path name is used as the format string for <code>java.text.DecimalFormat</code>.
     The current sequence number is passed in as the only parameter.
     If the optional start number is not specified, the path name is used as is.
     Useful formatting sequences are:
     </p>
-<source>
-# - insert the number, with no leading zeros or spaces
-000 - insert the number packed out to 3 digits with leading zeros if necessary
-</source>
-Examples:<br></br>
-<source>
- pin#'.'dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat
- pin000'.'dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat
- pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999
-</source>
+<dl>
+<dt><code>#</code></dt><dd>insert the number, with no leading zeros or spaces</dd>
+<dt><code>000</code></dt><dd>insert the number packed out to three digits with leading zeros if necessary</dd>
+</dl>
+<example title="Usage of format strings" anchor="string-from-file-format-examples">
+Here are a few format strings and the corresponding sequences they will generate.
+<dl>
+  <dt><code>pin#'.'dat</code></dt><dd>Will generate the digits without leading zeros and treat the dot literally like<br />
+    <code>pin1.dat</code>, ..., <code>pin9.dat</code>, <code>pin10.dat</code>, ..., <code>pin9999.dat</code></dd>
+  <dt><code>pin000'.'dat</code></dt><dd>Will generate leading zeros while keeping the dot. When the numbers start having more digits
+    then those three digits that this format suggests, the sequence will use more digits as can be seen in<br />
+    <code>pin001.dat</code>, ... <code>pin099.dat</code>, ..., <code>pin999.dat</code>, ..., <code>pin9999.dat</code></dd>
+  <dt><code>pin'.'dat#</code></dt><dd>Will append digits without leading zeros while keeping the dot and generate<br />
+    <code>pin.dat1</code>, ..., <code>pin.dat9</code>, ..., <code>pin.dat999</code></dd>
+</dl>
+</example>
 <p>
     If more digits are required than there are formatting characters, the number will be
     expanded as necessary.<br></br>
@@ -485,7 +491,7 @@ Examples:<br></br>
     <br></br>
     In other locales (e.g. <code>fr</code>), the decimal point is "<code>,</code>" - which means that "<code>#.</code>"
     becomes "<code>nnn,</code>".<br></br>
-    See the documentation for DecimalFormat for full details.<br></br>
+    See the documentation for <code>DecimalFormat</code> for full details.<br></br>
     If the path name does not contain any special formatting characters,
     the current sequence number will be appended to the name, otherwise
     the number will be inserted according to the formatting instructions.<br></br>
@@ -501,7 +507,7 @@ Examples:<br></br>
 </component>
 
 <component index="&sect-num;.5.6a" name="__machineName">
-<description><p>The machineName function returns the local host name. This uses the Java method InetAddress.getLocalHost() and passes it to getHostName()</p></description>
+<description><p>The machineName function returns the local host name. This uses the Java method <code>InetAddress.getLocalHost()</code> and passes it to <code>getHostName()</code></p></description>
 
 <properties>
         <property name="Variable Name" required="No">A reference name for reusing the value
@@ -510,7 +516,7 @@ Examples:<br></br>
 </component>
 
 <component index="&sect-num;.5.6b" name="__machineIP">
-<description><p>The machineIP function returns the local IP address. This uses the Java method InetAddress.getLocalHost() and passes it to getHostAddress()</p></description>
+<description><p>The machineIP function returns the local IP address. This uses the Java method <code>InetAddress.getLocalHost()</code> and passes it to <code>getHostAddress()</code></p></description>
 
 <properties>
         <property name="Variable Name" required="No">A reference name for reusing the value
