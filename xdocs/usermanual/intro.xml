@@ -15,6 +15,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+<!DOCTYPE document
+[
+<!ENTITY hellip   "&#x02026;" >
+]>
 <document next="get-started.html" id="$Id$">
 
 <properties>
@@ -59,7 +63,7 @@ The primary goal of further developments will be:
 <li>Addition of FTPS and SFTP protocols</li>
 <li>Enhancements to Webservices protocols (SOAP Attachments)</li>
 <li>Enhancements to JMS protocol implementation</li>
-<li>...</li>
+<li>&hellip;</li>
 </ul>
 
 </p>

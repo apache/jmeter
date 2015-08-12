@@ -15,6 +15,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+<!DOCTYPE document
+[
+<!ENTITY hellip   "&#x02026;" >
+]>
 <document>   
 <properties>     
     <author email="dev AT jmeter.apache.org">JMeter developers</author>     
@@ -230,7 +234,7 @@ Note that under some windows systems you may have this WARNING:
 <pre>
 java.util.prefs.WindowsPreferences 
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
-x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
 </pre>
 The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
 </li>

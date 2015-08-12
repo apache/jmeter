@@ -18,6 +18,7 @@
 
 <!DOCTYPE document[
 <!ENTITY sect-num '16'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
 
 <document prev="remote-test.html" next="best-practices.html" id="$Id: realtime-results.xml 1457581 2013-03-17 22:58:08Z sebb $">
@@ -31,7 +32,7 @@
 
 <section name="&sect-num;. Real-time results" anchor="realtime-results">
 <p>Since JMeter 2.13 you can get realtime results sent to a backend through the 
-<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice...) implementing <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
+<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;) implementing <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
 JMeter ships with a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br/>
 This feature provides:
 <ul>
@@ -39,7 +40,7 @@ This feature provides:
 <li>Nice graphs for metrics</li>
 <li>Ability to compare 2 or more load tests</li>
 <li>Storing monitoring data as long as JMeter results in the same backend</li>
-<li>...</li>
+<li>&hellip;</li>
 </ul>
 In this document we will present the configuration setup to graph and historize the data in 2 different backends:
 <ul>

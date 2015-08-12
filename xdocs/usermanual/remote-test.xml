@@ -18,6 +18,7 @@
 
 <!DOCTYPE document[
 <!ENTITY sect-num '15'>
+<!ENTITY hellip   "&#x02026;" >
 ]>
 
 <document prev="listeners.html" next="realtime-results.html" id="$Id$">
@@ -121,7 +122,7 @@ jmeter -n -t script.jmx -r
 </source>
 or
 <source>
-jmeter -n -t script.jmx -R server1,server2...
+jmeter -n -t script.jmx -R server1,server2,&hellip;
 </source>
 Other flags that may be useful:
 <dl>
