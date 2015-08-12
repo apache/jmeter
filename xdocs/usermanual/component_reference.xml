@@ -6170,7 +6170,7 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
   JDK).
 </p>
 <p>
-  To select the client certificate, choose Options-&gt;SSL Manager from the menu bar.
+  To select the client certificate, choose Options&rarr;SSL Manager from the menu bar.
   You will be presented with a file finder that looks for PKCS12 files by default.
   Your PKCS12 file must have the extension '.p12' for SSL Manager to recognize it
   as a PKCS12 file.  Any other file will be treated like an average JKS key store.
@@ -6211,7 +6211,7 @@ Ensure you read this <a href="https://wiki.apache.org/jmeter/TestRecording210">w
 
 <p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
 Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu (Add --> Non-Test Elements --> HTTP(S) Test Script Recorder).</p>
+Add menu (Add &rarr; Non-Test Elements &rarr; HTTP(S) Test Script Recorder).</p>
 <p>
 The recorder is implemented as an HTTP(S) proxy server.
 You need to set up your browser use the proxy for all HTTP and HTTPS requests.
