@@ -1892,6 +1892,8 @@ run JMeter unless all the JMeter jars are added.
           </classpath>
           <sysproperty key="classworlds.conf" value="${maven.home}/bin/m2.conf" />
           <sysproperty key="maven.home" value="${maven.home}" />
+          <!-- The following property must be defined for Maven 3.3.[123] at least -->
+          <sysproperty key="maven.multiModuleProjectDirectory" value="${maven.home}"/>
           <arg value="--batch-mode"/>
           <!--arg value="-X"/-->
           <arg value="-DgeneratePom=false"/>
