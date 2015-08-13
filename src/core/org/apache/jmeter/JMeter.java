@@ -348,7 +348,6 @@ public class JMeter implements JMeterPlugin {
                 for(String bit : bits){
                     log.debug(bit);
                 }
-                log.debug(jcp);
             }
 
             // Set some (hopefully!) useful properties
