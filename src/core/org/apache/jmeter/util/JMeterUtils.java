@@ -793,7 +793,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Integer.parseInt(appProperties.getProperty(propName, Integer.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Unexpected value set for int property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching int property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -820,7 +820,7 @@ public class JMeterUtils implements UnitTestManager {
                 ans = Integer.parseInt(strVal) == 1;
             }
         } catch (Exception e) {
-            log.warn("Unexpected value set for boolean property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching boolean property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -840,7 +840,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = Long.parseLong(appProperties.getProperty(propName, Long.toString(defaultVal)).trim());
         } catch (Exception e) {
-            log.warn("Unexpected value set for long property:'"+propName+"', defaulting to:"+defaultVal);
+            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching long property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -864,7 +864,7 @@ public class JMeterUtils implements UnitTestManager {
                 ans = value.trim();
             }
         } catch (Exception e) {
-            // TODO Can this happen ?
+            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching String property:'"+propName+"', defaulting to:"+defaultVal);
             ans = defaultVal;
         }
         return ans;
@@ -882,7 +882,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             ans = appProperties.getProperty(propName);
         } catch (Exception e) {
-            // TODO Can this happen ?
+            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching String property:'"+propName+"'");
             ans = null;
         }
         return ans;
