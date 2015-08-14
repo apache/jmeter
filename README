@@ -23,7 +23,8 @@
    o  Native commands or shell scripts
    o  TCP
 
-  Full multithreading framework allows concurrent sampling by many threads and simultaneous sampling of different functions by separate thread groups.
+  Full multithreading framework allows concurrent sampling by many threads
+  and simultaneous sampling of different functions by separate thread groups.
   Careful GUI design allows faster Test Plan building and debugging.
   Caching and offline analysis/replaying of test results.
   Highly Extensible core:
@@ -31,7 +32,7 @@
    o  Several load statistics may be choosen with pluggable timers .
    o  Data analysis and visualization plugins allow great extensibility as well as personalization.
    o  Functions can be used to provide dynamic input to a test or provide data manipulation.
-   o  Scriptable Samplers (BeanShell, BSF-compatible languages and JSR223-compatible languages)
+   o  Scriptable Samplers (BeanShell, BSF- and JSR223- compatible languages)
   
 
   The Latest Version
@@ -61,8 +62,8 @@
    o  Java Compiler [OPTIONAL]:
 
       A Java compiler is not needed since the distribution includes a 
-      precompiled java binary archive. Note that a compiler is required
-      if you plan to build plugin classes for Apache JMeter.
+      precompiled Java binary archive. Note that a compiler is required
+      if you plan to build plugins for Apache JMeter.
 
   Installation Instructions
   -------------------------
@@ -72,34 +73,36 @@
   - Release builds
   Unpack the binary archive into a suitable directory structure.
   
-  - Nightly builds
+  - Nightly builds (Be aware that these have not been reviewed or tested)
   Unpack BOTH the _bin and _lib archives into the SAME directory structure
   
   Running JMeter
   --------------
   
-  Change to the bin directory and run the jmeter (Un*x) or jmeter.bat (Windows) file.
+  Change to the bin directory
+  Run the jmeter (Un*x) or jmeter.bat (Windows) file.
   
-  For Windows (2K, XP etc), there are also some other scripts:
+  For Windows (2K, XP etc), there are also some other scripts.
+  Drag-drop a JMX file onto one of them: 
   
-  jmeter-n.cmd - drop a JMX file on this and it will run it as a non-GUI test
-  jmeter-n-r.cmd - drop a JMX file on this and it will run it as a non-GUI remote (client-server) test
-  jmeter-t.cmd - drop a JMX file on this and it will open the file for running a GUI test
+  jmeter-n.cmd - runs the file as a non-GUI test
+  jmeter-n-r.cmd - runs the file as a non-GUI remote (client-server) test
+  jmeter-t.cmd - loads the file ready to run it as a GUI test
   
   Documentation
   -------------
   The documentation available as of the date of this release is
-  also included, in HTML format, in the printable_docs/ directory, and it may
-  be browsed starting from the file called index.html.
+  also included, in HTML format, in the printable_docs/ directory,
+  and it may be browsed starting from the file called index.html.
 
   Build instructions
   ------------------
 
   - Release builds
   Unpack the source archive into a suitable directory structure.
-  Most of the 3rd party library files can be extracted from the binary archive by unpacking it
-  into the same directory structure.
-  You can use Ant to download any missing files:
+  Most of the 3rd party library files can be extracted from the binary archive
+  by unpacking it into the same directory structure.
+  You can also use Ant to download the required library files:
   
   ant download_jars 
   
@@ -112,15 +115,17 @@
 
   Any optional jars (see above) should be placed in lib/opt and/or lib.
   
-  Jars in lib/opt will be used for building JMeter and running the unit test, but won't be used at run-time.
-  [This is useful for testing what happens if the optional jars are not downloaded
-  by other JMeter users].
+  Jars in lib/opt will be used for building JMeter and running the unit test,
+  but won't be used at run-time.
+  [This is useful for testing what happens if the optional jars are not
+  downloaded by other JMeter users].
 
   JMeter is built using Ant.
   
   Change to the top-level directory and issue the command:
   
-  ant download_jars ! only needs to be done once; will download any missing 3rd party jars 
+  ant download_jars ! only needs to be done once;
+                      will download any missing 3rd party jars 
 
   ant
 
@@ -130,8 +135,9 @@
   ant test [-Djava.awt.headless=true]
   
   This will compile and run the unit tests.
-  The optional property definition is required if the system does not have a suitable GUI display.
-  
+  The optional property definition is required if the system 
+  does not have a suitable GUI display.
+
   Licensing and legal issues
   --------------------------
 
