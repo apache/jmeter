@@ -29,7 +29,7 @@
   Caching and offline analysis/replaying of test results.
   Highly Extensible core:
    o  Pluggable Samplers allow unlimited testing capabilities.
-   o  Several load statistics may be choosen with pluggable timers .
+   o  Several load statistics may be chosen with pluggable timers .
    o  Data analysis and visualization plugins allow great extensibility as well as personalization.
    o  Functions can be used to provide dynamic input to a test or provide data manipulation.
    o  Scriptable Samplers (BeanShell, BSF- and JSR223- compatible languages)
