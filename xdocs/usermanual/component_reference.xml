@@ -3998,7 +3998,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         If not specified the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the <code>Java</code> implementation is used.</property>
         <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
-        <property name="Method" required="No">HTTP GET or HTTP POST.</property>
+        <property name="Content encoding" required="No">The encoding to be used for the request.</property>
         <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the
         resource requires query string parameters, add them below in the "<code>Send Parameters With the Request</code>" section.
         Note that the path is the default for the full path, not a prefix to be applied to paths
