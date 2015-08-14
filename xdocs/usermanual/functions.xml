@@ -61,14 +61,14 @@ Functions that require no parameters can leave off the parentheses, for example 
 <p>
 If a function parameter contains a comma, then be sure to escape this with "<code>\</code>", otherwise JMeter will treat it as a parameter delimiter.
 For example:
-<pre>
+<source>
 ${__time(EEE\, d MMM yyyy)}
-</pre>
+</source>
 If the comma is not escaped - e.g. <code>${__javaScript(Math.max(2,5))}</code> - you will get an error such as:
-<pre>
+<source>
 ERROR - jmeter.functions.JavaScript: Error processing Javascript: [Math.max(2]
     org.mozilla.javascript.EvaluatorException: missing ) after argument list (&lt;cmd&gt;#1)
- </pre>
+ </source>
  This is because the string "<code>Math.max(2,5)</code>" is treated as being two parameters to the __javascript function:<br/>
  <code>Math.max(2</code> and <code>5)</code><br/>
  Other error messages are possible. 
@@ -294,7 +294,7 @@ replacement string") parsed by this function</li>
 <li><code>${refName_g#}</code> to refer to the n<sup>th</sup> group parsed by this function.</li>
 <li><code>${refName_matchNr}</code> to refer to the number of groups found by this function.</li>
 </ul>
-<note>If using distributed testing, ensure you switch mode (see jmeter.properties) so that it's not a stripping one, see <bugzilla>56376</bugzilla></note>
+<note>If using distributed testing, ensure you switch mode (see <code>jmeter.properties</code>) so that it's not a stripping one, see <bugzilla>56376</bugzilla></note>
 </p>
 </description>
 
@@ -313,13 +313,13 @@ replacement string") parsed by this function</li>
         to use.  Your regular expression might find numerous matches.  You have four choices:
                 <ul><li>An integer - Tells JMeter to use that match.  '<code>1</code>' for the first found match, '<code>2</code>' for the
                 second, and so on</li>
-                <li>RAND - Tells JMeter to choose a match at random.</li>
-                <li>ALL - Tells JMeter to use all matches, and create a template string for each one and then
+                <li><code>RAND</code> - Tells JMeter to choose a match at random.</li>
+                <li><code>ALL</code> - Tells JMeter to use all matches, and create a template string for each one and then
                 append them all together.  This option is little used.</li>
                 <li>A float number between 0 and 1 - tells JMeter to find the X<sup>th</sup> match using the formula:
                 (number_of_matches_found * float_number) rounded to nearest integer.</li>
                 </ul></property>
-        <property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
+        <property name="Fourth argument" required="No">If '<code>ALL</code>' was selected for the above argument
         value, then this argument will be inserted between each appended copy of the template value.</property>
         <property name="Fifth argument" required="No">Default value returned if no match is found</property>
         <property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br></br>
@@ -439,7 +439,7 @@ The reference name is now optional, but it must not be a valid integer.
     </p>
     <note>
     Function instances are shared between threads, and the file is (re-)opened by whatever thread
-    happens to need the next line of input, so using the threadNumber as part of the file name
+    happens to need the next line of input, so using the <code>threadNumber</code> as part of the file name
     will result in unpredictable behaviour.
     </note>
     <p>If an error occurs opening or reading the file, then the function returns the string "<code>**ERR**</code>"</p>
@@ -540,13 +540,13 @@ For details of the language, please see <a href="http://www.mozilla.org/rhino/ov
 The following variables are made available to the script:
 </p>
 <ul>
-<li>log - the logger for the function</li>
-<li>ctx - JMeterContext object</li>
-<li>vars - JMeterVariables object</li>
-<li>threadName - String containing the current thread name (in 2.3.2 it was misspelt as "<code>theadName</code>")</li>
-<li>sampler - current Sampler object (if any)</li>
-<li>sampleResult - previous SampleResult object (if any)</li>
-<li>props - JMeter Properties object</li>
+<li><code>log</code> - the logger for the function</li>
+<li><code>ctx</code> - JMeterContext object</li>
+<li><code>vars</code> - JMeterVariables object</li>
+<li><code>threadName</code> - String containing the current thread name (in 2.3.2 it was misspelt as "<code>theadName</code>")</li>
+<li><code>sampler</code> - current Sampler object (if any)</li>
+<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>props</code> - JMeter Properties object</li>
 </ul>
 <p>
 Rhinoscript allows access to static methods via its Packages object.
@@ -797,18 +797,18 @@ However the function <code>execute()</code> method is synchronised.
 <p>
 If the property "<code>beanshell.function.init</code>" is defined, it is passed to the Interpreter
 as the name of a sourced file. This can be used to define common methods and variables. There is a
-sample init file in the bin directory: BeanShellFunction.bshrc.
+sample init file in the bin directory: <code>BeanShellFunction.bshrc</code>.
 </p>
 <p>
 The following variables are set before the script is executed:
 <ul>
-<li>log - the logger for the BeanShell function (*)</li>
-<li>ctx - the current JMeter context variable</li>
-<li>vars - the current JMeter variables</li>
-<li>props - JMeter Properties object</li>
-<li>threadName - the threadName (String)</li>
-<li>Sampler the current Sampler, if any</li>
-<li>SampleResult - the current SampleResult, if any</li>
+<li><code>log</code> - the logger for the BeanShell function (*)</li>
+<li><code>ctx</code> - the current JMeter context variable</li>
+<li><code>vars</code> - the current JMeter variables</li>
+<li><code>props</code> - JMeter Properties object</li>
+<li><code>threadName</code> - the threadName (String)</li>
+<li><code>Sampler</code> - the current Sampler, if any</li>
+<li><code>SampleResult</code> - the current SampleResult, if any</li>
 </ul>
 (*) means that this is set before the init file, if any, is processed. 
 Other variables vary from invocation to invocation.
@@ -889,7 +889,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
     <p/>
     Example:
     <source>${__XPath(/path/to/build.xml, //target/@name)}</source>
-    This will match all targets in build.xml and return the contents of the next name attribute
+    This will match all targets in <code>build.xml</code> and return the contents of the next name attribute
 </description>
 
 <properties>
@@ -903,7 +903,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
     <p>The setProperty function sets the value of a JMeter property. 
         The default return value from the function is the empty string,
         so the function call can be used anywhere functions are valid.</p>
-        <p>The original value can be returned by setting the optional 3rd parameter to "<code>true</code>".</p>
+        <p>The original value can be returned by setting the optional 3<sup>rd</sup> parameter to "<code>true</code>".</p>
     <p>Properties are global to JMeter,
         so can be used to communicate between threads and thread groups</p>
     </description>
@@ -971,14 +971,14 @@ The following shorthand aliases are provided:
 The following variables are made available to the script:
 </p>
 <ul>
-<li>log - the logger for the function</li>
-<li>ctx - JMeterContext object</li>
-<li>vars - JMeterVariables object</li>
-<li>props - JMeter Properties object</li>
-<li>threadName - String containing the current thread name (in 2.3.2 it was misspelt as "<code>theadName</code>")</li>
-<li>sampler - current Sampler object (if any)</li>
-<li>sampleResult - previous SampleResult object (if any)</li>
-<li>OUT - System.out - e.g. <code>OUT.println("message")</code></li>
+<li><code>log</code> - the logger for the function</li>
+<li><code>ctx</code> - JMeterContext object</li>
+<li><code>vars</code> - JMeterVariables object</li>
+<li><code>props</code> - JMeter Properties object</li>
+<li><code>threadName</code> - String containing the current thread name (in 2.3.2 it was misspelt as "<code>theadName</code>")</li>
+<li><code>sampler</code> - current Sampler object (if any)</li>
+<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
     Jexl can also create classes and call methods on them, for example:
@@ -1109,9 +1109,9 @@ i.intValue(); // or use i.longValue()
 </properties>
 <p>Examples:
 <br/>
-<code>${__unescape(\r\n)}</code> = CRLF
+<code>${__unescape(\r\n)}</code> = <code>CRLF</code>
 <br/>
-<code>${__unescape(1\t2)}</code> = 1[tab]2
+<code>${__unescape(1\t2)}</code> = <code>1</code>[tab]<code>2</code>
  </p>
 </component>
 
@@ -1131,7 +1131,7 @@ If an entity is unrecognized, it is left alone, and inserted verbatim into the r
 e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>"&gt;&amp;zzzz;x"</code>.
 </p>
     <p>
-    Uses StringEscapeUtils#unescapeHtml(String) from Commons Lang.
+    Uses <code>StringEscapeUtils#unescapeHtml(String)</code> from Commons Lang.
     </p>
     </description>
 
@@ -1154,7 +1154,7 @@ becomes:
 <code>&#38;quot;bread&#38;quot; &#38;amp; &#38;quot;butter&#38;quot;</code>.
 </p>
     <p>
-    Uses StringEscapeUtils#escapeHtml(String) from Commons Lang.
+    Uses <code>StringEscapeUtils#escapeHtml(String)</code> from Commons Lang.
     </p>
     </description>
 
@@ -1168,7 +1168,7 @@ becomes:
 <component index="&sect-num;.5.26" name="__urldecode">
 <description>
     <p>
-Function to decode a application/x-www-form-urlencoded string.
+Function to decode a <code>application/x-www-form-urlencoded</code> string.
 Note: use UTF-8 as the encoding scheme.
 </p>
 <p>
@@ -1190,7 +1190,7 @@ For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</c
 <component index="&sect-num;.5.27" name="__urlencode">
 <description>
     <p>
-Function to encode a string to a application/x-www-form-urlencoded string.
+Function to encode a string to a <code>application/x-www-form-urlencoded</code> string.
 </p>
 <p>
 For example, the string <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code> would get converted to
@@ -1302,17 +1302,17 @@ However some variables are defined internally by JMeter. These are listed below.
 <li><code>JMeterThread.last_sample_ok</code> - whether or not the last sample was OK - <code>true</code>/<code>false</code>.
 Note: this is updated after PostProcessors and Assertions have been run.
 </li>
-<li>START variables (see next section)</li>
+<li><code>START</code> variables (see next section)</li>
 </ul>
 </subsection>
 <subsection name="&sect-num;.6 Pre-defined Properties" anchor="predefinedprops">
 <p>
 The set of JMeter properties is initialised from the system properties defined when JMeter starts;
-additional JMeter properties are defined in jmeter.properties, user.properties or on the command line.
+additional JMeter properties are defined in <code>jmeter.properties</code>, <code>user.properties</code> or on the command line.
 </p>
 <p>
 Some built-in properties are defined by JMeter. These are listed below.
-For convenience, the START properties are also copied to variables with the same names.
+For convenience, the <code>START</code> properties are also copied to variables with the same names.
 </p>
 <ul>
 <li><code>START.MS</code> - JMeter start time in milliseconds</li>
@@ -1321,7 +1321,7 @@ For convenience, the START properties are also copied to variables with the same
 <li><code>TESTSTART.MS</code> - test start time in milliseconds</li>
 </ul>
 <p>
-Please note that the START variables / properties represent JMeter startup time, not the test start time.
+Please note that the <code>START</code> variables / properties represent JMeter startup time, not the test start time.
 They are mainly intended for use in file names etc.
 </p>
 </subsection>
