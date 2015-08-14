@@ -4165,14 +4165,6 @@ This component is typically used in HTTPS scenarios where you don't want to take
 </ol>
 </description>
 
-preload.shortDescription=Preload Keystore before test. Setting is to true is usually the best option.
-startIndex.displayName=Alias Start index (0-based)
-startIndex.shortDescription=First index of Alias in Keystore
-endIndex.displayName=Alias End index (0-based)
-endIndex.shortDescription=Last index of Alias in Keystore. When using Variable name ensure it is large enough so that all keys are loaded at startup.
-clientCertAliasVarName.displayName=Variable name holding certificate alias
-clientCertAliasVarName.shortDescription=Variable name that will contain the alias to use for Cert authentication. Var content can come from CSV Data Set.
-
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Preload" required="Yes">Wether or not to preload Keystore. Setting is to true is usually the best option.</property>
