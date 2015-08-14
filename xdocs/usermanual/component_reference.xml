@@ -3925,22 +3925,22 @@ the <complink name="View Results Tree"/> Listener.
 JMeter version 2.3.2 and earlier did not check that received cookies were valid for the URL.
 This meant that cross-domain cookies were stored, and might be used later.
 This has been fixed in later versions.
-To revert to the earlier behaviour, define the JMeter property "CookieManager.check.cookies=false".
+To revert to the earlier behaviour, define the JMeter property "<code>CookieManager.check.cookies=false</code>".
 </p>
 <p>
 Received Cookies can be stored as JMeter thread variables
 (versions of JMeter after 2.3.2 no longer do this by default).
-To save cookies as variables, define the property "CookieManager.save.cookies=true".
-Also, cookies names are prefixed with "COOKIE_" before they are stored (this avoids accidental corruption of local variables)
-To revert to the original behaviour, define the property "CookieManager.name.prefix= " (one or more spaces).
-If enabled, the value of a cookie with the name TEST can be referred to as ${COOKIE_TEST}.
+To save cookies as variables, define the property "<code>CookieManager.save.cookies=true</code>".
+Also, cookies names are prefixed with "<code>COOKIE_</code>" before they are stored (this avoids accidental corruption of local variables)
+To revert to the original behaviour, define the property "<code>CookieManager.name.prefix= </code>" (one or more spaces).
+If enabled, the value of a cookie with the name <code>TEST</code> can be referred to as <code>${COOKIE_TEST}</code>.
 </p>
 <p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this,
 the cookie will be shared by all JMeter threads.</p>
 <p>Note that such Cookies are created with an Expiration time far in the future</p>
 <p>
-Since version 2.0.3, cookies with null values are ignored by default.
-This can be changed by setting the JMeter property: CookieManager.delete_null_cookies=false.
+Since version 2.0.3, cookies with <code>null</code> values are ignored by default.
+This can be changed by setting the JMeter property: <code>CookieManager.delete_null_cookies=false</code>.
 Note that this also applies to manually defined cookies - any such cookies will be removed from the display when it is updated.
 Note also that the cookie name must be unique - if a second cookie is defined with the same name, it will replace the first.
 </p>
@@ -3950,19 +3950,19 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
   <property name="Clear Cookies each Iteration" required="Yes">If selected, all server-defined cookies are cleared each time the main Thread Group loop is executed.
   In JMeter versions after 2.3, any cookies defined in the GUI are not cleared.</property>
   <property name="Cookie Policy" required="Yes">The cookie policy that will be used to manage the cookies. 
-  "compatibility" is the default, and should work in most cases.
-  See http://hc.apache.org/httpclient-3.x/cookies.html and 
-  http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
-  [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
+  "<code>compatibility</code>" is the default, and should work in most cases.
+  See <a href="http://hc.apache.org/httpclient-3.x/cookies.html">http://hc.apache.org/httpclient-3.x/cookies.html</a> and 
+  <a href="http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html">http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html</a>
+  [Note: "<code>ignoreCookies</code>" is equivalent to omitting the CookieManager.]
     </property>
- <property name="Implementation" required="Yes">HC3CookieHandler (HttpClient 3.1 API) or HC4CookieHandler (HttpClient 4 API). 
-  Default is HC3CookieHandler.
+ <property name="Implementation" required="Yes"><code>HC3CookieHandler</code> (HttpClient 3.1 API) or <code>HC4CookieHandler</code> (HttpClient 4 API). 
+  Default is <code>HC3CookieHandler</code>.
   <br></br>
-  <i>[Note: If you have a website to test with IPv6 address, choose HC4CookieHandler (IPv6 compliant)]</i></property>
+  <i>[Note: If you have a website to test with IPv6 address, choose <code>HC4CookieHandler</code> (IPv6 compliant)]</i></property>
   <property name="User-Defined Cookies" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.
   <br></br>
-  The "domain" is the hostname of the server (without http://); the port is currently ignored.
+  The "<code>domain</code>" is the hostname of the server (without <code>http://</code>); the port is currently ignored.
   </property>
   <property name="Add Button" required="N/A">Add an entry to the cookie table.</property>
   <property name="Delete Button" required="N/A">Delete the currently selected table entry.</property>
@@ -3979,8 +3979,8 @@ cookie table entries.</property>
          screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
-you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
-you add the 25 HTTP Request controllers, leave the "Server Name or IP" field empty.  The controllers will inherit
+you could add a single HTTP Request Defaults element with the "<code>Server Name or IP</code>" field filled in.  Then, when
+you add the 25 HTTP Request controllers, leave the "<code>Server Name or IP</code>" field empty.  The controllers will inherit
 this field value from the HTTP Request Defaults element.</p>
 <note>
 In JMeter 2.2 and earlier, port 80 was treated specially - it was ignored if the sampler used the https protocol.
@@ -3990,28 +3990,28 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Server" required="No">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.</property>
+        <property name="Server" required="No">Domain name or IP address of the web server. e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.</property>
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
-        <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1</code>, <code>HttpClient4</code>. 
         If not specified the default depends on the value of the JMeter property
-        <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
-        <property name="Protocol" required="No">HTTP or HTTPS.</property>
+        <code>jmeter.httpsampler</code>, failing that, the <code>Java</code> implementation is used.</property>
+        <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
         <property name="Method" required="No">HTTP GET or HTTP POST.</property>
-        <property name="Path" required="No">The path to resource (for example, /servlets/myServlet). If the
-        resource requires query string parameters, add them below in the "Send Parameters With the Request" section.
+        <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the
+        resource requires query string parameters, add them below in the "<code>Send Parameters With the Request</code>" section.
         Note that the path is the default for the full path, not a prefix to be applied to paths
         specified on the HTTP Request screens.
         </property>
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
         <i>value</i>.  The query string will be generated in the correct fashion, depending on
-        the choice of "Method" you made (i.e. if you chose GET, the query string will be
-        appended to the URL, if POST, then it will be sent separately).  Also, if you are
+        the choice of "<code>Method</code>" you made (i.e. if you chose <code>GET</code>, the query string will be
+        appended to the URL, if <code>POST</code>, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.</property>
-        <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
+        <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the <code>http://</code> prefix.]</property>
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
         <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
@@ -4022,8 +4022,8 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
         <property name="Embedded URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
-        So if you only want to download embedded resources from http://example.com/, use the expression:
-        http://example\.com/.*
+        So if you only want to download embedded resources from <code>http://example.com/</code>, use the expression:
+        <code>http://example\.com/.*</code>
         </property>
 </properties>
 <note>
@@ -4055,7 +4055,7 @@ This allows one to set up a default set of headers, and apply adjustments to par
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Name (Header)" required="No (You should have at least one, however)">Name of the request header.
         Two common request headers you may want to experiment with
-are "User-Agent" and "Referer".</property>
+are "<code>User-Agent</code>" and "<code>Referer</code>".</property>
   <property name="Value" required="No (You should have at least one, however)">Request header value.</property>
   <property name="Add Button" required="N/A">Add an entry to the header table.</property>
   <property name="Delete Button" required="N/A">Delete the currently selected table entry.</property>
@@ -4067,7 +4067,7 @@ header table entries.</property>
 <example title="Header Manager example" anchor="header_manager_example">
 
 <p><a href="../demos/HeaderManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan
-that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string
+that tells JMeter to override the default "<code>User-Agent</code>" request header and use a particular Internet Explorer agent string
 instead. (see figures 12 and 13).</p>
 
 <figure width="203" height="141" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
@@ -4109,16 +4109,16 @@ instead. (see figures 12 and 13).</p>
         </property>
         <property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
         process of trying to retrieve a connection</property>
-        <property name="Idle Cleanup Interval (ms)" required="Yes">This is used to specify how long idle connections will be maintained in the pool before being closed. For a complete explanation on how this works, see <a href="http://excalibur.apache.org/apidocs/org/apache/avalon/excalibur/pool/ResourceLimitingPool.html#trim%28%29">ResourceLimitingPool.trim()</a> (Defaults to "60000", 1 minute)</property>
+        <property name="Idle Cleanup Interval (ms)" required="Yes">This is used to specify how long idle connections will be maintained in the pool before being closed. For a complete explanation on how this works, see <a href="http://excalibur.apache.org/apidocs/org/apache/avalon/excalibur/pool/ResourceLimitingPool.html#trim%28%29">ResourceLimitingPool.trim()</a> (Defaults to "<code>60000</code>", 1 minute)</property>
         <property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
-        <property name="Keep-alive" required="Yes">The keep-alive is used enable a mechanism to monitor the health of connections. If a connection has not been used for Max Connection Age (ms) then before returning the connection from a call to getConnection(), the connection is first used to ping the database to make sure that it is still alive. 
+        <property name="Keep-alive" required="Yes">The keep-alive is used enable a mechanism to monitor the health of connections. If a connection has not been used for Max Connection Age (ms) then before returning the connection from a call to <code>getConnection()</code>, the connection is first used to ping the database to make sure that it is still alive. 
         Setting the age allows the 5 second age to be overridden. Validation Query will be used to test it.</property>
-        <property name="Max Connection Age (ms)" required="Yes">Controls the age mentioned in "Keep-Alive" property. It means connections not used for more than Max Connection Age will be tested</property>
+        <property name="Max Connection Age (ms)" required="Yes">Controls the age mentioned in "<code>Keep-Alive</code>" property. It means connections not used for more than Max Connection Age will be tested</property>
         <property name="Validation Query" required="Yes">A simple query used to determine if the database is still
         responding.</property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
         <property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
-        JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
+        JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).</property>
         <property name="Username" required="No">Name of user to connect as.</property>
         <property name="Password" required="No">Password to connect with. (N.B. this is stored unencrypted in the test plan)</property>
     </properties>
@@ -4130,19 +4130,19 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 If JMeter reports <b>No suitable driver</b>, then this could mean either:
 </p>
 <ul>
-<li>The driver class was not found. In this case, there will be a log message such as <tt>DataSourceElement: Could not load driver: {classname} java.lang.ClassNotFoundException: {classname}</tt></li>
+<li>The driver class was not found. In this case, there will be a log message such as <code>DataSourceElement: Could not load driver: {classname} java.lang.ClassNotFoundException: {classname}</code></li>
 <li>The driver class was found, but the class does not support the connection string. This could be because of a syntax error in the connection string, or because the wrong classname was used.</li>
 </ul>
-If the database server is not running or is not accessible, then JMeter will report a <b>java.net.ConnectException</b>.
+If the database server is not running or is not accessible, then JMeter will report a <code>java.net.ConnectException</code>.
 <table>
 <tr><th>Database</th><th>Driver class</th><th>Database URL</th></tr>
-<tr><td>MySQL</td><td>com.mysql.jdbc.Driver</td><td>jdbc:mysql://host[:port]/dbname</td></tr>
-<tr><td>PostgreSQL</td><td>org.postgresql.Driver</td><td>jdbc:postgresql:{dbname}</td></tr>
-<tr><td>Oracle</td><td>oracle.jdbc.OracleDriver</td><td>jdbc:oracle:thin:@//host:port/service
-OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</td></tr>
-<tr><td>Ingres (2006)</td><td>ingres.jdbc.IngresDriver</td><td>jdbc:ingres://host:port/db[;attr=value]</td></tr>
-<tr><td>SQL Server (MS JDBC driver)</td><td>com.microsoft.sqlserver.jdbc.SQLServerDriver</td><td>jdbc:sqlserver://host:port;DatabaseName=dbname</td></tr>
-<tr><td>Apache Derby</td><td>org.apache.derby.jdbc.ClientDriver</td><td>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</td></tr>
+<tr><td>MySQL</td><td><code>com.mysql.jdbc.Driver</code></td><td><code>jdbc:mysql://host[:port]/dbname</code></td></tr>
+<tr><td>PostgreSQL</td><td><code>org.postgresql.Driver</code></td><td><code>jdbc:postgresql:{dbname}</code></td></tr>
+<tr><td>Oracle</td><td><code>oracle.jdbc.OracleDriver</code></td><td><code>jdbc:oracle:thin:@//host:port/service</code>
+OR<br/><code>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</code></td></tr>
+<tr><td>Ingres (2006)</td><td><code>ingres.jdbc.IngresDriver</code></td><td><code>jdbc:ingres://host:port/db[;attr=value]</code></td></tr>
+<tr><td>SQL Server (MS JDBC driver)</td><td><code>com.microsoft.sqlserver.jdbc.SQLServerDriver</code></td><td><code>jdbc:sqlserver://host:port;DatabaseName=dbname</code></td></tr>
+<tr><td>Apache Derby</td><td><code>org.apache.derby.jdbc.ClientDriver</code></td><td><code>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</code></td></tr>
 </table>
 <note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
 </component>
@@ -4156,10 +4156,10 @@ This component is typically used in HTTPS scenarios where you don't want to take
 <ol>
 <li>Create your certificates either with Java keytool utility or through your PKI</li>
 <li>If created by PKI, import your keys in Java Key Store by converting them to a format acceptable by JKS</li>
-<li>Then reference the keystore file through the 2 JVM properties (or add them in system.properties):
+<li>Then reference the keystore file through the two JVM properties (or add them in <code>system.properties</code>):
     <ul>
-        <li>-Djavax.net.ssl.keyStore=path_to_keystore</li>
-        <li>-Djavax.net.ssl.keyStorePassword=password_of_keystore</li>
+        <li><code>-Djavax.net.ssl.keyStore=path_to_keystore</code></li>
+        <li><code>-Djavax.net.ssl.keyStorePassword=password_of_keystore</code></li>
     </ul>
 </li>
 </ol>
@@ -4176,14 +4176,14 @@ clientCertAliasVarName.shortDescription=Variable name that will contain the alia
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Preload" required="Yes">Wether or not to preload Keystore. Setting is to true is usually the best option.</property>
-  <property name="Variable name holding certificate alias" required="False">Variable name that will contain the alias to use for authentication by client certificate. Variable value will be filled from CSV Data Set for example. In the screenshot, "certificat_ssl" will also be a variable in CSV Data Set.</property>
+  <property name="Variable name holding certificate alias" required="False">Variable name that will contain the alias to use for authentication by client certificate. Variable value will be filled from CSV Data Set for example. In the screenshot, "<code>certificat_ssl</code>" will also be a variable in CSV Data Set.</property>
   <property name="Alias Start Index" required="Yes">The index of the first key to use in Keystore, 0-based.</property>
-  <property name="Alias End Index" required="Yes">The index of the last key to use in Keystore, 0-based. When using "Variable name holding certificate alias" ensure it is large enough so that all keys are loaded at startup.</property>
+  <property name="Alias End Index" required="Yes">The index of the last key to use in Keystore, 0-based. When using "<code>Variable name holding certificate alias</code>" ensure it is large enough so that all keys are loaded at startup.</property>
 </properties>
 <note>
 To make JMeter use more than one certificate you need to ensure that:
 <ul>
-<li>https.use.cached.ssl.context=false is set in jmeter.properties or user.properties</li>
+<li><code>https.use.cached.ssl.context=false</code> is set in <code>jmeter.properties</code> or <code>user.properties</code></li>
 <li>You use either HTTPClient 3.1 or 4 implementations for HTTP Request</li>
 </ul>
 </note>
