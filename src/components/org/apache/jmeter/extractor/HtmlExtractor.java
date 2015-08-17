@@ -120,36 +120,31 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 }
             }
             int matchCount=0;// Number of refName_n variable sets to keep
-            try {
-                String match;
-                if (matchNumber >= 0) {// Original match behaviour
-                    match = getCorrectMatch(matches, matchNumber);
+            String match;
+            if (matchNumber >= 0) {// Original match behaviour
+                match = getCorrectMatch(matches, matchNumber);
+                if (match != null) {
+                    vars.put(refName, match);
+                } 
+            } else // < 0 means we save all the matches
+            {
+                matchCount = matches.size();
+                vars.put(refName + REF_MATCH_NR, Integer.toString(matchCount));// Save the count
+                for (int i = 1; i <= matchCount; i++) {
+                    match = getCorrectMatch(matches, i);
                     if (match != null) {
-                        vars.put(refName, match);
-                    } 
-                } else // < 0 means we save all the matches
-                {
-                    matchCount = matches.size();
-                    vars.put(refName + REF_MATCH_NR, Integer.toString(matchCount));// Save the count
-                    for (int i = 1; i <= matchCount; i++) {
-                        match = getCorrectMatch(matches, i);
-                        if (match != null) {
-                            final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
-                            vars.put(refName_n, match);
-                        }
+                        final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                        vars.put(refName_n, match);
                     }
                 }
-                // Remove any left-over variables
-                for (int i = matchCount + 1; i <= prevCount; i++) {
-                    final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
-                    vars.remove(refName_n);
-                }
-            } catch (RuntimeException e) {
-                log.warn(getName()+":Error while generating result");
             }
-
+            // Remove any left-over variables
+            for (int i = matchCount + 1; i <= prevCount; i++) {
+                final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                vars.remove(refName_n);
+            }
         } catch (RuntimeException e) {
-            log.warn(getName()+":Error while generating result");
+            log.warn(getName()+":Error while generating result " + e);
         }
 
     }
