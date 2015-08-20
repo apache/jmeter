@@ -4154,7 +4154,7 @@ This component is typically used in HTTPS scenarios where you don't want to take
 <p>To use this element, you need to setup first a Java Key Store with the client certificates you want to test, to do that:
 </p>
 <ol>
-<li>Create your certificates either with Java keytool utility or through your PKI</li>
+<li>Create your certificates either with Java <code>keytool</code> utility or through your PKI</li>
 <li>If created by PKI, import your keys in Java Key Store by converting them to a format acceptable by JKS</li>
 <li>Then reference the keystore file through the two JVM properties (or add them in <code>system.properties</code>):
     <ul>
@@ -4167,7 +4167,7 @@ This component is typically used in HTTPS scenarios where you don't want to take
 
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-  <property name="Preload" required="Yes">Wether or not to preload Keystore. Setting is to true is usually the best option.</property>
+  <property name="Preload" required="Yes">Wether or not to preload Keystore. Setting it to <code>true</code> is usually the best option.</property>
   <property name="Variable name holding certificate alias" required="False">Variable name that will contain the alias to use for authentication by client certificate. Variable value will be filled from CSV Data Set for example. In the screenshot, "<code>certificat_ssl</code>" will also be a variable in CSV Data Set.</property>
   <property name="Alias Start Index" required="Yes">The index of the first key to use in Keystore, 0-based.</property>
   <property name="Alias End Index" required="Yes">The index of the last key to use in Keystore, 0-based. When using "<code>Variable name holding certificate alias</code>" ensure it is large enough so that all keys are loaded at startup.</property>
@@ -4213,13 +4213,13 @@ To make JMeter use more than one certificate you need to ensure that:
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="TCPClient classname" required="No">Name of the TCPClient class. Defaults to the property tcp.handler, failing that TCPClientImpl.</property>
+  <property name="TCPClient classname" required="No">Name of the TCPClient class. Defaults to the property <code>tcp.handler</code>, failing that <code>TCPClientImpl</code>.</property>
   <property name="ServerName or IP" required="">Name or IP of TCP server</property>
   <property name="Port Number" required="">Port to be used</property>
   <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
   <property name="Close connection" required="Yes">If selected, the connection will be closed after running the sampler.</property>  
-  <property name="SO_LINGER" required="No">Enable/disable SO_LINGER with the specified linger time in seconds when a socket is created. If you set "SO_LINGER" value as 0, you may prevent large numbers of sockets sitting around with a TIME_WAIT status.</property>
-  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range -128 to +127 to skip eol checking. You may set this in jmeter.properties file as well with eolByte property. If you set this in TCP Sampler Config and in jmeter.properties file at the same time, the setting value in the TCP Sampler Config will be used.</property>
+  <property name="SO_LINGER" required="No">Enable/disable <code>SO_LINGER</code> with the specified linger time in seconds when a socket is created. If you set "<code>SO_LINGER</code>" value as <code>0</code>, you may prevent large numbers of sockets sitting around with a <code>TIME_WAIT</code> status.</property>
+  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range <code>-128</code> to <code>+127</code> to skip eol checking. You may set this in <code>jmeter.properties</code> file as well with the <code>tcp.eolByte</code> property. If you set this in TCP Sampler Config and in <code>jmeter.properties</code> file at the same time, the setting value in the TCP Sampler Config will be used.</property>
   <property name="Connect Timeout" required="No">Connect Timeout (milliseconds, 0 disables).</property>
   <property name="Response Timeout" required="No">Response Timeout (milliseconds, 0 disables).</property>
   <property name="Set Nodelay" required="">Should the nodelay property be set?</property>
@@ -4239,13 +4239,13 @@ So you cannot reference variables which are defined as part of a test run, e.g. 
 UDVs should not be used with functions that generate different results each time they are called.
 Only the result of the first function call will be saved in the variable. 
 </b>
-However, UDVs can be used with functions such as __P(), for example:
+However, UDVs can be used with functions such as <code>__P()</code>, for example:
 </p>
-<pre>
+<source>
 HOST      ${__P(host,localhost)} 
-</pre>
+</source>
 <p>
-which would define the variable "HOST" to have the value of the JMeter property "host", defaulting to "localhost" if not defined.
+which would define the variable "<code>HOST</code>" to have the value of the JMeter property "<code>host</code>", defaulting to "<code>localhost</code>" if not defined.
 </p>
 <p>
 For defining variables during a test run, see <complink name="User Parameters"/>.
@@ -4273,7 +4273,7 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 </note>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "Name"
+  <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "<code>Name</code>"
       column is what you'll need to place inside the brackets in <code>${&hellip;}</code> constructs to use the variables later on. The
       whole <code>${&hellip;}</code> will then be replaced by the string in the "<code>Value</code>" column.</property>
 </properties>
@@ -4283,33 +4283,33 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 <description>
 <p>
 The Random Variable Config Element is used to generate random numeric strings and store them in variable for use later.
-It's simpler than using <complink name="User Defined Variables"/> together with the __Random() function.
+It's simpler than using <complink name="User Defined Variables"/> together with the <code>__Random()</code> function.
 </p>
 <p>
 The output variable is constructed by using the random number generator,
 and then the resulting number is formatted using the format string.
 The number is calculated using the formula <code>minimum+Random.nextInt(maximum-minimum+1)</code>.
-Random.nextInt() requires a positive integer.
-This means that maximum-minimum - i.e. the range - must be less than 2147483647,
-however the minimum and maximum values can be any long values so long as the range is OK.
+<code>Random.nextInt()</code> requires a positive integer.
+This means that <code>maximum-minimum</code> - i.e. the range - must be less than <code>2147483647</code>,
+however the <code>minimum</code> and <code>maximum</code> values can be any <code>long</code> values so long as the range is OK.
 </p>
 </description>
 
 <properties>
   <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.</property>
   <property name="Variable Name" required="Yes">The name of the variable in which to store the random string.</property>
-  <property name="Format String" required="No">The java.text.DecimalFormat format string to be used. 
-  For example "000" which will generate numbers with at least 3 digits, 
-  or "USER_000" which will generate output of the form USER_nnn. 
-  If not specified, the default is to generate the number using Long.toString()</property>
-  <property name="Minimum Value" required="Yes">The minimum value (long) of the generated random number.</property>
-  <property name="Maximum Value" required="Yes">The maximum value (long) of the generated random number.</property>
+  <property name="Format String" required="No">The <code>java.text.DecimalFormat</code> format string to be used. 
+  For example "<code>000</code>" which will generate numbers with at least 3 digits, 
+  or "<code>USER_000</code>" which will generate output of the form <code>USER_nnn</code>. 
+  If not specified, the default is to generate the number using <code>Long.toString()</code></property>
+  <property name="Minimum Value" required="Yes">The minimum value (<code>long</code>) of the generated random number.</property>
+  <property name="Maximum Value" required="Yes">The maximum value (<code>long</code>) of the generated random number.</property>
   <property name="Random Seed" required="No">The seed for the random number generator. Default is the current time in milliseconds. 
-  If you use the same seed value with Per Thread set to true, you will get the same value for each Thread as per 
+  If you use the same seed value with Per Thread set to <code>true</code>, you will get the same value for each Thread as per 
   <a href="http://docs.oracle.com/javase/6/docs/api/java/util/Random.html" >Random</a> class.
   </property>
-  <property name="Per Thread(User)?" required="Yes">If False, the generator is shared between all threads in the thread group.
-  If True, then each thread has its own random generator.</property>
+  <property name="Per Thread(User)?" required="Yes">If <code>False</code>, the generator is shared between all threads in the thread group.
+  If <code>True</code>, then each thread has its own random generator.</property>
 </properties>
 
 </component>
@@ -4319,7 +4319,7 @@ however the minimum and maximum values can be any long values so long as the ran
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
 with the start, continuing on like that until the test is ended.  </p>
-<p>From version 2.1.2, the counter now uses a long to store the value, so the range is from -2^63 to 2^63-1.</p>
+<p>From version 2.1.2, the counter now uses a long to store the value, so the range is from <code>-2^63</code> to <code>2^63-1</code>.</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -4327,21 +4327,21 @@ with the start, continuing on like that until the test is ended.  </p>
         number during the first iteration.</property>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
-        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the Start value.
-        For versions after 2.2 the default is Long.MAX_VALUE (previously it was 0).
+        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the <code>Start</code> value.
+        For versions after 2.2 the default is <code>Long.MAX_VALUE</code> (previously it was <code>0</code>).
         </property>
-        <property name="Format" required="No">Optional format, e.g. 000 will format as 001, 002 etc. 
-        This is passed to DecimalFormat, so any valid formats can be used.
+        <property name="Format" required="No">Optional format, e.g. <code>000</code> will format as <code>001</code>, <code>002</code>, etc. 
+        This is passed to <code>DecimalFormat</code>, so any valid formats can be used.
         If there is a problem interpreting the format, then it is ignored.
-    [The default format is generated using Long.toString()]
+    [The default format is generated using <code>Long.toString()</code>]
         </property>
         <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
         as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
         <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
-        own counter?  If unchecked, the counter is global (i.e., user #1 will get value "1", and user #2 will get value "2" on
+        own counter?  If unchecked, the counter is global (i.e., user #1 will get value "<code>1</code>", and user #2 will get value "<code>2</code>" on
         the first iteration).  If checked, each user has an independent counter.</property>
         <property name="Reset counter on each Thread Group Iteration" required="No">This option is only available when counter is tracked per User, if checked, 
-        counter will be reset to Start value on each Thread Group iteration. This can be useful when Counter is inside a Loop Controller.</property>
+        counter will be reset to <code>Start</code> value on each Thread Group iteration. This can be useful when Counter is inside a Loop Controller.</property>
 </properties>
 </component>
 
@@ -4367,8 +4367,9 @@ GUI that they can use while developing new JMeter components.</p>
      from the supplied Connection settings. Each thread gets its own connection.
      The connection configuration name is used by the JDBC Sampler to select the appropriate
      connection.
-     You can then access com.mongodb.DB object in Beanshell or JSR223 Test Elements through the element <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a> 
-     using this code<br/>
+     <p>
+     You can then access <code>com.mongodb.DB</code> object in Beanshell or JSR223 Test Elements through the element <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a> 
+     using this code</p>
      
     <source>
 import com.mongodb.DB;
@@ -4386,56 +4387,59 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         </property>
         
         <property name="Keep Trying" required="No">
-            If true, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
+            If <code>true</code>, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
             There is maximum amount of time to keep retrying, which is 15s by default.<br/>This can be useful to avoid some exceptions being thrown when a server is down temporarily by blocking the operations.
             <br/>It also can be useful to smooth the transition to a new master (so that a new master is elected within the retry time).<br/>
-            Note that when using this flag\:
-            <br/>- for a replica set, the driver will trying to connect to the old master for that time, instead of failing over to the new one right away 
-            <br/>- this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.<br/>
-            Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations. <br/>
-            Default is false.
+            <note>Note that when using this flag
+              <ul>
+                <li>for a replica set, the driver will trying to connect to the old master for that time, instead of failing over to the new one right away </li>
+                <li>this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.</li>
+              </ul>
+              Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations.
+            </note>
+            Default is <code>false</code>.
         </property>
         <property name="Maximum connections per host" required="No"></property>
         <property name="Connection timeout" required="No">
-            The connection timeout in milliseconds.<br/>It is used solely when establishing a new connection Socket.connect(java.net.SocketAddress, int)<br/>Default is 0 and means no timeout.
+            The connection timeout in milliseconds.<br/>It is used solely when establishing a new connection <code>Socket.connect(java.net.SocketAddress, int)</code><br/>Default is <code>0</code> and means no timeout.
         </property>
         <property name="Maximum retry time" required="No">
-            The maximum amount of time in MS to spend retrying to open connection to the same server.<br/>Default is 0, which means to use the default 15s if autoConnectRetry is on.
+            The maximum amount of time in milliseconds to spend retrying to open connection to the same server.<br/>Default is <code>0</code>, which means to use the default 15s if <code>autoConnectRetry</code> is on.
         </property>
         <property name="Maximum wait time" required="No">
-            The maximum wait time in ms that a thread may wait for a connection to become available.<br/>Default is 120,000.
+            The maximum wait time in milliseconds that a thread may wait for a connection to become available.<br/>Default is <code>120,000</code>.
         </property>
         <property name="Socket timeout" required="No">
-            The socket timeout in milliseconds It is used for I/O socket read and write operations Socket.setSoTimeout(int)<br/>Default is 0 and means no timeout.
+            The socket timeout in milliseconds It is used for I/O socket read and write operations <code>Socket.setSoTimeout(int)</code><br/>Default is <code>0</code> and means no timeout.
         </property>
         <property name="Socket keep alive" required="No">
-            This flag controls the socket keep alive feature that keeps a connection alive through firewalls Socket.setKeepAlive(boolean)<br/>
-            Default is false.
+            This flag controls the socket keep alive feature that keeps a connection alive through firewalls <code>Socket.setKeepAlive(boolean)</code><br/>
+            Default is <code>false</code>.
         </property>
         <property name="ThreadsAllowedToBlockForConnectionMultiplier" required="No">
         This multiplier, multiplied with the connectionsPerHost setting, gives the maximum number of threads that may be waiting for a connection to become available from the pool.<br/>
         All further threads will get an exception right away.<br/>
-        For example if connectionsPerHost is 10 and threadsAllowedToBlockForConnectionMultiplier is 5, then up to 50 threads can wait for a connection.<br/>
-        Default is 5.
+        For example if <code>connectionsPerHost</code> is <code>10</code> and <code>threadsAllowedToBlockForConnectionMultiplier</code> is <code>5</code>, then up to 50 threads can wait for a connection.<br/>
+        Default is <code>5</code>.
         </property>
         <property name="Write Concern : Safe" required="No">
-            If true the driver will use a WriteConcern of WriteConcern.SAFE for all operations.<br/>
-            If w, wtimeout, fsync or j are specified, this setting is ignored.<br/>
-            Default is false.
+            If <code>true</code> the driver will use a <code>WriteConcern</code> of <code>WriteConcern.SAFE</code> for all operations.<br/>
+            If <code>w</code>, <code>wtimeout</code>, <code>fsync</code> or <code>j</code> are specified, this setting is ignored.<br/>
+            Default is <code>false</code>.
         </property>
         <property name="Write Concern : Fsync" required="No">
-            The fsync value of the global WriteConcern.<br/>
-            Default is false.
+            The <code>fsync</code> value of the global <code>WriteConcern</code>.<br/>
+            Default is <code>false</code>.
         </property>
         <property name="Write Concern : Wait for Journal" required="No">
-            The j value of the global WriteConcern.<br/>
-            Default is false.
+            The <code>j</code> value of the global <code>WriteConcern</code>.<br/>
+            Default is <code>false</code>.
         </property>
         <property name="Write Concern : Wait for servers" required="No">
-            The w value of the global WriteConcern.<br/>Default is 0.
+            The <code>w</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
         </property>
         <property name="Write Concern : Wait timeout" required="No">
-            The wtimeout value of the global WriteConcern.<br/>Default is 0.
+            The <code>wtimeout</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
         </property>
         <property name="Write Concern : Continue on error" required="No">
             If batch inserts should continue after the first error
@@ -4454,13 +4458,13 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     in the same scope.
     To ensure that an Assertion is applied only to a particular sampler, add it as a child of the sampler.
     </p>
-    <p>
+    <note>
     Note: Unless documented otherwise, Assertions are not applied to sub-samples (child samples) -
     only to the parent sample.
     In the case of BSF and BeanShell Assertions, the script can retrieve sub-samples using the method
     <code>prev.getSubResults()</code> which returns an array of SampleResults.
     The array will be empty if there are none.
-    </p>
+    </note>
     <p>
     Versions of JMeter after 2.3.2 include the option to apply certain assertions
     to either the main sample, the sub-samples or both. 
@@ -4477,8 +4481,8 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     any failure will be applied to the main sample only.
     </p>
     <note>
-    The variable <b>JMeterThread.last_sample_ok</b> is updated to
-    "true" or "false" after all assertions for a sampler have been run.
+    The variable <code>JMeterThread.last_sample_ok</code> is updated to
+    "<code>true</code>" or "<code>false</code>" after all assertions for a sampler have been run.
      </note>
 </description>
 <component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="921" height="423" screenshot="assertion/assertion.png">
@@ -4488,8 +4492,8 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     The pattern strings are:
     </p>
     <ul>
-    <li>Contains, Matches: Perl5-style regular expressions</li>
-    <li>Equals, Substring: plain text, case-sensitive</li>
+    <li><code>Contains</code>, <code>Matches</code>: Perl5-style regular expressions</li>
+    <li><code>Equals</code>, <code>Substring</code>: plain text, case-sensitive</li>
     </ul>
     <p>
     A summary of the pattern matching characters can be found at <a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">ORO Perl5 regular expressions.</a>
@@ -4498,25 +4502,25 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
 to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
 pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
 <p>Note that the pattern string should not include the enclosing delimiters, 
-    i.e. use <b>Price: \d+</b> not <b>/Price: \d+/</b>.
+    i.e. use <code>Price: \d+</code> not <code>/Price: \d+/</code>.
     </p>
     <p>
-    By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
-    In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
-    - not just the start and end of the entire string. Note that \s does match new-line.
+    By default, the pattern is in multi-line mode, which means that the "<code>.</code>" meta-character does not match newline.
+    In multi-line mode, "<code>^</code>" and "<code>$</code>" match the start or end of any line anywhere within the string 
+    - not just the start and end of the entire string. Note that <code>\s</code> does match new-line.
     Case is also significant. To override these settings, one can use the <i>extended regular expression</i> syntax.
     For example:
 </p>
 <dl>
 <dt><code>(?i)</code></dt><dd>ignore case</dd>
-<dt><code>(?s)</code></dt><dd>treat target as single line, i.e. "." matches new-line</dd>
+<dt><code>(?s)</code></dt><dd>treat target as single line, i.e. "<code>.</code>" matches new-line</dd>
 <dt><code>(?is)</code></dt><dd>both the above</dd>
 </dl>
 These can be used anywhere within the expression and remain in effect until overridden. E.g.
 <dl>
-<dt><code>(?i)apple(?-i) Pie</code></dt><dd>matches "ApPLe Pie", but not "ApPLe pIe"</dd>
-<dt><code>(?s)Apple.+?Pie</code></dt><dd>matches Apple followed by Pie, which may be on a subsequent line.</dd>
-<dt><code>Apple(?s).+?Pie</code></dt><dd>same as above, but it's probably clearer to use the (?s) at the start.</dd>
+<dt><code>(?i)apple(?-i) Pie</code></dt><dd>matches "<code>ApPLe Pie</code>", but not "<code>ApPLe pIe</code>"</dd>
+<dt><code>(?s)Apple.+?Pie</code></dt><dd>matches <code>Apple</code> followed by <code>Pie</code>, which may be on a subsequent line.</dd>
+<dt><code>Apple(?s).+?Pie</code></dt><dd>same as above, but it's probably clearer to use the <code>(?s)</code> at the start.</dd>
 </dl>
 
 </description>
@@ -4526,45 +4530,45 @@ These can be used anywhere within the expression and remain in effect until over
         This is for use with samplers that can generate sub-samples, 
         e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
         <ul>
-        <li>Main sample only - assertion only applies to the main sample</li>
-        <li>Sub-samples only - assertion only applies to the sub-samples</li>
-        <li>Main sample and sub-samples - assertion applies to both.</li>
-        <li>JMeter Variable - assertion is to be applied to the contents of the named variable</li>
+        <li><code>Main sample only</code> - assertion only applies to the main sample</li>
+        <li><code>Sub-samples only</code> - assertion only applies to the sub-samples</li>
+        <li><code>Main sample and sub-samples</code> - assertion applies to both.</li>
+        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         </property>
         <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
         <ul>
-        <li>Text Response - the response text from the server, i.e. the body, excluding any HTTP headers.</li>
-        <li>Document (text) - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).</li>
-        <li>URL sampled</li>
-        <li>Response Code - e.g. 200</li>
-        <li>Response Message - e.g. OK</li>
-        <li>Response Headers, including Set-Cookie headers (if any)</li>
+        <li><code>Text Response</code> - the response text from the server, i.e. the body, excluding any HTTP headers.</li>
+        <li><code>Document (text)</code> - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).</li>
+        <li><code>URL sampled</code></li>
+        <li><code>Response Code</code> - e.g. <code>200</code></li>
+        <li><code>Response Message</code> - e.g. <code>OK</code></li>
+        <li><code>Response Headers</code>, including Set-Cookie headers (if any)</li>
         </ul>
                 </property>
         <property name="Ignore status" required="Yes">Instructs JMeter to set the status to success initially. 
                 <p>
                 The overall success of the sample is determined by combining the result of the
                 assertion with the existing Response status.
-                When the Ignore Status checkbox is selected, the Response status is forced
+                When the <code>Ignore Status</code> checkbox is selected, the Response status is forced
                 to successful before evaluating the Assertion.
                 </p>
-                HTTP Responses with statuses in the 4xx and 5xx ranges are normally
+                HTTP Responses with statuses in the <code>4xx</code> and <code>5xx</code> ranges are normally
                 regarded as unsuccessful. 
-                The "Ignore status" checkbox can be used to set the status successful before performing further checks.
+                The "<code>Ignore status</code>" checkbox can be used to set the status successful before performing further checks.
                 Note that this will have the effect of clearing any previous assertion failures,
                 so make sure that this is only set on the first assertion.
         </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates how the text being tested
         is checked against the pattern.
         <ul>
-        <li>Contains - true if the text contains the regular expression pattern</li>
-        <li>Matches - true if the whole text matches the regular expression pattern</li>
-        <li>Equals - true if the whole text equals the pattern string (case-sensitive)</li>
-        <li>Substring - true if the text contains the pattern string (case-sensitive)</li>
+        <li><code>Contains</code> - true if the text contains the regular expression pattern</li>
+        <li><code>Matches</code> - true if the whole text matches the regular expression pattern</li>
+        <li><code>Equals</code> - true if the whole text equals the pattern string (case-sensitive)</li>
+        <li><code>Substring</code> - true if the text contains the pattern string (case-sensitive)</li>
         </ul>
-        Equals and Substring patterns are plain strings, not regular expressions.
-        NOT may also be selected to invert the result of the check.</property>
+        <code>Equals</code> and <code>Substring</code> patterns are plain strings, not regular expressions.
+        <code>NOT</code> may also be selected to invert the result of the check.</property>
         <property name="Patterns to Test" required="Yes">A list of patterns to
         be tested.  
         Each pattern is tested separately. 
@@ -4572,9 +4576,9 @@ These can be used anywhere within the expression and remain in effect until over
         There is no difference between setting up
         one Assertion with multiple patterns and setting up multiple Assertions with one
         pattern each (assuming the other options are the same).
-        <b>However, when the Ignore Status checkbox is selected, this has the effect of cancelling any
-        previous assertion failures - so make sure that the Ignore Status checkbox is only used on
-        the first Assertion.</b>
+        <note>However, when the <code>Ignore Status</code> checkbox is selected, this has the effect of cancelling any
+        previous assertion failures - so make sure that the <code>Ignore Status</code> checkbox is only used on
+        the first Assertion.</note>
         </property>
 </properties>
 <p>
@@ -4616,10 +4620,10 @@ the size be equal to, greater than, less than, or not equal to a given number of
         This is for use with samplers that can generate sub-samples, 
         e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
         <ul>
-        <li>Main sample only - assertion only applies to the main sample</li>
-        <li>Sub-samples only - assertion only applies to the sub-samples</li>
-        <li>Main sample and sub-samples - assertion applies to both.</li>
-        <li>JMeter Variable - assertion is to be applied to the contents of the named variable</li>
+        <li><code>Main sample only</code> - assertion only applies to the main sample</li>
+        <li><code>Sub-samples only</code> - assertion only applies to the sub-samples</li>
+        <li><code>Main sample and sub-samples</code> - assertion applies to both.</li>
+        <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         </property>
         <property name="Size in bytes" required="Yes">The number of bytes to use in testing the size of the response (or value of the JMeter variable).</property>
@@ -4653,20 +4657,20 @@ This means that variables persist across calls to the assertion.
 All Assertions are called from the same thread as the sampler.
 </p>
 <p>
-If the property "beanshell.assertion.init" is defined, it is passed to the Interpreter
+If the property "<code>beanshell.assertion.init</code>" is defined, it is passed to the Interpreter
 as the name of a sourced file. This can be used to define common methods and variables.
-There is a sample init file in the bin directory: BeanShellAssertion.bshrc
+There is a sample init file in the <code>bin</code> directory: <code>BeanShellAssertion.bshrc</code>
 </p>
 <p>
-The test element supports the ThreadListener and TestListener methods.
+The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
 These should be defined in the initialisation file.
-See the file BeanShellListeners.bshrc for example definitions.
+See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </p>
 </description>
 
 <properties>
     <property name="Name" required="">Descriptive name for this element that is shown in the tree.
-    The name is stored in the script variable Label</property>
+    The name is stored in the script variable <code>Label</code></property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -4675,11 +4679,11 @@ See the file BeanShellListeners.bshrc for example definitions.
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>bsh.args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>bsh.args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the BeanShell script to run. This overrides the script.
-    The file name is stored in the script variable FileName</property>
+    The file name is stored in the script variable <code>FileName</code></property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
 <p>There's a <a href="../demos/BeanShellAssertion.bsh">sample script</a> you can try.</p>
@@ -4688,28 +4692,33 @@ Before invoking the script, some variables are set up in the BeanShell interpret
 These are strings unless otherwise noted:
 </p>
 <ul>
-<li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
-    <li>SampleResult - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
-    <li>Response - the response Object; read-write</li>
-    <li>Failure - boolean; read-write; used to set the Assertion status</li>
-    <li>FailureMessage - String; read-write; used to set the Assertion message</li>
-    <li>ResponseData - the response body (byte [])</li>
-    <li>ResponseCode - e.g. 200</li>
-    <li>ResponseMessage - e.g. OK</li>
-    <li>ResponseHeaders - contains the HTTP headers</li>
-    <li>RequestHeaders - contains the HTTP headers sent to the server</li>
-    <li>SampleLabel</li>
-    <li>SamplerData - data that was sent to the server</li>
-    <li>ctx - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
-    <li>vars - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());</li>
-    <li>props - JMeterProperties (class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+  <li><code>log</code> - the Logger Object. (e.g.) <code>log.warn("Message"[,Throwable])</code></li>
+  <li><code>SampleResult</code> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
+  <li><code>Response</code> - the response Object; read-write</li>
+  <li><code>Failure</code> - boolean; read-write; used to set the Assertion status</li>
+  <li><code>FailureMessage</code> - String; read-write; used to set the Assertion message</li>
+  <li><code>ResponseData</code> - the response body (byte [])</li>
+  <li><code>ResponseCode</code> - e.g. <code>200</code></li>
+  <li><code>ResponseMessage</code> - e.g. <code>OK</code></li>
+  <li><code>ResponseHeaders</code> - contains the HTTP headers</li>
+  <li><code>RequestHeaders</code> - contains the HTTP headers sent to the server</li>
+  <li><code>SampleLabel</code></li>
+  <li><code>SamplerData</code> - data that was sent to the server</li>
+  <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
+  <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. 
+    <source>vars.get("VAR1");
+vars.put("VAR2","value");
+vars.putObject("OBJ1",new Object());</source></li>
+  <li><code>props</code> - JMeterProperties (class <code>java.util.Properties</code>) - e.g.
+    <source>props.get("START.HMS");
+props.put("PROP1","1234");</source></li>
 </ul>
 <p>The following methods of the Response object may be useful:</p>
 <ul>
-    <li>setStopThread(boolean)</li>
-    <li>setStopTest(boolean)</li>
-    <li>String getSampleLabel()</li>
-    <li>setSampleLabel(String)</li>
+    <li><code>setStopThread(boolean)</code></li>
+    <li><code>setStopTest(boolean)</code></li>
+    <li><code>String getSampleLabel()</code></li>
+    <li><code>setSampleLabel(String)</code></li>
 </ul>
 </component>
 
@@ -4728,8 +4737,8 @@ These are strings unless otherwise noted:
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-<property name="doctype" required="Yes">omit/auto/strict/loose</property>
-<property name="Format" required="Yes">HTML, XHTML or XML</property>
+<property name="doctype" required="Yes"><code>omit</code>, <code>auto</code>, <code>strict</code> or <code>loose</code></property>
+<property name="Format" required="Yes"><code>HTML</code>, <code>XHTML</code> or <code>XML</code></property>
 <property name="Errors only" required="Yes">Only take note of errors?</property>
 <property name="Error threshold" required="Yes">Number of errors allowed before classing the response as failed</property>
 <property name="Warning threshold" required="Yes">Number of warnings allowed before classing the response as failed</property>
@@ -4740,9 +4749,9 @@ These are strings unless otherwise noted:
 <component name="XPath Assertion" index="&sect-num;.5.8"  width="800" height="317" screenshot="xpath_assertion.png">
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
-XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
+XPath.  If that XPath exists, the Assertion is true.  Using "<code>/</code>" will match any well-formed
 document, and is the default XPath Expression. 
-The assertion also supports boolean expressions, such as "count(//*error)=2".
+The assertion also supports boolean expressions, such as "<code>count(//*error)=2</code>".
 See <a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a> for more information
 on XPath.
 </p>
@@ -4772,16 +4781,14 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 <note>
 As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
 you can provide a Properties file which contains mappings for the namespace prefixes: 
-<ul>
-<li>prefix1=Full Namespace 1</li>
-<li>prefix2=Full Namespace 2</li>
-<li>&hellip;</li>
-</ul>
+<source>
+prefix1=Full Namespace 1
+prefix2=Full Namespace 2
+&hellip;
+</source>
 
-You reference this file in jmeter.properties file using the property:
-<ul>
-    <li>xpath.namespace.config</li>
-</ul>
+You reference this file in <code>jmeter.properties</code> file using the property:
+    <source>xpath.namespace.config</source>
 </note>
 </component>
 <component name="XML Schema Assertion" index="&sect-num;.5.9"  width="472" height="132" screenshot="assertion/XMLSchemaAssertion.png">
@@ -4805,33 +4812,43 @@ The BSF Assertion allows BSF script code to be used to check the status of the p
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>
-The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+The script (or file) is processed using the <code>BSFEngine.exec()</code> method, which does not return a value.
 </p>
 <p>The following variables are set up for use by the script:</p>
 <ul>
-<li>log - (Logger) - can be used to write to the log file</li>
-<li>Label - the String Label</li>
-<li>Filename - the script file name (if any)</li>
-<li>Parameters - the parameters (as a String)</li>
-<li>args - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>SampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li>sampler - (Sampler)- gives access to the current sampler</li>
-<li>OUT - System.out - e.g. OUT.println("message")</li>
-<li>AssertionResult - the assertion result</li>
+<li><code>log</code> - (Logger) - can be used to write to the log file</li>
+<li><code>Label</code> - the String Label</li>
+<li><code>Filename</code> - the script file name (if any)</li>
+<li><code>Parameters</code> - the parameters (as a String)</li>
+<li><code>args</code> - the parameters as a String array (split on whitespace)</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables:
+<source>
+vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+vars.getObject("OBJ2");
+</source></li>
+<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g.
+<source>
+props.get("START.HMS");
+props.put("PROP1","1234");
+</source></li>
+<li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
+<li><code>sampler</code> - (Sampler)- gives access to the current sampler</li>
+<li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
+<li><code>AssertionResult</code> - the assertion result</li>
 </ul>
 <p>
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
-If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
+If an error is detected, the script should use <code>AssertionResult.setFailureMessage("message")</code> and <code>AssertionResult.setFailure(true)</code>.
 </p>
 <p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
@@ -4848,31 +4865,41 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>The following variables are set up for use by the script:</p>
 <ul>
-<li>log - (Logger) - can be used to write to the log file</li>
-<li>Label - the String Label</li>
-<li>Filename - the script file name (if any)</li>
-<li>Parameters - the parameters (as a String)</li>
-<li>args - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>SampleResult, prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li>sampler - (Sampler)- gives access to the current sampler</li>
-<li>OUT - System.out - e.g. OUT.println("message")</li>
-<li>AssertionResult - the assertion result</li>
+<li><code>log</code> - (Logger) - can be used to write to the log file</li>
+<li><code>Label</code> - the String Label</li>
+<li><code>Filename</code> - the script file name (if any)</li>
+<li><code>Parameters</code> - the parameters (as a String)</li>
+<li><code>args</code> - the parameters as a String array (split on whitespace)</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables:
+<source>
+vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+vars.getObject("OBJ2");
+</source></li>
+<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g.
+<source>
+props.get("START.HMS");
+props.put("PROP1","1234");
+</source></li>
+<li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
+<li><code>sampler</code> - (Sampler)- gives access to the current sampler</li>
+<li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
+<li><code>AssertionResult</code> - the assertion result</li>
 </ul>
 <p>
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
-If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
+If an error is detected, the script should use <code>AssertionResult.setFailureMessage("message")</code> and <code>AssertionResult.setFailure(true)</code>.
 </p>
 <p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
@@ -4880,7 +4907,7 @@ If an error is detected, the script should use AssertionResult.setFailureMessage
 <component name="Compare Assertion" index="&sect-num;.5.12"  width="292" height="296" screenshot="assertion/compare.png">
 <description>
 <note>
-Compare Assertion MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
+Compare Assertion <b>must not be used</b> during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
 during Test Plan debugging and Validation.
 </note>
 
@@ -4892,9 +4919,9 @@ The assertion comparisons can be seen in the <complink name="Comparison Assertio
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
     <property name="Compare Content" required="Yes">Whether or not to compare the content (response data)</property>
     <property name="Compare Time" required="Yes">If the value is >=0, then check if the response time difference is no greater than the value. 
-    I.e. if the value is 0, then the response times must be exactly equal.</property>
+    I.e. if the value is <code>0</code>, then the response times must be exactly equal.</property>
     <property name="Comparison Filters" required="No">Filters can be used to remove strings from the content comparison.
-    For example, if the page has a time-stamp, it might be matched with: "Time: \d\d:\d\d:\d\d" and replaced with a dummy fixed time "Time: HH:MM:SS".
+    For example, if the page has a time-stamp, it might be matched with: "<code>Time: \d\d:\d\d:\d\d</code>" and replaced with a dummy fixed time "<code>Time: HH:MM:SS</code>".
     </property>
 </properties>
 </component>
@@ -4903,27 +4930,27 @@ The assertion comparisons can be seen in the <complink name="Comparison Assertio
 <description>
 The SMIME Assertion can be used to evaluate the sample results from the Mail Reader Sampler.
 This assertion verifies if the body of a mime message is signed or not. The signature can also be verified against a specific signer certificate.
-As this is a functionality that is not necessarily needed by most users, additional jars need to be downloaded and added to JMETER_HOME/lib :<br></br> 
+As this is a functionality that is not necessarily needed by most users, additional jars need to be downloaded and added to <code>JMETER_HOME/lib</code> :<br></br> 
 <ul>
-<li>bcmail-xxx.jar (BouncyCastle SMIME/CMS)</li>
-<li>bcprov-xxx.jar (BouncyCastle Provider)</li>
+<li><code>bcmail-xxx.jar</code> (BouncyCastle SMIME/CMS)</li>
+<li><code>bcprov-xxx.jar</code> (BouncyCastle Provider)</li>
 </ul>
 These need to be <a href="http://www.bouncycastle.org/latest_releases.html">downloaded from BouncyCastle.</a>
 <p>
 If using the <complink name="Mail Reader Sampler">Mail Reader Sampler</complink>, 
-please ensure that you select "Store the message using MIME (raw)" otherwise the Assertion won't be able to process the message correctly.
+please ensure that you select "<code>Store the message using MIME (raw)</code>" otherwise the Assertion won't be able to process the message correctly.
 </p>
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
     <property name="Verify Signature" required="Yes">If selected, the assertion will verify if it is a valid signature according to the parameters defined in the Signer Certificate box.</property>
     <property name="Message not signed" required="Yes">Whether or not to expect a signature in the message</property>
-    <property name="Signer Cerificate" required="Yes">"No Check" means that it will not perform signature verification. "Check values" is used to verify the signature against the inputs provided. And "Certificate file" will perform the verification against a specific certificate file.</property>
+    <property name="Signer Cerificate" required="Yes">"<code>No Check</code>" means that it will not perform signature verification. "<code>Check values</code>" is used to verify the signature against the inputs provided. And "<code>Certificate file</code>" will perform the verification against a specific certificate file.</property>
     <property name="Message Position" required="Yes">
     The Mail sampler can retrieve multiple messages in a single sample.
     Use this field to specify which message will be checked.
-    Messages are numbered from 0, so 0 means the first message.
-    Negative numbers count from the LAST message; -1 means LAST, -2 means penultimate etc.
+    Messages are numbered from <code>0</code>, so <code>0</code> means the first message.
+    Negative numbers count from the LAST message; <code>-1</code> means LAST, <code>-2</code> means penultimate etc.
     </property>
 </properties>
 </component>
