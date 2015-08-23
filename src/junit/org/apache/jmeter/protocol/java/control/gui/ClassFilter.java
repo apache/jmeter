@@ -47,7 +47,7 @@ class ClassFilter {
     }
 
     String[] filterArray(List<String> items) {
-        ArrayList<String> newlist = new ArrayList<>();
+        List<String> newlist = new ArrayList<>();
         for (String item : items) {
             if (include(item)) {
                 newlist.add(item);

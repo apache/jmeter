@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,7 +91,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
 
     private void formatSet(StringBuilder sb, @SuppressWarnings("rawtypes") Set s) {
         @SuppressWarnings("unchecked")
-        ArrayList<Map.Entry<Object, Object>> al = new ArrayList<>(s);
+        List<Map.Entry<Object, Object>> al = new ArrayList<>(s);
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
             @Override
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {

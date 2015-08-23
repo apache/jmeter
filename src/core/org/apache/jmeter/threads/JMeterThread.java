@@ -510,7 +510,7 @@ public class JMeterThread implements Runnable, Interruptible {
         List<SampleListener> sampleListeners = samplePack.getSampleListeners();
         // Do not send subsamples to listeners which receive the transaction sample
         if(transactionSampler != null) {
-            ArrayList<SampleListener> onlySubSamplerListeners = new ArrayList<>();
+            List<SampleListener> onlySubSamplerListeners = new ArrayList<>();
             List<SampleListener> transListeners = transactionPack.getSampleListeners();
             for(SampleListener listener : sampleListeners) {
                 // Check if this instance is present in transaction listener list

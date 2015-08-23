@@ -335,7 +335,7 @@ public final class ClassFinder {
         }
 
         // find all jar files or paths that end with strPathOrJar
-        ArrayList<String> listPaths = new ArrayList<>();
+        List<String> listPaths = new ArrayList<>();
         String strPath = null;
         while (stPaths.hasMoreTokens()) {
             strPath = fixPathEntry(stPaths.nextToken());

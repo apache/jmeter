@@ -24,6 +24,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.prefs.Preferences;
@@ -60,7 +61,7 @@ public class LookAndFeelCommand implements Command {
         }
         String jMeterLaf = getJMeterLaf();
         if (log.isInfoEnabled()) {
-            ArrayList<String> names = new ArrayList<>();
+            List<String> names = new ArrayList<>();
             for(UIManager.LookAndFeelInfo laf : lfs) {
                 if (laf.getClassName().equals(jMeterLaf)) {
                     names.add(laf.getName());

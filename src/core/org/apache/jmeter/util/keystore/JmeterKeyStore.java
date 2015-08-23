@@ -32,6 +32,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -114,7 +115,7 @@ public final class JmeterKeyStore {
         char pw[] = pword==null ? null : pword.toCharArray();
         store.load(is, pw);
     
-        ArrayList<String> v_names = new ArrayList<>();
+        List<String> v_names = new ArrayList<>();
         this.privateKeyByAlias = new HashMap<>();
         this.certsByAlias = new HashMap<>();
 
