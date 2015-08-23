@@ -60,6 +60,6 @@ public abstract class AbstractSamplerGui extends AbstractJMeterGuiComponent {
      */
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.SAMPLERS });
+        return Arrays.asList(MenuFactory.SAMPLERS);
     }
 }

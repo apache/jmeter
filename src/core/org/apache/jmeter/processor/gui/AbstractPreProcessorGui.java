@@ -37,7 +37,7 @@ public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent
 
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.PRE_PROCESSORS });
+        return Arrays.asList(MenuFactory.PRE_PROCESSORS);
     }
 
 }
