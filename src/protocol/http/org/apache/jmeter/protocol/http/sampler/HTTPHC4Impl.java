@@ -882,7 +882,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     if (! HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
                         String v = header.getValue();
                         if (HTTPConstants.HEADER_HOST.equalsIgnoreCase(n)) {
-                            int port = url.getPort();
+                            int port = getPortFromHostHeader(v, url.getPort());
                             v = v.replaceFirst(":\\d+$",""); // remove any port specification // $NON-NLS-1$ $NON-NLS-2$
                             if (port != -1) {
                                 if (port == url.getDefaultPort()) {
@@ -900,6 +900,28 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if (cacheManager != null){
             cacheManager.setHeaders(url, request);
         }
+    }
+
+    /**
+     * Get port from the value of the Host header, or return the given
+     * defaultValue
+     *
+     * @param hostHeaderValue
+     *            value of the http Host header
+     * @param defaultValue
+     *            value to be used, when no port could be extracted from
+     *            hostHeaderValue
+     * @return integer representing the port for the host header
+     */
+    private int getPortFromHostHeader(String hostHeaderValue, int defaultValue) {
+        String[] hostParts = hostHeaderValue.split(":");
+        if (hostParts.length > 1) {
+            String portString = hostParts[hostParts.length - 1];
+            if (portString.matches("^\\d+$")) {
+                return Integer.valueOf(portString);
+            }
+        }
+        return defaultValue;
     }
 
     /**
