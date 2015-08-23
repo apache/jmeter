@@ -52,7 +52,7 @@ public final class NewDriver {
     private static final String jmDir;
 
     static {
-        final List<URL> jars = new LinkedList<URL>();
+        final List<URL> jars = new LinkedList<>();
         final String initial_classpath = System.getProperty(JAVA_CLASS_PATH);
 
         // Find JMeter home dir from the initial classpath

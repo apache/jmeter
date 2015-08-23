@@ -239,9 +239,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             subscriber = createSubscriber(session, dest, durableSubscriptionId, jmsSelector);
             if(useMessageListener) {
                 if (queueSize <=0) {
-                    queue = new LinkedBlockingQueue<Message>();
+                    queue = new LinkedBlockingQueue<>();
                 } else {
-                    queue = new LinkedBlockingQueue<Message>(queueSize);            
+                    queue = new LinkedBlockingQueue<>(queueSize);
                 }
                 subscriber.setMessageListener(this);
             } else {

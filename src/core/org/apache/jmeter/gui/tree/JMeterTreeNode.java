@@ -76,7 +76,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      * @return {@link List} of {@link JMeterTreeNode}s
      */
     public List<JMeterTreeNode> getPathToThreadGroup() {
-        List<JMeterTreeNode> nodes = new ArrayList<JMeterTreeNode>();
+        List<JMeterTreeNode> nodes = new ArrayList<>();
         if(treeModel != null) {
             TreeNode[] nodesToRoot = treeModel.getPathToRoot(this);
             for (TreeNode node : nodesToRoot) {

@@ -121,7 +121,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * Default Constructor.
      */
     public AuthManager() {
-        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList<Object>()));
+        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList<>()));
     }
 
     /** {@inheritDoc} */
@@ -129,7 +129,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     public void clear() {
         super.clear();
         kerberosManager.clearSubjects();
-        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList<Object>()));
+        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList<>()));
     }
 
     /**

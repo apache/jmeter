@@ -111,7 +111,7 @@ public class HttpMirrorThread implements Runnable {
             final String[] requestParts = firstLine.split("\\s+");
             final String requestMethod = requestParts[0];
             final String requestPath = requestParts[1];
-            final HashMap<String, String> parameters = new HashMap<String, String>();
+            final HashMap<String, String> parameters = new HashMap<>();
             if (HTTPConstants.GET.equals(requestMethod)) {
                 int querypos = requestPath.indexOf('?');
                 if (querypos >= 0) {

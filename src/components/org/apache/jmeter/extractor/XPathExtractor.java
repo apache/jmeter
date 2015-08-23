@@ -124,7 +124,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
         vars.put(matchNR, "0"); // In case parse fails // $NON-NLS-1$
         vars.remove(concat(refName,"1")); // In case parse fails // $NON-NLS-1$
 
-        List<String> matches = new ArrayList<String>();
+        List<String> matches = new ArrayList<>();
         try{
             if (isScopeVariable()){
                 String inputString=vars.get(getVariableName());

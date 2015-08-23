@@ -372,7 +372,7 @@ implements ChangeListener, ActionListener, ItemListener
     private String[] getMethodNames(Class<?> clazz)
     {
         Method[] meths = clazz.getMethods();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (int idx=0; idx < meths.length; idx++){
             final Method method = meths[idx];
             final String name = method.getName();

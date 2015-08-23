@@ -321,7 +321,7 @@ class SMIMEAssertion {
      */
     private static List<String> getEmailFromCert(X509Certificate cert)
             throws CertificateException {
-        List<String> res = new ArrayList<String>();
+        List<String> res = new ArrayList<>();
 
         X509Principal subject = PrincipalUtil.getSubjectX509Principal(cert);
         Iterator<?> addressIt = subject.getValues(X509Name.EmailAddress).iterator();

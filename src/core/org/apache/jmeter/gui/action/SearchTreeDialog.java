@@ -197,7 +197,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         }
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
-        Set<JMeterTreeNode> nodes = new HashSet<JMeterTreeNode>();
+        Set<JMeterTreeNode> nodes = new HashSet<>();
         for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
             try {
                 if (jMeterTreeNode.getUserObject() instanceof Searchable){

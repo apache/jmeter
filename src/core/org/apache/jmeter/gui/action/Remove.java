@@ -35,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Remove implements Command {
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     // Whether to skip the delete confirmation dialogue
     private static final boolean SKIP_CONFIRM = JMeterUtils.getPropDefault("confirm.delete.skip", false); // $NON-NLS-1$

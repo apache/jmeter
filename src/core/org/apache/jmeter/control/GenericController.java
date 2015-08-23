@@ -54,8 +54,7 @@ public class GenericController extends AbstractTestElement implements Controller
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private transient LinkedList<LoopIterationListener> iterationListeners =
-        new LinkedList<LoopIterationListener>();
+    private transient LinkedList<LoopIterationListener> iterationListeners = new LinkedList<>();
 
     // Only create the map if it is required
     private transient ConcurrentMap<TestElement, Object> children = 
@@ -64,8 +63,7 @@ public class GenericController extends AbstractTestElement implements Controller
     private static final Object DUMMY = new Object();
 
     // May be replaced by RandomOrderController
-    protected transient List<TestElement> subControllersAndSamplers =
-        new ArrayList<TestElement>();
+    protected transient List<TestElement> subControllersAndSamplers = new ArrayList<>();
 
     /**
      * Index of current sub controller or sampler
@@ -422,13 +420,9 @@ public class GenericController extends AbstractTestElement implements Controller
     }
     
     protected Object readResolve(){
-        iterationListeners =
-                new LinkedList<LoopIterationListener>();
-        children = 
-                TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
-        
-        subControllersAndSamplers =
-                new ArrayList<TestElement>();
+        iterationListeners = new LinkedList<>();
+        children = TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
+        subControllersAndSamplers = new ArrayList<>();
 
         return this;
     }

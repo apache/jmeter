@@ -220,7 +220,7 @@ public class ConversionUtils {
         final boolean endsWithSlash = currentPath.endsWith(SLASH);
 
         StringTokenizer st = new StringTokenizer(currentPath, SLASH);
-        List<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens())
         {
             tokens.add(st.nextToken());

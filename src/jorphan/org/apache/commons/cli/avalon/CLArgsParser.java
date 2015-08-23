@@ -223,7 +223,7 @@ public final class CLArgsParser {
     public CLArgsParser(final String[] args, final CLOptionDescriptor[] optionDescriptors, final ParserControl control) {
         m_optionDescriptors = optionDescriptors;
         m_control = control;
-        m_options = new Vector<CLOption>();
+        m_options = new Vector<>();
         m_args = args;
 
         try {
@@ -666,7 +666,7 @@ public final class CLArgsParser {
      */
     private final void buildOptionIndex() {
         final int size = m_options.size();
-        m_optionIndex = new Hashtable<Object, CLOption>(size * 2);
+        m_optionIndex = new Hashtable<>(size * 2);
 
         for (int i = 0; i < size; i++) {
             final CLOption option = m_options.get(i);

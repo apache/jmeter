@@ -192,7 +192,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         }
 
         Perl5Matcher matcher = JMeterUtils.getMatcher();
-        List<MatchResult> matches = new ArrayList<MatchResult>();
+        List<MatchResult> matches = new ArrayList<>();
         int found = 0;
 
         if (isScopeVariable()){
@@ -315,7 +315,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             return;
         }
         // Contains Strings and Integers
-        List<Object> combined = new ArrayList<Object>();
+        List<Object> combined = new ArrayList<>();
         String rawTemplate = getTemplate();
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$

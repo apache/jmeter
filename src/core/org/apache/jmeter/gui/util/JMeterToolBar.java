@@ -164,7 +164,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         
         String iconSize = JMeterUtils.getPropDefault(TOOLBAR_ICON_SIZE, DEFAULT_TOOLBAR_ICON_SIZE); 
 
-        List<IconToolbarBean> listIcons = new ArrayList<IconToolbarBean>();
+        List<IconToolbarBean> listIcons = new ArrayList<>();
         for (String key : oList) {
             log.debug("Toolbar icon key: " + key); //$NON-NLS-1$
             String trimmed = key.trim();
@@ -204,7 +204,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      */
     private Map<String, Boolean> getCurrentButtonsStates() {
         Component[] components = getComponents();
-        Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(components.length);
+        Map<String, Boolean> buttonStates = new HashMap<>(components.length);
         for (int i = 0; i < components.length; i++) {
             if (components[i] instanceof JButton) {
                 JButton button = (JButton) components[i];
@@ -219,7 +219,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      */
     public void initButtonsState() {
         final boolean started = false;
-        Map<String, Boolean> buttonStates = new HashMap<String, Boolean>();
+        Map<String, Boolean> buttonStates = new HashMap<>();
         buttonStates.put(ActionNames.ACTION_START, Boolean.valueOf(!started));
         buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, Boolean.valueOf(!started));
         buttonStates.put(ActionNames.ACTION_STOP, Boolean.valueOf(started));
@@ -240,7 +240,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      *            Flag whether local test is started
      */
     public void setLocalTestStarted(boolean started) {
-        Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(3);
+        Map<String, Boolean> buttonStates = new HashMap<>(3);
         buttonStates.put(ActionNames.ACTION_START, Boolean.valueOf(!started));
         buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, Boolean.valueOf(!started));
         buttonStates.put(ActionNames.ACTION_STOP, Boolean.valueOf(started));
@@ -255,7 +255,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      *            Flag whether the test is started
      */
     public void setRemoteTestStarted(boolean started) {
-        Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(3);
+        Map<String, Boolean> buttonStates = new HashMap<>(3);
         buttonStates.put(ActionNames.REMOTE_START_ALL, Boolean.valueOf(!started));
         buttonStates.put(ActionNames.REMOTE_STOP_ALL, Boolean.valueOf(started));
         buttonStates.put(ActionNames.REMOTE_SHUT_ALL, Boolean.valueOf(started));
@@ -273,7 +273,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      *            {@link ActionNames#REDO} should be enabled
      */
     public void updateUndoRedoIcons(boolean canUndo, boolean canRedo) {
-        Map<String, Boolean> buttonStates = new HashMap<String, Boolean>(2);
+        Map<String, Boolean> buttonStates = new HashMap<>(2);
         buttonStates.put(ActionNames.UNDO, Boolean.valueOf(canUndo));
         buttonStates.put(ActionNames.REDO, Boolean.valueOf(canRedo));
         updateButtons(buttonStates);

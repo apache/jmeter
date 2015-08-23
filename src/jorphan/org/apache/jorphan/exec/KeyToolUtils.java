@@ -136,7 +136,7 @@ public class KeyToolUtils {
             throws IOException {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, null);
-        final List<String> arguments = new ArrayList<String>();
+        final List<String> arguments = new ArrayList<>();
         arguments.add(getKeyToolPath());
         arguments.add("-genkeypair"); // $NON-NLS-1$
         arguments.add("-alias"); // $NON-NLS-1$
@@ -305,7 +305,7 @@ public class KeyToolUtils {
     public static String list(final File keystore, final String storePass) throws IOException {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, null);
-        final List<String> arguments = new ArrayList<String>();
+        final List<String> arguments = new ArrayList<>();
         arguments.add(getKeyToolPath());
         arguments.add("-list"); // $NON-NLS-1$
         arguments.add("-v"); // $NON-NLS-1$
@@ -368,7 +368,7 @@ public class KeyToolUtils {
             throws IOException {
         final File workingDir = keystore.getParentFile();
         final SystemCommand nativeCommand = new SystemCommand(workingDir, 0L, 0, null, input, output, null);
-        final List<String> arguments = new ArrayList<String>();
+        final List<String> arguments = new ArrayList<>();
         arguments.add(getKeyToolPath());
         arguments.add(command);
         arguments.add("-keystore"); // $NON-NLS-1$
@@ -420,7 +420,7 @@ public class KeyToolUtils {
      */
     private static boolean checkKeytool(String keytoolPath) {
         final SystemCommand nativeCommand = new SystemCommand(null, null);
-        final List<String> arguments = new ArrayList<String>();
+        final List<String> arguments = new ArrayList<>();
         arguments.add(keytoolPath);
         arguments.add("-help"); // $NON-NLS-1$
         try {

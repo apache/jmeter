@@ -110,7 +110,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      * @return a panel containing the relevant components
      */
     private JPanel createClassnamePanel() {
-        List<String> possibleClasses = new ArrayList<String>();
+        List<String> possibleClasses = new ArrayList<>();
 
         try {
             // Find all the classes which implement the BackendListenerClient
@@ -244,7 +244,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      */
     private static final boolean checkContainsClassName(ComboBoxModel<?> model, String className) {
         int size = model.getSize();
-        Set<String> set = new HashSet<String>(size);
+        Set<String> set = new HashSet<>(size);
         for (int i = 0; i < size; i++) {
             set.add((String)model.getElementAt(i));
         }

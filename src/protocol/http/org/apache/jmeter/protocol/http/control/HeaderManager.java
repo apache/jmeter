@@ -63,14 +63,14 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
     private Object SOAPHeader = null;
 
     public HeaderManager() {
-        setProperty(new CollectionProperty(HEADERS, new ArrayList<Object>()));
+        setProperty(new CollectionProperty(HEADERS, new ArrayList<>()));
     }
 
     /** {@inheritDoc} */
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(HEADERS, new ArrayList<Object>()));
+        setProperty(new CollectionProperty(HEADERS, new ArrayList<>()));
     }
 
     /**
@@ -217,7 +217,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
      * @param name header name
      */
     public void removeHeaderNamed(String name) {
-        List<Integer> removeIndices = new ArrayList<Integer>();
+        List<Integer> removeIndices = new ArrayList<>();
         for (int i = getHeaders().size() - 1; i >= 0; i--) {
             Header header = (Header) getHeaders().get(i).getObjectValue();
             if (header == null) {

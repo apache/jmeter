@@ -80,7 +80,7 @@ public class SystemSampler extends AbstractSampler {
      */
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
@@ -112,7 +112,7 @@ public class SystemSampler extends AbstractSampler {
         Arguments environment = getEnvironmentVariables();
         boolean checkReturnCode = getCheckReturnCode();
         int expectedReturnCode = getExpectedReturnCode();
-        List<String> cmds = new ArrayList<String>(args.getArgumentCount()+1);
+        List<String> cmds = new ArrayList<>(args.getArgumentCount() + 1);
         StringBuilder cmdLine = new StringBuilder((null == command) ? "" : command);
         cmds.add(command);
         for (int i=0;i<args.getArgumentCount();i++) {
@@ -122,7 +122,7 @@ public class SystemSampler extends AbstractSampler {
             cmdLine.append(cmds.get(i+1));
         }
 
-        Map<String,String> env = new HashMap<String, String>();
+        Map<String,String> env = new HashMap<>();
         for (int i=0;i<environment.getArgumentCount();i++) {
             Argument arg = environment.getArgument(i);
             env.put(arg.getName(), arg.getPropertyAsString(Argument.VALUE));

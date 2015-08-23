@@ -164,7 +164,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private JButton runningIndicator;
 
     /** The set of currently running hosts. */
-    private final Set<String> hosts = new HashSet<String>();
+    private final Set<String> hosts = new HashSet<>();
 
     /** A message dialog shown while JMeter threads are stopping. */
     private JDialog stoppingMessage;

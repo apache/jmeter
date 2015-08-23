@@ -41,7 +41,7 @@ import org.mozilla.javascript.Scriptable;
  */
 public class JavaScript extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__javaScript"; //$NON-NLS-1$
 

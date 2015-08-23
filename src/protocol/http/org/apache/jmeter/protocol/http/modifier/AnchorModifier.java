@@ -73,7 +73,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             sampler = (HTTPSamplerBase) sam;
             result = (HTTPSampleResult) res;
         }
-        List<HTTPSamplerBase> potentialLinks = new ArrayList<HTTPSamplerBase>();
+        List<HTTPSamplerBase> potentialLinks = new ArrayList<>();
         String responseText = ""; // $NON-NLS-1$
         responseText = result.getResponseDataAsString();
         Document html;
@@ -117,7 +117,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         if (log.isDebugEnabled()) {
             log.debug("Modifying argument: " + arg);
         }
-        List<Argument> possibleReplacements = new ArrayList<Argument>();
+        List<Argument> possibleReplacements = new ArrayList<>();
         PropertyIterator iter = args.iterator();
         Argument replacementArg;
         while (iter.hasNext()) {
@@ -148,7 +148,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
     private void addFormUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config, 
             List<HTTPSamplerBase> potentialLinks) {
         NodeList rootList = html.getChildNodes();
-        List<HTTPSamplerBase> urls = new LinkedList<HTTPSamplerBase>();
+        List<HTTPSamplerBase> urls = new LinkedList<>();
         for (int x = 0; x < rootList.getLength(); x++) {
             urls.addAll(HtmlParsingUtils.createURLFromForm(rootList.item(x), result.getURL()));
         }

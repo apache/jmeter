@@ -35,7 +35,7 @@ public class StatusImpl implements Status {
      */
     public StatusImpl() {
         super();
-        connectors = new LinkedList<Connector>();
+        connectors = new LinkedList<>();
     }
 
     /** {@inheritDoc} */

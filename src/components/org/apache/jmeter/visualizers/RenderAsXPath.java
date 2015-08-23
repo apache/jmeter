@@ -135,7 +135,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     private String process(String textToParse, XPathExtractor extractor) {
         try {
             Document doc = parseResponse(textToParse, extractor);
-            List<String> matchStrings = new ArrayList<String>();
+            List<String> matchStrings = new ArrayList<>();
             XPathUtil.putValuesForXPathInList(doc, xpathExpressionField.getText(),
                     matchStrings, extractor.getFragment());
             StringBuilder builder = new StringBuilder();

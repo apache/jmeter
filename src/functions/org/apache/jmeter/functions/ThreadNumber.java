@@ -34,7 +34,7 @@ public class ThreadNumber extends AbstractFunction {
 
     private static final String KEY = "__threadNum"; //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     /** {@inheritDoc} */
     @Override

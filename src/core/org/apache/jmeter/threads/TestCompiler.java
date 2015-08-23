@@ -76,14 +76,14 @@ public class TestCompiler implements HashTreeTraverser {
      * If the ObjectPair (child, parent) is present, then the child has been added.
      * Otherwise, the child is added to the parent and the pair is added to the Set.
      */
-    private static final Set<ObjectPair> PAIRING = new HashSet<ObjectPair>();
+    private static final Set<ObjectPair> PAIRING = new HashSet<>();
 
-    private final LinkedList<TestElement> stack = new LinkedList<TestElement>();
+    private final LinkedList<TestElement> stack = new LinkedList<>();
 
-    private final Map<Sampler, SamplePackage> samplerConfigMap = new HashMap<Sampler, SamplePackage>();
+    private final Map<Sampler, SamplePackage> samplerConfigMap = new HashMap<>();
 
     private final Map<TransactionController, SamplePackage> transactionControllerConfigMap =
-        new HashMap<TransactionController, SamplePackage>();
+            new HashMap<>();
 
     private final HashTree testTree;
 
@@ -204,17 +204,17 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     private void saveSamplerConfigs(Sampler sam) {
-        List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
-        List<Controller> controllers = new LinkedList<Controller>();
-        List<SampleListener> listeners = new LinkedList<SampleListener>();
-        List<Timer> timers = new LinkedList<Timer>();
-        List<Assertion> assertions = new LinkedList<Assertion>();
-        LinkedList<PostProcessor> posts = new LinkedList<PostProcessor>();
-        LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
+        List<ConfigTestElement> configs = new LinkedList<>();
+        List<Controller> controllers = new LinkedList<>();
+        List<SampleListener> listeners = new LinkedList<>();
+        List<Timer> timers = new LinkedList<>();
+        List<Assertion> assertions = new LinkedList<>();
+        LinkedList<PostProcessor> posts = new LinkedList<>();
+        LinkedList<PreProcessor> pres = new LinkedList<>();
         for (int i = stack.size(); i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
-            List<PreProcessor>  tempPre = new LinkedList<PreProcessor> ();
-            List<PostProcessor> tempPost = new LinkedList<PostProcessor>();
+            List<PreProcessor>  tempPre = new LinkedList<>();
+            List<PostProcessor> tempPost = new LinkedList<>();
             for (Object item : testTree.list(stack.subList(0, i))) {
                 if ((item instanceof ConfigTestElement)) {
                     configs.add((ConfigTestElement) item);
@@ -247,13 +247,13 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     private void saveTransactionControllerConfigs(TransactionController tc) {
-        List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
-        List<Controller> controllers = new LinkedList<Controller>();
-        List<SampleListener> listeners = new LinkedList<SampleListener>();
-        List<Timer> timers = new LinkedList<Timer>();
-        List<Assertion> assertions = new LinkedList<Assertion>();
-        LinkedList<PostProcessor> posts = new LinkedList<PostProcessor>();
-        LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
+        List<ConfigTestElement> configs = new LinkedList<>();
+        List<Controller> controllers = new LinkedList<>();
+        List<SampleListener> listeners = new LinkedList<>();
+        List<Timer> timers = new LinkedList<>();
+        List<Assertion> assertions = new LinkedList<>();
+        LinkedList<PostProcessor> posts = new LinkedList<>();
+        LinkedList<PreProcessor> pres = new LinkedList<>();
         for (int i = stack.size(); i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
             for (Object item : testTree.list(stack.subList(0, i))) {

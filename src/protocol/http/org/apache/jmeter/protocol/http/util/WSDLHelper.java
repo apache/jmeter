@@ -78,7 +78,7 @@ public class WSDLHelper {
 
     private Object[] SOAPOPS = null;
 
-    private final Map<String, String> ACTIONS = new HashMap<String, String>();
+    private final Map<String, String> ACTIONS = new HashMap<>();
 
     private final AuthManager AUTH;
 
@@ -320,7 +320,7 @@ public class WSDLHelper {
      * @return Node[]
      */
     public Object[] getSOAPBindings() {
-        ArrayList<Element> list = new ArrayList<Element>();
+        ArrayList<Element> list = new ArrayList<>();
         NodeList bindings = WSDLDOC.getElementsByTagNameNS(WSDL_NAMESPACE,"binding");
         for (int idx = 0; idx < bindings.getLength(); idx++) {
             Element nd = (Element) bindings.item(idx);
@@ -357,7 +357,7 @@ public class WSDLHelper {
      */
     public Object[] getOperations() {
         Object[] res = this.getSOAPBindings();
-        ArrayList<Element> ops = new ArrayList<Element>();
+        ArrayList<Element> ops = new ArrayList<>();
         // first we iterate through the bindings
         for (int idx = 0; idx < res.length; idx++) {
             Element one = (Element) res[idx];

@@ -81,6 +81,6 @@ public class SocketOutputStreamPoolFactory
 
     @Override
     public PooledObject<SocketOutputStream> wrap(SocketOutputStream outputStream) {
-        return new DefaultPooledObject<SocketOutputStream>(outputStream);
+        return new DefaultPooledObject<>(outputStream);
     }
 }

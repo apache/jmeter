@@ -157,7 +157,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
-        responses = new LinkedList<SampleResult>();
+        responses = new LinkedList<>();
     }
 
     public void iterationEnd(LoopIterationEvent iterEvent) {

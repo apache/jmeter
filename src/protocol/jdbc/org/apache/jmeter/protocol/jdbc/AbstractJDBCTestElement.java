@@ -81,7 +81,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     static {
         // based on e291. Getting the Name of a JDBC Type from javaalmanac.com
         // http://javaalmanac.com/egs/java.sql/JdbcInt2Str.html
-        mapJdbcNameToInt = new HashMap<String, Integer>();
+        mapJdbcNameToInt = new HashMap<>();
 
         //Get all fields in java.sql.Types and store the corresponding int values
         Field[] fields = java.sql.Types.class.getFields();
@@ -130,7 +130,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      *  At one time a Connection is only held by one thread
      */
     private static final Map<Connection, Map<String, PreparedStatement>> perConnCache =
-            new ConcurrentHashMap<Connection, Map<String, PreparedStatement>>();
+            new ConcurrentHashMap<>();
 
     /**
      * Creates a JDBCSampler.
@@ -240,7 +240,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
         } while (result || (updateCount != -1));
         if (out!=null && pstmt instanceof CallableStatement){
-            ArrayList<Object> outputValues = new ArrayList<Object>();
+            ArrayList<Object> outputValues = new ArrayList<>();
             CallableStatement cs = (CallableStatement) pstmt;
             sb.append("Output variables by position:\n");
             for(int i=0; i < out.length; i++){
@@ -435,7 +435,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         String resultVariable = getResultVariable().trim();
         List<Map<String, Object> > results = null;
         if(resultVariable.length() > 0) {
-            results = new ArrayList<Map<String,Object> >();
+            results = new ArrayList<>();
             jmvars.putObject(resultVariable, results);
         }
         int j = 0;
@@ -446,7 +446,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 Object o = rs.getObject(i);
                 if(results != null) {
                     if(row == null) {
-                        row = new HashMap<String, Object>(numColumns);
+                        row = new HashMap<>(numColumns);
                         results.add(row);
                     }
                     row.put(meta.getColumnLabel(i), o);

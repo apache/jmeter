@@ -49,7 +49,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 
     private boolean dirty = false;
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.CHECK_DIRTY);
@@ -61,7 +61,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     }
 
     public CheckDirty() {
-        previousGuiItems = new HashMap<JMeterTreeNode, TestElement>();
+        previousGuiItems = new HashMap<>();
         ActionRouter.getInstance().addPreActionListener(ExitCommand.class, this);
     }
 

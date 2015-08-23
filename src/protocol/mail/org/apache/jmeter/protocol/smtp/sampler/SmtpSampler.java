@@ -64,7 +64,7 @@ public class SmtpSampler extends AbstractSampler {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 
@@ -377,7 +377,7 @@ public class SmtpSampler extends AbstractSampler {
      */
     private List<InternetAddress> getPropNameAsAddresses(String propValue) throws AddressException{
         if (propValue.length() > 0){ // we have at least one potential address
-            List<InternetAddress> addresses = new ArrayList<InternetAddress>();
+            List<InternetAddress> addresses = new ArrayList<>();
             for (String address : propValue.split(";")){
                 addresses.add(new InternetAddress(address.trim()));
             }

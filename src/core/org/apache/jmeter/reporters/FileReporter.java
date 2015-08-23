@@ -55,7 +55,7 @@ public class FileReporter extends JPanel {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Map<String, List<Integer>> data = new ConcurrentHashMap<String, List<Integer>>();
+    private final Map<String, List<Integer>> data = new ConcurrentHashMap<>();
 
     /**
      * Initialize a file reporter from a file

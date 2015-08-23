@@ -112,7 +112,7 @@ public class JsseSSLManager extends SSLManager {
                 log.debug("Creating shared context");
                 this.defaultContext = createContext();
             } else {
-                this.threadlocal = new ThreadLocal<SSLContext>();
+                this.threadlocal = new ThreadLocal<>();
             }
 
             HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this, CPS));

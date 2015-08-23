@@ -149,7 +149,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
             return;
         }
         Set<Map.Entry<Object, Object>> s = p.entrySet();
-        ArrayList<Map.Entry<Object, Object>> al = new ArrayList<Map.Entry<Object, Object>>(s);
+        ArrayList<Map.Entry<Object, Object>> al = new ArrayList<>(s);
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
             @Override
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {

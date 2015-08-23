@@ -30,7 +30,7 @@ import org.apache.jmeter.gui.GuiPackage;
  */
 public class ToolBar implements Command {
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.TOOLBAR);

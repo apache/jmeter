@@ -51,8 +51,7 @@ public class KerberosManager implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String JAAS_APPLICATION = JMeterUtils.getPropDefault("kerberos_jaas_application", "JMeter"); //$NON-NLS-1$ $NON-NLS-2$
-    private final ConcurrentMap<String, Future<Subject>> subjects
-        = new ConcurrentHashMap<String, Future<Subject>>();
+    private final ConcurrentMap<String, Future<Subject>> subjects = new ConcurrentHashMap<>();
 
     public KerberosManager() {
     }
@@ -80,7 +79,7 @@ public class KerberosManager implements Serializable {
             }
         };
 
-        FutureTask<Subject> task = new FutureTask<Subject>(callable);
+        FutureTask<Subject> task = new FutureTask<>(callable);
         if(log.isDebugEnabled()) {
             log.debug("Subject cached:"+subjects.keySet() +" before:"+username);
         }

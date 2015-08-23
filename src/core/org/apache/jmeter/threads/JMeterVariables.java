@@ -32,7 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * These are similar to properties, but they are local to a single thread.
  */
 public class JMeterVariables {
-    private final Map<String, Object> variables = new HashMap<String, Object>();
+    private final Map<String, Object> variables = new HashMap<>();
 
     private int iteration = 0;
 

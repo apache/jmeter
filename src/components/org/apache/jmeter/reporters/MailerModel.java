@@ -152,7 +152,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      */
     public List<String> getAddressList() {
         String addressees = getToAddress();
-        List<String> addressList = new ArrayList<String>();
+        List<String> addressList = new ArrayList<>();
 
         if (addressees != null) {
 

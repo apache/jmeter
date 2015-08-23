@@ -44,7 +44,7 @@ public abstract class AbstractListenerElement extends AbstractTestElement {
     }
 
     public void setListener(Visualizer vis) {
-        listener = new WeakReference<Visualizer>(vis);
+        listener = new WeakReference<>(vis);
     }
 
     @Override

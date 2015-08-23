@@ -95,7 +95,7 @@ public class Summariser extends AbstractTestElement
      * This map allows summarisers with the same name to contribute to the same totals.
      */
     //@GuardedBy("LOCK") - needed to ensure consistency between this and INSTANCE_COUNT
-    private static final Map<String, Totals> ACCUMULATORS = new ConcurrentHashMap<String, Totals>();
+    private static final Map<String, Totals> ACCUMULATORS = new ConcurrentHashMap<>();
 
     //@GuardedBy("LOCK")
     private static int INSTANCE_COUNT; // number of active tests

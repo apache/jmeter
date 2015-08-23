@@ -46,9 +46,9 @@ public class Jexl2Function extends AbstractFunction implements ThreadListener {
 
     private static final String KEY = "__jexl2"; //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
-    private static final ThreadLocal<JexlEngine> threadLocalJexl = new ThreadLocal<JexlEngine>();
+    private static final ThreadLocal<JexlEngine> threadLocalJexl = new ThreadLocal<>();
 
     static
     {

@@ -35,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 1.8.1
  */
 public class IntSum extends AbstractFunction {
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__intSum"; //$NON-NLS-1$
 

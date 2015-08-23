@@ -89,7 +89,7 @@ public class UserSequence implements Serializable {
             log.debug("UserSequence.getNextuserMods(): current parameters will be " + "changed to: " + user);
         } else {
             // no entries in all users, therefore create an empty Map object
-            user = new HashMap<String, String>();
+            user = new HashMap<>();
         }
 
         return user;

@@ -756,7 +756,8 @@ public class JMeter implements JMeterPlugin {
             treeModel.addSubTree(tree, root);
 
             // Hack to resolve ModuleControllers in non GUI mode
-            SearchByClass<ReplaceableController> replaceableControllers = new SearchByClass<ReplaceableController>(ReplaceableController.class);
+            SearchByClass<ReplaceableController> replaceableControllers =
+                    new SearchByClass<>(ReplaceableController.class);
             tree.traverse(replaceableControllers);
             Collection<ReplaceableController> replaceableControllersRes = replaceableControllers.getSearchResults();
             for (Iterator<ReplaceableController> iter = replaceableControllersRes.iterator(); iter.hasNext();) {
@@ -792,7 +793,7 @@ public class JMeter implements JMeterPlugin {
             // when NON GUI mode is used
             tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
 
-            List<JMeterEngine> engines = new LinkedList<JMeterEngine>();
+            List<JMeterEngine> engines = new LinkedList<>();
             tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null));
             println("Created the tree successfully using "+testFile);
             if (!remoteStart) {
@@ -804,7 +805,7 @@ public class JMeter implements JMeterPlugin {
                 engines.add(engine);
             } else {
                 java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");//$NON-NLS-1$
-                List<String> hosts = new LinkedList<String>();
+                List<String> hosts = new LinkedList<>();
                 while (st.hasMoreElements()) {
                     hosts.add((String) st.nextElement());
                 }
@@ -829,7 +830,7 @@ public class JMeter implements JMeterPlugin {
      * @param tree The {@link HashTree} to convert
      */
     public static void convertSubTree(HashTree tree) {
-        LinkedList<Object> copyList = new LinkedList<Object>(tree.list());
+        LinkedList<Object> copyList = new LinkedList<>(tree.list());
         for (Object o  : copyList) {
             if (o instanceof TestElement) {
                 TestElement item = (TestElement) o;

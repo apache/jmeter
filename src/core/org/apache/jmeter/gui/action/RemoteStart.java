@@ -41,7 +41,7 @@ public class RemoteStart extends AbstractAction {
 
     private static final String REMOTE_HOSTS_SEPARATOR = ","; // $NON-NLS-1$
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.REMOTE_START);
@@ -94,7 +94,7 @@ public class RemoteStart extends AbstractAction {
     private List<String> getRemoteHosts() {
         String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
         StringTokenizer st = new StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
-        List<String> list = new LinkedList<String>();
+        List<String> list = new LinkedList<>();
         while (st.hasMoreElements())
             list.add((String) st.nextElement());
         return list;

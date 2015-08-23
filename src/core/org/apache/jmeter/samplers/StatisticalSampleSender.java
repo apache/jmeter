@@ -68,10 +68,10 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     private final RemoteSampleListener listener;
 
-    private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
+    private final List<SampleEvent> sampleStore = new ArrayList<>();
 
     //@GuardedBy("sampleStore") TODO perhaps use ConcurrentHashMap ?
-    private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<String, StatisticalSampleResult>();
+    private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<>();
 
     // Settings; readResolve sets these from the server/client values as appropriate
     // TODO would be nice to make these final; not 100% sure volatile is needed as not changed after creation

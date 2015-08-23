@@ -87,7 +87,7 @@ public class Proxy extends Thread {
         JMeterUtils.getPropDefault("proxy.ssl.protocol", "TLS"); // $NON-NLS-1$ $NON-NLS-2$
 
     // HashMap to save ssl connection between Jmeter proxy and browser
-    private static final HashMap<String, SSLSocketFactory> HOST2SSL_SOCK_FAC = new HashMap<String, SSLSocketFactory>();
+    private static final HashMap<String, SSLSocketFactory> HOST2SSL_SOCK_FAC = new HashMap<>();
 
     private static final SamplerCreatorFactory SAMPLERFACTORY = new SamplerCreatorFactory();
 
@@ -281,7 +281,7 @@ public class Proxy extends Thread {
             }
             if(result != null) // deliverSampler allows sampler to be null, but result must not be null
             {
-                List<TestElement> children = new ArrayList<TestElement>();
+                List<TestElement> children = new ArrayList<>();
                 if(captureHttpHeaders) {
                     children.add(headers);
                 }

@@ -34,7 +34,7 @@ import org.apache.log.Logger;
  */
 public class InitialContextFactory {
 
-    private static final ConcurrentHashMap<String, Context> MAP = new ConcurrentHashMap<String, Context>();
+    private static final ConcurrentHashMap<String, Context> MAP = new ConcurrentHashMap<>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 

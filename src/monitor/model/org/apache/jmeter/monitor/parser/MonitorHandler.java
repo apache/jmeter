@@ -71,7 +71,7 @@ public class MonitorHandler extends DefaultHandler {
     public void startDocument() throws SAXException {
         // this.startDoc = true;
         // Reset all work variables so reusing the instance starts afresh.
-        this.stacktree = new Stack<Object>();
+        this.stacktree = new Stack<>();
         this.status = null;
         this.jvm = null;
         this.memory = null;

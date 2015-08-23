@@ -37,7 +37,7 @@ public class MongoUtils {
 
     public static List<ServerAddress> toServerAddresses(String connections) throws UnknownHostException {
 
-        List<ServerAddress> addresses = new ArrayList<ServerAddress>();
+        List<ServerAddress> addresses = new ArrayList<>();
         for(String connection : Arrays.asList(connections.split(","))) {
             int port = DEFAULT_PORT;
             String[] hostPort = connection.split(":");

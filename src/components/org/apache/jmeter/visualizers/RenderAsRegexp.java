@@ -126,7 +126,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         } catch (MalformedCachePatternException e) {
             return e.toString();
         }
-        List<MatchResult> matches = new LinkedList<MatchResult>();
+        List<MatchResult> matches = new LinkedList<>();
         while (matcher.contains(input, pattern)) {
             matches.add(matcher.getMatch());
         }

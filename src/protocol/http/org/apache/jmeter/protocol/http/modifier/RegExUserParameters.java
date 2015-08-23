@@ -100,7 +100,7 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
             return null;
         }
         int n = Integer.parseInt(jmvars.get(regExRefName + MATCH_NR));
-        Map<String, String> map = new HashMap<String, String>(n);
+        Map<String, String> map = new HashMap<>(n);
         for(int i=1; i<=n; i++){
             map.put(jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grNames), 
                     jmvars.get(regExRefName + i + REGEX_GROUP_SUFFIX + grValues));

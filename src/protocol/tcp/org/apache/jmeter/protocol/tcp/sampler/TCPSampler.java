@@ -58,7 +58,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.LoginConfigGui",
                     "org.apache.jmeter.protocol.tcp.config.gui.TCPConfigGui",
@@ -143,7 +143,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         new ThreadLocal<Map<String, Object>>() {
         @Override
         protected Map<String, Object> initialValue() {
-            return new HashMap<String, Object>();
+            return new HashMap<>();
         }
     };
 

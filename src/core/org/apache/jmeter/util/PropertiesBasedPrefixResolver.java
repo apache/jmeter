@@ -41,7 +41,7 @@ import org.w3c.dom.Node;
 public class PropertiesBasedPrefixResolver extends PrefixResolverDefault {
     private static final Logger logger = LoggingManager.getLoggerForClass();
     private static final String XPATH_NAMESPACE_CONFIG = "xpath.namespace.config";
-    private static final Map<String, String> NAMESPACE_MAP = new HashMap<String, String>();
+    private static final Map<String, String> NAMESPACE_MAP = new HashMap<>();
     static {
         String pathToNamespaceConfig = JMeterUtils.getPropDefault(XPATH_NAMESPACE_CONFIG, "");
         if(!StringUtils.isEmpty(pathToNamespaceConfig)) {

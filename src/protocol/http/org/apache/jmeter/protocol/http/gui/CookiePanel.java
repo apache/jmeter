@@ -91,7 +91,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private JComboBox<String> selectHandlerPanel;
 
-    private HashMap<String, String> handlerMap = new HashMap<String, String>();
+    private HashMap<String, String> handlerMap = new HashMap<>();
 
     private static final String[] COLUMN_RESOURCE_NAMES = {
         ("name"),   //$NON-NLS-1$
@@ -401,7 +401,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     private JComboBox<String> createComboHandler() {
         ComboBoxModel<String> nodesModel = new DefaultComboBoxModel<>();
         // drop-down list for renderer
-        selectHandlerPanel = new JComboBox<String>(nodesModel);
+        selectHandlerPanel = new JComboBox<>(nodesModel);
         selectHandlerPanel.setActionCommand(HANDLER_COMMAND);
         selectHandlerPanel.addActionListener(this);
 

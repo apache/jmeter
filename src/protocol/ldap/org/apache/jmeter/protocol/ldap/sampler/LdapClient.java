@@ -69,7 +69,7 @@ public class LdapClient {
      */
     public void connect(String host, String port, String rootdn, String username, String password)
             throws NamingException {
-        Hashtable<String, String> env = new Hashtable<String, String>();
+        Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory"); //$NON-NLS-1$
         env.put(Context.PROVIDER_URL, "ldap://" + host + ":" + port + "/" + rootdn); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
         env.put(Context.REFERRAL, "throw"); //$NON-NLS-1$

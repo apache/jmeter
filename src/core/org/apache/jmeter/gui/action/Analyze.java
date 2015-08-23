@@ -30,7 +30,7 @@ import org.apache.jmeter.reporters.FileReporter;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class Analyze implements Command {
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.ANALYZE_FILE);

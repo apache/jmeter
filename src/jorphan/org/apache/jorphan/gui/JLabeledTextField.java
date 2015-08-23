@@ -49,7 +49,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
     private JTextField mTextField;
 
     // Maybe move to vector if MT problems occur
-    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
+    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<>(3);
 
     // A temporary cache for the focus listener
     private String oldValue = "";
@@ -94,7 +94,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
      */
     @Override
     public List<JComponent> getComponentList() {
-        List<JComponent> comps = new LinkedList<JComponent>();
+        List<JComponent> comps = new LinkedList<>();
         comps.add(mLabel);
         comps.add(mTextField);
         return comps;

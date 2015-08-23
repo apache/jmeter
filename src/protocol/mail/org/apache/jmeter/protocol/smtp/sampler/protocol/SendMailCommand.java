@@ -110,7 +110,7 @@ public class SendMailCommand {
      */
     public SendMailCommand() {
         headerFields = new CollectionProperty();
-        attachments = new ArrayList<File>();
+        attachments = new ArrayList<>();
     }
 
     /**

@@ -32,13 +32,13 @@ import org.apache.jmeter.testbeans.gui.TestBeanGUI;
  */
 public final class GUIFactory {
     /** A Map from String to JMeterGUIComponent of registered GUI classes. */
-    private static final Map<String, JMeterGUIComponent> GUI_MAP = new HashMap<String, JMeterGUIComponent>();
+    private static final Map<String, JMeterGUIComponent> GUI_MAP = new HashMap<>();
 
     /** A Map from String to ImageIcon of registered icons. */
-    private static final Map<String, ImageIcon> ICON_MAP = new HashMap<String, ImageIcon>();
+    private static final Map<String, ImageIcon> ICON_MAP = new HashMap<>();
 
     /** A Map from String to ImageIcon of registered icons. */
-    private static final Map<String, ImageIcon> DISABLED_ICON_MAP = new HashMap<String, ImageIcon>();
+    private static final Map<String, ImageIcon> DISABLED_ICON_MAP = new HashMap<>();
 
     /**
      * Prevent instantiation since this is a static utility class.

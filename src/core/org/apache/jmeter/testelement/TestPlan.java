@@ -57,7 +57,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     private static final String BASEDIR = "basedir";
 
-    private transient List<AbstractThreadGroup> threadGroups = new LinkedList<AbstractThreadGroup>();
+    private transient List<AbstractThreadGroup> threadGroups = new LinkedList<>();
 
     // There's only 1 test plan, so can cache the mode here
     private static volatile boolean functionalMode = false;
@@ -76,7 +76,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     // create transient item
     private Object readResolve(){
-        threadGroups = new LinkedList<AbstractThreadGroup>();
+        threadGroups = new LinkedList<>();
         return this;
     }
 

@@ -113,7 +113,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
         model = new DefaultComboBoxModel<>();
 
         if (rb != null && tags.length > 0) {
-            validTranslations=new HashMap<String, String>();
+            validTranslations = new HashMap<>();
             for (String tag : this.tags) {
                 validTranslations.put(tag, rb.getString(tag));
             }

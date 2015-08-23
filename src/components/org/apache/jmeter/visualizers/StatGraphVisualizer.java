@@ -157,8 +157,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      */
     private final transient Object lock = new Object();
     
-    private final Map<String, SamplingStatCalculator> tableRows =
-        new ConcurrentHashMap<String, SamplingStatCalculator>();
+    private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
 
     private AxisGraph graphPanel = null;
 
@@ -219,7 +218,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private JComboBox<String> columnsList = new JComboBox<>(GRAPH_COLUMNS);
 
-    private List<BarGraph> eltList = new ArrayList<BarGraph>();
+    private List<BarGraph> eltList = new ArrayList<>();
 
     private JCheckBox columnSelection = new JCheckBox(JMeterUtils.getResString("aggregate_graph_column_selection"), false); //$NON-NLS-1$
 
@@ -597,11 +596,11 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * @return the data from the model
      */
     public static List<List<Object>> getAllTableData(ObjectTableModel model, Format[] formats) {
-        List<List<Object>> data = new ArrayList<List<Object>>();
+        List<List<Object>> data = new ArrayList<>();
         if (model.getRowCount() > 0) {
             for (int rw=0; rw < model.getRowCount(); rw++) {
                 int cols = model.getColumnCount();
-                List<Object> column = new ArrayList<Object>();
+                List<Object> column = new ArrayList<>();
                 data.add(column);
                 for (int idx=0; idx < cols; idx++) {
                     Object val = model.getValueAt(rw,idx);

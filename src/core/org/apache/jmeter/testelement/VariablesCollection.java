@@ -31,7 +31,7 @@ public class VariablesCollection implements Serializable {
 
     private static final long serialVersionUID = 240L;
 
-    private final Map<String, JMeterVariables> varMap = new HashMap<String, JMeterVariables>();
+    private final Map<String, JMeterVariables> varMap = new HashMap<>();
 
     public void addJMeterVariables(JMeterVariables jmVars) {
         varMap.put(Thread.currentThread().getName(), jmVars);

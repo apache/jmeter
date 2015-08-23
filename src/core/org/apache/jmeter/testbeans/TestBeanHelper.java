@@ -137,7 +137,7 @@ public class TestBeanHelper {
     {
         if(prop instanceof CollectionProperty)
         {
-            Collection<Object> values = new LinkedList<Object>();
+            Collection<Object> values = new LinkedList<>();
             PropertyIterator iter = prop.iterator();
             while(iter.hasNext())
             {
