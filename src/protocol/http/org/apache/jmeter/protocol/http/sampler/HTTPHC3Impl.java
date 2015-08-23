@@ -27,6 +27,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -750,7 +751,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             final boolean browserCompatible = getDoBrowserCompatibleMultipart();
             // We don't know how many entries will be skipped
-            ArrayList<PartBase> partlist = new ArrayList<>();
+            List<PartBase> partlist = new ArrayList<>();
             // Create the parts
             // Add any parameters
             PropertyIterator args = getArguments().iterator();

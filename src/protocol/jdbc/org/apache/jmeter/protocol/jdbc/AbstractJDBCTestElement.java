@@ -240,7 +240,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
         } while (result || (updateCount != -1));
         if (out!=null && pstmt instanceof CallableStatement){
-            ArrayList<Object> outputValues = new ArrayList<>();
+            List<Object> outputValues = new ArrayList<>();
             CallableStatement cs = (CallableStatement) pstmt;
             sb.append("Output variables by position:\n");
             for(int i=0; i < out.length; i++){
