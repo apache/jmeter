@@ -84,7 +84,7 @@ public class LdapExtClient {
     public static DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, boolean secure)
             throws NamingException {
         DirContext dirContext;
-        Hashtable<String, String> env = new Hashtable<String, String>();
+        Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory"); // $NON-NLS-1$
         StringBuilder sb = new StringBuilder(80);
         if (secure) {

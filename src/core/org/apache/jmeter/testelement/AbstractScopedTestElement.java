@@ -150,7 +150,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
      * @return list containing the current sample and/or its child samples
      */
     protected List<SampleResult> getSampleList(SampleResult result) {
-        List<SampleResult> sampleList = new ArrayList<SampleResult>();
+        List<SampleResult> sampleList = new ArrayList<>();
 
         String scope = fetchScope();
         if (isScopeParent(scope) || isScopeAll(scope)) {

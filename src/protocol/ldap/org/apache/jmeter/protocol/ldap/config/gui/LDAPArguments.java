@@ -48,7 +48,7 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
      * Create a new Arguments object with no arguments.
      */
     public LDAPArguments() {
-        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<Object>()));
+        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<>()));
     }
 
     /**
@@ -66,7 +66,7 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<Object>()));
+        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<>()));
     }
 
     /**
@@ -87,7 +87,7 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
      */
     public Map<String, String> getArgumentsAsMap() {
         PropertyIterator iter = getArguments().iterator();
-        Map<String, String> argMap = new HashMap<String, String>();
+        Map<String, String> argMap = new HashMap<>();
         while (iter.hasNext()) {
             LDAPArgument arg = (LDAPArgument) iter.next().getObjectValue();
             argMap.put(arg.getName(), arg.getValue());

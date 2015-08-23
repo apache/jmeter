@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final LinkedList<TestElement> stack = new LinkedList<TestElement>();
+    private final LinkedList<TestElement> stack = new LinkedList<>();
 
     /**
      * Node to find in TestTree
@@ -89,8 +89,8 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
      * @return List of {@link Controller}
      */
     public List<Controller> getControllersToRoot() {
-        List<Controller> result = new ArrayList<Controller>(stack.size());
-        LinkedList<TestElement> stackLocalCopy = new LinkedList<TestElement>(stack);
+        List<Controller> result = new ArrayList<>(stack.size());
+        LinkedList<TestElement> stackLocalCopy = new LinkedList<>(stack);
         while(stackLocalCopy.size()>0) {
             TestElement te = stackLocalCopy.getLast();
             if(te instanceof Controller) {

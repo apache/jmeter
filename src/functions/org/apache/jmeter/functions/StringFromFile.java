@@ -67,7 +67,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Only modified by static block so no need to synchronize subsequent read-only access
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__StringFromFile";//$NON-NLS-1$
 

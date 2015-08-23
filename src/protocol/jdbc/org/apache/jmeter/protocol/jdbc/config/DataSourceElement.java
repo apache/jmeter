@@ -245,7 +245,7 @@ public class DataSourceElement extends AbstractTestElement
         new ThreadLocal<Map<String, ResourceLimitingJdbcDataSource>>(){
         @Override
         protected Map<String, ResourceLimitingJdbcDataSource> initialValue() {
-            return new HashMap<String, ResourceLimitingJdbcDataSource>();
+            return new HashMap<>();
         }
     };
 

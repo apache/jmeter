@@ -41,7 +41,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Variable extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__V"; //$NON-NLS-1$
 

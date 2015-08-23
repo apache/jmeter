@@ -36,7 +36,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     private static final long serialVersionUID = 240L;
 
-    private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
+    private final List<SampleEvent> sampleStore = new ArrayList<>();
 
     private final RemoteSampleListener listener;
 

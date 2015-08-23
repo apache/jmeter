@@ -138,7 +138,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     private Collection<Object> convertCollection(Collection<?> values)
     {
-        List<Object> l = new LinkedList<Object>();
+        List<Object> l = new LinkedList<>();
         for(Object obj : values)
         {
             if(obj instanceof TestElementProperty)

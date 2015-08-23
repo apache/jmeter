@@ -187,7 +187,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         new ThreadLocal<Map<HttpClientKey, HttpClient>>(){
         @Override
         protected Map<HttpClientKey, HttpClient> initialValue() {
-            return new HashMap<HttpClientKey, HttpClient>();
+            return new HashMap<>();
         }
     };
 
@@ -1158,7 +1158,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     }
                     // Add the parameters
                     PropertyIterator args = getArguments().iterator();
-                    List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+                    List <NameValuePair> nvps = new ArrayList<>();
                     String urlContentEncoding = contentEncoding;
                     if(urlContentEncoding == null || urlContentEncoding.length() == 0) {
                         // Use the default encoding for urls

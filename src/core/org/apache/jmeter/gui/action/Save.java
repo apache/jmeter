@@ -97,7 +97,7 @@ public class Save implements Command {
     // NumberFormat to format version number in backup file names
     private static final DecimalFormat BACKUP_VERSION_FORMATER = new DecimalFormat("000000"); //$NON-NLS-1$
     
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.SAVE_AS); // Save (Selection) As
@@ -337,7 +337,7 @@ public class Save implements Command {
         // create a file filter that select files matching a given regex pattern
         IOFileFilter patternFileFilter = new PrivatePatternFileFilter(backupPattern);
         // get all backup files in the backup directory
-        List<File> backupFiles = new ArrayList<File>(FileUtils.listFiles(backupDir, patternFileFilter, null));
+        List<File> backupFiles = new ArrayList<>(FileUtils.listFiles(backupDir, patternFileFilter, null));
         // find the highest version number among existing backup files (this
         // should be the more recent backup)
         int lastVersionNumber = 0;
@@ -351,7 +351,7 @@ public class Save implements Command {
             }
         }
         // find expired backup files
-        List<File> expiredFiles = new ArrayList<File>();
+        List<File> expiredFiles = new ArrayList<>();
         if (BACKUP_MAX_HOURS > 0) {
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.HOUR_OF_DAY, -BACKUP_MAX_HOURS);
@@ -410,7 +410,7 @@ public class Save implements Command {
 
     // package protected to allow access from test code
     void convertSubTree(HashTree tree) {
-        Iterator<Object> iter = new LinkedList<Object>(tree.list()).iterator();
+        Iterator<Object> iter = new LinkedList<>(tree.list()).iterator();
         while (iter.hasNext()) {
             JMeterTreeNode item = (JMeterTreeNode) iter.next();
             convertSubTree(tree.getTree(item));

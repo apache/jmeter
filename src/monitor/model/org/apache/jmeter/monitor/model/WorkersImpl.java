@@ -31,7 +31,7 @@ public class WorkersImpl implements Workers {
      */
     public WorkersImpl() {
         super();
-        worker = new LinkedList<Worker>();
+        worker = new LinkedList<>();
     }
 
     @Override

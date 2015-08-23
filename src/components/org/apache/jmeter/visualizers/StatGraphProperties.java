@@ -35,7 +35,7 @@ public class StatGraphProperties {
     public static final String[] strokeWidth = { "1.0f", "1.5f", "2.0f", "2.5f", "3.0f", "3.5f", "4.0f", "4.5f", "5.0f", "5.5f", "6.0f", "6.5f"};
 
     public static Map<String, String> getFontNameMap() {
-        Map<String, String> fontNameMap = new LinkedHashMap<String, String>(2);
+        Map<String, String> fontNameMap = new LinkedHashMap<>(2);
         fontNameMap.put(JMeterUtils.getResString("font.sansserif"), "SansSerif"); //$NON-NLS-1$ //$NON-NLS-1$
         fontNameMap.put(JMeterUtils.getResString("font.serif"), "Serif"); //$NON-NLS-1$
         return fontNameMap;
@@ -43,7 +43,7 @@ public class StatGraphProperties {
 
     @SuppressWarnings("boxing")
     public static Map<String, Integer> getFontStyleMap() {
-        Map<String, Integer> fontStyleMap = new LinkedHashMap<String, Integer>(3);
+        Map<String, Integer> fontStyleMap = new LinkedHashMap<>(3);
         fontStyleMap.put(JMeterUtils.getResString("fontstyle.normal"), Font.PLAIN); //$NON-NLS-1$
         fontStyleMap.put(JMeterUtils.getResString("fontstyle.bold"), Font.BOLD); //$NON-NLS-1$
         fontStyleMap.put(JMeterUtils.getResString("fontstyle.italic"), Font.ITALIC); //$NON-NLS-1$
@@ -52,7 +52,7 @@ public class StatGraphProperties {
 
     @SuppressWarnings("boxing")
     public static Map<String, Integer> getPlacementNameMap() {
-        Map<String, Integer> placementNameMap = new LinkedHashMap<String, Integer>(4);
+        Map<String, Integer> placementNameMap = new LinkedHashMap<>(4);
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"), LegendAreaProperties.BOTTOM); //$NON-NLS-1$
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.right"), LegendAreaProperties.RIGHT); //$NON-NLS-1$
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.left"), LegendAreaProperties.LEFT); //$NON-NLS-1$
@@ -62,7 +62,7 @@ public class StatGraphProperties {
     
     public static Map<String, Shape> getPointShapeMap() {
         // We want to retain insertion order, so LinkedHashMap is necessary
-        Map<String, Shape> pointShapeMap = new LinkedHashMap<String, Shape>(5);
+        Map<String, Shape> pointShapeMap = new LinkedHashMap<>(5);
         pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_circle"), PointChartProperties.SHAPE_CIRCLE); //$NON-NLS-1$
         pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_diamond"), PointChartProperties.SHAPE_DIAMOND); //$NON-NLS-1$
         pointShapeMap.put(JMeterUtils.getResString("graph_pointshape_square"), PointChartProperties.SHAPE_SQUARE); //$NON-NLS-1$

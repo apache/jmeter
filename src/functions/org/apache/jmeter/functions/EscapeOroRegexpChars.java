@@ -38,7 +38,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
 public class EscapeOroRegexpChars extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__escapeOroRegexpChars"; //$NON-NLS-1$
 

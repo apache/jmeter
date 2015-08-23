@@ -70,7 +70,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
     private static final long serialVersionUID = 240L;
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.protocol.ldap.config.gui.LdapConfigGui",
                     "org.apache.jmeter.protocol.ldap.config.gui.LdapExtConfigGui",
@@ -152,7 +152,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
 
     private static final ConcurrentHashMap<String, DirContext> ldapContexts =
-        new ConcurrentHashMap<String, DirContext>();
+            new ConcurrentHashMap<>();
 
     private static final int MAX_SORTED_RESULTS =
         JMeterUtils.getPropDefault("ldapsampler.max_sorted_results", 1000); // $NON-NLS-1$
@@ -881,7 +881,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             throws NamingException
     {
 
-        final ArrayList<SearchResult>     sortedResults = new ArrayList<SearchResult>(MAX_SORTED_RESULTS);
+        final ArrayList<SearchResult>     sortedResults = new ArrayList<>(MAX_SORTED_RESULTS);
         final String        searchBase = getPropertyAsString(SEARCHBASE);
         final String        rootDn = getRootdn();
 
@@ -918,7 +918,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     {
         final Attributes    attrs = sr.getAttributes();
         final int           size = attrs.size();
-        final ArrayList<Attribute>     sortedAttrs = new ArrayList<Attribute>(size);
+        final ArrayList<Attribute>     sortedAttrs = new ArrayList<>(size);
 
         xmlb.openTag("searchresult"); // $NON-NLS-1$
         xmlb.tag("dn", sr.getName()); // $NON-NLS-1$
@@ -941,7 +941,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 if (attr.size() == 1) {
                     sb.append(getWriteValue(attr.get()));
                 } else {
-                    final ArrayList<String>     sortedVals = new ArrayList<String>(attr.size());
+                    final ArrayList<String>     sortedVals = new ArrayList<>(attr.size());
                     boolean             first = true;
 
                     for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore(); )

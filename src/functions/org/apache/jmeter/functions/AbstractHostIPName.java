@@ -30,7 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 abstract class AbstractHostIPName extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     static {
         // desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");

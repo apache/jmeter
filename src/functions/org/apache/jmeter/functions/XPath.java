@@ -54,7 +54,7 @@ public class XPath extends AbstractFunction {
     // }
     private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private Object[] values; // Parameter list
 

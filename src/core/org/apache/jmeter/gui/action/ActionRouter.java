@@ -44,13 +44,13 @@ public final class ActionRouter implements ActionListener {
 
     private static volatile ActionRouter router;
 
-    private Map<String, Set<Command>> commands = new HashMap<String, Set<Command>>();
+    private Map<String, Set<Command>> commands = new HashMap<>();
 
     private final Map<String, HashSet<ActionListener>> preActionListeners =
-        new HashMap<String, HashSet<ActionListener>>();
+            new HashMap<>();
 
     private final Map<String, HashSet<ActionListener>> postActionListeners =
-        new HashMap<String, HashSet<ActionListener>>();
+            new HashMap<>();
 
     private ActionRouter() {
     }
@@ -124,7 +124,7 @@ public final class ActionRouter implements ActionListener {
      *         <code>actionName</code>
      */
     public Set<Command> getAction(String actionName) {
-        Set<Command> set = new HashSet<Command>();
+        Set<Command> set = new HashSet<>();
         for (Command c : commands.get(actionName)) {
             try {
                 set.add(c);
@@ -190,7 +190,7 @@ public final class ActionRouter implements ActionListener {
         if (action != null) {
             HashSet<ActionListener> set = preActionListeners.get(action.getName());
             if (set == null) {
-                set = new HashSet<ActionListener>();
+                set = new HashSet<>();
             }
             set.add(listener);
             preActionListeners.put(action.getName(), set);
@@ -233,7 +233,7 @@ public final class ActionRouter implements ActionListener {
         if (action != null) {
             HashSet<ActionListener> set = postActionListeners.get(action.getName());
             if (set == null) {
-                set = new HashSet<ActionListener>();
+                set = new HashSet<>();
             }
             set.add(listener);
             postActionListeners.put(action.getName(), set);
@@ -295,7 +295,7 @@ public final class ActionRouter implements ActionListener {
                     // Ignore the classes which are specific to the reporting tool
                     "org.apache.jmeter.report.gui", // $NON-NLS-1$ // notContains - classname should not contain this string
                     false); // annotations - true if classnames are annotations
-            commands = new HashMap<String, Set<Command>>(listClasses.size());
+            commands = new HashMap<>(listClasses.size());
             if (listClasses.isEmpty()) {
                 log.fatalError("!!!!!Uh-oh, didn't find any action handlers!!!!!");
                 throw new JMeterError("No action handlers found - check JMeterHome and libraries");
@@ -306,7 +306,7 @@ public final class ActionRouter implements ActionListener {
                 for (String commandName : command.getActionNames()) {
                     Set<Command> commandObjects = commands.get(commandName);
                     if (commandObjects == null) {
-                        commandObjects = new HashSet<Command>();
+                        commandObjects = new HashSet<>();
                         commands.put(commandName, commandObjects);
                     }
                     commandObjects.add(command);

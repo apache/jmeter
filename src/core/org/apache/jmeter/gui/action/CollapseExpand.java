@@ -32,7 +32,7 @@ import org.apache.jmeter.gui.GuiPackage;
  */
 public class CollapseExpand implements Command {
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.COLLAPSE_ALL);

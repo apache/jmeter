@@ -98,7 +98,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     //For holding the ThrougputInfo objects for all ThreadGroups. Keyed by AbstractThreadGroup objects
     private static final ConcurrentMap<AbstractThreadGroup, ThroughputInfo> threadGroupsInfoMap =
-        new ConcurrentHashMap<AbstractThreadGroup, ThroughputInfo>();
+            new ConcurrentHashMap<>();
 
 
     /**

@@ -104,8 +104,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
      */
     private final transient Object lock = new Object();
 
-    private final Map<String, Calculator> tableRows =
-        new ConcurrentHashMap<String, Calculator>();
+    private final Map<String, Calculator> tableRows = new ConcurrentHashMap<>();
 
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =

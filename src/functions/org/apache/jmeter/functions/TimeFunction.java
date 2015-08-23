@@ -42,10 +42,10 @@ public class TimeFunction extends AbstractFunction {
 
     private static final String KEY = "__time"; // $NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     // Only modified in class init
-    private static final Map<String, String> aliases = new HashMap<String, String>();
+    private static final Map<String, String> aliases = new HashMap<>();
 
     static {
         desc.add(JMeterUtils.getResString("time_format")); //$NON-NLS-1$

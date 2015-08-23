@@ -41,7 +41,7 @@ public class TemplateManager {
          * N.B. Must use LinkedHashMap for field type
          * XStream creates a plain HashMap if one uses Map as the field type.
          */
-        private final LinkedHashMap<String, Template> templates = new LinkedHashMap<String, Template>();
+        private final LinkedHashMap<String, Template> templates = new LinkedHashMap<>();
     }
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
             "/bin/templates/templates.xml");
@@ -103,7 +103,7 @@ public class TemplateManager {
     }
 
     private Map<String, Template> readTemplates() {
-        final Map<String, Template> temps = new LinkedHashMap<String, Template>();
+        final Map<String, Template> temps = new LinkedHashMap<>();
        
         final String[] templateFiles = TEMPLATE_FILES.split(",");
         for (String templateFile : templateFiles) {

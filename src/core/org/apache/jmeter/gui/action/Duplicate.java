@@ -37,7 +37,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  */
 public class Duplicate extends AbstractAction {
 
-    private static final HashSet<String> commands = new HashSet<String>();
+    private static final HashSet<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.DUPLICATE);

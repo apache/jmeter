@@ -33,7 +33,7 @@ import org.apache.jmeter.services.FileServer;
  */
 public class TestPlanName extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__TestPlanName"; //$NON-NLS-1$
 

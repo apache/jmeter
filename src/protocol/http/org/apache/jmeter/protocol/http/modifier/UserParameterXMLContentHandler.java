@@ -41,13 +41,13 @@ public class UserParameterXMLContentHandler implements ContentHandler {
 
     // Note UserParameterXML accesses this variable
     // to obtain the Set data via method getParsedParameters()
-    private List<Map<String, String>> userThreads = new LinkedList<Map<String, String>>();
+    private List<Map<String, String>> userThreads = new LinkedList<>();
 
     private String paramname = "";
 
     private String paramvalue = "";
 
-    private Map<String, String> nameValuePair = new HashMap<String, String>();
+    private Map<String, String> nameValuePair = new HashMap<>();
 
     /** Buffer for collecting data from the "characters" SAX event. */
     private CharArrayWriter contents = new CharArrayWriter();
@@ -94,7 +94,7 @@ public class UserParameterXMLContentHandler implements ContentHandler {
         // must create a new object,
         // or else end up with a set full of the same Map object
         if (qName.equals("thread")) {
-            nameValuePair = new HashMap<String, String>();
+            nameValuePair = new HashMap<>();
         }
 
     }

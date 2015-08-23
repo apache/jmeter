@@ -98,7 +98,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if(_map != null) {
             data = _map;
         } else {
-            data = new HashMap<Object, HashTree>();
+            data = new HashMap<>();
         }
         if(key != null) {
             data.put(key, new HashTree());
@@ -215,7 +215,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            a collection of objects to be added to the created HashTree.
      */
     public HashTree(Collection<?> keys) {
-        data = new HashMap<Object, HashTree>();
+        data = new HashMap<>();
         for (Object o : keys) {
             data.put(o, new HashTree());
         }
@@ -229,7 +229,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            array with names for the new top-level nodes
      */
     public HashTree(Object[] keys) {
-        data = new HashMap<Object, HashTree>();
+        data = new HashMap<>();
         for (int x = 0; x < keys.length; x++) {
             data.put(keys[x], new HashTree());
         }

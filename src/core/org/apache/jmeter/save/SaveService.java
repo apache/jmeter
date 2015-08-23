@@ -422,7 +422,7 @@ public class SaveService {
     // Allow test code to check for spurious class references
     static List<String> checkClasses(){
         final ClassLoader classLoader = SaveService.class.getClassLoader();
-        List<String> missingClasses = new ArrayList<String>();
+        List<String> missingClasses = new ArrayList<>();
         //boolean OK = true;
         for (Object clazz : classToAlias.keySet()) {
             String name = (String) clazz;

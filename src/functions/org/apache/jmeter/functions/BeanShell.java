@@ -41,7 +41,7 @@ public class BeanShell extends AbstractFunction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__BeanShell"; //$NON-NLS-1$
 

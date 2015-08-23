@@ -36,7 +36,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         
     private String prefix;
 
-    private List<MetricTuple> metrics = new ArrayList<MetricTuple>();
+    private List<MetricTuple> metrics = new ArrayList<>();
 
     private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
 

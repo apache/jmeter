@@ -103,7 +103,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         new ThreadLocal<Map<HostConfiguration, HttpClient>>(){
         @Override
         protected Map<HostConfiguration, HttpClient> initialValue() {
-            return new HashMap<HostConfiguration, HttpClient>();
+            return new HashMap<>();
         }
     };
 
@@ -750,7 +750,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             final boolean browserCompatible = getDoBrowserCompatibleMultipart();
             // We don't know how many entries will be skipped
-            ArrayList<PartBase> partlist = new ArrayList<PartBase>();
+            ArrayList<PartBase> partlist = new ArrayList<>();
             // Create the parts
             // Add any parameters
             PropertyIterator args = getArguments().iterator();

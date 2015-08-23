@@ -44,7 +44,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
                                    ".binary"); // $NON-NLS-1$
 
     /** Which content-types will be treated as binary (exact match) */
-    private static final Set<String> binaryContentTypes = new HashSet<String>();
+    private static final Set<String> binaryContentTypes = new HashSet<>();
 
     /** Where to store the temporary binary files */
     private static final String binaryDirectory =

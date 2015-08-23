@@ -37,9 +37,9 @@ public class Entry {
     private List<Assertion> assertions;
 
     public Entry() {
-        configSet = new HashMap<Class<?>, ConfigElement>();
+        configSet = new HashMap<>();
         // clonedSet = new HashSet();
-        assertions = new LinkedList<Assertion>();
+        assertions = new LinkedList<>();
     }
 
     public void addAssertion(Assertion assertion) {

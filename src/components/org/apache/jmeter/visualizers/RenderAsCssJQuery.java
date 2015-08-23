@@ -123,7 +123,7 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
 
     private String process(String textToParse) {
         try {
-            List<String> result = new ArrayList<String>();
+            List<String> result = new ArrayList<>();
             Extractor extractor = HtmlExtractor.getExtractorImpl(cssJqueryLabeledChoice.getText());
             final int nbFound = extractor.extract(
                     cssJqueryField.getText(), attributeField.getText(), -1, textToParse, result, 0, null);

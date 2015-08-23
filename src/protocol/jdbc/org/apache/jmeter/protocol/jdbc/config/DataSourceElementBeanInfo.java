@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 
 public class DataSourceElementBeanInfo extends BeanInfoSupport {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    private static Map<String,Integer> TRANSACTION_ISOLATION_MAP = new HashMap<String, Integer>(5);
+    private static Map<String,Integer> TRANSACTION_ISOLATION_MAP = new HashMap<>(5);
     static {
         // Will use default isolation
         TRANSACTION_ISOLATION_MAP.put("DEFAULT", Integer.valueOf(-1));

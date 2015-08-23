@@ -104,7 +104,7 @@ public class HttpMirrorServer extends Thread implements Stoppable {
         ServerSocket mainSocket = null;
         ThreadPoolExecutor threadPoolExecutor = null;
         if(maxThreadPoolSize>0) {
-            final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
+            final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(
                     maxQueueSize);
             threadPoolExecutor = new ThreadPoolExecutor(
                     maxThreadPoolSize/2, 

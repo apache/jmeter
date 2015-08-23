@@ -85,7 +85,7 @@ public class JMSProperties extends AbstractTestElement implements Serializable {
      */
     public Map<String, Object> getJmsPropertysAsMap() {
         PropertyIterator iter = getProperties().iterator();
-        Map<String, Object> argMap = new LinkedHashMap<String, Object>();
+        Map<String, Object> argMap = new LinkedHashMap<>();
         while (iter.hasNext()) {
             JMSProperty arg = (JMSProperty) iter.next().getObjectValue();
             // Because CollectionProperty.mergeIn will not prevent adding two

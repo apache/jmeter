@@ -147,7 +147,7 @@ public class ConversionHelp {
     /**
      *  Names of properties that are handled specially
      */
-    private static final Map<String, String> propertyToAttribute=new HashMap<String, String>();
+    private static final Map<String, String> propertyToAttribute = new HashMap<>();
 
     private static void mapentry(String prop, String att){
         propertyToAttribute.put(prop,att);

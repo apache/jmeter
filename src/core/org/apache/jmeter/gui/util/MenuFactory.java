@@ -90,10 +90,9 @@ public final class MenuFactory {
 
     public static final String LISTENERS = "menu_listener"; //$NON-NLS-1$
 
-    private static final Map<String, List<MenuInfo>> menuMap =
-        new HashMap<String, List<MenuInfo>>();
+    private static final Map<String, List<MenuInfo>> menuMap = new HashMap<>();
 
-    private static final Set<String> elementsToSkip = new HashSet<String>();
+    private static final Set<String> elementsToSkip = new HashSet<>();
 
     // MENU_ADD_xxx - controls which items are in the ADD menu
     // MENU_PARENT_xxx - controls which items are in the Insert Parent menu
@@ -128,17 +127,17 @@ public final class MenuFactory {
         postProcessors, preProcessors;
 
     static {
-        threads = new LinkedList<MenuInfo>();
-        fragments = new LinkedList<MenuInfo>();
-        timers = new LinkedList<MenuInfo>();
-        controllers = new LinkedList<MenuInfo>();
-        samplers = new LinkedList<MenuInfo>();
-        configElements = new LinkedList<MenuInfo>();
-        assertions = new LinkedList<MenuInfo>();
-        listeners = new LinkedList<MenuInfo>();
-        postProcessors = new LinkedList<MenuInfo>();
-        preProcessors = new LinkedList<MenuInfo>();
-        nonTestElements = new LinkedList<MenuInfo>();
+        threads = new LinkedList<>();
+        fragments = new LinkedList<>();
+        timers = new LinkedList<>();
+        controllers = new LinkedList<>();
+        samplers = new LinkedList<>();
+        configElements = new LinkedList<>();
+        assertions = new LinkedList<>();
+        listeners = new LinkedList<>();
+        postProcessors = new LinkedList<>();
+        preProcessors = new LinkedList<>();
+        nonTestElements = new LinkedList<>();
         menuMap.put(THREADS, threads);
         menuMap.put(FRAGMENTS, fragments);
         menuMap.put(TIMERS, timers);

@@ -78,7 +78,7 @@ public class Colors {
 
         String[] oList = order.split(ENTRY_SEP);
 
-        List<Color> listColors = new ArrayList<Color>();
+        List<Color> listColors = new ArrayList<>();
         for (String key : oList) {
             String trimmed = key.trim();
             String property = p.getProperty(trimmed);

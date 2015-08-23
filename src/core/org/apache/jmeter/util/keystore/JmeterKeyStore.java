@@ -59,8 +59,8 @@ public final class JmeterKeyStore {
     private String clientCertAliasVarName;
 
     private String[] names = new String[0]; // default empty array to prevent NPEs
-    private Map<String, PrivateKey> privateKeyByAlias = new HashMap<String, PrivateKey>();
-    private Map<String, X509Certificate[]> certsByAlias = new HashMap<String, X509Certificate[]>();
+    private Map<String, PrivateKey> privateKeyByAlias = new HashMap<>();
+    private Map<String, X509Certificate[]> certsByAlias = new HashMap<>();
 
     //@GuardedBy("this")
     private int last_user;
@@ -114,9 +114,9 @@ public final class JmeterKeyStore {
         char pw[] = pword==null ? null : pword.toCharArray();
         store.load(is, pw);
     
-        ArrayList<String> v_names = new ArrayList<String>();
-        this.privateKeyByAlias = new HashMap<String, PrivateKey>();
-        this.certsByAlias = new HashMap<String, X509Certificate[]>();
+        ArrayList<String> v_names = new ArrayList<>();
+        this.privateKeyByAlias = new HashMap<>();
+        this.certsByAlias = new HashMap<>();
 
         if (null != is){ // No point checking an empty keystore
             PrivateKey _key = null;

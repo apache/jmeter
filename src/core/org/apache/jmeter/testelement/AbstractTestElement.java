@@ -535,7 +535,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public void setTemporary(JMeterProperty property) {
         if (temporaryProperties == null) {
-            temporaryProperties = new LinkedHashSet<JMeterProperty>();
+            temporaryProperties = new LinkedHashSet<>();
         }
         temporaryProperties.add(property);
         if (property instanceof MultiProperty) {
@@ -629,7 +629,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public List<String> getSearchableTokens() {
-        List<String> result = new ArrayList<String>(25);
+        List<String> result = new ArrayList<>(25);
         PropertyIterator iterator = propertyIterator();
         while(iterator.hasNext()) {
             JMeterProperty jMeterProperty = iterator.next();    

@@ -57,8 +57,8 @@ public class MonitorAccumModel implements Clearable, Serializable {
      *
      */
     public MonitorAccumModel() {
-        serverListMap = new HashMap<String, List<MonitorModel>>();
-        listeners = new LinkedList<MonitorListener>();
+        serverListMap = new HashMap<>();
+        listeners = new LinkedList<>();
     }
 
     public int getBufferSize() {

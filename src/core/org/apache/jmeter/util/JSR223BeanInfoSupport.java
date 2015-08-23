@@ -41,7 +41,7 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
     public static final String[][] LANGUAGE_NAMES;
 
     static {
-        Map<String, ScriptEngineFactory> nameMap = new HashMap<String, ScriptEngineFactory>();
+        Map<String, ScriptEngineFactory> nameMap = new HashMap<>();
         ScriptEngineManager sem = new ScriptEngineManager();
         final List<ScriptEngineFactory> engineFactories = sem.getEngineFactories();
         for(ScriptEngineFactory fact : engineFactories){

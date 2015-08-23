@@ -83,7 +83,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * temporary storage for GUI tree expansion state
      */
-    private ArrayList<Integer> savedExpanded = new ArrayList<Integer>();
+    private ArrayList<Integer> savedExpanded = new ArrayList<>();
 
     /**
      * temporary storage for GUI tree selected row
@@ -95,7 +95,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
     private static final int HISTORY_SIZE = JMeterUtils.getPropDefault("undo.history.size", 0);
 
-    private List<UndoHistoryItem> history = new LimitedArrayList<UndoHistoryItem>(HISTORY_SIZE);
+    private List<UndoHistoryItem> history = new LimitedArrayList<>(HISTORY_SIZE);
 
     /**
      * flag to prevent recursive actions
@@ -105,7 +105,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * History listeners
      */
-    private List<HistoryListener> listeners = new ArrayList<UndoHistory.HistoryListener>();
+    private List<HistoryListener> listeners = new ArrayList<>();
 
     public UndoHistory() {
     }

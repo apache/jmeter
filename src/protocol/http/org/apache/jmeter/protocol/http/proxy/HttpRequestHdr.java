@@ -79,7 +79,7 @@ public class HttpRequestHdr {
 
     private byte[] rawPostData;
 
-    private final Map<String, Header> headers = new HashMap<String, Header>();
+    private final Map<String, Header> headers = new HashMap<>();
 
     private final String httpSamplerName;
 

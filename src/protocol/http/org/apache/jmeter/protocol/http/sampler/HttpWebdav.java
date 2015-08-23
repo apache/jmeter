@@ -31,8 +31,8 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
  * @since 2.12
  */
 public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
-    private static final Set<String> WEBDAV_METHODS = 
-            new HashSet<String>(Arrays.asList(new String[] {
+    private static final Set<String> WEBDAV_METHODS =
+            new HashSet<>(Arrays.asList(new String[]{
                     HTTPConstants.PROPFIND,
                     HTTPConstants.PROPPATCH,
                     HTTPConstants.MKCOL,

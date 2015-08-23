@@ -61,7 +61,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     private JButton delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 
-    private List<ChangeListener> listeners = new LinkedList<ChangeListener>();
+    private List<ChangeListener> listeners = new LinkedList<>();
 
     private String title;
 

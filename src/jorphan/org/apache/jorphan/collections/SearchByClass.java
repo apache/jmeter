@@ -54,9 +54,9 @@ import java.util.Map;
  *            Class that should be searched for
  */
 public class SearchByClass<T> implements HashTreeTraverser {
-    private final List<T> objectsOfClass = new LinkedList<T>();
+    private final List<T> objectsOfClass = new LinkedList<>();
 
-    private final Map<Object, ListedHashTree> subTrees = new HashMap<Object, ListedHashTree>();
+    private final Map<Object, ListedHashTree> subTrees = new HashMap<>();
 
     private final Class<T> searchClass;
 

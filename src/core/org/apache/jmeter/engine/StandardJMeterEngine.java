@@ -80,7 +80,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
      * Only used by the function parser so far.
      * The list is merged with the testListeners and then cleared.
      */
-    private static final List<TestStateListener> testList = new ArrayList<TestStateListener>();
+    private static final List<TestStateListener> testList = new ArrayList<>();
 
     /** Whether to call System.exit(0) in exit after stopping RMI */
     private static final boolean REMOTE_SYSTEM_EXIT = JMeterUtils.getPropDefault("jmeterengine.remote.system.exit", false);
@@ -111,7 +111,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     private final String host;
 
     // The list of current thread groups; may be setUp, main, or tearDown.
-    private final List<AbstractThreadGroup> groups = new CopyOnWriteArrayList<AbstractThreadGroup>();
+    private final List<AbstractThreadGroup> groups = new CopyOnWriteArrayList<>();
 
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
@@ -164,7 +164,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     @Override
     public void configure(HashTree testTree) {
         // Is testplan serialised?
-        SearchByClass<TestPlan> testPlan = new SearchByClass<TestPlan>(TestPlan.class);
+        SearchByClass<TestPlan> testPlan = new SearchByClass<>(TestPlan.class);
         testTree.traverse(testPlan);
         Object[] plan = testPlan.getSearchResults().toArray();
         if (plan.length == 0) {
@@ -323,7 +323,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
          * Notification of test listeners needs to happen after function
          * replacement, but before setting RunningVersion to true.
          */
-        SearchByClass<TestStateListener> testListeners = new SearchByClass<TestStateListener>(TestStateListener.class); // TL - S&E
+        SearchByClass<TestStateListener> testListeners = new SearchByClass<>(TestStateListener.class); // TL - S&E
         test.traverse(testListeners);
 
         // Merge in any additional test listeners
@@ -338,9 +338,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         List<?> testLevelElements = new LinkedList<Object>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
 
-        SearchByClass<SetupThreadGroup> setupSearcher = new SearchByClass<SetupThreadGroup>(SetupThreadGroup.class);
-        SearchByClass<AbstractThreadGroup> searcher = new SearchByClass<AbstractThreadGroup>(AbstractThreadGroup.class);
-        SearchByClass<PostThreadGroup> postSearcher = new SearchByClass<PostThreadGroup>(PostThreadGroup.class);
+        SearchByClass<SetupThreadGroup> setupSearcher = new SearchByClass<>(SetupThreadGroup.class);
+        SearchByClass<AbstractThreadGroup> searcher = new SearchByClass<>(AbstractThreadGroup.class);
+        SearchByClass<PostThreadGroup> postSearcher = new SearchByClass<>(PostThreadGroup.class);
 
         test.traverse(setupSearcher);
         test.traverse(searcher);

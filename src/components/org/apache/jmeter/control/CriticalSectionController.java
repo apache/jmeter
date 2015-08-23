@@ -70,7 +70,7 @@ public class CriticalSectionController extends GenericController implements
 
     private static final String LOCK_NAME = "CriticalSectionController.lockName"; //$NON-NLS-1$
 
-    private static final ConcurrentHashMap<String, ReentrantLock> LOCK_MAP = new ConcurrentHashMap<String, ReentrantLock>();
+    private static final ConcurrentHashMap<String, ReentrantLock> LOCK_MAP = new ConcurrentHashMap<>();
 
     private transient volatile ReentrantLock currentLock;
 

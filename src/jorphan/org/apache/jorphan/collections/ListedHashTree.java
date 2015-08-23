@@ -45,7 +45,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     public ListedHashTree() {
         super();
-        order = new LinkedList<Object>();
+        order = new LinkedList<>();
     }
 
     public ListedHashTree(Object key) {

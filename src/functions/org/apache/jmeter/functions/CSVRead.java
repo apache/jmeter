@@ -55,7 +55,7 @@ public class CSVRead extends AbstractFunction {
 
     private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private Object[] values; // Parameter list
 

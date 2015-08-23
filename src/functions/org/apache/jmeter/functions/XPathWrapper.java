@@ -50,14 +50,14 @@ final class XPathWrapper {
      */
     //@GuardedBy("fileContainers")
     private static final Map<String, XPathFileContainer> fileContainers =
-        new HashMap<String, XPathFileContainer>();
+            new HashMap<>();
 
     /* The cache of file packs - for faster local access */
     private static final ThreadLocal<Map<String, XPathFileContainer>> filePacks =
         new ThreadLocal<Map<String, XPathFileContainer>>() {
         @Override
         protected Map<String, XPathFileContainer> initialValue() {
-            return new HashMap<String, XPathFileContainer>();
+            return new HashMap<>();
         }
     };
 

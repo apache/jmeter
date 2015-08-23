@@ -229,7 +229,7 @@ public class RequestViewHTTP implements RequestView {
     //TODO: move to utils class (JMeterUtils?)
     public static Map<String, String> getQueryMap(String query) {
 
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         if (query.trim().startsWith("<?")) { // $NON-NLS-1$
             // SOAP request (generally)
             map.put(" ", query); //blank name // $NON-NLS-1$

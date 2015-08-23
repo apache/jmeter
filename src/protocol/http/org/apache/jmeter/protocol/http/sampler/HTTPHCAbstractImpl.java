@@ -61,9 +61,9 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final String localHost;
 
-    protected static final Set<String> nonProxyHostFull = new HashSet<String>();
+    protected static final Set<String> nonProxyHostFull = new HashSet<>();
 
-    protected static final List<String> nonProxyHostSuffix = new ArrayList<String>();
+    protected static final List<String> nonProxyHostSuffix = new ArrayList<>();
 
     protected static final int nonProxyHostSuffixSize;
 

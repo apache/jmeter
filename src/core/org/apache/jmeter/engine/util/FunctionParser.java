@@ -55,7 +55,7 @@ class FunctionParser {
      */
     LinkedList<Object> compileString(String value) throws InvalidVariableException {
         StringReader reader = new StringReader(value);
-        LinkedList<Object> result = new LinkedList<Object>();
+        LinkedList<Object> result = new LinkedList<>();
         StringBuilder buffer = new StringBuilder();
         char previous = ' '; // TODO - why use space?
         char[] current = new char[1];
@@ -183,7 +183,7 @@ class FunctionParser {
      * @throws InvalidVariableException when evaluation of variables fail
      */
     LinkedList<CompoundVariable> parseParams(StringReader reader) throws InvalidVariableException {
-        LinkedList<CompoundVariable> result = new LinkedList<CompoundVariable>();
+        LinkedList<CompoundVariable> result = new LinkedList<>();
         StringBuilder buffer = new StringBuilder();
         char[] current = new char[1];
         char previous = ' ';

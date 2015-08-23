@@ -261,12 +261,12 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     /**
      * We want to retain insertion order, so LinkedHashMap is necessary
      */
-    private final Map<String, RespTimeGraphLineBean> seriesNames = new LinkedHashMap<String, RespTimeGraphLineBean>();
+    private final Map<String, RespTimeGraphLineBean> seriesNames = new LinkedHashMap<>();
 
     /**
      * We want to retain insertion order, so LinkedHashMap is necessary
      */
-    private final Map<String, Map<Long, StatCalculatorLong>> pList = new LinkedHashMap<String, Map<Long, StatCalculatorLong>>();
+    private final Map<String, Map<Long, StatCalculatorLong>> pList = new LinkedHashMap<>();
 
     private long durationTest = 0;
     
@@ -278,7 +278,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final List<Color> listColors = Colors.getColors();
 
-    private final List<RespTimeGraphDataBean> internalList = new ArrayList<RespTimeGraphDataBean>(); // internal list of all results
+    private final List<RespTimeGraphDataBean> internalList = new ArrayList<>(); // internal list of all results
 
     public RespTimeGraphVisualizer() {
         init();
@@ -331,7 +331,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                             value.addValue(respTime, 1);
                         } else {
                             // We want to retain insertion order, so LinkedHashMap is necessary
-                            Map<Long, StatCalculatorLong> newSubList = new LinkedHashMap<Long, StatCalculatorLong>(5);
+                            Map<Long, StatCalculatorLong> newSubList = new LinkedHashMap<>(5);
                             StatCalculatorLong helper = new StatCalculatorLong();
                             helper.addValue(Long.valueOf(sampleResult.getTime()),1);
                             newSubList.put(startTimeIntervalLong,  helper);
@@ -403,7 +403,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
         double nanLast = 0;
         double nanBegin = 0;
-        List<Double> nanList = new ArrayList<Double>();
+        List<Double> nanList = new ArrayList<>();
         int s = 0;
         for (Map<Long, StatCalculatorLong> subList : pList.values()) {
             int idx = 0;
@@ -557,7 +557,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 // Reload data form internal list of results
                 synchronized (lockInterval) {
                     if (internalList.size() >= 2) {
-                        List<RespTimeGraphDataBean> tempList = new ArrayList<RespTimeGraphDataBean>();
+                        List<RespTimeGraphDataBean> tempList = new ArrayList<>();
                         tempList.addAll(internalList);
                         this.clearData();
                         for (RespTimeGraphDataBean data : tempList) {

@@ -83,7 +83,7 @@ public class JMeterUtils implements UnitTestManager {
 
     private static volatile Properties appProperties;
 
-    private static final Vector<LocaleChangeListener> localeChangeListeners = new Vector<LocaleChangeListener>();
+    private static final Vector<LocaleChangeListener> localeChangeListeners = new Vector<>();
 
     private static volatile Locale locale;
 
@@ -668,7 +668,7 @@ public class JMeterUtils implements UnitTestManager {
     // TODO - does not appear to be called directly
     public static Vector<Object> getControllers(Properties properties) {
         String name = "controller."; // $NON-NLS-1$
-        Vector<Object> v = new Vector<Object>();
+        Vector<Object> v = new Vector<>();
         Enumeration<?> names = properties.keys();
         while (names.hasMoreElements()) {
             String prop = (String) names.nextElement();
@@ -735,7 +735,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return The Vector value
      */
     public static Vector<String> getVector(Properties properties, String name) {
-        Vector<String> v = new Vector<String>();
+        Vector<String> v = new Vector<>();
         Enumeration<?> names = properties.keys();
         while (names.hasMoreElements()) {
             String prop = (String) names.nextElement();
@@ -767,7 +767,7 @@ public class JMeterUtils implements UnitTestManager {
      *         the prefix removed
      */
     public static Hashtable<String, String> getHashtable(Properties properties, String prefix) {
-        Hashtable<String, String> t = new Hashtable<String, String>();
+        Hashtable<String, String> t = new Hashtable<>();
         Enumeration<?> names = properties.keys();
         final int length = prefix.length();
         while (names.hasMoreElements()) {
@@ -970,7 +970,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return Description of the Returned Value
      */
     public static Vector<Object> instantiate(Vector<String> v, String className) {
-        Vector<Object> i = new Vector<Object>();
+        Vector<Object> i = new Vector<>();
         try {
             Class<?> c = Class.forName(className);
             Enumeration<String> elements = v.elements();
@@ -1289,7 +1289,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return a map name/value for each header
      */
     public static LinkedHashMap<String, String> parseHeaders(String headers) {
-        LinkedHashMap<String, String> linkedHeaders = new LinkedHashMap<String, String>();
+        LinkedHashMap<String, String> linkedHeaders = new LinkedHashMap<>();
         String[] list = headers.split("\n"); // $NON-NLS-1$
         for (String header : list) {
             int colon = header.indexOf(':'); // $NON-NLS-1$

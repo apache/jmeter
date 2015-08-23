@@ -167,7 +167,7 @@ public final class ClassFinder {
 
     // For each directory in the search path, add all the jars found there
     private static String[] addJarsInPath(String[] paths) {
-        Set<String> fullList = new HashSet<String>();
+        Set<String> fullList = new HashSet<>();
         for (int i = 0; i < paths.length; i++) {
             final String path = paths[i];
             fullList.add(path); // Keep the unexpanded path
@@ -317,7 +317,7 @@ public final class ClassFinder {
 //            }
 //        }
 
-        return new ArrayList<String>(listClasses);//subClassList);
+        return new ArrayList<>(listClasses);//subClassList);
     }
 
     /*
@@ -335,7 +335,7 @@ public final class ClassFinder {
         }
 
         // find all jar files or paths that end with strPathOrJar
-        ArrayList<String> listPaths = new ArrayList<String>();
+        ArrayList<String> listPaths = new ArrayList<>();
         String strPath = null;
         while (stPaths.hasMoreTokens()) {
             strPath = fixPathEntry(stPaths.nextToken());

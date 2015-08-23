@@ -82,19 +82,19 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * Map from TestElement to JMeterGUIComponent, mapping the nodes in the tree
      * to their corresponding GUI components.
      */
-    private Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<TestElement, JMeterGUIComponent>();
+    private Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<>();
 
     /**
      * Map from Class to JMeterGUIComponent, mapping the Class of a GUI
      * component to an instance of that component.
      */
-    private Map<Class<?>, JMeterGUIComponent> guis = new HashMap<Class<?>, JMeterGUIComponent>();
+    private Map<Class<?>, JMeterGUIComponent> guis = new HashMap<>();
 
     /**
      * Map from Class to TestBeanGUI, mapping the Class of a TestBean to an
      * instance of TestBeanGUI to be used to edit such components.
      */
-    private Map<Class<?>, JMeterGUIComponent> testBeanGUIs = new HashMap<Class<?>, JMeterGUIComponent>();
+    private Map<Class<?>, JMeterGUIComponent> testBeanGUIs = new HashMap<>();
 
     /** The currently selected node in the tree. */
     private JMeterTreeNode currentNode = null;
@@ -637,9 +637,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
         // Forget about all GUIs we've created so far: we'll need to re-created
         // them all!
-        guis = new HashMap<Class<?>, JMeterGUIComponent>();
-        nodesToGui = new HashMap<TestElement, JMeterGUIComponent>();
-        testBeanGUIs = new HashMap<Class<?>, JMeterGUIComponent>();
+        guis = new HashMap<>();
+        nodesToGui = new HashMap<>();
+        testBeanGUIs = new HashMap<>();
 
         // BeanInfo objects also contain locale-sensitive data -- flush them
         // away:
@@ -766,7 +766,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @return copy of list of {@link Stoppable}s
      */
     public List<Stoppable> getStoppables() {
-        ArrayList<Stoppable> list = new ArrayList<Stoppable>();
+        ArrayList<Stoppable> list = new ArrayList<>();
         list.addAll(stoppables);
         return list;
     }

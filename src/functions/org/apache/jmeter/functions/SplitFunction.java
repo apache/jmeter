@@ -57,7 +57,7 @@ import org.apache.log.Logger;
 public class SplitFunction extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__split";// $NON-NLS-1$
 

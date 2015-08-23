@@ -52,7 +52,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
 
     private final ButtonGroup bGroup = new ButtonGroup();
 
-    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
+    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<>(3);
 
     /**
      *
@@ -129,7 +129,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      */
     public void resetButtons(String[] resouces, String selected) {
         Enumeration<AbstractButton> buttons = bGroup.getElements();
-        List<AbstractButton> buttonsToRemove = new ArrayList<AbstractButton>(this.bGroup.getButtonCount());
+        List<AbstractButton> buttonsToRemove = new ArrayList<>(this.bGroup.getButtonCount());
         while (buttons.hasMoreElements()) {
             AbstractButton abstractButton = buttons
                     .nextElement();
@@ -206,7 +206,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      */
     @Override
     public List<JComponent> getComponentList() {
-        List<JComponent> comps = new LinkedList<JComponent>();
+        List<JComponent> comps = new LinkedList<>();
         comps.add(mLabel);
         Enumeration<AbstractButton> en = this.bGroup.getElements();
         while (en.hasMoreElements()) {

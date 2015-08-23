@@ -48,14 +48,13 @@ public class CompoundVariable implements Function {
     private static final FunctionParser functionParser = new FunctionParser();
 
     // Created during class init; not modified thereafter 
-    private static final Map<String, Class<? extends Function>> functions =
-        new HashMap<String, Class<? extends Function>>();
+    private static final Map<String, Class<? extends Function>> functions = new HashMap<>();
 
     private boolean hasFunction, isDynamic;
 
     private String permanentResults;
 
-    private LinkedList<Object> compiledComponents = new LinkedList<Object>();
+    private LinkedList<Object> compiledComponents = new LinkedList<>();
 
     static {
         try {
@@ -171,7 +170,7 @@ public class CompoundVariable implements Function {
     /** {@inheritDoc} */
     @Override
     public List<String> getArgumentDesc() {
-        return new LinkedList<String>();
+        return new LinkedList<>();
     }
 
     public void clear() {

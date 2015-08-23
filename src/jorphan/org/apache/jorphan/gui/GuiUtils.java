@@ -125,7 +125,7 @@ public final class GuiUtils {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable trans = clipboard.getContents(null);
         DataFlavor[] flavourList = trans.getTransferDataFlavors();
-        Collection<DataFlavor> flavours = new ArrayList<DataFlavor>(flavourList.length);
+        Collection<DataFlavor> flavours = new ArrayList<>(flavourList.length);
         if (Collections.addAll(flavours, flavourList) && flavours.contains(DataFlavor.stringFlavor)) {
             return (String) trans.getTransferData(DataFlavor.stringFlavor);
         } else {

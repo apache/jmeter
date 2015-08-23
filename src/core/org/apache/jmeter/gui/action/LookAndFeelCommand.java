@@ -45,7 +45,7 @@ public class LookAndFeelCommand implements Command {
 
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     private static final Preferences PREFS = Preferences.userNodeForPackage(LookAndFeelCommand.class);
     // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
@@ -60,7 +60,7 @@ public class LookAndFeelCommand implements Command {
         }
         String jMeterLaf = getJMeterLaf();
         if (log.isInfoEnabled()) {
-            ArrayList<String> names=new ArrayList<String>();
+            ArrayList<String> names = new ArrayList<>();
             for(UIManager.LookAndFeelInfo laf : lfs) {
                 if (laf.getClassName().equals(jMeterLaf)) {
                     names.add(laf.getName());
