@@ -138,6 +138,11 @@
   The optional property definition is required if the system 
   does not have a suitable GUI display.
 
+  Developer information
+  ---------------------
+  The code is maintained in SVN at https://svn.apache.org/repos/asf/jmeter/trunk
+  There is a read-only mirror at GitHub: https://github.com/apache/jmeter
+
   Licensing and legal issues
   --------------------------
 
