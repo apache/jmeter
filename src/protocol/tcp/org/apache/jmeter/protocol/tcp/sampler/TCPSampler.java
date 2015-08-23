@@ -59,10 +59,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList(new String[]{
+            Arrays.asList(
                     "org.apache.jmeter.config.gui.LoginConfigGui",
                     "org.apache.jmeter.protocol.tcp.config.gui.TCPConfigGui",
-                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"
+            ));
 
     //++ JMX file constants - do not change
     public static final String SERVER = "TCPSampler.server"; //$NON-NLS-1$

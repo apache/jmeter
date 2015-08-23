@@ -54,10 +54,11 @@ public class LDAPSampler extends AbstractSampler {
     private static final long serialVersionUID = 240L;
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList(new String[]{
+            Arrays.asList(
                     "org.apache.jmeter.config.gui.LoginConfigGui",
                     "org.apache.jmeter.protocol.ldap.config.gui.LdapConfigGui",
-                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"
+            ));
     
     public static final String SERVERNAME = "servername"; //$NON-NLS-1$
 

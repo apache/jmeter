@@ -60,7 +60,7 @@ public abstract class AbstractListenerGui extends AbstractJMeterGuiComponent {
      */
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.LISTENERS });
+        return Arrays.asList(MenuFactory.LISTENERS);
     }
 
 }

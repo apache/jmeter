@@ -39,7 +39,7 @@ public abstract class AbstractPostProcessorGui extends AbstractScopedJMeterGuiCo
 
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.POST_PROCESSORS });
+        return Arrays.asList(MenuFactory.POST_PROCESSORS);
     }
 
 }

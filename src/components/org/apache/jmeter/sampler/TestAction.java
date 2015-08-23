@@ -47,8 +47,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
     private static final long serialVersionUID = 240L;
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList(new String[]{
-                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+            Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
 
     // Actions
     public static final int STOP = 0;

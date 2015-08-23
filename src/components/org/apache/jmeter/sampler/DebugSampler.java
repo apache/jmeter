@@ -44,8 +44,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
     private static final long serialVersionUID = 232L;
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList(new String[]{
-                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+            Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
 
     private boolean displayJMeterVariables;
 

@@ -101,7 +101,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
 
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
+        return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }
 
     @Override

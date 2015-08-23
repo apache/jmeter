@@ -61,6 +61,6 @@ public abstract class AbstractTimerGui extends AbstractJMeterGuiComponent {
      */
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.TIMERS });
+        return Arrays.asList(MenuFactory.TIMERS);
     }
 }

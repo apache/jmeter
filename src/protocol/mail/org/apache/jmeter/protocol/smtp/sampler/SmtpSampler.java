@@ -65,8 +65,7 @@ public class SmtpSampler extends AbstractSampler {
     private static final long serialVersionUID = 1L;
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList(new String[]{
-                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+            Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
