@@ -32,7 +32,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
  */
 public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
     private static final Set<String> WEBDAV_METHODS =
-            new HashSet<>(Arrays.asList(new String[]{
+            new HashSet<>(Arrays.asList(
                     HTTPConstants.PROPFIND,
                     HTTPConstants.PROPPATCH,
                     HTTPConstants.MKCOL,
@@ -42,7 +42,7 @@ public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
                     HTTPConstants.UNLOCK,
                     HTTPConstants.REPORT,
                     HTTPConstants.MKCALENDAR
-            }));
+            ));
     
     private String davMethod;
 

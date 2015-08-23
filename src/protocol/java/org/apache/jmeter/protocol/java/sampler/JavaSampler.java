@@ -49,9 +49,10 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList(new String[]{
+            Arrays.asList(
                     "org.apache.jmeter.protocol.java.config.gui.JavaConfigGui",
-                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+                    "org.apache.jmeter.config.gui.SimpleConfigGui"
+            ));
 
     /**
      * Set used to register instances which implement tearDownTest.

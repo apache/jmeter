@@ -304,7 +304,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     /** {@inheritDoc} */
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
+        return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }
 
     /** {@inheritDoc} */

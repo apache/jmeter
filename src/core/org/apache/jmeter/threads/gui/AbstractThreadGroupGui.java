@@ -60,7 +60,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
 
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.THREADS });
+        return Arrays.asList(MenuFactory.THREADS);
     }
 
     @Override

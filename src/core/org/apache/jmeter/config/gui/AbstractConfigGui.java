@@ -61,6 +61,6 @@ public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent {
      */
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.CONFIG_ELEMENTS });
+        return Arrays.asList(MenuFactory.CONFIG_ELEMENTS);
     }
 }

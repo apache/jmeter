@@ -43,8 +43,7 @@ import org.apache.log.Logger;
  */
 public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList(new String[]{
-                    "org.apache.jmeter.config.gui.SimpleConfigGui"}));
+            Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
     
     private static final long serialVersionUID = 234L;
     

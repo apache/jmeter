@@ -78,7 +78,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
      */
     @Override
     public Collection<String> getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.FRAGMENTS });
+        return Arrays.asList(MenuFactory.FRAGMENTS);
     }
 
 
