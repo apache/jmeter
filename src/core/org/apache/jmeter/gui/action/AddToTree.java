@@ -40,7 +40,7 @@ public class AddToTree implements Command {
     private static final Set<String> commandSet;
 
     static {
-        HashSet<String> commands = new HashSet<>();
+        Set<String> commands = new HashSet<>();
         commands.add(ActionNames.ADD);
         commandSet = Collections.unmodifiableSet(commands);
     }

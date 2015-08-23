@@ -53,7 +53,7 @@ public class AboutCommand implements Command {
     private static JDialog about;
 
     static {
-        HashSet<String> commands = new HashSet<>();
+        Set<String> commands = new HashSet<>();
         commands.add(ActionNames.ABOUT);
         commandSet = Collections.unmodifiableSet(commands);
     }

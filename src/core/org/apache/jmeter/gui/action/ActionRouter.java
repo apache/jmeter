@@ -46,10 +46,10 @@ public final class ActionRouter implements ActionListener {
 
     private Map<String, Set<Command>> commands = new HashMap<>();
 
-    private final Map<String, HashSet<ActionListener>> preActionListeners =
+    private final Map<String, Set<ActionListener>> preActionListeners =
             new HashMap<>();
 
-    private final Map<String, HashSet<ActionListener>> postActionListeners =
+    private final Map<String, Set<ActionListener>> postActionListeners =
             new HashMap<>();
 
     private ActionRouter() {
@@ -188,7 +188,7 @@ public final class ActionRouter implements ActionListener {
      */
     public void addPreActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet<ActionListener> set = preActionListeners.get(action.getName());
+            Set<ActionListener> set = preActionListeners.get(action.getName());
             if (set == null) {
                 set = new HashSet<>();
             }
@@ -210,7 +210,7 @@ public final class ActionRouter implements ActionListener {
      */
     public void removePreActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet<ActionListener> set = preActionListeners.get(action.getName());
+            Set<ActionListener> set = preActionListeners.get(action.getName());
             if (set != null) {
                 set.remove(listener);
                 preActionListeners.put(action.getName(), set);
@@ -231,7 +231,7 @@ public final class ActionRouter implements ActionListener {
      */
     public void addPostActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet<ActionListener> set = postActionListeners.get(action.getName());
+            Set<ActionListener> set = postActionListeners.get(action.getName());
             if (set == null) {
                 set = new HashSet<>();
             }
@@ -252,7 +252,7 @@ public final class ActionRouter implements ActionListener {
      */
     public void removePostActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet<ActionListener> set = postActionListeners.get(action.getName());
+            Set<ActionListener> set = postActionListeners.get(action.getName());
             if (set != null) {
                 set.remove(listener);
                 postActionListeners.put(action.getName(), set);
