@@ -1911,7 +1911,7 @@ run JMeter unless all the JMeter jars are added.
           <arg value="-D${XX}types=${packaging}.asc,pom.asc"/>
           <arg value="-D${XX}classifiers=,"/>
           <!-- Need at least version 2.7 of the plugin to upload additional files-->
-          <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.7:deploy-file"/>
+          <arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy-file"/>
         </java>
       </sequential>
     </macrodef>
