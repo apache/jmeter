@@ -45,7 +45,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class UnEscapeHtml extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__unescapeHtml"; //$NON-NLS-1$
 

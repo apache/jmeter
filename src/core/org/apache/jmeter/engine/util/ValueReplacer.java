@@ -43,7 +43,7 @@ public class ValueReplacer {
 
     private final CompoundVariable masterFunction = new CompoundVariable();
 
-    private Map<String, String> variables = new HashMap<String, String>();
+    private Map<String, String> variables = new HashMap<>();
 
     public ValueReplacer() {
     }
@@ -157,7 +157,7 @@ public class ValueReplacer {
      * @throws InvalidVariableException when <code>transform</code> throws an {@link InvalidVariableException} while transforming a value
      */
     private Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
-        List<JMeterProperty> props = new LinkedList<JMeterProperty>();
+        List<JMeterProperty> props = new LinkedList<>();
         while (iter.hasNext()) {
             JMeterProperty val = iter.next();
             if (log.isDebugEnabled()) {

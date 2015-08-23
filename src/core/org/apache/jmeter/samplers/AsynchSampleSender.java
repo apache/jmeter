@@ -67,7 +67,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     private Object readResolve() throws ObjectStreamException{
         int capacity = getCapacity();
         log.info("Using batch queue size (asynch.batch.queue.size): " + capacity); // server log file
-        queue = new ArrayBlockingQueue<SampleEvent>(capacity);        
+        queue = new ArrayBlockingQueue<>(capacity);
         Worker worker = new Worker(queue, listener);
         worker.setDaemon(true);
         worker.start();
@@ -142,7 +142,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
             try {
                 boolean eof = false;
                 while (!eof) {
-                    List<SampleEvent> l = new ArrayList<SampleEvent>();
+                    List<SampleEvent> l = new ArrayList<>();
                     SampleEvent e = queue.take();
                     while (!(eof = (e == FINAL_EVENT)) && e != null) { // try to process as many as possible
                         l.add(e);

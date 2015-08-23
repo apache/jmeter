@@ -33,7 +33,7 @@ import org.apache.jmeter.gui.GuiPackage;
  */
 public class LoggerPanelEnableDisable implements Command {
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.LOGGER_PANEL_ENABLE_DISABLE);

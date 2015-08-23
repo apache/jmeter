@@ -89,7 +89,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     public Object clone() {
         if(cookieManagers == null)
         {
-            cookieManagers = new ConcurrentHashMap<String, CookieManager>();
+            cookieManagers = new ConcurrentHashMap<>();
         }
         if(managersInUse == null)
         {

@@ -48,7 +48,7 @@ public class CompareAssertionBeanInfo extends BeanInfoSupport {
         p.setValue(TableEditor.OBJECT_PROPERTIES, // These are the names of the get/set methods
                 new String[]{SubstitutionElement.REGEX, SubstitutionElement.SUBSTITUTE});
         p.setValue(NOT_UNDEFINED,Boolean.TRUE);
-        p.setValue(DEFAULT,new ArrayList<Object>());
+        p.setValue(DEFAULT, new ArrayList<>());
         p.setValue(MULTILINE,Boolean.TRUE);
 
     }

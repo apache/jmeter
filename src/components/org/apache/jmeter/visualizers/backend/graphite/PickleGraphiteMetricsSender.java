@@ -53,7 +53,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private String prefix;
 
     // graphite expects a python-pickled list of nested tuples.
-    private List<MetricTuple> metrics = new LinkedList<MetricTuple>();
+    private List<MetricTuple> metrics = new LinkedList<>();
 
     private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
 

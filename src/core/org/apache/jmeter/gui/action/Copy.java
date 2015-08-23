@@ -43,7 +43,7 @@ import org.apache.log.Logger;
 public class Copy extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final HashSet<String> commands = new HashSet<String>();
+    private static final HashSet<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.COPY);
@@ -94,7 +94,7 @@ public class Copy extends AbstractAction {
      * @return JMeterTreeNode[]
      */
     static JMeterTreeNode[] keepOnlyAncestors(JMeterTreeNode[] currentNodes) {
-        List<JMeterTreeNode> nodes = new ArrayList<JMeterTreeNode>();
+        List<JMeterTreeNode> nodes = new ArrayList<>();
         for (int i = 0; i < currentNodes.length; i++) {
             boolean exclude = false;
             for (int j = 0; j < currentNodes.length; j++) {

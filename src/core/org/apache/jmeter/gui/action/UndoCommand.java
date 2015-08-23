@@ -33,7 +33,7 @@ import org.apache.jorphan.collections.HashTree;
  */
 public class UndoCommand implements Command {
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.UNDO);

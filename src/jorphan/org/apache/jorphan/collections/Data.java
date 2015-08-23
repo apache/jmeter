@@ -57,8 +57,8 @@ public class Data implements Serializable {
      * Constructor - takes no arguments.
      */
     public Data() {
-        header = new ArrayList<String>();
-        data = new HashMap<String, List<Object>>();
+        header = new ArrayList<>();
+        data = new HashMap<>();
         currentPos = -1;
         size = currentPos + 1;
     }
@@ -151,10 +151,10 @@ public class Data implements Serializable {
 
     public void addRow() {
         String[] headers = getHeaders();
-        List<Object> tempList = new ArrayList<Object>();
+        List<Object> tempList = new ArrayList<>();
         for (int i = 0; i < headers.length; i++) {
             if ((tempList = data.get(header.get(i))) == null) {
-                tempList = new ArrayList<Object>();
+                tempList = new ArrayList<>();
                 data.put(headers[i], tempList);
             }
             tempList.add("");
@@ -271,7 +271,7 @@ public class Data implements Serializable {
     public void addColumnValue(String column, Object value) {
         List<Object> tempList;
         if ((tempList = data.get(column)) == null) {
-            tempList = new ArrayList<Object>();
+            tempList = new ArrayList<>();
             data.put(column, tempList);
         }
         int s = tempList.size();
@@ -320,7 +320,7 @@ public class Data implements Serializable {
     public void setColumnValue(String column, Object value) {
         List<Object> tempList;
         if ((tempList = data.get(column)) == null) {
-            tempList = new ArrayList<Object>();
+            tempList = new ArrayList<>();
             data.put(column, tempList);
         }
 
@@ -468,10 +468,10 @@ public class Data implements Serializable {
      */
     public void setHeaders(String[] h) {
         int x = 0;
-        header = new ArrayList<String>(h.length);
+        header = new ArrayList<>(h.length);
         for (x = 0; x < h.length; x++) {
             header.add(h[x]);
-            data.put(h[x], new ArrayList<Object>());
+            data.put(h[x], new ArrayList<>());
         }
     }
 
@@ -597,7 +597,7 @@ public class Data implements Serializable {
      */
     public void addHeader(String s) {
         header.add(s);
-        data.put(s, new ArrayList<Object>(Math.max(size(), 100)));
+        data.put(s, new ArrayList<>(Math.max(size(), 100)));
     }
 
     /**

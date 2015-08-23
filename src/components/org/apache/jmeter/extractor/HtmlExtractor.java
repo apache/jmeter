@@ -177,7 +177,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
             String expression, String attribute, int matchNumber,
             SampleResult previousResult) {
         int found = 0;
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
             if(!StringUtils.isEmpty(inputString)) {

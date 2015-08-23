@@ -316,7 +316,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
      */
     private void clearCookies() {
         log.debug("Clear all cookies from store");
-        setProperty(new CollectionProperty(COOKIES, new ArrayList<Object>()));
+        setProperty(new CollectionProperty(COOKIES, new ArrayList<>()));
     }
 
     /**

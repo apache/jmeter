@@ -533,7 +533,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
             Hashtable<String,String> reqHeaders = null;
             if(headerManager != null) {
                 int size = headerManager.getHeaders().size();
-                reqHeaders = new Hashtable<String, String>(size);
+                reqHeaders = new Hashtable<>(size);
                 for (int i = 0; i < size; i++) {
                     Header header = headerManager.get(i);
                     reqHeaders.put(header.getName(), header.getValue());

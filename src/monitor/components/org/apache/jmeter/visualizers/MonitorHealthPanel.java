@@ -38,7 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class MonitorHealthPanel extends JPanel implements MonitorListener, Clearable {
     private static final long serialVersionUID = 240L;
 
-    private final Map<String, ServerPanel> serverPanelMap = new HashMap<String, ServerPanel>();
+    private final Map<String, ServerPanel> serverPanelMap = new HashMap<>();
 
     private JPanel servers = null;
 

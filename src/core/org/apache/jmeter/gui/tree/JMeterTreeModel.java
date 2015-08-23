@@ -74,7 +74,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * @return a list of tree nodes of the given <code>type</code>, or an empty list
      */
     public List<JMeterTreeNode> getNodesOfType(Class<?> type) {
-        List<JMeterTreeNode> nodeList = new LinkedList<JMeterTreeNode>();
+        List<JMeterTreeNode> nodeList = new LinkedList<>();
         traverseAndFind(type, (JMeterTreeNode) this.getRoot(), nodeList);
         return nodeList;
     }

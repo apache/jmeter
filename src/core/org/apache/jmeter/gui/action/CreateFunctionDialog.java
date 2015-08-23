@@ -29,7 +29,7 @@ public class CreateFunctionDialog extends AbstractAction {
 
     private static final Set<String> commands;
     static {
-        commands = new HashSet<String>();
+        commands = new HashSet<>();
         commands.add(ActionNames.FUNCTIONS);
     }
 

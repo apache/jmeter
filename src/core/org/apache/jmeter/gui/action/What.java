@@ -47,7 +47,7 @@ public class What implements Command {
     private static final Set<String> commandSet;
 
     static {
-        HashSet<String> commands = new HashSet<String>();
+        HashSet<String> commands = new HashSet<>();
         commands.add(ActionNames.WHAT_CLASS);
         commands.add(ActionNames.DEBUG_ON);
         commands.add(ActionNames.DEBUG_OFF);

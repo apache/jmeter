@@ -58,7 +58,7 @@ public class FileRowColContainer {
         fileName = file;
         delimiter = delim;
         nextRow = 0;
-        fileData = new ArrayList<List<String>>();
+        fileData = new ArrayList<>();
         load();
     }
 
@@ -67,7 +67,7 @@ public class FileRowColContainer {
         fileName = file;
         delimiter = DELIMITER;
         nextRow = 0;
-        fileData = new ArrayList<List<String>>();
+        fileData = new ArrayList<>();
         load();
     }
 
@@ -144,7 +144,7 @@ public class FileRowColContainer {
      *         the line
      */
     private static List<String> splitLine(String theLine, String delim) {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         StringTokenizer tokener = new StringTokenizer(theLine, delim, true);
         /*
          * the beginning of the line is a "delimiter" so that ,a,b,c returns ""

@@ -52,7 +52,7 @@ public class JMeterContext {
 
     private boolean restartNextLoop = false;
 
-    private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<String, Object>(5);
+    private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<>(5);
 
     JMeterContext() {
         clear0();

@@ -39,7 +39,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampler, TestBean, ConfigMergabilityIndicator {
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 

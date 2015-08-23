@@ -175,7 +175,7 @@ public class SampleResult implements Serializable, Cloneable {
     /** In Non GUI mode and when best config is used, size never exceeds 1, 
      * but as a compromise set it to 3 
      */
-    private final Set<String> files = new HashSet<String>(3);
+    private final Set<String> files = new HashSet<>(3);
 
     private String dataEncoding;// (is this really the character set?) e.g.
                                 // ISO-8895-1, UTF-8
@@ -569,7 +569,7 @@ public class SampleResult implements Serializable, Cloneable {
 
     public void addAssertionResult(AssertionResult assertResult) {
         if (assertionResults == null) {
-            assertionResults = new ArrayList<AssertionResult>();
+            assertionResults = new ArrayList<>();
         }
         assertionResults.add(assertResult);
     }
@@ -636,7 +636,7 @@ public class SampleResult implements Serializable, Cloneable {
      */
     public void storeSubResult(SampleResult subResult) {
         if (subResults == null) {
-            subResults = new ArrayList<SampleResult>();
+            subResults = new ArrayList<>();
         }
         subResults.add(subResult);
         subResult.setParent(this);

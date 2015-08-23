@@ -166,7 +166,7 @@ public class HC4CookieHandler implements CookieHandler {
      */
     List<org.apache.http.cookie.Cookie> getCookiesForUrl(
             CollectionProperty cookiesCP, URL url, boolean allowVariableCookie) {
-        List<org.apache.http.cookie.Cookie> cookies = new ArrayList<org.apache.http.cookie.Cookie>();
+        List<org.apache.http.cookie.Cookie> cookies = new ArrayList<>();
 
         for (PropertyIterator iter = cookiesCP.iterator(); iter.hasNext();) {
             Cookie jmcookie = (Cookie) iter.next().getObjectValue();
@@ -187,7 +187,7 @@ public class HC4CookieHandler implements CookieHandler {
 
         CookieOrigin cookieOrigin = new CookieOrigin(host, port, path, secure);
 
-        List<org.apache.http.cookie.Cookie> cookiesValid = new ArrayList<org.apache.http.cookie.Cookie>();
+        List<org.apache.http.cookie.Cookie> cookiesValid = new ArrayList<>();
         for (org.apache.http.cookie.Cookie cookie : cookies) {
             if (cookieSpec.match(cookie, cookieOrigin)) {
                 cookiesValid.add(cookie);

@@ -55,7 +55,7 @@ import org.apache.jmeter.util.SSLManager;
 public class SSLManagerCommand implements Command {
     private static final Set<String> commandSet;
     static {
-        HashSet<String> commands = new HashSet<String>();
+        HashSet<String> commands = new HashSet<>();
         commands.add(ActionNames.SSL_MANAGER);
         commandSet = Collections.unmodifiableSet(commands);
     }

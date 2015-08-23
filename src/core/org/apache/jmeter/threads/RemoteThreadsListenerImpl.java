@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         RemoteThreadsListener, ThreadListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    private final List<RemoteThreadsLifeCycleListener> listeners = new ArrayList<RemoteThreadsLifeCycleListener>();
+    private final List<RemoteThreadsLifeCycleListener> listeners = new ArrayList<>();
 
     /**
      * 

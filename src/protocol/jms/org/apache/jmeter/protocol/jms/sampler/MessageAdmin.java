@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 public class MessageAdmin {
     private static final MessageAdmin SINGLETON = new MessageAdmin();
 
-    private final Map<String, PlaceHolder> table = new ConcurrentHashMap<String, PlaceHolder>();
+    private final Map<String, PlaceHolder> table = new ConcurrentHashMap<>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 

@@ -322,7 +322,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         String textRenderer = JMeterUtils.getResString("view_results_render_text"); // $NON-NLS-1$
         Object textObject = null;
-        Map<String, ResultRenderer> map = new HashMap<String, ResultRenderer>(classesToAdd.size());
+        Map<String, ResultRenderer> map = new HashMap<>(classesToAdd.size());
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes

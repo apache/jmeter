@@ -88,8 +88,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
      */
     private final transient Object lock = new Object();
 
-    private final Map<String, SamplingStatCalculator> tableRows =
-        new ConcurrentHashMap<String, SamplingStatCalculator>();
+    private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
 
     public StatVisualizer() {
         super();

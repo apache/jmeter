@@ -100,7 +100,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.LoginConfigGui",
                     "org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui",
@@ -298,7 +298,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
 
     // Derive the mapping of content types to parsers
-    private static final Map<String, String> parsersForType = new HashMap<String, String>();
+    private static final Map<String, String> parsersForType = new HashMap<>();
     // Not synch, but it is not modified after creation
 
     private static final String RESPONSE_PARSERS= // list of parsers
@@ -1232,7 +1232,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             
             // For concurrent get resources
-            final List<Callable<AsynSamplerResultHolder>> liste = new ArrayList<Callable<AsynSamplerResultHolder>>();
+            final List<Callable<AsynSamplerResultHolder>> liste = new ArrayList<>();
 
             while (urls.hasNext()) {
                 Object binURL = urls.next(); // See catch clause below
@@ -1963,7 +1963,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *
      */
     private static class CleanerThread extends Thread {
-        private final List<HTTPSamplerBase> samplersToNotify = new ArrayList<HTTPSamplerBase>();
+        private final List<HTTPSamplerBase> samplersToNotify = new ArrayList<>();
         /**
          * @param runnable Runnable
          */

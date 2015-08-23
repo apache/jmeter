@@ -288,7 +288,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private List<String> getDataList(PowerTableModel p_model, String colName) {
         String[] dataArray = p_model.getData().getColumn(colName);
-        List<String> list = new LinkedList<String>();
+        List<String> list = new LinkedList<>();
         for (int i = 0; i < dataArray.length; i++) {
             list.add(dataArray[i]);
         }

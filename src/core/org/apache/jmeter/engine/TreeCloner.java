@@ -33,7 +33,7 @@ public class TreeCloner implements HashTreeTraverser {
 
     private final ListedHashTree newTree;
 
-    private final LinkedList<Object> objects = new LinkedList<Object>();
+    private final LinkedList<Object> objects = new LinkedList<>();
 
     private final boolean honourNoThreadClone;
 

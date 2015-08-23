@@ -122,7 +122,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     /**
      * The property name to value map that the active customizer edits:
      */
-    private final Map<String, Object> propertyMap = new HashMap<String, Object>();
+    private final Map<String, Object> propertyMap = new HashMap<>();
 
     /**
      * Whether the GUI components have been created.
@@ -130,7 +130,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     private boolean initialized = false;
 
     static {
-        List<String> paths = new LinkedList<String>();
+        List<String> paths = new LinkedList<>();
         paths.add("org.apache.jmeter.testbeans.gui");// $NON-NLS-1$
         paths.addAll(Arrays.asList(PropertyEditorManager.getEditorSearchPath()));
         String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);// $NON-NLS-1$
@@ -356,7 +356,7 @@ public TestElement createTestElement() {
     /** {@inheritDoc} */
     @Override
     public Collection<String> getMenuCategories() {
-        List<String> menuCategories = new LinkedList<String>();
+        List<String> menuCategories = new LinkedList<>();
         BeanDescriptor bd = beanInfo.getBeanDescriptor();
 
         // We don't want to show expert beans in the menus unless we're

@@ -39,7 +39,7 @@ import java.util.UUID;
  */
 public class Uuid extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__UUID"; //$NON-NLS-1$
 

@@ -58,7 +58,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.LoginConfigGui",
                     "org.apache.jmeter.protocol.ftp.config.gui.FtpConfigGui",

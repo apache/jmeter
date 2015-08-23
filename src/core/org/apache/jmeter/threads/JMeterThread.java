@@ -140,7 +140,7 @@ public class JMeterThread implements Runnable, Interruptible {
         testTree = test;
         compiler = new TestCompiler(testTree);
         controller = (Controller) testTree.getArray()[0];
-        SearchByClass<TestIterationListener> threadListenerSearcher = new SearchByClass<TestIterationListener>(TestIterationListener.class); // TL - IS
+        SearchByClass<TestIterationListener> threadListenerSearcher = new SearchByClass<>(TestIterationListener.class); // TL - IS
         test.traverse(threadListenerSearcher);
         testIterationStartListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
@@ -510,7 +510,7 @@ public class JMeterThread implements Runnable, Interruptible {
         List<SampleListener> sampleListeners = samplePack.getSampleListeners();
         // Do not send subsamples to listeners which receive the transaction sample
         if(transactionSampler != null) {
-            ArrayList<SampleListener> onlySubSamplerListeners = new ArrayList<SampleListener>();
+            ArrayList<SampleListener> onlySubSamplerListeners = new ArrayList<>();
             List<SampleListener> transListeners = transactionPack.getSampleListeners();
             for(SampleListener listener : sampleListeners) {
                 // Check if this instance is present in transaction listener list

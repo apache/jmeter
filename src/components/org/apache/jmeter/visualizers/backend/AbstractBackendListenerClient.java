@@ -56,7 +56,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     private static final Logger LOGGER = LoggingManager.getLoggerForClass();
     private UserMetric userMetrics = new UserMetric();
     
-    private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<String, SamplerMetric>();
+    private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
 
     /* Implements BackendListenerClient.setupTest(BackendListenerContext) */
     @Override

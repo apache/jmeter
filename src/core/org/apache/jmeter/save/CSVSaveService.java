@@ -1045,7 +1045,7 @@ public final class CSVSaveService {
             throws IOException {
         int ch;
         ParserState state = ParserState.INITIAL;
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         CharArrayWriter baos = new CharArrayWriter(200);
         boolean push = false;
         while (-1 != (ch = infile.read())) {

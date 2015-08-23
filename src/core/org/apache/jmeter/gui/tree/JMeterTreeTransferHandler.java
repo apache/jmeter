@@ -234,7 +234,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         TreePath dest = dl.getPath();
         JMeterTreeNode target = (JMeterTreeNode) dest.getLastPathComponent();
        
-        nodesForRemoval = new ArrayList<JMeterTreeNode>();
+        nodesForRemoval = new ArrayList<>();
         int index = dl.getChildIndex();
         TreePath[] pathsToSelect = new TreePath[nodes.length];
         int pathPosition = 0;
@@ -253,7 +253,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             
             // first copy the children as the call to copy.add will modify the collection we're iterating on
             Enumeration<?> enumFrom = node.children();
-            List<JMeterTreeNode> tmp = new ArrayList<JMeterTreeNode>();
+            List<JMeterTreeNode> tmp = new ArrayList<>();
             while (enumFrom.hasMoreElements()) {
                 JMeterTreeNode child = (JMeterTreeNode) enumFrom.nextElement();
                 tmp.add(child);

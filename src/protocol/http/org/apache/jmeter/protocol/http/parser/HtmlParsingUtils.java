@@ -283,7 +283,7 @@ public final class HtmlParsingUtils {
 
     public static List<HTTPSamplerBase> createURLFromForm(Node doc, URL context) {
         String selectName = null;
-        LinkedList<HTTPSamplerBase> urlConfigs = new LinkedList<HTTPSamplerBase>();
+        LinkedList<HTTPSamplerBase> urlConfigs = new LinkedList<>();
         recurseForm(doc, urlConfigs, context, selectName, false);
         /*
          * NamedNodeMap atts = formNode.getAttributes();

@@ -43,7 +43,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class SetProperty extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__setProperty"; //$NON-NLS-1$
 

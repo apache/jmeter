@@ -396,7 +396,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private Context getInitialContext() throws NamingException {
-        Hashtable<String, String> table = new Hashtable<String, String>();
+        Hashtable<String, String> table = new Hashtable<>();
 
         if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
             if (LOGGER.isDebugEnabled()) {

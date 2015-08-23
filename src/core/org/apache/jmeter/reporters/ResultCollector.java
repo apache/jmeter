@@ -105,7 +105,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static final Object LOCK = new Object();
 
     //@GuardedBy("LOCK")
-    private static final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
+    private static final Map<String, FileEntry> files = new HashMap<>();
 
     /**
      * Shutdown Hook that ensures PrintWriter is flushed is CTRL+C or kill is called during a test

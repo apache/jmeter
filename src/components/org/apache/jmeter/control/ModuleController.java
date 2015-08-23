@@ -100,7 +100,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
     }
 
     private void setNodePath() {
-        List<String> nodePath = new ArrayList<String>();
+        List<String> nodePath = new ArrayList<>();
         if (selectedNode != null) {
             TreeNode[] path = selectedNode.getPath();
             for (TreeNode node : path) {

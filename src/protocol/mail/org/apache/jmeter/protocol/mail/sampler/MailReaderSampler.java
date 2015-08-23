@@ -65,7 +65,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
 
     private static final long serialVersionUID = 240L;
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<String>(
+    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(new String[]{
                     "org.apache.jmeter.config.gui.SimpleConfigGui"}));
 

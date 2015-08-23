@@ -214,7 +214,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     }
 
     private Map<String, Object> getMapContent() throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        Map<String,Object> m = new HashMap<String,Object>();
+        Map<String,Object> m = new HashMap<>();
         String text = getMessageContent();
         String[] lines = text.split("\n");
         for (String line : lines){

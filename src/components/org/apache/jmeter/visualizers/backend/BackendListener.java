@@ -111,8 +111,8 @@ public class BackendListener extends AbstractTestElement
      * per server. But we need the total to be shared.
      */
     //@GuardedBy("LOCK") - needed to ensure consistency between this and instanceCount
-    private static final Map<String, ListenerClientData> queuesByTestElementName = 
-            new ConcurrentHashMap<String, ListenerClientData>();
+    private static final Map<String, ListenerClientData> queuesByTestElementName =
+            new ConcurrentHashMap<>();
 
     /**
      * Create a BackendListener.
@@ -208,7 +208,7 @@ public class BackendListener extends AbstractTestElement
         @Override
         public void run() {
             boolean isDebugEnabled = LOGGER.isDebugEnabled();
-            List<SampleResult> sampleResults = new ArrayList<SampleResult>(listenerClientData.queue.size());
+            List<SampleResult> sampleResults = new ArrayList<>(listenerClientData.queue.size());
             try {
                 try {
 
@@ -322,7 +322,7 @@ public class BackendListener extends AbstractTestElement
                 BackendListenerContext context = new BackendListenerContext((Arguments)getArguments().clone());
 
                 listenerClientData = new ListenerClientData();
-                listenerClientData.queue = new ArrayBlockingQueue<SampleResult>(queueSize); 
+                listenerClientData.queue = new ArrayBlockingQueue<>(queueSize);
                 listenerClientData.queueWaits = new AtomicLong(0L);
                 listenerClientData.queueWaitTime = new AtomicLong(0L);
                 listenerClientData.latch = new CountDownLatch(1);

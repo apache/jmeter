@@ -28,7 +28,7 @@ import java.util.Set;
  */
 public class SearchTreeCommand extends AbstractAction {
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     static {
         commands.add(ActionNames.SEARCH_TREE);

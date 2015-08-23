@@ -57,7 +57,7 @@ public class DistributedRunner {
     private final int retriesNumber;
     private PrintStream stdout = new PrintStream(new SilentOutputStream());
     private PrintStream stderr = new PrintStream(new SilentOutputStream());
-    private final Map<String, JMeterEngine> engines = new HashMap<String, JMeterEngine>();
+    private final Map<String, JMeterEngine> engines = new HashMap<>();
 
 
     public DistributedRunner() {
@@ -73,7 +73,7 @@ public class DistributedRunner {
 
     public void init(List<String> addresses, HashTree tree) {
         // converting list into mutable version
-        List<String> addrs = new LinkedList<String>(addresses);
+        List<String> addrs = new LinkedList<>(addresses);
 
         for (int tryNo = 0; tryNo < retriesNumber; tryNo++) {
             if (tryNo > 0) {
@@ -144,7 +144,7 @@ public class DistributedRunner {
      * Start all engines that were previously initiated
      */
     public void start() {
-        List<String> addresses = new LinkedList<String>();
+        List<String> addresses = new LinkedList<>();
         addresses.addAll(engines.keySet());
         start(addresses);
     }
@@ -169,7 +169,7 @@ public class DistributedRunner {
      * Stop all engines that were previously initiated
      */
     public void stop() {
-        List<String> addresses = new LinkedList<String>();
+        List<String> addresses = new LinkedList<>();
         addresses.addAll(engines.keySet());
         stop(addresses);
     }

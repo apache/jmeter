@@ -36,7 +36,7 @@ public class SamplerName extends AbstractFunction {
 
     private static final String KEY = "__samplerName"; //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     static {
         // desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");

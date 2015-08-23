@@ -36,11 +36,11 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     protected final TreeNode rootNode;
     protected final EventListenerList listener = new EventListenerList();
 
-    protected transient final List<Object> objects = new ArrayList<Object>();
+    protected transient final List<Object> objects = new ArrayList<>();
 
-    protected transient final List<String> headers = new ArrayList<String>();
+    protected transient final List<String> headers = new ArrayList<>();
 
-    protected transient final List<Class<?>> classes = new ArrayList<Class<?>>();
+    protected transient final List<Class<?>> classes = new ArrayList<>();
 
     protected transient final List<Functor> readFunctors;
 
@@ -48,8 +48,8 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
 
     public AbstractTreeTableModel(TreeNode root) {
         this.rootNode = root;
-        readFunctors = new ArrayList<Functor>();
-        writeFunctors = new ArrayList<Functor>();
+        readFunctors = new ArrayList<>();
+        writeFunctors = new ArrayList<>();
     }
 
     public AbstractTreeTableModel(String[] headers,
@@ -59,8 +59,8 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
         this.rootNode = null;
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(editorClasses));
-        this.readFunctors = new ArrayList<Functor>(Arrays.asList(readFunctors));
-        this.writeFunctors = new ArrayList<Functor>(Arrays.asList(writeFunctors));
+        this.readFunctors = new ArrayList<>(Arrays.asList(readFunctors));
+        this.writeFunctors = new ArrayList<>(Arrays.asList(writeFunctors));
     }
 
     /**

@@ -149,12 +149,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     public JMeterMenuBar() {
         // List for recent files menu items
-        file_load_recent_files = new LinkedList<JComponent>();
+        file_load_recent_files = new LinkedList<>();
         // Lists for remote engines menu items
-        remote_engine_start = new LinkedList<JMenuItem>();
-        remote_engine_stop = new LinkedList<JMenuItem>();
-        remote_engine_shut = new LinkedList<JMenuItem>();
-        remote_engine_exit = new LinkedList<JMenuItem>();
+        remote_engine_start = new LinkedList<>();
+        remote_engine_stop = new LinkedList<>();
+        remote_engine_shut = new LinkedList<>();
+        remote_engine_exit = new LinkedList<>();
         remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ","); //$NON-NLS-1$
         if (remoteHosts.length == 1 && remoteHosts[0].equals("")) {
             remoteHosts = new String[0];
@@ -238,7 +238,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
      * should be defined in a file somewhere, but that is for later.
      */
     public void createMenuBar() {
-        this.menuCreators = new ArrayList<MenuCreator>();
+        this.menuCreators = new ArrayList<>();
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(), 
@@ -387,7 +387,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
      */
     // Also used by org.apache.jmeter.resources.PackageTest
     public static String[] getLanguages(){
-        List<String> lang = new ArrayList<String>(20);
+        List<String> lang = new ArrayList<>(20);
         lang.add(Locale.ENGLISH.toString()); // en
         lang.add(Locale.FRENCH.toString()); // fr
         lang.add(Locale.GERMAN.toString()); // de

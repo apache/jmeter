@@ -39,7 +39,7 @@ public class UrlEncode extends AbstractFunction {
 
     private static final String CHARSET_ENCODING = "UTF-8"; //$NON-NLS-1$
     
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String KEY = "__urlencode"; //$NON-NLS-1$
 

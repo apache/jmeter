@@ -79,7 +79,7 @@ public class FileServer {
     private File base;
 
     //@GuardedBy("this") NOTE this also guards against possible window in checkForOpenFiles()
-    private final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
+    private final Map<String, FileEntry> files = new HashMap<>();
 
     private static final FileServer server = new FileServer();
 

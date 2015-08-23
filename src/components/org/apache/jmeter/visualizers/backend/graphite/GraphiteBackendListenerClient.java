@@ -233,9 +233,9 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         rootMetricsPrefix = context.getParameter("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
         String percentilesAsString = context.getParameter("percentiles", DEFAULT_METRICS_PREFIX);
         String[]  percentilesStringArray = percentilesAsString.split(SEPARATOR);
-        okPercentiles = new HashMap<String, Float>(percentilesStringArray.length);
-        koPercentiles = new HashMap<String, Float>(percentilesStringArray.length);
-        allPercentiles = new HashMap<String, Float>(percentilesStringArray.length);
+        okPercentiles = new HashMap<>(percentilesStringArray.length);
+        koPercentiles = new HashMap<>(percentilesStringArray.length);
+        allPercentiles = new HashMap<>(percentilesStringArray.length);
         DecimalFormat format = new DecimalFormat("0.##");
         for (int i = 0; i < percentilesStringArray.length; i++) {
             if(!StringUtils.isEmpty(percentilesStringArray[i].trim())) {
@@ -260,7 +260,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
         graphiteMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
         String[] samplers = samplersList.split(SEPARATOR);
-        samplersToFilter = new HashSet<String>();
+        samplersToFilter = new HashSet<>();
         for (String samplerName : samplers) {
             samplersToFilter.add(samplerName);
         }

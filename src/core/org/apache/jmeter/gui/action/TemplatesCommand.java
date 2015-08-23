@@ -28,7 +28,7 @@ import java.util.Set;
  */
 public class TemplatesCommand extends AbstractAction {
 
-    private static final Set<String> commands = new HashSet<String>();
+    private static final Set<String> commands = new HashSet<>();
 
     // Ensure the dialog is only created when it is first needed
     // In turn this avoids scanning the templates until first needed

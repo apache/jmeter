@@ -57,7 +57,7 @@ public class RegexFunction extends AbstractFunction {
 
     private Object[] values;// Parameters are stored here
 
-    private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<>();
 
     private static final String TEMPLATE_PATTERN = "\\$(\\d+)\\$";  //$NON-NLS-1$
     /** initialised to the regex \$(\d+)\$ */
@@ -151,7 +151,7 @@ public class RegexFunction extends AbstractFunction {
             return defaultValue;
         }
 
-        List<MatchResult> collectAllMatches = new ArrayList<MatchResult>();
+        List<MatchResult> collectAllMatches = new ArrayList<>();
         try {
             PatternMatcher matcher = JMeterUtils.getMatcher();
             PatternMatcherInput input = new PatternMatcherInput(textToMatch);
@@ -246,9 +246,9 @@ public class RegexFunction extends AbstractFunction {
     }
 
     private Object[] generateTemplate(String rawTemplate) {
-        List<String> pieces = new ArrayList<String>();
+        List<String> pieces = new ArrayList<>();
         // String or Integer
-        List<Object> combined = new LinkedList<Object>();
+        List<Object> combined = new LinkedList<>();
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Util.split(pieces, matcher, templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);

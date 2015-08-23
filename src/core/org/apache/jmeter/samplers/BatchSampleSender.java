@@ -57,7 +57,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
 
     private final RemoteSampleListener listener;
 
-    private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
+    private final List<SampleEvent> sampleStore = new ArrayList<>();
 
     // Server-only work item
     private transient long batchSendTime = -1;

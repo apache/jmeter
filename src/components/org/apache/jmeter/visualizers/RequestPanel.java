@@ -51,7 +51,7 @@ public class RequestPanel {
      * and Create Request Panel
      */
     public RequestPanel() {
-        listRequestView = new LinkedList<RequestView>();
+        listRequestView = new LinkedList<>();
         List<String> classesToAdd = Collections.<String> emptyList();
         try {
             classesToAdd = JMeterUtils.findClassesThatExtend(RequestView.class);

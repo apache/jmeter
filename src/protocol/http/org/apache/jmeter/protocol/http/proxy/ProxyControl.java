@@ -364,11 +364,11 @@ public class ProxyControl extends GenericController {
     }
 
     public void setIncludeList(Collection<String> list) {
-        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet<String>(list)));
+        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet<>(list)));
     }
 
     public void setExcludeList(Collection<String> list) {
-        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet<String>(list)));
+        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet<>(list)));
     }
 
     /**
@@ -1039,7 +1039,7 @@ public class ProxyControl extends GenericController {
     // TODO - could be converted to generic class?
     private Collection<?> findApplicableElements(JMeterTreeNode myTarget, Class<? extends TestElement> myClass, boolean ascending) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        LinkedList<TestElement> elements = new LinkedList<TestElement>();
+        LinkedList<TestElement> elements = new LinkedList<>();
 
         // Look for elements directly within the HTTP proxy:
         Enumeration<?> kids = treeModel.getNodeOf(this).children();

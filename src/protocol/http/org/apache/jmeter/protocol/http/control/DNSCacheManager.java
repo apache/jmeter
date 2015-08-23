@@ -100,7 +100,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     public Object clone() {
         DNSCacheManager clone = (DNSCacheManager) super.clone();
         clone.systemDefaultDnsResolver = new SystemDefaultDnsResolver();
-        clone.cache = new LinkedHashMap<String, InetAddress[]>();
+        clone.cache = new LinkedHashMap<>();
         CollectionProperty dnsServers = getServers();
         try {
             String[] serverNames = new String[dnsServers.size()];

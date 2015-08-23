@@ -124,7 +124,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
      * @return a panel containing the relevant components
      */
     private JPanel createClassnamePanel() {
-        List<String> possibleClasses = new ArrayList<String>();
+        List<String> possibleClasses = new ArrayList<>();
 
         try {
             // Find all the classes which implement the JavaSamplerClient
@@ -245,7 +245,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
      */
     private static final boolean checkContainsClassName(ComboBoxModel<String> model, String className) {
         int size = model.getSize();
-        Set<String> set = new HashSet<String>(size);
+        Set<String> set = new HashSet<>(size);
         for (int i = 0; i < size; i++) {
             set.add(model.getElementAt(i));
         }

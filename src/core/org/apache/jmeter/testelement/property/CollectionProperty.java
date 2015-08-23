@@ -39,7 +39,7 @@ public class CollectionProperty extends MultiProperty {
 
     public CollectionProperty() {
         super();
-        value = new ArrayList<JMeterProperty>();
+        value = new ArrayList<>();
     }
 
     @Override

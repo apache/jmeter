@@ -47,7 +47,7 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
         config.setMinEvictableIdleTimeMillis(TimeUnit.MINUTES.toMillis(3));
         config.setTimeBetweenEvictionRunsMillis(TimeUnit.MINUTES.toMillis(3));
 
-        return new GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream>(
+        return new GenericKeyedObjectPool<>(
                 new SocketOutputStreamPoolFactory(SOCKET_CONNECT_TIMEOUT_MS, SOCKET_TIMEOUT), config);
     }
     

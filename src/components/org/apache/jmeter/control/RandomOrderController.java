@@ -62,7 +62,7 @@ public class RandomOrderController extends GenericController implements Serializ
         int numElements = this.subControllersAndSamplers.size();
 
         // Create a new list containing numElements null elements.
-        List<TestElement> reordered = new ArrayList<TestElement>(this.subControllersAndSamplers.size());
+        List<TestElement> reordered = new ArrayList<>(this.subControllersAndSamplers.size());
         for (int i = 0; i < numElements; i++) {
             reordered.add(null);
         }

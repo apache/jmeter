@@ -70,7 +70,7 @@ public abstract class HTMLParser {
     private   static final float IE_10                = 10.0f;
 
     // Cache of parsers - parsers must be re-usable
-    private static final Map<String, HTMLParser> parsers = new ConcurrentHashMap<String, HTMLParser>(4);
+    private static final Map<String, HTMLParser> parsers = new ConcurrentHashMap<>(4);
 
     public static final String PARSER_CLASSNAME = "htmlParser.className"; // $NON-NLS-1$
 
@@ -147,7 +147,7 @@ public abstract class HTMLParser {
         // them roughly in order, which should be a better model of browser
         // behaviour.
 
-        Collection<URLString> col = new LinkedHashSet<URLString>();
+        Collection<URLString> col = new LinkedHashSet<>();
         return getEmbeddedResourceURLs(userAgent, html, baseUrl, new URLCollection(col),encoding);
 
         // An additional note on using HashSets to store URLs: I just

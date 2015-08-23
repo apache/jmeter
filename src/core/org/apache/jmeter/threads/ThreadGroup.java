@@ -77,7 +77,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     private transient Thread threadStarter;
 
     // List of active threads
-    private final Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
+    private final Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
 
     /**
      * Is test (still) running?

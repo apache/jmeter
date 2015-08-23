@@ -118,7 +118,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      */
     public MonitorPerformancePanel(MonitorAccumModel model, MonitorGraph graph) {
         super();
-        this.SERVERMAP = new HashMap<String, DefaultMutableTreeNode>();
+        this.SERVERMAP = new HashMap<>();
         this.MODEL = model;
         this.MODEL.addListener(this);
         this.GRAPH = graph;

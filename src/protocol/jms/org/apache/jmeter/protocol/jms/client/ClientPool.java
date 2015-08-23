@@ -35,10 +35,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ClientPool {
 
     //GuardedBy("this")
-    private static final ArrayList<Closeable> clients = new ArrayList<Closeable>();
+    private static final ArrayList<Closeable> clients = new ArrayList<>();
 
     //GuardedBy("this")
-    private static final Map<Object, Object> client_map = new ConcurrentHashMap<Object, Object>();
+    private static final Map<Object, Object> client_map = new ConcurrentHashMap<>();
 
     /**
      * Add a ReceiveClient to the ClientPool. This is so that we can make sure
