@@ -198,10 +198,8 @@ public class IncludeController extends GenericController implements ReplaceableC
         while (iter.hasNext()) {
             TestElement item = (TestElement) iter.next();
             if (!item.isEnabled()) {
-                //log.info("Removing "+item.toString());
                 tree.remove(item);
             } else {
-                //log.info("Keeping "+item.toString());
                 removeDisabledItems(tree.getTree(item));// Recursive call
             }
         }
