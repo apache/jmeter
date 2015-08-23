@@ -160,9 +160,8 @@ public class PropertyControlGui extends AbstractConfigGui implements
                 return m1.compareTo(m2);
             }
         });
-        Iterator<Map.Entry<Object, Object>> i = al.iterator();
-        while (i.hasNext()) {
-            tableModel.addRow(i.next());
+        for (Map.Entry<Object, Object> row : al) {
+            tableModel.addRow(row);
         }
 
     }

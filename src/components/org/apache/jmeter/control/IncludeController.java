@@ -67,9 +67,8 @@ public class IncludeController extends GenericController implements ReplaceableC
         clone.setIncludePath(this.getIncludePath());
         if (this.subtree != null) {
             if (this.subtree.size() == 1) {
-                Iterator<Object> itr = this.subtree.keySet().iterator();
-                while (itr.hasNext()) {
-                    this.sub = (TestElement) itr.next();
+                for (Object o : this.subtree.keySet()) {
+                    this.sub = (TestElement) o;
                 }
             }
             clone.subtree = (HashTree)this.subtree.clone();
@@ -173,9 +172,8 @@ public class IncludeController extends GenericController implements ReplaceableC
      * @return HashTree Subset within Test Fragment or Empty HashTree
      */
     private HashTree getProperBranch(HashTree tree) {
-        Iterator<Object> iter = new LinkedList<>(tree.list()).iterator();
-        while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+        for (Object o : new LinkedList<>(tree.list())) {
+            TestElement item = (TestElement) o;
 
             //if we found a TestPlan, then we are on our way to the TestFragment
             if (item instanceof TestPlan)
@@ -194,9 +192,8 @@ public class IncludeController extends GenericController implements ReplaceableC
 
 
     private void removeDisabledItems(HashTree tree) {
-        Iterator<Object> iter = new LinkedList<>(tree.list()).iterator();
-        while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+        for (Object o : new LinkedList<>(tree.list())) {
+            TestElement item = (TestElement) o;
             if (!item.isEnabled()) {
                 tree.remove(item);
             } else {

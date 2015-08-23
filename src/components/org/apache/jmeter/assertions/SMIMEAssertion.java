@@ -32,9 +32,11 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -324,17 +326,16 @@ class SMIMEAssertion {
         List<String> res = new ArrayList<>();
 
         X509Principal subject = PrincipalUtil.getSubjectX509Principal(cert);
-        Iterator<?> addressIt = subject.getValues(X509Name.EmailAddress).iterator();
-        while (addressIt.hasNext()) {
-            String address = (String) addressIt.next();
-            res.add(address);
+        Vector<?> addresses = subject.getValues(X509Name.EmailAddress);
+        for (Object address: addresses) {
+            res.add((String) address);
         }
 
-        Iterator<?> subjectAltNamesIt = 
-            X509ExtensionUtil.getSubjectAlternativeNames(cert).iterator();
-        while (subjectAltNamesIt.hasNext()) {
-            List<?> altName = (List<?>) subjectAltNamesIt.next();
-            int type = ((Integer) altName.get(0)).intValue();
+        Collection<?> subjectAltNames =
+            X509ExtensionUtil.getSubjectAlternativeNames(cert);
+        for (Object altNameObj : subjectAltNames) {
+            List<?> altName = (List<?>) altNameObj;
+            int type = (Integer) altName.get(0);
             if (type == GeneralName.rfc822Name) {
                 String address = (String) altName.get(1);
                 res.add(address);
