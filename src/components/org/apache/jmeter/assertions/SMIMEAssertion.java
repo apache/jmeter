@@ -303,7 +303,7 @@ class SMIMEAssertion {
      * 
      * @param serialString
      *            the String representation of the serial Number
-     * @return
+     * @return the BitInteger representation of the serial Number
      */
     private static BigInteger readSerialNumber(String serialString) {
         if (serialString.startsWith("0x") || serialString.startsWith("0X")) { // $NON-NLS-1$  // $NON-NLS-2$
@@ -315,7 +315,7 @@ class SMIMEAssertion {
     /**
      * Extract email addresses from a certificate
      * 
-     * @param cert
+     * @param cert the X509 certificate
      * @return a List of all email addresses found
      * @throws CertificateException
      */
@@ -347,7 +347,6 @@ class SMIMEAssertion {
     /**
      * Check if the Bouncycastle jce provider is installed and dynamically load
      * it, if needed;
-     * 
      */
     private static void checkForBouncycastle() {
         if (null == Security.getProvider("BC")) { // $NON-NLS-1$
