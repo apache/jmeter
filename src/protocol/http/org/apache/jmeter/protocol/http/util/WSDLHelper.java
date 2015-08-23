@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -320,7 +321,7 @@ public class WSDLHelper {
      * @return Node[]
      */
     public Object[] getSOAPBindings() {
-        ArrayList<Element> list = new ArrayList<>();
+        List<Element> list = new ArrayList<>();
         NodeList bindings = WSDLDOC.getElementsByTagNameNS(WSDL_NAMESPACE,"binding");
         for (int idx = 0; idx < bindings.getLength(); idx++) {
             Element nd = (Element) bindings.item(idx);
@@ -357,7 +358,7 @@ public class WSDLHelper {
      */
     public Object[] getOperations() {
         Object[] res = this.getSOAPBindings();
-        ArrayList<Element> ops = new ArrayList<>();
+        List<Element> ops = new ArrayList<>();
         // first we iterate through the bindings
         for (int idx = 0; idx < res.length; idx++) {
             Element one = (Element) res[idx];

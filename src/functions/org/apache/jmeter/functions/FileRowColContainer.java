@@ -140,11 +140,11 @@ public class FileRowColContainer {
     /**
      * Splits the line according to the specified delimiter
      *
-     * @return an ArrayList of Strings containing one element for each value in
+     * @return a List of Strings containing one element for each value in
      *         the line
      */
     private static List<String> splitLine(String theLine, String delim) {
-        ArrayList<String> result = new ArrayList<>();
+        List<String> result = new ArrayList<>();
         StringTokenizer tokener = new StringTokenizer(theLine, delim, true);
         /*
          * the beginning of the line is a "delimiter" so that ,a,b,c returns ""
