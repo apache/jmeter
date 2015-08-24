@@ -18,24 +18,6 @@
 
 package org.apache.jmeter.protocol.jdbc;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -45,6 +27,14 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.sql.*;
+import java.sql.Date;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A base class for all JDBC test elements handling the basics of a SQL request.
@@ -321,7 +311,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     if (argument.equals(NULL_MARKER)){
                         pstmt.setNull(i+1, targetSqlType);
                     } else {
-                        pstmt.setObject(i+1, argument, targetSqlType);
+                        setArgument(pstmt, argument, targetSqlType, i+1);
                     }
                 }
                 if (OUT.equalsIgnoreCase(inputOutput)||INOUT.equalsIgnoreCase(inputOutput)) {
@@ -336,6 +326,44 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
         }
         return outputs;
+    }
+
+    private void setArgument(PreparedStatement pstmt, String argument, int targetSqlType, int index) throws SQLException {
+        switch (targetSqlType) {
+        case Types.INTEGER:
+            pstmt.setInt(index, Integer.parseInt(argument));
+            break;
+        case Types.DOUBLE:
+        case Types.DECIMAL:
+            pstmt.setDouble(index, Double.parseDouble(argument));
+            break;
+        case Types.VARCHAR:
+            pstmt.setString(index, argument);
+            break;
+        case Types.BOOLEAN:
+            pstmt.setBoolean(index, Boolean.parseBoolean(argument));
+            break;
+        case Types.BIGINT:
+            pstmt.setLong(index, Long.parseLong(argument));
+            break;
+        case Types.DATE:
+            pstmt.setDate(index, Date.valueOf(argument));
+            break;
+        case Types.FLOAT:
+            pstmt.setFloat(index, Float.parseFloat(argument));
+            break;
+        case Types.TIMESTAMP:
+            pstmt.setTimestamp(index, Timestamp.valueOf(argument));
+            break;
+        case Types.TIME:
+            pstmt.setTime(index, Time.valueOf(argument));
+            break;
+        case Types.NULL:
+            pstmt.setNull(index, targetSqlType);
+            break;
+        default:
+            pstmt.setObject(index, argument, targetSqlType);
+        }
     }
 
 
