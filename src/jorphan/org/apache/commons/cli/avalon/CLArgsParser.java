@@ -153,9 +153,9 @@ public final class CLArgsParser {
      * @return the descriptor
      */
     private final CLOptionDescriptor getDescriptorFor(final int id) {
-        for (int i = 0; i < m_optionDescriptors.length; i++) {
-            if (m_optionDescriptors[i].getId() == id) {
-                return m_optionDescriptors[i];
+        for (CLOptionDescriptor optionDescriptor : m_optionDescriptors) {
+            if (optionDescriptor.getId() == id) {
+                return optionDescriptor;
             }
         }
 
@@ -170,9 +170,9 @@ public final class CLArgsParser {
      * @return the descriptor
      */
     private final CLOptionDescriptor getDescriptorFor(final String name) {
-        for (int i = 0; i < m_optionDescriptors.length; i++) {
-            if (m_optionDescriptors[i].getName().equals(name)) {
-                return m_optionDescriptors[i];
+        for (CLOptionDescriptor optionDescriptor : m_optionDescriptors) {
+            if (optionDescriptor.getName().equals(name)) {
+                return optionDescriptor;
             }
         }
 
@@ -277,8 +277,8 @@ public final class CLArgsParser {
             final CLOption option = arguments.elementAt(i);
             final int id = option.getDescriptor().getId();
 
-            for (int j = 0; j < incompatible.length; j++) {
-                if (id == incompatible[j]) {
+            for (int anIncompatible : incompatible) {
+                if (id == anIncompatible) {
                     final CLOption originalOption = arguments.elementAt(original);
                     final int originalId = originalOption.getDescriptor().getId();
 
@@ -495,8 +495,8 @@ public final class CLArgsParser {
     }
 
     private final boolean isSeparator(final char ch, final char[] separators) {
-        for (int i = 0; i < separators.length; i++) {
-            if (ch == separators[i]) {
+        for (char separator : separators) {
+            if (ch == separator) {
                 return true;
             }
         }
@@ -668,8 +668,7 @@ public final class CLArgsParser {
         final int size = m_options.size();
         m_optionIndex = new Hashtable<>(size * 2);
 
-        for (int i = 0; i < size; i++) {
-            final CLOption option = m_options.get(i);
+        for (final CLOption option : m_options) {
             final CLOptionDescriptor optionDescriptor = getDescriptorFor(option.getDescriptor().getId());
 
             m_optionIndex.put(Integer.valueOf(option.getDescriptor().getId()), option);
