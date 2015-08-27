@@ -36,14 +36,12 @@ class ClassFilter {
 
     private boolean include(String text) {
         if (pkgs.length == 0) return true; // i.e. no filter
-        boolean inc = false;
-        for (int idx=0; idx < pkgs.length; idx++) {
-            if (text.startsWith(pkgs[idx])){
-                inc = true;
-                break;
+        for (String pkg : pkgs) {
+            if (text.startsWith(pkg)) {
+                return true;
             }
         }
-        return inc;
+        return false;
     }
 
     String[] filterArray(List<String> items) {

@@ -316,15 +316,12 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     private String encode(String value)  {
         StringBuilder newValue = new StringBuilder();
         char[] chars = value.toCharArray();
-        for (int i = 0; i < chars.length; i++)
-        {
-            if (chars[i] == '\\')//$NON-NLS-1$
+        for (char c : chars) {
+            if (c == '\\')//$NON-NLS-1$
             {
                 newValue.append("\\\\");//$NON-NLS-1$
-            }
-            else
-            {
-                newValue.append(chars[i]);
+            } else {
+                newValue.append(c);
             }
         }
         return newValue.toString();

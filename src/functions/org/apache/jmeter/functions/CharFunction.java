@@ -56,14 +56,14 @@ public class CharFunction extends AbstractFunction {
             throws InvalidVariableException {
 
         StringBuilder sb = new StringBuilder(values.length);
-        for (int i=0; i < values.length; i++){
-            String numberString = ((CompoundVariable) values[i]).execute().trim();
+        for (Object val : values) {
+            String numberString = ((CompoundVariable) val).execute().trim();
             try {
-                long value=Long.decode(numberString).longValue();
+                long value = Long.decode(numberString).longValue();
                 char ch = (char) value;
                 sb.append(ch);
-            } catch (NumberFormatException e){
-                log.warn("Could not parse "+numberString+" : "+e);
+            } catch (NumberFormatException e) {
+                log.warn("Could not parse " + numberString + " : " + e);
             }
         }
         return sb.toString();

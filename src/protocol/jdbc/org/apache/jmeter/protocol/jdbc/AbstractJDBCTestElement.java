@@ -85,11 +85,11 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 
         //Get all fields in java.sql.Types and store the corresponding int values
         Field[] fields = java.sql.Types.class.getFields();
-        for (int i=0; i<fields.length; i++) {
+        for (Field field : fields) {
             try {
-                String name = fields[i].getName();
-                Integer value = (Integer)fields[i].get(null);
-                mapJdbcNameToInt.put(name.toLowerCase(java.util.Locale.ENGLISH),value);
+                String name = field.getName();
+                Integer value = (Integer) field.get(null);
+                mapJdbcNameToInt.put(name.toLowerCase(java.util.Locale.ENGLISH), value);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e); // should not happen
             }
@@ -431,7 +431,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         
 
         JMeterVariables jmvars = getThreadContext().getVariables();
-        String varnames[] = getVariableNames().split(COMMA);
+        String varNames[] = getVariableNames().split(COMMA);
         String resultVariable = getResultVariable().trim();
         List<Map<String, Object> > results = null;
         if(resultVariable.length() > 0) {
@@ -460,8 +460,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 } else {
                     sb.append('\t');
                 }
-                if (i <= varnames.length) { // i starts at 1
-                    String name = varnames[i - 1].trim();
+                if (i <= varNames.length) { // i starts at 1
+                    String name = varNames[i - 1].trim();
                     if (name.length()>0){ // Save the value in the variable if present
                         jmvars.put(name+UNDERSCORE+j, o == null ? null : o.toString());
                     }
@@ -469,16 +469,16 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
         }
         // Remove any additional values from previous sample
-        for(int i=0; i < varnames.length; i++){
-            String name = varnames[i].trim();
-            if (name.length()>0 && jmvars != null){
-                final String varCount = name+"_#"; // $NON-NLS-1$
+        for (String varName : varNames) {
+            String name = varName.trim();
+            if (name.length() > 0 && jmvars != null) {
+                final String varCount = name + "_#"; // $NON-NLS-1$
                 // Get the previous count
                 String prevCount = jmvars.get(varCount);
-                if (prevCount != null){
+                if (prevCount != null) {
                     int prev = Integer.parseInt(prevCount);
-                    for (int n=j+1; n <= prev; n++ ){
-                        jmvars.remove(name+UNDERSCORE+n);
+                    for (int n = j + 1; n <= prev; n++) {
+                        jmvars.remove(name + UNDERSCORE + n);
                     }
                 }
                 jmvars.put(varCount, Integer.toString(j)); // save the current count
