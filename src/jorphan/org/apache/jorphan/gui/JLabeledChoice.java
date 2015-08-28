@@ -210,7 +210,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     public String[] getItems() {
         String[] items = new String[choiceList.getItemCount()];
         for (int i = 0; i < items.length; i++) {
-            items[i] = (String) choiceList.getItemAt(i);
+            items[i] = choiceList.getItemAt(i);
         }
         return items;
     }
