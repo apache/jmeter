@@ -29,6 +29,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -42,7 +43,7 @@ import org.apache.log.Logger;
  * information on writing Java code to be executed by this sampler.
  *
  */
-public class JavaSampler extends AbstractSampler implements TestStateListener {
+public class JavaSampler extends AbstractSampler implements TestStateListener, Interruptible {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -333,5 +334,14 @@ public class JavaSampler extends AbstractSampler implements TestStateListener {
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+
+    @Override
+    public boolean interrupt() {
+        if (javaClient instanceof Interruptible) {
+            return ((Interruptible) javaClient).interrupt();
+            
+        }
+        return false;
     }
 }
