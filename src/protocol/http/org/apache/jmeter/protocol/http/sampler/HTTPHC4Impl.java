@@ -349,8 +349,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
-                InputStream instream = entity.getContent();
-                res.setResponseData(readResponse(res, instream, (int) entity.getContentLength()));
+                res.setResponseData(readResponse(res, entity.getContent(), (int) entity.getContentLength()));
             }
             
             res.sampleEnd(); // Done with the sampling proper.
