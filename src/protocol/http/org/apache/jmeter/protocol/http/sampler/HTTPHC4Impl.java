@@ -915,7 +915,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if (hostParts.length > 1) {
             String portString = hostParts[hostParts.length - 1];
             if (portString.matches("^\\d+$")) {
-                return Integer.valueOf(portString);
+                return Integer.parseInt(portString);
             }
         }
         return defaultValue;

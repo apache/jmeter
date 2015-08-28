@@ -335,8 +335,8 @@ class SMIMEAssertion {
             X509ExtensionUtil.getSubjectAlternativeNames(cert);
         for (Object altNameObj : subjectAltNames) {
             List<?> altName = (List<?>) altNameObj;
-            int type = (Integer) altName.get(0);
-            if (type == GeneralName.rfc822Name) {
+            Integer type = (Integer) altName.get(0);
+            if (type.intValue() == GeneralName.rfc822Name) {
                 String address = (String) altName.get(1);
                 res.add(address);
             }
