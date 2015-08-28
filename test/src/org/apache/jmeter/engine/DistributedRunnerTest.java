@@ -116,7 +116,7 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
     }
 
     private static class DistributedRunnerEmul extends DistributedRunner {
-        public List<EmulatorEngine> engines = new LinkedList<EmulatorEngine>();
+        public List<EmulatorEngine> engines = new LinkedList<>();
 
         @Override
         protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException, MalformedURLException {

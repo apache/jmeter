@@ -402,8 +402,8 @@ public class TestHTMLParser extends JMeterTestCase {
                 expected = getFile(resultFile).iterator();
             } else {
                 // Convert both to Sets
-                expected = new TreeSet<String>(getFile(resultFile)).iterator();
-                TreeSet<URL> temp = new TreeSet<URL>(new Comparator<Object>() {
+                expected = new TreeSet<>(getFile(resultFile)).iterator();
+                TreeSet<URL> temp = new TreeSet<>(new Comparator<Object>() {
                     @Override
                     public int compare(Object o1, Object o2) {
                         return (o1.toString().compareTo(o2.toString()));
@@ -429,7 +429,7 @@ public class TestHTMLParser extends JMeterTestCase {
 
         // Get expected results as a List
         private static List<String> getFile(String file) throws Exception {
-            ArrayList<String> al = new ArrayList<String>();
+            ArrayList<String> al = new ArrayList<>();
             if (file != null && file.length() > 0) {
                 BufferedReader br = new BufferedReader(new FileReader(findTestFile(file)));
                 String line = br.readLine();

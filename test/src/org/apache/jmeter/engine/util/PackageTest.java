@@ -48,7 +48,7 @@ public class PackageTest extends JMeterTestCase {
     @Override
     public void setUp() {
         jmctx = JMeterContextService.getContext();
-        Map<String, String> variables = new HashMap<String, String>();
+        Map<String, String> variables = new HashMap<>();
         variables.put("my_regex", ".*");
         variables.put("server", "jakarta.apache.org");
         SampleResult result = new SampleResult();

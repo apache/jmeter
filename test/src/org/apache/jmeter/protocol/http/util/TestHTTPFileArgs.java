@@ -55,7 +55,7 @@ public class TestHTTPFileArgs extends TestCase {
     }
 
     public void testSetHTTPFileArgs() throws Exception {
-        List<HTTPFileArg> newHTTPFileArgs = new LinkedList<HTTPFileArg>();
+        List<HTTPFileArg> newHTTPFileArgs = new LinkedList<>();
         newHTTPFileArgs.add(new HTTPFileArg("hede"));
         HTTPFileArgs files = new HTTPFileArgs();
         files.setHTTPFileArgs(newHTTPFileArgs);

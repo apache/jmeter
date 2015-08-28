@@ -252,7 +252,7 @@ public class TestSwitchController extends JMeterTestCase {
         */
         public void testFunction() throws Exception {
             JMeterContext jmctx = JMeterContextService.getContext();
-            Map<String, String> variables = new HashMap<String, String>();
+            Map<String, String> variables = new HashMap<>();
             ReplaceStringWithFunctions transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
             jmctx.setVariables(new JMeterVariables());
             JMeterVariables jmvars = jmctx.getVariables();
