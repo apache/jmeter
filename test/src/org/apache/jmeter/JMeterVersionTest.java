@@ -43,7 +43,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class JMeterVersionTest extends JMeterTestCase {
 
     // Convert between eclipse jar name and build.properties name
-    private static Map<String, String> JAR_TO_BUILD_PROP = new HashMap<String, String>();
+    private static Map<String, String> JAR_TO_BUILD_PROP = new HashMap<>();
     static {
         JAR_TO_BUILD_PROP.put("bsf", "apache-bsf");
         JAR_TO_BUILD_PROP.put("bsh", "beanshell");
@@ -66,8 +66,8 @@ public class JMeterVersionTest extends JMeterTestCase {
         super(arg0);
     }
 
-    private final Map<String, String> versions = new HashMap<String, String>();
-    private final Set<String> propNames = new HashSet<String>();
+    private final Map<String, String> versions = new HashMap<>();
+    private final Set<String> propNames = new HashSet<>();
 
     private File getFileFromHome(String relativeFile) {
         return new File(JMETER_HOME, relativeFile);
@@ -112,7 +112,7 @@ public class JMeterVersionTest extends JMeterTestCase {
         final Pattern p = Pattern.compile("\\s+<classpathentry kind=\"lib\" path=\"lib/(?:api/)?(.+?)-([^-]+(-b\\d+|-BETA\\d)?)\\.jar\"/>");
         final Pattern versionPat = Pattern.compile("\\$\\{(.+)\\.version\\}");
         String line;
-        final ArrayList<String> toRemove = new ArrayList<String>();
+        final ArrayList<String> toRemove = new ArrayList<>();
         while((line=eclipse.readLine()) != null){
             final Matcher m = p.matcher(line);
             if (m.matches()) {
@@ -191,7 +191,7 @@ public class JMeterVersionTest extends JMeterTestCase {
    }
 
     public void testLicences() {
-        Set<String> liceNames = new HashSet<String>();
+        Set<String> liceNames = new HashSet<>();
         for (Map.Entry<String, String> me : versions.entrySet()) {
         final String key = me.getKey();
             liceNames.add(key+"-"+me.getValue()+".txt");

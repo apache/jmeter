@@ -126,12 +126,12 @@ public class TestCacheManager extends JMeterTestCase {
         
         public HttpURLConnectionStub(HttpMethod method, URL url) {
             super(method, url);
-            this.properties = new HashMap<String, List<String>>();
+            this.properties = new HashMap<>();
         }
         
         @Override
         public void addRequestProperty(String key, String value) {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             list.add(value);
             this.properties.put(key, list);
         }

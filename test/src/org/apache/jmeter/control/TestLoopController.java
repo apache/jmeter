@@ -94,7 +94,7 @@ public class TestLoopController extends JMeterTestCase {
         public void testBug54467() throws Exception {
             JMeterContext jmctx = JMeterContextService.getContext();
             LoopController loop = new LoopController();
-            Map<String, String> variables = new HashMap<String, String>();
+            Map<String, String> variables = new HashMap<>();
             ReplaceStringWithFunctions transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
             jmctx.setVariables(new JMeterVariables());
 

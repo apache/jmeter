@@ -892,7 +892,7 @@ public class PostWriterTest extends TestCase {
      */
     private static class StubURLConnection extends HttpURLConnection {
         private ByteArrayOutputStream output = new ByteArrayOutputStream();
-        private Map<String, String> properties = new HashMap<String, String>();
+        private Map<String, String> properties = new HashMap<>();
         
         public StubURLConnection(String url) throws MalformedURLException {
             super(new URL(url));
