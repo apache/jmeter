@@ -165,8 +165,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void process(HttpResponse response, HttpContext context)
                 throws HttpException, IOException {
-            HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
-            HttpConnectionMetrics metrics = conn.getMetrics();
+            HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION)).getMetrics();
             context.setAttribute(CONTEXT_METRICS, metrics);
         }
     };
@@ -174,8 +173,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void process(HttpRequest request, HttpContext context)
                 throws HttpException, IOException {
-            HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
-            HttpConnectionMetrics metrics = conn.getMetrics();
+            HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION)).getMetrics();
             metrics.reset();
         }
     };
