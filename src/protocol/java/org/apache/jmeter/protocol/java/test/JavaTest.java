@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -67,7 +68,7 @@ import org.apache.log.Logger;
  *
  */
 
-public class JavaTest extends AbstractJavaSamplerClient implements Serializable {
+public class JavaTest extends AbstractJavaSamplerClient implements Serializable, Interruptible {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
@@ -149,6 +150,8 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
 
     /** The name used to store the Success Status parameter. */
     private static final String SUCCESS_NAME = "Status";
+
+    private volatile Thread myThread;
 
     /**
      * Default constructor for <code>JavaTest</code>.
@@ -300,12 +303,14 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
             // Execute the sample. In this case sleep for the
             // specified time, if any
             if (sleep > 0) {
+                myThread = Thread.currentThread();
                 TimeUnit.MILLISECONDS.sleep(sleep);
+                myThread = null;
             }
             results.setSuccessful(success);
         } catch (InterruptedException e) {
             LOG.warn("JavaTest: interrupted.");
-            results.setSuccessful(true);
+            results.setSuccessful(false);
         } catch (Exception e) {
             LOG.error("JavaTest: error during sample", e);
             results.setSuccessful(false);
@@ -350,4 +355,12 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
         return sb.toString();
     }
 
+    @Override
+    public boolean interrupt() {
+        Thread t = myThread;
+        if (t!= null) {
+            t.interrupt();
+        }
+        return t != null;
+    }
 }
