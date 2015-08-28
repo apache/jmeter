@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -47,7 +48,7 @@ import org.apache.log.Logger;
  *
  * @version $Revision$
  */
-public class SleepTest extends AbstractJavaSamplerClient implements Serializable {
+public class SleepTest extends AbstractJavaSamplerClient implements Serializable, Interruptible {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
@@ -76,6 +77,8 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
 
     // The name of the sampler
     private String name;
+
+    private volatile Thread myThread;
 
     /**
      * Default constructor for <code>SleepTest</code>.
@@ -148,14 +151,16 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
             // Record sample start time.
             results.sampleStart();
 
+            myThread = Thread.currentThread();
             // Execute the sample. In this case sleep for the
             // specified time.
             TimeUnit.MILLISECONDS.sleep(sleep);
+            myThread = null;
 
             results.setSuccessful(true);
         } catch (InterruptedException e) {
             LOG.warn("SleepTest: interrupted.");
-            results.setSuccessful(true);
+            results.setSuccessful(false);
             results.setResponseMessage(e.toString());
         } catch (Exception e) {
             LOG.error("SleepTest: error during sample", e);
@@ -218,5 +223,14 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
         sb.append("@");
         sb.append(Integer.toHexString(hashCode()));
         return sb.toString();
+    }
+
+    @Override
+    public boolean interrupt() {
+        Thread t = myThread;
+        if (t!= null) {
+            t.interrupt();
+        }
+        return t != null;
     }
 }
