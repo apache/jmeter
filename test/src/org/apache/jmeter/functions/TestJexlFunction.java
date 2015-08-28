@@ -53,7 +53,7 @@ public class TestJexlFunction extends JMeterTestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<CompoundVariable>();
+        params = new LinkedList<>();
     }
 
     public void testParameterCount() throws Exception {

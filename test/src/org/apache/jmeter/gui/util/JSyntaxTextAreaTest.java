@@ -42,7 +42,7 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
   
     public void testSyntaxNames() throws IllegalArgumentException,
             IllegalAccessException {
-        HashSet<String> values = new HashSet<String>();
+        HashSet<String> values = new HashSet<>();
         for (Field field : SyntaxConstants.class.getFields()) {
             int modifiers = field.getModifiers();
             if (field.getType().equals(String.class)

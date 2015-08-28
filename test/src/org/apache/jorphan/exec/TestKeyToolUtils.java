@@ -45,7 +45,7 @@ public class TestKeyToolUtils extends TestCase {
      */
     public void testCheckKeytool() throws Exception {
         SystemCommand sc = new SystemCommand(null, null);
-        List<String> arguments = new ArrayList<String>();
+        List<String> arguments = new ArrayList<>();
         arguments.add("xyzqwas"); // should not exist
         try {
             int status = sc.run(arguments);

@@ -161,7 +161,7 @@ public class JMeterTest extends JMeterTestCase {
      * Extract titles from component_reference.xml
      */
     public void createTitleSet() throws Exception {
-        guiTitles = new HashMap<String, Boolean>(90);
+        guiTitles = new HashMap<>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
         SAXBuilder bldr = new SAXBuilder();
@@ -191,7 +191,7 @@ public class JMeterTest extends JMeterTestCase {
      * Extract titles from component_reference.xml
      */
     public void createTagSet() throws Exception {
-        guiTags = new HashMap<String, Boolean>(90);
+        guiTags = new HashMap<>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
         SAXBuilder bldr = new SAXBuilder();
@@ -215,7 +215,7 @@ public class JMeterTest extends JMeterTestCase {
      * Extract titles from functions.xml
      */
     public void createFunctionSet() throws Exception {
-        funcTitles = new HashMap<String, Boolean>(20);
+        funcTitles = new HashMap<>(20);
 
         String compref = "../xdocs/usermanual/functions.xml";
         SAXBuilder bldr = new SAXBuilder();
@@ -559,7 +559,7 @@ public class JMeterTest extends JMeterTestCase {
         Object myThis = "";
         Iterator<String> classes = ClassFinder
                 .findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { extendsClass }).iterator();
-        List<Object> objects = new LinkedList<Object>();
+        List<Object> objects = new LinkedList<>();
         String n = "";
         boolean caughtError = true;
         Throwable caught = null;

@@ -177,7 +177,7 @@ public class PackageTest extends TestCase {
      * 
      */
     private void check(String resname, boolean checkUnexpected) throws Exception {
-        ArrayList<String> alf = new ArrayList<String>(500);// holds keys from file
+        ArrayList<String> alf = new ArrayList<>(500);// holds keys from file
         String res = getResName(resname);
         subTestFailures += readRF(res, alf);
         Collections.sort(alf);
@@ -238,7 +238,7 @@ public class PackageTest extends TestCase {
      * @return list of properties files subject to I18N
      */
     public static final String[] getResources(File srcFiledir) {
-        Set<String> set = new TreeSet<String>();
+        Set<String> set = new TreeSet<>();
         findFile(srcFiledir, set, new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -336,7 +336,7 @@ public class PackageTest extends TestCase {
      * @throws Exception if something fails
      */
     public void checkI18n() throws Exception {
-        Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();
+        Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<>();
         for (String prefix : prefixList) {
             Properties messages = new Properties();
             messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefix.substring(1)+".properties"));
@@ -360,7 +360,7 @@ public class PackageTest extends TestCase {
         String languageBundle = bundlePath+"_"+language+ ".properties";
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle);
         if(inputStream == null) {
-            Map<String, String> messagesAsProperties = new HashMap<String, String>();
+            Map<String, String> messagesAsProperties = new HashMap<>();
             for (Iterator<Map.Entry<Object, Object>> iterator = messages.entrySet().iterator(); iterator.hasNext();) {
                 Map.Entry<Object, Object> entry = iterator.next();
                 messagesAsProperties.put((String) entry.getKey(), (String) entry.getValue()); 
@@ -370,7 +370,7 @@ public class PackageTest extends TestCase {
         }
         messagesFr.load(inputStream);
     
-        Map<String, String> missingLabels = new TreeMap<String,String>();
+        Map<String, String> missingLabels = new TreeMap<>();
         for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
             Map.Entry<Object,Object> entry = iterator.next();
             String key = (String)entry.getKey();

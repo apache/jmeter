@@ -61,7 +61,7 @@ public class TestValueReplacer extends JMeterTestCase {
             assertTrue(replacer.containsKey("server"));
             TestElement element = new TestPlan();
             element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
-            List<Object> argsin = new ArrayList<Object>();
+            List<Object> argsin = new ArrayList<>();
             argsin.add("username is jack");
             argsin.add("his_password");
             element.setProperty(new CollectionProperty("args", argsin));
@@ -81,7 +81,7 @@ public class TestValueReplacer extends JMeterTestCase {
             assertTrue(replacer.containsKey("normal_regex"));
             TestElement element = new TestPlan();
             element.setProperty(new StringProperty("domain", "<this><is>xml</this></is>"));
-            List<Object> argsin = new ArrayList<Object>();
+            List<Object> argsin = new ArrayList<>();
             argsin.add("<this><is>xml</this></is>");
             argsin.add("And I say: Hello World.");
             element.setProperty(new CollectionProperty("args", argsin));

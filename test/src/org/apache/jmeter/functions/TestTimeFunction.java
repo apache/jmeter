@@ -52,7 +52,7 @@ public class TestTimeFunction extends JMeterTestCase {
             vars = new JMeterVariables();
             jmctx.setVariables(vars);
             jmctx.setPreviousResult(result);
-            params = new LinkedList<CompoundVariable>();
+            params = new LinkedList<>();
             result = new SampleResult();
             variable = new TimeFunction();
         }

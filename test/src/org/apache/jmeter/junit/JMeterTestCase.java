@@ -137,7 +137,7 @@ public abstract class JMeterTestCase extends TestCase {
 
     protected void checkInvalidParameterCounts(AbstractFunction func, int minimum)
             throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         for (int c = 0; c < minimum; c++) {
             try {
                 func.setParameters(parms);
@@ -152,7 +152,7 @@ public abstract class JMeterTestCase extends TestCase {
     
     protected void checkInvalidParameterCounts(AbstractFunction func, int min,
             int max) throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         for (int count = 0; count < min; count++) {
             try {
                 func.setParameters(parms);

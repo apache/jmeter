@@ -731,7 +731,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (temp != null) {
             return temp.list();
         }
-        return new HashSet<Object>();
+        return new HashSet<>();
     }
 
     /**
@@ -778,7 +778,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (tree != null) {
             return tree.list();
         }
-        return new HashSet<Object>();
+        return new HashSet<>();
     }
 
     /**

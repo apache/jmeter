@@ -64,7 +64,7 @@ public class PackageTest extends JMeterTestCase {
     // Create the CSVRead function and set its parameters.
     private static CSVRead setCSVReadParams(String p1, String p2) throws Exception {
         CSVRead cr = new CSVRead();
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         if (p1 != null) {
             parms.add(new CompoundVariable(p1));
         }
@@ -78,7 +78,7 @@ public class PackageTest extends JMeterTestCase {
     // Create the StringFromFile function and set its parameters.
     private static StringFromFile SFFParams(String p1, String p2, String p3, String p4) throws Exception {
         StringFromFile sff = new StringFromFile();
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         if (p1 != null) {
             parms.add(new CompoundVariable(p1));
         }
@@ -98,7 +98,7 @@ public class PackageTest extends JMeterTestCase {
     // Create the SplitFile function and set its parameters.
     private static SplitFunction splitParams(String p1, String p2, String p3) throws Exception {
         SplitFunction split = new SplitFunction();
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         parms.add(new CompoundVariable(p1));
         if (p2 != null) {
             parms.add(new CompoundVariable(p2));
@@ -118,7 +118,7 @@ public class PackageTest extends JMeterTestCase {
     }
 
     private static Collection<CompoundVariable> makeParams(String p1, String p2, String p3) {
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         if (p1 != null) {
             parms.add(new CompoundVariable(p1));
         }
@@ -823,7 +823,7 @@ public class PackageTest extends JMeterTestCase {
     }
 
     private XPath setupXPath(String file, String expr) throws Exception{
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         parms.add(new CompoundVariable(file));
         parms.add(new CompoundVariable(expr));
         XPath xp = new XPath();
@@ -961,7 +961,7 @@ public class PackageTest extends JMeterTestCase {
     
     // Perform a sum and check the results
     private void checkSum(AbstractFunction func, String value, String [] addends)  throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         for (int i=0; i< addends.length; i++){
             parms.add(new CompoundVariable(addends[i]));
         }
@@ -972,7 +972,7 @@ public class PackageTest extends JMeterTestCase {
     }
     // Perform a sum and check the results
     private void checkSumNoVar(AbstractFunction func, String value, String [] addends)  throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
+        Collection<CompoundVariable> parms = new LinkedList<>();
         for (int i=0; i< addends.length; i++){
             parms.add(new CompoundVariable(addends[i]));
         }
