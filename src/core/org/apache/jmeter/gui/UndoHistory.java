@@ -318,7 +318,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
             for (int rowN = 0; rowN < tree.getRowCount(); rowN++) {
                 if (tree.isExpanded(rowN)) {
-                    savedExpanded.add(rowN);
+                    savedExpanded.add(Integer.valueOf(rowN));
                 }
             }
         }
