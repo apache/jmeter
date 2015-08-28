@@ -526,7 +526,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             int cpt = 0;
             for (BarGraph bar : eltList) {
                 if (bar.getChkBox().isSelected()) {
-                    int col = model.findColumn((String) columnsList.getItemAt(cpt));
+                    int col = model.findColumn(columnsList.getItemAt(cpt));
                     for (int idx=0; idx < count; idx++) {
                         data[s][idx] = ((Number)model.getValueAt(idx,col)).doubleValue();
                     }
