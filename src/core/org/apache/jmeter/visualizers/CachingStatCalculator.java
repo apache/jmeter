@@ -49,7 +49,7 @@ public class CachingStatCalculator extends SamplingStatCalculator {
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         super.clear();
         storedValues.clear();
     }
