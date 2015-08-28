@@ -240,7 +240,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         for (int i = 0; i < percentilesStringArray.length; i++) {
             if(!StringUtils.isEmpty(percentilesStringArray[i].trim())) {
                 try {
-                    Float percentileValue = Float.parseFloat(percentilesStringArray[i].trim());
+                    Float percentileValue = Float.valueOf(percentilesStringArray[i].trim());
                     okPercentiles.put(
                             METRIC_OK_PERCENTILE_PREFIX+AbstractGraphiteMetricsSender.sanitizeString(format.format(percentileValue)),
                             percentileValue);
