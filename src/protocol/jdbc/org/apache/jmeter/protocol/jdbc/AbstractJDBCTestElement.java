@@ -21,13 +21,18 @@ package org.apache.jmeter.protocol.jdbc;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -321,7 +326,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     if (argument.equals(NULL_MARKER)){
                         pstmt.setNull(i+1, targetSqlType);
                     } else {
-                        pstmt.setObject(i+1, argument, targetSqlType);
+                        setArgument(pstmt, argument, targetSqlType, i+1);
                     }
                 }
                 if (OUT.equalsIgnoreCase(inputOutput)||INOUT.equalsIgnoreCase(inputOutput)) {
@@ -336,6 +341,62 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             }
         }
         return outputs;
+    }
+
+    private void setArgument(PreparedStatement pstmt, String argument, int targetSqlType, int index) throws SQLException {
+        switch (targetSqlType) {
+        case Types.INTEGER:
+            pstmt.setInt(index, Integer.parseInt(argument));
+            break;
+        case Types.DECIMAL:
+        case Types.NUMERIC:
+            pstmt.setBigDecimal(index, new BigDecimal(argument));
+            break;
+        case Types.DOUBLE:
+        case Types.FLOAT:
+            pstmt.setDouble(index, Double.parseDouble(argument));
+            break;
+        case Types.CHAR:
+        case Types.LONGVARCHAR:
+        case Types.VARCHAR:
+            pstmt.setString(index, argument);
+            break;
+        case Types.BIT:
+        case Types.BOOLEAN:
+            pstmt.setBoolean(index, Boolean.parseBoolean(argument));
+            break;
+        case Types.BIGINT:
+            pstmt.setLong(index, Long.parseLong(argument));
+            break;
+        case Types.DATE:
+            pstmt.setDate(index, Date.valueOf(argument));
+            break;
+        case Types.REAL:
+            pstmt.setFloat(index, Float.parseFloat(argument));
+            break;
+        case Types.TINYINT:
+            pstmt.setByte(index, Byte.parseByte(argument));
+            break;
+        case Types.SMALLINT:
+            pstmt.setShort(index, Short.parseShort(argument));
+            break;
+        case Types.TIMESTAMP:
+            pstmt.setTimestamp(index, Timestamp.valueOf(argument));
+            break;
+        case Types.TIME:
+            pstmt.setTime(index, Time.valueOf(argument));
+            break;
+        case Types.BINARY:
+        case Types.VARBINARY:
+        case Types.LONGVARBINARY:
+            pstmt.setBytes(index, argument.getBytes());
+            break;
+        case Types.NULL:
+            pstmt.setNull(index, targetSqlType);
+            break;
+        default:
+            pstmt.setObject(index, argument, targetSqlType);
+        }
     }
 
 
