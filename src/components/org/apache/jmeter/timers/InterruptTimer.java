@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -11,6 +12,7 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
@@ -39,6 +41,7 @@ public class InterruptTimer extends AbstractTestElement implements Timer, Serial
      * No-arg constructor.
      */
     public InterruptTimer() {
+//        LOG.setPriority(org.apache.log.Priority.DEBUG); // for local debugging
         debug = LOG.isDebugEnabled(); // TODO is this the best place for this? 
     }
 
@@ -68,6 +71,9 @@ public class InterruptTimer extends AbstractTestElement implements Timer, Serial
      */
     @Override
     public long delay() {
+        if (debug) {
+            LOG.debug(whoAmI("delay()", this));
+        }
         if (future != null) {
             if (!future.isDone()) {
                 boolean cancelled = future.cancel(false);
@@ -90,11 +96,18 @@ public class InterruptTimer extends AbstractTestElement implements Timer, Serial
             public void run() {
                   boolean interrupted = sampler.interrupt();
                   if (interrupted) {
-                      LOG.warn("The sampler " + samp.getName() + " was interrupted.");
+                      LOG.warn("Interruped the sampler " + getInfo(samp));
+                  } else {
+                      if (debug) {
+                          LOG.debug("Did not interrupt the sampler " + getInfo(samp));                          
+                      }
                   }
             }
         };
         // schedule the interrupt to occur 
+        if (debug) {
+            LOG.debug("Scheduling timer for " + getInfo(samp));
+        }
         future = tpool.schedule(run, timeout, TimeUnit.MILLISECONDS);
         return 0;
     }
@@ -116,8 +129,26 @@ public class InterruptTimer extends AbstractTestElement implements Timer, Serial
      */
     @Override
     public void iterationStart(LoopIterationEvent event) {
+        if (debug) {
+            LOG.debug(whoAmI("iterationStart()", this));
+        }
         timeout = getPropertyAsLong(TIMEOUT);
         context = JMeterContextService.getContext(); // TODO is this called from the correct thread?
-        tpool = Executors.newScheduledThreadPool(1); // ditto
+        tpool = Executors.newScheduledThreadPool(1, // ditto
+            new ThreadFactory() {
+                public Thread newThread(Runnable r) {
+                    Thread t = Executors.defaultThreadFactory().newThread(r);
+                    t.setDaemon(true);
+                    return t;
+                }
+            });
+    }
+
+    private String whoAmI(String id, TestElement o) {
+        return id + " @" + System.identityHashCode(o)+ " '"+ o.getName() + "'";         
+    }
+
+    private String getInfo(TestElement o) {
+        return whoAmI(o.getClass().getSimpleName(), o); 
     }
 }
