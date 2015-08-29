@@ -431,9 +431,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
                 // Perform the actual sample
                 currentSampler = sampler;
-                SampleResult result = sampler.sample(null);
+                SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
                 currentSampler = null;
-                // TODO: remove this useless Entry parameter
 
                 // If we got any results, then perform processing on the result
                 if (result != null) {
