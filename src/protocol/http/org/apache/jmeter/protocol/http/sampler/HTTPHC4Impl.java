@@ -820,10 +820,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         headerBuf.append(response.getStatusLine());// header[0] is not the status line...
         headerBuf.append("\n"); // $NON-NLS-1$
 
-        for (int i = 0; i < rh.length; i++) {
-            headerBuf.append(rh[i].getName());
+        for (Header responseHeader : rh) {
+            headerBuf.append(responseHeader.getName());
             headerBuf.append(": "); // $NON-NLS-1$
-            headerBuf.append(rh[i].getValue());
+            headerBuf.append(responseHeader.getValue());
             headerBuf.append("\n"); // $NON-NLS-1$
         }
         return headerBuf.toString();
@@ -932,12 +932,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Get all the request headers
             StringBuilder hdrs = new StringBuilder(100);
             Header[] requestHeaders = method.getAllHeaders();
-            for(int i = 0; i < requestHeaders.length; i++) {
+            for (Header requestHeader : requestHeaders) {
                 // Exclude the COOKIE header, since cookie is reported separately in the sample
-                if(!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeaders[i].getName())) {
-                    hdrs.append(requestHeaders[i].getName());
+                if (!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeader.getName())) {
+                    hdrs.append(requestHeader.getName());
                     hdrs.append(": "); // $NON-NLS-1$
-                    hdrs.append(requestHeaders[i].getValue());
+                    hdrs.append(requestHeader.getValue());
                     hdrs.append("\n"); // $NON-NLS-1$
                 }
             }

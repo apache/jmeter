@@ -1196,9 +1196,7 @@ public class ProxyControl extends GenericController {
                 continue; // go on with next property.
             }
 
-            for (Iterator<ConfigTestElement> configs = configurations.iterator(); configs.hasNext();) {
-                ConfigTestElement config = configs.next();
-
+            for (ConfigTestElement config : configurations) {
                 String configValue = config.getPropertyAsString(name);
 
                 if (configValue != null && configValue.length() > 0) {
@@ -1258,9 +1256,9 @@ public class ProxyControl extends GenericController {
     private void replaceValues(TestElement sampler, TestElement[] configs, Collection<Arguments> variables) {
         // Build the replacer from all the variables in the collection:
         ValueReplacer replacer = new ValueReplacer();
-        for (Iterator<Arguments> vars = variables.iterator(); vars.hasNext();) {
-            final Map<String, String> map = vars.next().getArgumentsAsMap();
-            for (Iterator<String> vals = map.values().iterator(); vals.hasNext();){
+        for (Arguments variable : variables) {
+            final Map<String, String> map = variable.getArgumentsAsMap();
+            for (Iterator<String> vals = map.values().iterator(); vals.hasNext(); ) {
                final Object next = vals.next();
                if ("".equals(next)) {// Drop any empty values (Bug 45199)
                    vals.remove();
@@ -1272,9 +1270,9 @@ public class ProxyControl extends GenericController {
         try {
             boolean cachedRegexpMatch = regexMatch;
             replacer.reverseReplace(sampler, cachedRegexpMatch);
-            for (int i = 0; i < configs.length; i++) {
-                if (configs[i] != null) {
-                    replacer.reverseReplace(configs[i], cachedRegexpMatch);
+            for (TestElement config : configs) {
+                if (config != null) {
+                    replacer.reverseReplace(config, cachedRegexpMatch);
                 }
             }
         } catch (InvalidVariableException e) {

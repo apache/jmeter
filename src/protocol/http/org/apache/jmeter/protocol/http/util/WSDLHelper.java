@@ -267,9 +267,9 @@ public class WSDLHelper {
      * @return list of web methods
      */
     public String[] getWebMethods() {
-        for (int idx = 0; idx < SOAPOPS.length; idx++) {
+        for (Object soapOp : SOAPOPS) {
             // get the node
-            Node act = (Node) SOAPOPS[idx];
+            Node act = (Node) soapOp;
             // get the soap:operation
             NodeList opers = ((Element) act).getElementsByTagNameNS(SOAP11_BINDING_NAMESPACE, "operation");
             if (opers.getLength() == 0) {
@@ -360,8 +360,8 @@ public class WSDLHelper {
         Object[] res = this.getSOAPBindings();
         List<Element> ops = new ArrayList<>();
         // first we iterate through the bindings
-        for (int idx = 0; idx < res.length; idx++) {
-            Element one = (Element) res[idx];
+        for (Object r : res) {
+            Element one = (Element) r;
             NodeList opnodes = one.getElementsByTagNameNS(WSDL_NAMESPACE, "operation");
             // now we iterate through the operations
             for (int idz = 0; idz < opnodes.getLength(); idz++) {
@@ -411,8 +411,8 @@ public class WSDLHelper {
             help.parse();
             String[] methods = help.getWebMethods();
             System.out.println("el: " + (System.currentTimeMillis() - start));
-            for (int idx = 0; idx < methods.length; idx++) {
-                System.out.println("method name: " + methods[idx]);
+            for (String method : methods) {
+                System.out.println("method name: " + method);
             }
             System.out.println("service url: " + help.getBinding());
             System.out.println("protocol: " + help.getProtocol());

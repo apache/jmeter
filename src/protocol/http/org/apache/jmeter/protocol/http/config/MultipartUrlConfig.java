@@ -122,9 +122,9 @@ public class MultipartUrlConfig implements Serializable {
      */
     public void parseArguments(String queryString) {
         String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary()); //$NON-NLS-1$
-        for (int i = 0; i < parts.length; i++) {
-            String contentDisposition = getHeaderValue("Content-disposition", parts[i]); //$NON-NLS-1$
-            String contentType = getHeaderValue("Content-type", parts[i]); //$NON-NLS-1$
+        for (String part : parts) {
+            String contentDisposition = getHeaderValue("Content-disposition", part); //$NON-NLS-1$
+            String contentType = getHeaderValue("Content-type", part); //$NON-NLS-1$
             // Check if it is form data
             if (contentDisposition != null && contentDisposition.indexOf("form-data") > -1) { //$NON-NLS-1$
                 // Get the form field name
@@ -151,13 +151,13 @@ public class MultipartUrlConfig implements Serializable {
                     // Code also allows for LF only (not sure why - perhaps because the test code uses it?)
                     final String LF = "\n";
                     final String LFLF = "\n\n";
-                    int indexEmptyCrLfCrLfLinePos = parts[i].indexOf(CRLFCRLF); //$NON-NLS-1$
-                    int indexEmptyLfLfLinePos = parts[i].indexOf(LFLF); //$NON-NLS-1$
+                    int indexEmptyCrLfCrLfLinePos = part.indexOf(CRLFCRLF); //$NON-NLS-1$
+                    int indexEmptyLfLfLinePos = part.indexOf(LFLF); //$NON-NLS-1$
                     String value = null;
-                    if(indexEmptyCrLfCrLfLinePos > -1) {// CRLF blank line found
-                        value = parts[i].substring(indexEmptyCrLfCrLfLinePos+CRLFCRLF.length(),parts[i].lastIndexOf(CRLF));
-                    } else if(indexEmptyLfLfLinePos > -1) { // LF blank line found
-                        value = parts[i].substring(indexEmptyLfLfLinePos+LFLF.length(),parts[i].lastIndexOf(LF));
+                    if (indexEmptyCrLfCrLfLinePos > -1) {// CRLF blank line found
+                        value = part.substring(indexEmptyCrLfCrLfLinePos + CRLFCRLF.length(), part.lastIndexOf(CRLF));
+                    } else if (indexEmptyLfLfLinePos > -1) { // LF blank line found
+                        value = part.substring(indexEmptyLfLfLinePos + LFLF.length(), part.lastIndexOf(LF));
                     }
                     this.addNonEncodedArgument(name, value);
                 }

@@ -307,20 +307,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     static{
         String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
-        for (int i=0;i<parsers.length;i++){
-            final String parser = parsers[i];
-            String classname=JMeterUtils.getProperty(parser+".className");//$NON-NLS-1$
-            if (classname == null){
-                log.info("Cannot find .className property for "+parser+", using default");
-                classname="";
+        for (final String parser : parsers) {
+            String classname = JMeterUtils.getProperty(parser + ".className");//$NON-NLS-1$
+            if (classname == null) {
+                log.info("Cannot find .className property for " + parser + ", using default");
+                classname = "";
             }
-            String typelist=JMeterUtils.getProperty(parser+".types");//$NON-NLS-1$
-            if (typelist != null){
-                String []types=JOrphanUtils.split(typelist, " " , true);
-                for (int j=0;j<types.length;j++){
-                    final String type = types[j];
-                    log.info("Parser for "+type+" is "+classname);
-                    parsersForType.put(type,classname);
+            String typelist = JMeterUtils.getProperty(parser + ".types");//$NON-NLS-1$
+            if (typelist != null) {
+                String[] types = JOrphanUtils.split(typelist, " ", true);
+                for (final String type : types) {
+                    log.info("Parser for " + type + " is " + classname);
+                    parsersForType.put(type, classname);
                 }
             } else {
                 log.warn("Cannot find .types property for "+parser);
@@ -1060,9 +1058,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void parseArguments(String queryString, String contentEncoding) {
         String[] args = JOrphanUtils.split(queryString, QRY_SEP);
         final boolean isDebug = log.isDebugEnabled();
-        for (int i = 0; i < args.length; i++) {
+        for (String arg : args) {
             if (isDebug) {
-                log.debug("Arg: " + args[i]);
+                log.debug("Arg: " + arg);
             }
             // need to handle four cases:
             // - string contains name=value
@@ -1073,17 +1071,17 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             String metaData; // records the existance of an equal sign
             String name;
             String value;
-            int length = args[i].length();
-            int endOfNameIndex = args[i].indexOf(ARG_VAL_SEP);
+            int length = arg.length();
+            int endOfNameIndex = arg.indexOf(ARG_VAL_SEP);
             if (endOfNameIndex != -1) {// is there a separator?
                 // case of name=value, name=
                 metaData = ARG_VAL_SEP;
-                name = args[i].substring(0, endOfNameIndex);
-                value = args[i].substring(endOfNameIndex + 1, length);
+                name = arg.substring(0, endOfNameIndex);
+                value = arg.substring(endOfNameIndex + 1, length);
             } else {
                 metaData = "";
-                name=args[i];
-                value="";
+                name = arg;
+                value = "";
             }
             if (name.length() > 0) {
                 if (isDebug) {
@@ -1533,8 +1531,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             if (lastRes.getSubResults() != null && lastRes.getSubResults().length > 0) {
                 SampleResult[] subs = lastRes.getSubResults();
-                for (int i = 0; i < subs.length; i++) {
-                    totalRes.addSubResult(subs[i]);
+                for (SampleResult sub : subs) {
+                    totalRes.addSubResult(sub);
                 }
             } else {
                 // Only add sample if it is a sample of valid url redirect, i.e. that
@@ -1695,9 +1693,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         HTTPFileArgs fileArgs = new HTTPFileArgs();
         // Weed out the empty files
         if (files.length > 0) {
-            for(int i=0; i < files.length; i++){
-                HTTPFileArg file = files[i];
-                if (file.isNotEmpty()){
+            for (HTTPFileArg file : files) {
+                if (file.isNotEmpty()) {
                     fileArgs.addHTTPFileArg(file);
                 }
             }
@@ -1834,8 +1831,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // Now deal with any additional file arguments
             if(fileArgs != null) {
                 HTTPFileArg[] infiles = fileArgs.asArray();
-                for (int i = 0; i < infiles.length; i++){
-                    allFileArgs.addHTTPFileArg(infiles[i]);
+                for (HTTPFileArg infile : infiles) {
+                    allFileArgs.addHTTPFileArg(infile);
                 }
             }
         } else {

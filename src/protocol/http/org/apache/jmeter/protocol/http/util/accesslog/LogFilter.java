@@ -178,8 +178,8 @@ public class LogFilter implements Filter, Serializable {
             this.PTRNFILTER = true;
             // now we create the compiled pattern and
             // add it to the arraylist
-            for (int idx = 0; idx < INCPTRN.length; idx++) {
-                this.INCPATTERNS.add(this.createPattern(INCPTRN[idx]));
+            for (String includePattern : INCPTRN) {
+                this.INCPATTERNS.add(this.createPattern(includePattern));
             }
         }
     }
@@ -201,8 +201,8 @@ public class LogFilter implements Filter, Serializable {
             this.PTRNFILTER = true;
             // now we create the compiled pattern and
             // add it to the arraylist
-            for (int idx = 0; idx < EXCPTRN.length; idx++) {
-                this.EXCPATTERNS.add(this.createPattern(EXCPTRN[idx]));
+            for (String excludePattern : EXCPTRN) {
+                this.EXCPATTERNS.add(this.createPattern(excludePattern));
             }
         }
     }
@@ -270,8 +270,8 @@ public class LogFilter implements Filter, Serializable {
         // usefile is set to false unless it
         // matches.
         this.USEFILE = false;
-        for (int idx = 0; idx < this.INCFILE.length; idx++) {
-            if (text.indexOf(this.INCFILE[idx]) > -1) {
+        for (String includeFile : this.INCFILE) {
+            if (text.indexOf(includeFile) > -1) {
                 this.USEFILE = true;
                 break;
             }
@@ -295,8 +295,8 @@ public class LogFilter implements Filter, Serializable {
         // it matches.
         this.USEFILE = true;
         boolean exc = false;
-        for (int idx = 0; idx < this.EXCFILE.length; idx++) {
-            if (text.indexOf(this.EXCFILE[idx]) > -1) {
+        for (String excludeFile : this.EXCFILE) {
+            if (text.indexOf(excludeFile) > -1) {
                 exc = true;
                 this.USEFILE = false;
                 break;
@@ -332,8 +332,8 @@ public class LogFilter implements Filter, Serializable {
      */
     protected boolean incPattern(String text) {
         this.USEFILE = false;
-        for (int idx = 0; idx < this.INCPATTERNS.size(); idx++) {
-            if (JMeterUtils.getMatcher().contains(text, this.INCPATTERNS.get(idx))) {
+        for (Pattern includePattern : this.INCPATTERNS) {
+            if (JMeterUtils.getMatcher().contains(text, includePattern)) {
                 this.USEFILE = true;
                 break;
             }
@@ -351,8 +351,8 @@ public class LogFilter implements Filter, Serializable {
     protected boolean excPattern(String text) {
         this.USEFILE = true;
         boolean exc = false;
-        for (int idx = 0; idx < this.EXCPATTERNS.size(); idx++) {
-            if (JMeterUtils.getMatcher().contains(text, this.EXCPATTERNS.get(idx))) {
+        for (Pattern excludePattern : this.EXCPATTERNS) {
+            if (JMeterUtils.getMatcher().contains(text, excludePattern)) {
                 exc = true;
                 this.USEFILE = false;
                 break;

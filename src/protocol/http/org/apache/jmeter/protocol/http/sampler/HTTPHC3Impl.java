@@ -385,8 +385,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     private static int calculateHeadersSize(HttpMethodBase httpMethod) {
         int headerSize = httpMethod.getStatusLine().toString().length()+2; // add a \r\n
         Header[] rh = httpMethod.getResponseHeaders();
-        for (int i = 0; i < rh.length; i++) {
-            headerSize += rh[i].toString().length(); // already include the \r\n
+        for (Header responseHeader : rh) {
+            headerSize += responseHeader.toString().length(); // already include the \r\n
         }
         headerSize += 2; // last \r\n before response data
         return headerSize;
@@ -574,11 +574,11 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         headerBuf.append(method.getStatusLine());// header[0] is not the status line...
         headerBuf.append("\n"); // $NON-NLS-1$
 
-        for (int i = 0; i < rh.length; i++) {
-            String key = rh[i].getName();
+        for (Header responseHeader : rh) {
+            String key = responseHeader.getName();
             headerBuf.append(key);
             headerBuf.append(": "); // $NON-NLS-1$
-            headerBuf.append(rh[i].getValue());
+            headerBuf.append(responseHeader.getValue());
             headerBuf.append("\n"); // $NON-NLS-1$
         }
         return headerBuf.toString();
@@ -660,12 +660,12 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         // Get all the request headers
         StringBuilder hdrs = new StringBuilder(100);
         Header[] requestHeaders = method.getRequestHeaders();
-        for(int i = 0; i < requestHeaders.length; i++) {
+        for (Header requestHeader : requestHeaders) {
             // Exclude the COOKIE header, since cookie is reported separately in the sample
-            if(!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeaders[i].getName())) {
-                hdrs.append(requestHeaders[i].getName());
+            if (!HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(requestHeader.getName())) {
+                hdrs.append(requestHeader.getName());
                 hdrs.append(": "); // $NON-NLS-1$
-                hdrs.append(requestHeaders[i].getValue());
+                hdrs.append(requestHeader.getValue());
                 hdrs.append("\n"); // $NON-NLS-1$
             }
         }
@@ -770,8 +770,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             }
 
             // Add any files
-            for (int i=0; i < files.length; i++) {
-                HTTPFileArg file = files[i];
+            for (HTTPFileArg file : files) {
                 File inputFile = FileServer.getFileServer().getResolvedFile(file.getPath());
                 // We do not know the char set of the file to be uploaded, so we set it to null
                 ViewableFilePart filePart = new ViewableFilePart(file.getParamName(), inputFile, file.getMimeType(), null);
@@ -1102,8 +1101,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     protected void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
         if (cookieManager != null) {
             Header hdr[] = method.getResponseHeaders(HTTPConstants.HEADER_SET_COOKIE);
-            for (int i = 0; i < hdr.length; i++) {
-                cookieManager.addCookieFromHeader(hdr[i].getValue(),u);
+            for (Header responseHeader : hdr) {
+                cookieManager.addCookieFromHeader(responseHeader.getValue(), u);
             }
         }
     }
