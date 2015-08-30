@@ -1259,10 +1259,10 @@ public class ProxyControl extends GenericController {
         for (Arguments variable : variables) {
             final Map<String, String> map = variable.getArgumentsAsMap();
             for (Iterator<String> vals = map.values().iterator(); vals.hasNext(); ) {
-               final Object next = vals.next();
-               if ("".equals(next)) {// Drop any empty values (Bug 45199)
-                   vals.remove();
-               }
+                final Object next = vals.next();
+                if ("".equals(next)) {// Drop any empty values (Bug 45199)
+                    vals.remove();
+                }
             }
             replacer.addVariables(map);
         }

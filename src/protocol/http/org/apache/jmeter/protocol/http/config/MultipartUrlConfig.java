@@ -138,12 +138,11 @@ public class MultipartUrlConfig implements Serializable {
                     // Get the filename
                     index = contentDisposition.indexOf(filenamePrefix) + filenamePrefix.length();
                     String path = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
-                    if(path != null && path.length() > 0) {
+                    if (path != null && path.length() > 0) {
                         // Set the values retrieved for the file upload
                         files.addHTTPFileArg(path, name, contentType);
                     }
-                }
-                else {
+                } else {
                     // Find the first empty line of the multipart, it signals end of headers for multipart
                     // Agents are supposed to terminate lines in CRLF:
                     final String CRLF = "\r\n";

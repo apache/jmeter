@@ -93,7 +93,7 @@ public class TestLogFilter extends JMeterTestCase {
                 String theFile = td.file;
                 boolean expect = td.exclfile;
 
-                testf.isFiltered(theFile,null);
+                testf.isFiltered(theFile, null);
                 String line = testf.filter(theFile);
                 if (line != null) {
                     assertTrue("Expect to accept " + theFile, expect);
@@ -109,7 +109,7 @@ public class TestLogFilter extends JMeterTestCase {
                 String theFile = td.file;
                 boolean expect = td.inclfile;
 
-                testf.isFiltered(theFile,null);
+                testf.isFiltered(theFile, null);
                 String line = testf.filter(theFile);
                 if (line != null) {
                     assertTrue("Expect to accept " + theFile, expect);
@@ -126,7 +126,7 @@ public class TestLogFilter extends JMeterTestCase {
                 String theFile = td.file;
                 boolean expect = td.exclpatt;
 
-                assertEquals(!expect, testf.isFiltered(theFile,null));
+                assertEquals(!expect, testf.isFiltered(theFile, null));
                 String line = testf.filter(theFile);
                 if (line != null) {
                     assertTrue("Expect to accept " + theFile, expect);
@@ -142,7 +142,7 @@ public class TestLogFilter extends JMeterTestCase {
                 String theFile = td.file;
                 boolean expect = td.inclpatt;
 
-                assertEquals(!expect, testf.isFiltered(theFile,null));
+                assertEquals(!expect, testf.isFiltered(theFile, null));
                 String line = testf.filter(theFile);
                 if (line != null) {
                     assertTrue("Expect to accept " + theFile, expect);
