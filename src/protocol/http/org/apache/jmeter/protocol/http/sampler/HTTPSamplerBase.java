@@ -321,7 +321,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     parsersForType.put(type, classname);
                 }
             } else {
-                log.warn("Cannot find .types property for "+parser);
+                log.warn("Cannot find .types property for " + parser);
             }
         }
         if (parsers.length==0){ // revert to previous behaviour
@@ -1085,14 +1085,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             if (name.length() > 0) {
                 if (isDebug) {
-                    log.debug("Name: " + name+ " Value: " + value+ " Metadata: " + metaData);
+                    log.debug("Name: " + name + " Value: " + value + " Metadata: " + metaData);
                 }
                 // If we know the encoding, we can decode the argument value,
                 // to make it easier to read for the user
-                if(!StringUtils.isEmpty(contentEncoding)) {
+                if (!StringUtils.isEmpty(contentEncoding)) {
                     addEncodedArgument(name, value, metaData, contentEncoding);
-                }
-                else {
+                } else {
                     // If we do not know the encoding, we just use the encoded value
                     // The browser has already done the encoding, so save the values as is
                     addNonEncodedArgument(name, value, metaData);

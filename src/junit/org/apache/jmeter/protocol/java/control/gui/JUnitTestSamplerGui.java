@@ -375,18 +375,18 @@ implements ChangeListener, ActionListener, ItemListener
         List<String> list = new ArrayList<>();
         for (final Method method : meths) {
             final String name = method.getName();
-            if (junit4.isSelected()){
+            if (junit4.isSelected()) {
                 if (method.isAnnotationPresent(Test.class) ||
-                    method.isAnnotationPresent(BeforeClass.class) ||
-                    method.isAnnotationPresent(AfterClass.class)) {
-                        list.add(name);
+                        method.isAnnotationPresent(BeforeClass.class) ||
+                        method.isAnnotationPresent(AfterClass.class)) {
+                    list.add(name);
                 }
             } else {
                 if (name.startsWith(TESTMETHOD_PREFIX) ||
-                    name.equals(ONETIMESETUP) ||
-                    name.equals(ONETIMETEARDOWN) ||
-                    name.equals(SUITE)) {
-                        list.add(name);
+                        name.equals(ONETIMESETUP) ||
+                        name.equals(ONETIMETEARDOWN) ||
+                        name.equals(SUITE)) {
+                    list.add(name);
                 }
             }
         }
