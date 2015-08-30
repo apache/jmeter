@@ -601,7 +601,7 @@ public class JMeter implements JMeterPlugin {
 
             // Should not have any text arguments
             case CLOption.TEXT_ARGUMENT:
-                throw new IllegalArgumentException("Unknown arg: "+option.getArgument());
+                throw new IllegalArgumentException("Unknown arg: " + option.getArgument());
 
             case PROPFILE2_OPT: // Bug 33920 - allow multiple props
                 try {
@@ -624,7 +624,7 @@ public class JMeter implements JMeterPlugin {
                     fis = new FileInputStream(new File(name));
                     System.getProperties().load(fis);
                 } catch (IOException e) {
-                    log.warn("Cannot find system property file "+e.getLocalizedMessage());
+                    log.warn("Cannot find system property file " + e.getLocalizedMessage());
                 } finally {
                     JOrphanUtils.closeQuietly(fis);
                 }
@@ -654,14 +654,14 @@ public class JMeter implements JMeterPlugin {
                 } else {
                     File propFile = new File(name);
                     if (propFile.canRead()) {
-                        log.info("Setting Global properties from the file "+name);
+                        log.info("Setting Global properties from the file " + name);
                         try {
                             fis = new FileInputStream(propFile);
                             remoteProps.load(fis);
                         } catch (FileNotFoundException e) {
-                            log.warn("Could not find properties file: "+e.getLocalizedMessage());
+                            log.warn("Could not find properties file: " + e.getLocalizedMessage());
                         } catch (IOException e) {
-                            log.warn("Could not load properties file: "+e.getLocalizedMessage());
+                            log.warn("Could not load properties file: " + e.getLocalizedMessage());
                         } finally {
                             JOrphanUtils.closeQuietly(fis);
                         }

@@ -278,7 +278,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         for (MenuCreator menuCreator : menuCreators) {
             JMenu[] topLevelMenus = menuCreator.getTopLevelMenus();
             for (JMenu topLevelMenu : topLevelMenus) {
-                this.add(topLevelMenu);                
+                this.add(topLevelMenu);
             }
         }
         this.add(helpMenu);
