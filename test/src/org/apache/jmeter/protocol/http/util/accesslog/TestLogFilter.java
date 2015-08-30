@@ -89,8 +89,7 @@ public class TestLogFilter extends JMeterTestCase {
 
         public void testExcludeFiles() {
             testf.excludeFiles(INCL);
-            for (int idx = 0; idx < TESTDATA.length; idx++) {
-                TestData td = TESTDATA[idx];
+            for (TestData td : TESTDATA) {
                 String theFile = td.file;
                 boolean expect = td.exclfile;
 
@@ -106,8 +105,7 @@ public class TestLogFilter extends JMeterTestCase {
 
         public void testIncludeFiles() {
             testf.includeFiles(INCL);
-            for (int idx = 0; idx < TESTDATA.length; idx++) {
-                TestData td = TESTDATA[idx];
+            for (TestData td : TESTDATA) {
                 String theFile = td.file;
                 boolean expect = td.inclfile;
 
@@ -124,8 +122,7 @@ public class TestLogFilter extends JMeterTestCase {
 
         public void testExcludePattern() {
             testf.excludePattern(PATTERNS);
-            for (int idx = 0; idx < TESTDATA.length; idx++) {
-                TestData td = TESTDATA[idx];
+            for (TestData td : TESTDATA) {
                 String theFile = td.file;
                 boolean expect = td.exclpatt;
 
@@ -141,8 +138,7 @@ public class TestLogFilter extends JMeterTestCase {
 
         public void testIncludePattern() {
             testf.includePattern(PATTERNS);
-            for (int idx = 0; idx < TESTDATA.length; idx++) {
-                TestData td = TESTDATA[idx];
+            for (TestData td : TESTDATA) {
                 String theFile = td.file;
                 boolean expect = td.inclpatt;
 

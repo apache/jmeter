@@ -152,8 +152,8 @@ public class StandardGenerator implements Generator, Serializable {
      */
     @Override
     public void setParams(NVPair[] params) {
-        for (int idx = 0; idx < params.length; idx++) {
-            SAMPLE.addArgument(params[idx].getName(), params[idx].getValue());
+        for (NVPair param : params) {
+            SAMPLE.addArgument(param.getName(), param.getValue());
         }
     }
 

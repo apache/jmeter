@@ -498,8 +498,7 @@ public class SmtpPanel extends JPanel {
     public CollectionProperty getHeaderFields() {
         CollectionProperty result = new CollectionProperty();
         result.setName(SmtpSampler.HEADER_FIELDS);
-        for (Iterator<JTextField> iterator = headerFields.keySet().iterator(); iterator.hasNext();) {
-            JTextField headerName = iterator.next();
+        for (JTextField headerName : headerFields.keySet()) {
             String name = headerName.getText();
             String value = headerFields.get(headerName).getText();
             Argument argument = new Argument(name, value);
