@@ -168,8 +168,7 @@ public final class ClassFinder {
     // For each directory in the search path, add all the jars found there
     private static String[] addJarsInPath(String[] paths) {
         Set<String> fullList = new HashSet<>();
-        for (int i = 0; i < paths.length; i++) {
-            final String path = paths[i];
+        for (final String path : paths) {
             fullList.add(path); // Keep the unexpanded path
             // TODO - allow directories to end with .jar by removing this check?
             if (!path.endsWith(DOT_JAR)) {
@@ -475,8 +474,8 @@ public final class ClassFinder {
                 Class<?> c = Class.forName(strClassName, false, contextClassLoader);
 
                 if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
-                    for (int i=0; i< parentClasses.length; i++) {
-                        if(parentClasses[i].isAssignableFrom(c)){
+                    for (Class<?> parentClass : parentClasses) {
+                        if (parentClass.isAssignableFrom(c)) {
                             return true;
                         }
                     }
@@ -561,12 +560,12 @@ public final class ClassFinder {
 
     private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses) throws IOException {
         String[] list = dir.list();
-        for (int i = 0; i < list.length; i++) {
-            File file = new File(dir, list[i]);
+        for (String aList : list) {
+            File file = new File(dir, aList);
             if (file.isDirectory()) {
                 // Recursive call
                 findClassesInPathsDir(strPathElement, file, listClasses);
-            } else if (list[i].endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
+            } else if (aList.endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
                 final String path = file.getPath();
                 listClasses.add(path.substring(strPathElement.length() + 1,
                         path.lastIndexOf('.')) // $NON-NLS-1$

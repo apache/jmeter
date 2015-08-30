@@ -213,8 +213,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         if (menu != null) {
             editMenu.removeAll();
             Component[] comps = menu.getComponents();
-            for (int i = 0; i < comps.length; i++) {
-                editMenu.add(comps[i]);
+            for (Component comp : comps) {
+                editMenu.add(comp);
             }
             editMenu.setEnabled(true);
         } else {
@@ -275,8 +275,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         this.add(searchMenu);
         this.add(runMenu);
         this.add(optionsMenu);
-        for (Iterator<MenuCreator> iterator = menuCreators.iterator(); iterator.hasNext();) {
-            MenuCreator menuCreator = iterator.next();
+        for (MenuCreator menuCreator : menuCreators) {
             JMenu[] topLevelMenus = menuCreator.getTopLevelMenus();
             for (JMenu topLevelMenu : topLevelMenus) {
                 this.add(topLevelMenu);                
@@ -320,13 +319,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem functionHelper = makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS); //$NON-NLS-1$
 
         lafMenu = makeMenuRes("appearance",'L'); //$NON-NLS-1$
-        UIManager.LookAndFeelInfo lafs[] = getAllLAFs();
-        for (int i = 0; i < lafs.length; ++i) {
-            JMenuItem laf = new JMenuItem(lafs[i].getName());
-            laf.addActionListener(ActionRouter.getInstance());
-            laf.setActionCommand(ActionNames.LAF_PREFIX + lafs[i].getClassName());
-            laf.setToolTipText(lafs[i].getClassName()); // show the classname to the user
-            lafMenu.add(laf);
+        for (LookAndFeelInfo laf : getAllLAFs()) {
+            JMenuItem menuItem = new JMenuItem(laf.getName());
+            menuItem.addActionListener(ActionRouter.getInstance());
+            menuItem.setActionCommand(ActionNames.LAF_PREFIX + laf.getClassName());
+            menuItem.setToolTipText(laf.getClassName()); // show the classname to the user
+            lafMenu.add(menuItem);
         }
         optionsMenu.add(functionHelper);
         optionsMenu.add(lafMenu);
@@ -724,10 +722,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             }
         }
 
-        MenuElement[] subelements = menu.getSubElements();
-
-        for (int i = 0; i < subelements.length; i++) {
-            updateMenuElement(subelements[i]);
+        for (MenuElement subElement : menu.getSubElements()) {
+            updateMenuElement(subElement);
         }
     }
 

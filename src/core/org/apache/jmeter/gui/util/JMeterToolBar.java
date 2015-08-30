@@ -205,9 +205,9 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     private Map<String, Boolean> getCurrentButtonsStates() {
         Component[] components = getComponents();
         Map<String, Boolean> buttonStates = new HashMap<>(components.length);
-        for (int i = 0; i < components.length; i++) {
-            if (components[i] instanceof JButton) {
-                JButton button = (JButton) components[i];
+        for (Component component : components) {
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
                 buttonStates.put(button.getActionCommand(), Boolean.valueOf(button.isEnabled()));
             }
         }
@@ -286,10 +286,9 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      *            {@link Map} of button names and their states
      */
     private void updateButtons(Map<String, Boolean> buttonStates) {
-        Component[] components = getComponents();
-        for (int i = 0; i < components.length; i++) {
-            if (components[i] instanceof JButton) {
-                JButton button = (JButton) components[i];
+        for (Component component : getComponents()) {
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
                 Boolean enabled = buttonStates.get(button.getActionCommand());
                 if (enabled != null) {
                     button.setEnabled(enabled.booleanValue());

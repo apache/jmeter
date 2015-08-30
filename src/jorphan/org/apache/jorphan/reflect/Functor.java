@@ -349,8 +349,8 @@ public class Functor {
                         }
                     }
                     Class<?>[] interfaces = p_types[i].getInterfaces();
-                    for (int j = 0; j < interfaces.length; j++) {
-                        methodToInvoke = doCreateMethod(p_class,getNewArray(i, interfaces[j], p_types));
+                    for (Class<?> anInterface : interfaces) {
+                        methodToInvoke = doCreateMethod(p_class, getNewArray(i, anInterface, p_types));
                         if (methodToInvoke != null) {
                             return methodToInvoke;
                         }
