@@ -370,7 +370,7 @@ public class WSDLHelper {
                 Element child = (Element) opnodes.item(idz);
                 int numberOfSoapOperationNodes = child.getElementsByTagNameNS(SOAP11_BINDING_NAMESPACE, "operation").getLength()
                         + child.getElementsByTagNameNS(SOAP12_BINDING_NAMESPACE, "operation").getLength();
-                if (numberOfSoapOperationNodes>0) {
+                if (numberOfSoapOperationNodes > 0) {
                     ops.add(child);
                 }
             }
