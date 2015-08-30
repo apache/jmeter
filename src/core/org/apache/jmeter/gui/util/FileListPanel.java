@@ -207,8 +207,8 @@ public class FileListPanel extends JPanel implements ActionListener {
             chooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
             File[] cfiles = chooser.getSelectedFiles();
             if (cfiles != null) {
-                for (int idx=0; idx < cfiles.length; idx++) {
-                    this.addFilename(cfiles[idx].getPath());
+                for (File cfile : cfiles) {
+                    this.addFilename(cfile.getPath());
                 }
                 fireFileChanged();
             }

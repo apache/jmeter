@@ -152,8 +152,8 @@ public final class MenuFactory {
         try {
             String[] classesToSkip =
                 JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ","); //$NON-NLS-1$
-            for (int i = 0; i < classesToSkip.length; i++) {
-                elementsToSkip.add(classesToSkip[i].trim());
+            for (String aClassesToSkip : classesToSkip) {
+                elementsToSkip.add(aClassesToSkip.trim());
             }
 
             initializeMenus();
@@ -269,8 +269,8 @@ public final class MenuFactory {
 
     public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
         JMenu addMenu = new JMenu(label);
-        for (int i = 0; i < categories.length; i++) {
-            addMenu.add(makeMenu(categories[i], actionCommand));
+        for (String category : categories) {
+            addMenu.add(makeMenu(category, actionCommand));
         }
         GuiUtils.makeScrollableMenu(addMenu);
         return addMenu;
@@ -648,10 +648,9 @@ public final class MenuFactory {
 
     // Is any node an instance of one of the classes?
     private static boolean foundClass(JMeterTreeNode nodes[],Class<?> classes[]){
-        for (int i = 0; i < nodes.length; i++) {
-            JMeterTreeNode node = nodes[i];
-            for (int j=0; j < classes.length; j++) {
-                if (classes[j].isInstance(node.getUserObject())){
+        for (JMeterTreeNode node : nodes) {
+            for (Class<?> aClass : classes) {
+                if (aClass.isInstance(node.getUserObject())) {
                     return true;
                 }
             }
@@ -661,12 +660,11 @@ public final class MenuFactory {
 
     // Is any node an instance of one of the classes, but not an exception?
     private static boolean foundClass(JMeterTreeNode nodes[],Class<?> classes[], Class<?> except){
-        for (int i = 0; i < nodes.length; i++) {
-            JMeterTreeNode node = nodes[i];
+        for (JMeterTreeNode node : nodes) {
             Object userObject = node.getUserObject();
             if (!except.isInstance(userObject)) {
-                for (int j=0; j < classes.length; j++) {
-                    if (classes[j].isInstance(userObject)){
+                for (Class<?> aClass : classes) {
+                    if (aClass.isInstance(userObject)) {
                         return true;
                     }
                 }

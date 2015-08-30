@@ -111,8 +111,8 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 
     public void setValues(String[] items) {
         choiceList.removeAllItems();
-        for (int i = 0; i < items.length; i++) {
-            choiceList.addItem(items[i]);
+        for (String item : items) {
+            choiceList.addItem(item);
         }
     }
 
@@ -277,8 +277,8 @@ public String getToolTipText() {
      */
     private void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
-        for (int index = 0; index < mChangeListeners.size(); index++) {
-            mChangeListeners.get(index).stateChanged(ce);
+        for (ChangeListener mChangeListener : mChangeListeners) {
+            mChangeListener.stateChanged(ce);
         }
     }
 

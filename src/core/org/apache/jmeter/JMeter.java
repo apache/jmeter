@@ -34,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -593,10 +592,7 @@ public class JMeter implements JMeterPlugin {
         // These can potentially occur multiple times
 
         List<CLOption> clOptions = parser.getArguments();
-        int size = clOptions.size();
-
-        for (int i = 0; i < size; i++) {
-            CLOption option = clOptions.get(i);
+        for (CLOption option : clOptions) {
             String name = option.getArgument(0);
             String value = option.getArgument(1);
             FileInputStream fis = null;
@@ -760,8 +756,7 @@ public class JMeter implements JMeterPlugin {
                     new SearchByClass<>(ReplaceableController.class);
             tree.traverse(replaceableControllers);
             Collection<ReplaceableController> replaceableControllersRes = replaceableControllers.getSearchResults();
-            for (Iterator<ReplaceableController> iter = replaceableControllersRes.iterator(); iter.hasNext();) {
-                ReplaceableController replaceableController = iter.next();
+            for (ReplaceableController replaceableController : replaceableControllersRes) {
                 replaceableController.resolveReplacementSubTree(root);
             }
 
