@@ -101,15 +101,15 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      *
      */
     private void initButtonGroup(String[] resouces, String selected) {
-        for (int idx = 0; idx < resouces.length; idx++) {
-            JRadioButton btn = new JRadioButton(JMeterUtils.getResString(resouces[idx]));
-            btn.setActionCommand(resouces[idx]);
+        for (String resource : resouces) {
+            JRadioButton btn = new JRadioButton(JMeterUtils.getResString(resource));
+            btn.setActionCommand(resource);
             btn.addActionListener(this);
             // add the button to the button group
             this.bGroup.add(btn);
             // add the button
             this.add(btn);
-            if (selected != null && selected.equals(resouces[idx])) {
+            if (selected != null && selected.equals(resource)) {
                 btn.setSelected(true);
             }
         }
@@ -195,8 +195,8 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      */
     private void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
-        for (int index = 0; index < mChangeListeners.size(); index++) {
-            mChangeListeners.get(index).stateChanged(ce);
+        for (ChangeListener mChangeListener : mChangeListeners) {
+            mChangeListener.stateChanged(ce);
         }
     }
 

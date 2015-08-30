@@ -243,8 +243,8 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
      */
     protected void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
-        for (int index = 0; index < mChangeListeners.size(); index++) {
-            mChangeListeners.get(index).stateChanged(ce);
+        for (ChangeListener mChangeListener : mChangeListeners) {
+            mChangeListener.stateChanged(ce);
         }
     }
 }

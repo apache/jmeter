@@ -243,8 +243,8 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      */
     private void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
-        for (int index = 0; index < mChangeListeners.size(); index++) {
-            mChangeListeners.get(index).stateChanged(ce);
+        for (ChangeListener mChangeListener : mChangeListeners) {
+            mChangeListener.stateChanged(ce);
         }
     }
     

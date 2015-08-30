@@ -416,8 +416,8 @@ public final class JOrphanUtils {
      */
     public static String baToHexString(byte ba[]) {
         StringBuilder sb = new StringBuilder(ba.length*2);
-        for (int i = 0; i < ba.length; i++) {
-            int j = ba[i] & 0xff;
+        for (byte b : ba) {
+            int j = b & 0xff;
             if (j < 16) {
                 sb.append("0"); // $NON-NLS-1$ add zero padding
             }
