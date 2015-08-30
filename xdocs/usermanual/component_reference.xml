@@ -5236,23 +5236,6 @@ to the random delay.</property>
 
 </component>
 
-<component name="Interrupt Timer" index="&sect-num;.6.1" anchor="interrupt" width="336" height="148" screenshot="timers/interrupt_timer.png">
-<description>
-<p>This is not strictly a timer, as it does not cause a delay before a sampler.
-Instead it interrupts the sampler if that has taken longer than the timeout.
-The timeout is ignored if it is zero or negative.
-For this to work, the sampler must implement Interruptible. 
-The following samplers are known to do so:<br></br>
-AJP, BeanShell, FTP, HTTP, Soap, AccessLog, MailReader, JMS Subscriber, TCPSampler, TestAction
-</p></description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree.</property>
-        <property name="Sampler Timeout" required="Yes">If the sampler takes longer to complete, it will be interrupted.</property>
-</properties>
-</component>
-
-
 <a href="#">^</a>
 
 </section>
