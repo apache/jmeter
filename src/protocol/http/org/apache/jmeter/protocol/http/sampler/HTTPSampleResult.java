@@ -104,8 +104,8 @@ public class HTTPSampleResult extends SampleResult {
          */
         final String[] REDIRECT_CODES = { "301", "302", "303" };
         String code = getResponseCode();
-        for (int i = 0; i < REDIRECT_CODES.length; i++) {
-            if (REDIRECT_CODES[i].equals(code)) {
+        for (String redirectCode : REDIRECT_CODES) {
+            if (redirectCode.equals(code)) {
                 return true;
             }
         }

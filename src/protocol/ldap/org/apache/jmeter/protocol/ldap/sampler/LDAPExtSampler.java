@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -899,9 +898,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
             sortResults(sortedResults);
 
-            for (Iterator<SearchResult> it = sortedResults.iterator(); it.hasNext();)
-            {
-                final SearchResult  sr = it.next();
+            for (final SearchResult sr : sortedResults) {
                 writeSearchResult(sr, xmlb);
             }
         }
@@ -934,16 +931,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 sortedAttrs.add(attr);
             }
             sortAttributes(sortedAttrs);
-            for (Iterator<Attribute> ait = sortedAttrs.iterator(); ait.hasNext();)
-            {
-                final Attribute     attr = ait.next();
-
+            for (final Attribute attr : sortedAttrs) {
                 StringBuilder sb = new StringBuilder();
                 if (attr.size() == 1) {
                     sb.append(getWriteValue(attr.get()));
                 } else {
-                    final ArrayList<String>     sortedVals = new ArrayList<>(attr.size());
-                    boolean             first = true;
+                    final ArrayList<String> sortedVals = new ArrayList<>(attr.size());
+                    boolean first = true;
 
                     for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore(); )
                     {
@@ -953,9 +947,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
                     Collections.sort(sortedVals);
 
-                    for (Iterator<String> vit = sortedVals.iterator(); vit.hasNext();)
+                    for (final String value : sortedVals)
                     {
-                        final String    value = vit.next();
                         if (first) {
                             first = false;
                         } else {

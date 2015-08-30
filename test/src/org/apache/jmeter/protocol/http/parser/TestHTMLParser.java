@@ -259,13 +259,13 @@ public class TestHTMLParser extends JMeterTestCase {
             suite.addTest(new TestHTMLParser("testNotParser"));
             suite.addTest(new TestHTMLParser("testNotCreatable"));
             suite.addTest(new TestHTMLParser("testNotCreatableStatic"));
-            for (int i = 0; i < PARSERS.length; i++) {
-                TestSuite ps = new TestSuite(PARSERS[i]);// Identify subtests
-                ps.addTest(new TestHTMLParser("testParserProperty", PARSERS[i], 0));
+            for (String parser : PARSERS) {
+                TestSuite ps = new TestSuite(parser);// Identify subtests
+                ps.addTest(new TestHTMLParser("testParserProperty", parser, 0));
                 for (int j = 0; j < TESTS.length; j++) {
                     TestSuite ts = new TestSuite(TESTS[j].fileName);
-                    ts.addTest(new TestHTMLParser("testParserSet", PARSERS[i], j));
-                    ts.addTest(new TestHTMLParser("testParserList", PARSERS[i], j));
+                    ts.addTest(new TestHTMLParser("testParserSet", parser, j));
+                    ts.addTest(new TestHTMLParser("testParserList", parser, j));
                     ps.addTest(ts);
                 }
                 suite.addTest(ps);

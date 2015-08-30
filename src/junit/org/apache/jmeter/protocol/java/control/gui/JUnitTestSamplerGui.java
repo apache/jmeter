@@ -185,8 +185,8 @@ implements ChangeListener, ActionListener, ItemListener
             filter.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
             // change the classname drop down
             String[] clist = filter.filterArray(classList);
-            for (int idx=0; idx < clist.length; idx++) {
-                classnameCombo.addItem(clist[idx]);
+            for (String classStr : clist) {
+                classnameCombo.addItem(classStr);
             }
         }
         catch (IOException e)
@@ -360,8 +360,8 @@ implements ChangeListener, ActionListener, ItemListener
                 // Don't instantiate class
                 Class<?> testClass = Class.forName(className, false, contextClassLoader);
                 String [] names = getMethodNames(testClass);
-                for (int idx=0; idx < names.length; idx++){
-                    methodName.addItem(names[idx]);
+                for (String name : names) {
+                    methodName.addItem(name);
                 }
                 methodName.repaint();
             } catch (ClassNotFoundException e) {
@@ -373,8 +373,7 @@ implements ChangeListener, ActionListener, ItemListener
     {
         Method[] meths = clazz.getMethods();
         List<String> list = new ArrayList<>();
-        for (int idx=0; idx < meths.length; idx++){
-            final Method method = meths[idx];
+        for (final Method method : meths) {
             final String name = method.getName();
             if (junit4.isSelected()){
                 if (method.isAnnotationPresent(Test.class) ||

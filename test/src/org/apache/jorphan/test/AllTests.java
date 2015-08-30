@@ -170,10 +170,10 @@ public final class AllTests {
         String cpe[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
         StringBuilder sb = new StringBuilder(3000);
         sb.append("java.class.path=");
-        for (int i = 0; i < cpe.length; i++) {
+        for (String path : cpe) {
             sb.append("\n");
-            sb.append(cpe[i]);
-            if (new java.io.File(cpe[i]).exists()) {
+            sb.append(path);
+            if (new File(path).exists()) {
                 sb.append(" - OK");
             } else {
                 sb.append(" - ??");
