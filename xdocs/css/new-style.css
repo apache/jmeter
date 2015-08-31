@@ -107,7 +107,8 @@ body {
 
 .section
           pre {
-  background: none repeat scroll 0 0 lightblue;
+  background: none repeat scroll 0 0 black;
+  color: orange;
   border: 1px solid gray;
   padding: 0.3rem;
   margin: 0.3rem;
