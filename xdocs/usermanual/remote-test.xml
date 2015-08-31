@@ -126,8 +126,8 @@ jmeter -n -t script.jmx -R server1,server2,&hellip;
 </source>
 Other flags that may be useful:
 <dl>
-<dh><code>-Gproperty=value</code></dh><dd>define a property in all the servers (may appear more than once)</dd>
-<dh><code>-X</code></dh><dd>Exit remote servers at the end of the test.</dd>
+<dt><code>-Gproperty=value</code></dt><dd>define a property in all the servers (may appear more than once)</dd>
+<dt><code>-X</code></dt><dd>Exit remote servers at the end of the test.</dd>
 </dl>
 The first example will start the test on whatever servers are defined in the JMeter property <code>remote_hosts</code>;<br/>
 The second example will define <code>remote_hosts</code> from the list of servers and then start the test on the remote servers.
@@ -247,23 +247,23 @@ continue.
 There are some JMeter properties that can be set to alter this behaviour.
 </p>
 <dl>
-<dh><code>mode</code></dh><dd>sample sending mode - default is <code>StrippedBatch</code> since 2.9. This should be set on the client node.
+<dt><code>mode</code></dt><dd>sample sending mode - default is <code>StrippedBatch</code> since 2.9. This should be set on the client node.
     <dl>
-    <dh><code>Standard</code></dh><dd>send samples synchronously as soon as they are generated</dd>
-    <dh><code>Hold</code></dh><dd>hold samples in an array until the end of a run. This may use a lot of memory on the server and is discouraged.</dd>
-    <dh><code>DiskStore</code></dh><dd>store samples in a disk file (under <code>java.io.temp</code>) until the end of a run. 
+    <dt><code>Standard</code></dt><dd>send samples synchronously as soon as they are generated</dd>
+    <dt><code>Hold</code></dt><dd>hold samples in an array until the end of a run. This may use a lot of memory on the server and is discouraged.</dd>
+    <dt><code>DiskStore</code></dt><dd>store samples in a disk file (under <code>java.io.temp</code>) until the end of a run. 
     The serialised data file is deleted on JVM exit.</dd>
-    <dh><code>StrippedDiskStore</code></dh><dd>remove responseData from successful samples, and use DiskStore sender to send them.</dd>
-    <dh><code>Batch</code></dh><dd>send saved samples when either the count (num_sample_threshold) or time (time_threshold) exceeds a threshold,
+    <dt><code>StrippedDiskStore</code></dt><dd>remove responseData from successful samples, and use DiskStore sender to send them.</dd>
+    <dt><code>Batch</code></dt><dd>send saved samples when either the count (num_sample_threshold) or time (time_threshold) exceeds a threshold,
     at which point the samples are sent synchronously.
     The thresholds can be configured on the server using the following properties:
         <dl>
-        <dh><code>num_sample_threshold</code></dh><dd>number of samples to accumulate, default <code>100</code></dd>
-        <dh><code>time_threshold</code></dh><dd>time threshold, default 60000 ms = 60 seconds</dd>
+        <dt><code>num_sample_threshold</code></dt><dd>number of samples to accumulate, default <code>100</code></dd>
+        <dt><code>time_threshold</code></dt><dd>time threshold, default 60000 ms = 60 seconds</dd>
         </dl>
     
      See also the Asynch mode, described below.</dd>
-    <dh><code>Statistical</code></dh><dd>send a summary sample when either the count or time exceeds a threshold. 
+    <dt><code>Statistical</code></dt><dd>send a summary sample when either the count or time exceeds a threshold. 
     The samples are summarised by thread group name and sample label.
     The following fields are accumulated:
       <ul>
@@ -275,9 +275,9 @@ There are some JMeter properties that can be set to alter this behaviour.
       </ul>
     Other fields that vary between samples are lost. 
     </dd>
-    <dh><code>Stripped</code></dh><dd>remove responseData from successful samples</dd>
-    <dh><code>StrippedBatch</code></dh><dd>remove responseData from successful samples, and use Batch sender to send them.</dd>
-    <dh><code>Asynch</code></dh><dd>samples are temporarily stored in a local queue. A separate worker thread sends the samples.
+    <dt><code>Stripped</code></dt><dd>remove responseData from successful samples</dd>
+    <dt><code>StrippedBatch</code></dt><dd>remove responseData from successful samples, and use Batch sender to send them.</dd>
+    <dt><code>Asynch</code></dt><dd>samples are temporarily stored in a local queue. A separate worker thread sends the samples.
         This allows the test thread to continue without waiting for the result to be sent back to the client.
         However, if samples are being created faster than they can be sent, the queue will eventually fill up,
         and the sampler thread will block until some samples can be drained from the queue.
@@ -285,8 +285,8 @@ There are some JMeter properties that can be set to alter this behaviour.
         The queue size can be adjusted by setting the JMeter property
         <code>asynch.batch.queue.size</code> (default <code>100</code>) on the server node.
     </dd>
-    <dh><code>StrippedAsynch</code></dh><dd>remove responseData from successful samples, and use Async sender to send them.</dd>
-    <dh><code>Custom implementation</code></dh><dd>set the mode parameter to your custom sample sender class name.
+    <dt><code>StrippedAsynch</code></dt><dd>remove responseData from successful samples, and use Async sender to send them.</dd>
+    <dt><code>Custom implementation</code></dt><dd>set the mode parameter to your custom sample sender class name.
     This must implement the interface <code>SampleSender</code> and have a constructor which takes a single
     parameter of type <code>RemoteSampleListener</code>. 
     </dd>
@@ -299,8 +299,8 @@ This is not really a problem as there is always a more efficient way to implemen
 </note>
 <p>The following properties apply to the <code>Batch</code> and <code>Statistical</code> modes:</p>
     <dl>
-    <dh><code>num_sample_threshold</code></dh><dd>number of samples in a batch (default <code>100</code>)</dd>
-    <dh><code>time_threshold</code></dh><dd>number of milliseconds to wait (default 60 seconds)</dd>
+    <dt><code>num_sample_threshold</code></dt><dd>number of samples in a batch (default <code>100</code>)</dd>
+    <dt><code>time_threshold</code></dt><dd>number of milliseconds to wait (default 60 seconds)</dd>
     </dl>
 </subsection>
 
