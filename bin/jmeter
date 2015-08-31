@@ -25,7 +25,7 @@
 ##   ==============================================
 
 # Minimal version to run JMeter
-MINIMAL_VERSION=1.6.0
+MINIMAL_VERSION=1.7.0
 
 # Check if Java is present and the minimal version requierement
 _java=`type java | awk '{ print $ NF }'`
