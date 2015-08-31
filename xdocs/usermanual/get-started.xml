@@ -291,11 +291,11 @@ options when <code>-jar</code> is used.
 the firewall/proxy server hostname and port number.  To do so, run the <code>jmeter[.bat]</code> file
 from a command line with the following parameters:</p>
 <dl>
-<dh><code>-H</code></dh><dd>[proxy server hostname or ip address]</dd>
-<dh><code>-P</code></dh><dd>[proxy server port]</dd>
-<dh><code>-N</code></dh><dd>[nonproxy hosts] (e.g. <code>*.apache.org|localhost</code>)</dd>
-<dh><code>-u</code></dh><dd>[username for proxy authentication - if required]</dd>
-<dh><code>-a</code></dh><dd>[password for proxy authentication - if required]</dd>
+<dt><code>-H</code></dt><dd>[proxy server hostname or ip address]</dd>
+<dt><code>-P</code></dt><dd>[proxy server port]</dd>
+<dt><code>-N</code></dt><dd>[nonproxy hosts] (e.g. <code>*.apache.org|localhost</code>)</dd>
+<dt><code>-u</code></dt><dd>[username for proxy authentication - if required]</dd>
+<dt><code>-a</code></dt><dd>[password for proxy authentication - if required]</dd>
 </dl>
 <b>Example</b>:
 <source>jmeter -H my.proxy.server -P 8000 -u username -a password -N localhost</source>
@@ -334,17 +334,17 @@ This is not to be confused with the proxy settings described above, which are us
 <p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
 the following command options:</p>
 <dl>
-<dh><code>-n</code></dh><dd>This specifies JMeter is to run in non-gui mode</dd>
-<dh><code>-t</code></dh><dd>[name of JMX file that contains the Test Plan].</dd>
-<dh><code>-l</code></dh><dd>[name of JTL file to log sample results to].</dd>
-<dh><code>-j</code></dh><dd>[name of JMeter run log file].</dd>
-<dh><code>-r</code></dh><dd>Run the test in the servers specified by the JMeter property "<code>remote_hosts</code>"</dd>
-<dh><code>-R</code></dh><dd>[list of remote servers] Run the test in the specified remote servers</dd>
+<dt><code>-n</code></dt><dd>This specifies JMeter is to run in non-gui mode</dd>
+<dt><code>-t</code></dt><dd>[name of JMX file that contains the Test Plan].</dd>
+<dt><code>-l</code></dt><dd>[name of JTL file to log sample results to].</dd>
+<dt><code>-j</code></dt><dd>[name of JMeter run log file].</dd>
+<dt><code>-r</code></dt><dd>Run the test in the servers specified by the JMeter property "<code>remote_hosts</code>"</dd>
+<dt><code>-R</code></dt><dd>[list of remote servers] Run the test in the specified remote servers</dd>
 </dl>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
 <dl>
-<dh><code>-H</code></dh><dd>[proxy server hostname or ip address]</dd>
-<dh><code>-P</code></dh><dd>[proxy server port]</dd>
+<dt><code>-H</code></dt><dd>[proxy server hostname or ip address]</dd>
+<dt><code>-P</code></dt><dd>[proxy server port]</dd>
 </dl>
 <b>Example</b>
 <source>jmeter -n -t my_test.jmx -l log.jtl -H my.proxy.server -P 8000</source>
@@ -361,8 +361,8 @@ You can also use non-GUI mode to run remote tests.
 To start the server(s), run <code>jmeter-server[.bat]</code> on each server host.</p>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
 <dl>
-<dh><code>-H</code></dh><dd>[proxy server hostname or ip address]</dd>
-<dh><code>-P</code></dh><dd>[proxy server port]</dd>
+<dt><code>-H</code></dt><dd>[proxy server hostname or ip address]</dd>
+<dt><code>-P</code></dt><dd>[proxy server port]</dd>
 </dl>
 <b>Example</b>:
 <source>jmeter-server -H my.proxy.server -P 8000</source>
@@ -374,9 +374,9 @@ jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-X]
 </source>
 where:
 <dl>
-<dh><code>-G</code></dh><dd>is used to define JMeter properties to be set in the servers</dd>
-<dh><code>-X</code></dh><dd>means exit the servers at the end of the test</dd>
-<dh><code>-Rserver1,server2</code></dh><dd>can be used instead of <code>-r</code> to provide a list of servers to start.
+<dt><code>-G</code></dt><dd>is used to define JMeter properties to be set in the servers</dd>
+<dt><code>-X</code></dt><dd>means exit the servers at the end of the test</dd>
+<dt><code>-Rserver1,server2</code></dt><dd>can be used instead of <code>-r</code> to provide a list of servers to start.
 Overrides <code>remote_hosts</code>, but does not define the property.</dd>
 </dl>
 <p>
@@ -391,11 +391,11 @@ Normally this is not necessary.
 (instead of modifying <code>jmeter.properties</code>).
 To do so, use the following options:</p>
 <dl>
-<dh><code>-D[prop_name]=[value]</code></dh><dd>defines a java system property value.</dd>
-<dh><code>-J[prop_name]=[value]</code></dh><dd>defines a local JMeter property.</dd>
-<dh><code>-G[prop_name]=[value]</code></dh><dd>defines a JMeter property to be sent to all remote servers.</dd>
-<dh><code>-G[propertyfile]</code></dh><dd>defines a file containing JMeter properties to be sent to all remote servers.</dd>
-<dh><code>-L[category]=[priority]</code></dh><dd>overrides a logging setting, setting a particular category to the given priority level.</dd>
+<dt><code>-D[prop_name]=[value]</code></dt><dd>defines a java system property value.</dd>
+<dt><code>-J[prop_name]=[value]</code></dt><dd>defines a local JMeter property.</dd>
+<dt><code>-G[prop_name]=[value]</code></dt><dd>defines a JMeter property to be sent to all remote servers.</dd>
+<dt><code>-G[propertyfile]</code></dt><dd>defines a file containing JMeter properties to be sent to all remote servers.</dd>
+<dt><code>-L[category]=[priority]</code></dt><dd>overrides a logging setting, setting a particular category to the given priority level.</dd>
 </dl>
 <p>The <code>-L</code> flag can also be used without the category name to set the root logging level.</p>
 <p><b>Examples</b>:
