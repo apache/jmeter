@@ -48,6 +48,9 @@ public final class MongoDBHolder {
      */
     public static DB getDBFromSource(String varName, String dbName, String login, String password) {
         MongoDB mongodb = (MongoDB) JMeterContextService.getContext().getVariables().getObject(varName);
+        if(mongodb==null) {
+            throw new IllegalStateException("You didn't define variable:"+varName +" using MongoDB Source Config (property:MongoDB Source)");
+        }
         return mongodb.getDB(dbName, login, password);
     }
 }
