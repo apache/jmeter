@@ -2624,7 +2624,7 @@ run JMeter unless all the JMeter jars are added.
     In order to run JUnit, both junit.jar and optional.jar need to be on the Ant classpath
     optional.jar is normally found in ANT_HOME/lib
 -->
-  <target name="junit"  description="Run individual JUnit test">
+  <target name="junit"  depends="compile-tests" description="Run individual JUnit test (-Dtest.case=org.apache.jorphan.test.AllTests) (-Dtest.format=plain)">
   <mkdir dir="reports"/>
   <property name="test.format" value="plain"/>
   <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
