@@ -1278,7 +1278,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li><code>Parameters</code> - text from the Parameters field</li>
 <li><code>args</code> - the parameters, split as described above</li>
 <li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
-<li><code>sampler</code> - pointer to current Sampler</li>
+<li><code>sampler</code> - <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> - pointer to current Sampler</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. 
   <source>vars.get("VAR1");
@@ -1372,7 +1372,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 <li><code>Parameters</code> - text from the Parameters field</li>
 <li><code>args</code> - the parameters, split as described above</li>
 <li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
-<li><code>sampler</code> - pointer to current Sampler</li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - pointer to current Sampler</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g. 
   <source>vars.get("VAR1");
@@ -3444,7 +3444,7 @@ vars.getObject("OBJ2");</source></dd>
 <dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
 <dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
-<dt><code>sampler</code></dt><dd>(Sampler)- gives access to the last sampler</dd>
+<dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
 <dt><code>OUT</code></dt><dd><code>System.out</code> - e.g. <code>OUT.println("message")</code></dd>
 </dl>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -3487,7 +3487,7 @@ vars.getObject("OBJ2");</source></dd>
 <dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
 <dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
-<dt><code>sampler</code></dt><dd>(Sampler)- gives access to the last sampler</dd>
+<dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
 <dt><code>OUT</code></dt><dd><code>System.out</code> - e.g. <code>OUT.println("message")</code></dd>
 </dl>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -4842,7 +4842,7 @@ props.get("START.HMS");
 props.put("PROP1","1234");
 </source></li>
 <li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li><code>sampler</code> - (Sampler)- gives access to the current sampler</li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
 <li><code>AssertionResult</code> - the assertion result</li>
 </ul>
@@ -4893,7 +4893,7 @@ props.get("START.HMS");
 props.put("PROP1","1234");
 </source></li>
 <li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li><code>sampler</code> - (Sampler)- gives access to the current sampler</li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
 <li><code>AssertionResult</code> - the assertion result</li>
 </ul>
@@ -5171,7 +5171,7 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 <li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - the current Sampler</li>
+<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)  - the current Sampler</li>
 <li>Label - the name of the Timer</li>
 <li>Filename - the file name (if any)</li>
 <li>OUT - System.out</li>
@@ -5212,7 +5212,7 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
 <li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - the current Sampler</li>
+<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - the current Sampler</li>
 <li>Label - the name of the Timer</li>
 <li>Filename - the file name (if any)</li>
 <li>OUT - System.out</li>
@@ -5430,7 +5430,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
@@ -5467,7 +5467,7 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -5502,7 +5502,7 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
 <li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -5983,7 +5983,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -6022,7 +6022,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 <li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
