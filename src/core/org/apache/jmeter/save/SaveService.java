@@ -177,13 +177,14 @@ public class SaveService {
     
     // Must match _version property value in saveservice.properties
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    private static final String PROPVERSION = "2.8";// Expected version $NON-NLS-1$
+    static final String PROPVERSION = "2.8";// Expected version $NON-NLS-1$
 
     // Internal information only
     private static String fileVersion = ""; // read from saveservice.properties file// $NON-NLS-1$
     // Must match Revision id value in saveservice.properties, 
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    private static final String FILEVERSION = "1700113"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "1700113"; // Expected value $NON-NLS-1$
+
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
@@ -411,12 +412,12 @@ public class SaveService {
 //  }
 
     // Routines for TestSaveService
-    static boolean checkPropertyVersion(){
-        return SaveService.PROPVERSION.equals(SaveService.propertiesVersion);
+    static String getPropertyVersion(){
+        return SaveService.propertiesVersion;
     }
 
-    static boolean checkFileVersion(){
-        return SaveService.FILEVERSION.equals(SaveService.fileVersion);
+    static String getFileVersion(){
+        return SaveService.fileVersion;
     }
 
     // Allow test code to check for spurious class references
