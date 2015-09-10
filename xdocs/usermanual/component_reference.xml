@@ -2750,6 +2750,7 @@ When reading from CSV results files, the header (if present) is used to determin
 <note>
 The file name can contain function and/or variable references.
 However variable references do not work in client-server mode (functions work OK).
+This is because the file is created on the client, and the client does not run the test locally so does not set up variables.
 </note>
 <p><b>Listeners can use a lot of memory if there are a lot of samples.</b>
 Most of the listeners currently keep a copy of every sample in their scope, apart from:
