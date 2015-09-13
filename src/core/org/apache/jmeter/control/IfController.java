@@ -20,8 +20,15 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.SimpleScriptContext;
+
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.mozilla.javascript.Context;
@@ -53,18 +60,92 @@ import org.mozilla.javascript.Scriptable;
 
 // for unit test code @see TestIfController
 
-public class IfController extends GenericController implements Serializable {
+public class IfController extends GenericController implements Serializable, ThreadListener {
 
     private static final Logger logger = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
     private static final String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
 
     private static final String USE_EXPRESSION = "IfController.useExpression"; //$NON-NLS-1$
+    
+    private static final String USE_RHINO_ENGINE_PROPERTY = "ifcontroller.use_rhino";
 
+    private static final boolean USE_RHINO_ENGINE = 
+            getInstance().getEngineByName("nashorn") == null || //$NON-NLS-1$
+            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) ;
+
+    
+    private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = new ThreadLocal<ScriptEngine>() {
+
+        /* (non-Javadoc)
+         * @see java.lang.ThreadLocal#initialValue()
+         */
+        @Override
+        protected ScriptEngine initialValue() {
+            return getInstance().getEngineByName("nashorn");//$NON-NLS-N$
+        }
+    
+    };
+
+    private interface JsEvaluator {
+        boolean evaluate(String testElementName, String condition);
+    }
+    
+    private static class RhinoJsEngine implements JsEvaluator {
+        @Override
+        public boolean evaluate(String testElementName, String condition) {
+            boolean result = false;
+            // now evaluate the condition using JavaScript
+            Context cx = Context.enter();
+            try {
+                Scriptable scope = cx.initStandardObjects(null);
+                Object cxResultObject = cx.evaluateString(scope, condition
+                /** * conditionString ** */
+                , "<cmd>", 1, null);
+                result = computeResultFromString(condition, Context.toString(cxResultObject));
+            } catch (Exception e) {
+                logger.error(testElementName+": error while processing "+ "[" + condition + "]\n", e);
+            } finally {
+                Context.exit();
+            }
+            return result;
+        }
+    }
+    
+    private static class NashornJsEngine implements JsEvaluator {
+        @Override
+        public boolean evaluate(String testElementName, String condition) {
+            try {
+                ScriptContext newContext = new SimpleScriptContext();
+                newContext.setBindings(NASHORN_ENGINE.get().createBindings(), ScriptContext.ENGINE_SCOPE);
+                Object o = NASHORN_ENGINE.get().eval(condition, newContext);
+                return computeResultFromString(condition, o.toString());
+            } catch (Exception ex) {
+                logger.error(testElementName+": error while processing "+ "[" + condition + "]\n", ex);
+            }
+            return false;
+        }
+    }
+        
+    private static JsEvaluator JAVASCRIPT_EVALUATOR = USE_RHINO_ENGINE ? new RhinoJsEngine() : new NashornJsEngine();
+    
+    /**
+     * Initialization On Demand Holder pattern
+     */
+    private static class LazyHolder {
+        public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
+    }
+ 
+    /**
+     * @return ScriptEngineManager singleton
+     */
+    public static ScriptEngineManager getInstance() {
+            return LazyHolder.INSTANCE;
+    }
     /**
      * constructor
      */
@@ -101,38 +182,37 @@ public class IfController extends GenericController implements Serializable {
      * evaluate the condition clause log error if bad condition
      */
     private boolean evaluateCondition(String cond) {
-        logger.debug("    getCondition() : [" + cond + "]");
-
-        String resultStr = "";
-        boolean result = false;
-
-        // now evaluate the condition using JavaScript
-        Context cx = Context.enter();
-        try {
-            Scriptable scope = cx.initStandardObjects(null);
-            Object cxResultObject = cx.evaluateString(scope, cond
-            /** * conditionString ** */
-            , "<cmd>", 1, null);
-            resultStr = Context.toString(cxResultObject);
-
-            if (resultStr.equals("false")) { //$NON-NLS-1$
-                result = false;
-            } else if (resultStr.equals("true")) { //$NON-NLS-1$
-                result = true;
-            } else {
-                throw new Exception(" BAD CONDITION :: " + cond + " :: expected true or false");
-            }
-
-            logger.debug("    >> evaluate Condition -  [ " + cond + "] results is  [" + result + "]");
-        } catch (Exception e) {
-            logger.error(getName()+": error while processing "+ "[" + cond + "]\n", e);
-        } finally {
-            Context.exit();
+        if(logger.isDebugEnabled()) {
+            logger.debug("    getCondition() : [" + cond + "]");
         }
-
-        return result;
+        return JAVASCRIPT_EVALUATOR.evaluate(getName(), cond);
     }
 
+    /**
+     * @param condition
+     * @param resultStr
+     * @return boolean
+     * @throws Exception
+     */
+    private static final boolean computeResultFromString(String condition, String resultStr) throws Exception {
+        boolean result;
+        switch(resultStr) {
+            case "false":
+                result=false;
+                break;
+            case "true":
+                result=true;
+                break;
+            default:
+                throw new Exception(" BAD CONDITION :: " + condition + " :: expected true or false");
+        }
+        if(logger.isDebugEnabled()) {
+            logger.debug("    >> evaluate Condition -  [ " + condition + "] results is  [" + result + "]");
+        }
+        return result;
+    }
+    
+    
     private static boolean evaluateExpression(String cond) {
         return cond.equalsIgnoreCase("true"); // $NON-NLS-1$
     }
@@ -208,5 +288,13 @@ public class IfController extends GenericController implements Serializable {
 
     public void setUseExpression(boolean selected) {
         setProperty(USE_EXPRESSION, selected, false);
+    }
+    @Override
+    public void threadStarted() {
+        
+    }
+    @Override
+    public void threadFinished() {
+       NASHORN_ENGINE.remove();
     }
 }
