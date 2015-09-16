@@ -105,8 +105,7 @@ body {
   padding: 0px;
 }
 
-.section
-          pre {
+.section pre, .source {
   background: none repeat scroll 0 0 black;
   color: orange;
   border: 1px solid gray;
@@ -493,5 +492,26 @@ table {
   .header > .banner {
     width: 100%;
     text-align: center;
+  }
+}
+
+@media print {
+  .nav, .header, .footer, .pagelinks, .go-top {
+    display: none;
+  }
+
+  #content {
+    display: block;
+    width: 70rem;
+    max-width: 70rem;
+  }
+
+  .section pre, .source {
+    background-color: none;
+    color: brown;
+  }
+
+  .menu, figure > a > img, .screenshot > a > img, .section-index > li {
+    box-shadow: none;
   }
 }
