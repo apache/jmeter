@@ -4919,7 +4919,7 @@ The assertion comparisons can be seen in the <complink name="Comparison Assertio
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
     <property name="Compare Content" required="Yes">Whether or not to compare the content (response data)</property>
-    <property name="Compare Time" required="Yes">If the value is >=0, then check if the response time difference is no greater than the value. 
+    <property name="Compare Time" required="Yes">If the value is &gt;=0, then check if the response time difference is no greater than the value.
     I.e. if the value is <code>0</code>, then the response times must be exactly equal.</property>
     <property name="Comparison Filters" required="No">Filters can be used to remove strings from the content comparison.
     For example, if the page has a time-stamp, it might be matched with: "<code>Time: \d\d:\d\d:\d\d</code>" and replaced with a dummy fixed time "<code>Time: HH:MM:SS</code>".
@@ -4931,7 +4931,7 @@ The assertion comparisons can be seen in the <complink name="Comparison Assertio
 <description>
 The SMIME Assertion can be used to evaluate the sample results from the Mail Reader Sampler.
 This assertion verifies if the body of a mime message is signed or not. The signature can also be verified against a specific signer certificate.
-As this is a functionality that is not necessarily needed by most users, additional jars need to be downloaded and added to <code>JMETER_HOME/lib</code> :<br></br> 
+As this is a functionality that is not necessarily needed by most users, additional jars need to be downloaded and added to <code>JMETER_HOME/lib</code>:<br></br> 
 <ul>
 <li><code>bcmail-xxx.jar</code> (BouncyCastle SMIME/CMS)</li>
 <li><code>bcprov-xxx.jar</code> (BouncyCastle Provider)</li>
@@ -4944,7 +4944,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Verify Signature" required="Yes">If selected, the assertion will verify if it is a valid signature according to the parameters defined in the Signer Certificate box.</property>
+    <property name="Verify Signature" required="Yes">If selected, the assertion will verify if it is a valid signature according to the parameters defined in the <code>Signer Certificate</code> box.</property>
     <property name="Message not signed" required="Yes">Whether or not to expect a signature in the message</property>
     <property name="Signer Cerificate" required="Yes">"<code>No Check</code>" means that it will not perform signature verification. "<code>Check values</code>" is used to verify the signature against the inputs provided. And "<code>Certificate file</code>" will perform the verification against a specific certificate file.</property>
     <property name="Message Position" required="Yes">
@@ -4963,7 +4963,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
 <section name="&sect-num;.6 Timers" anchor="timers">
 <description>
     <br></br>
-    <p>
+    <note>
     Note that timers are processed <b>before</b> each sampler in the scope in which they are found;
     if there are several timers in the same scope, <b>all</b> the timers will be processed <b>before
     each</b> sampler.
@@ -4975,7 +4975,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
     The timer will be applied before the sampler is executed.
     To apply a timer after a sampler, either add it to the next sampler, or add it as the
     child of a <complink name="Test Action"/> Sampler.
-    </p>
+    </note>
 </description>
 <component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" width="372" height="100" screenshot="timers/constant_timer.png">
 <description>
@@ -4992,7 +4992,7 @@ requests, use this timer.</p></description>
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals occurring near a particular value.  
-The total delay is the sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0) times
+The total delay is the sum of the Gaussian distributed value (with mean <code>0.0</code> and standard deviation <code>1.0</code>) times
 the deviation value you specify, and the offset value.
 Another way to explain it, in Gaussian Random Timer, the variation around constant offset has a gaussian curve distribution. 
 
@@ -5038,8 +5038,10 @@ The value can be changed in various ways:
 <li>using the remote BeanShell server to change a JMeter property</li>
 </ul>
 <p>See <a href="best-practices.html">Best Practices</a> for further details.
+<note>
 Note that the throughput value should not be changed too often during a test
 - it will take a while for the new value to take effect.
+</note>
 </p>
 </description>
 <properties>
@@ -5047,14 +5049,14 @@ Note that the throughput value should not be changed too often during a test
   <property name="Target Throughput" required="Yes">Throughput we want the timer to try to generate.</property>
   <property name="Calculate Throughput based on" required="Yes">
    <ul>
-    <li>this thread only - each thread will try to maintain the target throughput. The overall throughput will be proportional to the number of active threads.</li>
-    <li>all active threads in current thread group - the target throughput is divided amongst all the active threads in the group. 
+    <li><code>this thread only</code> - each thread will try to maintain the target throughput. The overall throughput will be proportional to the number of active threads.</li>
+    <li><code>all active threads in current thread group</code> - the target throughput is divided amongst all the active threads in the group. 
     Each thread will delay as needed, based on when it last ran.</li>
-    <li>all active threads - the target throughput is divided amongst all the active threads in all Thread Groups.
+    <li><code>all active threads</code> - the target throughput is divided amongst all the active threads in all Thread Groups.
     Each thread will delay as needed, based on when it last ran.
     In this case, each other Thread Group will need a Constant Throughput timer with the same settings.</li>
-    <li>all active threads in current thread group (shared) - as above, but each thread is delayed based on when any thread in the group last ran.</li>
-    <li>all active threads (shared) - as above; each thread is delayed based on when any thread last ran.</li>
+    <li><code>all active threads in current thread group (shared)</code> - as above, but each thread is delayed based on when any thread in the group last ran.</li>
+    <li><code>all active threads (shared)</code> - as above; each thread is delayed based on when any thread last ran.</li>
    </ul>
   </property>
   <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.
@@ -5075,15 +5077,15 @@ points of the test plan.
 
 <properties>
   <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
-  <property name="Number of Simultaneous Users to Group by" required="Yes">Number of threads to release at once. Setting it to 0 is equivalent to setting it to Number of threads in Thread Group.</property>
-  <property name="Timeout in milliseconds" required="No">If set to 0, Timer will wait for the number of threads to reach the value in "Number of Simultaneous Users to Group". If superior to 0, then timer will wait at max "Timeout in milliseconds" for the number of Threads. If after the timeout interval the number of users waiting is not reached, timer will stop waiting. Defaults to 0</property>
+  <property name="Number of Simultaneous Users to Group by" required="Yes">Number of threads to release at once. Setting it to <code>0</code> is equivalent to setting it to Number of threads in Thread Group.</property>
+  <property name="Timeout in milliseconds" required="No">If set to <code>0</code>, Timer will wait for the number of threads to reach the value in "<code>Number of Simultaneous Users to Group</code>". If superior to <code>0</code>, then timer will wait at max "<code>Timeout in milliseconds</code>" for the number of Threads. If after the timeout interval the number of users waiting is not reached, timer will stop waiting. Defaults to <code>0</code></property>
 </properties>
 <note>
-If timeout in milliseconds is set to 0 and number of threads never reaches "Number of Simultaneous Users to Group by" then Test will pause infinitely.
+If timeout in milliseconds is set to <code>0</code> and number of threads never reaches "<code>Number of Simultaneous Users to Group by</code>" then Test will pause infinitely.
 Only a forced stop will stop it. Setting Timeout in milliseconds is an option to consider in this case.
 </note>
 <note>
-Synchronizing timer blocks only within one JVM, so if using Distributed testing ensure you never set "Number of Simultaneous Users to Group by" to a value superior to the number of users
+Synchronizing timer blocks only within one JVM, so if using Distributed testing ensure you never set "<code>Number of Simultaneous Users to Group by</code>" to a value superior to the number of users
 of its containing Thread group considering 1 injector only.
 </note>
 
@@ -5098,14 +5100,14 @@ The BeanShell Timer can be used to generate a delay.
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
-The test element supports the ThreadListener and TestListener methods.
+The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
 These should be defined in the initialisation file.
-See the file BeanShellListeners.bshrc for example definitions.
+See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </p>
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.
-    The name is stored in the script variable Label</property>
+    The name is stored in the script variable <code>Label</code></property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -5114,13 +5116,13 @@ See the file BeanShellListeners.bshrc for example definitions.
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>bsh.args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>bsh.args</code> - String array containing parameters, split on white-space</li>
     </ul>
     </property>
     <property name="Script file" required="No">
     A file containing the BeanShell script to run.
-    The file name is stored in the script variable FileName
+    The file name is stored in the script variable <code>FileName</code>
      The return value is used as the number of milliseconds to wait.
      </property>
     <property name="Script" required="Yes (unless script file is provided)">
@@ -5129,14 +5131,18 @@ See the file BeanShellListeners.bshrc for example definitions.
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
-<li>log - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
+<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>
+vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+</source></li>
+<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <code>SampleResult</code> (if any)</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
+<p>If the property <code>beanshell.timer.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
 
@@ -5154,12 +5160,12 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul>
     </property>
     <property name="Script file" required="No">
-    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
+    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property
      The return value is converted to a long integer and used as the number of milliseconds to wait.
      </property>
     <property name="Script" required="Yes (unless script file is provided)">
@@ -5168,14 +5174,17 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 </properties>
 <p>Before invoking the script, some variables are set up in the script interpreter:</p>
 <ul>
-<li>log - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)  - the current Sampler</li>
-<li>Label - the name of the Timer</li>
-<li>Filename - the file name (if any)</li>
-<li>OUT - System.out</li>
+<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>
+vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());</source></li>
+<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)  - the current Sampler</li>
+<li><code>Label</code> - the name of the Timer</li>
+<li><code>FileName</code> - the file name (if any)</li>
+<li><code>OUT</code> - System.out</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
@@ -5194,12 +5203,12 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul>
     </property>
     <property name="Script file" required="No">
-    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property
+    A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property
      The return value is converted to a long integer and used as the number of milliseconds to wait.
      </property>
     <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
@@ -5209,14 +5218,16 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
 </properties>
 <p>Before invoking the script, some variables are set up in the script interpreter:</p>
 <ul>
-<li>log - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - the current Sampler</li>
-<li>Label - the name of the Timer</li>
-<li>Filename - the file name (if any)</li>
-<li>OUT - System.out</li>
+<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());</source></li>
+<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - the current Sampler</li>
+<li><code>Label</code> - the name of the Timer</li>
+<li><code>FileName</code> - the file name (if any)</li>
+<li><code>OUT</code> - System.out</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
@@ -5257,11 +5268,11 @@ test sample with appropriate values from the matching link or form.  Perl-type r
 expressions are used to find matches.</p>
 </description>
 <note>
-Matches are performed using protocol, host, path and parameter names.
+Matches are performed using <code>protocol</code>, <code>host</code>, <code>path</code> and <code>parameter names</code>.
 The target sampler cannot contain parameters that are not in the response links.
 </note>
 <note>
-If using distributed testing, ensure you switch mode (see jmeter.properties) so that it's not a stripping one, see <bugzilla>56376</bugzilla>
+If using distributed testing, ensure you switch mode (see <code>jmeter.properties</code>) so that it's not a stripping one, see <bugzilla>56376</bugzilla>
 </note>
 
 <example title="Spidering Example" anchor="spider_example">
@@ -5269,7 +5280,7 @@ If using distributed testing, ensure you switch mode (see jmeter.properties) so 
 hitting link after link parsed from the HTML returned from your server (this is not
 actually the most useful thing to do, but it serves as a good example).  You would create
 a <complink name="Simple Controller"/>, and add the &quot;HTML Link Parser&quot; to it.  Then, create an
-HTTP Request, and set the domain to &quot;.*&quot;, and the path likewise. This will
+HTTP Request, and set the domain to &quot;<code>.*</code>&quot;, and the path likewise. This will
 cause your test sample to match with any link found on the returned pages.  If you wanted to
 restrict the spidering to a particular domain, then change the domain value
 to the one you want.  Then, only links to that domain will be followed.
@@ -5283,14 +5294,14 @@ of the poll options are very dynamic - maybe user generated.  If you wanted JMet
 test the poll, you could either create test samples with hardcoded values chosen, or you
 could let the HTML Link Parser parse the form, and insert a random poll option into
 your URL test sample.  To do this, follow the above example, except, when configuring
-your Web Test controller's URL options, be sure to choose &quot;POST&quot; as the
-method.  Put in hard-coded values for the domain, path, and any additional form parameters.
-Then, for the actual radio button parameter, put in the name (let's say it's called &quot;poll_choice&quot;),
-and then &quot;.*&quot; for the value of that parameter.  When the modifier examines
+your Web Test controller's URL options, be sure to choose &quot;<code>POST</code>&quot; as the
+method.  Put in hard-coded values for the <code>domain</code>, <code>path</code>, and any additional form parameters.
+Then, for the actual radio button parameter, put in the name (let's say it's called &quot;<code>poll_choice</code>&quot;),
+and then &quot;<code>.*</code>&quot; for the value of that parameter.  When the modifier examines
 this URL test sample, it will find that it &quot;matches&quot; the poll form (and
 it shouldn't match any other form, given that you've specified all the other aspects of
 the URL test sample), and it will replace your form parameters with the matching
-parameters from the form.  Since the regular expression &quot;.*&quot; will match with
+parameters from the form.  Since the regular expression &quot;<code>.*</code>&quot; will match with
 anything, the modifier will probably have a list of radio buttons to choose from.  It
 will choose at random, and replace the value in your URL test sample.  Each time through
 the test, a new random value will be chosen.</p>
@@ -5323,7 +5334,7 @@ Clever users will even determine that this modifier can be used to grab values t
         grab the value assigned to it, whether it's in an HREF or a form.</property>
         <property name="Path Extension" required="No">Some web apps rewrite URLs by appending
         a semi-colon plus the session id parameter.  Check this box if that is so.</property>
-        <property name="Do not use equals in path extension" required="No">Some web apps rewrite URLs without using an &quot;=&quot; sign between the parameter name and value (such as Intershop Enfinity).</property>
+        <property name="Do not use equals in path extension" required="No">Some web apps rewrite URLs without using an &quot;<code>=</code>&quot; sign between the parameter name and value (such as Intershop Enfinity).</property>
         <property name="Do not use questionmark in path extension" required="No">Prevents the query string to end up in the path extension (such as Intershop Enfinity).</property>
         <property name="Cache Session Id?" required="Yes">
         Should the value of the session Id be saved for later use when the session Id is not present?
@@ -5334,7 +5345,7 @@ Clever users will even determine that this modifier can be used to grab values t
 </properties>
 
 <note>
-If using distributed testing, ensure you switch mode (see jmeter.properties) so that it's not a stripping one, see <bugzilla>56376</bugzilla>.
+If using distributed testing, ensure you switch mode (see <code>jmeter.properties</code>) so that it's not a stripping one, see <bugzilla>56376</bugzilla>.
 </note>
 
 </component>
@@ -5345,14 +5356,14 @@ specifying the name of the parameter, a value prefix and suffix, and counter par
 modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
 Request that it modifies, it will replace any parameter with the same name or add the appropriate
 parameter to the requests list of arguments.</p>
-<note>The value of the argument in your HTTP Request must be a '*' in order for the HTML Parameter Mask
+<note>The value of the argument in your HTTP Request must be a '<code>*</code>' in order for the HTML Parameter Mask
 Modifier to replace it.</note>
 <p>As an example, the username for a login script could be modified to send a series of values
 such as:<br></br>
-user_1<br></br>
-user_2<br></br>
-user_3<br></br>
-user_4, etc.</p></description>
+<code>user_1</code><br></br>
+<code>user_2</code><br></br>
+<code>user_3</code><br></br>
+<code>user_4</code>, etc.</p></description>
 
 <properties>
         <property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
@@ -5361,7 +5372,7 @@ user_4, etc.</p></description>
         <property name="ID Prefix" required="No">A string value to prefix to every generated value.</property>
         <property name="Lower Bound" required="Yes">A number value to start the counter at.</property>
         <property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts
-        with the Lower Bound value.</property>
+        with the <code>Lower Bound</code> value.</property>
         <property name="Increment" required="Yes">Value to increment the counter by each time through.</property>
         <property name="ID Suffix" required="No">A string value to add as suffix to every generated value.</property>
 </properties>
@@ -5374,10 +5385,10 @@ you to specify a series of values for any User Variable. For each thread, the va
 in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
 user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.</p>
 
-<p>The variable is specified by clicking the Add Variable button in the bottom of the panel and filling in the Variable name in the 'Name:' column.
-To add a new value to the series, click the 'Add User' button and fill in the desired value in the newly added column.</p>
+<p>The variable is specified by clicking the <code>Add Variable</code> button in the bottom of the panel and filling in the Variable name in the '<code>Name:</code>' column.
+To add a new value to the series, click the '<code>Add User</code>' button and fill in the desired value in the newly added column.</p>
 
-<p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: ${variable}.</p>
+<p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: <code>${variable}</code>.</p>
 <p>See also the <complink name="CSV Data Set Config"/> element, which is more suitable for large numbers of parameters</p>
 </description>
 
@@ -5401,14 +5412,14 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
-The test element supports the ThreadListener and TestListener methods.
+The test element supports the <code>ThreadListener</code> and <code>TestListener</code> methods.
 These should be defined in the initialisation file.
-See the file BeanShellListeners.bshrc for example definitions.
+See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </p>
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.
-    The name is stored in the script variable Label</property>
+    The name is stored in the script variable <code>Label</code></property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -5417,24 +5428,26 @@ See the file BeanShellListeners.bshrc for example definitions.
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>bsh.args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>bsh.args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the BeanShell script to run.
-    The file name is stored in the script variable FileName</property>
+    The file name is stored in the script variable <code>FileName</code></property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script. The return value is ignored.</property>
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
-<li>log - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
+<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());</source></li>
+<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
+<p>If the property <code>beanshell.preprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
 <component name="BSF PreProcessor" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
@@ -5449,27 +5462,30 @@ The BSF PreProcessor allows BSF script code to be applied before taking a sample
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>
-The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+The script (or file) is processed using the <code>BSFEngine.exec()</code> method, which does not return a value.
 </p>
 <p>The following BSF variables are set up for use by the script:</p>
 <ul>
-<li>log - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li>Label - the String Label</li>
-<li>Filename - the script file name (if any)</li>
-<li>Parameters - the parameters (as a String)</li>
-<li>args - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
-<li>OUT - System.out - e.g. OUT.println("message")</li>
+<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>Label</code> - the String Label</li>
+<li><code>FileName</code> - the script file name (if any)</li>
+<li><code>Parameters</code> - the parameters (as a String)</li>
+<li><code>args</code> - the parameters as a String array (split on whitespace)</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+vars.getObject("OBJ2");</source></li>
+<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
+<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
@@ -5486,25 +5502,28 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
     <property name="Parameters" required="No">Parameters to pass to the script.
     The parameters are stored in the following variables:
     <ul>
-        <li>Parameters - string containing the parameters as a single variable</li>
-        <li>args - String array containing parameters, split on white-space</li>
+        <li><code>Parameters</code> - string containing the parameters as a single variable</li>
+        <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
-    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "user.dir" System property</property>
+    <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>The following JSR223 variables are set up for use by the script:</p>
 <ul>
-<li>log - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li>Label - the String Label</li>
-<li>Filename - the script file name (if any)</li>
-<li>Parameters - the parameters (as a String)</li>
-<li>args - the parameters as a String array (split on whitespace)</li>
-<li>ctx - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li>vars - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - (JMeterProperties - class java.util.Properties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampler - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
-<li>OUT - System.out - e.g. OUT.println("message")</li>
+<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>Label</code> - the String Label</li>
+<li><code>FileName</code> - the script file name (if any)</li>
+<li><code>Parameters</code> - the parameters (as a String)</li>
+<li><code>args</code> - the parameters as a String array (split on whitespace)</li>
+<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
+<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+vars.put(key,val);
+vars.putObject("OBJ1",new Object());
+vars.getObject("OBJ2");</source></li>
+<li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
+<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
@@ -5523,8 +5542,8 @@ See the following Test plan:
         <link href="../demos/JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
 </links>
 <p>
-In the linked test plan,"Create Price Cut-Off" JDBC PreProcessor calls a stored procedure to create a Price Cut-Off in Database,
-this one will be used by "Calculate Price cut off".
+In the linked test plan, "<code>Create Price Cut-Off</code>" JDBC PreProcessor calls a stored procedure to create a Price Cut-Off in Database,
+this one will be used by "<code>Calculate Price cut off</code>".
 </p>
 <figure width="818" height="394" image="jdbc-pre-processor.png">Create Price Cut-Off Preprocessor</figure>
 
@@ -5546,24 +5565,28 @@ this one will be used by "Calculate Price cut off".
         <property name="Parameter values regex group number" required="Yes">Group number of regular expression used to extract parameter values</property>
     </properties>
     
-    <p>Example:</p>
+    <example title="Regexp Example" anchor="regex_user_param_example">
     <p>Suppose we have a request which returns a form with 3 input parameters and we want to extract the value of 2 of them to inject them in next request</p>
-    <p>1. - Create Post Processor Regular Expression for first HTTP Request</p>
-    <ul>
-        <li>refName - set name of a regular expression Ex. (listParams)</li>
-        <li>regular expression - expression that will extract input names and input values attributes
+    <ol>
+      <li>Create Post Processor Regular Expression for first HTTP Request
+        <ul>
+          <li><code>refName</code> - set name of a regular expression Expression (<code>listParams</code>)</li>
+          <li><code>regular expression</code> - expression that will extract input names and input values attributes
             <br/>
-            Ex: input name="([^"]+?)" value="([^"]+?)"</li>
-        <li>template would be empty</li>
-        <li>match nr - -1 (in order to iterate through all the possible matches)</li>
-    </ul>
-    
-    <p>2. - Create Pre Processor RegEx User Parameters for second HTTP Request</p>
-    <ul>
-        <li>refName - set the same reference name of a regular expression, would be listParams in our example</li>
-        <li>parameter names group number - group number of regular expression for parameter names, would be 1 in our example</li>
-        <li>parameter values group number - group number of regular expression for parameter values, would be 2 in our example</li>
-    </ul>
+            Ex: <code>input name="([^"]+?)" value="([^"]+?)"</code></li>
+          <li><code>template</code> - would be empty</li>
+          <li><code>match nr</code> - <code>-1</code> (in order to iterate through all the possible matches)</li>
+        </ul>
+      </li>
+      <li>Create Pre Processor RegEx User Parameters for second HTTP Request
+        <ul>
+          <li><code>refName</code> - set the same reference name of a regular expression, would be <code>listParams</code> in our example</li>
+          <li><code>parameter names group number</code> - group number of regular expression for parameter names, would be <code>1</code> in our example</li>
+          <li><code>parameter values group number</code> - group number of regular expression for parameter values, would be <code>2</code> in our example</li>
+        </ul>
+      </li>
+    </ol>
+    </example>
     
     <p>See also the <complink name="Regular Expression Extractor"/> element, which is used to extract parametes names and values</p>
 </component>
