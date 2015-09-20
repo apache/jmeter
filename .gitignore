@@ -22,5 +22,10 @@ target/
 build-local.properties
 jmeter-fb.*
 
+# ignore generated keystore and certs
+/bin/proxyserver.jks
+/bin/ApacheJMeterTemporaryRootCA.crt
+/bin/ApacheJMeterTemporaryRootCA.usr
+
 # ignore jar's in lib/
 /lib/**/*.jar
