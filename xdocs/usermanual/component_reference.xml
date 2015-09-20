@@ -6088,8 +6088,8 @@ The Test Plan is where the overall settings for a test are specified.
 </p>
 <p>
 Static variables can be defined for values that are repeated throughout a test, such as server names.
-For example the variable SERVER could be defined as www.example.com, and the rest of the test plan
-could refer to it as ${SERVER}. This simplifies changing the name later.
+For example the variable <code>SERVER</code> could be defined as <code>www.example.com</code>, and the rest of the test plan
+could refer to it as <code>${SERVER}</code>. This simplifies changing the name later.
 </p>
 <p>
 If the same variable name is reused on one of more
@@ -6108,7 +6108,7 @@ Selecting Functional Testing instructs JMeter to save the  additional sample inf
 - Response Data and Sampler Data - to all result files.
 This increases the resources needed to run a test, and may adversely impact JMeter performance.
 If more data is required for a particular sampler only, then add a Listener to it, and configure the fields as required.
-[The option does not affect CSV result files, which cannot currently store such information.]
+<note>The option does not affect CSV result files, which cannot currently store such information.</note>
 </p>
 <p>Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
 <p>Run tearDown Thread Groups after shutdown of main threads: 
@@ -6119,13 +6119,13 @@ The tearDown threads won't be run if the test is forcibly stopped.
 Test plan now provides an easy way to add classpath setting to a specific test plan. 
 The feature is additive, meaning that you can add jar files or directories,
 but removing an entry requires restarting JMeter.
-Note that this cannot be used to add JMeter GUI plugins, because they are processed earlier.
+<note>Note that this cannot be used to add JMeter GUI plugins, because they are processed earlier.</note>
 However it can be useful for utility jars such as JDBC drivers. The jars are only added to
 the search path for the JMeter loader, not for the system class loader.
 </p>
 <p>
 JMeter properties also provides an entry for loading additional classpaths.
-In jmeter.properties, edit "user.classpath" or "plugin_dependency_paths" to include additional libraries.
+In <code>jmeter.properties</code>, edit "<code>user.classpath</code>" or "<code>plugin_dependency_paths</code>" to include additional libraries.
 See <a href="get-started.html#classpath">JMeter's Classpath</a> and
 <a href="get-started.html#configuring_jmeter">Configuring JMeter</a> for details.
 </p>
@@ -6151,16 +6151,16 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
         Determines what happens if a sampler error occurs, either because the sample itself failed or an assertion failed.
         The possible choices are:
         <ul>
-        <li>Continue - ignore the error and continue with the test</li>
-        <li>Start Next Loop - ignore the error, start next loop and continue with the test</li>
-        <li>Stop Thread - current thread exits</li>
-        <li>Stop Test - the entire test is stopped at the end of any current samples.</li>
-        <li>Stop Test Now - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
+        <li><code>Continue</code> - ignore the error and continue with the test</li>
+        <li><code>Start Next Loop</code> - ignore the error, start next loop and continue with the test</li>
+        <li><code>Stop Thread</code> - current thread exits</li>
+        <li><code>Stop Test</code> - the entire test is stopped at the end of any current samples.</li>
+        <li><code>Stop Test Now</code> - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
         </ul>
         </property>
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
         <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
-        <property name="Loop Count" required="Yes, unless forever is selected">Number of times to perform the test case.  Alternatively, "forever" can be selected causing the test to run until manually stopped.</property>
+        <property name="Loop Count" required="Yes, unless forever is selected">Number of times to perform the test case.  Alternatively, "<code>forever</code>" can be selected causing the test to run until manually stopped.</property>
         <property name="Delay Thread creation until needed" required="Yes">
         If selected, threads are created only when the appropriate proportion of the ramp-up time has elapsed.
         This is most appropriate for tests with a ramp-up time that is significantly longer than the time to execute a single thread.
@@ -6171,18 +6171,18 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
         </property>
         <property name="Scheduler" required="Yes">If selected, enables the scheduler</property>
         <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.
-            Note: the Startup Delay field over-rides this - see below.
+            Note: the <code>Startup Delay</code> field over-rides this - see below.
             </property>
         <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.
-            Note: the Duration field over-rides this - see below.
+            Note: the <code>Duration</code> field over-rides this - see below.
             </property>
         <property name="Duration (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative end time. 
-            JMeter will use this to calculate the End Time, and ignore the End Time value.
+            JMeter will use this to calculate the End Time, and ignore the <code>End Time</code> value.
         </property>
         <property name="Startup delay (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative startup delay.
-            JMeter will use this to calculate the Start Time, and ignore the Start Time value.
+            JMeter will use this to calculate the Start Time, and ignore the <code>Start Time</code> value.
         </property>
 </properties>
 </component>
@@ -6190,8 +6190,8 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 <component name="WorkBench" index="&sect-num;.9.3"  width="384" height="103" screenshot="workbench.png">
 <description>
 <p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
-When you save your test plan, WorkBench items are not saved with it by default unless you check "Save Workbench" option.
-Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p>
+When you save your test plan, WorkBench items are not saved with it by default unless you check "<code>Save Workbench</code>" option.
+Your WorkBench can be saved independently, if you like (right-click on <code>WorkBench</code> and choose <code>Save</code>).</p>
 <p>Certain test elements are only available on the WorkBench:</p>
 <ul>
 <li><complink name="HTTP(S) Test Script Recorder"/></li>
@@ -6222,17 +6222,17 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
   JDK).
 </p>
 <p>
-  To select the client certificate, choose Options&rarr;SSL Manager from the menu bar.
+  To select the client certificate, choose <code>Options</code>&rarr;<code>SSL Manager</code> from the menu bar.
   You will be presented with a file finder that looks for PKCS12 files by default.
-  Your PKCS12 file must have the extension '.p12' for SSL Manager to recognize it
+  Your PKCS12 file must have the extension '<code>.p12</code>' for SSL Manager to recognize it
   as a PKCS12 file.  Any other file will be treated like an average JKS key store.
   If JSSE is correctly installed, you will be prompted for the password.  The text
-  box does not hide the characters you type at this point--so make sure no one is
+  box does not hide the characters you type at this point -- so make sure no one is
   looking over your shoulder.  The current implementation assumes that the password
   for the keystore is also the password for the private key of the client you want
   to authenticate as.
 </p>
-<p>Or you can set the appropriate System properties - see the system.properties file.</p>
+<p>Or you can set the appropriate System properties - see the <code>system.properties</code> file.</p>
 <p>
   The next time you run your test, the SSL Manager will examine your key store to
   see if it has at least one key available to it.  If there is only one key, SSL
@@ -6244,12 +6244,12 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
   You must have your Certificate Authority (CA) certificate installed properly
   if it is not signed by one of the five CA certificates that ships with your
   JDK.  One method to install it is to import your CA certificate into a JKS
-  file, and name the JKS file "jssecacerts".  Place the file in your JRE's
-  lib/security folder.  This file will be read before the "cacerts" file in
-  the same directory.  Keep in mind that as long as the "jssecacerts" file
-  exists, the certificates installed in "cacerts" will not be used.  This may
+  file, and name the JKS file "<code>jssecacerts</code>".  Place the file in your JRE's
+  <code>lib/security</code> folder.  This file will be read before the "<code>cacerts</code>" file in
+  the same directory.  Keep in mind that as long as the "<code>jssecacerts</code>" file
+  exists, the certificates installed in "<code>cacerts</code>" will not be used.  This may
   cause problems for you.  If you don't mind importing your CA certificate into
-  the "cacerts" file, then you can authenticate against all of the CA certificates
+  the "<code>cacerts</code>" file, then you can authenticate against all of the CA certificates
   installed.
 </p>
 </component>
@@ -6263,11 +6263,11 @@ Ensure you read this <a href="https://wiki.apache.org/jmeter/TestRecording210">w
 
 <p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
 Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu (Add &rarr; Non-Test Elements &rarr; HTTP(S) Test Script Recorder).</p>
+Add menu (<code>Add</code> &rarr; <code>Non-Test Elements</code> &rarr; <code>HTTP(S) Test Script Recorder</code>).</p>
 <p>
 The recorder is implemented as an HTTP(S) proxy server.
 You need to set up your browser use the proxy for all HTTP and HTTPS requests.
-[Do not use JMeter as the proxy for any other request types - FTP, etc. - as JMeter cannot handle them.]
+<note>Do not use JMeter as the proxy for any other request types - FTP, etc. - as JMeter cannot handle them.</note>
 </p>
 <p>
 Ideally use private browsing mode when recording the session.
@@ -6280,7 +6280,7 @@ HTTPS connections use certificates to authenticate the connection between the br
 When connecting via HTTPS, the server presents the certificate to the browser.
 To authenticate the certificate, the browser checks that the server certificate is signed
 by a Certificate Authority (CA) that is linked to one of its in-built root CAs.
-[Browsers also check that the certificate is for the correct host or domain, and that it is valid and not expired.]
+<note>Browsers also check that the certificate is for the correct host or domain, and that it is valid and not expired.</note>
 If any of the browser checks fail, it will prompt the user who can then decided whether to allow the connection to proceed.  
 </p>
 <p>
@@ -6296,7 +6296,7 @@ When using dynamic mode, the certificate will be for the correct host name, and 
 By default, this CA certificate won't be trusted by the browser, however it can be installed as a trusted certificate.
 Once this is done, the generated server certificates will be accepted by the browser.
 This has the advantage that even embedded HTTPS resources can be intercepted, and there is no need to override the browser checks for each new server.
-(Browsers don't prompt for embedded resources. So with earlier versions, embedded resources would only be downloaded for servers that were already 'known' to the browser)
+<note>Browsers don't prompt for embedded resources. So with earlier versions, embedded resources would only be downloaded for servers that were already 'known' to the browser</note>
 </p>
 <p>Unless a keystore is provided (and you define the property <code>proxy.cert.alias</code>),
 JMeter needs to use the keytool application to create the keystore entries. 
@@ -6306,14 +6306,14 @@ If necessary, the system property <code>keytool.directory</code> can be used to 
 This should be defined in the file <code>system.properties</code>.
 </p>
 <p>
-The JMeter certificates are generated (if necessary) when the Start button is pressed.
+The JMeter certificates are generated (if necessary) when the <code>Start</code> button is pressed.
 <b>Certificate generation can take some while, during which time the GUI will be unresponsive.</b>
 The cursor is changed to an hour-glass whilst this is happening.
 When certificate generation is complete, the GUI will display a pop-up dialogue containing the details of the certificate for the root CA.
 This certificate needs to be installed by the browser in order for it to accept the host certificates generated by JMeter; see <a href="#install_cert">below</a> for details.
 </p>
 <p>
-If necessary, you can force JMeter to regenerate the keystore (and the exported certificates - ApacheJMeterTemporaryRootCA[.usr|.crt]) by deleting the keystore file <code>proxyserver.jks</code> from the JMeter directory.
+If necessary, you can force JMeter to regenerate the keystore (and the exported certificates - <code>ApacheJMeterTemporaryRootCA[.usr|.crt]</code>) by deleting the keystore file <code>proxyserver.jks</code> from the JMeter directory.
 </p>
 <p>
 With versions of JMeter up to 2.9, it used a single certificate for all target servers.
@@ -6325,17 +6325,17 @@ As a consequence:
 <ul>
 <li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:
 <source>
-1) The server's name "www.example.com" does not match the certificate's name
-   "JMeter Proxy (DO NOT TRUST)". Somebody may be trying to eavesdrop on you.
-2) The certificate for "JMeter Proxy (DO NOT TRUST)" is signed by the unknown Certificate Authority
-   "JMeter Proxy (DO NOT TRUST)". It is not possible to verify that this is a valid certificate.
+1) The server's name "<code>www.example.com</code>" does not match the certificate's name
+   "<code>JMeter Proxy (DO NOT TRUST)</code>". Somebody may be trying to eavesdrop on you.
+2) The certificate for "<code>JMeter Proxy (DO NOT TRUST)</code>" is signed by the unknown Certificate Authority
+   "<code>JMeter Proxy (DO NOT TRUST)</code>". It is not possible to verify that this is a valid certificate.
 </source>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.
 However, do not accept this certificate permanently; it should only be accepted temporarily.
 Browsers only prompt this dialogue for the certificate of the main url, not for the resources loaded in the page, such as images, css or javascript files hosted on a secured external CDN. 
 If you have such resources (gmail has for example), you'll have to first browse manually to these other domains in order to accept JMeter's certificate for them. 
-Check in jmeter.log for secure domains that you need to register certificate for.
+Check in <code>jmeter.log</code> for secure domains that you need to register certificate for.
 </li>
 <li>If the browser has already registered a validated certificate for this domain, the browser will detect JMeter as a security breach and will refuse to load the page. If so, you have to remove the trusted certificate from your browser's keystore.
 </li>
@@ -6346,19 +6346,19 @@ Versions of JMeter from 2.10 onwards still support this method, and will continu
 The following properties can be used to change the certificate that is used:
 </p>
 <ul>
-<li>proxy.cert.directory - the directory in which to find the certificate (default = JMeter bin/)</li>
-<li>proxy.cert.file - name of the keystore file (default "proxyserver.jks")</li>
-<li>proxy.cert.keystorepass - keystore password (default "password") [Ignored if using JMeter certificate]</li>
-<li>proxy.cert.keypassword - certificate key password (default "password") [Ignored if using JMeter certificate]</li>
-<li>proxy.cert.type - the certificate type (default "JKS") [Ignored if using JMeter certificate]</li>
-<li>proxy.cert.factory - the factory (default "SunX509") [Ignored if using JMeter certificate]</li>
-<li>proxy.cert.alias - the alias for the key to be used. If this is defined, JMeter does not attempt to generate its own certificate(s).</li>
-<li>proxy.ssl.protocol - the protocol to be used (default "SSLv3")</li>
+<li><code>proxy.cert.directory</code> - the directory in which to find the certificate (default = JMeter <code>bin/</code>)</li>
+<li><code>proxy.cert.file</code> - name of the keystore file (default "<code>proxyserver.jks</code>")</li>
+<li><code>proxy.cert.keystorepass</code> - keystore password (default "<code>password</code>") [Ignored if using JMeter certificate]</li>
+<li><code>proxy.cert.keypassword</code> - certificate key password (default "<code>password</code>") [Ignored if using JMeter certificate]</li>
+<li><code>proxy.cert.type</code> - the certificate type (default "<code>JKS</code>") [Ignored if using JMeter certificate]</li>
+<li><code>proxy.cert.factory</code> - the factory (default "<code>SunX509</code>") [Ignored if using JMeter certificate]</li>
+<li><code>proxy.cert.alias</code> - the alias for the key to be used. If this is defined, JMeter does not attempt to generate its own certificate(s).</li>
+<li><code>proxy.ssl.protocol</code> - the protocol to be used (default "<code>SSLv3</code>")</li>
 </ul>
 <note>
 If your browser currently uses a proxy (e.g. a company intranet may route all external requests via a proxy),
 then you need to <a href="get-started.html#proxy_server">tell JMeter to use that proxy</a> before starting JMeter, 
-using the <a href="get-started.html#options">command-line options</a> -H and -P.
+using the <a href="get-started.html#options">command-line options</a> <code>-H</code> and <code>-P</code>.
 This setting will also be needed when running the generated test plan.
 </note>
 <a name="install_cert"/>
@@ -6385,15 +6385,15 @@ Please ensure that only trusted users have access to the host with the keystore.
 Choose the following options:
 </p>
 <ul>
-<li>Tools / Options</li>
-<li>Advanced / Certificates</li>
-<li>View Certificates</li>
-<li>Authorities</li>
-<li>Import &hellip;</li>
-<li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.crt</code>, press Open</li>
-<li>Click View and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
-<li>If OK, select "Trust this CA to identify web sites", and press OK</li>
-<li>Close dialogs by pressing OK as necessary</li>
+<li><code>Tools / Options</code></li>
+<li><code>Advanced / Certificates</code></li>
+<li><code>View Certificates</code></li>
+<li><code>Authorities</code></li>
+<li><code>Import &hellip;</code></li>
+<li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.crt</code>, press <code>Open</code></li>
+<li>Click <code>View</code> and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
+<li>If OK, select "<code>Trust this CA to identify web sites</code>", and press <code>OK</code></li>
+<li>Close dialogs by pressing <code>OK</code> as necessary</li>
 </ul>
 <h5>Installing the certificate in Chrome or Internet Explorer</h5>
 <p>
@@ -6401,14 +6401,14 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
 </p>
 <ul>
 <li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.crt</code>, and open it</li>
-<li>Click on the "Details" tab and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
-<li>If OK, go back to the "General" tab, and click on "Install Certificate &hellip;" and follow the Wizard prompts</li>
+<li>Click on the "<code>Details</code>" tab and check that the certificate details agree with the ones displayed by the JMeter Test Script Recorder</li>
+<li>If OK, go back to the "<code>General</code>" tab, and click on "<code>Install Certificate &hellip;</code>" and follow the Wizard prompts</li>
 </ul>
 <h5>Installing the certificate in Opera</h5>
 <ul>
-<li>Tools / Preferences / Advanced / Security</li>
-<li>Manage Certificates &hellip;</li>
-<li>Select "Intermediate" tab, click "Import &hellip;"</li>
+<li><code>Tools / Preferences / Advanced / Security</code></li>
+<li><code>Manage Certificates &hellip;</code></li>
+<li>Select "<code>Intermediate</code>" tab, click "<code>Import &hellip;</code>"</li>
 <li>Browse to the JMeter launch directory, and click on the file <code>ApacheJMeterTemporaryRootCA.usr</code>, and open it</li>
 <li></li>
 </ul>
@@ -6416,64 +6416,64 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  8080 is the default, but you can change it.</property>
+        <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  <code>8080</code> is the default, but you can change it.</property>
         <property name="HTTPS Domains" required="No">List of domain (or host) names for HTTPS. Use this to pre-generate certificates for all servers you wish to record.
         <br/>
-        For example, *.apache.org,*.incubator.apache.org
+        For example, <code>*.apache.org,*.incubator.apache.org</code>
         <br/>
         Note that wildcard domains only apply to one level,
-        i.e. podling.incubator.apache.org matches *.incubator.apache.org but not *.apache.org
+        i.e. <code>podling.incubator.apache.org</code> matches <code>*.incubator.apache.org</code> but not <code>*.apache.org</code>
         </property>
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
            <ul>
-             <li>Do not group samplers: store all recorded samplers sequentially, without any grouping.</li>
-             <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
-             <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
-             <li>Store 1<sup>st</sup> sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources &hellip;" flags will be turned on in those samplers.</li>
-             <li>Put each group in a new transaction controller: create a new <complink name="Transaction Controller"/> for each group, and store all samplers for that group in it.</li>
+             <li><code>Do not group samplers</code> - store all recorded samplers sequentially, without any grouping.</li>
+             <li><code>Add separators between groups</code> - add a controller named "<code>--------------</code>" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
+             <li><code>Put each group in a new controller</code> - create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
+             <li><code>Store 1<sup>st</sup> sampler of each group only</code> - only the first request in each group will be recorded. The "<code>Follow Redirects</code>" and "<code>Retrieve All Embedded Resources &hellip;</code>" flags will be turned on in those samplers.</li>
+             <li><code>Put each group in a new transaction controller</code> - create a new <complink name="Transaction Controller"/> for each group, and store all samplers for that group in it.</li>
            </ul>
-           The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
-           to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
+           The property <code>proxy.pause</code> determines the minimum gap that JMeter needs between requests
+           to treat them as separate "clicks". The default is <code>1000</code> (milliseconds) i.e. 1 second.
            If you are using grouping, please ensure that you leave the required gap between clicks.
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
         <property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?
         If specified, a Header Manager will be added to each HTTP Sampler.
         The Proxy server always removes Cookie and Authorization headers from the generated Header Managers.
-        By default it also removes If-Modified-Since and If-None-Match headers.
+        By default it also removes <code>If-Modified-Since</code> and <code>If-None-Match</code> headers.
         These are used to determine if the browser cache items are up to date;
         when recording one normally wants to download all the content.
-        To change which additional headers are removed, define the JMeter property <b>proxy.headers.remove</b>
+        To change which additional headers are removed, define the JMeter property <code>proxy.headers.remove</code>
         as a comma-separated list of headers.
         </property>
         <property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
-        <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b. More information below in the paragraph about "User Defined Variable replacement".</property>
+        <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to <code>\b</code>. More information below in the paragraph about "<code>User Defined Variable replacement</code>".</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
         <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?<br/>
-        <b>Note:</b> see "Recording and redirects" section below for important information.
+        <note>Note: see "Recording and redirects" section below for important information.</note>
         </property>
         <property name="Use Keep-Alive" required="Yes">Set Use Keep-Alive in the generated samplers?</property>
         <property name="Retrieve all Embedded Resources" required="Yes">Set Retrieve all Embedded Resources in the generated samplers?</property>
         <property name="Content Type filter" required="No">
-        Filter the requests based on the content-type - e.g. "text/html [;charset=utf-8 ]".
-        The fields are regular expressions which are checked to see if they are contained in the content-type.
+        Filter the requests based on the <code>content-type</code> - e.g. "<code>text/html [;charset=utf-8 ]</code>".
+        The fields are regular expressions which are checked to see if they are contained in the <code>content-type</code>.
         [Does not have to match the entire field].
         The include filter is checked first, then the exclude filter.
         Samples which are filtered out will not be stored.
-        <b>Note: this filtering is applied to the content type of the response</b>
+        <note>Note: this filtering is applied to the content type of the response</note>
         </property>
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
-        those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
+        those that meet the requirements of the <code>Include</code>/<code>Exclude</code> fields are <em>recorded</em>.  If both <code>Include</code> and <code>Exclude</code> are
         left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
-        etc. are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
-        recorded</b>.</property>
+        etc. are recorded).  <note>If there is at least one entry in the <code>Include</code> field, then only requests that match one or more <code>Include</code> patterns are
+        recorded</note>.</property>
         <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
-        <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
+        <note>Any requests that match one or more <code>Exclude</code> pattern are <em>not</em> recorded</note>.</property>
         <property name="Notify Child Listeners of filtered samplers" required="No">Notify Child Listeners of filtered samplers
-        <b>Any response that match one or more Exclude pattern is <i>not</i> delivered to Child Listeners (View Results Tree)</b>.</property>
-        <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".</property>
+        <note>Any response that match one or more <code>Exclude</code> pattern is <em>not</em> delivered to Child Listeners (View Results Tree)</note>.</property>
+        <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "<code>Proxy up and running!</code>".</property>
         <property name="Stop Button" required="N/A">Stop the proxy server.</property>
         <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is
   useful when you change/add/delete an include/exclude filter expression.</property>
@@ -6484,8 +6484,8 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
 During recording, the browser will follow a redirect response and generate an additional request.
 The Proxy will record both the original request and the redirected request
 (subject to whatever exclusions are configured).
-The generated samples have "Follow Redirects" selected by default, because that is generally better.
-[Redirects may depend on the original request, so repeating the originally recorded sample may not always work.]
+The generated samples have "<code>Follow Redirects</code>" selected by default, because that is generally better.
+<note>Redirects may depend on the original request, so repeating the originally recorded sample may not always work.</note>
 </p>
 <p>
 Now if JMeter is set to follow the redirect during replay, it will issue the original request, 
@@ -6500,13 +6500,13 @@ To disable the redirect detection, set the property <code>proxy.redirect.disabli
 
 <h4>Includes and Excludes</h4>
 <p>The <b>include and exclude patterns</b> are treated as regular expressions (using Jakarta ORO).
-They will be matched against the host name, port (actual or implied) path and query (if any) of each browser request.
+They will be matched against the host name, port (actual or implied), path and query (if any) of each browser request.
 If the URL you are browsing is <br></br> 
-<b>&quot;http://jmeter.apache.org/jmeter/index.html?username=xxxx&quot;</b>,<br></br> 
+"<code>http://jmeter.apache.org/jmeter/index.html?username=xxxx</code>",<br></br> 
 then the regular expression will be tested against the string:<br></br> 
-<b>&quot;jmeter.apache.org:80/jmeter/index.html?username=xxxx&quot;</b>.<br></br>   
-Thus, if you want to include all .html files, your regular expression might look like: <br></br> 
-<b>&quot;.*\.html(\?.*)?&quot;</b> - or <b>&quot;.*\.html&quot;</b> 
+"<code>jmeter.apache.org:80/jmeter/index.html?username=xxxx</code>".<br></br>   
+Thus, if you want to include all <code>.html</code> files, your regular expression might look like: <br></br> 
+"<code>.*\.html(\?.*)?</code>" - or "<code>.*\.html</code> 
 if you know that there is no query string or you only want html pages without query strings.
 </p>
 <p>
@@ -6518,14 +6518,14 @@ Using a combination of includes and excludes,
 you should be able to record what you are interested in and skip what you are not.
 </p>
 
-<p>
-N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus <b>&quot;\.html&quot;</b> will <b>not</b> match <b>j.a.o/index.html</b>
-</p>
+<note>
+N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus "<code>\.html</code>" will <b>not</b> match <code>j.a.o/index.html</code>
+</note>
 
 <h4>Capturing binary POST data</h4>
 <p>
 Versions of JMeter from 2.3.2 are able to capture binary POST data.
-To configure which content-types are treated as binary, update the JMeter property proxy.binary.types.
+To configure which <code>content-types</code> are treated as binary, update the JMeter property <code>proxy.binary.types</code>.
 The default settings are as follows:
 </p>
 <source>
@@ -6542,18 +6542,18 @@ proxy.binary.filesuffix=.binary
 do this, create a timer directly within the HTTP(S) Test Script Recorder component.
 The proxy will place a copy of this timer into each sample it records, or into
 the first sample of each group if you're using grouping. This copy will then be
-scanned for occurrences of variable ${T} in its properties, and any such
+scanned for occurrences of variable <code>${T}</code> in its properties, and any such
 occurrences will be replaced by the time gap from the previous sampler
 recorded (in milliseconds).</p>
 
-<p>When you are ready to begin, hit &quot;start&quot;.</p>
+<p>When you are ready to begin, hit &quot;<code>start</code>&quot;.</p>
 <note>You will need to edit the proxy settings of your browser to point at the
 appropriate server and port, where the server is the machine JMeter is running on, and
 the port # is from the Proxy Control Panel shown above.</note>
 
 <h4>Where Do Samples Get Recorded?</h4>
 <p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
-"Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
+"<code>Use Recording Controller</code>", they will be stored in the first Recording Controller found in the test object tree (so be
 sure to add a Recording Controller before you start recording).</p>
 
 <p>
@@ -6562,10 +6562,10 @@ To check if this is the case, try stopping the proxy.
 If the browser still downloads pages, then it was not sending requests via the proxy.
 Double-check the browser options. 
 If you are trying to record from a server running on the same host,
-then check that the browser is not set to "Bypass proxy server for local addresses"
+then check that the browser is not set to "<code>Bypass proxy server for local addresses</code>"
 (this example is from IE7, but there will be similar options for other browsers).
-If JMeter does not record browser URLs such as http://localhost/ or http://127.0.0.1/,
-try using the non-loopback hostname or IP address, e.g. http://myhost/ or http://192.168.0.2/.
+If JMeter does not record browser URLs such as <code>http://localhost/</code> or <code>http://127.0.0.1/</code>,
+try using the non-loopback hostname or IP address, e.g. <code>http://myhost/</code> or <code>http://192.168.0.2/</code>.
 </p>
 
 <h4>Handling of HTTP Request Defaults</h4>
@@ -6588,10 +6588,10 @@ place User Defined Variables directly within the HTTP(S) Test Script Recorder to
 <p>Replacement by Variables: by default, the Proxy server looks for all occurrences of UDV values. 
 If you define the variable <code>WEB</code> with the value <code>www</code>, for example,
 the string <code>www</code> will be replaced by <code>${WEB}</code> wherever it is found.
-To avoid this happening everywhere, set the "Regex Matching" check-box.
+To avoid this happening everywhere, set the "<code>Regex Matching</code>" check-box.
 This tells the proxy server to treat values as Regexes (using the perl5 compatible regex matchers provided by ORO).</p>
 
-<p>If "Regex Matching" is selected every variable will be compiled into a perl compatible regex enclosed in
+<p>If "<code>Regex Matching</code>" is selected every variable will be compiled into a perl compatible regex enclosed in
 <code>\b(</code> and <code>)\b</code>. That way each match will start and end at a word boundary.</p>
 
 <note>Note that the boundary characters are not part of the matching group, e.g. <code>n.*</code> to match <code>name</code> out
@@ -6613,7 +6613,7 @@ The parens are necessary, since the normally added boundary characters will prev
 
 <p>If you want to match <code>/images</code> at the start of a string only, use the value <code>(^/images)</code>.
 Jakarta ORO also supports zero-width look-ahead, so one can match <code>/images/&hellip;</code>
-but retain the trailing <code>/</code> in the output by using <code>(^/images(?=/))</code>".</p>
+but retain the trailing <code>/</code> in the output by using <code>(^/images(?=/))</code>.</p>
 
 <note>
 Note that the current version of Jakara ORO does not support look-behind - i.e. <code>(?&lt;=&hellip;)</code> or <code>(?&lt;!&hellip;)</code>.
@@ -6623,10 +6623,10 @@ Note that the current version of Jakara ORO does not support look-behind - i.e. 
 <code>regex</code> will partly match a previous replaced variable, which will result in something like
 <code>${{regex}</code>, which is most probably not the desired result.</p>
 
-<p>If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
+<p>If there are any problems interpreting any variables as patterns, these are reported in <code>jmeter.log</code>,
 so be sure to check this if UDVs are not working as expected.</p>
 
-<p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
+<p>When you are done recording your test samples, stop the proxy server (hit the &quot;<code>stop</code>&quot; button).  Remember to reset
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.</p>
 
@@ -6640,7 +6640,7 @@ You can also add a <complink name="Save Responses to a file"/> Post-Processor wh
 If you define the property <code>proxy.number.requests=true</code> 
 JMeter will add a number to each sampler and each response.
 Note that there may be more responses than samplers if excludes or includes have been used.
-Responses that have been excluded will have labels enclosed in [ and ], for example <code>[23 /favicon.ico]</code> 
+Responses that have been excluded will have labels enclosed in <code>[</code> and <code>],</code> for example <code>[23 /favicon.ico]</code> 
 </p>
 <h4>Cookie Manager</h4>
 <p>
@@ -6653,8 +6653,8 @@ plan because they are likely to change between runs.
 </p>
 <h4>Authorization Manager</h4>
 <p>
-The HTTP(S) Test Script Recorder grabs "Authentication" header, tries to compute the Auth Policy. If Authorization Manager was added to target
-controller manually, HTTP(S) Test Script Recorder will find it and add authorization(matching ones will be removed). Otherwise
+The HTTP(S) Test Script Recorder grabs "<code>Authentication</code>" header, tries to compute the Auth Policy. If Authorization Manager was added to target
+controller manually, HTTP(S) Test Script Recorder will find it and add authorization (matching ones will be removed). Otherwise
 Authorization Manager will be added to target controller with authorization object.
 You may have to fix automatically computed values after recording.
 
@@ -6670,7 +6670,7 @@ either by copying the files there or by starting JMeter in the directory contain
 <p>
 You may have to record an HTTP protocol that is not handled by default by JMeter (Custom Binary Protocol, Adobe Flex, Microsoft Silverlight, &hellip; ).
 Although JMeter does not provide a native proxy implementation to record these protocols, you have the ability to
-record these protocols by implementing a custom SamplerCreator. This Sampler Creator will translate the binary format into a HTTPSamplerBase subclass
+record these protocols by implementing a custom <code>SamplerCreator</code>. This Sampler Creator will translate the binary format into a <code>HTTPSamplerBase</code> subclass
 that can be added to the JMeter Test Case.
 For more details see "Extending JMeter".
 </p>
@@ -6683,15 +6683,15 @@ The HTTP Mirror Server is a very simple HTTP server - it simply mirrors the data
 This is useful for checking the content of HTTP requests.
 </p>
 <p>
-It uses default port 8081 since 2.6. 
+It uses default port <code>8081</code> since 2.6.
 </p>
 </description>
 <properties>
-        <property name="Port" required="Yes">Port on which Mirror server listens, defaults to 8081.</property>
-        <property name="Max Number of threads" required="No">If set to a value > 0, number of threads serving requests will be limited to the configured number, if set to a value &lt;=0 
-        a new thread will be created to serve each incoming request. Defaults to 0</property>
+        <property name="Port" required="Yes">Port on which Mirror server listens, defaults to <code>8081</code>.</property>
+        <property name="Max Number of threads" required="No">If set to a value &gt; <code>0</code>, number of threads serving requests will be limited to the configured number, if set to a value &lt;=<code>0</code> 
+        a new thread will be created to serve each incoming request. Defaults to <code>0</code></property>
         <property name="Max Queue size" required="No">Size of queue used for holding tasks before they are executed by Thread Pool, when Thread pool is exceeded, incoming requests will
-        be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than 0. Defaults to 25</property>
+        be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than <code>0</code>. Defaults to <code>25</code></property>
 </properties>
 <note>
 Note that you can get more control over the responses by adding an HTTP Header Manager with the following name/value pairs:
@@ -6702,7 +6702,7 @@ Note that you can get more control over the responses by adding an HTTP Header M
         <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status responses</a>, example 200 OK, 500 Internal Server Error, &hellip;.</property>
         <property name="X-ResponseLength" required="No">Size of response, this trims the response to the requested size if that is less than the total size</property>
         <property name="X-SetHeaders" required="No">Pipe separated list of headers, example:<br/> 
-        <code>headerA=valueA|headerB=valueB</code> would set headerA to valueA and headerB to valueB.        
+        <code>headerA=valueA|headerB=valueB</code> would set <code>headerA</code> to <code>valueA</code> and <code>headerB</code> to <code>valueB</code>.
         </property>
 </properties>
 <p>
@@ -6710,9 +6710,9 @@ You can also use the following query parameters:
 </p>
 <properties>
     <property name="redirect" required="No">Generates a 302 (Temporary Redirect) with the provided location.
-    e.g. ?redirect=/path 
+    e.g. <code>?redirect=/path</code>
     </property>
-    <property name="status" required="No">Overrides the default status return. e.g. ?status=404 Not Found</property>
+    <property name="status" required="No">Overrides the default status return. e.g. <code>?status=404 Not Found</code></property>
     <property name="v" required="No">Verbose flag, writes some details to standard output. e.g. first line and redirect location if specified</property>
 </properties>
 </component>
@@ -6759,10 +6759,10 @@ The values can be seen in the <complink name="View Results Tree"/> Listener Resp
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="JMeter Properties" required="Yes">Whether to show JMeter properties (default false).</property>
-        <property name="JMeter Variables" required="Yes">Whether to show JMeter variables (default false).</property>
-        <property name="Sampler Properties" required="Yes">Whether to show Sampler properties (default true).</property>
-        <property name="System Properties" required="Yes">Whether to show System properties (default false).</property>
+        <property name="JMeter Properties" required="Yes">Whether to show JMeter properties (default <code>false</code>).</property>
+        <property name="JMeter Variables" required="Yes">Whether to show JMeter variables (default <code>false</code>).</property>
+        <property name="Sampler Properties" required="Yes">Whether to show Sampler properties (default <code>true</code>).</property>
+        <property name="System Properties" required="Yes">Whether to show System properties (default <code>false</code>).</property>
 </properties>
 </component>
 
@@ -6801,7 +6801,7 @@ This is done by default since JMeter 2.13.
 </description>
 <note>
 Note that by default it won't run if Test is gracefully shutdown, if you want to make it run in this case, 
-ensure you check option "Run tearDown Thread Groups after shutdown of main threads" on Test Plan element.
+ensure you check option "<code>Run tearDown Thread Groups after shutdown of main threads</code>" on Test Plan element.
 If Test Plan is stopped, tearDown will not run even if option is checked.
 </note>
 <figure width="1081" height="570" image="tear_down_on_shutdown.png">Figure 1 - Run tearDown Thread Groups after shutdown of main threads</figure>
