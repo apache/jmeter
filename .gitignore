@@ -21,3 +21,6 @@ target/
 
 build-local.properties
 jmeter-fb.*
+
+# ignore jar's in lib/
+/lib/**/*.jar
