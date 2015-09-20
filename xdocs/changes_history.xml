@@ -20,6 +20,7 @@
   <!ENTITY oacute "&#x000F3;">
   <!ENTITY THORN  "&#x000DE;">
   <!ENTITY rarr   "&#x02192;">
+  <!ENTITY rArr   "&#x021D2;">
 ]>
 <document>   
 <properties>     
@@ -2669,7 +2670,7 @@ Added DiskStore remote sample sender: like Hold, but saves samples to disk until
 </p>
 
 <h3>New Logger Panel</h3>
-<p>A new Log Viewer  has been added to the GUI and can be enabled from menu Options > Log Viewer:
+<p>A new Log Viewer  has been added to the GUI and can be enabled from menu Options &rarr; Log Viewer:
 <figure width="326" height="147" image="changes/2.6/28_loggerpanel_option.png"></figure>
 </p>
 <p>This Log Viewer shows the jmeter.log file, and useful (for example) to debug BeanShell/BSF scripts:
@@ -2939,11 +2940,11 @@ The thread is not now started unless the pause time is greater than 0.
 <li><bugzilla>51923</bugzilla> - Counter function bug or documentation issue ? (fixed docs)</li>
 <li>Update velocity.jar to 1.7 (from 1.6.2)</li>
 <li>Update js.jar to 1.7R3 (from 1.6R5)</li>
-<li>Update commons-codec 1.5 => 1.6</li>
-<li>Update commons-io 2.0.1 => 2.1</li>
-<li>Update commons-jexl 2.0.1 => 2.1.1</li>
-<li>Update jdom 1.1 => 1.1.2</li>
-<li>Update junit 4.9 => 4.10</li>
+<li>Update commons-codec 1.5 &rArr; 1.6</li>
+<li>Update commons-io 2.0.1 &rArr; 2.1</li>
+<li>Update commons-jexl 2.0.1 &rArr; 2.1.1</li>
+<li>Update jdom 1.1 &rArr; 1.1.2</li>
+<li>Update junit 4.9 &rArr; 4.10</li>
 <li><bugzilla>51954</bugzilla> - Generated documents include &lt;/br&gt; entries which cause extra blank lines </li>
 <li><bugzilla>52075</bugzilla> - JMeterProperty.clone() currently returns Object; it should return JMeterProperty</li>
 <li>Updated httpcore to 4.1.4</li>
@@ -3233,7 +3234,7 @@ Rather than delegating to the JMeter thread handler for "unexpected" failures, e
 
 <h3>General</h3>
 <ul>
-<li><bugzilla>49734</bugzilla> - Null pointer exception on stop Threads command (Run>Stop)</li>
+<li><bugzilla>49734</bugzilla> - Null pointer exception on stop Threads command (Run &rarr; Stop)</li>
 <li><bugzilla>49666</bugzilla> - CSV Header read as data after EOF</li>
 <li><bugzilla>45703</bugzilla> - Synchronizing Timer</li>
 <li><bugzilla>50088</bugzilla> - fix getAvgPageBytes in SamplingStatCalculator so it returns what it should</li>
@@ -3291,7 +3292,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 
 <h3>Listeners</h3>
 <ul>
-<li>View Results Tree - Add a dialog's text box on "Sampler result tab > Parsed" to display the long value with a double click on cell</li>
+<li>View Results Tree - Add a dialog's text box on "Sampler result tab &rarr; Parsed" to display the long value with a double click on cell</li>
 <li><bugzilla>37156</bugzilla> - Formatted view of Request in Results Tree</li>
 <li><bugzilla>49365</bugzilla> - Allow result set to be written to file in a path relative to the loaded script</li>
 <li><bugzilla>50579</bugzilla> - Error count is long, sample count is int. Changed sample count to long.</li>
@@ -3456,7 +3457,7 @@ It no longer calls addSubResult(). This may possibly affect some 3rd party add-o
 <ul>
 <li><bugzilla>48603</bugzilla> - Mailer Visualiser sends two emails for a single failed response</li>
 <li>Correct calculation of min/max/std.dev for aggregated samples (Summary Report)</li>
-<li><bugzilla>48889</bugzilla> - Wrong response time with mode=Statistical and num_sample_threshold > 1</li>
+<li><bugzilla>48889</bugzilla> - Wrong response time with mode=Statistical and num_sample_threshold &gt; 1</li>
 <li><bugzilla>47398</bugzilla> - SampleEvents are sent twice over RMI in distributed testing and non gui mode</li>
 </ul>
 
@@ -3589,12 +3590,12 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Removed all external libraries from SVN; added download_jars Ant target</li>
 <li>Updated various jar files:
 <ul>
-<li>BeanShell - 2.0b4 => 2.0b5</li>
-<li>Commons Codec - 1.3 => 1.4</li>
-<li>Commons-Collections - 3.2 => 3.2.1</li>
-<li>JTidy => r938</li>
-<li>JUnit - 3.8.2 => 4.8.1</li>
-<li>Logkit - 1.2 => 2.0</li>
+<li>BeanShell - 2.0b4 &rArr; 2.0b5</li>
+<li>Commons Codec - 1.3 &rArr; 1.4</li>
+<li>Commons-Collections - 3.2 &rArr; 3.2.1</li>
+<li>JTidy &rArr; r938</li>
+<li>JUnit - 3.8.2 &rArr; 4.8.1</li>
+<li>Logkit - 1.2 &rArr; 2.0</li>
 <li>Xalan Serializer = 2.7.1 (previously erroneously shown as 2.9.1)</li>
 <li>Xerces xml-apis = 1.3.04 (previously erroneously shown as 2.9.1)</li>
 <li>Some jar files were renamed.</li>
