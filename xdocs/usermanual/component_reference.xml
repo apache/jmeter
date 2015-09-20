@@ -5866,7 +5866,7 @@ extracting the node as text or attribute value and store the result into the giv
     <property name="Fetch External DTDs"  required="If Tidy is not selected">If selected, external DTDs are fetched.</property>
     <property name="Return entire XPath fragment instead of text content?" required="Yes">
     If selected, the fragment will be returned rather than the text content.<br></br>
-    For example <code>//title</code> would return "<code>&lt;title>Apache JMeter&lt;/title&gt;</code>" rather than "<code>Apache JMeter</code>".<br></br>
+    For example <code>//title</code> would return "<code>&lt;title&gt;Apache JMeter&lt;/title&gt;</code>" rather than "<code>Apache JMeter</code>".<br></br>
     In this case, <code>//title/text()</code> would return "<code>Apache JMeter</code>".
     </property>
     <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
