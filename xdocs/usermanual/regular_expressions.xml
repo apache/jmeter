@@ -80,13 +80,13 @@ See also <a href="#placement">Placement of modifiers</a> below.
 <p>
 Suppose you want to match the following portion of a web-page: 
 <br/>
-<code>name="file" value="readme.txt"></code>
+<code>name="file" value="readme.txt"&gt;</code>
 <br/>
 and you want to extract <code>readme.txt</code>.
 <br/>
 A suitable regular expression would be:
 <br/>
-<code>name="file" value="(.+?)"></code>
+<code>name="file" value="(.+?)"&gt;</code>
 <p>
 The special characters above are:
 </p>
@@ -97,17 +97,17 @@ The special characters above are:
 <dt><code>?</code></dt><dd>don't be greedy, i.e. stop when first match succeeds</dd>
 </dl>
 <p>
-Note: without the <code>?</code>, the <code>.+</code> would continue past the first <code>"></code>
-until it found the last possible <code>"></code> - which is probably not what was intended.
+Note: without the <code>?</code>, the <code>.+</code> would continue past the first <code>"&gt;</code>
+until it found the last possible <code>"&gt;</code> - which is probably not what was intended.
 </p>
 <p>
 Note: although the above expression works, it's more efficient to use the following expression:
 <br/>
-<code>name="file" value="([^"]+)"></code>
+<code>name="file" value="([^"]+)"&gt;</code>
 where<br></br>
 <code>[^"]</code> - means match anything except <code>"</code><br></br>
 In this case, the matching engine can stop looking as soon as it sees the first <code>"</code>, 
-whereas in the previous case the engine has to check that it has found <code>"></code> rather than say <code>" ></code>.
+whereas in the previous case the engine has to check that it has found <code>"&gt;</code> rather than say <code>" &gt;</code>.
 </p>
 <h3>Extract multiple strings</h3>
 <p>
