@@ -21,6 +21,8 @@
 <!ENTITY sect-num '19'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY rarr     "&#x02192;" >
+<!ENTITY le       "&#x02264;" >
+<!ENTITY ge       "&#x02265;" >
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
   prev="boss.html" next="functions.html" id="$Id$">
@@ -4919,7 +4921,7 @@ The assertion comparisons can be seen in the <complink name="Comparison Assertio
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
     <property name="Compare Content" required="Yes">Whether or not to compare the content (response data)</property>
-    <property name="Compare Time" required="Yes">If the value is &gt;=0, then check if the response time difference is no greater than the value.
+    <property name="Compare Time" required="Yes">If the value is &ge;0, then check if the response time difference is no greater than the value.
     I.e. if the value is <code>0</code>, then the response times must be exactly equal.</property>
     <property name="Comparison Filters" required="No">Filters can be used to remove strings from the content comparison.
     For example, if the page has a time-stamp, it might be matched with: "<code>Time: \d\d:\d\d:\d\d</code>" and replaced with a dummy fixed time "<code>Time: HH:MM:SS</code>".
@@ -6688,7 +6690,7 @@ It uses default port <code>8081</code> since 2.6.
 </description>
 <properties>
         <property name="Port" required="Yes">Port on which Mirror server listens, defaults to <code>8081</code>.</property>
-        <property name="Max Number of threads" required="No">If set to a value &gt; <code>0</code>, number of threads serving requests will be limited to the configured number, if set to a value &lt;=<code>0</code> 
+        <property name="Max Number of threads" required="No">If set to a value &gt; <code>0</code>, number of threads serving requests will be limited to the configured number, if set to a value &le; <code>0</code> 
         a new thread will be created to serve each incoming request. Defaults to <code>0</code></property>
         <property name="Max Queue size" required="No">Size of queue used for holding tasks before they are executed by Thread Pool, when Thread pool is exceeded, incoming requests will
         be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than <code>0</code>. Defaults to <code>25</code></property>
