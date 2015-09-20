@@ -2256,10 +2256,10 @@ run JMeter unless all the JMeter jars are added.
       <param name="subdir" expression="usermanual" />
       <param name="year" expression="${year}" />
     </xslt>
-    <copy todir="${dest.docs}/images">
+    <copy todir="${dest.docs}/images" overwrite="${docs.force}">
       <fileset dir="${src.images}" excludes="logo.xcf,logo.svg"/>
     </copy>
-    <copy todir="${dest.docs}/css">
+    <copy todir="${dest.docs}/css" overwrite="${docs.force}">
       <fileset dir="${src.css}"/>
     </copy>
     <!-- 
