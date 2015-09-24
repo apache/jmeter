@@ -289,7 +289,7 @@ public class Proxy extends Thread {
                     children.addAll(samplerCreator.createChildren(sampler, result));
                 } 
                 target.deliverSampler(sampler,
-                        children.isEmpty() ? null : (TestElement[]) children
+                         children
                                 .toArray(new TestElement[children.size()]),
                         result);
             }
@@ -550,7 +550,7 @@ public class Proxy extends Thread {
         }
         StringBuilder sb = new StringBuilder(headers.length());
         for (String line : headerLines) {
-            if (line != null) {
+            if (line != null){
                 sb.append(line).append(CRLF_STRING);
             }
         }
