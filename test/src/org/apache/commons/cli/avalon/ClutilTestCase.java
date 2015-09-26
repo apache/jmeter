@@ -37,7 +37,7 @@ public final class ClutilTestCase extends TestCase {
             "-Dstupid=idiot", "are", "--all", "--all", "here" };
 
     private static final String[] ARGLIST4 = new String[] {
-    // incompatable (blee/all)
+    // incompatible (blee/all)
             "-Dstupid", "idiot", "are", "--all", "--blee", "here" };
 
     private static final String[] ARGLIST5 = new String[] { "-f", "myfile.txt" };
@@ -188,7 +188,7 @@ public final class ClutilTestCase extends TestCase {
     public void testOptionalArgLongEquals() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
 
-        // Check that optional args work woth long options
+        // Check that optional args work with long options
         final String[] args = new String[] { "--taint=param", "-a" };
 
         final CLArgsParser parser = new CLArgsParser(args, options);

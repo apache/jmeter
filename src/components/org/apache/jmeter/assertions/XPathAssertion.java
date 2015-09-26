@@ -195,7 +195,7 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
     }
 
     /**
-     * Is this whitepsace ignored.
+     * Is this whitespace ignored.
      *
      * @return boolean
      */
