@@ -148,7 +148,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
-    public void testXMLTrailingcontent() throws Exception {
+    public void testXMLTrailingContent() throws Exception {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
         baos.write("extra".getBytes()); // TODO - charset?
         result.setResponseData(baos.toByteArray());
@@ -161,7 +161,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
-    public void testXMLTrailingwhitespace() throws Exception {
+    public void testXMLTrailingWhitespace() throws Exception {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
         baos.write(" \t\n".getBytes()); // TODO - charset?
         result.setResponseData(baos.toByteArray());
