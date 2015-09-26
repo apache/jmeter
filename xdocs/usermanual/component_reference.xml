@@ -988,6 +988,7 @@ Webservice Soap Sampler assumes that empty response means failure.
          <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
          <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=<code>false</code></property>
          <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
+         <property name="Parse the search results?" required="No">If <code>true</code>, the search results will be added to the response data. If <code>false</code>, a marker - whether results where found or not - will be added to the response data.</property>
        </properties>
      </dd>
      <dt><b>Modification test</b></dt>
