@@ -221,7 +221,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     /**
      * Gets the doctype
      * 
-     * @return the documemt type
+     * @return the document type
      */
     public String getDoctype() {
         return getPropertyAsString(DOCTYPE_KEY);

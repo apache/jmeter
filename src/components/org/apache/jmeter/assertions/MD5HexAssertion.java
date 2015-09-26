@@ -44,7 +44,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** Key for storing assertion-informations in the jmx-file. */
+    /** Key for storing assertion-information in the jmx-file. */
     private static final String MD5HEX_KEY = "MD5HexAssertion.size";
 
     /*

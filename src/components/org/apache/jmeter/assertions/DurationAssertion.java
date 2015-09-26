@@ -33,11 +33,11 @@ import org.apache.jmeter.util.JMeterUtils;
 public class DurationAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final long serialVersionUID = 240L;
 
-    /** Key for storing assertion-informations in the jmx-file. */
+    /** Key for storing assertion-information in the jmx-file. */
     public static final String DURATION_KEY = "DurationAssertion.duration"; // $NON-NLS-1$
 
     /**
-     * Returns the result of the Assertion. Here it checks wether the Sample
+     * Returns the result of the Assertion. Here it checks whether the Sample
      * took to long to be considered successful. If so an AssertionResult
      * containing a FailureMessage will be returned. Otherwise the returned
      * AssertionResult will reflect the success of the Sample.

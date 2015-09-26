@@ -72,8 +72,8 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
         return getPropertyAsString(ISSUER_DN_KEY);
     }
 
-    public void setIssuerDn(String issuertDn) {
-        setProperty(ISSUER_DN_KEY, issuertDn);
+    public void setIssuerDn(String issuerDn) {
+        setProperty(ISSUER_DN_KEY, issuerDn);
     }
 
     public boolean isSignerCheckByFile() {

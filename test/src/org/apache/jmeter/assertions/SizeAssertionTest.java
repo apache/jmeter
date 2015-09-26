@@ -158,7 +158,7 @@ public class SizeAssertionTest extends JMeterTestCase{
       }
       
       private void assertFailed() throws Exception{
-          assertNotNull("Failure nessage should not be null",result.getFailureMessage());
+          assertNotNull("Failure message should not be null",result.getFailureMessage());
           //System.out.println(result.getFailureMessage());
           assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
           assertFalse(result.isError());
