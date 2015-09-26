@@ -188,8 +188,8 @@ class SMIMEAssertion {
 
                         String email = testElement.getSignerEmail();
                         if (!JOrphanUtils.isBlank(email)) {
-                            List<String> emailfromCert = getEmailFromCert(cert);
-                            if (!emailfromCert.contains(email)) {
+                            List<String> emailFromCert = getEmailFromCert(cert);
+                            if (!emailFromCert.contains(email)) {
                                 res.setFailure(true);
                                 failureMessage
                                         .append("Email address \"")
