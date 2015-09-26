@@ -986,8 +986,8 @@ Webservice Soap Sampler assumes that empty response means failure.
          <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=<code>0</code>, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode <code>4</code></property>
          <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in milliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is <code>0</code>, which means no limit)</property>
          <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
-         <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=<code>false</code></property>
-         <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
+         <property name="Return object" required="No">Whether the object will be returned (<code>true</code>) or not (<code>false</code>). Default=<code>false</code></property>
+         <property name="Dereference aliases" required="No">If <code>true</code>, it will dereference aliases, if <code>false</code>, it will not follow them (default=<code>false</code>)</property>
          <property name="Parse the search results?" required="No">If <code>true</code>, the search results will be added to the response data. If <code>false</code>, a marker - whether results where found or not - will be added to the response data.</property>
        </properties>
      </dd>
