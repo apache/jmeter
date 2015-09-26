@@ -48,7 +48,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
     };
 
     /**
-     * Returns the result of the Assertion. Here it checks wether the Sample
+     * Returns the result of the Assertion. Here it checks whether the Sample
      * took to long to be considered successful. If so an AssertionResult
      * containing a FailureMessage will be returned. Otherwise the returned
      * AssertionResult will reflect the success of the Sample.

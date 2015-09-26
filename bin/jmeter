@@ -27,7 +27,7 @@
 # Minimal version to run JMeter
 MINIMAL_VERSION=1.7.0
 
-# Check if Java is present and the minimal version requierement
+# Check if Java is present and the minimal version requirement
 _java=`type java | awk '{ print $ NF }'`
 CURRENT_VERSION=`"$_java" -version 2>&1 | awk -F'"' '/version/ {print $2}'`
 minimal_version=`echo $MINIMAL_VERSION | awk -F'.' '{ print $2 }'`
@@ -85,7 +85,7 @@ PRGDIR=`dirname "$PRG"`
 #   Life length: for the life of the JVM.
 
 # This is the base heap size -- you may increase or decrease it to fit your
-# system's memory availablity:
+# system's memory availability:
 HEAP="-Xms512m -Xmx512m"
 
 # There's an awful lot of per-sample objects allocated during test run, so we

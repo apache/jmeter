@@ -220,7 +220,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
         docTypePanel.add(docTypeBox);
         assertionPanel.add(docTypePanel);
 
-        // format (HMTL, XHTML, XML)
+        // format (HTML, XHTML, XML)
         VerticalPanel formatPanel = new VerticalPanel();
         formatPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Format"));
         htmlRadioButton = new JRadioButton("HTML", true); //$NON-NLS-1$
@@ -318,7 +318,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     }
 
     /**
-     * This method is called from erros-only checkbox
+     * This method is called from errors-only checkbox
      *
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
