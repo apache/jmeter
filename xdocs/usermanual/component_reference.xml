@@ -1612,7 +1612,7 @@ The following table shows some values which may be useful when configuring JMS:
 </table>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="709" height="498" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="739" height="607" screenshot="jmssubscriber.png">
 <note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
