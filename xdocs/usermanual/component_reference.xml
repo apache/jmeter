@@ -1644,7 +1644,7 @@ The following table shows some values which may be useful when configuring JMS:
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
-  <property name="Read response" required="Yes">should the sampler store the response. If not, only the response length is returned.</property>
+  <property name="Save response" required="Yes">should the sampler store the response. If not, only the response length is returned.</property>
   <property name="Timeout" required="Yes">Specify the timeout to be applied, in milliseconds. <code>0</code>=none. 
   This is the overall aggregate timeout, not per sample.</property>
   <property name="Client" required="Yes">Which client implementation to use.
