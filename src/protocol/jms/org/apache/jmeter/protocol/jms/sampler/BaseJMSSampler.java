@@ -52,13 +52,20 @@ public abstract class BaseJMSSampler extends AbstractSampler {
 
     private static final String CREDENTIALS = "jms.security_credentials"; // $NON-NLS-1$
 
+    /*
+     * The number of samples to aggregate
+     */
     private static final String ITERATIONS = "jms.iterations"; // $NON-NLS-1$
 
     private static final String USE_AUTH = "jms.authenticate"; // $NON-NLS-1$
 
     private static final String USE_PROPERTIES_FILE = "jms.jndi_properties"; // $NON-NLS-1$
 
-    private static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
+    /*
+     * If true, store the response in the sampleResponse
+     * (N.B. do not change the value, as it is used in JMX files)
+     */
+    private static final String STORE_RESPONSE = "jms.read_response"; // $NON-NLS-1$
 
     // Is Destination setup static? else dynamic
     private static final String DESTINATION_STATIC = "jms.destination_static"; // $NON-NLS-1$
@@ -203,18 +210,18 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     }
 
     /**
-     * get the iterations as string
+     * get the number of samples to aggregate
      *
-     * @return the number of iterations
+     * @return String containing the the number of samples to aggregate
      */
     public String getIterations() {
         return getPropertyAsString(ITERATIONS);
     }
 
     /**
-     * return the number of iterations as int instead of string
+     * get the number of samples to aggregate
      *
-     * @return the number of iterations as int instead of string
+     * @return int containing the the number of samples to aggregate
      */
     public int getIterationCount() {
         return getPropertyAsInt(ITERATIONS);
@@ -240,30 +247,30 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     }
 
     /**
-     * set whether the sampler should read the response or not
+     * set whether the sampler should store the response or not
      *
-     * @param read whether the sampler should read the response or not
+     * @param read whether the sampler should store the response or not
      */
     public void setReadResponse(String read) {
-        setProperty(READ_RESPONSE, read);
+        setProperty(STORE_RESPONSE, read);
     }
 
     /**
-     * return whether the sampler should read the response
+     * return whether the sampler should store the response
      *
-     * @return whether the sampler should read the response
+     * @return whether the sampler should store the response
      */
     public String getReadResponse() {
-        return getPropertyAsString(READ_RESPONSE);
+        return getPropertyAsString(STORE_RESPONSE);
     }
 
     /**
-     * return whether the sampler should read the response as a boolean value
+     * return whether the sampler should store the response
      *
-     * @return whether the sampler should read the response as a boolean value
+     * @return boolean: whether the sampler should read the response
      */
     public boolean getReadResponseAsBoolean() {
-        return getPropertyAsBoolean(READ_RESPONSE);
+        return getPropertyAsBoolean(STORE_RESPONSE);
     }
 
     /**
