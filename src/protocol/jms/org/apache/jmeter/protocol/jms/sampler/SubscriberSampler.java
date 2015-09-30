@@ -188,7 +188,6 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             now = System.currentTimeMillis();
         }
         result.sampleEnd();
-        result.setResponseMessage(read + " samples messages received");
         if (getReadResponseAsBoolean()) {
             result.setResponseData(buffer.toString().getBytes()); // TODO - charset?
         } else {
