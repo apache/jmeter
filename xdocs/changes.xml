@@ -113,6 +113,7 @@ Summary
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>58477</bug> __javaScript function : Allow use of Nashorn engine for Java8 and upper versions</li>
 </ul>
 
 <h3>I18N</h3>
