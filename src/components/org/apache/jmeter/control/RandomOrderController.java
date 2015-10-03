@@ -17,11 +17,7 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.jmeter.testelement.TestElement;
+import java.util.Collections;
 
 /**
  * A controller that runs its children each at most once, but in a random order.
@@ -59,30 +55,6 @@ public class RandomOrderController extends GenericController implements Serializ
      * Replace the subControllersAndSamplers list with a reordered ArrayList.
      */
     private void reorder() {
-        int numElements = this.subControllersAndSamplers.size();
-
-        // Create a new list containing numElements null elements.
-        List<TestElement> reordered = new ArrayList<>(this.subControllersAndSamplers.size());
-        for (int i = 0; i < numElements; i++) {
-            reordered.add(null);
-        }
-
-        // Insert the subControllersAndSamplers into random list positions.
-        for (Iterator<TestElement> i = this.subControllersAndSamplers.iterator(); i.hasNext();) {
-            int idx = (int) Math.floor(Math.random() * reordered.size());
-            while (true) {
-                if (idx == numElements) {
-                    idx = 0;
-                }
-                if (reordered.get(idx) == null) {
-                    reordered.set(idx, i.next());
-                    break;
-                }
-                idx++;
-            }
-        }
-
-        // Replace subControllersAndSamplers with reordered copy.
-        this.subControllersAndSamplers = reordered;
+        Collections.shuffle(subControllersAndSamplers);
     }
 }
