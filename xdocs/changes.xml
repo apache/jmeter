@@ -74,7 +74,9 @@ Summary
 
 <ul>
     <li>In RandomTimer class, protected instance timer has been replaced by getTimer() protected method, this is related to <bugzilla>58100</bugzilla>. This may impact 3rd party plugins.</li>
-    <li>If Controller will now use by default Nashorn Engine under Java8. If you want to revert to Rhino Engine, use property <code>ifcontroller.use_rhino=true</code>, see <bugzilla>58406</bugzilla></li>
+    <li>Since version 2.14, you can use Nashorn Engine (default javascript engine is Rhino) under Java8 for Elements that use Javascript Engine (__javaScript, IfController). If you want to use it, use property <code>javascript.use_rhino=false</code>, see <bugzilla>58406</bugzilla>.
+    Note in future versions, we will switch to Nashorn by default, so users are encouraged to report any issue related to broken code when using Nashorn instead of Rhino.
+    </li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -95,7 +97,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>58406</bug>IfController : Use Nashorn Engine if available for JavaScript evaluation</li>
+    <li><bug>58406</bug>IfController : Allow use of Nashorn Engine if available for JavaScript evaluation</li>
     <li><bug>58281</bug>RandomOrderController : Improve randomization algorithm performance. Contributed by Graham Russell (jmeter at ham1.co.uk)</li> 
 </ul>
 
