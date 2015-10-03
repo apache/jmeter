@@ -72,11 +72,11 @@ public class IfController extends GenericController implements Serializable, Thr
 
     private static final String USE_EXPRESSION = "IfController.useExpression"; //$NON-NLS-1$
     
-    private static final String USE_RHINO_ENGINE_PROPERTY = "ifcontroller.use_rhino";
+    private static final String USE_RHINO_ENGINE_PROPERTY = "javascript.use_rhino"; //$NON-NLS-1$
 
     private static final boolean USE_RHINO_ENGINE = 
             getInstance().getEngineByName("nashorn") == null || //$NON-NLS-1$
-            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) ;
+            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, true) ;
 
     
     private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = new ThreadLocal<ScriptEngine>() {
