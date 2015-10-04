@@ -2968,7 +2968,7 @@ For example, the RE <code>(JMeter\w*).*</code> applied to the current JMeter hom
 Match count: 26
 Match[1][0]=JMeter - Apache JMeter&lt;/title&gt;
 Match[1][1]=JMeter
-Match[2][0]=JMeter" title="JMeter" border="0"/&gt;lt;/a&gt;
+Match[2][0]=JMeter" title="JMeter" border="0"/&gt;&lt;/a&gt;
 Match[2][1]=JMeter
 Match[3][0]=JMeterCommitters"&gt;Contributors&lt;/a&gt;
 Match[3][1]=JMeterCommitters
