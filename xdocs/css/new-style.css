@@ -183,9 +183,9 @@ figure>a>img, .screenshot>a>img {
   margin: 1em;
 }
 
-.property .name, .property
-          .description, .property
-          .required {
+.property .name,
+.property .description,
+.property .required {
   display: inline-block;
 }
 
@@ -431,9 +431,9 @@ table {
   .properties {
     margin: 1rem 0px;
   }
-  .property .name, .property
-          .description, .property
-          .required {
+  .property .name, 
+  .property .description,
+  .property .required {
     display: block;
     width: 100%;
     /* lose the padding applied for wider screens */
