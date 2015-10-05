@@ -199,6 +199,11 @@ figure>a>img, .screenshot>a>img {
 .property .description {
   vertical-align: top;
   width: 60%;
+  /* add padding so description does not run into side columns */
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  /* treat padding as part of the content, so we don't need to adjust width to compensate */
+  box-sizing: border-box;
 }
 
 .property .required {
@@ -431,6 +436,8 @@ table {
           .required {
     display: block;
     width: 100%;
+    /* lose the padding applied for wider screens */
+    padding: 0;
   }
   .property .required {
     border-bottom: 1px solid #ddd;
