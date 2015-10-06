@@ -228,6 +228,7 @@
 			<th></th>
 		</tr>
 		<xsl:for-each select="/testResults/*[not(@lb = preceding::*/@lb)]">
+			<xsl:sort select="count(../*[@lb = current()/@lb][attribute::s='false'])" data-type="number" order="descending" />
 			<xsl:variable name="label" select="@lb" />
 			<xsl:variable name="count" select="count(../*[@lb = current()/@lb])" />
 			<xsl:variable name="failureCount" select="count(../*[@lb = current()/@lb][attribute::s='false'])" />
