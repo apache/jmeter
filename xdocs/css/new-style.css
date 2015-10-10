@@ -521,4 +521,14 @@ table {
   .menu, figure > a > img, .screenshot > a > img, .section-index > li {
     box-shadow: none;
   }
+
+  .section-index {
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+  }
+
+  .section-index > li {
+    border: none;
+  }
 }
