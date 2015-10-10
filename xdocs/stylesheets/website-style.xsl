@@ -365,18 +365,22 @@
           instead ***
         </div>
       </xsl:if>
+      <xsl:apply-templates select="description" />
       <xsl:if test="@screenshot != ''">
         <div class="screenshot">
-          <xsl:call-template name="image">
-            <xsl:with-param name="srcdir" select="$sshotdir" />
-            <xsl:with-param name="image" select="@screenshot" />
-            <xsl:with-param name="width" select="@width" />
-            <xsl:with-param name="height" select="@height" />
-            <xsl:with-param name="alt" select="concat('Screenshot for ', @name)" />
-          </xsl:call-template>
+          <figure>
+            <xsl:call-template name="image">
+              <xsl:with-param name="srcdir" select="$sshotdir" />
+              <xsl:with-param name="image" select="@screenshot" />
+              <xsl:with-param name="width" select="@width" />
+              <xsl:with-param name="height" select="@height" />
+              <xsl:with-param name="alt" select="concat('Screenshot for Control-Panel of ', @name)" />
+            </xsl:call-template>
+            <figcaption>Screenshot of Control-Panel of <xsl:value-of select="@name"/></figcaption>
+          </figure>
         </div>
       </xsl:if>
-      <xsl:apply-templates />
+      <xsl:apply-templates select="*[not(self::description)]" />
       <div class="go-top">
         <a href="#">^</a>
       </div>
