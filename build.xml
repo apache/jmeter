@@ -263,6 +263,7 @@
   <property name="build.mongodb" value="build/protocol/mongodb"/>
   <property name="build.test" value="build/test"/>
   <property name="build.res" value="build/res"/>
+  <property name="build.test-res" value="test/resources"/>
 
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
   <!--
@@ -2607,6 +2608,7 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
+        <pathelement location="${build.test-res}"/>
         <path refid="classpath"/>
       </classpath>
       <jvmarg value="-server"/>
