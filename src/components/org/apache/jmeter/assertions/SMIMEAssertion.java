@@ -33,8 +33,10 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -70,6 +72,12 @@ class SMIMEAssertion {
 
     // Use the name of the test element, otherwise cannot enable/disable debug from the GUI
     private static final Logger log = LoggingManager.getLoggerForShortName(SMIMEAssertionTestElement.class.getName());
+    
+    private static Map<String, String> keywordMap = new HashMap<>();
+    static {
+        keywordMap.put("E", "1.2.840.113549.1.9.1");
+        keywordMap.put("EMAILADDRESS", "1.2.840.113549.1.9.1");
+    }
 
     SMIMEAssertion() {
         super();
@@ -203,13 +211,13 @@ class SMIMEAssertion {
                         if (subject.length() > 0) {
                             final X500Principal certPrincipal = cert.getSubjectX500Principal();
                             log.debug(certPrincipal.getName(X500Principal.CANONICAL));
-                            X500Principal principal = new X500Principal(subject);
+                            X500Principal principal = new X500Principal(subject, keywordMap);
                             log.debug(principal.getName(X500Principal.CANONICAL));
                             if (!principal.equals(certPrincipal)) {
                                 res.setFailure(true);
                                 failureMessage
                                         .append("Distinguished name of signer certificate does not match \"")
-                                        .append(subject).append("\"\n");
+                                        .append(principal).append("\" != \"").append(certPrincipal).append("\"\n");
                             }
                         }
 
@@ -217,13 +225,13 @@ class SMIMEAssertion {
                         if (issuer.length() > 0) {
                             final X500Principal issuerX500Principal = cert.getIssuerX500Principal();
                             log.debug(issuerX500Principal.getName(X500Principal.CANONICAL));
-                            X500Principal principal = new X500Principal(issuer);
+                            X500Principal principal = new X500Principal(issuer, keywordMap);
                             log.debug(principal.getName(X500Principal.CANONICAL));
                             if (!principal.equals(issuerX500Principal)) {
                                 res.setFailure(true);
                                 failureMessage
                                         .append("Issuer distinguished name of signer certificate does not match \"")
-                                        .append(subject).append("\"\n");
+                                        .append(principal).append("\" != \"").append(issuerX500Principal).append("\"\n");
                             }
                         }
 
