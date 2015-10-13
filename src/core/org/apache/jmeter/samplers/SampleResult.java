@@ -765,7 +765,7 @@ public class SampleResult implements Serializable, Cloneable {
 
     /**
      * Sets the data type of the sample.
-     * @param dataType String containing {@link BINARY} or {@link TEXT}
+     * @param dataType String containing {@link #BINARY} or {@link #TEXT}
      * @see #BINARY
      * @see #TEXT
      */
@@ -776,7 +776,7 @@ public class SampleResult implements Serializable, Cloneable {
     /**
      * Returns the data type of the sample.
      * 
-     * @return String containing {@link BINARY} or {@link TEXT} or the empty string
+     * @return String containing {@link #BINARY} or {@link #TEXT} or the empty string
      * @see #BINARY
      * @see #TEXT
      */
