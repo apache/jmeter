@@ -485,11 +485,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Execute request either as is or under PrivilegedAction 
      * if a Subject is available for url
-     * @param httpClient
-     * @param httpRequest
-     * @param localContext
-     * @param url
-     * @return
+     * @param httpClient the {@link HttpClient} to be used to execute the httpRequest
+     * @param httpRequest the {@link HttpRequest} to be executed
+     * @param localContext th {@link HttpContext} to be used for execution
+     * @param url the target url (will be used to look up a possible subject for the execution)
+     * @return the result of the execution of the httpRequest
      * @throws IOException
      * @throws ClientProtocolException
      */
