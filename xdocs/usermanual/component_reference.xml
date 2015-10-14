@@ -138,11 +138,11 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         </li>
         <li>HTTP Request - this has an implementation drop-down box, which selects the HTTP protocol implementation to be used:
           <dl>
-            <dt>Java</dt><dd>uses the HTTP implementation provided by the JVM.
+            <dt><code>Java</code></dt><dd>uses the HTTP implementation provided by the JVM.
             This has some limitations in comparison with the HttpClient implementations - see below.</dd>
-            <dt>HTTPClient3.1</dt><dd>uses Apache Commons HttpClient 3.1.
+            <dt><code>HTTPClient3.1</code></dt><dd>uses Apache Commons HttpClient 3.1.
             This is no longer being developed, and support for this may be dropped in a future JMeter release.</dd>
-            <dt>HTTPClient4</dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
+            <dt><code>HTTPClient4</code></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
             <dt>Blank Value</dt><dd>does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on <code>jmeter.httpsampler</code> property defined in <code>jmeter.properties</code></dd>
           </dl>
         </li>
@@ -161,8 +161,8 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
              <code>PATCH</code>, <code>PROPFIND</code>, <code>PROPPATCH</code>, <code>UNLOCK</code>, <code>REPORT</code>, <code>MKCALENDAR</code>.</li>
          <li>It does not support client based certificate testing with Keystore Config.</li>
          </ul>
-         <p>Note: the <code>FILE</code> protocol is intended for testing purposes only.
-         It is handled by the same code regardless of which HTTP Sampler is used.</p>
+         <note>Note: the <code>FILE</code> protocol is intended for testing purposes only.
+         It is handled by the same code regardless of which HTTP Sampler is used.</note>
         <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
          you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
          For normal logins (i.e. where the user enters login information in a form), you will need to work out what the form submit button does,
