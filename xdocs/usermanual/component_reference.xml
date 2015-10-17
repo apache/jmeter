@@ -2957,8 +2957,8 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <tr><td><code>JSON</code></td>
 <td>The <i>JSON view</i> will show the response in tree style (also handles JSON embedded in JavaScript).
 <br/></td></tr>
-<tr><td><code>JSON PATH TESTER</code></td>
-<td>The <i>JSON PATH TESTER view</i> will let you test your JSON-PATH expressions and see the extracted data from a particular response.
+<tr><td><code>JSON Path Tester</code></td>
+<td>The <i>JSON Path Tester view</i> will let you test your JSON-PATH expressions and see the extracted data from a particular response.
 <br/></td></tr>
 <tr><td><code>Regexp Tester</code></td>
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
@@ -6082,7 +6082,7 @@ In the linked test plan, "<code>JDBC PostProcessor</code>" JDBC PostProcessor ca
 <figure width="818" height="399" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
 </component>
 
-<component name="JSON PostProcessor" index="&sect-num;.8.9">
+<component name="JSON Path PostProcessor" index="&sect-num;.8.9">
 <description>
 <p>
 The JSON PostProcessor enables you extract data from JSON responses using JSON-PATH syntax. This post processor is very similar to Regular expression extractor.
@@ -6098,12 +6098,12 @@ It will alow you to extract in a very easy way text content, see <a href="http:/
     <property name="Default Values" required="No">Semi-colon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</property>
     <property name="Match Numbers" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
 		<ul>
-		<li>0 : means random (Default Value)</li>
-		<li>-1 means extract all results, they will be named as <Variable name>_N (where N goes from 1 to Number of results</li>
-		<li>X : means extract the Xth result. If > to number of match nothing default     value will be used</li>
+		<li><code>0</code> : means random (Default Value)</li>
+		<li><code>-1</code> means extract all results, they will be named as <code><em>variable name</em>_N</code> (where N goes from 1 to Number of results</li>
+		<li><code>X</code> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
 		</ul>
     </property>
-    <property name="Compute concatenation var " required="No">If many results are found, plugin will concat them using ‘,’ separator and store it a var named <Variable name>_ALL</property>
+    <property name="Compute concatenation var" required="No">If many results are found, plugin will concat them using ‘,’ separator and store it a var named <code><em>&lt;variable name&gt;</em>_ALL</code></property>
 </properties>
 <figure width="855" height="276" image="json-post-processor.png">JSON PostProcessor</figure>
 </component>

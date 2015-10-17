@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -61,7 +60,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     
     private static final String JSONPATH_TESTER_COMMAND = "jsonpath_tester"; // $NON-NLS-1$
 
-    private JPanel jsonWithJSonPathPane;
+    private JPanel jsonWithJSonPathPanel;
 
     private JTextArea jsonDataField;
 
@@ -71,7 +70,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     private JTabbedPane rightSide;
 
-    private SampleResult sampleResult = null;
+    private SampleResult sampleResult;
 
     private JScrollPane jsonDataPane;
 
@@ -86,7 +85,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     /** {@inheritDoc} */
     public void init() {
         // Create the panels for the json tab
-        jsonWithJSonPathPane = createJSonPathExtractorPanel();
+        jsonWithJSonPathPanel = createJSonPathExtractorPanel();
     }
 
     /**
@@ -117,8 +116,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     private String process(String textToParse) {
         try {
-            List<String> matchStrings = new ArrayList<String>();
-            extractWithJSonPath(textToParse, jsonPathExpressionField.getText(), matchStrings);
+            List<String> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
             if(matchStrings.size()==0) {
                 return "NO MATCH";
             }
@@ -136,11 +134,9 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         }
     }
     
-    private void extractWithJSonPath(String textToParse, String expression,
-            List<String> matchStrings) throws ParseException {
+    private List<String> extractWithJSonPath(String textToParse, String expression) throws ParseException {
         JSONManager jsonManager = new JSONManager();
-        List<String> list = jsonManager.extractWithJsonPath(textToParse, expression);
-        matchStrings.addAll(list);
+        return jsonManager.extractWithJsonPath(textToParse, expression);
     }
 
     /*================= internal business =================*/
@@ -172,13 +168,13 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     public void setupTabPane() {
          // Add json-path tester pane
         if (rightSide.indexOfTab(JMeterUtils.getResString("jsonpath_tester_title")) < 0) { // $NON-NLS-1$
-            rightSide.addTab(JMeterUtils.getResString("jsonpath_tester_title"), jsonWithJSonPathPane); // $NON-NLS-1$
+            rightSide.addTab(JMeterUtils.getResString("jsonpath_tester_title"), jsonWithJSonPathPanel); // $NON-NLS-1$
         }
         clearData();
     }
 
     /**
-     * @return RegExp Tester panel
+     * @return JSON PATH Tester panel
      */
     private JPanel createJSonPathExtractorPanel() {
         
@@ -190,32 +186,32 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         this.jsonDataPane = GuiUtils.makeScrollPane(jsonDataField);
         jsonDataPane.setMinimumSize(new Dimension(0, 400));
 
-        JPanel pane = new JPanel(new BorderLayout(0, 5));
+        JPanel panel = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 jsonDataPane, createJSonPathExtractorTasksPanel());
         mainSplit.setDividerLocation(400);
-        pane.add(mainSplit, BorderLayout.CENTER);
-        return pane;
+        panel.add(mainSplit, BorderLayout.CENTER);
+        return panel;
     }
 
     /**
-     * Create the Regexp task pane
+     * Create the JSON PATH task pane
      *
-     * @return Regexp task pane
+     * @return JSON PATH task pane
      */
     private JPanel createJSonPathExtractorTasksPanel() {
-        JPanel xpathActionPanel = new JPanel();
-        xpathActionPanel.setLayout(new BoxLayout(xpathActionPanel, BoxLayout.X_AXIS));
+        JPanel jsonPathActionPanel = new JPanel();
+        jsonPathActionPanel.setLayout(new BoxLayout(jsonPathActionPanel, BoxLayout.X_AXIS));
         Border margin = new EmptyBorder(5, 5, 0, 5);
-        xpathActionPanel.setBorder(margin);
+        jsonPathActionPanel.setBorder(margin);
         jsonPathExpressionField = new JLabeledTextField(JMeterUtils.getResString("jsonpath_tester_field")); // $NON-NLS-1$
-        xpathActionPanel.add(jsonPathExpressionField, BorderLayout.WEST);
+        jsonPathActionPanel.add(jsonPathExpressionField, BorderLayout.WEST);
 
         JButton xpathTester = new JButton(JMeterUtils.getResString("jsonpath_tester_button_test")); // $NON-NLS-1$
         xpathTester.setActionCommand(JSONPATH_TESTER_COMMAND);
         xpathTester.addActionListener(this);
-        xpathActionPanel.add(xpathTester, BorderLayout.EAST);
+        jsonPathActionPanel.add(xpathTester, BorderLayout.EAST);
 
         jsonPathResultField = new JTextArea();
         jsonPathResultField.setEditable(false);
@@ -223,7 +219,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonPathResultField.setWrapStyleWord(true);
 
         JPanel xpathTasksPanel = new JPanel(new BorderLayout(0, 5));
-        xpathTasksPanel.add(xpathActionPanel, BorderLayout.NORTH);
+        xpathTasksPanel.add(jsonPathActionPanel, BorderLayout.NORTH);
         xpathTasksPanel.add(GuiUtils.makeScrollPane(jsonPathResultField), BorderLayout.CENTER);
 
         return xpathTasksPanel;

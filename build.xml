@@ -392,7 +392,7 @@
     <include name="${lib.dir}/${jodd-lagarto.jar}"/>
     <include name="${lib.dir}/${jodd-log.jar}"/>
     <include name="${lib.dir}/${json-path}"/>
-  	<include name="${lib.dir}/${json-smart}"/>
+    <include name="${lib.dir}/${json-smart}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>

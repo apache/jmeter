@@ -19,7 +19,6 @@
 package org.apache.jmeter.extractor.json.jsonpath;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,11 @@ import com.jayway.jsonpath.JsonPath;
  * @since 2.14
  */
 public class JSONManager {
-
+    /**
+     * This Map can hardly grow above 10 elements as it is used within JSONPostProcessor to 
+     * store the computed JsonPath for the set of JSON Path Expressions.
+     * Usually there will be 1 to Maximum 10 elements
+     */
     private Map<String, JsonPath> expressionToJsonPath = new HashMap<String, JsonPath>(
             2);
 
@@ -45,29 +48,21 @@ public class JSONManager {
 
         return jsonPath;
     }
-
+    
     public void reset() {
         expressionToJsonPath.clear();
     }
 
+    /**
+     * 
+     * @param jsonString JSON String from which data is extracted
+     * @param jsonPath JSON-PATH expression
+     * @return List of String extracted data
+     * @throws ParseException
+     */
     public List<String> extractWithJsonPath(String jsonString, String jsonPath)
             throws ParseException {
         JsonPath jsonPathParser = getJsonPath(jsonPath);
-        Object values = jsonPathParser.<List<?>> read(jsonString);
-        List<String> jsonExtraction = new ArrayList<String>();
-        if (values instanceof String) {
-            jsonExtraction.add((String) values);
-        } else if (values instanceof List<?>) {
-            List<?> asList = (List<?>) values;
-            for (Object object : asList) {
-                if(object instanceof String) {
-                    jsonExtraction.add((String)object);
-                } else {
-                    jsonExtraction.add(object.toString());
-                }
-            }
-        }
-
-        return jsonExtraction;
+        return jsonPathParser.read(jsonString);
     }
 }

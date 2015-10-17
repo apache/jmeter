@@ -41,9 +41,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
  */
 public class JSONPostProcessorGui extends AbstractPostProcessorGui {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -2845056031828291476L;
 
     private JLabeledTextField defaultValuesField;
@@ -140,13 +137,13 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         GridBagConstraints gbc = new GridBagConstraints();
         initConstraints(gbc);
         addField(panel, refNamesField, gbc);
-        resetContraints(gbc);
+        nextLine(gbc);
         addField(panel, jsonPathExpressionsField, gbc);
-        resetContraints(gbc);
+        nextLine(gbc);
         addField(panel, matchNumbersField, gbc);
-        resetContraints(gbc);
+        nextLine(gbc);
         addField(panel, new JLabel(JMeterUtils.getResString("jsonpp_compute_concat")) ,computeConcatenationField, gbc);
-        resetContraints(gbc);
+        nextLine(gbc);
         gbc.weighty = 1;
         addField(panel, defaultValuesField, gbc);
         return panel;
@@ -169,8 +166,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         panel.add(checkBox, gbc.clone());
     }
 
-    // Next line
-    private void resetContraints(GridBagConstraints gbc) {
+    private void nextLine(GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.weightx = 0;
