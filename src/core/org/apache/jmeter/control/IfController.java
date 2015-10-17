@@ -145,7 +145,7 @@ public class IfController extends GenericController implements Serializable, Thr
     /**
      * @return ScriptEngineManager singleton
      */
-    public static ScriptEngineManager getInstance() {
+    private static ScriptEngineManager getInstance() {
             return LazyHolder.INSTANCE;
     }
     /**
