@@ -58,13 +58,13 @@ public class JavaScript extends AbstractFunction {
     }
  
     private static final boolean USE_RHINO_ENGINE = 
-            getInstance().getEngineByName(JavaScript.NASHORN_ENGINE_NAME) == null ||
-            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, true) ;
+            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, true) || 
+            (getInstance().getEngineByName(JavaScript.NASHORN_ENGINE_NAME) == null);
 
     /**
      * @return ScriptEngineManager singleton
      */
-    public static ScriptEngineManager getInstance() {
+    private static ScriptEngineManager getInstance() {
             return LazyHolder.INSTANCE;
     }
     private static final List<String> desc = new LinkedList<>();
