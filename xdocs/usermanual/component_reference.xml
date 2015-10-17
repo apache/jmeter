@@ -6070,7 +6070,6 @@ The JDBC PostProcessor enables you to run some SQL statement just after a sample
 This can be useful if your JDBC Sample changes some data and you want to reset state to what it was before the JDBC sample run.
 </p>
 </description>
-</component>
 <links>
         <link href="../demos/JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
 </links>
@@ -6078,6 +6077,7 @@ This can be useful if your JDBC Sample changes some data and you want to reset s
 In the linked test plan, "<code>JDBC PostProcessor</code>" JDBC PostProcessor calls a stored procedure to delete from Database the Price Cut-Off that was created by PreProcessor.
 </p>
 <figure width="818" height="399" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
+</component>
 </section>
 
 <section name="&sect-num;.9 Miscellaneous Features" anchor="Miscellaneous_Features">
