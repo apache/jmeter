@@ -86,6 +86,8 @@ under the License.
       <jodd-core.version>3.6.6</jodd-core.version>
       <jodd-lagarto.version>3.6.6</jodd-lagarto.version>
       <jodd-log.version>3.6.6</jodd-log.version>
+      <json-path.version>2.0.0</json-path.version>
+      <json-smart.version>2.2</json-smart.version>
       <jsoup.version>1.8.2</jsoup.version>
       <rhino.version>1.7.7</rhino.version>
       <junit.version>4.12</junit.version>
@@ -373,6 +375,16 @@ under the License.
         <groupId>org.apache.geronimo.specs</groupId>
         <artifactId>geronimo-jms_1.1_spec</artifactId>
         <version>${jms.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jayway.jsonpath</groupId>
+        <artifactId>json-path</artifactId>
+        <version>${json-path.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.minidev</groupId>
+        <artifactId>json-smart</artifactId>
+        <version>${json-smart.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jsoup</groupId>

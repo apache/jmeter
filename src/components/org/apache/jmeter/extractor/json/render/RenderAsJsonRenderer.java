@@ -57,6 +57,8 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
+    private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
+    
     private static final String JSONPATH_TESTER_COMMAND = "jsonpath_tester"; // $NON-NLS-1$
 
     private JPanel jsonWithJSonPathPane;
@@ -149,7 +151,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         try {
-            jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response));
+            jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));
             jsonDataField.setCaretPosition(0);
         } catch (Exception e) {
             LOGGER.error("Exception converting to XML:"+response+ ", message:"+e.getMessage(),e);
