@@ -26,6 +26,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
+    private static final String TAB_SEPARATOR = ":   "; //$NON-NLS-1$
 
     private static final String ESC_CHAR_REGEX = "\\\\[\"\\\\/bfnrt]|\\\\u[0-9A-Fa-f]{4}"; // $NON-NLS-1$
 
@@ -56,10 +57,25 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
     // It might be useful also to make this available in the 'Request' tab, for
     // when posting JSON.
-    private static String prettyJSON(String json) {
+    /**
+     * Pretty-print JSON text
+     * @param json input text
+     * @return prettyfied json
+     */
+    public static String prettyJSON(String json) {
+        return prettyJSON(json, RenderAsJSON.TAB_SEPARATOR);
+    }
+    
+    /**
+     * Pretty-print JSON text
+     * @param json input text
+     * @param tabSeparator String tab separator
+     * @return prettyfied json
+     */
+    public static String prettyJSON(String json, String tabSeparator) {
         StringBuilder pretty = new StringBuilder(json.length() * 2); // Educated guess
 
-        final String tab = ":   "; // $NON-NLS-1$
+        final String tab = tabSeparator; // $NON-NLS-1$
         StringBuilder index = new StringBuilder();
         String nl = ""; // $NON-NLS-1$
 
