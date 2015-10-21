@@ -139,6 +139,18 @@ jodd-log-3.6.6
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
+json-path-2.0.0
+--------
+https://github.com/jayway/JsonPath
+- JSON Path Extractor
+- JSON Path Renderer
+
+json-smart-2.2
+--------
+https://github.com/netplex/json-smart-v2
+- JSON Path Extractor
+- JSON Path Renderer
+
 jsoup-1.8.2
 --------
 http://www.jsoup.org/
