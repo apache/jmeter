@@ -57,7 +57,7 @@ public class TestRenderAsJson extends TestCase {
     }
 
     @Test
-    public void testRenderResultSimpleStructur() throws Exception {
+    public void testRenderResultSimpleStructure() throws Exception {
         assertEquals(
                 "{\n" + TAB + "\"Hello\": \"World\", \n" + TAB + "\"more\": \n"
                         + TAB + "[\n" + TAB + TAB + "\"Something\", \n" + TAB
