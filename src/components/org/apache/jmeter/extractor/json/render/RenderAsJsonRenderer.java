@@ -120,20 +120,19 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     private String process(String textToParse) {
         try {
             List<String> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
-            if(matchStrings.size()==0) {
-                return "NO MATCH";
-            }
-            else {
+            if (matchStrings.size() == 0) {
+                return "NO MATCH"; //$NON-NLS-1$
+            } else {
                 StringBuilder builder = new StringBuilder();
-                int i=0;
+                int i = 0;
                 for (String text : matchStrings) {
-                    builder.append("Result[").append(i++).append("]=").append(text).append("\n");
+                    builder.append("Result[").append(i++).append("]=").append(text).append("\n"); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
                 }
-                
+
                 return builder.toString();
             }
         } catch (Exception e) {
-            return "Exception:"+ e.getMessage();
+            return "Exception: " + e.getMessage(); //$NON-NLS-1$
         }
     }
     
@@ -144,18 +143,16 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     /*================= internal business =================*/
 
-
-
     /** {@inheritDoc} */
     @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         try {
-            jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));
+            jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));  //$NON-NLS-1$
             jsonDataField.setCaretPosition(0);
         } catch (Exception e) {
-            LOGGER.error("Exception converting to XML:"+response+ ", message:"+e.getMessage(),e);
-            jsonDataField.setText("Exception converting to XML:"+response+ ", message:"+e.getMessage());
+            LOGGER.error("Exception converting to XML: "+response+ ", message: "+e.getMessage(),e); //$NON-NLS-1$ $NON-NLS-2$
+            jsonDataField.setText("Exception converting to XML: "+response+ ", message: "+e.getMessage()); //$NON-NLS-1$ $NON-NLS-2$
             jsonDataField.setCaretPosition(0);
         }
     }
