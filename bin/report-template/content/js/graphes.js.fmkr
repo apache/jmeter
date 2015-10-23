@@ -1,0 +1,1386 @@
+﻿$(document).ready(function() {
+    var offset = 0;
+	$(".click-title").mouseenter( function(	e){
+		e.preventDefault();
+		this.style.cursor="pointer";
+	});
+	$(".click-title").mousedown( function(event){
+		event.preventDefault();
+	});
+	
+	try {
+	   bbq();
+	} catch (e) {
+	}
+	try {
+	   btot();
+	} catch (e) {
+	}
+	try {
+	   rtp();
+	} catch (e) {
+	}
+    $(".portlet-header").css("cursor", "auto");
+});
+
+var b1 = false;
+var b2 = false;
+var b3 = false;
+var b4 = false;
+var b5 = false;
+var b6 = false;
+var b7 = false;
+var b8 = false;
+var b9 = false;
+var b10 = false;
+var b11 = false;
+var chiffre = 0;
+
+//Response times percentiles
+function rtp(bool, below) {
+	var data = ${responseTimePercentiles.values};
+    var options = {
+        series: {
+            points: { show: false }
+        },
+        legend: {
+        	noColumns: 2,
+        	show: true,
+        	container: '#legendResponseTimePercentiles'
+        },
+        xaxis: {
+        	min: ${responseTimePercentiles.minX?c},
+			max: ${responseTimePercentiles.maxX?c},
+			tickDecimals: 1,
+			axisLabel: "Percentiles",
+			axisLabelUseCanvas: true,
+			axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+		},
+        yaxis: { 
+			min: ${responseTimePercentiles.minY?c},
+			max: ${responseTimePercentiles.maxY?c},
+			axisLabel: "Percentile value in ms",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+			
+		},
+		grid: {
+            hoverable: true //IMPORTANT! this is needed for tooltip to work
+        },
+        tooltip: true,
+        tooltipOpts: {
+            content: "%s for %x.2 was %y"
+        },
+        selection: { mode: "x" },
+		stack: true
+    };
+
+    var placeholder = $("#flot-response-times-percentiles");
+
+	var i = 0;
+	$.each(data, function(key, val) {
+		val.color = i;
+		++i;
+	});
+	
+	var choiceContainer = $("#choicesResponseTimePercentiles");
+	if ( bool == false ){
+		plotAccordingToChoices();
+	} else {
+		createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+		plotAccordingToChoices();
+		$('#bodyPercentiles .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+		});
+		}
+		function plotAccordingToChoices() {
+			var datasets = [];
+			var i = 0;
+			choiceContainer.find("input:checked").each(function () {
+				var key = $(this).attr("name");
+				if (key == data[key].label){
+					datasets.push(data[key]);
+					datasets[i].threshold.below=chiffre;
+					datasets[i].threshold.color=$("#slider-vertical").children("div").css("background-color");
+					i++;
+				}
+			});
+
+			$.plot(placeholder, datasets, options);
+			$("#collapseResponseTimePercentiles #legendResponseTimePercentiles").children().css("border", "1px solid #888888");
+		}
+}
+
+// Response time distribution
+function rtd(bool) {
+	var data = ${responseTimeDistribution.values};
+	var options = {
+		legend: { noColumns: 2,show: true, container: '#legendResponseTimeDistribution' },
+		xaxis:{
+			axisLabel: "Response times in ms",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+		},
+		yaxis: {
+			axisLabel: "Number of responses",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+		},
+		bars : {
+			show: true,
+			barWidth: ${responseTimeDistribution.granularity?c}
+		},
+		grid: {
+            hoverable: true //IMPORTANT! this is needed for tooltip to work
+        },
+        tooltip: true,
+        tooltipOpts: {
+            content: "%s for %x was %y"
+        }
+    };
+	
+	var i = 0;
+	var choiceContainer = $("#choicesResponseTimeDistribution");
+	if (bool == false){
+		plotAccordingToChoices();
+	}else{
+		createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+		plotAccordingToChoices();
+		$('#footerRTD .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+		});
+	}
+	function plotAccordingToChoices() {
+		$.plot($("#flot-response-time-distribution"), prepareData( data, choiceContainer), options);
+	}
+};
+
+// Active Threads Over Time
+function tsot(bool) {
+	var data = ${activeThreadsOverTime.values};
+	var xaxisLabel = getElapsedTimeLabel(${activeThreadsOverTime.granularity?c});
+    var options = {
+        series: {
+            lines: {
+                show: true
+            },
+            points: {
+				show: true
+            }
+        },
+		xaxis: {
+			min: ${activeThreadsOverTime.minX?c},
+			max: ${activeThreadsOverTime.maxX?c},
+            mode: "time",
+			timeformat: "%H:%M:%S",
+			axisLabel: xaxisLabel,
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+        },
+		yaxis: { 
+			min: ${activeThreadsOverTime.minY?c},
+			max: ${activeThreadsOverTime.maxY?c},
+			axisLabel: "Number of active threads",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20
+        },
+		legend: {
+			noColumns: 6,
+			show: true,
+			container: '#legendActiveThreadsOverTime'
+		},
+		selection: { 
+			mode: "x"
+		},
+		grid: {
+            hoverable: true //IMPORTANT! this is needed for tooltip to work
+        },
+        tooltip: true,
+        tooltipOpts: {
+            content: "%s for %x was %y",
+            onHover: function(flotItem, $tooltipEl) {
+            }
+        }
+    };
+
+    // hard-code color indices to prevent them from shifting as
+	// countries are turned on/off
+	var i = 0;
+	$.each(data, function(key, val) {
+		val.color = i;
+		++i;
+	});
+	
+	var choiceContainer = $("#choicesActiveThreadsOverTime");
+	if( bool == false ) {
+		plotAccordingToChoices();
+	}else{
+		createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+		plotAccordingToChoices();
+		$('#footerTSOT .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+		});
+	}
+	function plotAccordingToChoices() {
+		$.plot($("#flotActiveThreadsOverTime"), prepareData( data, choiceContainer), options);
+	}
+};
+
+// Response Time Per Sample
+function hb(bool) {
+		var ticks = ${responseTimePerSample.sampleNames};
+		var dataSet = ${responseTimePerSample.values};
+ 
+        var options = {
+            series: {
+                bars: {
+                    show: true
+                }
+            },
+            bars: {
+                align: "center",
+                barWidth: 0.5,
+                horizontal: true,
+                fillColor: { colors: [{ opacity: 0.5 }, { opacity: 1}] },
+                lineWidth: 1
+            },
+            xaxis: {
+                max: ${responseTimePerSample.maxX?c},
+                axisLabel: "Response Time in ms",
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 12,
+				axisLabelFontFamily: 'Verdana, Arial',
+				axisLabelPadding: 20,
+                tickColor: "white",
+                tickFormatter: function (v, axis) {
+                    return $.formatNumber(v, { format: "#,###", locale: "us" });
+                },
+                color: "black"
+            },
+            yaxis: {
+                tickColor: "white",
+                ticks: ticks,
+                color: "black"
+            },
+            legend: {
+                noColumns: 0,
+                labelBoxBorderColor: "#858585",
+                container: '#legendHorizontalBar'
+            },
+            grid: {
+                hoverable: true,
+                borderWidth: 2,
+                backgroundColor: { colors: ["white", "white"] }
+            }
+        };
+ 
+       
+        // hard-code color indices to prevent them from shifting as
+		// countries are turned on/off
+		
+		var choiceContainer = $("#choicesResponseTimePerSample");
+		if (bool == false){
+			plotAccordingToChoices();
+		} else {
+			createLegend(dataSet, choiceContainer);
+			choiceContainer.find("input").click(plotAccordingToChoices);
+			plotAccordingToChoices();
+			$('#footerRTPS .legendColorBox > div').each(function(i){
+				$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+			});
+		}
+		function plotAccordingToChoices() {
+			$.plot($("#flot-horizontal-bar"), prepareData( dataSet, choiceContainer), options);
+		}
+   
+        var previousPoint = null, previousLabel = null;
+ 
+        $.fn.UseTooltip = function () {
+            $(this).bind("plothover", function (event, pos, item) {
+                if (item) {
+                    if ((previousLabel != item.series.label) ||
+                 (previousPoint != item.dataIndex)) {
+                        previousPoint = item.dataIndex;
+                        previousLabel = item.series.label;
+                        $("#tooltip").remove();
+ 
+                        var x = item.datapoint[0];
+                        var y = item.datapoint[1];
+ 
+                        var color = item.series.color;
+ 
+                        showTooltip(item.pageX,
+                        item.pageY,
+                        color,
+                        "<strong>" + item.series.label + "</strong><br>" + item.series.yaxis.ticks[y].label +
+                        " : <strong>" + $.formatNumber(x, { format: "#,###", locale: "us" }) + "</strong> ms");
+                    }
+                } else {
+                    $("#tooltip").remove();
+                    previousPoint = null;
+                }
+            });
+        };
+ 
+        function showTooltip(x, y, color, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y - 10,
+                left: x + 10,
+                border: '2px solid ' + color,
+                padding: '3px',
+                'font-size': '9px',
+                'border-radius': '5px',
+                'background-color': '#fff',
+                'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+                opacity: 0.9
+            }).appendTo("body").fadeIn(200);
+        }
+	
+	$("#flot-horizontal-bar").UseTooltip();
+};
+
+
+// Times vs threads
+function tvt(bool){
+		var data = ${timeVsThreads.values};
+        var options = {
+            series: {
+                lines: {
+                    show: true
+                },
+                points: {
+                    show: true
+                }
+            },
+			xaxis: {
+				min: ${timeVsThreads.minX?c},
+				max: ${timeVsThreads.maxX?c},
+                axisLabel: "Number of active threads",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+			},
+			yaxis: {
+				min: ${timeVsThreads.minY?c},
+				max: ${timeVsThreads.maxY?c},
+                axisLabel: "Average response times in ms",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20
+			},
+			
+			legend: { noColumns: 2,show: true, container: '#legendTimeVsThreads' },
+			grid: {
+                hoverable: true //IMPORTANT! this is needed for tooltip to work
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s for %x.2 was %y.2",
+                onHover: function(flotItem, $tooltipEl) {
+                }
+            }
+        };
+		
+		var i = 0;
+		
+		var choiceContainer = $("#choicesTimeVsThreads");
+		if(bool == false){
+			plotAccordingToChoices();
+		}else{
+		
+		createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+		
+		plotAccordingToChoices();
+		
+		$('#footerTVT .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+		});
+		}
+		function plotAccordingToChoices() {
+			$.plot($("#flot-times-vs-threads"), prepareData( data, choiceContainer), options);
+		}
+};
+
+
+//Bytes throughput Over Time
+function btot(bool) {
+		var data = ${bytesThroughputOverTime.values};
+		var xaxisLabel = getElapsedTimeLabel(${bytesThroughputOverTime.granularity?c});
+		var options = {
+			series: {
+				lines: {
+					show: true
+				},
+				points: {
+					show: true
+				}
+			},
+			xaxis: {
+				min: ${bytesThroughputOverTime.minX?c},
+				max: ${bytesThroughputOverTime.maxX?c},
+				mode: "time",
+				timeformat: "%H:%M:%S",
+				axisLabel: xaxisLabel ,
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 12,
+				axisLabelFontFamily: 'Verdana, Arial',
+				axisLabelPadding: 20,
+			},
+			yaxis: { 
+				min: ${bytesThroughputOverTime.minY?c},
+				max: ${bytesThroughputOverTime.maxY?c},
+				axisLabel: "Bytes/sec",
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 12,
+				axisLabelFontFamily: 'Verdana, Arial',
+				axisLabelPadding: 20,			
+			},
+			legend: {
+				noColumns: 2,
+				show: true,
+				container: '#legendBytesThroughputOverTime'
+			},
+			selection: { 
+				mode: "x"
+			},
+			grid: {
+				hoverable: true //IMPORTANT! this is needed for tooltip to work
+			},
+			tooltip: true,
+			tooltipOpts: {
+				content: "%s for %x was %y",
+				onHover: function(flotItem, $tooltipEl) {
+				}
+			}
+		};
+
+		// hard-code color indices to prevent them from shifting as
+		// countries are turned on/off
+		var i = 0;
+		$.each(data, function(key, val) {
+			val.color = i;
+			++i;
+		});
+		
+		var choiceContainer = $("#choicesBytesThroughputOverTime");
+		if( bool == false){
+			plotAccordingToChoices();
+		}else{
+			createLegend(data, choiceContainer);
+			choiceContainer.find("input").click(plotAccordingToChoices);
+			plotAccordingToChoices();
+			$('#footerBytes .legendColorBox > div').each(function(i){
+				$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+			});
+		}
+		function plotAccordingToChoices() {
+			$.plot($("#flot-line-chart"), prepareData( data, choiceContainer), options);
+		}
+}
+
+//Response Time Over Time
+function rtot(bool) {
+    		
+	var data = ${responseTimesOverTime.values};
+	var xaxisLabel = getElapsedTimeLabel(${responseTimesOverTime.granularity?c});
+    var options = {
+        series: {
+            lines: {
+                show: true
+            },
+            points: {
+                show: true
+            }
+        },
+		xaxis: {
+			min: ${responseTimesOverTime.minX?c},
+			max: ${responseTimesOverTime.maxX?c},
+            mode: "time",
+			timeformat: "%H:%M:%S",
+			axisLabel: xaxisLabel,
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+        },
+		yaxis: { 
+			min: ${responseTimesOverTime.minY?c},
+			max: ${responseTimesOverTime.maxY?c},
+			axisLabel: "Response time in ms",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+		},
+		legend: {
+			noColumns: 2,
+			show: true,
+			container: '#legendResponseTimesOverTime'
+		},
+		selection: { 
+			mode: "x"
+		},
+		grid: {
+            hoverable: true //IMPORTANT! this is needed for tooltip to work
+        },
+        tooltip: true,
+        tooltipOpts: {
+            content: "%s for %x was %y",
+            onHover: function(flotItem, $tooltipEl) {
+            }
+        }
+    };
+
+    // hard-code color indices to prevent them from shifting as
+	// countries are turned on/off
+	var i = 0;
+	$.each(data, function(key, val) {
+		val.color = i;
+		++i;
+	});
+
+	var choiceContainer = $("#choicesResponseTimesOverTime");
+	if( bool == false){
+		plotAccordingToChoices();
+	}else{
+		createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+
+		plotAccordingToChoices();
+		
+		$('#footerRTOT .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+		});
+	}
+	function plotAccordingToChoices() {
+		$.plot($("#flot-Response-Time-Over-Time"), prepareData(data, choiceContainer), options);
+	}
+};
+
+//Latencies Over Time
+function lot(bool) {
+			var data = ${latenciesOverTime.values};
+			var xaxisLabel = getElapsedTimeLabel(${latenciesOverTime.granularity?c});
+			var options = {
+				series: {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					}
+				},
+				xaxis: {
+					min: ${latenciesOverTime.minX?c},
+					max: ${latenciesOverTime.maxX?c},
+					mode: "time",
+					timeformat: "%H:%M:%S",
+					axisLabel: xaxisLabel,
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				yaxis: {
+					min: ${latenciesOverTime.minY?c},
+					max: ${latenciesOverTime.maxY?c},
+					axisLabel: "Response latencies in ms",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				legend: {
+					noColumns: 2,
+					show: true,
+					container: '#legendLatenciesOverTime'
+				},
+				selection: {
+					mode: "x"
+				},
+				grid: {
+					hoverable: true //IMPORTANT! this is needed for tooltip to work
+				},
+				tooltip: true,
+				tooltipOpts: {
+					content: "%s for %x was %y",
+					onHover: function(flotItem, $tooltipEl) {
+					}
+				}
+			};
+
+			// hard-code color indices to prevent them from shifting as
+			// countries are turned on/off
+			var i = 0;
+			$.each(data, function(key, val) {
+				val.color = i;
+				++i;
+			});
+			
+			// insert checkboxes 
+			var choiceContainer = $("#choicesLatenciesOverTime");
+			if( bool == false ) {
+				plotAccordingToChoices();
+			}else {
+				createLegend(data, choiceContainer);
+				choiceContainer.find("input").click(plotAccordingToChoices);
+
+				plotAccordingToChoices();
+				$('#footerLatencies .legendColorBox > div').each(function(i){
+					$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+				});
+			}
+			function plotAccordingToChoices() {
+				$.plot($("#flot-latencies-over-time"), prepareData( data, choiceContainer), options);
+			}
+};
+
+//Response Time vs Request
+function rtvr(bool) {
+		var data = ${responseTimeVsRequest.values};
+
+        var options = {
+            series: {
+                lines: {
+                    show: true
+                },
+                points: {
+                    show: true
+                }
+            },
+			xaxis: {
+				min : ${responseTimeVsRequest.minX?c},
+				max : ${responseTimeVsRequest.maxX?c},
+				axisLabel: "Global number of requests per second",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+            },
+			yaxis: {
+				min : ${responseTimeVsRequest.minY?c},
+				max : ${responseTimeVsRequest.maxY?c},
+				axisLabel: "Median Response Time",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+			},
+			legend: {
+				noColumns: 2,
+				show: true,
+				container: '#legendResponseTimeVsRequest'
+			},
+			grid: {
+                hoverable: true //IMPORTANT! this is needed for tooltip to work
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s for %x was %y",
+                onHover: function(flotItem, $tooltipEl) {
+                }
+            }
+        };
+      
+		var choiceContainer = $("#choicesResponseTimeVsRequest");
+		if ( bool == false){
+			plotAccordingToChoices();
+		}else{
+			createLegend(data, choiceContainer);
+			choiceContainer.find("input").click(plotAccordingToChoices);
+	
+			plotAccordingToChoices();
+			$('#footerRTVR .legendColorBox > div').each(function(i){
+				$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+			});
+		}
+		function plotAccordingToChoices() {
+			$.plot($("#flot-response-time-vs-request"), prepareData( data, choiceContainer), options);
+		}
+};
+
+
+//Latency vs Request
+function lvr(bool) {
+		var data = ${latencyVsRequest.values};
+        var options = {
+            series: {
+                lines: {
+                    show: true
+                },
+                points: {
+                    show: true
+                }
+            },
+			xaxis: {
+				min : ${latencyVsRequest.minX?c},
+				max : ${latencyVsRequest.maxX?c},
+				axisLabel: "Global number of requests per second",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+            },
+			yaxis: {
+				min : ${latencyVsRequest.minY?c},
+				max : ${latencyVsRequest.maxY?c},
+				axisLabel: "Median Latency",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+			}
+			,
+			legend: { noColumns: 2,show: true, container: '#legendLatencyVsRequest' },
+			
+			grid: {
+                hoverable: true //IMPORTANT! this is needed for tooltip to work
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s for %x was %y",
+                onHover: function(flotItem, $tooltipEl) {
+                }
+            }
+        };
+      
+		var choiceContainer = $("#choicesLatencyVsRequest");
+		if(bool == false){
+			plotAccordingToChoices();
+		}else{
+			createLegend(data, choiceContainer);
+			choiceContainer.find("input").click(plotAccordingToChoices);
+	
+			plotAccordingToChoices();
+			$('#footerLatency .legendColorBox > div').each(function(i){
+				$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+			});
+		}
+		function plotAccordingToChoices() {
+			$.plot($("#flot-latency-vs-request"), prepareData( data, choiceContainer), options);
+		}
+};
+
+
+//Hits per second
+function bbq(bool) {
+        $("#flot-hits-per-second").mousemove(function(e){
+			e.preventDefault();
+		});
+	
+		var data = ${hitsPerSecond.values};
+		var datasets = [];
+		var xaxisLabel = getElapsedTimeLabel(${hitsPerSecond.granularity?c});
+		
+        var options = {
+            series: {
+                lines: {
+                    show: true
+                },
+                points: {
+                    show: true
+                }
+            },
+			xaxis: {
+				min: ${hitsPerSecond.minX?c},
+				max: ${hitsPerSecond.maxX?c},
+                mode: "time",
+				timeformat: "%H:%M:%S",
+				axisLabel: xaxisLabel,
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20,
+            },
+			yaxis: {
+				min: ${hitsPerSecond.minY?c},
+				max: ${hitsPerSecond.maxY?c},
+				axisLabel: "Number of hits / sec",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 20, }
+			,
+			legend: { noColumns: 2,show: true, container: '#legendHitsPerSecond' },
+			selection: { mode: "xy" },
+			grid: {
+                hoverable: true //IMPORTANT! this is needed for tooltip to work
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s for %x was %y.2"
+            }
+        };
+        
+		var optionsMin = {
+			series: {
+				lines: { show: true, lineWidth: 1 },
+				shadowSize: 0
+			},
+			xaxis: { 
+				mode: "time",
+				timeformat: "%H:%M:%S",
+			},
+			yaxis: {
+				min: 0,
+			},
+			grid: {
+				color: "#999"
+			},
+			selection: {
+				mode: "xy"
+			}
+		};
+		
+		$("#flot-hits-per-second").mousedown(function(e){
+			e.preventDefault();
+		});
+		
+		var choiceContainer = $("#choicesHitsPerSecond");
+		if (bool ==false){
+			plotAccordingToChoices();
+		}else{
+			createLegend(data, choiceContainer);
+			choiceContainer.find("input").click(plotAccordingToChoices);
+			
+			plotAccordingToChoices();
+			$("#flot-hits-per-second").bind("mousedown", function() { return false; });
+			$("#overview").bind("mousedown", function() { return false; });
+				// now connect the two
+			$("#flot-hits-per-second").bind("plotselected", function (event, ranges) {
+				// clamp the zooming to prevent eternal zoom
+				if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
+					ranges.xaxis.to = ranges.xaxis.from + 0.00001;
+				}
+				if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) {
+					ranges.yaxis.to = ranges.yaxis.from + 0.00001;
+				}
+				// do the zooming
+				plot = $.plot($("#flot-hits-per-second"), datasets,
+							  $.extend(true, {}, options, {
+								  xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to },
+								  yaxis: { min: ranges.yaxis.from, max: ranges.yaxis.to }
+							  }));
+				
+				// don't fire event on the overview to prevent eternal loop
+				});
+				$("#overview").bind("plotselected", function (event, ranges) {
+					plot.setSelection(ranges);
+				});
+			$('#footerHitsPerSecond .legendColorBox > div').each(function(i){
+				$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+			});
+		}
+		function plotAccordingToChoices() {
+			datasets = prepareData(data, choiceContainer);
+			plot = $.plot($("#flot-hits-per-second"), datasets, options);
+			// setup overview
+			var overview = $.plot($("#overview"), datasets, optionsMin );
+		}
+}
+
+
+//Hits codes per second
+function hcps(bool) {
+	var data = ${codesPerSecond.values};
+	var xaxisLabel = getElapsedTimeLabel(${codesPerSecond.granularity?c});
+    var options = {
+        series: {
+            lines: {
+                show: true
+            },
+            points: {
+                show: true
+            }
+        },
+		xaxis: {
+			min: ${codesPerSecond.minX?c},
+			max: ${codesPerSecond.maxX?c},
+            mode: "time",
+			timeformat: "%H:%M:%S",
+			axisLabel: xaxisLabel,
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+        },
+		yaxis: {
+			min: ${codesPerSecond.minY?c},
+			max: ${codesPerSecond.maxY?c},
+			axisLabel: "Number of responses/sec",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+		},
+		legend: {
+			noColumns: 2,
+			show: true,
+			container: '#legendCodesPerSecond'
+		},			
+		grid: {
+            hoverable: true //IMPORTANT! this is needed for tooltip to work
+        },
+        tooltip: true,
+        tooltipOpts: {
+            content: "%s for %x was %y.2",
+            onHover: function(flotItem, $tooltipEl) {
+            }
+        }
+    };
+
+    // hard-code color indices to prevent them from shifting as
+	// countries are turned on/off
+	var i = 0;
+	$.each(data, function(key, val) {
+		val.color = i;
+		++i;
+	});
+	 
+	var choiceContainer = $("#choicesCodesPerSecond");
+	if( bool == false){
+		plotAccordingToChoices();
+	}else{
+		createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+	
+		plotAccordingToChoices();
+		$('#footerCodesPerSecond .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+		});
+	}
+	function plotAccordingToChoices() {
+		$.plot($("#flotCodesPerSecond"), prepareData( data, choiceContainer), options);
+	}
+};
+
+
+//Transactions per second
+function tps(bool) {
+	var data = ${transactionsPerSecond.values};
+	var xaxisLabel = getElapsedTimeLabel(${transactionsPerSecond.granularity?c});
+    var options = {
+        series: {
+            lines: {
+                show: true
+            },
+            points: {
+                show: true
+            }
+        },
+		xaxis: {
+			min: ${transactionsPerSecond.minX?c},
+			max: ${transactionsPerSecond.maxX?c},
+            mode: "time",
+			timeformat: "%H:%M:%S",
+			axisLabel: xaxisLabel,
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+        },
+		yaxis: {
+			min: ${transactionsPerSecond.minY?c},
+			max: ${transactionsPerSecond.maxY?c},
+			axisLabel: "Number of transactions / sec",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,			}
+		,
+		legend: {
+			noColumns: 2,
+			show: true,
+			container: '#legendTransactionsPerSecond'
+		},
+		grid: {
+            hoverable: true //IMPORTANT! this is needed for tooltip to work
+        },
+        tooltip: true,
+        tooltipOpts: {
+            content: "%s for %x was %y",
+            onHover: function(flotItem, $tooltipEl) {
+            }
+        }
+    };
+
+    // hard-code color indices to prevent them from shifting as
+    // countries are turned on/off
+    var i = 0;
+    $.each(data, function(key, val) {
+        val.color = i;
+        ++i;
+    });
+    
+    var choiceContainer = $("#choicesTransactionsPerSecond");
+	if( bool == false){
+		plotAccordingToChoices();
+	}else{
+    	createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+		plotAccordingToChoices();
+		$('#footerTransactions .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
+		});
+	}
+    
+    function plotAccordingToChoices() {
+    	$.plot($("#flot-transactions-per-second"), prepareData( data, choiceContainer), options);
+    }
+};
+
+//collapse
+$(function() {
+		$('.collapse').on('shown.bs.collapse', function(){
+			$(this).parent().find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-up");
+			if (this.id == "bodyResponseTimeOver") {
+				if ( b6 == false ) {
+					rtot();
+				}
+				b6 = true;
+				document.location.href="#ResponseTimesOverTime";
+			} else if (this.id == "bodyLantencies") {
+				if ( b5 == false ) {
+					lot();
+				}
+				b5 = true;
+				document.location.href="#LatenciesOverTimes";
+			} else if (this.id == "bodyRTD") {
+				if ( b1 == false ) {
+					rtd();
+				}
+				b1 = true;
+				document.location.href="#ResponseTimeDistribution" ;
+			} else if (this.id == "bodyTSOT") {
+				if ( b2 == false ) {
+					tsot();
+				}
+				b2 = true;
+				document.location.href="#ThreadsStateOverTime";
+			} else if (this.id == "bodyRTPS") {
+				if ( b3 == false ) {
+					hb();
+				}
+				b3 = true;
+				document.location.href="#ResponseTimePerSample" ;
+			} else if (this.id == "bodyTVT") {
+				if ( b4 == false ) {
+					tvt();
+				}
+				b4 = true;
+				document.location.href="#TimeVsThreads" ;
+			} else if (this.id == "bodyCodesPerSecond") {
+				if ( b7 == false ) {
+					hcps();
+				}
+				b7 = true;
+				document.location.href="#codesPerSecond";
+			} else if (this.id == "bodyTransactionspersecond") {
+				if ( b8 == false ) {
+					tps();
+				}
+				b8 = true;
+				document.location.href="#TransactionsPerSecond";
+			} else if (this.id == "bodyResponseTimeVsRequest") {
+				if ( b9 == false ) {
+					rtvr();
+				}
+				b9 = true;
+				document.location.href="#ResponseTimeVsRequest";
+			} else if (this.id == "bodylatency") {
+				if ( b10 == false ) {
+					lvr();
+				}
+				b10 = true;
+				document.location.href="#LatencyVsRequest";
+			}
+		}).on('hidden.bs.collapse', function(){
+			$(this).parent().find(".fa-chevron-up").removeClass("fa-chevron-up").addClass("fa-chevron-down");
+			var d = $(this);
+		});
+});
+
+$(function() {
+	$(".glyphicon").mousedown( function(event){
+		var tmp = $('.in:not(ul)');
+		tmp.parent().parent().parent().find(".fa-chevron-up").removeClass("fa-chevron-down").addClass("fa-chevron-down");
+		tmp.removeClass("in");
+		tmp.addClass("out");
+	});
+});
+
+//cookies
+$(function() {
+	//createCookie('ppkcookie','testcookie',7)
+	var currentPage="";
+    var v = $("#graphContainer").sortable({
+      revert: false,
+	  axis: 'y',
+	  forcePlaceholderSize : true,
+	  placeholder : 'col-lg-12 portlet ui-state-highlight',
+	  update: function (e, ui) {
+		var order = foo.sortable("toArray").join();
+		var currentLocation =  document.location.href;
+		currentLocation = currentLocation.substring(currentLocation.lastIndexOf( "/" )+1 );
+		if (currentLocation.lastIndexOf( "#" ) != -1) {
+			currentLocation = currentLocation.substring(0 , currentLocation.lastIndexOf( "#" ) );
+		}
+		currentPage = currentLocation;
+		if (typeof(Storage) != "undefined") {
+			// Store
+			localStorage.setItem(currentPage+"", order);
+		}
+		reOrderList();
+	  },
+	  handle: ".glyphicon"
+    });
+	var foo = $("#graphContainer");
+	//order = $.cookie("sortableOrder");
+	//order = readCookie("sortableOrder");
+	var order = null;
+	var currentLocation =  document.location.href;
+		currentLocation = currentLocation.substring(currentLocation.lastIndexOf( "/" )+1);
+		if (currentLocation.lastIndexOf( "#" ) != -1) {
+			currentLocation = currentLocation.substring(0 , currentLocation.lastIndexOf( "#" ));
+		}
+		currentPage = currentLocation;
+	if (typeof(Storage) != "undefined") {
+		order = localStorage.getItem(currentPage+"");
+	}
+	if (order) {
+		$(order.split(',')).each(function (i, id) {
+			//appending the element with the ID given id should move each element to the end of the
+			// list one after another, and at the end, the order should be restored.
+			$("#" + id).appendTo(foo);
+		});
+	}
+    $( ".portlet" ).disableSelection();
+	reOrderList();
+});
+
+//uncheck all box
+function uncheckAll(id){
+	var placeholder = document.getElementById(id);
+	
+	var cases = $(placeholder).find(':checkbox'); // on cherche les checkbox qui d�pendent de la liste 'cases'
+  
+	cases.attr('checked', false);// on coche les cases
+	$(cases).parent().children().children().addClass("legend-disabled");
+	if ( id == "choicesBytesThroughputOverTime"){
+		var choiceContainer = $("#choicesBytesThroughputOverTime");
+		btot(false);
+	} else if(id == "choicesResponseTimesOverTime"){
+		var choiceContainer = $("#choicesResponseTimesOverTime");
+		rtot(false);
+	} else if ( id == "choicesLatenciesOverTime"){
+		var choiceContainer = $("#choicesLatenciesOverTime");
+		lot(false);
+	} else if ( id == "choicesResponseTimePercentiles"){
+		var choiceContainer = $("#choicesResponseTimePercentiles");
+		rtp(false);
+	} else if(id == "choicesThreadsStateOverTime"){
+		var choiceContainer = $("#choicesThreadsStateOverTime");
+		tsot(false);
+	} else if ( id == "choicesTimeVsThreads"){
+		var choiceContainer = $("#choicesTimeVsThreads");
+		tvt(false);
+	} else if ( id == "choicesResponseTimeDistribution"){
+		var choiceContainer = $("#choicesResponseTimeDistribution");
+		rtd(false);
+	} else if ( id == "choicesResponseTimePerSample"){
+		var choiceContainer = $("#choicesResponseTimePerSample");
+		hb(false);
+	} else if ( id == "choicesHitsPerSecond"){
+		var choiceContainer = $("#choicesHitsPerSecond");
+		bbq(false);
+	} else if(id == "choiceseCodesPerSecond"){
+		var choiceContainer = $("#choicesCodesPerSecond");
+		hcps(false);
+	} else if ( id == "choicesTransactionsPerSecond"){
+		var choiceContainer = $("#choicesTransactionsPerSecond");
+		tps(false);
+	} else if ( id == "choicesResponseTimeVsRequest"){
+		var choiceContainer = $("#choicesResponseTimeVsRequest");
+		rtvr(false);
+	} else if ( id == "choicesLatencyVsRequest"){
+		var choiceContainer = $("#choicesLatencyVsRequest");
+		lvr(false);
+	}
+	choiceContainer.find("label").each(function(){
+		this.style.color = "#818181";
+	});
+}
+
+//check all box
+function checkAll(id){
+	var placeholder = document.getElementById(id);
+	placeholder.style.color = "black";
+	var cases2 = $(placeholder).find(':not(checked)'); // on cherche les checkbox qui dépendent de la liste 'cases'
+	console.log(cases2);
+	cases2.prop('checked', true);// on coche les cases
+	$(cases2).parent().children().children().removeClass("legend-disabled");
+	if (id == "choicesBytesThroughputOverTime"){
+		var choiceContainer = $("#choicesBytesThroughputOverTime");
+		btot(false);
+	} else if(id == "choicesResponseTimesOverTime"){
+		var choiceContainer = $("#choicesResponseTimesOverTime");
+		rtot(false);
+	} else if ( id == "choicesLatenciesOverTime"){
+		var choiceContainer = $("#choicesLatenciesOverTime");
+		lot(false);
+	} else if ( id == "choicesResponseTimePercentiles"){
+		var choiceContainer = $("#choicesResponseTimePercentiles");
+		rtp(false);
+	} else if(id == "choicesThreadsStateOverTime"){
+		var choiceContainer = $("#choicesThreadsStateOverTime");
+		tsot(false);
+	} else if ( id == "choicesTimeVsThreads"){
+		var choiceContainer = $("#choicesTimeVsThreads");
+		tvt(false);
+	} else if ( id == "choicesResponseTimeDistribution"){
+		var choiceContainer = $("#choicesResponseTimeDistribution");
+		rtd(false);
+	} else if ( id == "choicesResponseTimePerSample"){
+		var choiceContainer = $("#choicesResponseTimePerSample");
+		hb(false);
+	} else if ( id == "choicesHitsPerSecond"){
+		var choiceContainer = $("#choicesHitsPerSecond");
+		bbq(false);
+	} else if(id == "choicesCodesPerSecond"){
+		var choiceContainer = $("#choicesCodesPerSecond");
+		hcps(false);
+	} else if ( id == "choicesTransactionsPerSecond"){
+		var choiceContainer = $("#choicesTransactionsPerSecond");
+		tps(false);
+	} else if ( id == "choicesResponseTimeVsRequest"){
+		var choiceContainer = $("#choicesResponseTimeVsRequest");
+		rtvr(false);
+	} else if ( id == "choicesLatencyVsRequest"){
+		var choiceContainer = $("#choicesLatencyVsRequest");
+		lvr(false);
+	}
+	choiceContainer.find("label").each(function(){
+		this.style.color = "black";
+	});
+}
+
+function reOrderList(){
+	//parcours des li dans le menu
+	var ul = document.getElementById("submenu").getElementsByTagName("li"); ;
+	var i=0;
+	var a;
+	for( i=0; i<ul.length; i++){
+		a = ul[0].firstElementChild;
+	}
+	var t = document.getElementById("graphContainer").getElementsByClassName("portlet"); ;
+	for( i=0; i<t.length; i++){
+		a=ul[i].firstElementChild;
+		ul[i].firstElementChild.innerHTML = reOrderAux(t[i].getAttribute("id"), a);
+		var str = document.location.href;
+		str = str.substring(str.lastIndexOf( "/" )+1 );
+		if (str.substring(0, str.lastIndexOf("#"))!= ""){
+			str = str.substring(0, str.lastIndexOf("#"));
+		}
+		var s = str+ "#"+t[i].getAttribute("id");
+		a.setAttribute("href", s);
+	}
+}
+
+function reOrderAux(s, a){
+	var st="",str1;
+	var t=0;
+	for (var i=0; i<s.length; i++) {
+		if(s.charAt(i) == s.charAt(i).toUpperCase()){
+			var str1 = s.substring(t, i);
+			t=i;
+			st+=str1+" ";
+		}
+	}
+	var str1 = s.substring(t);
+	st+=str1+" ";
+	return st;
+}
+
+//prepare datas
+function prepareData(data, choiceContainer){
+	var datasets = [];
+	choiceContainer.find("input:checked").each(function () {
+		var key = $(this).attr("name");
+		if (key == data[key].label)
+			datasets.push(data[key]);
+	});
+	return datasets;
+}
+
+//create slider
+$(function() {
+    $( "#slider-vertical" ).slider({
+      orientation: "vertical",
+      range: "min",
+      min: ${responseTimePercentiles.minY?c},
+      max: ${responseTimePercentiles.maxY?c},
+      value: 0,
+      slide: function( event, ui ) {
+       chiffre= ui.value;
+	   rtp(false,ui.value);
+	   $( "#amount" ).val( ui.value );
+      }
+    });
+    $("#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
+	$("#slider-vertical").children("div").css("background-color","purple");
+	$("#amount" ).css("color", $("#slider-vertical").children("div").css("background-color"));
+	$("#slider-vertical").children("div").css("opacity","0.3");
+});
+
+function createLegend(data, choiceContainer) {
+	$.each(data, function(key, val) {
+	l = val.label;
+	var li = $('<li />').appendTo(choiceContainer);
+			
+	$('<input name="' + l + '" id="' + l + '" type="checkbox" checked="checked" hidden />').appendTo(li);
+	$('<label>', {
+		text: l , 
+		'for': l
+	}).appendTo(li);
+	});
+	choiceContainer.find("label").click( function(){
+		if ( this.style.color !== "rgb(129, 129, 129)" ){
+			this.style.color="#818181";
+			var v = $(this).parent();
+			$(v).children().children().toggleClass("legend-disabled");
+		}else {
+			this.style.color="black";
+			var i = 0;
+			var v = $(this).parent();
+			v = $(v).children().children().toggleClass("legend-disabled");
+		}
+	});
+		
+	choiceContainer.find("label").mousedown( function(event){
+		event.preventDefault();
+	});
+		
+	choiceContainer.find("label").mouseenter( function(){
+		this.style.cursor="pointer";
+	});
+}

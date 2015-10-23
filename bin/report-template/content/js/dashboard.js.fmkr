@@ -1,0 +1,107 @@
+$(document).ready(function() {
+    var offset = 0;
+	plot();
+
+    function plot() {
+		var dataSets = {	
+			"KO": {
+				"label": "KO",
+				"data": ${requestsSummary.KoPercent?c},
+				"color": "red"
+			},
+			"OK": {
+				"label": "OK",
+				"data": ${requestsSummary.OkPercent?c},
+				"color": "#ddf2da"
+			}
+		};
+		var data = [];
+		
+		for(var i in dataSets) {
+			data.push(dataSets[i]);
+		}
+		
+		$.plot($("#flot-requests-summary"), data, 
+		{
+			series: {
+				pie: { 
+					show: true,
+					radius: 1,
+					label: {
+						show: true,
+						radius: 3/4,
+						formatter: function(label, series){
+							return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+						},
+						background: { 
+							opacity: 0.5,
+							color: '#000'
+						}
+					}
+				}
+			},
+			legend: {
+				show: true
+			}
+		});
+	}
+});
+
+$(function(){
+
+	var dApdex = ${apdexSummary.values};
+	
+	var dStats = ${statisticsSummary.values};
+	
+	var dErrors = ${errorsSummary.values};
+		
+	createTable(dApdex, "Apdex");
+	createTable(dStats, "Statistics");
+	createTable(dErrors, "Errors");
+
+});
+
+
+function createTable(data, id) {
+	var d = data;
+		var nbl =0;
+		var tableRef = document.getElementById(id);
+		for(var i in d){
+			var nouvelleLigne   = tableRef.insertRow(nbl);
+			
+			$(tableRef.rows[0]).css("font-weight", "bold");
+			$(tableRef.rows[0]).css("font-size", "16px");
+			$(tableRef.rows[0]).css("font-family", "Arial");
+			
+			var c = 0;
+			for(var j in d[i]){
+				var firstRow = tableRef.rows[0];
+				var cell = firstRow.insertCell(c);
+				cell.innerHTML = j;
+				c++;
+				//alert(d[i][j]);
+			}
+			nbl++;
+			break;
+		}	
+		var b = true;
+		for(var i in d){
+			var nouvelleLigne   = tableRef.insertRow(nbl);
+			var c = 0;
+			for(var j in d[i]){
+				var firstRow = tableRef.rows[nbl];
+				
+				var cell = firstRow.insertCell(c);
+				cell.innerHTML = d[i][j];
+				c++;
+			}
+			
+			if (b){
+				$(tableRef.rows[nbl]).addClass("blue");
+				b=false;
+			} else {
+				b=true;
+			}
+			nbl++;
+		}
+}

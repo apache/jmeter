@@ -64,6 +64,7 @@
 	<classpathentry kind="lib" path="lib/excalibur-pool-api-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-impl-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-instrumented-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/freemarker-2.3.22.jar"/>
 	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/htmllexer-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/htmlparser-2.1.jar"/>
@@ -75,6 +76,8 @@
 	<classpathentry kind="lib" path="lib/jodd-core-3.6.6.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-lagarto-3.6.6.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-log-3.6.6.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-props-3.6.6.jar"/>
+	<classpathentry kind="lib" path="lib/javax.json-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>

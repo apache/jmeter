@@ -70,6 +70,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
+import org.apache.jmeter.report.dashboard.ReportGenerator;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
@@ -128,7 +129,9 @@ public class JMeter implements JMeterPlugin {
     private static final int TESTFILE_OPT       = 't';// $NON-NLS-1$
     private static final int PROXY_USERNAME     = 'u';// $NON-NLS-1$
     private static final int VERSION_OPT        = 'v';// $NON-NLS-1$
-
+    private static final int REPORT_GENERATING  = 'g';// $NON-NLS-1$
+    private static final int REPORT_AT_END      = 'e';// $NON-NLS-1$
+    
     private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
     private static final int JMETER_GLOBAL_PROP = 'G';// $NON-NLS-1$
     private static final int PROXY_HOST         = 'H';// $NON-NLS-1$
@@ -139,8 +142,6 @@ public class JMeter implements JMeterPlugin {
     private static final int REMOTE_OPT_PARAM   = 'R';// $NON-NLS-1$
     private static final int SYSTEM_PROPFILE    = 'S';// $NON-NLS-1$
     private static final int REMOTE_STOP        = 'X';// $NON-NLS-1$
-
-
 
     /**
      * Define the understood options. Each CLOptionDescriptor contains:
@@ -206,6 +207,12 @@ public class JMeter implements JMeterPlugin {
                     "the jmeter home directory to use"),
             new CLOptionDescriptor("remoteexit", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_STOP,
             "Exit the remote servers at end of test (non-GUI)"),
+            new CLOptionDescriptor("reportonly",
+	            CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_GENERATING,
+	            "generate charts only"),
+            new CLOptionDescriptor("reportatendofloadtests",
+	            CLOptionDescriptor.ARGUMENT_DISALLOWED, REPORT_AT_END,
+	            "generate charts after load tests")
                     };
 
     public JMeter() {
@@ -385,15 +392,34 @@ public class JMeter implements JMeterPlugin {
                     startGui(testFile);
                     startOptionalServers();
                 } else {
-                    CLOption rem=parser.getArgumentById(REMOTE_OPT_PARAM);
-                    if (rem==null) { rem=parser.getArgumentById(REMOTE_OPT); }
-                    CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
-                    String jtlFile = null;
-                    if (jtl != null){
-                        jtlFile=processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
-                    }
-                    startNonGui(testFile, jtlFile, rem);
-                    startOptionalServers();
+                    CLOption testReportOpt = parser
+			    .getArgumentById(REPORT_GENERATING);
+
+		    if (testReportOpt != null) {
+			String reportFile = testReportOpt.getArgument();
+			ReportGenerator generator = new ReportGenerator(
+			        reportFile);
+			generator.generate();
+		    } else {
+			CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
+			if (rem == null) {
+			    rem = parser.getArgumentById(REMOTE_OPT);
+			}
+			CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
+			String jtlFile = null;
+			if (jtl != null) {
+			    jtlFile = processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
+			}
+			startNonGui(testFile, jtlFile, rem);
+			startOptionalServers();
+			CLOption reportAtEndOpt = parser.getArgumentById(REPORT_AT_END);
+			if (reportAtEndOpt != null) {
+			    // TODO How to wait end of load tests ?
+			    ReportGenerator generator = new ReportGenerator(
+				    jtlFile);
+			    generator.generate();
+			}
+		    }
                 }
             }
         } catch (IllegalUserActionException e) {
