@@ -76,6 +76,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
 
     /** {@inheritDoc} */
+    @Override
     public void clearData() {
         this.jsonDataField.setText(""); // $NON-NLS-1$
         // don't set empty to keep json path
@@ -83,6 +84,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void init() {
         // Create the panels for the json tab
         jsonWithJSonPathPanel = createJSonPathExtractorPanel();
@@ -94,6 +96,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
      *
      * @param e the ActionEvent being processed
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if ((sampleResult != null) && (JSONPATH_TESTER_COMMAND.equals(command))) {
@@ -144,6 +147,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
 
     /** {@inheritDoc} */
+    @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         try {
@@ -165,6 +169,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
 
     /** {@inheritDoc} */
+    @Override
     public void setupTabPane() {
          // Add json-path tester pane
         if (rightSide.indexOfTab(JMeterUtils.getResString("jsonpath_tester_title")) < 0) { // $NON-NLS-1$
@@ -226,11 +231,13 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public synchronized void setRightSide(JTabbedPane side) {
         rightSide = side;
     }
 
     /** {@inheritDoc} */
+    @Override
     public synchronized void setSamplerResult(Object userObject) {
         if (userObject instanceof SampleResult) {
             sampleResult = (SampleResult) userObject;
@@ -238,17 +245,20 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setLastSelectedTab(int index) {
         // nothing to do
     }
 
     /** {@inheritDoc} */
+    @Override
     public void renderImage(SampleResult sampleResult) {
         clearData();
         jsonDataField.setText(JMeterUtils.getResString("jsonpath_render_no_text")); // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setBackgroundColor(Color backGround) {
     }
 
