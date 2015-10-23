@@ -154,7 +154,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         panel.add(item.get(0), gbc.clone());
         gbc.gridx++;
         gbc.weightx = 1;
-        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(item.get(1), gbc.clone());
     }
     
@@ -162,7 +162,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         panel.add(label, gbc.clone());
         gbc.gridx++;
         gbc.weightx = 1;
-        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(checkBox, gbc.clone());
     }
 
@@ -170,7 +170,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.weightx = 0;
-        gbc.fill=GridBagConstraints.NONE;
+        gbc.fill = GridBagConstraints.NONE;
     }
 
     private void initConstraints(GridBagConstraints gbc) {
