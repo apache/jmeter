@@ -209,10 +209,10 @@ public class JMeter implements JMeterPlugin {
             "Exit the remote servers at end of test (non-GUI)"),
             new CLOptionDescriptor("reportonly",
 	            CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_GENERATING,
-	            "generate charts only"),
+	            "generate report dashboard only"),
             new CLOptionDescriptor("reportatendofloadtests",
 	            CLOptionDescriptor.ARGUMENT_DISALLOWED, REPORT_AT_END,
-	            "generate charts after load tests")
+	            "generate report dashboard after load test")
                     };
 
     public JMeter() {
