@@ -70,6 +70,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
+import org.apache.jmeter.report.config.ConfigurationException;
+import org.apache.jmeter.report.dashboard.GenerationException;
 import org.apache.jmeter.report.dashboard.ReportGenerator;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
@@ -393,33 +395,27 @@ public class JMeter implements JMeterPlugin {
                     startOptionalServers();
                 } else {
                     CLOption testReportOpt = parser
-			    .getArgumentById(REPORT_GENERATING);
+                            .getArgumentById(REPORT_GENERATING);
 
-		    if (testReportOpt != null) {
-			String reportFile = testReportOpt.getArgument();
-			ReportGenerator generator = new ReportGenerator(
-			        reportFile);
-			generator.generate();
-		    } else {
-			CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
-			if (rem == null) {
-			    rem = parser.getArgumentById(REMOTE_OPT);
-			}
-			CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
-			String jtlFile = null;
-			if (jtl != null) {
-			    jtlFile = processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
-			}
-			startNonGui(testFile, jtlFile, rem);
-			startOptionalServers();
-			CLOption reportAtEndOpt = parser.getArgumentById(REPORT_AT_END);
-			if (reportAtEndOpt != null) {
-			    // TODO How to wait end of load tests ?
-			    ReportGenerator generator = new ReportGenerator(
-				    jtlFile);
-			    generator.generate();
-			}
-		    }
+                    if (testReportOpt != null) {
+                        String reportFile = testReportOpt.getArgument();
+                        ReportGenerator generator = new ReportGenerator(
+                                reportFile);
+                        generator.generate();
+                    } else {
+                        CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
+                        if (rem == null) {
+                            rem = parser.getArgumentById(REMOTE_OPT);
+                        }
+                        CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
+                        String jtlFile = null;
+                        if (jtl != null) {
+                            jtlFile = processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
+                        }
+                        CLOption reportAtEndOpt = parser.getArgumentById(REPORT_AT_END);
+                        startNonGui(testFile, jtlFile, rem, reportAtEndOpt != null);
+                        startOptionalServers();
+                    }
                 }
             }
         } catch (IllegalUserActionException e) {
@@ -734,8 +730,8 @@ public class JMeter implements JMeterPlugin {
         return jmlogfile;
     }
 
-    private void startNonGui(String testFile, String logFile, CLOption remoteStart)
-            throws IllegalUserActionException {
+    private void startNonGui(String testFile, String logFile, CLOption remoteStart, boolean generateReportDashboard)
+            throws IllegalUserActionException, ConfigurationException {
         // add a system property so samplers can check to see if JMeter
         // is running in NonGui mode
         System.setProperty(JMETER_NON_GUI, "true");// $NON-NLS-1$
@@ -757,11 +753,15 @@ public class JMeter implements JMeterPlugin {
         if (testFile == null) {
             throw new IllegalUserActionException("Non-GUI runs require a test plan");
         }
-        driver.runNonGui(testFile, logFile, remoteStart != null, remote_hosts_string);
+        ReportGenerator reportGenerator = null;
+        if(generateReportDashboard) {
+            reportGenerator = new ReportGenerator(logFile);
+        }
+        driver.runNonGui(testFile, logFile, remoteStart != null, remote_hosts_string, reportGenerator);
     }
 
     // run test in batch mode
-    private void runNonGui(String testFile, String logFile, boolean remoteStart, String remote_hosts_string) {
+    private void runNonGui(String testFile, String logFile, boolean remoteStart, String remote_hosts_string, ReportGenerator reportGenerator) {
         try {
             File f = new File(testFile);
             if (!f.exists() || !f.isFile()) {
@@ -815,7 +815,7 @@ public class JMeter implements JMeterPlugin {
             tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
 
             List<JMeterEngine> engines = new LinkedList<>();
-            tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null));
+            tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null, reportGenerator));
             println("Created the tree successfully using "+testFile);
             if (!remoteStart) {
                 JMeterEngine engine = new StandardJMeterEngine();
@@ -936,13 +936,17 @@ public class JMeter implements JMeterPlugin {
 
         private final List<JMeterEngine> engines;
 
+        private ReportGenerator reportGenerator;
+
         /**
          * @param unused JMeter unused for now
          * @param engines List<JMeterEngine>
+         * @param reportGenerator {@link ReportGenerator}
          */
-        public ListenToTest(JMeter unused, List<JMeterEngine> engines) {
+        public ListenToTest(JMeter unused, List<JMeterEngine> engines, ReportGenerator reportGenerator) {
             //_parent = unused;
             this.engines=engines;
+            this.reportGenerator = reportGenerator;
         }
 
         @Override
@@ -999,6 +1003,15 @@ public class JMeter implements JMeterPlugin {
             }
             ClientJMeterEngine.tidyRMI(log);
             println("... end of run");
+            if(reportGenerator != null) {
+                try {
+                    log.info("Generating Dashboard");
+                    reportGenerator.generate();
+                    log.info("Dashboard generated");
+                } catch (GenerationException ex) {
+                    log.error("Error generating dashboard:"+ex.getMessage(), ex);
+                }
+            }
             checkForRemainingThreads();
         }
 
