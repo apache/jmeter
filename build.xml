@@ -377,7 +377,7 @@
     <include name="${lib.dir}/${excalibur-pool-api.jar}"/>
     <include name="${lib.dir}/${excalibur-pool-impl.jar}"/>
     <include name="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
-  	<include name="${lib.dir}/${freemarker.jar}"/>
+    <include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
@@ -392,8 +392,10 @@
     <include name="${lib.dir}/${jodd-core.jar}"/>
     <include name="${lib.dir}/${jodd-lagarto.jar}"/>
     <include name="${lib.dir}/${jodd-log.jar}"/>
-  	<include name="${lib.dir}/${jodd-props.jar}"/>
-  	<include name="${lib.dir}/${json.jar}"/>
+    <include name="${lib.dir}/${jodd-props.jar}"/>
+    <include name="${lib.dir}/${json.jar}"/>
+    <include name="${lib.dir}/${json-path.jar}"/>
+    <include name="${lib.dir}/${json-smart.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>
@@ -455,7 +457,7 @@
     <pathelement location="${lib.dir}/${excalibur-pool-api.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-pool-impl.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
-  	<pathelement location="${lib.dir}/${freemarker.jar}"/>
+    <pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
@@ -471,7 +473,9 @@
     <pathelement location="${lib.dir}/${jodd-lagarto.jar}"/>
     <pathelement location="${lib.dir}/${jodd-log.jar}"/>
     <pathelement location="${lib.dir}/${jodd-props.jar}"/>
-  	<pathelement location="${lib.dir}/${json.jar}"/>
+    <pathelement location="${lib.dir}/${json.jar}"/>
+    <pathelement location="${lib.dir}/${json-path.jar}"/>
+    <pathelement location="${lib.dir}/${json-smart.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
     <pathelement location="${lib.dir}/${junit.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
@@ -2855,6 +2859,8 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="jodd-log"/>
         <process_jarfile jarname="jodd-props"/>
     	<process_jarfile jarname="json"/>
+        <process_jarfile jarname="json-path"/>
+        <process_jarfile jarname="json-smart"/>
         <process_jarfile jarname="jsoup"/>
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>

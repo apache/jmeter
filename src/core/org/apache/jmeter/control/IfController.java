@@ -66,6 +66,8 @@ public class IfController extends GenericController implements Serializable, Thr
 
     private static final long serialVersionUID = 241L;
 
+    private static final String NASHORN_ENGINE_NAME = "nashorn"; //$NON-NLS-1$
+
     private static final String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
     private static final String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
@@ -75,8 +77,8 @@ public class IfController extends GenericController implements Serializable, Thr
     private static final String USE_RHINO_ENGINE_PROPERTY = "javascript.use_rhino"; //$NON-NLS-1$
 
     private static final boolean USE_RHINO_ENGINE = 
-            getInstance().getEngineByName("nashorn") == null || //$NON-NLS-1$
-            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, true) ;
+            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, true) ||
+            getInstance().getEngineByName(NASHORN_ENGINE_NAME) == null;
 
     
     private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = new ThreadLocal<ScriptEngine>() {
@@ -143,7 +145,7 @@ public class IfController extends GenericController implements Serializable, Thr
     /**
      * @return ScriptEngineManager singleton
      */
-    public static ScriptEngineManager getInstance() {
+    private static ScriptEngineManager getInstance() {
             return LazyHolder.INSTANCE;
     }
     /**
