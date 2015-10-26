@@ -136,8 +136,7 @@ public class ReportGenerator {
     /**
      * Generate dashboard reports using the data from the specified CSV File.
      *
-     * @param workingDirectory
-     *            the working directory for consumers
+     * @throws GenerationException when the generation failed
      */
     public void generate() throws GenerationException {
 

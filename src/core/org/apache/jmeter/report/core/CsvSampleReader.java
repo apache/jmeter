@@ -329,8 +329,6 @@ public class CsvSampleReader {
      * 
      * @param input
      *            The input csv file
-     * @param separator
-     *            The separator to be used for columns splitting
      * @return The CSV metadata (first line with column names)
      */
     public static SampleMetadata getSampleMetaData(CsvFile input) {

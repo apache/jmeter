@@ -105,8 +105,7 @@ public class GraphConfiguration {
     /**
      * Sets the class name of the graph.
      *
-     * @param graph
-     *            the class name to set
+     * @param className the new class name
      */
     public final void setClassName(String className) {
 	this.className = className;

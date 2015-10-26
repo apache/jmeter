@@ -183,7 +183,7 @@ public class Sample {
     /**
      * Return the sample data at the ith column as a double.
      * 
-     * @param i
+     * @param id
      *            The column number (zero based) of the data to be returned as a
      *            double
      * @return The ith column data as a double
@@ -211,7 +211,7 @@ public class Sample {
     /**
      * Return the sample data at the ith column as a char.
      * 
-     * @param i
+     * @param id
      *            The column number (zero based) of the data to be returned as a
      *            char
      * @return The ith column data as a double
@@ -245,7 +245,7 @@ public class Sample {
      * "true", in any other cases this method returns false
      * </p>
      * 
-     * @param i
+     * @param id
      *            The column number (zero based) of the data to be returned as a
      *            boolean
      * @return The ith column data as a double

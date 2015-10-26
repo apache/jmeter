@@ -42,8 +42,7 @@ public interface Aggregator {
     /**
      * Adds the specified value to the storage of the current aggregator.
      *
-     * @param sample
-     *            the sample to add
+     * @param value the value to aggregate
      */
     void addValue(double value);
 

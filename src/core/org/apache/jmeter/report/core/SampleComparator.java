@@ -58,7 +58,7 @@ public interface SampleComparator {
      * better performance
      * </p>
      * 
-     * @param sampleMetadata
+     * @param metadata
      *            The sample metadata of the sample to be compared by this
      *            instance
      */

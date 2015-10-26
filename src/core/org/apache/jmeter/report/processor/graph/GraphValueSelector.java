@@ -21,7 +21,7 @@ import org.apache.jmeter.report.core.Sample;
 
 /**
  * The interface GraphValueSelector represents a projection from a sample to the
- * value to aggregate for its series.
+ * value to aggregate for graph series.
  *
  * @since 2.14
  */
@@ -31,10 +31,8 @@ public interface GraphValueSelector {
      * Do a projection from a sample to the value to aggregate for the specified
      * series and key.
      *
-     * @param group
-     *            the group
      * @param series
-     *            the series
+     *            the series where the value will be aggregated
      * @param sample
      *            the sample
      * @return the value to aggregate
