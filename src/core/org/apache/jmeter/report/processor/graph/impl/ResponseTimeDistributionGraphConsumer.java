@@ -25,6 +25,7 @@ import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.AbstractAggregatorFactory;
 import org.apache.jmeter.report.processor.Aggregator;
+import org.apache.jmeter.report.processor.SumAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.CountValueSelector;
@@ -91,39 +92,8 @@ public class ResponseTimeDistributionGraphConsumer extends
 	        1);
 
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new AbstractAggregatorFactory() {
-
-		    @Override
-		    protected Aggregator createAggregator() {
-		        return new Aggregator() {
-			    private long valueCount = 0L;
-			    private double count = 0L;
-
-			    @Override
-			    public void reset() {
-			        valueCount = 0L;
-			        count = 0d;
-			    }
-
-			    @Override
-			    public long getCount() {
-			        return valueCount;
-			    }
-
-			    @Override
-			    public double getResult() {
-			        return count;
-			    }
-
-			    @Override
-			    public void addValue(double value) {
-			        valueCount++;
-			        count += value;
-			    }
-		        };
-		    }
-	        }, new NameSeriesSelector(), new CountValueSelector(), false,
-	        false));
+	        new SumAggregatorFactory(), new NameSeriesSelector(),
+	        new CountValueSelector(), false, false));
 
 	return groupInfos;
     }
@@ -132,8 +102,8 @@ public class ResponseTimeDistributionGraphConsumer extends
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData(org.apache
-     * .jmeter.report.config.GraphConfiguration)
+     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData
+     * (org.apache .jmeter.report.config.GraphConfiguration)
      */
     @Override
     public DataContext exportData(GraphConfiguration configuration) {
