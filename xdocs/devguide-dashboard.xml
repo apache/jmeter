@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	You under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+
+<!DOCTYPE document[
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document id="$Id$">
+
+	<properties>
+		<title>Developer's guide: Dashboard generator</title>
+	</properties>
+
+	<body>
+
+		<section name="Dashboard generator">
+			<subsection name="1 Overview" anchor="overview">
+				<figure image="dashboard.png">Figure 1 - Dashboard generation overview</figure>
+				<p>
+					To produce the dashboard, the generator begins by building a
+					chain
+					of
+					consumers that processes samples from a CSV sample file. The
+					chain
+					is
+					built using JMeter properties (prefixed by
+					<code>jmeter.reportgenerator</code>
+					) in order to enable the user to
+					customize
+					it.
+				</p>
+				<p>
+					During the sample processing each graph consumer publishes data
+					in
+					the
+					sample context. Then this context is used to produce data for
+					the
+					template engine.
+				</p>
+				<p>
+					At last, this one processes the input template files and injects
+					produced data to generate a HTML site structure.</p>
+			</subsection>
+
+			<subsection name="2 Consumers chain details" anchor="consumers_chain">
+				<figure image="chain.png">Figure 2 - Consumers chain</figure>
+				<p>
+					The chain begins with a normalizer consumer in charge of
+					standardizing
+					the time stamp of each sample. Then a filter consumer
+					keeps or
+					discards samples depending on the
+					<code>jmeter.reportgenerator.sample_filter</code>
+					property. Another filter is
+					plugged after to discard controller
+					samples.
+				</p>
+				<p>
+					Depending on the property
+					<code>jmeter.reportgenerator.graph.&lt;graph_id&gt;.exclude_controllers</code>
+					, the graph consumer matching the graph_id identifier will be
+					plugged at position A or B.
+				</p>
+			</subsection>
+
+			<subsection name="3 Limitations and Outlooks" anchor="outlooks">
+				<ul>
+					<li>
+						<p>Till now, there is only one samples source implementation which
+							is strongly coupled with the CSV file format, we should allow
+							other
+							kinds of source by using a sample source interface.</p>
+					</li>
+
+					<li>
+						<p>To add customized graph, users must extends the
+							AbstractGraphConsumer or use one of the implementations provided
+							in
+							the package “org.apache.jmeter.report.processor.graph.impl”.
+							This
+							could be enhanced by making concrete the base class and give
+							public
+							access to additional properties (like selectors). But first
+							we have
+							to resolve the issue of shared properties (E.g : over time
+							graphs
+							must dispatch the same granularity property to the keys
+							selector
+							and time rate aggregator).</p>
+					</li>
+
+
+					<li>
+						<p>
+							The chain building is dispatched between the
+							org.apache.jmeter.report.dashboard.ReporGenerator.generate method
+							and the implementation of the consumers. So the code in charge of
+							the building is splitted and furthermore some consumers can be
+							redundants and harm the performance.
+						</p>
+						<p>
+							E.g: Each LatencyVSRequestGraphConsumer and
+							ResponseTimeVSRequestGraphConsumer instances use an embedded
+							consumer that could be shared depending on granularity and
+							exclude_controllers properties.
+						</p>
+						<p>
+							So we should enable the consumers to define the chain they
+							require
+							and provide a single chain builder that processes these
+							chain
+							requirements to instantiate needed consumers on demand. I.e,
+							for
+							thesame chain requirement declaration, the same consumer
+							instances
+							are used. Otherwise if the declaration differs a new
+							branch of
+							consumer is created.
+						</p>
+					</li>
+
+					<li>
+						<p>Fow now, consumers are in charge of the data transformation
+							from
+							the sample context to the data context used by freemarker
+							(via the
+							exportData method). It should be the sole responsablity
+							of the
+							template engine to transform the data. So the stored data
+							in the
+							sample context should implement a common interface or be
+							compatible
+							with standard serialization pratices.</p>
+					</li>
+
+					<li>
+						<p>There is only one implementation of template engine (tied to
+							freemarker). We should provide a template engine interface to
+							enable the use of alternate engines.</p>
+					</li>
+				</ul>
+			</subsection>
+		</section>
+
+	</body>
+</document>
+
