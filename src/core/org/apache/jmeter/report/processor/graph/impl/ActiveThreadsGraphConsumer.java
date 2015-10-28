@@ -30,7 +30,6 @@ import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
-
 /**
  * The class ActiveThreadsGraphConsumer provides a graph to visualize hits rate
  * per second.

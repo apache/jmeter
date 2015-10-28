@@ -22,6 +22,7 @@ import org.apache.jmeter.report.core.SampleMetadata;
 
 /**
  * Defines a comparator for {@link Sample} instances
+ * 
  * @since 2.14
  */
 public interface SampleComparator {

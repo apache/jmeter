@@ -18,8 +18,7 @@
 package org.apache.jmeter.report.processor;
 
 /**
- * The interface Aggregator represents an aggregator used by graph
- * consumers.
+ * The interface Aggregator represents an aggregator used by graph consumers.
  *
  * @since 2.14
  */
@@ -42,7 +41,8 @@ public interface Aggregator {
     /**
      * Adds the specified value to the storage of the current aggregator.
      *
-     * @param value the value to aggregate
+     * @param value
+     *            the value to aggregate
      */
     void addValue(double value);
 

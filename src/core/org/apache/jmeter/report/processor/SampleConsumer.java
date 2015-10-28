@@ -49,6 +49,7 @@ import org.apache.jmeter.report.core.SampleMetadata;
  * <li>Call <code>stopConsuming()</code> after evry sample has been consumed</li>
  * </p>
  * <br>
+ * 
  * @since 2.14
  */
 public interface SampleConsumer extends SampleProcessor {

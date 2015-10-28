@@ -95,8 +95,8 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData(org.apache
-     * .jmeter.report.config.GraphConfiguration)
+     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData
+     * (org.apache .jmeter.report.config.GraphConfiguration)
      */
     @Override
     public DataContext exportData(GraphConfiguration configuration) {

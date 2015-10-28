@@ -81,9 +81,8 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#getSeriesExtraAttibutes
-     * ()
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
+     * getSeriesExtraAttibutes ()
      */
     @Override
     protected Map<String, String> getSeriesExtraAttibutes() {

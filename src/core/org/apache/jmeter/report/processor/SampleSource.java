@@ -118,8 +118,8 @@ public class SampleSource implements Runnable, SampleSourceChannelAttributes {
 	try {
 	    final Pattern pattern = Pattern.compile(inputRootName
 		    + "-[0-9]+\\." + inputExtension);
-	    secondaryInputs = inputFile.getAbsoluteFile().getParentFile().listFiles(
-		    new FileFilter() {
+	    secondaryInputs = inputFile.getAbsoluteFile().getParentFile()
+		    .listFiles(new FileFilter() {
 
 		        @Override
 		        public boolean accept(File pathname) {

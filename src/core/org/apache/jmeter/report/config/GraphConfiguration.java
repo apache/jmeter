@@ -105,7 +105,8 @@ public class GraphConfiguration {
     /**
      * Sets the class name of the graph.
      *
-     * @param className the new class name
+     * @param className
+     *            the new class name
      */
     public final void setClassName(String className) {
 	this.className = className;
@@ -155,7 +156,7 @@ public class GraphConfiguration {
      * @return the properties of the graph
      */
     public final Map<String, String> getProperties() {
-        return properties;
+	return properties;
     }
 
     /**

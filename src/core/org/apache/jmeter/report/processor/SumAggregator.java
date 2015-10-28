@@ -27,15 +27,19 @@ public class SumAggregator implements Aggregator {
     private long count = 0L;
     private double sum = 0d;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
      */
     @Override
     public long getCount() {
 	return count;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
      */
     @Override
@@ -43,7 +47,9 @@ public class SumAggregator implements Aggregator {
 	return sum;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
@@ -52,7 +58,9 @@ public class SumAggregator implements Aggregator {
 	sum += value;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#reset()
      */
     @Override

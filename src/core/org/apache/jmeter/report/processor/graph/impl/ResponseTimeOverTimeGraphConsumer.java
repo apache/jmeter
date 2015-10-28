@@ -28,13 +28,14 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
-
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate per second.
+ * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate
+ * per second.
  *
  * @since 2.14
  */
-public class ResponseTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer {
+public class ResponseTimeOverTimeGraphConsumer extends
+        AbstractOverTimeGraphConsumer {
 
     /*
      * (non-Javadoc)
@@ -58,7 +59,8 @@ public class ResponseTimeOverTimeGraphConsumer extends AbstractOverTimeGraphCons
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(1);
+	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
+	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new MeanAggregatorFactory(), new NameSeriesSelector(),
 	        new ElapsedTimeValueSelector(), false, false));

@@ -25,46 +25,46 @@ import org.apache.jmeter.report.processor.AggregatorFactory;
  * The class GroupData helps to store group data for a graph.
  */
 public class GroupData {
-	private final HashMap<String, SeriesData> seriesData = new HashMap<String, SeriesData>();
-	private final SeriesData overallSeries;
+    private final HashMap<String, SeriesData> seriesData = new HashMap<String, SeriesData>();
+    private final SeriesData overallSeries;
 
-	/**
-	 * Gets the series data map.
-	 *
-	 * @return the series data map
-	 */
-	public final HashMap<String, SeriesData> getSeriesInfo() {
-	    return seriesData;
-	}
+    /**
+     * Gets the series data map.
+     *
+     * @return the series data map
+     */
+    public final HashMap<String, SeriesData> getSeriesInfo() {
+	return seriesData;
+    }
 
-	/**
-	 * Gets the overall series data
-	 *
-	 * @return the overall series data
-	 */
-	public final SeriesData getOverallSeries() {
-	    return overallSeries;
-	}
+    /**
+     * Gets the overall series data
+     *
+     * @return the overall series data
+     */
+    public final SeriesData getOverallSeries() {
+	return overallSeries;
+    }
 
-	/**
-	 * Instantiates a new group groupData.
-	 *
-	 * @param factory
-	 *            the factory
-	 * @param hasOverall
-	 *            the status defining if the group has an overall seriesData
-	 * @param hasAggregatedKey
-	 *            the status defining if the group aggregates keys
-	 */
-	public GroupData(AggregatorFactory factory,
-	        boolean hasOverall, boolean hasAggregatedKey) {
-	    overallSeries = hasOverall ? new SeriesData(factory,
-		    hasAggregatedKey) : null;
-	}
+    /**
+     * Instantiates a new group groupData.
+     *
+     * @param factory
+     *            the factory
+     * @param hasOverall
+     *            the status defining if the group has an overall seriesData
+     * @param hasAggregatedKey
+     *            the status defining if the group aggregates keys
+     */
+    public GroupData(AggregatorFactory factory, boolean hasOverall,
+	    boolean hasAggregatedKey) {
+	overallSeries = hasOverall ? new SeriesData(factory, hasAggregatedKey)
+	        : null;
+    }
 
-	public void clear() {
-	    seriesData.clear();
-	    if (overallSeries != null)
-		overallSeries.clear();
-	}
+    public void clear() {
+	seriesData.clear();
+	if (overallSeries != null)
+	    overallSeries.clear();
+    }
 }

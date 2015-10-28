@@ -314,7 +314,7 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
     void aggregateSample(Sample sample, StatisticsInfo info) {
 	info.total++;
 	info.bytes += sample.getSentBytes();
-	
+
 	if (sample.getSuccess() == false) {
 	    info.errors++;
 	}

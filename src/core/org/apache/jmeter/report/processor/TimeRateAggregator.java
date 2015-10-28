@@ -43,7 +43,9 @@ public class TimeRateAggregator implements Aggregator {
 	this.granularity = granularity;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
      */
     @Override
@@ -51,7 +53,9 @@ public class TimeRateAggregator implements Aggregator {
 	return count;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
      */
     @Override
@@ -59,7 +63,9 @@ public class TimeRateAggregator implements Aggregator {
 	return value * (1000.0d / granularity);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
@@ -68,7 +74,9 @@ public class TimeRateAggregator implements Aggregator {
 	this.value += value;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#reset()
      */
     @Override

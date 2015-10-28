@@ -29,13 +29,11 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 
 /**
- * The class TimeVSThreadGraphConsumer provides a graph to visualize
- * ...
+ * The class TimeVSThreadGraphConsumer provides a graph to visualize ...
  *
  * @since 2.14
  */
-public class TimeVSThreadGraphConsumer extends
-        AbstractGraphConsumer {
+public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
 
     /*
      * (non-Javadoc)

@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.DataContext;
  * @since 2.14
  *
  */
-public abstract class AbstractSummaryConsumer  extends AbstractSampleConsumer{
+public abstract class AbstractSummaryConsumer extends AbstractSampleConsumer {
 
     /**
      * Instantiates a new abstract summary consumer.

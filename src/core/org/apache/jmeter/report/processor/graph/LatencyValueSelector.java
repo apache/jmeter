@@ -20,14 +20,19 @@ package org.apache.jmeter.report.processor.graph;
 import org.apache.jmeter.report.core.Sample;
 
 /**
- * The class LatencyValueSelector provides a projection from a sample to its latency.
+ * The class LatencyValueSelector provides a projection from a sample to its
+ * latency.
  *
  * @since 2.14
  */
 public class LatencyValueSelector implements GraphValueSelector {
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.csv.processor.GraphValueSelector#select(java.lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.csv.processor.GraphValueSelector#select(java
+     * .lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
      */
     @Override
     public double select(String series, Sample sample) {

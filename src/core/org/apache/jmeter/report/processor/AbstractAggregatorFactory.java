@@ -29,8 +29,7 @@ package org.apache.jmeter.report.processor;
  *
  * @since 2.14
  */
-public abstract class AbstractAggregatorFactory implements
-        AggregatorFactory {
+public abstract class AbstractAggregatorFactory implements AggregatorFactory {
 
     /**
      * Instantiates a new abstract aggregator factory.

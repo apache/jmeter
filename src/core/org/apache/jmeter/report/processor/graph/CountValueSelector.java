@@ -26,8 +26,12 @@ import org.apache.jmeter.report.core.Sample;
  */
 public class CountValueSelector implements GraphValueSelector {
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.csv.processor.GraphValueSelector#select(java.lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.csv.processor.GraphValueSelector#select(java
+     * .lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
      */
     @Override
     public double select(String series, Sample sample) {

@@ -28,15 +28,19 @@ public class MeanAggregator implements Aggregator {
 
     private Mean mean = new Mean();
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
      */
     @Override
     public long getCount() {
 	return mean.getN();
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
      */
     @Override
@@ -44,7 +48,9 @@ public class MeanAggregator implements Aggregator {
 	return mean.getResult();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
@@ -52,7 +58,9 @@ public class MeanAggregator implements Aggregator {
 	mean.increment(value);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#reset()
      */
     @Override

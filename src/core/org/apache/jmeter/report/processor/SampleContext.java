@@ -50,8 +50,8 @@ public class SampleContext {
      *            the new working directory
      */
     public final void setWorkingDirectory(File workingDirectory) {
-//	if (workingDirectory == null)
-//	    throw new ArgumentNullException("workingDirectory");
+	// if (workingDirectory == null)
+	// throw new ArgumentNullException("workingDirectory");
 
 	this.workingDirectory = workingDirectory;
 	// workingDirectory.mkdirs();

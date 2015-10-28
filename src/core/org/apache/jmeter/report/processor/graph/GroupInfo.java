@@ -25,77 +25,77 @@ import org.apache.jmeter.report.processor.AggregatorFactory;
  * @since 2.14
  */
 public class GroupInfo {
-	private final boolean enableAggregatedKeysSeries;
-	private final boolean enableOverallSeries;
-	private final GraphSeriesSelector seriesSelector;
-	private final GraphValueSelector valueSelector;
-	private final AggregatorFactory aggregatorFactory;
-	private final GroupData groupData;
+    private final boolean enableAggregatedKeysSeries;
+    private final boolean enableOverallSeries;
+    private final GraphSeriesSelector seriesSelector;
+    private final GraphValueSelector valueSelector;
+    private final AggregatorFactory aggregatorFactory;
+    private final GroupData groupData;
 
-	/**
-	 * Enables aggregated keys seriesData.
-	 *
-	 * @return the enableAggregatedKeysSeries
-	 */
-	public final boolean enablesAggregatedKeysSeries() {
-	    return enableAggregatedKeysSeries;
-	}
+    /**
+     * Enables aggregated keys seriesData.
+     *
+     * @return the enableAggregatedKeysSeries
+     */
+    public final boolean enablesAggregatedKeysSeries() {
+	return enableAggregatedKeysSeries;
+    }
 
-	/**
-	 * Enables overall seriesData.
-	 *
-	 * @return the enableOverallSeries
-	 */
-	public final boolean enablesOverallSeries() {
-	    return enableOverallSeries;
-	}
+    /**
+     * Enables overall seriesData.
+     *
+     * @return the enableOverallSeries
+     */
+    public final boolean enablesOverallSeries() {
+	return enableOverallSeries;
+    }
 
-	/**
-	 * Gets the seriesData selector.
-	 *
-	 * @return the seriesData selector
-	 */
-	public final GraphSeriesSelector getSeriesSelector() {
-	    return seriesSelector;
-	}
+    /**
+     * Gets the seriesData selector.
+     *
+     * @return the seriesData selector
+     */
+    public final GraphSeriesSelector getSeriesSelector() {
+	return seriesSelector;
+    }
 
-	/**
-	 * Gets the value selector.
-	 *
-	 * @return the value selector
-	 */
-	public final GraphValueSelector getValueSelector() {
-	    return valueSelector;
-	}
+    /**
+     * Gets the value selector.
+     *
+     * @return the value selector
+     */
+    public final GraphValueSelector getValueSelector() {
+	return valueSelector;
+    }
 
-	/**
-	 * Gets the aggregator factory.
-	 *
-	 * @return the aggregatorFactory
-	 */
-	public final AggregatorFactory getAggregatorFactory() {
-	    return aggregatorFactory;
-	}
+    /**
+     * Gets the aggregator factory.
+     *
+     * @return the aggregatorFactory
+     */
+    public final AggregatorFactory getAggregatorFactory() {
+	return aggregatorFactory;
+    }
 
-	/**
-	 * Gets the group data.
-	 *
-	 * @return the group data
-	 */
-	public final GroupData getGroupData() {
-	    return groupData;
-	}
+    /**
+     * Gets the group data.
+     *
+     * @return the group data
+     */
+    public final GroupData getGroupData() {
+	return groupData;
+    }
 
-	public GroupInfo(AggregatorFactory aggregatorFactory,
-	        GraphSeriesSelector seriesSelector,
-	        GraphValueSelector valueSelector, boolean enableOverallSeries,
-	        boolean enableAggregatedKeysSeries) {
-	    this.enableOverallSeries = enableOverallSeries;
-	    this.seriesSelector = seriesSelector;
-	    this.valueSelector = valueSelector;
-	    this.aggregatorFactory = aggregatorFactory;
-	    this.enableAggregatedKeysSeries = enableAggregatedKeysSeries;
-	    this.groupData = new GroupData(aggregatorFactory,
-		    enableOverallSeries, enableAggregatedKeysSeries);
-	}
+    public GroupInfo(AggregatorFactory aggregatorFactory,
+	    GraphSeriesSelector seriesSelector,
+	    GraphValueSelector valueSelector, boolean enableOverallSeries,
+	    boolean enableAggregatedKeysSeries) {
+	this.enableOverallSeries = enableOverallSeries;
+	this.seriesSelector = seriesSelector;
+	this.valueSelector = valueSelector;
+	this.aggregatorFactory = aggregatorFactory;
+	this.enableAggregatedKeysSeries = enableAggregatedKeysSeries;
+	this.groupData = new GroupData(aggregatorFactory, enableOverallSeries,
+	        enableAggregatedKeysSeries);
+    }
 }

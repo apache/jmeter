@@ -38,15 +38,19 @@ public class PercentileAggregator implements Aggregator {
 	percentile = new PSquarePercentile(index);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
      */
     @Override
     public long getCount() {
 	return percentile.getN();
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
      */
     @Override
@@ -54,7 +58,9 @@ public class PercentileAggregator implements Aggregator {
 	return percentile.getResult();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
@@ -62,7 +68,9 @@ public class PercentileAggregator implements Aggregator {
 	percentile.increment(value);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.core.GraphAggregator#reset()
      */
     @Override

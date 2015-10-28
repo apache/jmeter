@@ -460,9 +460,11 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 		SeriesData overallData = groupData.getOverallSeries();
 		String overallSeriesName = String.format(overallSeriesFormat,
 		        groupName);
-		addKeyData(result, groupName, overallSeriesName, overallData, false);
+		addKeyData(result, groupName, overallSeriesName, overallData,
+		        false);
 		if (aggregatedKeysSeries == true) {
-		    addKeyData(result, groupName, overallSeriesName, overallData, true);
+		    addKeyData(result, groupName, overallSeriesName,
+			    overallData, true);
 		}
 	    }
 	}

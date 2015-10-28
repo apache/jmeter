@@ -41,7 +41,6 @@ import org.apache.jmeter.report.processor.SampleProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * R-way external sample sorter.<br>
  * <p>
@@ -288,7 +287,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 	    throw new NullPointerException(
 		    "sampleComparator is not set, call setSampleComparator() first.");
 	}
-	
+
 	File workDir = getWorkingDirectory();
 	workDir.mkdir();
 	this.pool.prestartAllCoreThreads();

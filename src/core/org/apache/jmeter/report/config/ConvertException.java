@@ -24,7 +24,7 @@ package org.apache.jmeter.report.config;
  * @since 2.14
  */
 public class ConvertException extends Exception {
-    
+
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -8837968211227052980L;
     private static final String MESSAGE_FORMAT = "Unable to convert \"%s\" to \"%s\"";

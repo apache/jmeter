@@ -85,8 +85,8 @@ public abstract class AbstractOverTimeGraphConsumer extends
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#createGroupInfos()
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
+     * createGroupInfos()
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
@@ -98,8 +98,8 @@ public abstract class AbstractOverTimeGraphConsumer extends
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData(org.apache
-     * .jmeter.report.config.GraphConfiguration)
+     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData
+     * (org.apache .jmeter.report.config.GraphConfiguration)
      */
     @Override
     public DataContext exportData(GraphConfiguration configuration) {

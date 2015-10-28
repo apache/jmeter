@@ -28,9 +28,9 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
-
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate per second.
+ * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate
+ * per second.
  *
  * @since 2.14
  */
@@ -58,7 +58,8 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(1);
+	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
+	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new TimeRateAggregatorFactory(), new StaticSeriesSelector(),
 	        new CountValueSelector(), false, false));

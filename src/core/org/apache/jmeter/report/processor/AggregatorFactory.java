@@ -25,8 +25,8 @@ package org.apache.jmeter.report.processor;
 public interface AggregatorFactory {
 
     /**
-     * Creates a new Aggregator object to calculate an aggregated value
-     * in a graph.
+     * Creates a new Aggregator object to calculate an aggregated value in a
+     * graph.
      *
      * @param key
      *            the key of the value
@@ -42,8 +42,8 @@ public interface AggregatorFactory {
     Aggregator createKeyAggregator();
 
     /**
-     * Creates a new Aggregator object to calculate an aggregated value
-     * of an aggregated key series.
+     * Creates a new Aggregator object to calculate an aggregated value of an
+     * aggregated key series.
      *
      * @return the graph data aggregator
      */
