@@ -95,7 +95,11 @@ public class Sample {
      * @return The data as an integer
      */
     public int getInt(String name) {
-	return Integer.parseInt(data[metadata.indexOf(name)]);
+	try {
+	    return Integer.parseInt(data[metadata.indexOf(name)]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
@@ -108,7 +112,11 @@ public class Sample {
      *             if the data could not be parsed as an integer
      */
     public int getInt(int i) {
-	return Integer.parseInt(data[i]);
+	try {
+	    return Integer.parseInt(data[i]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
@@ -122,7 +130,11 @@ public class Sample {
      *             if the data could not be parsed as a long
      */
     public long getLong(String name) {
-	return Long.parseLong(data[metadata.indexOf(name)]);
+	try {
+	    return Long.parseLong(data[metadata.indexOf(name)]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
@@ -136,7 +148,11 @@ public class Sample {
      *             if the data could not be parsed as an integer
      */
     public long getLong(int i) {
-	return Long.parseLong(data[i]);
+	try {
+	    return Long.parseLong(data[i]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
@@ -150,7 +166,11 @@ public class Sample {
      *             if the data could not be parsed as a float
      */
     public float getFloat(String name) {
-	return Float.parseFloat(data[metadata.indexOf(name)]);
+	try {
+	    return Float.parseFloat(data[metadata.indexOf(name)]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
@@ -163,7 +183,11 @@ public class Sample {
      *             if the data could not be parsed as a float
      */
     public float getFloat(int i) {
-	return Float.parseFloat(data[i]);
+	try {
+	    return Float.parseFloat(data[i]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
@@ -177,7 +201,11 @@ public class Sample {
      *             if the data could not be parsed as a double
      */
     public double getDouble(String name) {
-	return Double.parseDouble(data[metadata.indexOf(name)]);
+	try {
+	    return Double.parseDouble(data[metadata.indexOf(name)]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
@@ -191,7 +219,11 @@ public class Sample {
      *             if the data could not be parsed as a double
      */
     public double getDouble(int id) {
-	return Double.parseDouble(data[id]);
+	try {
+	    return Double.parseDouble(data[id]);
+	} catch (NumberFormatException ex) {
+	    throw new SampleException("Error on sample #" + row, ex);
+	}
     }
 
     /**
