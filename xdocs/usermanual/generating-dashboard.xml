@@ -11,7 +11,7 @@
 	language governing permissions and limitations under the License. -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num 'x'>
+<!ENTITY sect-num '16'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
@@ -19,21 +19,21 @@
 	id="$Id$">
 
 	<properties>
-		<title>User's Manual: Generating Report Dashboard</title>
+		<title>User's Manual: Generating Dashboard Report</title>
 	</properties>
 
 	<body>
 
 		<section name="&sect-num;. Generating Report Dashboard">
-			<p>JMeter supports report dashboard generation to get graphs and
+			<p>JMeter supports dashboard report generation to get graphs and
 				statistics from a test plan.
 				It uses a source directory with
-				templated files (where graph data and
+				template files (where graph data and
 				statistics are injected)
 				to
 				produce html pages in a destination directory.</p>
 			<p>
-				The report generation can take place stand alone from a samples
+				The report generation can be done as a stand alone process from a samples
 				log
 				file or after running load test.
 			</p>
@@ -85,7 +85,7 @@
 								<code>jmeter.reportgenerator.sample_filter</code>
 								:
 								<br />
-								Sets the filter of samples to keep for graphs and statistics
+								Sets the filter for samples to keep for graphs and statistics
 								generation.
 								<br />
 								A comma separated list of samples names, Default: "" (no filtering)
