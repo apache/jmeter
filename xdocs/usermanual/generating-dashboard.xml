@@ -88,7 +88,7 @@
 								Sets the filter of samples to keep for graphs and statistics
 								generation.
 								<br />
-								A comma separated list of samples names, Default: ""
+								A comma separated list of samples names, Default: "" (no filtering)
 							</p>
 						</li>
 						<li>
@@ -379,14 +379,14 @@
 			</subsection>
 
 			<subsection name="&sect-num;.4 Default graphs" anchor="default_graphs">
-				<p>The dashboard generator provides the following graph class :</p>
+				<p>The dashboard generator provides the following graph classes :</p>
 				<ul>
 					<li>
 						<p>
 							<code>org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer</code>
 							:
 							<br />
-							This graph represents the number of active thread over time.
+							This graph represents the number of active threads over time.
 							<br />
 							Additional produced values : granularity.
 						</p>
