@@ -30,11 +30,11 @@ public interface SampleComparator {
     /**
      * Compares to sample<br>
      * <p>
-     * Must return an integer that define the relational order of the 2 comapred
+     * Must return an long integer that define the relational order of the 2 compared
      * samples :<br>
-     * <li>Negative integer : s1 is lower than s2</li>
-     * <li>nul integer (zero) : s1 is stricly equal to s2</li>
-     * <li>Positive integer : s1 is greater than s2</li>
+     * <li>Negative long integer : s1 is lower than s2</li>
+     * <li>Zero long integer : s1 is strictly equal to s2</li>
+     * <li>Positive long integer : s1 is greater than s2</li>
      * </p>
      * 
      * @param s1
@@ -44,7 +44,7 @@ public interface SampleComparator {
      * @return A negative is <code>s1 &lt; s2</code>, <code>0 if s1 = s2</code>,
      *         a positive integer if <code>s1 &gt; s2</code>
      */
-    int compare(Sample s1, Sample s2);
+    long compare(Sample s1, Sample s2);
 
     /**
      * Initializes the comparator with the {@link SampleMetadata} of the samples

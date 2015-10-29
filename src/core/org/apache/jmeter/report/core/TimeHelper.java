@@ -17,8 +17,12 @@
  */
 package org.apache.jmeter.report.core;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class TimeHelper provides helper functions to ease time displaying.
@@ -26,6 +30,9 @@ import java.util.concurrent.TimeUnit;
  * @since 2.14
  */
 public class TimeHelper {
+
+    private static final String MILLISECONDS_FORMAT = "ms";
+    private static final String TIMESTAMP_FORMAT_PROPERTY = "jmeter.save.saveservice.timestamp_format";
 
     public static final String time(long t) {
 	long h = t / 3600000;
@@ -124,5 +131,33 @@ public class TimeHelper {
      */
     public static final String formatDuration(long msDuration) {
 	return formatDuration(msDuration, true);
+    }
+
+    /**
+     * Format the specified time stamp to string using JMeter properties.
+     *
+     * @param timeStamp
+     *            the time stamp
+     * @return the string
+     */
+    public static final String formatTimeStamp(long timeStamp) {
+	String format = JMeterUtils.getPropDefault(TIMESTAMP_FORMAT_PROPERTY,
+	        MILLISECONDS_FORMAT);
+	return (MILLISECONDS_FORMAT.equalsIgnoreCase(format)) ? String
+	        .valueOf(timeStamp) : formatTimeStamp(timeStamp, format);
+    }
+
+    /**
+     * Format the specified time stamp to string using the format.
+     *
+     * @param timeStamp
+     *            the time stamp
+     * @param format
+     *            the format
+     * @return the string
+     */
+    public static final String formatTimeStamp(long timeStamp, String format) {
+	SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+	return dateFormat.format(new Date(timeStamp));
     }
 }

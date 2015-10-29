@@ -52,8 +52,7 @@ public class FieldSampleComparator implements SampleComparator {
      * .jmeter.report.csv.core.Sample, org.apache.jmeter.report.csv.core.Sample)
      */
     @Override
-    public int compare(Sample s1, Sample s2) {
-	// TODO hazardous, return long ?
-	return (int) (s1.getLong(index) - s2.getLong(index));
+    public long compare(Sample s1, Sample s2) {
+	return s1.getLong(index) - s2.getLong(index);
     }
 }

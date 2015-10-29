@@ -56,12 +56,12 @@
 				<p>
 					The chain begins with a normalizer consumer in charge of
 					standardizing
-					the time stamp of each sample. Then a filter consumer
-					keeps or
-					discards samples depending on the
+					the time stamp of each sample. Then two consumers have to define
+					the start time and end time of the load tests.
+					At the same level a
+					filter consumer keeps or discards samples depending on the
 					<code>jmeter.reportgenerator.sample_filter</code>
-					property. Another filter is
-					plugged after to discard controller
+					property. Another filter is plugged after to discard controller
 					samples.
 				</p>
 				<p>

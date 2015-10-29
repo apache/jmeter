@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,12 +43,17 @@ import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SamplePredicate;
+import org.apache.jmeter.report.core.SampleSelector;
+import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 import org.apache.jmeter.report.processor.AbstractSummaryConsumer;
+import org.apache.jmeter.report.processor.AggregateConsumer;
 import org.apache.jmeter.report.processor.ApdexSummaryConsumer;
 import org.apache.jmeter.report.processor.ApdexThresholdsInfo;
 import org.apache.jmeter.report.processor.ErrorsSummaryConsumer;
 import org.apache.jmeter.report.processor.FilterConsumer;
+import org.apache.jmeter.report.processor.MaxAggregator;
+import org.apache.jmeter.report.processor.MinAggregator;
 import org.apache.jmeter.report.processor.NormalizerSampleConsumer;
 import org.apache.jmeter.report.processor.RequestsSummaryConsumer;
 import org.apache.jmeter.report.processor.SampleContext;
@@ -78,6 +84,8 @@ public class ReportGenerator {
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
 
     private static final String NORMALIZER_CONSUMER_NAME = "normalizer";
+    private static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
+    private static final String END_DATE_CONSUMER_NAME = "endDate";
     private static final String NAME_FILTER_CONSUMER_NAME = "nameFilter";
     private static final String APDEX_SUMMARY_CONSUMER_NAME = "apdexSummary";
     private static final String ERRORS_SUMMARY_CONSUMER_NAME = "errorsSummary";
@@ -86,8 +94,6 @@ public class ReportGenerator {
     private static final String START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME = "startIntervalControlerFilter";
 
     private final File testFile;
-    private final Date begin;
-    private final Date end;
     private final ReportGeneratorConfiguration configuration;
 
     /**
@@ -103,8 +109,6 @@ public class ReportGenerator {
 		    "Invalid test file : %s", file));
 
 	this.testFile = file;
-	this.begin = new Date();
-	this.end = new Date();
 	configuration = ReportGeneratorConfiguration
 	        .LoadFromProperties(JMeterUtils.getJMeterProperties());
     }
@@ -155,7 +159,7 @@ public class ReportGenerator {
 	    }
 	}
 
-	// generate JS data
+	// Build consumers chain
 	SampleContext sampleContext = new SampleContext();
 	sampleContext.setWorkingDirectory(tmpDir);
 	SampleSource source = new SampleSource(testFile, JMeterUtils
@@ -166,6 +170,28 @@ public class ReportGenerator {
 	NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
 	normalizer.setName(NORMALIZER_CONSUMER_NAME);
 	source.setSampleConsumer(normalizer);
+
+	AggregateConsumer beginDateConsumer = new AggregateConsumer(
+	        new MinAggregator(), new SampleSelector<Double>() {
+
+		    @Override
+		    public Double select(Sample sample) {
+		        return (double) sample.getStartTime();
+		    }
+	        });
+	beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
+	normalizer.addSampleConsumer(beginDateConsumer);
+
+	AggregateConsumer endDateConsumer = new AggregateConsumer(
+	        new MaxAggregator(), new SampleSelector<Double>() {
+
+		    @Override
+		    public Double select(Sample sample) {
+		        return (double) sample.getEndTime();
+		    }
+	        });
+	beginDateConsumer.setName(END_DATE_CONSUMER_NAME);
+	normalizer.addSampleConsumer(endDateConsumer);
 
 	FilterConsumer nameFilter = new FilterConsumer();
 	nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
@@ -182,7 +208,6 @@ public class ReportGenerator {
 		        || filteredSamples.contains(sample.getName());
 	    }
 	});
-	// nameFilter.setReverseFilter(reverseFilter);
 	normalizer.setSampleConsumer(nameFilter);
 
 	// Static consumers
@@ -316,7 +341,7 @@ public class ReportGenerator {
 	}
 
 	// Generate data
-	log.debug("Start sample processing");
+	log.debug("Start samples processing");
 	try {
 	    source.run();
 	} catch (SampleException ex) {
@@ -324,15 +349,17 @@ public class ReportGenerator {
 	    log.error(message, ex);
 	    throw new GenerationException(message, ex);
 	}
-	log.debug("End of sample processing");
+	log.debug("End of samples processing");
 
 	log.debug("Start data exporting");
 
 	// Create data context and populate it
 	DataContext dataContext = new DataContext();
 	dataContext.put(DATA_CTX_TESTFILE, testFile.getName());
-	dataContext.put(DATA_CTX_BEGINDATE, begin);
-	dataContext.put(DATA_CTX_ENDDATE, end);
+	dataContext.put(DATA_CTX_BEGINDATE, TimeHelper
+	        .formatTimeStamp((long) beginDateConsumer.getResult()));
+	dataContext.put(DATA_CTX_ENDDATE,TimeHelper
+	        .formatTimeStamp((long) endDateConsumer.getResult()));
 
 	// Export graph data to the data context
 	for (Map.Entry<GraphConfiguration, AbstractGraphConsumer> entryGraph : graphMap
@@ -382,5 +409,4 @@ public class ReportGenerator {
 	log.debug("End of report generation");
 
     }
-
 }

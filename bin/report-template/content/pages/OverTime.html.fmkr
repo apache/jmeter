@@ -131,7 +131,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Over Time</h1>
-                    <p>( ${testFile} start : ${beginDate?datetime} - end : ${endDate?datetime} )</p>
+                    <p>( ${testFile} start : ${beginDate} - end : ${endDate} )</p>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
