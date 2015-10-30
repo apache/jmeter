@@ -272,32 +272,32 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 		    double value = entry.getKey();
 		    percent += (double) 100 * entry.getValue().getCount()
 			    / count;
-		    double percentile = rank / 10d;
+		    double percentile = (double)rank / 10;
 		    while (percentile < percent) {
 			keyResult.put(percentile, value);
-			percentile = ++rank / 10d;
+			percentile = (double)++rank / 10;
 		    }
 		    result.setMinY(value);
 		    result.setMaxY(value);
 		}
-		result.setMinX(0d);
-		result.setMaxX(100d);
+		result.setMinX(0);
+		result.setMaxX(100);
 	    } else {
 		for (Map.Entry<Double, Aggregator> entry : sortedInfo
 		        .entrySet()) {
 		    double value = entry.getKey();
 		    percent += (double) 100 * entry.getValue().getCount()
 			    / count;
-		    double percentile = rank / 10d;
+		    double percentile = (double)rank / 10;
 		    while (percentile < percent) {
 			keyResult.put(value, percentile);
-			percentile = ++rank / 10d;
+			percentile = (double)++rank / 10;
 		    }
 		    result.setMinX(value);
 		    result.setMaxX(value);
 		}
-		result.setMinY(0d);
-		result.setMaxY(100d);
+		result.setMinY(0);
+		result.setMaxY(100);
 	    }
 	}
 

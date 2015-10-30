@@ -35,7 +35,7 @@ public class CountValueSelector implements GraphValueSelector {
      */
     @Override
     public double select(String series, Sample sample) {
-	return 1d;
+	return 1;
     }
 
 }

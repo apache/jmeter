@@ -45,9 +45,9 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	long bytes = 0L;
 	long errors = 0L;
 	long total = 0L;
-	PercentileAggregator percentile90 = new PercentileAggregator(90.0d);
-	PercentileAggregator percentile95 = new PercentileAggregator(95.0d);
-	PercentileAggregator percentile99 = new PercentileAggregator(99.0d);
+	PercentileAggregator percentile90 = new PercentileAggregator(90);
+	PercentileAggregator percentile95 = new PercentileAggregator(95);
+	PercentileAggregator percentile99 = new PercentileAggregator(99);
 	long min = Long.MAX_VALUE;
 	long max = Long.MIN_VALUE;
 
@@ -323,6 +323,7 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	info.percentile90.addValue((double) elapsedTime);
 	info.percentile95.addValue((double) elapsedTime);
 	info.percentile99.addValue((double) elapsedTime);
+
 	info.min = Math.min(info.min, elapsedTime);
 	info.max = Math.max(info.max, elapsedTime);
 
@@ -330,7 +331,7 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	info.firstTime = Math.min(info.firstTime, startTime);
 
 	long endTime = sample.getEndTime();
-	info.endTime = Math.max(info.firstTime, endTime);
+	info.endTime = Math.max(info.endTime, endTime);
     }
 
     @Override
@@ -356,7 +357,7 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	StatisticsResult result = new StatisticsResult();
 	result.setTotalCount(info.total);
 	result.setErrorCount(info.errors);
-	result.setErrorPercentage(info.errors * 100.0d / total);
+	result.setErrorPercentage((double) info.errors * 100 / total);
 	result.setPercentile90(info.percentile90.getResult());
 	result.setPercentile95(info.percentile95.getResult());
 	result.setPercentile99(info.percentile99.getResult());

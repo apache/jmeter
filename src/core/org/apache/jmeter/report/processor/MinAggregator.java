@@ -18,30 +18,14 @@
 package org.apache.jmeter.report.processor;
 
 /**
- * The class TimeRateAggregator is used to get samples rate by second.
+ * The class MinAggregator is used to get minimum from samples.
  * 
  * @since 2.14
  */
-public class TimeRateAggregator implements Aggregator {
+public class MinAggregator implements Aggregator {
 
-    private long count = 0;
-    private long granularity = 1;
-    private double value = 0;
-
-    /**
-     * @return the granularity
-     */
-    public final long getGranularity() {
-	return granularity;
-    }
-
-    /**
-     * @param granularity
-     *            the granularity to set
-     */
-    public final void setGranularity(long granularity) {
-	this.granularity = granularity;
-    }
+    private long count = 0L;
+    private double value = Double.MAX_VALUE;
 
     /*
      * (non-Javadoc)
@@ -60,7 +44,7 @@ public class TimeRateAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return (double) value * 1000 / granularity;
+	return value;
     }
 
     /*
@@ -69,9 +53,9 @@ public class TimeRateAggregator implements Aggregator {
      * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
      */
     @Override
-    public void addValue(final double value) {
-	this.count++;
-	this.value += value;
+    public void addValue(double value) {
+	this.value = Math.min(this.value, value);
+	count++;
     }
 
     /*
@@ -81,8 +65,8 @@ public class TimeRateAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	count = 0;
-	value = 0;
+	count = 0L;
+	value = Double.MAX_VALUE;
     }
 
 }

@@ -52,11 +52,11 @@ public class RequestsSummaryConsumer extends AbstractSummaryConsumer {
     }
 
     public final double getSucceededPercent() {
-	return 100.0d * succeededCount / (succeededCount + failedCount);
+	return (double) succeededCount * 100 / (succeededCount + failedCount);
     }
 
     public final double getFailedPercent() {
-	return 100.0d * failedCount / (succeededCount + failedCount);
+	return (double) failedCount * 100 / (succeededCount + failedCount);
     }
 
     @Override

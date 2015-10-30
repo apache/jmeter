@@ -35,7 +35,7 @@ public class MedianAggregatorFactory extends AbstractAggregatorFactory {
     @Override
     protected Aggregator createAggregator() {
 	// TODO Auto-generated method stub
-	return new PercentileAggregator(50.0d);
+	return new PercentileAggregator(50);
     }
 
 }

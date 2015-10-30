@@ -170,8 +170,8 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	    long count = entry.getValue();
 	    ErrorsResult result = new ErrorsResult();
 	    result.setErrorCount(count);
-	    result.setErrorPercent((100.0d * count) / errorCount);
-	    result.setSamplePercent((100.0d * count) / sampleCount);
+	    result.setErrorPercent((double) count * 100 / errorCount);
+	    result.setSamplePercent((double) count * 100 / sampleCount);
 	    errorValues.put(entry.getKey(), result);
 	}
 

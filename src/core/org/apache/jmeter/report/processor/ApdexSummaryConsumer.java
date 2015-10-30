@@ -228,7 +228,7 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
     }
 
     private double getApdex(ApdexCount count) {
-	return (count.satisfiedCount + count.toleratedCount / 2.0d)
+	return (count.satisfiedCount + (double) count.toleratedCount / 2)
 	        / count.totalCount;
     }
 

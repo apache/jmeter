@@ -24,8 +24,8 @@ package org.apache.jmeter.report.processor;
  */
 public class SumAggregator implements Aggregator {
 
-    private long count = 0L;
-    private double sum = 0d;
+    private long count = 0;
+    private double sum = 0;
 
     /*
      * (non-Javadoc)
@@ -65,8 +65,8 @@ public class SumAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	count = 0L;
-	sum = 0d;
+	count = 0;
+	sum = 0;
     }
 
 }
