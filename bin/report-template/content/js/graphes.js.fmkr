@@ -144,7 +144,9 @@ function rtd(bool) {
         },
         tooltip: true,
         tooltipOpts: {
-            content: "%s for %x was %y"
+            content: function(label, xval, yval, flotItem){
+            	return yval + " responses for " + label + " were between " + xval + " and " + (xval + ${responseTimeDistribution.granularity?c}) + " ms";
+            }
         }
     };
 	
