@@ -1353,15 +1353,17 @@ $(function() {
 });
 
 function createLegend(data, choiceContainer) {
-	$.each(data, function(key, val) {
-	l = val.label;
-	var li = $('<li />').appendTo(choiceContainer);
+	var keys = Object.keys(data);
+	keys.sort();
+	$.each(keys, function(index, key) {
+		var l = data[key].label;
+		var li = $('<li />').appendTo(choiceContainer);
 			
-	$('<input name="' + l + '" id="' + l + '" type="checkbox" checked="checked" hidden />').appendTo(li);
-	$('<label>', {
-		text: l , 
-		'for': l
-	}).appendTo(li);
+		$('<input name="' + l + '" id="' + l + '" type="checkbox" checked="checked" hidden />').appendTo(li);
+		$('<label>', {
+			text: l , 
+			'for': l
+		}).appendTo(li);
 	});
 	choiceContainer.find("label").click( function(){
 		if ( this.style.color !== "rgb(129, 129, 129)" ){
