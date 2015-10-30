@@ -17,7 +17,9 @@
  */
 package org.apache.jmeter.report.processor;
 
-import org.apache.commons.math3.stat.descriptive.rank.PSquarePercentile;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class PercentileAggregator is used to get percentile from samples.
@@ -25,8 +27,13 @@ import org.apache.commons.math3.stat.descriptive.rank.PSquarePercentile;
  * @since 2.14
  */
 public class PercentileAggregator implements Aggregator {
+    private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault(
+	    ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_PREFIX
+	            + ReportGeneratorConfiguration.KEY_DELIMITER
+	            + "statistic_window", 200000);
 
-    private PSquarePercentile percentile;
+    private final DescriptiveStatistics statistics;
+    private final double percentileIndex;
 
     /**
      * Instantiates a new percentile aggregator.
@@ -35,7 +42,8 @@ public class PercentileAggregator implements Aggregator {
      *            the index of the percentile
      */
     public PercentileAggregator(double index) {
-	percentile = new PSquarePercentile(index);
+	statistics = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+	percentileIndex = index;
     }
 
     /*
@@ -45,7 +53,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public long getCount() {
-	return percentile.getN();
+	return statistics.getN();
     }
 
     /*
@@ -55,7 +63,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return percentile.getResult();
+	return statistics.getPercentile(percentileIndex);
     }
 
     /*
@@ -65,7 +73,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public void addValue(double value) {
-	percentile.increment(value);
+	statistics.addValue(value);
     }
 
     /*
@@ -75,7 +83,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	percentile.clear();
+	statistics.clear();
     }
 
 }

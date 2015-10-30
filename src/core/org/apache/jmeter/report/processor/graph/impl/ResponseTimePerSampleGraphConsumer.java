@@ -26,14 +26,14 @@ import javax.json.JsonArrayBuilder;
 import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.JsonUtil;
-import org.apache.jmeter.report.processor.MeanAggregatorFactory;
-import org.apache.jmeter.report.processor.MedianAggregatorFactory;
+import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ElapsedTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GraphKeysSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.IndexedNameSelector;
 import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class ResponseTimePerSampleGraphConsumer provides a graph to visualize
@@ -43,8 +43,7 @@ import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
  */
 public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
-    private static final String RESPONSE_TIME_PER_SAMPLE_SERIES_AVG = "Average Time";
-    private static final String RESPONSE_TIME_PER_SAMPLE_SERIES_MED = "Median Time";
+    private static final String RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT = "Percentile %d";
 
     /**
      * Instantiates a new response time per sample graph consumer.
@@ -64,6 +63,28 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 	return new IndexedNameSelector();
     }
 
+    /**
+     * Creates the group info for elapsed time percentile depending on jmeter
+     * properties.
+     *
+     * @param propertyKey
+     *            the property key
+     * @param defaultValue
+     *            the default value
+     * @return the group info
+     */
+    private GroupInfo createGroupInfo(String propertyKey, int defaultValue) {
+	int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
+	PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
+	factory.setPercentileIndex(property);
+	StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
+	seriesSelector.setSeriesName(String.format(
+	        RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT, property));
+
+	return new GroupInfo(factory, seriesSelector,
+	        new ElapsedTimeValueSelector(), false, false);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -75,18 +96,14 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
 	        2);
 
-	StaticSeriesSelector averageSeriesSelector = new StaticSeriesSelector();
-	averageSeriesSelector
-	        .setSeriesName(RESPONSE_TIME_PER_SAMPLE_SERIES_AVG);
-	groupInfos.put(RESPONSE_TIME_PER_SAMPLE_SERIES_AVG, new GroupInfo(
-	        new MeanAggregatorFactory(), averageSeriesSelector,
-	        new ElapsedTimeValueSelector(), false, false));
+	groupInfos.put("aggregate_rpt_pct1",
+	        createGroupInfo("aggregate_rpt_pct1", 90));
 
-	StaticSeriesSelector medianSeriesSelector = new StaticSeriesSelector();
-	medianSeriesSelector.setSeriesName(RESPONSE_TIME_PER_SAMPLE_SERIES_MED);
-	groupInfos.put(RESPONSE_TIME_PER_SAMPLE_SERIES_MED, new GroupInfo(
-	        new MedianAggregatorFactory(), medianSeriesSelector,
-	        new ElapsedTimeValueSelector(), false, false));
+	groupInfos.put("aggregate_rpt_pct2",
+	        createGroupInfo("aggregate_rpt_pct2", 95));
+
+	groupInfos.put("aggregate_rpt_pct3",
+	        createGroupInfo("aggregate_rpt_pct3", 99));
 
 	return groupInfos;
     }

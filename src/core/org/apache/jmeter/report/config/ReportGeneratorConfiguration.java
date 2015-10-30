@@ -39,7 +39,7 @@ public class ReportGeneratorConfiguration {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final char KEY_DELIMITER = '.';
+    public static final char KEY_DELIMITER = '.';
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
     public static final String REPORT_GENERATOR_GRAPH_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
 	    + KEY_DELIMITER + "graph";

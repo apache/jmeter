@@ -30,8 +30,8 @@ public interface SampleComparator {
     /**
      * Compares to sample<br>
      * <p>
-     * Must return an long integer that define the relational order of the 2 compared
-     * samples :<br>
+     * Must return an long integer that define the relational order of the 2
+     * compared samples :<br>
      * <li>Negative long integer : s1 is lower than s2</li>
      * <li>Zero long integer : s1 is strictly equal to s2</li>
      * <li>Positive long integer : s1 is greater than s2</li>

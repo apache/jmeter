@@ -28,12 +28,15 @@
 			<p>JMeter supports dashboard report generation to get graphs and
 				statistics from a test plan.
 				It uses a source directory with
-				template files (where graph data and
+				template
+				files (where graph data and
 				statistics are injected)
 				to
-				produce html pages in a destination directory.</p>
+				produce html
+				pages in a destination directory.</p>
 			<p>
-				The report generation can be done as a stand alone process from a samples
+				The report generation can be done as a stand alone process from a
+				samples
 				log
 				file or after running load test.
 			</p>
@@ -88,7 +91,8 @@
 								Sets the filter for samples to keep for graphs and statistics
 								generation.
 								<br />
-								A comma separated list of samples names, Default: "" (no filtering)
+								A comma separated list of samples names, Default: "" (no
+								filtering)
 							</p>
 						</li>
 						<li>
@@ -113,6 +117,21 @@
 								Default: report-template
 							</p>
 						</li>
+						<li>
+							<p>
+								<code>jmeter.reportgenerator.statistic_window</code>
+								:
+								<br />
+								Sets the size of the sliding window used by percentile
+								evaluation.
+								<br />
+								Caution : higher value provides a better accurency but needs
+								more memory.
+								<br />
+								Default: 200000
+							</p>
+						</li>
+
 					</ul>
 
 					<note>Relative paths are build from the JMeter working directory

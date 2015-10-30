@@ -62,12 +62,12 @@ public class SampleBuilder {
     private long row = 0;
 
     public SampleBuilder(SampleMetadata metadata, NumberFormat floatFormater) {
-	if (metadata == null) {
-	    throw new NullPointerException("metadata is null !");
-	}
-	if (floatFormater == null) {
-	    throw new NullPointerException("floatFormater is null !");
-	}
+	if (metadata == null)
+	    throw new ArgumentNullException("metadata");
+
+	if (floatFormater == null)
+	    throw new ArgumentNullException("floatFormater");
+
 	this.floatFormater = floatFormater;
 	this.metadata = metadata;
 	this.data = new String[metadata.getColumnCount()];

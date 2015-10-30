@@ -23,8 +23,6 @@ import java.util.Map;
 import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.Sample;
-import org.apache.jmeter.report.processor.AbstractAggregatorFactory;
-import org.apache.jmeter.report.processor.Aggregator;
 import org.apache.jmeter.report.processor.SumAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;

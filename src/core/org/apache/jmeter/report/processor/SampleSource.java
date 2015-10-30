@@ -277,9 +277,9 @@ public class SampleSource implements Runnable, SampleSourceChannelAttributes {
 	private List<SampleConsumer> sampleConsumers = new ArrayList<SampleConsumer>();
 
 	public void setSampleConsumers(List<SampleConsumer> consumers) {
-	    if (consumers == null) {
-		throw new NullPointerException("consumers is null !");
-	    }
+	    if (consumers == null)
+		throw new ArgumentNullException("consumers");
+
 	    this.sampleConsumers = consumers;
 	}
 

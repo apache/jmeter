@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.jmeter.report.core.ArgumentNullException;
 import org.apache.jmeter.report.core.CsvFile;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.CsvSampleWriter;
@@ -176,12 +177,12 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            Wether the CSV header should be written in the output CSV file
      */
     public void sort(CsvFile inputFile, File outputFile, boolean writeHeader) {
-	if (inputFile == null) {
-	    throw new NullPointerException("inputFile is null !");
-	}
-	if (outputFile == null) {
-	    throw new NullPointerException("outputFile is null !");
-	}
+	if (inputFile == null)
+	    throw new ArgumentNullException("inputFile");
+
+	if (outputFile == null)
+	    throw new ArgumentNullException("outputFile");
+
 	if (!inputFile.isFile()) {
 	    throw new SampleException(
 		    inputFile.getAbsolutePath()
@@ -217,15 +218,15 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     public void sort(SampleMetadata sampleMetadata, File inputFile,
 	    File outputFile, boolean writeHeader) {
-	if (sampleMetadata == null) {
-	    throw new NullPointerException("sampleMetadata is null !");
-	}
-	if (inputFile == null) {
-	    throw new NullPointerException("inputFile is null !");
-	}
-	if (outputFile == null) {
-	    throw new NullPointerException("outputFile is null !");
-	}
+	if (sampleMetadata == null)
+	    throw new ArgumentNullException("sampleMetadata");
+
+	if (inputFile == null)
+	    throw new ArgumentNullException("inputFile");
+
+	if (outputFile == null)
+	    throw new ArgumentNullException("outputFile");
+
 	if (!inputFile.isFile()) {
 	    throw new SampleException(
 		    inputFile.getAbsolutePath()
@@ -258,12 +259,12 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     private void sort(CsvSampleReader csvReader, File output,
 	    boolean writeHeader) {
-	if (csvReader == null) {
-	    throw new NullPointerException("csvReader is null !");
-	}
-	if (output == null) {
-	    throw new NullPointerException("output is null !");
-	}
+	if (csvReader == null)
+	    throw new ArgumentNullException("csvReader");
+
+	if (output == null)
+	    throw new ArgumentNullException("output");
+
 	SampleMetadata sampleMetadata = csvReader.getMetadata();
 	SampleWriterConsumer writerConsumer = new SampleWriterConsumer();
 	writerConsumer.setOutputFile(output);
@@ -283,10 +284,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     }
 
     public void startConsuming() {
-	if (sampleComparator == null) {
-	    throw new NullPointerException(
+	if (sampleComparator == null)
+	    throw new IllegalStateException(
 		    "sampleComparator is not set, call setSampleComparator() first.");
-	}
 
 	File workDir = getWorkingDirectory();
 	workDir.mkdir();

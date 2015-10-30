@@ -22,9 +22,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -358,8 +356,8 @@ public class ReportGenerator {
 	dataContext.put(DATA_CTX_TESTFILE, testFile.getName());
 	dataContext.put(DATA_CTX_BEGINDATE, TimeHelper
 	        .formatTimeStamp((long) beginDateConsumer.getResult()));
-	dataContext.put(DATA_CTX_ENDDATE,TimeHelper
-	        .formatTimeStamp((long) endDateConsumer.getResult()));
+	dataContext.put(DATA_CTX_ENDDATE,
+	        TimeHelper.formatTimeStamp((long) endDateConsumer.getResult()));
 
 	// Export graph data to the data context
 	for (Map.Entry<GraphConfiguration, AbstractGraphConsumer> entryGraph : graphMap

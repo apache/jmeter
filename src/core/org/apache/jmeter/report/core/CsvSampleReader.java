@@ -85,17 +85,17 @@ public class CsvSampleReader {
     }
 
     public CsvSampleReader(File inputFile, SampleMetadata metadata) {
-	if (inputFile == null) {
-	    throw new NullPointerException("inputFile is null !");
-	}
+	if (inputFile == null)
+	    throw new ArgumentNullException("inputFile");
+
 	if (!inputFile.isFile()) {
 	    throw new IllegalArgumentException(
 		    inputFile.getAbsolutePath()
 		            + " does not exist or is not a file ! Please provide an existing input file.");
 	}
-	if (metadata == null) {
-	    throw new NullPointerException("metadat isn ull !");
-	}
+	if (metadata == null)
+	    throw new ArgumentNullException("metadata");
+
 	Reader r = null;
 	try {
 	    r = new InputStreamReader(new FileInputStream(inputFile), CHARSET);
@@ -107,9 +107,9 @@ public class CsvSampleReader {
     }
 
     public CsvSampleReader(CsvFile inputFile) {
-	if (inputFile == null) {
-	    throw new NullPointerException("inputFile is null !");
-	}
+	if (inputFile == null)
+	    throw new ArgumentNullException("inputFile");
+
 	if (!inputFile.isFile()) {
 	    throw new IllegalArgumentException(
 		    inputFile.getAbsolutePath()
@@ -126,9 +126,9 @@ public class CsvSampleReader {
     }
 
     private void init(SampleMetadata metadata, Reader in) {
-	if (metadata == null) {
-	    throw new NullPointerException("metadata is null !");
-	}
+	if (metadata == null)
+	    throw new ArgumentNullException("metadata");
+
 	this.br = new BufferedReader(in, BUF_SIZE);
 	this.metadata = metadata;
 	this.columnCount = metadata.getColumnCount();

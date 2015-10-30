@@ -65,10 +65,10 @@ public class AggregateConsumer extends AbstractSampleConsumer {
 	this.selector = selector;
     }
 
-    public double getResult(){
+    public double getResult() {
 	return aggregator.getResult();
     }
-    
+
     /*
      * (non-Javadoc)
      * 

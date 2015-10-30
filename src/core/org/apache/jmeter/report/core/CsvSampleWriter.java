@@ -49,7 +49,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     public CsvSampleWriter(SampleMetadata metadata) {
 	if (metadata == null) {
-	    throw new NullPointerException("metadata is null !");
+	    throw new ArgumentNullException("metadata");
 	}
 	this.metadata = metadata;
 	this.columnCount = metadata.getColumnCount();
@@ -60,7 +60,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     public CsvSampleWriter(Writer output, SampleMetadata metadata) {
 	this(metadata);
 	if (output == null) {
-	    throw new NullPointerException("output is null !");
+	    throw new ArgumentNullException("output");
 	}
 	setWriter(output);
     }
@@ -68,7 +68,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     public CsvSampleWriter(OutputStream output, SampleMetadata metadata) {
 	this(metadata);
 	if (output == null) {
-	    throw new NullPointerException("output is null !");
+	    throw new ArgumentNullException("output");
 	}
 	setOutputStream(output);
     }
@@ -76,7 +76,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     public CsvSampleWriter(File output, SampleMetadata metadata) {
 	this(metadata);
 	if (output == null) {
-	    throw new NullPointerException("output is null !");
+	    throw new ArgumentNullException("output");
 	}
 	setOutputFile(output);
     }
@@ -111,11 +111,11 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     }
 
     @Override
-    public long write(Sample s) {
+    public long write(Sample sample) {
 	try {
 	    row.setLength(0);
 	    for (int i = 0; i < columnCount; i++) {
-		String data = s.getString(i);
+		String data = sample.getString(i);
 		// Add quotes if needed
 		if (data.indexOf(separator) > -1) {
 		    data = '"' + data + '"';
@@ -130,8 +130,8 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 	    if (writer == null) {
 		throw new IllegalStateException(
 		        "No writer set ! Call setWriter() first !", npe);
-	    } else if (s == null) {
-		throw new NullPointerException("null sample !");
+	    } else if (sample == null) {
+		throw new ArgumentNullException("sample");
 	    } else {
 		throw npe;
 	    }
