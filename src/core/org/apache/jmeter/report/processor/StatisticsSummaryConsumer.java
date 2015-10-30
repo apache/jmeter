@@ -27,6 +27,7 @@ import javax.json.JsonObjectBuilder;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.core.Sample;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * <p>
@@ -39,15 +40,25 @@ import org.apache.jmeter.report.core.Sample;
 // TODO Add support of "TOTAL" statistics line
 public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 
+    private static final int percentileIndex1 = JMeterUtils.getPropDefault(
+	    "aggregate_rpt_pct1", 90);
+    private static final int percentileIndex2 = JMeterUtils.getPropDefault(
+	    "aggregate_rpt_pct2", 95);
+    private static final int percentileIndex3 = JMeterUtils.getPropDefault(
+	    "aggregate_rpt_pct3", 99);
+
     private class StatisticsInfo {
 	long firstTime = Long.MAX_VALUE;
 	long endTime = Long.MIN_VALUE;
 	long bytes = 0L;
 	long errors = 0L;
 	long total = 0L;
-	PercentileAggregator percentile90 = new PercentileAggregator(90);
-	PercentileAggregator percentile95 = new PercentileAggregator(95);
-	PercentileAggregator percentile99 = new PercentileAggregator(99);
+	PercentileAggregator percentile1 = new PercentileAggregator(
+	        percentileIndex1);
+	PercentileAggregator percentile2 = new PercentileAggregator(
+	        percentileIndex2);
+	PercentileAggregator percentile3 = new PercentileAggregator(
+	        percentileIndex3);
 	long min = Long.MAX_VALUE;
 	long max = Long.MIN_VALUE;
 
@@ -57,9 +68,9 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	    bytes = 0L;
 	    errors = 0L;
 	    total = 0L;
-	    percentile90.reset();
-	    percentile95.reset();
-	    percentile99.reset();
+	    percentile1.reset();
+	    percentile2.reset();
+	    percentile3.reset();
 	    min = Long.MAX_VALUE;
 	    max = Long.MIN_VALUE;
 	}
@@ -89,9 +100,9 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	private long totalCount;
 	private long errorCount;
 	private Double errorPercentage;
-	private Double percentile90;
-	private Double percentile95;
-	private Double percentile99;
+	private Double percentile1;
+	private Double percentile2;
+	private Double percentile3;
 	private Double throughput;
 
 	private Double byteRate;
@@ -156,60 +167,72 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	}
 
 	/**
-	 * Gets the 90th percentile of elapsed time.
+	 * Gets the percentile of elapsed time matching the property
+	 * aggregate_rpt_pct1.
 	 *
-	 * @return the 90th percentile of elapsed time
+	 * @return the percentile of elapsed time matching the property
+	 *         aggregate_rpt_pct1
 	 */
-	public final Double getPercentile90() {
-	    return percentile90;
+	public final Double getPercentile1() {
+	    return percentile1;
 	}
 
 	/**
-	 * Sets the 90th percentile of elapsed time.
+	 * Sets the percentile of elapsed time matching the property
+	 * aggregate_rpt_pct1.
 	 *
-	 * @param percentile90
-	 *            the 90th percentile of elapsed time to set
+	 * @param percentile1
+	 *            the percentile of elapsed time matching the property
+	 *            aggregate_rpt_pct1 to set
 	 */
-	public final void setPercentile90(Double percentile90) {
-	    this.percentile90 = percentile90;
+	public final void setPercentile1(Double percentile1) {
+	    this.percentile1 = percentile1;
 	}
 
 	/**
-	 * Gets the 95th percentile of elapsed time.
+	 * Gets the percentile of elapsed time matching the property
+	 * aggregate_rpt_pct2.
 	 *
-	 * @return the 95th percentile of elapsed time
+	 * @return the percentile of elapsed time matching the property
+	 *         aggregate_rpt_pct2
 	 */
-	public final Double getPercentile95() {
-	    return percentile95;
+	public final Double getPercentile2() {
+	    return percentile2;
 	}
 
 	/**
-	 * Sets the 95th percentile of elapsed time.
+	 * Sets the percentile of elapsed time matching the property
+	 * aggregate_rpt_pct2.
 	 *
-	 * @param percentile95
-	 *            the 95th percentile of elapsed time to set
+	 * @param percentile2
+	 *            the percentile of elapsed time matching the property
+	 *            aggregate_rpt_pct2 to set
 	 */
-	public final void setPercentile95(Double percentile95) {
-	    this.percentile95 = percentile95;
+	public final void setPercentile2(Double percentile2) {
+	    this.percentile2 = percentile2;
 	}
 
 	/**
-	 * Gets the 99th percentile of elapsed time.
+	 * Gets the percentile of elapsed time matching the property
+	 * aggregate_rpt_pct3.
 	 *
-	 * @return the 99th percentile of elapsed time
+	 * @return the percentile of elapsed time matching the property
+	 *         aggregate_rpt_pct3
 	 */
-	public final Double getPercentile99() {
-	    return percentile99;
+	public final Double getPercentile3() {
+	    return percentile3;
 	}
 
 	/**
-	 * Sets the 99th percentile.
+	 * Sets the percentile of elapsed time matching the property
+	 * aggregate_rpt_pct3.
 	 *
-	 * @param percentile99
-	 *            the 99th percentile of elapsed time to set
+	 * @param percentile3
+	 *            the percentile of elapsed time matching the property
+	 *            aggregate_rpt_pct3 to set
 	 */
-	public final void setPercentile99(Double percentile99) {
-	    this.percentile99 = percentile99;
+	public final void setPercentile3(Double percentile3) {
+	    this.percentile3 = percentile3;
 	}
 
 	/**
@@ -320,9 +343,9 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	}
 
 	long elapsedTime = sample.getElapsedTime();
-	info.percentile90.addValue((double) elapsedTime);
-	info.percentile95.addValue((double) elapsedTime);
-	info.percentile99.addValue((double) elapsedTime);
+	info.percentile1.addValue((double) elapsedTime);
+	info.percentile2.addValue((double) elapsedTime);
+	info.percentile3.addValue((double) elapsedTime);
 
 	info.min = Math.min(info.min, elapsedTime);
 	info.max = Math.max(info.max, elapsedTime);
@@ -358,9 +381,9 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	result.setTotalCount(info.total);
 	result.setErrorCount(info.errors);
 	result.setErrorPercentage((double) info.errors * 100 / total);
-	result.setPercentile90(info.percentile90.getResult());
-	result.setPercentile95(info.percentile95.getResult());
-	result.setPercentile99(info.percentile99.getResult());
+	result.setPercentile1(info.percentile1.getResult());
+	result.setPercentile2(info.percentile2.getResult());
+	result.setPercentile3(info.percentile3.getResult());
 	result.setThroughput(info.getThroughput());
 	result.setByteRate(info.getKBytesPerSecond());
 	result.setMin(info.min);
@@ -388,12 +411,12 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	        .add("KO", Long.toString(result.getErrorCount()))
 	        .add("Error%",
 	                String.format("%.2f%%", result.getErrorPercentage()))
-	        .add("90% Line",
-	                String.format("%.2f", result.getPercentile90()))
-	        .add("95% Line",
-	                String.format("%.2f", result.getPercentile95()))
-	        .add("99% Line",
-	                String.format("%.2f", result.getPercentile99()))
+	        .add(String.format("%d%% Line", percentileIndex1),
+	                String.format("%.2f", result.getPercentile1()))
+	        .add(String.format("%d%% Line", percentileIndex2),
+	                String.format("%.2f", result.getPercentile2()))
+	        .add(String.format("%d%% Line", percentileIndex3),
+	                String.format("%.2f", result.getPercentile3()))
 	        .add("Throughput",
 	                String.format("%.2f", result.getThroughput()))
 	        .add("KB/sec", String.format("%.2f", result.getByteRate()))
