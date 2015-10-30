@@ -393,7 +393,7 @@
     <include name="${lib.dir}/${jodd-lagarto.jar}"/>
     <include name="${lib.dir}/${jodd-log.jar}"/>
     <include name="${lib.dir}/${jodd-props.jar}"/>
-    <include name="${lib.dir}/${json.jar}"/>
+    <include name="${lib.dir}/${javaxjson.jar}"/>
     <include name="${lib.dir}/${json-path.jar}"/>
     <include name="${lib.dir}/${json-smart.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
@@ -473,7 +473,7 @@
     <pathelement location="${lib.dir}/${jodd-lagarto.jar}"/>
     <pathelement location="${lib.dir}/${jodd-log.jar}"/>
     <pathelement location="${lib.dir}/${jodd-props.jar}"/>
-    <pathelement location="${lib.dir}/${json.jar}"/>
+    <pathelement location="${lib.dir}/${javaxjson.jar}"/>
     <pathelement location="${lib.dir}/${json-path.jar}"/>
     <pathelement location="${lib.dir}/${json-smart.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
@@ -2858,7 +2858,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="jodd-lagarto"/>
         <process_jarfile jarname="jodd-log"/>
         <process_jarfile jarname="jodd-props"/>
-    	<process_jarfile jarname="json"/>
+    	<process_jarfile jarname="javaxjson"/>
         <process_jarfile jarname="json-path"/>
         <process_jarfile jarname="json-smart"/>
         <process_jarfile jarname="jsoup"/>
