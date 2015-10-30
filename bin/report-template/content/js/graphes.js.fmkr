@@ -662,7 +662,7 @@ function rtvr(bool) {
         var options = {
             series: {
                 lines: {
-                    show: true
+                    show: false
                 },
                 points: {
                     show: true
@@ -726,7 +726,7 @@ function lvr(bool) {
         var options = {
             series: {
                 lines: {
-                    show: true
+                    show: false
                 },
                 points: {
                     show: true
