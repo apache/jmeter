@@ -201,9 +201,9 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 		    .add("Type of error", entry.getKey())
 		    .add("Number of errors",
 		            Long.toString(result.getErrorCount()))
-		    .add("Error Rate",
+		    .add("% in errors",
 		            String.format("%.2f%%", result.getErrorPercent()))
-		    .add("Sample Rate",
+		    .add("% in all samples",
 		            String.format("%.2f%%", result.getSamplePercent()));
 	    builder.add(Integer.toString(++index), seriesBuilder);
 	}
