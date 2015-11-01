@@ -412,10 +412,10 @@ public class JMeter implements JMeterPlugin {
                         if (jtl != null) {
                             jtlFile = processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
                         }
-                        CLOption reportAtEndOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
+                        CLOption reportAtEndOpt = parser.getArgumentById(REPORT_AT_END_OPT);
                         if(reportAtEndOpt != null) {
                             if(jtlFile == null) {
-                                throw new IllegalUserActionException("Option -"+REPORT_GENERATING_OPT+" requires -"+LOGFILE_OPT + " option");
+                                throw new IllegalUserActionException("Option -"+REPORT_AT_END_OPT+" requires -"+LOGFILE_OPT + " option");
                             }
                         }
                         startNonGui(testFile, jtlFile, rem, reportAtEndOpt != null);
