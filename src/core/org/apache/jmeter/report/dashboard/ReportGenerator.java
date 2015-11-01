@@ -74,6 +74,17 @@ import freemarker.template.Configuration;
  */
 public class ReportGenerator {
     private static final Logger log = LoggingManager.getLoggerForClass();
+    /** A properties file indicator for true. * */
+    private static final String TRUE = "true"; // $NON_NLS-1$
+
+    /** A properties file indicator for false. * */
+    private static final String FALSE = "false"; // $NON_NLS-1$
+
+    private static final boolean PRINT_FIELD_NAMES = 
+            TRUE.equalsIgnoreCase(JMeterUtils.getPropDefault("jmeter.save.saveservice.print_field_names", FALSE));
+
+    private static final boolean CSV_OUTPUT_FORMAT = 
+            "csv".equalsIgnoreCase(JMeterUtils.getPropDefault("jmeter.save.saveservice.output_format", "csv"));
 
     public static final String DATA_CTX_TESTFILE = "testFile";
     public static final String DATA_CTX_BEGINDATE = "beginDate";
@@ -108,6 +119,13 @@ public class ReportGenerator {
      * @param resultCollector Can be null, used if generation occurs at end of test
      */
     public ReportGenerator(String resultsFile, ResultCollector resultCollector) throws ConfigurationException {
+        if(!CSV_OUTPUT_FORMAT) {
+            throw new IllegalArgumentException("Report generation requires csv output format, check 'jmeter.save.saveservice.output_format' property");
+        }
+        if(!PRINT_FIELD_NAMES) {
+            throw new IllegalArgumentException("Report generation requires csv to print field names, check 'jmeter.save.saveservice.print_field_names' property");
+        }
+
 	File file = new File(resultsFile);
 	if(resultCollector==null) {
 	    if(!(file.isFile() && file.canRead())) {
