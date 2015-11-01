@@ -59,6 +59,7 @@ import org.apache.jmeter.report.processor.SampleSource;
 import org.apache.jmeter.report.processor.StatisticsSummaryConsumer;
 import org.apache.jmeter.report.processor.ThresholdSelector;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
+import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -95,17 +96,32 @@ public class ReportGenerator {
     private final ReportGeneratorConfiguration configuration;
 
     /**
+     * ResultCollector used 
+     */
+    private final ResultCollector resultCollector;
+
+    /**
      * Instantiates a new report generator.
      *
-     * @param testFile
-     *            the test file
+     * @param resultsFile
+     *            the test results file
+     * @param resultCollector Can be null, used if generation occurs at end of test
      */
-    public ReportGenerator(String testFile) throws ConfigurationException {
-	File file = new File(testFile);
-	if (file.isFile() == false)
-	    throw new IllegalArgumentException(String.format(
-		    "Invalid test file : %s", file));
-
+    public ReportGenerator(String resultsFile, ResultCollector resultCollector) throws ConfigurationException {
+	File file = new File(resultsFile);
+	if(resultCollector==null) {
+	    if(!(file.isFile() && file.canRead())) {
+	        throw new IllegalArgumentException(String.format(
+	            "Invalid test results file : %s", file));
+	    }
+	    log.info("Will only generate report from results file:"+resultsFile);
+	} else {
+	    if(file.exists() && file.length()>0) {
+	        throw new IllegalArgumentException("Results file:"+resultsFile+" is not empty");
+	    }
+        log.info("Will generate report at end of test from  results file:"+resultsFile);
+	}
+	this.resultCollector = resultCollector;
 	this.testFile = file;
 	configuration = ReportGeneratorConfiguration
 	        .LoadFromProperties(JMeterUtils.getJMeterProperties());
@@ -143,6 +159,10 @@ public class ReportGenerator {
      */
     public void generate() throws GenerationException {
 
+        if(resultCollector != null) {
+            log.info("Flushing result collector before report Generation");
+            resultCollector.flushFile();
+        }
 	log.debug("Start report generation");
 
 	File tmpDir = configuration.getTempDirectory();
