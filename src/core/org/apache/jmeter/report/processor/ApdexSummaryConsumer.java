@@ -28,6 +28,7 @@ import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.TimeHelper;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * <p>
@@ -147,13 +148,20 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	JsonObjectBuilder seriesBuilder = Json.createObjectBuilder();
 	ApdexThresholdsInfo info = result.getThresholdsInfo();
 	seriesBuilder
-	        .add("Apdex", String.format("%.3f", result.getApdex()))
-	        .add("T",
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_apdex_apdex"),
+	                String.format("%.3f", result.getApdex()))
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_apdex_satisfied"),
 	                TimeHelper.formatDuration(info.getSatisfiedThreshold(),
 	                        false))
-	        .add("F",
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_apdex_tolerated"),
 	                TimeHelper.formatDuration(info.getToleratedThreshold(),
-	                        false)).add("Samplers", sample);
+	                        false))
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_apdex_samplers"),
+	                sample);
 	builder.add(Integer.toString(index), seriesBuilder);
     }
 
@@ -257,7 +265,9 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	DataContext dataResult = new DataContext();
 	JsonObjectBuilder builder = Json.createObjectBuilder();
 	int index = 1;
-	appendLineToBuilder(builder, "TOTAL", overallResult, index);
+	appendLineToBuilder(builder,
+	        JMeterUtils.getResString("reportgenerator_summary_total"),
+	        overallResult, index);
 	for (Map.Entry<String, ApdexResult> entry : apdexValues.entrySet()) {
 	    index++;
 	    appendLineToBuilder(builder, entry.getKey(), entry.getValue(),
