@@ -1,5 +1,5 @@
 ﻿$(document).ready(function() {
-    var offset = 0;
+    //var offset = 0;
 	$(".click-title").mouseenter( function(	e){
 		e.preventDefault();
 		this.style.cursor="pointer";
@@ -8,19 +8,10 @@
 		event.preventDefault();
 	});
 	
-	try {
-	   bbq();
-	} catch (e) {
-	}
-	try {
-	   btot();
-	} catch (e) {
-	}
-	try {
-	   rtp();
-	} catch (e) {
-	}
-    $(".portlet-header").css("cursor", "auto");
+	bbq();
+	btot();
+	rtp();
+	$(".portlet-header").css("cursor", "auto");
 });
 
 var b1 = false;
@@ -1131,68 +1122,21 @@ $(function() {
 	});
 });
 
-
-//uncheck all box
-function uncheckAll(id){
+function checkUncheckAll(id, check){
 	var placeholder = document.getElementById(id);
 	
-	var cases = $(placeholder).find(':checkbox'); // on cherche les checkbox qui d�pendent de la liste 'cases'
-  
-	cases.attr('checked', false);// on coche les cases
-	$(cases).parent().children().children().addClass("legend-disabled");
-	if ( id == "choicesBytesThroughputOverTime"){
-		var choiceContainer = $("#choicesBytesThroughputOverTime");
-		btot(false);
-	} else if(id == "choicesResponseTimesOverTime"){
-		var choiceContainer = $("#choicesResponseTimesOverTime");
-		rtot(false);
-	} else if ( id == "choicesLatenciesOverTime"){
-		var choiceContainer = $("#choicesLatenciesOverTime");
-		lot(false);
-	} else if ( id == "choicesResponseTimePercentiles"){
-		var choiceContainer = $("#choicesResponseTimePercentiles");
-		rtp(false);
-	} else if(id == "choicesThreadsStateOverTime"){
-		var choiceContainer = $("#choicesThreadsStateOverTime");
-		tsot(false);
-	} else if ( id == "choicesTimeVsThreads"){
-		var choiceContainer = $("#choicesTimeVsThreads");
-		tvt(false);
-	} else if ( id == "choicesResponseTimeDistribution"){
-		var choiceContainer = $("#choicesResponseTimeDistribution");
-		rtd(false);
-	} else if ( id == "choicesResponseTimePerSample"){
-		var choiceContainer = $("#choicesResponseTimePerSample");
-		hb(false);
-	} else if ( id == "choicesHitsPerSecond"){
-		var choiceContainer = $("#choicesHitsPerSecond");
-		bbq(false);
-	} else if(id == "choiceseCodesPerSecond"){
-		var choiceContainer = $("#choicesCodesPerSecond");
-		hcps(false);
-	} else if ( id == "choicesTransactionsPerSecond"){
-		var choiceContainer = $("#choicesTransactionsPerSecond");
-		tps(false);
-	} else if ( id == "choicesResponseTimeVsRequest"){
-		var choiceContainer = $("#choicesResponseTimeVsRequest");
-		rtvr(false);
-	} else if ( id == "choicesLatencyVsRequest"){
-		var choiceContainer = $("#choicesLatencyVsRequest");
-		lvr(false);
+	if(check) {
+		placeholder.style.color = "black";
 	}
-	choiceContainer.find("label").each(function(){
-		this.style.color = "#818181";
-	});
-}
-
-//check all box
-function checkAll(id){
-	var placeholder = document.getElementById(id);
-	placeholder.style.color = "black";
-	var cases2 = $(placeholder).find(':not(checked)'); // on cherche les checkbox qui dépendent de la liste 'cases'
-	console.log(cases2);
-	cases2.prop('checked', true);// on coche les cases
-	$(cases2).parent().children().children().removeClass("legend-disabled");
+	var expression = check === true ? ":not(checked)" : ':checked';
+	var checkboxes =  $(placeholder).find(expression);
+	checkboxes.prop('checked', check);
+	
+	if(check) {
+		$(checkboxes).parent().children().children().removeClass("legend-disabled");
+	} else {
+		$(checkboxes).parent().children().children().addClass("legend-disabled");		
+	}	
 	if (id == "choicesBytesThroughputOverTime"){
 		var choiceContainer = $("#choicesBytesThroughputOverTime");
 		btot(false);
@@ -1234,45 +1178,18 @@ function checkAll(id){
 		lvr(false);
 	}
 	choiceContainer.find("label").each(function(){
-		this.style.color = "black";
+		this.style.color = check === true ? "black" : "#818181";
 	});
 }
 
-function reOrderList(){
-	//parcours des li dans le menu
-	var ul = document.getElementById("submenu").getElementsByTagName("li"); ;
-	var i=0;
-	var a;
-	for( i=0; i<ul.length; i++){
-		a = ul[0].firstElementChild;
-	}
-	var t = document.getElementById("graphContainer").getElementsByClassName("portlet"); ;
-	for( i=0; i<t.length; i++){
-		a=ul[i].firstElementChild;
-		ul[i].firstElementChild.innerHTML = reOrderAux(t[i].getAttribute("id"), a);
-		var str = document.location.href;
-		str = str.substring(str.lastIndexOf( "/" )+1 );
-		if (str.substring(0, str.lastIndexOf("#"))!= ""){
-			str = str.substring(0, str.lastIndexOf("#"));
-		}
-		var s = str+ "#"+t[i].getAttribute("id");
-		a.setAttribute("href", s);
-	}
+//uncheck all box
+function uncheckAll(id){
+	checkUncheckAll(id, false);
 }
 
-function reOrderAux(s, a){
-	var st="",str1;
-	var t=0;
-	for (var i=0; i<s.length; i++) {
-		if(s.charAt(i) == s.charAt(i).toUpperCase()){
-			var str1 = s.substring(t, i);
-			t=i;
-			st+=str1+" ";
-		}
-	}
-	var str1 = s.substring(t);
-	st+=str1+" ";
-	return st;
+//check all box
+function checkAll(id){
+	checkUncheckAll(id, true);
 }
 
 //prepare datas
