@@ -406,22 +406,45 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	    StatisticsResult result, int index) {
 	JsonObjectBuilder seriesBuilder = Json.createObjectBuilder();
 	seriesBuilder
-	        .add("Label", sample)
-	        .add("#Samples", Long.toString(result.getTotalCount()))
-	        .add("KO", Long.toString(result.getErrorCount()))
-	        .add("Error%",
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_label"),
+	                sample)
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_count"),
+	                Long.toString(result.getTotalCount()))
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_error_count"),
+	                Long.toString(result.getErrorCount()))
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_error_percent"),
 	                String.format("%.2f%%", result.getErrorPercentage()))
-	        .add(String.format("%d%% Line", percentileIndex1),
+	        .add(String.format(
+	                JMeterUtils
+	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
+	                percentileIndex1),
 	                String.format("%.2f", result.getPercentile1()))
-	        .add(String.format("%d%% Line", percentileIndex2),
+	        .add(String.format(
+	                JMeterUtils
+	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
+	                percentileIndex2),
 	                String.format("%.2f", result.getPercentile2()))
-	        .add(String.format("%d%% Line", percentileIndex3),
+	        .add(String.format(
+	                JMeterUtils
+	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
+	                percentileIndex3),
 	                String.format("%.2f", result.getPercentile3()))
-	        .add("Throughput",
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_throughput"),
 	                String.format("%.2f", result.getThroughput()))
-	        .add("KB/sec", String.format("%.2f", result.getByteRate()))
-	        .add("Min", Long.toString(result.getMin()))
-	        .add("Max", Long.toString(result.getMax()));
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_kbytes"),
+	                String.format("%.2f", result.getByteRate()))
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_min"),
+	                Long.toString(result.getMin()))
+	        .add(JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_max"),
+	                Long.toString(result.getMax()));
 	builder.add(Integer.toString(index), seriesBuilder);
     }
 

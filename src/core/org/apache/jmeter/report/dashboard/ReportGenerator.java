@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,6 +90,7 @@ public class ReportGenerator {
     public static final String DATA_CTX_TESTFILE = "testFile";
     public static final String DATA_CTX_BEGINDATE = "beginDate";
     public static final String DATA_CTX_ENDDATE = "endDate";
+    public static final String DATA_CTX_TIMEZONE = "timezone";
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not a valid graph class.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
@@ -391,6 +393,7 @@ public class ReportGenerator {
 
 	// Create data context and populate it
 	DataContext dataContext = new DataContext();
+	dataContext.put(DATA_CTX_TIMEZONE, TimeZone.getDefault().getID());
 	dataContext.put(DATA_CTX_TESTFILE, testFile.getName());
 	dataContext.put(DATA_CTX_BEGINDATE, TimeHelper
 	        .formatTimeStamp((long) beginDateConsumer.getResult()));

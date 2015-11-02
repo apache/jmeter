@@ -27,6 +27,7 @@ import javax.json.JsonObjectBuilder;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.core.Sample;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * <p>
@@ -198,12 +199,17 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	    JsonObjectBuilder seriesBuilder = Json.createObjectBuilder();
 	    ErrorsResult result = entry.getValue();
 	    seriesBuilder
-		    .add("Type of error", entry.getKey())
-		    .add("Number of errors",
+		    .add(JMeterUtils
+		            .getResString("reportgenerator_summary_errors_type"),
+		            entry.getKey())
+		    .add(JMeterUtils
+		            .getResString("reportgenerator_summary_errors_count"),
 		            Long.toString(result.getErrorCount()))
-		    .add("% in errors",
+		    .add(JMeterUtils
+		            .getResString("reportgenerator_summary_errors_rate_error"),
 		            String.format("%.2f%%", result.getErrorPercent()))
-		    .add("% in all samples",
+		    .add(JMeterUtils
+		            .getResString("reportgenerator_summary_errors_rate_all"),
 		            String.format("%.2f%%", result.getSamplePercent()));
 	    builder.add(Integer.toString(++index), seriesBuilder);
 	}
