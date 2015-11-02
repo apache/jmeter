@@ -1354,9 +1354,14 @@ $(function() {
 	$("#slider-vertical").children("div").css("opacity","0.3");
 });
 
+
+function sortAlphaCaseless(a,b){
+    return a.toLowerCase() > b.toLowerCase() ? 1 : -1;
+};
+ 
 function createLegend(data, choiceContainer) {
-	var keys = Object.keys(data);
-	keys.sort();
+    var keys = Object.keys(data);
+    keys.sort(sortAlphaCaseless);
 	$.each(keys, function(index, key) {
 		var l = data[key].label;
 		var li = $('<li />').appendTo(choiceContainer);

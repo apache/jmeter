@@ -281,7 +281,7 @@
 					anchor="report_only">
 					<p>
 						Use the following command :
-						<code>jmeter -g &lt;log file&gt;</code>
+						<code>jmeter -n -g &lt;log file&gt;</code>
 					</p>
 				</subsection>
 
@@ -289,7 +289,7 @@
 					anchor="report_after_load_test">
 					<p>
 						Use the following command :
-						<code>jmeter -el &lt;test log file&gt;</code>
+						<code>jmeter -n -e -l &lt;test log file&gt;</code>
 					</p>
 				</subsection>
 			</subsection>

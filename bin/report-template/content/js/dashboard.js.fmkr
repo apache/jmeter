@@ -62,46 +62,33 @@ $(function(){
 });
 
 
+/**
+ * Create a table with thead and tbody
+ * @param data Table data
+ * @param id Table id
+ */
 function createTable(data, id) {
-	var d = data;
-		var nbl =0;
-		var tableRef = document.getElementById(id);
-		for(var i in d){
-			var nouvelleLigne   = tableRef.insertRow(nbl);
-			
-			$(tableRef.rows[0]).css("font-weight", "bold");
-			$(tableRef.rows[0]).css("font-size", "16px");
-			$(tableRef.rows[0]).css("font-family", "Arial");
-			
-			var c = 0;
-			for(var j in d[i]){
-				var firstRow = tableRef.rows[0];
-				var cell = firstRow.insertCell(c);
-				cell.innerHTML = j;
-				c++;
-				//alert(d[i][j]);
-			}
-			nbl++;
-			break;
-		}	
-		var b = true;
-		for(var i in d){
-			var nouvelleLigne   = tableRef.insertRow(nbl);
-			var c = 0;
-			for(var j in d[i]){
-				var firstRow = tableRef.rows[nbl];
-				
-				var cell = firstRow.insertCell(c);
-				cell.innerHTML = d[i][j];
-				c++;
-			}
-			
-			if (b){
-				$(tableRef.rows[nbl]).addClass("blue");
-				b=false;
-			} else {
-				b=true;
-			}
-			nbl++;
+	var numberOfRows =0;
+	var tableRef = document.getElementById(id);
+	var header = tableRef.createTHead();
+	for(var i in data){
+		var newRow = header.insertRow(numberOfRows++);
+		var column = 0;
+		for(var j in data[i]){
+			var cell = newRow.insertCell(column++);
+			cell.innerHTML = j;
 		}
+		break;
+	}	
+	var tBody = tableRef.createTBody();
+	tableRef.appendChild(tBody);
+	numberOfRows = 0;
+	for(var i in data){
+		var newRow = tBody.insertRow(numberOfRows++);
+		var column = 0;
+		for(var j in data[i]){
+			var cell = newRow.insertCell(column++);
+			cell.innerHTML = data[i][j];
+		}	
+	}		
 }

@@ -21,7 +21,10 @@
     <link href="sbadmin2-1.0.7/dist/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Dashboard css -->
-	 <link href="content/css/dashboard.css" rel="stylesheet">
+	<link href="content/css/dashboard.css" rel="stylesheet">
+	
+	<!-- Table sorter -->
+	<link href="content/css/theme.blue.css" rel="stylesheet">
 	
 	<!-- icone onglet -->
 	<link rel="icon" type="image/png" href="content/pages/icon-apache.png" />
@@ -105,7 +108,7 @@
                         <div class="panel-body">
 						
 							<section id="apdex" class="col-md-12 table-responsive">
-								<table id="Apdex" class="table table-bordered table-condensed ">
+								<table id="Apdex" class="table table-bordered table-condensed tablesorter ">
 								   
 								</table>
 								</section>
@@ -140,7 +143,7 @@
 						
 							<div class="panel-body ">
 							<section class="col-md-12 table-responsive">
-								<table id="Statistics" class="table table-bordered table-condensed ">
+								<table id="Statistics" class="table table-bordered table-condensed tablesorter ">
 								  
 								</table>
 								</section>
@@ -243,7 +246,7 @@
 							<!-- /.panel-heading -->
 							<div class="panel-body">
 								<section class="col-md-12 table-responsive">
-								<table id="Errors" class="table table-bordered table-condensed"	>
+								<table id="Errors" class="table table-bordered table-condensed tablesorter ">
 								  
 								</table>
 								</section>
@@ -280,6 +283,18 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="sbadmin2-1.0.7/dist/js/sb-admin-2.js"></script>
+	<script type="text/javascript" src="content/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+                $.extend( $.tablesorter.defaults, {
+                    theme: 'blue',
+                    widthFixed: true
+                });
+                $("#Apdex").tablesorter({widgets:['zebra']});
+                $("#Statistics").tablesorter({widgets:['zebra']});
+                $("#Errors").tablesorter({widgets:['zebra']});
+    });
+    </script>
 
 </body>
 

@@ -78,9 +78,9 @@ public class ReportGeneratorConfiguration {
 
     private static final String LOAD_GRAPH_FMT = "Load configuration for graph \"%s\"";
     private static final String INVALID_KEY_FMT = "Invalid property \"%s\", skip it.";
-    private static final String INVALID_PROPERTY_VALUE_FMT = "Invalid value \"%s\" for property \"%s\", use default value \"%s\" instead.";
+    private static final String INVALID_PROPERTY_VALUE_FMT = "Invalid value \"%s\" for property \"%s\", using default value \"%s\" instead.";
     private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
-    private static final String NOT_FOUND_PROPERTY_FMT = "Property \"%s\" not found, use default value \"%s\" instead.";
+    private static final String NOT_FOUND_PROPERTY_FMT = "Property \"%s\" not found, using default value \"%s\" instead.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Convert string to \"%s\" is not supported";
 
     // Optional graph properties
