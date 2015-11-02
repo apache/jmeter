@@ -1,3 +1,4 @@
+
 # Directory trees to ignore
 backups/
 build/
@@ -7,6 +8,8 @@ printable_docs/
 reports/
 site/
 target/
+
+!bin/report-template/**/dist
 
 # specific files to ignore
 *.log
@@ -32,3 +35,4 @@ jmeter-fb.*
 
 # ignore default report output directory
 /bin/report-output
+/output/
