@@ -1248,6 +1248,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <include name="${dest.jar.jmeter}/report-template/**/*.*"/>
     <include name="${dest.jar.jmeter}/templates/*.jmx"/>
     <include name="${dest.jar.jmeter}/templates/*.xml"/>
     <include name="${dest.jar.jmeter}/examples/*.jmx"/>

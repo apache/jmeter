@@ -1131,54 +1131,6 @@ $(function() {
 	});
 });
 
-//cookies
-$(function() {
-	//createCookie('ppkcookie','testcookie',7)
-	var currentPage="";
-    var v = $("#graphContainer").sortable({
-      revert: false,
-	  axis: 'y',
-	  forcePlaceholderSize : true,
-	  placeholder : 'col-lg-12 portlet ui-state-highlight',
-	  update: function (e, ui) {
-		var order = foo.sortable("toArray").join();
-		var currentLocation =  document.location.href;
-		currentLocation = currentLocation.substring(currentLocation.lastIndexOf( "/" )+1 );
-		if (currentLocation.lastIndexOf( "#" ) != -1) {
-			currentLocation = currentLocation.substring(0 , currentLocation.lastIndexOf( "#" ) );
-		}
-		currentPage = currentLocation;
-		if (typeof(Storage) != "undefined") {
-			// Store
-			localStorage.setItem(currentPage+"", order);
-		}
-		reOrderList();
-	  },
-	  handle: ".glyphicon"
-    });
-	var foo = $("#graphContainer");
-	//order = $.cookie("sortableOrder");
-	//order = readCookie("sortableOrder");
-	var order = null;
-	var currentLocation =  document.location.href;
-		currentLocation = currentLocation.substring(currentLocation.lastIndexOf( "/" )+1);
-		if (currentLocation.lastIndexOf( "#" ) != -1) {
-			currentLocation = currentLocation.substring(0 , currentLocation.lastIndexOf( "#" ));
-		}
-		currentPage = currentLocation;
-	if (typeof(Storage) != "undefined") {
-		order = localStorage.getItem(currentPage+"");
-	}
-	if (order) {
-		$(order.split(',')).each(function (i, id) {
-			//appending the element with the ID given id should move each element to the end of the
-			// list one after another, and at the end, the order should be restored.
-			$("#" + id).appendTo(foo);
-		});
-	}
-    $( ".portlet" ).disableSelection();
-	reOrderList();
-});
 
 //uncheck all box
 function uncheckAll(id){
