@@ -56,7 +56,7 @@
 				<p>
 					The chain begins with a normalizer consumer in charge of
 					standardizing
-					the time stamp of each sample. Then two consumers have to define
+					the timestamp of each sample. Then two consumers have to define
 					the start time and end time of the load tests.
 					At the same level a
 					filter consumer keeps or discards samples depending on the
@@ -75,10 +75,9 @@
 			<subsection name="3 Limitations and Outlooks" anchor="outlooks">
 				<ul>
 					<li>
-						<p>Till now, there is only one samples source implementation which
+						<p>Till now, there is only one sample source implementation which
 							is strongly coupled with the CSV file format, we should allow
-							other
-							kinds of source by using a sample source interface.</p>
+							other kinds of source by using a sample source interface.</p>
 					</li>
 
 					<li>
@@ -105,7 +104,7 @@
 							org.apache.jmeter.report.dashboard.ReporGenerator.generate method
 							and the implementation of the consumers. So the code in charge of
 							the building is splitted and furthermore some consumers can be
-							redundants and harm the performance.
+							redundants and harm the performance of report generation, not load testing.
 						</p>
 						<p>
 							E.g: Each LatencyVSRequestGraphConsumer and
@@ -120,7 +119,7 @@
 							chain
 							requirements to instantiate needed consumers on demand. I.e,
 							for
-							thesame chain requirement declaration, the same consumer
+							the same chain requirement declaration, the same consumer
 							instances
 							are used. Otherwise if the declaration differs a new
 							branch of

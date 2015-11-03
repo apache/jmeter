@@ -1,6 +1,5 @@
 $(document).ready(function() {
-		
-	var offset = 0;
+    
 	$(".click-title").mouseenter( function(	e){
 		e.preventDefault();
 		this.style.cursor="pointer";
@@ -9,19 +8,16 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 	
-	try {
-	   bbq();
-	} catch (e) {
-	}
-	try {
-	   btot();
-	} catch (e) {
-	}
-	try {
-	   rtp();
-	} catch (e) {
-	}
-    $(".portlet-header").css("cursor", "auto");
+	try{
+		bbq();
+	} catch(e){}
+	try{
+		btot();
+	} catch(e){}
+	try{
+		rtp();
+	} catch(e){}
+	$(".portlet-header").css("cursor", "auto");
 });
 
 var b1 = false;
@@ -1172,7 +1168,6 @@ $(function() {
 	});
 });
 
-
 function toggleAll(id, checked){
 	var placeholder = document.getElementById(id);
 	
@@ -1222,8 +1217,9 @@ function toggleAll(id, checked){
 		choiceContainer = $("#choicesLatencyVsRequest");
 		lvr(false);
 	}
+	var color = checked ? "black" : "#818181";
 	choiceContainer.find("label").each(function(){
-		this.style.color = checked ? "black" : "#818181";
+		this.style.color = color;
 	});
 }
 
