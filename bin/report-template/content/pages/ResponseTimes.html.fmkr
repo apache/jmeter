@@ -84,20 +84,28 @@
 									
 									<ul class="nav nav-third-level in" id="submenu">
 										<li>
-											<a href="ResponseTimes.html#responseTimePercentiles">${responseTimePercentiles.title}</i></a>
+											<a href="ResponseTimes.html#responseTimePercentiles" onclick="$('#bodyResponseTimePercentiles').collapse('show');">
+												${responseTimePercentiles.title}
+											</a>
 										</li>
 										
 										<li>
-											<a href="ResponseTimes.html#activeThreadsOverTime">${activeThreadsOverTime.title}</a>
+											<a href="ResponseTimes.html#activeThreadsOverTime" onclick="$('#bodyActiveThreadsOverTime').collapse('show');">
+												${activeThreadsOverTime.title}
+											</a>
 										</li>
 										<li>
-											<a href="ResponseTimes.html#timeVsThreads">${timeVsThreads.title}</a>
+											<a href="ResponseTimes.html#timeVsThreads" onclick="$('#bodyTimeVsThreads').collapse('show');">${timeVsThreads.title}</a>
 										</li>
 										<li>
-											<a href="ResponseTimes.html#responseTimeDistribution">${responseTimeDistribution.title}</a>
+											<a href="ResponseTimes.html#responseTimeDistribution" onclick="$('#bodyResponseTimeDistribution').collapse('show');">
+												${responseTimeDistribution.title}
+											</a>
 										</li>
 										<li>
-											<a href="ResponseTimes.html#responseTimePerSample">${responseTimePerSample.title}</a>
+											<a href="ResponseTimes.html#responseTimePerSample" onclick="$('#bodyResponseTimePerSample').collapse('show');">
+												${responseTimePerSample.title}
+											</a>
 										</li>
 									</ul>
           
@@ -126,7 +134,7 @@
             	<div class="col-lg-12 portlet" id="responseTimePercentiles">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyPercentiles" aria-expanded="true" aria-controls="bodyPercentiles">${responseTimePercentiles.title}</span>
+                            <i class="fa fa-bar-chart-o fa-fw"></i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimePercentiles" aria-expanded="true" aria-controls="bodyResponseTimePercentiles">${responseTimePercentiles.title}</span>
 							<div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -141,14 +149,14 @@
 										<li><a href="#responseTimePercentiles" onClick="uncheckAll('choicesResponseTimePercentiles');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyPercentiles" aria-expanded="true" aria-controls="bodyPercentiles">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimePercentiles" aria-expanded="true" aria-controls="bodyResponseTimePercentiles">
 										<i class="fa fa-chevron-up"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse in portlet-content" id="bodyPercentiles">
+						<div class="collapse in portlet-content" id="bodyResponseTimePercentiles">
 							<div class="panel-body" id="collapseResponseTimePercentiles">
 								
 							
@@ -159,10 +167,6 @@
 									</div>
 									
 								</div>
-								<!--<div class="col-lg-1 col-md-1 col-sm-1 hidden-xs">
-										<div id="slider-vertical" style="height:342px;margin-top:9px;margin-right:auto;margin-left:auto;"></div>
-										<input type="text" id="amount" disabled style="width:100%;text-align:center;margin-top:20px">
-								</div>-->
 								<div class="col-lg-1 col-md-1 col-sm-1 hidden-xs"><div id="slider-vertical" style="height:342px;margin-top:9px;margin-right:auto;margin-left:auto;"></div><input type="text" id="amount" disabled style="width:100%;text-align:center;margin-top:20px"></div>
 								
 							</div>
@@ -180,7 +184,7 @@
 				<div class="col-lg-12 portlet" id="activeThreadsOverTime">
                     <div class="panel panel-default" >
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyTSOT" aria-expanded="true" aria-controls="bodyTSOT">${activeThreadsOverTime.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">${activeThreadsOverTime.title}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -195,14 +199,14 @@
 										<li><a href="#activeThreadsOverTime" onClick="uncheckAll('choicesActiveThreadsOverTime');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTSOT" aria-expanded="true" aria-controls="bodyTSOT">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodyTSOT">
+						<div class="collapse out portlet-content" id="bodyActiveThreadsOverTime">
 							<div class="panel-body" id="collapseActiveThreadsOverTime">
 								<div class="flot-chart">
 									<div class="flot-chart-content" id="flotActiveThreadsOverTime" style="float: left; width:80%;"></div>
@@ -226,7 +230,7 @@
 				<div class="col-lg-12 portlet" id="timeVsThreads">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyTVT" aria-expanded="true" aria-controls="bodyTVT">${timeVsThreads.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyTimeVsThreads" aria-expanded="true" aria-controls="bodyTimeVsThreads">${timeVsThreads.title}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -241,14 +245,14 @@
 										<li><a href="#timeVsThreads" onClick="uncheckAll('choicesTimeVsThreads');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTVT" aria-expanded="true" aria-controls="bodyTVT">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTimeVsThreads" aria-expanded="true" aria-controls="bodyTimeVsThreads">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodyTVT">
+						<div class="collapse out portlet-content" id="bodyTimeVsThreads">
 							<div class="panel-body" id="collapseTimeVsThreads">
 							
 								<div class="flot-chart">
@@ -269,7 +273,7 @@
 				<div class="col-lg-12 portlet" id="responseTimeDistribution">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyRTD" aria-expanded="true" aria-controls="bodyRTD">${responseTimeDistribution.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyResponseTimeDistribution" aria-expanded="true" aria-controls="bodyResponseTimeDistribution">${responseTimeDistribution.title}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -284,14 +288,14 @@
 										<li><a href="#responseTimeDistribution" onClick="uncheckAll('choicesResponseTimeDistribution');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyRTD" aria-expanded="true" aria-controls="bodyRTD">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeDistribution" aria-expanded="true" aria-controls="bodyResponseTimeDistribution">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodyRTD">
+						<div class="collapse out portlet-content" id="bodyResponseTimeDistribution">
 							<div class="panel-body" id="collapseResponseTimeDistribution">
 								
 								<div class="flot-chart">
@@ -312,7 +316,7 @@
 				<div class="col-lg-12 portlet" id="responseTimePerSample">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyRTPS" aria-expanded="true" aria-controls="bodyRTPS">${responseTimePerSample.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimePerSample" aria-expanded="true" aria-controls="bodyResponseTimePerSample">${responseTimePerSample.title}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -327,14 +331,14 @@
 										<li><a href="#responseTimePerSample" onClick="uncheckAll('choicesResponseTimePerSample');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyRTPS" aria-expanded="true" aria-controls="bodyRTPS">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimePerSample" aria-expanded="true" aria-controls="bodyResponseTimePerSample">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodyRTPS">
+						<div class="collapse out portlet-content" id="bodyResponseTimePerSample">
 							<div class="panel-body" id="collapseResponseTimePerSample">
 								
 								<div class="flot-chart">

@@ -79,20 +79,20 @@
                                     <a href="Throughput.html">Throughput<span class="fa arrow"></span></a>
 									<ul class="nav nav-third-level in" id="submenu">
 										<li>
-											<a href="Throughput.html#hitsPerSecond">${hitsPerSecond.title}</a>
+											<a href="Throughput.html#hitsPerSecond" onclick="$('#bodyHitsPerSecond').collapse('show');">${hitsPerSecond.title}</a>
 										</li>
 										
 										<li>
-											<a href="Throughput.html#codesPerSecond">${codesPerSecond.title}</a>
+											<a href="Throughput.html#codesPerSecond" onclick="$('#bodyCodesPerSecond').collapse('show');">${codesPerSecond.title}</a>
 										</li>
 										<li>
-											<a href="Throughput.html#transactionsPerSecond">${transactionsPerSecond.title}</a>
+											<a href="Throughput.html#transactionsPerSecond" onclick="$('#bodyTransactionsPerSecond').collapse('show');">${transactionsPerSecond.title}</a>
 										</li>
 										<li>
-											<a href="Throughput.html#responseTimeVsRequest">${responseTimeVsRequest.title}</a>
+											<a href="Throughput.html#responseTimeVsRequest" onclick="$('#bodyResponseTimeVsRequest').collapse('show');">${responseTimeVsRequest.title}</a>
 										</li>
 										<li>
-											<a href="Throughput.html#latencyVsRequest">${latencyVsRequest.title}</a>
+											<a href="Throughput.html#latencyVsRequest" onclick="$('#bodyLatenciesVsRequest').collapse('show');">${latencyVsRequest.title}</a>
 										</li>
 									</ul>
                                 </li>
@@ -215,7 +215,7 @@
 				<div class="col-lg-12 portlet" id="transactionsPerSecond">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                          <i class="fa fa-bar-chart-o fa-fw"> </i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyTransactionspersecond" aria-expanded="true" aria-controls="bodyTransactionspersecond">${transactionsPerSecond.title}</span>
+                          <i class="fa fa-bar-chart-o fa-fw"> </i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyTransactionsPerSecond" aria-expanded="true" aria-controls="bodyTransactionsPerSecond">${transactionsPerSecond.title}</span>
 						  <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -230,14 +230,14 @@
 										<li><a href="#transactionsPerSecond" onClick="uncheckAll('choicesTransactionsPerSecond');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTransactionspersecond" aria-expanded="true" aria-controls="bodyTransactionspersecond">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTransactionsPerSecond" aria-expanded="true" aria-controls="bodyTransactionsPerSecond">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodyTransactionspersecond">
+						<div class="collapse out portlet-content" id="bodyTransactionsPerSecond">
 							<div class="panel-body" id="collapseTransactionsPerSecond">
 								<div class="flot-chart">
 									<div class="flot-chart-content" id="flotTransactionsPerSecond" style="float: left; width:80%;"></div>
@@ -304,7 +304,7 @@
                <div class="col-lg-12 portlet" id="latencyVsRequest">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                          <i class="fa fa-bar-chart-o fa-fw"> </i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodylatency" aria-expanded="true" aria-controls="bodylatency">${latencyVsRequest.title}</span>
+                          <i class="fa fa-bar-chart-o fa-fw"> </i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLatenciesVsRequest" aria-expanded="true" aria-controls="bodyLatenciesVsRequest">${latencyVsRequest.title}</span>
 						  <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -319,14 +319,14 @@
 										<li><a href="#latencyVsRequest" onClick="uncheckAll('choicesLatencyVsRequest');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodylatency" aria-expanded="true" aria-controls="bodylatency">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLatenciesVsRequest" aria-expanded="true" aria-controls="bodyLatenciesVsRequest">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodylatency">
+						<div class="collapse out portlet-content" id="bodyLatenciesVsRequest">
 							<div class="panel-body" id="collapseLatencyVsRequest">
 								
 								<div class="flot-chart">

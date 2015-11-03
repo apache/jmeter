@@ -76,14 +76,20 @@
                                     <a href="OverTime.html">Over Time<span class="fa arrow"></span></a>
 									<ul class="nav nav-third-level in" id="submenu">
 										<li>
-											<a href="OverTime.html#bytesThroughputOverTime">${bytesThroughputOverTime.title}</a>
+											<a href="OverTime.html#bytesThroughputOverTime" onclick="$('#bodyBytesThroughputOverTime').collapse('show');">
+												${bytesThroughputOverTime.title}
+											</a>
 										</li>
 										
 										<li>
-											<a href="OverTime.html#responseTimesOverTime">${responseTimesOverTime.title}</a>
+											<a href="OverTime.html#responseTimesOverTime" onclick="$('#bodyResponseTimeOverTime').collapse('show');">
+												${responseTimesOverTime.title}
+											</a>
 										</li>
 										<li>
-											<a href="OverTime.html#latenciesOverTime">${latenciesOverTime.title}</a>
+											<a href="OverTime.html#latenciesOverTime" onclick="$('#bodyLantenciesOverTime').collapse('show');">
+												${latenciesOverTime.title}
+											</a>
 										</li>
 										
 									</ul>
@@ -142,7 +148,7 @@
                 <div class="col-lg-12 portlet" id="bytesThroughputOverTime">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                             <i  class="fa fa-bar-chart-o fa-fw" ></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="bodyBytes" aria-expanded="true" aria-controls="bodyBytes">${bytesThroughputOverTime.title}</span>
+                             <i  class="fa fa-bar-chart-o fa-fw" ></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">${bytesThroughputOverTime.title}</span>
 							 <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -157,7 +163,7 @@
 										<li><a href="#bytesThroughputOverTime" onClick="uncheckAll('choicesBytesThroughputOverTime');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyBytes" aria-expanded="true" aria-controls="bodyBytes">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">
 										<i class="fa fa-chevron-up"></i>
 									</button>
 									<!--<button type="button" class="btn btn-link btn-xs" data-toggle="modal" data-target="#myModal">
@@ -167,7 +173,7 @@
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse in portlet-content" id="bodyBytes">
+						<div class="collapse in portlet-content" id="bodyBytesThroughputOverTime">
 							<div class="panel-body " id="collapseBytes">
 								<div class="flot-chart">
 									<div class="flot-chart-content" id="flotBytesThroughputOverTime" style="float: left; width:80%;"></div>
@@ -189,7 +195,8 @@
                 <div class="col-lg-12 portlet" id="responseTimesOverTime">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-							<i class="fa fa-bar-chart-o fa-fw"></i> <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimeOver" aria-expanded="true" aria-controls="bodyResponseTimeOver">${responseTimesOverTime.title}</span>
+							<i class="fa fa-bar-chart-o fa-fw"></i> 
+							<span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">${responseTimesOverTime.title}</span>
                            <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -199,19 +206,19 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#bodyResponseTimeOver" onClick="checkAll('choicesResponseTimesOverTime');">Afficher tous les samples</a>
+										<li><a href="#bodyResponseTimeOverTime" onClick="checkAll('choicesResponseTimesOverTime');">Afficher tous les samples</a>
 										</li>
-										<li><a href="#bodyResponseTimeOver" onClick="uncheckAll('choicesResponseTimesOverTime');">Masquer tous les samples</a>
+										<li><a href="#bodyResponseTimeOverTime" onClick="uncheckAll('choicesResponseTimesOverTime');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeOver" aria-expanded="true" aria-controls="bodyResponseTimeOver">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodyResponseTimeOver">
+						<div class="collapse out portlet-content" id="bodyResponseTimeOverTime">
 							<div class="panel-body" id="collapseResponseTimesOverTime">
 								<div class="flot-chart">
 									<div class="flot-chart-content" id="flotResponseTimesOverTime" style="float: left; width:80%;"></div>
@@ -240,7 +247,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
-                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLantencies" aria-expanded="true" aria-controls="bodyLantencies">${latenciesOverTime.title}</span>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">${latenciesOverTime.title}</span>
 							<div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -255,14 +262,14 @@
 										<li><a href="#latenciesOverTime" onClick="uncheckAll('choicesLatenciesOverTime');">Masquer tous les samples</a>
 										</li>
 									</ul>
-									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLantencies" aria-expanded="true" aria-controls="bodyLantencies">
+									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">
 										<i class="fa fa-chevron-down"></i>
 									</button>
 								</div>
 							</div>
                         </div>
                         <!-- /.panel-heading -->
-						<div class="collapse out portlet-content" id="bodyLantencies">
+						<div class="collapse out portlet-content" id="bodyLantenciesOverTime">
 							<div class="panel-body" id="collapseLatencies">
 								<div class="flot-chart">
 									<div class="flot-chart-content" id="flotLatenciesOverTime" style="float: left; width:80%;"></div>

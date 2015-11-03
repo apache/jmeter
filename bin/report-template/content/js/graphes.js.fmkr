@@ -158,7 +158,7 @@ function rtp(bool, below) {
 		createLegend(data, choiceContainer);
 		choiceContainer.find("input").click(plotAccordingToChoices);
 		plotAccordingToChoices();
-		$('#bodyPercentiles .legendColorBox > div').each(function(i){
+		$('#bodyResponseTimePercentiles .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
 		}
@@ -1088,74 +1088,82 @@ function tps(bool) {
     }
 };
 
+// Collapse the graph matching the specified DOM element depending the collapsed status
+function collapse(elem, collapsed){
+	if(collapsed){
+		$(elem).parent().find(".fa-chevron-up").removeClass("fa-chevron-up").addClass("fa-chevron-down");
+	} else {
+		$(elem).parent().find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-up");
+		if (elem.id == "bodyResponseTimeOverTime") {
+			if ( b6 == false ) {
+				rtot();
+			}
+			b6 = true;
+			document.location.href="#responseTimesOverTime";
+		} else if (elem.id == "bodyLantenciesOverTime") {
+			if ( b5 == false ) {
+				lot();
+			}
+			b5 = true;
+			document.location.href="#latenciesOverTime";
+		} else if (elem.id == "bodyResponseTimeDistribution") {
+			if ( b1 == false ) {
+				rtd();
+			}
+			b1 = true;
+			document.location.href="#responseTimeDistribution" ;
+		} else if (elem.id == "bodyActiveThreadsOverTime") {
+			if ( b2 == false ) {
+				tsot();
+			}
+			b2 = true;
+			document.location.href="#activeThreadsOverTime";
+		} else if (elem.id == "bodyResponseTimePerSample") {
+			if ( b3 == false ) {
+				hb();
+			}
+			b3 = true;
+			document.location.href="#responseTimePerSample" ;
+		} else if (elem.id == "bodyTimeVsThreads") {
+			if ( b4 == false ) {
+				tvt();
+			}
+			b4 = true;
+			document.location.href="#timeVsThreads" ;
+		} else if (elem.id == "bodyCodesPerSecond") {
+			if ( b7 == false ) {
+				hcps();
+			}
+			b7 = true;
+			document.location.href="#codesPerSecond";
+		} else if (elem.id == "bodyTransactionsPerSecond") {
+			if ( b8 == false ) {
+				tps();
+			}
+			b8 = true;
+			document.location.href="#transactionsPerSecond";
+		} else if (elem.id == "bodyResponseTimeVsRequest") {
+			if ( b9 == false ) {
+				rtvr();
+			}
+			b9 = true;
+			document.location.href="#responseTimeVsRequest";
+		} else if (elem.id == "bodyLatenciesVsRequest") {
+			if ( b10 == false ) {
+				lvr();
+			}
+			b10 = true;
+			document.location.href="#latencyVsRequest";
+		}
+	}
+}
+
 //collapse
 $(function() {
 		$('.collapse').on('shown.bs.collapse', function(){
-			$(this).parent().find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-up");
-			if (this.id == "bodyResponseTimeOver") {
-				if ( b6 == false ) {
-					rtot();
-				}
-				b6 = true;
-				document.location.href="#responseTimesOverTime";
-			} else if (this.id == "bodyLantencies") {
-				if ( b5 == false ) {
-					lot();
-				}
-				b5 = true;
-				document.location.href="#latenciesOverTime";
-			} else if (this.id == "bodyRTD") {
-				if ( b1 == false ) {
-					rtd();
-				}
-				b1 = true;
-				document.location.href="#responseTimeDistribution" ;
-			} else if (this.id == "bodyTSOT") {
-				if ( b2 == false ) {
-					tsot();
-				}
-				b2 = true;
-				document.location.href="#activeThreadsOverTime";
-			} else if (this.id == "bodyRTPS") {
-				if ( b3 == false ) {
-					hb();
-				}
-				b3 = true;
-				document.location.href="#responseTimePerSample" ;
-			} else if (this.id == "bodyTVT") {
-				if ( b4 == false ) {
-					tvt();
-				}
-				b4 = true;
-				document.location.href="#timeVsThreads" ;
-			} else if (this.id == "bodyCodesPerSecond") {
-				if ( b7 == false ) {
-					hcps();
-				}
-				b7 = true;
-				document.location.href="#codesPerSecond";
-			} else if (this.id == "bodyTransactionspersecond") {
-				if ( b8 == false ) {
-					tps();
-				}
-				b8 = true;
-				document.location.href="#transactionsPerSecond";
-			} else if (this.id == "bodyResponseTimeVsRequest") {
-				if ( b9 == false ) {
-					rtvr();
-				}
-				b9 = true;
-				document.location.href="#responseTimeVsRequest";
-			} else if (this.id == "bodylatency") {
-				if ( b10 == false ) {
-					lvr();
-				}
-				b10 = true;
-				document.location.href="#latencyVsRequest";
-			}
+			collapse(this, false);
 		}).on('hidden.bs.collapse', function(){
-			$(this).parent().find(".fa-chevron-up").removeClass("fa-chevron-up").addClass("fa-chevron-down");
-			var d = $(this);
+			collapse(this, true);
 		});
 });
 
