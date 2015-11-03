@@ -1,5 +1,6 @@
-﻿$(document).ready(function() {
-    var offset = 0;
+$(document).ready(function() {
+		
+	var offset = 0;
 	$(".click-title").mouseenter( function(	e){
 		e.preventDefault();
 		this.style.cursor="pointer";
@@ -36,6 +37,73 @@ var b10 = false;
 var b11 = false;
 var chiffre = 0;
 
+var overviewOptions = {
+	series: {
+		lines: { show: true, lineWidth: 1 },
+		shadowSize: 0
+	},
+	xaxis: { 
+		mode: "time",
+		timeformat: "%H:%M:%S",
+	},
+	yaxis: {
+		min: 0,
+	},
+	grid: {
+		color: "#999"
+	},
+	selection: {
+		mode: "xy"
+	},
+	legend: {
+		show: false
+	}
+};
+
+// Fix time stamps
+function fixTimeStamps(data, offset){
+	$.each(data, function(key, val) {
+		$.each(val.data, function(index, coord) {
+			coord[0] += offset;
+		});
+	});
+}
+
+// Prepare DOM items to add zoom on the specified graph
+function setGraphZoomable(graphSelector, overviewSelector, options){
+	var graph = $(graphSelector);
+	var overview = $(overviewSelector);
+	 
+	// Ignore mouse down event
+	graph.bind("mousedown", function() { return false; });
+	overview.bind("mousedown", function() { return false; });
+	
+	// now connect the two
+	graph.bind("plotselected", function (event, ranges) {
+		var self = $(this);
+		
+		// clamp the zooming to prevent infinite zoom
+		if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
+			ranges.xaxis.to = ranges.xaxis.from + 0.00001;
+		}
+		if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) {
+			ranges.yaxis.to = ranges.yaxis.from + 0.00001;
+		}
+		
+		// Do the zooming
+		$.plot(self, self.data('plot').getData(), 
+			$.extend(true, {}, options, {
+				xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to },
+				yaxis: { min: ranges.yaxis.from, max: ranges.yaxis.to }
+			}));
+	});
+		
+	// don't fire event on the overview to prevent eternal loop
+	overview.bind("plotselected", function (event, ranges) {
+		$(graphSelector).data('plot').setSelection(ranges);
+	});
+}
+	
 //Response times percentiles
 function rtp(bool, below) {
 	var data = ${responseTimePercentiles.values};
@@ -170,8 +238,7 @@ function rtd(bool) {
 // Active Threads Over Time
 function tsot(bool) {
 	var data = ${activeThreadsOverTime.values};
-	var xaxisLabel = getElapsedTimeLabel(${activeThreadsOverTime.granularity?c});
-    var options = {
+	var options = {
         series: {
             lines: {
                 show: true
@@ -181,11 +248,11 @@ function tsot(bool) {
             }
         },
 		xaxis: {
-			min: ${activeThreadsOverTime.minX?c},
-			max: ${activeThreadsOverTime.maxX?c},
+			min: ${activeThreadsOverTime.minX?c} + ${timeZoneOffset?c},
+			max: ${activeThreadsOverTime.maxX?c} + ${timeZoneOffset?c},
             mode: "time",
 			timeformat: "%H:%M:%S",
-			axisLabel: xaxisLabel,
+			axisLabel: getElapsedTimeLabel(${activeThreadsOverTime.granularity?c}),
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
@@ -205,17 +272,12 @@ function tsot(bool) {
 			show: true,
 			container: '#legendActiveThreadsOverTime'
 		},
-		selection: { 
-			mode: "x"
-		},
 		grid: {
             hoverable: true //IMPORTANT! this is needed for tooltip to work
         },
         tooltip: true,
         tooltipOpts: {
-            content: "%s for %x was %y",
-            onHover: function(flotItem, $tooltipEl) {
-            }
+            content: "%s for %x was %y"
         }
     };
 
@@ -227,6 +289,9 @@ function tsot(bool) {
 		++i;
 	});
 	
+	fixTimeStamps(data, ${timeZoneOffset?c});
+	
+	var dataset = [];
 	var choiceContainer = $("#choicesActiveThreadsOverTime");
 	if( bool == false ) {
 		plotAccordingToChoices();
@@ -234,12 +299,17 @@ function tsot(bool) {
 		createLegend(data, choiceContainer);
 		choiceContainer.find("input").click(plotAccordingToChoices);
 		plotAccordingToChoices();
+		setGraphZoomable("#flotActiveThreadsOverTime", "#overviewActiveThreadsOverTime", options)
 		$('#footerTSOT .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
 	}
 	function plotAccordingToChoices() {
-		$.plot($("#flotActiveThreadsOverTime"), prepareData( data, choiceContainer), options);
+		dataset = prepareData( data, choiceContainer);
+		$.plot($("#flotActiveThreadsOverTime"), dataset, options);
+		
+		// setup overview
+		$.plot("#overviewActiveThreadsOverTime", dataset, overviewOptions);
 	}
 };
 
@@ -427,7 +497,6 @@ function tvt(bool){
 //Bytes throughput Over Time
 function btot(bool) {
 		var data = ${bytesThroughputOverTime.values};
-		var xaxisLabel = getElapsedTimeLabel(${bytesThroughputOverTime.granularity?c});
 		var options = {
 			series: {
 				lines: {
@@ -438,11 +507,11 @@ function btot(bool) {
 				}
 			},
 			xaxis: {
-				min: ${bytesThroughputOverTime.minX?c},
-				max: ${bytesThroughputOverTime.maxX?c},
+				min: ${bytesThroughputOverTime.minX?c} + ${timeZoneOffset?c},
+				max: ${bytesThroughputOverTime.maxX?c} + ${timeZoneOffset?c},
 				mode: "time",
 				timeformat: "%H:%M:%S",
-				axisLabel: xaxisLabel ,
+				axisLabel: getElapsedTimeLabel(${bytesThroughputOverTime.granularity?c}) ,
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
 				axisLabelFontFamily: 'Verdana, Arial',
@@ -463,16 +532,14 @@ function btot(bool) {
 				container: '#legendBytesThroughputOverTime'
 			},
 			selection: { 
-				mode: "x"
+				mode: "xy"
 			},
 			grid: {
 				hoverable: true //IMPORTANT! this is needed for tooltip to work
 			},
 			tooltip: true,
 			tooltipOpts: {
-				content: "%s for %x was %y",
-				onHover: function(flotItem, $tooltipEl) {
-				}
+				content: "%s for %x was %y"
 			}
 		};
 
@@ -484,6 +551,9 @@ function btot(bool) {
 			++i;
 		});
 		
+		fixTimeStamps(data, ${timeZoneOffset?c});
+		
+		var dataset = [];
 		var choiceContainer = $("#choicesBytesThroughputOverTime");
 		if( bool == false){
 			plotAccordingToChoices();
@@ -491,12 +561,17 @@ function btot(bool) {
 			createLegend(data, choiceContainer);
 			choiceContainer.find("input").click(plotAccordingToChoices);
 			plotAccordingToChoices();
+			setGraphZoomable("#flotBytesThroughputOverTime", "#overviewBytesThroughputOverTime", options)
 			$('#footerBytes .legendColorBox > div').each(function(i){
 				$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 			});
 		}
 		function plotAccordingToChoices() {
-			$.plot($("#flot-line-chart"), prepareData( data, choiceContainer), options);
+			dataset = prepareData( data, choiceContainer);
+			$.plot($("#flotBytesThroughputOverTime"), dataset, options);
+			
+			// setup overview
+			$.plot($("#overviewBytesThroughputOverTime"), dataset, overviewOptions);
 		}
 }
 
@@ -504,8 +579,7 @@ function btot(bool) {
 function rtot(bool) {
     		
 	var data = ${responseTimesOverTime.values};
-	var xaxisLabel = getElapsedTimeLabel(${responseTimesOverTime.granularity?c});
-    var options = {
+	var options = {
         series: {
             lines: {
                 show: true
@@ -515,11 +589,11 @@ function rtot(bool) {
             }
         },
 		xaxis: {
-			min: ${responseTimesOverTime.minX?c},
-			max: ${responseTimesOverTime.maxX?c},
+			min: ${responseTimesOverTime.minX?c} + ${timeZoneOffset?c},
+			max: ${responseTimesOverTime.maxX?c} + ${timeZoneOffset?c},
             mode: "time",
 			timeformat: "%H:%M:%S",
-			axisLabel: xaxisLabel,
+			axisLabel: getElapsedTimeLabel(${responseTimesOverTime.granularity?c}),
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
@@ -547,9 +621,7 @@ function rtot(bool) {
         },
         tooltip: true,
         tooltipOpts: {
-            content: "%s for %x was %y",
-            onHover: function(flotItem, $tooltipEl) {
-            }
+            content: "%s for %x was %y"
         }
     };
 
@@ -561,28 +633,33 @@ function rtot(bool) {
 		++i;
 	});
 
+	fixTimeStamps(data, ${timeZoneOffset?c});
+	
+	var dataset = [];
 	var choiceContainer = $("#choicesResponseTimesOverTime");
 	if( bool == false){
 		plotAccordingToChoices();
 	}else{
 		createLegend(data, choiceContainer);
 		choiceContainer.find("input").click(plotAccordingToChoices);
-
 		plotAccordingToChoices();
-		
+		setGraphZoomable("#flotResponseTimesOverTime", "#overviewResponseTimeOverTime", options);
 		$('#footerRTOT .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
 	}
 	function plotAccordingToChoices() {
-		$.plot($("#flot-Response-Time-Over-Time"), prepareData(data, choiceContainer), options);
+		dataset = prepareData(data, choiceContainer);
+		$.plot($("#flotResponseTimesOverTime"), dataset, options);
+		
+		// setup overview
+		$.plot($("#overviewResponseTimesOverTime"), dataset, overviewOptions);
 	}
 };
 
 //Latencies Over Time
 function lot(bool) {
 			var data = ${latenciesOverTime.values};
-			var xaxisLabel = getElapsedTimeLabel(${latenciesOverTime.granularity?c});
 			var options = {
 				series: {
 					lines: {
@@ -593,11 +670,11 @@ function lot(bool) {
 					}
 				},
 				xaxis: {
-					min: ${latenciesOverTime.minX?c},
-					max: ${latenciesOverTime.maxX?c},
+					min: ${latenciesOverTime.minX?c} + ${timeZoneOffset?c},
+					max: ${latenciesOverTime.maxX?c} + ${timeZoneOffset?c},
 					mode: "time",
 					timeformat: "%H:%M:%S",
-					axisLabel: xaxisLabel,
+					axisLabel: getElapsedTimeLabel(${latenciesOverTime.granularity?c}),
 					axisLabelUseCanvas: true,
 					axisLabelFontSizePixels: 12,
 					axisLabelFontFamily: 'Verdana, Arial',
@@ -625,9 +702,7 @@ function lot(bool) {
 				},
 				tooltip: true,
 				tooltipOpts: {
-					content: "%s for %x was %y",
-					onHover: function(flotItem, $tooltipEl) {
-					}
+					content: "%s for %x was %y"
 				}
 			};
 
@@ -639,21 +714,28 @@ function lot(bool) {
 				++i;
 			});
 			
-			// insert checkboxes 
+			fixTimeStamps(data, ${timeZoneOffset?c});
+			
+			// insert checkboxes
+			var dataset = [];
 			var choiceContainer = $("#choicesLatenciesOverTime");
 			if( bool == false ) {
 				plotAccordingToChoices();
 			}else {
 				createLegend(data, choiceContainer);
 				choiceContainer.find("input").click(plotAccordingToChoices);
-
 				plotAccordingToChoices();
+				setGraphZoomable("#flotLatenciesOverTime", "#overviewLatenciesOverTime", options);
 				$('#footerLatencies .legendColorBox > div').each(function(i){
 					$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 				});
 			}
 			function plotAccordingToChoices() {
-				$.plot($("#flot-latencies-over-time"), prepareData( data, choiceContainer), options);
+				dataset = prepareData( data, choiceContainer);
+				$.plot($("#flotLatenciesOverTime"), dataset, options);
+				
+				// setup overview
+				$.plot("#overviewLatenciesOverTime", dataset, overviewOptions);
 			}
 };
 
@@ -786,127 +868,78 @@ function lvr(bool) {
 
 //Hits per second
 function bbq(bool) {
-        $("#flot-hits-per-second").mousemove(function(e){
-			e.preventDefault();
-		});
-	
-		var data = ${hitsPerSecond.values};
-		var datasets = [];
-		var xaxisLabel = getElapsedTimeLabel(${hitsPerSecond.granularity?c});
-		
-        var options = {
-            series: {
-                lines: {
-                    show: true
-                },
-                points: {
-                    show: true
-                }
+	var data = ${hitsPerSecond.values};
+	var options = {
+    	series: {
+        	lines: {
+            	show: true
             },
-			xaxis: {
-				min: ${hitsPerSecond.minX?c},
-				max: ${hitsPerSecond.maxX?c},
-                mode: "time",
-				timeformat: "%H:%M:%S",
-				axisLabel: xaxisLabel,
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 20,
-            },
-			yaxis: {
-				min: ${hitsPerSecond.minY?c},
-				max: ${hitsPerSecond.maxY?c},
-				axisLabel: "Number of hits / sec",
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 20, }
-			,
-			legend: { noColumns: 2,show: true, container: '#legendHitsPerSecond' },
-			selection: { mode: "xy" },
-			grid: {
-                hoverable: true //IMPORTANT! this is needed for tooltip to work
-            },
-            tooltip: true,
-            tooltipOpts: {
-                content: "%s for %x was %y.2"
+            points: {
+            	show: true
             }
-        };
+		},
+		xaxis: {
+			min: ${hitsPerSecond.minX?c} + ${timeZoneOffset?c},
+			max: ${hitsPerSecond.maxX?c} + ${timeZoneOffset?c},
+        	mode: "time",
+        	timeformat: "%H:%M:%S",
+			axisLabel: getElapsedTimeLabel(${hitsPerSecond.granularity?c}),
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20,
+		},
+		yaxis: {
+			min: ${hitsPerSecond.minY?c},
+			max: ${hitsPerSecond.maxY?c},
+			axisLabel: "Number of hits / sec",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 20 
+		},
+		legend: {
+			noColumns: 2,
+			show: true, 
+			container: "#legendHitsPerSecond"},
+		grid: {
+        	hoverable: true //IMPORTANT! this is needed for tooltip to work
+		},
+        tooltip: true,
+        tooltipOpts: {
+			content: "%s for %x was %y.2"
+		}
+	};
         
-		var optionsMin = {
-			series: {
-				lines: { show: true, lineWidth: 1 },
-				shadowSize: 0
-			},
-			xaxis: { 
-				mode: "time",
-				timeformat: "%H:%M:%S",
-			},
-			yaxis: {
-				min: 0,
-			},
-			grid: {
-				color: "#999"
-			},
-			selection: {
-				mode: "xy"
-			}
-		};
+	fixTimeStamps(data, ${timeZoneOffset?c});
 		
-		$("#flot-hits-per-second").mousedown(function(e){
-			e.preventDefault();
+	var dataset = [];
+	var choiceContainer = $("#choicesHitsPerSecond");
+	if (bool ==false){
+		plotAccordingToChoices();
+	}else{
+		createLegend(data, choiceContainer);
+		choiceContainer.find("input").click(plotAccordingToChoices);
+		plotAccordingToChoices();
+		setGraphZoomable("#flotHitsPerSecond", "#overviewHitsPerSecond", options);
+		$('#footerHitsPerSecond .legendColorBox > div').each(function(i){
+			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
-		
-		var choiceContainer = $("#choicesHitsPerSecond");
-		if (bool ==false){
-			plotAccordingToChoices();
-		}else{
-			createLegend(data, choiceContainer);
-			choiceContainer.find("input").click(plotAccordingToChoices);
-			
-			plotAccordingToChoices();
-			$("#flot-hits-per-second").bind("mousedown", function() { return false; });
-			$("#overview").bind("mousedown", function() { return false; });
-				// now connect the two
-			$("#flot-hits-per-second").bind("plotselected", function (event, ranges) {
-				// clamp the zooming to prevent eternal zoom
-				if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
-					ranges.xaxis.to = ranges.xaxis.from + 0.00001;
-				}
-				if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) {
-					ranges.yaxis.to = ranges.yaxis.from + 0.00001;
-				}
-				// do the zooming
-				plot = $.plot($("#flot-hits-per-second"), datasets,
-							  $.extend(true, {}, options, {
-								  xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to },
-								  yaxis: { min: ranges.yaxis.from, max: ranges.yaxis.to }
-							  }));
-				
-				// don't fire event on the overview to prevent eternal loop
-				});
-				$("#overview").bind("plotselected", function (event, ranges) {
-					plot.setSelection(ranges);
-				});
-			$('#footerHitsPerSecond .legendColorBox > div').each(function(i){
-				$(this).clone().prependTo(choiceContainer.find("li").eq(i));
-			});
-		}
-		function plotAccordingToChoices() {
-			datasets = prepareData(data, choiceContainer);
-			plot = $.plot($("#flot-hits-per-second"), datasets, options);
-			// setup overview
-			var overview = $.plot($("#overview"), datasets, optionsMin );
-		}
+	}
+	function plotAccordingToChoices() {
+		dataset = prepareData(data, choiceContainer);
+		plot = $.plot($("#flotHitsPerSecond"), dataset, options);
+	
+		// setup overview
+		$.plot($("#overviewHitsPerSecond"), dataset, overviewOptions);
+	}
 }
 
 
 //Hits codes per second
 function hcps(bool) {
 	var data = ${codesPerSecond.values};
-	var xaxisLabel = getElapsedTimeLabel(${codesPerSecond.granularity?c});
-    var options = {
+	var options = {
         series: {
             lines: {
                 show: true
@@ -916,11 +949,11 @@ function hcps(bool) {
             }
         },
 		xaxis: {
-			min: ${codesPerSecond.minX?c},
-			max: ${codesPerSecond.maxX?c},
+			min: ${codesPerSecond.minX?c} + ${timeZoneOffset?c},
+			max: ${codesPerSecond.maxX?c} + ${timeZoneOffset?c},
             mode: "time",
 			timeformat: "%H:%M:%S",
-			axisLabel: xaxisLabel,
+			axisLabel: getElapsedTimeLabel(${codesPerSecond.granularity?c}),
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
@@ -937,17 +970,14 @@ function hcps(bool) {
 		},
 		legend: {
 			noColumns: 2,
-			show: true,
-			container: '#legendCodesPerSecond'
-		},			
+			show: true, 
+			container: "#legendCodesPerSecond"},			
 		grid: {
             hoverable: true //IMPORTANT! this is needed for tooltip to work
         },
         tooltip: true,
         tooltipOpts: {
-            content: "%s for %x was %y.2",
-            onHover: function(flotItem, $tooltipEl) {
-            }
+            content: "%s for %x was %y.2"
         }
     };
 
@@ -958,30 +988,36 @@ function hcps(bool) {
 		val.color = i;
 		++i;
 	});
-	 
+	
+	fixTimeStamps(data, ${timeZoneOffset?c});
+	
+	var dataset = [];
 	var choiceContainer = $("#choicesCodesPerSecond");
 	if( bool == false){
 		plotAccordingToChoices();
 	}else{
 		createLegend(data, choiceContainer);
 		choiceContainer.find("input").click(plotAccordingToChoices);
-	
 		plotAccordingToChoices();
+		setGraphZoomable("#flotCodesPerSecond", "#overviewCodesPerSecond", options);
 		$('#footerCodesPerSecond .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
 	}
 	function plotAccordingToChoices() {
-		$.plot($("#flotCodesPerSecond"), prepareData( data, choiceContainer), options);
+		dataset = prepareData( data, choiceContainer);
+		$.plot($("#flotCodesPerSecond"), dataset, options);
+		
+		// setup overview
+		$.plot($("#overviewCodesPerSecond"), dataset, overviewOptions);
 	}
 };
 
 
-//Transactions per second
+// Transactions per second
 function tps(bool) {
 	var data = ${transactionsPerSecond.values};
-	var xaxisLabel = getElapsedTimeLabel(${transactionsPerSecond.granularity?c});
-    var options = {
+	var options = {
         series: {
             lines: {
                 show: true
@@ -991,11 +1027,11 @@ function tps(bool) {
             }
         },
 		xaxis: {
-			min: ${transactionsPerSecond.minX?c},
-			max: ${transactionsPerSecond.maxX?c},
+			min: ${transactionsPerSecond.minX?c} + ${timeZoneOffset?c},
+			max: ${transactionsPerSecond.maxX?c} + ${timeZoneOffset?c},
             mode: "time",
 			timeformat: "%H:%M:%S",
-			axisLabel: xaxisLabel,
+			axisLabel: getElapsedTimeLabel(${transactionsPerSecond.granularity?c}),
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
@@ -1012,17 +1048,14 @@ function tps(bool) {
 		,
 		legend: {
 			noColumns: 2,
-			show: true,
-			container: '#legendTransactionsPerSecond'
-		},
+			show: true, 
+			container: "#legendTransactionsPerSecond"},
 		grid: {
             hoverable: true //IMPORTANT! this is needed for tooltip to work
         },
         tooltip: true,
         tooltipOpts: {
-            content: "%s for %x was %y",
-            onHover: function(flotItem, $tooltipEl) {
-            }
+            content: "%s for %x was %y"
         }
     };
 
@@ -1034,6 +1067,9 @@ function tps(bool) {
         ++i;
     });
     
+    fixTimeStamps(data, ${timeZoneOffset?c});
+    
+    var dataset = [];
     var choiceContainer = $("#choicesTransactionsPerSecond");
 	if( bool == false){
 		plotAccordingToChoices();
@@ -1041,13 +1077,18 @@ function tps(bool) {
     	createLegend(data, choiceContainer);
 		choiceContainer.find("input").click(plotAccordingToChoices);
 		plotAccordingToChoices();
+		setGraphZoomable("#flotTransactionsPerSecond", "#overviewTransactionsPerSecond", options);
 		$('#footerTransactions .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
 	}
     
     function plotAccordingToChoices() {
-    	$.plot($("#flot-transactions-per-second"), prepareData( data, choiceContainer), options);
+    	dataset = prepareData( data, choiceContainer);
+    	$.plot($("#flotTransactionsPerSecond"), dataset, options);
+    	
+    	// setup overview
+		$.plot($("#overviewTransactionsPerSecond"), dataset, overviewOptions);
     }
 };
 
@@ -1060,37 +1101,37 @@ $(function() {
 					rtot();
 				}
 				b6 = true;
-				document.location.href="#ResponseTimesOverTime";
+				document.location.href="#responseTimesOverTime";
 			} else if (this.id == "bodyLantencies") {
 				if ( b5 == false ) {
 					lot();
 				}
 				b5 = true;
-				document.location.href="#LatenciesOverTimes";
+				document.location.href="#latenciesOverTime";
 			} else if (this.id == "bodyRTD") {
 				if ( b1 == false ) {
 					rtd();
 				}
 				b1 = true;
-				document.location.href="#ResponseTimeDistribution" ;
+				document.location.href="#responseTimeDistribution" ;
 			} else if (this.id == "bodyTSOT") {
 				if ( b2 == false ) {
 					tsot();
 				}
 				b2 = true;
-				document.location.href="#ThreadsStateOverTime";
+				document.location.href="#activeThreadsOverTime";
 			} else if (this.id == "bodyRTPS") {
 				if ( b3 == false ) {
 					hb();
 				}
 				b3 = true;
-				document.location.href="#ResponseTimePerSample" ;
+				document.location.href="#responseTimePerSample" ;
 			} else if (this.id == "bodyTVT") {
 				if ( b4 == false ) {
 					tvt();
 				}
 				b4 = true;
-				document.location.href="#TimeVsThreads" ;
+				document.location.href="#timeVsThreads" ;
 			} else if (this.id == "bodyCodesPerSecond") {
 				if ( b7 == false ) {
 					hcps();
@@ -1102,19 +1143,19 @@ $(function() {
 					tps();
 				}
 				b8 = true;
-				document.location.href="#TransactionsPerSecond";
+				document.location.href="#transactionsPerSecond";
 			} else if (this.id == "bodyResponseTimeVsRequest") {
 				if ( b9 == false ) {
 					rtvr();
 				}
 				b9 = true;
-				document.location.href="#ResponseTimeVsRequest";
+				document.location.href="#responseTimeVsRequest";
 			} else if (this.id == "bodylatency") {
 				if ( b10 == false ) {
 					lvr();
 				}
 				b10 = true;
-				document.location.href="#LatencyVsRequest";
+				document.location.href="#latencyVsRequest";
 			}
 		}).on('hidden.bs.collapse', function(){
 			$(this).parent().find(".fa-chevron-up").removeClass("fa-chevron-up").addClass("fa-chevron-down");
@@ -1132,147 +1173,68 @@ $(function() {
 });
 
 
-//uncheck all box
-function uncheckAll(id){
+function toggleAll(id, checked){
 	var placeholder = document.getElementById(id);
 	
-	var cases = $(placeholder).find(':checkbox'); // on cherche les checkbox qui d�pendent de la liste 'cases'
+	var cases = $(placeholder).find(':checkbox');
   
-	cases.attr('checked', false);// on coche les cases
-	$(cases).parent().children().children().addClass("legend-disabled");
+	cases.attr('checked', checked);
+	$(cases).parent().children().children().toggleClass("legend-disabled", !checked);
+	
+	var choiceContainer;
 	if ( id == "choicesBytesThroughputOverTime"){
-		var choiceContainer = $("#choicesBytesThroughputOverTime");
+		choiceContainer = $("#choicesBytesThroughputOverTime");
 		btot(false);
 	} else if(id == "choicesResponseTimesOverTime"){
-		var choiceContainer = $("#choicesResponseTimesOverTime");
+		choiceContainer = $("#choicesResponseTimesOverTime");
 		rtot(false);
 	} else if ( id == "choicesLatenciesOverTime"){
-		var choiceContainer = $("#choicesLatenciesOverTime");
+		choiceContainer = $("#choicesLatenciesOverTime");
 		lot(false);
 	} else if ( id == "choicesResponseTimePercentiles"){
-		var choiceContainer = $("#choicesResponseTimePercentiles");
+		choiceContainer = $("#choicesResponseTimePercentiles");
 		rtp(false);
-	} else if(id == "choicesThreadsStateOverTime"){
-		var choiceContainer = $("#choicesThreadsStateOverTime");
+	} else if(id == "choicesActiveThreadsOverTime"){
+		choiceContainer = $("#choicesActiveThreadsOverTime");
 		tsot(false);
 	} else if ( id == "choicesTimeVsThreads"){
-		var choiceContainer = $("#choicesTimeVsThreads");
+		choiceContainer = $("#choicesTimeVsThreads");
 		tvt(false);
 	} else if ( id == "choicesResponseTimeDistribution"){
-		var choiceContainer = $("#choicesResponseTimeDistribution");
+		choiceContainer = $("#choicesResponseTimeDistribution");
 		rtd(false);
 	} else if ( id == "choicesResponseTimePerSample"){
-		var choiceContainer = $("#choicesResponseTimePerSample");
+		choiceContainer = $("#choicesResponseTimePerSample");
 		hb(false);
 	} else if ( id == "choicesHitsPerSecond"){
-		var choiceContainer = $("#choicesHitsPerSecond");
-		bbq(false);
-	} else if(id == "choiceseCodesPerSecond"){
-		var choiceContainer = $("#choicesCodesPerSecond");
-		hcps(false);
-	} else if ( id == "choicesTransactionsPerSecond"){
-		var choiceContainer = $("#choicesTransactionsPerSecond");
-		tps(false);
-	} else if ( id == "choicesResponseTimeVsRequest"){
-		var choiceContainer = $("#choicesResponseTimeVsRequest");
-		rtvr(false);
-	} else if ( id == "choicesLatencyVsRequest"){
-		var choiceContainer = $("#choicesLatencyVsRequest");
-		lvr(false);
-	}
-	choiceContainer.find("label").each(function(){
-		this.style.color = "#818181";
-	});
-}
-
-//check all box
-function checkAll(id){
-	var placeholder = document.getElementById(id);
-	placeholder.style.color = "black";
-	var cases2 = $(placeholder).find(':not(checked)'); // on cherche les checkbox qui dépendent de la liste 'cases'
-	console.log(cases2);
-	cases2.prop('checked', true);// on coche les cases
-	$(cases2).parent().children().children().removeClass("legend-disabled");
-	if (id == "choicesBytesThroughputOverTime"){
-		var choiceContainer = $("#choicesBytesThroughputOverTime");
-		btot(false);
-	} else if(id == "choicesResponseTimesOverTime"){
-		var choiceContainer = $("#choicesResponseTimesOverTime");
-		rtot(false);
-	} else if ( id == "choicesLatenciesOverTime"){
-		var choiceContainer = $("#choicesLatenciesOverTime");
-		lot(false);
-	} else if ( id == "choicesResponseTimePercentiles"){
-		var choiceContainer = $("#choicesResponseTimePercentiles");
-		rtp(false);
-	} else if(id == "choicesThreadsStateOverTime"){
-		var choiceContainer = $("#choicesThreadsStateOverTime");
-		tsot(false);
-	} else if ( id == "choicesTimeVsThreads"){
-		var choiceContainer = $("#choicesTimeVsThreads");
-		tvt(false);
-	} else if ( id == "choicesResponseTimeDistribution"){
-		var choiceContainer = $("#choicesResponseTimeDistribution");
-		rtd(false);
-	} else if ( id == "choicesResponseTimePerSample"){
-		var choiceContainer = $("#choicesResponseTimePerSample");
-		hb(false);
-	} else if ( id == "choicesHitsPerSecond"){
-		var choiceContainer = $("#choicesHitsPerSecond");
+		choiceContainer = $("#choicesHitsPerSecond");
 		bbq(false);
 	} else if(id == "choicesCodesPerSecond"){
-		var choiceContainer = $("#choicesCodesPerSecond");
+		choiceContainer = $("#choicesCodesPerSecond");
 		hcps(false);
 	} else if ( id == "choicesTransactionsPerSecond"){
-		var choiceContainer = $("#choicesTransactionsPerSecond");
+		choiceContainer = $("#choicesTransactionsPerSecond");
 		tps(false);
 	} else if ( id == "choicesResponseTimeVsRequest"){
-		var choiceContainer = $("#choicesResponseTimeVsRequest");
+		choiceContainer = $("#choicesResponseTimeVsRequest");
 		rtvr(false);
 	} else if ( id == "choicesLatencyVsRequest"){
-		var choiceContainer = $("#choicesLatencyVsRequest");
+		choiceContainer = $("#choicesLatencyVsRequest");
 		lvr(false);
 	}
 	choiceContainer.find("label").each(function(){
-		this.style.color = "black";
+		this.style.color = checked ? "black" : "#818181";
 	});
 }
 
-function reOrderList(){
-	//parcours des li dans le menu
-	var ul = document.getElementById("submenu").getElementsByTagName("li"); ;
-	var i=0;
-	var a;
-	for( i=0; i<ul.length; i++){
-		a = ul[0].firstElementChild;
-	}
-	var t = document.getElementById("graphContainer").getElementsByClassName("portlet"); ;
-	for( i=0; i<t.length; i++){
-		a=ul[i].firstElementChild;
-		ul[i].firstElementChild.innerHTML = reOrderAux(t[i].getAttribute("id"), a);
-		var str = document.location.href;
-		str = str.substring(str.lastIndexOf( "/" )+1 );
-		if (str.substring(0, str.lastIndexOf("#"))!= ""){
-			str = str.substring(0, str.lastIndexOf("#"));
-		}
-		var s = str+ "#"+t[i].getAttribute("id");
-		a.setAttribute("href", s);
-	}
+//uncheck all boxes
+function uncheckAll(id){
+	toggleAll(id, false);
 }
 
-function reOrderAux(s, a){
-	var st="",str1;
-	var t=0;
-	for (var i=0; i<s.length; i++) {
-		if(s.charAt(i) == s.charAt(i).toUpperCase()){
-			var str1 = s.substring(t, i);
-			t=i;
-			st+=str1+" ";
-		}
-	}
-	var str1 = s.substring(t);
-	st+=str1+" ";
-	return st;
+//check all boxes
+function checkAll(id){
+	toggleAll(id, true);
 }
 
 //prepare datas

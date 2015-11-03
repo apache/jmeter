@@ -149,40 +149,32 @@
                         </div>
                         <!-- /.panel-heading -->
 						<div class="collapse in portlet-content" id="bodyHitsPerSecond">
-                        <div class="panel-body" id="collapseHitsPerSecond" >
-							
-                            <div class="flot-chart" >
-                                <div class="flot-chart-content" id="flot-hits-per-second" style="float: left; width:80%;"></div>
-								<div id="miniature" style="float:left;margin-left:5px">
-								<p>Zoom :</p>
-								<div id="overview" style="width:190px;height:100px;"></div>
-								</div>
-							
-
-							</div>
-							
-                        <!-- /.panel-body -->
-						
-						</div>
+                        	<div class="panel-body" id="collapseHitsPerSecond" >	
+								<div class="flot-chart" >
+                        			<div class="flot-chart-content" id="flotHitsPerSecond" style="float: left; width:80%;"></div>
+									<div style="float:left;margin-left:5px">
+										<p>Zoom :</p>
+										<div id="overviewHitsPerSecond" style="width:190px;height:100px;"></div>
+									</div>
+								</div>	
+                        	</div>
 							<div class="panel-footer" id="footerHitsPerSecond">
-									<li id="legendHitsPerSecond" style="font-weight: bold;" hidden></li>
-									<ul id="choicesHitsPerSecond" class="legend">
-										
-									</ul>
+								<p id="legendHitsPerSecond" hidden></p>
+								<ul id="choicesHitsPerSecond" class="legend"></ul>
 							</div>
 						</div>
-                    <!-- /.panel -->
-                </div>
+                	</div>
 				</div>
 				
 				<!-- codesPerSecond -->
 				
 				<div class="col-lg-12 portlet" id="codesPerSecond">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw">  </i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyCodesPerSecond" aria-expanded="true" aria-controls="bodyCodesPerSecond">${codesPerSecond.title}</span>
+                        <div class="panel-heading portlet-header">
+                            <i class="fa fa-bar-chart-o fa-fw"></i>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyCodesPerSecond" aria-expanded="true" aria-controls="bodyCodesPerSecond">${codesPerSecond.title}</span>
 							<div class="pull-right">
-								<div class="btn-group" id="test">
+								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
 										<i class="glyphicon glyphicon-resize-vertical"></i>
 									</a>
@@ -190,9 +182,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#codesPerSecond" onClick="checkAll('choicesCodesPerSecond');">Afficher tous les samples</a>
+										<li><a href="#codesPerSecond" onClick="checkAll('choicesCodesPerSecond');">Display samples</a>
 										</li>
-										<li><a href="#codesPerSecond" onClick="uncheckAll('choicesCodesPerSecond');">Masquer tous les samples</a>
+										<li><a href="#codesPerSecond" onClick="uncheckAll('choicesCodesPerSecond');">Hide samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyCodesPerSecond" aria-expanded="true" aria-controls="bodyCodesPerSecond">
@@ -205,22 +197,20 @@
 						
 						<div class="collapse out portlet-content" id="bodyCodesPerSecond">
 							<div class="panel-body" id="collapseCodesPerSecond">
-								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flotCodesPerSecond"></div>
+									<div class="flot-chart-content" id="flotCodesPerSecond" style="float: left; width:80%;"></div>
+									<div style="float:left;margin-left:5px">
+										<p>Zoom :</p>
+										<div id="overviewCodesPerSecond" style="width:190px;height:100px;"></div>
+									</div>
 								</div>
-								
 							</div>
 							<div class="panel-footer" id="footerCodesPerSecond">
-									<p id="legendCodesPerSecond" hidden></p>
-									<ul id="choicesCodesPerSecond" class="legend">
-							
-									</ul>
+								<p id="legendCodesPerSecond" hidden></p>
+								<ul id="choicesCodesPerSecond" class="legend"></ul>
 							</div>
 						</div>
-                        <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel -->
 				</div>
 				<div class="col-lg-12 portlet" id="transactionsPerSecond">
                     <div class="panel panel-default">
@@ -249,17 +239,17 @@
                         <!-- /.panel-heading -->
 						<div class="collapse out portlet-content" id="bodyTransactionspersecond">
 							<div class="panel-body" id="collapseTransactionsPerSecond">
-								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flot-transactions-per-second"></div>
+									<div class="flot-chart-content" id="flotTransactionsPerSecond" style="float: left; width:80%;"></div>
+									<div style="float:left;margin-left:5px">
+										<p>Zoom :</p>
+										<div id="overviewTransactionsPerSecond" style="width:190px;height:100px;"></div>
+									</div>
 								</div>
-								
 							</div>
 							<div class="panel-footer" id="footerTransactions">
-									<p id="legendTransactionsPerSecond" hidden></p>
-									<ul id="choicesTransactionsPerSecond" class="legend">
-							
-									</ul>
+								<p id="legendTransactionsPerSecond" hidden></p>
+								<ul id="choicesTransactionsPerSecond" class="legend"></ul>
 							</div>
 						</div>
                         <!-- /.panel-body -->

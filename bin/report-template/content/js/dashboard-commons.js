@@ -1,8 +1,14 @@
+/*
+ * Gets a string representing the specified duration in milliseconds.
+ * 
+ * E.g : duration = 20000100, returns "45 min 20 sec 100 ms"
+ */
 function formatDuration(duration) {
 	var type = $.type(duration);
 	if (type === "string")
 		return duration;
 
+	// Calculate each part of the string
 	var days = Math.floor(duration / 86400000); // 1000 * 60 * 60 * 24 = 1 day
 	duration %= 8640000;
 
@@ -15,6 +21,7 @@ function formatDuration(duration) {
 	var seconds = Math.floor(duration / 1000); // 1 second
 	duration %= 1000;
 
+	// Add non null part.
 	var formatArray = [];
 	if (days > 0)
 		formatArray.push(days + " day(s)");
@@ -31,13 +38,20 @@ function formatDuration(duration) {
 	if (duration > 0)
 		formatArray.push(duration + " ms");
 
+	// Build the string
 	return formatArray.join(" ");
 }
 
-function getElapsedTimeLabel(duration) {
-	return "Elapsed Time (granularity: " + formatDuration(duration) + ")";
+/*
+ * Gets axis label for the specified granularity
+ */
+function getElapsedTimeLabel(granularity) {
+	return "Elapsed Time (granularity: " + formatDuration(granularity) + ")";
 }
 
+/*
+ * This comparison function evaluates abscissas and sort them. 
+ */
 function compareByXCoordinate(coordA, coordB){
 	return coordB[0] - coord1[0];
 }

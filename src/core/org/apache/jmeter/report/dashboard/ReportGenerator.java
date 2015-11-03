@@ -81,16 +81,19 @@ public class ReportGenerator {
     /** A properties file indicator for false. * */
     private static final String FALSE = "false"; // $NON_NLS-1$
 
-    private static final boolean PRINT_FIELD_NAMES = 
-            TRUE.equalsIgnoreCase(JMeterUtils.getPropDefault("jmeter.save.saveservice.print_field_names", FALSE));
+    private static final boolean PRINT_FIELD_NAMES = TRUE
+	    .equalsIgnoreCase(JMeterUtils.getPropDefault(
+	            "jmeter.save.saveservice.print_field_names", FALSE));
 
-    private static final boolean CSV_OUTPUT_FORMAT = 
-            "csv".equalsIgnoreCase(JMeterUtils.getPropDefault("jmeter.save.saveservice.output_format", "csv"));
+    private static final boolean CSV_OUTPUT_FORMAT = "csv"
+	    .equalsIgnoreCase(JMeterUtils.getPropDefault(
+	            "jmeter.save.saveservice.output_format", "csv"));
 
     public static final String DATA_CTX_TESTFILE = "testFile";
     public static final String DATA_CTX_BEGINDATE = "beginDate";
     public static final String DATA_CTX_ENDDATE = "endDate";
-    public static final String DATA_CTX_TIMEZONE = "timezone";
+    public static final String DATA_CTX_TIMEZONE = "timeZone";
+    public static final String DATA_CTX_TIMEZONE_OFFSET = "timeZoneOffset";
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not a valid graph class.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
@@ -109,7 +112,7 @@ public class ReportGenerator {
     private final ReportGeneratorConfiguration configuration;
 
     /**
-     * ResultCollector used 
+     * ResultCollector used
      */
     private final ResultCollector resultCollector;
 
@@ -118,28 +121,35 @@ public class ReportGenerator {
      *
      * @param resultsFile
      *            the test results file
-     * @param resultCollector Can be null, used if generation occurs at end of test
+     * @param resultCollector
+     *            Can be null, used if generation occurs at end of test
      */
-    public ReportGenerator(String resultsFile, ResultCollector resultCollector) throws ConfigurationException {
-        if(!CSV_OUTPUT_FORMAT) {
-            throw new IllegalArgumentException("Report generation requires csv output format, check 'jmeter.save.saveservice.output_format' property");
-        }
-        if(!PRINT_FIELD_NAMES) {
-            throw new IllegalArgumentException("Report generation requires csv to print field names, check 'jmeter.save.saveservice.print_field_names' property");
-        }
+    public ReportGenerator(String resultsFile, ResultCollector resultCollector)
+	    throws ConfigurationException {
+	if (!CSV_OUTPUT_FORMAT) {
+	    throw new IllegalArgumentException(
+		    "Report generation requires csv output format, check 'jmeter.save.saveservice.output_format' property");
+	}
+	if (!PRINT_FIELD_NAMES) {
+	    throw new IllegalArgumentException(
+		    "Report generation requires csv to print field names, check 'jmeter.save.saveservice.print_field_names' property");
+	}
 
 	File file = new File(resultsFile);
-	if(resultCollector==null) {
-	    if(!(file.isFile() && file.canRead())) {
-	        throw new IllegalArgumentException(String.format(
-	            "Invalid test results file : %s", file));
+	if (resultCollector == null) {
+	    if (!(file.isFile() && file.canRead())) {
+		throw new IllegalArgumentException(String.format(
+		        "Invalid test results file : %s", file));
 	    }
-	    log.info("Will only generate report from results file:"+resultsFile);
+	    log.info("Will only generate report from results file:"
+		    + resultsFile);
 	} else {
-	    if(file.exists() && file.length()>0) {
-	        throw new IllegalArgumentException("Results file:"+resultsFile+" is not empty");
+	    if (file.exists() && file.length() > 0) {
+		throw new IllegalArgumentException("Results file:"
+		        + resultsFile + " is not empty");
 	    }
-        log.info("Will generate report at end of test from  results file:"+resultsFile);
+	    log.info("Will generate report at end of test from  results file:"
+		    + resultsFile);
 	}
 	this.resultCollector = resultCollector;
 	this.testFile = file;
@@ -179,10 +189,10 @@ public class ReportGenerator {
      */
     public void generate() throws GenerationException {
 
-        if(resultCollector != null) {
-            log.info("Flushing result collector before report Generation");
-            resultCollector.flushFile();
-        }
+	if (resultCollector != null) {
+	    log.info("Flushing result collector before report Generation");
+	    resultCollector.flushFile();
+	}
 	log.debug("Start report generation");
 
 	File tmpDir = configuration.getTempDirectory();
@@ -393,7 +403,9 @@ public class ReportGenerator {
 
 	// Create data context and populate it
 	DataContext dataContext = new DataContext();
-	dataContext.put(DATA_CTX_TIMEZONE, TimeZone.getDefault().getID());
+	TimeZone timezone = TimeZone.getDefault();
+	dataContext.put(DATA_CTX_TIMEZONE, timezone.getID());
+	dataContext.put(DATA_CTX_TIMEZONE_OFFSET, timezone.getRawOffset());
 	dataContext.put(DATA_CTX_TESTFILE, testFile.getName());
 	dataContext.put(DATA_CTX_BEGINDATE, TimeHelper
 	        .formatTimeStamp((long) beginDateConsumer.getResult()));
