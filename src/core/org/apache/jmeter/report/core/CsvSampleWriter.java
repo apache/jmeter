@@ -21,9 +21,11 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Writer;
 
+import org.apache.commons.lang3.CharUtils;
 import org.apache.jmeter.report.core.AbstractSampleWriter;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleMetadata;
+import org.apache.jmeter.save.CSVSaveService;
 
 /**
  * Class to be used to write samples to a csv destination (OutputStream, Writer
@@ -114,13 +116,12 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     public long write(Sample sample) {
 	try {
 	    row.setLength(0);
+	    char[] specials = new char[] { separator,
+		    CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
 	    for (int i = 0; i < columnCount; i++) {
 		String data = sample.getString(i);
-		// Add quotes if needed
-		if (data.indexOf(separator) > -1) {
-		    data = '"' + data + '"';
-		}
-		row.append(data).append(separator);
+		row.append(CSVSaveService.quoteDelimiters(data, specials))
+		        .append(separator);
 	    }
 	    int rowLength = row.length() - 1;
 	    row.setLength(rowLength);
