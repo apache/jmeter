@@ -1002,7 +1002,7 @@ public final class CSVSaveService {
      * @return the input String, enclosed in quote characters if the value
      * contains a special character, <code>null</code> for null string input
      */
-    private static String quoteDelimiters(String input, char[] specialChars) {
+    public static String quoteDelimiters(String input, char[] specialChars) {
         if (StringUtils.containsNone(input, specialChars)) {
             return input;
         }
