@@ -213,7 +213,7 @@ soap-2.3.1
 ----------
 - WebServiceSampler ONLY
 
-tika-1.10
+tika-1.11
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor
