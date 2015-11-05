@@ -158,9 +158,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#bytesThroughputOverTime" onClick="checkAll('choicesBytesThroughputOverTime');">Afficher tous les samples</a>
+										<li><a href="#bytesThroughputOverTime" onClick="checkAll('choicesBytesThroughputOverTime');">Display all samples</a>
 										</li>
-										<li><a href="#bytesThroughputOverTime" onClick="uncheckAll('choicesBytesThroughputOverTime');">Masquer tous les samples</a>
+										<li><a href="#bytesThroughputOverTime" onClick="uncheckAll('choicesBytesThroughputOverTime');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">
@@ -184,7 +184,7 @@
 								</div>
 							</div>
 							<!-- /.panel-body -->
-							<div class="panel-footer" id="footerBytes">
+							<div class="panel-footer" id="footerBytesThroughputOverTime">
 								<p id="legendBytesThroughputOverTime" hidden></p>
 								<ul id="choicesBytesThroughputOverTime" class="legend"></ul>
 							</div>
@@ -206,9 +206,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#bodyResponseTimeOverTime" onClick="checkAll('choicesResponseTimesOverTime');">Afficher tous les samples</a>
+										<li><a href="#bodyResponseTimeOverTime" onClick="checkAll('choicesResponseTimesOverTime');">Display all samples</a>
 										</li>
-										<li><a href="#bodyResponseTimeOverTime" onClick="uncheckAll('choicesResponseTimesOverTime');">Masquer tous les samples</a>
+										<li><a href="#bodyResponseTimeOverTime" onClick="uncheckAll('choicesResponseTimesOverTime');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">
@@ -228,7 +228,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="panel-footer" id="footerRTOT">
+							<div class="panel-footer" id="footerResponseTimesOverTime">
 								<p id="legendResponseTimesOverTime" hidden></p>
 								<ul id="choicesResponseTimesOverTime" class="legend">
 							
@@ -257,9 +257,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#latenciesOverTime" onClick="checkAll('choicesLatenciesOverTime');">Afficher tous les samples</a>
+										<li><a href="#latenciesOverTime" onClick="checkAll('choicesLatenciesOverTime');">Display all samples</a>
 										</li>
-										<li><a href="#latenciesOverTime" onClick="uncheckAll('choicesLatenciesOverTime');">Masquer tous les samples</a>
+										<li><a href="#latenciesOverTime" onClick="uncheckAll('choicesLatenciesOverTime');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">
@@ -279,7 +279,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="panel-footer" id="footerLatencies">
+							<div class="panel-footer" id="footerLatenciesOverTime">
 									<p id="legendLatenciesOverTime" hidden></p>
 									<ul id="choicesLatenciesOverTime" class="legend"></ul>
 							</div>

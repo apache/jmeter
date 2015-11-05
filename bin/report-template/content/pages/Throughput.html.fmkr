@@ -225,9 +225,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#transactionsPerSecond" onClick="checkAll('choicesTransactionsPerSecond');">Afficher tous les samples</a>
+										<li><a href="#transactionsPerSecond" onClick="checkAll('choicesTransactionsPerSecond');">Display all samples</a>
 										</li>
-										<li><a href="#transactionsPerSecond" onClick="uncheckAll('choicesTransactionsPerSecond');">Masquer tous les samples</a>
+										<li><a href="#transactionsPerSecond" onClick="uncheckAll('choicesTransactionsPerSecond');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTransactionsPerSecond" aria-expanded="true" aria-controls="bodyTransactionsPerSecond">
@@ -247,7 +247,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="panel-footer" id="footerTransactions">
+							<div class="panel-footer" id="footerTransactionsPerSecond">
 								<p id="legendTransactionsPerSecond" hidden></p>
 								<ul id="choicesTransactionsPerSecond" class="legend"></ul>
 							</div>
@@ -270,9 +270,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#responseTimeVsRequest" onClick="checkAll('choicesResponseTimeVsRequest');">Afficher tous les samples</a>
+										<li><a href="#responseTimeVsRequest" onClick="checkAll('choicesResponseTimeVsRequest');">Display all samples</a>
 										</li>
-										<li><a href="#responseTimeVsRequest" onClick="uncheckAll('choicesResponseTimeVsRequest');">Masquer tous les samples</a>
+										<li><a href="#responseTimeVsRequest" onClick="uncheckAll('choicesResponseTimeVsRequest');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeVsRequest" aria-expanded="true" aria-controls="bodyResponseTimeVsRequest">
@@ -286,11 +286,11 @@
 							<div class="panel-body" id="collapseResponseTimeVsRequest">
 								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flot-response-time-vs-request"></div>
+									<div class="flot-chart-content" id="flotResponseRimeVsRequest"></div>
 								</div>
 								
 							</div>
-							<div class="panel-footer" id="footerRTVR">
+							<div class="panel-footer" id="footerResponseRimeVsRequest">
 									<p id="legendResponseTimeVsRequest" hidden></p>
 									<ul id="choicesResponseTimeVsRequest" class="legend">
 							
@@ -314,9 +314,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#latencyVsRequest" onClick="checkAll('choicesLatencyVsRequest');">Afficher tous les samples</a>
+										<li><a href="#latencyVsRequest" onClick="checkAll('choicesLatencyVsRequest');">Display all samples</a>
 										</li>
-										<li><a href="#latencyVsRequest" onClick="uncheckAll('choicesLatencyVsRequest');">Masquer tous les samples</a>
+										<li><a href="#latencyVsRequest" onClick="uncheckAll('choicesLatencyVsRequest');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLatenciesVsRequest" aria-expanded="true" aria-controls="bodyLatenciesVsRequest">
@@ -330,9 +330,9 @@
 							<div class="panel-body" id="collapseLatencyVsRequest">
 								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flot-latency-vs-request"></div>
+									<div class="flot-chart-content" id="flotLatenciesVsRequest"></div>
 								</div>
-								<div class="panel-footer" id="footerLatency">
+								<div class="panel-footer" id="footerLatenciesVsRequest">
 									<p id="legendLatencyVsRequest" hidden></p>
 									<ul id="choicesLatencyVsRequest" class="legend">
 							

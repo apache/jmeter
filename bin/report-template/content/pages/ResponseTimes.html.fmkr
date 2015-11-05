@@ -144,9 +144,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#responseTimePercentiles" onClick="checkAll('choicesResponseTimePercentiles');">Afficher tous les samples</a>
+										<li><a href="#responseTimePercentiles" onClick="checkAll('choicesResponseTimePercentiles');">Display all samples</a>
 										</li>
-										<li><a href="#responseTimePercentiles" onClick="uncheckAll('choicesResponseTimePercentiles');">Masquer tous les samples</a>
+										<li><a href="#responseTimePercentiles" onClick="uncheckAll('choicesResponseTimePercentiles');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimePercentiles" aria-expanded="true" aria-controls="bodyResponseTimePercentiles">
@@ -163,7 +163,7 @@
 									
 								<div class="flot-chart col-lg-11 col-md-11 col-sm-11 col-xs-12">
 								
-									<div class="flot-chart-content" id="flot-response-times-percentiles" >
+									<div class="flot-chart-content" id="flotResponseTimesPercentiles" >
 									</div>
 									
 								</div>
@@ -194,9 +194,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#activeThreadsOverTime" onClick="checkAll('choicesActiveThreadsOverTime');">Afficher tous les samples</a>
+										<li><a href="#activeThreadsOverTime" onClick="checkAll('choicesActiveThreadsOverTime');">Display all samples</a>
 										</li>
-										<li><a href="#activeThreadsOverTime" onClick="uncheckAll('choicesActiveThreadsOverTime');">Masquer tous les samples</a>
+										<li><a href="#activeThreadsOverTime" onClick="uncheckAll('choicesActiveThreadsOverTime');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">
@@ -216,7 +216,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="panel-footer" id="footerTSOT">
+							<div class="panel-footer" id="footerActiveThreadsOverTime">
 									<p id="legendActiveThreadsOverTime" hidden></p>
 									<ul id="choicesActiveThreadsOverTime" class="legend">
 							
@@ -240,9 +240,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#timeVsThreads" onClick="checkAll('choicesTimeVsThreads');">Afficher tous les samples</a>
+										<li><a href="#timeVsThreads" onClick="checkAll('choicesTimeVsThreads');">Display all samples</a>
 										</li>
-										<li><a href="#timeVsThreads" onClick="uncheckAll('choicesTimeVsThreads');">Masquer tous les samples</a>
+										<li><a href="#timeVsThreads" onClick="uncheckAll('choicesTimeVsThreads');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTimeVsThreads" aria-expanded="true" aria-controls="bodyTimeVsThreads">
@@ -256,10 +256,10 @@
 							<div class="panel-body" id="collapseTimeVsThreads">
 							
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flot-times-vs-threads"></div>
+									<div class="flot-chart-content" id="flotTimesVsThreads"></div>
 								</div>
 							</div>
-							<div class="panel-footer" id="footerTVT">
+							<div class="panel-footer" id="footerTimeVsThreads">
 								<p id="legendTimeVsThreads" hidden></p>
 								<ul id="choicesTimeVsThreads" class="legend">
 						
@@ -283,9 +283,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#responseTimeDistribution" onClick="checkAll('choicesResponseTimeDistribution');">Afficher tous les samples</a>
+										<li><a href="#responseTimeDistribution" onClick="checkAll('choicesResponseTimeDistribution');">Display all samples</a>
 										</li>
-										<li><a href="#responseTimeDistribution" onClick="uncheckAll('choicesResponseTimeDistribution');">Masquer tous les samples</a>
+										<li><a href="#responseTimeDistribution" onClick="uncheckAll('choicesResponseTimeDistribution');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeDistribution" aria-expanded="true" aria-controls="bodyResponseTimeDistribution">
@@ -299,10 +299,10 @@
 							<div class="panel-body" id="collapseResponseTimeDistribution">
 								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flot-response-time-distribution"></div>
+									<div class="flot-chart-content" id="flotResponseTimeDistribution"></div>
 								</div>
 							</div>
-							<div class="panel-footer" id="footerRTD">
+							<div class="panel-footer" id="footerResponseTimeDistribution">
 								<p id="legendResponseTimeDistribution" hidden></p>
 								<ul id="choicesResponseTimeDistribution" class="legend">
 						
@@ -326,9 +326,9 @@
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#responseTimePerSample" onClick="checkAll('choicesResponseTimePerSample');">Afficher tous les samples</a>
+										<li><a href="#responseTimePerSample" onClick="checkAll('choicesResponseTimePerSample');">Display all samples</a>
 										</li>
-										<li><a href="#responseTimePerSample" onClick="uncheckAll('choicesResponseTimePerSample');">Masquer tous les samples</a>
+										<li><a href="#responseTimePerSample" onClick="uncheckAll('choicesResponseTimePerSample');">Hide all samples</a>
 										</li>
 									</ul>
 									<button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimePerSample" aria-expanded="true" aria-controls="bodyResponseTimePerSample">
@@ -342,11 +342,11 @@
 							<div class="panel-body" id="collapseResponseTimePerSample">
 								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flot-horizontal-bar"></div>
+									<div class="flot-chart-content" id="flotResponseTimePerSample"></div>
 								</div>
 								
 							</div>
-							<div class="panel-footer" id="footerRTPS">
+							<div class="panel-footer" id="footerResponseTimePerSample">
 								<p id="legendHorizontalBar" hidden></p>
 								<ul id="choicesResponseTimePerSample" class="legend">
 						
