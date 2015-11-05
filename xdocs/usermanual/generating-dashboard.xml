@@ -398,6 +398,9 @@
 			</subsection>
 
 			<subsection name="&sect-num;.4 Default graphs" anchor="default_graphs">
+				<note>Due to limitations of this early version, each default graph
+					must be declared among the JMeter properties.</note>
+
 				<p>The dashboard generator provides the following graph classes :</p>
 				<ul>
 					<li>
@@ -527,6 +530,10 @@
 							<br />
 							This graph represents the average response time depending on the
 							number of current active threads.
+							<br />
+							The *-aggregated series represent the average reponse time
+							regardless of the
+							number of current active threads.
 						</p>
 					</li>
 					<li>
@@ -541,9 +548,6 @@
 						</p>
 					</li>
 				</ul>
-
-				<note>Due to limitations of this early version, each default graph
-					must be declared among the JMeter properties.</note>
 			</subsection>
 
 		</section>

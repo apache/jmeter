@@ -25,8 +25,8 @@
 	
 	<!-- Table sorter -->
 	<link href="content/css/theme.blue.css" rel="stylesheet">
-	
-	<!-- icone onglet -->
+    
+	<!-- icon -->
 	<link rel="icon" type="image/png" href="content/pages/icon-apache.png" />
 
     <!-- Custom Fonts -->

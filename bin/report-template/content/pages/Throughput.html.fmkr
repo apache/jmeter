@@ -11,10 +11,10 @@
 
     <title>JMeter Dashboard</title>
 
-    <  <!-- Bootstrap Core CSS -->
+    <!-- Bootstrap Core CSS -->
     <link href="../../sbadmin2-1.0.7/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- icone onglet -->
+	<!-- icon -->
 	<link rel="icon" type="image/png" href="icon-apache.png" />
     
 	<!-- MetisMenu CSS -->

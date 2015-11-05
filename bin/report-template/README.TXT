@@ -1,30 +1,49 @@
-content
-	css
-		-dashboard.css : modifie quelques attributs des tableaux de la page dashboard
-		-legends.css : définie le format des légendes des graphiques
-		-jquery-ui.css : version 1.11.4
-		-jquery-ui.structure.css : version 1.11.4
-		-jquery-ui.theme.css : version 1.11.4
-	js
-		- curvedLines.js : version 1.1.1 , sert à modifier l'apparence des courbes pour qu'elles s'arrondissent
-		- Dashboard.js : Fichier javascript nécessaire à la création de la page "index.html", génére les tableaux et graphiques de cette page
-		- graphes.js : fichier principale, c'est le fichier qui permet de générer les graphes des trois pages : OverTime.html, ResponseTime.html et Throughput.html
+Summary
+-------
+
+I  - Default template directory content
+II - Expected series format
+
+---
+
+I - Default template directory content :
+----------------------------------------
+
+/
+- index.html.fmkr : templated file for index page (dashboard)
+-/content
+	-/css
+		- dashboard.css : style sheet for tables in index page 
+		- jquery-ui.css : version 1.11.4
+		- jquery-ui.structure.css : version 1.11.4
+		- jquery-ui.theme.css : version 1.11.4
+		- legends.css : style sheet for graph legends
+		- theme.blue.css : blue theme for tablesorter plugin
+	-/js
+		- curvedLines.js : version 1.1.1 , to change graph lines aspect
+		- dashboard.js.fmkr : template script file for index page
+		- dashboard-common.js : script file for shared functions
+		- graphes.js.fmkr : templated script file for OverTime.html, ResponseTime.html and Throughput.html
 		- hashtable.js : version 3.0 A standalone implementation of hash table in JavaScript.
-		- jquery-ui.js : version 1.11.4
 		- jquery.cookie.js : 1.4.1 
-		- jquery.flot.axislabels.js : version 2.0.1 , affiche le nom des axes sur les graphiques
-		- jquery.numberformatter-1.2.3.min.js :  1.2.4 , permet de convertir les timestamp en date
-		
-	pages
-		- OverTime.fmkr : Modèle qui va générer la page OverTime.html
-		- ResponseTimes.fmkr : Modèle qui va générer la page ResponseTimes.html
-		- Throughput.fmkr : Modèle qui va générer la page Throughput.html
-		
-sbadmin2-1.0.7
-	./bower_components
-		./flot
-			./jquery.flot.pie.js : version 0.8.3 : Patch de ce fichier car il y avait un problème sous mac avec firefox avec la version de la release sbadmin
-	
+		- jquery.flot.axislabels.js : version 2.0.1 , to display labels on graph axes 
+		- jquery.numberformatter-1.2.3.min.js :  1.2.4 , to format timestamp in UI
+		- jquery.tablesorter.min.js : to allow column sorting in tables
+		- jquery-ui.js : version 1.11.4
+	-/pages
+		- OverTime.hmtl.fmkr : templated html page for over time graphs
+		- ResponseTimes.html.fmkr : templated html page for response time graphs
+		- Throughput.html.fmkr : templated html page for throughput graphs		
+-/sbadmin2-1.0.7
+	-/bower_components
+		-/flot
+			- jquery.flot.pie.js : version 0.8.3 : patched file to fix an issue with firefox on Mac
+
+---
+
+II - Expected series format :
+-----------------------------
+
 responseTimePercentileGrapher.values
 {
          "Click Order" :{
@@ -46,8 +65,6 @@ responseTimePercentileGrapher.values
 			"threshold" : { "below": 0, "color": "none" }
 		}
 }
-responseTimePercentileGrapher.minX=0
-responseTimePercentileGrapher.maxX=400000
 
 responseTimeDistributionGrapher.values
 {
@@ -102,7 +119,6 @@ responseTimeDistributionGrapher.values
         ]
     }
 }
-responseTimeDistributionGrapher.granularity
 
 activeThreadsOverTimeGrapher.values
 {
@@ -119,11 +135,6 @@ activeThreadsOverTimeGrapher.values
 		"data": [  [ 720000, 6 ], [ 1440000, 4 ], [ 2160000, 5 ], [ 2880000, 6 ], [ 3600000, 4 ], [ 4320000, 5 ], [ 5040000, 6 ], [ 5760000, 5 ], [ 6480000, 4 ], [ 7200000, 5 ] ]
 	}
 }
-activeThreadsOverTimeGrapher.minX
-activeThreadsOverTimeGrapher.maxX
-activeThreadsOverTimeGrapher.minY
-activeThreadsOverTimeGrapher.maxY
-activeThreadsOverTimeGrapher.granularity
 
 responseTimePerSampleGrapher.values
 	var data = {
@@ -134,10 +145,9 @@ responseTimePerSampleGrapher.values
 			"label": "Temps médian", "data": [[1582.3, 0], [128.95, 1],[1603, 2],[1774, 3],[1645, 4], [185, 5], [1225, 6]] 
 		}
 	}
+
 responseTimePerSampleGrapher.sampleNames
 	var ticks = [[0, "s0-0000-login"], [1, "s01-0100-FormulaireRechercheClients"], [2, "s01-0200-RechercheClients"], [3, "s01-0300-SelectionClient"], [4, "s01-0400-TraitementLocal"], [5, "s01-0500-AjouterPrestation"], [6, "s01-0600-AjouterAffutagePatin"]];
-
-responseTimePerSampleGrapher.maxX
 
 timeVsThreadsGrapher.values
 {
@@ -176,10 +186,6 @@ timeVsThreadsGrapher.values
         }
 	}
 }
-timeVsThreadsGrapher.minX
-timeVsThreadsGrapher.maxX
-timeVsThreadsGrapher.minY
-timeVsThreadsGrapher.maxY
 
 bytesThroughputOverTimeGrapher.values
 {
@@ -191,11 +197,6 @@ bytesThroughputOverTimeGrapher.values
 		"label": "Bytes sent per second",
 		"data": [ [ 355000, 10 ], [ 400000, 10 ], [ 400000, 10 ], [ 410000, 10 ], [ 420000, 10 ], [ 430000, 10 ], [ 445000, 10 ], [ 451000, 10 ], [ 460000, 10 ], [ 470000, 10 ], [ 490000, 10 ], [ 510000, 10 ], [ 530000, 10 ], [ 570000, 10 ], [ 580000, 10 ], [ 590000, 10 ], [ 620000, 10 ], [ 640000, 10 ], [ 660000, 10 ], [ 670000, 10 ], [ 680000, 10 ], [ 700000, 10 ], [ 710000, 10 ], [ 720000, 10 ], [ 740000, 10 ], [ 860000, 10 ], [ 900000, 72 ] ] }
 }
-bytesThroughputOverTimeGrapher.minX
-bytesThroughputOverTimeGrapher.maxX
-bytesThroughputOverTimeGrapher.minY
-bytesThroughputOverTimeGrapher.maxY
-bytesThroughputOverTimeGrapher.granularity
 
 responseTimeOverTimeGrapher.values
 {
@@ -209,11 +210,6 @@ responseTimeOverTimeGrapher.values
 	"label": "AccountCreationProcess",
 	"data": [ [ 355000, 10 ], [ 400000, 1000 ], [ 400000, 5000 ], [ 410000, 6000 ], [ 420000, 5693 ], [ 430000, 5263 ], [ 445000, 5742 ], [ 451000, 5461 ], [ 460000, 5869 ], [ 470000, 5436 ], [ 490000, 5032 ], [ 510000, 5821 ], [ 530000, 5463 ], [ 570000, 5789 ], [ 580000, 5321 ], [ 590000, 5456 ], [ 620000, 5864 ], [ 640000, 5412 ], [ 660000, 5369 ], [ 670000, 5693 ], [ 680000, 5465 ], [ 700000, 5555 ], [ 710000, 5444 ], [ 720000, 5333 ], [ 740000, 5999 ], [ 860000, 10 ], [ 900000, 0 ] ] }
 }
-responseTimeOverTimeGrapher.minX
-responseTimeOverTimeGrapher.maxY
-responseTimeOverTimeGrapher.minY
-responseTimeOverTimeGrapher.maxY
-responseTimeOverTimeGrapher.granularity
 
 latencyOverTimeGrapher.values
 {
@@ -230,11 +226,6 @@ latencyOverTimeGrapher.values
 		"data": [ [ 355000, 10 ], [ 400000, 500 ], [ 400000, 2500 ], [ 410000,3000 ], [ 420000, 2880 ], [ 430000, 2880 ], [ 445000, 2786 ], [ 451000, 2750 ], [ 460000, 2950 ], [ 470000, 2786 ], [ 490000, 2516 ], [ 510000, 2460 ], [ 530000, 2730 ], [ 570000, 2890 ], [ 580000, 2700 ], [ 590000, 2994 ], [ 620000, 2892 ], [ 640000, 2745 ], [ 660000, 2658 ], [ 670000, 2846 ], [ 680000, 2745], [ 700000, 2800 ], [ 710000, 2750 ], [ 720000, 2650 ], [ 740000, 3000 ],[ 760000, 2680 ], [ 780000, 2680 ], [ 860000, 10 ], [ 900000, 0 ] ]
 	}
 }
-latencyOverTimeGrapher.minX
-latencyOverTimeGrapher.maxX
-latencyOverTimeGrapher.minY
-latencyOverTimeGrapher.maxY
-latencyOverTimeGrapher.granularity
 
 responseTimeVsRequestGrapher.values
 {
@@ -249,10 +240,6 @@ responseTimeVsRequestGrapher.values
 		"color": "red"
 	}
 }
-responseTimeVsRequestGrapher.minX
-responseTimeVsRequestGrapher.maxX
-responseTimeVsRequestGrapher.minY
-responseTimeVsRequestGrapher.maxY
 
 latencyVsRequestGrapher.values
 {
@@ -268,10 +255,6 @@ latencyVsRequestGrapher.values
 		"color": "red"
 	}
 }
-latencyVsRequestGrapher.minX
-latencyVsRequestGrapher.maxX
-latencyVsRequestGrapher.minY
-latencyVsRequestGrapher.maxY
 
 hitsPerSecondGrapher.values
 {
@@ -280,11 +263,6 @@ hitsPerSecondGrapher.values
 		"data": [ [ 510000, 0 ], [ 525000, 25 ], [ 540000, 38 ], [ 555000, 50 ], [ 570000, 100 ], [ 585000, 135 ], [ 600000, 140 ], [ 615000, 135 ], [ 630000, 132 ], [ 645000, 137 ], [ 660000, 133 ], [ 675000, 133 ], [ 690000, 136 ], [ 705000, 134 ], [ 720000, 130 ], [ 735000, 129 ], [ 750000, 134 ], [ 765000, 135 ], [ 780000, 134 ], [ 795000, 138 ], [ 810000, 139 ], [ 825000, 134 ], [ 840000, 130 ], [ 855000, 132 ], [ 870000, 134 ], [ 885000, 136 ], [ 900000, 10 ] ] 
 	}
 }
-hitsPerSecondGrapher.minX
-hitsPerSecondGrapher.maxX
-hitsPerSecondGrapher.minY
-hitsPerSecondGrapher.maxY
-hitsPerSecondGrapher.granularity
 
 codesPerSecondGrapher.values
 {
@@ -299,11 +277,6 @@ codesPerSecondGrapher.values
 		"data": [ [ 750000, 0 ],[ 750000, 2 ] ] 
 	}
 }
-codesPerSecondGrapher.minX
-codesPerSecondGrapher.maxX
-codesPerSecondGrapher.minY
-codesPerSecondGrapher.maxY
-codesPerSecondGrapher.granularity
 
 transactionPerSecondGrapher.values
 {
@@ -327,10 +300,4 @@ transactionPerSecondGrapher.values
 		"label": "AccountCreationProcess-success",
 		"data": [ [ 500000, 0 ], [ 525000, 24 ], [ 540000, 23 ], [ 555000,26 ], [ 570000, 22 ], [ 585000, 23 ], [ 600000, 24 ], [ 615000, 21 ], [ 630000, 25], [ 645000, 22 ], [ 660000, 24 ], [ 675000, 23 ], [ 690000, 25 ], [ 705000, 23 ], [ 720000, 24 ], [ 735000, 23 ], [ 750000,22 ], [ 765000, 26 ], [ 780000, 24 ], [ 795000, 24 ], [ 810000, 22 ], [ 825000, 27 ], [ 840000, 22 ], [ 855000, 23 ], [ 870000, 24 ], [ 885000, 26 ], [ 905000, 0 ] ]
 	}
-	...
 }
-transactionPerSecondGrapher.minX
-transactionPerSecondGrapher.maxX
-transactionPerSecondGrapher.minY
-transactionPerSecondGrapher.maxY
-transactionPerSecondGrapher.granularity
