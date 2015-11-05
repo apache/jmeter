@@ -27,12 +27,13 @@ var overviewOptions = {
 		lines: { show: true, lineWidth: 1 },
 		shadowSize: 0
 	},
-	xaxis: { 
+	xaxis: {
+		ticks: 2,
 		mode: "time",
 		timeformat: "%H:%M:%S",
 	},
 	yaxis: {
-		min: 0,
+		ticks: 2
 	},
 	grid: {
 		color: "#999"
@@ -68,8 +69,26 @@ function setColorIndices(data){
     });
 }
 
+// Set the zoom on the specified plot object
+function zoomPlot(plot, xmin, xmax, ymin, ymax){
+	var axes = plot.getAxes();
+	// Override axes min and max options
+	$.extend(true, axes, {
+		xaxis: { 
+			options : { min: xmin, max: xmax }
+		},
+		yaxis: { 
+			options : { min: ymin, max: ymax }
+		}
+	});
+	
+	// Redraw the plot
+	plot.setupGrid();
+	plot.draw();
+}
+
 // Prepares DOM items to add zoom on the specified graph
-function setGraphZoomable(graphSelector, overviewSelector, options){
+function setGraphZoomable(graphSelector, overviewSelector){
 	var graph = $(graphSelector);
 	var overview = $(overviewSelector);
 	 
@@ -77,10 +96,8 @@ function setGraphZoomable(graphSelector, overviewSelector, options){
 	graph.bind("mousedown", function() { return false; });
 	overview.bind("mousedown", function() { return false; });
 	
-	// now connect the two
+	// Zoom on selection
 	graph.bind("plotselected", function (event, ranges) {
-		var self = $(this);
-		
 		// clamp the zooming to prevent infinite zoom
 		if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
 			ranges.xaxis.to = ranges.xaxis.from + 0.00001;
@@ -90,16 +107,23 @@ function setGraphZoomable(graphSelector, overviewSelector, options){
 		}
 		
 		// Do the zooming
-		$.plot(self, self.data('plot').getData(), 
-			$.extend(true, {}, options, {
-				xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to },
-				yaxis: { min: ranges.yaxis.from, max: ranges.yaxis.to }
-			}));
-	});
+		var plot = graph.data('plot');
+		zoomPlot(plot, ranges.xaxis.from, ranges.xaxis.to, ranges.yaxis.from, ranges.yaxis.to);
+		plot.clearSelection();
 		
-	// don't fire event on the overview to prevent eternal loop
+		// Synchronize overview selection
+		overview.data('plot').setSelection(ranges, true);
+	});
+	
+	// Zoom linked graph on overview selection
 	overview.bind("plotselected", function (event, ranges) {
-		$(graphSelector).data('plot').setSelection(ranges);
+		graph.data('plot').setSelection(ranges);
+	});
+	
+	// Reset linked graph zoom when reseting overview selection
+	overview.bind("plotunselected", function () {
+		var overviewAxes = overview.data('plot').getAxes();
+		zoomPlot(graph.data('plot'), overviewAxes.xaxis.min, overviewAxes.xaxis.max, overviewAxes.yaxis.min, overviewAxes.yaxis.max);
 	});
 }
 
@@ -272,6 +296,9 @@ var activeThreadsOverTimeInfos = {
 			grid: {
 	            hoverable: true // IMPORTANT! this is needed for tooltip to work
 	        },
+	        selection: {
+	        	mode: 'xy'
+	        },
 	        tooltip: true,
 	        tooltipOpts: {
 	            content: "%s for %x was %y"
@@ -279,9 +306,13 @@ var activeThreadsOverTimeInfos = {
 	    },
 	    createGraph: function() {
 			var dataset = prepareData(this.data, $("#choicesActiveThreadsOverTime"));
-			$.plot($("#flotActiveThreadsOverTime"), dataset, this.options);
+			var options = this.options;
+			$.plot($("#flotActiveThreadsOverTime"), dataset, options);
 			// setup overview
-			$.plot("#overviewActiveThreadsOverTime", dataset, overviewOptions);
+			$.plot($("#overviewActiveThreadsOverTime"), dataset, $.extend(true, {}, overviewOptions, {
+				xaxis: {min : options.xaxis.min, max: options.xaxis.max},
+				yaxis: {min : options.yaxis.min, max: options.yaxis.max},
+			}));
 		}
 };
 
@@ -296,7 +327,7 @@ function refreshActiveThreadsOverTime() {
 		var choiceContainer = $("#choicesActiveThreadsOverTime");
 		createLegend(choiceContainer, infos);
 		infos.createGraph();
-		setGraphZoomable("#flotActiveThreadsOverTime", "#overviewActiveThreadsOverTime", this.options)
+		setGraphZoomable("#flotActiveThreadsOverTime", "#overviewActiveThreadsOverTime");
 		$('#footerActiveThreadsOverTime .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
@@ -527,9 +558,13 @@ var bytesThroughputOverTimeInfos = {
 		},
 		createGraph: function() {
 			var dataset = prepareData(this.data, $("#choicesBytesThroughputOverTime"));
-			$.plot($("#flotBytesThroughputOverTime"), dataset, this.options);	
+			var options = this.options;
+			$.plot($("#flotBytesThroughputOverTime"), dataset, options);
 			// setup overview
-			$.plot($("#overviewBytesThroughputOverTime"), dataset, overviewOptions);
+			$.plot($("#overviewBytesThroughputOverTime"), dataset, $.extend(true, {}, overviewOptions, {
+				xaxis: {min : options.xaxis.min, max: options.xaxis.max},
+				yaxis: {min : options.yaxis.min, max: options.yaxis.max},
+			}));
 		}
 };
 
@@ -544,7 +579,7 @@ function refreshBytesThroughputOverTime() {
 		var choiceContainer = $("#choicesBytesThroughputOverTime");
 		createLegend(choiceContainer, infos);
 		infos.createGraph();
-		setGraphZoomable("#flotBytesThroughputOverTime", "#overviewBytesThroughputOverTime", infos.options)
+		setGraphZoomable("#flotBytesThroughputOverTime", "#overviewBytesThroughputOverTime");
 		$('#footerBytesThroughputOverTime .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
@@ -587,10 +622,10 @@ var responseTimesOverTimeInfos = {
 				show: true,
 				container: '#legendResponseTimesOverTime'
 			},
-			selection: { 
-				mode: "x"
-			},
-			grid: {
+			selection: {
+	        	mode: 'xy'
+	        },
+	        grid: {
 	            hoverable: true // IMPORTANT! this is needed for tooltip to work
 	        },
 	        tooltip: true,
@@ -600,9 +635,13 @@ var responseTimesOverTimeInfos = {
 	    },
 	    createGraph: function() {
 			var dataset = prepareData(this.data, $("#choicesResponseTimesOverTime"));
-			$.plot($("#flotResponseTimesOverTime"), dataset, this.options);
+			var options = this.options;
+			$.plot($("#flotResponseTimesOverTime"), dataset, options);
 			// setup overview
-			$.plot($("#overviewResponseTimesOverTime"), dataset, overviewOptions);
+			$.plot($("#overviewResponseTimesOverTime"), dataset, $.extend(true, {}, overviewOptions, {
+				xaxis: {min : options.xaxis.min, max: options.xaxis.max},
+				yaxis: {min : options.yaxis.min, max: options.yaxis.max},
+			}));
 		}
 };
 
@@ -617,7 +656,7 @@ function refreshResponseTimeOverTime() {
 		var choiceContainer = $("#choicesResponseTimesOverTime");
 		createLegend(choiceContainer, infos);
 		infos.createGraph();
-		setGraphZoomable("#flotResponseTimesOverTime", "#overviewResponseTimeOverTime", infos.options);
+		setGraphZoomable("#flotResponseTimesOverTime", "#overviewResponseTimesOverTime");
 		$('#footerResponseTimesOverTime .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
@@ -661,9 +700,9 @@ var latenciesOverTimeInfos = {
 				container: '#legendLatenciesOverTime'
 			},
 			selection: {
-				mode: "x"
-			},
-			grid: {
+	        	mode: 'xy'
+	        },
+	        grid: {
 				hoverable: true // IMPORTANT! this is needed for tooltip to work
 			},
 			tooltip: true,
@@ -673,9 +712,13 @@ var latenciesOverTimeInfos = {
 		},
 		createGraph: function () {
 			var dataset = prepareData(this.data, $("#choicesLatenciesOverTime"));
-			$.plot($("#flotLatenciesOverTime"), dataset, this.options);			
+			var options = this.options;
+			$.plot($("#flotLatenciesOverTime"), dataset, options);
 			// setup overview
-			$.plot("#overviewLatenciesOverTime", dataset, overviewOptions);
+			$.plot($("#overviewLatenciesOverTime"), dataset, $.extend(true, {}, overviewOptions, {
+				xaxis: {min : options.xaxis.min, max: options.xaxis.max},
+				yaxis: {min : options.yaxis.min, max: options.yaxis.max},
+			}));
 		}	
 };
 
@@ -690,7 +733,7 @@ function refreshLatenciesOverTime() {
 		var choiceContainer = $("#choicesLatenciesOverTime");
 		createLegend(choiceContainer, infos);
 		infos.createGraph();
-		setGraphZoomable("#flotLatenciesOverTime", "#overviewLatenciesOverTime", infos.options);
+		setGraphZoomable("#flotLatenciesOverTime", "#overviewLatenciesOverTime");
 		$('#footerLatenciesOverTime .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
@@ -855,6 +898,9 @@ var hitsPerSecondInfos = {
 				noColumns: 2,
 				show: true, 
 				container: "#legendHitsPerSecond"},
+			selection: {
+				mode : 'xy'
+			},
 			grid: {
 	        	hoverable: true // IMPORTANT! this is needed for tooltip to work
 			},
@@ -865,9 +911,13 @@ var hitsPerSecondInfos = {
 		},
 		createGraph: function createGraph() {
 			var dataset = prepareData(this.data, $("#choicesHitsPerSecond"));
-			$.plot($("#flotHitsPerSecond"), dataset, this.options);
+			var options = this.options;
+			$.plot($("#flotHitsPerSecond"), dataset, options);
 			// setup overview
-			$.plot($("#overviewHitsPerSecond"), dataset, overviewOptions);
+			$.plot($("#overviewHitsPerSecond"), dataset, $.extend(true, {}, overviewOptions, {
+				xaxis: {min : options.xaxis.min, max: options.xaxis.max},
+				yaxis: {min : options.yaxis.min, max: options.yaxis.max},
+			}));
 		}
 };
 
@@ -882,7 +932,7 @@ function refreshHitsPerSecond() {
 		var choiceContainer = $("#choicesHitsPerSecond");
 		createLegend(choiceContainer, infos);
 		infos.createGraph();
-		setGraphZoomable("#flotHitsPerSecond", "#overviewHitsPerSecond", infos.options);
+		setGraphZoomable("#flotHitsPerSecond", "#overviewHitsPerSecond");
 		$('#footerHitsPerSecond .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
@@ -923,7 +973,11 @@ var codesPerSecondInfos = {
 			legend: {
 				noColumns: 2,
 				show: true, 
-				container: "#legendCodesPerSecond"},			
+				container: "#legendCodesPerSecond"
+			},			
+			selection: {
+				mode: 'xy'
+			},
 			grid: {
 	            hoverable: true // IMPORTANT! this is needed for tooltip to work
 	        },
@@ -934,9 +988,13 @@ var codesPerSecondInfos = {
 	    },
 	createGraph: function() {
 		var dataset = prepareData(this.data, $("#choicesCodesPerSecond"));
-		$.plot($("#flotCodesPerSecond"), dataset, this.options);
+		var options = this.options;
+		$.plot($("#flotCodesPerSecond"), dataset, options);
 		// setup overview
-		$.plot($("#overviewCodesPerSecond"), dataset, overviewOptions);
+		$.plot($("#overviewCodesPerSecond"), dataset, $.extend(true, {}, overviewOptions, {
+			xaxis: {min : options.xaxis.min, max: options.xaxis.max},
+			yaxis: {min : options.yaxis.min, max: options.yaxis.max},
+		}));
 	}
 };
 
@@ -951,7 +1009,7 @@ function refreshCodesPerSecond() {
 		var choiceContainer = $("#choicesCodesPerSecond");
 		createLegend(choiceContainer, infos);
 		infos.createGraph();
-		setGraphZoomable("#flotCodesPerSecond", "#overviewCodesPerSecond", infos.options);
+		setGraphZoomable("#flotCodesPerSecond", "#overviewCodesPerSecond");
 		$('#footerCodesPerSecond .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
@@ -992,7 +1050,11 @@ var transactionsPerSecondInfos = {
 			legend: {
 				noColumns: 2,
 				show: true, 
-				container: "#legendTransactionsPerSecond"},
+				container: "#legendTransactionsPerSecond"
+			},
+			selection: {
+	        	mode: 'xy'
+	        },
 			grid: {
 	            hoverable: true // IMPORTANT! this is needed for tooltip to work
 	        },
@@ -1003,9 +1065,13 @@ var transactionsPerSecondInfos = {
 	    },
 	createGraph: function () {
 		var dataset = prepareData(this.data, $("#choicesTransactionsPerSecond"));
-		$.plot($("#flotTransactionsPerSecond"), dataset, this.options);
+		var options = this.options;
+		$.plot($("#flotTransactionsPerSecond"), dataset, options);
 		// setup overview
-		$.plot($("#overviewTransactionsPerSecond"), dataset, overviewOptions);
+		$.plot($("#overviewTransactionsPerSecond"), dataset, $.extend(true, {}, overviewOptions, {
+			xaxis: {min : options.xaxis.min, max: options.xaxis.max},
+			yaxis: {min : options.yaxis.min, max: options.yaxis.max},
+		}));
 	}
 };
 
