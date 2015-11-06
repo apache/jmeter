@@ -531,9 +531,14 @@
 							This graph represents the average response time depending on the
 							number of current active threads.
 							<br />
-							The *-aggregated series represent the average reponse time
-							regardless of the
-							number of current active threads.
+							<!-- NOTE : Actually aggregated series are disabled -->
+							<!--<p> The *-aggregated series represent the average response time 
+								regardless of the number of current active threads. These series are represented 
+								by a sole point because the number of current active threads is aggregated 
+								to an average. So for these points : <ul> <li>The abscissa is the average 
+								of the number of current active threads when samples of the series finish.</li> 
+								<li>The ordinate is the average of the response time for the samples of the 
+								series regardless of the number of current active threads.</li> </ul> </p> -->
 						</p>
 					</li>
 					<li>
