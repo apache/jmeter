@@ -138,11 +138,11 @@ activeThreadsOverTimeGrapher.values
 
 responseTimePerSampleGrapher.values
 	var data = {
-		"Temps moyen" : { 
-			"label": "Temps moyen", "data": [[1682.3, 0], [168.95, 1],[1703, 2],[1874, 3],[1945, 4], [385, 5], [1525, 6]] 
+		"Average time" : { 
+			"label": "Average time", "data": [[1682.3, 0], [168.95, 1],[1703, 2],[1874, 3],[1945, 4], [385, 5], [1525, 6]] 
 		},
-		"Temps médian" : { 
-			"label": "Temps médian", "data": [[1582.3, 0], [128.95, 1],[1603, 2],[1774, 3],[1645, 4], [185, 5], [1225, 6]] 
+		"Median time" : { 
+			"label": "Median time", "data": [[1582.3, 0], [128.95, 1],[1603, 2],[1774, 3],[1645, 4], [185, 5], [1225, 6]] 
 		}
 	}
 
@@ -159,8 +159,8 @@ timeVsThreadsGrapher.values
 				"show": true
 	    }
 	},
-	"Moyenne creerCompte" : {
-		"label": "Moyenne creerCompte",
+	"Average creerCompte" : {
+		"label": "Average creerCompte",
 	    "data": [ [ 2750, 16146 ] ], 
 		"color": "red" ,
 		"points": {
@@ -176,8 +176,8 @@ timeVsThreadsGrapher.values
 			"show": true
         }
 	},
-	"Moyenne captcha" : {
-		"label" : "Moyenne captcha",
+	"Average captcha" : {
+		"label" : "Average captcha",
 		"data": [[ 2820, 10000]],
 		"color": "green",
 	    "points": {

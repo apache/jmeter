@@ -284,17 +284,17 @@
                         <!-- /.panel-heading -->
 						<div class="collapse out portlet-content" id="bodyResponseTimeVsRequest">
 							<div class="panel-body" id="collapseResponseTimeVsRequest">
-								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flotResponseRimeVsRequest"></div>
+									<div class="flot-chart-content" id="flotResponseTimeVsRequest" style="float: left; width:80%;"></div>
+									<div style="float:left;margin-left:5px">
+										<p>Zoom :</p>
+										<div id="overviewResponseTimeVsRequest" style="width:190px;height:100px;"></div>
+									</div>
 								</div>
-								
 							</div>
 							<div class="panel-footer" id="footerResponseRimeVsRequest">
 									<p id="legendResponseTimeVsRequest" hidden></p>
-									<ul id="choicesResponseTimeVsRequest" class="legend">
-							
-									</ul>
+									<ul id="choicesResponseTimeVsRequest" class="legend"></ul>
 							</div>
 						</div>
                         <!-- /.panel-body -->
@@ -328,15 +328,16 @@
                         <!-- /.panel-heading -->
 						<div class="collapse out portlet-content" id="bodyLatenciesVsRequest">
 							<div class="panel-body" id="collapseLatencyVsRequest">
-								
 								<div class="flot-chart">
-									<div class="flot-chart-content" id="flotLatenciesVsRequest"></div>
+									<div class="flot-chart-content" id="flotLatenciesVsRequest" style="float: left; width:80%;"></div>
+									<div style="float:left;margin-left:5px">
+										<p>Zoom :</p>
+										<div id="overviewLatenciesVsRequest" style="width:190px;height:100px;"></div>
+									</div>
 								</div>
 								<div class="panel-footer" id="footerLatenciesVsRequest">
 									<p id="legendLatencyVsRequest" hidden></p>
-									<ul id="choicesLatencyVsRequest" class="legend">
-							
-									</ul>
+									<ul id="choicesLatencyVsRequest" class="legend"></ul>
 								</div>
 							</div>
 						</div>
