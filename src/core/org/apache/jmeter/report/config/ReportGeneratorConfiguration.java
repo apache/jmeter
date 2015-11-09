@@ -27,6 +27,8 @@ import java.util.Properties;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+import com.sun.org.apache.xalan.internal.utils.Objects;
+
 import jodd.props.Props;
 
 /**
@@ -116,6 +118,7 @@ public class ReportGeneratorConfiguration {
 	void createSubConfiguration(String name);
     }
 
+    private String sampleFilter;
     private File templateDirectory;
     private File tempDirectory;
     private File outputDirectory;
@@ -123,6 +126,35 @@ public class ReportGeneratorConfiguration {
     private long apdexToleratedThreshold;
     private ArrayList<String> filteredSamples = new ArrayList<String>();
     private HashMap<String, GraphConfiguration> graphConfigurations = new HashMap<String, GraphConfiguration>();
+
+    /**
+     * Gets the overall sample filter.
+     *
+     * @return the overall sample filter
+     */
+    public final String getSampleFilter() {
+	return sampleFilter;
+    }
+
+    /**
+     * Sets the overall sample filter.
+     *
+     * @param sampleFilter
+     *            the new overall sample filter
+     */
+    public final void setSampleFilter(String sampleFilter) {
+	if (Objects.equals(this.sampleFilter, sampleFilter) == false) {
+	    this.sampleFilter = sampleFilter;
+	    filteredSamples.clear();
+	    if (sampleFilter != null) {
+		String[] items = sampleFilter.split(",");
+		int count = items.length;
+		for (int index = 0; index < count; index++) {
+		    filteredSamples.add(items[index].trim());
+		}
+	    }
+	}
+    }
 
     /**
      * Gets the template directory.
@@ -440,17 +472,7 @@ public class ReportGeneratorConfiguration {
 	// Load sample filter
 	final String sampleFilter = getOptionalProperty(props,
 	        REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
-
-	// Build filtered samples list
-	if (sampleFilter != null) {
-	    List<String> filteredSamples = configuration.getFilteredSamples();
-	    filteredSamples.clear();
-	    String[] items = sampleFilter.split(",");
-	    int count = items.length;
-	    for (int index = 0; index < count; index++) {
-		filteredSamples.add(items[index].trim());
-	    }
-	}
+	configuration.setSampleFilter(sampleFilter);
 
 	// Find graph identifiers and create a configuration for each
 	final Map<String, GraphConfiguration> graphConfigurations = configuration

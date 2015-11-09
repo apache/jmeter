@@ -94,6 +94,7 @@ public class ReportGenerator {
     public static final String DATA_CTX_ENDDATE = "endDate";
     public static final String DATA_CTX_TIMEZONE = "timeZone";
     public static final String DATA_CTX_TIMEZONE_OFFSET = "timeZoneOffset";
+    public static final String DATA_CTX_OVERALL_FILTER = "overallFilter";
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not a valid graph class.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
@@ -411,6 +412,7 @@ public class ReportGenerator {
 	        .formatTimeStamp((long) beginDateConsumer.getResult()));
 	dataContext.put(DATA_CTX_ENDDATE,
 	        TimeHelper.formatTimeStamp((long) endDateConsumer.getResult()));
+	dataContext.put(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter());
 
 	// Export graph data to the data context
 	for (Map.Entry<GraphConfiguration, AbstractGraphConsumer> entryGraph : graphMap

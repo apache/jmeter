@@ -34,10 +34,6 @@ I - Default template directory content :
 		- OverTime.hmtl.fmkr : templated html page for over time graphs
 		- ResponseTimes.html.fmkr : templated html page for response time graphs
 		- Throughput.html.fmkr : templated html page for throughput graphs		
--/sbadmin2-1.0.7
-	-/bower_components
-		-/flot
-			- jquery.flot.pie.js : version 0.8.3 : patched file to fix an issue with firefox on Mac
 
 ---
 
