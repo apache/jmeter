@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
@@ -94,6 +95,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private Serializable object_msg_file_contents = null;
     // Cache for bytes-message, only used when parsing from a file 
     private byte[] bytes_msg_file_contents = null;
+
+    // Cached file name
+    private String cachedFileName;
 
     public PublisherSampler() {
     }
@@ -250,7 +254,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
             // in the case the test uses a file, we set it locally and
             // prevent loading the file repeatedly
-            if (file_contents == null) {
+            // if the file name changes we reload it
+            if (file_contents == null || !Objects.equals(cachedFileName, getInputFile())) {
+                cachedFileName = getInputFile();
                 file_contents = getFileContent(getInputFile());
             }
             return file_contents;
@@ -288,7 +294,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
             // in the case the test uses a file, we set it locally and
             // prevent loading the file repeatedly
-            if (object_msg_file_contents == null) {
+            // if the file name changes we reload it
+            if (object_msg_file_contents == null || !Objects.equals(cachedFileName, getInputFile())) {
+                cachedFileName = getInputFile();
                 object_msg_file_contents = getFileObjectContent(getInputFile());
             }
 
@@ -317,7 +325,9 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
             // in the case the test uses a file, we set it locally and
             // prevent loading the file repeatedly
-            if (bytes_msg_file_contents == null) {
+            // if the file name changes we reload it
+            if (bytes_msg_file_contents == null || !Objects.equals(cachedFileName, getInputFile())) {
+                cachedFileName = getInputFile();
                 bytes_msg_file_contents = getFileBytesContent(getInputFile());
             }
 
