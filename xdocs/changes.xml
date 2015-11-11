@@ -170,6 +170,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>58600</bug>Display correct filenames, when they are searched by IncludeController</li>
 </ul>
 
 <h3>Listeners</h3>
