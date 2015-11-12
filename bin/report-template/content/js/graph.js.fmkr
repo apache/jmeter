@@ -147,7 +147,7 @@ function setGraphZoomable(graphSelector, overviewSelector){
 }
 
 var responseTimePercentilesInfos = {
-		data: ${responseTimePercentiles.values},
+		data: ${(responseTimePercentiles.values)!"{}"},
 	    options: {
 	        series: {
 	            points: { show: false }
@@ -158,8 +158,8 @@ var responseTimePercentilesInfos = {
 	        	container: '#legendResponseTimePercentiles'
 	        },
 	        xaxis: {
-	        	min: ${responseTimePercentiles.minX?c},
-				max: ${responseTimePercentiles.maxX?c},
+	        	min: ${(responseTimePercentiles.minX?c)!0},
+				max: ${(responseTimePercentiles.maxX?c)!0},
 				tickDecimals: 1,
 				axisLabel: "Percentiles",
 				axisLabelUseCanvas: true,
@@ -168,8 +168,8 @@ var responseTimePercentilesInfos = {
 	            axisLabelPadding: 20,
 			},
 	        yaxis: { 
-				min: ${responseTimePercentiles.minY?c},
-				max: ${responseTimePercentiles.maxY?c},
+				min: ${(responseTimePercentiles.minY?c)!0},
+				max: ${(responseTimePercentiles.maxY?c)!0},
 				axisLabel: "Percentile value in ms",
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
@@ -228,7 +228,7 @@ function refreshResponseTimePercentiles(below) {
 }
 
 var responseTimeDistributionInfos = {
-		data: ${responseTimeDistribution.values},
+		data: ${(responseTimeDistribution.values)!"{}"},
 		options: {
 			legend: { noColumns: 2,show: true, container: '#legendResponseTimeDistribution' },
 			xaxis:{
@@ -247,7 +247,7 @@ var responseTimeDistributionInfos = {
 			},
 			bars : {
 				show: true,
-				barWidth: ${responseTimeDistribution.granularity?c}
+				barWidth: ${(responseTimeDistribution.granularity?c)!0}
 			},
 			grid: {
 	            hoverable: true // IMPORTANT! this is needed for tooltip to work
@@ -255,7 +255,7 @@ var responseTimeDistributionInfos = {
 	        tooltip: true,
 	        tooltipOpts: {
 	            content: function(label, xval, yval, flotItem){
-	            	return yval + " responses for " + label + " were between " + xval + " and " + (xval + ${responseTimeDistribution.granularity?c}) + " ms";
+	            	return yval + " responses for " + label + " were between " + xval + " and " + (xval + ${(responseTimeDistribution.granularity?c)!0}) + " ms";
 	            }
 	        }
 	    },
@@ -282,7 +282,7 @@ function refreshResponseTimeDistribution() {
 };
 
 var activeThreadsOverTimeInfos = {
-		data: ${activeThreadsOverTime.values},
+		data: ${(activeThreadsOverTime.values)!"{}"},
 		options: {
 	        series: {
 	            lines: {
@@ -293,19 +293,19 @@ var activeThreadsOverTimeInfos = {
 	            }
 	        },
 			xaxis: {
-				min: ${activeThreadsOverTime.minX?c} + ${timeZoneOffset?c},
-				max: ${activeThreadsOverTime.maxX?c} + ${timeZoneOffset?c},
+				min: ${(activeThreadsOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
+				max: ${(activeThreadsOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
 	            mode: "time",
 				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${activeThreadsOverTime.granularity?c}),
+				axisLabel: getElapsedTimeLabel(${(activeThreadsOverTime.granularity?c)!0}),
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
 	            axisLabelFontFamily: 'Verdana, Arial',
 	            axisLabelPadding: 20,
 	        },
 			yaxis: { 
-				min: ${activeThreadsOverTime.minY?c},
-				max: ${activeThreadsOverTime.maxY?c},
+				min: ${(activeThreadsOverTime.minY?c)!0},
+				max: ${(activeThreadsOverTime.maxY?c)!0},
 				axisLabel: "Number of active threads",
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
@@ -341,7 +341,7 @@ var activeThreadsOverTimeInfos = {
 function refreshActiveThreadsOverTime() {
 	var infos = activeThreadsOverTimeInfos;
 	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${timeZoneOffset?c});
+	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotActiveThreadsOverTime"))) {
 		infos.createGraph();
 	}else{
@@ -356,7 +356,7 @@ function refreshActiveThreadsOverTime() {
 };
 
 var responseTimePerSampleInfos = {
-		data: ${responseTimePerSample.values},
+		data: ${(responseTimePerSample.values)!"{}"},
 	    options: {
 			series: {
 	        	bars: {
@@ -371,7 +371,7 @@ var responseTimePerSampleInfos = {
 				lineWidth: 1
 			},
 			xaxis: {
-				max: ${responseTimePerSample.maxX?c},
+				max: ${(responseTimePerSample.maxX?c)!0},
 				axisLabel: "Response Time in ms",
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
@@ -385,7 +385,7 @@ var responseTimePerSampleInfos = {
 			},
 			yaxis: {
 				tickColor: "white",
-				ticks: ${responseTimePerSample.sampleNames},
+				ticks: ${(responseTimePerSample.sampleNames)!"[]"},
 				color: "black"
 			},
 			legend: {
@@ -469,7 +469,7 @@ function refreshResponseTimePerSample() {
 };
 
 var timeVsThreadsInfos = {
-		data: ${timeVsThreads.values},
+		data: ${(timeVsThreads.values)!"{}"},
         options: {
             series: {
                 lines: {
@@ -480,8 +480,8 @@ var timeVsThreadsInfos = {
                 }
             },
 			xaxis: {
-				min: ${timeVsThreads.minX?c},
-				max: ${timeVsThreads.maxX?c},
+				min: ${(timeVsThreads.minX?c)!0},
+				max: ${(timeVsThreads.maxX?c)!0},
                 axisLabel: "Number of active threads",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
@@ -489,8 +489,8 @@ var timeVsThreadsInfos = {
                 axisLabelPadding: 20,
 			},
 			yaxis: {
-				min: ${timeVsThreads.minY?c},
-				max: ${timeVsThreads.maxY?c},
+				min: ${(timeVsThreads.minY?c)!0},
+				max: ${(timeVsThreads.maxY?c)!0},
                 axisLabel: "Average response times in ms",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
@@ -539,7 +539,7 @@ function refreshTimeVsThreads(){
 };
 
 var bytesThroughputOverTimeInfos = {
-		data: ${bytesThroughputOverTime.values},
+		data: ${(bytesThroughputOverTime.values)!"{}"},
 		options: {
 			series: {
 				lines: {
@@ -550,19 +550,19 @@ var bytesThroughputOverTimeInfos = {
 				}
 			},
 			xaxis: {
-				min: ${bytesThroughputOverTime.minX?c} + ${timeZoneOffset?c},
-				max: ${bytesThroughputOverTime.maxX?c} + ${timeZoneOffset?c},
+				min: ${(bytesThroughputOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
+				max: ${(bytesThroughputOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
 				mode: "time",
 				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${bytesThroughputOverTime.granularity?c}) ,
+				axisLabel: getElapsedTimeLabel(${(bytesThroughputOverTime.granularity?c)!0}) ,
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
 				axisLabelFontFamily: 'Verdana, Arial',
 				axisLabelPadding: 20,
 			},
 			yaxis: { 
-				min: ${bytesThroughputOverTime.minY?c},
-				max: ${bytesThroughputOverTime.maxY?c},
+				min: ${(bytesThroughputOverTime.minY?c)!0},
+				max: ${(bytesThroughputOverTime.maxY?c)!0},
 				axisLabel: "Bytes/sec",
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
@@ -598,7 +598,7 @@ var bytesThroughputOverTimeInfos = {
 function refreshBytesThroughputOverTime() {
 	var infos = bytesThroughputOverTimeInfos;
 	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${timeZoneOffset?c});
+	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotBytesThroughputOverTime"))){
 		infos.createGraph();
 	}else{
@@ -613,7 +613,7 @@ function refreshBytesThroughputOverTime() {
 }
 
 var responseTimesOverTimeInfos = {
-		data: ${responseTimesOverTime.values},
+		data: ${(responseTimesOverTime.values)!"{}"},
 		options: {
 	        series: {
 	            lines: {
@@ -624,19 +624,19 @@ var responseTimesOverTimeInfos = {
 	            }
 	        },
 			xaxis: {
-				min: ${responseTimesOverTime.minX?c} + ${timeZoneOffset?c},
-				max: ${responseTimesOverTime.maxX?c} + ${timeZoneOffset?c},
+				min: ${(responseTimesOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
+				max: ${(responseTimesOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
 	            mode: "time",
 				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${responseTimesOverTime.granularity?c}),
+				axisLabel: getElapsedTimeLabel(${(responseTimesOverTime.granularity?c)!0}),
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
 	            axisLabelFontFamily: 'Verdana, Arial',
 	            axisLabelPadding: 20,
 	        },
 			yaxis: { 
-				min: ${responseTimesOverTime.minY?c},
-				max: ${responseTimesOverTime.maxY?c},
+				min: ${(responseTimesOverTime.minY?c)!0},
+				max: ${(responseTimesOverTime.maxY?c)!0},
 				axisLabel: "Response time in ms",
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
@@ -672,7 +672,7 @@ var responseTimesOverTimeInfos = {
 function refreshResponseTimeOverTime() {
 	var infos = responseTimesOverTimeInfos;
     setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${timeZoneOffset?c});
+	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotResponseTimesOverTime"))){
 		infos.createGraph();
 	}else{
@@ -687,7 +687,7 @@ function refreshResponseTimeOverTime() {
 };
 
 var latenciesOverTimeInfos = {
-		data: ${latenciesOverTime.values},
+		data: ${(latenciesOverTime.values)!"{}"},
 		options: {
 			series: {
 				lines: {
@@ -698,19 +698,19 @@ var latenciesOverTimeInfos = {
 				}
 			},
 			xaxis: {
-				min: ${latenciesOverTime.minX?c} + ${timeZoneOffset?c},
-				max: ${latenciesOverTime.maxX?c} + ${timeZoneOffset?c},
+				min: ${(latenciesOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
+				max: ${(latenciesOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
 				mode: "time",
 				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${latenciesOverTime.granularity?c}),
+				axisLabel: getElapsedTimeLabel(${(latenciesOverTime.granularity?c)!0}),
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
 				axisLabelFontFamily: 'Verdana, Arial',
 				axisLabelPadding: 20,
 			},
 			yaxis: {
-				min: ${latenciesOverTime.minY?c},
-				max: ${latenciesOverTime.maxY?c},
+				min: ${(latenciesOverTime.minY?c)!0},
+				max: ${(latenciesOverTime.maxY?c)!0},
 				axisLabel: "Response latencies in ms",
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
@@ -746,7 +746,7 @@ var latenciesOverTimeInfos = {
 function refreshLatenciesOverTime() {
 	var infos = latenciesOverTimeInfos;
 	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${timeZoneOffset?c});
+	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotLatenciesOverTime"))) {
 		infos.createGraph();
 	}else {
@@ -761,7 +761,7 @@ function refreshLatenciesOverTime() {
 };
 
 var responseTimeVsRequestInfos = {
-	data: ${responseTimeVsRequest.values},
+	data: ${(responseTimeVsRequest.values)!"{}"},
 	options: {
 		series: {
 			lines: {
@@ -772,8 +772,8 @@ var responseTimeVsRequestInfos = {
 			}
 		},
 		xaxis: {
-			min : ${responseTimeVsRequest.minX?c},
-			max : ${responseTimeVsRequest.maxX?c},
+			min : ${(responseTimeVsRequest.minX?c)!0},
+			max : ${(responseTimeVsRequest.maxX?c)!0},
 			axisLabel: "Global number of requests per second",
 			axisLabelUseCanvas: true,
 			axisLabelFontSizePixels: 12,
@@ -781,8 +781,8 @@ var responseTimeVsRequestInfos = {
 			axisLabelPadding: 20,
 		},
 		yaxis: {
-			min : ${responseTimeVsRequest.minY?c},
-			max : ${responseTimeVsRequest.maxY?c},
+			min : ${(responseTimeVsRequest.minY?c)!0},
+			max : ${(responseTimeVsRequest.maxY?c)!0},
 			axisLabel: "Median Response Time",
 			axisLabelUseCanvas: true,
 			axisLabelFontSizePixels: 12,
@@ -834,7 +834,7 @@ function refreshResponseTimeVsRequest() {
 
 
 var latenciesVsRequestInfos = {
-	data: ${latencyVsRequest.values},
+	data: ${(latencyVsRequest.values)!"{}"},
     options: {
     	series: {
         	lines: {
@@ -845,8 +845,8 @@ var latenciesVsRequestInfos = {
         	}
     	},
     	xaxis: {
-    		min : ${latencyVsRequest.minX?c},
-    		max : ${latencyVsRequest.maxX?c},
+    		min : ${(latencyVsRequest.minX?c)!0},
+    		max : ${(latencyVsRequest.maxX?c)!0},
     		axisLabel: "Global number of requests per second",
     		axisLabelUseCanvas: true,
     		axisLabelFontSizePixels: 12,
@@ -854,8 +854,8 @@ var latenciesVsRequestInfos = {
     		axisLabelPadding: 20,
     	},
     	yaxis: {
-    		min : ${latencyVsRequest.minY?c},
-    		max : ${latencyVsRequest.maxY?c},
+    		min : ${(latencyVsRequest.minY?c)!0},
+    		max : ${(latencyVsRequest.maxY?c)!0},
     		axisLabel: "Median Latency",
     		axisLabelUseCanvas: true,
     		axisLabelFontSizePixels: 12,
@@ -901,7 +901,7 @@ function refreshLatenciesVsRequest() {
 };
 
 var hitsPerSecondInfos = {
-		data: ${hitsPerSecond.values},
+		data: ${(hitsPerSecond.values)!"{}"},
 		options: {
 	    	series: {
 	        	lines: {
@@ -912,19 +912,19 @@ var hitsPerSecondInfos = {
 	            }
 			},
 			xaxis: {
-				min: ${hitsPerSecond.minX?c} + ${timeZoneOffset?c},
-				max: ${hitsPerSecond.maxX?c} + ${timeZoneOffset?c},
+				min: ${(hitsPerSecond.minX?c)!0} + ${(timeZoneOffset?c)!0},
+				max: ${(hitsPerSecond.maxX?c)!0} + ${(timeZoneOffset?c)!0},
 	        	mode: "time",
 	        	timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${hitsPerSecond.granularity?c}),
+				axisLabel: getElapsedTimeLabel(${(hitsPerSecond.granularity?c)!0}),
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
 	            axisLabelFontFamily: 'Verdana, Arial',
 	            axisLabelPadding: 20,
 			},
 			yaxis: {
-				min: ${hitsPerSecond.minY?c},
-				max: ${hitsPerSecond.maxY?c},
+				min: ${(hitsPerSecond.minY?c)!0},
+				max: ${(hitsPerSecond.maxY?c)!0},
 				axisLabel: "Number of hits / sec",
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
@@ -959,7 +959,7 @@ var hitsPerSecondInfos = {
 function refreshHitsPerSecond() {
 	var infos = hitsPerSecondInfos;
     setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${timeZoneOffset?c});
+	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
 	if (isGraph($("#flotHitsPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -974,7 +974,7 @@ function refreshHitsPerSecond() {
 }
 
 var codesPerSecondInfos = {
-		data: ${codesPerSecond.values},
+		data: ${(codesPerSecond.values)!"{}"},
 		options: {
 	        series: {
 	            lines: {
@@ -985,19 +985,19 @@ var codesPerSecondInfos = {
 	            }
 	        },
 			xaxis: {
-				min: ${codesPerSecond.minX?c} + ${timeZoneOffset?c},
-				max: ${codesPerSecond.maxX?c} + ${timeZoneOffset?c},
+				min: ${(codesPerSecond.minX?c)!0} + ${(timeZoneOffset?c)!0},
+				max: ${(codesPerSecond.maxX?c)!0} + ${(timeZoneOffset?c)!0},
 	            mode: "time",
 				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${codesPerSecond.granularity?c}),
+				axisLabel: getElapsedTimeLabel(${(codesPerSecond.granularity?c)!0}),
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
 	            axisLabelFontFamily: 'Verdana, Arial',
 	            axisLabelPadding: 20,
 	        },
 			yaxis: {
-				min: ${codesPerSecond.minY?c},
-				max: ${codesPerSecond.maxY?c},
+				min: ${(codesPerSecond.minY?c)!0},
+				max: ${(codesPerSecond.maxY?c)!0},
 				axisLabel: "Number of responses/sec",
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
@@ -1033,7 +1033,7 @@ var codesPerSecondInfos = {
 function refreshCodesPerSecond() {
 	var infos = codesPerSecondInfos;
 	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${timeZoneOffset?c});
+	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotCodesPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -1048,7 +1048,7 @@ function refreshCodesPerSecond() {
 };
 
 var transactionsPerSecondInfos = {
-		data: ${transactionsPerSecond.values},
+		data: ${(transactionsPerSecond.values)!"{}"},
 		options: {
 	        series: {
 	            lines: {
@@ -1059,19 +1059,19 @@ var transactionsPerSecondInfos = {
 	            }
 	        },
 			xaxis: {
-				min: ${transactionsPerSecond.minX?c} + ${timeZoneOffset?c},
-				max: ${transactionsPerSecond.maxX?c} + ${timeZoneOffset?c},
+				min: ${(transactionsPerSecond.minX?c)!0} + ${(timeZoneOffset?c)!0},
+				max: ${(transactionsPerSecond.maxX?c)!0} + ${(timeZoneOffset?c)!0},
 	            mode: "time",
 				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${transactionsPerSecond.granularity?c}),
+				axisLabel: getElapsedTimeLabel(${(transactionsPerSecond.granularity?c)!0}),
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
 	            axisLabelFontFamily: 'Verdana, Arial',
 	            axisLabelPadding: 20,
 	        },
 			yaxis: {
-				min: ${transactionsPerSecond.minY?c},
-				max: ${transactionsPerSecond.maxY?c},
+				min: ${(transactionsPerSecond.minY?c)!0},
+				max: ${(transactionsPerSecond.maxY?c)!0},
 				axisLabel: "Number of transactions / sec",
 	            axisLabelUseCanvas: true,
 	            axisLabelFontSizePixels: 12,
@@ -1107,7 +1107,7 @@ var transactionsPerSecondInfos = {
 function refreshTransactionsPerSecond() {
 	var infos = transactionsPerSecondInfos;
     setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${timeZoneOffset?c});
+	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
     if(isGraph($("#flotTransactionsPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -1281,8 +1281,8 @@ $(function() {
     $( "#slider-vertical" ).slider({
       orientation: "vertical",
       range: "min",
-      min: ${responseTimePercentiles.minY?c},
-      max: ${responseTimePercentiles.maxY?c},
+      min: ${(responseTimePercentiles.minY?c)!0},
+      max: ${(responseTimePercentiles.maxY?c)!0},
       value: 0,
       slide: function( event, ui ) {
        chiffre= ui.value;

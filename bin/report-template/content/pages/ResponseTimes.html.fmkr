@@ -77,26 +77,26 @@
 									<ul class="nav nav-third-level in" id="submenu">
 										<li>
 											<a href="ResponseTimes.html#responseTimePercentiles" onclick="$('#bodyResponseTimePercentiles').collapse('show');">
-												${responseTimePercentiles.title}
+												${(responseTimePercentiles.title)!"Response Time Percentiles"}
 											</a>
 										</li>
 										
 										<li>
 											<a href="ResponseTimes.html#activeThreadsOverTime" onclick="$('#bodyActiveThreadsOverTime').collapse('show');">
-												${activeThreadsOverTime.title}
+												${(activeThreadsOverTime.title)!"Active Threads Over Time"}
 											</a>
 										</li>
 										<li>
-											<a href="ResponseTimes.html#timeVsThreads" onclick="$('#bodyTimeVsThreads').collapse('show');">${timeVsThreads.title}</a>
+											<a href="ResponseTimes.html#timeVsThreads" onclick="$('#bodyTimeVsThreads').collapse('show');">${(timeVsThreads.title)!"Time Vs Threads"}</a>
 										</li>
 										<li>
 											<a href="ResponseTimes.html#responseTimeDistribution" onclick="$('#bodyResponseTimeDistribution').collapse('show');">
-												${responseTimeDistribution.title}
+												${(responseTimeDistribution.title)!"Response Time Distribution"}
 											</a>
 										</li>
 										<li>
 											<a href="ResponseTimes.html#responseTimePerSample" onclick="$('#bodyResponseTimePerSample').collapse('show');">
-												${responseTimePerSample.title}
+												${(responseTimePerSample.title)!"Response Time Per Sample"}
 											</a>
 										</li>
 									</ul>
@@ -129,7 +129,7 @@
             	<div class="col-lg-12 portlet" id="responseTimePercentiles">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                            <i class="fa fa-bar-chart-o fa-fw"></i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimePercentiles" aria-expanded="true" aria-controls="bodyResponseTimePercentiles">${responseTimePercentiles.title}</span>
+                            <i class="fa fa-bar-chart-o fa-fw"></i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimePercentiles" aria-expanded="true" aria-controls="bodyResponseTimePercentiles">${(responseTimePercentiles.title)!"Response Time Percentiles"}</span>
 							<div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -176,7 +176,7 @@
 				<div class="col-lg-12 portlet" id="activeThreadsOverTime">
                     <div class="panel panel-default" >
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">${activeThreadsOverTime.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">${(activeThreadsOverTime.title)!"Active Threads Over Time"}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -222,7 +222,7 @@
 				<div class="col-lg-12 portlet" id="timeVsThreads">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyTimeVsThreads" aria-expanded="true" aria-controls="bodyTimeVsThreads">${timeVsThreads.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyTimeVsThreads" aria-expanded="true" aria-controls="bodyTimeVsThreads">${(timeVsThreads.title)!"Time Vs Threads"}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -266,7 +266,7 @@
 				<div class="col-lg-12 portlet" id="responseTimeDistribution">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyResponseTimeDistribution" aria-expanded="true" aria-controls="bodyResponseTimeDistribution">${responseTimeDistribution.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyResponseTimeDistribution" aria-expanded="true" aria-controls="bodyResponseTimeDistribution">${(responseTimeDistribution.title)!"Response Time Distribution"}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -309,7 +309,7 @@
 				<div class="col-lg-12 portlet" id="responseTimePerSample">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimePerSample" aria-expanded="true" aria-controls="bodyResponseTimePerSample">${responseTimePerSample.title}</span>
+                           <i class="fa fa-bar-chart-o fa-fw"></i><span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimePerSample" aria-expanded="true" aria-controls="bodyResponseTimePerSample">${(responseTimePerSample.title)!"Response Time Per Sample"}</span>
 						   <div class="pull-right">
 								<div class="btn-group">
 									<a class="drag btn btn-link btn-xs">
@@ -383,7 +383,7 @@
     <script src="../js/jquery.numberformatter-1.2.3.min.js"></script> 
 	<script src="../js/curvedLines.js"></script>
     <script src="../js/dashboard-commons.js"></script>
-    <script src="../js/graphes.js"></script>
+    <script src="../js/graph.js"></script>
 	<script src="../js/jquery-ui.js"></script>
 	<script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.threshold.js"></script>
     <!-- Custom Theme JavaScript -->

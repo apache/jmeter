@@ -20,13 +20,16 @@ package org.apache.jmeter.report.core;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
+//import org.apache.jmeter.samplers.SampleResult;
+//import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 
 /**
@@ -43,6 +46,8 @@ public class CsvSampleReader {
 
     private static final String CHARSET = "ISO8859-1";
 
+    private File file;
+
     private BufferedReader reader;
 
     private char separator;
@@ -55,72 +60,88 @@ public class CsvSampleReader {
 
     private Sample lastSampleRead;
 
+    /**
+     * Instantiates a new csv sample reader.
+     *
+     * @param inputFile
+     *            the input file
+     * @param separator
+     *            the separator
+     */
     public CsvSampleReader(File inputFile, char separator) {
-	assertFile(inputFile);
-	BufferedReader reader = createReader(inputFile);
-	init(reader, readMetadata(reader, separator));
+	this(inputFile, null, separator);
     }
 
+    /**
+     * Instantiates a new csv sample reader.
+     *
+     * @param inputFile
+     *            the input file
+     * @param metadata
+     *            the metadata
+     */
     public CsvSampleReader(File inputFile, SampleMetadata metadata) {
-	assertFile(inputFile);
-	if (metadata == null)
-	    throw new ArgumentNullException("metadata");
-
-	init(createReader(inputFile), metadata);
+	this(inputFile, metadata, null);
     }
 
-    private static void assertFile(File file) {
-	if (file == null)
+    private CsvSampleReader(File inputFile, SampleMetadata metadata,
+	    Character separator) {
+	if (inputFile == null)
 	    throw new ArgumentNullException("inputFile");
 
-	if (!file.isFile())
-	    throw new IllegalArgumentException(
-		    file.getAbsolutePath()
-		            + " does not exist or is not a file ! Please provide an existing input file.");
-    }
-
-    private static BufferedReader createReader(File file) {
-	Reader reader = null;
+	if (inputFile.isFile() == false || inputFile.canRead() == false)
+	    throw new IllegalArgumentException(file.getAbsolutePath()
+		    + "does not exist or is not readable");
+	this.file = inputFile;
 	try {
-	    reader = new InputStreamReader(new FileInputStream(file), CHARSET);
-	} catch (Exception e) {
-	    throw new RuntimeException("Could not create file reader !", e);
+	    this.reader = new BufferedReader(new InputStreamReader(
+		    new FileInputStream(file), CHARSET), BUF_SIZE);
+	} catch (FileNotFoundException | UnsupportedEncodingException ex) {
+	    throw new SampleException("Could not create file reader !", ex);
 	}
-	return new BufferedReader(reader, BUF_SIZE);
-    }
-
-    private static SampleMetadata readMetadata(BufferedReader reader,
-	    char separator) {
-	try {
-	    return new SampleMetaDataParser(separator).parse(reader.readLine());
-	} catch (Exception e) {
-	    throw new SampleException("Could not read metadata !", e);
-	}
-	
-//	String line = reader.readLine();
-//        if (line == null) {
-//            throw new IOException(filename + ": unable to read header line");
-//        }
-//        long lineNumber = 1;
-//        SampleSaveConfiguration saveConfig = CSVSaveService
-//                .getSampleSaveConfiguration(line, filename);
-//        if (saveConfig == null) {// not a valid header
-//            log.info(filename
-//                    + " does not appear to have a valid header. Using default configuration.");
-//            saveConfig = (SampleSaveConfiguration) resultCollector
-//                    .getSaveConfig().clone(); // may change the format later
-//            dataReader.reset(); // restart from beginning
-//            lineNumber = 0;
-//        }
-    }
-
-    private void init(BufferedReader reader, SampleMetadata metadata) {
-	this.reader = reader;
+	if (metadata == null)
+	    metadata = readMetadata(separator);
 	this.metadata = metadata;
 	this.columnCount = metadata.getColumnCount();
 	this.separator = metadata.getSeparator();
 	this.row = 0;
-	lastSampleRead = nextSample();
+	this.lastSampleRead = nextSample();
+    }
+
+    private SampleMetadata readMetadata(char separator) {
+	try {
+//	    String line = reader.readLine();
+//	    
+//	    // Get save configuration from csv header
+//	    SampleSaveConfiguration saveConfig = CSVSaveService
+//		    .getSampleSaveConfiguration(line, file.getAbsolutePath());
+//	    
+//	    // If csv header is invalid, get save configuration from jmeter properties
+//	    if (saveConfig == null)
+//		saveConfig = SampleSaveConfiguration.staticConfig();
+//	    return new SampleMetadata(saveConfig);
+	    
+	    return new SampleMetaDataParser(separator).parse(reader.readLine());
+	} catch (Exception e) {
+	    throw new SampleException("Could not read metadata !", e);
+	}
+
+	// String line = reader.readLine();
+	// if (line == null) {
+	// throw new IOException(filename + ": unable to read header line");
+	// }
+	// long lineNumber = 1;
+	// SampleSaveConfiguration saveConfig = CSVSaveService
+	// .getSampleSaveConfiguration(line, filename);
+	// if (saveConfig == null) {// not a valid header
+	// log.info(filename
+	// +
+	// " does not appear to have a valid header. Using default configuration.");
+	// saveConfig = (SampleSaveConfiguration) resultCollector
+	// .getSaveConfig().clone(); // may change the format later
+	// dataReader.reset(); // restart from beginning
+	// lineNumber = 0;
+	// }
     }
 
     public SampleMetadata getMetadata() {

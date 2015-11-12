@@ -88,7 +88,7 @@ public class SampleMetadata {
 	    index.put(columns[i].trim(), i);
 	}
     }
-
+    
     /**
      * Gets the character used for separating columns
      */

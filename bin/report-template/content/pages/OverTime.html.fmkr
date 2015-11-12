@@ -69,18 +69,18 @@
 									<ul class="nav nav-third-level in" id="submenu">
 										<li>
 											<a href="OverTime.html#bytesThroughputOverTime" onclick="$('#bodyBytesThroughputOverTime').collapse('show');">
-												${bytesThroughputOverTime.title}
+												${(bytesThroughputOverTime.title)!"Bytes Throughput Over Time"}
 											</a>
 										</li>
 										
 										<li>
 											<a href="OverTime.html#responseTimesOverTime" onclick="$('#bodyResponseTimeOverTime').collapse('show');">
-												${responseTimesOverTime.title}
+												${(responseTimesOverTime.title)!"Response Times Over Time"}
 											</a>
 										</li>
 										<li>
 											<a href="OverTime.html#latenciesOverTime" onclick="$('#bodyLantenciesOverTime').collapse('show');">
-												${latenciesOverTime.title}
+												${(latenciesOverTime.title)!"Latencies Over Time"}
 											</a>
 										</li>
 										
@@ -143,7 +143,7 @@
                 <div class="col-lg-12 portlet" id="bytesThroughputOverTime">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                             <i  class="fa fa-bar-chart-o fa-fw" ></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">${bytesThroughputOverTime.title}</span>
+                             <i  class="fa fa-bar-chart-o fa-fw" ></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">${(bytesThroughputOverTime.title)!"Bytes Throughput Over Time"}</span>
 							 <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -191,7 +191,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
 							<i class="fa fa-bar-chart-o fa-fw"></i> 
-							<span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">${responseTimesOverTime.title}</span>
+							<span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">${(responseTimesOverTime.title)!"Response Times Over Time"}</span>
                            <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -242,7 +242,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
-                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">${latenciesOverTime.title}</span>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">${(latenciesOverTime.title)!"Latencies Over Time"}</span>
 							<div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -317,7 +317,7 @@
     <script src="../js/jquery.numberformatter-1.2.3.min.js"></script> 
 	<script src="../js/curvedLines.js"></script>
 	<script src="../js/dashboard-commons.js"></script>
-    <script src="../js/graphes.js"></script>
+    <script src="../js/graph.js"></script>
 	<script src="../js/jquery-ui.js"></script>
 	<script src="../js/jquery.cookie.js"></script>
     <!-- Custom Theme JavaScript -->
