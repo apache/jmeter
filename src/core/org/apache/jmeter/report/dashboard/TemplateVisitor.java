@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.report.core.DataContext;
 
@@ -84,7 +85,8 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
 	try {
 	    Files.copy(arg0, newDir);
 	} catch (FileAlreadyExistsException ex) {
-	    // do nothing
+	    // Set directory empty
+	    FileUtils.cleanDirectory(newDir.toFile());
 	}
 	return FileVisitResult.CONTINUE;
     }

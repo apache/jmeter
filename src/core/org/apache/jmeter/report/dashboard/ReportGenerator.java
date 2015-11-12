@@ -66,6 +66,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import freemarker.template.Configuration;
+import freemarker.template.TemplateExceptionHandler;
 
 /**
  * The class ReportGenerator provides a way to generate all the templated files
@@ -439,6 +440,7 @@ public class ReportGenerator {
 	        Configuration.getVersion());
 	try {
 	    templateCfg.setDirectoryForTemplateLoading(templateDir);
+	    templateCfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 	    TemplateVisitor visitor = new TemplateVisitor(templateDir.toPath(),
 		    outputDir.toPath(), templateCfg, dataContext);
 	    Files.walkFileTree(templateDir.toPath(), visitor);
