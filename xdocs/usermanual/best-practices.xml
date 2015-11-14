@@ -112,7 +112,7 @@ If the browser works OK even if JMeter is not running, then the browser cannot b
 Some browsers ignore proxy settings for <code>localhost</code> or <code>127.0.0.1</code>; try using the local hostname or IP instead.
 </p>
 <p>
-The error "unknown_ca" probably means that you are trying to record HTTPS, and the browser has not accepted the
+The error "<code>unknown_ca</code>" probably means that you are trying to record HTTPS, and the browser has not accepted the
 JMeter Proxy server certificate.
 </p>
 <!--TODO: Describe how to use this to record against one server[name]
