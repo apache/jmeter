@@ -29,6 +29,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -180,10 +182,10 @@ public class SaveService {
     static final String PROPVERSION = "2.9";// Expected version $NON-NLS-1$
 
     // Internal information only
-    private static String fileVersion = ""; // read from saveservice.properties file// $NON-NLS-1$
-    // Must match Revision id value in saveservice.properties, 
+    private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
+    // Must match the sha1 checksum of the file saveservice.properties,
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "1709921"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "3b98c4294b3ea34dc27d437f32683cf2822892e6"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
@@ -221,8 +223,33 @@ public class SaveService {
         }
         return nameMap;
     }
+
+    private static String getChecksumForPropertiesFile()
+            throws NoSuchAlgorithmException, IOException {
+        FileInputStream fis = null;
+        MessageDigest md = MessageDigest.getInstance("SHA1");
+        try {
+            fis = new FileInputStream(JMeterUtils.getJMeterHome()
+                    + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
+                            SAVESERVICE_PROPERTIES_FILE));
+            byte[] readBuffer = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = fis.read(readBuffer)) != -1) {
+                md.update(readBuffer, 0, bytesRead);
+            }
+        } finally {
+            JOrphanUtils.closeQuietly(fis);
+        }
+        return JOrphanUtils.baToHexString(md.digest());
+    }
     private static void initProps() {
         // Load the alias properties
+        try {
+            fileVersion = getChecksumForPropertiesFile();
+        } catch (IOException | NoSuchAlgorithmException e) {
+            log.fatalError("Can't compute checksum for saveservice properties file", e);
+            throw new JMeterError("JMeter requires the checksum of saveservice properties file to continue", e);
+        }
         try {
             Properties nameMap = loadProperties();
             // now create the aliases
@@ -237,8 +264,8 @@ public class SaveService {
                         propertiesVersion = val;
                         log.info("Using SaveService properties version " + propertiesVersion);
                     } else if (key.equalsIgnoreCase("_file_version")) { // $NON-NLS-1$
-                            fileVersion = extractVersion(val);
-                            log.info("Using SaveService properties file version " + fileVersion);
+                        log.info("SaveService properties file version is now computed by a checksum,"
+                                + "the property _file_version is not used anymore and can be removed.");
                     } else if (key.equalsIgnoreCase("_file_encoding")) { // $NON-NLS-1$
                         fileEncoding = val;
                         log.info("Using SaveService properties file encoding " + fileEncoding);
@@ -383,18 +410,6 @@ public class SaveService {
     }
 
     private static boolean versionsOK = true;
-
-    // Extract version digits from String of the form #Revision: n.mm #
-    // (where # is actually $ above)
-    private static final String REVPFX = "$Revision: ";
-    private static final String REVSFX = " $"; // $NON-NLS-1$
-
-    private static String extractVersion(String rev) {
-        if (rev.length() > REVPFX.length() + REVSFX.length()) {
-            return rev.substring(REVPFX.length(), rev.length() - REVSFX.length());
-        }
-        return rev;
-    }
 
 //  private static void checkVersion(Class clazz, String expected) {
 //

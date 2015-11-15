@@ -60,6 +60,8 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
             return new JSONManager();
         }
     };
+
+    @Override
     public void process() {
         JMeterContext context = getThreadContext();
         JMeterVariables vars = context.getVariables();

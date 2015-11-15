@@ -254,7 +254,7 @@ There are some JMeter properties that can be set to alter this behaviour.
     <dt><code>DiskStore</code></dt><dd>store samples in a disk file (under <code>java.io.temp</code>) until the end of a run. 
     The serialised data file is deleted on JVM exit.</dd>
     <dt><code>StrippedDiskStore</code></dt><dd>remove responseData from successful samples, and use DiskStore sender to send them.</dd>
-    <dt><code>Batch</code></dt><dd>send saved samples when either the count (num_sample_threshold) or time (time_threshold) exceeds a threshold,
+    <dt><code>Batch</code></dt><dd>send saved samples when either the count (<code>num_sample_threshold</code>) or time (<code>time_threshold</code>) exceeds a threshold,
     at which point the samples are sent synchronously.
     The thresholds can be configured on the server using the following properties:
         <dl>

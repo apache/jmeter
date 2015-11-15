@@ -77,6 +77,7 @@ Summary
     <li>Since version 2.14, you can use Nashorn Engine (default javascript engine is Rhino) under Java8 for Elements that use Javascript Engine (__javaScript, IfController). If you want to use it, use property <code>javascript.use_rhino=false</code>, see <bugzilla>58406</bugzilla>.
     Note in future versions, we will switch to Nashorn by default, so users are encouraged to report any issue related to broken code when using Nashorn instead of Rhino.
     </li>
+    <li>Since version 2.14, JMS Publisher will reload contents of file if Message source is "From File" and the ""Filename" field changes (through variables usage for example)</li>   
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -93,6 +94,7 @@ Summary
 <ul>
     <li><bug>57928</bug>Add ability to define protocol (http/https) to AccessLogSampler GUI. Contributed by Jérémie Lesage (jeremie.lesage at jeci.fr)</li>
     <li><bug>58300</bug> Make existing Java Samplers implement Interruptible</li>
+    <li><bug>58160</bug>JMS Publisher : reload file content if file name changes. Based partly on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -128,6 +130,7 @@ Summary
 <li><bug>57988</bug>Shortcuts (Ctrl+1 .. Ctrl+9) to quick add elements into test plan. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 <li><bug>58100</bug>Performance enhancements : Replace Random by ThreadLocalRandom.</li>
 <li><bug>58465</bug>JMS Read response field is badly named and documented</li>
+<li><bug>58601</bug>Change check for modification of <code>saveservice.properties</code> from <code>$Revision$</code> to sha1 sum of the file itself.</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
@@ -168,6 +171,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>58600</bug>Display correct filenames, when they are searched by IncludeController</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -211,6 +215,7 @@ Summary
 <li>Amol Moye (amol.moye at thomsonreuters.com)</li>
 <li>Samoht-fr (https://github.com/Samoht-fr)</li>
 <li>Graham Russell (jmeter at ham1.co.uk)</li>
+<li>Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
 </ul>
 
 <br/>
