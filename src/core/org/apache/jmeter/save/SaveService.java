@@ -214,38 +214,28 @@ public class SaveService {
 
     public static Properties loadProperties() throws IOException{
         Properties nameMap = new Properties();
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(JMeterUtils.getJMeterHome()
-                         + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE));
+        try (FileInputStream fis = new FileInputStream(JMeterUtils.getJMeterHome()
+                + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE))){
             nameMap.load(fis);
-        } finally {
-            JOrphanUtils.closeQuietly(fis);
         }
         return nameMap;
     }
 
     private static String getChecksumForPropertiesFile()
             throws NoSuchAlgorithmException, IOException {
-        FileInputStream fis = null;
-        InputStreamReader inStream = null;
-        BufferedReader reader = null;
         MessageDigest md = MessageDigest.getInstance("SHA1");
-        try {
-            fis = new FileInputStream(JMeterUtils.getJMeterHome()
-                    + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
-                            SAVESERVICE_PROPERTIES_FILE));
-            inStream = new InputStreamReader(fis);
-            reader = new BufferedReader(inStream);
+        try (BufferedReader reader = 
+                new BufferedReader(
+                        new InputStreamReader(
+                                new FileInputStream(JMeterUtils.getJMeterHome()
+                                        + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
+                                                SAVESERVICE_PROPERTIES_FILE))))
+                ) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 md.update(line.getBytes());
             }
-        } finally {
-            JOrphanUtils.closeQuietly(reader);
-            JOrphanUtils.closeQuietly(inStream);
-            JOrphanUtils.closeQuietly(fis);
-        }
+        } 
         return JOrphanUtils.baToHexString(md.digest());
     }
     private static void initProps() {
@@ -542,12 +532,8 @@ public class SaveService {
      */
     public static HashTree loadTree(File file) throws IOException {
         log.info("Loading file: " + file);
-        InputStream reader = null;
-        try {
-            reader = new FileInputStream(file);
+        try (InputStream reader = new FileInputStream(file)){
             return readTree(reader, file);
-        } finally {
-            JOrphanUtils.closeQuietly(reader);
         }
     }
 
