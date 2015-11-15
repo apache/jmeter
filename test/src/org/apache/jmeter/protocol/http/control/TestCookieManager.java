@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -365,7 +366,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         public void testCookiePolicyIgnore() throws Exception {
-            man.setCookiePolicy(org.apache.http.client.params.CookiePolicy.IGNORE_COOKIES);
+            man.setCookiePolicy(CookieSpecs.IGNORE_COOKIES);
             man.testStarted(); // ensure policy is picked up
             URL url = new URL("http://order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;", url);
@@ -384,7 +385,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("/sub1",man.get(1).getPath());
             assertEquals("/",man.get(2).getPath());
             String s = man.getCookieHeaderForURL(url);
-            assertNull(s);
+            assertTrue(s.length()==0);
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
             List<org.apache.http.cookie.Cookie> c = 
                     cookieHandler.getCookiesForUrl(man.getCookies(), url, 
