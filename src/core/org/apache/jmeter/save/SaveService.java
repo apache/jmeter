@@ -19,6 +19,7 @@
 package org.apache.jmeter.save;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -183,9 +184,9 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
-    // Must match the sha1 checksum of the file saveservice.properties,
+    // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "3b98c4294b3ea34dc27d437f32683cf2822892e6"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "3136d9168702a07555b110a86f7ba4da4ab88346"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
@@ -227,17 +228,22 @@ public class SaveService {
     private static String getChecksumForPropertiesFile()
             throws NoSuchAlgorithmException, IOException {
         FileInputStream fis = null;
+        InputStreamReader inStream = null;
+        BufferedReader reader = null;
         MessageDigest md = MessageDigest.getInstance("SHA1");
         try {
             fis = new FileInputStream(JMeterUtils.getJMeterHome()
                     + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
                             SAVESERVICE_PROPERTIES_FILE));
-            byte[] readBuffer = new byte[8192];
-            int bytesRead;
-            while ((bytesRead = fis.read(readBuffer)) != -1) {
-                md.update(readBuffer, 0, bytesRead);
+            inStream = new InputStreamReader(fis);
+            reader = new BufferedReader(inStream);
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                md.update(line.getBytes());
             }
         } finally {
+            JOrphanUtils.closeQuietly(reader);
+            JOrphanUtils.closeQuietly(inStream);
             JOrphanUtils.closeQuietly(fis);
         }
         return JOrphanUtils.baToHexString(md.digest());
