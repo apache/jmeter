@@ -25,18 +25,23 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.util.PublicSuffixMatcher;
+import org.apache.http.conn.util.PublicSuffixMatcherLoader;
 import org.apache.http.cookie.CookieOrigin;
 import org.apache.http.cookie.CookieSpec;
-import org.apache.http.cookie.CookieSpecRegistry;
+import org.apache.http.cookie.CookieSpecProvider;
 import org.apache.http.cookie.MalformedCookieException;
 import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.impl.cookie.BestMatchSpecFactory;
-import org.apache.http.impl.cookie.BrowserCompatSpecFactory;
-import org.apache.http.impl.cookie.IgnoreSpecFactory;
-import org.apache.http.impl.cookie.NetscapeDraftSpecFactory;
-import org.apache.http.impl.cookie.RFC2109SpecFactory;
-import org.apache.http.impl.cookie.RFC2965SpecFactory;
+import org.apache.http.impl.cookie.DefaultCookieSpecProvider;
+import org.apache.http.impl.cookie.IgnoreSpecProvider;
+import org.apache.http.impl.cookie.NetscapeDraftSpecProvider;
+import org.apache.http.impl.cookie.RFC2109SpecProvider;
+import org.apache.http.impl.cookie.RFC6265CookieSpecProvider;
 import org.apache.http.message.BasicHeader;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -50,23 +55,36 @@ public class HC4CookieHandler implements CookieHandler {
     
     private final transient CookieSpec cookieSpec;
     
-    private static CookieSpecRegistry registry  = new CookieSpecRegistry();
+    private static PublicSuffixMatcher publicSuffixMatcher = PublicSuffixMatcherLoader.getDefault();
+    private static Registry<CookieSpecProvider> registry  = 
+            RegistryBuilder.<CookieSpecProvider>create()
+            .register(CookieSpecs.BEST_MATCH, new DefaultCookieSpecProvider(publicSuffixMatcher))
+            .register(CookieSpecs.BROWSER_COMPATIBILITY, new DefaultCookieSpecProvider(publicSuffixMatcher))
+            .register(CookieSpecs.STANDARD, new RFC6265CookieSpecProvider())
+            .register(CookiePolicy.RFC_2109, new RFC2109SpecProvider())
+            .register(CookieSpecs.STANDARD_STRICT, new RFC6265CookieSpecProvider(
+                    org.apache.http.impl.cookie.RFC6265CookieSpecProvider.CompatibilityLevel.STRICT, null))
+            .register(CookieSpecs.DEFAULT, new DefaultCookieSpecProvider(publicSuffixMatcher))
+            .register(CookieSpecs.IGNORE_COOKIES, new IgnoreSpecProvider())
+            .register(CookieSpecs.NETSCAPE, new NetscapeDraftSpecProvider())
+            .build();
 
-    static {
-        registry.register(CookiePolicy.BEST_MATCH, new BestMatchSpecFactory());
-        registry.register(CookiePolicy.BROWSER_COMPATIBILITY, new BrowserCompatSpecFactory());
-        registry.register(CookiePolicy.RFC_2109, new RFC2109SpecFactory());
-        registry.register(CookiePolicy.RFC_2965, new RFC2965SpecFactory());
-        registry.register(CookiePolicy.IGNORE_COOKIES, new IgnoreSpecFactory());
-        registry.register(CookiePolicy.NETSCAPE, new NetscapeDraftSpecFactory());
-    }
+//    static {
+//        registry.register(CookiePolicy.BEST_MATCH, new BestMatchSpecFactory());
+//        registry.register(CookiePolicy.BROWSER_COMPATIBILITY, new BrowserCompatSpecFactory());
+//        registry.register(CookiePolicy.RFC_2109, new RFC2109SpecFactory());
+//        registry.register(CookiePolicy.RFC_2965, new RFC2965SpecFactory());
+//        registry.register(CookiePolicy.IGNORE_COOKIES, new IgnoreSpecFactory());
+//        registry.register(CookiePolicy.NETSCAPE, new NetscapeDraftSpecFactory());
+//    }
 
     public HC4CookieHandler(String policy) {
         super();
         if (policy.equals(org.apache.commons.httpclient.cookie.CookiePolicy.DEFAULT)) { // tweak diff HC3 vs HC4
-            policy = CookiePolicy.BEST_MATCH;
+            policy = CookieSpecs.STANDARD;
         }
-        this.cookieSpec = registry.getCookieSpec(policy);
+        HttpClientContext context = HttpClientContext.create();
+        this.cookieSpec = registry.lookup(policy).create(context);
     }
 
     @Override
