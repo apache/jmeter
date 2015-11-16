@@ -52,6 +52,6 @@ function getElapsedTimeLabel(granularity) {
 /*
  * This comparison function evaluates abscissas and sort them. 
  */
-function compareByXCoordinate(coordA, coordB){
-	return coordB[0] - coord1[0];
+function compareByXCoordinate(coord1, coord2){
+	return coord2[0] - coord1[0];
 }

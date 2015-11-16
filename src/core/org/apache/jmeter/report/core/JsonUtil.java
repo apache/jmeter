@@ -17,12 +17,9 @@
  */
 package org.apache.jmeter.report.core;
 
-import java.io.StringWriter;
+import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonWriter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The class JsonUtil provides helper functions to generate Json.
@@ -32,38 +29,34 @@ import javax.json.JsonWriter;
 public final class JsonUtil {
 
     /**
-     * Converts a json object to a json-like string.
+     * Converts the specified array to a json-like array string.
      *
-     * @param json
-     *            the json object to convert
-     * @return the json-like string representing the specified object
+     * @param array
+     *            the array
+     * @return the json string
      */
-    public static String convertJsonToString(JsonObject json) {
-	StringWriter stWriter = new StringWriter();
-	JsonWriter jsonWriter = Json.createWriter(stWriter);
-	try {
-	    jsonWriter.writeObject(json);
-	} finally {
-	    jsonWriter.close();
-	}
-	return stWriter.toString();
+    public static String toJsonArray(String[] array) {
+	return '[' + StringUtils.join(array, ", ") + ']';
     }
 
     /**
-     * Convert a json array to a json-like string.
+     * Converts the specified map to a json-like object string.
      *
-     * @param jsonArray
-     *            the json array
+     * @param map
+     *            the map
      * @return the string
      */
-    public static String convertJsonToString(JsonArray jsonArray) {
-	StringWriter stWriter = new StringWriter();
-	JsonWriter jsonWriter = Json.createWriter(stWriter);
-	try {
-	    jsonWriter.writeArray(jsonArray);
-	} finally {
-	    jsonWriter.close();
+    public static String toJsonObject(Map<String, String> map) {
+	String result = "{";
+	if (map != null) {
+	    String[] array = new String[map.size()];
+	    int index = 0;
+	    for (Map.Entry<String, String> entry : map.entrySet()) {
+		array[index] = '"' + entry.getKey() + "\": " + entry.getValue();
+		index++;
+	    }
+	    result += StringUtils.join(array, ", ");
 	}
-	return stWriter.toString();
+	return result + "}";
     }
 }

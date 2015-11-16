@@ -23,15 +23,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.CsvSampleWriter;
-import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleBuilder;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
+import org.apache.jmeter.report.processor.MapResultData;
+import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -150,15 +150,13 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData
-     * (org.apache .jmeter.report.config.GraphConfiguration)
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
+     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */
     @Override
-    public DataContext exportData(GraphConfiguration configuration) {
-	DataContext result = super.exportData(configuration);
-	result.put(RESULT_CTX_GRANULARITY, granularity);
-	return result;
+    protected void initializeExtraResults(MapResultData parentResult) {
+	parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(
+	        granularity));
     }
 
     private static class TimeCountConsumer extends AbstractSampleConsumer {

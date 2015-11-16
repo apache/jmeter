@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
+import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ElapsedTimeValueSelector;
@@ -70,4 +71,11 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
 	return groupInfos;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
+     */
+    @Override
+    protected void initializeExtraResults(MapResultData parentResult) {
+        // do nothing
+    }
 }

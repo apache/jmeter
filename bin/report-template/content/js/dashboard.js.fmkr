@@ -1,94 +1,108 @@
-$(document).ready(function() {
-    var offset = 0;
-	plot();
+$(document)
+		.ready(
+				function() {
+					var offset = 0;
+					plot();
 
-    function plot() {
-		var dataSets = {	
-			"KO": {
-				"label": "KO",
-				"data": ${requestsSummary.KoPercent?c},
-				"color": "red"
-			},
-			"OK": {
-				"label": "OK",
-				"data": ${requestsSummary.OkPercent?c},
-				"color": "#ddf2da"
-			}
-		};
-		var data = [];
-		
-		for(var i in dataSets) {
-			data.push(dataSets[i]);
-		}
-		
-		$.plot($("#flot-requests-summary"), data, 
-		{
-			series: {
-				pie: { 
-					show: true,
-					radius: 1,
-					label: {
-						show: true,
-						radius: 3/4,
-						formatter: function(label, series){
-							return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-						},
-						background: { 
-							opacity: 0.5,
-							color: '#000'
-						}
+					function plot() {
+						var data = ${requestsSummaryResult!"{}"};
+						var seriesInfo = [ {
+							"label" : "KO",
+							"data" : data.KoPercent,
+							"color" : "red"
+						}, {
+							"label" : "OK",
+							"data" : data.OkPercent,
+							"color" : "blue"
+						} ];
+
+						$
+								.plot(
+										$("#flot-requests-summary"),
+										seriesInfo,
+										{
+											series : {
+												pie : {
+													show : true,
+													radius : 1,
+													label : {
+														show : true,
+														radius : 3 / 4,
+														formatter : function(
+																label, series) {
+															return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'
+																	+ label
+																	+ '<br/>'
+																	+ Math
+																			.round(series.percent)
+																	+ '%</div>';
+														},
+														background : {
+															opacity : 0.5,
+															color : '#000'
+														}
+													}
+												}
+											},
+											legend : {
+												show : true
+											}
+										});
 					}
-				}
-			},
-			legend: {
-				show: true
-			}
-		});
-	}
-});
+				});
 
-$(function(){
+$(function() {
 
-	var dApdex = ${apdexSummary.values};
-	
-	var dStats = ${statisticsSummary.values};
-	
-	var dErrors = ${errorsSummary.values};
-		
+	var dApdex = ${apdexSummaryResult!"{}"};
+
+	var dStats = ${statisticsSummaryResult!"{}"};
+
+	var dErrors = ${errorsSummaryResult!"{}"};
+
 	createTable(dApdex, "Apdex");
 	createTable(dStats, "Statistics");
 	createTable(dErrors, "Errors");
 
 });
 
-
 /**
  * Create a table with thead and tbody
- * @param data Table data
- * @param id Table id
+ * 
+ * @param data
+ *            Table data
+ * @param id
+ *            Table id
  */
 function createTable(data, id) {
-	var numberOfRows =0;
 	var tableRef = document.getElementById(id);
+
+	// Create header and populate it with data.titles array
 	var header = tableRef.createTHead();
-	for(var i in data){
-		var newRow = header.insertRow(numberOfRows++);
-		var column = 0;
-		for(var j in data[i]){
-			var cell = newRow.insertCell(column++);
-			cell.innerHTML = j;
-		}
-		break;
-	}	
-	var tBody = tableRef.createTBody();
+	var newRow = header.insertRow(-1);
+	for (var index = 0; index < data.titles.length; index++) {
+		var cell = newRow.insertCell(-1);
+		cell.innerHTML = data.titles[index];
+	}
+
+	var tBody = document.createElement('tbody');
 	tableRef.appendChild(tBody);
-	numberOfRows = 0;
-	for(var i in data){
-		var newRow = tBody.insertRow(numberOfRows++);
-		var column = 0;
-		for(var j in data[i]){
-			var cell = newRow.insertCell(column++);
-			cell.innerHTML = data[i][j];
-		}	
-	}		
+	
+	// Create overall row if defined
+	if(data.overall){
+		var newRow = tBody.insertRow(-1);
+		for(var index=0;index < data.overall.length; index++){
+			var cell = newRow.insertCell(-1);
+			cell.innerHTML = data.overall[index];
+		}
+	}
+		
+	 // Populate table content with data.items array
+	 for(var index=0; index < data.items.length; index++){
+		 var item = data.items[index];
+		 var newRow = tBody.insertRow(-1);
+		 for(var col=0; col < item.length; col++){
+			 var cell = newRow.insertCell(-1);
+			 cell.innerHTML = item[col];
+		 }
+	 }
 }

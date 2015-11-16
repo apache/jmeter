@@ -17,28 +17,18 @@
  */
 package org.apache.jmeter.report.processor.graph;
 
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-
-import org.apache.jmeter.report.config.GraphConfiguration;
-import org.apache.jmeter.report.core.ArgumentNullException;
-import org.apache.jmeter.report.core.DataContext;
-import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 import org.apache.jmeter.report.processor.Aggregator;
 import org.apache.jmeter.report.processor.AggregatorFactory;
-import org.apache.jmeter.report.processor.graph.GraphConsumerResult.GroupResult;
-import org.apache.jmeter.report.processor.graph.GraphConsumerResult.KeyResult;
-import org.apache.jmeter.report.processor.graph.GraphConsumerResult.SeriesResult;
+import org.apache.jmeter.report.processor.ListResultData;
+import org.apache.jmeter.report.processor.MapResultData;
+import org.apache.jmeter.report.processor.ValueResultData;
 
 /**
  * <p>
@@ -56,7 +46,7 @@ import org.apache.jmeter.report.processor.graph.GraphConsumerResult.SeriesResult
  * <p>
  * <b>About the groupData :</b><br>
  * The grapher build an aggregator for each seriesData/key pair using an
- * external factory. All groupData from a serie do the same aggregate
+ * external factory. All groupData from a series do the same aggregate
  * calculation.
  * <p>
  * 
@@ -69,7 +59,7 @@ import org.apache.jmeter.report.processor.graph.GraphConsumerResult.SeriesResult
  * <p>
  * <b>About the values (y-axis coordinates) :</b><br>
  * Values are defined by the result aggregate produced by each aggregator.
- * During consumption values to add to the groupData are defined by the
+ * During consumption, values to add to the groupData are defined by the
  * valueSelector.
  * </p>
  *
@@ -80,13 +70,14 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     protected static final String DEFAULT_GROUP = "Generic group";
 
     public static final String RESULT_KEY = "Result";
-    public static final String RESULT_CTX_VALUES = "values";
-    public static final String RESULT_CTX_MIN_X = "minX";
-    public static final String RESULT_CTX_MAX_X = "maxX";
-    public static final String RESULT_CTX_MIN_Y = "minY";
-    public static final String RESULT_CTX_MAX_Y = "maxY";
-    public static final String RESULT_CTX_TITLE = "title";
-
+    public static final String RESULT_MIN_X = "minX";
+    public static final String RESULT_MAX_X = "maxX";
+    public static final String RESULT_MIN_Y = "minY";
+    public static final String RESULT_MAX_Y = "maxY";
+    public static final String RESULT_SERIES = "series";
+    public static final String RESULT_SERIES_NAME = "label";
+    public static final String RESULT_SERIES_DATA = "data";
+    
     /** The Constant DEFAULT_OVERALL_SERIES_NAME. */
     public static final String DEFAULT_OVERALL_SERIES_FORMAT = "Overall %s";
 
@@ -218,6 +209,16 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     protected abstract Map<String, GroupInfo> createGroupInfos();
 
+    private void setMinResult(MapResultData result, String name, Double value) {
+	ValueResultData valueResult = (ValueResultData) result.getResult(name);
+	valueResult.setValue(Math.min((Double) valueResult.getValue(), value));
+    }
+
+    private void setMaxResult(MapResultData result, String name, Double value) {
+	ValueResultData valueResult = (ValueResultData) result.getResult(name);
+	valueResult.setValue(Math.max((Double) valueResult.getValue(), value));
+    }
+
     /**
      * Adds a value map build from specified parameters to the result map.
      *
@@ -226,11 +227,38 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @param map
      *            the groupData map
      */
-    private void addKeyData(GraphConsumerResult result, String group,
-	    String series, SeriesData seriesData, boolean aggregated) {
-	// Create key data
-	KeyResult keyResult = new KeyResult();
+    private void addKeyData(MapResultData result, String group, String series,
+	    SeriesData seriesData, boolean aggregated) {
 
+	// Add to the result map
+	ListResultData seriesList = (ListResultData) result
+	        .getResult(RESULT_SERIES);
+
+	// Looks for series result using its name
+	MapResultData seriesResult = null;
+	int index = 0;
+	int size = seriesList.getSize();
+	while (seriesResult == null && index < size) {
+	    MapResultData currSeries = (MapResultData) seriesList.get(index);
+	    String name = String.valueOf(((ValueResultData) currSeries
+		    .getResult(RESULT_SERIES_NAME)).getValue());
+	    if (Objects.equals(name, series)) {
+		seriesResult = currSeries;
+	    }
+	    index++;
+	}
+
+	// Create series result if not found
+	if (seriesResult == null) {
+	    seriesResult = new MapResultData();
+	    seriesResult.setResult(RESULT_SERIES_NAME,
+		    new ValueResultData(series));
+	    seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
+	    seriesList.addResult(seriesResult);
+	}
+
+	ListResultData dataResult = (ListResultData) seriesResult.getResult(RESULT_SERIES_DATA);
+	
 	// Populate it with data from groupData
 	Map<Double, Aggregator> aggInfo;
 	if (aggregated == false) {
@@ -246,19 +274,24 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 		// Init key and value depending on revertsKeysAndValues property
 		Double key = entry.getKey();
 		Double value = entry.getValue().getResult();
+
+		// Create result storage for coordinates
+		ListResultData coordResult = new ListResultData();
+
 		if (revertsKeysAndValues == false) {
-		    keyResult.put(key, value);
-		    result.setMinX(key);
-		    result.setMaxX(key);
-		    result.setMinY(value);
-		    result.setMaxY(value);
+		    key = entry.getKey();
+		    value = entry.getValue().getResult();
 		} else {
-		    keyResult.put(value, key);
-		    result.setMinX(value);
-		    result.setMaxX(value);
-		    result.setMinY(key);
-		    result.setMaxY(key);
+		    key = entry.getValue().getResult();
+		    value = entry.getKey();
 		}
+		coordResult.addResult(new ValueResultData(key));
+		coordResult.addResult(new ValueResultData(value));
+		dataResult.addResult(coordResult);
+		setMinResult(result, RESULT_MIN_X, key);
+		setMaxResult(result, RESULT_MAX_X, key);
+		setMinResult(result, RESULT_MIN_Y, value);
+		setMaxResult(result, RESULT_MAX_Y, value);
 	    }
 	} else {
 	    long count = seriesData.getCount();
@@ -274,14 +307,17 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 			    / count;
 		    double percentile = (double) rank / 10;
 		    while (percentile < percent) {
-			keyResult.put(percentile, value);
+			ListResultData coordResult = new ListResultData();
+			coordResult.addResult(new ValueResultData(percentile));
+			coordResult.addResult(new ValueResultData(value));
+			dataResult.addResult(coordResult);
 			percentile = (double) ++rank / 10;
 		    }
-		    result.setMinY(value);
-		    result.setMaxY(value);
+		    setMinResult(result, RESULT_MIN_Y, value);
+		    setMaxResult(result, RESULT_MAX_Y, value);
 		}
-		result.setMinX(0);
-		result.setMaxX(100);
+		setMinResult(result, RESULT_MIN_X, 0d);
+		setMaxResult(result, RESULT_MAX_X, 100d);
 	    } else {
 		for (Map.Entry<Double, Aggregator> entry : sortedInfo
 		        .entrySet()) {
@@ -290,24 +326,19 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 			    / count;
 		    double percentile = (double) rank / 10;
 		    while (percentile < percent) {
-			keyResult.put(value, percentile);
+			ListResultData coordResult = new ListResultData();
+			coordResult.addResult(new ValueResultData(value));
+			coordResult.addResult(new ValueResultData(percentile));
+			dataResult.addResult(coordResult);
 			percentile = (double) ++rank / 10;
 		    }
-		    result.setMinX(value);
-		    result.setMaxX(value);
+		    setMinResult(result, RESULT_MIN_X, value);
+		    setMaxResult(result, RESULT_MAX_X, value);
 		}
-		result.setMinY(0);
-		result.setMaxY(100);
+		setMinResult(result, RESULT_MIN_Y, 0d);
+		setMaxResult(result, RESULT_MAX_Y, 100d);
 	    }
 	}
-
-	// Add to the result map
-	SeriesResult seriesResult = result.getGroupResult().get(group);
-	if (seriesResult == null) {
-	    seriesResult = new SeriesResult();
-	    result.getGroupResult().put(group, seriesResult);
-	}
-	seriesResult.put(series, keyResult);
     }
 
     /**
@@ -350,6 +381,25 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	}
     }
 
+    private MapResultData createResult() {
+	MapResultData result = new MapResultData();
+	result.setResult(RESULT_MIN_X, new ValueResultData(Double.MAX_VALUE));
+	result.setResult(RESULT_MAX_X, new ValueResultData(Double.MIN_VALUE));
+	result.setResult(RESULT_MIN_Y, new ValueResultData(Double.MAX_VALUE));
+	result.setResult(RESULT_MAX_Y, new ValueResultData(Double.MIN_VALUE));
+	result.setResult(RESULT_SERIES, new ListResultData());
+
+	initializeExtraResults(result);
+	return result;
+    }
+
+    /**
+     * Inherited classes can add properties to the result
+     *
+     * @param parentResult the parent result
+     */
+    protected abstract void initializeExtraResults(MapResultData parentResult);
+
     /*
      * (non-Javadoc)
      * 
@@ -358,9 +408,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void startConsuming() {
-	// Store empty data structure in the current context to use it during
-	// samples consumption.
-	setLocalData(RESULT_KEY, new GraphConsumerResult());
 
 	// Broadcast metadata to consumes for each channel
 	int channelCount = getConsumedChannelCount();
@@ -434,21 +481,21 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public void stopConsuming() {
 	super.stopProducing();
 
-	GraphConsumerResult result = (GraphConsumerResult) getLocalData(RESULT_KEY);
+	MapResultData result = createResult();
 
 	// Get the aggregate results from the map
-	for (Map.Entry<String, GroupInfo> entryGroup : groupInfos.entrySet()) {
-	    String groupName = entryGroup.getKey();
-	    GroupInfo groupInfo = entryGroup.getValue();
+	for (Map.Entry<String, GroupInfo> groupEntry : groupInfos.entrySet()) {
+	    String groupName = groupEntry.getKey();
+	    GroupInfo groupInfo = groupEntry.getValue();
 	    GroupData groupData = groupInfo.getGroupData();
 	    boolean overallSeries = groupInfo.enablesOverallSeries();
 	    boolean aggregatedKeysSeries = groupInfo
 		    .enablesAggregatedKeysSeries();
 
-	    for (Map.Entry<String, SeriesData> entrySeries : groupData
+	    for (Map.Entry<String, SeriesData> seriesEntry : groupData
 		    .getSeriesInfo().entrySet()) {
-		String seriesName = entrySeries.getKey();
-		SeriesData seriesData = entrySeries.getValue();
+		String seriesName = seriesEntry.getKey();
+		SeriesData seriesData = seriesEntry.getValue();
 		addKeyData(result, groupName, seriesName, seriesData, false);
 		if (aggregatedKeysSeries == true) {
 		    addKeyData(result, groupName, seriesName, seriesData, true);
@@ -469,117 +516,12 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	    }
 	}
 
+	// Store the result
+	setLocalData(RESULT_KEY, result);
+
 	for (GroupInfo groupInfo : groupInfos.values()) {
 	    groupInfo.getGroupData().clear();
 	}
-    }
-
-    /**
-     * <p>
-     * Creates a json object used to produce flot charts data with the specified
-     * seriesData data.
-     * </p>
-     * 
-     * <p>
-     * The keys of the map are used as seriesData label. The values of the map
-     * are maps too where key is used as x-axis coordinates and values are used
-     * as y-axis coordinates
-     * </p>
-     *
-     * @param data
-     *            the data used to populate the seriesData
-     * @param attributes
-     *            additional attributes to inject in the seriesData
-     * @return the json object
-     */
-    private static JsonObject createJsonSeries(GroupResult data,
-	    Map<String, String> attributes) {
-
-	JsonObjectBuilder builder = Json.createObjectBuilder();
-
-	for (Map.Entry<String, SeriesResult> entryGroup : data.entrySet()) {
-	    for (Map.Entry<String, KeyResult> entrySeries : entryGroup
-		    .getValue().entrySet()) {
-		// Build the arrays
-		JsonArrayBuilder dataBuilder = Json.createArrayBuilder();
-		for (Map.Entry<Double, Double> dataSeries : entrySeries
-		        .getValue().entrySet()) {
-		    dataBuilder.add(Json.createArrayBuilder()
-			    .add(dataSeries.getKey())
-			    .add(dataSeries.getValue()));
-		}
-
-		// Build the seriesData and inject data inside
-		String name = entrySeries.getKey();
-		JsonObjectBuilder innerBuilder = Json.createObjectBuilder()
-		        .add("label", name).add("data", dataBuilder);
-
-		// Handle additional attributes
-		if (attributes != null) {
-		    for (Map.Entry<String, String> attributeEntry : attributes
-			    .entrySet()) {
-			JsonReader reader = Json.createReader(new StringReader(
-			        attributeEntry.getValue()));
-			try {
-
-			    innerBuilder.add(attributeEntry.getKey(),
-				    reader.readObject());
-			} finally {
-			    reader.close();
-			}
-		    }
-		}
-		builder.add(name, innerBuilder);
-
-	    }
-	}
-
-	return builder.build();
-    }
-
-    /**
-     * Export data including configuration items.
-     *
-     * @param configuration
-     *            the configuration
-     * @return the data context
-     */
-    public DataContext exportData(GraphConfiguration configuration) {
-	if (configuration == null)
-	    throw new ArgumentNullException("configuration");
-
-	DataContext resultContext = new DataContext();
-	GraphConsumerResult result = (GraphConsumerResult) getLocalData(RESULT_KEY);
-	resultContext.put(
-	        RESULT_CTX_VALUES,
-	        JsonUtil.convertJsonToString(createJsonSeries(
-	                result.getGroupResult(), getSeriesExtraAttibutes())));
-
-	// Publish axis boundaries: configuration properties take precedence
-	// over calculated boundaries
-	Double fromConf;
-	fromConf = configuration.getAbscissaMin();
-	resultContext.put(RESULT_CTX_MIN_X, fromConf != null ? fromConf
-	        : result.getMinX());
-
-	fromConf = configuration.getAbscissaMax();
-	resultContext.put(RESULT_CTX_MAX_X, fromConf != null ? fromConf
-	        : result.getMaxX());
-
-	fromConf = configuration.getOrdinateMin();
-	resultContext.put(RESULT_CTX_MIN_Y, fromConf != null ? fromConf
-	        : result.getMinY());
-
-	fromConf = configuration.getOrdinateMax();
-	resultContext.put(RESULT_CTX_MAX_Y, fromConf != null ? fromConf
-	        : result.getMaxY());
-
-	resultContext.put(RESULT_CTX_TITLE, configuration.getTitle());
-	return resultContext;
-    }
-
-    protected Map<String, String> getSeriesExtraAttibutes() {
-	return null;
     }
 
 }

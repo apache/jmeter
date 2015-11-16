@@ -23,9 +23,9 @@ $(document).ready(function() {
 var chiffre = 0;
 
 // Fixes time stamps
-function fixTimeStamps(data, offset){
-	$.each(data, function(key, val) {
-		$.each(val.data, function(index, coord) {
+function fixTimeStamps(series, offset){
+	$.each(series, function(index, item) {
+		$.each(item.data, function(index, coord) {
 			coord[0] += offset;
 		});
 	});
@@ -71,20 +71,20 @@ function prepareOverviewOptions(graphOptions){
 	return $.extend(true, {}, graphOptions, overviewOptions);
 }
 
-//Get the property value of an object using the specified key
-//Returns the property value if all properties in the key exist; undefined otherwise.
+// Get the property value of an object using the specified key
+// Returns the property value if all properties in the key exist; undefined
+// otherwise.
 function getProperty(key, obj) {
 	return key.split('.').reduce(function(prop, subprop){
 		return prop && prop[subprop];
 	}, obj);
 }
 
-// Tie each series of the specified data to a color
-function setColorIndices(data){
-	var i = 0;
-    $.each(data, function(key, val) {
-        val.color = i;
-        ++i;
+// Mark series and sort data
+function prepareSeries(series){
+	$.each(series, function(index, item) {
+		item.data.sort(compareByXCoordinate);
+        item.color = index;
     });
 }
 
@@ -147,64 +147,57 @@ function setGraphZoomable(graphSelector, overviewSelector){
 }
 
 var responseTimePercentilesInfos = {
-		data: ${(responseTimePercentiles.values)!"{}"},
-	    options: {
-	        series: {
-	            points: { show: false }
-	        },
-	        legend: {
-	        	noColumns: 2,
-	        	show: true,
-	        	container: '#legendResponseTimePercentiles'
-	        },
-	        xaxis: {
-	        	min: ${(responseTimePercentiles.minX?c)!0},
-				max: ${(responseTimePercentiles.maxX?c)!0},
-				tickDecimals: 1,
-				axisLabel: "Percentiles",
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-			},
-	        yaxis: { 
-				min: ${(responseTimePercentiles.minY?c)!0},
-				max: ${(responseTimePercentiles.maxY?c)!0},
-				axisLabel: "Percentile value in ms",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-				
-			},
-			grid: {
-	            hoverable: true // IMPORTANT! this is needed for tooltip to work
-	        },
-	        tooltip: true,
-	        tooltipOpts: {
-	            content: "%s for %x.2 was %y"
-	        },
-	        selection: { mode: "xy" },
+		data: ${responseTimePercentilesResult!"{}"},
+	    getOptions: function() {
+	    	return {
+	    		series: {
+	    			points: { show: false }
+	    		},
+	    		legend: {
+	    			noColumns: 2,
+	    			show: true,
+	    			container: '#legendResponseTimePercentiles'
+	    		},
+	    		xaxis: {
+	    			min: this.data.minX,
+	    			max: this.data.maxX,
+	    			tickDecimals: 1,
+	    			axisLabel: "Percentiles",
+	    			axisLabelUseCanvas: true,
+	    			axisLabelFontSizePixels: 12,
+	    			axisLabelFontFamily: 'Verdana, Arial',
+	    			axisLabelPadding: 20,
+	    		},
+	    		yaxis: { 
+	    			min: this.data.minY,
+	    			max: this.data.maxY,
+	    			axisLabel: "Percentile value in ms",
+	    			axisLabelUseCanvas: true,
+	    			axisLabelFontSizePixels: 12,
+	    			axisLabelFontFamily: 'Verdana, Arial',
+	    			axisLabelPadding: 20
+	    		},
+	    		grid: {
+	    			hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+	    		},
+	    		tooltip: true,
+	    		tooltipOpts: {
+	    			content: "%s for %x.2 was %y"
+	    		},
+	    		selection: { mode: "xy" },
+	    	};
 	    },
 	    createGraph: function() {
-			var data = this.data;
-			var options = this.options;
-	    	var dataset = [];
-			var i = 0;
-			$("#choicesResponseTimePercentiles").find("input:checked").each(function () {
-				var key = $(this).attr("name");
-				if (key == data[key].label){
-					dataset.push(data[key]);
-					dataset[i].threshold.below=chiffre;
-					dataset[i].threshold.color=$("#slider-vertical").children("div").css("background-color");
-					i++;
-				}
+			var dataset = prepareData(this.data.series, $("#choicesResponseTimePercentiles"), function(series){
+				series.curvedLines = {apply: true, tension: 1};
+				series.threshold = { 
+						below: chiffre, 
+						color: $("#slider-vertical").children("div").css("background-color")
+				};
 			});
-
+			var options = this.getOptions();
 			$.plot($("#flotResponseTimesPercentiles"), dataset, options);
-			// $("#collapseResponseTimePercentiles
-			// #legendResponseTimePercentiles").children().css("border", "1px
-			// solid #888888");
 			// setup overview
 			$.plot($("#overviewResponseTimesPercentiles"), dataset, prepareOverviewOptions(options));
 		}
@@ -212,8 +205,9 @@ var responseTimePercentilesInfos = {
 	
 // Response times percentiles
 function refreshResponseTimePercentiles(below) {
-	var  infos = responseTimePercentilesInfos;
-	setColorIndices(infos.data);
+	var infos = responseTimePercentilesInfos;
+	var series = infos.data.series;
+	prepareSeries(series);
 	if (isGraph($("#flotResponseTimesPercentiles"))){
 		infos.createGraph();
 	} else {
@@ -228,39 +222,43 @@ function refreshResponseTimePercentiles(below) {
 }
 
 var responseTimeDistributionInfos = {
-		data: ${(responseTimeDistribution.values)!"{}"},
-		options: {
-			legend: { noColumns: 2,show: true, container: '#legendResponseTimeDistribution' },
-			xaxis:{
-				axisLabel: "Response times in ms",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-			},
-			yaxis: {
-				axisLabel: "Number of responses",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-			},
-			bars : {
-				show: true,
-				barWidth: ${(responseTimeDistribution.granularity?c)!0}
-			},
-			grid: {
-	            hoverable: true // IMPORTANT! this is needed for tooltip to work
-	        },
-	        tooltip: true,
-	        tooltipOpts: {
-	            content: function(label, xval, yval, flotItem){
-	            	return yval + " responses for " + label + " were between " + xval + " and " + (xval + ${(responseTimeDistribution.granularity?c)!0}) + " ms";
-	            }
-	        }
+		data: ${responseTimeDistributionResult!"{}"},
+		getOptions: function() {
+			var granularity = this.data.granularity;
+			return {
+				legend: { noColumns: 2,show: false, container: '#legendResponseTimeDistribution' },
+				xaxis:{
+					axisLabel: "Response times in ms",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				yaxis: {
+					axisLabel: "Number of responses",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				bars : {
+					show: true,
+					barWidth: this.data.granularity
+				},
+				grid: {
+					hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+				},
+				tooltip: true,
+				tooltipOpts: {
+					content: function(label, xval, yval, flotItem){
+						return yval + " responses for " + label + " were between " + xval + " and " + (xval + granularity) + " ms";
+					}
+				}
+			};
 	    },
 		createGraph: function() {
-			$.plot($("#flotResponseTimeDistribution"), prepareData(this.data, $("#choicesResponseTimeDistribution")), this.options);
+			$.plot($("#flotResponseTimeDistribution"), prepareData(this.data.series, $("#choicesResponseTimeDistribution")), this.getOptions());
 		}
 	
 };
@@ -268,7 +266,8 @@ var responseTimeDistributionInfos = {
 // Response time distribution
 function refreshResponseTimeDistribution() {
 	var infos = responseTimeDistributionInfos;
-	setColorIndices(infos.data);
+	var series = infos.data.series;
+	prepareSeries(series);
 	if (isGraph($("#flotResponseTimeDistribution"))){
 		infos.createGraph();
 	}else{
@@ -282,55 +281,58 @@ function refreshResponseTimeDistribution() {
 };
 
 var activeThreadsOverTimeInfos = {
-		data: ${(activeThreadsOverTime.values)!"{}"},
-		options: {
-	        series: {
-	            lines: {
-	                show: true
-	            },
-	            points: {
-					show: true
-	            }
-	        },
-			xaxis: {
-				min: ${(activeThreadsOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
-				max: ${(activeThreadsOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
-	            mode: "time",
-				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${(activeThreadsOverTime.granularity?c)!0}),
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-	        },
-			yaxis: { 
-				min: ${(activeThreadsOverTime.minY?c)!0},
-				max: ${(activeThreadsOverTime.maxY?c)!0},
-				axisLabel: "Number of active threads",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20
-	        },
-			legend: {
-				noColumns: 6,
-				show: true,
-				container: '#legendActiveThreadsOverTime'
-			},
-			grid: {
-	            hoverable: true // IMPORTANT! this is needed for tooltip to work
-	        },
-	        selection: {
-	        	mode: 'xy'
-	        },
-	        tooltip: true,
-	        tooltipOpts: {
-	            content: "%s for %x was %y"
-	        }
+		data: ${activeThreadsOverTimeResult!"{}"},
+		getOptions: function() {
+			return {
+				series: {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					}
+				},
+				xaxis: {
+					min: this.data.minX + ${(timeZoneOffset?c)!0},
+					max: this.data.maxX + ${(timeZoneOffset?c)!0},
+					mode: "time",
+					timeformat: "%H:%M:%S",
+					axisLabel: getElapsedTimeLabel(this.data.granularity),
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				yaxis: { 
+					min: this.data.minY,
+					max: this.data.maxY,
+					axisLabel: "Number of active threads",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20
+				},
+				legend: {
+					noColumns: 6,
+					show: true,
+					container: '#legendActiveThreadsOverTime'
+				},
+				grid: {
+					hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+				},
+				selection: {
+					mode: 'xy'
+				},
+				tooltip: true,
+				tooltipOpts: {
+					content: "%s for %x was %y"
+				}
+			};
 	    },
 	    createGraph: function() {
-			var dataset = prepareData(this.data, $("#choicesActiveThreadsOverTime"));
-			var options = this.options;
+			var dataset = prepareData(this.data.series, $("#choicesActiveThreadsOverTime"));
+			var options = this.getOptions();
 			$.plot($("#flotActiveThreadsOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewActiveThreadsOverTime"), dataset, prepareOverviewOptions(options));
@@ -340,8 +342,9 @@ var activeThreadsOverTimeInfos = {
 // Active Threads Over Time
 function refreshActiveThreadsOverTime() {
 	var infos = activeThreadsOverTimeInfos;
-	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
+	var series = infos.data.series;
+	prepareSeries(series);
+	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotActiveThreadsOverTime"))) {
 		infos.createGraph();
 	}else{
@@ -356,51 +359,58 @@ function refreshActiveThreadsOverTime() {
 };
 
 var responseTimePerSampleInfos = {
-		data: ${(responseTimePerSample.values)!"{}"},
-	    options: {
-			series: {
-	        	bars: {
-	            	 show: true
-				}
-			},
-			bars: {
-				align: "center",
-				barWidth: 0.5,
-				horizontal: true,
-				fillColor: { colors: [{ opacity: 0.5 }, { opacity: 1}] },
-				lineWidth: 1
-			},
-			xaxis: {
-				max: ${(responseTimePerSample.maxX?c)!0},
-				axisLabel: "Response Time in ms",
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 12,
-				axisLabelFontFamily: 'Verdana, Arial',
-				axisLabelPadding: 20,
-				tickColor: "white",
-				tickFormatter: function (v, axis) {
-					return $.formatNumber(v, { format: "#,###", locale: "us" });
+		data: ${responseTimePerSampleResult!"{}"},
+	    getOptions: function() {
+	    	var ticks = [];
+	    	$.each(this.data.sampleNames, function(index, item){
+	    		ticks.push([index, item]);
+	    	});
+	    	
+			return {
+				series: {
+					bars: {
+						show: true
+					}
 				},
-				color: "black"
-			},
-			yaxis: {
-				tickColor: "white",
-				ticks: ${(responseTimePerSample.sampleNames)!"[]"},
-				color: "black"
-			},
-			legend: {
-				noColumns: 0,
-				labelBoxBorderColor: "#858585",
-				container: '#legendHorizontalBar'
-			},
-			grid: {
-				hoverable: true,
-				borderWidth: 2,
-				backgroundColor: { colors: ["white", "white"] }
-			}
+				bars: {
+					align: "center",
+					barWidth: 0.5,
+					horizontal: true,
+					fillColor: { colors: [{ opacity: 0.5 }, { opacity: 1}] },
+					lineWidth: 1
+				},
+				xaxis: {
+					max: this.data.maxX,
+					axisLabel: "Response Time in ms",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+					tickColor: "white",
+					tickFormatter: function (v, axis) {
+						return $.formatNumber(v, { format: "#,###", locale: "us" });
+					},
+					color: "black"
+				},
+				yaxis: {
+					tickColor: "white",
+					ticks: ticks,
+					color: "black"
+				},
+				legend: {
+					noColumns: 0,
+					labelBoxBorderColor: "#858585",
+					container: '#legendHorizontalBar'
+				},
+				grid: {
+					hoverable: true,
+					borderWidth: 2,
+					backgroundColor: { colors: ["white", "white"] }
+				}
+			};
 		},
 	    createGraph: function() {
-			$.plot($("#flotResponseTimePerSample"), prepareData(this.data, $("#choicesResponseTimePerSample")), this.options);
+			$.plot($("#flotResponseTimePerSample"), prepareData(this.data.series, $("#choicesResponseTimePerSample")), this.getOptions());
 		}
 
 };
@@ -408,7 +418,8 @@ var responseTimePerSampleInfos = {
 // Response Time Per Sample
 function refreshResponseTimePerSample() {
 	var infos = responseTimePerSampleInfos;
-	setColorIndices(infos.data);
+	var series = infos.data.series;
+	prepareSeries(series);
 	if (isGraph($("#flotResponseTimePerSample"))){
 		infos.createGraph();
 	} else {
@@ -469,52 +480,51 @@ function refreshResponseTimePerSample() {
 };
 
 var timeVsThreadsInfos = {
-		data: ${(timeVsThreads.values)!"{}"},
-        options: {
-            series: {
-                lines: {
-                    show: true
-                },
-                points: {
-                    show: true
-                }
-            },
-			xaxis: {
-				min: ${(timeVsThreads.minX?c)!0},
-				max: ${(timeVsThreads.maxX?c)!0},
-                axisLabel: "Number of active threads",
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 20,
-			},
-			yaxis: {
-				min: ${(timeVsThreads.minY?c)!0},
-				max: ${(timeVsThreads.maxY?c)!0},
-                axisLabel: "Average response times in ms",
-                axisLabelUseCanvas: true,
-                axisLabelFontSizePixels: 12,
-                axisLabelFontFamily: 'Verdana, Arial',
-                axisLabelPadding: 20
-			},
-			
-			legend: { noColumns: 2,show: true, container: '#legendTimeVsThreads' },
-			selection: {
-	    		mode: 'xy'
-	    	},
-	    	grid: {
-                hoverable: true // IMPORTANT! this is needed for tooltip to work
-            },
-            tooltip: true,
-            tooltipOpts: {
-                content: "%s for %x.2 was %y.2",
-                onHover: function(flotItem, $tooltipEl) {
-                }
-            }
+		data: ${timeVsThreadsResult!"{}"},
+        getOptions: function() {
+        	return {
+        		series: {
+        			lines: {
+        				show: true
+        			},
+        			points: {
+        				show: true
+        			}
+        		},
+        		xaxis: {
+        			min: this.data.minX,
+        			max: this.data.maxX,
+        			axisLabel: "Number of active threads",
+        			axisLabelUseCanvas: true,
+        			axisLabelFontSizePixels: 12,
+        			axisLabelFontFamily: 'Verdana, Arial',
+        			axisLabelPadding: 20,
+        		},
+        		yaxis: {
+        			min: this.data.minY,
+        			max: this.data.maxY,
+        			axisLabel: "Average response times in ms",
+        			axisLabelUseCanvas: true,
+        			axisLabelFontSizePixels: 12,
+        			axisLabelFontFamily: 'Verdana, Arial',
+        			axisLabelPadding: 20
+        		},
+        		legend: { noColumns: 2,show: true, container: '#legendTimeVsThreads' },
+        		selection: {
+        			mode: 'xy'
+        		},
+        		grid: {
+        			hoverable: true // IMPORTANT! this is needed for tooltip to work
+        		},
+        		tooltip: true,
+        		tooltipOpts: {
+        			content: "%s for %x.2 was %y.2"
+        		}
+        	};
         },
 		createGraph: function() {
-			var dataset = prepareData(this.data, $("#choicesTimeVsThreads"));
-			var options = this.options;
+			var dataset = prepareData(this.data.series, $("#choicesTimeVsThreads"));
+			var options = this.getOptions();
 			$.plot($("#flotTimesVsThreads"), dataset, options);
 			// setup overview
 			$.plot($("#overviewTimesVsThreads"), dataset, prepareOverviewOptions(options));
@@ -524,7 +534,8 @@ var timeVsThreadsInfos = {
 // Time vs threads
 function refreshTimeVsThreads(){
 	var infos = timeVsThreadsInfos;
-	setColorIndices(infos.data);
+	var series = infos.data.series;
+	prepareSeries(series);
 	if(isGraph($("#flotTimesVsThreads"))){
 		infos.createGraph();
 	}else{
@@ -539,55 +550,58 @@ function refreshTimeVsThreads(){
 };
 
 var bytesThroughputOverTimeInfos = {
-		data: ${(bytesThroughputOverTime.values)!"{}"},
-		options: {
-			series: {
-				lines: {
-					show: true
+		data : ${bytesThroughputOverTimeResult!"{}"},
+		getOptions : function(){
+			return {
+				series: {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					}
 				},
-				points: {
-					show: true
+				xaxis: {
+					min: this.data.minX + ${(timeZoneOffset?c)!0},
+					max: this.data.maxX + ${(timeZoneOffset?c)!0},
+					mode: "time",
+					timeformat: "%H:%M:%S",
+					axisLabel: getElapsedTimeLabel(this.data.granularity) ,
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				yaxis: { 
+					min: this.data.minY,
+					max: this.data.maxY,
+					axisLabel: "Bytes/sec",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,			
+				},
+				legend: {
+					noColumns: 2,
+					show: true,
+					container: '#legendBytesThroughputOverTime'
+				},
+				selection: { 
+					mode: "xy"
+				},
+				grid: {
+					hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+				},
+				tooltip: true,
+				tooltipOpts: {
+					content: "%s for %x was %y"
 				}
-			},
-			xaxis: {
-				min: ${(bytesThroughputOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
-				max: ${(bytesThroughputOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
-				mode: "time",
-				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${(bytesThroughputOverTime.granularity?c)!0}) ,
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 12,
-				axisLabelFontFamily: 'Verdana, Arial',
-				axisLabelPadding: 20,
-			},
-			yaxis: { 
-				min: ${(bytesThroughputOverTime.minY?c)!0},
-				max: ${(bytesThroughputOverTime.maxY?c)!0},
-				axisLabel: "Bytes/sec",
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 12,
-				axisLabelFontFamily: 'Verdana, Arial',
-				axisLabelPadding: 20,			
-			},
-			legend: {
-				noColumns: 2,
-				show: true,
-				container: '#legendBytesThroughputOverTime'
-			},
-			selection: { 
-				mode: "xy"
-			},
-			grid: {
-				hoverable: true // IMPORTANT! this is needed for tooltip to work
-			},
-			tooltip: true,
-			tooltipOpts: {
-				content: "%s for %x was %y"
-			}
+			};
 		},
-		createGraph: function() {
-			var dataset = prepareData(this.data, $("#choicesBytesThroughputOverTime"));
-			var options = this.options;
+		createGraph : function() {
+			var dataset = prepareData(this.data.series, $("#choicesBytesThroughputOverTime"));
+			var options = this.getOptions();
 			$.plot($("#flotBytesThroughputOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewBytesThroughputOverTime"), dataset, prepareOverviewOptions(options));
@@ -597,8 +611,9 @@ var bytesThroughputOverTimeInfos = {
 // Bytes throughput Over Time
 function refreshBytesThroughputOverTime() {
 	var infos = bytesThroughputOverTimeInfos;
-	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
+	var series = infos.data.series;
+	prepareSeries(series);
+	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotBytesThroughputOverTime"))){
 		infos.createGraph();
 	}else{
@@ -613,55 +628,58 @@ function refreshBytesThroughputOverTime() {
 }
 
 var responseTimesOverTimeInfos = {
-		data: ${(responseTimesOverTime.values)!"{}"},
-		options: {
-	        series: {
-	            lines: {
-	                show: true
-	            },
-	            points: {
-	                show: true
-	            }
-	        },
-			xaxis: {
-				min: ${(responseTimesOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
-				max: ${(responseTimesOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
-	            mode: "time",
-				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${(responseTimesOverTime.granularity?c)!0}),
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-	        },
-			yaxis: { 
-				min: ${(responseTimesOverTime.minY?c)!0},
-				max: ${(responseTimesOverTime.maxY?c)!0},
-				axisLabel: "Response time in ms",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-			},
-			legend: {
-				noColumns: 2,
-				show: true,
-				container: '#legendResponseTimesOverTime'
-			},
-			selection: {
-	        	mode: 'xy'
-	        },
-	        grid: {
-	            hoverable: true // IMPORTANT! this is needed for tooltip to work
-	        },
-	        tooltip: true,
-	        tooltipOpts: {
-	            content: "%s for %x was %y"
-	        }
-	    },
+		data: ${responseTimesOverTimeResult!"{}"},
+		getOptions: function(){
+	        return {
+	        	series: {
+	        		lines: {
+	        			show: true
+	        		},
+	        		points: {
+	        			show: true
+	        		}
+	        	},
+	        	xaxis: {
+	        		min: this.data.minX + ${(timeZoneOffset?c)!0},
+	        		max: this.data.maxX + ${(timeZoneOffset?c)!0},
+	        		mode: "time",
+	        		timeformat: "%H:%M:%S",
+	        		axisLabel: getElapsedTimeLabel(this.data.granularity),
+	        		axisLabelUseCanvas: true,
+	        		axisLabelFontSizePixels: 12,
+	        		axisLabelFontFamily: 'Verdana, Arial',
+	        		axisLabelPadding: 20,
+	        	},
+	        	yaxis: { 
+	        		min: this.data.minY,
+	        		max: this.data.maxY,
+	        		axisLabel: "Response time in ms",
+	        		axisLabelUseCanvas: true,
+	        		axisLabelFontSizePixels: 12,
+	        		axisLabelFontFamily: 'Verdana, Arial',
+	        		axisLabelPadding: 20,
+	        	},
+	        	legend: {
+	        		noColumns: 2,
+	        		show: true,
+	        		container: '#legendResponseTimesOverTime'
+	        	},
+	        	selection: {
+	        		mode: 'xy'
+	        	},
+	        	grid: {
+	        		hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+	        	},
+	        	tooltip: true,
+	        	tooltipOpts: {
+	        		content: "%s for %x was %y"
+	        	}
+	        };
+		},
 	    createGraph: function() {
-			var dataset = prepareData(this.data, $("#choicesResponseTimesOverTime"));
-			var options = this.options;
+			var dataset = prepareData(this.data.series, $("#choicesResponseTimesOverTime"));
+			var options = this.getOptions();
 			$.plot($("#flotResponseTimesOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewResponseTimesOverTime"), dataset, prepareOverviewOptions(options));
@@ -671,8 +689,9 @@ var responseTimesOverTimeInfos = {
 // Response Times Over Time
 function refreshResponseTimeOverTime() {
 	var infos = responseTimesOverTimeInfos;
-    setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
+    var series = infos.data.series;
+	prepareSeries(series);
+	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotResponseTimesOverTime"))){
 		infos.createGraph();
 	}else{
@@ -687,55 +706,58 @@ function refreshResponseTimeOverTime() {
 };
 
 var latenciesOverTimeInfos = {
-		data: ${(latenciesOverTime.values)!"{}"},
-		options: {
-			series: {
-				lines: {
-					show: true
+		data: ${latenciesOverTimeResult!"{}"},
+		getOptions: function() {
+			return {
+				series: {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					}
 				},
-				points: {
-					show: true
+				xaxis: {
+					min: this.data.minX + ${(timeZoneOffset?c)!0},
+					max: this.data.maxX + ${(timeZoneOffset?c)!0},
+					mode: "time",
+					timeformat: "%H:%M:%S",
+					axisLabel: getElapsedTimeLabel(this.data.granularity),
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				yaxis: {
+					min: this.data.minY,
+					max: this.data.maxY,
+					axisLabel: "Response latencies in ms",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				legend: {
+					noColumns: 2,
+					show: true,
+					container: '#legendLatenciesOverTime'
+				},
+				selection: {
+					mode: 'xy'
+				},
+				grid: {
+					hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+				},
+				tooltip: true,
+				tooltipOpts: {
+					content: "%s for %x was %y"
 				}
-			},
-			xaxis: {
-				min: ${(latenciesOverTime.minX?c)!0} + ${(timeZoneOffset?c)!0},
-				max: ${(latenciesOverTime.maxX?c)!0} + ${(timeZoneOffset?c)!0},
-				mode: "time",
-				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${(latenciesOverTime.granularity?c)!0}),
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 12,
-				axisLabelFontFamily: 'Verdana, Arial',
-				axisLabelPadding: 20,
-			},
-			yaxis: {
-				min: ${(latenciesOverTime.minY?c)!0},
-				max: ${(latenciesOverTime.maxY?c)!0},
-				axisLabel: "Response latencies in ms",
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 12,
-				axisLabelFontFamily: 'Verdana, Arial',
-				axisLabelPadding: 20,
-			},
-			legend: {
-				noColumns: 2,
-				show: true,
-				container: '#legendLatenciesOverTime'
-			},
-			selection: {
-	        	mode: 'xy'
-	        },
-	        grid: {
-				hoverable: true // IMPORTANT! this is needed for tooltip to work
-			},
-			tooltip: true,
-			tooltipOpts: {
-				content: "%s for %x was %y"
-			}
+			};
 		},
 		createGraph: function () {
-			var dataset = prepareData(this.data, $("#choicesLatenciesOverTime"));
-			var options = this.options;
+			var dataset = prepareData(this.data.series, $("#choicesLatenciesOverTime"));
+			var options = this.getOptions();
 			$.plot($("#flotLatenciesOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewLatenciesOverTime"), dataset, prepareOverviewOptions(options));
@@ -745,8 +767,9 @@ var latenciesOverTimeInfos = {
 // Latencies Over Time
 function refreshLatenciesOverTime() {
 	var infos = latenciesOverTimeInfos;
-	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
+	var series = infos.data.series;
+	prepareSeries(series);
+	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotLatenciesOverTime"))) {
 		infos.createGraph();
 	}else {
@@ -761,53 +784,55 @@ function refreshLatenciesOverTime() {
 };
 
 var responseTimeVsRequestInfos = {
-	data: ${(responseTimeVsRequest.values)!"{}"},
-	options: {
-		series: {
-			lines: {
-				show: false
+	data: ${responseTimeVsRequestResult!"{}"},
+	getOptions: function() {
+		return {
+			series: {
+				lines: {
+					show: false
+				},
+				points: {
+					show: true
+				}
 			},
-			points: {
-				show: true
+			xaxis: {
+				min : this.data.minX,
+				max : this.data.maxX,
+				axisLabel: "Global number of requests per second",
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 12,
+				axisLabelFontFamily: 'Verdana, Arial',
+				axisLabelPadding: 20,
+			},
+			yaxis: {
+				min : this.data.minY,
+				max : this.data.maxY,
+				axisLabel: "Median Response Time",
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 12,
+				axisLabelFontFamily: 'Verdana, Arial',
+				axisLabelPadding: 20,
+			},
+			legend: {
+				noColumns: 2,
+				show: true,
+				container: '#legendResponseTimeVsRequest'
+			},
+			selection: {
+				mode: 'xy'
+			},
+			grid: {
+				hoverable: true // IMPORTANT! this is needed for tooltip to work
+			},
+			tooltip: true,
+			tooltipOpts: {
+				content: "%s for %x was %y"
 			}
-		},
-		xaxis: {
-			min : ${(responseTimeVsRequest.minX?c)!0},
-			max : ${(responseTimeVsRequest.maxX?c)!0},
-			axisLabel: "Global number of requests per second",
-			axisLabelUseCanvas: true,
-			axisLabelFontSizePixels: 12,
-			axisLabelFontFamily: 'Verdana, Arial',
-			axisLabelPadding: 20,
-		},
-		yaxis: {
-			min : ${(responseTimeVsRequest.minY?c)!0},
-			max : ${(responseTimeVsRequest.maxY?c)!0},
-			axisLabel: "Median Response Time",
-			axisLabelUseCanvas: true,
-			axisLabelFontSizePixels: 12,
-			axisLabelFontFamily: 'Verdana, Arial',
-			axisLabelPadding: 20,
-		},
-		legend: {
-			noColumns: 2,
-			show: true,
-			container: '#legendResponseTimeVsRequest'
-		},
-		selection: {
-    		mode: 'xy'
-    	},
-    	grid: {
-			hoverable: true // IMPORTANT! this is needed for tooltip to work
-		},
-		tooltip: true,
-		tooltipOpts: {
-			content: "%s for %x was %y"
-		}
+		};
 	},
     createGraph: function () {
-		var dataset = prepareData(this.data, $("#choicesResponseTimeVsRequest"));
-		var options = this.options;
+		var dataset = prepareData(this.data.series, $("#choicesResponseTimeVsRequest"));
+		var options = this.getOptions();
 		$.plot($("#flotResponseTimeVsRequest"), dataset, options);
 		// setup overview
 		$.plot($("#overviewResponseTimeVsRequest"), dataset, prepareOverviewOptions(options));
@@ -818,7 +843,8 @@ var responseTimeVsRequestInfos = {
 // Response Time vs Request
 function refreshResponseTimeVsRequest() {
 	var infos = responseTimeVsRequestInfos;
-	setColorIndices(infos.data);
+	var series = infos.data.series;
+	prepareSeries(series);
 	if (isGraph($("#flotResponseTimeVsRequest"))){
 		infos.create();
 	}else{
@@ -834,49 +860,51 @@ function refreshResponseTimeVsRequest() {
 
 
 var latenciesVsRequestInfos = {
-	data: ${(latencyVsRequest.values)!"{}"},
-    options: {
-    	series: {
-        	lines: {
-            	show: false
-        	},
-        	points: {
-        		show: true
-        	}
-    	},
-    	xaxis: {
-    		min : ${(latencyVsRequest.minX?c)!0},
-    		max : ${(latencyVsRequest.maxX?c)!0},
-    		axisLabel: "Global number of requests per second",
-    		axisLabelUseCanvas: true,
-    		axisLabelFontSizePixels: 12,
-    		axisLabelFontFamily: 'Verdana, Arial',
-    		axisLabelPadding: 20,
-    	},
-    	yaxis: {
-    		min : ${(latencyVsRequest.minY?c)!0},
-    		max : ${(latencyVsRequest.maxY?c)!0},
-    		axisLabel: "Median Latency",
-    		axisLabelUseCanvas: true,
-    		axisLabelFontSizePixels: 12,
-    		axisLabelFontFamily: 'Verdana, Arial',
-    		axisLabelPadding: 20,
-    	},
-    	legend: { noColumns: 2,show: true, container: '#legendLatencyVsRequest' },
-    	selection: {
-    		mode: 'xy'
-    	},
-    	grid: {
-    		hoverable: true // IMPORTANT! this is needed for tooltip to work
-    	},
-    	tooltip: true,
-    	tooltipOpts: {
-    		content: "%s for %x was %y"
-    	}
-	},
+	data: ${latencyVsRequestResult!"{}"},
+    getOptions: function() {
+    	return{
+    		series: {
+    			lines: {
+    				show: false
+    			},
+    			points: {
+    				show: true
+    			}
+    		},
+    		xaxis: {
+    			min : this.data.minX,
+    			max : this.data.maxX,
+    			axisLabel: "Global number of requests per second",
+    			axisLabelUseCanvas: true,
+    			axisLabelFontSizePixels: 12,
+    			axisLabelFontFamily: 'Verdana, Arial',
+    			axisLabelPadding: 20,
+    		},
+    		yaxis: {
+    			min : this.data.minY,
+    			max : this.data.maxY,
+    			axisLabel: "Median Latency",
+    			axisLabelUseCanvas: true,
+    			axisLabelFontSizePixels: 12,
+    			axisLabelFontFamily: 'Verdana, Arial',
+    			axisLabelPadding: 20,
+    		},
+    		legend: { noColumns: 2,show: true, container: '#legendLatencyVsRequest' },
+    		selection: {
+    			mode: 'xy'
+    		},
+    		grid: {
+    			hoverable: true // IMPORTANT! this is needed for tooltip to work
+    		},
+    		tooltip: true,
+    		tooltipOpts: {
+    			content: "%s for %x was %y"
+    		}
+    	};
+    },
 	createGraph: function () {
-		var dataset = prepareData(this.data, $("#choicesLatencyVsRequest"));
-		var options = this.options;
+		var dataset = prepareData(this.data.series, $("#choicesLatencyVsRequest"));
+		var options = this.getOptions();
 		$.plot($("#flotLatenciesVsRequest"), dataset, options);
 		// setup overview
 		$.plot($("#overviewLatenciesVsRequest"), dataset, prepareOverviewOptions(options));
@@ -886,7 +914,8 @@ var latenciesVsRequestInfos = {
 // Latencies vs Request
 function refreshLatenciesVsRequest() {
 		var infos = latenciesVsRequestInfos;
-		setColorIndices(infos.data);
+		var series = infos.data.series;
+		prepareSeries(series);
 		if(isGraph($("#flotLatenciesVsRequest"))){
 			infos.createGraph();
 		}else{
@@ -901,54 +930,58 @@ function refreshLatenciesVsRequest() {
 };
 
 var hitsPerSecondInfos = {
-		data: ${(hitsPerSecond.values)!"{}"},
-		options: {
-	    	series: {
-	        	lines: {
-	            	show: true
-	            },
-	            points: {
-	            	show: true
-	            }
-			},
-			xaxis: {
-				min: ${(hitsPerSecond.minX?c)!0} + ${(timeZoneOffset?c)!0},
-				max: ${(hitsPerSecond.maxX?c)!0} + ${(timeZoneOffset?c)!0},
-	        	mode: "time",
-	        	timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${(hitsPerSecond.granularity?c)!0}),
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-			},
-			yaxis: {
-				min: ${(hitsPerSecond.minY?c)!0},
-				max: ${(hitsPerSecond.maxY?c)!0},
-				axisLabel: "Number of hits / sec",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20 
-			},
-			legend: {
-				noColumns: 2,
-				show: true, 
-				container: "#legendHitsPerSecond"},
-			selection: {
-				mode : 'xy'
-			},
-			grid: {
-	        	hoverable: true // IMPORTANT! this is needed for tooltip to work
-			},
-	        tooltip: true,
-	        tooltipOpts: {
-				content: "%s for %x was %y.2"
-			}
+		data: ${hitsPerSecondResult!"{}"},
+		getOptions: function() {
+	    	return {
+	    		series: {
+	    			lines: {
+	    				show: true
+	    			},
+	    			points: {
+	    				show: true
+	    			}
+	    		},
+	    		xaxis: {
+	    			min: this.data.minX + ${(timeZoneOffset?c)!0},
+	    			max: this.data.maxX + ${(timeZoneOffset?c)!0},
+	    			mode: "time",
+	    			timeformat: "%H:%M:%S",
+	    			axisLabel: getElapsedTimeLabel(this.data.granularity),
+	    			axisLabelUseCanvas: true,
+	    			axisLabelFontSizePixels: 12,
+	    			axisLabelFontFamily: 'Verdana, Arial',
+	    			axisLabelPadding: 20,
+	    		},
+	    		yaxis: {
+	    			min: this.data.minY,
+	    			max: this.data.maxY,
+	    			axisLabel: "Number of hits / sec",
+	    			axisLabelUseCanvas: true,
+	    			axisLabelFontSizePixels: 12,
+	    			axisLabelFontFamily: 'Verdana, Arial',
+	    			axisLabelPadding: 20 
+	    		},
+	    		legend: {
+	    			noColumns: 2,
+	    			show: true, 
+	    			container: "#legendHitsPerSecond"
+	    		},
+	    		selection: {
+	    			mode : 'xy'
+	    		},
+	    		grid: {
+	    			hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+	    		},
+	    		tooltip: true,
+	    		tooltipOpts: {
+	    			content: "%s for %x was %y.2"
+	    		}
+	    	};
 		},
 		createGraph: function createGraph() {
-			var dataset = prepareData(this.data, $("#choicesHitsPerSecond"));
-			var options = this.options;
+			var dataset = prepareData(this.data.series, $("#choicesHitsPerSecond"));
+			var options = this.getOptions();
 			$.plot($("#flotHitsPerSecond"), dataset, options);
 			// setup overview
 			$.plot($("#overviewHitsPerSecond"), dataset, prepareOverviewOptions(options));
@@ -958,8 +991,9 @@ var hitsPerSecondInfos = {
 // Hits per second
 function refreshHitsPerSecond() {
 	var infos = hitsPerSecondInfos;
-    setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
+	var series = infos.data.series;
+    prepareSeries(series);
+	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
 	if (isGraph($("#flotHitsPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -974,55 +1008,58 @@ function refreshHitsPerSecond() {
 }
 
 var codesPerSecondInfos = {
-		data: ${(codesPerSecond.values)!"{}"},
-		options: {
-	        series: {
-	            lines: {
-	                show: true
-	            },
-	            points: {
-	                show: true
-	            }
-	        },
-			xaxis: {
-				min: ${(codesPerSecond.minX?c)!0} + ${(timeZoneOffset?c)!0},
-				max: ${(codesPerSecond.maxX?c)!0} + ${(timeZoneOffset?c)!0},
-	            mode: "time",
-				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${(codesPerSecond.granularity?c)!0}),
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-	        },
-			yaxis: {
-				min: ${(codesPerSecond.minY?c)!0},
-				max: ${(codesPerSecond.maxY?c)!0},
-				axisLabel: "Number of responses/sec",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-			},
-			legend: {
-				noColumns: 2,
-				show: true, 
-				container: "#legendCodesPerSecond"
-			},			
-			selection: {
-				mode: 'xy'
-			},
-			grid: {
-	            hoverable: true // IMPORTANT! this is needed for tooltip to work
-	        },
-	        tooltip: true,
-	        tooltipOpts: {
-	            content: "%s for %x was %y.2"
-	        }
-	    },
+		data: ${codesPerSecondResult!"{}"},
+		getOptions: function(){
+			return {
+				series: {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					}
+				},
+				xaxis: {
+					min: this.data.minX + ${(timeZoneOffset?c)!0},
+					max: this.data.maxX + ${(timeZoneOffset?c)!0},
+					mode: "time",
+					timeformat: "%H:%M:%S",
+					axisLabel: getElapsedTimeLabel(this.data.granularity),
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				yaxis: {
+					min: this.data.minY,
+					max: this.data.maxY,
+					axisLabel: "Number of responses/sec",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				legend: {
+					noColumns: 2,
+					show: true, 
+					container: "#legendCodesPerSecond"
+				},			
+				selection: {
+					mode: 'xy'
+				},
+				grid: {
+					hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+				},
+				tooltip: true,
+				tooltipOpts: {
+					content: "%s for %x was %y.2"
+				}
+			};
+		},
 	createGraph: function() {
-		var dataset = prepareData(this.data, $("#choicesCodesPerSecond"));
-		var options = this.options;
+		var dataset = prepareData(this.data.series, $("#choicesCodesPerSecond"));
+		var options = this.getOptions();
 		$.plot($("#flotCodesPerSecond"), dataset, options);
 		// setup overview
 		$.plot($("#overviewCodesPerSecond"), dataset, prepareOverviewOptions(options));
@@ -1032,8 +1069,9 @@ var codesPerSecondInfos = {
 // Codes per second
 function refreshCodesPerSecond() {
 	var infos = codesPerSecondInfos;
-	setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
+	var series = infos.data.series;
+	prepareSeries(series);
+	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotCodesPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -1048,55 +1086,58 @@ function refreshCodesPerSecond() {
 };
 
 var transactionsPerSecondInfos = {
-		data: ${(transactionsPerSecond.values)!"{}"},
-		options: {
-	        series: {
-	            lines: {
-	                show: true
-	            },
-	            points: {
-	                show: true
-	            }
-	        },
-			xaxis: {
-				min: ${(transactionsPerSecond.minX?c)!0} + ${(timeZoneOffset?c)!0},
-				max: ${(transactionsPerSecond.maxX?c)!0} + ${(timeZoneOffset?c)!0},
-	            mode: "time",
-				timeformat: "%H:%M:%S",
-				axisLabel: getElapsedTimeLabel(${(transactionsPerSecond.granularity?c)!0}),
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,
-	        },
-			yaxis: {
-				min: ${(transactionsPerSecond.minY?c)!0},
-				max: ${(transactionsPerSecond.maxY?c)!0},
-				axisLabel: "Number of transactions / sec",
-	            axisLabelUseCanvas: true,
-	            axisLabelFontSizePixels: 12,
-	            axisLabelFontFamily: 'Verdana, Arial',
-	            axisLabelPadding: 20,			}
-			,
-			legend: {
-				noColumns: 2,
-				show: true, 
-				container: "#legendTransactionsPerSecond"
-			},
-			selection: {
-	        	mode: 'xy'
-	        },
-			grid: {
-	            hoverable: true // IMPORTANT! this is needed for tooltip to work
-	        },
-	        tooltip: true,
-	        tooltipOpts: {
-	            content: "%s for %x was %y"
-	        }
-	    },
+		data: ${transactionsPerSecondResult!"{}"},
+		getOptions: function(){
+			return {
+				series: {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					}
+				},
+				xaxis: {
+					min: this.data.minX + ${(timeZoneOffset?c)!0},
+					max: this.data.maxX + ${(timeZoneOffset?c)!0},
+					mode: "time",
+					timeformat: "%H:%M:%S",
+					axisLabel: getElapsedTimeLabel(this.data.granularity),
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20,
+				},
+				yaxis: {
+					min: this.data.minY,
+					max: this.data.maxY,
+					axisLabel: "Number of transactions / sec",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelFontFamily: 'Verdana, Arial',
+					axisLabelPadding: 20
+				},
+				legend: {
+					noColumns: 2,
+					show: true, 
+					container: "#legendTransactionsPerSecond"
+				},
+				selection: {
+					mode: 'xy'
+				},
+				grid: {
+					hoverable: true // IMPORTANT! this is needed for tooltip to
+									// work
+				},
+				tooltip: true,
+				tooltipOpts: {
+					content: "%s for %x was %y"
+				}
+			};
+		},
 	createGraph: function () {
-		var dataset = prepareData(this.data, $("#choicesTransactionsPerSecond"));
-		var options = this.options;
+		var dataset = prepareData(this.data.series, $("#choicesTransactionsPerSecond"));
+		var options = this.getOptions();
 		$.plot($("#flotTransactionsPerSecond"), dataset, options);
 		// setup overview
 		$.plot($("#overviewTransactionsPerSecond"), dataset, prepareOverviewOptions(options));
@@ -1106,15 +1147,16 @@ var transactionsPerSecondInfos = {
 // Transactions per second
 function refreshTransactionsPerSecond() {
 	var infos = transactionsPerSecondInfos;
-    setColorIndices(infos.data);
-	fixTimeStamps(infos.data, ${(timeZoneOffset?c)!0});
+	var series = infos.data.series;
+    prepareSeries(series);
+	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
     if(isGraph($("#flotTransactionsPerSecond"))){
 		infos.createGraph();
 	}else{
 		var choiceContainer = $("#choicesTransactionsPerSecond");
 		createLegend(choiceContainer, infos);
 		infos.createGraph();
-		setGraphZoomable("#flotTransactionsPerSecond", "#overviewTransactionsPerSecond", infos.options);
+		setGraphZoomable("#flotTransactionsPerSecond", "#overviewTransactionsPerSecond");
 		$('#footerTransactionsPerSecond .legendColorBox > div').each(function(i){
 			$(this).clone().prependTo(choiceContainer.find("li").eq(i));
 		});
@@ -1266,12 +1308,20 @@ function checkAll(id){
 }
 
 // prepare datas
-function prepareData(data, choiceContainer){
+function prepareData(series, choiceContainer, customizeSeries){
 	var datasets = [];
-	choiceContainer.find("input:checked").each(function () {
-		var key = $(this).attr("name");
-		if (key == data[key].label)
-			datasets.push(data[key]);
+	choiceContainer.find("input:checked").each(function (index, item) {
+		var key = $(item).attr("name");
+		var i = 0;
+		var size = series.length; 
+		while(i < size && series[i].label != key)
+			i++;
+		if(i < size){
+			var currentSeries = series[i];
+			datasets.push(currentSeries);
+			if(customizeSeries)
+				customizeSeries(currentSeries);
+		}
 	});
 	return datasets;
 }
@@ -1281,8 +1331,8 @@ $(function() {
     $( "#slider-vertical" ).slider({
       orientation: "vertical",
       range: "min",
-      min: ${(responseTimePercentiles.minY?c)!0},
-      max: ${(responseTimePercentiles.maxY?c)!0},
+      min: responseTimePercentilesInfos.data.minY,
+      max: responseTimePercentilesInfos.data.maxY,
       value: 0,
       slide: function( event, ui ) {
        chiffre= ui.value;
@@ -1302,14 +1352,16 @@ function sortAlphaCaseless(a,b){
 };
  
 function createLegend(choiceContainer, infos) {
-    var keys = Object.keys(infos.data);
+    var keys = [];
+    $.each(infos.data.series, function(index, item){
+    	keys.push(item.label);
+    });
     keys.sort(sortAlphaCaseless);
 	$.each(keys, function(index, key) {
-		var label = infos.data[key].label;
-		var id = choiceContainer.attr('id') + label;
+		var id = choiceContainer.attr('id') + index;
 		$('<li />')
-			.append($('<input id="' + id + '" name="' + label + '" type="checkbox" checked="checked" hidden />'))
-			.append($('<label />', { 'text': label , 'for': id }))
+			.append($('<input id="' + id + '" name="' + key + '" type="checkbox" checked="checked" hidden />'))
+			.append($('<label />', { 'text': key , 'for': id }))
 			.appendTo(choiceContainer);
 	});
 	choiceContainer.find("label").click( function(){

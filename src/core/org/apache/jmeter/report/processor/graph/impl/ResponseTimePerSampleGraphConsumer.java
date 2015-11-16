@@ -20,13 +20,10 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-
-import org.apache.jmeter.report.config.GraphConfiguration;
-import org.apache.jmeter.report.core.DataContext;
-import org.apache.jmeter.report.core.JsonUtil;
+import org.apache.jmeter.report.processor.ListResultData;
+import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
+import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.ElapsedTimeValueSelector;
 import org.apache.jmeter.report.processor.graph.GraphKeysSelector;
@@ -37,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class ResponseTimePerSampleGraphConsumer provides a graph to visualize
- * ...
+ * percentiles of response time for each sample name.
  *
  * @since 2.14
  */
@@ -111,21 +108,18 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData
-     * (org.apache .jmeter.report.config.GraphConfiguration)
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
+     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */
     @Override
-    public DataContext exportData(GraphConfiguration configuration) {
-	DataContext result = super.exportData(configuration);
-	JsonArrayBuilder builder = Json.createArrayBuilder();
+    protected void initializeExtraResults(MapResultData parentResult) {
+	ListResultData samples = new ListResultData();
 	IndexedNameSelector indexedNameSelector = (IndexedNameSelector) getKeysSelector();
 	int size = indexedNameSelector.getNames().size();
 	for (int i = 0; i < size; i++) {
-	    builder.add(Json.createArrayBuilder().add(i)
-		    .add(indexedNameSelector.getNames().get(i)));
+	    samples.addResult(new ValueResultData(indexedNameSelector
+		    .getNames().get(i)));
 	}
-	result.put("sampleNames", JsonUtil.convertJsonToString(builder.build()));
-	return result;
+	parentResult.setResult("sampleNames", samples);
     }
 }

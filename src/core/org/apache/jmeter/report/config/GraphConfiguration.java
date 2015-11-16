@@ -17,23 +17,18 @@
  */
 package org.apache.jmeter.report.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * The class GraphConfiguration describes a configuration of a graph.
  *
  * @since 2.14
  */
-public class GraphConfiguration {
+public class GraphConfiguration extends SubConfiguration {
 
     private Double abscissaMax;
     private Double abscissaMin;
-    private String className;
     private boolean excludeControllers;
     private Double ordinateMin;
     private Double ordinateMax;
-    private HashMap<String, String> properties = new HashMap<String, String>();
     private String title;
 
     /**
@@ -94,25 +89,6 @@ public class GraphConfiguration {
     }
 
     /**
-     * Gets the class name of the graph.
-     *
-     * @return the class name of the graph
-     */
-    public final String getClassName() {
-	return className;
-    }
-
-    /**
-     * Sets the class name of the graph.
-     *
-     * @param className
-     *            the new class name
-     */
-    public final void setClassName(String className) {
-	this.className = className;
-    }
-
-    /**
      * Gets the minimum ordinate.
      *
      * @return the minimum ordinate
@@ -148,15 +124,6 @@ public class GraphConfiguration {
      */
     public final void setOrdinateMax(Double ordinateMax) {
 	this.ordinateMax = ordinateMax;
-    }
-
-    /**
-     * Gets the properties of the graph.
-     *
-     * @return the properties of the graph
-     */
-    public final Map<String, String> getProperties() {
-	return properties;
     }
 
     /**

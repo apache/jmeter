@@ -106,7 +106,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Throughput</h1>
-                    <p>( ${testFile} start : ${beginDate} - end : ${endDate} )</p>
+                    <p>( ${testFile!""} start : ${beginDateResult!""} - end : ${endDateResult!""} )</p>
                     <#if overallFilter?has_content>
                 		<p>( Filter : ${overallFilter} )</p>
                 	</#if>

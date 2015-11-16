@@ -19,13 +19,7 @@ package org.apache.jmeter.report.processor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
-
-import org.apache.jmeter.report.core.DataContext;
-import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.util.JMeterUtils;
@@ -51,66 +45,9 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	long totalCount = 0L;
     }
 
-    /**
-     * The class ApdexResult provides a container for APDEX calculation result.
-     */
-    public class ApdexResult {
-	private ApdexThresholdsInfo thresholdsInfo;
-	private Double apdex;
-
-	/**
-	 * Gets the APDEX thresholds information.
-	 *
-	 * @return the thresholds information
-	 */
-	public final ApdexThresholdsInfo getThresholdsInfo() {
-	    return thresholdsInfo;
-	}
-
-	/**
-	 * Sets the APDEX thresholds information.
-	 *
-	 * @param thresholdsInfo
-	 *            the APDEX thresholds information to set
-	 */
-	public final void setThresholdsInfo(ApdexThresholdsInfo thresholdsInfo) {
-	    this.thresholdsInfo = thresholdsInfo;
-	}
-
-	/**
-	 * Gets the apdex result.
-	 *
-	 * @return the apdex result
-	 */
-	public final Double getApdex() {
-	    return apdex;
-	}
-
-	/**
-	 * Sets the apdex result.
-	 *
-	 * @param apdex
-	 *            the apdex result to set
-	 */
-	public final void setApdex(Double apdex) {
-	    this.apdex = apdex;
-	}
-    }
-
     private Map<String, ApdexCount> counts = new HashMap<String, ApdexCount>();
     private ThresholdSelector thresholdSelector;
     private ApdexCount overallCount;
-    private ApdexResult overallResult;
-    private Map<String, ApdexResult> apdexValues = new TreeMap<String, ApdexResult>();
-
-    /**
-     * Gets the apdex result values.
-     *
-     * @return the apdex result values
-     */
-    public final Iterable<Map.Entry<String, ApdexResult>> getApdexValues() {
-	return apdexValues.entrySet();
-    }
 
     /**
      * Gets the APDEX threshold selector.
@@ -131,48 +68,11 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	this.thresholdSelector = thresholdSelector;
     }
 
-    /**
-     * Append Apdex information to JSON builder.
-     *
-     * @param builder
-     *            the JSON builder
-     * @param sample
-     *            the sample
-     * @param result
-     *            the apdex result
-     * @param index
-     *            the index of the line
-     */
-    private void appendLineToBuilder(JsonObjectBuilder builder, String sample,
-	    ApdexResult result, int index) {
-	JsonObjectBuilder seriesBuilder = Json.createObjectBuilder();
-	ApdexThresholdsInfo info = result.getThresholdsInfo();
-	seriesBuilder
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_apdex_apdex"),
-	                String.format("%.3f", result.getApdex()))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_apdex_satisfied"),
-	                TimeHelper.formatDuration(info.getSatisfiedThreshold(),
-	                        false))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_apdex_tolerated"),
-	                TimeHelper.formatDuration(info.getToleratedThreshold(),
-	                        false))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_apdex_samplers"),
-	                sample);
-	builder.add(Integer.toString(index), seriesBuilder);
-    }
-
     @Override
     public void startConsuming() {
 	// Reset maps
 	counts.clear();
-	apdexValues.clear();
 	overallCount = new ApdexCount();
-	overallResult = new ApdexResult();
-	overallResult.thresholdsInfo = thresholdSelector.select("");
 
 	// Broadcast metadata to consumes for each channel
 	int channelCount = getConsumedChannelCount();
@@ -202,21 +102,11 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	// Increment the total count of samples
 	overallCount.totalCount++;
 
-	// Get the APDEX result for the current name or create it if it does not
-	// exist
-	ApdexResult result = apdexValues.get(name);
-	if (result == null) {
-	    result = new ApdexResult();
-	    result.thresholdsInfo = thresholdSelector.select(name);
-	    apdexValues.put(name, result);
-	}
-
-	ApdexThresholdsInfo overallInfo = overallResult.getThresholdsInfo();
-
 	// Process only succeeded samples
 	if (sample.getSuccess()) {
 	    long elapsedTime = sample.getElapsedTime();
-	    ApdexThresholdsInfo info = result.getThresholdsInfo();
+
+	    ApdexThresholdsInfo info = getThresholdSelector().select(name);
 
 	    // Increment the counters depending on the elapsed time.
 	    if (elapsedTime <= info.getSatisfiedThreshold()) {
@@ -224,6 +114,8 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	    } else if (elapsedTime <= info.getToleratedThreshold()) {
 		apdexCount.toleratedCount++;
 	    }
+
+	    ApdexThresholdsInfo overallInfo = getThresholdSelector().select("");
 
 	    // Increment the overall counters depending on the elapsed time.
 	    if (elapsedTime <= overallInfo.getSatisfiedThreshold()) {
@@ -240,16 +132,47 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	        / count.totalCount;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
+     * ()
+     */
+    @Override
+    protected ListResultData createResultTitles() {
+	ListResultData titles = new ListResultData();
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_apdex_apdex")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_apdex_satisfied")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_apdex_tolerated")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_apdex_samplers")));
+	return titles;
+    }
+
+    private ListResultData createResultItem(String name, ApdexCount count,
+	    ApdexThresholdsInfo info) {
+	ListResultData result = new ListResultData();
+
+	result.addResult(new ValueResultData(String.format("%.3f", getApdex(count))));
+
+	result.addResult(new ValueResultData(TimeHelper.formatDuration(
+	                info.getSatisfiedThreshold(), false)));
+
+	result.addResult(new ValueResultData(TimeHelper.formatDuration(
+	                info.getToleratedThreshold(), false)));
+
+	result.addResult(new ValueResultData(name));
+	
+	return result;
+    }
+
     @Override
     public void stopConsuming() {
-	// Calculate overall APDEX
-	overallResult.setApdex(getApdex(overallCount));
-
-	// Calculate APDEX for each sample name and complete the result map
-	for (Map.Entry<String, ApdexCount> entry : counts.entrySet()) {
-	    apdexValues.get(entry.getKey())
-		    .setApdex(getApdex(entry.getValue()));
-	}
+	storeResult(counts.keySet());
 	super.stopProducing();
     }
 
@@ -257,23 +180,20 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.jmeter.report.processor.graph.AbstractSummaryConsumer#exportData
-     * ()
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultItem
+     * (java.lang.String)
      */
     @Override
-    public DataContext exportData() {
-	DataContext dataResult = new DataContext();
-	JsonObjectBuilder builder = Json.createObjectBuilder();
-	int index = 1;
-	appendLineToBuilder(builder,
-	        JMeterUtils.getResString("reportgenerator_summary_total"),
-	        overallResult, index);
-	for (Map.Entry<String, ApdexResult> entry : apdexValues.entrySet()) {
-	    index++;
-	    appendLineToBuilder(builder, entry.getKey(), entry.getValue(),
-		    index);
+    protected ListResultData createResultItem(String name) {
+	ApdexThresholdsInfo info = getThresholdSelector().select(name);
+	ApdexCount count;
+	if ("".equals(name)) {
+	    name = JMeterUtils.getResString("reportgenerator_summary_total");
+	    count = overallCount;
+	} else {
+	    count = counts.get(name);
 	}
-	dataResult.put("values", JsonUtil.convertJsonToString(builder.build()));
-	return dataResult;
+	return createResultItem(name, count, info);
     }
+
 }

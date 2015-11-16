@@ -19,13 +19,7 @@ package org.apache.jmeter.report.processor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
-
-import org.apache.jmeter.report.core.DataContext;
-import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -92,237 +86,13 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	}
     }
 
-    /**
-     * The class StatisticsResult provides a container for statistics
-     * calculation result.
-     */
-    public class StatisticsResult {
-	private long totalCount;
-	private long errorCount;
-	private Double errorPercentage;
-	private Double percentile1;
-	private Double percentile2;
-	private Double percentile3;
-	private Double throughput;
-
-	private Double byteRate;
-	private long min;
-	private long max;
-
-	/**
-	 * Gets the total number of samples.
-	 *
-	 * @return the total number of samples
-	 */
-	public final long getTotalCount() {
-	    return totalCount;
-	}
-
-	/**
-	 * Sets the total number of samples.
-	 *
-	 * @param totalCount
-	 *            the total number of samples to set
-	 */
-	public final void setTotalCount(long totalCount) {
-	    this.totalCount = totalCount;
-	}
-
-	/**
-	 * Gets the number of errors.
-	 *
-	 * @return the number of errors
-	 */
-	public final long getErrorCount() {
-	    return errorCount;
-	}
-
-	/**
-	 * Sets the number of errors.
-	 *
-	 * @param errorCount
-	 *            the number of errors to set
-	 */
-	public final void setErrorCount(long errorCount) {
-	    this.errorCount = errorCount;
-	}
-
-	/**
-	 * Gets the percentage of errors.
-	 *
-	 * @return the percentage of errors
-	 */
-	public final Double getErrorPercentage() {
-	    return errorPercentage;
-	}
-
-	/**
-	 * Sets the percentage of errors.
-	 *
-	 * @param errorPercentage
-	 *            the percentage of errors to set
-	 */
-	public final void setErrorPercentage(Double errorPercentage) {
-	    this.errorPercentage = errorPercentage;
-	}
-
-	/**
-	 * Gets the percentile of elapsed time matching the property
-	 * aggregate_rpt_pct1.
-	 *
-	 * @return the percentile of elapsed time matching the property
-	 *         aggregate_rpt_pct1
-	 */
-	public final Double getPercentile1() {
-	    return percentile1;
-	}
-
-	/**
-	 * Sets the percentile of elapsed time matching the property
-	 * aggregate_rpt_pct1.
-	 *
-	 * @param percentile1
-	 *            the percentile of elapsed time matching the property
-	 *            aggregate_rpt_pct1 to set
-	 */
-	public final void setPercentile1(Double percentile1) {
-	    this.percentile1 = percentile1;
-	}
-
-	/**
-	 * Gets the percentile of elapsed time matching the property
-	 * aggregate_rpt_pct2.
-	 *
-	 * @return the percentile of elapsed time matching the property
-	 *         aggregate_rpt_pct2
-	 */
-	public final Double getPercentile2() {
-	    return percentile2;
-	}
-
-	/**
-	 * Sets the percentile of elapsed time matching the property
-	 * aggregate_rpt_pct2.
-	 *
-	 * @param percentile2
-	 *            the percentile of elapsed time matching the property
-	 *            aggregate_rpt_pct2 to set
-	 */
-	public final void setPercentile2(Double percentile2) {
-	    this.percentile2 = percentile2;
-	}
-
-	/**
-	 * Gets the percentile of elapsed time matching the property
-	 * aggregate_rpt_pct3.
-	 *
-	 * @return the percentile of elapsed time matching the property
-	 *         aggregate_rpt_pct3
-	 */
-	public final Double getPercentile3() {
-	    return percentile3;
-	}
-
-	/**
-	 * Sets the percentile of elapsed time matching the property
-	 * aggregate_rpt_pct3.
-	 *
-	 * @param percentile3
-	 *            the percentile of elapsed time matching the property
-	 *            aggregate_rpt_pct3 to set
-	 */
-	public final void setPercentile3(Double percentile3) {
-	    this.percentile3 = percentile3;
-	}
-
-	/**
-	 * Gets the throughput.
-	 *
-	 * @return the throughput
-	 */
-	public final Double getThroughput() {
-	    return throughput;
-	}
-
-	/**
-	 * Sets the throughput.
-	 *
-	 * @param throughput
-	 *            the throughput to set
-	 */
-	public final void setThroughput(Double throughput) {
-	    this.throughput = throughput;
-	}
-
-	/**
-	 * Gets the byte rate.
-	 *
-	 * @return the byteRate
-	 */
-	public final Double getByteRate() {
-	    return byteRate;
-	}
-
-	/**
-	 * Sets the byte rate.
-	 *
-	 * @param byteRate
-	 *            the byte rate to set
-	 */
-	public final void setByteRate(Double byteRate) {
-	    this.byteRate = byteRate;
-	}
-
-	/**
-	 * Gets the minimum elapsed time.
-	 *
-	 * @return the minimum elapsed time
-	 */
-	public final long getMin() {
-	    return min;
-	}
-
-	/**
-	 * Sets the minimum elapsed time.
-	 *
-	 * @param min
-	 *            the minimum elapsed time to set
-	 */
-	public final void setMin(long min) {
-	    this.min = min;
-	}
-
-	/**
-	 * Gets the maximum elapsed time.
-	 *
-	 * @return the maximum elapsed time
-	 */
-	public final long getMax() {
-	    return max;
-	}
-
-	/**
-	 * Sets the maximum elapsed time.
-	 *
-	 * @param max
-	 *            the maximum elapsed time to set
-	 */
-	public final void setMax(long max) {
-	    this.max = max;
-	}
-
-    }
-
     private Map<String, StatisticsInfo> counts = new HashMap<String, StatisticsInfo>();
-    private Map<String, StatisticsResult> results = new TreeMap<String, StatisticsResult>();
     private StatisticsInfo overallInfo = new StatisticsInfo();
-    private StatisticsResult overallResult;
 
     @Override
     public void startConsuming() {
 	// Reset maps
 	counts.clear();
-	results.clear();
 	overallInfo.clear();
 
 	// Broadcast metadata to consumes for each channel
@@ -376,97 +146,95 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	super.produce(sample, channel);
     }
 
-    private StatisticsResult createResult(StatisticsInfo info, long total) {
-	StatisticsResult result = new StatisticsResult();
-	result.setTotalCount(info.total);
-	result.setErrorCount(info.errors);
-	result.setErrorPercentage((double) info.errors * 100 / total);
-	result.setPercentile1(info.percentile1.getResult());
-	result.setPercentile2(info.percentile2.getResult());
-	result.setPercentile3(info.percentile3.getResult());
-	result.setThroughput(info.getThroughput());
-	result.setByteRate(info.getKBytesPerSecond());
-	result.setMin(info.min);
-	result.setMax(info.max);
-	return result;
-    }
-
     @Override
     public void stopConsuming() {
-	// Calculate percentage for each sample name and build the result map
-	for (Map.Entry<String, StatisticsInfo> entry : counts.entrySet()) {
-	    StatisticsInfo info = entry.getValue();
-	    results.put(entry.getKey(), createResult(info, overallInfo.total));
-	}
-	overallResult = createResult(overallInfo, overallInfo.total);
+	storeResult(counts.keySet());
 	super.stopProducing();
-    }
-
-    private void appendLineToBuilder(JsonObjectBuilder builder, String sample,
-	    StatisticsResult result, int index) {
-	JsonObjectBuilder seriesBuilder = Json.createObjectBuilder();
-	seriesBuilder
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_label"),
-	                sample)
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_count"),
-	                Long.toString(result.getTotalCount()))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_error_count"),
-	                Long.toString(result.getErrorCount()))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_error_percent"),
-	                String.format("%.2f%%", result.getErrorPercentage()))
-	        .add(String.format(
-	                JMeterUtils
-	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
-	                percentileIndex1),
-	                String.format("%.2f", result.getPercentile1()))
-	        .add(String.format(
-	                JMeterUtils
-	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
-	                percentileIndex2),
-	                String.format("%.2f", result.getPercentile2()))
-	        .add(String.format(
-	                JMeterUtils
-	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
-	                percentileIndex3),
-	                String.format("%.2f", result.getPercentile3()))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_throughput"),
-	                String.format("%.2f", result.getThroughput()))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_kbytes"),
-	                String.format("%.2f", result.getByteRate()))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_min"),
-	                Long.toString(result.getMin()))
-	        .add(JMeterUtils
-	                .getResString("reportgenerator_summary_statistics_max"),
-	                Long.toString(result.getMax()));
-	builder.add(Integer.toString(index), seriesBuilder);
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.jmeter.report.processor.graph.AbstractSummaryConsumer#exportData
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
      * ()
      */
     @Override
-    public DataContext exportData() {
-	DataContext dataResult = new DataContext();
-	JsonObjectBuilder builder = Json.createObjectBuilder();
-	int index = 1;
-	appendLineToBuilder(builder, "TOTAL", overallResult, index);
-	for (Map.Entry<String, StatisticsResult> entry : results.entrySet()) {
-	    index++;
-	    appendLineToBuilder(builder, entry.getKey(), entry.getValue(),
-		    index);
+    protected ListResultData createResultTitles() {
+	ListResultData titles = new ListResultData();
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_statistics_label")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_statistics_count")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_statistics_error_count")));
+	titles.addResult(new ValueResultData(
+	        JMeterUtils
+	                .getResString("reportgenerator_summary_statistics_error_percent")));
+	titles.addResult(new ValueResultData(
+	        String.format(
+	                JMeterUtils
+	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
+	                percentileIndex1)));
+	titles.addResult(new ValueResultData(
+	        String.format(
+	                JMeterUtils
+	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
+	                percentileIndex2)));
+	titles.addResult(new ValueResultData(
+	        String.format(
+	                JMeterUtils
+	                        .getResString("reportgenerator_summary_statistics_percentile_fmt"),
+	                percentileIndex3)));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_statistics_throughput")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_statistics_kbytes")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_statistics_min")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_statistics_max")));
+	return titles;
+    }
+
+    private ListResultData createResultItem(String name, StatisticsInfo info) {
+	ListResultData result = new ListResultData();
+	result.addResult(new ValueResultData(name));
+	result.addResult(new ValueResultData(info.total));
+	result.addResult(new ValueResultData(info.errors));
+	result.addResult(new ValueResultData(String.format("%.2f%%",
+	        (double) info.errors * 100 / overallInfo.total)));
+	result.addResult(new ValueResultData(String.format("%.2f",
+	        info.percentile1.getResult())));
+	result.addResult(new ValueResultData(String.format("%.2f",
+	        info.percentile2.getResult())));
+	result.addResult(new ValueResultData(String.format("%.2f",
+	        info.percentile3.getResult())));
+	result.addResult(new ValueResultData(String.format("%.2f",
+	        info.getThroughput())));
+	result.addResult(new ValueResultData(String.format("%.2f",
+	        info.getKBytesPerSecond())));
+	result.addResult(new ValueResultData(Long.toString(info.min)));
+	result.addResult(new ValueResultData(Long.toString(info.max)));
+	return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultItem
+     * (java.lang.String)
+     */
+    @Override
+    protected ListResultData createResultItem(String name) {
+	StatisticsInfo info;
+	if ("".equals(name)) {
+	    name = JMeterUtils.getResString("reportgenerator_summary_total");
+	    info = overallInfo;
+	} else {
+	    info = counts.get(name);
 	}
-	dataResult.put("values", JsonUtil.convertJsonToString(builder.build()));
-	return dataResult;
+	return createResultItem(name, info);
     }
 }

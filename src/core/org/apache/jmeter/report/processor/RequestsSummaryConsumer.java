@@ -17,7 +17,6 @@
  */
 package org.apache.jmeter.report.processor;
 
-import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.Sample;
 
 /**
@@ -28,41 +27,20 @@ import org.apache.jmeter.report.core.Sample;
  * 
  * @since 2.14
  */
-public class RequestsSummaryConsumer extends AbstractSummaryConsumer {
+public class RequestsSummaryConsumer extends AbstractSampleConsumer {
 
-    private long succeededCount;
-    private long failedCount;
+    public static final String RESULT_KEY = "Result";
 
-    /**
-     * Gets the number of succeeded samples.
-     *
-     * @return the number of succeeded samples
+    private long count;
+    private long errorCount;
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
      */
-    public final long getSucceededCount() {
-	return succeededCount;
-    }
-
-    /**
-     * Gets the number of failed samples.
-     *
-     * @return the number of failed samples
-     */
-    public final long getFailedCount() {
-	return failedCount;
-    }
-
-    public final double getSucceededPercent() {
-	return (double) succeededCount * 100 / (succeededCount + failedCount);
-    }
-
-    public final double getFailedPercent() {
-	return (double) failedCount * 100 / (succeededCount + failedCount);
-    }
-
     @Override
     public void startConsuming() {
-	succeededCount = 0L;
-	failedCount = 0L;
+	count = 0L;
+	errorCount = 0L;
 
 	// Broadcast metadata to consumes for each channel
 	int channelCount = getConsumedChannelCount();
@@ -73,33 +51,29 @@ public class RequestsSummaryConsumer extends AbstractSummaryConsumer {
 	super.startProducing();
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.jmeter.report.core.Sample, int)
+     */
     @Override
     public void consume(Sample sample, int channel) {
-	if (sample.getSuccess()) {
-	    succeededCount++;
-	} else {
-	    failedCount++;
+	count++;
+	if (sample.getSuccess() == false) {
+	    errorCount++;
 	}
 	super.produce(sample, channel);
     }
 
-    @Override
-    public void stopConsuming() {
-	super.stopProducing();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractSummaryConsumer#exportData
-     * ()
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
      */
     @Override
-    public DataContext exportData() {
-	DataContext result = new DataContext();
-	result.put("KoPercent", getFailedPercent());
-	result.put("OkPercent", getSucceededPercent());
-	return result;
+    public void stopConsuming() {
+	MapResultData result = new MapResultData();
+	result.setResult("KoPercent", new ValueResultData((double) errorCount
+	        * 100 / count));
+	result.setResult("OkPercent", new ValueResultData(
+	        (double) (count - errorCount) * 100 / count));
+	setLocalData(RESULT_KEY, result);
+	super.stopProducing();
     }
 }

@@ -31,7 +31,7 @@ import org.apache.log.Logger;
 import jodd.props.Props;
 
 /**
- * The class ReportGeneratorConfiguration describes the configuration of a
+ * The class ReportGeneratorConfiguration describes the configuration of the
  * report generator.
  *
  * @since 2.14
@@ -44,24 +44,14 @@ public class ReportGeneratorConfiguration {
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
     public static final String REPORT_GENERATOR_GRAPH_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
 	    + KEY_DELIMITER + "graph";
-
-    // Template directory
-    private static final String REPORT_GENERATOR_KEY_TEMPLATE_DIR = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "template_dir";
-    private static final File REPORT_GENERATOR_KEY_TEMPLATE_DIR_DEFAULT = new File(
-	    "report-template");
+    public static final String REPORT_GENERATOR_EXPORTER_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
+	    + KEY_DELIMITER + "exporter";
 
     // Temporary directory
     private static final String REPORT_GENERATOR_KEY_TEMP_DIR = REPORT_GENERATOR_KEY_PREFIX
 	    + KEY_DELIMITER + "temp_dir";
     private static final File REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT = new File(
 	    "temp");
-
-    // Output directory
-    private static final String REPORT_GENERATOR_KEY_OUTPUT_DIR = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "output_dir";
-    private static final File REPORT_GENERATOR_KEY_OUTPUT_DIR_DEFAULT = new File(
-	    "report-output");
 
     // Apdex Satified Threshold
     private static final String REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
@@ -77,10 +67,10 @@ public class ReportGeneratorConfiguration {
     private static final String REPORT_GENERATOR_KEY_SAMPLE_FILTER = REPORT_GENERATOR_KEY_PREFIX
 	    + KEY_DELIMITER + "sample_filter";
 
+    private static final String LOAD_EXPORTER_FMT = "Load configuration for exporter \"%s\"";
     private static final String LOAD_GRAPH_FMT = "Load configuration for graph \"%s\"";
     private static final String INVALID_KEY_FMT = "Invalid property \"%s\", skip it.";
     private static final String INVALID_PROPERTY_VALUE_FMT = "Invalid value \"%s\" for property \"%s\", using default value \"%s\" instead.";
-    private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
     private static final String NOT_FOUND_PROPERTY_FMT = "Property \"%s\" not found, using default value \"%s\" instead.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Convert string to \"%s\" is not supported";
 
@@ -94,13 +84,14 @@ public class ReportGeneratorConfiguration {
     // Exclude controllers
     public static final String GRAPH_KEY_EXCLUDE_CONTROLLERS = "exclude_controllers";
     public static final boolean GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT = false;
+
     // Title
     public static final String GRAPH_KEY_TITLE = "title";
     public static final String GRAPH_KEY_TITLE_DEFAULT = "Generic graph title";
-    // ClassName
-    public static final String GRAPH_KEY_CLASSNAME = "classname";
 
-    public static final String GRAPH_KEY_PROPERTY = "property";
+    // Sub configuration keys
+    public static final String SUBCONF_KEY_CLASSNAME = "classname";
+    public static final String SUBCONF_KEY_PROPERTY = "property";
 
     private static final String START_LOADING_MSG = "Report generator properties loading";
     private static final String END_LOADING_MSG = "End of report generator properties loading";
@@ -118,12 +109,11 @@ public class ReportGeneratorConfiguration {
     }
 
     private String sampleFilter;
-    private File templateDirectory;
     private File tempDirectory;
-    private File outputDirectory;
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
     private ArrayList<String> filteredSamples = new ArrayList<String>();
+    private HashMap<String, SubConfiguration> exportConfigurations = new HashMap<String, SubConfiguration>();
     private HashMap<String, GraphConfiguration> graphConfigurations = new HashMap<String, GraphConfiguration>();
 
     /**
@@ -156,32 +146,6 @@ public class ReportGeneratorConfiguration {
     }
 
     /**
-     * Gets the template directory.
-     *
-     * @return the template directory
-     */
-    public final File getTemplateDirectory() {
-	return templateDirectory;
-    }
-
-    /**
-     * Sets the template directory.
-     *
-     * @param templateDirectory
-     *            the template directory to set
-     */
-    public final void setTemplateDirectory(File templateDirectory)
-	    throws ConfigurationException {
-	this.templateDirectory = templateDirectory;
-	if (templateDirectory.isDirectory() == false) {
-	    String message = String.format(INVALID_TEMPLATE_DIRECTORY_FMT,
-		    templateDirectory);
-	    log.error(message);
-	    throw new ConfigurationException(message);
-	}
-    }
-
-    /**
      * Gets the temporary directory.
      *
      * @return the temporary directory
@@ -198,25 +162,6 @@ public class ReportGeneratorConfiguration {
      */
     public final void setTempDirectory(File tempDirectory) {
 	this.tempDirectory = tempDirectory;
-    }
-
-    /**
-     * Gets the output directory.
-     *
-     * @return the output directory
-     */
-    public final File getOutputDirectory() {
-	return outputDirectory;
-    }
-
-    /**
-     * Sets the output directory.
-     *
-     * @param outputDirectory
-     *            the output directory to set
-     */
-    public final void setOutputDirectory(File outputDirectory) {
-	this.outputDirectory = outputDirectory;
     }
 
     /**
@@ -267,12 +212,49 @@ public class ReportGeneratorConfiguration {
     }
 
     /**
+     * Gets the export configurations.
+     *
+     * @return the export configurations
+     */
+    public final Map<String, SubConfiguration> getExportConfigurations() {
+	return exportConfigurations;
+    }
+
+    /**
      * Gets the graph configurations.
      *
      * @return the graph configurations
      */
     public final Map<String, GraphConfiguration> getGraphConfigurations() {
 	return graphConfigurations;
+    }
+
+    /**
+     * Gets the exporter property prefix from the specified exporter identifier.
+     *
+     * @param exporterId
+     *            the exporter identifier
+     * @return the exporter property prefix
+     */
+    public static String getExporterPropertyPrefix(String exporterId) {
+	return REPORT_GENERATOR_EXPORTER_KEY_PREFIX + KEY_DELIMITER
+	        + exporterId;
+    }
+
+    /**
+     * Gets the exporter property key from the specified identifier and property
+     * name.
+     *
+     * @param exporterId
+     *            the exporter identifier
+     * @param propertyName
+     *            the property name
+     * @return the exporter property key
+     */
+    public static String getExporterPropertyKey(String exporterId,
+	    String propertyName) {
+	return getExporterPropertyPrefix(exporterId) + KEY_DELIMITER
+	        + propertyName;
     }
 
     /**
@@ -436,23 +418,11 @@ public class ReportGeneratorConfiguration {
 	Props props = new Props();
 	props.load(properties);
 
-	// Load template directory property
-	final File templateDirectory = getRequiredProperty(props,
-	        REPORT_GENERATOR_KEY_TEMPLATE_DIR,
-	        REPORT_GENERATOR_KEY_TEMPLATE_DIR_DEFAULT, File.class);
-	configuration.setTemplateDirectory(templateDirectory);
-
 	// Load temporary directory property
 	final File tempDirectory = getRequiredProperty(props,
 	        REPORT_GENERATOR_KEY_TEMP_DIR,
 	        REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT, File.class);
 	configuration.setTempDirectory(tempDirectory);
-
-	// Load output directory property
-	final File outputDirectory = getRequiredProperty(props,
-	        REPORT_GENERATOR_KEY_OUTPUT_DIR,
-	        REPORT_GENERATOR_KEY_OUTPUT_DIR_DEFAULT, File.class);
-	configuration.setOutputDirectory(outputDirectory);
 
 	// Load apdex statified threshold
 	final long apdexSatisfiedThreshold = getRequiredProperty(props,
@@ -544,13 +514,13 @@ public class ReportGeneratorConfiguration {
 
 	    // Get the property defining the class name
 	    String className = getRequiredProperty(props,
-		    getGraphPropertyKey(graphId, GRAPH_KEY_CLASSNAME), "",
+		    getGraphPropertyKey(graphId, SUBCONF_KEY_CLASSNAME), "",
 		    String.class);
 	    graphConfiguration.setClassName(className);
 
 	    // Load graph properties
 	    Map<String, Object> graphKeys = props.innerMap(getGraphPropertyKey(
-		    graphId, GRAPH_KEY_PROPERTY));
+		    graphId, SUBCONF_KEY_PROPERTY));
 	    Map<String, String> graphProperties = graphConfiguration
 		    .getProperties();
 	    for (Map.Entry<String, Object> entryProperty : graphKeys.entrySet()) {
@@ -558,6 +528,52 @@ public class ReportGeneratorConfiguration {
 		        (String) entryProperty.getValue());
 	    }
 	}
+
+	// Find exporter identifiers and create a configuration for each
+	final Map<String, SubConfiguration> exportConfigurations = configuration
+	        .getExportConfigurations();
+	initializeSubConfiguration(props, REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
+	        new SubConfigurationFactory<SubConfiguration>() {
+
+		    @Override
+		    public void createSubConfiguration(String name) {
+		        SubConfiguration exportConfiguration = exportConfigurations
+		                .get(name);
+		        if (exportConfiguration == null) {
+			    exportConfiguration = new SubConfiguration();
+			    exportConfigurations.put(name, exportConfiguration);
+		        }
+
+		    }
+	        });
+
+	// Load export configuration
+	for (Map.Entry<String, SubConfiguration> entry : exportConfigurations
+	        .entrySet()) {
+	    String exportId = entry.getKey();
+	    final SubConfiguration exportConfiguration = entry.getValue();
+
+	    log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
+
+	    // Get the property defining the class name
+	    String className = getRequiredProperty(props,
+		    getExporterPropertyKey(exportId, SUBCONF_KEY_CLASSNAME),
+		    "", String.class);
+	    exportConfiguration.setClassName(className);
+
+	    // Load exporter properties
+	    Map<String, Object> exporterKeys = props
+		    .innerMap(getExporterPropertyKey(exportId,
+		            SUBCONF_KEY_PROPERTY));
+	    Map<String, String> graphProperties = exportConfiguration
+		    .getProperties();
+	    for (Map.Entry<String, Object> entryProperty : exporterKeys
+		    .entrySet()) {
+		graphProperties.put(entryProperty.getKey(),
+		        (String) entryProperty.getValue());
+	    }
+	}
+
 	log.debug(END_LOADING_MSG);
 
 	return configuration;

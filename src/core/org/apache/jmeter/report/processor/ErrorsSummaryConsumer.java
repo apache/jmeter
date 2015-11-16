@@ -19,13 +19,7 @@ package org.apache.jmeter.report.processor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
-
-import org.apache.jmeter.report.core.DataContext;
-import org.apache.jmeter.report.core.JsonUtil;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -39,94 +33,18 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 
-    /**
-     * The class ErrorsResult provides a container for errors calculation
-     * result.
-     */
-    public class ErrorsResult {
-	private long errorCount;
-	private Double errorPercent;
-	private Double samplePercent;
-
-	/**
-	 * Gets the number of errors.
-	 *
-	 * @return the number of errors
-	 */
-	public final long getErrorCount() {
-	    return errorCount;
-	}
-
-	/**
-	 * Sets the number of errors.
-	 *
-	 * @param errorCount
-	 *            the number of errors to set
-	 */
-	public final void setErrorCount(long errorCount) {
-	    this.errorCount = errorCount;
-	}
-
-	/**
-	 * Gets the error rate over the overall error count.
-	 *
-	 * @return the error rate over the overall error count
-	 */
-	public final Double getErrorPercent() {
-	    return errorPercent;
-	}
-
-	/**
-	 * Sets the error rate over the overall error count.
-	 *
-	 * @param errorPercent
-	 *            the error rate over the overall error count
-	 */
-	public final void setErrorPercent(Double errorPercent) {
-	    this.errorPercent = errorPercent;
-	}
-
-	/**
-	 * Gets the error rate over the sample count.
-	 *
-	 * @return the error rate over the sample count
-	 */
-	public final Double getSamplePercent() {
-	    return samplePercent;
-	}
-
-	/**
-	 * Sets the error rate over the sample count.
-	 *
-	 * @param samplePercent
-	 *            the error rate over the sample count to set
-	 */
-	public final void setSamplePercent(Double samplePercent) {
-	    this.samplePercent = samplePercent;
-	}
-
-    }
-
     private Map<String, Long> counts = new HashMap<String, Long>();
-    private Map<String, ErrorsResult> errorValues = new TreeMap<String, ErrorsResult>();
     private long errorCount = 0L;
     private long sampleCount = 0L;
 
-    /**
-     * Gets the error result values.
-     *
-     * @return the error result values
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
      */
-    public final Iterable<Map.Entry<String, ErrorsResult>> getErrorValues() {
-	return errorValues.entrySet();
-    }
-
     @Override
     public void startConsuming() {
 	// Reset maps
 	counts.clear();
-	errorValues.clear();
-
+	
 	// Broadcast metadata to consumes for each channel
 	int channelCount = getConsumedChannelCount();
 	for (int i = 0; i < channelCount; i++) {
@@ -136,6 +54,9 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	super.startProducing();
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.jmeter.report.core.Sample, int)
+     */
     @Override
     public void consume(Sample sample, int channel) {
 	// Each result is defined by code of samples so get the code of the
@@ -164,18 +85,12 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	super.produce(sample, channel);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
+     */
     @Override
     public void stopConsuming() {
-	// Calculate percentage for each sample code and build the result map
-	for (Map.Entry<String, Long> entry : counts.entrySet()) {
-	    long count = entry.getValue();
-	    ErrorsResult result = new ErrorsResult();
-	    result.setErrorCount(count);
-	    result.setErrorPercent((double) count * 100 / errorCount);
-	    result.setSamplePercent((double) count * 100 / sampleCount);
-	    errorValues.put(entry.getKey(), result);
-	}
-
+	storeResult(counts.keySet());
 	super.stopProducing();
 
 	// Reset state
@@ -183,37 +98,48 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	sampleCount = 0L;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles()
+     */
+    @Override
+    protected ListResultData createResultTitles() {
+	ListResultData titles = new ListResultData();
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_errors_type")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_errors_count")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_errors_rate_error")));
+	titles.addResult(new ValueResultData(JMeterUtils
+	        .getResString("reportgenerator_summary_errors_rate_all")));
+	return titles;
+    }
+    
+    private ListResultData createResultItem(String name, long count) {
+	ListResultData result = new ListResultData();
+	result.addResult(new ValueResultData(name));
+	result.addResult(new ValueResultData(count));
+	result.addResult(new ValueResultData((double) count * 100 / errorCount));
+	result.addResult(new ValueResultData((double) count * 100 / sampleCount));
+	return result;
+    }
+
     /*
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.jmeter.report.processor.graph.AbstractSummaryConsumer#exportData
-     * ()
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultItem
+     * (java.lang.String)
      */
     @Override
-    public DataContext exportData() {
-	DataContext dataResult = new DataContext();
-	JsonObjectBuilder builder = Json.createObjectBuilder();
-	int index = 0;
-	for (Map.Entry<String, ErrorsResult> entry : errorValues.entrySet()) {
-	    JsonObjectBuilder seriesBuilder = Json.createObjectBuilder();
-	    ErrorsResult result = entry.getValue();
-	    seriesBuilder
-		    .add(JMeterUtils
-		            .getResString("reportgenerator_summary_errors_type"),
-		            entry.getKey())
-		    .add(JMeterUtils
-		            .getResString("reportgenerator_summary_errors_count"),
-		            Long.toString(result.getErrorCount()))
-		    .add(JMeterUtils
-		            .getResString("reportgenerator_summary_errors_rate_error"),
-		            String.format("%.2f%%", result.getErrorPercent()))
-		    .add(JMeterUtils
-		            .getResString("reportgenerator_summary_errors_rate_all"),
-		            String.format("%.2f%%", result.getSamplePercent()));
-	    builder.add(Integer.toString(++index), seriesBuilder);
+    protected ListResultData createResultItem(String name) {
+	long count;
+	if ("".equals(name)) {
+	    name = JMeterUtils.getResString("reportgenerator_summary_total");
+	    count = errorCount;
+	} else {
+	    count = counts.get(name);
 	}
-	dataResult.put("values", JsonUtil.convertJsonToString(builder.build()));
-	return dataResult;
+	return createResultItem(name, count);
     }
 }

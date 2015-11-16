@@ -20,10 +20,10 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.config.GraphConfiguration;
-import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.Sample;
+import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.SumAggregatorFactory;
+import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.CountValueSelector;
@@ -33,7 +33,7 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 
 /**
  * The class ResponseTimeDistributionGraphConsumer provides a graph to visualize
- * ...
+ * the distribution of the average response time per sample
  *
  * @since 2.14
  */
@@ -99,15 +99,14 @@ public class ResponseTimeDistributionGraphConsumer extends
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#exportData
-     * (org.apache .jmeter.report.config.GraphConfiguration)
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
+     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */
     @Override
-    public DataContext exportData(GraphConfiguration configuration) {
-	DataContext result = super.exportData(configuration);
-	result.put(AbstractOverTimeGraphConsumer.RESULT_CTX_GRANULARITY,
-	        granularity);
-	return result;
+    protected void initializeExtraResults(MapResultData parentResult) {
+	parentResult.setResult(
+	        AbstractOverTimeGraphConsumer.RESULT_CTX_GRANULARITY,
+	        new ValueResultData(granularity));
+
     }
 }

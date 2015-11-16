@@ -18,42 +18,42 @@
 package org.apache.jmeter.report.dashboard;
 
 /**
- * The class GenerationException provides an exception when report generation
- * fails.
+ * The class ExportException provides an exception when data export fails.
  *
  * @since 2.14
  */
-public class GenerationException extends Exception {
+public class ExportException extends Exception {
 
+    
     /** The Constant serialVersionUID. */
-    private static final long serialVersionUID = 8344451600520488094L;
+    private static final long serialVersionUID = 89868452883024813L;
 
     /**
-     * Instantiates a new configuration exception.
+     * Instantiates a new export exception.
      */
-    public GenerationException() {
+    public ExportException() {
 	super();
     }
 
     /**
-     * Instantiates a new configuration exception.
+     * Instantiates a new export exception.
      *
      * @param message
      *            the message
      */
-    public GenerationException(String message) {
+    public ExportException(String message) {
 	super(message);
     }
 
     /**
-     * Instantiates a new configuration exception.
+     * Instantiates a new export exception.
      *
      * @param message
      *            the message
      * @param cause
-     *            the cause
+     *            the inner cause
      */
-    public GenerationException(String message, Throwable cause) {
+    public ExportException(String message, Throwable cause) {
 	super(message, cause);
     }
 

@@ -21,12 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,16 +36,15 @@ import org.apache.jmeter.report.config.Converters;
 import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.config.StringConverter;
+import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.core.ControllerSamplePredicate;
-import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SamplePredicate;
 import org.apache.jmeter.report.core.SampleSelector;
-import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
-import org.apache.jmeter.report.processor.AbstractSummaryConsumer;
 import org.apache.jmeter.report.processor.AggregateConsumer;
+import org.apache.jmeter.report.processor.AggregateFormatter;
 import org.apache.jmeter.report.processor.ApdexSummaryConsumer;
 import org.apache.jmeter.report.processor.ApdexThresholdsInfo;
 import org.apache.jmeter.report.processor.ErrorsSummaryConsumer;
@@ -65,9 +63,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import freemarker.template.Configuration;
-import freemarker.template.TemplateExceptionHandler;
-
 /**
  * The class ReportGenerator provides a way to generate all the templated files
  * of the plugin.
@@ -76,6 +71,7 @@ import freemarker.template.TemplateExceptionHandler;
  */
 public class ReportGenerator {
     private static final Logger log = LoggingManager.getLoggerForClass();
+
     /** A properties file indicator for true. * */
     private static final String TRUE = "true"; // $NON_NLS-1$
 
@@ -90,14 +86,8 @@ public class ReportGenerator {
 	    .equalsIgnoreCase(JMeterUtils.getPropDefault(
 	            "jmeter.save.saveservice.output_format", "csv"));
 
-    public static final String DATA_CTX_TESTFILE = "testFile";
-    public static final String DATA_CTX_BEGINDATE = "beginDate";
-    public static final String DATA_CTX_ENDDATE = "endDate";
-    public static final String DATA_CTX_TIMEZONE = "timeZone";
-    public static final String DATA_CTX_TIMEZONE_OFFSET = "timeZoneOffset";
-    public static final String DATA_CTX_OVERALL_FILTER = "overallFilter";
-
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not a valid graph class.";
+    private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
 
     private static final String NORMALIZER_CONSUMER_NAME = "normalizer";
@@ -221,6 +211,22 @@ public class ReportGenerator {
 	normalizer.setName(NORMALIZER_CONSUMER_NAME);
 	source.setSampleConsumer(normalizer);
 
+	AggregateFormatter dateFormatter = new AggregateFormatter() {
+
+	    @Override
+	    public String format(double aggregate) {
+		String format = JMeterUtils.getPropDefault(
+		        "jmeter.save.saveservice.timestamp_format", "MS");
+		SimpleDateFormat sdf;
+		if ("MS".equalsIgnoreCase(format) == false) {
+		    sdf = new SimpleDateFormat(format);
+		} else {
+		    sdf = new SimpleDateFormat();
+		}
+		return sdf.format(new Date((long) aggregate));
+	    }
+	};
+
 	AggregateConsumer beginDateConsumer = new AggregateConsumer(
 	        new MinAggregator(), new SampleSelector<Double>() {
 
@@ -229,6 +235,7 @@ public class ReportGenerator {
 		        return (double) sample.getStartTime();
 		    }
 	        });
+	beginDateConsumer.setFormatter(dateFormatter);
 	beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
 	normalizer.addSampleConsumer(beginDateConsumer);
 
@@ -240,7 +247,8 @@ public class ReportGenerator {
 		        return (double) sample.getEndTime();
 		    }
 	        });
-	beginDateConsumer.setName(END_DATE_CONSUMER_NAME);
+	endDateConsumer.setFormatter(dateFormatter);
+	endDateConsumer.setName(END_DATE_CONSUMER_NAME);
 	normalizer.addSampleConsumer(endDateConsumer);
 
 	FilterConsumer nameFilter = new FilterConsumer();
@@ -260,11 +268,9 @@ public class ReportGenerator {
 	});
 	normalizer.setSampleConsumer(nameFilter);
 
-	// Static consumers
-	ArrayList<AbstractSummaryConsumer> summaries = new ArrayList<AbstractSummaryConsumer>();
-
 	ApdexSummaryConsumer apdexSummaryConsumer = new ApdexSummaryConsumer();
 	apdexSummaryConsumer.setName(APDEX_SUMMARY_CONSUMER_NAME);
+	apdexSummaryConsumer.setHasOverallResult(true);
 	apdexSummaryConsumer.setThresholdSelector(new ThresholdSelector() {
 
 	    @Override
@@ -278,17 +284,15 @@ public class ReportGenerator {
 	    }
 	});
 	nameFilter.setSampleConsumer(apdexSummaryConsumer);
-	summaries.add(apdexSummaryConsumer);
 
 	RequestsSummaryConsumer requestsSummaryConsumer = new RequestsSummaryConsumer();
 	requestsSummaryConsumer.setName(REQUESTS_SUMMARY_CONSUMER_NAME);
 	nameFilter.setSampleConsumer(requestsSummaryConsumer);
-	summaries.add(requestsSummaryConsumer);
 
 	StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
 	statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
+	statisticsSummaryConsumer.setHasOverallResult(true);
 	nameFilter.setSampleConsumer(statisticsSummaryConsumer);
-	summaries.add(statisticsSummaryConsumer);
 
 	FilterConsumer excludeControllerFilter = new FilterConsumer();
 	excludeControllerFilter
@@ -301,7 +305,6 @@ public class ReportGenerator {
 	ErrorsSummaryConsumer errorsSummaryConsumer = new ErrorsSummaryConsumer();
 	errorsSummaryConsumer.setName(ERRORS_SUMMARY_CONSUMER_NAME);
 	excludeControllerFilter.setSampleConsumer(errorsSummaryConsumer);
-	summaries.add(errorsSummaryConsumer);
 
 	// Get graph configurations
 	Map<String, GraphConfiguration> graphConfigurations = configuration
@@ -403,53 +406,35 @@ public class ReportGenerator {
 
 	log.debug("Start data exporting");
 
-	// Create data context and populate it
-	DataContext dataContext = new DataContext();
-	TimeZone timezone = TimeZone.getDefault();
-	dataContext.put(DATA_CTX_TIMEZONE, timezone.getID());
-	dataContext.put(DATA_CTX_TIMEZONE_OFFSET, timezone.getRawOffset());
-	dataContext.put(DATA_CTX_TESTFILE, testFile.getName());
-	dataContext.put(DATA_CTX_BEGINDATE, TimeHelper
-	        .formatTimeStamp((long) beginDateConsumer.getResult()));
-	dataContext.put(DATA_CTX_ENDDATE,
-	        TimeHelper.formatTimeStamp((long) endDateConsumer.getResult()));
-	dataContext.put(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter());
+	// Process configuration to build data exporters
+	for (Map.Entry<String, SubConfiguration> entry : configuration
+	        .getExportConfigurations().entrySet()) {
+	    String exporterName = entry.getKey();
+	    SubConfiguration exporterConfiguration = entry.getValue();
 
-	// Export graph data to the data context
-	for (Map.Entry<GraphConfiguration, AbstractGraphConsumer> entryGraph : graphMap
-	        .entrySet()) {
-	    GraphConfiguration graphConfiguration = entryGraph.getKey();
-	    AbstractGraphConsumer graph = entryGraph.getValue();
-	    DataContext resultContext = graph.exportData(graphConfiguration);
-	    dataContext.put(graph.getName(), resultContext);
-	}
+	    // Instantiate the class from the classname
+	    String className = exporterConfiguration.getClassName();
+	    try {
+		Class<?> clazz = Class.forName(className);
+		Object obj = clazz.newInstance();
+		DataExporter exporter = (DataExporter) obj;
+		exporter.setName(exporterName);
 
-	// Export data from static summaries
-	for (AbstractSummaryConsumer summary : summaries) {
-	    dataContext.put(summary.getName(), summary.exportData());
+		// Export data
+		exporter.export(sampleContext, testFile, configuration);
+	    } catch (ClassNotFoundException | IllegalAccessException
+		    | InstantiationException | ClassCastException ex) {
+		String error = String.format(INVALID_CLASS_FMT, className);
+		log.error(error, ex);
+		throw new GenerationException(error, ex);
+	    } catch (ExportException ex) {
+		String error = String.format(INVALID_EXPORT_FMT, exporterName);
+		log.error(error, ex);
+		throw new GenerationException(error, ex);
+	    }
 	}
 
 	log.debug("End of data exporting");
-
-	log.debug("Start template processing");
-
-	// Walk template directory to copy files and process templated ones
-	File templateDir = configuration.getTemplateDirectory();
-	File outputDir = configuration.getOutputDirectory();
-	Configuration templateCfg = new Configuration(
-	        Configuration.getVersion());
-	try {
-	    templateCfg.setDirectoryForTemplateLoading(templateDir);
-	    templateCfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-	    TemplateVisitor visitor = new TemplateVisitor(templateDir.toPath(),
-		    outputDir.toPath(), templateCfg, dataContext);
-	    Files.walkFileTree(templateDir.toPath(), visitor);
-	} catch (IOException ex) {
-	    throw new GenerationException("Unable to process template files.",
-		    ex);
-	}
-
-	log.debug("End of template processing");
 
 	if (tmpDirCreated == true) {
 	    try {

@@ -18,43 +18,32 @@
 package org.apache.jmeter.report.dashboard;
 
 /**
- * The class GenerationException provides an exception when report generation
- * fails.
- *
- * @since 2.14
+ * The Class AbstractDataExporter provides a base class for DataExporter.
  */
-public class GenerationException extends Exception {
+public abstract class AbstractDataExporter implements DataExporter {
 
-    /** The Constant serialVersionUID. */
-    private static final long serialVersionUID = 8344451600520488094L;
-
+    private String name;
+    
     /**
-     * Instantiates a new configuration exception.
+     * Instantiates a new abstract data exporter.
      */
-    public GenerationException() {
-	super();
+    protected AbstractDataExporter() {
     }
 
-    /**
-     * Instantiates a new configuration exception.
-     *
-     * @param message
-     *            the message
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.dashboard.DataExporter#getName()
      */
-    public GenerationException(String message) {
-	super(message);
+    @Override
+    public String getName() {
+	return name;
     }
 
-    /**
-     * Instantiates a new configuration exception.
-     *
-     * @param message
-     *            the message
-     * @param cause
-     *            the cause
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.dashboard.DataExporter#setName(java.lang.String)
      */
-    public GenerationException(String message, Throwable cause) {
-	super(message, cause);
+    @Override
+    public void setName(String name) {
+	this.name = name;
     }
 
 }

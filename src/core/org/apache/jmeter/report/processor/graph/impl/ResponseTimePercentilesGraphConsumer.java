@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
+import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.SumAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.CountValueSelector;
@@ -29,8 +30,7 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 
 /**
- * The class ResponseTimePerSampleGraphConsumer provides a graph to visualize
- * ...
+ * The Class ResponseTimePercentilesGraphConsumer.
  *
  * @since 2.14
  */
@@ -78,18 +78,11 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
 	return groupInfos;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * getSeriesExtraAttibutes ()
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */
     @Override
-    protected Map<String, String> getSeriesExtraAttibutes() {
-	HashMap<String, String> extraAttributes = new HashMap<String, String>();
-	extraAttributes.put("curvedLines", "{\"apply\": true, \"tension\": 1}");
-	extraAttributes.put("threshold",
-	        "{ \"below\": 0, \"color\": \"none\" }");
-	return extraAttributes;
+    protected void initializeExtraResults(MapResultData parentResult) {
+        // do nothing
     }
 }

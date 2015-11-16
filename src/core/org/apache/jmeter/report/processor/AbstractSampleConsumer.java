@@ -72,7 +72,7 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
      *            the value
      */
     protected final void setLocalData(String key, Object value) {
-	getSampleContext().setData(getAbsoluteKey(this, key), value);
+	getSampleContext().getData().put(getAbsoluteKey(this, key), value);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
      * @return the local data
      */
     protected final Object getLocalData(String key) {
-	return getSampleContext().getData(getAbsoluteKey(this, key));
+	return getSampleContext().getData().get(getAbsoluteKey(this, key));
     }
 
     /**

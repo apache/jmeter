@@ -19,6 +19,7 @@ package org.apache.jmeter.report.processor;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Defines the context in which {@link SampleConsumer}, {@link SampleProducer}
@@ -58,25 +59,12 @@ public class SampleContext {
     }
 
     /**
-     * Gets the data matching the specified key.
+     * Gets the data storage.
      *
-     * @param key
-     *            the key
      * @return the data
      */
-    public final Object getData(String key) {
-	return data.get(key);
+    public final Map<String, Object> getData() {
+	return data;
     }
 
-    /**
-     * Sets the data with the specified key.
-     *
-     * @param key
-     *            the key
-     * @param value
-     *            the value
-     */
-    public final void setData(String key, Object value) {
-	data.put(key, value);
-    }
 }

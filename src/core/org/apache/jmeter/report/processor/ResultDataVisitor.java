@@ -15,46 +15,42 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.report.dashboard;
+package org.apache.jmeter.report.processor;
 
 /**
- * The class GenerationException provides an exception when report generation
- * fails.
+ * The interface ResultDataVisitor represents a visitor for result data from
+ * samples processing.
  *
+ * @param <TVisit>
+ *            the type returned by visit methods
  * @since 2.14
  */
-public class GenerationException extends Exception {
-
-    /** The Constant serialVersionUID. */
-    private static final long serialVersionUID = 8344451600520488094L;
+public interface ResultDataVisitor<TVisit> {
 
     /**
-     * Instantiates a new configuration exception.
-     */
-    public GenerationException() {
-	super();
-    }
-
-    /**
-     * Instantiates a new configuration exception.
+     * Visits the specified list result.
      *
-     * @param message
-     *            the message
+     * @param listResult
+     *            the list result
+     * @return the result of the visit
      */
-    public GenerationException(String message) {
-	super(message);
-    }
+    TVisit visitListResult(ListResultData listResult);
 
     /**
-     * Instantiates a new configuration exception.
+     * Visits the specified map result.
      *
-     * @param message
-     *            the message
-     * @param cause
-     *            the cause
+     * @param mapResult
+     *            the map result
+     * @return the result of the visit
      */
-    public GenerationException(String message, Throwable cause) {
-	super(message, cause);
-    }
+    TVisit visitMapResult(MapResultData mapResult);
 
+    /**
+     * Visits the specified value result.
+     *
+     * @param valueResult
+     *            the value result
+     * @return the result of the visit
+     */
+    TVisit visitValueResult(ValueResultData valueResult);
 }

@@ -22,13 +22,23 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleSelector;
 
 /**
- * @author Ubik
- *
+ * The Class AggregateConsumer provides a consumer that can aggregate samples to
+ * provide a result
+ * 
+ * @since 2.14
  */
 public class AggregateConsumer extends AbstractSampleConsumer {
 
+    public static String RESULT_KEY = "Result";
+    
+    /** The aggregator. */
     private Aggregator aggregator;
+
+    /** The selector. */
     private SampleSelector<Double> selector;
+
+    /** The formatter. */
+    private AggregateFormatter formatter;
 
     /**
      * Gets the aggregator.
@@ -49,10 +59,31 @@ public class AggregateConsumer extends AbstractSampleConsumer {
     }
 
     /**
+     * Gets the formatter.
+     *
+     * @return the formatter
+     */
+    public final AggregateFormatter getFormatter() {
+	return formatter;
+    }
+
+    /**
+     * Sets the formatter.
+     *
+     * @param formatter
+     *            the new formatter
+     */
+    public final void setFormatter(AggregateFormatter formatter) {
+	this.formatter = formatter;
+    }
+
+    /**
      * Instantiates a new abstract aggregate consumer.
      *
      * @param aggregator
      *            the aggregator
+     * @param selector
+     *            the selector
      */
     public AggregateConsumer(Aggregator aggregator,
 	    SampleSelector<Double> selector) {
@@ -63,10 +94,6 @@ public class AggregateConsumer extends AbstractSampleConsumer {
 
 	this.aggregator = aggregator;
 	this.selector = selector;
-    }
-
-    public double getResult() {
-	return aggregator.getResult();
     }
 
     /*
@@ -105,6 +132,10 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void stopConsuming() {
+	double result = aggregator.getResult();
+	// Format result if needed
+	Object value = formatter != null ? formatter.format(result) : result;
+	setLocalData(RESULT_KEY, new ValueResultData(value));
 	super.stopProducing();
     }
 
