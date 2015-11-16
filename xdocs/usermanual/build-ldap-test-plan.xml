@@ -66,7 +66,7 @@ field that you can modify. In this example, leave this field with the default va
   Figure &sect-num;.2 Login Config Element for our Test Plan</figure>
 
         <note><p>Enter Username field to "your LDAP Username",<br/>
-        The password field to "your LDAP Passowrd"</p>
+        The password field to "your LDAP Password"</p>
 
         <p>These values will be used by the LDAP Requests.</p></note>
 </section>
