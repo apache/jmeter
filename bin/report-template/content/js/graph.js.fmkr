@@ -226,7 +226,11 @@ var responseTimeDistributionInfos = {
 		getOptions: function() {
 			var granularity = this.data.granularity;
 			return {
-				legend: { noColumns: 2,show: false, container: '#legendResponseTimeDistribution' },
+				legend: { 
+					noColumns: 2,
+					show: true, 
+					container: '#legendResponseTimeDistribution' 
+				},
 				xaxis:{
 					axisLabel: "Response times in ms",
 					axisLabelUseCanvas: true,
