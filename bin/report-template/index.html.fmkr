@@ -158,6 +158,7 @@
 	<script type="text/javascript" src="content/js/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
         $(function(){
+        		// Add support of columns sort to the following tables
                 $.extend( $.tablesorter.defaults, {
                     theme: 'blue',
                     cssInfoBlock: "tablesorter-no-sort",

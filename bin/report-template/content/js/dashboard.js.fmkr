@@ -1,10 +1,6 @@
-/**
- * Create a table with thead and tbody
+/*
+ * Populates the table identified by id parameter with the specified data and format
  * 
- * @param data
- *            Table data
- * @param id
- *            Table id
  */
 function createTable(data, id, formatter) {
 	var tableRef = document.getElementById(id);
@@ -20,7 +16,7 @@ function createTable(data, id, formatter) {
 
 	var tBody;
 	
-	// Create overall row if defined
+	// Create overall body if defined
 	if(data.overall){
 		tBody = document.createElement('tbody');
 		tBody.className = "tablesorter-no-sort";
@@ -32,10 +28,11 @@ function createTable(data, id, formatter) {
 		}
 	}
 	
+	// Create regular body
 	tBody = document.createElement('tbody');
 	tableRef.appendChild(tBody);
 		
-	// Populate table content with data.items array
+	// Populate body with data.items array
 	for(var index=0; index < data.items.length; index++){
 		var item = data.items[index];
 		var newRow = tBody.insertRow(-1);
@@ -86,6 +83,7 @@ $(document).ready(function() {
 		}
 	});
 	
+	// Creates APDEX table
 	createTable(${apdexSummaryResult!"{}"}, "apdexTable", function(index, item){
 		switch(index){
 			case 0: 
@@ -98,6 +96,8 @@ $(document).ready(function() {
 		}
 		return item;
 	});
+	
+	// Create statistics table
 	createTable(${statisticsSummaryResult!"{}"}, "statisticsTable", function(index, item){
 		switch(index){
 			case 3:
@@ -113,6 +113,8 @@ $(document).ready(function() {
 		}
 		return item;
 	});
+	
+	// Create error table
 	createTable(${errorsSummaryResult!"{}"}, "errorsTable", function(index, item){
 		switch(index){
 			case 2:

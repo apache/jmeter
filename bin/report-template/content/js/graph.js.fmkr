@@ -8,6 +8,7 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 	
+	// Ugly code while this script is shared among several pages
 	try{
 		refreshHitsPerSecond();
 	} catch(e){}
@@ -1228,7 +1229,7 @@ function collapse(elem, collapsed){
 	}
 }
 
-// collapse
+// Collapse
 $(function() {
 		$('.collapse').on('shown.bs.collapse', function(){
 			collapse(this, false);
@@ -1246,6 +1247,10 @@ $(function() {
 	});
 });
 
+/*
+ * Activates or deactivates all series of the specified graph (represented by id parameter)
+ * depending on checked argument. 
+ */
 function toggleAll(id, checked){
 	var placeholder = document.getElementById(id);
 	
@@ -1301,19 +1306,21 @@ function toggleAll(id, checked){
 	});
 }
 
-// uncheck all boxes
+// Unchecks all boxes for "Hide all samples" functionality
 function uncheckAll(id){
 	toggleAll(id, false);
 }
 
-// check all boxes
+// Checks all boxes for "Show all samples" functionality
 function checkAll(id){
 	toggleAll(id, true);
 }
 
-// prepare datas
+// Prepares data to be consumed by plot plugins
 function prepareData(series, choiceContainer, customizeSeries){
 	var datasets = [];
+	
+	// Add only selected series to the data set
 	choiceContainer.find("input:checked").each(function (index, item) {
 		var key = $(item).attr("name");
 		var i = 0;
@@ -1350,18 +1357,26 @@ $(function() {
 	$("#slider-vertical").children("div").css("opacity","0.3");
 });
 
-
+/*
+ * Ignore case comparator 
+ */
 function sortAlphaCaseless(a,b){
     return a.toLowerCase() > b.toLowerCase() ? 1 : -1;
 };
- 
+
+/*
+ * Creates a legend in the specified element with graph information
+ */
 function createLegend(choiceContainer, infos) {
+	// Sort series by name
     var keys = [];
     $.each(infos.data.series, function(index, item){
     	keys.push(item.label);
     });
     keys.sort(sortAlphaCaseless);
-	$.each(keys, function(index, key) {
+	
+    // Create list of series with support of activation/deactivation
+    $.each(keys, function(index, key) {
 		var id = choiceContainer.attr('id') + index;
 		$('<li />')
 			.append($('<input id="' + id + '" name="' + key + '" type="checkbox" checked="checked" hidden />'))
@@ -1376,15 +1391,14 @@ function createLegend(choiceContainer, infos) {
 		}
 		$(this).parent().children().children().toggleClass("legend-disabled");
 	});
-		
 	choiceContainer.find("label").mousedown( function(event){
 		event.preventDefault();
 	});
-		
 	choiceContainer.find("label").mouseenter(function(){
 		this.style.cursor="pointer";
 	});
 	
+	// Recreate graphe on series activation toggle
 	choiceContainer.find("input").click(function(){
 		infos.createGraph();
 	});

@@ -29,7 +29,7 @@ function formatDuration(duration, spaced) {
 	var seconds = Math.floor(duration / 1000); // 1 second
 	duration %= 1000;
 
-	// Add non null part.
+	// Add non zero part.
 	var formatArray = [];
 	if (days > 0)
 		formatArray.push(formatUnit(days, "day(s)", spaced));
@@ -58,7 +58,7 @@ function getElapsedTimeLabel(granularity) {
 }
 
 /*
- * Remove quotes from the specified string 
+ * Removes quotes from the specified string 
  */
 function unquote(str, quoteChar) {
 	quoteChar = quoteChar || '"';
@@ -69,7 +69,7 @@ function unquote(str, quoteChar) {
 };
 
 /*
- * This comparison function evaluates abscissas and sort them.
+ * This comparison function evaluates abscissas to sort array of coordinates.
  */
 function compareByXCoordinate(coord1, coord2) {
 	return coord2[0] - coord1[0];
