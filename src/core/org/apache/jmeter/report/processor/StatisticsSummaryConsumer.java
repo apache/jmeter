@@ -202,20 +202,14 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	result.addResult(new ValueResultData(name));
 	result.addResult(new ValueResultData(info.total));
 	result.addResult(new ValueResultData(info.errors));
-	result.addResult(new ValueResultData(String.format("%.2f%%",
-	        (double) info.errors * 100 / overallInfo.total)));
-	result.addResult(new ValueResultData(String.format("%.2f",
-	        info.percentile1.getResult())));
-	result.addResult(new ValueResultData(String.format("%.2f",
-	        info.percentile2.getResult())));
-	result.addResult(new ValueResultData(String.format("%.2f",
-	        info.percentile3.getResult())));
-	result.addResult(new ValueResultData(String.format("%.2f",
-	        info.getThroughput())));
-	result.addResult(new ValueResultData(String.format("%.2f",
-	        info.getKBytesPerSecond())));
-	result.addResult(new ValueResultData(Long.toString(info.min)));
-	result.addResult(new ValueResultData(Long.toString(info.max)));
+	result.addResult(new ValueResultData((double) info.errors * 100 / overallInfo.total));
+	result.addResult(new ValueResultData(info.percentile1.getResult()));
+	result.addResult(new ValueResultData(info.percentile2.getResult()));
+	result.addResult(new ValueResultData(info.percentile3.getResult()));
+	result.addResult(new ValueResultData(info.getThroughput()));
+	result.addResult(new ValueResultData(info.getKBytesPerSecond()));
+	result.addResult(new ValueResultData(info.min));
+	result.addResult(new ValueResultData(info.max));
 	return result;
     }
 

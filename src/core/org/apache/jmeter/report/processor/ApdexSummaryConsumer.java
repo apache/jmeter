@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
-import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -157,13 +156,11 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	    ApdexThresholdsInfo info) {
 	ListResultData result = new ListResultData();
 
-	result.addResult(new ValueResultData(String.format("%.3f", getApdex(count))));
+	result.addResult(new ValueResultData(getApdex(count)));
 
-	result.addResult(new ValueResultData(TimeHelper.formatDuration(
-	                info.getSatisfiedThreshold(), false)));
+	result.addResult(new ValueResultData(info.getSatisfiedThreshold()));
 
-	result.addResult(new ValueResultData(TimeHelper.formatDuration(
-	                info.getToleratedThreshold(), false)));
+	result.addResult(new ValueResultData(info.getToleratedThreshold()));
 
 	result.addResult(new ValueResultData(name));
 	

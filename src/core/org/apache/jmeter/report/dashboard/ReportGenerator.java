@@ -21,8 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +40,7 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SamplePredicate;
 import org.apache.jmeter.report.core.SampleSelector;
+import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 import org.apache.jmeter.report.processor.AggregateConsumer;
 import org.apache.jmeter.report.processor.AggregateFormatter;
@@ -215,15 +214,7 @@ public class ReportGenerator {
 
 	    @Override
 	    public String format(double aggregate) {
-		String format = JMeterUtils.getPropDefault(
-		        "jmeter.save.saveservice.timestamp_format", "MS");
-		SimpleDateFormat sdf;
-		if ("MS".equalsIgnoreCase(format) == false) {
-		    sdf = new SimpleDateFormat(format);
-		} else {
-		    sdf = new SimpleDateFormat();
-		}
-		return sdf.format(new Date((long) aggregate));
+		return TimeHelper.formatTimeStamp((long)aggregate);
 	    }
 	};
 

@@ -1,70 +1,3 @@
-$(document)
-		.ready(
-				function() {
-					var offset = 0;
-					plot();
-
-					function plot() {
-						var data = ${requestsSummaryResult!"{}"};
-						var seriesInfo = [ {
-							"label" : "KO",
-							"data" : data.KoPercent,
-							"color" : "red"
-						}, {
-							"label" : "OK",
-							"data" : data.OkPercent,
-							"color" : "blue"
-						} ];
-
-						$
-								.plot(
-										$("#flot-requests-summary"),
-										seriesInfo,
-										{
-											series : {
-												pie : {
-													show : true,
-													radius : 1,
-													label : {
-														show : true,
-														radius : 3 / 4,
-														formatter : function(
-																label, series) {
-															return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'
-																	+ label
-																	+ '<br/>'
-																	+ Math
-																			.round(series.percent)
-																	+ '%</div>';
-														},
-														background : {
-															opacity : 0.5,
-															color : '#000'
-														}
-													}
-												}
-											},
-											legend : {
-												show : true
-											}
-										});
-					}
-				});
-
-$(function() {
-
-	var dApdex = ${apdexSummaryResult!"{}"};
-
-	var dStats = ${statisticsSummaryResult!"{}"};
-
-	var dErrors = ${errorsSummaryResult!"{}"};
-
-	createTable(dApdex, "Apdex");
-	createTable(dStats, "Statistics");
-	createTable(dErrors, "Errors");
-
-});
-
 /**
  * Create a table with thead and tbody
  * 
@@ -73,36 +6,120 @@ $(function() {
  * @param id
  *            Table id
  */
-function createTable(data, id) {
+function createTable(data, id, formatter) {
 	var tableRef = document.getElementById(id);
 
 	// Create header and populate it with data.titles array
 	var header = tableRef.createTHead();
 	var newRow = header.insertRow(-1);
 	for (var index = 0; index < data.titles.length; index++) {
-		var cell = newRow.insertCell(-1);
+		var cell = document.createElement('th');
 		cell.innerHTML = data.titles[index];
+		newRow.appendChild(cell);
 	}
 
-	var tBody = document.createElement('tbody');
-	tableRef.appendChild(tBody);
+	var tBody;
 	
 	// Create overall row if defined
 	if(data.overall){
+		tBody = document.createElement('tbody');
+		tBody.className = "tablesorter-no-sort";
+		tableRef.appendChild(tBody);
 		var newRow = tBody.insertRow(-1);
 		for(var index=0;index < data.overall.length; index++){
 			var cell = newRow.insertCell(-1);
-			cell.innerHTML = data.overall[index];
+			cell.innerHTML = formatter ? formatter(index, data.overall[index]): data.overall[index];
 		}
 	}
+	
+	tBody = document.createElement('tbody');
+	tableRef.appendChild(tBody);
 		
-	 // Populate table content with data.items array
-	 for(var index=0; index < data.items.length; index++){
-		 var item = data.items[index];
-		 var newRow = tBody.insertRow(-1);
-		 for(var col=0; col < item.length; col++){
-			 var cell = newRow.insertCell(-1);
-			 cell.innerHTML = item[col];
-		 }
-	 }
+	// Populate table content with data.items array
+	for(var index=0; index < data.items.length; index++){
+		var item = data.items[index];
+		var newRow = tBody.insertRow(-1);
+		for(var col=0; col < item.length; col++){
+			var cell = newRow.insertCell(-1);
+			cell.innerHTML = formatter ? formatter(col, item[col]) : item[col];
+		}
+	}
 }
+
+$(document).ready(function() {
+	var data = ${requestsSummaryResult!"{}"};
+	var dataset = [
+	    {
+	    	"label" : "KO",
+		    "data" : data.KoPercent,
+		   	"color" : "red"
+		},
+		{
+			"label" : "OK",
+			"data" : data.OkPercent,
+			"color" : "blue"
+		}];
+	$.plot($("#flot-requests-summary"), dataset, {
+		series : {
+			pie : {
+				show : true,
+				radius : 1,
+				label : {
+					show : true,
+					radius : 3 / 4,
+					formatter : function(label, series) {
+						return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'
+							+ label
+							+ '<br/>'
+							+ Math.round(series.percent)
+							+ '%</div>';
+					},
+					background : {
+						opacity : 0.5,
+						color : '#000'
+					}
+				}
+			}
+		},
+		legend : {
+			show : true
+		}
+	});
+	
+	createTable(${apdexSummaryResult!"{}"}, "apdexTable", function(index, item){
+		switch(index){
+			case 0: 
+				item = item.toFixed(3); 
+				break;
+			case 1:
+			case 2:
+				item = formatDuration(item);
+				break;
+		}
+		return item;
+	});
+	createTable(${statisticsSummaryResult!"{}"}, "statisticsTable", function(index, item){
+		switch(index){
+			case 3:
+				item = item.toFixed(2) + '%';
+				break;
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+				item = item.toFixed(2);
+				break;
+		}
+		return item;
+	});
+	createTable(${errorsSummaryResult!"{}"}, "errorsTable", function(index, item){
+		switch(index){
+			case 2:
+			case 3:
+				item = item.toFixed(2) + '%';
+				break;
+		}
+		return item;
+	});
+});

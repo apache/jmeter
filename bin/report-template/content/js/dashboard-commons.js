@@ -1,9 +1,17 @@
 /*
+ * Suffixes the specified value with a unit
+ * The spaced argument defines whether a space character is introduced.
+ */
+function formatUnit(value, unit, spaced){
+	return spaced ? value + " " + unit : value + unit;
+}
+
+/*
  * Gets a string representing the specified duration in milliseconds.
  * 
  * E.g : duration = 20000100, returns "45 min 20 sec 100 ms"
  */
-function formatDuration(duration) {
+function formatDuration(duration, spaced) {
 	var type = $.type(duration);
 	if (type === "string")
 		return duration;
@@ -24,19 +32,19 @@ function formatDuration(duration) {
 	// Add non null part.
 	var formatArray = [];
 	if (days > 0)
-		formatArray.push(days + " day(s)");
+		formatArray.push(formatUnit(days, "day(s)", spaced));
 
 	if (hours > 0)
-		formatArray.push(hours + " hour(s)");
+		formatArray.push(formatUnit(hours, "hour(s)", spaced));
 
 	if (minutes > 0)
-		formatArray.push(minutes + " min");
+		formatArray.push(formatUnit(minutes,"min", spaced));
 
 	if (seconds > 0)
-		formatArray.push(seconds + " sec");
+		formatArray.push(formatUnit(seconds, "sec", spaced));
 
 	if (duration > 0)
-		formatArray.push(duration + " ms");
+		formatArray.push(formatUnit(duration, "ms", spaced));
 
 	// Build the string
 	return formatArray.join(" ");
@@ -50,8 +58,19 @@ function getElapsedTimeLabel(granularity) {
 }
 
 /*
- * This comparison function evaluates abscissas and sort them. 
+ * Remove quotes from the specified string 
  */
-function compareByXCoordinate(coord1, coord2){
+function unquote(str, quoteChar) {
+	quoteChar = quoteChar || '"';
+	if (str.length > 0 && str[0] === quoteChar && str[str.length - 1] === quoteChar)
+		return str.slice(1, str.length - 1);
+	else
+		return str;
+};
+
+/*
+ * This comparison function evaluates abscissas and sort them.
+ */
+function compareByXCoordinate(coord1, coord2) {
 	return coord2[0] - coord1[0];
 }

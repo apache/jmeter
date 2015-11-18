@@ -227,3 +227,7 @@ caption {
 	cursor: pointer;
 	background-color: #e6bf99;
 }
+
+.tablesorter .tablesorter-no-sort td {
+	font-weight: bold;
+}
