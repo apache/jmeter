@@ -53,6 +53,7 @@ import org.apache.jmeter.report.processor.MinAggregator;
 import org.apache.jmeter.report.processor.NormalizerSampleConsumer;
 import org.apache.jmeter.report.processor.RequestsSummaryConsumer;
 import org.apache.jmeter.report.processor.SampleContext;
+import org.apache.jmeter.report.processor.CsvFileSampleSource;
 import org.apache.jmeter.report.processor.SampleSource;
 import org.apache.jmeter.report.processor.StatisticsSummaryConsumer;
 import org.apache.jmeter.report.processor.ThresholdSelector;
@@ -201,14 +202,14 @@ public class ReportGenerator {
 	// Build consumers chain
 	SampleContext sampleContext = new SampleContext();
 	sampleContext.setWorkingDirectory(tmpDir);
-	SampleSource source = new SampleSource(testFile, JMeterUtils
+	SampleSource source = new CsvFileSampleSource(testFile, JMeterUtils
 	        .getPropDefault("jmeter.save.saveservice.default_delimiter",
 	                ",").charAt(0));
 	source.setSampleContext(sampleContext);
 
 	NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
 	normalizer.setName(NORMALIZER_CONSUMER_NAME);
-	source.setSampleConsumer(normalizer);
+	source.addSampleConsumer(normalizer);
 
 	AggregateFormatter dateFormatter = new AggregateFormatter() {
 
