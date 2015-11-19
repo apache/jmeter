@@ -40,10 +40,8 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SamplePredicate;
 import org.apache.jmeter.report.core.SampleSelector;
-import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 import org.apache.jmeter.report.processor.AggregateConsumer;
-import org.apache.jmeter.report.processor.AggregateFormatter;
 import org.apache.jmeter.report.processor.ApdexSummaryConsumer;
 import org.apache.jmeter.report.processor.ApdexThresholdsInfo;
 import org.apache.jmeter.report.processor.ErrorsSummaryConsumer;
@@ -86,19 +84,19 @@ public class ReportGenerator {
 	    .equalsIgnoreCase(JMeterUtils.getPropDefault(
 	            "jmeter.save.saveservice.output_format", "csv"));
 
-    private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not a valid graph class.";
+    private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
 
-    private static final String NORMALIZER_CONSUMER_NAME = "normalizer";
-    private static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
-    private static final String END_DATE_CONSUMER_NAME = "endDate";
-    private static final String NAME_FILTER_CONSUMER_NAME = "nameFilter";
-    private static final String APDEX_SUMMARY_CONSUMER_NAME = "apdexSummary";
-    private static final String ERRORS_SUMMARY_CONSUMER_NAME = "errorsSummary";
-    private static final String REQUESTS_SUMMARY_CONSUMER_NAME = "requestsSummary";
-    private static final String STATISTICS_SUMMARY_CONSUMER_NAME = "statisticsSummary";
-    private static final String START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME = "startIntervalControlerFilter";
+    public static final String NORMALIZER_CONSUMER_NAME = "normalizer";
+    public static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
+    public static final String END_DATE_CONSUMER_NAME = "endDate";
+    public static final String NAME_FILTER_CONSUMER_NAME = "nameFilter";
+    public static final String APDEX_SUMMARY_CONSUMER_NAME = "apdexSummary";
+    public static final String ERRORS_SUMMARY_CONSUMER_NAME = "errorsSummary";
+    public static final String REQUESTS_SUMMARY_CONSUMER_NAME = "requestsSummary";
+    public static final String STATISTICS_SUMMARY_CONSUMER_NAME = "statisticsSummary";
+    public static final String START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME = "startIntervalControlerFilter";
 
     private final File testFile;
     private final ReportGeneratorConfiguration configuration;
@@ -211,14 +209,6 @@ public class ReportGenerator {
 	normalizer.setName(NORMALIZER_CONSUMER_NAME);
 	source.addSampleConsumer(normalizer);
 
-	AggregateFormatter dateFormatter = new AggregateFormatter() {
-
-	    @Override
-	    public String format(double aggregate) {
-		return TimeHelper.formatTimeStamp((long)aggregate);
-	    }
-	};
-
 	AggregateConsumer beginDateConsumer = new AggregateConsumer(
 	        new MinAggregator(), new SampleSelector<Double>() {
 
@@ -227,7 +217,6 @@ public class ReportGenerator {
 		        return (double) sample.getStartTime();
 		    }
 	        });
-	beginDateConsumer.setFormatter(dateFormatter);
 	beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
 	normalizer.addSampleConsumer(beginDateConsumer);
 
@@ -239,7 +228,6 @@ public class ReportGenerator {
 		        return (double) sample.getEndTime();
 		    }
 	        });
-	endDateConsumer.setFormatter(dateFormatter);
 	endDateConsumer.setName(END_DATE_CONSUMER_NAME);
 	normalizer.addSampleConsumer(endDateConsumer);
 

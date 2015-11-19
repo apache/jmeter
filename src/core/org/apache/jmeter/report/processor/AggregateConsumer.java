@@ -37,9 +37,6 @@ public class AggregateConsumer extends AbstractSampleConsumer {
     /** The selector. */
     private SampleSelector<Double> selector;
 
-    /** The formatter. */
-    private AggregateFormatter formatter;
-
     /**
      * Gets the aggregator.
      *
@@ -56,25 +53,6 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     public final SampleSelector<Double> getSelector() {
 	return selector;
-    }
-
-    /**
-     * Gets the formatter.
-     *
-     * @return the formatter
-     */
-    public final AggregateFormatter getFormatter() {
-	return formatter;
-    }
-
-    /**
-     * Sets the formatter.
-     *
-     * @param formatter
-     *            the new formatter
-     */
-    public final void setFormatter(AggregateFormatter formatter) {
-	this.formatter = formatter;
     }
 
     /**
@@ -132,10 +110,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void stopConsuming() {
-	double result = aggregator.getResult();
-	// Format result if needed
-	Object value = formatter != null ? formatter.format(result) : result;
-	setLocalData(RESULT_KEY, new ValueResultData(value));
+	setLocalData(RESULT_KEY, new ValueResultData(aggregator.getResult()));
 	super.stopProducing();
     }
 

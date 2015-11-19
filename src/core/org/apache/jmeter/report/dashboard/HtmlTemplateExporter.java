@@ -27,6 +27,8 @@ import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.ArgumentNullException;
 import org.apache.jmeter.report.core.DataContext;
+import org.apache.jmeter.report.core.TimeHelper;
+import org.apache.jmeter.report.processor.AggregateConsumer;
 import org.apache.jmeter.report.processor.ResultData;
 import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jorphan.logging.LoggingManager;
@@ -51,6 +53,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     public static final String DATA_CTX_TIMEZONE = "timeZone";
     public static final String DATA_CTX_TIMEZONE_OFFSET = "timeZoneOffset";
     public static final String DATA_CTX_OVERALL_FILTER = "overallFilter";
+    public static final String TIMESTAMP_FORMAT_MS = "ms";
 
     private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
 
@@ -67,6 +70,14 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	    value = '"' + (String) value + '"';
 	}
 	context.put(key, value);
+    }
+
+    private long formatTimestamp(String key, DataContext context) {
+	double result = Double.valueOf((String) context.get(key));
+	long timestamp = (long) result;
+	// Quote the string to respect Json spec.
+	context.put(key, '"' + TimeHelper.formatTimeStamp(timestamp) + '"');
+	return timestamp;
     }
 
     /*
@@ -91,13 +102,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
 	// Create data context and populate it
 	DataContext dataContext = new DataContext();
-	TimeZone timezone = TimeZone.getDefault();
-	addToContext(DATA_CTX_TIMEZONE, timezone.getID(), dataContext);
-	addToContext(DATA_CTX_TIMEZONE_OFFSET, timezone.getRawOffset(),
-	        dataContext);
-	addToContext(DATA_CTX_TESTFILE, file.getName(), dataContext);
-	addToContext(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter(),
-	        dataContext);
 
 	// Collect consumers results from sample context and transform them into
 	// Json strings to inject in the data context
@@ -111,18 +115,33 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	    }
 	}
 
-	// // Export data from static summaries
-	// for (AbstractSummaryConsumer summary : summaries) {
-	// dataContext.put(summary.getName(), summary.exportData());
-	// }
+	// Replace the begin date with its formatted string and store the old
+	// timestamp
+	long oldTimestamp = formatTimestamp(
+	        ReportGenerator.BEGIN_DATE_CONSUMER_NAME
+	                + AggregateConsumer.RESULT_KEY, dataContext);
+
+	// Replace the end date with its formatted string
+	formatTimestamp(ReportGenerator.END_DATE_CONSUMER_NAME
+	        + AggregateConsumer.RESULT_KEY, dataContext);
+
+	// Add time zone offset (that matches the begin date) to the context
+	TimeZone timezone = TimeZone.getDefault();
+	addToContext(DATA_CTX_TIMEZONE_OFFSET,
+	        timezone.getOffset(oldTimestamp), dataContext);
+
+	// Add the test file name to the context
+	addToContext(DATA_CTX_TESTFILE, file.getName(), dataContext);
+
+	// Add the overall filter property to the context
+	addToContext(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter(),
+	        dataContext);
 
 	// Get the configuration of the current exporter
 	SubConfiguration exportCfg = configuration.getExportConfigurations()
 	        .get(getName());
 
-	// // Get properties of the current exporter
-	// Map<String, String> properties = exportCfg.getProperties();
-
+	// Get template directory property value
 	File templateDirectory = new File(exportCfg.getProperty(
 	        REPORT_GENERATOR_KEY_TEMPLATE_DIR,
 	        REPORT_GENERATOR_KEY_TEMPLATE_DIR_DEFAULT));
@@ -132,7 +151,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	    log.error(message);
 	    throw new ExportException(message);
 	}
-	// TODO check property
+
+	// Get output directory property value
 	File outputDir = new File(exportCfg.getProperty(
 	        REPORT_GENERATOR_KEY_OUTPUT_DIR,
 	        REPORT_GENERATOR_KEY_OUTPUT_DIR_DEFAULT));
@@ -155,5 +175,4 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	log.debug("End of template processing");
 
     }
-
 }
