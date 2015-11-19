@@ -24,6 +24,7 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -50,7 +51,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
     public void startConsuming() {
 	sampleMetadata = getConsumedMetadata(0);
-	timestamp = sampleMetadata.indexOf(SampleMetadata.JMETER_TIMESTAMP);
+	timestamp = sampleMetadata.indexOf(CSVSaveService.TIME_STAMP);
 	super.setProducedMetadata(sampleMetadata, 0);
 	startProducing();
     }

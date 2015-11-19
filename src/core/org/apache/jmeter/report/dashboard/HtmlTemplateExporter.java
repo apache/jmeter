@@ -38,8 +38,8 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 
 /**
- * The class HtmlTemplateExporter provides a data exporter that generate and
- * process templated files using freemarker.
+ * The class HtmlTemplateExporter provides a data exporter that generates and
+ * processes template files using freemarker.
  * 
  * @since 2.14
  */

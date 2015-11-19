@@ -17,7 +17,13 @@
  */
 package org.apache.jmeter.report.core;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.TreeMap;
+
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
+import org.apache.jmeter.save.CSVSaveService;
 
 /**
  * <p>
@@ -30,41 +36,11 @@ import java.util.TreeMap;
  */
 public class SampleMetadata {
 
-    public static final String JMETER_TIMESTAMP = "timeStamp";
-
-    public static final String JMETER_ELAPSED = "elapsed";
-
-    public static final String JMETER_SAMPLE_NAME = "label";
-
-    public static final String JMETER_RESPONSE_CODE = "responseCode";
-
-    public static final String JMETER_RESPONSE_MESSAGE = "responseMessage";
-
-    public static final String JMETER_THREAD_NAME = "threadName";
-
-    public static final String JMETER_SUCCESS = "success";
-
-    public static final String JMETER_BYTES = "bytes";
-
-    public static final String JMETER_THREAD_GROUP = "grpThreads";
-
-    public static final String JMETER_THREAD_COUNT = "allThreads";
-
-    public static final String JMETER_LATENCY = "Latency";
-
-    public static final String JMETER_SAMPLE_COUNT = "SampleCount";
-
-    public static final String JMETER_ERROR_COUNT = "ErrorCount";
-
-    public static final String JMETER_HOSTNAME = "Hostname";
-
-    public static final String JMETER_JVM_ID = "jvmId";
-
     /** The column list : accessed by CSVSampleWriter */
-    String[] column;
+    List<String> columns;
 
     /** Index to map column names to their corresponding indexes */
-    private TreeMap<String, Integer> index;
+    private TreeMap<String, Integer> index = new TreeMap<String, Integer>();
 
     /** character separator used for separating columns */
     private char separator;
@@ -81,14 +57,84 @@ public class SampleMetadata {
 	if (columns == null) {
 	    throw new ArgumentNullException("columns");
 	}
+	initialize(separator, Arrays.asList(columns));
+    }
+
+    public SampleMetadata(SampleSaveConfiguration saveConfig) {
+	if (saveConfig == null)
+	    throw new ArgumentNullException("saveConfig");
+	ArrayList<String> columns = new ArrayList<String>();
+	if (saveConfig.saveTimestamp()) {
+	    columns.add(CSVSaveService.TIME_STAMP);
+	}
+	if (saveConfig.saveTime()) {
+	    columns.add(CSVSaveService.CSV_ELAPSED);
+	}
+	if (saveConfig.saveLabel()) {
+	    columns.add(CSVSaveService.LABEL);
+	}
+	if (saveConfig.saveCode()) {
+	    columns.add(CSVSaveService.RESPONSE_CODE);
+	}
+	if (saveConfig.saveMessage()) {
+	    columns.add(CSVSaveService.RESPONSE_MESSAGE);
+	}
+	if (saveConfig.saveThreadName()) {
+	    columns.add(CSVSaveService.THREAD_NAME);
+	}
+	if (saveConfig.saveDataType()) {
+	    columns.add(CSVSaveService.DATA_TYPE);
+	}
+	if (saveConfig.saveSuccess()) {
+	    columns.add(CSVSaveService.SUCCESSFUL);
+	}
+	if (saveConfig.saveAssertionResultsFailureMessage()) {
+	    columns.add(CSVSaveService.FAILURE_MESSAGE);
+	}
+	if (saveConfig.saveBytes()) {
+	    columns.add(CSVSaveService.CSV_BYTES);
+	}
+	if (saveConfig.saveThreadCounts()) {
+	    columns.add(CSVSaveService.CSV_THREAD_COUNT1);
+	    columns.add(CSVSaveService.CSV_THREAD_COUNT2);
+	}
+	if (saveConfig.saveUrl()) {
+	    columns.add(CSVSaveService.CSV_URL);
+	}
+	if (saveConfig.saveFileName()) {
+	    columns.add(CSVSaveService.CSV_FILENAME);
+	}
+	if (saveConfig.saveLatency()) {
+	    columns.add(CSVSaveService.CSV_LATENCY);
+	}
+	if (saveConfig.saveEncoding()) {
+	    columns.add(CSVSaveService.CSV_ENCODING);
+	}
+	if (saveConfig.saveSampleCount()) {
+	    columns.add(CSVSaveService.CSV_SAMPLE_COUNT);
+	    columns.add(CSVSaveService.CSV_ERROR_COUNT);
+	}
+	if (saveConfig.saveHostname()) {
+	    columns.add(CSVSaveService.CSV_HOSTNAME);
+	}
+	if (saveConfig.saveIdleTime()) {
+	    columns.add(CSVSaveService.CSV_IDLETIME);
+	}
+	if (saveConfig.saveConnectTime()) {
+	    columns.add(CSVSaveService.CSV_CONNECT_TIME);
+	}
+	initialize(saveConfig.getDelimiter().charAt(0), columns);
+    }
+
+    private void initialize(char separator, List<String> columns) {
 	this.separator = separator;
-	this.column = columns;
-	index = new TreeMap<String, Integer>();
-	for (int i = 0; i < columns.length; i++) {
-	    index.put(columns[i].trim(), i);
+	this.columns = columns;
+	int size = columns.size();
+	for (int i = 0; i < size; i++) {
+	    index.put(this.columns.get(i).trim(), i);
 	}
     }
-    
+
     /**
      * Gets the character used for separating columns
      */
@@ -100,7 +146,7 @@ public class SampleMetadata {
      * Returns the number of columns in the metadata
      */
     public int getColumnCount() {
-	return column.length;
+	return columns.size();
     }
 
     /**
@@ -115,7 +161,7 @@ public class SampleMetadata {
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(int i) {
-	return column[i];
+	return columns.get(i);
     }
 
     /**
@@ -130,7 +176,7 @@ public class SampleMetadata {
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(Integer i) {
-	return column[i.intValue()];
+	return columns.get(i.intValue());
     }
 
     /**
@@ -154,13 +200,13 @@ public class SampleMetadata {
     @Override
     public String toString() {
 	StringBuffer out = new StringBuffer();
-	for (int i = 0; i < column.length; i++) {
-	    out.append(column[i]);
-	    if (i < column.length - 1) {
+	int size = columns.size();
+	for (int i = 0; i < size; i++) {
+	    out.append(columns.get(i));
+	    if (i < size - 1) {
 		out.append(separator);
 	    }
 	}
 	return out.toString();
     }
-
 }

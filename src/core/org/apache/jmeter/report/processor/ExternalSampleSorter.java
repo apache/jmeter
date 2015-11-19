@@ -193,7 +193,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 		    outputFile.getAbsolutePath()
 		            + " is a directory. Please provide a valid output sample file path (not a directory)");
 	}
-	CsvSampleReader csvReader = new CsvSampleReader(inputFile, inputFile.getSeparator());
+	CsvSampleReader csvReader = new CsvSampleReader(inputFile,
+	        inputFile.getSeparator(), false);
 	try {
 	    sort(csvReader, outputFile, writeHeader);
 	} finally {

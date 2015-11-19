@@ -118,12 +118,12 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 	csvReaders = new CsvSampleReader[secondaryInputs.length + 1];
 	int k = 0;
 	// primary input file (ex. input.csv)
-	csvReaders[k] = new CsvSampleReader(inputFile, separator);
+	csvReaders[k] = new CsvSampleReader(inputFile, separator, true);
 	inputFiles[k] = inputFile;
 	// secondary input files (ex. input-1.csv, input-2.csv, input-3.csv)
 	for (File input : secondaryInputs) {
 	    k++;
-	    csvReaders[k] = new CsvSampleReader(input, separator);
+	    csvReaders[k] = new CsvSampleReader(input, separator, true);
 	    inputFiles[k] = secondaryInputs[k - 1];
 	}
 	producer = new PrivateProducer();

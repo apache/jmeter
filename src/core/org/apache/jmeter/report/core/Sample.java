@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.report.core;
 
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -310,7 +311,7 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-	return getLong(metadata.indexOf(SampleMetadata.JMETER_TIMESTAMP));
+	return getLong(metadata.indexOf(CSVSaveService.TIME_STAMP));
     }
 
     /**
@@ -319,7 +320,7 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-	return getLong(metadata.indexOf(SampleMetadata.JMETER_ELAPSED));
+	return getLong(metadata.indexOf(CSVSaveService.CSV_ELAPSED));
     }
 
     /**
@@ -371,7 +372,7 @@ public class Sample {
      * @return the response code stored in the sample
      */
     public String getResponseCode() {
-	return getString(metadata.indexOf(SampleMetadata.JMETER_RESPONSE_CODE));
+	return getString(metadata.indexOf(CSVSaveService.RESPONSE_CODE));
     }
 
     /**
@@ -380,7 +381,7 @@ public class Sample {
      * @return the name stored in the sample
      */
     public String getName() {
-	return getString(metadata.indexOf(SampleMetadata.JMETER_SAMPLE_NAME));
+	return getString(metadata.indexOf(CSVSaveService.LABEL));
     }
 
     /**
@@ -389,8 +390,7 @@ public class Sample {
      * @return the response message stored in the sample
      */
     public String getResponseMessage() {
-	return getString(metadata
-	        .indexOf(SampleMetadata.JMETER_RESPONSE_MESSAGE));
+	return getString(metadata.indexOf(CSVSaveService.RESPONSE_MESSAGE));
     }
 
     /**
@@ -399,7 +399,7 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-	return getLong(metadata.indexOf(SampleMetadata.JMETER_LATENCY));
+	return getLong(metadata.indexOf(CSVSaveService.CSV_LATENCY));
     }
 
     /**
@@ -408,7 +408,7 @@ public class Sample {
      * @return the success status stored in the sample
      */
     public boolean getSuccess() {
-	return getBoolean(metadata.indexOf(SampleMetadata.JMETER_SUCCESS));
+	return getBoolean(metadata.indexOf(CSVSaveService.SUCCESSFUL));
     }
 
     /**
@@ -417,7 +417,7 @@ public class Sample {
      * @return the number of sent bytes stored in the sample
      */
     public int getSentBytes() {
-	return getInt(metadata.indexOf(SampleMetadata.JMETER_BYTES));
+	return getInt(metadata.indexOf(CSVSaveService.CSV_BYTES));
     }
 
     /**
@@ -426,7 +426,7 @@ public class Sample {
      * @return the number of threads in the group of this sample
      */
     public int getGroupThreads() {
-	return getInt(metadata.indexOf(SampleMetadata.JMETER_THREAD_GROUP));
+	return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT1));
     }
 
     /**
@@ -435,7 +435,7 @@ public class Sample {
      * @return the overall number of threads
      */
     public int getAllThreads() {
-	return getInt(metadata.indexOf(SampleMetadata.JMETER_THREAD_COUNT));
+	return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT2));
     }
 
     /**
@@ -444,6 +444,6 @@ public class Sample {
      * @return the thread name stored in the sample
      */
     public String getThreadName() {
-	return getString(metadata.indexOf(SampleMetadata.JMETER_THREAD_NAME));
+	return getString(metadata.indexOf(CSVSaveService.THREAD_NAME));
     }
 }

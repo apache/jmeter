@@ -65,32 +65,32 @@ public final class CSVSaveService {
     // XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
     // ---------------------------------------------------------------------
 
-    private static final String DATA_TYPE = "dataType"; // $NON-NLS-1$
-    private static final String FAILURE_MESSAGE = "failureMessage"; // $NON-NLS-1$
-    private static final String LABEL = "label"; // $NON-NLS-1$
-    private static final String RESPONSE_CODE = "responseCode"; // $NON-NLS-1$
-    private static final String RESPONSE_MESSAGE = "responseMessage"; // $NON-NLS-1$
-    private static final String SUCCESSFUL = "success"; // $NON-NLS-1$
-    private static final String THREAD_NAME = "threadName"; // $NON-NLS-1$
-    private static final String TIME_STAMP = "timeStamp"; // $NON-NLS-1$
+    public static final String DATA_TYPE = "dataType"; // $NON-NLS-1$
+    public static final String FAILURE_MESSAGE = "failureMessage"; // $NON-NLS-1$
+    public static final String LABEL = "label"; // $NON-NLS-1$
+    public static final String RESPONSE_CODE = "responseCode"; // $NON-NLS-1$
+    public static final String RESPONSE_MESSAGE = "responseMessage"; // $NON-NLS-1$
+    public static final String SUCCESSFUL = "success"; // $NON-NLS-1$
+    public static final String THREAD_NAME = "threadName"; // $NON-NLS-1$
+    public static final String TIME_STAMP = "timeStamp"; // $NON-NLS-1$
 
     // ---------------------------------------------------------------------
     // ADDITIONAL CSV RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
     // ---------------------------------------------------------------------
 
-    private static final String CSV_ELAPSED = "elapsed"; // $NON-NLS-1$
-    private static final String CSV_BYTES = "bytes"; // $NON-NLS-1$
-    private static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
-    private static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
-    private static final String CSV_SAMPLE_COUNT = "SampleCount"; // $NON-NLS-1$
-    private static final String CSV_ERROR_COUNT = "ErrorCount"; // $NON-NLS-1$
-    private static final String CSV_URL = "URL"; // $NON-NLS-1$
-    private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
-    private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
-    private static final String CSV_CONNECT_TIME = "Connect"; // $NON-NLS-1$
-    private static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
-    private static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
-    private static final String CSV_IDLETIME = "IdleTime"; // $NON-NLS-1$
+    public static final String CSV_ELAPSED = "elapsed"; // $NON-NLS-1$
+    public static final String CSV_BYTES = "bytes"; // $NON-NLS-1$
+    public static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
+    public static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
+    public static final String CSV_SAMPLE_COUNT = "SampleCount"; // $NON-NLS-1$
+    public static final String CSV_ERROR_COUNT = "ErrorCount"; // $NON-NLS-1$
+    public static final String CSV_URL = "URL"; // $NON-NLS-1$
+    public static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
+    public static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
+    public static final String CSV_CONNECT_TIME = "Connect"; // $NON-NLS-1$
+    public static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
+    public static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
+    public static final String CSV_IDLETIME = "IdleTime"; // $NON-NLS-1$
 
     // Used to enclose variable name labels, to distinguish from any of the
     // above labels
