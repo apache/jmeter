@@ -25,127 +25,113 @@
 	<body>
 
 		<section name="&sect-num;. Generating Report Dashboard">
-			<p>JMeter supports dashboard report generation to get graphs and
-				statistics from a test plan.
-				It uses a source directory with
-				template
-				files (where graph data and
-				statistics are injected)
-				to
-				produce html
-				pages in a destination directory.</p>
 			<p>
-				The report generation can be done as a stand alone process from a
-				samples
-				log
-				file or after running load test.
+				JMeter supports dashboard report generation to get graphs and
+				statistics from a test plan.
+				<br />
+				This chapter describes how to configure and use the generator.
 			</p>
 
-			<subsection name="&sect-num;.1 Configuring Dashboard Generation"
+			<subsection name="&sect-num;.1 Overview">
+				<p>
+					The dashboard generator is a modular extension of JMeter. Its
+					default behavior is to read and process samples from CSV files to
+					generate Html files containing graph views.
+				</p>
+
+				<p>
+					It is designed to support different way of data exportation, if
+					Html files are not relevant.
+				</p>
+			</subsection>
+
+			<subsection name="&sect-num;.2 Configuring Dashboard Generation"
 				anchor="configure">
-				<p>Dashboard generation uses JMeter properties to customize the
+				<p>
+					Dashboard generation uses JMeter properties to customize the
 					report. Some properties are used
 					for general settings and others are
 					used to describe a graph
-					configuration.
+					configuration or exporter configuration.
 				</p>
 
-				<subsection name="&sect-num;.1.1 General settings"
+				<subsection name="&sect-num;.2.1 General settings"
 					anchor="configure_general">
-					<ul>
-						<li>
-							<p>
-								<code>jmeter.reportgenerator.apdex_statisfied_threshold</code>
-								:
-								<br />
-								Sets the satisfaction threshold for the APDEX calculation.
-								<br />
-								Specified in milliseconds, Default: 100
-							</p>
-						</li>
-						<li>
-							<p>
-								<code>jmeter.reportgenerator.apdex_tolerated_threshold</code>
-								:
-								<br />
-								Sets the tolerance threshold for the APDEX calculation.
-								<br />
-								Specified in milliseconds, Default: 150
-							</p>
-						</li>
-						<li>
-							<p>
-								<code>jmeter.reportgenerator.output_dir</code>
-								:
-								<br />
-								Sets the destination directory for generated html pages.
-								<br />
-								Default: report-output
-							</p>
-						</li>
-						<li>
-							<p>
-								<code>jmeter.reportgenerator.sample_filter</code>
-								:
-								<br />
-								Sets the filter for samples to keep for graphs and statistics
-								generation.
-								<br />
-								A comma separated list of samples names, Default: "" (no
-								filtering)
-							</p>
-						</li>
-						<li>
-							<p>
-								<code>jmeter.reportgenerator.temp_dir</code>
-								:
-								<br />
-								Sets the temporary directory used by the generation processus if
-								it needs file I/O operations.
-								<br />
-								Default: temp
-							</p>
-						</li>
-						<li>
-							<p>
-								<code>jmeter.reportgenerator.template_dir</code>
-								:
-								<br />
-								Sets the source directory of templated files from which the html
-								pages are generated.
-								<br />
-								Default: report-template
-							</p>
-						</li>
-						<li>
-							<p>
-								<code>jmeter.reportgenerator.statistic_window</code>
-								:
-								<br />
-								Sets the size of the sliding window used by percentile
-								evaluation.
-								<br />
-								Caution : higher value provides a better accurency but needs
-								more memory.
-								<br />
-								Default: 200000
-							</p>
-						</li>
-
-					</ul>
+					<note>
+						All properties must be prefixed with
+						<code>jmeter.reportgenerator.</code>
+					</note>
+					<table>
+						<thead>
+							<tr>
+								<th>Property</th>
+								<th>Description</th>
+								<th>Default value</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>apdex_statisfied_threshold</td>
+								<td>
+									Sets the satisfaction threshold for the APDEX calculation.
+									<br />
+									Specified in milliseconds
+								</td>
+								<td>500</td>
+							</tr>
+							<tr>
+								<td>apdex_tolerated_threshold</td>
+								<td>
+									Sets the tolerance threshold for the APDEX calculation.
+									<br />
+									Specified in milliseconds
+								</td>
+								<td>1500</td>
+							</tr>
+							<tr>
+								<td>sample_filter</td>
+								<td>
+									Sets the filter of samples to keep for graphs and
+									statistics
+									generation.
+									<br />
+									A comma separated list of samples names is expected
+								</td>
+								<td>"" (no filtering)</td>
+							</tr>
+							<tr>
+								<td>temp_dir</td>
+								<td>Sets the temporary directory used by the generation
+									processus if
+									it needs file I/O operations.</td>
+								<td>temp</td>
+							</tr>
+							<tr>
+								<td>statistic_window</td>
+								<td>
+									Sets the size of the sliding window used by percentile
+									evaluation.
+									<br />
+									Caution : higher value provides a better accurency but needs
+									more memory.
+								</td>
+								<td>200000</td>
+							</tr>
+						</tbody>
+					</table>
 
 					<note>Relative paths are build from the JMeter working directory
 						(default: bin).</note>
 
 					<note>
-						<p>Dashboard generation uses Jodd-props to read and parse
-							properties, so you can define some overall properties
-							which are
-							used by graph configuration.
-							These properties are freely named but
-							you should use the prefix
-							"jmeter.reportgenerator" in order to
-							avoid properties overlap.</p>
+						<p>
+							You can define some overall properties which are used by the
+							generator configuration.
+							These properties are freely named but you
+							should use the prefix
+							"jmeter.reportgenerator." in order to avoid
+							properties overlap.
+						</p>
 						<p>
 							E.g :
 							<br />
@@ -160,100 +146,94 @@
 					</note>
 				</subsection>
 
-				<subsection name="&sect-num;.1.2 Graph settings" anchor="configure_graph">
+				<subsection name="&sect-num;.2.2 Graph settings" anchor="configure_graph">
 					<p>Each property describing a graph configuration must be prefixed
-						with "jmeter.reportgenerator.graph"
-						followed by the graph
-						identifier used in templated files.</p>
-					<p>E.g : if the graph reference ${&lt;graph_id&gt;} is used in a
-						templated file, the properties of this graph are prefixed by
-						"jmeter.reportgenerator.graph.&lt;graph_id&gt;".</p>
+						with "jmeter.reportgenerator.graph." followed by the graph
+						identifier.</p>
+					<note> The identifier is used to group properties by graph.</note>
 
-					<subsection name="&sect-num;.1.2.1 General properties"
+					<subsection name="&sect-num;.2.2.1 General properties"
 						anchor="general_graph_properties">
 						<p>All graphs support these properties :</p>
-						<ul>
-							<li>
-								<p>
-									<code>abscissa_max</code>
-									:
-									<br />
-									Sets the maximum abscissa of the graph. If this property is not
-									set, it will be defined during the generation.
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>abscissa_min</code>
-									:
-									<br />
-									Sets the minimum abscissa of the graph. If this property is not
-									set, it will be defined during the generation.
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>classname</code>
-									:
-									<br />
-									The fully qualified class name of the graph
-									<br />
-									This property is required.
-									<br />
-									The class of the graph must extend
-									org.apache.jmeter.report.processor.graph.AbstractGraphConsumer.
-									<br />
-									See
-									<a href="#default_graphs">Default graph section</a>
-									for more details.
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>exclude_controllers</code>
-									:
-									<br />
-									Defines whether the graph discards controller samples.
-									<br />
-									Default : false.
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>ordinate_max</code>
-									:
-									<br />
-									Sets the maximum ordinate of the graph. If this property is not
-									set, it will be defined during the generation.
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>ordinate_min</code>
-									:
-									<br />
-									Sets the minimum ordinate of the graph. If this property is not
-									set, it will be defined during the generation.
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>title</code>
-									:
-									<br />
-									Sets the title of the graph.
-									<br />
-									Default : "".
-								</p>
-							</li>
-
-						</ul>
+						<table>
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Description</th>
+									<th>Default value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>abscissa_max</td>
+									<td>
+										Sets the maximum abscissa of the graph. If this property is
+										not set, it will be defined during the generation.
+									</td>
+									<td>No default value</td>
+								</tr>
+								<tr>
+									<td>abscissa_min</td>
+									<td>
+										Sets the minimum abscissa of the graph. If this property is
+										not set, it will be defined during the generation.
+									</td>
+									<td>No default value</td>
+								</tr>
+								<tr>
+									<td>classname</td>
+									<td>
+										The fully qualified class name of the graph
+										<br />
+										This property is required.
+										<br />
+										The class of the graph must extend
+										org.apache.jmeter.report.processor.graph.AbstractGraphConsumer.
+										<br />
+										See
+										<a href="#default_graphs">Default graph section</a>
+										for more details.
+									</td>
+									<td>No default value</td>
+								</tr>
+								<tr>
+									<td>exclude_controllers</td>
+									<td>
+										Defines whether the graph discards controller samples.
+									</td>
+									<td>false</td>
+								</tr>
+								<tr>
+									<td>ordinate_max</td>
+									<td>
+										Sets the maximum ordinate of the graph. If this property is
+										not set, it will be defined during the generation.
+									</td>
+									<td>No default value</td>
+								</tr>
+								<tr>
+									<td>ordinate_min</td>
+									<td>
+										Sets the minimum ordinate of the graph. If this property is
+										not set, it will be defined during the generation.
+									</td>
+									<td>No default value</td>
+								</tr>
+								<tr>
+									<td>title</td>
+									<td>
+										Sets the title of the graph.
+									</td>
+									<td>""</td>
+								</tr>
+							</tbody>
+						</table>
 					</subsection>
 
-					<subsection name="&sect-num;.1.2.2 Specific properties"
+					<subsection name="&sect-num;.2.2.2 Specific properties"
 						anchor="specific_graph_properties">
-						<p>Specific
-							graph properties must use the prefix
+						<p>
+							Specific graph properties must use the prefix
 							"jmeter.reportgenerator.graph.&lt;graph_id&gt;.property"
 							<br />
 							The name of the property will be mapped using camel case
@@ -273,11 +253,87 @@
 
 				</subsection>
 
+				<subsection name="&sect-num;.2.3 Export settings" anchor="configure_export">
+					<p>
+						Each property describing an exporter configuration must be
+						prefixed
+						with "jmeter.reportgenerator.exporter"
+						followed by the
+						exporter identifier.
+					</p>
+					
+					<subsection name="&sect-num;.2.3.1 General properties"
+						anchor="general_export_properties">
+						<table>
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Description</th>
+									<th>Default value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>classname</td>
+									<td>
+										The fully qualified class name of the exporter
+										<br />
+										This property is required.
+										<br />
+										The class of the exporter must implement
+										org.apache.jmeter.report.dashboard.DataExporter.
+									</td>
+									<td>No default value</td>
+								</tr>
+							</tbody>
+						</table>
+					</subsection>
+
+					<subsection name="&sect-num;.2.3.1 Specific properties for Html export"
+						anchor="html_export_properties">
+						<p>
+							Specific exporter properties must use the prefix
+							"jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property"
+						</p>
+						<table>
+							<thead>
+								<tr>
+									<th>Property</th>
+									<th>Description</th>
+									<th>Default value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>output_dir</td>
+									<td>
+										Sets the destination directory for generated html pages.
+									</td>
+									<td>report-output</td>
+								</tr>
+								<tr>
+									<td>template_dir</td>
+									<td>
+										Sets the source directory of templated files from which the
+										html pages are generated.
+									</td>
+									<td>report-template</td>
+								</tr>
+							</tbody>
+						</table>
+					</subsection>
+
+				</subsection>
 			</subsection>
 
-			<subsection name="&sect-num;.2 Generating dashboard"
+			<subsection name="&sect-num;.3 Generating dashboard"
 				anchor="report_only">
-				<subsection name="&sect-num;.2.1 Generating from samples log file"
+				<p>
+					The report generation can be done as a stand alone process from a
+					samples log file or after running load test.
+				</p>
+
+				<subsection name="&sect-num;.3.1 Generating from samples log file"
 					anchor="report_only">
 					<p>
 						Use the following command :
@@ -285,7 +341,7 @@
 					</p>
 				</subsection>
 
-				<subsection name="&sect-num;.2.2 Generating after load test"
+				<subsection name="&sect-num;.3.2 Generating after load test"
 					anchor="report_after_load_test">
 					<p>
 						Use the following command :
@@ -294,11 +350,11 @@
 				</subsection>
 			</subsection>
 
-			<subsection name="&sect-num;.3 Template processing"
+			<subsection name="&sect-num;.4 Template processing"
 				anchor="process_template">
-				<subsection name="&sect-num;.3.1 Overview" anchor="template_overview">
+				<subsection name="&sect-num;.4.1 Overview" anchor="template_overview">
 					<p>
-						The dashboard generation use the template engine
+						The default exporter of the generator use the template engine
 						<a href="http://freemarker.org/">freemarker</a>
 						to produce html pages.
 						<br />
@@ -379,16 +435,15 @@
 					</note>
 				</subsection>
 
-				<subsection name="&sect-num;.3.2 Customization" anchor="template_customization">
+				<subsection name="&sect-num;.4.2 Customization" anchor="template_customization">
 					<p>You can customize the dashboard generation by modifying the
 						files in the template directory.
 					</p>
 					<p>
 						If you want to add a graph to the dahsboard, you have to
-						<a href="configure_graph">declare
+						<a href="#configure_graph">declare
 							it among the JMeter properties</a>
-						and use its references in the
-						templated files
+						and use its references in the templated files.
 					</p>
 					<p>If you want to remove a graph from the dashboard, you must
 						remove
@@ -397,9 +452,10 @@
 				</subsection>
 			</subsection>
 
-			<subsection name="&sect-num;.4 Default graphs" anchor="default_graphs">
+			<subsection name="&sect-num;.5 Default graphs" anchor="default_graphs">
 				<note>Due to limitations of this early version, each default graph
-					must be declared among the JMeter properties.</note>
+					must be declared among the JMeter properties. Otherwise, the graph
+					views will be empty.</note>
 
 				<p>The dashboard generator provides the following graph classes :</p>
 				<ul>

@@ -23,52 +23,120 @@
 	<body>
 
 		<section name="Dashboard generator">
+			<p>
+				This document describes the architecture and operation of the
+				dashboard
+				generation engine.
+			</p>
 			<subsection name="1 Overview" anchor="overview">
-				<figure image="dashboard.png">Figure 1 - Dashboard generation overview</figure>
-				<p>
-					To produce the dashboard, the generator begins by building a
-					chain
-					of
-					consumers that processes samples from a CSV sample file. The
-					chain
-					is
-					built using JMeter properties (prefixed by
-					<code>jmeter.reportgenerator</code>
-					) in order to enable the user to
-					customize
-					it.
-				</p>
-				<p>
-					During the sample processing each graph consumer publishes data
-					in
-					the
-					sample context. Then this context is used to produce data for
-					the
-					template engine.
-				</p>
-				<p>
-					At last, this one processes the input template files and injects
-					produced data to generate a HTML site structure.</p>
+				<subsection name="1.1 Architecture" anchor="overview_architecture">
+					<p>
+						The dashboard generation engine is a modular feature based on
+						samples operation processus.
+						<br />
+						The processus can be represented by
+						the following diagram :
+					</p>
+					<figure image="dashboard.png">Figure 1 - Dashboard generation overview</figure>
+					<p>
+						In this view, you can see :
+						<ul>
+							<li>
+								A source from where samples are produced (E.g: CSV file).
+							</li>
+							<li>
+								A chain of items, named consumers, that do operations
+								from
+								samples that go through the chain.
+								(E.g: Filtering, sorting,
+								calculation, ...)
+							</li>
+							<li>
+								An execution context, named sample context, where the results
+								of
+								consumers calculations are stored.
+							</li>
+							<li>
+								A set of items, named exporters, that use the content of the
+								sample context to generate a final result to the user (E.g. :
+								Html page generation).
+							</li>
+						</ul>
+					</p>
+				</subsection>
+				<subsection name="1.2 Operation" anchor="overview_operation">
+					<p>
+						Before producing samples, the source is associated with a sample
+						context that will be used to store the consumers results.
+					</p>
+					<p>
+						Then a
+						chain of consumers is built using JMeter properties
+						(prefixed by
+						<code>jmeter.reportgenerator</code>
+						) in order to enable the user to customize it.
+					</p>
+					<p>
+						When the source
+						emits a sample, it sends it to the first consumer
+						of
+						the chain.
+						<br />
+						The consumer can have different behaviors :
+						<ul>
+							<li>It can process the sample and sends it to the next
+								consumers.</li>
+							<li>It cannot process the sample, so it stores it and
+								continues to
+								receive other samples. When it can process the
+								stored samples, it
+								does and sends the whole to the next
+								consumers (E.g: sorting).</li>
+							<li>It can choose to discard the sample (E.g:
+								filtering).</li>
+						</ul>
+						When the source stops samples producing, consumers can publish a
+						result in the sample context.
+						<br />
+						The latter is send to the set of
+						exporters in order to create
+						results used by final user.
+					</p>
+				</subsection>
 			</subsection>
 
 			<subsection name="2 Consumers chain details" anchor="consumers_chain">
+				<p>
+
+				</p>
 				<figure image="chain.png">Figure 2 - Consumers chain</figure>
 				<p>
 					The chain begins with a normalizer consumer in charge of
-					standardizing
-					the timestamp of each sample. Then two consumers have to define
-					the start time and end time of the load tests.
-					At the same level a
-					filter consumer keeps or discards samples depending on the
+					standardizing the timestamp of each sample because JMeter allows
+					different timestamp formats (See :
+					<code>jmeter.save.saveservice.timestamp_format</code>
+					).
+				</p>
+				<p>
+					Then two consumers have to define the start time and end time of
+					the load tests.
+				</p>
+				<p>
+					At the same level a filter consumer keeps or
+					discards samples
+					depending on the
 					<code>jmeter.reportgenerator.sample_filter</code>
-					property. Another filter is plugged after to discard controller
+					property.
+				</p>
+				<p> Another filter is plugged after to discard controller
 					samples.
 				</p>
 				<p>
 					Depending on the property
 					<code>jmeter.reportgenerator.graph.&lt;graph_id&gt;.exclude_controllers</code>
 					, the graph consumer matching the graph_id identifier will be
-					plugged at position A or B.
+					set at
+					position A or B.
 				</p>
 			</subsection>
 
@@ -79,9 +147,8 @@
 							is strongly coupled with the CSV file format, we should allow
 							other kinds of source by using a sample source interface.</p>
 					</li>
-
 					<li>
-						<p>To add customized graph, users must extends the
+						<p>To add customized graph, users must extend the
 							AbstractGraphConsumer or use one of the implementations provided
 							in
 							the package “org.apache.jmeter.report.processor.graph.impl”.
@@ -96,15 +163,14 @@
 							selector
 							and time rate aggregator).</p>
 					</li>
-
-
 					<li>
 						<p>
 							The chain building is dispatched between the
 							org.apache.jmeter.report.dashboard.ReporGenerator.generate method
 							and the implementation of the consumers. So the code in charge of
 							the building is splitted and furthermore some consumers can be
-							redundants and harm the performance of report generation, not load testing.
+							redundants and harm the performance of report generation, not
+							load testing.
 						</p>
 						<p>
 							E.g: Each LatencyVSRequestGraphConsumer and
@@ -123,28 +189,30 @@
 							instances
 							are used. Otherwise if the declaration differs a new
 							branch of
-							consumer is created.
+							consumers is created.
 						</p>
 					</li>
-
 					<li>
-						<p>Fow now, consumers are in charge of the data transformation
-							from
-							the sample context to the data context used by freemarker
-							(via the
-							exportData method). It should be the sole responsablity
-							of the
-							template engine to transform the data. So the stored data
-							in the
-							sample context should implement a common interface or be
-							compatible
-							with standard serialization pratices.</p>
+						<p>
+							The graphs (DOM elements) in the generated html page should be
+							dynamicaly build in order to match the graphs defined in jmeter
+							properties.
+						</p>
 					</li>
-
 					<li>
-						<p>There is only one implementation of template engine (tied to
-							freemarker). We should provide a template engine interface to
-							enable the use of alternate engines.</p>
+						<p>
+							Some improvements can be done on the generated html pages :
+							<ul>
+								<li>Using a single page, and hide graphs depending on the
+									navigation menu selection.</li>
+								<li>Adding a loading animation when graphs are build or
+									refreshed.</li>
+								<li>Let the user determine if a graph is zoomable using a jmeter
+									property.</li>
+								<li>Using the jquery.plot.setData() method to handle series
+									activation/deactivation rather than rebuild the graph.</li>
+							</ul>
+						</p>
 					</li>
 				</ul>
 			</subsection>
