@@ -374,6 +374,16 @@ public class Sample {
     public String getResponseCode() {
 	return getString(metadata.indexOf(CSVSaveService.RESPONSE_CODE));
     }
+    
+    /**
+     * Gets the failure message stored in the sample.
+     *
+     * @return the failure message stored in the sample
+     */
+    public String getFailureMessage() {
+        return getString(metadata.indexOf(CSVSaveService.FAILURE_MESSAGE));
+    }
+    
 
     /**
      * Gets the name stored in the sample.

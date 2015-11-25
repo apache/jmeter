@@ -20,6 +20,8 @@ package org.apache.jmeter.report.processor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -33,6 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 
+    private static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$
     private Map<String, Long> counts = new HashMap<String, Long>();
     private long errorCount = 0L;
     private long sampleCount = 0L;
@@ -59,30 +62,47 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
      */
     @Override
     public void consume(Sample sample, int channel) {
-	// Each result is defined by code of samples so get the code of the
-	// sample
-	String code = sample.getResponseCode();
-
-	// TODO Do less static, get the assertion field
-	if ("200".equals(code)) {
-	    code = "Assertion failed";
-	}
 
 	// Increment sample count
 	sampleCount++;
 
 	// Process only failed samples
-	if (sample.getSuccess() == false) {
+	if (!sample.getSuccess()) {
 	    errorCount++;
 
+	    // Each result is defined by code of samples so get the code of the
+	    // sample
+	    String code = sample.getResponseCode();
+
+	    if (isSuccessCode(Integer.parseInt(code))) {
+	        code = ASSERTION_FAILED;
+	        if(!StringUtils.isEmpty(sample.getFailureMessage())) {
+	            code = StringEscapeUtils.escapeJson(sample.getFailureMessage());
+	        } 
+	    }
+
 	    // Increment error count by code
-	    if (counts.containsKey(code) == true) {
-		counts.put(code, counts.get(code) + 1);
+	    Long count = counts.get(code);
+	    if (count != null) {
+	        counts.put(code, count + 1);
 	    } else {
-		counts.put(code, Long.valueOf(1));
+	        counts.put(code, Long.valueOf(1));
 	    }
 	}
 	super.produce(sample, channel);
+    }
+    
+
+    /**
+     * Determine if the HTTP status code is successful or not
+     * i.e. in range 200 to 399 inclusive
+     *
+     * @param code status code to check
+     * @return whether in range 200-399 or not
+     * FIXME Duplicates HTTPSamplerBase#isSuccessCode but it's in http protocol
+     */
+    protected boolean isSuccessCode(int code){
+        return (code >= 200 && code <= 399);
     }
 
     /* (non-Javadoc)
