@@ -202,7 +202,7 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	result.addResult(new ValueResultData(name));
 	result.addResult(new ValueResultData(info.total));
 	result.addResult(new ValueResultData(info.errors));
-	result.addResult(new ValueResultData((double) info.errors * 100 / overallInfo.total));
+	result.addResult(new ValueResultData((double) info.errors * 100 / info.total));
 	result.addResult(new ValueResultData(info.percentile1.getResult()));
 	result.addResult(new ValueResultData(info.percentile2.getResult()));
 	result.addResult(new ValueResultData(info.percentile3.getResult()));
