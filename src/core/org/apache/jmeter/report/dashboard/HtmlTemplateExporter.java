@@ -156,7 +156,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	File outputDir = new File(exportCfg.getProperty(
 	        REPORT_GENERATOR_KEY_OUTPUT_DIR,
 	        REPORT_GENERATOR_KEY_OUTPUT_DIR_DEFAULT));
-
+	log.info("Will generate dashboard in folder:"+outputDir);
 	// Walk template directory to copy files and process templated ones
 	Configuration templateCfg = new Configuration(
 	        Configuration.getVersion());
