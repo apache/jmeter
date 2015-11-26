@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.core.Sample;
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -40,14 +41,16 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
     private long errorCount = 0L;
     private long sampleCount = 0L;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
      */
     @Override
     public void startConsuming() {
 	// Reset maps
 	counts.clear();
-	
+
 	// Broadcast metadata to consumes for each channel
 	int channelCount = getConsumedChannelCount();
 	for (int i = 0; i < channelCount; i++) {
@@ -57,8 +60,12 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	super.startProducing();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.jmeter.report.core.Sample, int)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
+     * jmeter.report.core.Sample, int)
      */
     @Override
     public void consume(Sample sample, int channel) {
@@ -74,38 +81,45 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	    // sample
 	    String code = sample.getResponseCode();
 
-	    if (isSuccessCode(Integer.parseInt(code))) {
-	        code = ASSERTION_FAILED;
-	        if(!StringUtils.isEmpty(sample.getFailureMessage())) {
-	            code = StringEscapeUtils.escapeJson(sample.getFailureMessage());
-	        } 
+	    if (JMeterUtils
+		    .getPropDefault(
+		            SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
+		            false)
+		    && isSuccessCode(Integer.parseInt(code))) {
+		code = ASSERTION_FAILED;
+		if (!StringUtils.isEmpty(sample.getFailureMessage())) {
+		    code = StringEscapeUtils.escapeJson(sample
+			    .getFailureMessage());
+		}
 	    }
 
 	    // Increment error count by code
 	    Long count = counts.get(code);
 	    if (count != null) {
-	        counts.put(code, count + 1);
+		counts.put(code, count + 1);
 	    } else {
-	        counts.put(code, Long.valueOf(1));
+		counts.put(code, Long.valueOf(1));
 	    }
 	}
 	super.produce(sample, channel);
     }
-    
 
     /**
-     * Determine if the HTTP status code is successful or not
-     * i.e. in range 200 to 399 inclusive
+     * Determine if the HTTP status code is successful or not i.e. in range 200
+     * to 399 inclusive
      *
-     * @param code status code to check
-     * @return whether in range 200-399 or not
-     * FIXME Duplicates HTTPSamplerBase#isSuccessCode but it's in http protocol
+     * @param code
+     *            status code to check
+     * @return whether in range 200-399 or not FIXME Duplicates
+     *         HTTPSamplerBase#isSuccessCode but it's in http protocol
      */
-    protected boolean isSuccessCode(int code){
-        return (code >= 200 && code <= 399);
+    protected boolean isSuccessCode(int code) {
+	return (code >= 200 && code <= 399);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
      */
     @Override
@@ -118,8 +132,12 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	sampleCount = 0L;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
+     * ()
      */
     @Override
     protected ListResultData createResultTitles() {
@@ -134,7 +152,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 	        .getResString("reportgenerator_summary_errors_rate_all")));
 	return titles;
     }
-    
+
     private ListResultData createResultItem(String name, long count) {
 	ListResultData result = new ListResultData();
 	result.addResult(new ValueResultData(name));
