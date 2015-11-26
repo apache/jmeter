@@ -85,7 +85,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
 		    .getPropDefault(
 		            SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
 		            false)
-		    && isSuccessCode(Integer.parseInt(code))) {
+		    && isSuccessCode(code)) {
 		code = ASSERTION_FAILED;
 		if (!StringUtils.isEmpty(sample.getFailureMessage())) {
 		    code = StringEscapeUtils.escapeJson(sample
@@ -113,8 +113,16 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer {
      * @return whether in range 200-399 or not FIXME Duplicates
      *         HTTPSamplerBase#isSuccessCode but it's in http protocol
      */
-    protected boolean isSuccessCode(int code) {
-	return (code >= 200 && code <= 399);
+    protected boolean isSuccessCode(String codeAsString) {
+        if(StringUtils.isNumeric(codeAsString)) {
+            try {
+                int code = Integer.parseInt(codeAsString);
+                return (code >= 200 && code <= 399);
+            } catch (NumberFormatException ex){
+                return false;
+            }
+        }
+        return false;
     }
 
     /*
