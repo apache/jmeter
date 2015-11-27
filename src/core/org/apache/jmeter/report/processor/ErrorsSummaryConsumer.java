@@ -53,7 +53,8 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
     @Override
     protected ListResultData createDataResult(String key, Long data) {
 	ListResultData result = new ListResultData();
-	result.addResult(new ValueResultData(key != null ? key : JMeterUtils.getResString("reportgenerator_summary_total")));
+	result.addResult(new ValueResultData(key != null ? key : JMeterUtils
+	        .getResString("reportgenerator_summary_total")));
 	result.addResult(new ValueResultData(data));
 	result.addResult(new ValueResultData((double) data * 100 / errorCount));
 	result.addResult(new ValueResultData((double) data * 100
@@ -126,14 +127,16 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
      *         FIXME Duplicates HTTPSamplerBase#isSuccessCode but it's in http
      *         protocol
      */
-    protected boolean isSuccessCode(String code) {
-	try {
-	    int intCode = Integer.parseInt(code);
-	    return (intCode >= 200 && intCode <= 399);
-	} catch (NumberFormatException ex) {
-	    return false;
+    protected boolean isSuccessCode(String codeAsString) {
+	if (StringUtils.isNumeric(codeAsString)) {
+	    try {
+		int code = Integer.parseInt(codeAsString);
+		return (code >= 200 && code <= 399);
+	    } catch (NumberFormatException ex) {
+		return false;
+	    }
 	}
-
+	return false;
     }
 
     /*
