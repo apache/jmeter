@@ -22,6 +22,7 @@ $(document).ready(function() {
 });
 
 var chiffre = 0;
+var showControllersOnly = ${showControllersOnly?c!"false"};
 
 // Fixes time stamps
 function fixTimeStamps(series, offset){
@@ -81,11 +82,20 @@ function getProperty(key, obj) {
 	}, obj);
 }
 
-// Mark series and sort data
-function prepareSeries(series){
-	$.each(series, function(index, item) {
-		item.data.sort(compareByXCoordinate);
-        item.color = index;
+// Filter, mark series and sort data
+function prepareSeries(data){
+	
+	// Keep only controllers series when supported and needed
+	if(data.supportsControllersDiscrimination && showControllersOnly){
+		data.series = $.grep(data.series, function(series, index){
+			return series.isController;
+		});
+	}
+	
+	// Sort data and mark series
+	$.each(data.series, function(index, series) {
+		series.data.sort(compareByXCoordinate);
+        series.color = index;
     });
 }
 
@@ -207,8 +217,7 @@ var responseTimePercentilesInfos = {
 // Response times percentiles
 function refreshResponseTimePercentiles(below) {
 	var infos = responseTimePercentilesInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
+	prepareSeries(infos.data);
 	if (isGraph($("#flotResponseTimesPercentiles"))){
 		infos.createGraph();
 	} else {
@@ -271,8 +280,7 @@ var responseTimeDistributionInfos = {
 // Response time distribution
 function refreshResponseTimeDistribution() {
 	var infos = responseTimeDistributionInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
+	prepareSeries(infos.data);
 	if (isGraph($("#flotResponseTimeDistribution"))){
 		infos.createGraph();
 	}else{
@@ -347,9 +355,8 @@ var activeThreadsOverTimeInfos = {
 // Active Threads Over Time
 function refreshActiveThreadsOverTime() {
 	var infos = activeThreadsOverTimeInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
-	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
+	prepareSeries(infos.data);
+	fixTimeStamps(infos.data.series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotActiveThreadsOverTime"))) {
 		infos.createGraph();
 	}else{
@@ -423,8 +430,7 @@ var responseTimePerSampleInfos = {
 // Response Time Per Sample
 function refreshResponseTimePerSample() {
 	var infos = responseTimePerSampleInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
+	prepareSeries(infos.data);
 	if (isGraph($("#flotResponseTimePerSample"))){
 		infos.createGraph();
 	} else {
@@ -539,8 +545,7 @@ var timeVsThreadsInfos = {
 // Time vs threads
 function refreshTimeVsThreads(){
 	var infos = timeVsThreadsInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
+	prepareSeries(infos.data);
 	if(isGraph($("#flotTimesVsThreads"))){
 		infos.createGraph();
 	}else{
@@ -616,9 +621,8 @@ var bytesThroughputOverTimeInfos = {
 // Bytes throughput Over Time
 function refreshBytesThroughputOverTime() {
 	var infos = bytesThroughputOverTimeInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
-	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
+	prepareSeries(infos.data);
+	fixTimeStamps(infos.data.series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotBytesThroughputOverTime"))){
 		infos.createGraph();
 	}else{
@@ -694,9 +698,8 @@ var responseTimesOverTimeInfos = {
 // Response Times Over Time
 function refreshResponseTimeOverTime() {
 	var infos = responseTimesOverTimeInfos;
-    var series = infos.data.series;
-	prepareSeries(series);
-	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
+    prepareSeries(infos.data);
+	fixTimeStamps(infos.data.series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotResponseTimesOverTime"))){
 		infos.createGraph();
 	}else{
@@ -772,9 +775,8 @@ var latenciesOverTimeInfos = {
 // Latencies Over Time
 function refreshLatenciesOverTime() {
 	var infos = latenciesOverTimeInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
-	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
+	prepareSeries(infos.data);
+	fixTimeStamps(infos.data.series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotLatenciesOverTime"))) {
 		infos.createGraph();
 	}else {
@@ -848,8 +850,7 @@ var responseTimeVsRequestInfos = {
 // Response Time vs Request
 function refreshResponseTimeVsRequest() {
 	var infos = responseTimeVsRequestInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
+	prepareSeries(infos.data);
 	if (isGraph($("#flotResponseTimeVsRequest"))){
 		infos.create();
 	}else{
@@ -919,8 +920,7 @@ var latenciesVsRequestInfos = {
 // Latencies vs Request
 function refreshLatenciesVsRequest() {
 		var infos = latenciesVsRequestInfos;
-		var series = infos.data.series;
-		prepareSeries(series);
+		prepareSeries(infos.data);
 		if(isGraph($("#flotLatenciesVsRequest"))){
 			infos.createGraph();
 		}else{
@@ -996,9 +996,8 @@ var hitsPerSecondInfos = {
 // Hits per second
 function refreshHitsPerSecond() {
 	var infos = hitsPerSecondInfos;
-	var series = infos.data.series;
-    prepareSeries(series);
-	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
+	prepareSeries(infos.data);
+	fixTimeStamps(infos.data.series, ${(timeZoneOffset?c)!0});
 	if (isGraph($("#flotHitsPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -1074,9 +1073,8 @@ var codesPerSecondInfos = {
 // Codes per second
 function refreshCodesPerSecond() {
 	var infos = codesPerSecondInfos;
-	var series = infos.data.series;
-	prepareSeries(series);
-	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
+	prepareSeries(infos.data);
+	fixTimeStamps(infos.data.series, ${(timeZoneOffset?c)!0});
 	if(isGraph($("#flotCodesPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -1152,9 +1150,8 @@ var transactionsPerSecondInfos = {
 // Transactions per second
 function refreshTransactionsPerSecond() {
 	var infos = transactionsPerSecondInfos;
-	var series = infos.data.series;
-    prepareSeries(series);
-	fixTimeStamps(series, ${(timeZoneOffset?c)!0});
+	prepareSeries(infos.data);
+	fixTimeStamps(infos.data.series, ${(timeZoneOffset?c)!0});
     if(isGraph($("#flotTransactionsPerSecond"))){
 		infos.createGraph();
 	}else{
@@ -1370,8 +1367,8 @@ function sortAlphaCaseless(a,b){
 function createLegend(choiceContainer, infos) {
 	// Sort series by name
     var keys = [];
-    $.each(infos.data.series, function(index, item){
-    	keys.push(item.label);
+    $.each(infos.data.series, function(index, series){
+    	keys.push(series.label);
     });
     keys.sort(sortAlphaCaseless);
 	

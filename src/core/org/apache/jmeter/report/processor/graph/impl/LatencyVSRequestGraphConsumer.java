@@ -68,7 +68,7 @@ public class LatencyVSRequestGraphConsumer extends
 	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new MedianAggregatorFactory(), new StatusSeriesSelector(),
-	        new LatencyValueSelector(), false, false));
+	        new LatencyValueSelector(), false, false, false));
 	return groupInfos;
     }
 }

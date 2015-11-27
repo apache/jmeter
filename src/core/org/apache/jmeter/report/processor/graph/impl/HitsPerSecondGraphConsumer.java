@@ -62,7 +62,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new TimeRateAggregatorFactory(), new StaticSeriesSelector(),
-	        new CountValueSelector(), false, false));
+	        new CountValueSelector(), false, false, false));
 	return groupInfos;
     }
 

@@ -17,9 +17,6 @@
  */
 package org.apache.jmeter.report.processor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -32,7 +29,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 2.14
  */
 // TODO Add support of "TOTAL" statistics line
-public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
+public class StatisticsSummaryConsumer extends
+        AbstractSummaryConsumer<StatisticsSummaryData> {
 
     private static final int percentileIndex1 = JMeterUtils.getPropDefault(
 	    "aggregate_rpt_pct1", 90);
@@ -41,115 +39,101 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
     private static final int percentileIndex3 = JMeterUtils.getPropDefault(
 	    "aggregate_rpt_pct3", 99);
 
-    private class StatisticsInfo {
-	long firstTime = Long.MAX_VALUE;
-	long endTime = Long.MIN_VALUE;
-	long bytes = 0L;
-	long errors = 0L;
-	long total = 0L;
-	PercentileAggregator percentile1 = new PercentileAggregator(
-	        percentileIndex1);
-	PercentileAggregator percentile2 = new PercentileAggregator(
-	        percentileIndex2);
-	PercentileAggregator percentile3 = new PercentileAggregator(
-	        percentileIndex3);
-	long min = Long.MAX_VALUE;
-	long max = Long.MIN_VALUE;
-
-	public void clear() {
-	    firstTime = Long.MAX_VALUE;
-	    endTime = Long.MIN_VALUE;
-	    bytes = 0L;
-	    errors = 0L;
-	    total = 0L;
-	    percentile1.reset();
-	    percentile2.reset();
-	    percentile3.reset();
-	    min = Long.MAX_VALUE;
-	    max = Long.MIN_VALUE;
-	}
-
-	public long getElapsedTime() {
-	    return endTime - firstTime;
-	}
-
-	public double getBytesPerSecond() {
-	    return bytes / ((double) getElapsedTime() / 1000);
-	}
-
-	public double getKBytesPerSecond() {
-	    return getBytesPerSecond() / 1024;
-	}
-
-	public double getThroughput() {
-	    return (total / (double) getElapsedTime()) * 1000.0;
-	}
+    /**
+     * Instantiates a new statistics summary consumer.
+     */
+    public StatisticsSummaryConsumer() {
+	super(true);
     }
 
-    private Map<String, StatisticsInfo> counts = new HashMap<String, StatisticsInfo>();
-    private StatisticsInfo overallInfo = new StatisticsInfo();
-
-    @Override
-    public void startConsuming() {
-	// Reset maps
-	counts.clear();
-	overallInfo.clear();
-
-	// Broadcast metadata to consumes for each channel
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    super.setProducedMetadata(getConsumedMetadata(i), i);
-	}
-
-	super.startProducing();
-    }
-
-    void aggregateSample(Sample sample, StatisticsInfo info) {
-	info.total++;
-	info.bytes += sample.getSentBytes();
+    void aggregateSample(Sample sample, StatisticsSummaryData data) {
+	data.IncTotal();
+	data.IncBytes(sample.getSentBytes());
 
 	if (sample.getSuccess() == false) {
-	    info.errors++;
+	    data.IncErrors();
 	}
 
 	long elapsedTime = sample.getElapsedTime();
-	info.percentile1.addValue((double) elapsedTime);
-	info.percentile2.addValue((double) elapsedTime);
-	info.percentile3.addValue((double) elapsedTime);
+	data.getPercentile1().addValue((double) elapsedTime);
+	data.getPercentile2().addValue((double) elapsedTime);
+	data.getPercentile3().addValue((double) elapsedTime);
 
-	info.min = Math.min(info.min, elapsedTime);
-	info.max = Math.max(info.max, elapsedTime);
+	data.setMin(elapsedTime);
+	data.setMax(elapsedTime);
 
-	long startTime = sample.getStartTime();
-	info.firstTime = Math.min(info.firstTime, startTime);
+	data.setFirstTime(sample.getStartTime());
 
-	long endTime = sample.getEndTime();
-	info.endTime = Math.max(info.endTime, endTime);
+	data.setEndTime(sample.getEndTime());
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
+     * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
+     * org.apache.jmeter.report.core.Sample)
+     */
     @Override
-    public void consume(Sample sample, int channel) {
-	// Each result is defined by name of samples so get the name of the
-	// sample
-	String name = sample.getName();
-
-	// Get the object to store counters or create it if it does not exist.
-	StatisticsInfo info = counts.get(name);
-	if (info == null) {
-	    info = new StatisticsInfo();
-	    counts.put(name, info);
+    protected void updateData(SummaryInfo info, Sample sample) {
+	SummaryInfo overallInfo = getOverallInfo();
+	StatisticsSummaryData overallData = overallInfo.getData();
+	if (overallData == null) {
+	    overallData = new StatisticsSummaryData(percentileIndex1,
+		    percentileIndex2, percentileIndex3);
+	    overallInfo.setData(overallData);
 	}
 
-	aggregateSample(sample, info);
-	aggregateSample(sample, overallInfo);
+	StatisticsSummaryData data = info.getData();
+	if (data == null) {
+	    data = new StatisticsSummaryData(percentileIndex1,
+		    percentileIndex2, percentileIndex3);
+	    info.setData(data);
+	}
 
-	super.produce(sample, channel);
+	aggregateSample(sample, data);
+	aggregateSample(sample, overallData);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
+     * (java.lang.String)
+     */
     @Override
-    public void stopConsuming() {
-	storeResult(counts.keySet());
-	super.stopProducing();
+    protected ListResultData createDataResult(String key,
+	    StatisticsSummaryData data) {
+	ListResultData result = new ListResultData();
+	result.addResult(new ValueResultData(key != null ? key : JMeterUtils
+	        .getResString("reportgenerator_summary_total")));
+	long total = data.getTotal();
+	long errors = data.getErrors();
+	result.addResult(new ValueResultData(total));
+	result.addResult(new ValueResultData(errors));
+	result.addResult(new ValueResultData((double) errors * 100 / total));
+	result.addResult(new ValueResultData(data.getPercentile1().getResult()));
+	result.addResult(new ValueResultData(data.getPercentile2().getResult()));
+	result.addResult(new ValueResultData(data.getPercentile3().getResult()));
+	result.addResult(new ValueResultData(data.getThroughput()));
+	result.addResult(new ValueResultData(data.getKBytesPerSecond()));
+	result.addResult(new ValueResultData(data.getMin()));
+	result.addResult(new ValueResultData(data.getMax()));
+	return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
+     * (org.apache.jmeter.report.core.Sample)
+     */
+    @Override
+    protected String getKeyFromSample(Sample sample) {
+	return sample.getName();
     }
 
     /*
@@ -197,38 +181,4 @@ public class StatisticsSummaryConsumer extends AbstractSummaryConsumer {
 	return titles;
     }
 
-    private ListResultData createResultItem(String name, StatisticsInfo info) {
-	ListResultData result = new ListResultData();
-	result.addResult(new ValueResultData(name));
-	result.addResult(new ValueResultData(info.total));
-	result.addResult(new ValueResultData(info.errors));
-	result.addResult(new ValueResultData((double) info.errors * 100 / info.total));
-	result.addResult(new ValueResultData(info.percentile1.getResult()));
-	result.addResult(new ValueResultData(info.percentile2.getResult()));
-	result.addResult(new ValueResultData(info.percentile3.getResult()));
-	result.addResult(new ValueResultData(info.getThroughput()));
-	result.addResult(new ValueResultData(info.getKBytesPerSecond()));
-	result.addResult(new ValueResultData(info.min));
-	result.addResult(new ValueResultData(info.max));
-	return result;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultItem
-     * (java.lang.String)
-     */
-    @Override
-    protected ListResultData createResultItem(String name) {
-	StatisticsInfo info;
-	if ("".equals(name)) {
-	    name = JMeterUtils.getResString("reportgenerator_summary_total");
-	    info = overallInfo;
-	} else {
-	    info = counts.get(name);
-	}
-	return createResultItem(name, info);
-    }
 }

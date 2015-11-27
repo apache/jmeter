@@ -78,7 +78,7 @@ public class TransactionsPerSecondGraphConsumer extends
 		                        : FAILURE_SERIES_SUFFIX);
 		        return Arrays.asList(label);
 		    }
-	        }, new CountValueSelector(), false, false));
+	        }, new CountValueSelector(), false, false, true));
 	return groupInfos;
     }
 

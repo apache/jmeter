@@ -61,16 +61,28 @@ public class SubConfiguration {
     /**
      * Gets the value of the specified property.
      *
+     * @param <TProperty>
+     *            the type of the property
      * @param key
      *            the key identifier of the property
      * @param defaultValue
      *            the default value of the property
+     * @param clazz
+     *            the class of the property
      * @return the value of property if found; defaultValue otherwise
+     * @throws ConfigurationException
+     *             if cannot convert property
      */
-    public final String getProperty(String key, String defaultValue) {
+    public final <TProperty> TProperty getProperty(String key,
+	    TProperty defaultValue, Class<TProperty> clazz)
+	    throws ConfigurationException {
 	String value = properties.get(key);
-	if (value == null)
-	    value = defaultValue;
-	return value;
+	TProperty result;
+	if (value == null) {
+	    result = defaultValue;
+	} else {
+	    result = ConfigurationUtils.convert(value, clazz);
+	}
+	return result;
     }
 }

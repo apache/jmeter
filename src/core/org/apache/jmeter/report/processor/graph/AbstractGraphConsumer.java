@@ -18,6 +18,7 @@
 package org.apache.jmeter.report.processor.graph;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -74,10 +75,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public static final String RESULT_MAX_X = "maxX";
     public static final String RESULT_MIN_Y = "minY";
     public static final String RESULT_MAX_Y = "maxY";
+    public static final String RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION = "supportsControllersDiscrimination";
+
     public static final String RESULT_SERIES = "series";
     public static final String RESULT_SERIES_NAME = "label";
     public static final String RESULT_SERIES_DATA = "data";
-    
+    public static final String RESULT_SERIES_IS_CONTROLLER = "isController";
+
     /** The Constant DEFAULT_OVERALL_SERIES_NAME. */
     public static final String DEFAULT_OVERALL_SERIES_FORMAT = "Overall %s";
 
@@ -251,14 +255,17 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	// Create series result if not found
 	if (seriesResult == null) {
 	    seriesResult = new MapResultData();
-	    seriesResult.setResult(RESULT_SERIES_NAME,
-		    new ValueResultData(series));
+	    seriesResult.setResult(RESULT_SERIES_NAME, new ValueResultData(
+		    series));
+	    seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
+		    new ValueResultData(seriesData.isControllersSeries()));
 	    seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
 	    seriesList.addResult(seriesResult);
 	}
 
-	ListResultData dataResult = (ListResultData) seriesResult.getResult(RESULT_SERIES_DATA);
-	
+	ListResultData dataResult = (ListResultData) seriesResult
+	        .getResult(RESULT_SERIES_DATA);
+
 	// Populate it with data from groupData
 	Map<Double, Aggregator> aggInfo;
 	if (aggregated == false) {
@@ -389,6 +396,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	result.setResult(RESULT_MAX_Y, new ValueResultData(Double.MIN_VALUE));
 	result.setResult(RESULT_SERIES, new ListResultData());
 
+	boolean supportsControllersDiscrimination = true;
+	Iterator<GroupInfo> it = groupInfos.values().iterator();
+	while (supportsControllersDiscrimination && it.hasNext()) {
+	    supportsControllersDiscrimination &= it.next()
+		    .supportsControllersDiscrimination();
+	}
+	result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
+	        new ValueResultData(supportsControllersDiscrimination));
+
 	initializeExtraResults(result);
 	return result;
     }
@@ -396,7 +412,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Inherited classes can add properties to the result
      *
-     * @param parentResult the parent result
+     * @param parentResult
+     *            the parent result
      */
     protected abstract void initializeExtraResults(MapResultData parentResult);
 
@@ -428,7 +445,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     @Override
     public void consume(Sample sample, int channel) {
 
-	// Get key from sample and define min and max X
+	// Get key from sample
 	Double key = keysSelector.select(sample);
 
 	// Build groupData maps
@@ -445,7 +462,11 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 		Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
 		SeriesData seriesData = seriesInfo.get(seriesName);
 		if (seriesData == null) {
-		    seriesData = new SeriesData(factory, aggregatedKeysSeries);
+		    seriesData = new SeriesData(
+			    factory,
+			    aggregatedKeysSeries,
+			    groupInfo.supportsControllersDiscrimination() ? sample
+			            .isController() : false);
 		    seriesInfo.put(seriesName, seriesData);
 		}
 

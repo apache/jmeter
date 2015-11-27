@@ -68,7 +68,7 @@ public class ResponseTimeVSRequestGraphConsumer extends
 	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new MedianAggregatorFactory(), new StatusSeriesSelector(),
-	        new ElapsedTimeValueSelector(), false, false));
+	        new ElapsedTimeValueSelector(), false, false, false));
 	return groupInfos;
     }
 }

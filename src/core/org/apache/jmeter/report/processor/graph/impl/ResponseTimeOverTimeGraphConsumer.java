@@ -63,7 +63,7 @@ public class ResponseTimeOverTimeGraphConsumer extends
 	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new MeanAggregatorFactory(), new NameSeriesSelector(),
-	        new ElapsedTimeValueSelector(), false, false));
+	        new ElapsedTimeValueSelector(), false, false, true));
 	return groupInfos;
     }
 }

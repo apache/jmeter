@@ -1,30 +1,34 @@
+var showControllersOnly = ${showControllersOnly?c!"false"};
+
 /*
- * Populates the table identified by id parameter with the specified data and format
+ * Populates the table identified by id parameter with the specified data and
+ * format
  * 
  */
-function createTable(data, id, formatter) {
+function createTable(info, id, formatter) {
 	var tableRef = document.getElementById(id);
 
 	// Create header and populate it with data.titles array
 	var header = tableRef.createTHead();
 	var newRow = header.insertRow(-1);
-	for (var index = 0; index < data.titles.length; index++) {
+	for (var index = 0; index < info.titles.length; index++) {
 		var cell = document.createElement('th');
-		cell.innerHTML = data.titles[index];
+		cell.innerHTML = info.titles[index];
 		newRow.appendChild(cell);
 	}
 
 	var tBody;
 	
 	// Create overall body if defined
-	if(data.overall){
+	if(info.overall){
 		tBody = document.createElement('tbody');
 		tBody.className = "tablesorter-no-sort";
 		tableRef.appendChild(tBody);
 		var newRow = tBody.insertRow(-1);
-		for(var index=0;index < data.overall.length; index++){
+		var data = info.overall.data;
+		for(var index=0;index < data.length; index++){
 			var cell = newRow.insertCell(-1);
-			cell.innerHTML = formatter ? formatter(index, data.overall[index]): data.overall[index];
+			cell.innerHTML = formatter ? formatter(index, data[index]): data[index];
 		}
 	}
 	
@@ -33,12 +37,14 @@ function createTable(data, id, formatter) {
 	tableRef.appendChild(tBody);
 		
 	// Populate body with data.items array
-	for(var index=0; index < data.items.length; index++){
-		var item = data.items[index];
-		var newRow = tBody.insertRow(-1);
-		for(var col=0; col < item.length; col++){
-			var cell = newRow.insertCell(-1);
-			cell.innerHTML = formatter ? formatter(col, item[col]) : item[col];
+	for(var index=0; index < info.items.length; index++){
+		var item = info.items[index];
+		if(!showControllersOnly || !info.supportsControllersDiscrimination || item.isController){
+			var newRow = tBody.insertRow(-1);
+			for(var col=0; col < item.data.length; col++){
+				var cell = newRow.insertCell(-1);
+				cell.innerHTML = formatter ? formatter(col, item.data[col]) : item.data[col];
+			}
 		}
 	}
 }

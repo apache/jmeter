@@ -73,7 +73,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
 
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new SumAggregatorFactory(), new NameSeriesSelector(),
-	        new CountValueSelector(), false, false));
+	        new CountValueSelector(), false, false, true));
 
 	return groupInfos;
     }

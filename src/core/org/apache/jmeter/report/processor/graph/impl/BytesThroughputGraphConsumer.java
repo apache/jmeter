@@ -83,7 +83,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 		        return (series == SENT_BYTES_SERIES_LABEL) ? sample
 		                .getSentBytes() : 0;
 		    }
-	        }, false, false));
+	        }, false, false, false));
 	return groupInfos;
     }
 

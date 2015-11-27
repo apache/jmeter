@@ -39,6 +39,9 @@ public class SeriesData {
     /** The values aggregator for aggregated keys seriesData. */
     private final Aggregator valuesAggregator;
 
+    /** Indicate whether the current series is produced from controller samples. */
+    private final boolean isControllersSeries;
+
     /** The count of samples of this series. */
     private long count = 0L;
 
@@ -47,7 +50,7 @@ public class SeriesData {
      *
      * @return the groupData
      */
-    public Map<Double, Aggregator> getAggregatorInfo() {
+    public final Map<Double, Aggregator> getAggregatorInfo() {
 	return aggregators;
     }
 
@@ -56,7 +59,7 @@ public class SeriesData {
      *
      * @return the keys aggregator
      */
-    public Aggregator getKeysAggregator() {
+    public final Aggregator getKeysAggregator() {
 	return keysAggregator;
     }
 
@@ -65,8 +68,18 @@ public class SeriesData {
      *
      * @return the values aggregator
      */
-    public Aggregator getValuesAggregator() {
+    public final Aggregator getValuesAggregator() {
 	return valuesAggregator;
+    }
+
+    /**
+     * Checks if the current series is built from controller samples.
+     *
+     * @return true, if the current series is built from controller samples;
+     *         false otherwise
+     */
+    public final boolean isControllersSeries() {
+	return isControllersSeries;
     }
 
     /**
@@ -74,7 +87,7 @@ public class SeriesData {
      *
      * @return the count of samples
      */
-    public long getCount() {
+    public final long getCount() {
 	return count;
     }
 
@@ -85,8 +98,11 @@ public class SeriesData {
      *            the factory
      * @param hasAggregatedKey
      *            the has aggregated key
+     * @param isControllersSeries
+     *            the flag using to indicate if the current series is built from controller samples
      */
-    public SeriesData(AggregatorFactory factory, boolean hasAggregatedKey) {
+    public SeriesData(AggregatorFactory factory, boolean hasAggregatedKey,
+	    boolean isControllersSeries) {
 	if (hasAggregatedKey) {
 	    keysAggregator = factory.createKeyAggregator();
 	    valuesAggregator = factory.createAggregatedKeyValueAggregator();
@@ -94,6 +110,7 @@ public class SeriesData {
 	    keysAggregator = null;
 	    valuesAggregator = null;
 	}
+	this.isControllersSeries = isControllersSeries;
     }
 
     /**

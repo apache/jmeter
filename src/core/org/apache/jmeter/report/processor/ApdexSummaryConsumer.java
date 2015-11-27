@@ -17,9 +17,6 @@
  */
 package org.apache.jmeter.report.processor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -36,17 +33,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @since 2.14
  */
-public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
+public class ApdexSummaryConsumer extends
+        AbstractSummaryConsumer<ApdexSummaryData> {
 
-    private class ApdexCount {
-	long satisfiedCount = 0L;
-	long toleratedCount = 0L;
-	long totalCount = 0L;
-    }
-
-    private Map<String, ApdexCount> counts = new HashMap<String, ApdexCount>();
     private ThresholdSelector thresholdSelector;
-    private ApdexCount overallCount;
 
     /**
      * Gets the APDEX threshold selector.
@@ -67,68 +57,98 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	this.thresholdSelector = thresholdSelector;
     }
 
-    @Override
-    public void startConsuming() {
-	// Reset maps
-	counts.clear();
-	overallCount = new ApdexCount();
-
-	// Broadcast metadata to consumes for each channel
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    super.setProducedMetadata(getConsumedMetadata(i), i);
-	}
-
-	super.startProducing();
+    public ApdexSummaryConsumer() {
+	super(true);
     }
 
-    @Override
-    public void consume(Sample sample, int channel) {
-	// Each result is define by name of samplers so get the name of the
-	// sample
-	String name = sample.getName();
+    protected ListResultData createDataResult(String key, ApdexSummaryData data) {
+	ListResultData result = new ListResultData();
+	result.addResult(new ValueResultData(getApdex(data)));
+	ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
+	result.addResult(new ValueResultData(thresholdsInfo
+	        .getSatisfiedThreshold()));
+	result.addResult(new ValueResultData(thresholdsInfo
+	        .getToleratedThreshold()));
+	result.addResult(new ValueResultData(key != null ? key : JMeterUtils
+	        .getResString("reportgenerator_summary_total")));
 
-	// Get the object to store counters or create it if it does not exist.
-	ApdexCount apdexCount = counts.get(name);
-	if (apdexCount == null) {
-	    apdexCount = new ApdexCount();
-	    counts.put(name, apdexCount);
+	return result;
+    };
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
+     * (org.apache.jmeter.report.core.Sample)
+     */
+    @Override
+    protected String getKeyFromSample(Sample sample) {
+	return sample.getName();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
+     * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
+     * org.apache.jmeter.report.core.Sample)
+     */
+    @Override
+    protected void updateData(SummaryInfo info, Sample sample) {
+
+	// Initialize overall data if they don't exist
+	SummaryInfo overallInfo = getOverallInfo();
+	ApdexSummaryData overallData = overallInfo.getData();
+	if (overallData == null) {
+	    overallData = new ApdexSummaryData(getThresholdSelector().select(
+		    null));
+	    overallInfo.setData(overallData);
+	}
+
+	// Initialize info data if they don't exist
+	ApdexSummaryData data = info.getData();
+	if (data == null) {
+	    data = new ApdexSummaryData(getThresholdSelector().select(
+		    sample.getName()));
+	    info.setData(data);
 	}
 
 	// Increment the total count of samples with the current name
-	apdexCount.totalCount++;
+	data.IncTotalCount();
 
 	// Increment the total count of samples
-	overallCount.totalCount++;
+	overallData.IncTotalCount();
 
 	// Process only succeeded samples
 	if (sample.getSuccess()) {
 	    long elapsedTime = sample.getElapsedTime();
 
-	    ApdexThresholdsInfo info = getThresholdSelector().select(name);
-
 	    // Increment the counters depending on the elapsed time.
-	    if (elapsedTime <= info.getSatisfiedThreshold()) {
-		apdexCount.satisfiedCount++;
-	    } else if (elapsedTime <= info.getToleratedThreshold()) {
-		apdexCount.toleratedCount++;
+	    ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
+	    if (elapsedTime <= thresholdsInfo.getSatisfiedThreshold()) {
+		data.IncSatisfiedCount();
+	    } else if (elapsedTime <= thresholdsInfo.getToleratedThreshold()) {
+		data.IncToleratedCount();
 	    }
-
-	    ApdexThresholdsInfo overallInfo = getThresholdSelector().select("");
 
 	    // Increment the overall counters depending on the elapsed time.
-	    if (elapsedTime <= overallInfo.getSatisfiedThreshold()) {
-		overallCount.satisfiedCount++;
-	    } else if (elapsedTime <= overallInfo.getToleratedThreshold()) {
-		overallCount.toleratedCount++;
+	    ApdexThresholdsInfo overallThresholdsInfo = overallData
+		    .getApdexThresholdInfo();
+	    if (elapsedTime <= overallThresholdsInfo.getSatisfiedThreshold()) {
+		overallData.IncSatisfiedCount();
+	    } else if (elapsedTime <= overallThresholdsInfo
+		    .getToleratedThreshold()) {
+		overallData.IncToleratedCount();
 	    }
 	}
-	super.produce(sample, channel);
+
     }
 
-    private double getApdex(ApdexCount count) {
-	return (count.satisfiedCount + (double) count.toleratedCount / 2)
-	        / count.totalCount;
+    private double getApdex(ApdexSummaryData data) {
+	return (data.getSatisfiedCount() + (double) data.getToleratedCount() / 2)
+	        / data.getTotalCount();
     }
 
     /*
@@ -150,47 +170,6 @@ public class ApdexSummaryConsumer extends AbstractSummaryConsumer {
 	titles.addResult(new ValueResultData(JMeterUtils
 	        .getResString("reportgenerator_summary_apdex_samplers")));
 	return titles;
-    }
-
-    private ListResultData createResultItem(String name, ApdexCount count,
-	    ApdexThresholdsInfo info) {
-	ListResultData result = new ListResultData();
-
-	result.addResult(new ValueResultData(getApdex(count)));
-
-	result.addResult(new ValueResultData(info.getSatisfiedThreshold()));
-
-	result.addResult(new ValueResultData(info.getToleratedThreshold()));
-
-	result.addResult(new ValueResultData(name));
-	
-	return result;
-    }
-
-    @Override
-    public void stopConsuming() {
-	storeResult(counts.keySet());
-	super.stopProducing();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultItem
-     * (java.lang.String)
-     */
-    @Override
-    protected ListResultData createResultItem(String name) {
-	ApdexThresholdsInfo info = getThresholdSelector().select(name);
-	ApdexCount count;
-	if ("".equals(name)) {
-	    name = JMeterUtils.getResString("reportgenerator_summary_total");
-	    count = overallCount;
-	} else {
-	    count = counts.get(name);
-	}
-	return createResultItem(name, count, info);
     }
 
 }

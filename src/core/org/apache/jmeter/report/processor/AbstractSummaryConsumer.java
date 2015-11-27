@@ -17,20 +17,81 @@
  */
 package org.apache.jmeter.report.processor;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.jmeter.report.core.Sample;
 
 /**
  * The class AbstractSummaryConsumer provides a base class for data of the
  * dashboard page.
  *
+ * @param <TData>
+ *            the type of data to process
  * @since 2.14
  */
-public abstract class AbstractSummaryConsumer extends AbstractSampleConsumer {
+public abstract class AbstractSummaryConsumer<TData> extends
+        AbstractSampleConsumer {
 
-    public static final String RESULT_KEY = "Result";
-    public static final String OVERALL_KEY = "overall";
-    public static final String ITEMS_KEY = "items";
-    public static final String TITLES_KEY = "titles";
+    /**
+     * The class SummaryInfo stores intermediate results.
+     */
+    protected class SummaryInfo {
+	final boolean isController;
+	TData data;
+
+	/**
+	 * Checks if these information implies controller sample.
+	 *
+	 * @return true, if is controller
+	 */
+	public final boolean isController() {
+	    return isController;
+	}
+
+	/**
+	 * Gets the data to store.
+	 *
+	 * @return the data to store
+	 */
+	public final TData getData() {
+	    return data;
+	}
+
+	/**
+	 * Sets the data to store.
+	 *
+	 * @param data
+	 *            the new data to store
+	 */
+	public final void setData(TData data) {
+	    this.data = data;
+	}
+
+	/**
+	 * Instantiates a new summary info.
+	 *
+	 * @param isController
+	 *            true, if these information implies only controller
+	 *            samples; false otherwise
+	 */
+	public SummaryInfo(boolean isController) {
+	    this.isController = isController;
+	}
+
+    }
+
+    public static final String CTX_RESULT = "Result";
+    public static final String RESULT_VALUE_DATA = "data";
+    public static final String RESULT_VALUE_IS_CONTROLLER = "isController";
+    public static final String RESULT_VALUE_ITEMS = "items";
+    public static final String RESULT_VALUE_OVERALL = "overall";
+    public static final String RESULT_VALUE_SUPPORTS_CONTROLLERS_DISCRIMINATION = "supportsControllersDiscrimination";
+    public static final String RESULT_VALUE_TITLES = "titles";
+
+    private final Map<String, SummaryInfo> infos = new HashMap<String, SummaryInfo>();
+    private final SummaryInfo overallInfo = new SummaryInfo(false);
+    private final boolean supportsControllersDiscrimination;
 
     private boolean hasOverallResult;
 
@@ -54,20 +115,64 @@ public abstract class AbstractSummaryConsumer extends AbstractSampleConsumer {
     }
 
     /**
-     * Instantiates a new abstract summary consumer.
+     * Indicates whether this summary can discriminate controller samples
+     *
+     * @return true, if this summary can discriminate controller samples; false
+     *         otherwise.
      */
-    protected AbstractSummaryConsumer() {
+    public final boolean suppportsControllersDiscrimination() {
+	return supportsControllersDiscrimination;
     }
 
     /**
-     * Creates a result item for the sample with the specified name.<br/>
-     * If name is empty, an overall result is expected.
-     * 
-     * @param name
-     *            the name of the sample
-     * @return the map result data
+     * Gets the overall info.
+     *
+     * @return the overall info
      */
-    protected abstract ListResultData createResultItem(String name);
+    protected final SummaryInfo getOverallInfo() {
+	return overallInfo;
+    }
+
+    /**
+     * Gets the summary infos.
+     *
+     * @return the summary infos
+     */
+    protected final Map<String, SummaryInfo> getSummaryInfos() {
+	return infos;
+    }
+
+    /**
+     * Instantiates a new abstract summary consumer.
+     *
+     * @param supportsControllersDiscrimination
+     *            indicates whether this summary can discriminate controller
+     *            samples
+     */
+    protected AbstractSummaryConsumer(boolean supportsControllersDiscrimination) {
+	this.supportsControllersDiscrimination = supportsControllersDiscrimination;
+    }
+
+    /**
+     * Gets the identifier key from sample.<br />
+     * This key is use identify the SummaryInfo linked with the sample
+     *
+     * @param sample
+     *            the sample
+     * @return the key identifying the sample
+     */
+    protected abstract String getKeyFromSample(Sample sample);
+
+    /**
+     * Creates a result item for information identified by the specified key.<br/>
+     *
+     * @param key
+     *            the key
+     * @param data
+     *            the data
+     * @return the list result data
+     */
+    protected abstract ListResultData createDataResult(String key, TData data);
 
     /**
      * Creates the result containing titles of columns.
@@ -77,31 +182,104 @@ public abstract class AbstractSummaryConsumer extends AbstractSampleConsumer {
     protected abstract ListResultData createResultTitles();
 
     /**
-     * Store the result of samples consumption building from the specified samples.
+     * Update the stored data with the data from the specified sample.
      *
-     * @param samples the samples
+     * @param sample
+     *            the sample
      */
-    protected final void storeResult(Set<String> samples) {
+    protected abstract void updateData(SummaryInfo info, Sample sample);
+
+    private MapResultData createResultFromKey(String key) {
+	SummaryInfo info = (key == null) ? overallInfo : infos.get(key);
+	MapResultData result = null;
+	TData data = info.getData();
+	if (data != null) {
+	    result = new MapResultData();
+	    result.setResult(RESULT_VALUE_IS_CONTROLLER, new ValueResultData(
+		    info.isController()));
+	    result.setResult(RESULT_VALUE_DATA, createDataResult(key, data));
+	}
+	return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
+     */
+    @Override
+    public void startConsuming() {
+
+	// Broadcast metadata to consumes for each channel
+	int channelCount = getConsumedChannelCount();
+	for (int i = 0; i < channelCount; i++) {
+	    super.setProducedMetadata(getConsumedMetadata(i), i);
+	}
+	super.startProducing();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
+     * jmeter.report.core.Sample, int)
+     */
+    @Override
+    public void consume(Sample sample, int channel) {
+	String key = getKeyFromSample(sample);
+
+	// Get the object to store counters or create it if it does not exist.
+	SummaryInfo info = infos.get(key);
+	if (info == null) {
+	    info = new SummaryInfo(supportsControllersDiscrimination
+		    && sample.isController());
+	    infos.put(key, info);
+	}
+	updateData(info, sample);
+	super.produce(sample, channel);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
+     */
+    @Override
+    public void stopConsuming() {
 	MapResultData result = new MapResultData();
 
+	// Push the support flag in the result
+	result.setResult(RESULT_VALUE_SUPPORTS_CONTROLLERS_DISCRIMINATION,
+	        new ValueResultData(supportsControllersDiscrimination));
+
 	// Add headers
-	result.setResult(TITLES_KEY, createResultTitles());
+	result.setResult(RESULT_VALUE_TITLES, createResultTitles());
 
 	// Add overall row if needed
 	if (hasOverallResult) {
-	    result.setResult(OVERALL_KEY, createResultItem(""));
+	    MapResultData overallResult = createResultFromKey(null);
+	    if (overallResult != null)
+		result.setResult(RESULT_VALUE_OVERALL, overallResult);
 	}
 
 	// Build rows from samples
 	ListResultData itemsResult = new ListResultData();
-	result.setResult(ITEMS_KEY, itemsResult);
-	if (samples != null) {
-	    for (String name : samples) {
-		itemsResult.addResult(createResultItem(name));
-	    }
+	for (String key : infos.keySet()) {
+	    // Add result only if data exist
+	    MapResultData keyResult = createResultFromKey(key);
+	    if (keyResult != null)
+		itemsResult.addResult(keyResult);
 	}
-	
+	result.setResult(RESULT_VALUE_ITEMS, itemsResult);
+
 	// Store to the context
-	setLocalData(RESULT_KEY, result);
+	setLocalData(CTX_RESULT, result);
+
+	super.stopProducing();
+
+	// Reset infos
+	infos.clear();
+	overallInfo.setData(null);
     }
 }

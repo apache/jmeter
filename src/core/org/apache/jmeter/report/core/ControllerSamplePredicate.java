@@ -24,8 +24,6 @@ package org.apache.jmeter.report.core;
  * @since 2.14
  */
 public class ControllerSamplePredicate implements SamplePredicate {
-    public final static String CONTROLLER_PATTERN = "Number of samples in transaction";
-
     /*
      * (non-Javadoc)
      * 
@@ -38,8 +36,7 @@ public class ControllerSamplePredicate implements SamplePredicate {
 	if (sample == null)
 	    throw new ArgumentNullException("sample");
 
-	String message = sample.getResponseMessage();
-	return message != null && message.startsWith(CONTROLLER_PATTERN);
+	return sample.isController();
     }
 
 }

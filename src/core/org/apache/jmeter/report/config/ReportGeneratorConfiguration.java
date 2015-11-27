@@ -70,9 +70,7 @@ public class ReportGeneratorConfiguration {
     private static final String LOAD_EXPORTER_FMT = "Load configuration for exporter \"%s\"";
     private static final String LOAD_GRAPH_FMT = "Load configuration for graph \"%s\"";
     private static final String INVALID_KEY_FMT = "Invalid property \"%s\", skip it.";
-    private static final String INVALID_PROPERTY_VALUE_FMT = "Invalid value \"%s\" for property \"%s\", using default value \"%s\" instead.";
     private static final String NOT_FOUND_PROPERTY_FMT = "Property \"%s\" not found, using default value \"%s\" instead.";
-    private static final String NOT_SUPPORTED_CONVERTION_FMT = "Convert string to \"%s\" is not supported";
 
     // Optional graph properties
     public static final String GRAPH_KEY_ABSCISSA_MIN_KEY = "abscissa_min";
@@ -312,24 +310,7 @@ public class ReportGeneratorConfiguration {
 		        defaultValue));
 	    }
 	} else {
-	    if (clazz.isAssignableFrom(String.class)) {
-		property = (TProperty) value;
-	    } else {
-		StringConverter<TProperty> converter = Converters
-		        .getConverter(clazz);
-		if (converter == null)
-		    throw new ConfigurationException(String.format(
-			    NOT_SUPPORTED_CONVERTION_FMT, clazz.getName()));
-		try {
-		    property = converter.convert(value);
-		} catch (ConvertException ex) {
-		    if (defaultValue != null) {
-			log.warn(String.format(INVALID_PROPERTY_VALUE_FMT,
-			        value, key, defaultValue), ex);
-			property = defaultValue;
-		    }
-		}
-	    }
+	    property = ConfigurationUtils.convert(value, clazz);
 	}
 	return property;
     }

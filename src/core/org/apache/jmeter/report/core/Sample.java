@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Sample {
 
+    public final static String CONTROLLER_PATTERN = "Number of samples in transaction";
+    
     private boolean storesStartTimeStamp;
     private SampleMetadata metadata;
     String[] data;
@@ -76,8 +78,8 @@ public class Sample {
     }
 
     /**
-     * Get the data of the ith column as a string. Very fast beacause it is a
-     * signle array access.
+     * Get the data of the ith column as a string. Very fast because it is a
+     * single array access.
      * 
      * @param i
      *            The column number (0 based) of the data to be returned
@@ -455,5 +457,15 @@ public class Sample {
      */
     public String getThreadName() {
 	return getString(metadata.indexOf(CSVSaveService.THREAD_NAME));
+    }
+    
+    /**
+     * Checks if this sample is a controller.
+     *
+     * @return true, if this sample is a controller; otherwise false
+     */
+    public boolean isController(){
+	String message = getResponseMessage();
+	return message != null && message.startsWith(CONTROLLER_PATTERN);
     }
 }
