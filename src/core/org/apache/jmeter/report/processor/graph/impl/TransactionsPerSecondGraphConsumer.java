@@ -25,8 +25,8 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.TimeRateAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
+import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
 import org.apache.jmeter.report.processor.graph.CountValueSelector;
-import org.apache.jmeter.report.processor.graph.GraphSeriesSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
@@ -68,7 +68,8 @@ public class TransactionsPerSecondGraphConsumer extends
 	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
 	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new TimeRateAggregatorFactory(), new GraphSeriesSelector() {
+	        new TimeRateAggregatorFactory(), new AbstractSeriesSelector(
+	                true) {
 
 		    @Override
 		    public Iterable<String> select(Sample sample) {
@@ -78,7 +79,7 @@ public class TransactionsPerSecondGraphConsumer extends
 		                        : FAILURE_SERIES_SUFFIX);
 		        return Arrays.asList(label);
 		    }
-	        }, new CountValueSelector(), false, false, true));
+	        }, new CountValueSelector(), false, false));
 	return groupInfos;
     }
 

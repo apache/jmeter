@@ -62,7 +62,7 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 	        1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new TimeRateAggregatorFactory(), new CodeSeriesSelector(),
-	        new CountValueSelector(), false, false, false));
+	        new CountValueSelector(), false, false));
 	return groupInfos;
     }
 

@@ -31,8 +31,6 @@ public class GroupInfo {
     private final GraphValueSelector valueSelector;
     private final AggregatorFactory aggregatorFactory;
     private final GroupData groupData;
-    /** Indicates whether the graph can discriminate controllers series. */
-    private final boolean supportsControllersDiscrimination;
 
     /**
      * Enables aggregated keys seriesData.
@@ -89,25 +87,28 @@ public class GroupInfo {
     }
 
     /**
-     * Indicates whether series of this group can discriminate controllers.
+     * Instantiates a new group info.
      *
-     * @return true, if series of this group can discriminate controllers;
-     *         otherwise false.
+     * @param aggregatorFactory
+     *            the aggregator factory
+     * @param seriesSelector
+     *            the series selector
+     * @param valueSelector
+     *            the value selector
+     * @param enableOverallSeries
+     *            the enable overall series
+     * @param enableAggregatedKeysSeries
+     *            the enable aggregated keys series
      */
-    public final boolean supportsControllersDiscrimination() {
-	return supportsControllersDiscrimination;
-    }
-
     public GroupInfo(AggregatorFactory aggregatorFactory,
 	    GraphSeriesSelector seriesSelector,
 	    GraphValueSelector valueSelector, boolean enableOverallSeries,
-	    boolean enableAggregatedKeysSeries, boolean supportsControllersDiscrimination) {
+	    boolean enableAggregatedKeysSeries) {
 	this.enableOverallSeries = enableOverallSeries;
 	this.seriesSelector = seriesSelector;
 	this.valueSelector = valueSelector;
 	this.aggregatorFactory = aggregatorFactory;
 	this.enableAggregatedKeysSeries = enableAggregatedKeysSeries;
-	this.supportsControllersDiscrimination = supportsControllersDiscrimination;
 	this.groupData = new GroupData(aggregatorFactory, enableOverallSeries,
 	        enableAggregatedKeysSeries);
     }

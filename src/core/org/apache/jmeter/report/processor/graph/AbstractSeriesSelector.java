@@ -17,34 +17,43 @@
  */
 package org.apache.jmeter.report.processor.graph;
 
-import java.util.Arrays;
-
-import org.apache.jmeter.report.core.Sample;
-
 /**
- * The class NameSerieSelector provides a projection of a sample to its name.
- * 
+ * The class AbstractSeriesSelector provide an abstract base class for
+ * GraphSeriesSelector.
+ *
  * @since 2.14
  */
-public class NameSeriesSelector extends AbstractSeriesSelector {
+public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
+
+    private final boolean allowsControllerDiscrimination;
 
     /**
-     * Instantiates a new name series selector.
+     * Instantiates a new abstract series selector.
      */
-    public NameSeriesSelector() {
-	super(true);
+    protected AbstractSeriesSelector() {
+	this(false);
     }
-    
+
+    /**
+     * Instantiates a new abstract series selector.
+     *
+     * @param allowsControllerDiscrimination
+     *            indicates whether this selector allows to discriminate
+     *            controllers
+     */
+    protected AbstractSeriesSelector(boolean allowsControllerDiscrimination) {
+	this.allowsControllerDiscrimination = allowsControllerDiscrimination;
+    }
+
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleSelector#select(org.apache
-     * .jmeter.report.csv.core.Sample)
+     * @see org.apache.jmeter.report.processor.graph.GraphSeriesSelector#
+     * supportsControllersDiscrimination()
      */
     @Override
-    public Iterable<String> select(Sample sample) {
-	return Arrays.asList(sample.getName());
+    public final boolean allowsControllersDiscrimination() {
+	return allowsControllerDiscrimination;
     }
 
 }

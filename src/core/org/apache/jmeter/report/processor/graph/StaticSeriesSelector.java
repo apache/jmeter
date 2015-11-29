@@ -26,7 +26,7 @@ import org.apache.jmeter.report.core.Sample;
  * 
  * @since 2.14
  */
-public class StaticSeriesSelector implements GraphSeriesSelector {
+public class StaticSeriesSelector extends AbstractSeriesSelector {
 
     private String seriesName;
 

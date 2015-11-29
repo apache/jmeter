@@ -398,8 +398,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	boolean supportsControllersDiscrimination = true;
 	Iterator<GroupInfo> it = groupInfos.values().iterator();
 	while (supportsControllersDiscrimination && it.hasNext()) {
-	    supportsControllersDiscrimination &= it.next()
-		    .supportsControllersDiscrimination();
+	    supportsControllersDiscrimination &= it.next().getSeriesSelector()
+		    .allowsControllersDiscrimination();
 	}
 	result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
 	        new ValueResultData(supportsControllersDiscrimination));
@@ -461,10 +461,9 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 		Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
 		SeriesData seriesData = seriesInfo.get(seriesName);
 		if (seriesData == null) {
-		    seriesData = new SeriesData(
-			    factory,
-			    aggregatedKeysSeries,
-			    groupInfo.supportsControllersDiscrimination() ? sample
+		    seriesData = new SeriesData(factory, aggregatedKeysSeries,
+			    groupInfo.getSeriesSelector()
+			            .allowsControllersDiscrimination() ? sample
 			            .isController() : false);
 		    seriesInfo.put(seriesName, seriesData);
 		}

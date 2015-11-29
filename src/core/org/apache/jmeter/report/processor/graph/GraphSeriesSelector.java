@@ -26,5 +26,12 @@ import org.apache.jmeter.report.core.SampleSelector;
  * @since 2.14
  */
 public interface GraphSeriesSelector extends SampleSelector<Iterable<String>> {
+    
+    /**
+     * Indicates whether this selector allows controllers discrimination.
+     *
+     * @return true, if this selector allows controllers discrimination; false otherwise
+     */
+    boolean allowsControllersDiscrimination();
 
 }

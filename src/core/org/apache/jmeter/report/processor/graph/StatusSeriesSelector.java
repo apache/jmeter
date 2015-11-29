@@ -27,7 +27,7 @@ import org.apache.jmeter.report.core.Sample;
  *
  * @since 2.14
  */
-public class StatusSeriesSelector implements GraphSeriesSelector {
+public class StatusSeriesSelector extends AbstractSeriesSelector {
 
     private String failureLabel = "Failures";
     private String successLabel = "Successes";

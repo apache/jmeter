@@ -27,7 +27,7 @@ import org.apache.jmeter.report.core.Sample;
  * 
  * @since 2.14
  */
-public class CodeSeriesSelector implements GraphSeriesSelector {
+public class CodeSeriesSelector extends AbstractSeriesSelector {
 
     /*
      * (non-Javadoc)

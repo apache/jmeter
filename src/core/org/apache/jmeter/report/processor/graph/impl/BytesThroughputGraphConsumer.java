@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.TimeRateAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
-import org.apache.jmeter.report.processor.graph.GraphSeriesSelector;
+import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
 import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
@@ -66,7 +66,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
 	        2);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new TimeRateAggregatorFactory(), new GraphSeriesSelector() {
+	        new TimeRateAggregatorFactory(), new AbstractSeriesSelector() {
 		    private final Iterable<String> values = Arrays.asList(
 		            RECEIVED_BYTES_SERIES_LABEL,
 		            SENT_BYTES_SERIES_LABEL);
@@ -83,7 +83,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 		        return (series == SENT_BYTES_SERIES_LABEL) ? sample
 		                .getSentBytes() : 0;
 		    }
-	        }, false, false, false));
+	        }, false, false));
 	return groupInfos;
     }
 

@@ -79,7 +79,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 	        RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT, property));
 
 	return new GroupInfo(factory, seriesSelector,
-	        new ElapsedTimeValueSelector(), false, false, false);
+	        new ElapsedTimeValueSelector(), false, false);
     }
 
     /*
