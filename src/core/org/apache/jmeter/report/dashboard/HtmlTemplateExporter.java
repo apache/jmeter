@@ -24,15 +24,17 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.jmeter.report.config.ConfigurationException;
-import org.apache.jmeter.report.config.GraphConfiguration;
+import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.ArgumentNullException;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.TimeHelper;
-import org.apache.jmeter.report.processor.AggregateConsumer;
+import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.ResultData;
+import org.apache.jmeter.report.processor.ResultDataVisitor;
 import org.apache.jmeter.report.processor.SampleContext;
+import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -56,6 +58,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     public static final String DATA_CTX_TIMEZONE_OFFSET = "timeZoneOffset";
     public static final String DATA_CTX_OVERALL_FILTER = "overallFilter";
     public static final String DATA_CTX_SHOW_CONTROLLERS_ONLY = "showControllersOnly";
+    public static final String DATA_CTX_RESULT = "result";
+    public static final String DATA_CTX_EXTRA_OPTIONS = "extraOptions";
 
     public static final String TIMESTAMP_FORMAT_MS = "ms";
     private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
@@ -78,6 +82,28 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	    value = '"' + (String) value + '"';
 	}
 	context.put(key, value);
+    }
+
+    private interface ResultCustomizer {
+	ResultData customizeResult(ResultData result);
+    }
+
+    private <TVisit> void addResultToContext(String resultKey,
+	    Map<String, Object> storage, DataContext dataContext,
+	    ResultDataVisitor<TVisit> visitor) {
+	addResultToContext(resultKey, storage, dataContext, visitor, null);
+    }
+
+    private <TVisit> void addResultToContext(String resultKey,
+	    Map<String, Object> storage, DataContext dataContext,
+	    ResultDataVisitor<TVisit> visitor, ResultCustomizer customizer) {
+	Object data = storage.get(resultKey);
+	if (data instanceof ResultData) {
+	    ResultData result = (ResultData) data;
+	    if (customizer != null)
+		result = customizer.customizeResult(result);
+	    dataContext.put(resultKey, result.accept(visitor));
+	}
     }
 
     private long formatTimestamp(String key, DataContext context) {
@@ -123,8 +149,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	DataContext dataContext = new DataContext();
 
 	// Get the configuration of the current exporter
-	SubConfiguration exportCfg = configuration.getExportConfigurations()
-	        .get(getName());
+	final ExporterConfiguration exportCfg = configuration
+	        .getExportConfigurations().get(getName());
 
 	// Get template directory property value
 	File templateDirectory = getPropertyFromConfig(exportCfg, TEMPLATE_DIR,
@@ -148,16 +174,61 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	addToContext(DATA_CTX_SHOW_CONTROLLERS_ONLY, controllersOnly,
 	        dataContext);
 
-	// Collect consumers results from sample context and transform them into
-	// Json strings to inject in the data context
 	JsonizerVisitor jsonizer = new JsonizerVisitor();
-	for (Map.Entry<String, Object> entry : context.getData().entrySet()) {
-	    String key = entry.getKey();
-	    Object value = entry.getValue();
-	    if (value instanceof ResultData) {
-		ResultData result = (ResultData) value;
-		dataContext.put(key, result.accept(jsonizer));
-	    }
+	Map<String, Object> storedData = context.getData();
+
+	// Add begin date consumer result to the data context
+	addResultToContext(ReportGenerator.BEGIN_DATE_CONSUMER_NAME,
+	        storedData, dataContext, jsonizer);
+
+	// Add end date summary consumer result to the data context
+	addResultToContext(ReportGenerator.END_DATE_CONSUMER_NAME, storedData,
+	        dataContext, jsonizer);
+
+	// Add Apdex summary consumer result to the data context
+	addResultToContext(ReportGenerator.APDEX_SUMMARY_CONSUMER_NAME,
+	        storedData, dataContext, jsonizer);
+
+	// Add errors summary consumer result to the data context
+	addResultToContext(ReportGenerator.ERRORS_SUMMARY_CONSUMER_NAME,
+	        storedData, dataContext, jsonizer);
+
+	// Add requests summary consumer result to the data context
+	addResultToContext(ReportGenerator.REQUESTS_SUMMARY_CONSUMER_NAME,
+	        storedData, dataContext, jsonizer);
+
+	// Add statistics summary consumer result to the data context
+	addResultToContext(ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME,
+	        storedData, dataContext, jsonizer);
+
+	// Collect graph results from sample context and transform them into
+	// Json strings to inject in the data context
+	for (String graphId : configuration.getGraphConfigurations().keySet()) {
+	    final SubConfiguration extraOptions = exportCfg
+		    .getGraphExtraConfigurations().get(graphId);
+	    addResultToContext(graphId, storedData, dataContext, jsonizer,
+		    new ResultCustomizer() {
+
+		        @Override
+		        public ResultData customizeResult(ResultData result) {
+			    MapResultData customizedResult = new MapResultData();
+			    customizedResult.setResult(DATA_CTX_RESULT,
+			            (ResultData) result);
+			    if (extraOptions != null) {
+			        MapResultData extraResult = new MapResultData();
+			        for (Map.Entry<String, String> extraEntry : extraOptions
+			                .getProperties().entrySet()) {
+				    extraResult.setResult(
+				            extraEntry.getKey(),
+				            new ValueResultData(extraEntry
+				                    .getValue()));
+			        }
+			        customizedResult.setResult(
+			                DATA_CTX_EXTRA_OPTIONS, extraResult);
+			    }
+			    return customizedResult;
+		        }
+		    });
 	}
 
 	// Replace the begin date with its formatted string and store the old

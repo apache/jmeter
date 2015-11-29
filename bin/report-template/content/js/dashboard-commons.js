@@ -57,6 +57,15 @@ function getElapsedTimeLabel(granularity) {
 	return "Elapsed Time (granularity: " + formatDuration(granularity) + ")";
 }
 
+//Get the property value of an object using the specified key
+//Returns the property value if all properties in the key exist; undefined
+//otherwise.
+function getProperty(key, obj) {
+	return key.split('.').reduce(function(prop, subprop){
+		return prop && prop[subprop];
+	}, obj);
+}
+
 /*
  * Removes quotes from the specified string 
  */
