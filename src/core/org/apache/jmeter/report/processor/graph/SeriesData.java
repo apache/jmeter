@@ -42,6 +42,12 @@ public class SeriesData {
     /** Indicate whether the current series is produced from controller samples. */
     private final boolean isControllersSeries;
 
+    /**
+     * Indicate whether the current series is an overall aggregation of other
+     * series.
+     */
+    private final boolean isOverallSeries;
+
     /** The count of samples of this series. */
     private long count = 0L;
 
@@ -83,6 +89,16 @@ public class SeriesData {
     }
 
     /**
+     * Checks if the current series is an overall aggregation of other series.
+     *
+     * @return true, if the current series is an overall aggregation of other
+     *         series; false otherwise
+     */
+    public final boolean isOverallSeries() {
+	return isOverallSeries;
+    }
+
+    /**
      * Gets the count of samples.
      *
      * @return the count of samples
@@ -99,10 +115,11 @@ public class SeriesData {
      * @param hasAggregatedKey
      *            the has aggregated key
      * @param isControllersSeries
-     *            the flag using to indicate if the current series is built from controller samples
+     *            the flag using to indicate if the current series is built from
+     *            controller samples
      */
     public SeriesData(AggregatorFactory factory, boolean hasAggregatedKey,
-	    boolean isControllersSeries) {
+	    boolean isControllersSeries, boolean isOverallSeries) {
 	if (hasAggregatedKey) {
 	    keysAggregator = factory.createKeyAggregator();
 	    valuesAggregator = factory.createAggregatedKeyValueAggregator();
@@ -111,6 +128,7 @@ public class SeriesData {
 	    valuesAggregator = null;
 	}
 	this.isControllersSeries = isControllersSeries;
+	this.isOverallSeries = isOverallSeries;
     }
 
     /**

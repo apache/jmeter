@@ -80,6 +80,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public static final String RESULT_SERIES_NAME = "label";
     public static final String RESULT_SERIES_DATA = "data";
     public static final String RESULT_SERIES_IS_CONTROLLER = "isController";
+    public static final String RESULT_SERIES_IS_OVERALL = "isOverall";
 
     /** The Constant DEFAULT_OVERALL_SERIES_NAME. */
     public static final String DEFAULT_OVERALL_SERIES_FORMAT = "Overall %s";
@@ -258,6 +259,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 		    series));
 	    seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
 		    new ValueResultData(seriesData.isControllersSeries()));
+	    seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
+		    new ValueResultData(seriesData.isOverallSeries()));
 	    seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
 	    seriesList.addResult(seriesResult);
 	}
@@ -464,7 +467,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 		    seriesData = new SeriesData(factory, aggregatedKeysSeries,
 			    groupInfo.getSeriesSelector()
 			            .allowsControllersDiscrimination() ? sample
-			            .isController() : false);
+			            .isController() : false, false);
 		    seriesInfo.put(seriesName, seriesData);
 		}
 

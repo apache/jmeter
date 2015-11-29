@@ -58,8 +58,8 @@ public class GroupData {
      */
     public GroupData(AggregatorFactory factory, boolean hasOverall,
 	    boolean hasAggregatedKey) {
-	overallSeries = hasOverall ? new SeriesData(factory, hasAggregatedKey, false)
-	        : null;
+	overallSeries = hasOverall ? new SeriesData(factory, hasAggregatedKey,
+	        false, true) : null;
     }
 
     public void clear() {
