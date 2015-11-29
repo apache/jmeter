@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.jmeter.report.config.ConfigurationException;
+import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.ArgumentNullException;
@@ -162,12 +163,10 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	// Replace the begin date with its formatted string and store the old
 	// timestamp
 	long oldTimestamp = formatTimestamp(
-	        ReportGenerator.BEGIN_DATE_CONSUMER_NAME
-	                + AggregateConsumer.RESULT_KEY, dataContext);
+	        ReportGenerator.BEGIN_DATE_CONSUMER_NAME, dataContext);
 
 	// Replace the end date with its formatted string
-	formatTimestamp(ReportGenerator.END_DATE_CONSUMER_NAME
-	        + AggregateConsumer.RESULT_KEY, dataContext);
+	formatTimestamp(ReportGenerator.END_DATE_CONSUMER_NAME, dataContext);
 
 	// Add time zone offset (that matches the begin date) to the context
 	TimeZone timezone = TimeZone.getDefault();

@@ -29,8 +29,6 @@ import org.apache.jmeter.report.core.Sample;
  */
 public class RequestsSummaryConsumer extends AbstractSampleConsumer {
 
-    public static final String RESULT_KEY = "Result";
-
     private long count;
     private long errorCount;
 
@@ -73,7 +71,7 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
 	        * 100 / count));
 	result.setResult("OkPercent", new ValueResultData(
 	        (double) (count - errorCount) * 100 / count));
-	setLocalData(RESULT_KEY, result);
+	setDataToContext(getName(), result);
 	super.stopProducing();
     }
 }

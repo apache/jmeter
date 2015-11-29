@@ -81,7 +81,6 @@ public abstract class AbstractSummaryConsumer<TData> extends
 
     }
 
-    public static final String CTX_RESULT = "Result";
     public static final String RESULT_VALUE_DATA = "data";
     public static final String RESULT_VALUE_IS_CONTROLLER = "isController";
     public static final String RESULT_VALUE_ITEMS = "items";
@@ -273,8 +272,8 @@ public abstract class AbstractSummaryConsumer<TData> extends
 	}
 	result.setResult(RESULT_VALUE_ITEMS, itemsResult);
 
-	// Store to the context
-	setLocalData(CTX_RESULT, result);
+	// Store the result in the context
+	setDataToContext(getName(), result);
 
 	super.stopProducing();
 

@@ -158,7 +158,7 @@ function setGraphZoomable(graphSelector, overviewSelector){
 }
 
 var responseTimePercentilesInfos = {
-		data: ${responseTimePercentilesResult!"{}"},
+		data: ${responseTimePercentiles!"{}"},
 	    getOptions: function() {
 	    	return {
 	    		series: {
@@ -232,7 +232,7 @@ function refreshResponseTimePercentiles(below) {
 }
 
 var responseTimeDistributionInfos = {
-		data: ${responseTimeDistributionResult!"{}"},
+		data: ${responseTimeDistribution!"{}"},
 		getOptions: function() {
 			var granularity = this.data.granularity;
 			return {
@@ -294,7 +294,7 @@ function refreshResponseTimeDistribution() {
 };
 
 var activeThreadsOverTimeInfos = {
-		data: ${activeThreadsOverTimeResult!"{}"},
+		data: ${activeThreadsOverTime!"{}"},
 		getOptions: function() {
 			return {
 				series: {
@@ -371,7 +371,7 @@ function refreshActiveThreadsOverTime() {
 };
 
 var responseTimePerSampleInfos = {
-		data: ${responseTimePerSampleResult!"{}"},
+		data: ${responseTimePerSample!"{}"},
 	    getOptions: function() {
 	    	var ticks = [];
 	    	$.each(this.data.sampleNames, function(index, item){
@@ -491,7 +491,7 @@ function refreshResponseTimePerSample() {
 };
 
 var timeVsThreadsInfos = {
-		data: ${timeVsThreadsResult!"{}"},
+		data: ${timeVsThreads!"{}"},
         getOptions: function() {
         	return {
         		series: {
@@ -560,7 +560,7 @@ function refreshTimeVsThreads(){
 };
 
 var bytesThroughputOverTimeInfos = {
-		data : ${bytesThroughputOverTimeResult!"{}"},
+		data : ${bytesThroughputOverTime!"{}"},
 		getOptions : function(){
 			return {
 				series: {
@@ -637,7 +637,7 @@ function refreshBytesThroughputOverTime() {
 }
 
 var responseTimesOverTimeInfos = {
-		data: ${responseTimesOverTimeResult!"{}"},
+		data: ${responseTimesOverTime!"{}"},
 		getOptions: function(){
 	        return {
 	        	series: {
@@ -714,7 +714,7 @@ function refreshResponseTimeOverTime() {
 };
 
 var latenciesOverTimeInfos = {
-		data: ${latenciesOverTimeResult!"{}"},
+		data: ${latenciesOverTime!"{}"},
 		getOptions: function() {
 			return {
 				series: {
@@ -791,7 +791,7 @@ function refreshLatenciesOverTime() {
 };
 
 var responseTimeVsRequestInfos = {
-	data: ${responseTimeVsRequestResult!"{}"},
+	data: ${responseTimeVsRequest!"{}"},
 	getOptions: function() {
 		return {
 			series: {
@@ -866,7 +866,7 @@ function refreshResponseTimeVsRequest() {
 
 
 var latenciesVsRequestInfos = {
-	data: ${latencyVsRequestResult!"{}"},
+	data: ${latencyVsRequest!"{}"},
     getOptions: function() {
     	return{
     		series: {
@@ -935,7 +935,7 @@ function refreshLatenciesVsRequest() {
 };
 
 var hitsPerSecondInfos = {
-		data: ${hitsPerSecondResult!"{}"},
+		data: ${hitsPerSecond!"{}"},
 		getOptions: function() {
 	    	return {
 	    		series: {
@@ -1012,7 +1012,7 @@ function refreshHitsPerSecond() {
 }
 
 var codesPerSecondInfos = {
-		data: ${codesPerSecondResult!"{}"},
+		data: ${codesPerSecond!"{}"},
 		getOptions: function(){
 			return {
 				series: {
@@ -1089,7 +1089,7 @@ function refreshCodesPerSecond() {
 };
 
 var transactionsPerSecondInfos = {
-		data: ${transactionsPerSecondResult!"{}"},
+		data: ${transactionsPerSecond!"{}"},
 		getOptions: function(){
 			return {
 				series: {

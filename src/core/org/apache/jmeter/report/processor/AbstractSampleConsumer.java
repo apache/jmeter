@@ -64,57 +64,51 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
     private Map<Integer, SampleMetadata> consumedMetadata = new TreeMap<Integer, SampleMetadata>();
 
     /**
-     * Store a data in the current sample context with a prefixed key.
+     * Gets the data identified by the specified key from the current sample
+     * context
+     *
+     * @param key
+     *            the key
+     * @return the data
+     */
+    protected final Object getDataFromContext(String key) {
+	return getSampleContext().getData().get(key);
+    }
+
+    /**
+     * Store data in the current sample context with the specified key
+     * identifier.
      *
      * @param key
      *            the key
      * @param value
      *            the value
      */
-    protected final void setLocalData(String key, Object value) {
-	getSampleContext().getData().put(getAbsoluteKey(this, key), value);
+    protected final void setDataToContext(String key, Object value) {
+	getSampleContext().getData().put(key, value);
     }
 
     /**
-     * Gets the data stored in the current sample context prefixing the
-     * specified key .
+     * Gets the name of the consumer.
      *
-     * @param key
-     *            the key
-     * @return the local data
+     * @return the name of the consumer
      */
-    protected final Object getLocalData(String key) {
-	return getSampleContext().getData().get(getAbsoluteKey(this, key));
-    }
-
-    /**
-     * Define an absolute key for the data store using the specified consumer
-     * name and a relative key.
-     *
-     * @param consumer
-     *            the consumer
-     * @param relativeKey
-     *            the relative key
-     * @return the absolute key
-     */
-    public static final String getAbsoluteKey(AbstractSampleConsumer consumer,
-	    String relativeKey) {
-	if (consumer == null)
-	    throw new ArgumentNullException("consumer");
-
-	return consumer.getName() + relativeKey;
-    }
-
-    public void setName(String name) {
-	this.name = name;
-    }
-
     public String getName() {
 	if (name == null) {
 	    return getClass().getSimpleName() + "-" + hashCode();
 	} else {
 	    return name;
 	}
+    }
+
+    /**
+     * Sets the name of the consumer.
+     *
+     * @param name
+     *            the new name
+     */
+    public void setName(String name) {
+	this.name = name;
     }
 
     public final File getWorkingDirectory() {

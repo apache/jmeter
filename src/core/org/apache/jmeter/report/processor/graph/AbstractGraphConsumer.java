@@ -70,7 +70,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     protected static final String DEFAULT_GROUP = "Generic group";
 
-    public static final String RESULT_KEY = "Result";
     public static final String RESULT_MIN_X = "minX";
     public static final String RESULT_MAX_X = "maxX";
     public static final String RESULT_MIN_Y = "minY";
@@ -538,7 +537,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	}
 
 	// Store the result
-	setLocalData(RESULT_KEY, result);
+	setDataToContext(getName(), result);
 
 	for (GroupInfo groupInfo : groupInfos.values()) {
 	    groupInfo.getGroupData().clear();

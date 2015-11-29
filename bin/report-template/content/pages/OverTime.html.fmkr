@@ -69,18 +69,18 @@
 									<ul class="nav nav-third-level in" id="submenu">
 										<li>
 											<a href="OverTime.html#bytesThroughputOverTime" onclick="$('#bodyBytesThroughputOverTime').collapse('show');">
-												${(bytesThroughputOverTime.title)!"Bytes Throughput Over Time"}
+												Bytes Throughput Over Time
 											</a>
 										</li>
 										
 										<li>
 											<a href="OverTime.html#responseTimesOverTime" onclick="$('#bodyResponseTimeOverTime').collapse('show');">
-												${(responseTimesOverTime.title)!"Response Times Over Time"}
+												Response Times Over Time
 											</a>
 										</li>
 										<li>
 											<a href="OverTime.html#latenciesOverTime" onclick="$('#bodyLantenciesOverTime').collapse('show');">
-												${(latenciesOverTime.title)!"Latencies Over Time"}
+												Latencies Over Time
 											</a>
 										</li>
 										
@@ -129,7 +129,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Over Time</h1>
-                    <p>( ${testFile!""} start : ${beginDateResult!""} - end : ${endDateResult!""} )</p>
+                    <p>( ${testFile!""} start : ${beginDate!""} - end : ${endDate!""} )</p>
                     <#if overallFilter?has_content>
                 		<p>( Filter : ${overallFilter} )</p>
                 	</#if>
@@ -143,7 +143,7 @@
                 <div class="col-lg-12 portlet" id="bytesThroughputOverTime">
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
-                             <i  class="fa fa-bar-chart-o fa-fw" ></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">${(bytesThroughputOverTime.title)!"Bytes Throughput Over Time"}</span>
+                             <i  class="fa fa-bar-chart-o fa-fw" ></i> <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">Bytes Throughput Over Time</span>
 							 <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -191,7 +191,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
 							<i class="fa fa-bar-chart-o fa-fw"></i> 
-							<span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">${(responseTimesOverTime.title)!"Response Times Over Time"}</span>
+							<span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">ResponseTimes Over Time</span>
                            <div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">
@@ -242,7 +242,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
-                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">${(latenciesOverTime.title)!"Latencies Over Time"}</span>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">Latencies Over Time</span>
 							<div class="pull-right">
 								<div class="btn-group">
 									<a class="btn btn-link btn-xs">

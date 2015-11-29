@@ -29,8 +29,6 @@ import org.apache.jmeter.report.core.SampleSelector;
  */
 public class AggregateConsumer extends AbstractSampleConsumer {
 
-    public static String RESULT_KEY = "Result";
-    
     /** The aggregator. */
     private Aggregator aggregator;
 
@@ -110,7 +108,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void stopConsuming() {
-	setLocalData(RESULT_KEY, new ValueResultData(aggregator.getResult()));
+	setDataToContext(getName(), new ValueResultData(aggregator.getResult()));
 	super.stopProducing();
     }
 
