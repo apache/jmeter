@@ -22,7 +22,7 @@ package org.apache.jmeter.report.config;
  *
  * @since 2.14
  */
-public class GraphConfiguration extends SubConfiguration {
+public class GraphConfiguration extends InstanceConfiguration {
 
     private Double abscissaMax;
     private Double abscissaMin;

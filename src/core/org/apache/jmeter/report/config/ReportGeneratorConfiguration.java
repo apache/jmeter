@@ -87,6 +87,8 @@ public class ReportGeneratorConfiguration {
     public static final String GRAPH_KEY_TITLE = "title";
     public static final String GRAPH_KEY_TITLE_DEFAULT = "Generic graph title";
 
+    public static final String EXPORTER_KEY_GRAPH_EXTRA_OPTIONS = "graph_options";
+
     // Sub configuration keys
     public static final String SUBCONF_KEY_CLASSNAME = "classname";
     public static final String SUBCONF_KEY_PROPERTY = "property";
@@ -103,7 +105,10 @@ public class ReportGeneratorConfiguration {
      *            the generic type
      */
     private interface SubConfigurationFactory<TSubConfiguration> {
-	void createSubConfiguration(String name);
+	TSubConfiguration createSubConfiguration();
+
+	void initialize(String subConfId, TSubConfiguration subConfiguration)
+	        throws ConfigurationException;
     }
 
     private String sampleFilter;
@@ -111,7 +116,7 @@ public class ReportGeneratorConfiguration {
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
     private ArrayList<String> filteredSamples = new ArrayList<String>();
-    private HashMap<String, SubConfiguration> exportConfigurations = new HashMap<String, SubConfiguration>();
+    private HashMap<String, ExporterConfiguration> exportConfigurations = new HashMap<String, ExporterConfiguration>();
     private HashMap<String, GraphConfiguration> graphConfigurations = new HashMap<String, GraphConfiguration>();
 
     /**
@@ -214,7 +219,7 @@ public class ReportGeneratorConfiguration {
      *
      * @return the export configurations
      */
-    public final Map<String, SubConfiguration> getExportConfigurations() {
+    public final Map<String, ExporterConfiguration> getExportConfigurations() {
 	return exportConfigurations;
     }
 
@@ -227,16 +232,46 @@ public class ReportGeneratorConfiguration {
 	return graphConfigurations;
     }
 
+    // /**
+    // * Gets the exporter property prefix from the specified exporter
+    // identifier.
+    // *
+    // * @param exporterId
+    // * the exporter identifier
+    // * @return the exporter property prefix
+    // */
+    // public static String getExporterPropertyPrefix(String exporterId) {
+    // return REPORT_GENERATOR_EXPORTER_KEY_PREFIX + KEY_DELIMITER
+    // + exporterId;
+    // }
+
     /**
-     * Gets the exporter property prefix from the specified exporter identifier.
+     * Gets the sub configuration property prefix from the specified sub
+     * configuration identifier.
      *
      * @param exporterId
-     *            the exporter identifier
-     * @return the exporter property prefix
+     *            the sub configuration identifier
+     * @return the sub configuration property prefix
      */
-    public static String getExporterPropertyPrefix(String exporterId) {
-	return REPORT_GENERATOR_EXPORTER_KEY_PREFIX + KEY_DELIMITER
-	        + exporterId;
+    public static String getSubConfigurationPropertyPrefix(String keyPrefix,
+	    String subConfId) {
+	return keyPrefix + KEY_DELIMITER + subConfId;
+    }
+
+    /**
+     * Gets the sub configuration property key from the specified identifier and
+     * property name.
+     *
+     * @param exporterId
+     *            the sub configuration identifier
+     * @param propertyName
+     *            the property name
+     * @return the sub configuration property key
+     */
+    public static String getSubConfigurationPropertyKey(String keyPrefix,
+	    String subConfId, String propertyName) {
+	return getSubConfigurationPropertyPrefix(keyPrefix, subConfId)
+	        + KEY_DELIMITER + propertyName;
     }
 
     /**
@@ -251,20 +286,21 @@ public class ReportGeneratorConfiguration {
      */
     public static String getExporterPropertyKey(String exporterId,
 	    String propertyName) {
-	return getExporterPropertyPrefix(exporterId) + KEY_DELIMITER
-	        + propertyName;
+	return getSubConfigurationPropertyPrefix(
+	        REPORT_GENERATOR_EXPORTER_KEY_PREFIX, exporterId)
+	        + KEY_DELIMITER + propertyName;
     }
 
-    /**
-     * Gets the graph property prefix from the specified graph identifier.
-     *
-     * @param graphId
-     *            the graph identifier
-     * @return the graph property prefix
-     */
-    public static String getGraphPropertyPrefix(String graphId) {
-	return REPORT_GENERATOR_GRAPH_KEY_PREFIX + KEY_DELIMITER + graphId;
-    }
+    // /**
+    // * Gets the graph property prefix from the specified graph identifier.
+    // *
+    // * @param graphId
+    // * the graph identifier
+    // * @return the graph property prefix
+    // */
+    // public static String getGraphPropertyPrefix(String graphId) {
+    // return REPORT_GENERATOR_GRAPH_KEY_PREFIX + KEY_DELIMITER + graphId;
+    // }
 
     /**
      * Gets the graph property key from the specified identifier and property
@@ -277,7 +313,10 @@ public class ReportGeneratorConfiguration {
      * @return the graph property key
      */
     public static String getGraphPropertyKey(String graphId, String propertyName) {
-	return getGraphPropertyPrefix(graphId) + KEY_DELIMITER + propertyName;
+	return getSubConfigurationPropertyPrefix(
+	        REPORT_GENERATOR_GRAPH_KEY_PREFIX, graphId)
+	        + KEY_DELIMITER
+	        + propertyName;
     }
 
     /**
@@ -333,13 +372,13 @@ public class ReportGeneratorConfiguration {
     }
 
     /**
-     * Initialize sub configuration items. This function iterates over
+     ** Initialize sub configuration items. This function iterates over
      * properties and find each direct sub properties with the specified prefix
-     * 
+     *
      * <p>
      * E.g. :
      * </p>
-     * 
+     *
      * <p>
      * With properties :
      * <ul>
@@ -351,32 +390,62 @@ public class ReportGeneratorConfiguration {
      * <p>
      * And prefix : jmeter.reportgenerator.graph
      * </p>
-     * 
+     *
      * <p>
      * The function creates 2 sub configuration items : graph1 and graph2
      * </p>
      *
      * @param <TSubConf>
-     *            the type of the sub configuration item
+     *            the generic type
+     * @param subConfigurations
+     *            the sub configurations
      * @param props
-     *            the properties
+     *            the props
      * @param propertyPrefix
      *            the property prefix
      * @param factory
-     *            the sub configuration item factory
-     * @param invalidKeyFormat
-     *            the invalid key format
+     *            the factory
+     * @throws ConfigurationException
+     *             the configuration exception
      */
-    private static <TSubConf> void initializeSubConfiguration(Props props,
-	    String propertyPrefix, SubConfigurationFactory<TSubConf> factory) {
+    private static <TSubConf extends SubConfiguration> void loadSubConfiguration(
+	    Map<String, TSubConf> subConfigurations, Props props,
+	    String propertyPrefix, SubConfigurationFactory<TSubConf> factory)
+	    throws ConfigurationException {
+
 	for (Map.Entry<String, Object> entry : props.innerMap(propertyPrefix)
 	        .entrySet()) {
 	    String key = entry.getKey();
 	    int index = key.indexOf(KEY_DELIMITER);
 	    if (index > 0) {
-		factory.createSubConfiguration(key.substring(0, index));
+		String name = key.substring(0, index);
+		TSubConf subConfiguration = subConfigurations.get(name);
+		if (subConfiguration == null) {
+		    subConfiguration = factory.createSubConfiguration();
+		    subConfigurations.put(name, subConfiguration);
+		}
 	    } else {
 		log.warn(String.format(INVALID_KEY_FMT, key));
+	    }
+	}
+
+	// Load sub configurations
+	for (Map.Entry<String, TSubConf> entry : subConfigurations.entrySet()) {
+	    String subConfId = entry.getKey();
+	    final TSubConf subConfiguration = entry.getValue();
+
+	    // Load specific properties
+	    factory.initialize(subConfId, subConfiguration);
+
+	    // Load extra properties
+	    Map<String, Object> extraKeys = props
+		    .innerMap(getSubConfigurationPropertyKey(propertyPrefix,
+		            subConfId, SUBCONF_KEY_PROPERTY));
+	    Map<String, String> extraProperties = subConfiguration
+		    .getProperties();
+	    for (Map.Entry<String, Object> entryProperty : extraKeys.entrySet()) {
+		extraProperties.put(entryProperty.getKey(),
+		        (String) entryProperty.getValue());
 	    }
 	}
     }
@@ -396,7 +465,7 @@ public class ReportGeneratorConfiguration {
 	ReportGeneratorConfiguration configuration = new ReportGeneratorConfiguration();
 
 	// Use jodd.Props to ease property handling
-	Props props = new Props();
+	final Props props = new Props();
 	props.load(properties);
 
 	// Load temporary directory property
@@ -424,136 +493,143 @@ public class ReportGeneratorConfiguration {
 	        REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
 	configuration.setSampleFilter(sampleFilter);
 
-	// Find graph identifiers and create a configuration for each
+	// Find graph identifiers and load a configuration for each
 	final Map<String, GraphConfiguration> graphConfigurations = configuration
 	        .getGraphConfigurations();
-	initializeSubConfiguration(props, REPORT_GENERATOR_GRAPH_KEY_PREFIX,
+	loadSubConfiguration(graphConfigurations, props,
+	        REPORT_GENERATOR_GRAPH_KEY_PREFIX,
 	        new SubConfigurationFactory<GraphConfiguration>() {
 
 		    @Override
-		    public void createSubConfiguration(String name) {
-		        GraphConfiguration graphConfiguration = graphConfigurations
-		                .get(name);
-		        if (graphConfiguration == null) {
-			    graphConfiguration = new GraphConfiguration();
-			    graphConfigurations.put(name, graphConfiguration);
-		        }
-
+		    public GraphConfiguration createSubConfiguration() {
+		        return new GraphConfiguration();
 		    }
-	        });
-
-	// Load graph configuration
-	for (Map.Entry<String, GraphConfiguration> entry : graphConfigurations
-	        .entrySet()) {
-	    String graphId = entry.getKey();
-	    final GraphConfiguration graphConfiguration = entry.getValue();
-
-	    log.debug(String.format(LOAD_GRAPH_FMT, graphId));
-
-	    // Get the property defining the minimum abscissa
-	    Double minAbscissa = getOptionalProperty(props,
-		    getGraphPropertyKey(graphId, GRAPH_KEY_ABSCISSA_MIN_KEY),
-		    Double.class);
-	    if (minAbscissa != null)
-		graphConfiguration.setAbscissaMin(minAbscissa);
-
-	    // Get the property defining the maximum abscissa
-	    Double maxAbscissa = getOptionalProperty(props,
-		    getGraphPropertyKey(graphId, GRAPH_KEY_ABSCISSA_MAX_KEY),
-		    Double.class);
-	    if (maxAbscissa != null)
-		graphConfiguration.setAbscissaMax(maxAbscissa);
-
-	    // Get the property defining the minimum ordinate
-	    Double minOrdinate = getOptionalProperty(props,
-		    getGraphPropertyKey(graphId, GRAPH_KEY_ORDINATE_MIN_KEY),
-		    Double.class);
-	    if (minOrdinate != null)
-		graphConfiguration.setOrdinateMin(minOrdinate);
-
-	    // Get the property defining the maximum ordinate
-	    Double maxOrdinate = getOptionalProperty(props,
-		    getGraphPropertyKey(graphId, GRAPH_KEY_ORDINATE_MAX_KEY),
-		    Double.class);
-	    if (maxOrdinate != null)
-		graphConfiguration.setOrdinateMax(maxOrdinate);
-
-	    // Get the property defining whether the graph have to filter
-	    // controller
-	    // samples
-	    boolean excludeControllers = getRequiredProperty(
-		    props,
-		    getGraphPropertyKey(graphId, GRAPH_KEY_EXCLUDE_CONTROLLERS),
-		    GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT, Boolean.class);
-	    graphConfiguration.setExcludeControllers(excludeControllers);
-
-	    // Get the property defining the title of the graph
-	    String title = getRequiredProperty(props,
-		    getGraphPropertyKey(graphId, GRAPH_KEY_TITLE),
-		    GRAPH_KEY_TITLE_DEFAULT, String.class);
-	    graphConfiguration.setTitle(title);
-
-	    // Get the property defining the class name
-	    String className = getRequiredProperty(props,
-		    getGraphPropertyKey(graphId, SUBCONF_KEY_CLASSNAME), "",
-		    String.class);
-	    graphConfiguration.setClassName(className);
-
-	    // Load graph properties
-	    Map<String, Object> graphKeys = props.innerMap(getGraphPropertyKey(
-		    graphId, SUBCONF_KEY_PROPERTY));
-	    Map<String, String> graphProperties = graphConfiguration
-		    .getProperties();
-	    for (Map.Entry<String, Object> entryProperty : graphKeys.entrySet()) {
-		graphProperties.put(entryProperty.getKey(),
-		        (String) entryProperty.getValue());
-	    }
-	}
-
-	// Find exporter identifiers and create a configuration for each
-	final Map<String, SubConfiguration> exportConfigurations = configuration
-	        .getExportConfigurations();
-	initializeSubConfiguration(props, REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
-	        new SubConfigurationFactory<SubConfiguration>() {
 
 		    @Override
-		    public void createSubConfiguration(String name) {
-		        SubConfiguration exportConfiguration = exportConfigurations
-		                .get(name);
-		        if (exportConfiguration == null) {
-			    exportConfiguration = new SubConfiguration();
-			    exportConfigurations.put(name, exportConfiguration);
-		        }
+		    public void initialize(String graphId,
+		            GraphConfiguration graphConfiguration)
+		            throws ConfigurationException {
+		        log.debug(String.format(LOAD_GRAPH_FMT, graphId));
+
+		        // Get the property defining the minimum abscissa
+		        Double minAbscissa = getOptionalProperty(
+		                props,
+		                getGraphPropertyKey(graphId,
+		                        GRAPH_KEY_ABSCISSA_MIN_KEY),
+		                Double.class);
+		        if (minAbscissa != null)
+			    graphConfiguration.setAbscissaMin(minAbscissa);
+
+		        // Get the property defining the maximum abscissa
+		        Double maxAbscissa = getOptionalProperty(
+		                props,
+		                getGraphPropertyKey(graphId,
+		                        GRAPH_KEY_ABSCISSA_MAX_KEY),
+		                Double.class);
+		        if (maxAbscissa != null)
+			    graphConfiguration.setAbscissaMax(maxAbscissa);
+
+		        // Get the property defining the minimum ordinate
+		        Double minOrdinate = getOptionalProperty(
+		                props,
+		                getGraphPropertyKey(graphId,
+		                        GRAPH_KEY_ORDINATE_MIN_KEY),
+		                Double.class);
+		        if (minOrdinate != null)
+			    graphConfiguration.setOrdinateMin(minOrdinate);
+
+		        // Get the property defining the maximum ordinate
+		        Double maxOrdinate = getOptionalProperty(
+		                props,
+		                getGraphPropertyKey(graphId,
+		                        GRAPH_KEY_ORDINATE_MAX_KEY),
+		                Double.class);
+		        if (maxOrdinate != null)
+			    graphConfiguration.setOrdinateMax(maxOrdinate);
+
+		        // Get the property defining whether the graph have to
+		        // filter
+		        // controller
+		        // samples
+		        boolean excludeControllers = getRequiredProperty(
+		                props,
+		                getGraphPropertyKey(graphId,
+		                        GRAPH_KEY_EXCLUDE_CONTROLLERS),
+		                GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT,
+		                Boolean.class);
+		        graphConfiguration
+		                .setExcludeControllers(excludeControllers);
+
+		        // Get the property defining the title of the graph
+		        String title = getRequiredProperty(props,
+		                getGraphPropertyKey(graphId, GRAPH_KEY_TITLE),
+		                GRAPH_KEY_TITLE_DEFAULT, String.class);
+		        graphConfiguration.setTitle(title);
+
+		        // Get the property defining the class name
+		        String className = getRequiredProperty(
+		                props,
+		                getGraphPropertyKey(graphId,
+		                        SUBCONF_KEY_CLASSNAME), "",
+		                String.class);
+		        graphConfiguration.setClassName(className);
 
 		    }
 	        });
 
-	// Load export configuration
-	for (Map.Entry<String, SubConfiguration> entry : exportConfigurations
-	        .entrySet()) {
-	    String exportId = entry.getKey();
-	    final SubConfiguration exportConfiguration = entry.getValue();
+	// Find exporter identifiers and load a configuration for each
+	final Map<String, ExporterConfiguration> exportConfigurations = configuration
+	        .getExportConfigurations();
+	loadSubConfiguration(exportConfigurations, props,
+	        REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
+	        new SubConfigurationFactory<ExporterConfiguration>() {
 
-	    log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
+		    @Override
+		    public ExporterConfiguration createSubConfiguration() {
+		        return new ExporterConfiguration();
+		    }
 
-	    // Get the property defining the class name
-	    String className = getRequiredProperty(props,
-		    getExporterPropertyKey(exportId, SUBCONF_KEY_CLASSNAME),
-		    "", String.class);
-	    exportConfiguration.setClassName(className);
+		    @Override
+		    public void initialize(String exportId,
+		            ExporterConfiguration exportConfiguration)
+		            throws ConfigurationException {
+		        log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
 
-	    // Load exporter properties
-	    Map<String, Object> exporterKeys = props
-		    .innerMap(getExporterPropertyKey(exportId,
-		            SUBCONF_KEY_PROPERTY));
-	    Map<String, String> graphProperties = exportConfiguration
-		    .getProperties();
-	    for (Map.Entry<String, Object> entryProperty : exporterKeys
-		    .entrySet()) {
-		graphProperties.put(entryProperty.getKey(),
-		        (String) entryProperty.getValue());
-	    }
-	}
+		        // Get the property defining the class name
+		        String className = getRequiredProperty(
+		                props,
+		                getExporterPropertyKey(exportId,
+		                        SUBCONF_KEY_CLASSNAME), "",
+		                String.class);
+		        exportConfiguration.setClassName(className);
+
+		        // Load graph extra properties
+		        Map<String, SubConfiguration> graphExtraConfigurations = exportConfiguration
+		                .getGraphExtraConfigurations();
+		        loadSubConfiguration(
+		                graphExtraConfigurations,
+		                props,
+		                getSubConfigurationPropertyKey(
+		                        REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
+		                        exportId,
+		                        EXPORTER_KEY_GRAPH_EXTRA_OPTIONS),
+		                new SubConfigurationFactory<SubConfiguration>() {
+
+			            @Override
+			            public SubConfiguration createSubConfiguration() {
+			                return new SubConfiguration();
+			            }
+
+			            @Override
+			            public void initialize(String subConfId,
+			                    SubConfiguration subConfiguration)
+			                    throws ConfigurationException {
+			                // do nothing
+
+			            }
+		                });
+		    }
+	        });
 
 	log.debug(END_LOADING_MSG);
 

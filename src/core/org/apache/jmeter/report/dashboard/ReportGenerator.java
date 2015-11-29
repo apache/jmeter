@@ -31,10 +31,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ConvertException;
 import org.apache.jmeter.report.config.Converters;
+import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.config.StringConverter;
-import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.core.ControllerSamplePredicate;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
@@ -387,10 +387,10 @@ public class ReportGenerator {
 	log.debug("Start data exporting");
 
 	// Process configuration to build data exporters
-	for (Map.Entry<String, SubConfiguration> entry : configuration
+	for (Map.Entry<String, ExporterConfiguration> entry : configuration
 	        .getExportConfigurations().entrySet()) {
 	    String exporterName = entry.getKey();
-	    SubConfiguration exporterConfiguration = entry.getValue();
+	    ExporterConfiguration exporterConfiguration = entry.getValue();
 
 	    // Instantiate the class from the classname
 	    String className = exporterConfiguration.getClassName();

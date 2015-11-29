@@ -27,27 +27,7 @@ import java.util.Map;
  */
 public class SubConfiguration {
 
-    private String className;
     private HashMap<String, String> properties = new HashMap<String, String>();
-
-    /**
-     * Gets the class name of the item.
-     *
-     * @return the class name of the item
-     */
-    public final String getClassName() {
-	return className;
-    }
-
-    /**
-     * Sets the class name of the item.
-     *
-     * @param className
-     *            the new class name
-     */
-    public final void setClassName(String className) {
-	this.className = className;
-    }
 
     /**
      * Gets the properties of the item.
