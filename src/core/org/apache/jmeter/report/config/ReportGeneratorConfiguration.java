@@ -545,6 +545,10 @@ public class ReportGeneratorConfiguration {
 		    }
 	        });
 
+	if(graphConfigurations.isEmpty()){
+	    log.info("No graph configuration found.");
+	}
+	
 	// Find exporter identifiers and load a configuration for each
 	final Map<String, ExporterConfiguration> exportConfigurations = configuration
 	        .getExportConfigurations();
@@ -600,6 +604,10 @@ public class ReportGeneratorConfiguration {
 		    }
 	        });
 
+	if(exportConfigurations.isEmpty()){
+	    log.warn("No export configuration found. None report will be generated.");
+	}
+	
 	log.debug(END_LOADING_MSG);
 
 	return configuration;
