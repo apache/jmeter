@@ -372,13 +372,13 @@ public class ReportGeneratorConfiguration {
     }
 
     /**
-     ** Initialize sub configuration items. This function iterates over
+     * * Initialize sub configuration items. This function iterates over
      * properties and find each direct sub properties with the specified prefix
-     *
+     * 
      * <p>
      * E.g. :
      * </p>
-     *
+     * 
      * <p>
      * With properties :
      * <ul>
@@ -390,7 +390,7 @@ public class ReportGeneratorConfiguration {
      * <p>
      * And prefix : jmeter.reportgenerator.graph
      * </p>
-     *
+     * 
      * <p>
      * The function creates 2 sub configuration items : graph1 and graph2
      * </p>
@@ -405,12 +405,16 @@ public class ReportGeneratorConfiguration {
      *            the property prefix
      * @param factory
      *            the factory
+     * @param noPropertyKey
+     *            indicates whether extra properties are prefixed with the
+     *            SUBCONF_KEY_PROPERTY
      * @throws ConfigurationException
      *             the configuration exception
      */
     private static <TSubConf extends SubConfiguration> void loadSubConfiguration(
 	    Map<String, TSubConf> subConfigurations, Props props,
-	    String propertyPrefix, SubConfigurationFactory<TSubConf> factory)
+	    String propertyPrefix, boolean noPropertyKey,
+	    SubConfigurationFactory<TSubConf> factory)
 	    throws ConfigurationException {
 
 	for (Map.Entry<String, Object> entry : props.innerMap(propertyPrefix)
@@ -439,8 +443,10 @@ public class ReportGeneratorConfiguration {
 
 	    // Load extra properties
 	    Map<String, Object> extraKeys = props
-		    .innerMap(getSubConfigurationPropertyKey(propertyPrefix,
-		            subConfId, SUBCONF_KEY_PROPERTY));
+		    .innerMap(noPropertyKey ? getSubConfigurationPropertyPrefix(
+		            propertyPrefix, subConfId)
+		            : getSubConfigurationPropertyKey(propertyPrefix,
+		                    subConfId, SUBCONF_KEY_PROPERTY));
 	    Map<String, String> extraProperties = subConfiguration
 		    .getProperties();
 	    for (Map.Entry<String, Object> entryProperty : extraKeys.entrySet()) {
@@ -497,7 +503,7 @@ public class ReportGeneratorConfiguration {
 	final Map<String, GraphConfiguration> graphConfigurations = configuration
 	        .getGraphConfigurations();
 	loadSubConfiguration(graphConfigurations, props,
-	        REPORT_GENERATOR_GRAPH_KEY_PREFIX,
+	        REPORT_GENERATOR_GRAPH_KEY_PREFIX, false,
 	        new SubConfigurationFactory<GraphConfiguration>() {
 
 		    @Override
@@ -581,7 +587,7 @@ public class ReportGeneratorConfiguration {
 	final Map<String, ExporterConfiguration> exportConfigurations = configuration
 	        .getExportConfigurations();
 	loadSubConfiguration(exportConfigurations, props,
-	        REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
+	        REPORT_GENERATOR_EXPORTER_KEY_PREFIX, false,
 	        new SubConfigurationFactory<ExporterConfiguration>() {
 
 		    @Override
@@ -613,6 +619,7 @@ public class ReportGeneratorConfiguration {
 		                        REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
 		                        exportId,
 		                        EXPORTER_KEY_GRAPH_EXTRA_OPTIONS),
+		                true,
 		                new SubConfigurationFactory<SubConfiguration>() {
 
 			            @Override

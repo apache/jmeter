@@ -73,6 +73,31 @@ function prepareOverviewOptions(graphOptions){
 	return $.extend(true, {}, graphOptions, overviewOptions);
 }
 
+// Force axes boundaries using graph extra options 
+function prepareOptions(options, data){
+	var extraOptions = data.extraOptions;
+	if(extraOptions !== undefined){
+		var xOffset = options.xaxis.mode === "time" ? ${(timeZoneOffset?c)!0} : 0;
+		var yOffset = options.yaxis.mode === "time" ? ${(timeZoneOffset?c)!0} : 0;
+		
+		var minX = extraOptions.minX;
+		if(minX !== undefined)
+			options.xaxis.min = minX + xOffset;
+		
+		var maxX = extraOptions.maxX;
+		if(maxX !== undefined)
+			options.xaxis.max = maxX + xOffset;
+		
+		var minY = extraOptions.minY;
+		if(minY !== undefined)
+			options.yaxis.min = minY + yOffset;
+		
+		var maxY = extraOptions.maxY;
+		if(maxY !== undefined)
+			options.yaxis.max = maxY + yOffset;
+	}
+}
+
 // Filter, mark series and sort data
 function prepareSeries(data){
 	var result = data.result;
@@ -162,8 +187,6 @@ var responseTimePercentilesInfos = {
 	    			container: '#legendResponseTimePercentiles'
 	    		},
 	    		xaxis: {
-	    			min: this.data.result.minX,
-	    			max: this.data.result.maxX,
 	    			tickDecimals: 1,
 	    			axisLabel: "Percentiles",
 	    			axisLabelUseCanvas: true,
@@ -172,8 +195,6 @@ var responseTimePercentilesInfos = {
 	    			axisLabelPadding: 20,
 	    		},
 	    		yaxis: { 
-	    			min: this.data.result.minY,
-	    			max: this.data.result.maxY,
 	    			axisLabel: "Percentile value in ms",
 	    			axisLabelUseCanvas: true,
 	    			axisLabelFontSizePixels: 12,
@@ -192,7 +213,8 @@ var responseTimePercentilesInfos = {
 	    	};
 	    },
 	    createGraph: function() {
-			var dataset = prepareData(this.data.result.series, $("#choicesResponseTimePercentiles"), function(series){
+	    	var data = this.data;
+			var dataset = prepareData(data.result.series, $("#choicesResponseTimePercentiles"), function(series){
 				series.curvedLines = {apply: true, tension: 1};
 				series.threshold = { 
 						below: chiffre, 
@@ -200,6 +222,7 @@ var responseTimePercentilesInfos = {
 				};
 			});
 			var options = this.getOptions();
+			prepareOptions(options, data);
 			$.plot($("#flotResponseTimesPercentiles"), dataset, options);
 			// setup overview
 			$.plot($("#overviewResponseTimesPercentiles"), dataset, prepareOverviewOptions(options));
@@ -264,7 +287,10 @@ var responseTimeDistributionInfos = {
 			};
 	    },
 		createGraph: function() {
-			$.plot($("#flotResponseTimeDistribution"), prepareData(this.data.result.series, $("#choicesResponseTimeDistribution")), this.getOptions());
+			var data = this.data;
+			var options = this.getOptions();
+			prepareOptions(options, data);
+			$.plot($("#flotResponseTimeDistribution"), prepareData(data.result.series, $("#choicesResponseTimeDistribution")), options);
 		}
 	
 };
@@ -298,8 +324,6 @@ var activeThreadsOverTimeInfos = {
 					}
 				},
 				xaxis: {
-					min: this.data.result.minX + ${(timeZoneOffset?c)!0},
-					max: this.data.result.maxX + ${(timeZoneOffset?c)!0},
 					mode: "time",
 					timeformat: "%H:%M:%S",
 					axisLabel: getElapsedTimeLabel(this.data.result.granularity),
@@ -309,8 +333,6 @@ var activeThreadsOverTimeInfos = {
 					axisLabelPadding: 20,
 				},
 				yaxis: { 
-					min: this.data.result.minY,
-					max: this.data.result.maxY,
 					axisLabel: "Number of active threads",
 					axisLabelUseCanvas: true,
 					axisLabelFontSizePixels: 12,
@@ -336,8 +358,10 @@ var activeThreadsOverTimeInfos = {
 			};
 	    },
 	    createGraph: function() {
-			var dataset = prepareData(this.data.result.series, $("#choicesActiveThreadsOverTime"));
+	    	var data = this.data;
+			var dataset = prepareData(data.result.series, $("#choicesActiveThreadsOverTime"));
 			var options = this.getOptions();
+			prepareOptions(options, data);
 			$.plot($("#flotActiveThreadsOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewActiveThreadsOverTime"), dataset, prepareOverviewOptions(options));
@@ -384,7 +408,6 @@ var responseTimePerSampleInfos = {
 					lineWidth: 1
 				},
 				xaxis: {
-					max: this.data.result.maxX,
 					axisLabel: "Response Time in ms",
 					axisLabelUseCanvas: true,
 					axisLabelFontSizePixels: 12,
@@ -414,7 +437,10 @@ var responseTimePerSampleInfos = {
 			};
 		},
 	    createGraph: function() {
-			$.plot($("#flotResponseTimePerSample"), prepareData(this.data.result.series, $("#choicesResponseTimePerSample")), this.getOptions());
+	    	var data = this.data;
+	    	var options = this.getOptions();
+	    	prepareOptions(options, data);
+			$.plot($("#flotResponseTimePerSample"), prepareData(data.result.series, $("#choicesResponseTimePerSample")), options);
 		}
 
 };
@@ -495,8 +521,6 @@ var timeVsThreadsInfos = {
         			}
         		},
         		xaxis: {
-        			min: this.data.result.minX,
-        			max: this.data.result.maxX,
         			axisLabel: "Number of active threads",
         			axisLabelUseCanvas: true,
         			axisLabelFontSizePixels: 12,
@@ -504,8 +528,6 @@ var timeVsThreadsInfos = {
         			axisLabelPadding: 20,
         		},
         		yaxis: {
-        			min: this.data.result.minY,
-        			max: this.data.result.maxY,
         			axisLabel: "Average response times in ms",
         			axisLabelUseCanvas: true,
         			axisLabelFontSizePixels: 12,
@@ -526,8 +548,10 @@ var timeVsThreadsInfos = {
         	};
         },
 		createGraph: function() {
-			var dataset = prepareData(this.data.result.series, $("#choicesTimeVsThreads"));
+			var data = this.data;
+			var dataset = prepareData(data.result.series, $("#choicesTimeVsThreads"));
 			var options = this.getOptions();
+			prepareOptions(options, data);
 			$.plot($("#flotTimesVsThreads"), dataset, options);
 			// setup overview
 			$.plot($("#overviewTimesVsThreads"), dataset, prepareOverviewOptions(options));
@@ -564,8 +588,6 @@ var bytesThroughputOverTimeInfos = {
 					}
 				},
 				xaxis: {
-					min: this.data.result.minX + ${(timeZoneOffset?c)!0},
-					max: this.data.result.maxX + ${(timeZoneOffset?c)!0},
 					mode: "time",
 					timeformat: "%H:%M:%S",
 					axisLabel: getElapsedTimeLabel(this.data.result.granularity) ,
@@ -575,8 +597,6 @@ var bytesThroughputOverTimeInfos = {
 					axisLabelPadding: 20,
 				},
 				yaxis: { 
-					min: this.data.result.minY,
-					max: this.data.result.maxY,
 					axisLabel: "Bytes/sec",
 					axisLabelUseCanvas: true,
 					axisLabelFontSizePixels: 12,
@@ -602,8 +622,10 @@ var bytesThroughputOverTimeInfos = {
 			};
 		},
 		createGraph : function() {
-			var dataset = prepareData(this.data.result.series, $("#choicesBytesThroughputOverTime"));
+			var data = this.data;
+			var dataset = prepareData(data.result.series, $("#choicesBytesThroughputOverTime"));
 			var options = this.getOptions();
+			prepareOptions(options, data);
 			$.plot($("#flotBytesThroughputOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewBytesThroughputOverTime"), dataset, prepareOverviewOptions(options));
@@ -641,8 +663,6 @@ var responseTimesOverTimeInfos = {
 	        		}
 	        	},
 	        	xaxis: {
-	        		min: this.data.result.minX + ${(timeZoneOffset?c)!0},
-	        		max: this.data.result.maxX + ${(timeZoneOffset?c)!0},
 	        		mode: "time",
 	        		timeformat: "%H:%M:%S",
 	        		axisLabel: getElapsedTimeLabel(this.data.result.granularity),
@@ -652,8 +672,6 @@ var responseTimesOverTimeInfos = {
 	        		axisLabelPadding: 20,
 	        	},
 	        	yaxis: { 
-	        		min: this.data.result.minY,
-	        		max: this.data.result.maxY,
 	        		axisLabel: "Response time in ms",
 	        		axisLabelUseCanvas: true,
 	        		axisLabelFontSizePixels: 12,
@@ -679,8 +697,10 @@ var responseTimesOverTimeInfos = {
 	        };
 		},
 	    createGraph: function() {
-			var dataset = prepareData(this.data.result.series, $("#choicesResponseTimesOverTime"));
+	    	var data = this.data;
+			var dataset = prepareData(data.result.series, $("#choicesResponseTimesOverTime"));
 			var options = this.getOptions();
+			prepareOptions(options, data);
 			$.plot($("#flotResponseTimesOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewResponseTimesOverTime"), dataset, prepareOverviewOptions(options));
@@ -718,8 +738,6 @@ var latenciesOverTimeInfos = {
 					}
 				},
 				xaxis: {
-					min: this.data.result.minX + ${(timeZoneOffset?c)!0},
-					max: this.data.result.maxX + ${(timeZoneOffset?c)!0},
 					mode: "time",
 					timeformat: "%H:%M:%S",
 					axisLabel: getElapsedTimeLabel(this.data.result.granularity),
@@ -729,8 +747,6 @@ var latenciesOverTimeInfos = {
 					axisLabelPadding: 20,
 				},
 				yaxis: {
-					min: this.data.result.minY,
-					max: this.data.result.maxY,
 					axisLabel: "Response latencies in ms",
 					axisLabelUseCanvas: true,
 					axisLabelFontSizePixels: 12,
@@ -756,8 +772,10 @@ var latenciesOverTimeInfos = {
 			};
 		},
 		createGraph: function () {
-			var dataset = prepareData(this.data.result.series, $("#choicesLatenciesOverTime"));
+			var data = this.data;
+			var dataset = prepareData(data.result.series, $("#choicesLatenciesOverTime"));
 			var options = this.getOptions();
+			prepareOptions(options, data);
 			$.plot($("#flotLatenciesOverTime"), dataset, options);
 			// setup overview
 			$.plot($("#overviewLatenciesOverTime"), dataset, prepareOverviewOptions(options));
@@ -795,8 +813,6 @@ var responseTimeVsRequestInfos = {
 				}
 			},
 			xaxis: {
-				min : this.data.result.minX,
-				max : this.data.result.maxX,
 				axisLabel: "Global number of requests per second",
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
@@ -804,8 +820,6 @@ var responseTimeVsRequestInfos = {
 				axisLabelPadding: 20,
 			},
 			yaxis: {
-				min : this.data.result.minY,
-				max : this.data.result.maxY,
 				axisLabel: "Median Response Time",
 				axisLabelUseCanvas: true,
 				axisLabelFontSizePixels: 12,
@@ -830,8 +844,10 @@ var responseTimeVsRequestInfos = {
 		};
 	},
     createGraph: function () {
-		var dataset = prepareData(this.data.result.series, $("#choicesResponseTimeVsRequest"));
+    	var data = this.data;
+		var dataset = prepareData(data.result.series, $("#choicesResponseTimeVsRequest"));
 		var options = this.getOptions();
+		prepareOptions(options, data);
 		$.plot($("#flotResponseTimeVsRequest"), dataset, options);
 		// setup overview
 		$.plot($("#overviewResponseTimeVsRequest"), dataset, prepareOverviewOptions(options));
@@ -870,8 +886,6 @@ var latenciesVsRequestInfos = {
     			}
     		},
     		xaxis: {
-    			min : this.data.result.minX,
-    			max : this.data.result.maxX,
     			axisLabel: "Global number of requests per second",
     			axisLabelUseCanvas: true,
     			axisLabelFontSizePixels: 12,
@@ -879,8 +893,6 @@ var latenciesVsRequestInfos = {
     			axisLabelPadding: 20,
     		},
     		yaxis: {
-    			min : this.data.result.minY,
-    			max : this.data.result.maxY,
     			axisLabel: "Median Latency",
     			axisLabelUseCanvas: true,
     			axisLabelFontSizePixels: 12,
@@ -901,8 +913,10 @@ var latenciesVsRequestInfos = {
     	};
     },
 	createGraph: function () {
-		var dataset = prepareData(this.data.result.series, $("#choicesLatencyVsRequest"));
+		var data = this.data;
+		var dataset = prepareData(data.result.series, $("#choicesLatencyVsRequest"));
 		var options = this.getOptions();
+		prepareOptions(options, data);
 		$.plot($("#flotLatenciesVsRequest"), dataset, options);
 		// setup overview
 		$.plot($("#overviewLatenciesVsRequest"), dataset, prepareOverviewOptions(options));
@@ -939,8 +953,6 @@ var hitsPerSecondInfos = {
 	    			}
 	    		},
 	    		xaxis: {
-	    			min: this.data.result.minX + ${(timeZoneOffset?c)!0},
-	    			max: this.data.result.maxX + ${(timeZoneOffset?c)!0},
 	    			mode: "time",
 	    			timeformat: "%H:%M:%S",
 	    			axisLabel: getElapsedTimeLabel(this.data.result.granularity),
@@ -950,8 +962,6 @@ var hitsPerSecondInfos = {
 	    			axisLabelPadding: 20,
 	    		},
 	    		yaxis: {
-	    			min: this.data.result.minY,
-	    			max: this.data.result.maxY,
 	    			axisLabel: "Number of hits / sec",
 	    			axisLabelUseCanvas: true,
 	    			axisLabelFontSizePixels: 12,
@@ -977,8 +987,10 @@ var hitsPerSecondInfos = {
 	    	};
 		},
 		createGraph: function createGraph() {
-			var dataset = prepareData(this.data.result.series, $("#choicesHitsPerSecond"));
+			var data = this.data;
+			var dataset = prepareData(data.result.series, $("#choicesHitsPerSecond"));
 			var options = this.getOptions();
+			prepareOptions(options, data);
 			$.plot($("#flotHitsPerSecond"), dataset, options);
 			// setup overview
 			$.plot($("#overviewHitsPerSecond"), dataset, prepareOverviewOptions(options));
@@ -1016,8 +1028,6 @@ var codesPerSecondInfos = {
 					}
 				},
 				xaxis: {
-					min: this.data.result.minX + ${(timeZoneOffset?c)!0},
-					max: this.data.result.maxX + ${(timeZoneOffset?c)!0},
 					mode: "time",
 					timeformat: "%H:%M:%S",
 					axisLabel: getElapsedTimeLabel(this.data.result.granularity),
@@ -1027,8 +1037,6 @@ var codesPerSecondInfos = {
 					axisLabelPadding: 20,
 				},
 				yaxis: {
-					min: this.data.result.minY,
-					max: this.data.result.maxY,
 					axisLabel: "Number of responses/sec",
 					axisLabelUseCanvas: true,
 					axisLabelFontSizePixels: 12,
@@ -1054,8 +1062,10 @@ var codesPerSecondInfos = {
 			};
 		},
 	createGraph: function() {
-		var dataset = prepareData(this.data.result.series, $("#choicesCodesPerSecond"));
+		var data = this.data;
+		var dataset = prepareData(data.result.series, $("#choicesCodesPerSecond"));
 		var options = this.getOptions();
+		prepareOptions(options, data);
 		$.plot($("#flotCodesPerSecond"), dataset, options);
 		// setup overview
 		$.plot($("#overviewCodesPerSecond"), dataset, prepareOverviewOptions(options));
@@ -1093,8 +1103,6 @@ var transactionsPerSecondInfos = {
 					}
 				},
 				xaxis: {
-					min: this.data.result.minX + ${(timeZoneOffset?c)!0},
-					max: this.data.result.maxX + ${(timeZoneOffset?c)!0},
 					mode: "time",
 					timeformat: "%H:%M:%S",
 					axisLabel: getElapsedTimeLabel(this.data.result.granularity),
@@ -1104,8 +1112,6 @@ var transactionsPerSecondInfos = {
 					axisLabelPadding: 20,
 				},
 				yaxis: {
-					min: this.data.result.minY,
-					max: this.data.result.maxY,
 					axisLabel: "Number of transactions / sec",
 					axisLabelUseCanvas: true,
 					axisLabelFontSizePixels: 12,
@@ -1131,8 +1137,10 @@ var transactionsPerSecondInfos = {
 			};
 		},
 	createGraph: function () {
-		var dataset = prepareData(this.data.result.series, $("#choicesTransactionsPerSecond"));
+		var data = this.data;
+		var dataset = prepareData(data.result.series, $("#choicesTransactionsPerSecond"));
 		var options = this.getOptions();
+		prepareOptions(options, data);
 		$.plot($("#flotTransactionsPerSecond"), dataset, options);
 		// setup overview
 		$.plot($("#overviewTransactionsPerSecond"), dataset, prepareOverviewOptions(options));

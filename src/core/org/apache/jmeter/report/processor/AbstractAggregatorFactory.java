@@ -46,7 +46,7 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
      * createValueAggregator(double)
      */
     @Override
-    public final Aggregator createValueAggregator(double key) {
+    public final Aggregator createValueAggregator() {
 	return createAggregator();
     }
 

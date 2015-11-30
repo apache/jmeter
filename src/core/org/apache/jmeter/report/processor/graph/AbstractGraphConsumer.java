@@ -367,7 +367,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	// Get or create aggregator
 	Aggregator aggregator = aggInfo.get(key);
 	if (aggregator == null) {
-	    aggregator = factory.createValueAggregator(key);
+	    aggregator = factory.createValueAggregator();
 	    aggInfo.put(key, aggregator);
 	}
 

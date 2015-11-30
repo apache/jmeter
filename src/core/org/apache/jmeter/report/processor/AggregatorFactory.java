@@ -28,11 +28,9 @@ public interface AggregatorFactory {
      * Creates a new Aggregator object to calculate an aggregated value in a
      * graph.
      *
-     * @param key
-     *            the key of the value
      * @return the graph data aggregator
      */
-    Aggregator createValueAggregator(double key);
+    Aggregator createValueAggregator();
 
     /**
      * Creates a new Aggregator object to calculate an aggregated key.
