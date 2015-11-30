@@ -24,50 +24,8 @@ package org.apache.jmeter.report.config;
  */
 public class GraphConfiguration extends InstanceConfiguration {
 
-    private Double abscissaMax;
-    private Double abscissaMin;
     private boolean excludeControllers;
-    private Double ordinateMin;
-    private Double ordinateMax;
     private String title;
-
-    /**
-     * Gets the maximum abscissa.
-     *
-     * @return the maximum abscissa
-     */
-    public final Double getAbscissaMax() {
-	return abscissaMax;
-    }
-
-    /**
-     * Sets the maximum abscissa.
-     *
-     * @param abscissaMax
-     *            the maximum abscissa to set
-     */
-    public final void setAbscissaMax(Double abscissaMax) {
-	this.abscissaMax = abscissaMax;
-    }
-
-    /**
-     * Gets the minimum abscissa.
-     *
-     * @return the minimum abscissa
-     */
-    public final Double getAbscissaMin() {
-	return abscissaMin;
-    }
-
-    /**
-     * Sets the minimum abscissa.
-     *
-     * @param abscissaMin
-     *            the minimum abscissa to set
-     */
-    public final void setAbscissaMin(Double abscissaMin) {
-	this.abscissaMin = abscissaMin;
-    }
 
     /**
      * Checks if controller samples have to be filtered.
@@ -86,44 +44,6 @@ public class GraphConfiguration extends InstanceConfiguration {
      */
     public final void setExcludeControllers(boolean excludeControllers) {
 	this.excludeControllers = excludeControllers;
-    }
-
-    /**
-     * Gets the minimum ordinate.
-     *
-     * @return the minimum ordinate
-     */
-    public final Double getOrdinateMin() {
-	return ordinateMin;
-    }
-
-    /**
-     * Sets the minimum ordinate.
-     *
-     * @param ordinateMin
-     *            the minimum ordinate to set
-     */
-    public final void setOrdinateMin(Double ordinateMin) {
-	this.ordinateMin = ordinateMin;
-    }
-
-    /**
-     * Gets the maximum ordinate.
-     *
-     * @return the maximum ordinate
-     */
-    public final Double getOrdinateMax() {
-	return ordinateMax;
-    }
-
-    /**
-     * Sets the maximum ordinate.
-     *
-     * @param ordinateMax
-     *            the maximum ordinate to set
-     */
-    public final void setOrdinateMax(Double ordinateMax) {
-	this.ordinateMax = ordinateMax;
     }
 
     /**

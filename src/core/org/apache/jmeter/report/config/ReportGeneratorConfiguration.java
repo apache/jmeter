@@ -517,46 +517,8 @@ public class ReportGeneratorConfiguration {
 		            throws ConfigurationException {
 		        log.debug(String.format(LOAD_GRAPH_FMT, graphId));
 
-		        // Get the property defining the minimum abscissa
-		        Double minAbscissa = getOptionalProperty(
-		                props,
-		                getGraphPropertyKey(graphId,
-		                        GRAPH_KEY_ABSCISSA_MIN_KEY),
-		                Double.class);
-		        if (minAbscissa != null)
-			    graphConfiguration.setAbscissaMin(minAbscissa);
-
-		        // Get the property defining the maximum abscissa
-		        Double maxAbscissa = getOptionalProperty(
-		                props,
-		                getGraphPropertyKey(graphId,
-		                        GRAPH_KEY_ABSCISSA_MAX_KEY),
-		                Double.class);
-		        if (maxAbscissa != null)
-			    graphConfiguration.setAbscissaMax(maxAbscissa);
-
-		        // Get the property defining the minimum ordinate
-		        Double minOrdinate = getOptionalProperty(
-		                props,
-		                getGraphPropertyKey(graphId,
-		                        GRAPH_KEY_ORDINATE_MIN_KEY),
-		                Double.class);
-		        if (minOrdinate != null)
-			    graphConfiguration.setOrdinateMin(minOrdinate);
-
-		        // Get the property defining the maximum ordinate
-		        Double maxOrdinate = getOptionalProperty(
-		                props,
-		                getGraphPropertyKey(graphId,
-		                        GRAPH_KEY_ORDINATE_MAX_KEY),
-		                Double.class);
-		        if (maxOrdinate != null)
-			    graphConfiguration.setOrdinateMax(maxOrdinate);
-
 		        // Get the property defining whether the graph have to
-		        // filter
-		        // controller
-		        // samples
+		        // filter controller samples
 		        boolean excludeControllers = getRequiredProperty(
 		                props,
 		                getGraphPropertyKey(graphId,
