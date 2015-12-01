@@ -45,6 +45,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
@@ -111,7 +112,8 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         moduleToRunTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
         moduleToRunTreeNodes = new JTree(moduleToRunTreeModel);
         moduleToRunTreeNodes.setCellRenderer(new ModuleControllerCellRenderer());
-
+        moduleToRunTreeNodes.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        
         ImageIcon image = JMeterUtils.getImage("warning.png");
         warningLabel = new JLabel("", image, SwingConstants.LEFT); // $NON-NLS-1$
         warningLabel.setForeground(Color.RED);
