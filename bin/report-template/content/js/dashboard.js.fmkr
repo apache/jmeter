@@ -1,11 +1,13 @@
 var showControllersOnly = ${showControllersOnly?c!"false"};
+var seriesFilter = ${seriesFilter!"undefined"};
+var filtersOnlySampleSeries = ${filtersOnlySampleSeries?c!"false"};
 
 /*
  * Populates the table identified by id parameter with the specified data and
  * format
  * 
  */
-function createTable(info, id, formatter) {
+function createTable(info, id, formatter, seriesIndex) {
 	var tableRef = document.getElementById(id);
 
 	// Create header and populate it with data.titles array
@@ -35,11 +37,17 @@ function createTable(info, id, formatter) {
 	// Create regular body
 	tBody = document.createElement('tbody');
 	tableRef.appendChild(tBody);
-		
+	
+	var regexp;
+	if(seriesFilter)
+		regexp = new RegExp(seriesFilter, 'i');
+	
 	// Populate body with data.items array
 	for(var index=0; index < info.items.length; index++){
 		var item = info.items[index];
-		if(!showControllersOnly || !info.supportsControllersDiscrimination || item.isController){
+		if((!regexp || filtersOnlySampleSeries && !info.supportsControllersDiscrimination || regexp.test(item.data[seriesIndex])) 
+				&&
+				(!showControllersOnly || !info.supportsControllersDiscrimination || item.isController)){
 			var newRow = tBody.insertRow(-1);
 			for(var col=0; col < item.data.length; col++){
 				var cell = newRow.insertCell(-1);
@@ -101,7 +109,7 @@ $(document).ready(function() {
 				break;
 		}
 		return item;
-	});
+	}, 3);
 	
 	// Create statistics table
 	createTable(${statisticsSummary!"{}"}, "statisticsTable", function(index, item){
@@ -118,7 +126,7 @@ $(document).ready(function() {
 				break;
 		}
 		return item;
-	});
+	}, 0);
 	
 	// Create error table
 	createTable(${errorsSummary!"{}"}, "errorsTable", function(index, item){
