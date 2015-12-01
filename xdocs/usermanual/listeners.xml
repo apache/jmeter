@@ -33,27 +33,27 @@
 <section name="&sect-num;. Introduction to listeners" anchor="intro">
 <p>A listener is a component that shows the results of the
 samples. The results can be shown in a tree, tables, graphs or simply written to a log
-file. To view the contents of a response from any given sampler, add either of the Listeners "View
-Results Tree" or "View Results in table" to a test plan. To view the response time graphically, add
-graph results, spline results or distribution graph. 
+file. To view the contents of a response from any given sampler, add either of the Listeners "<code>View
+Results Tree</code>" or "<code>View Results in table</code>" to a test plan. To view the response time graphically, add
+graph results, spline results or distribution graph.
 The <complink name="listeners">Listeners</complink> 
 section of the components page has full descriptions of all the listeners.</p>
 
 <note>
-Different listeners display the response information in different ways. 
+Different listeners display the response information in different ways.
 However, they all write the same raw data to the output file - if one is specified.
 </note>
 <p>
-The "Configure" button can be used to specify which fields to write to the file, and whether to 
-write it as CSV or XML. 
+The "<code>Configure</code>" button can be used to specify which fields to write to the file, and whether to
+write it as CSV or XML.
 CSV files are much smaller than XML files, so use CSV if you are generating lots of samples.
 </p>
 <p>
 The file name can be specified using either a relative or an absolute path name.
-Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+Relative paths are resolved relative to the current working directory (which defaults to the <code>bin/</code> directory).
 Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
-If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
-then the path is assumed to be relative to the JMX file location. 
+If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
+then the path is assumed to be relative to the JMX file location.
 </p>
 <p>
 If you only wish to record certain samples, add the Listener as a child of the sampler.
@@ -64,49 +64,43 @@ The same filename can be used by multiple samplers - but make sure they all use 
 
 <section name="&sect-num;.1 Default Configuration" anchor="defaults">
 <p>
-The default items to be saved can be defined in the jmeter.properties (or user.properties) file.
+The default items to be saved can be defined in the <code>jmeter.properties</code> (or <code>user.properties</code>) file.
 The properties are used as the initial settings for the Listener Config pop-up, and are also
-used for the log file specified by the -l command-line flag (commonly used for non-GUI test runs).
+used for the log file specified by the <code>-l</code> command-line flag (commonly used for non-GUI test runs).
 </p>
-<p>To change the default format, find the following line in jmeter.properties:</p>
-<p>jmeter.save.saveservice.output_format=</p>
+<p>To change the default format, find the following line in <code>jmeter.properties</code>:</p>
+<source>jmeter.save.saveservice.output_format=</source>
 <p>
-The information to be saved is configurable.  For maximum information, choose "xml" as the format and specify "Functional Test Mode" on the Test Plan element.  If this box is not checked, the default saved
+The information to be saved is configurable.  For maximum information, choose "<code>xml</code>" as the format and specify "<code>Functional Test Mode</code>" on the Test Plan element.  If this box is not checked, the default saved
 data includes a time stamp (the number of milliseconds since midnight,
 January 1, 1970 UTC), the data type, the thread name, the label, the
 response time, message, and code, and a success indicator.  If checked, all information, including the full response data will be logged.</p>
 <p>
 The following example indicates how to set
-properties to get a vertical bar ("|") delimited format that will
+properties to get a vertical bar ("<code>|</code>") delimited format that will
 output results like:.</p>
-<p>
-<code>
-<pre>
+<source>
 timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
 02/06/03 08:21:42|1187|Home|200|Thread Group-1|text|true|
 02/06/03 08:21:42|47|Login|200|Thread Group-1|text|false|Test Failed: 
     expected to contain: password etc.
-</pre>
-</code></p>
+</source>
 <p>
-The corresponding jmeter.properties that need to be set are shown below.  One oddity
-in this example is that the output_format is set to csv, which
+The corresponding <code>jmeter.properties</code> that need to be set are shown below.  One oddity
+in this example is that the <code>output_format</code> is set to <code>csv</code>, which
 typically
-indicates comma-separated values.  However, the default_delimiter was
+indicates comma-separated values.  However, the <code>default_delimiter</code> was
 set to be a vertical bar instead of a comma, so the csv tag is a
 misnomer in this case. (Think of CSV as meaning character separated values)</p>
-<p>
-<code>
-<pre>
+<source>
 jmeter.save.saveservice.output_format=csv
 jmeter.save.saveservice.assertion_results_failure_message=true
 jmeter.save.saveservice.default_delimiter=|
-</pre>
-</code>
+</source>
 <p>
 The full set of properties that affect result file output is shown below.
 </p>
-<code>
+<source>
 #---------------------------------------------------------------------------
 # Results file configuration
 #---------------------------------------------------------------------------
@@ -198,27 +192,27 @@ sampleresult.timestamp.start=true
 # Use a background thread to calculate the nanoTime offset
 # Set this to &lt;= 0 to disable the background thread
 #sampleresult.nanoThreadSleep=5000
-</code></p>
+</source>
 <p>
-The date format to be used for the timestamp_format is described in <a
+The date format to be used for the <code>timestamp_format</code> is described in <a
 HREF="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">
 <b>SimpleDateFormat</b></a>.
 The timestamp format is used for both writing and reading files.
-If the format is set to "ms", and the column does not parse as a long integer,
+If the format is set to "<code>ms</code>", and the column does not parse as a long integer,
 JMeter (2.9+) will try the following formats:
 <ul>
-<li>yyyy/MM/dd HH:mm:ss.SSS</li>
-<li>yyyy/MM/dd HH:mm:ss</li>
-<li>yyyy-MM-dd HH:mm:ss.SSS</li>
-<li>yyyy-MM-dd HH:mm:ss</li>
-<li>MM/dd/yy HH:mm:ss (this is for compatibility with previous versions; it is not recommended as a format)</li>
+<li><code>yyyy/MM/dd HH:mm:ss.SSS</code></li>
+<li><code>yyyy/MM/dd HH:mm:ss</code></li>
+<li><code>yyyy-MM-dd HH:mm:ss.SSS</code></li>
+<li><code>yyyy-MM-dd HH:mm:ss</code></li>
+<li><code>MM/dd/yy HH:mm:ss</code> (this is for compatibility with previous versions; it is not recommended as a format)</li>
 </ul> 
 Matching is now also strict (non-lenient).
 JMeter 2.8 and earlier used lenient mode which could result in timestamps with incorrect dates 
 (times were usually correct).</p>
 <subsection name="&sect-num;.1.1 Sample Variables" anchor="sample_variables">
 <p>
-JMeter supports the <b>sample_variables</b> 
+JMeter supports the <code>sample_variables</code> 
 property to define a list of additional JMeter variables which are to be saved with
 each sample in the JTL files. The values are written to CSV files as additional columns,
 and as additional attributes in XML files. See above for an example.
@@ -235,39 +229,40 @@ CSV format cannot currently be used to save any items that include line-breaks.
 <figure image="sample_result_config.png"><br/><b>Configuration dialogue</b></figure>
 </subsection>
 <p>
-Note that cookies, method and the query string are saved as part of the "Sampler Data" option.
+Note that cookies, method and the query string are saved as part of the "<code>Sampler Data</code>" option.
 </p>
 </section>
 
 <section name="&sect-num;.2 non-GUI (batch) test runs" anchor="batch">
 <p>
-When running in non-GUI mode, the -l flag can be used to create a top-level listener for the test run.
+When running in non-GUI mode, the <code>-l</code> flag can be used to create a top-level listener for the test run.
 This is in addition to any Listeners defined in the test plan.
-The configuration of this listener is controlled by entries in the file jmeter.properties
+The configuration of this listener is controlled by entries in the file <code>jmeter.properties</code>
 as described in the previous section.
 </p>
 <p>
 This feature can be used to specify different data and log files for each test run, for example:
-<pre>
+</p>
+<source>
 jmeter -n -t testplan.jmx -l testplan_01.jtl -j testplan_01.log
 jmeter -n -t testplan.jmx -l testplan_02.jtl -j testplan_02.log
-</pre>
-</p>
+</source>
 <p>
-Note that JMeter logging messages are written to the file <b>jmeter.log</b> by default.
-This file is recreated each time, so if you want to keep the log files for each run, 
-you will need to rename it using the -j option as above. The -j option was added in version 2.3.
+Note that JMeter logging messages are written to the file <code>jmeter.log</code> by default.
+This file is recreated each time, so if you want to keep the log files for each run,
+you will need to rename it using the <code>-j</code> option as above. The <code>-j</code> option was added in version 2.3.
 </p>
 <p>Versions of JMeter after 2.3.1 support variables in the log file name.
 If the filename contains  paired single-quotes, then the name is processed
-as a SimpleDateFormat format applied to the current date, for example:
-<b>log_file='jmeter_'yyyyMMddHHmmss'.tmp'</b>. 
+as a <code>SimpleDateFormat</code> format applied to the current date, for example:
+<code>log_file='jmeter_'yyyyMMddHHmmss'.tmp'</code>.
 This can be used to generate a unique name for each test run.
 </p>
 </section>
 
 <section name="&sect-num;.3 Resource usage" anchor="resources">
-<p><b>Listeners can use a lot of memory if there are a lot of samples.</b>
+<note> Listeners can use a lot of memory if there are a lot of samples.</note>
+<p>
 Most of the listeners currently keep a copy of every sample they display, apart from:
 </p>
 <ul>
@@ -297,28 +292,28 @@ Only the specified data items are recorded in the file.
 The order of appearance of columns is fixed, and is as follows:
 </p>
 <ul>
-<li>timeStamp - in milliseconds since 1/1/1970</li>
-<li>elapsed - in milliseconds</li>
-<li>label - sampler label</li>
-<li>responseCode - e.g. 200, 404</li>
-<li>responseMessage - e.g. OK</li>
-<li>threadName</li>
-<li>dataType - e.g. text</li>
-<li>success - true or false</li>
-<li>failureMessage - if any</li>
-<li>bytes - number of bytes in the sample</li>
-<li>grpThreads - number of active threads in this thread group</li>
-<li>allThreads - total number of active threads in all groups</li>
-<li>URL</li>
-<li>Filename - if Save Response to File was used</li>
-<li>latency - time to first response</li>
-<li>connect - time to establish connection</li>
-<li>encoding</li>
-<li>SampleCount - number of samples (1, unless multiple samples are aggregated)</li>
-<li>ErrorCount - number of errors (0 or 1, unless multiple samples are aggregated)</li>
-<li>Hostname where the sample was generated</li>
-<li>IdleTime - number of milliseconds of 'Idle' time (normally 0)</li>
-<li>Variables, if specified</li>
+<li><code>timeStamp</code> - in milliseconds since 1/1/1970</li>
+<li><code>elapsed</code> - in milliseconds</li>
+<li><code>label</code> - sampler label</li>
+<li><code>responseCode</code> - e.g. <code>200</code>, <code>404</code></li>
+<li><code>responseMessage</code> - e.g. <code>OK</code></li>
+<li><code>threadName</code></li>
+<li><code>dataType</code> - e.g. <code>text</code></li>
+<li><code>success</code> - <code>true</code> or <code>false</code></li>
+<li><code>failureMessage</code> - if any</li>
+<li><code>bytes</code> - number of bytes in the sample</li>
+<li><code>grpThreads</code> - number of active threads in this thread group</li>
+<li><code>allThreads</code> - total number of active threads in all groups</li>
+<li><code>URL</code></li>
+<li><code>Filename</code> - if <code>Save Response to File</code> was used</li>
+<li><code>latency</code> - time to first response</li>
+<li><code>connect</code> - time to establish connection</li>
+<li><code>encoding</code></li>
+<li><code>SampleCount</code> - number of samples (1, unless multiple samples are aggregated)</li>
+<li><code>ErrorCount</code> - number of errors (0 or 1, unless multiple samples are aggregated)</li>
+<li><code>Hostname</code> - where the sample was generated</li>
+<li><code>IdleTime</code> - number of milliseconds of 'Idle' time (normally 0)</li>
+<li><code>Variables</code>, if specified</li>
 </ul>
 
 </section>
@@ -412,7 +407,7 @@ Content-Type: text/html; charset=ISO-8859-1
 &lt;/testResults&gt;
 </source>
 <p>
-Note that the sample node name may be either "sample" or "httpSample".
+Note that the sample node name may be either "<code>sample</code>" or "<code>httpSample</code>".
 </p>
 </section>
 
@@ -428,33 +423,33 @@ The sample attributes have the following meaning:
 </p>
 <table>
 <tr><th>Attribute</th><th>Content</th></tr>
-<tr><td>by</td><td>Bytes</td></tr>
-<tr><td>de</td><td>Data encoding</td></tr>
-<tr><td>dt</td><td>Data type</td></tr>
-<tr><td>ec</td><td>Error count (0 or 1, unless multiple samples are aggregated)</td></tr>
-<tr><td>hn</td><td>Hostname where the sample was generated</td></tr>
-<tr><td>it</td><td>Idle Time = time not spent sampling (milliseconds) (generally 0)</td></tr>
-<tr><td>lb</td><td>Label</td></tr>
-<tr><td>lt</td><td>Latency = time to initial response (milliseconds) - not all samplers support this</td></tr>
-<tr><td>ct</td><td>Connect Time = time to establish the connection (milliseconds) - not all samplers support this</td></tr>
-<tr><td>na</td><td>Number of active threads for all thread groups</td></tr>
-<tr><td>ng</td><td>Number of active threads in this group</td></tr>
-<tr><td>rc</td><td>Response Code (e.g. 200)</td></tr>
-<tr><td>rm</td><td>Response Message (e.g. OK)</td></tr>
-<tr><td> s</td><td>Success flag (true/false)</td></tr>
-<tr><td>sc</td><td>Sample count (1, unless multiple samples are aggregated)</td></tr>
-<tr><td> t</td><td>Elapsed time (milliseconds)</td></tr>
-<tr><td>tn</td><td>Thread Name</td></tr>
-<tr><td>ts</td><td>timeStamp (milliseconds since midnight Jan 1, 1970 UTC)</td></tr>
-<tr><td>varname</td><td>Value of the named variable (versions of JMeter after 2.3.1)</td></tr>
+<tr><td><code>by</code></td><td>Bytes</td></tr>
+<tr><td><code>de</code></td><td>Data encoding</td></tr>
+<tr><td><code>dt</code></td><td>Data type</td></tr>
+<tr><td><code>ec</code></td><td>Error count (0 or 1, unless multiple samples are aggregated)</td></tr>
+<tr><td><code>hn</code></td><td>Hostname where the sample was generated</td></tr>
+<tr><td><code>it</code></td><td>Idle Time = time not spent sampling (milliseconds) (generally 0)</td></tr>
+<tr><td><code>lb</code></td><td>Label</td></tr>
+<tr><td><code>lt</code></td><td>Latency = time to initial response (milliseconds) - not all samplers support this</td></tr>
+<tr><td><code>ct</code></td><td>Connect Time = time to establish the connection (milliseconds) - not all samplers support this</td></tr>
+<tr><td><code>na</code></td><td>Number of active threads for all thread groups</td></tr>
+<tr><td><code>ng</code></td><td>Number of active threads in this group</td></tr>
+<tr><td><code>rc</code></td><td>Response Code (e.g. <code>200</code>)</td></tr>
+<tr><td><code>rm</code></td><td>Response Message (e.g. <code>OK</code>)</td></tr>
+<tr><td> <code>s</code></td><td>Success flag (<code>true</code>/<code>false</code>)</td></tr>
+<tr><td><code>sc</code></td><td>Sample count (1, unless multiple samples are aggregated)</td></tr>
+<tr><td> <code>t</code></td><td>Elapsed time (milliseconds)</td></tr>
+<tr><td><code>tn</code></td><td>Thread Name</td></tr>
+<tr><td><code>ts</code></td><td>timeStamp (milliseconds since midnight Jan 1, 1970 UTC)</td></tr>
+<tr><td><code>varname</code></td><td>Value of the named variable (versions of JMeter after 2.3.1)</td></tr>
 </table>
 <p>
-Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".
-This has been corrected so that it is always saved as "rc"; either "rc" or "rs" can be read.
+Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "<code>rs</code>", but read it back expecting to find "<code>rc</code>".
+This has been corrected so that it is always saved as "<code>rc</code>"; either "<code>rc</code>" or "<code>rs</code>" can be read.
 </p>
 <note>
 Versions of JMeter after 2.3.1 allow additional variables to be saved with the test plan.
-Currently, the variables are saved as additional attributes. 
+Currently, the variables are saved as additional attributes.
 The testplan variable name is used as the attribute name.
 See <a href="#sample_variables">Sample variables</a> (above) for more information.
 </note>
@@ -465,7 +460,7 @@ See <a href="#sample_variables">Sample variables</a> (above) for more informatio
 As shown above, the response data can be saved in the XML log file if required.
 However, this can make the file rather large, and the text has to be encoded so
 that it is still valid XML. Also, images cannot be included.
-Only sample responses with the type TEXT can be saved.
+Only sample responses with the type <code>TEXT</code> can be saved.
 <br/>
 Another solution is to use the Post-Processor <complink name="Save_Responses_to_a_file">Save Responses to a file</complink>.
 This generates a new file for each sample, and saves the file name with the sample.
@@ -474,7 +469,7 @@ The data will be retrieved from the file if necessary when the sample log file i
 </p>
 </section>
 <section name="&sect-num;.9 Loading (reading) response data" anchor="loading">
-<p>To view an existing results file, you can use the File "Browse&hellip;" button to select a file.
+<p>To view an existing results file, you can use the File "<code>Browse&hellip;</code>" button to select a file.
 If necessary, just create a dummy testplan with the appropriate Listener in it.
 </p>
 <p>Results can be read from XML or CSV format files.
@@ -490,7 +485,7 @@ use the menu item Run/Clear (Ctrl+Shift+E) or Run/Clear All (Ctrl+E) before load
 </section>
 <section name="&sect-num;.10 Saving Listener GUI data" anchor="screencap">
 <p>JMeter is capable of saving any listener as a PNG file. To do so, select the
-listener in the left panel. Click <b>Edit</b> &gt; <b>Save As Image</b>. A file dialog will
+listener in the left panel. Click <code>Edit</code> &gt; <code>Save As Image</code>. A file dialog will
 appear. Enter the desired name and save the listener.
 </p>
 <p>
