@@ -28,6 +28,10 @@ import java.util.Map;
 public class ExporterConfiguration extends InstanceConfiguration {
 
     private final HashMap<String, SubConfiguration> graphExtraConfigurations = new HashMap<String, SubConfiguration>();
+
+    private boolean filtersOnlySampleSeries;
+    private String seriesFilter;
+    private boolean showControllerSeriesOnly;
     
     /**
      * Gets the extra configurations for graphs.
@@ -36,5 +40,59 @@ public class ExporterConfiguration extends InstanceConfiguration {
      */
     public Map<String, SubConfiguration> getGraphExtraConfigurations(){
 	return graphExtraConfigurations;
+    }
+
+    /**
+     * Indicates whether series filter apply only on sample series 
+     *
+     * @return true if series filter apply only on sample series; false otherwise
+     */
+    public final boolean filtersOnlySampleSeries() {
+        return filtersOnlySampleSeries;
+    }
+
+    /**
+     * Sets the series filters apply only on sample series.
+     *
+     * @param filtersOnlySampleSeries true if series filter apply only on sample series; false otherwise
+     */
+    public final void filtersOnlySampleSeries(boolean filtersOnlySampleSeries) {
+        this.filtersOnlySampleSeries = filtersOnlySampleSeries;
+    }
+    
+    /**
+     * Gets the series filter.
+     *
+     * @return the series filter
+     */
+    public final String getSeriesFilter() {
+        return seriesFilter;
+    }
+
+    /**
+     * Sets the series filter.
+     *
+     * @param seriesFilter the series filter to set
+     */
+    public final void setSeriesFilter(String seriesFilter) {
+        this.seriesFilter = seriesFilter;
+    }
+
+    /**
+     * Indicates whether only controller series are shown.
+     *
+     * @return true if only controller series are shown; false otherwise
+     */
+    public final boolean showControllerSeriesOnly() {
+        return showControllerSeriesOnly;
+    }
+
+    /**
+     * Sets the flag defining whether only controllers series are shown
+     *
+     * @param showControllerSeriesOnly indicates whether only controllers series are shown
+     */
+    public final void showControllerSeriesOnly(boolean showControllerSeriesOnly) {
+        this.showControllerSeriesOnly = showControllerSeriesOnly;
     }
 }

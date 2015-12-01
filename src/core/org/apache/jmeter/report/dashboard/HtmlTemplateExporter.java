@@ -60,6 +60,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     public static final String DATA_CTX_SHOW_CONTROLLERS_ONLY = "showControllersOnly";
     public static final String DATA_CTX_RESULT = "result";
     public static final String DATA_CTX_EXTRA_OPTIONS = "extraOptions";
+    public static final String DATA_CTX_SERIES_FILTER = "seriesFilter";
+    public static final String DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES = "filtersOnlySampleSeries";
 
     public static final String TIMESTAMP_FORMAT_MS = "ms";
     private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
@@ -72,10 +74,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     // Output directory
     private static final String OUTPUT_DIR = "output_dir";
     private static final File OUTPUT_DIR_DEFAULT = new File("report-output");
-
-    // Show controllers only
-    private static final String SHOW_CONTROLLERS_ONLY = "show_controllers_only";
-    private static final Boolean SHOW_CONTROLLERS_ONLY_DEFAULT = false;
 
     private void addToContext(String key, Object value, DataContext context) {
 	if (value instanceof String) {
@@ -167,12 +165,18 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	        OUTPUT_DIR_DEFAULT, File.class);
 	log.info("Will generate dashboard in folder:" + outputDir);
 
-	// Get "show controllers only" property value
-	Boolean controllersOnly = getPropertyFromConfig(exportCfg,
-	        SHOW_CONTROLLERS_ONLY, SHOW_CONTROLLERS_ONLY_DEFAULT,
-	        Boolean.class);
-	addToContext(DATA_CTX_SHOW_CONTROLLERS_ONLY, controllersOnly,
+	// Add the flag defining whether only sample series are filtered to the
+	// context
+	addToContext(DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES,
+	        exportCfg.filtersOnlySampleSeries(), dataContext);
+
+	// Add the series filter to the context
+	addToContext(DATA_CTX_SERIES_FILTER, exportCfg.getSeriesFilter(),
 	        dataContext);
+
+	// Add the flag defining whether only controller series are displayed
+	addToContext(DATA_CTX_SHOW_CONTROLLERS_ONLY,
+	        exportCfg.showControllerSeriesOnly(), dataContext);
 
 	JsonizerVisitor jsonizer = new JsonizerVisitor();
 	Map<String, Object> storedData = context.getData();

@@ -21,8 +21,10 @@ $(document).ready(function() {
 	$(".portlet-header").css("cursor", "auto");
 });
 
-var chiffre = 0;
+var percentileThreshold = 0;
 var showControllersOnly = ${showControllersOnly?c!"false"};
+var seriesFilter = ${seriesFilter!"undefined"};
+var filtersOnlySampleSeries = ${filtersOnlySampleSeries?c!"false"};
 
 // Fixes time stamps
 function fixTimeStamps(series, offset){
@@ -101,6 +103,15 @@ function prepareOptions(options, data){
 // Filter, mark series and sort data
 function prepareSeries(data){
 	var result = data.result;
+	
+	// Keep only series when needed
+	if(seriesFilter && (!filtersOnlySampleSeries || result.supportsControllersDiscrimination)){
+		// Insensitive case matching
+		var regexp = new RegExp(seriesFilter, 'i');
+		result.series = $.grep(result.series, function(series, index){
+			return regexp.test(series.label);
+		});
+	}
 	
 	// Keep only controllers series when supported and needed
 	if(result.supportsControllersDiscrimination && showControllersOnly){
@@ -217,7 +228,7 @@ var responseTimePercentilesInfos = {
 			var dataset = prepareData(data.result.series, $("#choicesResponseTimePercentiles"), function(series){
 				series.curvedLines = {apply: true, tension: 1};
 				series.threshold = { 
-						below: chiffre, 
+						below: percentileThreshold, 
 						color: $("#slider-vertical").children("div").css("background-color")
 				};
 			});
@@ -230,7 +241,7 @@ var responseTimePercentilesInfos = {
 };
 	
 // Response times percentiles
-function refreshResponseTimePercentiles(below) {
+function refreshResponseTimePercentiles() {
 	var infos = responseTimePercentilesInfos;
 	prepareSeries(infos.data);
 	if (isGraph($("#flotResponseTimesPercentiles"))){
@@ -1339,13 +1350,13 @@ $(function() {
     $( "#slider-vertical" ).slider({
       orientation: "vertical",
       range: "min",
-      min: responseTimePercentilesInfos.data.minY,
-      max: responseTimePercentilesInfos.data.maxY,
+      min: responseTimePercentilesInfos.data.result.minY,
+      max: responseTimePercentilesInfos.data.result.maxY,
       value: 0,
-      slide: function( event, ui ) {
-       chiffre= ui.value;
-	   refreshResponseTimePercentiles(ui.value);
-	   $( "#amount" ).val( ui.value );
+      stop: function(event, ui ) {
+       percentileThreshold= ui.value;
+	   refreshResponseTimePercentiles();
+	   $("#amount").val(percentileThreshold);
       }
     });
     $("#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );

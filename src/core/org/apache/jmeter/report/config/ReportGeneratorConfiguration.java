@@ -72,12 +72,6 @@ public class ReportGeneratorConfiguration {
     private static final String INVALID_KEY_FMT = "Invalid property \"%s\", skip it.";
     private static final String NOT_FOUND_PROPERTY_FMT = "Property \"%s\" not found, using default value \"%s\" instead.";
 
-    // Optional graph properties
-    public static final String GRAPH_KEY_ABSCISSA_MIN_KEY = "abscissa_min";
-    public static final String GRAPH_KEY_ABSCISSA_MAX_KEY = "abscissa_max";
-    public static final String GRAPH_KEY_ORDINATE_MIN_KEY = "ordinate_min";
-    public static final String GRAPH_KEY_ORDINATE_MAX_KEY = "ordinate_max";
-
     // Required graph properties
     // Exclude controllers
     public static final String GRAPH_KEY_EXCLUDE_CONTROLLERS = "exclude_controllers";
@@ -87,6 +81,20 @@ public class ReportGeneratorConfiguration {
     public static final String GRAPH_KEY_TITLE = "title";
     public static final String GRAPH_KEY_TITLE_DEFAULT = "Generic graph title";
 
+    // Required exporter properties
+    // Filters only sample series ?
+    public static final String EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES = "filters_only_sample_series";
+    public static final boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = false;
+
+    // Series filter
+    public static final String EXPORTER_KEY_SERIES_FILTER = "series_filter";
+    public static final String EXPORTER_KEY_SERIES_FILTER_DEFAULT = "";
+
+    // Show controllers only
+    private static final String EXPORTER_KEY_SHOW_CONTROLLERS_ONLY = "show_controllers_only";
+    private static final boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = false;
+
+    // Optional exporter properties
     public static final String EXPORTER_KEY_GRAPH_EXTRA_OPTIONS = "graph_options";
 
     // Sub configuration keys
@@ -545,10 +553,10 @@ public class ReportGeneratorConfiguration {
 		    }
 	        });
 
-	if(graphConfigurations.isEmpty()){
+	if (graphConfigurations.isEmpty()) {
 	    log.info("No graph configuration found.");
 	}
-	
+
 	// Find exporter identifiers and load a configuration for each
 	final Map<String, ExporterConfiguration> exportConfigurations = configuration
 	        .getExportConfigurations();
@@ -574,6 +582,37 @@ public class ReportGeneratorConfiguration {
 		                        SUBCONF_KEY_CLASSNAME), "",
 		                String.class);
 		        exportConfiguration.setClassName(className);
+
+		        // Get the property defining whether only sample series
+		        // are filtered
+		        boolean filtersOnlySampleSeries = getRequiredProperty(
+		                props,
+		                getExporterPropertyKey(exportId,
+		                        EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES),
+		                EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT,
+		                Boolean.class);
+		        exportConfiguration
+		                .filtersOnlySampleSeries(filtersOnlySampleSeries);
+
+		        // Get the property defining the series filter
+		        String seriesFilter = getRequiredProperty(
+		                props,
+		                getExporterPropertyKey(exportId,
+		                        EXPORTER_KEY_SERIES_FILTER),
+		                EXPORTER_KEY_SERIES_FILTER_DEFAULT,
+		                String.class);
+		        exportConfiguration.setSeriesFilter(seriesFilter);
+
+		        // Get the property defining whether only controllers
+			// series are shown
+		        boolean showControllerSeriesOnly = getRequiredProperty(
+		                props,
+		                getExporterPropertyKey(exportId,
+		                        EXPORTER_KEY_SHOW_CONTROLLERS_ONLY),
+		                EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT,
+		                Boolean.class);
+		        exportConfiguration
+		                .showControllerSeriesOnly(showControllerSeriesOnly);
 
 		        // Load graph extra properties
 		        Map<String, SubConfiguration> graphExtraConfigurations = exportConfiguration
@@ -604,10 +643,10 @@ public class ReportGeneratorConfiguration {
 		    }
 	        });
 
-	if(exportConfigurations.isEmpty()){
+	if (exportConfigurations.isEmpty()) {
 	    log.warn("No export configuration found. None report will be generated.");
 	}
-	
+
 	log.debug(END_LOADING_MSG);
 
 	return configuration;
