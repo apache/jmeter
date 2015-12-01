@@ -18,9 +18,11 @@
 
 package org.apache.jmeter.control.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
@@ -35,6 +37,9 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -107,8 +112,22 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         moduleToRunTreeNodes = new JTree(moduleToRunTreeModel);
         moduleToRunTreeNodes.setCellRenderer(new ModuleControllerCellRenderer());
 
-        warningLabel = new JLabel(""); // $NON-NLS-1$
+        ImageIcon image = JMeterUtils.getImage("warning.png");
+        warningLabel = new JLabel("", image, SwingConstants.LEFT); // $NON-NLS-1$
+        warningLabel.setForeground(Color.RED);
+        Font font = warningLabel.getFont();
+        warningLabel.setFont(new Font(font.getFontName(), Font.BOLD, (int)(font.getSize()*1.1)));
+        warningLabel.setVisible(false);
+        
         init();
+        
+        TreeSelectionListener tsl = new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                warningLabel.setVisible(false);
+            }
+        };
+        moduleToRunTreeNodes.addTreeSelectionListener(tsl);
     }
 
     /** {@inheritDoc}} */
@@ -116,6 +135,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     public String getLabelResource() {
         return "module_controller_title"; // $NON-NLS-1$
     }
+    
     /** {@inheritDoc}} */
     @Override
     public void configure(TestElement el) {
@@ -125,8 +145,9 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         if (selected == null && controller.getNodePath() != null) {
             warningLabel.setText(JMeterUtils.getResString("module_controller_warning") // $NON-NLS-1$
                     + renderPath(controller.getNodePath()));
+            warningLabel.setVisible(true);
         } else {
-            warningLabel.setText(""); // $NON-NLS-1$
+            warningLabel.setVisible(false);
         }
         reinitialize();
     }
