@@ -7,8 +7,8 @@ var filtersOnlySampleSeries = ${filtersOnlySampleSeries?c!"false"};
  * format
  * 
  */
-function createTable(info, id, formatter, seriesIndex) {
-	var tableRef = document.getElementById(id);
+function createTable(table, info, formatter, defaultSorts, seriesIndex) {
+	var tableRef = table[0];
 
 	// Create header and populate it with data.titles array
 	var header = tableRef.createTHead();
@@ -55,9 +55,21 @@ function createTable(info, id, formatter, seriesIndex) {
 			}
 		}
 	}
+	
+	// Add support of columns sort
+	table.tablesorter({sortList : defaultSorts});
 }
 
 $(document).ready(function() {
+	
+	// Customize table sorter default options
+	$.extend( $.tablesorter.defaults, {
+        theme: 'blue',
+        cssInfoBlock: "tablesorter-no-sort",
+        widthFixed: true,
+        widgets: ['zebra']
+    });
+	
 	var data = ${requestsSummary!"{}"};
 	var dataset = [
 	    {
@@ -98,7 +110,7 @@ $(document).ready(function() {
 	});
 	
 	// Creates APDEX table
-	createTable(${apdexSummary!"{}"}, "apdexTable", function(index, item){
+	createTable($("#apdexTable"), ${apdexSummary!"{}"}, function(index, item){
 		switch(index){
 			case 0: 
 				item = item.toFixed(3); 
@@ -109,10 +121,10 @@ $(document).ready(function() {
 				break;
 		}
 		return item;
-	}, 3);
+	}, [[0, 0]], 3);
 	
 	// Create statistics table
-	createTable(${statisticsSummary!"{}"}, "statisticsTable", function(index, item){
+	createTable($("#statisticsTable"), ${statisticsSummary!"{}"}, function(index, item){
 		switch(index){
 			case 3:
 				item = item.toFixed(2) + '%';
@@ -126,10 +138,10 @@ $(document).ready(function() {
 				break;
 		}
 		return item;
-	}, 0);
+	}, [[3, 1]], 0);
 	
 	// Create error table
-	createTable(${errorsSummary!"{}"}, "errorsTable", function(index, item){
+	createTable($("#errorsTable"), ${errorsSummary!"{}"}, function(index, item){
 		switch(index){
 			case 2:
 			case 3:
@@ -137,5 +149,5 @@ $(document).ready(function() {
 				break;
 		}
 		return item;
-	});
+	}, [[1, 1]]);
 });
