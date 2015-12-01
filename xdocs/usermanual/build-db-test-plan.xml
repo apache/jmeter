@@ -18,7 +18,6 @@
 
 <!DOCTYPE document[
 <!ENTITY sect-num '7'>
-<!ENTITY rarr     "&#x02192;" >
 ]>
 
 <document prev="build-adv-web-test-plan.html" next="build-ftp-test-plan.html" id="$Id$">
@@ -53,8 +52,11 @@ tells JMeter the number of users you want to simulate, how often the users shoul
 send requests, and the how many requests they should send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
-clicking your right mouse button to get the Add menu, and then select
-<b>Add</b> &rarr; <b>ThreadGroup</b>.</p>
+clicking your right mouse button to get the <code>Add</code> menu, and then select
+<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>ThreadGroup</guimenuitem>
+</menuchoice>.</p>
 
 <p>You should now see the Thread Group element under Test Plan. If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
@@ -109,7 +111,11 @@ will be performing.  In this section, you will specify the JDBC requests to
 perform.</p>
 
 <p>Begin by selecting the JDBC Users element. Click your right mouse button
-to get the w<b>Add</b> menu, and then select <b>Add</b> &rarr; <b>Config Element</b> &rarr; <b>JDBC Connection Configuration</b>.
+to get the <b>Add</b> menu, and then select <menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Config Element</guimenuitem>
+  <guimenuitem>JDBC Connection Configuration</guimenuitem>
+</menuchoice>.
 Then, select this new element to view its Control Panel (see Figure &sect-num;.3).</p>
 
 <p>Set up the following fields (these assume we will be using a MySQL database called 'cloud'):</p>
@@ -131,7 +137,11 @@ More than one JDBC Request can refer to the same pool.
 Figure &sect-num;.3. JDBC Configuration</figure>
 
 <p>Selecting the JDBC Users element again. Click your right mouse button
-to get the <b>Add</b> menu, and then select <b>Add</b> &rarr; <b>Sampler</b> &rarr; <b>JDBC Request</b>.
+to get the <b>Add</b> menu, and then select <menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Sampler</guimenuitem>
+  <guimenuitem>JDBC Request</guimenuitem>
+</menuchoice>.
 Then, select this new element to view its Control Panel (see Figure &sect-num;.4).</p>
 
 <figure image="jdbctest/JDBCRequest.png">
@@ -177,9 +187,16 @@ responsible for storing all of the results of your JDBC requests in a file
 and presenting the results.</p>
 
 <p>Select the <i>JDBC Users</i> element and add a <complink name="Summary Report"/>
-listener (<b>Add</b> &rarr; <b>Listener</b> &rarr; <b>Summary Report</b>).</p>
+listener (<menuchoice>
+    <guimenuitem>Add</guimenuitem>
+    <guimenuitem>Listener</guimenuitem>
+    <guimenuitem>Summary Report</guimenuitem>
+</menuchoice>).</p>
 
-<p>Save the test plan, and run the test with the menu <b>Run</b> &rarr; <b>Start</b> or <b>Ctrl+R</b></p>
+<p>Save the test plan, and run the test with the menu
+<menuchoice><guimenuitem>Run</guimenuitem><guimenuitem>Start</guimenuitem></menuchoice> or
+<keycombo><keysym>Ctrl</keysym><keysym>R</keysym></keycombo>
+</p>
 
 <p>The listener shows the results.</p>
 
