@@ -2743,8 +2743,23 @@ To read existing results and display them, use the file panel Browse button to o
 <p>
 Versions of JMeter up to 2.3.2 <b>used to clear any current data</b> before loading the new file.<br></br>
 This is no longer done, thus <b>allowing files to be merged</b>.
-If the previous behaviour is required, 
-use the menu item <code>Run</code> &rarr; <code>Clear</code> (Ctrl+Shift+E) or <code>Run</code> &rarr; <code>Clear All</code> (Ctrl+E) before loading the file.
+If the previous behaviour is required, use the menu item
+<menuchoice>
+  <guimenuitem>Run</guimenuitem>
+  <guimenuitem>Clear</guimenuitem>
+  <shortcut>
+    <keycombo><keysym>Ctrl</keysym><keysym>Shift</keysym><keysym>E</keysym></keycombo>
+  </shortcut>
+</menuchoice>
+or
+<menuchoice>
+  <guimenuitem>Run</guimenuitem>
+  <guimenuitem>Clear All</guimenuitem>
+  <shortcut>
+    <keycombo><keysym>Ctrl</keysym><keysym>E</keysym></keycombo>
+  </shortcut>
+</menuchoice>
+before loading the file.
 </p>
 <p>Results can be read from XML or CSV format files.
 When reading from CSV results files, the header (if present) is used to determine which fields are present.

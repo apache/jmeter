@@ -294,6 +294,16 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #ch_category ($node)
 #elseif ($node.getName().equals("ch_title"))
 #ch_title ($node)
+#elseif ($node.getName().equals("menuchoice"))
+#menuchoice ($node)
+#elseif ($node.getName().equals("shortcut"))
+#shortcut ($node)
+#elseif ($node.getName().equals("keycombo"))
+#keycombo ($node)
+#elseif ($node.getName().equals("keysym"))
+#keysym ($node)
+#elseif ($node.getName().equals("guimenuitem"))
+#guimenuitem ($node)
 #else
 #outputTag($node)
 #runloop($node)
@@ -316,6 +326,25 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #macro (outputEndTag $tag)
 </$tag.getName()>
 #end
+
+#macro (menuchoice $items)
+ <span class="menuchoice">
+ #foreach ($item in $items.getChildren("guimenuitem"))#guimenuitem($item)#if ($foreach.hasNext)&nbsp;&rarr;&nbsp;#end#end
+ #foreach ($item in $items.getChildren("shortcut"))
+  #shortcut($item)
+ #end
+ </span>
+#end
+
+#macro (guimenuitem $item)<span class="guimenuitem">$item.getText()</span>#end
+
+#macro (shortcut $shortcut)
+ (#foreach ($keycombo in $shortcut.getChildren("keycombo"))#keycombo ($keycombo)#end)
+#end
+
+#macro (keycombo $combo)<span class="keycombo">#foreach ($key in $combo.getChildren("keysym"))#keysym($key)#if ($foreach.hasNext)&nbsp;+&nbsp;#end#end</span>#end
+
+#macro (keysym $keysym)<span class="keysym">$keysym.getText()</span>#end
 
 #macro (runloop $itemToLoop)
 #foreach ($node in $itemToLoop.getContent())
