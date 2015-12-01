@@ -96,7 +96,7 @@ public class TestSaveService extends JMeterTestCase {
             failed |= loadAndSave(testFile, fileName, true);
         }
         for (int i = 0; i < FILES_LINES.length; i++) {
-            final String fileName = FILES[i];
+            final String fileName = FILES_LINES[i];
             final File testFile = findTestFile("testfiles/" + fileName);
             failed |= loadAndSave(testFile, fileName, false);
         }
