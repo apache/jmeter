@@ -441,6 +441,13 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
                         setDisabledIcon(icon);
                     }
                 }
+                else if (!enabled) { // i.e. no disabled icon found
+                    // Must therefore set the enabled icon so there is at least some  icon
+                    icon = node.getIcon();
+                    if (icon != null) {
+                        setIcon(icon);
+                    }
+                }
             }
             return this;
         }
