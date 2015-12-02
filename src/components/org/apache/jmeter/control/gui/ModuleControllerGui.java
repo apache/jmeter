@@ -43,6 +43,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -112,7 +113,60 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         moduleToRunTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
         moduleToRunTreeNodes = new JTree(moduleToRunTreeModel);
         moduleToRunTreeNodes.setCellRenderer(new ModuleControllerCellRenderer());
-        moduleToRunTreeNodes.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        
+        // this custom TreeSelectionModel forbid the selection of some test elements (test plan, thread group, etc..)
+        TreeSelectionModel tsm =  new DefaultTreeSelectionModel() {
+
+            private static final long serialVersionUID = 4062816201792954617L;
+
+            private boolean isSelectedPathAllowed(DefaultMutableTreeNode lastSelected) {
+                JMeterTreeNode tn = null;
+                if (lastSelected != null && lastSelected.getUserObject() instanceof JMeterTreeNode) {
+                    tn = (JMeterTreeNode) lastSelected.getUserObject();
+                }
+                if(tn != null && isTestElementAllowed(tn.getTestElement())) {
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            @Override
+            public void setSelectionPath(TreePath path) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
+                
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.setSelectionPath(path);
+                }
+            }
+
+            @Override
+            public void setSelectionPaths(TreePath[] pPaths) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) pPaths[pPaths.length-1].getLastPathComponent();
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.setSelectionPaths(pPaths);
+                }
+            }
+
+            @Override
+            public void addSelectionPath(TreePath path) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.addSelectionPath(path);
+                }
+            }
+
+            @Override
+            public void addSelectionPaths(TreePath[] paths) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) paths[paths.length-1].getLastPathComponent();
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.addSelectionPaths(paths);
+                }
+            }
+            
+        };
+        tsm.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        moduleToRunTreeNodes.setSelectionModel(tsm);
         
         ImageIcon image = JMeterUtils.getImage("warning.png");
         warningLabel = new JLabel("", image, SwingConstants.LEFT); // $NON-NLS-1$
@@ -123,6 +177,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         
         init();
         
+        // the listener is used to hide the error messsage when a target element is selected
         TreeSelectionListener tsl = new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -196,11 +251,21 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             selected = tn;
             //prevent from selecting thread group or test plan elements
             if (selected != null 
-                    && !(selected.getTestElement() instanceof AbstractThreadGroup)
-                    && !(selected.getTestElement() instanceof TestPlan)) {
+                    && isTestElementAllowed(selected.getTestElement())) {
                 ((ModuleController) element).setSelectedNode(selected);
             }
         }
+    }
+    
+    // check if a given test element can be selected as the target of a module controller
+    private static boolean isTestElementAllowed(TestElement testElement) {
+        if (testElement != null 
+                && !(testElement instanceof AbstractThreadGroup)
+                && !(testElement instanceof TestPlan)) {
+            return true;
+        }
+        
+        return false;
     }
 
     /** {@inheritDoc}} */
