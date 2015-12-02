@@ -713,7 +713,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private TreeCellRenderer getCellRenderer() {
         DefaultTreeCellRenderer rend = new JMeterCellRenderer();
-        rend.setFont(new Font("Dialog", Font.PLAIN, 11));
         return rend;
     }
 

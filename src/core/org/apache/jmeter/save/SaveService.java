@@ -19,8 +19,10 @@
 package org.apache.jmeter.save;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -183,9 +185,9 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
-    // Must match the sha1 checksum of the file saveservice.properties,
+    // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "8c81942775d1ed418d54f80e1be124066a5b7f15"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "3136d9168702a07555b110a86f7ba4da4ab88346"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
@@ -213,32 +215,25 @@ public class SaveService {
 
     public static Properties loadProperties() throws IOException{
         Properties nameMap = new Properties();
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(JMeterUtils.getJMeterHome()
-                         + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE));
+        try (FileInputStream fis = new FileInputStream(JMeterUtils.getJMeterHome()
+                + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE))){
             nameMap.load(fis);
-        } finally {
-            JOrphanUtils.closeQuietly(fis);
         }
         return nameMap;
     }
 
     private static String getChecksumForPropertiesFile()
             throws NoSuchAlgorithmException, IOException {
-        FileInputStream fis = null;
         MessageDigest md = MessageDigest.getInstance("SHA1");
-        try {
-            fis = new FileInputStream(JMeterUtils.getJMeterHome()
+        try (FileReader fileReader = new FileReader(
+                    JMeterUtils.getJMeterHome()
                     + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
-                            SAVESERVICE_PROPERTIES_FILE));
-            byte[] readBuffer = new byte[8192];
-            int bytesRead;
-            while ((bytesRead = fis.read(readBuffer)) != -1) {
-                md.update(readBuffer, 0, bytesRead);
+                    SAVESERVICE_PROPERTIES_FILE));
+                BufferedReader reader = new BufferedReader(fileReader)) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                md.update(line.getBytes());
             }
-        } finally {
-            JOrphanUtils.closeQuietly(fis);
         }
         return JOrphanUtils.baToHexString(md.digest());
     }
@@ -536,12 +531,8 @@ public class SaveService {
      */
     public static HashTree loadTree(File file) throws IOException {
         log.info("Loading file: " + file);
-        InputStream reader = null;
-        try {
-            reader = new FileInputStream(file);
+        try (InputStream reader = new FileInputStream(file)){
             return readTree(reader, file);
-        } finally {
-            JOrphanUtils.closeQuietly(reader);
         }
     }
 

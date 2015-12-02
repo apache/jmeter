@@ -3792,9 +3792,9 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
         This is usually useful if each main thread group iteration represents behaviour of one Virtual User.
         </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
-say you specify a Base URL of "<code>http://jmeter.apache.org/restricted/</code>" with a <code>Username</code> of "<code>jmeter</code>" and
+say you specify a Base URL of "<code>http://localhost/restricted/</code>" with a <code>Username</code> of "<code>jmeter</code>" and
 a <code>Password</code> of "<code>jmeter</code>".  If you send an HTTP request to the URL
-"<code>http://jmeter.apache.org/restricted/ant/myPage.html</code>", the Authorization Manager sends the login
+"<code>http://localhost/restricted/ant/myPage.html</code>", the Authorization Manager sends the login
 information for the user named, "<code>jmeter</code>".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
   <property name="Password" required="Yes">The password for the user. (N.B. this is stored unencrypted in the test plan)</property>
@@ -6452,10 +6452,10 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  <code>8080</code> is the default, but you can change it.</property>
         <property name="HTTPS Domains" required="No">List of domain (or host) names for HTTPS. Use this to pre-generate certificates for all servers you wish to record.
         <br/>
-        For example, <code>*.apache.org,*.incubator.apache.org</code>
+        For example, <code>*.example.com,*.subdomain.example.com</code>
         <br/>
         Note that wildcard domains only apply to one level,
-        i.e. <code>podling.incubator.apache.org</code> matches <code>*.incubator.apache.org</code> but not <code>*.apache.org</code>
+        i.e. <code>abc.subdomain.example.com</code> matches <code>*.subdomain.example.com</code> but not <code>*.example.com</code>
         </property>
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
@@ -6535,9 +6535,9 @@ To disable the redirect detection, set the property <code>proxy.redirect.disabli
 <p>The <b>include and exclude patterns</b> are treated as regular expressions (using Jakarta ORO).
 They will be matched against the host name, port (actual or implied), path and query (if any) of each browser request.
 If the URL you are browsing is <br></br> 
-"<code>http://jmeter.apache.org/jmeter/index.html?username=xxxx</code>",<br></br> 
+"<code>http://localhost/jmeter/index.html?username=xxxx</code>",<br></br> 
 then the regular expression will be tested against the string:<br></br> 
-"<code>jmeter.apache.org:80/jmeter/index.html?username=xxxx</code>".<br></br>   
+"<code>localhost:80/jmeter/index.html?username=xxxx</code>".<br></br>   
 Thus, if you want to include all <code>.html</code> files, your regular expression might look like: <br></br> 
 "<code>.*\.html(\?.*)?</code>" - or "<code>.*\.html</code> 
 if you know that there is no query string or you only want html pages without query strings.
@@ -6552,7 +6552,7 @@ you should be able to record what you are interested in and skip what you are no
 </p>
 
 <note>
-N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus "<code>\.html</code>" will <b>not</b> match <code>j.a.o/index.html</code>
+N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus "<code>\.html</code>" will <b>not</b> match <code>localhost:80/index.html</code>
 </note>
 
 <h4>Capturing binary POST data</h4>
