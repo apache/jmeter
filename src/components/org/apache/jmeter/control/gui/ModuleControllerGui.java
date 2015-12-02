@@ -182,6 +182,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 warningLabel.setVisible(false);
+                expandButton.setEnabled(true);
             }
         };
         moduleToRunTreeNodes.addTreeSelectionListener(tsl);
@@ -203,8 +204,10 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             warningLabel.setText(JMeterUtils.getResString("module_controller_warning") // $NON-NLS-1$
                     + renderPath(controller.getNodePath()));
             warningLabel.setVisible(true);
+            expandButton.setEnabled(false);
         } else {
             warningLabel.setVisible(false);
+            expandButton.setEnabled(true);
         }
         reinitialize();
     }
@@ -302,7 +305,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
 
         JPanel modulesPanel = new JPanel();
         
-        expandButton = new JButton(JMeterUtils.getResString("expand")); //$NON-NLS-1$
+        expandButton = new JButton(JMeterUtils.getResString("find_target_element")); //$NON-NLS-1$
         expandButton.addActionListener(this);
         modulesPanel.add(expandButton);
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
