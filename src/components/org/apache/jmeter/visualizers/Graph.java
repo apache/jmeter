@@ -236,7 +236,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
         if (wantMedian) {
             int median = (int) (oneSample.getMedian() * height / graphMax);
 
-            g.setColor(JMeterColor.purple);
+            g.setColor(JMeterColor.PURPLE);
             g.drawLine(adjustedWidth, height - median, adjustedWidth, (height - median - 1));
         }
 
@@ -249,7 +249,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
         if (wantThroughput) {
             int throughput = (int) (oneSample.getThroughput() * height / throughputMax);
 
-            g.setColor(JMeterColor.dark_green);
+            g.setColor(JMeterColor.DARK_GREEN);
             g.drawLine(adjustedWidth, height - throughput, adjustedWidth, (height - throughput - 1));
         }
     }

@@ -291,8 +291,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         data = createChooseCheckBox("graph_results_data", Color.black); // $NON-NLS-1$
         average = createChooseCheckBox("graph_results_average", Color.blue); // $NON-NLS-1$
         deviation = createChooseCheckBox("graph_results_deviation", Color.red); // $NON-NLS-1$
-        throughput = createChooseCheckBox("graph_results_throughput", JMeterColor.dark_green); // $NON-NLS-1$
-        median = createChooseCheckBox("graph_results_median", JMeterColor.purple); // $NON-NLS-1$
+        throughput = createChooseCheckBox("graph_results_throughput", JMeterColor.DARK_GREEN); // $NON-NLS-1$
+        median = createChooseCheckBox("graph_results_median", JMeterColor.PURPLE); // $NON-NLS-1$
 
         chooseGraphsPanel.add(selectGraphsLabel);
         chooseGraphsPanel.add(data);
@@ -353,8 +353,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         dataField = createInfoField(Color.black, 5);
         averageField = createInfoField(Color.blue, 5);
         deviationField = createInfoField(Color.red, 5);
-        throughputField = createInfoField(JMeterColor.dark_green, 15);
-        medianField = createInfoField(JMeterColor.purple, 5);
+        throughputField = createInfoField(JMeterColor.DARK_GREEN, 15);
+        medianField = createInfoField(JMeterColor.PURPLE, 5);
 
         graphInfoPanel.add(createInfoColumn(createInfoLabel("graph_results_no_samples", noSamplesField), // $NON-NLS-1$
                 noSamplesField, createInfoLabel("graph_results_deviation", deviationField), deviationField)); // $NON-NLS-1$
