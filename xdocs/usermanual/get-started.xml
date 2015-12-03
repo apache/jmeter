@@ -19,7 +19,6 @@
 <!DOCTYPE document[
 <!ENTITY sect-num '2'>
 <!ENTITY hellip   "&#x02026;" >
-<!ENTITY rarr     "&#x02192;" >
 ]>
 
 <document prev="intro.html" next="build-test-plan.html" id="$Id$">
@@ -422,7 +421,8 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
         It defaults to <code>jmeter.log</code>, and will be found in the directory from which JMeter was launched.
         </p>
         <p>
-        The menu <b>Options &rarr; Log Viewer</b> displays the log file in a bottom pane on main JMeter window.
+        The menu <menuchoice><guimenuitem>Options</guimenuitem><guimenuitem>Log Viewer</guimenuitem></menuchoice>
+        displays the log file in a bottom pane on main JMeter window.
         </p>
         <p>
         In the GUI mode, the number of error/fatal messages logged in the log file is displayed at top-right.
