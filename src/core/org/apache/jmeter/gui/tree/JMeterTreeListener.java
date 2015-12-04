@@ -219,6 +219,10 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
             actionName = ActionNames.MOVE_LEFT;
         } else if (KeyStrokes.matches(e, KeyStrokes.ALT_RIGHT_ARROW)) {
             actionName = ActionNames.MOVE_RIGHT;
+        } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_LEFT_ARROW)) {
+            actionName = ActionNames.COLLAPSE;
+        } else if (KeyStrokes.matches(e, KeyStrokes.SHIFT_RIGHT_ARROW)) {
+            actionName = ActionNames.EXPAND;
         } 
         
         if (actionName != null) {
