@@ -74,6 +74,8 @@ public final class KeyStrokes {
     public static final KeyStroke ALT_DOWN_ARROW    = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK);
     public static final KeyStroke ALT_LEFT_ARROW    = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK);
     public static final KeyStroke ALT_RIGHT_ARROW   = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK);
+    public static final KeyStroke SHIFT_LEFT_ARROW  = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke SHIFT_RIGHT_ARROW = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.SHIFT_DOWN_MASK);
     
     // component hotkeys
     public static final KeyStroke CTRL_0   = KeyStroke.getKeyStroke(KeyEvent.VK_0, CONTROL_MASK);
@@ -86,6 +88,7 @@ public final class KeyStrokes {
     public static final KeyStroke CTRL_7   = KeyStroke.getKeyStroke(KeyEvent.VK_7, CONTROL_MASK);
     public static final KeyStroke CTRL_8   = KeyStroke.getKeyStroke(KeyEvent.VK_8, CONTROL_MASK);
     public static final KeyStroke CTRL_9   = KeyStroke.getKeyStroke(KeyEvent.VK_9, CONTROL_MASK);
+
 
     /**
      * Check if an event matches the KeyStroke definition.
