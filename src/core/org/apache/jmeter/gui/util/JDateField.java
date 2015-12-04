@@ -29,16 +29,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 /**
  * This is Date mask control. Using this control we can pop up our date in the
- * text field. And this control is Devloped basically for JDK1.3 and lower
- * version support. This control is similer to JSpinner control this is
+ * text field. And this control is developed basically for JDK1.3 and lower
+ * version support. This control is similar to JSpinner control this is
  * available in JDK1.4 and above only.
  * <p>
  * This will set the date "yyyy/MM/dd HH:mm:ss" in this format only.
  * </p>
- *
  */
 public class JDateField extends JTextField {
 
@@ -118,14 +118,6 @@ public class JDateField extends JTextField {
             return dateFormat.parse(getText());
         } catch (ParseException e) {
             return new Date();
-        } catch (Exception e) {
-            // DateFormat.parse has some bugs (up to JDK 1.4.2) by which it
-            // throws unchecked exceptions. E.g. see:
-            // http://developer.java.sun.com/developer/bugParade/bugs/4699765.html
-            //
-            // To avoid problems with such situations, we'll catch all
-            // exceptions here and act just as for ParseException above:
-            return new Date();
         }
     }
 
@@ -173,13 +165,17 @@ public class JDateField extends JTextField {
         if (pos > newDate.length()) {
             pos = newDate.length();
         }
-        setCaretPosition(pos);// Restore position
-
+        final int newPosition = pos;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setCaretPosition(newPosition);// Restore position
+            }
+        });
     }
 
     class KeyFocus extends KeyAdapter {
-        KeyFocus() {
-        }
+        KeyFocus() {}
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -192,15 +188,16 @@ public class JDateField extends JTextField {
     }
 
     class FocusClass implements FocusListener {
-        FocusClass() {
-        }
+        FocusClass() {}
 
         @Override
-        public void focusGained(FocusEvent e) {
-        }
+        public void focusGained(FocusEvent e) {}
 
         @Override
         public void focusLost(FocusEvent e) {
+            if(getText() == null || getText().isEmpty()) {
+                return;
+            }
             try {
                 dateFormat.parse(getText());
             } catch (ParseException e1) {
