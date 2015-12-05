@@ -75,8 +75,11 @@ public class TestSaveService extends JMeterTestCase {
         super(name);
     }
 
-    public void testPropfile() throws Exception {
+    public void testPropfile1() throws Exception {
         assertEquals("Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties", SaveService.PROPVERSION, SaveService.getPropertyVersion());            
+    }
+
+    public void testPropfile2() throws Exception {
         assertEquals("Property File Version mismatch, ensure you update SaveService#FILEVERSION field with revision id of saveservice.properties", SaveService.FILEVERSION, SaveService.getFileVersion());
     }
     
@@ -93,7 +96,7 @@ public class TestSaveService extends JMeterTestCase {
             failed |= loadAndSave(testFile, fileName, true);
         }
         for (int i = 0; i < FILES_LINES.length; i++) {
-            final String fileName = FILES[i];
+            final String fileName = FILES_LINES[i];
             final File testFile = findTestFile("testfiles/" + fileName);
             failed |= loadAndSave(testFile, fileName, false);
         }

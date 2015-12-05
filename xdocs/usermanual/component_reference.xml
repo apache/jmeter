@@ -20,7 +20,6 @@
 [
 <!ENTITY sect-num '19'>
 <!ENTITY hellip   "&#x02026;" >
-<!ENTITY rarr     "&#x02192;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
 ]>
@@ -731,9 +730,9 @@ See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up
  (true). If you need to maintain the session, add a blank Header Manager. The
  sampler uses the Header Manager to store the SOAPHTTPConnection object, since
  the version of apache soap does not provide a easy way to get and set the cookies.</p>
- <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
+ <note>If you are using CSVDataSet, do not check "Memory Cache". If memory
  cache is checked, it will not iterate to the next value. That means all the requests
- will use the first value.</p>
+ will use the first value.</note>
  <p>Make sure you use <code>&lt;soap:Envelope</code> rather than <code>&lt;Envelope</code>. For example:</p>
  <source>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -1216,7 +1215,7 @@ return "Data from sample with Label "+Label;
 SampleResult.setResponseData("My data");
 return null;
 </source>
-<p>Another example:<br></br> ensure that the property <b>beanshell.sampler.init=BeanShellSampler.bshrc</b> is defined in <code>jmeter.properties</code>. 
+<p>Another example:<br></br> ensure that the property <code>beanshell.sampler.init=BeanShellSampler.bshrc</code> is defined in <code>jmeter.properties</code>. 
 The following script will show the values of all the variables in the <code>ResponseData</code> field:
 </p>
 <source>
@@ -2743,8 +2742,23 @@ To read existing results and display them, use the file panel Browse button to o
 <p>
 Versions of JMeter up to 2.3.2 <b>used to clear any current data</b> before loading the new file.<br></br>
 This is no longer done, thus <b>allowing files to be merged</b>.
-If the previous behaviour is required, 
-use the menu item <code>Run</code> &rarr; <code>Clear</code> (Ctrl+Shift+E) or <code>Run</code> &rarr; <code>Clear All</code> (Ctrl+E) before loading the file.
+If the previous behaviour is required, use the menu item
+<menuchoice>
+  <guimenuitem>Run</guimenuitem>
+  <guimenuitem>Clear</guimenuitem>
+  <shortcut>
+    <keycombo><keysym>Ctrl</keysym><keysym>Shift</keysym><keysym>E</keysym></keycombo>
+  </shortcut>
+</menuchoice>
+or
+<menuchoice>
+  <guimenuitem>Run</guimenuitem>
+  <guimenuitem>Clear All</guimenuitem>
+  <shortcut>
+    <keycombo><keysym>Ctrl</keysym><keysym>E</keysym></keycombo>
+  </shortcut>
+</menuchoice>
+before loading the file.
 </p>
 <p>Results can be read from XML or CSV format files.
 When reading from CSV results files, the header (if present) is used to determine which fields are present.
@@ -2936,10 +2950,9 @@ Match[9]=#__counter
 (Word, Excel, PowerPoint 97-2003, 2007-2010 (openxml), Apache OpenOffice (writer, calc, impress), HTML,
 gzip, jar/zip files (list of content), and some meta-data on "multimedia" files like mp3, mp4, flv, etc. The complete list of 
 support format is available on <a href="http://tika.apache.org/1.2/formats.html">Apache Tika format page.</a>
-<br/><br/>
-<b>Note:</b> A requirement to the <code>Document view</code> is to download the <a href="http://tika.apache.org/download.html">
+<note>A requirement to the <code>Document view</code> is to download the <a href="http://tika.apache.org/download.html">
 Apache Tika binary package</a> (<code>tika-app-x.x.jar</code>) and put this in <code>JMETER_HOME/lib</code> directory.
-<br/><br/>
+</note>
 If the document is larger than 10 MB, then it won't be displayed.
 To change this limit, set the JMeter property <code>document.max_size</code> (unit is byte) or set to <code>0</code> to remove the limit.
 <br/></td></tr>
@@ -3792,9 +3805,9 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
         This is usually useful if each main thread group iteration represents behaviour of one Virtual User.
         </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
-say you specify a Base URL of "<code>http://jmeter.apache.org/restricted/</code>" with a <code>Username</code> of "<code>jmeter</code>" and
+say you specify a Base URL of "<code>http://localhost/restricted/</code>" with a <code>Username</code> of "<code>jmeter</code>" and
 a <code>Password</code> of "<code>jmeter</code>".  If you send an HTTP request to the URL
-"<code>http://jmeter.apache.org/restricted/ant/myPage.html</code>", the Authorization Manager sends the login
+"<code>http://localhost/restricted/ant/myPage.html</code>", the Authorization Manager sends the login
 information for the user named, "<code>jmeter</code>".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
   <property name="Password" required="Yes">The password for the user. (N.B. this is stored unencrypted in the test plan)</property>
@@ -4102,8 +4115,8 @@ instead. (see figures 12 and 13).</p>
         <property name="Variable Name" required="Yes">The name of the variable the connection is tied to.  
         Multiple connections can be used, each tied to a different variable, allowing JDBC Samplers
         to select the appropriate connection.
-        <b>Each name must be different. If there are two configuration elements using the same name,
-        only one will be saved. JMeter versions after 2.3 log a message if a duplicate name is detected.</b>
+        <note>Each name must be different. If there are two configuration elements using the same name,
+        only one will be saved. JMeter versions after 2.3 log a message if a duplicate name is detected.</note>
         </property>
         <property name="Max Number of Connections" required="Yes">
         Maximum number of connections allowed in the pool.
@@ -4134,7 +4147,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 <p>Some possible settings are shown below. Please check the exact details in the JDBC driver documentation.</p>
 
 <p>
-If JMeter reports <b>No suitable driver</b>, then this could mean either:
+If JMeter reports <code>No suitable driver</code>, then this could mean either:
 </p>
 <ul>
 <li>The driver class was not found. In this case, there will be a log message such as <code>DataSourceElement: Could not load driver: {classname} java.lang.ClassNotFoundException: {classname}</code></li>
@@ -4236,9 +4249,9 @@ To make JMeter use more than one certificate you need to ensure that:
 
 <component name="User Defined Variables" index="&sect-num;.4.16"  width="741" height="266" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables element lets you define an <b>initial set of variables</b>, just as in the <complink name="Test Plan" />.
-<b>
+<note>
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
-</b>
+</note>
 So you cannot reference variables which are defined as part of a test run, e.g. in a Post-Processor.
 </p>
 <p>
@@ -6132,7 +6145,7 @@ Such variables should be used for items that may change between test runs,
 but which remain the same during a test run.
 </p>
 <p>
-<b>Note that the Test Plan cannot refer to variables it defines.</b> 
+<note>Note that the Test Plan cannot refer to variables it defines.</note> 
 If you need to construct other variables from the Test Plan variables, 
 use a <complink name="User Defined Variables"/> test element.
 </p>
@@ -6255,7 +6268,8 @@ Your WorkBench can be saved independently, if you like (right-click on <code>Wor
   JDK).
 </p>
 <p>
-  To select the client certificate, choose <code>Options</code>&rarr;<code>SSL Manager</code> from the menu bar.
+  To select the client certificate, choose <menuchoice><guimenuitem>Options</guimenuitem>
+  <guimenuitem>SSL Manager</guimenuitem></menuchoice> from the menu bar.
   You will be presented with a file finder that looks for PKCS12 files by default.
   Your PKCS12 file must have the extension '<code>.p12</code>' for SSL Manager to recognize it
   as a PKCS12 file.  Any other file will be treated like an average JKS key store.
@@ -6296,7 +6310,13 @@ Ensure you read this <a href="https://wiki.apache.org/jmeter/TestRecording210">w
 
 <p>To use the recorder, <i>add</i> the HTTP(S) Test Script Recorder element to the workbench.
 Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu (<code>Add</code> &rarr; <code>Non-Test Elements</code> &rarr; <code>HTTP(S) Test Script Recorder</code>).</p>
+Add menu 
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Non-Test Elements</guimenuitem>
+  <guimenuitem>HTTP(S) Test Script Recorder</guimenuitem>
+</menuchoice>
+).</p>
 <p>
 The recorder is implemented as an HTTP(S) proxy server.
 You need to set up your browser use the proxy for all HTTP and HTTPS requests.
@@ -6340,7 +6360,7 @@ This should be defined in the file <code>system.properties</code>.
 </p>
 <p>
 The JMeter certificates are generated (if necessary) when the <code>Start</code> button is pressed.
-<b>Certificate generation can take some while, during which time the GUI will be unresponsive.</b>
+<note>Certificate generation can take some while, during which time the GUI will be unresponsive.</note>
 The cursor is changed to an hour-glass whilst this is happening.
 When certificate generation is complete, the GUI will display a pop-up dialogue containing the details of the certificate for the root CA.
 This certificate needs to be installed by the browser in order for it to accept the host certificates generated by JMeter; see <a href="#install_cert">below</a> for details.
@@ -6452,10 +6472,10 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  <code>8080</code> is the default, but you can change it.</property>
         <property name="HTTPS Domains" required="No">List of domain (or host) names for HTTPS. Use this to pre-generate certificates for all servers you wish to record.
         <br/>
-        For example, <code>*.apache.org,*.incubator.apache.org</code>
+        For example, <code>*.example.com,*.subdomain.example.com</code>
         <br/>
         Note that wildcard domains only apply to one level,
-        i.e. <code>podling.incubator.apache.org</code> matches <code>*.incubator.apache.org</code> but not <code>*.apache.org</code>
+        i.e. <code>abc.subdomain.example.com</code> matches <code>*.subdomain.example.com</code> but not <code>*.example.com</code>
         </property>
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
@@ -6535,9 +6555,9 @@ To disable the redirect detection, set the property <code>proxy.redirect.disabli
 <p>The <b>include and exclude patterns</b> are treated as regular expressions (using Jakarta ORO).
 They will be matched against the host name, port (actual or implied), path and query (if any) of each browser request.
 If the URL you are browsing is <br></br> 
-"<code>http://jmeter.apache.org/jmeter/index.html?username=xxxx</code>",<br></br> 
+"<code>http://localhost/jmeter/index.html?username=xxxx</code>",<br></br> 
 then the regular expression will be tested against the string:<br></br> 
-"<code>jmeter.apache.org:80/jmeter/index.html?username=xxxx</code>".<br></br>   
+"<code>localhost:80/jmeter/index.html?username=xxxx</code>".<br></br>   
 Thus, if you want to include all <code>.html</code> files, your regular expression might look like: <br></br> 
 "<code>.*\.html(\?.*)?</code>" - or "<code>.*\.html</code> 
 if you know that there is no query string or you only want html pages without query strings.
@@ -6552,7 +6572,7 @@ you should be able to record what you are interested in and skip what you are no
 </p>
 
 <note>
-N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus "<code>\.html</code>" will <b>not</b> match <code>j.a.o/index.html</code>
+N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus "<code>\.html</code>" will <b>not</b> match <code>localhost:80/index.html</code>
 </note>
 
 <h4>Capturing binary POST data</h4>

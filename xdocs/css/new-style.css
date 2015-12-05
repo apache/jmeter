@@ -334,6 +334,24 @@ table {
   display: none;
 }
 
+.menuchoice > span {
+  color: brown;
+  font-style: italic;
+}
+
+.keysym {
+  background-color: #f0f0f0;
+  border: 1px solid #bbb;
+  border-radius: 0.3rem;
+  padding: 0.1rem;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.example .keysym {
+  background-color: white;
+}
+
 @media screen and (max-width: 1000px) {
   .nav {
   width: 100%;

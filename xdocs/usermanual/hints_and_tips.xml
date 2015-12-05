@@ -46,7 +46,7 @@ another thread can <a href="functions.html#__P">read</a> the updated value.
 <p>
 If there is a lot of information that needs to be passed between threads, then consider using a file.
 For example you could use the <a href="component_reference.html#Save_Responses_to_a_file">Save Responses to a file</a>
-listener or perhaps a BeanShell PostProcessor in one thread, and read the file using the HTTP Sampler "file:" protocol,
+listener or perhaps a BeanShell PostProcessor in one thread, and read the file using the HTTP Sampler "<code>file:</code>" protocol,
 and extract the information using a PostProcessor or BeanShell element.
 </p>
 <p>
@@ -68,7 +68,7 @@ It is sometimes very useful to see Log messages to debug dynamic scripting langu
 groovy used in JMeter.
 Since version 2.6, you can view log messages directly in JMeter GUI, to do so:</p>
 <ul>
-<li>use menu Options &gt; Log Viewer, a log console will appear at the bottom of the interface</li>
+<li>use menu <code>Options</code> &gt; <code>Log Viewer</code>, a log console will appear at the bottom of the interface</li>
 <li>Or click on the Warning icon in the upper right corner of GUI</li>
 </ul>
 By default this log console is disabled, you can enable it by changing in <code>jmeter.properties</code>:
@@ -156,49 +156,49 @@ values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</co
         </p>
         <dl>
             <dt>
-                <code>Ctrl+0</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>0</keysym></keycombo>
             </dt>
             <dd>Thread Group</dd>
             <dt>
-                <code>Ctrl+1</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>1</keysym></keycombo>
             </dt>
             <dd>HTTP Request</dd>
             <dt>
-                <code>Ctrl+2</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>2</keysym></keycombo>
             </dt>
             <dd>Regular Expression Extractor</dd>
             <dt>
-                <code>Ctrl+3</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>3</keysym></keycombo>
             </dt>
             <dd>Response Assertion</dd>
             <dt>
-                <code>Ctrl+4</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>4</keysym></keycombo>
             </dt>
             <dd>Constant Timer</dd>
             <dt>
-                <code>Ctrl+5</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>5</keysym></keycombo>
             </dt>
             <dd>Test Action</dd>
             <dt>
-                <code>Ctrl+6</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>6</keysym></keycombo>
             </dt>
             <dd>JSR223 PostProcessor</dd>
             <dt>
-                <code>Ctrl+7</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>7</keysym></keycombo>
             </dt>
             <dd>JSR223 PreProcessor</dd>
             <dt>
-                <code>Ctrl+8</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>8</keysym></keycombo>
             </dt>
             <dd>Debug Sampler</dd>
             <dt>
-                <code>Ctrl+9</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>9</keysym></keycombo>
             </dt>
             <dd>View Results Tree</dd>
         </dl>
         <p>
-            To change these binding, please find "gui.quick_*" properties within jmeter.properties file as example,
-            it is recommended to put overrides for them into user.properties file.
+            To change these binding, please find "<code>gui.quick_*</code>" properties within <code>jmeter.properties</code> file as example,
+            it is recommended to put overrides for them into <code>user.properties</code> file.
         </p>
     </subsection>
 </section>

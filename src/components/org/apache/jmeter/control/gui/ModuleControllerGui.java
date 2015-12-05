@@ -18,9 +18,11 @@
 
 package org.apache.jmeter.control.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
@@ -35,11 +37,16 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
@@ -106,9 +113,79 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         moduleToRunTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
         moduleToRunTreeNodes = new JTree(moduleToRunTreeModel);
         moduleToRunTreeNodes.setCellRenderer(new ModuleControllerCellRenderer());
+        
+        // this custom TreeSelectionModel forbid the selection of some test elements (test plan, thread group, etc..)
+        TreeSelectionModel tsm =  new DefaultTreeSelectionModel() {
 
-        warningLabel = new JLabel(""); // $NON-NLS-1$
+            private static final long serialVersionUID = 4062816201792954617L;
+
+            private boolean isSelectedPathAllowed(DefaultMutableTreeNode lastSelected) {
+                JMeterTreeNode tn = null;
+                if (lastSelected != null && lastSelected.getUserObject() instanceof JMeterTreeNode) {
+                    tn = (JMeterTreeNode) lastSelected.getUserObject();
+                }
+                if(tn != null && isTestElementAllowed(tn.getTestElement())) {
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            @Override
+            public void setSelectionPath(TreePath path) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
+                
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.setSelectionPath(path);
+                }
+            }
+
+            @Override
+            public void setSelectionPaths(TreePath[] pPaths) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) pPaths[pPaths.length-1].getLastPathComponent();
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.setSelectionPaths(pPaths);
+                }
+            }
+
+            @Override
+            public void addSelectionPath(TreePath path) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) path.getLastPathComponent();
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.addSelectionPath(path);
+                }
+            }
+
+            @Override
+            public void addSelectionPaths(TreePath[] paths) {
+                DefaultMutableTreeNode lastSelected = (DefaultMutableTreeNode) paths[paths.length-1].getLastPathComponent();
+                if(isSelectedPathAllowed(lastSelected)) {
+                    super.addSelectionPaths(paths);
+                }
+            }
+            
+        };
+        tsm.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        moduleToRunTreeNodes.setSelectionModel(tsm);
+        
+        ImageIcon image = JMeterUtils.getImage("warning.png");
+        warningLabel = new JLabel("", image, SwingConstants.LEFT); // $NON-NLS-1$
+        warningLabel.setForeground(Color.RED);
+        Font font = warningLabel.getFont();
+        warningLabel.setFont(new Font(font.getFontName(), Font.BOLD, (int)(font.getSize()*1.1)));
+        warningLabel.setVisible(false);
+        
         init();
+        
+        // the listener is used to hide the error messsage when a target element is selected
+        TreeSelectionListener tsl = new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                warningLabel.setVisible(false);
+                expandButton.setEnabled(true);
+            }
+        };
+        moduleToRunTreeNodes.addTreeSelectionListener(tsl);
     }
 
     /** {@inheritDoc}} */
@@ -116,6 +193,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
     public String getLabelResource() {
         return "module_controller_title"; // $NON-NLS-1$
     }
+    
     /** {@inheritDoc}} */
     @Override
     public void configure(TestElement el) {
@@ -125,8 +203,11 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         if (selected == null && controller.getNodePath() != null) {
             warningLabel.setText(JMeterUtils.getResString("module_controller_warning") // $NON-NLS-1$
                     + renderPath(controller.getNodePath()));
+            warningLabel.setVisible(true);
+            expandButton.setEnabled(false);
         } else {
-            warningLabel.setText(""); // $NON-NLS-1$
+            warningLabel.setVisible(false);
+            expandButton.setEnabled(true);
         }
         reinitialize();
     }
@@ -173,11 +254,21 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
             selected = tn;
             //prevent from selecting thread group or test plan elements
             if (selected != null 
-                    && !(selected.getTestElement() instanceof AbstractThreadGroup)
-                    && !(selected.getTestElement() instanceof TestPlan)) {
+                    && isTestElementAllowed(selected.getTestElement())) {
                 ((ModuleController) element).setSelectedNode(selected);
             }
         }
+    }
+    
+    // check if a given test element can be selected as the target of a module controller
+    private static boolean isTestElementAllowed(TestElement testElement) {
+        if (testElement != null 
+                && !(testElement instanceof AbstractThreadGroup)
+                && !(testElement instanceof TestPlan)) {
+            return true;
+        }
+        
+        return false;
     }
 
     /** {@inheritDoc}} */
@@ -214,7 +305,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
 
         JPanel modulesPanel = new JPanel();
         
-        expandButton = new JButton(JMeterUtils.getResString("expand")); //$NON-NLS-1$
+        expandButton = new JButton(JMeterUtils.getResString("find_target_element")); //$NON-NLS-1$
         expandButton.addActionListener(this);
         modulesPanel.add(expandButton);
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
@@ -418,6 +509,13 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
                         setIcon(icon);
                     } else {
                         setDisabledIcon(icon);
+                    }
+                }
+                else if (!enabled) { // i.e. no disabled icon found
+                    // Must therefore set the enabled icon so there is at least some  icon
+                    icon = node.getIcon();
+                    if (icon != null) {
+                        setIcon(icon);
                     }
                 }
             }

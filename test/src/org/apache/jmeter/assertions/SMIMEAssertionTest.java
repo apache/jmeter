@@ -74,6 +74,7 @@ public class SMIMEAssertionTest extends TestCase {
     private MimeMessage msg;
     private SampleResult parent;
 
+    @Override
     public void setUp() throws MessagingException, IOException {
         Session mailSession = Session.getDefaultInstance(new Properties());
         msg = new MimeMessage(mailSession, this.getClass().getResourceAsStream(

@@ -37,3 +37,14 @@ a[name]:hover:after{
   /* Green so shows up on section headings too */
   color: rgb(0,255,0);
 }
+
+.keysym {
+  background-color: #f0f0f0;
+  border: 1px solid #aaa;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+}
+
+.guimenuitem {
+  font-style: italic;
+}

@@ -16,6 +16,7 @@
   <!ENTITY nbsp  "&#160;">
   <!ENTITY ndash "&#x02013;">
   <!ENTITY para  "&#x000B6;">
+  <!ENTITY rarr  "&#x02192;">
   <!ENTITY trade "&#x02122;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -577,6 +578,31 @@
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()" />
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="guimenuitem">
+    <span class="guimenuitem"><xsl:apply-templates /></span>
+    <xsl:if test="following-sibling::guimenuitem">&nbsp;&rarr;&nbsp;</xsl:if>
+  </xsl:template>
+
+  <xsl:template match="keysym">
+    <span class="keysym"><xsl:apply-templates /></span>
+    <xsl:if test="following-sibling::keysym and parent::keycombo">&nbsp;+&nbsp;</xsl:if>
+  </xsl:template>
+
+  <xsl:template match="keycombo">
+    <span class="keycombo"><xsl:apply-templates select="keysym" /></span>
+  </xsl:template>
+
+  <xsl:template match="shortcut">
+    (<xsl:apply-templates select="keycombo"/>)
+  </xsl:template>
+
+  <xsl:template match="menuchoice">
+    <span class="menuchoice">
+      <xsl:apply-templates select="guimenuitem"/>
+      <xsl:apply-templates select="shortcut"/>
+    </span>
   </xsl:template>
 
 </xsl:stylesheet>
