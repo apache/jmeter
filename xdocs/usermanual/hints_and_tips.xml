@@ -156,43 +156,43 @@ values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</co
         </p>
         <dl>
             <dt>
-                <code>Ctrl+0</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>0</keysym></keycombo>
             </dt>
             <dd>Thread Group</dd>
             <dt>
-                <code>Ctrl+1</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>1</keysym></keycombo>
             </dt>
             <dd>HTTP Request</dd>
             <dt>
-                <code>Ctrl+2</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>2</keysym></keycombo>
             </dt>
             <dd>Regular Expression Extractor</dd>
             <dt>
-                <code>Ctrl+3</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>3</keysym></keycombo>
             </dt>
             <dd>Response Assertion</dd>
             <dt>
-                <code>Ctrl+4</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>4</keysym></keycombo>
             </dt>
             <dd>Constant Timer</dd>
             <dt>
-                <code>Ctrl+5</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>5</keysym></keycombo>
             </dt>
             <dd>Test Action</dd>
             <dt>
-                <code>Ctrl+6</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>6</keysym></keycombo>
             </dt>
             <dd>JSR223 PostProcessor</dd>
             <dt>
-                <code>Ctrl+7</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>7</keysym></keycombo>
             </dt>
             <dd>JSR223 PreProcessor</dd>
             <dt>
-                <code>Ctrl+8</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>8</keysym></keycombo>
             </dt>
             <dd>Debug Sampler</dd>
             <dt>
-                <code>Ctrl+9</code>
+                <keycombo><keysym>Ctrl</keysym><keysym>9</keysym></keycombo>
             </dt>
             <dd>View Results Tree</dd>
         </dl>

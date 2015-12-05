@@ -4527,7 +4527,8 @@ To change the list of removed headers, define the property proxy.headers.remove 
 <li><bugzilla>28715</bugzilla> - allow variable cookie values (set CookieManager.allow_variable_cookies=false to disable)</li>
 <li><bugzilla>40873</bugzilla> - add JMS point-to-point non-persistent delivery option</li>
 <li><bugzilla>43283</bugzilla> - Save action adds .jmx if not present; checks for existing file on Save As</li>
-<li>Control+A key does not work for Save All As; changed to Control+Shift+S</li>
+<li><keycombo><keysym>Control</keysym><keysym>A</keysym></keycombo> key does not work for Save All As;
+    changed to <keycombo><keysym>Control</keysym><keysym>Shift</keysym><keysym>S</keysym></keycombo></li>
 <li><bugzilla>40991</bugzilla> - Allow Assertions to check Headers</li>
 </ul>
 
@@ -4596,7 +4597,8 @@ The main bug fixes are:
 <ul>
 <li>HTTPS (SSL) handling now much improved</li>
 <li>Various Remote mode bugs fixed</li>
-<li>Control+C and Control+V now work in the test tree</li>
+<li><keycombo><keysym>Control</keysym><keysym>C</keysym></keycombo>
+    and <keycombo><keysym>Control</keysym><keysym>V</keysym></keycombo> now work in the test tree</li>
 <li>Latency and Encoding now available in CSV log output</li>
 <li>Test elements no longer default to previous contents; test elements no longer cleared when changing language.</li>
 </ul>
@@ -4634,7 +4636,8 @@ so the temporary work-round of using '\' and '@' in the username to delimit the 
 has been removed.
 </p>
 <p>
-Control-Z no longer used for Remote Start All - this now uses Control+Shift+R
+<keycombo><keysym>Control</keysym><keysym>Z</keysym></keycombo> no longer used for Remote Start All - this
+now uses <keycombo><keysym>Control</keysym><keysym>Shift</keysym><keysym>R</keysym></keycombo>
 </p>
 <p>
 HttpClient now uses pre-emptive authentication. 
