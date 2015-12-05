@@ -98,7 +98,7 @@
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.4.8.jar"/>
 	<!-- Needed for build and test -->
-	<classpathentry kind="src" path="test/resources"/>
+	<classpathentry kind="src" path="test/resources" output="build/test"/>
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.49.jar"/>
