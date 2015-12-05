@@ -102,5 +102,4 @@
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.49.jar"/>
-	<classpathentry kind="output" path="build"/>
 </classpath>
