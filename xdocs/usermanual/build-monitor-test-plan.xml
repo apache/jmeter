@@ -18,7 +18,6 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '13'>
-<!ENTITY rarr     "&#x02192;" >
 ]>
 <document prev="build-jms-topic-test-plan.html" next="listeners.html" id="$Id$">
 
@@ -49,14 +48,17 @@ need to change the MBeanServer lookup to retrieve the correct MBeans.</p>
 <section name="&sect-num;.1 Adding A Server" anchor="adding_server">
 <p>The first step is to add a <a href="test_plan.html#thread_group">Thread Group</a>
 element.  The Thread Group tells JMeter the number of threads you want. Always use
-1, since we are using JMeter as a monitor. This is very important for those not
+<code>1</code>, since we are using JMeter as a monitor. This is very important for those not
 familiar with server monitors. As a general rule, using multiple threads for a
 single server is bad and can create significant stress.
 </p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
-clicking your right mouse button to get the Add menu, and then select
-Add &rarr; ThreadGroup.</p>
+clicking your right mouse button to get the <menuchoice><guimenuitem>Add</guimenuitem></menuchoice> menu, and then select
+<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>ThreadGroup</guimenuitem>
+</menuchoice>.</p>
 
 <p>You should now see the Thread Group element under Test Plan.  If you do not
 see the element, "expand" the Test Plan tree by clicking on the Test Plan element.</p>
@@ -70,10 +72,17 @@ Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <section name="&sect-num;.2 HTTP Auth Manager" anchor="adding_auth">
 <p>Add the <complink name="HTTP Authorization Manager"/> to the Thread Group element
-(Add &rarr; Config element &rarr; HTTP Authorization Manager). Enter the username
-and password for your webserver. Important note: the monitor only works with
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Config element</guimenuitem>
+  <guimenuitem>HTTP Authorization Manager</guimenuitem>
+</menuchoice>). Enter the username
+and password for your webserver. 
+<note>Important note: the monitor only works with
 Tomcat5 build 5.0.19 and newer. For instructions on how to setup Tomcat, please
-refer to tomcat 5 documentation.</p>
+refer to tomcat 5 documentation.
+</note>
+</p>
 <ol>
 <li> leave the base URL blank</li>
 <li> enter the username</li>
@@ -84,16 +93,20 @@ refer to tomcat 5 documentation.</p>
 <section name="&sect-num;.3 Adding HTTP Request" anchor="adding_request">
 
 <p>Add the <complink name="HTTP Request"/> to the Thread Group element
-(Add &rarr; Sampler &rarr; HTTP Request). Then, select the HTTP Request element
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Sampler</guimenuitem>
+  <guimenuitem>HTTP Request</guimenuitem>
+</menuchoice>). Then, select the HTTP Request element
 in the tree and edit the following properties):
 <ol>
-<li>Change the Name field to "Server Status".</li>
+<li>Change the Name field to "<code>Server Status</code>".</li>
 <li>Enter the IP address or Hostname</li>
 <li>Enter the port number</li>
-<li>Set the Path field to "/manager/status" if you're using Tomcat.</li>
-<li>Add a request parameter named "XML" in uppercase. Give it a value of
-"true" in lowercase.</li>
-<li>Check "Use as Monitor" at the bottom of the sampler</li>
+<li>Set the Path field to "<code>/manager/status</code>" if you're using Tomcat.</li>
+<li>Add a request parameter named "<code>XML</code>" in uppercase. Give it a value of
+"<code>true</code>" in lowercase.</li>
+<li>Check "<code>Use as Monitor</code>" at the bottom of the sampler</li>
 </ol>
 </p>
 
@@ -101,8 +114,13 @@ in the tree and edit the following properties):
 
 <section name="&sect-num;.4 Adding Constant Timer" anchor="adding_timer">
 
-<p>Add a timer to this thread group (Add &rarr; Timer &rarr; Constant Timer).
-Enter 5000 milliseconds in the "Thread Delay" box. In general, using intervals shorter
+<p>Add a timer to this thread group 
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Timer</guimenuitem>
+  <guimenuitem>Constant Timer</guimenuitem>
+</menuchoice>).
+Enter <code>5000</code> milliseconds in the "<code>Thread Delay</code>" box. In general, using intervals shorter
 than 5 seconds will add stress to your server. Find out what is an acceptable interval
 before you deploy the monitor in your production environment.</p>
 
@@ -115,7 +133,11 @@ before you deploy the monitor in your production environment.</p>
  the raw data and statistics, make sure you use different filenames.</p>
 
 <p>Select the thread group element and add a <complink name="Simple Data Writer"/> listener
-(Add &rarr; Listener &rarr; Simple Data Writer).  Next, you need to specify a directory
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Listener</guimenuitem>
+  <guimenuitem>Simple Data Writer</guimenuitem>
+</menuchoice>).  Next, you need to specify a directory
 and filename of the output file.  You can either type it into the filename field, or
 select the Browse button and browse to a directory and then enter a filename.</p>
 
@@ -124,16 +146,21 @@ select the Browse button and browse to a directory and then enter a filename.</p
 <section name="&sect-num;.6 Adding Monitor Results" anchor="add_monitor_listener">
 
 <p>Add the <a href="component_reference.html#listeners">Listener</a> by selecting the
-test plan element (Add &rarr; Listener &rarr; Monitor Results). 
-<br></br>
+test plan element 
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Listener</guimenuitem>
+  <guimenuitem>Monitor Results</guimenuitem>
+</menuchoice>).
+</p><p>
 By default, the Listener will select the results from the first connector in the sample response.
 The Connector prefix field can be used to select a different connector.
 If specified, the Listener will choose the first connector which matches the prefix.
 If no match is found, then the first connector is selected.
 </p>
 <p>There are two tabs in
-the monitor results listener. The first is the "Health", which displays the status of
-the last sample the monitor received. The second tab is "Performance", which shows a
+the monitor results listener. The first is the "<code>Health</code>", which displays the status of
+the last sample the monitor received. The second tab is "<code>Performance</code>", which shows a
 historical view of the server's performance. 
 </p>
 
