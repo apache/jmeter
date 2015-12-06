@@ -18,6 +18,7 @@
 
 package org.apache.jorphan.logging;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -190,6 +191,8 @@ public final class LoggingManager {
         Writer wt;
         isWriterSystemOut = false;
         try {
+            File logFileAsFile = new File(logFile);
+            System.out.println("Writing log file to:"+logFileAsFile.getAbsolutePath());
             wt = new FileWriter(logFile);
         } catch (Exception e) {
             System.out.println(propName + "=" + logFile + " " + e.toString());

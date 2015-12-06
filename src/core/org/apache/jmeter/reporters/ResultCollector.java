@@ -629,7 +629,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     /**
      * Flush PrintWriter to synchronize file contents
      */
-    protected void flushFile() {
+    public void flushFile() {
         if (out != null) {
             log.info("forced flush through ResultCollecto#flushFile");
             out.flush();
