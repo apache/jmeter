@@ -18,7 +18,6 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '12'>
-<!ENTITY rarr     "&#x02192;" >
 ]>
 <document prev="build-jms-point-to-point-test-plan.html" next="build-monitor-test-plan.html" id="$Id$">
 
@@ -51,7 +50,7 @@ where the sender expects a response.  Messaging systems are quite different from
 normal HTTP requests. In HTTP, a single user sends a request and gets a response.
 Messaging system can work in synchronous and asynchronous mode.  A JMS sampler needs 
 the JMS implementation jar files; for example, from Apache ActiveMQ.  
-See <a href="#libraries_activemq">here</a> for the list of jars provided by ActiveMQ 3.0.</p>
+See <a href="get-started.html#libraries_activemq">here</a> for the list of jars provided by ActiveMQ.</p>
 
 </section>
 
@@ -62,8 +61,8 @@ See <a href="#libraries_activemq">here</a> for the list of jars provided by Acti
 send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
-clicking your right mouse button to get the Add menu, and then select
-Add &rarr; ThreadGroup.</p>
+clicking your right mouse button to get the <menuchoice><guimenuitem>Add</guimenuitem></menuchoice> menu, and then select
+<menuchoice><guimenuitem>Add</guimenuitem><guimenuitem>ThreadGroup</guimenuitem></menuchoice>.</p>
 
 <p>You should now see the Thread Group element under Test Plan.  If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
@@ -78,11 +77,11 @@ below)</p>
 Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
-field, enter Subscribers.</p>
+field, enter <code>Subscribers</code>.</p>
 
-<p>Next, increase the number of users (called threads) to 5.</p>
+<p>Next, increase the number of users (called threads) to <code>5</code>.</p>
 
-<p>In the next field, the Ramp-Up Period, set the value to 0
+<p>In the next field, the Ramp-Up Period, set the value to <code>0</code>
 seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
 finish starting all of your users by the end of the 5 seconds.  So, if we have
@@ -90,15 +89,15 @@ finish starting all of your users by the end of the 5 seconds.  So, if we have
 would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
 value to 0, JMeter will immediately start all users.</p>
 
-<p>Clear the checkbox labeled "Forever", and enter a value of 10 in the Loop
+<p>Clear the checkbox labeled "<code>Forever</code>", and enter a value of <code>10</code> in the Loop
 Count field.  This property tells JMeter how many times to repeat your test.
-If you enter a loop count value of 0, then JMeter will run your test only
-once. To have JMeter repeatedly run your Test Plan, select the Forever
+If you enter a loop count value of <code>0</code>, then JMeter will run your test only
+once. To have JMeter repeatedly run your Test Plan, select the <code>Forever</code>
 checkbox.</p>
 
 <p>Repeat the process and add another thread group. For the second thread
-group, enter "Publisher" in the name field, set the number of threads to 1,
-and set the iteration to 10.
+group, enter "<code>Publisher</code>" in the name field, set the number of threads to <code>1</code>,
+and set the iteration to <code>10</code>.
 </p>
 
 <note>In most applications, you have to manually accept
@@ -112,28 +111,34 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
 <section name="&sect-num;.2 Adding JMS Subscriber and Publisher" anchor="adding_subscriber_publisher">
 
-<p>Make sure the required jar files are in JMeter's lib directory. If they are
+<p>Make sure the required jar files are in JMeter's <code>lib</code> directory. If they are
 not, shutdown JMeter, copy the jar files over and restart JMeter.</p>
 
 <p>Start by adding the sampler <complink name="JMS Subscriber"/>
-to the Subscribers element (Add &rarr; Sampler &rarr; JMS Subscriber).
+to the Subscribers element
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Sampler</guimenuitem>
+  <guimenuitem>JMS Subscriber</guimenuitem>
+</menuchoice>).
 Then, select the JMS Subscriber element in the tree and edit the following properties:
 
 <ol>
-<li>Change the Name field to "Sample Subscriber"</li>
-<li>If the JMS provider uses the jndi.properties file, check the box</li>
-<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
-<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
+<li>Change the Name field to "<code>Sample Subscriber</code>"</li>
+<li>If the JMS provider uses the <code>jndi.properties</code> file, check the box</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "<code>org.apache.activemq.jndi.ActiveMQInitialContextFactory</code>"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "<code>tcp://localhost:61616</code>"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
-<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1"
-Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
+of the JMS provider for the information. For ActiveMQ, the default is "<code>ConnectionFactory</code>"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "<code>dynamicTopics/MyStaticTopic1</code>"
+<note>Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
 Setup on Each sample mean that JMeter (re)starting to listen before run each JMS Subscriber sample, 
-this last option permit to have Destination name with some JMeter variables</li>
-<li>If the JMS provider requires authentication, check "required" and enter the 
+this last option permit to have Destination name with some JMeter variables
+</note></li>
+<li>If the JMS provider requires authentication, check "<code>required</code>" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
-<li>Enter 10 in "Number of samples to aggregate". For performance reasons, the sampler
+<li>Enter <code>10</code> in "<code>Number of samples to aggregate</code>". For performance reasons, the sampler
 will aggregate messages, since small messages will arrive very quickly. If the sampler
 didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
 <li>If you want to read the response, check the box</li>
@@ -146,25 +151,31 @@ exhibits zombie threads with one client, try the other.</li>
 Figure &sect-num;.2. JMS Subscriber</figure>
 
 <p>Next add the sampler <complink name="JMS Publisher"/>
-to the Publisher element (Add &rarr; Sampler &rarr; JMS Subscriber).
+to the Publisher element 
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Sampler</guimenuitem>
+  <guimenuitem>JMS Subscriber</guimenuitem>
+</menuchoice>).
 Then, select the JMS Publisher element in the tree and edit the following properties:
 </p>
 
 <ol>
-<li>Change the Name field to "Sample Publisher".</li>
-<li>If the JMS provider uses the jndi.properties file, check the box</li>
-<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
-<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
+<li>Change the Name field to "<code>Sample Publisher</code>".</li>
+<li>If the JMS provider uses the <code>jndi.properties</code> file, check the box</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "<code>org.apache.activemq.jndi.ActiveMQInitialContextFactory</code>"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "<code>tcp://localhost:61616</code>"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
-<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1". 
-Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
+of the JMS provider for the information. For ActiveMQ, the default is "<code>ConnectionFactory</code>"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "<code>dynamicTopics/MyStaticTopic1</code>". 
+<note>Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
 Setup on Each sample mean that JMeter (re)starting the connection before run each JMS Publisher sample, 
-this last option permit to have Destination name with some JMeter variables</li>
-<li>If the JMS provider requires authentication, check "required" and enter the 
+this last option permit to have Destination name with some JMeter variables
+</note></li>
+<li>If the JMS provider requires authentication, check "<code>required</code>" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
-<li>Enter 10 in "Number of samples to aggregate". For performance reasons, the sampler
+<li>Enter <code>10</code> in "<code>Number of samples to aggregate</code>". For performance reasons, the sampler
 will aggregate messages, since small messages will arrive very quickly. If the sampler
 didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
 <li>Select the appropriate configuration for getting the message to publish. If you
@@ -186,8 +197,12 @@ Figure &sect-num;.3. JMS Publisher</figure>
 responsible for storing all of the results of your HTTP requests in a file and presenting
 a visual model of the data.</p>
 
-<p>Select the Test Plan element and add a <complink name="Graph Results"/> listener (Add &rarr; Listener
-&rarr; Graph Results).  Next, you need to specify a directory and filename of the
+<p>Select the Test Plan element and add a <complink name="Graph Results"/> listener
+(<menuchoice>
+  <guimenuitem>Add</guimenuitem>
+  <guimenuitem>Listener</guimenuitem>
+  <guimenuitem>Graph Results</guimenuitem>
+</menuchoice>).  Next, you need to specify a directory and filename of the
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 

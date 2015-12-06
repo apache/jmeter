@@ -1165,6 +1165,20 @@ run JMeter unless all the JMeter jars are added.
     <fail message="Cannot find required classes"/>
   </target>
 
+ <target name="setup-eclipse-project" description="Setup eclipse project to contribute to JMeter">
+    <echo>Creating eclipse project</echo>
+    <copy overwrite="false" file="eclipse.project" tofile=".project" />
+    <copy overwrite="false" file="eclipse.classpath" tofile=".classpath"/>
+    <input message="Next step will download dependencies for JMeter, do you agree with the download ?" addproperty="do.download" validargs="y,n"/>
+    <condition property="do.abort">
+        <equals arg1="n" arg2="${do.download}"/>
+    </condition>
+    <fail message="You didn't agree to download dependencies, ensure you call Ant target 'download_jars when importing project" if="do.abort"/>
+    <echo>Downloading dependencies</echo>
+    <antcall target="download_jars" />
+    <echo>Project has been successfully created, you can now import it in Eclipse using Right click > Import > Existing projects into Workspace</echo>
+  </target>
+	
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
     <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/mirror-server"/>
   </target>
@@ -1317,6 +1331,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
     <include name="eclipse.classpath"/>
+    <include name="eclipse.project"/>
     <include name="eclipse.readme"/>
     <include name="checkstyle.xml"/>
     <include name="${lib.dir}/aareadme.txt"/>
