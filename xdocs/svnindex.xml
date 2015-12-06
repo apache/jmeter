@@ -33,7 +33,7 @@ href="download_jmeter.cgi">download page</a>.  </p>
 
 </section>
 
-<section name="Access the Version Controlled Source Code">
+<section name="Access the SVN Version Controlled Source Code">
 
 <p>For information on connecting to the ASF Subversion repositories, see the <a
 href="http://www.apache.org/dev/version-control.html">version control
@@ -62,6 +62,31 @@ When checking out a subproject using Subversion, ensure that you are checking ou
   <td><a href="http://svn.apache.org/repos/asf/jmeter/trunk">http://svn.apache.org/repos/asf/jmeter/trunk</a></td>
   <td><a href="https://svn.apache.org/repos/asf/jmeter/trunk">https://svn.apache.org/repos/asf/jmeter/trunk</a></td>
   <td><a href="http://svn.apache.org/viewcvs.cgi/jmeter/">http://svn.apache.org/viewcvs.cgi/jmeter/</a></td>
+ </tr>
+</table>
+
+</subsection>
+</section>
+<section name="Access the GIT Version Controlled Source Code">
+
+<p>For information on connecting to the GIT mirror repositories, see the <a
+href="http://www.apache.org/dev/git.html">version control
+page</a>. </p>
+
+<subsection name="Git" anchor="git">
+
+<p>Apache maintains read-only GIT mirrors of Apache codebases, for JMeter, the mirror is accessible at the urls below.</p>
+
+<table>
+ <tr>
+  <th>Project</th>
+  <th>GIT (read-only)</th>
+  <th>GITHUB (read-only)</th>
+ </tr>
+ <tr>
+  <td>Apache JMeter</td>
+  <td><a href="git://git.apache.org/jmeter.git">git://git.apache.org/jmeter.git</a></td>
+  <td><a href="https://github.com/apache/jmeter">https://github.com/apache/jmeter</a></td>
  </tr>
 </table>
 
