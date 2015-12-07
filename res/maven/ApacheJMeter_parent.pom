@@ -77,6 +77,7 @@ under the License.
       <excalibur-pool-api.version>${excalibur-pool.version}</excalibur-pool-api.version>
       <excalibur-pool-impl.version>${excalibur-pool.version}</excalibur-pool-impl.version>
       <excalibur-pool-instrumented.version>${excalibur-pool.version}</excalibur-pool-instrumented.version>
+      <freemarker.version>2.3.22</freemarker.version>
       <htmlparser.version>2.1</htmlparser.version>
       <httpclient.version>4.2.6</httpclient.version>
       <httpcore.version>4.2.5</httpcore.version>
@@ -86,6 +87,7 @@ under the License.
       <jodd-core.version>3.6.6</jodd-core.version>
       <jodd-lagarto.version>3.6.6</jodd-lagarto.version>
       <jodd-log.version>3.6.6</jodd-log.version>
+      <jodd-props.version>3.6.6</jodd-props.version>
       <json-path.version>2.0.0</json-path.version>
       <json-smart.version>2.2</json-smart.version>
       <jsoup.version>1.8.2</jsoup.version>
@@ -395,6 +397,11 @@ under the License.
         <version>${jodd-log.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.jodd</groupId>
+        <artifactId>jodd-props</artifactId>
+        <version>${jodd-props.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.mongodb</groupId>
         <artifactId>mongo-java-driver</artifactId>
         <version>${mongo-java-driver.version}</version>
@@ -414,6 +421,12 @@ under the License.
         <artifactId>slf4j-nop</artifactId>
         <version>${slf4j-nop.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+        <version>${freemarker.version}</version>
+      </dependency>
+
       <!-- Docs only; not needed for source or binary archives
       <dependency>
         <groupId>org.apache.velocity</groupId>

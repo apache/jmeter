@@ -107,6 +107,10 @@ excalibur-pool-1.2 (org.apache.avalon.excalibur.pool)
 ------------------
 - used by excalibur-datasource
 
+freemarker-2.3.22.jar
+----------------------
+- used by Report/Dashboard feature
+
 htmlparser-2.1
 htmllexer-2.1
 ----------------------
@@ -138,6 +142,11 @@ jodd-log-3.6.6
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
+
+jodd-props-3.6.6
+--------
+http://www.jodd.org/
+- used by Report/Dashboard feature properties management
 
 json-path-2.0.0
 --------
