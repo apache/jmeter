@@ -103,7 +103,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      * The name of the property indicating which assertion results should be
      * saved.
      **************************************************************************/
-    private static final String ASSERTION_RESULTS_FAILURE_MESSAGE_PROP =
+    public static final String ASSERTION_RESULTS_FAILURE_MESSAGE_PROP =
         "jmeter.save.saveservice.assertion_results_failure_message";  // $NON_NLS-1$
 
     /***************************************************************************
