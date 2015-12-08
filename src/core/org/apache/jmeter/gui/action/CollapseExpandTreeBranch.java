@@ -85,7 +85,7 @@ public class CollapseExpandTreeBranch extends AbstractAction {
             return;
         }
         
-        Enumeration children = node.children();
+        Enumeration<?> children = node.children();
         while(children.hasMoreElements()) {
             TreeNode child = (TreeNode) children.nextElement();
             TreePath path = parent.pathByAddingChild(child);
