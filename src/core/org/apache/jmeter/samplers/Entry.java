@@ -27,18 +27,17 @@ import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
 
 // TODO - not used at present - could perhaps be removed
+@Deprecated
 public class Entry {
 
     private Map<Class<?>, ConfigElement> configSet;
 
-    // Set clonedSet;
     private Class<?> sampler;
 
     private List<Assertion> assertions;
 
     public Entry() {
         configSet = new HashMap<>();
-        // clonedSet = new HashSet();
         assertions = new LinkedList<>();
     }
 
