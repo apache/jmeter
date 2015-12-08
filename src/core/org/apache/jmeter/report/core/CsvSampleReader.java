@@ -72,9 +72,8 @@ public class CsvSampleReader {
      *            indicates whether the reader uses jmeter
      *            SampleSaveConfiguration to define metadata
      */
-    public CsvSampleReader(File inputFile, char separator,
-	    boolean useSaveSampleCfg) {
-	this(inputFile, null, separator, useSaveSampleCfg);
+    public CsvSampleReader(File inputFile, char separator, boolean useSaveSampleCfg) {
+        this(inputFile, null, separator, useSaveSampleCfg);
     }
 
     /**
@@ -88,56 +87,56 @@ public class CsvSampleReader {
      *            indicates if the reader uses strict mode
      */
     public CsvSampleReader(File inputFile, SampleMetadata metadata) {
-	this(inputFile, metadata, null, false);
+        this(inputFile, metadata, null, false);
     }
 
     private CsvSampleReader(File inputFile, SampleMetadata metadata,
-	    Character separator, boolean useSaveSampleCfg) {
-	if (inputFile == null)
-	    throw new ArgumentNullException("inputFile");
+            Character separator, boolean useSaveSampleCfg) {
+        if (inputFile == null)
+            throw new ArgumentNullException("inputFile");
 
-	if (inputFile.isFile() == false || inputFile.canRead() == false)
-	    throw new IllegalArgumentException(file.getAbsolutePath()
-		    + "does not exist or is not readable");
-	this.file = inputFile;
-	try {
-	    this.reader = new BufferedReader(new InputStreamReader(
-		    new FileInputStream(file), CHARSET), BUF_SIZE);
-	} catch (FileNotFoundException | UnsupportedEncodingException ex) {
-	    throw new SampleException("Could not create file reader !", ex);
-	}
-	if (metadata == null)
-	    metadata = readMetadata(separator, useSaveSampleCfg);
-	this.metadata = metadata;
-	this.columnCount = metadata.getColumnCount();
-	this.separator = metadata.getSeparator();
-	this.row = 0;
-	this.lastSampleRead = nextSample();
+        if (inputFile.isFile() == false || inputFile.canRead() == false)
+            throw new IllegalArgumentException(file.getAbsolutePath()
+                    + "does not exist or is not readable");
+        this.file = inputFile;
+        try {
+            this.reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(file), CHARSET), BUF_SIZE);
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            throw new SampleException("Could not create file reader !", ex);
+        }
+        if (metadata == null)
+            metadata = readMetadata(separator, useSaveSampleCfg);
+        this.metadata = metadata;
+        this.columnCount = metadata.getColumnCount();
+        this.separator = metadata.getSeparator();
+        this.row = 0;
+        this.lastSampleRead = nextSample();
     }
 
     private SampleMetadata readMetadata(char separator, boolean useSaveSampleCfg) {
-	try {
-	    SampleMetadata metadata;
-	    // Read first line
-	    String line = reader.readLine();
+        try {
+            SampleMetadata metadata;
+            // Read first line
+            String line = reader.readLine();
 
-	    // When we can use sample save config and there is no header in csv
-	    // file
-	    if (useSaveSampleCfg
-		    && CSVSaveService.getSampleSaveConfiguration(line,
-		            file.getAbsolutePath()) == null) {
-		// Build metadata from default save config
-		metadata = new SampleMetadata(
-		        SampleSaveConfiguration.staticConfig());
+            // When we can use sample save config and there is no header in csv
+            // file
+            if (useSaveSampleCfg
+                    && CSVSaveService.getSampleSaveConfiguration(line,
+                            file.getAbsolutePath()) == null) {
+                // Build metadata from default save config
+                metadata = new SampleMetadata(
+                        SampleSaveConfiguration.staticConfig());
 
-	    } else {
-		// Build metadata from headers
-		metadata = new SampleMetaDataParser(separator).parse(line);
-	    }
-	    return metadata;
-	} catch (Exception e) {
-	    throw new SampleException("Could not read metadata !", e);
-	}
+            } else {
+                // Build metadata from headers
+                metadata = new SampleMetaDataParser(separator).parse(line);
+            }
+            return metadata;
+        } catch (Exception e) {
+            throw new SampleException("Could not read metadata !", e);
+        }
     }
 
     /**
@@ -146,29 +145,29 @@ public class CsvSampleReader {
      * @return the metadata
      */
     public SampleMetadata getMetadata() {
-	return metadata;
+        return metadata;
     }
 
     private Sample nextSample() {
-	String[] data;
-	try {
-	    data = CSVSaveService.csvReadFile(reader, separator);
-	    Sample sample = null;
-	    if (data.length > 0) {
-		// TODO is it correct to use a filler ?
-		if (data.length < columnCount) {
-		    String[] filler = new String[columnCount];
-		    System.arraycopy(data, 0, filler, 0, data.length);
-		    for (int i = data.length; i < columnCount; i++)
-			filler[i] = "";
-		    data = filler;
-		}
-		sample = new Sample(row, metadata, data);
-	    }
-	    return sample;
-	} catch (IOException e) {
-	    throw new SampleException("Could not read sample <" + row + ">", e);
-	}
+        String[] data;
+        try {
+            data = CSVSaveService.csvReadFile(reader, separator);
+            Sample sample = null;
+            if (data.length > 0) {
+                // TODO is it correct to use a filler ?
+                if (data.length < columnCount) {
+                    String[] filler = new String[columnCount];
+                    System.arraycopy(data, 0, filler, 0, data.length);
+                    for (int i = data.length; i < columnCount; i++)
+                        filler[i] = "";
+                    data = filler;
+                }
+                sample = new Sample(row, metadata, data);
+            }
+            return sample;
+        } catch (IOException e) {
+            throw new SampleException("Could not read sample <" + row + ">", e);
+        }
     }
 
     /**
@@ -177,9 +176,9 @@ public class CsvSampleReader {
      * @return the sample
      */
     public Sample readSample() {
-	Sample out = lastSampleRead;
-	lastSampleRead = nextSample();
-	return out;
+        Sample out = lastSampleRead;
+        lastSampleRead = nextSample();
+        return out;
     }
 
     /**
@@ -188,7 +187,7 @@ public class CsvSampleReader {
      * @return the sample
      */
     public Sample peek() {
-	return lastSampleRead;
+        return lastSampleRead;
     }
 
     /**
@@ -197,17 +196,17 @@ public class CsvSampleReader {
      * @return true, if the file contains more samples
      */
     public boolean hasNext() {
-	return lastSampleRead != null;
+        return lastSampleRead != null;
     }
 
     /**
      * Close the reader.
      */
     public void close() {
-	try {
-	    reader.close();
-	} catch (Exception e) {
-	    // ignore
-	}
+        try {
+            reader.close();
+        } catch (Exception e) {
+            // ignore
+        }
     }
 }
