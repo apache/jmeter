@@ -18,10 +18,16 @@
 
 package org.apache.jmeter.testelement.property;
 
-public interface PropertyIterator {
+import java.util.Iterator;
+
+public interface PropertyIterator extends Iterator<JMeterProperty> {
+    
+    @Override
     boolean hasNext();
 
+    @Override
     JMeterProperty next();
 
+    @Override
     void remove();
 }

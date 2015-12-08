@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
@@ -84,15 +85,13 @@ public class JMSProperties extends AbstractTestElement implements Serializable {
      * @return a new Map with String keys and values containing the JmsProperties
      */
     public Map<String, Object> getJmsPropertysAsMap() {
-        PropertyIterator iter = getProperties().iterator();
         Map<String, Object> argMap = new LinkedHashMap<>();
-        while (iter.hasNext()) {
-            JMSProperty arg = (JMSProperty) iter.next().getObjectValue();
+        for (JMeterProperty jMeterProperty : getProperties()) {
+            JMSProperty arg = (JMSProperty) jMeterProperty.getObjectValue();
             // Because CollectionProperty.mergeIn will not prevent adding two
             // properties of the same name, we need to select the first value so
             // that this element's values prevail over defaults provided by
-            // configuration
-            // elements:
+            // configuration elements:
             if (!argMap.containsKey(arg.getName())) {
                 argMap.put(arg.getName(), arg.getValueAsObject());
             }
