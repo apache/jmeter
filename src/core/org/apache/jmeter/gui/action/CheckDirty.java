@@ -28,6 +28,7 @@ import java.util.Set;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -87,6 +88,9 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         } else if (action.equals(ActionNames.ADD_ALL)) {
             previousGuiItems.clear();
             GuiPackage.getInstance().getTreeModel().getTestPlan().traverse(this);
+            if (isWorkbenchSaveable()) {
+                GuiPackage.getInstance().getTreeModel().getWorkBench().traverse(this);
+            }
         } else if (action.equals(ActionNames.CHECK_REMOVE)) {
             GuiPackage guiPackage = GuiPackage.getInstance();
             JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
@@ -99,6 +103,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
                 removeMode = false;
             }
         }
+        
         // If we are merging in another test plan, we know the test plan is dirty now
         if(action.equals(ActionNames.SUB_TREE_MERGED)) {
             dirty = true;
@@ -109,11 +114,27 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
             try {
                 HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
                 wholeTree.traverse(this);
+                
+                // check the workbench for modification
+                if(!dirty) {
+                    if (isWorkbenchSaveable()) {
+                        HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
+                        workbench.traverse(this);
+                    }
+                }
             } finally {
                 checkMode = false;
             }
         }
         GuiPackage.getInstance().setDirty(dirty);
+    }
+
+    /**
+     * check if the workbench should be saved
+     */
+    private boolean isWorkbenchSaveable() {
+        JMeterTreeNode workbenchNode = (JMeterTreeNode) ((JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot()).getChildAt(1);
+        return ((WorkBench) workbenchNode.getUserObject()).getSaveWorkBench();
     }
 
     /**
