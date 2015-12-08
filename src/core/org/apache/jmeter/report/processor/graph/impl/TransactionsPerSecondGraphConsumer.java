@@ -97,6 +97,6 @@ public class TransactionsPerSecondGraphConsumer extends
 	((TimeRateAggregatorFactory) getGroupInfos().get(
 	        AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
 	        .setGranularity(granularity);
-    };
+    }
 
 }

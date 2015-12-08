@@ -74,7 +74,7 @@ public class ApdexSummaryConsumer extends
 	        .getResString("reportgenerator_summary_total")));
 
 	return result;
-    };
+    }
 
     /*
      * (non-Javadoc)
