@@ -74,7 +74,7 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
     public String visitMapResult(MapResultData mapResult) {
 	String result = "";
 	if (mapResult != null) {
-	    HashMap<String, String> map = new HashMap<String, String>();
+	    HashMap<String, String> map = new HashMap<>();
 	    for (Map.Entry<String, ResultData> entry : mapResult.entrySet()) {
 		map.put(entry.getKey(), entry.getValue().accept(this));
 	    }

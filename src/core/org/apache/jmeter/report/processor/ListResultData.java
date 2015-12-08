@@ -30,7 +30,7 @@ import org.apache.jmeter.report.core.ArgumentNullException;
 public class ListResultData implements ResultData, Iterable<ResultData> {
 
     /** The items. */
-    private ArrayList<ResultData> items = new ArrayList<ResultData>();
+    private ArrayList<ResultData> items = new ArrayList<>();
 
     /*
      * (non-Javadoc)

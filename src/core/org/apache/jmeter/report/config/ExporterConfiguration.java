@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class ExporterConfiguration extends InstanceConfiguration {
 
-    private final HashMap<String, SubConfiguration> graphExtraConfigurations = new HashMap<String, SubConfiguration>();
+    private final HashMap<String, SubConfiguration> graphExtraConfigurations = new HashMap<>();
 
     private boolean filtersOnlySampleSeries;
     private String seriesFilter;

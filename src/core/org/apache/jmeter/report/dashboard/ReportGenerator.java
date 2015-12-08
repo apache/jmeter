@@ -291,7 +291,7 @@ public class ReportGenerator {
 	        .getGraphConfigurations();
 
 	// Process configuration to build graph consumers
-	HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap = new HashMap<GraphConfiguration, AbstractGraphConsumer>();
+	HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap = new HashMap<>();
 	for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations
 	        .entrySet()) {
 	    String graphName = entryGraphCfg.getKey();

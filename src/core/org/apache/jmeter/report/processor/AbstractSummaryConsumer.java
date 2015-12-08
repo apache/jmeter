@@ -88,7 +88,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
     public static final String RESULT_VALUE_SUPPORTS_CONTROLLERS_DISCRIMINATION = "supportsControllersDiscrimination";
     public static final String RESULT_VALUE_TITLES = "titles";
 
-    private final Map<String, SummaryInfo> infos = new HashMap<String, SummaryInfo>();
+    private final Map<String, SummaryInfo> infos = new HashMap<>();
     private final SummaryInfo overallInfo = new SummaryInfo(false);
     private final boolean supportsControllersDiscrimination;
 

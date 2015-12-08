@@ -27,7 +27,7 @@ import java.util.HashMap;
  */
 public final class Converters {
 
-    private static HashMap<Class<?>, StringConverter<?>> converters = new HashMap<Class<?>, StringConverter<?>>();
+    private static HashMap<Class<?>, StringConverter<?>> converters = new HashMap<>();
 
     static {
 

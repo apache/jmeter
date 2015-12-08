@@ -253,7 +253,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
     private class PrivateProducer extends AbstractSampleProcessor implements
 	    SampleProducer {
 
-	private List<SampleConsumer> sampleConsumers = new ArrayList<SampleConsumer>();
+	private List<SampleConsumer> sampleConsumers = new ArrayList<>();
 
 	public void setSampleConsumers(List<SampleConsumer> consumers) {
 	    if (consumers == null)

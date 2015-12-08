@@ -31,7 +31,7 @@ import org.apache.jmeter.report.processor.AggregatorFactory;
 public class SeriesData {
 
     /** The regular groupData. */
-    private final HashMap<Double, Aggregator> aggregators = new HashMap<Double, Aggregator>();
+    private final HashMap<Double, Aggregator> aggregators = new HashMap<>();
 
     /** The keys aggregator for aggregated keys seriesData. */
     private final Aggregator keysAggregator;

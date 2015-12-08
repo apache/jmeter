@@ -40,7 +40,7 @@ public class SampleMetadata {
     List<String> columns;
 
     /** Index to map column names to their corresponding indexes */
-    private TreeMap<String, Integer> index = new TreeMap<String, Integer>();
+    private TreeMap<String, Integer> index = new TreeMap<>();
 
     /** character separator used for separating columns */
     private char separator;
@@ -63,7 +63,7 @@ public class SampleMetadata {
     public SampleMetadata(SampleSaveConfiguration saveConfig) {
 	if (saveConfig == null)
 	    throw new ArgumentNullException("saveConfig");
-	ArrayList<String> columns = new ArrayList<String>();
+	ArrayList<String> columns = new ArrayList<>();
 	if (saveConfig.saveTimestamp()) {
 	    columns.add(CSVSaveService.TIME_STAMP);
 	}

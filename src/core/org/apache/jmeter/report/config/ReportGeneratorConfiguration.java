@@ -123,9 +123,9 @@ public class ReportGeneratorConfiguration {
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
-    private ArrayList<String> filteredSamples = new ArrayList<String>();
-    private HashMap<String, ExporterConfiguration> exportConfigurations = new HashMap<String, ExporterConfiguration>();
-    private HashMap<String, GraphConfiguration> graphConfigurations = new HashMap<String, GraphConfiguration>();
+    private ArrayList<String> filteredSamples = new ArrayList<>();
+    private HashMap<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
+    private HashMap<String, GraphConfiguration> graphConfigurations = new HashMap<>();
 
     /**
      * Gets the overall sample filter.

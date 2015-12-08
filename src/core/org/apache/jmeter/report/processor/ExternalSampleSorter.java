@@ -90,7 +90,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private SampleComparator sampleComparator;
 
-    private BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>();
+    private BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
 
     private ThreadPoolExecutor pool;
 
@@ -295,8 +295,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 	this.pool.prestartAllCoreThreads();
 	inputSampleCount = 0;
 	chunkedSampleCount = 0;
-	chunks = new LinkedList<File>();
-	samples = new LinkedList<Sample>();
+	chunks = new LinkedList<>();
+	samples = new LinkedList<>();
 	sampleMetadata = getConsumedMetadata(0);
 	sampleComparator.initialize(sampleMetadata);
     }
@@ -430,7 +430,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     }
 
     private List<Sample> merge(List<Sample> left, List<Sample> right) {
-	ArrayList<Sample> out = new ArrayList<Sample>();
+	ArrayList<Sample> out = new ArrayList<>();
 	ListIterator<Sample> l = left.listIterator();
 	ListIterator<Sample> r = right.listIterator();
 	while (l.hasNext() || r.hasNext()) {

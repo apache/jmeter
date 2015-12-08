@@ -63,8 +63,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
-	        2);
+	HashMap<String, GroupInfo> groupInfos = new HashMap<>(2);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new TimeRateAggregatorFactory(), new AbstractSeriesSelector() {
 		    private final Iterable<String> values = Arrays.asList(

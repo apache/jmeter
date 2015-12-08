@@ -25,7 +25,7 @@ import org.apache.jmeter.report.processor.AggregatorFactory;
  * The class GroupData helps to store group data for a graph.
  */
 public class GroupData {
-    private final HashMap<String, SeriesData> seriesData = new HashMap<String, SeriesData>();
+    private final HashMap<String, SeriesData> seriesData = new HashMap<>();
     private final SeriesData overallSeries;
 
     /**

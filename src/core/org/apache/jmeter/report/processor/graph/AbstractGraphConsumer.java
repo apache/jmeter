@@ -206,7 +206,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      */
     protected AbstractGraphConsumer() {
 	keysSelector = createKeysSelector();
-	groupInfos = new HashMap<String, GroupInfo>(createGroupInfos());
+	groupInfos = new HashMap<>(createGroupInfos());
     }
 
     protected abstract GraphKeysSelector createKeysSelector();
@@ -274,7 +274,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	    aggInfo = seriesData.getAggregatorInfo();
 	} else {
 	    series = String.format(aggregatedKeysSeriesFormat, series);
-	    aggInfo = new HashMap<Double, Aggregator>();
+	    aggInfo = new HashMap<>();
 	    aggInfo.put(seriesData.getKeysAggregator().getResult(),
 		    seriesData.getValuesAggregator());
 	}
@@ -306,7 +306,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 	    long count = seriesData.getCount();
 	    int rank = 0;
 	    double percent = 0;
-	    TreeMap<Double, Aggregator> sortedInfo = new TreeMap<Double, Aggregator>(
+	    TreeMap<Double, Aggregator> sortedInfo = new TreeMap<>(
 		    aggInfo);
 	    if (revertsKeysAndValues == false) {
 		for (Map.Entry<Double, Aggregator> entry : sortedInfo

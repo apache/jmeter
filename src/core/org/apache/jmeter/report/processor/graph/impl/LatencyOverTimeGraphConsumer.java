@@ -58,7 +58,7 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>();
+	HashMap<String, GroupInfo> groupInfos = new HashMap<>();
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new MeanAggregatorFactory(), new NameSeriesSelector(),
 	        new LatencyValueSelector(), false, false));
