@@ -263,7 +263,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      *            used
      */
     public void setDoctype(String inDoctype) {
-        if ((inDoctype == null) || (inDoctype.trim().equals(""))) {
+        if ((inDoctype == null) || (inDoctype.trim().isEmpty())) {
             setProperty(new StringProperty(DOCTYPE_KEY, DEFAULT_DOCTYPE));
         } else {
             setProperty(new StringProperty(DOCTYPE_KEY, inDoctype));

@@ -185,7 +185,7 @@ public class Save implements Command {
             }
             updateFile = chooser.getSelectedFile().getAbsolutePath();
             // Make sure the file ends with proper extension
-            if(FilenameUtils.getExtension(updateFile).equals("")) {
+            if(FilenameUtils.getExtension(updateFile).isEmpty()) {
                 updateFile = updateFile + JMX_FILE_EXTENSION;
             }
             // Check if the user is trying to save to an existing file
