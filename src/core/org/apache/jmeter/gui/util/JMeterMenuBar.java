@@ -156,7 +156,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         remote_engine_shut = new LinkedList<>();
         remote_engine_exit = new LinkedList<>();
         remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ","); //$NON-NLS-1$
-        if (remoteHosts.length == 1 && remoteHosts[0].equals("")) {
+        if (remoteHosts.length == 1 && remoteHosts[0].isEmpty()) {
             remoteHosts = new String[0];
         }
         this.getRemoteItems();

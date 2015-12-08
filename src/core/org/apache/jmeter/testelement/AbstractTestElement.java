@@ -295,7 +295,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
         JMeterProperty prop = getProperty(property.getName());
 
-        if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals(""))) {
+        if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().isEmpty())) {
             propMap.put(property.getName(), propertyToPut);
         } else {
             prop.mergeIn(propertyToPut);

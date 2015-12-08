@@ -130,7 +130,7 @@ class HtmlParserHTMLParser extends HTMLParser {
                 BaseHrefTag baseHref = (BaseHrefTag) tag;
                 String baseref = baseHref.getBaseUrl();
                 try {
-                    if (!baseref.equals(""))// Bugzilla 30713
+                    if (!baseref.isEmpty())// Bugzilla 30713
                     {
                         baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref);
                     }

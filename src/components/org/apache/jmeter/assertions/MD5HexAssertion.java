@@ -65,7 +65,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
         }
 
         // no point in checking if we don't have anything to compare against
-        if (getAllowedMD5Hex().equals("")) {
+        if (getAllowedMD5Hex().isEmpty()) {
             result.setError(false);
             result.setFailure(true);
             result.setFailureMessage("MD5Hex to test against is empty");
@@ -99,8 +99,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
         byte[] md5Result = {};
 
         try {
-            MessageDigest md;
-            md = MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("MD5");
             md5Result = md.digest(ba);
         } catch (NoSuchAlgorithmException e) {
             log.error("", e);
