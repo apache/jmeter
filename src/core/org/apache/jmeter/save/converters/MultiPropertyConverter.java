@@ -22,14 +22,13 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
 
-import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
 
 public class MultiPropertyConverter extends AbstractCollectionConverter {
 
@@ -53,12 +52,11 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         MultiProperty prop = (MultiProperty) arg0;
+        
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
-        PropertyIterator iter = prop.iterator();
-        while (iter.hasNext()) {
-            writeItem(iter.next(), context, writer);
+        for (JMeterProperty jMeterProperty : prop) {
+            writeItem(jMeterProperty, context, writer);
         }
-
     }
 
     /** {@inheritDoc} */

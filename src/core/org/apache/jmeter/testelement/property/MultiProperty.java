@@ -26,7 +26,7 @@ import org.apache.jmeter.testelement.TestElement;
  *
  * @version $Revision$
  */
-public abstract class MultiProperty extends AbstractProperty {
+public abstract class MultiProperty extends AbstractProperty implements Iterable<JMeterProperty> {
     private static final long serialVersionUID = 240L;
 
     public MultiProperty() {

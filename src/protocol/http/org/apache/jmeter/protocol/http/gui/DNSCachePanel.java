@@ -38,7 +38,7 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.control.DNSCacheManager;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -146,9 +146,8 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
 
     private void populateTable(DNSCacheManager resolver) {
         dnsServersTableModel.clearData();
-        PropertyIterator iter = resolver.getServers().iterator();
-        while (iter.hasNext()) {
-            addServerToTable((String) iter.next().getObjectValue());
+        for (JMeterProperty jMeterProperty : resolver.getServers()) {
+            addServerToTable((String) jMeterProperty.getObjectValue());
         }
     }
 

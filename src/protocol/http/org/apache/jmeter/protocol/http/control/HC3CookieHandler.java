@@ -26,7 +26,7 @@ import org.apache.commons.httpclient.cookie.CookieSpec;
 import org.apache.commons.httpclient.cookie.MalformedCookieException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -82,9 +82,9 @@ public class HC3CookieHandler implements CookieHandler {
             boolean allowVariableCookie){
         org.apache.commons.httpclient.Cookie cookies[]=
             new org.apache.commons.httpclient.Cookie[cookiesCP.size()];
-        int i=0;
-        for (PropertyIterator iter = cookiesCP.iterator(); iter.hasNext();) {
-            Cookie jmcookie = (Cookie) iter.next().getObjectValue();
+        int i = 0;
+        for (JMeterProperty jMeterProperty : cookiesCP) {
+            Cookie jmcookie = (Cookie) jMeterProperty.getObjectValue();
             // Set to running version, to allow function evaluation for the cookie values (bug 28715)
             if (allowVariableCookie) {
                 jmcookie.setRunningVersion(true);
