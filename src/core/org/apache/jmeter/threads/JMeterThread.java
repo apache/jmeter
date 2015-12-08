@@ -251,14 +251,14 @@ public class JMeterThread implements Runnable, Interruptible {
     public void run() {
         // threadContext is not thread-safe, so keep within thread
         JMeterContext threadContext = JMeterContextService.getContext();
-        LoopIterationListener iterationListener=null;
+        LoopIterationListener iterationListener = null;
 
         try {
             iterationListener = initRun(threadContext);
             while (running) {
                 Sampler sam = controller.next();
                 while (running && sam != null) {
-                    process_sampler(sam, null, threadContext);
+                    processSampler(sam, null, threadContext);
                     threadContext.cleanAfterSample();
                     if(onErrorStartNextLoop || threadContext.isRestartNextLoop()) {
                         if(threadContext.isRestartNextLoop()) {
@@ -352,7 +352,7 @@ public class JMeterThread implements Runnable, Interruptible {
             }
         }
         if(transactionSampler!=null) {
-            process_sampler(transactionSampler, null, threadContext);
+            processSampler(transactionSampler, null, threadContext);
         }
     }
 
@@ -365,7 +365,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * @return SampleResult if a transaction was processed
      */
     @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
-    private SampleResult process_sampler(Sampler current, Sampler parent, JMeterContext threadContext) {
+    private SampleResult processSampler(Sampler current, Sampler parent, JMeterContext threadContext) {
         SampleResult transactionResult = null;
         try {
             // Check if we are running a transaction
@@ -389,7 +389,7 @@ public class JMeterThread implements Runnable, Interruptible {
                     // Check assertions for the transaction sample
                     checkAssertions(transactionPack.getAssertions(), transactionResult, threadContext);
                     // Notify listeners with the transaction sample result
-                    if (!(parent instanceof TransactionSampler)){
+                    if (!(parent instanceof TransactionSampler)) {
                         notifyListeners(transactionPack.getSampleListeners(), transactionResult);
                     }
                     compiler.done(transactionPack);
@@ -400,11 +400,11 @@ public class JMeterThread implements Runnable, Interruptible {
                     Sampler prev = current;
                     // It is the sub sampler of the transaction that will be sampled
                     current = transactionSampler.getSubSampler();
-                    if (current instanceof TransactionSampler){
-                        SampleResult res = process_sampler(current, prev, threadContext);// recursive call
+                    if (current instanceof TransactionSampler) {
+                        SampleResult res = processSampler(current, prev, threadContext);// recursive call
                         threadContext.setCurrentSampler(prev);
-                        current=null;
-                        if (res!=null){
+                        current = null;
+                        if (res != null) {
                             transactionSampler.addSubSamplerResult(res);
                         }
                     }
