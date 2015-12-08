@@ -33,7 +33,7 @@ public class GraphConfiguration extends InstanceConfiguration {
      * @return true if controller samples have to be filtered; false otherwise.
      */
     public final boolean excludesControllers() {
-	return excludeControllers;
+        return excludeControllers;
     }
 
     /**
@@ -43,7 +43,7 @@ public class GraphConfiguration extends InstanceConfiguration {
      *            the switch value to set
      */
     public final void setExcludeControllers(boolean excludeControllers) {
-	this.excludeControllers = excludeControllers;
+        this.excludeControllers = excludeControllers;
     }
 
     /**
@@ -52,7 +52,7 @@ public class GraphConfiguration extends InstanceConfiguration {
      * @return the title of the graph
      */
     public final String getTitle() {
-	return title;
+        return title;
     }
 
     /**
@@ -62,7 +62,7 @@ public class GraphConfiguration extends InstanceConfiguration {
      *            the title of the graph to set
      */
     public final void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
 }

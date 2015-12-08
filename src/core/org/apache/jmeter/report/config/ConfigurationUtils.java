@@ -49,28 +49,28 @@ public class ConfigurationUtils {
      *             when unable to convert the string
      */
     public static <TProperty> TProperty convert(String value,
-	    Class<TProperty> clazz) throws ConfigurationException {
-	if (clazz == null)
-	    throw new ArgumentNullException("clazz");
+        Class<TProperty> clazz) throws ConfigurationException {
+    if (clazz == null)
+        throw new ArgumentNullException("clazz");
 
-	TProperty result;
-	if (clazz.isAssignableFrom(String.class)) {
-	    result = (TProperty) value;
-	} else {
-	    StringConverter<TProperty> converter = Converters
-		    .getConverter(clazz);
-	    if (converter == null)
-		throw new ConfigurationException(String.format(
-		        NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()));
+    TProperty result;
+    if (clazz.isAssignableFrom(String.class)) {
+        result = (TProperty) value;
+    } else {
+        StringConverter<TProperty> converter = Converters
+            .getConverter(clazz);
+        if (converter == null)
+        throw new ConfigurationException(String.format(
+                NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()));
 
-	    try {
-		result = converter.convert(value);
-	    } catch (ConvertException ex) {
-		throw new ConfigurationException(String.format(
-		        NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()),
-		        ex);
-	    }
-	}
-	return result;
+        try {
+        result = converter.convert(value);
+        } catch (ConvertException ex) {
+        throw new ConfigurationException(String.format(
+                NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()),
+                ex);
+        }
+    }
+    return result;
     }
 }

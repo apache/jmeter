@@ -32,7 +32,7 @@ public class ConfigurationException extends Exception {
      * Instantiates a new configuration exception.
      */
     public ConfigurationException() {
-	super();
+        super();
     }
 
     /**
@@ -42,7 +42,7 @@ public class ConfigurationException extends Exception {
      *            the message
      */
     public ConfigurationException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ConfigurationException extends Exception {
      *            the cause
      */
     public ConfigurationException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
 }
