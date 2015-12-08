@@ -177,7 +177,7 @@ public class SmtpSampler extends AbstractSampler {
                 instance.setMailBody(getPropertyAsString(MESSAGE));
                 instance.setPlainBody(getPropertyAsBoolean(PLAIN_BODY));
                 final String filesToAttach = getPropertyAsString(ATTACH_FILE);
-                if (!filesToAttach.equals("")) {
+                if (!filesToAttach.isEmpty()) {
                     String[] attachments = filesToAttach.split(FILENAME_SEPARATOR);
                     for (String attachment : attachments) {
                         File file = new File(attachment);
