@@ -39,7 +39,7 @@ public class ExporterConfiguration extends InstanceConfiguration {
      * @return the extra configurations for graphs
      */
     public Map<String, SubConfiguration> getGraphExtraConfigurations(){
-	return graphExtraConfigurations;
+        return graphExtraConfigurations;
     }
 
     /**
