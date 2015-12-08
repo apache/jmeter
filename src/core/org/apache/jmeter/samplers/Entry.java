@@ -26,8 +26,7 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
 
-// TODO - not used at present - could perhaps be removed
-@Deprecated
+// TODO - the class contents are not used at present - could perhaps be removed
 public class Entry {
 
     private Map<Class<?>, ConfigElement> configSet;
