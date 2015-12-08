@@ -425,7 +425,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 Sampler sampler = pack.getSampler();
                 sampler.setThreadContext(threadContext);
                 // TODO should this set the thread names for all the subsamples?
-                // might be more efficient than fetching the name elsewehere
+                // might be more efficient than fetching the name elsewhere
                 sampler.setThreadName(threadName);
                 TestBeanHelper.prepare(sampler);
 
@@ -542,15 +542,15 @@ public class JMeterThread implements Runnable, Interruptible {
         threadContext.setThreadGroup(threadGroup);
         threadContext.setEngine(engine);
         testTree.traverse(compiler);
-        // listeners = controller.getListeners();
         if (scheduler) {
             // set the scheduler to start
             startScheduler();
         }
+
         rampUpDelay(); // TODO - how to handle thread stopped here
         log.info("Thread started: " + Thread.currentThread().getName());
         /*
-         * Setting SamplingStarted before the contollers are initialised allows
+         * Setting SamplingStarted before the controllers are initialised allows
          * them to access the running values of functions and variables (however
          * it does not seem to help with the listeners)
          */
