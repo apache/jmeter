@@ -31,7 +31,7 @@ import org.apache.jmeter.report.core.ArgumentNullException;
  */
 public class MapResultData implements ResultData {
 
-    private HashMap<String, ResultData> map = new HashMap<String, ResultData>();
+    private HashMap<String, ResultData> map = new HashMap<>();
 
     /*
      * (non-Javadoc)

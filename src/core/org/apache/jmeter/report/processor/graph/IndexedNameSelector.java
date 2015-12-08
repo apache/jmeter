@@ -32,7 +32,7 @@ import org.apache.jmeter.report.core.Sample;
 public class IndexedNameSelector implements GraphKeysSelector {
 
     /** The names. */
-    private LinkedList<String> names = new LinkedList<String>();
+    private LinkedList<String> names = new LinkedList<>();
 
     /**
      * Gets the names.

@@ -200,9 +200,9 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 	}
 
 	// Collection of sample builders for channels
-	private ArrayList<SampleBuilder> builders = new ArrayList<SampleBuilder>();
-	private ArrayList<FileInfo> fileInfos = new ArrayList<FileInfo>();
-	private HashMap<Long, Long> counts = new HashMap<Long, Long>();
+	private ArrayList<SampleBuilder> builders = new ArrayList<>();
+	private ArrayList<FileInfo> fileInfos = new ArrayList<>();
+	private HashMap<Long, Long> counts = new HashMap<>();
 	boolean createdWorkDir = false;
 	private final AbstractVersusRequestsGraphConsumer parent;
 

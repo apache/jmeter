@@ -60,8 +60,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
-	        1);
+	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new MeanAggregatorFactory(), new AbstractSeriesSelector() {
 
