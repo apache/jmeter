@@ -284,6 +284,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 	}
     }
 
+    @Override
     public void startConsuming() {
 	if (sampleComparator == null)
 	    throw new IllegalStateException(
@@ -300,6 +301,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 	sampleComparator.initialize(sampleMetadata);
     }
 
+    @Override
     public void consume(Sample s, int channel) {
 	samples.add(s);
 	inputSampleCount++;
@@ -309,6 +311,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 	}
     }
 
+    @Override
     public void stopConsuming() {
 	if (samples.size() > 0) {
 	    chunks.add(sortAndDump(samples, sampleMetadata));
@@ -383,7 +386,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 	final List<Sample> left = samples.subList(0, middle);
 	final List<Sample> right = samples.subList(middle, sz);
 	Job<List<Sample>> jobLeft = new Job<List<Sample>>() {
-	    protected List<Sample> exec() {
+	    @Override
+        protected List<Sample> exec() {
 		return sort(left);
 	    }
 	};

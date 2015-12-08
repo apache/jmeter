@@ -245,6 +245,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      * This sample source will start reading all inputs CSV files and produce
      * their samples to this sample source registered sample consumers.
      */
+    @Override
     public void run() {
 	produce();
     }
@@ -275,6 +276,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 	    this.sampleConsumers.remove(consumer);
 	}
 
+	@Override
 	public void setSampleContext(SampleContext context) {
 	    for (SampleConsumer consumer : this.sampleConsumers) {
 		try {
@@ -288,6 +290,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 	    }
 	}
 
+	@Override
 	public void setProducedMetadata(SampleMetadata metadata, int channel) {
 	    for (SampleConsumer consumer : this.sampleConsumers) {
 		try {
@@ -317,6 +320,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 	    }
 	}
 
+	@Override
 	public void startProducing() {
 	    for (SampleConsumer consumer : this.sampleConsumers) {
 		try {
@@ -330,6 +334,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 	    }
 	}
 
+	@Override
 	public void produce(Sample s, int channel) {
 	    for (SampleConsumer consumer : this.sampleConsumers) {
 		try {
@@ -343,6 +348,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 	    }
 	}
 
+	@Override
 	public void stopProducing() {
 	    for (SampleConsumer consumer : this.sampleConsumers) {
 		try {
