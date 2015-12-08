@@ -80,5 +80,5 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
 	((TimeRateAggregatorFactory) getGroupInfos().get(
 	        AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
 	        .setGranularity(granularity);
-    };
+    }
 }
