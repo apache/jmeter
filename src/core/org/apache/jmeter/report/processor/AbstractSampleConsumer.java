@@ -151,6 +151,7 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
 	this.sampleConsumers.remove(consumer);
     }
 
+    @Override
     public void setConsumedMetadata(SampleMetadata sampleMetadata, int channel) {
 	consumedMetadata.put(channel, sampleMetadata);
     }
@@ -185,6 +186,7 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
 	}
     }
 
+    @Override
     public void setProducedMetadata(SampleMetadata metadata, int channel) {
 	for (SampleConsumer consumer : this.sampleConsumers) {
 	    try {
@@ -206,6 +208,7 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
 	}
     }
 
+    @Override
     public void startProducing() {
 	producedSampleCount = 0;
 	for (SampleConsumer consumer : this.sampleConsumers) {
@@ -219,6 +222,7 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
 	}
     }
 
+    @Override
     public void produce(Sample s, int channel) {
 	for (SampleConsumer consumer : this.sampleConsumers) {
 	    try {
@@ -233,6 +237,7 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
 	}
     }
 
+    @Override
     public void stopProducing() {
 	for (SampleConsumer consumer : this.sampleConsumers) {
 	    try {

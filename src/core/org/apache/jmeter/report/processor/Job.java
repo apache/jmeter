@@ -34,6 +34,7 @@ abstract class Job<T> implements Runnable {
 
     private volatile T result;
 
+    @Override
     public final void run() {
 	resultReady = false;
 	result = exec();

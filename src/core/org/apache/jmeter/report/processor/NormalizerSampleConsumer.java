@@ -49,6 +49,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
     private SampleMetadata sampleMetadata;
 
+    @Override
     public void startConsuming() {
 	sampleMetadata = getConsumedMetadata(0);
 	timestamp = sampleMetadata.indexOf(CSVSaveService.TIME_STAMP);
@@ -56,6 +57,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 	startProducing();
     }
 
+    @Override
     public void consume(Sample s, int channel) {
 	Date date = null;
 	try {
@@ -86,6 +88,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 	super.produce(rewrited, 0);
     }
 
+    @Override
     public void stopConsuming() {
 	super.stopProducing();
     }
