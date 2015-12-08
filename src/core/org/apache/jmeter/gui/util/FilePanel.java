@@ -45,7 +45,7 @@ public class FilePanel extends FilePanelEntry {
     public FilePanel(ChangeListener l, String title) {
         super(JMeterUtils.getResString("file_visualizer_filename"), l); // $NON-NLS-1$
         this.title = title;
-        init();        
+        init();
     }
 
     public FilePanel(String resString, String[] exts) {

@@ -268,6 +268,7 @@ public class GenericController extends AbstractTestElement implements Controller
      * Called to re-initialize a index of controller's elements (Bug 50032)
      * @deprecated replaced by GeneriController#initializeSubControllers
      */
+    @Deprecated
     protected void reInitializeSubController() {
         initializeSubControllers();
     }
