@@ -85,6 +85,7 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
 	this.shouldWriteHeader = writeHeader;
     }
 
+    @Override
     public void startConsuming() {
 	if (outputFile == null) {
 	    File wd = getWorkingDirectory();
@@ -107,10 +108,12 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
 	}
     }
 
+    @Override
     public void consume(Sample s, int channel) {
 	csvWriters[channel].write(s);
     }
 
+    @Override
     public void stopConsuming() {
 	for (int i = 0; i < channelsCount; i++) {
 	    csvWriters[i].close();

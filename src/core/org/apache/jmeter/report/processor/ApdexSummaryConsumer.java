@@ -61,6 +61,7 @@ public class ApdexSummaryConsumer extends
 	super(true);
     }
 
+    @Override
     protected ListResultData createDataResult(String key, ApdexSummaryData data) {
 	ListResultData result = new ListResultData();
 	result.addResult(new ValueResultData(getApdex(data)));
