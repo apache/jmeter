@@ -20,7 +20,6 @@ package org.apache.jmeter.engine.util;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -68,11 +67,11 @@ public class CompoundVariable implements Function {
             if (notContain!=null){
                 log.info("Note: Function class names must not contain the string: '"+notContain+"'");
             }
+            
             List<String> classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                     new Class[] { Function.class }, true, contain, notContain);
-            Iterator<String> iter = classes.iterator();
-            while (iter.hasNext()) {
-                Function tempFunc = (Function) Class.forName(iter.next()).newInstance();
+            for (String clazzName : classes) {
+                Function tempFunc = (Function) Class.forName(clazzName).newInstance();
                 String referenceKey = tempFunc.getReferenceKey();
                 if (referenceKey.length() > 0) { // ignore self
                     functions.put(referenceKey, tempFunc.getClass());
@@ -82,8 +81,9 @@ public class CompoundVariable implements Function {
                     }
                 }
             }
+            
             final int functionCount = functions.size();
-            if (functionCount == 0){
+            if (functionCount == 0) {
                 log.warn("Did not find any functions");
             } else {
                 log.debug("Function count: "+functionCount);
@@ -134,6 +134,7 @@ public class CompoundVariable implements Function {
         if (compiledComponents == null || compiledComponents.size() == 0) {
             return ""; // $NON-NLS-1$
         }
+        
         StringBuilder results = new StringBuilder();
         for (Object item : compiledComponents) {
             if (item instanceof Function) {

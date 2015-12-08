@@ -1322,9 +1322,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             binRes = future.get(1, TimeUnit.MILLISECONDS);
                             if(cookieManager != null) {
                                 CollectionProperty cookies = binRes.getCookies();
-                                PropertyIterator iter = cookies.iterator();
-                                while (iter.hasNext()) {
-                                    Cookie cookie = (Cookie) iter.next().getObjectValue();
+                                for (JMeterProperty jMeterProperty : cookies) {
+                                    Cookie cookie = (Cookie) jMeterProperty.getObjectValue();
                                     cookieManager.add(cookie) ;
                                 }
                             }

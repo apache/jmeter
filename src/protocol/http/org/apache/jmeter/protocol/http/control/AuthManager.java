@@ -49,7 +49,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -235,10 +235,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             s2 = url2.toString();
         }
 
-            log.debug("Target URL strings to match against: "+s1+" and "+s2);
+        log.debug("Target URL strings to match against: "+s1+" and "+s2);
         // TODO should really return most specific (i.e. longest) match.
-        for (PropertyIterator iter = getAuthObjects().iterator(); iter.hasNext();) {
-            Authorization auth = (Authorization) iter.next().getObjectValue();
+        for (JMeterProperty jMeterProperty : getAuthObjects()) {
+            Authorization auth = (Authorization) jMeterProperty.getObjectValue();
 
             String uRL = auth.getURL();
             log.debug("Checking match against auth'n entry: "+uRL);
@@ -291,11 +291,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param newAuthorization authorization to be added
      */
     public void addAuth(Authorization newAuthorization) {
-        boolean alreadyExists=false;
-        PropertyIterator iter = getAuthObjects().iterator();
+        boolean alreadyExists = false;
         //iterate over authentication objects in manager
-        while (iter.hasNext()) {
-            Authorization authorization = (Authorization) iter.next().getObjectValue();
+        for (JMeterProperty jMeterProperty : getAuthObjects()) {
+            Authorization authorization = (Authorization) jMeterProperty.getObjectValue();
             if (authorization == null) {
                 continue;
             }
