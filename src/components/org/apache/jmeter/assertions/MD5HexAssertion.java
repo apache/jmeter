@@ -74,8 +74,6 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 
         String md5Result = baMD5Hex(resultData);
 
-        // String md5Result = DigestUtils.md5Hex(resultData);
-
         if (!md5Result.equalsIgnoreCase(getAllowedMD5Hex())) {
             result.setFailure(true);
 
