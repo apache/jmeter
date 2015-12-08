@@ -95,8 +95,9 @@ public class RemoteStart extends AbstractAction {
         String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
         StringTokenizer st = new StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
         List<String> list = new LinkedList<>();
-        while (st.hasMoreElements())
+        while (st.hasMoreElements()) {
             list.add((String) st.nextElement());
+        }
         return list;
     }
 
