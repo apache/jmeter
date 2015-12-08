@@ -202,13 +202,13 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         String guiClassName = node.getPropertyAsString(TestElement.GUI_CLASS);
         try {
             Class<?> testClass;
-            if (testClassName.equals("")) { // $NON-NLS-1$
+            if (testClassName.isEmpty()) { // $NON-NLS-1$
                 testClass = node.getClass();
             } else {
                 testClass = Class.forName(testClassName);
             }
             Class<?> guiClass = null;
-            if (!guiClassName.equals("")) { // $NON-NLS-1$
+            if (!guiClassName.isEmpty()) { // $NON-NLS-1$
                 guiClass = Class.forName(guiClassName);
             }
             return getGui(node, guiClass, testClass);
