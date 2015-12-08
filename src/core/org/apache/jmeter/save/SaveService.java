@@ -513,6 +513,7 @@ public class SaveService {
      * @throws IOException if there is a problem reading the file or processing it
      * @deprecated use {@link SaveService}{@link #loadTree(File)}
      */
+    @Deprecated
     public static HashTree loadTree(InputStream reader) throws IOException {
         try {
             return readTree(reader, null);
