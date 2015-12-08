@@ -50,7 +50,7 @@ import org.apache.jmeter.protocol.http.control.CookieHandler;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HC3CookieHandler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -293,9 +293,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private void populateTable(CookieManager manager) {
         tableModel.clearData();
-        PropertyIterator iter = manager.getCookies().iterator();
-        while (iter.hasNext()) {
-            addCookieToTable((Cookie) iter.next().getObjectValue());
+        for (JMeterProperty jMeterProperty : manager.getCookies()) {
+            addCookieToTable((Cookie) jMeterProperty.getObjectValue());
         }
     }
 

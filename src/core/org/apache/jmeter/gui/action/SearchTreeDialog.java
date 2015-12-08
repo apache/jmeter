@@ -24,7 +24,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -216,8 +215,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         GuiPackage guiInstance = GuiPackage.getInstance();
         JTree jTree = guiInstance.getMainFrame().getTree();
 
-        for (Iterator<JMeterTreeNode> iterator = nodes.iterator(); iterator.hasNext();) {
-            JMeterTreeNode jMeterTreeNode = iterator.next();
+        for (JMeterTreeNode jMeterTreeNode : nodes) {
             jMeterTreeNode.setMarkedBySearch(true);
             if (expand) {
                 jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));

@@ -32,7 +32,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -104,10 +104,9 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         CollectionProperty dnsServers = getServers();
         try {
             String[] serverNames = new String[dnsServers.size()];
-            PropertyIterator dnsServIt = dnsServers.iterator();
-            int index=0;
-            while (dnsServIt.hasNext()) {
-                serverNames[index] = dnsServIt.next().getStringValue();
+            int index = 0;
+            for (JMeterProperty jMeterProperty : dnsServers) {
+                serverNames[index] = jMeterProperty.getStringValue();
                 index++;
             }
             clone.resolver = new ExtendedResolver(serverNames);

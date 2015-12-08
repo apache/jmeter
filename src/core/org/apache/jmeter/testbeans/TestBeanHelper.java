@@ -133,20 +133,16 @@ public class TestBeanHelper {
         return value;
     }
 
-    private static Object unwrapCollection(MultiProperty prop,String type)
+    private static Object unwrapCollection(MultiProperty prop, String type)
     {
         if(prop instanceof CollectionProperty)
         {
             Collection<Object> values = new LinkedList<>();
-            PropertyIterator iter = prop.iterator();
-            while(iter.hasNext())
-            {
-                try
-                {
-                    values.add(unwrapProperty(null,iter.next(),Class.forName(type)));
+            for (JMeterProperty jMeterProperty : prop) {
+                try {
+                    values.add(unwrapProperty(null, jMeterProperty, Class.forName(type)));
                 }
-                catch(Exception e)
-                {
+                catch(Exception e) {
                     log.error("Couldn't convert object: " + prop.getObjectValue() + " to " + type,e);
                 }
             }

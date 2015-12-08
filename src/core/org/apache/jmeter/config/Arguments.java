@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
@@ -32,7 +33,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * A set of Argument objects.
  *
  */
-public class Arguments extends ConfigTestElement implements Serializable {
+public class Arguments extends ConfigTestElement implements Serializable, Iterable<JMeterProperty> {
     private static final long serialVersionUID = 240L;
 
     /** The name of the property used to store the arguments. */
@@ -141,6 +142,7 @@ public class Arguments extends ConfigTestElement implements Serializable {
      *
      * @return an iteration of the arguments
      */
+    @Override
     public PropertyIterator iterator() {
         return getArguments().iterator();
     }
