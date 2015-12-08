@@ -31,51 +31,51 @@ public final class Converters {
 
     static {
 
-	StringConverter<Double> doubleConverter = new StringConverter<Double>() {
+        StringConverter<Double> doubleConverter = new StringConverter<Double>() {
 
-	    @Override
-	    public Double convert(String value) throws ConvertException {
-		try {
-		    return Double.valueOf(value);
-		} catch (NumberFormatException ex) {
-		    throw new ConvertException(value, Double.class.getName());
-		}
-	    }
-	};
-	converters.put(Double.class, doubleConverter);
-	converters.put(double.class, doubleConverter);
+            @Override
+            public Double convert(String value) throws ConvertException {
+                try {
+                    return Double.valueOf(value);
+                } catch (NumberFormatException ex) {
+                    throw new ConvertException(value, Double.class.getName());
+                }
+            }
+        };
+        converters.put(Double.class, doubleConverter);
+        converters.put(double.class, doubleConverter);
 
-	StringConverter<Long> longConverter = new StringConverter<Long>() {
+        StringConverter<Long> longConverter = new StringConverter<Long>() {
 
-	    @Override
-	    public Long convert(String value) throws ConvertException {
-		try {
-		    return Long.valueOf(value);
-		} catch (NumberFormatException ex) {
-		    throw new ConvertException(value, Long.class.getName());
-		}
-	    }
-	};
-	converters.put(Long.class, longConverter);
-	converters.put(long.class, longConverter);
+            @Override
+            public Long convert(String value) throws ConvertException {
+                try {
+                    return Long.valueOf(value);
+                } catch (NumberFormatException ex) {
+                    throw new ConvertException(value, Long.class.getName());
+                }
+            }
+        };
+        converters.put(Long.class, longConverter);
+        converters.put(long.class, longConverter);
 
-	StringConverter<Boolean> booleanConverter = new StringConverter<Boolean>() {
+        StringConverter<Boolean> booleanConverter = new StringConverter<Boolean>() {
 
-	    @Override
-	    public Boolean convert(String value) throws ConvertException {
-		return Boolean.valueOf(value);
-	    }
-	};
-	converters.put(Boolean.class, booleanConverter);
-	converters.put(boolean.class, booleanConverter);
+            @Override
+            public Boolean convert(String value) throws ConvertException {
+                return Boolean.valueOf(value);
+            }
+        };
+        converters.put(Boolean.class, booleanConverter);
+        converters.put(boolean.class, booleanConverter);
 
-	converters.put(File.class, new StringConverter<File>() {
+        converters.put(File.class, new StringConverter<File>() {
 
-	    @Override
-	    public File convert(String value) throws ConvertException {
-		return new File(value);
-	    }
-	});
+            @Override
+            public File convert(String value) throws ConvertException {
+                return new File(value);
+            }
+        });
     }
 
     /**
@@ -89,7 +89,7 @@ public final class Converters {
      */
     @SuppressWarnings("unchecked")
     public static <TDest> StringConverter<TDest> getConverter(Class<TDest> clazz) {
-	return (StringConverter<TDest>) converters.get(clazz);
+        return (StringConverter<TDest>) converters.get(clazz);
     }
 
 }

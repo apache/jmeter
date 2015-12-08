@@ -38,8 +38,7 @@ public class ConvertException extends Exception {
      *            the type
      */
     public ConvertException(String value, String type) {
-	super(String.format(MESSAGE_FORMAT, value, type));
-
+        super(String.format(MESSAGE_FORMAT, value, type));
     }
 
     /**
@@ -53,7 +52,7 @@ public class ConvertException extends Exception {
      *            the cause
      */
     public ConvertException(String value, String type, Throwable cause) {
-	super(String.format(MESSAGE_FORMAT, value, type), cause);
+        super(String.format(MESSAGE_FORMAT, value, type), cause);
     }
 
 }

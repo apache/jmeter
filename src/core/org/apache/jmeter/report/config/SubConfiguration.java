@@ -35,7 +35,7 @@ public class SubConfiguration {
      * @return the properties of the item
      */
     public final Map<String, String> getProperties() {
-	return properties;
+        return properties;
     }
 
     /**
@@ -54,15 +54,15 @@ public class SubConfiguration {
      *             if cannot convert property
      */
     public final <TProperty> TProperty getProperty(String key,
-	    TProperty defaultValue, Class<TProperty> clazz)
-	    throws ConfigurationException {
-	String value = properties.get(key);
-	TProperty result;
-	if (value == null) {
-	    result = defaultValue;
-	} else {
-	    result = ConfigurationUtils.convert(value, clazz);
-	}
-	return result;
+            TProperty defaultValue, Class<TProperty> clazz)
+                    throws ConfigurationException {
+        String value = properties.get(key);
+        TProperty result;
+        if (value == null) {
+            result = defaultValue;
+        } else {
+            result = ConfigurationUtils.convert(value, clazz);
+        }
+        return result;
     }
 }

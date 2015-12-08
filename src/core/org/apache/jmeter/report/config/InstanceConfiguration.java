@@ -33,7 +33,7 @@ public class InstanceConfiguration extends SubConfiguration {
      * @return the class name of the item
      */
     public final String getClassName() {
-	return className;
+        return className;
     }
 
     /**
@@ -43,7 +43,7 @@ public class InstanceConfiguration extends SubConfiguration {
      *            the new class name
      */
     public final void setClassName(String className) {
-	this.className = className;
+        this.className = className;
     }
 
 }

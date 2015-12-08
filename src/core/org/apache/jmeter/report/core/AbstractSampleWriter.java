@@ -62,15 +62,14 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            sample writer
      */
     public void setWriter(Writer writer) {
-	if (writer == null)
-	    throw new ArgumentNullException("writer");
+        if (writer == null)
+            throw new ArgumentNullException("writer");
 
-	if (this.writer != null) {
-	    // flush and close previous writer
-	    safeClose(this.writer);
-	}
-	this.writer = new PrintWriter(new BufferedWriter(writer, BUF_SIZE),
-	        false);
+        if (this.writer != null) {
+            // flush and close previous writer
+            safeClose(this.writer);
+        }
+        this.writer = new PrintWriter(new BufferedWriter(writer, BUF_SIZE), false);
     }
 
     /**
@@ -81,14 +80,14 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            The output stream on which sample should be written
      */
     public void setOutputStream(OutputStream out) {
-	if (out == null)
-	    throw new ArgumentNullException("out");
+        if (out == null)
+            throw new ArgumentNullException("out");
 
-	try {
-	    setWriter(new OutputStreamWriter(out, CHARSET));
-	} catch (UnsupportedEncodingException e) {
-	    // ignore iso8859-1 always supported
-	}
+        try {
+            setWriter(new OutputStreamWriter(out, CHARSET));
+        } catch (UnsupportedEncodingException e) {
+            // ignore iso8859-1 always supported
+        }
     }
 
     /**
@@ -99,13 +98,13 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            sample writter
      */
     public void setOutputFile(File output) {
-	FileOutputStream fos = null;
-	try {
-	    fos = new FileOutputStream(output);
-	} catch (Exception e) {
-	    throw new SampleException(e.getMessage(), e);
-	}
-	setOutputStream(fos);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(output);
+        } catch (Exception e) {
+            throw new SampleException(e.getMessage(), e);
+        }
+        setOutputStream(fos);
     }
 
     /**
@@ -115,29 +114,29 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      */
     @Override
     public void close() {
-	safeClose(this.writer);
-	this.writer = null;
+        safeClose(this.writer);
+        this.writer = null;
     }
 
     private void safeClose(Writer w) {
-	try {
-	    w.flush();
-	} catch (Exception e) {
-	    // ignore
-	}
-	try {
-	    w.close();
-	} catch (Exception e) {
-	    // ignore
-	}
+        try {
+            w.flush();
+        } catch (Exception e) {
+            // ignore
+        }
+        try {
+            w.close();
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     public void flush() {
-	try {
-	    writer.flush();
-	} catch (Exception e) {
-	    // ignore
-	}
+        try {
+            writer.flush();
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
 }
