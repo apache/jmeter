@@ -120,10 +120,6 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      * Initialises all of the components on this panel.
      */
     private void init() {
-        /*
-         * if(choiceList.isEditable()) { choiceList.addActionListener(new
-         * ComboListener()); }
-         */
         // Register the handler for focus listening. This handler will
         // only notify the registered when the text changes from when
         // the focus is gained to when it is lost.
