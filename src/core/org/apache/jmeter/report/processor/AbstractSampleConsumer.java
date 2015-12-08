@@ -55,13 +55,13 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
      * samples consumers that will consume sample produced by this sample
      * consumer (which is also a sample producer)
      */
-    private List<SampleConsumer> sampleConsumers = new ArrayList<SampleConsumer>();
+    private List<SampleConsumer> sampleConsumers = new ArrayList<>();
 
     /**
      * index of sample metadata consumed by this consumer. Indexed by channel
      * numbers
      */
-    private Map<Integer, SampleMetadata> consumedMetadata = new TreeMap<Integer, SampleMetadata>();
+    private Map<Integer, SampleMetadata> consumedMetadata = new TreeMap<>();
 
     /**
      * Gets the data identified by the specified key from the current sample

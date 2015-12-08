@@ -64,8 +64,7 @@ public class ResponseTimeVSRequestGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<String, GroupInfo>(
-	        1);
+	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
 	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
 	        new MedianAggregatorFactory(), new StatusSeriesSelector(),
 	        new ElapsedTimeValueSelector(), false, false));
