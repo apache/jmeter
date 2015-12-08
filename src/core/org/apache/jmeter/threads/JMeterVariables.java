@@ -71,6 +71,7 @@ public class JMeterVariables {
     }
 
     // Does not appear to be used
+    @Deprecated
     public void initialize() {
         variables.clear();
         preloadVariables();
