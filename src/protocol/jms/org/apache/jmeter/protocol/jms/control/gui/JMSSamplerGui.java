@@ -153,7 +153,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     @Override
     public void modifyTestElement(TestElement element) {
         this.configureTestElement(element);
-        if (!(element instanceof JMSSampler)) return;
+        if (!(element instanceof JMSSampler)) { return; }
         JMSSampler sampler = (JMSSampler) element;
         transfer(sampler);
     }
@@ -161,7 +161,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (!(el instanceof JMSSampler)) return;
+        if (!(el instanceof JMSSampler)) { return; }
         JMSSampler sampler = (JMSSampler) el;
         queueConnectionFactory.setText(sampler.getQueueConnectionFactory());
         sendQueue.setText(sampler.getSendQueue());

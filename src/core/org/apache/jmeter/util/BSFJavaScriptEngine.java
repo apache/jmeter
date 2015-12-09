@@ -75,9 +75,10 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             Object fun = global.get(method, global);
             // NOTE: Source and line arguments are nonsense in a call().
             //       Any way to make these arguments *sensible?
-            if (fun == Scriptable.NOT_FOUND)
+            if (fun == Scriptable.NOT_FOUND) {
                 throw new EvaluatorException("function " + method +
                                              " not found.", "none", 0);
+            }
 
             cx.setOptimizationLevel(-1);
             cx.setGeneratingDebug(false);
@@ -90,8 +91,9 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
 
 //                ScriptRuntime.call(cx, fun, global, args, global);
 
-            if (retval instanceof Wrapper)
+            if (retval instanceof Wrapper) {
                 retval = ((Wrapper) retval).unwrap();
+            }
         }
         catch (Throwable t) {
             handleError(t);
@@ -142,8 +144,9 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
                                        source, lineNo,
                                        null);
 
-            if (retval instanceof NativeJavaObject)
+            if (retval instanceof NativeJavaObject) {
                 retval = ((NativeJavaObject) retval).unwrap();
+            }
 
         }
         catch (Throwable t) { // includes JavaScriptException, rethrows Errors
@@ -156,8 +159,9 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
     }
 
     private void handleError(Throwable t) throws BSFException {
-        if (t instanceof WrappedException)
+        if (t instanceof WrappedException) {
             t = ((WrappedException) t).getWrappedException();
+        }
 
         String message = null;
         Throwable target = t;
@@ -184,8 +188,9 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             message = "Stack Overflow";
         }
 
-        if (message == null)
+        if (message == null) {
             message = t.toString();
+        }
 
         if (t instanceof Error && !(t instanceof StackOverflowError)) {
             // Re-throw Errors because we're supposed to let the JVM see it

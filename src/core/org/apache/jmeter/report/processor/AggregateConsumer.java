@@ -63,10 +63,12 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     public AggregateConsumer(Aggregator aggregator,
 	    SampleSelector<Double> selector) {
-	if (aggregator == null)
+	if (aggregator == null) {
 	    throw new ArgumentNullException("aggregator");
-	if (selector == null)
+	}
+	if (selector == null) {
 	    throw new ArgumentNullException("selector");
+	}
 
 	this.aggregator = aggregator;
 	this.selector = selector;

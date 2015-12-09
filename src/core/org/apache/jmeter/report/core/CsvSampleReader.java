@@ -92,12 +92,14 @@ public class CsvSampleReader {
 
     private CsvSampleReader(File inputFile, SampleMetadata metadata,
             Character separator, boolean useSaveSampleCfg) {
-        if (inputFile == null)
+        if (inputFile == null) {
             throw new ArgumentNullException("inputFile");
+        }
 
-        if (inputFile.isFile() == false || inputFile.canRead() == false)
+        if (inputFile.isFile() == false || inputFile.canRead() == false) {
             throw new IllegalArgumentException(file.getAbsolutePath()
                     + "does not exist or is not readable");
+        }
         this.file = inputFile;
         try {
             this.reader = new BufferedReader(new InputStreamReader(
@@ -105,8 +107,9 @@ public class CsvSampleReader {
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             throw new SampleException("Could not create file reader !", ex);
         }
-        if (metadata == null)
+        if (metadata == null) {
             metadata = readMetadata(separator, useSaveSampleCfg);
+        }
         this.metadata = metadata;
         this.columnCount = metadata.getColumnCount();
         this.separator = metadata.getSeparator();
@@ -158,8 +161,9 @@ public class CsvSampleReader {
                 if (data.length < columnCount) {
                     String[] filler = new String[columnCount];
                     System.arraycopy(data, 0, filler, 0, data.length);
-                    for (int i = data.length; i < columnCount; i++)
+                    for (int i = data.length; i < columnCount; i++) {
                         filler[i] = "";
+                    }
                     data = filler;
                 }
                 sample = new Sample(row, metadata, data);

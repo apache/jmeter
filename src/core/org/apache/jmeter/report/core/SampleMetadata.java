@@ -61,8 +61,9 @@ public class SampleMetadata {
     }
 
     public SampleMetadata(SampleSaveConfiguration saveConfig) {
-	if (saveConfig == null)
-	    throw new ArgumentNullException("saveConfig");
+	if (saveConfig == null) {
+        throw new ArgumentNullException("saveConfig");
+    }
 	ArrayList<String> columns = new ArrayList<>();
 	if (saveConfig.saveTimestamp()) {
 	    columns.add(CSVSaveService.TIME_STAMP);

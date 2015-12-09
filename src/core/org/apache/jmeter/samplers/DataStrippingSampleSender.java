@@ -67,7 +67,9 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     @Override
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
-        if(decoratedSender != null) decoratedSender.testEnded(host);
+        if(decoratedSender != null) { 
+            decoratedSender.testEnded(host);
+        }
     }
 
     @Override

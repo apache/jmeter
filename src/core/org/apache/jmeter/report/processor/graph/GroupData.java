@@ -64,7 +64,8 @@ public class GroupData {
 
     public void clear() {
 	seriesData.clear();
-	if (overallSeries != null)
+	if (overallSeries != null) {
 	    overallSeries.clear();
+	}
     }
 }

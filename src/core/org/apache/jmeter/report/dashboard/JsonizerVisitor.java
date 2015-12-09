@@ -96,8 +96,9 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
 	if (valueResult != null) {
 	    Object value = valueResult.getValue();
 	    result = String.valueOf(value);
-	    if (value instanceof String)
-		result = '"' + result + '"';
+	    if (value instanceof String) {
+	        result = '"' + result + '"';
+	    }
 	}
 	return result;
     }

@@ -35,7 +35,7 @@ class ClassFilter {
     }
 
     private boolean include(String text) {
-        if (pkgs.length == 0) return true; // i.e. no filter
+        if (pkgs.length == 0) { return true; } // i.e. no filter
         for (String pkg : pkgs) {
             if (text.startsWith(pkg)) {
                 return true;

@@ -49,8 +49,9 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
     }
 
     public void setOutputFile(File outputFile) {
-	if (outputFile == null)
-	    throw new ArgumentNullException("outputFile");
+	if (outputFile == null) {
+        throw new ArgumentNullException("outputFile");
+    }
 
 	this.outputFile = outputFile;
     }
