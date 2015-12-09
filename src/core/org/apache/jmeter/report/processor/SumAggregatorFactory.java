@@ -33,7 +33,7 @@ public class SumAggregatorFactory extends AbstractAggregatorFactory {
      */
     @Override
     protected Aggregator createAggregator() {
-	return new SumAggregator();
+        return new SumAggregator();
     }
 
 }
