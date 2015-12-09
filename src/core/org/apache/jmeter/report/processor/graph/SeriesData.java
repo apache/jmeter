@@ -57,7 +57,7 @@ public class SeriesData {
      * @return the groupData
      */
     public final Map<Double, Aggregator> getAggregatorInfo() {
-	return aggregators;
+        return aggregators;
     }
 
     /**
@@ -66,7 +66,7 @@ public class SeriesData {
      * @return the keys aggregator
      */
     public final Aggregator getKeysAggregator() {
-	return keysAggregator;
+        return keysAggregator;
     }
 
     /**
@@ -75,7 +75,7 @@ public class SeriesData {
      * @return the values aggregator
      */
     public final Aggregator getValuesAggregator() {
-	return valuesAggregator;
+        return valuesAggregator;
     }
 
     /**
@@ -85,7 +85,7 @@ public class SeriesData {
      *         false otherwise
      */
     public final boolean isControllersSeries() {
-	return isControllersSeries;
+        return isControllersSeries;
     }
 
     /**
@@ -95,7 +95,7 @@ public class SeriesData {
      *         series; false otherwise
      */
     public final boolean isOverallSeries() {
-	return isOverallSeries;
+        return isOverallSeries;
     }
 
     /**
@@ -104,7 +104,7 @@ public class SeriesData {
      * @return the count of samples
      */
     public final long getCount() {
-	return count;
+        return count;
     }
 
     /**
@@ -119,33 +119,33 @@ public class SeriesData {
      *            controller samples
      */
     public SeriesData(AggregatorFactory factory, boolean hasAggregatedKey,
-	    boolean isControllersSeries, boolean isOverallSeries) {
-	if (hasAggregatedKey) {
-	    keysAggregator = factory.createKeyAggregator();
-	    valuesAggregator = factory.createAggregatedKeyValueAggregator();
-	} else {
-	    keysAggregator = null;
-	    valuesAggregator = null;
-	}
-	this.isControllersSeries = isControllersSeries;
-	this.isOverallSeries = isOverallSeries;
+            boolean isControllersSeries, boolean isOverallSeries) {
+        if (hasAggregatedKey) {
+            keysAggregator = factory.createKeyAggregator();
+            valuesAggregator = factory.createAggregatedKeyValueAggregator();
+        } else {
+            keysAggregator = null;
+            valuesAggregator = null;
+        }
+        this.isControllersSeries = isControllersSeries;
+        this.isOverallSeries = isOverallSeries;
     }
 
     /**
      * Increment the count of samples.
      */
     public void incrementCount() {
-	count++;
+        count++;
     }
 
     public void clear() {
-	aggregators.clear();
-	count = 0L;
-	if (keysAggregator != null) {
-        keysAggregator.reset();
-    }
-	if (valuesAggregator != null) {
-        valuesAggregator.reset();
-    }
+        aggregators.clear();
+        count = 0L;
+        if (keysAggregator != null) {
+            keysAggregator.reset();
+        }
+        if (valuesAggregator != null) {
+            valuesAggregator.reset();
+        }
     }
 }
