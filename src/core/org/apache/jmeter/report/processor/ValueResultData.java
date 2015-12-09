@@ -34,7 +34,7 @@ public class ValueResultData implements ResultData {
      * @return the value of the result
      */
     public final Object getValue() {
-	return value;
+        return value;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ValueResultData implements ResultData {
      *            the new value of the result
      */
     public final void setValue(Object value) {
-	this.value = value;
+        this.value = value;
     }
 
     /**
@@ -60,7 +60,7 @@ public class ValueResultData implements ResultData {
      *            the value of the result
      */
     public ValueResultData(Object value) {
-	setValue(value);
+        setValue(value);
     }
 
     /*
@@ -72,10 +72,10 @@ public class ValueResultData implements ResultData {
      */
     @Override
     public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
-	if (visitor == null) {
-        throw new ArgumentNullException("visitor");
-    }
-	return visitor.visitValueResult(this);
+        if (visitor == null) {
+            throw new ArgumentNullException("visitor");
+        }
+        return visitor.visitValueResult(this);
     }
 
 }

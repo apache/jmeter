@@ -32,7 +32,7 @@ public class TimeRateAggregatorFactory extends AbstractAggregatorFactory {
      * @return the granularity
      */
     public final long getGranularity() {
-	return granularity;
+        return granularity;
     }
 
     /**
@@ -42,7 +42,7 @@ public class TimeRateAggregatorFactory extends AbstractAggregatorFactory {
      *            the granularity to set
      */
     public final void setGranularity(long granularity) {
-	this.granularity = granularity;
+        this.granularity = granularity;
     }
 
     /*
@@ -54,9 +54,9 @@ public class TimeRateAggregatorFactory extends AbstractAggregatorFactory {
      */
     @Override
     protected Aggregator createAggregator() {
-	TimeRateAggregator aggregator = new TimeRateAggregator();
-	aggregator.setGranularity(granularity);
-	return aggregator;
+        TimeRateAggregator aggregator = new TimeRateAggregator();
+        aggregator.setGranularity(granularity);
+        return aggregator;
     }
 
 }

@@ -32,7 +32,7 @@ public class TimeRateAggregator implements Aggregator {
      * @return the granularity
      */
     public final long getGranularity() {
-	return granularity;
+        return granularity;
     }
 
     /**
@@ -40,7 +40,7 @@ public class TimeRateAggregator implements Aggregator {
      *            the granularity to set
      */
     public final void setGranularity(long granularity) {
-	this.granularity = granularity;
+        this.granularity = granularity;
     }
 
     /*
@@ -50,7 +50,7 @@ public class TimeRateAggregator implements Aggregator {
      */
     @Override
     public long getCount() {
-	return count;
+        return count;
     }
 
     /*
@@ -60,7 +60,7 @@ public class TimeRateAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return value * 1000 / granularity;
+        return value * 1000 / granularity;
     }
 
     /*
@@ -70,8 +70,8 @@ public class TimeRateAggregator implements Aggregator {
      */
     @Override
     public void addValue(final double value) {
-	this.count++;
-	this.value += value;
+        this.count++;
+        this.value += value;
     }
 
     /*
@@ -81,8 +81,8 @@ public class TimeRateAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	count = 0;
-	value = 0;
+        count = 0;
+        value = 0;
     }
 
 }

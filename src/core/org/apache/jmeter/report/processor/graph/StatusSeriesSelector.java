@@ -38,7 +38,7 @@ public class StatusSeriesSelector extends AbstractSeriesSelector {
      * @return the failureLabel
      */
     public final String getFailureLabel() {
-	return failureLabel;
+        return failureLabel;
     }
 
     /**
@@ -48,7 +48,7 @@ public class StatusSeriesSelector extends AbstractSeriesSelector {
      *            the failureLabel to set
      */
     public final void setFailureLabel(String failureLabel) {
-	this.failureLabel = failureLabel;
+        this.failureLabel = failureLabel;
     }
 
     /**
@@ -57,7 +57,7 @@ public class StatusSeriesSelector extends AbstractSeriesSelector {
      * @return the successLabel
      */
     public final String getSuccessLabel() {
-	return successLabel;
+        return successLabel;
     }
 
     /**
@@ -67,7 +67,7 @@ public class StatusSeriesSelector extends AbstractSeriesSelector {
      *            the successLabel to set
      */
     public final void setSuccessLabel(String successLabel) {
-	this.successLabel = successLabel;
+        this.successLabel = successLabel;
     }
 
     /*
@@ -79,8 +79,8 @@ public class StatusSeriesSelector extends AbstractSeriesSelector {
      */
     @Override
     public Iterable<String> select(Sample sample) {
-	String label = sample.getSuccess() ? successLabel : failureLabel;
-	return Arrays.asList(new String[] { label });
+        String label = sample.getSuccess() ? successLabel : failureLabel;
+        return Arrays.asList(new String[] { label });
     }
 
 }
