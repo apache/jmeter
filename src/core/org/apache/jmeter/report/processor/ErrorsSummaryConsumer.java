@@ -110,8 +110,9 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 	    errorCount++;
 
 	    Long data = info.getData();
-	    if (data == null)
-		data = Long.valueOf(1);
+	    if (data == null) {
+	        data = Long.valueOf(1);
+	    }
 	    info.setData(data + 1);
 	}
     }

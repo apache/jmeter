@@ -89,8 +89,9 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      *            columns
      */
     public CsvFileSampleSource(final File inputFile, final char separator) {
-	if (inputFile == null)
+	if (inputFile == null) {
 	    throw new ArgumentNullException("inputFile");
+	}
 
 	final String inputRootName = getFileRootName(inputFile.getName());
 	final String inputExtension = getFileExtension(inputFile.getName());
@@ -173,9 +174,10 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      */
     private void produce() {
 	SampleContext context = getSampleContext();
-	if (context == null)
+	if (context == null) {
 	    throw new IllegalStateException(
 		    "Set a sample context before produce samples.");
+	}
 
 	for (int i = 0; i < csvReaders.length; i++) {
 	    long sampleCount = 0;
@@ -256,8 +258,9 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 	private List<SampleConsumer> sampleConsumers = new ArrayList<>();
 
 	public void setSampleConsumers(List<SampleConsumer> consumers) {
-	    if (consumers == null)
+	    if (consumers == null) {
 		throw new ArgumentNullException("consumers");
+	    }
 
 	    this.sampleConsumers = consumers;
 	}

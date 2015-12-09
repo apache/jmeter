@@ -141,9 +141,11 @@ public class SeriesData {
     public void clear() {
 	aggregators.clear();
 	count = 0L;
-	if (keysAggregator != null)
-	    keysAggregator.reset();
-	if (valuesAggregator != null)
-	    valuesAggregator.reset();
+	if (keysAggregator != null) {
+        keysAggregator.reset();
+    }
+	if (valuesAggregator != null) {
+        valuesAggregator.reset();
+    }
     }
 }

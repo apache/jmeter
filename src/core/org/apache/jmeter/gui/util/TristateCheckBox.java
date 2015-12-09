@@ -155,8 +155,9 @@ public final class TristateCheckBox extends JCheckBox {
     public void setModel(ButtonModel newModel) {
         super.setModel(newModel);
         //Listen for enable changes
-        if (model instanceof TristateButtonModel)
+        if (model instanceof TristateButtonModel) {
             model.addChangeListener(enableListener);
+        }
     }
 
     //Empty override of superclass method
@@ -167,7 +168,9 @@ public final class TristateCheckBox extends JCheckBox {
     // Mostly delegates to model
     private void iterateState() {
         //Maybe do nothing at all?
-        if (!getModel().isEnabled()) return;
+        if (!getModel().isEnabled()) {
+            return;
+        }
 
         grabFocus();
 

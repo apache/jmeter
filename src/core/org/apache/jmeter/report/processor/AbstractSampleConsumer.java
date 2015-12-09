@@ -127,8 +127,9 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
     }
 
     public void setSampleConsumers(List<SampleConsumer> consumers) {
-	if (consumers == null)
+	if (consumers == null) {
 	    throw new ArgumentNullException("consumers");
+	}
 
 	this.sampleConsumers = consumers;
     }

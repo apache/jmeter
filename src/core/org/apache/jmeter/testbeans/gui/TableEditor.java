@@ -132,7 +132,9 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         {
             model.setRows(convertCollection((Collection<?>)value));
         }
-        else model.clearData();
+        else {
+            model.clearData();
+        }
         this.firePropertyChange();
     }
 

@@ -186,8 +186,9 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
      * @return Panel for entering the data
      */
     private Component makeDataPanel() {
-        if (smtpPanel == null)
+        if (smtpPanel == null) {
             smtpPanel = new SmtpPanel();
+        }
         return smtpPanel;
     }
 }

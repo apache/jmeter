@@ -98,8 +98,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 	Object data = storage.get(resultKey);
 	if (data instanceof ResultData) {
 	    ResultData result = (ResultData) data;
-	    if (customizer != null)
+	    if (customizer != null) {
 		result = customizer.customizeResult(result);
+	    }
 	    dataContext.put(resultKey, result.accept(visitor));
 	}
     }
@@ -134,12 +135,15 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     @Override
     public void export(SampleContext context, File file,
 	    ReportGeneratorConfiguration configuration) throws ExportException {
-	if (context == null)
+	if (context == null) {
 	    throw new ArgumentNullException("context");
-	if (file == null)
+	}
+	if (file == null) {
 	    throw new ArgumentNullException("file");
-	if (configuration == null)
+	}
+	if (configuration == null) {
 	    throw new ArgumentNullException("configuration");
+	}
 
 	log.debug("Start template processing");
 

@@ -62,8 +62,9 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            sample writer
      */
     public void setWriter(Writer writer) {
-        if (writer == null)
+        if (writer == null) {
             throw new ArgumentNullException("writer");
+        }
 
         if (this.writer != null) {
             // flush and close previous writer
@@ -80,8 +81,9 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            The output stream on which sample should be written
      */
     public void setOutputStream(OutputStream out) {
-        if (out == null)
+        if (out == null) {
             throw new ArgumentNullException("out");
+        }
 
         try {
             setWriter(new OutputStreamWriter(out, CHARSET));
