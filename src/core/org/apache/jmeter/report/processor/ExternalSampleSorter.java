@@ -177,11 +177,13 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            Wether the CSV header should be written in the output CSV file
      */
     public void sort(CsvFile inputFile, File outputFile, boolean writeHeader) {
-	if (inputFile == null)
+	if (inputFile == null) {
 	    throw new ArgumentNullException("inputFile");
+	}
 
-	if (outputFile == null)
+	if (outputFile == null) {
 	    throw new ArgumentNullException("outputFile");
+	}
 
 	if (!inputFile.isFile()) {
 	    throw new SampleException(
@@ -219,14 +221,17 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     public void sort(SampleMetadata sampleMetadata, File inputFile,
 	    File outputFile, boolean writeHeader) {
-	if (sampleMetadata == null)
+	if (sampleMetadata == null) {
 	    throw new ArgumentNullException("sampleMetadata");
+	}
 
-	if (inputFile == null)
+	if (inputFile == null) {
 	    throw new ArgumentNullException("inputFile");
+	}
 
-	if (outputFile == null)
+	if (outputFile == null) {
 	    throw new ArgumentNullException("outputFile");
+	}
 
 	if (!inputFile.isFile()) {
 	    throw new SampleException(
@@ -260,11 +265,13 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     private void sort(CsvSampleReader csvReader, File output,
 	    boolean writeHeader) {
-	if (csvReader == null)
+	if (csvReader == null) {
 	    throw new ArgumentNullException("csvReader");
+	}
 
-	if (output == null)
+	if (output == null) {
 	    throw new ArgumentNullException("output");
+	}
 
 	SampleMetadata sampleMetadata = csvReader.getMetadata();
 	SampleWriterConsumer writerConsumer = new SampleWriterConsumer();
@@ -286,9 +293,10 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     @Override
     public void startConsuming() {
-	if (sampleComparator == null)
+	if (sampleComparator == null) {
 	    throw new IllegalStateException(
 		    "sampleComparator is not set, call setSampleComparator() first.");
+	}
 
 	File workDir = getWorkingDirectory();
 	workDir.mkdir();

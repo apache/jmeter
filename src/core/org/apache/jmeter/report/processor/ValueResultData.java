@@ -72,8 +72,9 @@ public class ValueResultData implements ResultData {
      */
     @Override
     public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
-	if (visitor == null)
-	    throw new ArgumentNullException("visitor");
+	if (visitor == null) {
+        throw new ArgumentNullException("visitor");
+    }
 	return visitor.visitValueResult(this);
     }
 

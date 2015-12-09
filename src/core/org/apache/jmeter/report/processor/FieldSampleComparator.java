@@ -39,9 +39,10 @@ public class FieldSampleComparator implements SampleComparator {
     @Override
     public final void initialize(SampleMetadata metadata) {
 	index = metadata.indexOf(fieldName);
-	if (index < 0)
+	if (index < 0) {
 	    throw new SampleException(String.format(METADATA_EXCEPTION_MSG_FMT,
 		    fieldName, metadata));
+	}
     }
 
     /*

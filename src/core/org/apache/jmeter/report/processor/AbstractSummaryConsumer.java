@@ -258,8 +258,9 @@ public abstract class AbstractSummaryConsumer<TData> extends
 	// Add overall row if needed
 	if (hasOverallResult) {
 	    MapResultData overallResult = createResultFromKey(null);
-	    if (overallResult != null)
+	    if (overallResult != null) {
 		result.setResult(RESULT_VALUE_OVERALL, overallResult);
+	    }
 	}
 
 	// Build rows from samples
@@ -267,8 +268,9 @@ public abstract class AbstractSummaryConsumer<TData> extends
 	for (String key : infos.keySet()) {
 	    // Add result only if data exist
 	    MapResultData keyResult = createResultFromKey(key);
-	    if (keyResult != null)
+	    if (keyResult != null) {
 		itemsResult.addResult(keyResult);
+	    }
 	}
 	result.setResult(RESULT_VALUE_ITEMS, itemsResult);
 

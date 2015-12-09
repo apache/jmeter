@@ -50,8 +50,9 @@ public class ConfigurationUtils {
      */
     public static <TProperty> TProperty convert(String value,
         Class<TProperty> clazz) throws ConfigurationException {
-    if (clazz == null)
+    if (clazz == null) {
         throw new ArgumentNullException("clazz");
+    }
 
     TProperty result;
     if (clazz.isAssignableFrom(String.class)) {
@@ -59,9 +60,10 @@ public class ConfigurationUtils {
     } else {
         StringConverter<TProperty> converter = Converters
             .getConverter(clazz);
-        if (converter == null)
+        if (converter == null) {
         throw new ConfigurationException(String.format(
                 NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()));
+        }
 
         try {
         result = converter.convert(value);

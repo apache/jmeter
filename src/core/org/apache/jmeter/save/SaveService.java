@@ -145,8 +145,12 @@ public class SaveService {
         , JMeterUtils.getPropDefault(FILE_FORMAT, VERSION_2_2));
 
     private static boolean validateFormat(String format){
-        if ("2.2".equals(format)) return true;
-        if ("2.1".equals(format)) return true;
+        if ("2.2".equals(format)) {
+            return true;
+        }
+        if ("2.1".equals(format)) {
+            return true;
+        }
         return false;
     }
 

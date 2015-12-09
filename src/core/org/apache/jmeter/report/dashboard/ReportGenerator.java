@@ -329,12 +329,13 @@ public class ReportGenerator {
 				    } else {
 					StringConverter<?> converter = Converters
 					        .getConverter(parameterType);
-					if (converter == null)
-					    throw new GenerationException(
+					if (converter == null) {
+                        throw new GenerationException(
 						    String.format(
 						            NOT_SUPPORTED_CONVERTION_FMT,
 						            parameterType
 						                    .getName()));
+                    }
 					method.invoke(obj, converter
 					        .convert(propertyValue));
 				    }
