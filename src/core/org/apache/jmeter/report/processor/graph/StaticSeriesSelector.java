@@ -36,7 +36,7 @@ public class StaticSeriesSelector extends AbstractSeriesSelector {
      * @return the name of the series
      */
     public final String getSeriesName() {
-	return seriesName;
+        return seriesName;
     }
 
     /**
@@ -46,7 +46,7 @@ public class StaticSeriesSelector extends AbstractSeriesSelector {
      *            the name of the series to set
      */
     public final void setSeriesName(String seriesName) {
-	this.seriesName = seriesName;
+        this.seriesName = seriesName;
     }
 
     /*
@@ -58,7 +58,7 @@ public class StaticSeriesSelector extends AbstractSeriesSelector {
      */
     @Override
     public Iterable<String> select(Sample sample) {
-	return Arrays.asList(seriesName);
+        return Arrays.asList(seriesName);
     }
 
 }

@@ -33,8 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SampleWriterConsumer extends AbstractSampleConsumer {
 
-    private static final Logger log = LoggerFactory
-	    .getLogger(SampleWriterConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(SampleWriterConsumer.class);
 
     private File outputFile;
 
@@ -45,80 +44,79 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
     private int channelsCount;
 
     public void setOutputFile(String outputFile) {
-	setOutputFile(new File(outputFile));
+        setOutputFile(new File(outputFile));
     }
 
     public void setOutputFile(File outputFile) {
-	if (outputFile == null) {
+        if (outputFile == null) {
         throw new ArgumentNullException("outputFile");
-    }
+        }
 
-	this.outputFile = outputFile;
+        this.outputFile = outputFile;
     }
 
     public File getOutputFile() {
-	return outputFile;
+        return outputFile;
     }
 
     public File getOutputFile(int channel) {
-	String ext = null;
-	String fName = getOutputFile().getName();
-	int idx = fName.lastIndexOf('.');
-	if (idx >= 0 && idx < fName.length() - 1) {
-	    String backedName = fName;
-	    fName = fName.substring(0, idx);
-	    ext = backedName.substring(idx + 1);
-	} else {
-	    ext = "";
-	}
-	if (channel > 0) {
-	    fName += "-" + channel + "." + ext;
-	} else {
-	    fName += "." + ext;
-	}
-	return new File(getOutputFile().getParentFile(), fName);
+        String ext = null;
+        String fName = getOutputFile().getName();
+        int idx = fName.lastIndexOf('.');
+        if (idx >= 0 && idx < fName.length() - 1) {
+            String backedName = fName;
+            fName = fName.substring(0, idx);
+            ext = backedName.substring(idx + 1);
+        } else {
+            ext = "";
+        }
+        if (channel > 0) {
+            fName += "-" + channel + "." + ext;
+        } else {
+            fName += "." + ext;
+        }
+        return new File(getOutputFile().getParentFile(), fName);
     }
 
     /**
      * Enables the CSV header on the output file (defaults to false)
      */
     public void setWriteHeader(boolean writeHeader) {
-	this.shouldWriteHeader = writeHeader;
+        this.shouldWriteHeader = writeHeader;
     }
 
     @Override
     public void startConsuming() {
-	if (outputFile == null) {
-	    File wd = getWorkingDirectory();
-	    wd.mkdir();
-	    if (log.isInfoEnabled()) {
-		log.info("startConsuming(): No output file set, writing to work directory :"
-		        + wd.getAbsolutePath());
-	    }
-	    outputFile = new File(wd, "samples.csv");
-	}
-	outputFile.getParentFile().mkdirs();
-	channelsCount = getConsumedChannelCount();
-	csvWriters = new CsvSampleWriter[channelsCount];
-	for (int i = 0; i < channelsCount; i++) {
-	    csvWriters[i] = new CsvSampleWriter(getOutputFile(i),
-		    getConsumedMetadata(i));
-	    if (shouldWriteHeader) {
-		csvWriters[i].writeHeader();
-	    }
-	}
+        if (outputFile == null) {
+            File wd = getWorkingDirectory();
+            wd.mkdir();
+            if (log.isInfoEnabled()) {
+                log.info("startConsuming(): No output file set, writing to work directory :"
+                    + wd.getAbsolutePath());
+            }
+            outputFile = new File(wd, "samples.csv");
+        }
+        outputFile.getParentFile().mkdirs();
+        channelsCount = getConsumedChannelCount();
+        csvWriters = new CsvSampleWriter[channelsCount];
+        for (int i = 0; i < channelsCount; i++) {
+            csvWriters[i] = new CsvSampleWriter(getOutputFile(i),getConsumedMetadata(i));
+            if (shouldWriteHeader) {
+                csvWriters[i].writeHeader();
+            }
+        }
     }
 
     @Override
     public void consume(Sample s, int channel) {
-	csvWriters[channel].write(s);
+        csvWriters[channel].write(s);
     }
 
     @Override
     public void stopConsuming() {
-	for (int i = 0; i < channelsCount; i++) {
-	    csvWriters[i].close();
-	}
-	getWorkingDirectory().delete();
+        for (int i = 0; i < channelsCount; i++) {
+            csvWriters[i].close();
+        }
+        getWorkingDirectory().delete();
     }
 }

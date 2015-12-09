@@ -34,7 +34,7 @@ public class SumAggregator implements Aggregator {
      */
     @Override
     public long getCount() {
-	return count;
+        return count;
     }
 
     /*
@@ -44,7 +44,7 @@ public class SumAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return sum;
+        return sum;
     }
 
     /*
@@ -54,8 +54,8 @@ public class SumAggregator implements Aggregator {
      */
     @Override
     public void addValue(double value) {
-	count++;
-	sum += value;
+        count++;
+        sum += value;
     }
 
     /*
@@ -65,8 +65,8 @@ public class SumAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	count = 0;
-	sum = 0;
+        count = 0;
+        sum = 0;
     }
 
 }

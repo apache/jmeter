@@ -36,7 +36,7 @@ public class TimeStampKeysSelector implements GraphKeysSelector {
      * @return the granularity
      */
     public long getGranularity() {
-	return granularity;
+        return granularity;
     }
 
     /**
@@ -46,7 +46,7 @@ public class TimeStampKeysSelector implements GraphKeysSelector {
      *            the granularity to set
      */
     public void setGranularity(long granularity) {
-	this.granularity = granularity;
+        this.granularity = granularity;
     }
 
     /**
@@ -56,7 +56,7 @@ public class TimeStampKeysSelector implements GraphKeysSelector {
      * @return true if the begin time is used; false otherwise.
      */
     public final boolean selectsBeginTime() {
-	return selectBeginTime;
+        return selectBeginTime;
     }
 
     /**
@@ -67,7 +67,7 @@ public class TimeStampKeysSelector implements GraphKeysSelector {
      *            the status to set
      */
     public final void setSelectBeginTime(boolean selectBeginTime) {
-	this.selectBeginTime = selectBeginTime;
+        this.selectBeginTime = selectBeginTime;
     }
 
     /*
@@ -79,9 +79,8 @@ public class TimeStampKeysSelector implements GraphKeysSelector {
      */
     @Override
     public Double select(Sample sample) {
-	long time = selectBeginTime ? sample.getStartTime() : sample
-	        .getEndTime();
-	return (double) (time - time % granularity);
+        long time = selectBeginTime ? sample.getStartTime() : sample.getEndTime();
+        return (double) (time - time % granularity);
     }
 
 }
