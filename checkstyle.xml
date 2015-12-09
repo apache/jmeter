@@ -83,6 +83,8 @@
       <property name="classes" value="java.lang.Boolean, java.lang.String"/>
     </module>
 
+    <module name="NeedBraces"/>
+
     <!-- Required for SuppressionCommentFilter below -->
     <module name="FileContentsHolder"/>
 
@@ -94,14 +96,20 @@
 -->
 
   <!-- Setup special comments to suppress specific checks from source files -->
-  <module name="SuppressionCommentFilter">
-    <property name="offCommentFormat" value="CHECKSTYLE\: stop all checks"/>
-    <property name="onCommentFormat"  value="CHECKSTYLE\: resume checking"/>
+  <module name="SuppressionCommentFilter"/>
+
+  <module name="SuppressionFilter">
+    <!-- config_loc is used by Eclipse plugin -->
+    <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
   </module>
-  <module name="SuppressionCommentFilter">
-    <property name="offCommentFormat" value="CHECKSTYLE\: stop VisibilityModifier"/>
-    <property name="onCommentFormat"  value="CHECKSTYLE\: resume VisibilityModifier"/>
-    <property name="checkFormat"      value="VisibilityModifier"/>
+
+  <!-- 
+      Allow comment to suppress checkstyle for a single line
+      e.g. // CHECKSTYLE IGNORE MagicNumber
+   -->
+  <module name="SuppressWithNearbyCommentFilter">
+    <property name="commentFormat" value="CHECKSTYLE IGNORE (\w+)"/>
+    <property name="checkFormat" value="$1"/>
   </module>
 
 </module>
