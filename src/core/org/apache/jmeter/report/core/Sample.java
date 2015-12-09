@@ -296,6 +296,7 @@ public class Sample {
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
 	StringBuffer out = new StringBuffer();
 	for (int i = 0; i < data.length; i++) {
