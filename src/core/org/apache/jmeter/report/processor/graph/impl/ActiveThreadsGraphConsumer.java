@@ -77,7 +77,7 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
 
 		    @Override
 		    public double select(String series, Sample sample) {
-		        return (double) sample.getGroupThreads();
+		        return sample.getGroupThreads();
 		    }
 	        }, false, false));
 	return groupInfos;

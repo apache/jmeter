@@ -60,7 +60,7 @@ public class TimeRateAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return (double) value * 1000 / granularity;
+	return value * 1000 / granularity;
     }
 
     /*
