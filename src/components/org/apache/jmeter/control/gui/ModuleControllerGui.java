@@ -287,7 +287,6 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
                 new String[] {
                         MenuFactory.CONFIG_ELEMENTS,
                         MenuFactory.ASSERTIONS,
-                        MenuFactory.TIMERS,
                         MenuFactory.LISTENERS,
                 },
                 JMeterUtils.getResString("add"),  // $NON-NLS-1$
