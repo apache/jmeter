@@ -39,6 +39,8 @@
     <property name="fileExtensions" value="java, xml, xsd, dtd, htm, html, txt"/>
   </module>
   
+  <module name="NewlineAtEndOfFile"/>
+
   <module name="TreeWalker">
    
     <!-- Operator must be at end of wrapped line -->
@@ -95,7 +97,8 @@
   <module name="JavadocPackage"/>
 -->
 
-  <!-- Setup special comments to suppress specific checks from source files -->
+  <!-- Setup special comments to suppress specific checks from source files
+  CHECKSTYLE\:OFF and CHECKSTYLE\:ON -->
   <module name="SuppressionCommentFilter"/>
 
   <module name="SuppressionFilter">
