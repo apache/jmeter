@@ -23,7 +23,7 @@ package org.apache.jmeter.protocol.http.util;
  * Constants used in HTTP, mainly header names.
  */
 
-public interface HTTPConstantsInterface {
+public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
 
     int DEFAULT_HTTPS_PORT = 443;
     String DEFAULT_HTTPS_PORT_STRING = "443"; // $NON-NLS-1$
