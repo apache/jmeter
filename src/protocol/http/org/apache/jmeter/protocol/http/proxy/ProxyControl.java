@@ -1225,9 +1225,8 @@ public class ProxyControl extends GenericController {
     }
 
     private boolean matchesPatterns(String url, CollectionProperty patterns) {
-        PropertyIterator iter = patterns.iterator();
-        while (iter.hasNext()) {
-            String item = iter.next().getStringValue();
+        for (JMeterProperty jMeterProperty : patterns) {
+            String item = jMeterProperty.getStringValue();
             Pattern pattern = null;
             try {
                 pattern = JMeterUtils.getPatternCache().getPattern(item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
