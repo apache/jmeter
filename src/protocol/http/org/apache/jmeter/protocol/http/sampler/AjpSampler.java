@@ -35,7 +35,6 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
-import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -241,10 +240,8 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         setInt(0xA00b); //Host
         setString(host);
         if(headers != null) {
-            CollectionProperty coll = headers.getHeaders();
-            PropertyIterator i = coll.iterator();
-            while(i.hasNext()) {
-                Header header = (Header)i.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : headers.getHeaders()) {
+                Header header = (Header) jMeterProperty.getObjectValue();
                 String n = header.getName();
                 String v = header.getValue();
                 hbuf.append(n).append(COLON_SPACE).append(v).append(NEWLINE);
@@ -331,10 +328,8 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         String cookieHeader = null;
         if(cookies != null) {
             cookieHeader = cookies.getCookieHeaderForURL(url);
-            CollectionProperty coll = cookies.getCookies();
-            PropertyIterator i = coll.iterator();
-            while(i.hasNext()) {
-                Cookie cookie = (Cookie)(i.next().getObjectValue());
+            for (JMeterProperty jMeterProperty : cookies.getCookies()) {
+                Cookie cookie = (Cookie)(jMeterProperty.getObjectValue());
                 setInt(0xA009); // Cookie
                 setString(cookie.getName()+"="+cookie.getValue());//$NON-NLS-1$
             }

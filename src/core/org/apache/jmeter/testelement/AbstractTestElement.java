@@ -218,9 +218,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     }
 
     protected void traverseCollection(CollectionProperty col, TestElementTraverser traverser) {
-        PropertyIterator iter = col.iterator();
-        while (iter.hasNext()) {
-            traverseProperty(traverser, iter.next());
+        for (JMeterProperty jMeterProperty :  col) {
+            traverseProperty(traverser, jMeterProperty);
         }
     }
 
@@ -539,9 +538,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
         temporaryProperties.add(property);
         if (property instanceof MultiProperty) {
-            PropertyIterator iter = ((MultiProperty) property).iterator();
-            while (iter.hasNext()) {
-                setTemporary(iter.next());
+            for (JMeterProperty jMeterProperty : (MultiProperty) property) {
+                setTemporary(jMeterProperty);
             }
         }
     }

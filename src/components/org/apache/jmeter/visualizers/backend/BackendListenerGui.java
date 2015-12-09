@@ -39,7 +39,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apache.jorphan.logging.LoggingManager;
@@ -181,9 +181,8 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 }
 
                 if (testParams != null) {
-                    PropertyIterator i = testParams.getArguments().iterator();
-                    while (i.hasNext()) {
-                        Argument arg = (Argument) i.next().getObjectValue();
+                    for (JMeterProperty jMeterProperty : testParams.getArguments()) {
+                        Argument arg = (Argument) jMeterProperty.getObjectValue();
                         String name = arg.getName();
                         String value = arg.getValue();
 
