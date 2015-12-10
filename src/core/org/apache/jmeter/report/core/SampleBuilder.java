@@ -40,15 +40,15 @@ import org.apache.jmeter.report.core.SampleMetadata;
 public class SampleBuilder {
 
     private static final DecimalFormat DEFAULT_FLOAT_FORMATER = new DecimalFormat(
-	    "#########0.00#");
+            "#########0.00#");
 
     static {
-	DEFAULT_FLOAT_FORMATER.setRoundingMode(RoundingMode.HALF_DOWN);
-	DEFAULT_FLOAT_FORMATER.setGroupingUsed(false);
-	DecimalFormatSymbols newSymbols = new DecimalFormatSymbols(
-	        Locale.getDefault());
-	newSymbols.setDecimalSeparator('.');
-	DEFAULT_FLOAT_FORMATER.setDecimalFormatSymbols(newSymbols);
+        DEFAULT_FLOAT_FORMATER.setRoundingMode(RoundingMode.HALF_DOWN);
+        DEFAULT_FLOAT_FORMATER.setGroupingUsed(false);
+        DecimalFormatSymbols newSymbols = new DecimalFormatSymbols(
+                Locale.getDefault());
+        newSymbols.setDecimalSeparator('.');
+        DEFAULT_FLOAT_FORMATER.setDecimalFormatSymbols(newSymbols);
     }
 
     private final SampleMetadata metadata;
@@ -62,57 +62,57 @@ public class SampleBuilder {
     private long row = 0;
 
     public SampleBuilder(SampleMetadata metadata, NumberFormat floatFormater) {
-	if (metadata == null) {
-        throw new ArgumentNullException("metadata");
-    }
+        if (metadata == null) {
+            throw new ArgumentNullException("metadata");
+        }
 
-	if (floatFormater == null) {
-        throw new ArgumentNullException("floatFormater");
-    }
+        if (floatFormater == null) {
+            throw new ArgumentNullException("floatFormater");
+        }
 
-	this.floatFormater = floatFormater;
-	this.metadata = metadata;
-	this.data = new String[metadata.getColumnCount()];
-	k = 0;
-	row = 0;
+        this.floatFormater = floatFormater;
+        this.metadata = metadata;
+        this.data = new String[metadata.getColumnCount()];
+        k = 0;
+        row = 0;
     }
 
     public SampleBuilder(SampleMetadata metadata) {
-	this(metadata, DEFAULT_FLOAT_FORMATER);
+        this(metadata, DEFAULT_FLOAT_FORMATER);
     }
 
     /**
      * @return the metadata
      */
     public final SampleMetadata getMetadata() {
-	return metadata;
+        return metadata;
     }
 
     public SampleBuilder add(String e) {
-	if (k < data.length) {
-	    data[k++] = e;
-	}
-	return this;
+        if (k < data.length) {
+            data[k++] = e;
+        }
+        return this;
     }
 
     public SampleBuilder add(long e) {
-	add(Long.toString(e));
-	return this;
+        add(Long.toString(e));
+        return this;
     }
 
     public SampleBuilder add(double e) {
-	add(floatFormater.format(e));
-	return this;
+        add(floatFormater.format(e));
+        return this;
     }
 
     public Sample build() {
-	while (k < data.length) {
-	    data[k++] = "";
-	}
-	String[] sampleData = new String[data.length];
-	System.arraycopy(data, 0, sampleData, 0, data.length);
-	Sample out = new Sample(row++, metadata, sampleData);
-	k = 0;
-	return out;
+        while (k < data.length) {
+            data[k++] = "";
+        }
+        String[] sampleData = new String[data.length];
+        System.arraycopy(data, 0, sampleData, 0, data.length);
+        Sample out = new Sample(row++, metadata, sampleData);
+        k = 0;
+        return out;
     }
 }

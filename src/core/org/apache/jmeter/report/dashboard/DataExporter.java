@@ -58,5 +58,5 @@ public interface DataExporter {
      *             the export exception
      */
     void export(SampleContext context, File file,
-	    ReportGeneratorConfiguration configuration) throws ExportException;
+            ReportGeneratorConfiguration configuration) throws ExportException;
 }

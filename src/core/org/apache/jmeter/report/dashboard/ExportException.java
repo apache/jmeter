@@ -24,7 +24,6 @@ package org.apache.jmeter.report.dashboard;
  */
 public class ExportException extends Exception {
 
-    
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 89868452883024813L;
 
@@ -32,7 +31,7 @@ public class ExportException extends Exception {
      * Instantiates a new export exception.
      */
     public ExportException() {
-	super();
+        super();
     }
 
     /**
@@ -42,7 +41,7 @@ public class ExportException extends Exception {
      *            the message
      */
     public ExportException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -54,7 +53,7 @@ public class ExportException extends Exception {
      *            the inner cause
      */
     public ExportException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
 }

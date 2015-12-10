@@ -35,27 +35,27 @@ public class CsvFile extends File {
     private char separator;
 
     public CsvFile(File parent, String child, char separator) {
-	super(parent, child);
-	this.separator = separator;
+        super(parent, child);
+        this.separator = separator;
     }
 
     public CsvFile(String parent, String child, char separator) {
-	super(parent, child);
-	this.separator = separator;
+        super(parent, child);
+        this.separator = separator;
     }
 
     public CsvFile(String pathname, char separator) {
-	super(pathname);
-	this.separator = separator;
+        super(pathname);
+        this.separator = separator;
     }
 
     public CsvFile(URI uri, char separator) {
-	super(uri);
-	this.separator = separator;
+        super(uri);
+        this.separator = separator;
     }
 
     public char getSeparator() {
-	return separator;
+        return separator;
     }
 
 }

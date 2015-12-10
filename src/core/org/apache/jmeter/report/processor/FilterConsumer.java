@@ -49,7 +49,7 @@ public class FilterConsumer extends AbstractSampleConsumer {
      * @return true if the filtering is reversed; otherwise false.
      */
     public final boolean isReverseFilter() {
-	return reverseFilter;
+        return reverseFilter;
     }
 
     /**
@@ -59,7 +59,7 @@ public class FilterConsumer extends AbstractSampleConsumer {
      *            the filter mode to set
      */
     public final void setReverseFilter(boolean reverseFilter) {
-	this.reverseFilter = reverseFilter;
+        this.reverseFilter = reverseFilter;
     }
 
     /**
@@ -68,7 +68,7 @@ public class FilterConsumer extends AbstractSampleConsumer {
      * @return the sample predicate used to filter the samples.
      */
     public final SamplePredicate getSamplePredicate() {
-	return samplePredicate;
+        return samplePredicate;
     }
 
     /**
@@ -78,37 +78,37 @@ public class FilterConsumer extends AbstractSampleConsumer {
      *            the new sample predicate.
      */
     public final void setSamplePredicate(SamplePredicate samplePredicate) {
-	this.samplePredicate = samplePredicate;
+        this.samplePredicate = samplePredicate;
     }
 
     @Override
     public void startConsuming() {
-	// Broadcast metadata to consumers for each channel
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    super.setProducedMetadata(getConsumedMetadata(i), i);
-	}
-	super.startProducing();
+        // Broadcast metadata to consumers for each channel
+        int channelCount = getConsumedChannelCount();
+        for (int i = 0; i < channelCount; i++) {
+            super.setProducedMetadata(getConsumedMetadata(i), i);
+        }
+        super.startProducing();
     }
 
     @Override
     public void consume(Sample sample, int channel) {
-	// The sample is reproduced if :
-	// A predicate is defined and the sample matches it when reverseFilter
-	// is false.
-	// OR
-	// None predicate is defined or the sample does not match when
-	// reverseFilter is true.
-	if ((reverseFilter == false && samplePredicate != null && samplePredicate
-	        .matches(sample))
-	        || (reverseFilter == true && (samplePredicate == null || samplePredicate
-	                .matches(sample) == false))) {
-	    super.produce(sample, channel);
-	}
+        // The sample is reproduced if :
+        // A predicate is defined and the sample matches it when reverseFilter
+        // is false.
+        // OR
+        // None predicate is defined or the sample does not match when
+        // reverseFilter is true.
+        if ((reverseFilter == false && samplePredicate != null && samplePredicate
+                .matches(sample))
+                || (reverseFilter == true && (samplePredicate == null || samplePredicate
+                        .matches(sample) == false))) {
+            super.produce(sample, channel);
+        }
     }
 
     @Override
     public void stopConsuming() {
-	super.stopProducing();
+        super.stopProducing();
     }
 }

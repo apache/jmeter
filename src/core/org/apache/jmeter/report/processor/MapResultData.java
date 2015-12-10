@@ -42,10 +42,10 @@ public class MapResultData implements ResultData {
      */
     @Override
     public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
-	if (visitor == null) {
-        throw new ArgumentNullException("visitor");
-    }
-	return visitor.visitMapResult(this);
+        if (visitor == null) {
+            throw new ArgumentNullException("visitor");
+        }
+        return visitor.visitMapResult(this);
     }
 
     /**
@@ -54,7 +54,7 @@ public class MapResultData implements ResultData {
      * @return the sets of entries of the map
      */
     public Set<Entry<String, ResultData>> entrySet() {
-	return map.entrySet();
+        return map.entrySet();
     }
 
     /**
@@ -65,7 +65,7 @@ public class MapResultData implements ResultData {
      * @return the result
      */
     public ResultData getResult(String name) {
-	return map.get(name);
+        return map.get(name);
     }
 
     /**
@@ -78,7 +78,7 @@ public class MapResultData implements ResultData {
      * @return the previously result data associated with the specified name
      */
     public ResultData setResult(String name, ResultData result) {
-	return map.put(name, result);
+        return map.put(name, result);
     }
 
     /**
@@ -89,6 +89,6 @@ public class MapResultData implements ResultData {
      * @return the removed result data
      */
     public ResultData removeResult(String name) {
-	return map.remove(name);
+        return map.remove(name);
     }
 }

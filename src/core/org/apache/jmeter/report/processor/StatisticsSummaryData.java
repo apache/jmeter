@@ -38,7 +38,7 @@ public class StatisticsSummaryData {
     private long max = Long.MIN_VALUE;
 
     public long getElapsedTime() {
-	return endTime - firstTime;
+        return endTime - firstTime;
     }
 
     /**
@@ -47,7 +47,7 @@ public class StatisticsSummaryData {
      * @return the firstTime
      */
     public final long getFirstTime() {
-	return firstTime;
+        return firstTime;
     }
 
     /**
@@ -57,7 +57,7 @@ public class StatisticsSummaryData {
      *            the firstTime to set
      */
     public final void setFirstTime(long firstTime) {
-	this.firstTime = Math.min(this.firstTime, firstTime);
+        this.firstTime = Math.min(this.firstTime, firstTime);
     }
 
     /**
@@ -66,7 +66,7 @@ public class StatisticsSummaryData {
      * @return the endTime
      */
     public final long getEndTime() {
-	return endTime;
+        return endTime;
     }
 
     /**
@@ -76,7 +76,7 @@ public class StatisticsSummaryData {
      *            the endTime to set
      */
     public final void setEndTime(long endTime) {
-	this.endTime = Math.max(this.endTime, endTime);
+        this.endTime = Math.max(this.endTime, endTime);
     }
 
     /**
@@ -85,7 +85,7 @@ public class StatisticsSummaryData {
      * @return the bytes
      */
     public final long getBytes() {
-	return bytes;
+        return bytes;
     }
 
     /**
@@ -95,14 +95,14 @@ public class StatisticsSummaryData {
      *            the bytes to set
      */
     public final void setBytes(long bytes) {
-	this.bytes = bytes;
+        this.bytes = bytes;
     }
 
     /**
      * @return the errors
      */
     public final long getErrors() {
-	return errors;
+        return errors;
     }
 
     /**
@@ -110,14 +110,14 @@ public class StatisticsSummaryData {
      *            the errors to set
      */
     public final void setErrors(long errors) {
-	this.errors = errors;
+        this.errors = errors;
     }
 
     /**
      * @return the total
      */
     public final long getTotal() {
-	return total;
+        return total;
     }
 
     /**
@@ -125,14 +125,14 @@ public class StatisticsSummaryData {
      *            the total to set
      */
     public final void setTotal(long total) {
-	this.total = total;
+        this.total = total;
     }
 
     /**
      * @return the min
      */
     public final long getMin() {
-	return min;
+        return min;
     }
 
     /**
@@ -140,14 +140,14 @@ public class StatisticsSummaryData {
      *            the min to set
      */
     public final void setMin(long min) {
-	this.min = Math.min(this.min, min);
+        this.min = Math.min(this.min, min);
     }
 
     /**
      * @return the max
      */
     public final long getMax() {
-	return max;
+        return max;
     }
 
     /**
@@ -155,14 +155,14 @@ public class StatisticsSummaryData {
      *            the max to set
      */
     public final void setMax(long max) {
-	this.max = Math.max(this.max, max);
+        this.max = Math.max(this.max, max);
     }
 
     /**
      * @return the percentile1
      */
     public final PercentileAggregator getPercentile1() {
-	return percentile1;
+        return percentile1;
     }
 
     /**
@@ -171,7 +171,7 @@ public class StatisticsSummaryData {
      * @return the percentile2
      */
     public final PercentileAggregator getPercentile2() {
-	return percentile2;
+        return percentile2;
     }
 
     /**
@@ -180,17 +180,17 @@ public class StatisticsSummaryData {
      * @return the percentile3
      */
     public final PercentileAggregator getPercentile3() {
-	return percentile3;
+        return percentile3;
     }
 
     /**
      * Instantiates a new statistics info.
      */
     public StatisticsSummaryData(long percentileIndex1, long percentileIndex2,
-	    long percentileIndex3) {
-	percentile1 = new PercentileAggregator(percentileIndex1);
-	percentile2 = new PercentileAggregator(percentileIndex2);
-	percentile3 = new PercentileAggregator(percentileIndex3);
+            long percentileIndex3) {
+        percentile1 = new PercentileAggregator(percentileIndex1);
+        percentile2 = new PercentileAggregator(percentileIndex2);
+        percentile3 = new PercentileAggregator(percentileIndex3);
     }
 
     /**
@@ -199,7 +199,7 @@ public class StatisticsSummaryData {
      * @return the bytes per second
      */
     public double getBytesPerSecond() {
-	return bytes / ((double) getElapsedTime() / 1000);
+        return bytes / ((double) getElapsedTime() / 1000);
     }
 
     /**
@@ -208,7 +208,7 @@ public class StatisticsSummaryData {
      * @return the kilo bytes per second
      */
     public double getKBytesPerSecond() {
-	return getBytesPerSecond() / 1024;
+        return getBytesPerSecond() / 1024;
     }
 
     /**
@@ -217,18 +217,18 @@ public class StatisticsSummaryData {
      * @return the throughput
      */
     public double getThroughput() {
-	return (total / (double) getElapsedTime()) * 1000.0;
+        return (total / (double) getElapsedTime()) * 1000.0;
     }
 
     public void IncTotal() {
-	total++;
+        total++;
     }
 
     public void IncBytes(long value) {
-	bytes += value;
+        bytes += value;
     }
 
     public void IncErrors() {
-	errors++;
+        errors++;
     }
 }

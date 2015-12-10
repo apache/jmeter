@@ -39,7 +39,7 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
      * Instantiates a new jsonizer visitor.
      */
     public JsonizerVisitor() {
-	// TODO Auto-generated constructor stub
+        // TODO Auto-generated constructor stub
     }
 
     /*
@@ -51,16 +51,16 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
      */
     @Override
     public String visitListResult(ListResultData listResult) {
-	String result = "";
-	if (listResult != null) {
-	    int count = listResult.getSize();
-	    String[] items = new String[count];
-	    for (int i = 0; i < count; i++) {
-		items[i] = listResult.get(i).accept(this);
-	    }
-	    result = JsonUtil.toJsonArray(items);
-	}
-	return result;
+        String result = "";
+        if (listResult != null) {
+            int count = listResult.getSize();
+            String[] items = new String[count];
+            for (int i = 0; i < count; i++) {
+                items[i] = listResult.get(i).accept(this);
+            }
+            result = JsonUtil.toJsonArray(items);
+        }
+        return result;
     }
 
     /*
@@ -72,15 +72,15 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
      */
     @Override
     public String visitMapResult(MapResultData mapResult) {
-	String result = "";
-	if (mapResult != null) {
-	    HashMap<String, String> map = new HashMap<>();
-	    for (Map.Entry<String, ResultData> entry : mapResult.entrySet()) {
-		map.put(entry.getKey(), entry.getValue().accept(this));
-	    }
-	    result = JsonUtil.toJsonObject(map);
-	}
-	return result;
+        String result = "";
+        if (mapResult != null) {
+            HashMap<String, String> map = new HashMap<>();
+            for (Map.Entry<String, ResultData> entry : mapResult.entrySet()) {
+                map.put(entry.getKey(), entry.getValue().accept(this));
+            }
+            result = JsonUtil.toJsonObject(map);
+        }
+        return result;
     }
 
     /*
@@ -92,14 +92,14 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
      */
     @Override
     public String visitValueResult(ValueResultData valueResult) {
-	String result = "";
-	if (valueResult != null) {
-	    Object value = valueResult.getValue();
-	    result = String.valueOf(value);
-	    if (value instanceof String) {
-	        result = '"' + result + '"';
-	    }
-	}
-	return result;
+        String result = "";
+        if (valueResult != null) {
+            Object value = valueResult.getValue();
+            result = String.valueOf(value);
+            if (value instanceof String) {
+                result = '"' + result + '"';
+            }
+        }
+        return result;
     }
 }

@@ -32,7 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class Sample {
 
     public final static String CONTROLLER_PATTERN = "Number of samples in transaction";
-    
+
     private boolean storesStartTimeStamp;
     private SampleMetadata metadata;
     String[] data;
@@ -50,11 +50,11 @@ public class Sample {
      *            The sample data as a string array
      */
     public Sample(long row, SampleMetadata metadata, String... data) {
-	this.row = row;
-	this.metadata = metadata;
-	this.data = data;
-	this.storesStartTimeStamp = JMeterUtils.getPropDefault(
-	        "sampleresult.timestamp.start", false);
+        this.row = row;
+        this.metadata = metadata;
+        this.data = data;
+        this.storesStartTimeStamp = JMeterUtils.getPropDefault(
+                "sampleresult.timestamp.start", false);
     }
 
     /**
@@ -62,7 +62,7 @@ public class Sample {
      * built.
      */
     public long getSampleRow() {
-	return row;
+        return row;
     }
 
     /**
@@ -74,7 +74,7 @@ public class Sample {
      * @return The data value
      */
     public String getString(String name) {
-	return data[metadata.indexOf(name)];
+        return data[metadata.indexOf(name)];
     }
 
     /**
@@ -86,7 +86,7 @@ public class Sample {
      * @return The data as a string
      */
     public String getString(int i) {
-	return data[i];
+        return data[i];
     }
 
     /**
@@ -98,11 +98,11 @@ public class Sample {
      * @return The data as an integer
      */
     public int getInt(String name) {
-	try {
-	    return Integer.parseInt(data[metadata.indexOf(name)]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Integer.parseInt(data[metadata.indexOf(name)]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -115,11 +115,11 @@ public class Sample {
      *             if the data could not be parsed as an integer
      */
     public int getInt(int i) {
-	try {
-	    return Integer.parseInt(data[i]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Integer.parseInt(data[i]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -133,11 +133,11 @@ public class Sample {
      *             if the data could not be parsed as a long
      */
     public long getLong(String name) {
-	try {
-	    return Long.parseLong(data[metadata.indexOf(name)]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Long.parseLong(data[metadata.indexOf(name)]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -151,11 +151,11 @@ public class Sample {
      *             if the data could not be parsed as an integer
      */
     public long getLong(int i) {
-	try {
-	    return Long.parseLong(data[i]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Long.parseLong(data[i]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -169,11 +169,11 @@ public class Sample {
      *             if the data could not be parsed as a float
      */
     public float getFloat(String name) {
-	try {
-	    return Float.parseFloat(data[metadata.indexOf(name)]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Float.parseFloat(data[metadata.indexOf(name)]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -186,11 +186,11 @@ public class Sample {
      *             if the data could not be parsed as a float
      */
     public float getFloat(int i) {
-	try {
-	    return Float.parseFloat(data[i]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Float.parseFloat(data[i]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -204,11 +204,11 @@ public class Sample {
      *             if the data could not be parsed as a double
      */
     public double getDouble(String name) {
-	try {
-	    return Double.parseDouble(data[metadata.indexOf(name)]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Double.parseDouble(data[metadata.indexOf(name)]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -222,11 +222,11 @@ public class Sample {
      *             if the data could not be parsed as a double
      */
     public double getDouble(int id) {
-	try {
-	    return Double.parseDouble(data[id]);
-	} catch (NumberFormatException ex) {
-	    throw new SampleException("Error on sample #" + row, ex);
-	}
+        try {
+            return Double.parseDouble(data[id]);
+        } catch (NumberFormatException ex) {
+            throw new SampleException("Error on sample #" + row, ex);
+        }
     }
 
     /**
@@ -240,7 +240,7 @@ public class Sample {
      *             if the data could is an empty string
      */
     public char getChar(String name) {
-	return data[metadata.indexOf(name)].charAt(0);
+        return data[metadata.indexOf(name)].charAt(0);
     }
 
     /**
@@ -254,7 +254,7 @@ public class Sample {
      *             if the data could not be parsed as a double
      */
     public char getChar(int id) {
-	return data[id].charAt(0);
+        return data[id].charAt(0);
     }
 
     /**
@@ -270,7 +270,7 @@ public class Sample {
      * @return The data of the specified column as a boolean
      */
     public boolean getBoolean(String name) {
-	return "true".equalsIgnoreCase(data[metadata.indexOf(name)]);
+        return "true".equalsIgnoreCase(data[metadata.indexOf(name)]);
     }
 
     /**
@@ -288,7 +288,7 @@ public class Sample {
      *             if the data could not be parsed as a double
      */
     public boolean getBoolean(int id) {
-	return "true".equalsIgnoreCase(data[id]);
+        return "true".equalsIgnoreCase(data[id]);
     }
 
     /*
@@ -298,14 +298,14 @@ public class Sample {
      */
     @Override
     public String toString() {
-	StringBuffer out = new StringBuffer();
-	for (int i = 0; i < data.length; i++) {
-	    out.append(data[i]);
-	    if (i < data.length - 1) {
-		out.append(metadata.getSeparator());
-	    }
-	}
-	return out.toString();
+        StringBuffer out = new StringBuffer();
+        for (int i = 0; i < data.length; i++) {
+            out.append(data[i]);
+            if (i < data.length - 1) {
+                out.append(metadata.getSeparator());
+            }
+        }
+        return out.toString();
     }
 
     /**
@@ -314,7 +314,7 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-	return getLong(metadata.indexOf(CSVSaveService.TIME_STAMP));
+        return getLong(metadata.indexOf(CSVSaveService.TIME_STAMP));
     }
 
     /**
@@ -323,7 +323,7 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-	return getLong(metadata.indexOf(CSVSaveService.CSV_ELAPSED));
+        return getLong(metadata.indexOf(CSVSaveService.CSV_ELAPSED));
     }
 
     /**
@@ -343,8 +343,8 @@ public class Sample {
      * @return the start time
      */
     public long getStartTime() {
-	return storesStartTimeStamp ? getTimestamp() : getTimestamp()
-	        - getElapsedTime();
+        return storesStartTimeStamp ? getTimestamp() : getTimestamp()
+                - getElapsedTime();
     }
 
     /**
@@ -365,8 +365,8 @@ public class Sample {
      * @return the end time
      */
     public long getEndTime() {
-	return storesStartTimeStamp ? getTimestamp() + getElapsedTime()
-	        : getTimestamp();
+        return storesStartTimeStamp ? getTimestamp() + getElapsedTime()
+                : getTimestamp();
     }
 
     /**
@@ -375,9 +375,9 @@ public class Sample {
      * @return the response code stored in the sample
      */
     public String getResponseCode() {
-	return getString(metadata.indexOf(CSVSaveService.RESPONSE_CODE));
+        return getString(metadata.indexOf(CSVSaveService.RESPONSE_CODE));
     }
-    
+
     /**
      * Gets the failure message stored in the sample.
      *
@@ -386,7 +386,6 @@ public class Sample {
     public String getFailureMessage() {
         return getString(metadata.indexOf(CSVSaveService.FAILURE_MESSAGE));
     }
-    
 
     /**
      * Gets the name stored in the sample.
@@ -394,7 +393,7 @@ public class Sample {
      * @return the name stored in the sample
      */
     public String getName() {
-	return getString(metadata.indexOf(CSVSaveService.LABEL));
+        return getString(metadata.indexOf(CSVSaveService.LABEL));
     }
 
     /**
@@ -403,7 +402,7 @@ public class Sample {
      * @return the response message stored in the sample
      */
     public String getResponseMessage() {
-	return getString(metadata.indexOf(CSVSaveService.RESPONSE_MESSAGE));
+        return getString(metadata.indexOf(CSVSaveService.RESPONSE_MESSAGE));
     }
 
     /**
@@ -412,7 +411,7 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-	return getLong(metadata.indexOf(CSVSaveService.CSV_LATENCY));
+        return getLong(metadata.indexOf(CSVSaveService.CSV_LATENCY));
     }
 
     /**
@@ -421,7 +420,7 @@ public class Sample {
      * @return the success status stored in the sample
      */
     public boolean getSuccess() {
-	return getBoolean(metadata.indexOf(CSVSaveService.SUCCESSFUL));
+        return getBoolean(metadata.indexOf(CSVSaveService.SUCCESSFUL));
     }
 
     /**
@@ -430,7 +429,7 @@ public class Sample {
      * @return the number of sent bytes stored in the sample
      */
     public int getSentBytes() {
-	return getInt(metadata.indexOf(CSVSaveService.CSV_BYTES));
+        return getInt(metadata.indexOf(CSVSaveService.CSV_BYTES));
     }
 
     /**
@@ -439,7 +438,7 @@ public class Sample {
      * @return the number of threads in the group of this sample
      */
     public int getGroupThreads() {
-	return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT1));
+        return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT1));
     }
 
     /**
@@ -448,7 +447,7 @@ public class Sample {
      * @return the overall number of threads
      */
     public int getAllThreads() {
-	return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT2));
+        return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT2));
     }
 
     /**
@@ -457,16 +456,16 @@ public class Sample {
      * @return the thread name stored in the sample
      */
     public String getThreadName() {
-	return getString(metadata.indexOf(CSVSaveService.THREAD_NAME));
+        return getString(metadata.indexOf(CSVSaveService.THREAD_NAME));
     }
-    
+
     /**
      * Checks if this sample is a controller.
      *
      * @return true, if this sample is a controller; otherwise false
      */
-    public boolean isController(){
-	String message = getResponseMessage();
-	return message != null && message.startsWith(CONTROLLER_PATTERN);
+    public boolean isController() {
+        String message = getResponseMessage();
+        return message != null && message.startsWith(CONTROLLER_PATTERN);
     }
 }

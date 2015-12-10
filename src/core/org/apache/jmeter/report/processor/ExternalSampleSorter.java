@@ -82,7 +82,7 @@ import org.slf4j.LoggerFactory;
 public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private static final Logger log = LoggerFactory
-	    .getLogger(ExternalSampleSorter.class);
+            .getLogger(ExternalSampleSorter.class);
 
     private static final int DEFAULT_CHUNK_SIZE = 50000;
 
@@ -111,17 +111,17 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     private boolean revertedSort;
 
     public ExternalSampleSorter() {
-	chunkSize = DEFAULT_CHUNK_SIZE;
-	this.nbProcessors = Runtime.getRuntime().availableProcessors();
-	this.parallelize = nbProcessors > 1;
-	this.pool = new ThreadPoolExecutor(nbProcessors, nbProcessors + 5, 10,
-	        TimeUnit.SECONDS, workQueue);
-	setRevertedSort(false);
+        chunkSize = DEFAULT_CHUNK_SIZE;
+        this.nbProcessors = Runtime.getRuntime().availableProcessors();
+        this.parallelize = nbProcessors > 1;
+        this.pool = new ThreadPoolExecutor(nbProcessors, nbProcessors + 5, 10,
+                TimeUnit.SECONDS, workQueue);
+        setRevertedSort(false);
     }
 
     public ExternalSampleSorter(SampleComparator comparator) {
-	this();
-	setSampleComparator(comparator);
+        this();
+        setSampleComparator(comparator);
     }
 
     /**
@@ -135,17 +135,17 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            provided chunkSize is <5000
      */
     public void setChunkSize(long chunkSize) {
-	if (chunkSize < 50000) {
-	    chunkSize = 50000;
-	}
-	this.chunkSize = chunkSize;
+        if (chunkSize < 50000) {
+            chunkSize = 50000;
+        }
+        this.chunkSize = chunkSize;
     }
 
     /**
      * Set the sample comparator that will define sample ordering
      */
     public void setSampleComparator(SampleComparator sampleComparator) {
-	this.sampleComparator = sampleComparator;
+        this.sampleComparator = sampleComparator;
     }
 
     /**
@@ -155,11 +155,11 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            true to enable, false to disable
      */
     public void setParallelize(boolean parallelize) {
-	this.parallelize = parallelize;
+        this.parallelize = parallelize;
     }
 
     public boolean isParallelize() {
-	return parallelize;
+        return parallelize;
     }
 
     /**
@@ -177,31 +177,31 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            Wether the CSV header should be written in the output CSV file
      */
     public void sort(CsvFile inputFile, File outputFile, boolean writeHeader) {
-	if (inputFile == null) {
-	    throw new ArgumentNullException("inputFile");
-	}
+        if (inputFile == null) {
+            throw new ArgumentNullException("inputFile");
+        }
 
-	if (outputFile == null) {
-	    throw new ArgumentNullException("outputFile");
-	}
+        if (outputFile == null) {
+            throw new ArgumentNullException("outputFile");
+        }
 
-	if (!inputFile.isFile()) {
-	    throw new SampleException(
-		    inputFile.getAbsolutePath()
-		            + " does not exist or is not a file. Please provide an existing samples file");
-	}
-	if (outputFile.isDirectory()) {
-	    throw new SampleException(
-		    outputFile.getAbsolutePath()
-		            + " is a directory. Please provide a valid output sample file path (not a directory)");
-	}
-	CsvSampleReader csvReader = new CsvSampleReader(inputFile,
-	        inputFile.getSeparator(), false);
-	try {
-	    sort(csvReader, outputFile, writeHeader);
-	} finally {
-	    csvReader.close();
-	}
+        if (!inputFile.isFile()) {
+            throw new SampleException(
+                    inputFile.getAbsolutePath()
+                            + " does not exist or is not a file. Please provide an existing samples file");
+        }
+        if (outputFile.isDirectory()) {
+            throw new SampleException(
+                    outputFile.getAbsolutePath()
+                            + " is a directory. Please provide a valid output sample file path (not a directory)");
+        }
+        CsvSampleReader csvReader = new CsvSampleReader(inputFile,
+                inputFile.getSeparator(), false);
+        try {
+            sort(csvReader, outputFile, writeHeader);
+        } finally {
+            csvReader.close();
+        }
     }
 
     /**
@@ -220,36 +220,36 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            sample metadata)
      */
     public void sort(SampleMetadata sampleMetadata, File inputFile,
-	    File outputFile, boolean writeHeader) {
-	if (sampleMetadata == null) {
-	    throw new ArgumentNullException("sampleMetadata");
-	}
+            File outputFile, boolean writeHeader) {
+        if (sampleMetadata == null) {
+            throw new ArgumentNullException("sampleMetadata");
+        }
 
-	if (inputFile == null) {
-	    throw new ArgumentNullException("inputFile");
-	}
+        if (inputFile == null) {
+            throw new ArgumentNullException("inputFile");
+        }
 
-	if (outputFile == null) {
-	    throw new ArgumentNullException("outputFile");
-	}
+        if (outputFile == null) {
+            throw new ArgumentNullException("outputFile");
+        }
 
-	if (!inputFile.isFile()) {
-	    throw new SampleException(
-		    inputFile.getAbsolutePath()
-		            + " does not exist or is not a file. Please provide an existing samples file");
-	}
-	if (outputFile.isDirectory()) {
-	    throw new SampleException(
-		    outputFile.getAbsolutePath()
-		            + " is a directory. Please provide a valid output sample file path (not a directory)");
-	}
-	CsvSampleReader csvReader = new CsvSampleReader(inputFile,
-	        sampleMetadata);
-	try {
-	    sort(csvReader, outputFile, writeHeader);
-	} finally {
-	    csvReader.close();
-	}
+        if (!inputFile.isFile()) {
+            throw new SampleException(
+                    inputFile.getAbsolutePath()
+                            + " does not exist or is not a file. Please provide an existing samples file");
+        }
+        if (outputFile.isDirectory()) {
+            throw new SampleException(
+                    outputFile.getAbsolutePath()
+                            + " is a directory. Please provide a valid output sample file path (not a directory)");
+        }
+        CsvSampleReader csvReader = new CsvSampleReader(inputFile,
+                sampleMetadata);
+        try {
+            sort(csvReader, outputFile, writeHeader);
+        } finally {
+            csvReader.close();
+        }
     }
 
     /**
@@ -264,254 +264,254 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            Wether to writer CSV header on the output file
      */
     private void sort(CsvSampleReader csvReader, File output,
-	    boolean writeHeader) {
-	if (csvReader == null) {
-	    throw new ArgumentNullException("csvReader");
-	}
+            boolean writeHeader) {
+        if (csvReader == null) {
+            throw new ArgumentNullException("csvReader");
+        }
 
-	if (output == null) {
-	    throw new ArgumentNullException("output");
-	}
+        if (output == null) {
+            throw new ArgumentNullException("output");
+        }
 
-	SampleMetadata sampleMetadata = csvReader.getMetadata();
-	SampleWriterConsumer writerConsumer = new SampleWriterConsumer();
-	writerConsumer.setOutputFile(output);
-	writerConsumer.setWriteHeader(writeHeader);
-	addSampleConsumer(writerConsumer);
-	try {
-	    super.setConsumedMetadata(sampleMetadata, 0);
-	    startConsuming();
-	    Sample s = null;
-	    while ((s = csvReader.readSample()) != null) {
-		consume(s, 0);
-	    }
-	    stopConsuming();
-	} finally {
-	    removeSampleConsumer(writerConsumer);
-	}
+        SampleMetadata sampleMetadata = csvReader.getMetadata();
+        SampleWriterConsumer writerConsumer = new SampleWriterConsumer();
+        writerConsumer.setOutputFile(output);
+        writerConsumer.setWriteHeader(writeHeader);
+        addSampleConsumer(writerConsumer);
+        try {
+            super.setConsumedMetadata(sampleMetadata, 0);
+            startConsuming();
+            Sample s = null;
+            while ((s = csvReader.readSample()) != null) {
+                consume(s, 0);
+            }
+            stopConsuming();
+        } finally {
+            removeSampleConsumer(writerConsumer);
+        }
     }
 
     @Override
     public void startConsuming() {
-	if (sampleComparator == null) {
-	    throw new IllegalStateException(
-		    "sampleComparator is not set, call setSampleComparator() first.");
-	}
+        if (sampleComparator == null) {
+            throw new IllegalStateException(
+                    "sampleComparator is not set, call setSampleComparator() first.");
+        }
 
-	File workDir = getWorkingDirectory();
-	workDir.mkdir();
-	this.pool.prestartAllCoreThreads();
-	inputSampleCount = 0;
-	chunkedSampleCount = 0;
-	chunks = new LinkedList<>();
-	samples = new LinkedList<>();
-	sampleMetadata = getConsumedMetadata(0);
-	sampleComparator.initialize(sampleMetadata);
+        File workDir = getWorkingDirectory();
+        workDir.mkdir();
+        this.pool.prestartAllCoreThreads();
+        inputSampleCount = 0;
+        chunkedSampleCount = 0;
+        chunks = new LinkedList<>();
+        samples = new LinkedList<>();
+        sampleMetadata = getConsumedMetadata(0);
+        sampleComparator.initialize(sampleMetadata);
     }
 
     @Override
     public void consume(Sample s, int channel) {
-	samples.add(s);
-	inputSampleCount++;
-	if (samples.size() >= chunkSize) {
-	    chunks.add(sortAndDump(samples, sampleMetadata));
-	    samples.clear();
-	}
+        samples.add(s);
+        inputSampleCount++;
+        if (samples.size() >= chunkSize) {
+            chunks.add(sortAndDump(samples, sampleMetadata));
+            samples.clear();
+        }
     }
 
     @Override
     public void stopConsuming() {
-	if (samples.size() > 0) {
-	    chunks.add(sortAndDump(samples, sampleMetadata));
-	}
-	if (log.isDebugEnabled()) {
-	    log.debug("sort(): " + inputSampleCount
-		    + " samples read from input, " + chunkedSampleCount
-		    + " samples written to chunk files");
-	    if (inputSampleCount != chunkedSampleCount) {
-		log.error("Failure !");
-	    } else {
-		log.info("chunked samples dumps succeeded.");
-	    }
-	}
-	super.setProducedMetadata(sampleMetadata, 0);
-	super.startProducing();
-	sortFilesParallel(chunks, sampleMetadata, this);
-	super.stopProducing();
-	if (this.pool != null) {
-	    this.pool.shutdown();
-	}
-	getWorkingDirectory().delete();
+        if (samples.size() > 0) {
+            chunks.add(sortAndDump(samples, sampleMetadata));
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("sort(): " + inputSampleCount
+                    + " samples read from input, " + chunkedSampleCount
+                    + " samples written to chunk files");
+            if (inputSampleCount != chunkedSampleCount) {
+                log.error("Failure !");
+            } else {
+                log.info("chunked samples dumps succeeded.");
+            }
+        }
+        super.setProducedMetadata(sampleMetadata, 0);
+        super.startProducing();
+        sortFilesParallel(chunks, sampleMetadata, this);
+        super.stopProducing();
+        if (this.pool != null) {
+            this.pool.shutdown();
+        }
+        getWorkingDirectory().delete();
     }
 
     private File sortAndDump(final List<Sample> samples,
-	    final SampleMetadata sampleMetadata) {
-	long start = 0;
-	long stop = 0;
-	if (log.isDebugEnabled()) {
-	    log.debug("sortAndDump(): Sorting " + samples.size()
-		    + " samples...");
-	    start = System.currentTimeMillis();
-	}
-	final List<Sample> sortedSamples = sortSamplesParallel(samples);
-	if (sortedSamples.size() != samples.size()) {
-	    throw new SampleException("sort failed ! " + sortedSamples.size()
-		    + " != " + samples.size());
-	}
-	if (log.isDebugEnabled()) {
-	    stop = System.currentTimeMillis();
-	    log.debug("sortAndDump(): in " + (stop - start) / 1000f
-		    + " s. Sorted  " + samples.size() + " samples.");
-	}
-	File out = getChunkFile();
-	if (log.isDebugEnabled()) {
-	    log.debug("sortAndDump(): Dumping chunk " + out);
-	    start = System.currentTimeMillis();
-	}
-	CsvSampleWriter csvWriter = new CsvSampleWriter(out, sampleMetadata);
-	try {
-	    for (Sample sample : sortedSamples) {
-		csvWriter.write(sample);
-		chunkedSampleCount++;
-	    }
-	} finally {
-	    csvWriter.close();
-	}
-	if (log.isDebugEnabled()) {
-	    stop = System.currentTimeMillis();
-	    log.debug("sortAndDump(): in " + (stop - start) / 1000f
-		    + " s : Dumped chunk " + out.getAbsolutePath());
-	}
-	return out;
+            final SampleMetadata sampleMetadata) {
+        long start = 0;
+        long stop = 0;
+        if (log.isDebugEnabled()) {
+            log.debug("sortAndDump(): Sorting " + samples.size()
+                    + " samples...");
+            start = System.currentTimeMillis();
+        }
+        final List<Sample> sortedSamples = sortSamplesParallel(samples);
+        if (sortedSamples.size() != samples.size()) {
+            throw new SampleException("sort failed ! " + sortedSamples.size()
+                    + " != " + samples.size());
+        }
+        if (log.isDebugEnabled()) {
+            stop = System.currentTimeMillis();
+            log.debug("sortAndDump(): in " + (stop - start) / 1000f
+                    + " s. Sorted  " + samples.size() + " samples.");
+        }
+        File out = getChunkFile();
+        if (log.isDebugEnabled()) {
+            log.debug("sortAndDump(): Dumping chunk " + out);
+            start = System.currentTimeMillis();
+        }
+        CsvSampleWriter csvWriter = new CsvSampleWriter(out, sampleMetadata);
+        try {
+            for (Sample sample : sortedSamples) {
+                csvWriter.write(sample);
+                chunkedSampleCount++;
+            }
+        } finally {
+            csvWriter.close();
+        }
+        if (log.isDebugEnabled()) {
+            stop = System.currentTimeMillis();
+            log.debug("sortAndDump(): in " + (stop - start) / 1000f
+                    + " s : Dumped chunk " + out.getAbsolutePath());
+        }
+        return out;
     }
 
     private List<Sample> sortSamplesParallel(final List<Sample> samples) {
-	int sz = samples.size();
-	if (sz <= 1) {
-	    return samples;
-	}
-	int middle = sz / 2;
-	final List<Sample> left = samples.subList(0, middle);
-	final List<Sample> right = samples.subList(middle, sz);
-	Job<List<Sample>> jobLeft = new Job<List<Sample>>() {
-	    @Override
-        protected List<Sample> exec() {
-		return sort(left);
-	    }
-	};
-	Job<List<Sample>> jobRight = new Job<List<Sample>>() {
-	    @Override
-	    protected List<Sample> exec() {
-		return sort(right);
-	    }
-	};
+        int sz = samples.size();
+        if (sz <= 1) {
+            return samples;
+        }
+        int middle = sz / 2;
+        final List<Sample> left = samples.subList(0, middle);
+        final List<Sample> right = samples.subList(middle, sz);
+        Job<List<Sample>> jobLeft = new Job<List<Sample>>() {
+            @Override
+            protected List<Sample> exec() {
+                return sort(left);
+            }
+        };
+        Job<List<Sample>> jobRight = new Job<List<Sample>>() {
+            @Override
+            protected List<Sample> exec() {
+                return sort(right);
+            }
+        };
 
-	List<Sample> newLeft = null;
-	List<Sample> newRight = null;
-	workQueue.add(jobLeft);
-	workQueue.add(jobRight);
-	if (parallelize) {
-	    try {
-		newLeft = jobLeft.getResult();
-		newRight = jobRight.getResult();
-	    } catch (InterruptedException ie) {
-		throw new SampleException("Unexpected interruption !", ie);
-	    }
-	} else {
-	    newLeft = sort(left);
-	    newRight = sort(right);
-	}
-	return merge(newLeft, newRight);
+        List<Sample> newLeft = null;
+        List<Sample> newRight = null;
+        workQueue.add(jobLeft);
+        workQueue.add(jobRight);
+        if (parallelize) {
+            try {
+                newLeft = jobLeft.getResult();
+                newRight = jobRight.getResult();
+            } catch (InterruptedException ie) {
+                throw new SampleException("Unexpected interruption !", ie);
+            }
+        } else {
+            newLeft = sort(left);
+            newRight = sort(right);
+        }
+        return merge(newLeft, newRight);
     }
 
     public List<Sample> sort(List<Sample> samples) {
-	int sz = samples.size();
-	if (sz <= 1) {
-	    return samples;
-	}
-	int middle = sz / 2;
-	List<Sample> left = samples.subList(0, middle);
-	List<Sample> right = samples.subList(middle, sz);
-	left = sort(left);
-	right = sort(right);
-	return merge(left, right);
+        int sz = samples.size();
+        if (sz <= 1) {
+            return samples;
+        }
+        int middle = sz / 2;
+        List<Sample> left = samples.subList(0, middle);
+        List<Sample> right = samples.subList(middle, sz);
+        left = sort(left);
+        right = sort(right);
+        return merge(left, right);
     }
 
     private List<Sample> merge(List<Sample> left, List<Sample> right) {
-	ArrayList<Sample> out = new ArrayList<>();
-	ListIterator<Sample> l = left.listIterator();
-	ListIterator<Sample> r = right.listIterator();
-	while (l.hasNext() || r.hasNext()) {
-	    if (l.hasNext() && r.hasNext()) {
-		Sample firstLeft = l.next();
-		Sample firstRight = r.next();
-		if (revertedSort == false
-		        && sampleComparator.compare(firstLeft, firstRight) < 0
-		        || revertedSort == true
-		        && sampleComparator.compare(firstLeft, firstRight) >= 0) {
-		    out.add(firstLeft);
-		    r.previous();
-		} else {
-		    out.add(firstRight);
-		    l.previous();
-		}
-	    } else if (l.hasNext()) {
-		out.add(l.next());
-	    } else if (r.hasNext()) {
-		out.add(r.next());
-	    }
-	}
-	return out;
+        ArrayList<Sample> out = new ArrayList<>();
+        ListIterator<Sample> l = left.listIterator();
+        ListIterator<Sample> r = right.listIterator();
+        while (l.hasNext() || r.hasNext()) {
+            if (l.hasNext() && r.hasNext()) {
+                Sample firstLeft = l.next();
+                Sample firstRight = r.next();
+                if (revertedSort == false
+                        && sampleComparator.compare(firstLeft, firstRight) < 0
+                        || revertedSort == true
+                        && sampleComparator.compare(firstLeft, firstRight) >= 0) {
+                    out.add(firstLeft);
+                    r.previous();
+                } else {
+                    out.add(firstRight);
+                    l.previous();
+                }
+            } else if (l.hasNext()) {
+                out.add(l.next());
+            } else if (r.hasNext()) {
+                out.add(r.next());
+            }
+        }
+        return out;
     }
 
     public void mergeFiles(List<File> chunks, SampleMetadata metadata,
-	    SampleProducer producer) {
-	sortFilesParallel(chunks, metadata, producer);
+            SampleProducer producer) {
+        sortFilesParallel(chunks, metadata, producer);
     }
 
     private void sortFilesParallel(List<File> chunks,
-	    final SampleMetadata metadata, SampleProducer out) {
-	int sz = chunks.size();
-	if (sz > 1) {
-	    int middle = sz / 2;
-	    final List<File> left = chunks.subList(0, middle);
-	    final List<File> right = chunks.subList(middle, sz);
-	    File leftFile = null;
-	    File rightFile = null;
-	    Job<File> leftJob = new Job<File>() {
-		@Override
-		protected File exec() {
-		    return mergeSortFiles(left, metadata);
-		}
-	    };
-	    Job<File> rightJob = new Job<File>() {
-		@Override
-		protected File exec() {
-		    return mergeSortFiles(right, metadata);
-		}
-	    };
-	    if (parallelize) {
-		workQueue.add(leftJob);
-		workQueue.add(rightJob);
-		try {
-		    leftFile = leftJob.getResult();
-		    rightFile = rightJob.getResult();
-		} catch (InterruptedException ie) {
-		    throw new SampleException("Unexpected interruption !", ie);
-		}
-	    } else {
-		leftFile = leftJob.exec();
-		rightFile = rightJob.exec();
-	    }
-	    mergeFiles(metadata, leftFile, rightFile, out);
-	} else {
-	    File f = chunks.get(0);
-	    CsvSampleReader reader = new CsvSampleReader(f, metadata);
-	    Sample s = null;
-	    while ((s = reader.readSample()) != null) {
-		out.produce(s, 0);
-	    }
-	}
+            final SampleMetadata metadata, SampleProducer out) {
+        int sz = chunks.size();
+        if (sz > 1) {
+            int middle = sz / 2;
+            final List<File> left = chunks.subList(0, middle);
+            final List<File> right = chunks.subList(middle, sz);
+            File leftFile = null;
+            File rightFile = null;
+            Job<File> leftJob = new Job<File>() {
+                @Override
+                protected File exec() {
+                    return mergeSortFiles(left, metadata);
+                }
+            };
+            Job<File> rightJob = new Job<File>() {
+                @Override
+                protected File exec() {
+                    return mergeSortFiles(right, metadata);
+                }
+            };
+            if (parallelize) {
+                workQueue.add(leftJob);
+                workQueue.add(rightJob);
+                try {
+                    leftFile = leftJob.getResult();
+                    rightFile = rightJob.getResult();
+                } catch (InterruptedException ie) {
+                    throw new SampleException("Unexpected interruption !", ie);
+                }
+            } else {
+                leftFile = leftJob.exec();
+                rightFile = rightJob.exec();
+            }
+            mergeFiles(metadata, leftFile, rightFile, out);
+        } else {
+            File f = chunks.get(0);
+            CsvSampleReader reader = new CsvSampleReader(f, metadata);
+            Sample s = null;
+            while ((s = reader.readSample()) != null) {
+                out.produce(s, 0);
+            }
+        }
     }
 
     // private static long countSamples(File f, SampleMetadata metadata) {
@@ -530,109 +530,109 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     // }
 
     private File mergeSortFiles(List<File> chunks, SampleMetadata metadata) {
-	int sz = chunks.size();
-	if (sz == 1) {
-	    return chunks.get(0);
-	}
-	int middle = sz / 2;
-	List<File> left = chunks.subList(0, middle);
-	List<File> right = chunks.subList(middle, sz);
-	File leftFile = mergeSortFiles(left, metadata);
-	File rightFile = mergeSortFiles(right, metadata);
-	return mergeFiles(leftFile, rightFile, metadata);
+        int sz = chunks.size();
+        if (sz == 1) {
+            return chunks.get(0);
+        }
+        int middle = sz / 2;
+        List<File> left = chunks.subList(0, middle);
+        List<File> right = chunks.subList(middle, sz);
+        File leftFile = mergeSortFiles(left, metadata);
+        File rightFile = mergeSortFiles(right, metadata);
+        return mergeFiles(leftFile, rightFile, metadata);
     }
 
     private File mergeFiles(File left, File right, SampleMetadata metadata) {
-	File out = getChunkFile();
-	mergeFiles(metadata, left, right, out, false);
-	return out;
+        File out = getChunkFile();
+        mergeFiles(metadata, left, right, out, false);
+        return out;
     }
 
     private void mergeFiles(SampleMetadata metadata, File left, File right,
-	    File out, boolean writeHeader) {
-	if (out == null) {
-	    out = getChunkFile();
-	}
-	CsvSampleWriter csvWriter = new CsvSampleWriter(out, metadata);
-	CsvSampleReader l = new CsvSampleReader(left, metadata);
-	CsvSampleReader r = new CsvSampleReader(right, metadata);
-	try {
-	    if (writeHeader) {
-		csvWriter.writeHeader();
-	    }
-	    while (l.hasNext() || r.hasNext()) {
-		if (l.hasNext() && r.hasNext()) {
-		    Sample firstLeft = l.peek();
-		    Sample firstRight = r.peek();
-		    if (revertedSort == false
-			    && sampleComparator.compare(firstLeft, firstRight) < 0
-			    || revertedSort == true
-			    && sampleComparator.compare(firstLeft, firstRight) >= 0) {
-			csvWriter.write(firstLeft);
-			l.readSample();
-		    } else {
-			csvWriter.write(firstRight);
-			r.readSample();
-		    }
-		} else if (l.hasNext()) {
-		    csvWriter.write(l.readSample());
-		} else if (r.hasNext()) {
-		    csvWriter.write(r.readSample());
-		}
-	    }
-	} finally {
-	    csvWriter.close();
-	    l.close();
-	    r.close();
-	}
+            File out, boolean writeHeader) {
+        if (out == null) {
+            out = getChunkFile();
+        }
+        CsvSampleWriter csvWriter = new CsvSampleWriter(out, metadata);
+        CsvSampleReader l = new CsvSampleReader(left, metadata);
+        CsvSampleReader r = new CsvSampleReader(right, metadata);
+        try {
+            if (writeHeader) {
+                csvWriter.writeHeader();
+            }
+            while (l.hasNext() || r.hasNext()) {
+                if (l.hasNext() && r.hasNext()) {
+                    Sample firstLeft = l.peek();
+                    Sample firstRight = r.peek();
+                    if (revertedSort == false
+                            && sampleComparator.compare(firstLeft, firstRight) < 0
+                            || revertedSort == true
+                            && sampleComparator.compare(firstLeft, firstRight) >= 0) {
+                        csvWriter.write(firstLeft);
+                        l.readSample();
+                    } else {
+                        csvWriter.write(firstRight);
+                        r.readSample();
+                    }
+                } else if (l.hasNext()) {
+                    csvWriter.write(l.readSample());
+                } else if (r.hasNext()) {
+                    csvWriter.write(r.readSample());
+                }
+            }
+        } finally {
+            csvWriter.close();
+            l.close();
+            r.close();
+        }
     }
 
     private void mergeFiles(SampleMetadata metadata, File left, File right,
-	    SampleProducer out) {
-	CsvSampleReader l = new CsvSampleReader(left, metadata);
-	CsvSampleReader r = new CsvSampleReader(right, metadata);
-	try {
-	    while (l.hasNext() || r.hasNext()) {
-		if (l.hasNext() && r.hasNext()) {
-		    Sample firstLeft = l.peek();
-		    Sample firstRight = r.peek();
-		    if (revertedSort == false
-			    && sampleComparator.compare(firstLeft, firstRight) < 0
-			    || revertedSort == true
-			    && sampleComparator.compare(firstLeft, firstRight) >= 0) {
-			out.produce(firstLeft, 0);
-			l.readSample();
-		    } else {
-			out.produce(firstRight, 0);
-			r.readSample();
-		    }
-		} else if (l.hasNext()) {
-		    out.produce(l.readSample(), 0);
-		} else if (r.hasNext()) {
-		    out.produce(r.readSample(), 0);
-		}
-	    }
-	} finally {
-	    l.close();
-	    r.close();
-	}
+            SampleProducer out) {
+        CsvSampleReader l = new CsvSampleReader(left, metadata);
+        CsvSampleReader r = new CsvSampleReader(right, metadata);
+        try {
+            while (l.hasNext() || r.hasNext()) {
+                if (l.hasNext() && r.hasNext()) {
+                    Sample firstLeft = l.peek();
+                    Sample firstRight = r.peek();
+                    if (revertedSort == false
+                            && sampleComparator.compare(firstLeft, firstRight) < 0
+                            || revertedSort == true
+                            && sampleComparator.compare(firstLeft, firstRight) >= 0) {
+                        out.produce(firstLeft, 0);
+                        l.readSample();
+                    } else {
+                        out.produce(firstRight, 0);
+                        r.readSample();
+                    }
+                } else if (l.hasNext()) {
+                    out.produce(l.readSample(), 0);
+                } else if (r.hasNext()) {
+                    out.produce(r.readSample(), 0);
+                }
+            }
+        } finally {
+            l.close();
+            r.close();
+        }
     }
 
     private AtomicInteger sequence = new AtomicInteger();
 
     private File getChunkFile() {
-	DecimalFormat df = new DecimalFormat("00000");
-	File out = new File(getWorkingDirectory(), "chunk-"
-	        + df.format(sequence.incrementAndGet()) + ".csv");
-	out.deleteOnExit();
-	return out;
+        DecimalFormat df = new DecimalFormat("00000");
+        File out = new File(getWorkingDirectory(), "chunk-"
+                + df.format(sequence.incrementAndGet()) + ".csv");
+        out.deleteOnExit();
+        return out;
     }
 
     /**
      * @return the revertedSort
      */
     public final boolean isRevertedSort() {
-	return revertedSort;
+        return revertedSort;
     }
 
     /**
@@ -640,7 +640,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            the revertedSort to set
      */
     public final void setRevertedSort(boolean revertedSort) {
-	this.revertedSort = revertedSort;
+        this.revertedSort = revertedSort;
     }
 
     // private static void test(String wd, String in, String out) {

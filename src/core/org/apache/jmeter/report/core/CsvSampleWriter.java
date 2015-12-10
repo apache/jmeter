@@ -50,51 +50,51 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     private long sampleCount;
 
     public CsvSampleWriter(SampleMetadata metadata) {
-	if (metadata == null) {
-	    throw new ArgumentNullException("metadata");
-	}
-	this.metadata = metadata;
-	this.columnCount = metadata.getColumnCount();
-	this.separator = metadata.getSeparator();
-	this.sampleCount = 0;
+        if (metadata == null) {
+            throw new ArgumentNullException("metadata");
+        }
+        this.metadata = metadata;
+        this.columnCount = metadata.getColumnCount();
+        this.separator = metadata.getSeparator();
+        this.sampleCount = 0;
     }
 
     public CsvSampleWriter(Writer output, SampleMetadata metadata) {
-	this(metadata);
-	if (output == null) {
-	    throw new ArgumentNullException("output");
-	}
-	setWriter(output);
+        this(metadata);
+        if (output == null) {
+            throw new ArgumentNullException("output");
+        }
+        setWriter(output);
     }
 
     public CsvSampleWriter(OutputStream output, SampleMetadata metadata) {
-	this(metadata);
-	if (output == null) {
-	    throw new ArgumentNullException("output");
-	}
-	setOutputStream(output);
+        this(metadata);
+        if (output == null) {
+            throw new ArgumentNullException("output");
+        }
+        setOutputStream(output);
     }
 
     public CsvSampleWriter(File output, SampleMetadata metadata) {
-	this(metadata);
-	if (output == null) {
-	    throw new ArgumentNullException("output");
-	}
-	setOutputFile(output);
+        this(metadata);
+        if (output == null) {
+            throw new ArgumentNullException("output");
+        }
+        setOutputFile(output);
     }
 
     public void setSeparator(char separator) {
-	this.separator = separator;
+        this.separator = separator;
     }
 
     private void reset() {
-	sampleCount = 0;
+        sampleCount = 0;
     }
 
     @Override
     public void setWriter(Writer writer) {
-	super.setWriter(writer);
-	reset();
+        super.setWriter(writer);
+        reset();
     }
 
     /**
@@ -102,42 +102,42 @@ public class CsvSampleWriter extends AbstractSampleWriter {
      * header information will be written in the middle of the file.
      */
     public void writeHeader() {
-	row.setLength(0);
-	for (int i = 0; i < columnCount; i++) {
-	    row.append(metadata.getColumnName(i));
-	    if (i < columnCount - 1) {
-		row.append(separator);
-	    }
-	}
-	writer.println(row.toString());
+        row.setLength(0);
+        for (int i = 0; i < columnCount; i++) {
+            row.append(metadata.getColumnName(i));
+            if (i < columnCount - 1) {
+                row.append(separator);
+            }
+        }
+        writer.println(row.toString());
     }
 
     @Override
     public long write(Sample sample) {
-	try {
-	    row.setLength(0);
-	    char[] specials = new char[] { separator,
-		    CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
-	    for (int i = 0; i < columnCount; i++) {
-		String data = sample.getString(i);
-		row.append(CSVSaveService.quoteDelimiters(data, specials))
-		        .append(separator);
-	    }
-	    int rowLength = row.length() - 1;
-	    row.setLength(rowLength);
-	    writer.println(row.toString());
-	    sampleCount++;
-	} catch (NullPointerException npe) {
-	    if (writer == null) {
-		throw new IllegalStateException(
-		        "No writer set ! Call setWriter() first !", npe);
-	    } else if (sample == null) {
-		throw new ArgumentNullException("sample");
-	    } else {
-		throw npe;
-	    }
-	}
-	return sampleCount;
+        try {
+            row.setLength(0);
+            char[] specials = new char[] { separator,
+                    CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
+            for (int i = 0; i < columnCount; i++) {
+                String data = sample.getString(i);
+                row.append(CSVSaveService.quoteDelimiters(data, specials))
+                        .append(separator);
+            }
+            int rowLength = row.length() - 1;
+            row.setLength(rowLength);
+            writer.println(row.toString());
+            sampleCount++;
+        } catch (NullPointerException npe) {
+            if (writer == null) {
+                throw new IllegalStateException(
+                        "No writer set ! Call setWriter() first !", npe);
+            } else if (sample == null) {
+                throw new ArgumentNullException("sample");
+            } else {
+                throw npe;
+            }
+        }
+        return sampleCount;
     }
 
 }

@@ -48,7 +48,7 @@ public class ResponseTimeDistributionGraphConsumer extends
      * @return the granularity
      */
     public final long getGranularity() {
-	return granularity;
+        return granularity;
     }
 
     /**
@@ -56,7 +56,7 @@ public class ResponseTimeDistributionGraphConsumer extends
      *            the granularity to set
      */
     public final void setGranularity(long granularity) {
-	this.granularity = granularity;
+        this.granularity = granularity;
     }
 
     /*
@@ -67,15 +67,15 @@ public class ResponseTimeDistributionGraphConsumer extends
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-	return new GraphKeysSelector() {
+        return new GraphKeysSelector() {
 
-	    @Override
-	    public Double select(Sample sample) {
-		long elapsed = sample.getElapsedTime();
-		return (double) (elapsed - elapsed % granularity);
+            @Override
+            public Double select(Sample sample) {
+                long elapsed = sample.getElapsedTime();
+                return (double) (elapsed - elapsed % granularity);
 
-	    }
-	};
+            }
+        };
     }
 
     /*
@@ -86,13 +86,13 @@ public class ResponseTimeDistributionGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
 
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new SumAggregatorFactory(), new NameSeriesSelector(),
-	        new CountValueSelector(), false, false));
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new SumAggregatorFactory(), new NameSeriesSelector(),
+                new CountValueSelector(), false, false));
 
-	return groupInfos;
+        return groupInfos;
     }
 
     /*
@@ -103,9 +103,9 @@ public class ResponseTimeDistributionGraphConsumer extends
      */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
-	parentResult.setResult(
-	        AbstractOverTimeGraphConsumer.RESULT_CTX_GRANULARITY,
-	        new ValueResultData(granularity));
+        parentResult.setResult(
+                AbstractOverTimeGraphConsumer.RESULT_CTX_GRANULARITY,
+                new ValueResultData(granularity));
 
     }
 }

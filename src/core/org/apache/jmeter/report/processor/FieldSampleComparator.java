@@ -33,16 +33,16 @@ public class FieldSampleComparator implements SampleComparator {
     private final String fieldName;
 
     public FieldSampleComparator(String fieldName) {
-	this.fieldName = fieldName;
+        this.fieldName = fieldName;
     }
 
     @Override
     public final void initialize(SampleMetadata metadata) {
-	index = metadata.indexOf(fieldName);
-	if (index < 0) {
-	    throw new SampleException(String.format(METADATA_EXCEPTION_MSG_FMT,
-		    fieldName, metadata));
-	}
+        index = metadata.indexOf(fieldName);
+        if (index < 0) {
+            throw new SampleException(String.format(METADATA_EXCEPTION_MSG_FMT,
+                    fieldName, metadata));
+        }
     }
 
     /*
@@ -54,6 +54,6 @@ public class FieldSampleComparator implements SampleComparator {
      */
     @Override
     public long compare(Sample s1, Sample s2) {
-	return s1.getLong(index) - s2.getLong(index);
+        return s1.getLong(index) - s2.getLong(index);
     }
 }

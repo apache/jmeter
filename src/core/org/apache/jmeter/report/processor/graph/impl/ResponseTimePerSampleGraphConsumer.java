@@ -46,7 +46,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      * Instantiates a new response time per sample graph consumer.
      */
     public ResponseTimePerSampleGraphConsumer() {
-	setRevertKeysAndValues(true);
+        setRevertKeysAndValues(true);
     }
 
     /*
@@ -57,7 +57,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-	return new IndexedNameSelector();
+        return new IndexedNameSelector();
     }
 
     /**
@@ -71,15 +71,15 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      * @return the group info
      */
     private GroupInfo createGroupInfo(String propertyKey, int defaultValue) {
-	int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
-	PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
-	factory.setPercentileIndex(property);
-	StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
-	seriesSelector.setSeriesName(String.format(
-	        RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT, property));
+        int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
+        PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
+        factory.setPercentileIndex(property);
+        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
+        seriesSelector.setSeriesName(String.format(
+                RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT, property));
 
-	return new GroupInfo(factory, seriesSelector,
-	        new ElapsedTimeValueSelector(), false, false);
+        return new GroupInfo(factory, seriesSelector,
+                new ElapsedTimeValueSelector(), false, false);
     }
 
     /*
@@ -90,18 +90,18 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(2);
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(2);
 
-	groupInfos.put("aggregate_rpt_pct1",
-	        createGroupInfo("aggregate_rpt_pct1", 90));
+        groupInfos.put("aggregate_rpt_pct1",
+                createGroupInfo("aggregate_rpt_pct1", 90));
 
-	groupInfos.put("aggregate_rpt_pct2",
-	        createGroupInfo("aggregate_rpt_pct2", 95));
+        groupInfos.put("aggregate_rpt_pct2",
+                createGroupInfo("aggregate_rpt_pct2", 95));
 
-	groupInfos.put("aggregate_rpt_pct3",
-	        createGroupInfo("aggregate_rpt_pct3", 99));
+        groupInfos.put("aggregate_rpt_pct3",
+                createGroupInfo("aggregate_rpt_pct3", 99));
 
-	return groupInfos;
+        return groupInfos;
     }
 
     /*
@@ -112,13 +112,13 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
-	ListResultData samples = new ListResultData();
-	IndexedNameSelector indexedNameSelector = (IndexedNameSelector) getKeysSelector();
-	int size = indexedNameSelector.getNames().size();
-	for (int i = 0; i < size; i++) {
-	    samples.addResult(new ValueResultData(indexedNameSelector
-		    .getNames().get(i)));
-	}
-	parentResult.setResult("sampleNames", samples);
+        ListResultData samples = new ListResultData();
+        IndexedNameSelector indexedNameSelector = (IndexedNameSelector) getKeysSelector();
+        int size = indexedNameSelector.getNames().size();
+        for (int i = 0; i < size; i++) {
+            samples.addResult(new ValueResultData(indexedNameSelector
+                    .getNames().get(i)));
+        }
+        parentResult.setResult("sampleNames", samples);
     }
 }
