@@ -24,7 +24,7 @@
 
 	<body>
 
-		<section name="&sect-num;. Generating Report Dashboard">
+		<section name="&sect-num;. Generating Report Dashboard" anchor="generation">
 			<p>
 				JMeter supports dashboard report generation to get graphs and
 				statistics from a test plan.
@@ -32,7 +32,7 @@
 				This chapter describes how to configure and use the generator.
 			</p>
 
-			<subsection name="&sect-num;.1 Overview">
+			<subsection name="&sect-num;.1 Overview" anchor="overview">
 				<p>
 					The dashboard generator is a modular extension of JMeter. Its
 					default behavior is to read and process samples from CSV files to
