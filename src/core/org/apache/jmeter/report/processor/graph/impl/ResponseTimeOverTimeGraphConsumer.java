@@ -46,9 +46,9 @@ public class ResponseTimeOverTimeGraphConsumer extends
      */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
-	TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
-	keysSelector.setSelectBeginTime(false);
-	return keysSelector;
+        TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
+        keysSelector.setSelectBeginTime(false);
+        return keysSelector;
     }
 
     /*
@@ -59,10 +59,10 @@ public class ResponseTimeOverTimeGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new MeanAggregatorFactory(), new NameSeriesSelector(),
-	        new ElapsedTimeValueSelector(), false, false));
-	return groupInfos;
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new MeanAggregatorFactory(), new NameSeriesSelector(),
+                new ElapsedTimeValueSelector(), false, false));
+        return groupInfos;
     }
 }

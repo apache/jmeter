@@ -31,7 +31,7 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
      * Instantiates a new abstract series selector.
      */
     protected AbstractSeriesSelector() {
-	this(false);
+        this(false);
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
      *            controllers
      */
     protected AbstractSeriesSelector(boolean allowsControllerDiscrimination) {
-	this.allowsControllerDiscrimination = allowsControllerDiscrimination;
+        this.allowsControllerDiscrimination = allowsControllerDiscrimination;
     }
 
     /*
@@ -53,7 +53,7 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
      */
     @Override
     public final boolean allowsControllersDiscrimination() {
-	return allowsControllerDiscrimination;
+        return allowsControllerDiscrimination;
     }
 
 }

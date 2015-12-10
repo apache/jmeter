@@ -43,29 +43,29 @@ public class ReportGeneratorConfiguration {
     public static final char KEY_DELIMITER = '.';
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
     public static final String REPORT_GENERATOR_GRAPH_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "graph";
+            + KEY_DELIMITER + "graph";
     public static final String REPORT_GENERATOR_EXPORTER_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "exporter";
+            + KEY_DELIMITER + "exporter";
 
     // Temporary directory
     private static final String REPORT_GENERATOR_KEY_TEMP_DIR = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "temp_dir";
+            + KEY_DELIMITER + "temp_dir";
     private static final File REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT = new File(
-	    "temp");
+            "temp");
 
     // Apdex Satified Threshold
     private static final String REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "apdex_statisfied_threshold";
+            + KEY_DELIMITER + "apdex_statisfied_threshold";
     private static final long REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT = 500L;
 
     // Apdex Tolerated Threshold
     private static final String REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "apdex_tolerated_threshold";
+            + KEY_DELIMITER + "apdex_tolerated_threshold";
     private static final long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = 1500L;
 
     // Sample Filter
     private static final String REPORT_GENERATOR_KEY_SAMPLE_FILTER = REPORT_GENERATOR_KEY_PREFIX
-	    + KEY_DELIMITER + "sample_filter";
+            + KEY_DELIMITER + "sample_filter";
 
     private static final String LOAD_EXPORTER_FMT = "Load configuration for exporter \"%s\"";
     private static final String LOAD_GRAPH_FMT = "Load configuration for graph \"%s\"";
@@ -113,10 +113,10 @@ public class ReportGeneratorConfiguration {
      *            the generic type
      */
     private interface SubConfigurationFactory<TSubConfiguration> {
-	TSubConfiguration createSubConfiguration();
+        TSubConfiguration createSubConfiguration();
 
-	void initialize(String subConfId, TSubConfiguration subConfiguration)
-	        throws ConfigurationException;
+        void initialize(String subConfId, TSubConfiguration subConfiguration)
+                throws ConfigurationException;
     }
 
     private String sampleFilter;
@@ -133,7 +133,7 @@ public class ReportGeneratorConfiguration {
      * @return the overall sample filter
      */
     public final String getSampleFilter() {
-	return sampleFilter;
+        return sampleFilter;
     }
 
     /**
@@ -143,17 +143,17 @@ public class ReportGeneratorConfiguration {
      *            the new overall sample filter
      */
     public final void setSampleFilter(String sampleFilter) {
-	if (Objects.equals(this.sampleFilter, sampleFilter) == false) {
-	    this.sampleFilter = sampleFilter;
-	    filteredSamples.clear();
-	    if (sampleFilter != null) {
-		String[] items = sampleFilter.split(",");
-		int count = items.length;
-		for (int index = 0; index < count; index++) {
-		    filteredSamples.add(items[index].trim());
-		}
-	    }
-	}
+        if (Objects.equals(this.sampleFilter, sampleFilter) == false) {
+            this.sampleFilter = sampleFilter;
+            filteredSamples.clear();
+            if (sampleFilter != null) {
+                String[] items = sampleFilter.split(",");
+                int count = items.length;
+                for (int index = 0; index < count; index++) {
+                    filteredSamples.add(items[index].trim());
+                }
+            }
+        }
     }
 
     /**
@@ -162,7 +162,7 @@ public class ReportGeneratorConfiguration {
      * @return the temporary directory
      */
     public final File getTempDirectory() {
-	return tempDirectory;
+        return tempDirectory;
     }
 
     /**
@@ -172,7 +172,7 @@ public class ReportGeneratorConfiguration {
      *            the temporary directory to set
      */
     public final void setTempDirectory(File tempDirectory) {
-	this.tempDirectory = tempDirectory;
+        this.tempDirectory = tempDirectory;
     }
 
     /**
@@ -181,7 +181,7 @@ public class ReportGeneratorConfiguration {
      * @return the apdex satisfied threshold
      */
     public final long getApdexSatisfiedThreshold() {
-	return apdexSatisfiedThreshold;
+        return apdexSatisfiedThreshold;
     }
 
     /**
@@ -191,7 +191,7 @@ public class ReportGeneratorConfiguration {
      *            the apdex satisfied threshold to set
      */
     public final void setApdexSatisfiedThreshold(long apdexSatisfiedThreshold) {
-	this.apdexSatisfiedThreshold = apdexSatisfiedThreshold;
+        this.apdexSatisfiedThreshold = apdexSatisfiedThreshold;
     }
 
     /**
@@ -200,7 +200,7 @@ public class ReportGeneratorConfiguration {
      * @return the apdex tolerated threshold
      */
     public final long getApdexToleratedThreshold() {
-	return apdexToleratedThreshold;
+        return apdexToleratedThreshold;
     }
 
     /**
@@ -210,7 +210,7 @@ public class ReportGeneratorConfiguration {
      *            the apdex tolerated threshold to set
      */
     public final void setApdexToleratedThreshold(long apdexToleratedThreshold) {
-	this.apdexToleratedThreshold = apdexToleratedThreshold;
+        this.apdexToleratedThreshold = apdexToleratedThreshold;
     }
 
     /**
@@ -219,7 +219,7 @@ public class ReportGeneratorConfiguration {
      * @return the filteredSamples
      */
     public final List<String> getFilteredSamples() {
-	return filteredSamples;
+        return filteredSamples;
     }
 
     /**
@@ -228,7 +228,7 @@ public class ReportGeneratorConfiguration {
      * @return the export configurations
      */
     public final Map<String, ExporterConfiguration> getExportConfigurations() {
-	return exportConfigurations;
+        return exportConfigurations;
     }
 
     /**
@@ -237,7 +237,7 @@ public class ReportGeneratorConfiguration {
      * @return the graph configurations
      */
     public final Map<String, GraphConfiguration> getGraphConfigurations() {
-	return graphConfigurations;
+        return graphConfigurations;
     }
 
     // /**
@@ -262,8 +262,8 @@ public class ReportGeneratorConfiguration {
      * @return the sub configuration property prefix
      */
     public static String getSubConfigurationPropertyPrefix(String keyPrefix,
-	    String subConfId) {
-	return keyPrefix + KEY_DELIMITER + subConfId;
+            String subConfId) {
+        return keyPrefix + KEY_DELIMITER + subConfId;
     }
 
     /**
@@ -277,9 +277,9 @@ public class ReportGeneratorConfiguration {
      * @return the sub configuration property key
      */
     public static String getSubConfigurationPropertyKey(String keyPrefix,
-	    String subConfId, String propertyName) {
-	return getSubConfigurationPropertyPrefix(keyPrefix, subConfId)
-	        + KEY_DELIMITER + propertyName;
+            String subConfId, String propertyName) {
+        return getSubConfigurationPropertyPrefix(keyPrefix, subConfId)
+                + KEY_DELIMITER + propertyName;
     }
 
     /**
@@ -293,10 +293,10 @@ public class ReportGeneratorConfiguration {
      * @return the exporter property key
      */
     public static String getExporterPropertyKey(String exporterId,
-	    String propertyName) {
-	return getSubConfigurationPropertyPrefix(
-	        REPORT_GENERATOR_EXPORTER_KEY_PREFIX, exporterId)
-	        + KEY_DELIMITER + propertyName;
+            String propertyName) {
+        return getSubConfigurationPropertyPrefix(
+                REPORT_GENERATOR_EXPORTER_KEY_PREFIX, exporterId)
+                + KEY_DELIMITER + propertyName;
     }
 
     // /**
@@ -321,10 +321,10 @@ public class ReportGeneratorConfiguration {
      * @return the graph property key
      */
     public static String getGraphPropertyKey(String graphId, String propertyName) {
-	return getSubConfigurationPropertyPrefix(
-	        REPORT_GENERATOR_GRAPH_KEY_PREFIX, graphId)
-	        + KEY_DELIMITER
-	        + propertyName;
+        return getSubConfigurationPropertyPrefix(
+                REPORT_GENERATOR_GRAPH_KEY_PREFIX, graphId)
+                + KEY_DELIMITER
+                + propertyName;
     }
 
     /**
@@ -346,37 +346,37 @@ public class ReportGeneratorConfiguration {
      *             thrown when the property cannot be cast to the specified type
      */
     private static <TProperty> TProperty getProperty(Props props, String key,
-	    TProperty defaultValue, Class<TProperty> clazz)
-	    throws ConfigurationException {
-	TProperty property = null;
-	String value = props.getValue(key);
-	if (value == null) {
-	    if (defaultValue != null) {
-		property = defaultValue;
-		log.info(String.format(NOT_FOUND_PROPERTY_FMT, key,
-		        defaultValue));
-	    }
-	} else {
-	    property = ConfigurationUtils.convert(value, clazz);
-	}
-	return property;
+            TProperty defaultValue, Class<TProperty> clazz)
+            throws ConfigurationException {
+        TProperty property = null;
+        String value = props.getValue(key);
+        if (value == null) {
+            if (defaultValue != null) {
+                property = defaultValue;
+                log.info(String.format(NOT_FOUND_PROPERTY_FMT, key,
+                        defaultValue));
+            }
+        } else {
+            property = ConfigurationUtils.convert(value, clazz);
+        }
+        return property;
     }
 
     private static <TProperty> TProperty getOptionalProperty(Props props,
-	    String key, Class<TProperty> clazz) throws ConfigurationException {
-	TProperty property = getProperty(props, key, null, clazz);
-	if (property != null) {
-	    log.debug(String.format(OPTIONAL_PROPERTY_FMT, property, key));
-	}
-	return property;
+            String key, Class<TProperty> clazz) throws ConfigurationException {
+        TProperty property = getProperty(props, key, null, clazz);
+        if (property != null) {
+            log.debug(String.format(OPTIONAL_PROPERTY_FMT, property, key));
+        }
+        return property;
     }
 
     private static <TProperty> TProperty getRequiredProperty(Props props,
-	    String key, TProperty defaultValue, Class<TProperty> clazz)
-	    throws ConfigurationException {
-	TProperty property = getProperty(props, key, defaultValue, clazz);
-	log.debug(String.format(REQUIRED_PROPERTY_FMT, property, key));
-	return property;
+            String key, TProperty defaultValue, Class<TProperty> clazz)
+            throws ConfigurationException {
+        TProperty property = getProperty(props, key, defaultValue, clazz);
+        log.debug(String.format(REQUIRED_PROPERTY_FMT, property, key));
+        return property;
     }
 
     /**
@@ -420,48 +420,48 @@ public class ReportGeneratorConfiguration {
      *             the configuration exception
      */
     private static <TSubConf extends SubConfiguration> void loadSubConfiguration(
-	    Map<String, TSubConf> subConfigurations, Props props,
-	    String propertyPrefix, boolean noPropertyKey,
-	    SubConfigurationFactory<TSubConf> factory)
-	    throws ConfigurationException {
+            Map<String, TSubConf> subConfigurations, Props props,
+            String propertyPrefix, boolean noPropertyKey,
+            SubConfigurationFactory<TSubConf> factory)
+            throws ConfigurationException {
 
-	for (Map.Entry<String, Object> entry : props.innerMap(propertyPrefix)
-	        .entrySet()) {
-	    String key = entry.getKey();
-	    int index = key.indexOf(KEY_DELIMITER);
-	    if (index > 0) {
-		String name = key.substring(0, index);
-		TSubConf subConfiguration = subConfigurations.get(name);
-		if (subConfiguration == null) {
-		    subConfiguration = factory.createSubConfiguration();
-		    subConfigurations.put(name, subConfiguration);
-		}
-	    } else {
-		log.warn(String.format(INVALID_KEY_FMT, key));
-	    }
-	}
+        for (Map.Entry<String, Object> entry : props.innerMap(propertyPrefix)
+                .entrySet()) {
+            String key = entry.getKey();
+            int index = key.indexOf(KEY_DELIMITER);
+            if (index > 0) {
+                String name = key.substring(0, index);
+                TSubConf subConfiguration = subConfigurations.get(name);
+                if (subConfiguration == null) {
+                    subConfiguration = factory.createSubConfiguration();
+                    subConfigurations.put(name, subConfiguration);
+                }
+            } else {
+                log.warn(String.format(INVALID_KEY_FMT, key));
+            }
+        }
 
-	// Load sub configurations
-	for (Map.Entry<String, TSubConf> entry : subConfigurations.entrySet()) {
-	    String subConfId = entry.getKey();
-	    final TSubConf subConfiguration = entry.getValue();
+        // Load sub configurations
+        for (Map.Entry<String, TSubConf> entry : subConfigurations.entrySet()) {
+            String subConfId = entry.getKey();
+            final TSubConf subConfiguration = entry.getValue();
 
-	    // Load specific properties
-	    factory.initialize(subConfId, subConfiguration);
+            // Load specific properties
+            factory.initialize(subConfId, subConfiguration);
 
-	    // Load extra properties
-	    Map<String, Object> extraKeys = props
-		    .innerMap(noPropertyKey ? getSubConfigurationPropertyPrefix(
-		            propertyPrefix, subConfId)
-		            : getSubConfigurationPropertyKey(propertyPrefix,
-		                    subConfId, SUBCONF_KEY_PROPERTY));
-	    Map<String, String> extraProperties = subConfiguration
-		    .getProperties();
-	    for (Map.Entry<String, Object> entryProperty : extraKeys.entrySet()) {
-		extraProperties.put(entryProperty.getKey(),
-		        (String) entryProperty.getValue());
-	    }
-	}
+            // Load extra properties
+            Map<String, Object> extraKeys = props
+                    .innerMap(noPropertyKey ? getSubConfigurationPropertyPrefix(
+                            propertyPrefix, subConfId)
+                            : getSubConfigurationPropertyKey(propertyPrefix,
+                                    subConfId, SUBCONF_KEY_PROPERTY));
+            Map<String, String> extraProperties = subConfiguration
+                    .getProperties();
+            for (Map.Entry<String, Object> entryProperty : extraKeys.entrySet()) {
+                extraProperties.put(entryProperty.getKey(),
+                        (String) entryProperty.getValue());
+            }
+        }
     }
 
     /**
@@ -472,183 +472,183 @@ public class ReportGeneratorConfiguration {
      * @return the report generator configuration
      */
     public static ReportGeneratorConfiguration LoadFromProperties(
-	    Properties properties) throws ConfigurationException {
+            Properties properties) throws ConfigurationException {
 
-	log.debug(START_LOADING_MSG);
+        log.debug(START_LOADING_MSG);
 
-	ReportGeneratorConfiguration configuration = new ReportGeneratorConfiguration();
+        ReportGeneratorConfiguration configuration = new ReportGeneratorConfiguration();
 
-	// Use jodd.Props to ease property handling
-	final Props props = new Props();
-	props.load(properties);
+        // Use jodd.Props to ease property handling
+        final Props props = new Props();
+        props.load(properties);
 
-	// Load temporary directory property
-	final File tempDirectory = getRequiredProperty(props,
-	        REPORT_GENERATOR_KEY_TEMP_DIR,
-	        REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT, File.class);
-	configuration.setTempDirectory(tempDirectory);
+        // Load temporary directory property
+        final File tempDirectory = getRequiredProperty(props,
+                REPORT_GENERATOR_KEY_TEMP_DIR,
+                REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT, File.class);
+        configuration.setTempDirectory(tempDirectory);
 
-	// Load apdex statified threshold
-	final long apdexSatisfiedThreshold = getRequiredProperty(props,
-	        REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD,
-	        REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT,
-	        long.class);
-	configuration.setApdexSatisfiedThreshold(apdexSatisfiedThreshold);
+        // Load apdex statified threshold
+        final long apdexSatisfiedThreshold = getRequiredProperty(props,
+                REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD,
+                REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT,
+                long.class);
+        configuration.setApdexSatisfiedThreshold(apdexSatisfiedThreshold);
 
-	// Load apdex tolerated threshold
-	final long apdexToleratedThreshold = getRequiredProperty(props,
-	        REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD,
-	        REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT,
-	        long.class);
-	configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
+        // Load apdex tolerated threshold
+        final long apdexToleratedThreshold = getRequiredProperty(props,
+                REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD,
+                REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT,
+                long.class);
+        configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
 
-	// Load sample filter
-	final String sampleFilter = getOptionalProperty(props,
-	        REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
-	configuration.setSampleFilter(sampleFilter);
+        // Load sample filter
+        final String sampleFilter = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
+        configuration.setSampleFilter(sampleFilter);
 
-	// Find graph identifiers and load a configuration for each
-	final Map<String, GraphConfiguration> graphConfigurations = configuration
-	        .getGraphConfigurations();
-	loadSubConfiguration(graphConfigurations, props,
-	        REPORT_GENERATOR_GRAPH_KEY_PREFIX, false,
-	        new SubConfigurationFactory<GraphConfiguration>() {
+        // Find graph identifiers and load a configuration for each
+        final Map<String, GraphConfiguration> graphConfigurations = configuration
+                .getGraphConfigurations();
+        loadSubConfiguration(graphConfigurations, props,
+                REPORT_GENERATOR_GRAPH_KEY_PREFIX, false,
+                new SubConfigurationFactory<GraphConfiguration>() {
 
-		    @Override
-		    public GraphConfiguration createSubConfiguration() {
-		        return new GraphConfiguration();
-		    }
+                    @Override
+                    public GraphConfiguration createSubConfiguration() {
+                        return new GraphConfiguration();
+                    }
 
-		    @Override
-		    public void initialize(String graphId,
-		            GraphConfiguration graphConfiguration)
-		            throws ConfigurationException {
-		        log.debug(String.format(LOAD_GRAPH_FMT, graphId));
+                    @Override
+                    public void initialize(String graphId,
+                            GraphConfiguration graphConfiguration)
+                            throws ConfigurationException {
+                        log.debug(String.format(LOAD_GRAPH_FMT, graphId));
 
-		        // Get the property defining whether the graph have to
-		        // filter controller samples
-		        boolean excludeControllers = getRequiredProperty(
-		                props,
-		                getGraphPropertyKey(graphId,
-		                        GRAPH_KEY_EXCLUDE_CONTROLLERS),
-		                GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT,
-		                Boolean.class);
-		        graphConfiguration
-		                .setExcludeControllers(excludeControllers);
+                        // Get the property defining whether the graph have to
+                        // filter controller samples
+                        boolean excludeControllers = getRequiredProperty(
+                                props,
+                                getGraphPropertyKey(graphId,
+                                        GRAPH_KEY_EXCLUDE_CONTROLLERS),
+                                GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT,
+                                Boolean.class);
+                        graphConfiguration
+                                .setExcludeControllers(excludeControllers);
 
-		        // Get the property defining the title of the graph
-		        String title = getRequiredProperty(props,
-		                getGraphPropertyKey(graphId, GRAPH_KEY_TITLE),
-		                GRAPH_KEY_TITLE_DEFAULT, String.class);
-		        graphConfiguration.setTitle(title);
+                        // Get the property defining the title of the graph
+                        String title = getRequiredProperty(props,
+                                getGraphPropertyKey(graphId, GRAPH_KEY_TITLE),
+                                GRAPH_KEY_TITLE_DEFAULT, String.class);
+                        graphConfiguration.setTitle(title);
 
-		        // Get the property defining the class name
-		        String className = getRequiredProperty(
-		                props,
-		                getGraphPropertyKey(graphId,
-		                        SUBCONF_KEY_CLASSNAME), "",
-		                String.class);
-		        graphConfiguration.setClassName(className);
+                        // Get the property defining the class name
+                        String className = getRequiredProperty(
+                                props,
+                                getGraphPropertyKey(graphId,
+                                        SUBCONF_KEY_CLASSNAME), "",
+                                String.class);
+                        graphConfiguration.setClassName(className);
 
-		    }
-	        });
+                    }
+                });
 
-	if (graphConfigurations.isEmpty()) {
-	    log.info("No graph configuration found.");
-	}
+        if (graphConfigurations.isEmpty()) {
+            log.info("No graph configuration found.");
+        }
 
-	// Find exporter identifiers and load a configuration for each
-	final Map<String, ExporterConfiguration> exportConfigurations = configuration
-	        .getExportConfigurations();
-	loadSubConfiguration(exportConfigurations, props,
-	        REPORT_GENERATOR_EXPORTER_KEY_PREFIX, false,
-	        new SubConfigurationFactory<ExporterConfiguration>() {
+        // Find exporter identifiers and load a configuration for each
+        final Map<String, ExporterConfiguration> exportConfigurations = configuration
+                .getExportConfigurations();
+        loadSubConfiguration(exportConfigurations, props,
+                REPORT_GENERATOR_EXPORTER_KEY_PREFIX, false,
+                new SubConfigurationFactory<ExporterConfiguration>() {
 
-		    @Override
-		    public ExporterConfiguration createSubConfiguration() {
-		        return new ExporterConfiguration();
-		    }
+                    @Override
+                    public ExporterConfiguration createSubConfiguration() {
+                        return new ExporterConfiguration();
+                    }
 
-		    @Override
-		    public void initialize(String exportId,
-		            ExporterConfiguration exportConfiguration)
-		            throws ConfigurationException {
-		        log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
+                    @Override
+                    public void initialize(String exportId,
+                            ExporterConfiguration exportConfiguration)
+                            throws ConfigurationException {
+                        log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
 
-		        // Get the property defining the class name
-		        String className = getRequiredProperty(
-		                props,
-		                getExporterPropertyKey(exportId,
-		                        SUBCONF_KEY_CLASSNAME), "",
-		                String.class);
-		        exportConfiguration.setClassName(className);
+                        // Get the property defining the class name
+                        String className = getRequiredProperty(
+                                props,
+                                getExporterPropertyKey(exportId,
+                                        SUBCONF_KEY_CLASSNAME), "",
+                                String.class);
+                        exportConfiguration.setClassName(className);
 
-		        // Get the property defining whether only sample series
-		        // are filtered
-		        boolean filtersOnlySampleSeries = getRequiredProperty(
-		                props,
-		                getExporterPropertyKey(exportId,
-		                        EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES),
-		                EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT,
-		                Boolean.class);
-		        exportConfiguration
-		                .filtersOnlySampleSeries(filtersOnlySampleSeries);
+                        // Get the property defining whether only sample series
+                        // are filtered
+                        boolean filtersOnlySampleSeries = getRequiredProperty(
+                                props,
+                                getExporterPropertyKey(exportId,
+                                        EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES),
+                                EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT,
+                                Boolean.class);
+                        exportConfiguration
+                                .filtersOnlySampleSeries(filtersOnlySampleSeries);
 
-		        // Get the property defining the series filter
-		        String seriesFilter = getRequiredProperty(
-		                props,
-		                getExporterPropertyKey(exportId,
-		                        EXPORTER_KEY_SERIES_FILTER),
-		                EXPORTER_KEY_SERIES_FILTER_DEFAULT,
-		                String.class);
-		        exportConfiguration.setSeriesFilter(seriesFilter);
+                        // Get the property defining the series filter
+                        String seriesFilter = getRequiredProperty(
+                                props,
+                                getExporterPropertyKey(exportId,
+                                        EXPORTER_KEY_SERIES_FILTER),
+                                EXPORTER_KEY_SERIES_FILTER_DEFAULT,
+                                String.class);
+                        exportConfiguration.setSeriesFilter(seriesFilter);
 
-		        // Get the property defining whether only controllers
-			// series are shown
-		        boolean showControllerSeriesOnly = getRequiredProperty(
-		                props,
-		                getExporterPropertyKey(exportId,
-		                        EXPORTER_KEY_SHOW_CONTROLLERS_ONLY),
-		                EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT,
-		                Boolean.class);
-		        exportConfiguration
-		                .showControllerSeriesOnly(showControllerSeriesOnly);
+                        // Get the property defining whether only controllers
+                        // series are shown
+                        boolean showControllerSeriesOnly = getRequiredProperty(
+                                props,
+                                getExporterPropertyKey(exportId,
+                                        EXPORTER_KEY_SHOW_CONTROLLERS_ONLY),
+                                EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT,
+                                Boolean.class);
+                        exportConfiguration
+                                .showControllerSeriesOnly(showControllerSeriesOnly);
 
-		        // Load graph extra properties
-		        Map<String, SubConfiguration> graphExtraConfigurations = exportConfiguration
-		                .getGraphExtraConfigurations();
-		        loadSubConfiguration(
-		                graphExtraConfigurations,
-		                props,
-		                getSubConfigurationPropertyKey(
-		                        REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
-		                        exportId,
-		                        EXPORTER_KEY_GRAPH_EXTRA_OPTIONS),
-		                true,
-		                new SubConfigurationFactory<SubConfiguration>() {
+                        // Load graph extra properties
+                        Map<String, SubConfiguration> graphExtraConfigurations = exportConfiguration
+                                .getGraphExtraConfigurations();
+                        loadSubConfiguration(
+                                graphExtraConfigurations,
+                                props,
+                                getSubConfigurationPropertyKey(
+                                        REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
+                                        exportId,
+                                        EXPORTER_KEY_GRAPH_EXTRA_OPTIONS),
+                                true,
+                                new SubConfigurationFactory<SubConfiguration>() {
 
-			            @Override
-			            public SubConfiguration createSubConfiguration() {
-			                return new SubConfiguration();
-			            }
+                                    @Override
+                                    public SubConfiguration createSubConfiguration() {
+                                        return new SubConfiguration();
+                                    }
 
-			            @Override
-			            public void initialize(String subConfId,
-			                    SubConfiguration subConfiguration)
-			                    throws ConfigurationException {
-			                // do nothing
+                                    @Override
+                                    public void initialize(String subConfId,
+                                            SubConfiguration subConfiguration)
+                                            throws ConfigurationException {
+                                        // do nothing
 
-			            }
-		                });
-		    }
-	        });
+                                    }
+                                });
+                    }
+                });
 
-	if (exportConfigurations.isEmpty()) {
-	    log.warn("No export configuration found. None report will be generated.");
-	}
+        if (exportConfigurations.isEmpty()) {
+            log.warn("No export configuration found. None report will be generated.");
+        }
 
-	log.debug(END_LOADING_MSG);
+        log.debug(END_LOADING_MSG);
 
-	return configuration;
+        return configuration;
     }
 }

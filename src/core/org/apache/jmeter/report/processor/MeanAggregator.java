@@ -35,7 +35,7 @@ public class MeanAggregator implements Aggregator {
      */
     @Override
     public long getCount() {
-	return mean.getN();
+        return mean.getN();
     }
 
     /*
@@ -45,7 +45,7 @@ public class MeanAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return mean.getResult();
+        return mean.getResult();
     }
 
     /*
@@ -55,7 +55,7 @@ public class MeanAggregator implements Aggregator {
      */
     @Override
     public void addValue(double value) {
-	mean.increment(value);
+        mean.increment(value);
     }
 
     /*
@@ -65,7 +65,7 @@ public class MeanAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	mean.clear();
+        mean.clear();
     }
 
 }

@@ -30,7 +30,7 @@ public class ApdexSummaryData {
     private long totalCount;
 
     public final ApdexThresholdsInfo getApdexThresholdInfo() {
-	return apdexThresholdInfo;
+        return apdexThresholdInfo;
     }
 
     /**
@@ -39,7 +39,7 @@ public class ApdexSummaryData {
      * @return the satisfiedCount
      */
     public final long getSatisfiedCount() {
-	return satisfiedCount;
+        return satisfiedCount;
     }
 
     /**
@@ -49,14 +49,14 @@ public class ApdexSummaryData {
      *            the satisfiedCount to set
      */
     public final void setSatisfiedCount(long satisfiedCount) {
-	this.satisfiedCount = satisfiedCount;
+        this.satisfiedCount = satisfiedCount;
     }
 
     /**
      * @return the toleratedCount
      */
     public final long getToleratedCount() {
-	return toleratedCount;
+        return toleratedCount;
     }
 
     /**
@@ -66,7 +66,7 @@ public class ApdexSummaryData {
      *            the toleratedCount to set
      */
     public final void setToleratedCount(long toleratedCount) {
-	this.toleratedCount = toleratedCount;
+        this.toleratedCount = toleratedCount;
     }
 
     /**
@@ -75,7 +75,7 @@ public class ApdexSummaryData {
      * @return the totalCount
      */
     public final long getTotalCount() {
-	return totalCount;
+        return totalCount;
     }
 
     /**
@@ -83,7 +83,7 @@ public class ApdexSummaryData {
      *            the totalCount to set
      */
     public final void setTotalCount(long totalCount) {
-	this.totalCount = totalCount;
+        this.totalCount = totalCount;
     }
 
     /**
@@ -93,18 +93,18 @@ public class ApdexSummaryData {
      *            the threshold information
      */
     public ApdexSummaryData(ApdexThresholdsInfo info) {
-	apdexThresholdInfo = info;
+        apdexThresholdInfo = info;
     }
 
     public void IncSatisfiedCount() {
-	satisfiedCount++;
+        satisfiedCount++;
     }
 
     public void IncToleratedCount() {
-	toleratedCount++;
+        toleratedCount++;
     }
 
     public void IncTotalCount() {
-	totalCount++;
+        totalCount++;
     }
 }

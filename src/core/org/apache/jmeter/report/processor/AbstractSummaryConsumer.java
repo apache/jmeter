@@ -37,47 +37,47 @@ public abstract class AbstractSummaryConsumer<TData> extends
      * The class SummaryInfo stores intermediate results.
      */
     protected class SummaryInfo {
-	final boolean isController;
-	TData data;
+        final boolean isController;
+        TData data;
 
-	/**
-	 * Checks if these information implies controller sample.
-	 *
-	 * @return true, if is controller
-	 */
-	public final boolean isController() {
-	    return isController;
-	}
+        /**
+         * Checks if these information implies controller sample.
+         *
+         * @return true, if is controller
+         */
+        public final boolean isController() {
+            return isController;
+        }
 
-	/**
-	 * Gets the data to store.
-	 *
-	 * @return the data to store
-	 */
-	public final TData getData() {
-	    return data;
-	}
+        /**
+         * Gets the data to store.
+         *
+         * @return the data to store
+         */
+        public final TData getData() {
+            return data;
+        }
 
-	/**
-	 * Sets the data to store.
-	 *
-	 * @param data
-	 *            the new data to store
-	 */
-	public final void setData(TData data) {
-	    this.data = data;
-	}
+        /**
+         * Sets the data to store.
+         *
+         * @param data
+         *            the new data to store
+         */
+        public final void setData(TData data) {
+            this.data = data;
+        }
 
-	/**
-	 * Instantiates a new summary info.
-	 *
-	 * @param isController
-	 *            true, if these information implies only controller
-	 *            samples; false otherwise
-	 */
-	public SummaryInfo(boolean isController) {
-	    this.isController = isController;
-	}
+        /**
+         * Instantiates a new summary info.
+         *
+         * @param isController
+         *            true, if these information implies only controller
+         *            samples; false otherwise
+         */
+        public SummaryInfo(boolean isController) {
+            this.isController = isController;
+        }
 
     }
 
@@ -100,7 +100,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
      * @return true, if the result contains an overall item
      */
     public final boolean hasOverallResult() {
-	return hasOverallResult;
+        return hasOverallResult;
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
      *            true, if the result contains an overall item; false otherwise
      */
     public final void setHasOverallResult(boolean hasOverallResult) {
-	this.hasOverallResult = hasOverallResult;
+        this.hasOverallResult = hasOverallResult;
     }
 
     /**
@@ -120,7 +120,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
      *         otherwise.
      */
     public final boolean suppportsControllersDiscrimination() {
-	return supportsControllersDiscrimination;
+        return supportsControllersDiscrimination;
     }
 
     /**
@@ -129,7 +129,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
      * @return the overall info
      */
     protected final SummaryInfo getOverallInfo() {
-	return overallInfo;
+        return overallInfo;
     }
 
     /**
@@ -138,7 +138,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
      * @return the summary infos
      */
     protected final Map<String, SummaryInfo> getSummaryInfos() {
-	return infos;
+        return infos;
     }
 
     /**
@@ -149,7 +149,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
      *            samples
      */
     protected AbstractSummaryConsumer(boolean supportsControllersDiscrimination) {
-	this.supportsControllersDiscrimination = supportsControllersDiscrimination;
+        this.supportsControllersDiscrimination = supportsControllersDiscrimination;
     }
 
     /**
@@ -189,16 +189,16 @@ public abstract class AbstractSummaryConsumer<TData> extends
     protected abstract void updateData(SummaryInfo info, Sample sample);
 
     private MapResultData createResultFromKey(String key) {
-	SummaryInfo info = (key == null) ? overallInfo : infos.get(key);
-	MapResultData result = null;
-	TData data = info.getData();
-	if (data != null) {
-	    result = new MapResultData();
-	    result.setResult(RESULT_VALUE_IS_CONTROLLER, new ValueResultData(
-		    info.isController()));
-	    result.setResult(RESULT_VALUE_DATA, createDataResult(key, data));
-	}
-	return result;
+        SummaryInfo info = (key == null) ? overallInfo : infos.get(key);
+        MapResultData result = null;
+        TData data = info.getData();
+        if (data != null) {
+            result = new MapResultData();
+            result.setResult(RESULT_VALUE_IS_CONTROLLER, new ValueResultData(
+                    info.isController()));
+            result.setResult(RESULT_VALUE_DATA, createDataResult(key, data));
+        }
+        return result;
     }
 
     /*
@@ -209,12 +209,12 @@ public abstract class AbstractSummaryConsumer<TData> extends
     @Override
     public void startConsuming() {
 
-	// Broadcast metadata to consumes for each channel
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    super.setProducedMetadata(getConsumedMetadata(i), i);
-	}
-	super.startProducing();
+        // Broadcast metadata to consumes for each channel
+        int channelCount = getConsumedChannelCount();
+        for (int i = 0; i < channelCount; i++) {
+            super.setProducedMetadata(getConsumedMetadata(i), i);
+        }
+        super.startProducing();
     }
 
     /*
@@ -226,17 +226,17 @@ public abstract class AbstractSummaryConsumer<TData> extends
      */
     @Override
     public void consume(Sample sample, int channel) {
-	String key = getKeyFromSample(sample);
+        String key = getKeyFromSample(sample);
 
-	// Get the object to store counters or create it if it does not exist.
-	SummaryInfo info = infos.get(key);
-	if (info == null) {
-	    info = new SummaryInfo(supportsControllersDiscrimination
-		    && sample.isController());
-	    infos.put(key, info);
-	}
-	updateData(info, sample);
-	super.produce(sample, channel);
+        // Get the object to store counters or create it if it does not exist.
+        SummaryInfo info = infos.get(key);
+        if (info == null) {
+            info = new SummaryInfo(supportsControllersDiscrimination
+                    && sample.isController());
+            infos.put(key, info);
+        }
+        updateData(info, sample);
+        super.produce(sample, channel);
     }
 
     /*
@@ -246,41 +246,41 @@ public abstract class AbstractSummaryConsumer<TData> extends
      */
     @Override
     public void stopConsuming() {
-	MapResultData result = new MapResultData();
+        MapResultData result = new MapResultData();
 
-	// Push the support flag in the result
-	result.setResult(RESULT_VALUE_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-	        new ValueResultData(supportsControllersDiscrimination));
+        // Push the support flag in the result
+        result.setResult(RESULT_VALUE_SUPPORTS_CONTROLLERS_DISCRIMINATION,
+                new ValueResultData(supportsControllersDiscrimination));
 
-	// Add headers
-	result.setResult(RESULT_VALUE_TITLES, createResultTitles());
+        // Add headers
+        result.setResult(RESULT_VALUE_TITLES, createResultTitles());
 
-	// Add overall row if needed
-	if (hasOverallResult) {
-	    MapResultData overallResult = createResultFromKey(null);
-	    if (overallResult != null) {
-		result.setResult(RESULT_VALUE_OVERALL, overallResult);
-	    }
-	}
+        // Add overall row if needed
+        if (hasOverallResult) {
+            MapResultData overallResult = createResultFromKey(null);
+            if (overallResult != null) {
+                result.setResult(RESULT_VALUE_OVERALL, overallResult);
+            }
+        }
 
-	// Build rows from samples
-	ListResultData itemsResult = new ListResultData();
-	for (String key : infos.keySet()) {
-	    // Add result only if data exist
-	    MapResultData keyResult = createResultFromKey(key);
-	    if (keyResult != null) {
-		itemsResult.addResult(keyResult);
-	    }
-	}
-	result.setResult(RESULT_VALUE_ITEMS, itemsResult);
+        // Build rows from samples
+        ListResultData itemsResult = new ListResultData();
+        for (String key : infos.keySet()) {
+            // Add result only if data exist
+            MapResultData keyResult = createResultFromKey(key);
+            if (keyResult != null) {
+                itemsResult.addResult(keyResult);
+            }
+        }
+        result.setResult(RESULT_VALUE_ITEMS, itemsResult);
 
-	// Store the result in the context
-	setDataToContext(getName(), result);
+        // Store the result in the context
+        setDataToContext(getName(), result);
 
-	super.stopProducing();
+        super.stopProducing();
 
-	// Reset infos
-	infos.clear();
-	overallInfo.setData(null);
+        // Reset infos
+        infos.clear();
+        overallInfo.setData(null);
     }
 }

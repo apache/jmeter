@@ -38,7 +38,7 @@ public class GroupInfo {
      * @return the enableAggregatedKeysSeries
      */
     public final boolean enablesAggregatedKeysSeries() {
-	return enableAggregatedKeysSeries;
+        return enableAggregatedKeysSeries;
     }
 
     /**
@@ -47,7 +47,7 @@ public class GroupInfo {
      * @return the enableOverallSeries
      */
     public final boolean enablesOverallSeries() {
-	return enableOverallSeries;
+        return enableOverallSeries;
     }
 
     /**
@@ -56,7 +56,7 @@ public class GroupInfo {
      * @return the seriesData selector
      */
     public final GraphSeriesSelector getSeriesSelector() {
-	return seriesSelector;
+        return seriesSelector;
     }
 
     /**
@@ -65,7 +65,7 @@ public class GroupInfo {
      * @return the value selector
      */
     public final GraphValueSelector getValueSelector() {
-	return valueSelector;
+        return valueSelector;
     }
 
     /**
@@ -74,7 +74,7 @@ public class GroupInfo {
      * @return the aggregatorFactory
      */
     public final AggregatorFactory getAggregatorFactory() {
-	return aggregatorFactory;
+        return aggregatorFactory;
     }
 
     /**
@@ -83,7 +83,7 @@ public class GroupInfo {
      * @return the group data
      */
     public final GroupData getGroupData() {
-	return groupData;
+        return groupData;
     }
 
     /**
@@ -101,15 +101,15 @@ public class GroupInfo {
      *            the enable aggregated keys series
      */
     public GroupInfo(AggregatorFactory aggregatorFactory,
-	    GraphSeriesSelector seriesSelector,
-	    GraphValueSelector valueSelector, boolean enableOverallSeries,
-	    boolean enableAggregatedKeysSeries) {
-	this.enableOverallSeries = enableOverallSeries;
-	this.seriesSelector = seriesSelector;
-	this.valueSelector = valueSelector;
-	this.aggregatorFactory = aggregatorFactory;
-	this.enableAggregatedKeysSeries = enableAggregatedKeysSeries;
-	this.groupData = new GroupData(aggregatorFactory, enableOverallSeries,
-	        enableAggregatedKeysSeries);
+            GraphSeriesSelector seriesSelector,
+            GraphValueSelector valueSelector, boolean enableOverallSeries,
+            boolean enableAggregatedKeysSeries) {
+        this.enableOverallSeries = enableOverallSeries;
+        this.seriesSelector = seriesSelector;
+        this.valueSelector = valueSelector;
+        this.aggregatorFactory = aggregatorFactory;
+        this.enableAggregatedKeysSeries = enableAggregatedKeysSeries;
+        this.groupData = new GroupData(aggregatorFactory, enableOverallSeries,
+                enableAggregatedKeysSeries);
     }
 }

@@ -28,9 +28,9 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class PercentileAggregator implements Aggregator {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault(
-	    ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_PREFIX
-	            + ReportGeneratorConfiguration.KEY_DELIMITER
-	            + "statistic_window", 200000);
+            ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_PREFIX
+                    + ReportGeneratorConfiguration.KEY_DELIMITER
+                    + "statistic_window", 200000);
 
     private final DescriptiveStatistics statistics;
     private final double percentileIndex;
@@ -42,8 +42,8 @@ public class PercentileAggregator implements Aggregator {
      *            the index of the percentile
      */
     public PercentileAggregator(double index) {
-	statistics = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
-	percentileIndex = index;
+        statistics = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+        percentileIndex = index;
     }
 
     /*
@@ -53,7 +53,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public long getCount() {
-	return statistics.getN();
+        return statistics.getN();
     }
 
     /*
@@ -63,7 +63,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return statistics.getPercentile(percentileIndex);
+        return statistics.getPercentile(percentileIndex);
     }
 
     /*
@@ -73,7 +73,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public void addValue(double value) {
-	statistics.addValue(value);
+        statistics.addValue(value);
     }
 
     /*
@@ -83,7 +83,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	statistics.clear();
+        statistics.clear();
     }
 
 }

@@ -34,7 +34,7 @@ public class MinAggregator implements Aggregator {
      */
     @Override
     public long getCount() {
-	return count;
+        return count;
     }
 
     /*
@@ -44,7 +44,7 @@ public class MinAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-	return value;
+        return value;
     }
 
     /*
@@ -54,8 +54,8 @@ public class MinAggregator implements Aggregator {
      */
     @Override
     public void addValue(double value) {
-	this.value = Math.min(this.value, value);
-	count++;
+        this.value = Math.min(this.value, value);
+        count++;
     }
 
     /*
@@ -65,8 +65,8 @@ public class MinAggregator implements Aggregator {
      */
     @Override
     public void reset() {
-	count = 0L;
-	value = Double.MAX_VALUE;
+        count = 0L;
+        value = Double.MAX_VALUE;
     }
 
 }

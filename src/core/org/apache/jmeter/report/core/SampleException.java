@@ -42,7 +42,7 @@ public class SampleException extends RuntimeException {
      *            the message
      */
     public SampleException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -52,7 +52,7 @@ public class SampleException extends RuntimeException {
      *            the cause
      */
     public SampleException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 
     /**
@@ -64,6 +64,6 @@ public class SampleException extends RuntimeException {
      *            the cause
      */
     public SampleException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 }

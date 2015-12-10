@@ -36,7 +36,7 @@ public class ElapsedTimeValueSelector implements GraphValueSelector {
      */
     @Override
     public double select(String series, Sample sample) {
-	return sample.getElapsedTime();
+        return sample.getElapsedTime();
     }
 
 }

@@ -47,7 +47,7 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
      */
     @Override
     public final Aggregator createValueAggregator() {
-	return createAggregator();
+        return createAggregator();
     }
 
     /*
@@ -59,7 +59,7 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
      */
     @Override
     public final Aggregator createKeyAggregator() {
-	return createAggregator();
+        return createAggregator();
     }
 
     /*
@@ -70,7 +70,7 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
      */
     @Override
     public final Aggregator createAggregatedKeyValueAggregator() {
-	return createAggregator();
+        return createAggregator();
     }
 
 }

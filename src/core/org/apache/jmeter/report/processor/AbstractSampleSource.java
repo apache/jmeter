@@ -31,7 +31,7 @@ public abstract class AbstractSampleSource implements SampleSource {
      * Instantiates a new abstract sample source.
      */
     protected AbstractSampleSource() {
-	// TODO Auto-generated constructor stub
+        // TODO Auto-generated constructor stub
     }
 
     /*
@@ -49,7 +49,7 @@ public abstract class AbstractSampleSource implements SampleSource {
      */
     @Override
     public SampleContext getSampleContext() {
-	return sampleContext;
+        return sampleContext;
     }
 
     /*
@@ -61,7 +61,7 @@ public abstract class AbstractSampleSource implements SampleSource {
      */
     @Override
     public void setSampleContext(SampleContext sampleContext) {
-	this.sampleContext = sampleContext;
+        this.sampleContext = sampleContext;
     }
 
     /*

@@ -64,11 +64,11 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
      *            the data to inject
      */
     public TemplateVisitor(Path source, Path target,
-	    Configuration configuration, DataContext data) {
-	this.source = source;
-	this.target = target;
-	this.configuration = configuration;
-	this.data = data;
+            Configuration configuration, DataContext data) {
+        this.source = source;
+        this.target = target;
+        this.configuration = configuration;
+        this.data = data;
     }
 
     /*
@@ -79,16 +79,16 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
      */
     @Override
     public FileVisitResult preVisitDirectory(Path arg0, BasicFileAttributes arg1)
-	    throws IOException {
-	// Copy directory
-	Path newDir = target.resolve(source.relativize(arg0));
-	try {
-	    Files.copy(arg0, newDir);
-	} catch (FileAlreadyExistsException ex) {
-	    // Set directory empty
-	    FileUtils.cleanDirectory(newDir.toFile());
-	}
-	return FileVisitResult.CONTINUE;
+            throws IOException {
+        // Copy directory
+        Path newDir = target.resolve(source.relativize(arg0));
+        try {
+            Files.copy(arg0, newDir);
+        } catch (FileAlreadyExistsException ex) {
+            // Set directory empty
+            FileUtils.cleanDirectory(newDir.toFile());
+        }
+        return FileVisitResult.CONTINUE;
     }
 
     /*
@@ -99,30 +99,30 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
      */
     @Override
     public FileVisitResult visitFile(Path arg0, BasicFileAttributes arg1)
-	    throws IOException {
+            throws IOException {
 
-	// Depending on file extension, copy or process file
-	String extension = FilenameUtils.getExtension(arg0.toString());
-	if (TEMPLATED_FILE_EXT.equalsIgnoreCase(extension)) {
-	    // Process template file
-	    String templatePath = source.relativize(arg0).toString();
-	    Template template = configuration.getTemplate(templatePath);
-	    Path newPath = target.resolve(FilenameUtils
-		    .removeExtension(templatePath));
-	    Writer file = new FileWriter(newPath.toString());
-	    try {
-		template.process(data, file);
-	    } catch (TemplateException ex) {
-		throw new IOException(ex);
-	    } finally {
-		file.close();
-	    }
+        // Depending on file extension, copy or process file
+        String extension = FilenameUtils.getExtension(arg0.toString());
+        if (TEMPLATED_FILE_EXT.equalsIgnoreCase(extension)) {
+            // Process template file
+            String templatePath = source.relativize(arg0).toString();
+            Template template = configuration.getTemplate(templatePath);
+            Path newPath = target.resolve(FilenameUtils
+                    .removeExtension(templatePath));
+            Writer file = new FileWriter(newPath.toString());
+            try {
+                template.process(data, file);
+            } catch (TemplateException ex) {
+                throw new IOException(ex);
+            } finally {
+                file.close();
+            }
 
-	} else {
-	    // Copy regular file
-	    Path newFile = target.resolve(source.relativize(arg0));
-	    Files.copy(arg0, newFile, StandardCopyOption.REPLACE_EXISTING);
-	}
-	return FileVisitResult.CONTINUE;
+        } else {
+            // Copy regular file
+            Path newFile = target.resolve(source.relativize(arg0));
+            Files.copy(arg0, newFile, StandardCopyOption.REPLACE_EXISTING);
+        }
+        return FileVisitResult.CONTINUE;
     }
 }

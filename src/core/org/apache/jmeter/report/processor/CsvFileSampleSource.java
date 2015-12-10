@@ -67,7 +67,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
     public static final String SOURCE_FILE_ATTRIBUTE = "samplesource.file";
 
     private static final Logger log = LoggerFactory
-	    .getLogger(CsvFileSampleSource.class);
+            .getLogger(CsvFileSampleSource.class);
 
     /** input csv files to be produced */
     private File[] inputFiles;
@@ -89,72 +89,72 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      *            columns
      */
     public CsvFileSampleSource(final File inputFile, final char separator) {
-	if (inputFile == null) {
-	    throw new ArgumentNullException("inputFile");
-	}
+        if (inputFile == null) {
+            throw new ArgumentNullException("inputFile");
+        }
 
-	final String inputRootName = getFileRootName(inputFile.getName());
-	final String inputExtension = getFileExtension(inputFile.getName());
+        final String inputRootName = getFileRootName(inputFile.getName());
+        final String inputExtension = getFileExtension(inputFile.getName());
 
-	// Find secondary inputs by regex match
-	File[] secondaryInputs = null;
-	try {
-	    final Pattern pattern = Pattern.compile(inputRootName
-		    + "-[0-9]+\\." + inputExtension);
-	    secondaryInputs = inputFile.getAbsoluteFile().getParentFile()
-		    .listFiles(new FileFilter() {
+        // Find secondary inputs by regex match
+        File[] secondaryInputs = null;
+        try {
+            final Pattern pattern = Pattern.compile(inputRootName
+                    + "-[0-9]+\\." + inputExtension);
+            secondaryInputs = inputFile.getAbsoluteFile().getParentFile()
+                    .listFiles(new FileFilter() {
 
-		        @Override
-		        public boolean accept(File pathname) {
-			    return pathname.isFile()
-			            && pattern.matcher(pathname.getName())
-			                    .matches();
-		        }
-		    });
-	} catch (PatternSyntaxException e) {
-	    throw new SampleException("Could not locate input sample files !",
-		    e);
-	}
-	inputFiles = new File[secondaryInputs.length + 1];
-	csvReaders = new CsvSampleReader[secondaryInputs.length + 1];
-	int k = 0;
-	// primary input file (ex. input.csv)
-	csvReaders[k] = new CsvSampleReader(inputFile, separator, true);
-	inputFiles[k] = inputFile;
-	// secondary input files (ex. input-1.csv, input-2.csv, input-3.csv)
-	for (File input : secondaryInputs) {
-	    k++;
-	    csvReaders[k] = new CsvSampleReader(input, separator, true);
-	    inputFiles[k] = secondaryInputs[k - 1];
-	}
-	producer = new PrivateProducer();
+                        @Override
+                        public boolean accept(File pathname) {
+                            return pathname.isFile()
+                                    && pattern.matcher(pathname.getName())
+                                            .matches();
+                        }
+                    });
+        } catch (PatternSyntaxException e) {
+            throw new SampleException("Could not locate input sample files !",
+                    e);
+        }
+        inputFiles = new File[secondaryInputs.length + 1];
+        csvReaders = new CsvSampleReader[secondaryInputs.length + 1];
+        int k = 0;
+        // primary input file (ex. input.csv)
+        csvReaders[k] = new CsvSampleReader(inputFile, separator, true);
+        inputFiles[k] = inputFile;
+        // secondary input files (ex. input-1.csv, input-2.csv, input-3.csv)
+        for (File input : secondaryInputs) {
+            k++;
+            csvReaders[k] = new CsvSampleReader(input, separator, true);
+            inputFiles[k] = secondaryInputs[k - 1];
+        }
+        producer = new PrivateProducer();
     }
 
     private static String getFileRootName(String fName) {
-	int idx = fName.lastIndexOf('.');
-	if (idx < 0) {
-	    return fName;
-	}
-	fName = fName.substring(0, idx);
-	return fName;
+        int idx = fName.lastIndexOf('.');
+        if (idx < 0) {
+            return fName;
+        }
+        fName = fName.substring(0, idx);
+        return fName;
     }
 
     private static String getFileExtension(String fName) {
-	int idx = fName.lastIndexOf('.');
-	if (idx < 0) {
-	    return "";
-	}
-	if (idx < fName.length() - 1) {
-	    return fName.substring(idx + 1);
-	}
-	return "";
+        int idx = fName.lastIndexOf('.');
+        if (idx < 0) {
+            return "";
+        }
+        if (idx < fName.length() - 1) {
+            return fName.substring(idx + 1);
+        }
+        return "";
     }
 
     /**
      * Get the current time in milliseconds
      */
     private final long now() {
-	return System.currentTimeMillis();
+        return System.currentTimeMillis();
     }
 
     /**
@@ -165,7 +165,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      *          milliseconds
      */
     private final String time(long t) {
-	return TimeHelper.time(t);
+        return TimeHelper.time(t);
     }
 
     /**
@@ -173,37 +173,37 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      * consumers
      */
     private void produce() {
-	SampleContext context = getSampleContext();
-	if (context == null) {
-	    throw new IllegalStateException(
-		    "Set a sample context before produce samples.");
-	}
+        SampleContext context = getSampleContext();
+        if (context == null) {
+            throw new IllegalStateException(
+                    "Set a sample context before produce samples.");
+        }
 
-	for (int i = 0; i < csvReaders.length; i++) {
-	    long sampleCount = 0;
-	    long start = now();
-	    CsvSampleReader csvReader = csvReaders[i];
-	    producer.setSampleContext(context);
-	    producer.setProducedMetadata(csvReader.getMetadata(), i);
-	    producer.setChannelAttribute(i, SOURCE_FILE_ATTRIBUTE,
-		    inputFiles[i]);
-	    producer.startProducing();
-	    try {
-		Sample s = null;
-		while ((s = csvReader.readSample()) != null) {
-		    producer.produce(s, i);
-		    sampleCount++;
-		}
-	    } finally {
-		producer.stopProducing();
-		csvReader.close();
-	    }
-	    long time = now() - start;
-	    if (log.isInfoEnabled()) {
-		log.info("produce(): " + sampleCount + " samples produced in "
-		        + time(time) + " on channel " + i);
-	    }
-	}
+        for (int i = 0; i < csvReaders.length; i++) {
+            long sampleCount = 0;
+            long start = now();
+            CsvSampleReader csvReader = csvReaders[i];
+            producer.setSampleContext(context);
+            producer.setProducedMetadata(csvReader.getMetadata(), i);
+            producer.setChannelAttribute(i, SOURCE_FILE_ATTRIBUTE,
+                    inputFiles[i]);
+            producer.startProducing();
+            try {
+                Sample s = null;
+                while ((s = csvReader.readSample()) != null) {
+                    producer.produce(s, i);
+                    sampleCount++;
+                }
+            } finally {
+                producer.stopProducing();
+                csvReader.close();
+            }
+            long time = now() - start;
+            if (log.isInfoEnabled()) {
+                log.info("produce(): " + sampleCount + " samples produced in "
+                        + time(time) + " on channel " + i);
+            }
+        }
     }
 
     /*
@@ -215,7 +215,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      */
     @Override
     public void setSampleConsumers(List<SampleConsumer> consumers) {
-	producer.setSampleConsumers(consumers);
+        producer.setSampleConsumers(consumers);
     }
 
     /*
@@ -227,7 +227,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      */
     @Override
     public void addSampleConsumer(SampleConsumer consumer) {
-	producer.addSampleConsumer(consumer);
+        producer.addSampleConsumer(consumer);
     }
 
     /*
@@ -239,7 +239,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      */
     @Override
     public void removeSampleConsumer(SampleConsumer consumer) {
-	producer.removeSampleConsumer(consumer);
+        producer.removeSampleConsumer(consumer);
     }
 
     /**
@@ -249,120 +249,120 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      */
     @Override
     public void run() {
-	produce();
+        produce();
     }
 
     private class PrivateProducer extends AbstractSampleProcessor implements
-	    SampleProducer {
+            SampleProducer {
 
-	private List<SampleConsumer> sampleConsumers = new ArrayList<>();
+        private List<SampleConsumer> sampleConsumers = new ArrayList<>();
 
-	public void setSampleConsumers(List<SampleConsumer> consumers) {
-	    if (consumers == null) {
-		throw new ArgumentNullException("consumers");
-	    }
+        public void setSampleConsumers(List<SampleConsumer> consumers) {
+            if (consumers == null) {
+                throw new ArgumentNullException("consumers");
+            }
 
-	    this.sampleConsumers = consumers;
-	}
+            this.sampleConsumers = consumers;
+        }
 
-	public void addSampleConsumer(SampleConsumer consumer) {
-	    if (consumer == null) {
-		return;
-	    }
-	    this.sampleConsumers.add(consumer);
-	}
+        public void addSampleConsumer(SampleConsumer consumer) {
+            if (consumer == null) {
+                return;
+            }
+            this.sampleConsumers.add(consumer);
+        }
 
-	public void removeSampleConsumer(SampleConsumer consumer) {
-	    if (consumer == null) {
-		return;
-	    }
-	    this.sampleConsumers.remove(consumer);
-	}
+        public void removeSampleConsumer(SampleConsumer consumer) {
+            if (consumer == null) {
+                return;
+            }
+            this.sampleConsumers.remove(consumer);
+        }
 
-	@Override
-	public void setSampleContext(SampleContext context) {
-	    for (SampleConsumer consumer : this.sampleConsumers) {
-		try {
-		    consumer.setSampleContext(context);
-		} catch (Exception e) {
-		    log.error(
-			    "produce(): Consumer failed with message :"
-			            + e.getMessage(), e);
-		    throw new SampleException(e);
-		}
-	    }
-	}
+        @Override
+        public void setSampleContext(SampleContext context) {
+            for (SampleConsumer consumer : this.sampleConsumers) {
+                try {
+                    consumer.setSampleContext(context);
+                } catch (Exception e) {
+                    log.error(
+                            "produce(): Consumer failed with message :"
+                                    + e.getMessage(), e);
+                    throw new SampleException(e);
+                }
+            }
+        }
 
-	@Override
-	public void setProducedMetadata(SampleMetadata metadata, int channel) {
-	    for (SampleConsumer consumer : this.sampleConsumers) {
-		try {
-		    consumer.setConsumedMetadata(metadata, channel);
-		} catch (Exception e) {
-		    log.error(
-			    "setProducedMetadata(): Consumer failed with message :"
-			            + e.getMessage(), e);
-		    throw new SampleException(e);
-		}
-	    }
-	}
+        @Override
+        public void setProducedMetadata(SampleMetadata metadata, int channel) {
+            for (SampleConsumer consumer : this.sampleConsumers) {
+                try {
+                    consumer.setConsumedMetadata(metadata, channel);
+                } catch (Exception e) {
+                    log.error(
+                            "setProducedMetadata(): Consumer failed with message :"
+                                    + e.getMessage(), e);
+                    throw new SampleException(e);
+                }
+            }
+        }
 
-	@Override
-	public void setChannelAttribute(int channel, String key, Object value) {
-	    super.setChannelAttribute(channel, key, value);
-	    // propagate to this mock producer's consumers
-	    for (SampleConsumer consumer : this.sampleConsumers) {
-		try {
-		    consumer.setChannelAttribute(channel, key, value);
-		} catch (Exception e) {
-		    log.error(
-			    "setChannelAttribute(): Consumer failed with message :"
-			            + e.getMessage(), e);
-		    throw new SampleException(e);
-		}
-	    }
-	}
+        @Override
+        public void setChannelAttribute(int channel, String key, Object value) {
+            super.setChannelAttribute(channel, key, value);
+            // propagate to this mock producer's consumers
+            for (SampleConsumer consumer : this.sampleConsumers) {
+                try {
+                    consumer.setChannelAttribute(channel, key, value);
+                } catch (Exception e) {
+                    log.error(
+                            "setChannelAttribute(): Consumer failed with message :"
+                                    + e.getMessage(), e);
+                    throw new SampleException(e);
+                }
+            }
+        }
 
-	@Override
-	public void startProducing() {
-	    for (SampleConsumer consumer : this.sampleConsumers) {
-		try {
-		    consumer.startConsuming();
-		} catch (Exception e) {
-		    log.error(
-			    "startProducing(): Consumer failed with message :"
-			            + e.getMessage(), e);
-		    throw new SampleException(e);
-		}
-	    }
-	}
+        @Override
+        public void startProducing() {
+            for (SampleConsumer consumer : this.sampleConsumers) {
+                try {
+                    consumer.startConsuming();
+                } catch (Exception e) {
+                    log.error(
+                            "startProducing(): Consumer failed with message :"
+                                    + e.getMessage(), e);
+                    throw new SampleException(e);
+                }
+            }
+        }
 
-	@Override
-	public void produce(Sample s, int channel) {
-	    for (SampleConsumer consumer : this.sampleConsumers) {
-		try {
-		    consumer.consume(s, channel);
-		} catch (Exception e) {
-		    log.error(
-			    "produce(): Consumer failed with message :"
-			            + e.getMessage(), e);
-		    throw new SampleException(e);
-		}
-	    }
-	}
+        @Override
+        public void produce(Sample s, int channel) {
+            for (SampleConsumer consumer : this.sampleConsumers) {
+                try {
+                    consumer.consume(s, channel);
+                } catch (Exception e) {
+                    log.error(
+                            "produce(): Consumer failed with message :"
+                                    + e.getMessage(), e);
+                    throw new SampleException(e);
+                }
+            }
+        }
 
-	@Override
-	public void stopProducing() {
-	    for (SampleConsumer consumer : this.sampleConsumers) {
-		try {
-		    consumer.stopConsuming();
-		} catch (Exception e) {
-		    log.error("stopProducing(): Consumer failed with message :"
-			    + e.getMessage(), e);
-		    throw new SampleException(e);
-		}
-	    }
-	}
+        @Override
+        public void stopProducing() {
+            for (SampleConsumer consumer : this.sampleConsumers) {
+                try {
+                    consumer.stopConsuming();
+                } catch (Exception e) {
+                    log.error("stopProducing(): Consumer failed with message :"
+                            + e.getMessage(), e);
+                    throw new SampleException(e);
+                }
+            }
+        }
     }
 
 }

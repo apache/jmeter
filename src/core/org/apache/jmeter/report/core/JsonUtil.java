@@ -36,7 +36,7 @@ public final class JsonUtil {
      * @return the json string
      */
     public static String toJsonArray(String[] array) {
-	return '[' + StringUtils.join(array, ", ") + ']';
+        return '[' + StringUtils.join(array, ", ") + ']';
     }
 
     /**
@@ -47,16 +47,16 @@ public final class JsonUtil {
      * @return the string
      */
     public static String toJsonObject(Map<String, String> map) {
-	String result = "{";
-	if (map != null) {
-	    String[] array = new String[map.size()];
-	    int index = 0;
-	    for (Map.Entry<String, String> entry : map.entrySet()) {
-		array[index] = '"' + entry.getKey() + "\": " + entry.getValue();
-		index++;
-	    }
-	    result += StringUtils.join(array, ", ");
-	}
-	return result + "}";
+        String result = "{";
+        if (map != null) {
+            String[] array = new String[map.size()];
+            int index = 0;
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                array[index] = '"' + entry.getKey() + "\": " + entry.getValue();
+                index++;
+            }
+            result += StringUtils.join(array, ", ");
+        }
+        return result + "}";
     }
 }

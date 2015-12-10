@@ -45,9 +45,9 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
-	TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
-	keysSelector.setSelectBeginTime(false);
-	return keysSelector;
+        TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
+        keysSelector.setSelectBeginTime(false);
+        return keysSelector;
     }
 
     /*
@@ -58,11 +58,11 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new TimeRateAggregatorFactory(), new CodeSeriesSelector(),
-	        new CountValueSelector(), false, false));
-	return groupInfos;
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new TimeRateAggregatorFactory(), new CodeSeriesSelector(),
+                new CountValueSelector(), false, false));
+        return groupInfos;
     }
 
     /*
@@ -74,10 +74,10 @@ public class CodesPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     public void setGranularity(long granularity) {
-	super.setGranularity(granularity);
-	// Override the granularity of the aggregators factory
-	((TimeRateAggregatorFactory) getGroupInfos().get(
-	        AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-	        .setGranularity(granularity);
+        super.setGranularity(granularity);
+        // Override the granularity of the aggregators factory
+        ((TimeRateAggregatorFactory) getGroupInfos().get(
+                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
+                .setGranularity(granularity);
     }
 }

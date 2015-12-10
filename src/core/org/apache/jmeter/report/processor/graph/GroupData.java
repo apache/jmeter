@@ -34,7 +34,7 @@ public class GroupData {
      * @return the series data map
      */
     public final HashMap<String, SeriesData> getSeriesInfo() {
-	return seriesData;
+        return seriesData;
     }
 
     /**
@@ -43,7 +43,7 @@ public class GroupData {
      * @return the overall series data
      */
     public final SeriesData getOverallSeries() {
-	return overallSeries;
+        return overallSeries;
     }
 
     /**
@@ -57,15 +57,15 @@ public class GroupData {
      *            the status defining if the group aggregates keys
      */
     public GroupData(AggregatorFactory factory, boolean hasOverall,
-	    boolean hasAggregatedKey) {
-	overallSeries = hasOverall ? new SeriesData(factory, hasAggregatedKey,
-	        false, true) : null;
+            boolean hasAggregatedKey) {
+        overallSeries = hasOverall ? new SeriesData(factory, hasAggregatedKey,
+                false, true) : null;
     }
 
     public void clear() {
-	seriesData.clear();
-	if (overallSeries != null) {
-	    overallSeries.clear();
-	}
+        seriesData.clear();
+        if (overallSeries != null) {
+            overallSeries.clear();
+        }
     }
 }

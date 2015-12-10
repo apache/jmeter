@@ -33,7 +33,7 @@ public class ApdexThresholdsInfo {
      * @return the satisfied threshold
      */
     public final long getSatisfiedThreshold() {
-	return satisfiedThreshold;
+        return satisfiedThreshold;
     }
 
     /**
@@ -43,7 +43,7 @@ public class ApdexThresholdsInfo {
      *            the satisfied threshold to set
      */
     public final void setSatisfiedThreshold(long satisfiedThreshold) {
-	this.satisfiedThreshold = satisfiedThreshold;
+        this.satisfiedThreshold = satisfiedThreshold;
     }
 
     /**
@@ -52,7 +52,7 @@ public class ApdexThresholdsInfo {
      * @return the tolerated threshold
      */
     public final long getToleratedThreshold() {
-	return toleratedThreshold;
+        return toleratedThreshold;
     }
 
     /**
@@ -62,6 +62,6 @@ public class ApdexThresholdsInfo {
      *            the tolerated threshold to set
      */
     public final void setToleratedThreshold(long toleratedThreshold) {
-	this.toleratedThreshold = toleratedThreshold;
+        this.toleratedThreshold = toleratedThreshold;
     }
 }

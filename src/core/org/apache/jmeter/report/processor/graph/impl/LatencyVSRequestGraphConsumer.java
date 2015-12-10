@@ -46,14 +46,14 @@ public class LatencyVSRequestGraphConsumer extends
      */
     @Override
     protected GraphKeysSelector createKeysSelector() {
-	return new GraphKeysSelector() {
+        return new GraphKeysSelector() {
 
-	    @Override
-	    public Double select(Sample sample) {
-		return sample
-		        .getDouble(AbstractVersusRequestsGraphConsumer.TIME_INTERVAL_LABEL);
-	    }
-	};
+            @Override
+            public Double select(Sample sample) {
+                return sample
+                        .getDouble(AbstractVersusRequestsGraphConsumer.TIME_INTERVAL_LABEL);
+            }
+        };
     }
 
     /*
@@ -64,10 +64,10 @@ public class LatencyVSRequestGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new MedianAggregatorFactory(), new StatusSeriesSelector(),
-	        new LatencyValueSelector(), false, false));
-	return groupInfos;
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new MedianAggregatorFactory(), new StatusSeriesSelector(),
+                new LatencyValueSelector(), false, false));
+        return groupInfos;
     }
 }

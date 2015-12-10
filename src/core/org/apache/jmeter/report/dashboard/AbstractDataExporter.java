@@ -23,27 +23,32 @@ package org.apache.jmeter.report.dashboard;
 public abstract class AbstractDataExporter implements DataExporter {
 
     private String name;
-    
+
     /**
      * Instantiates a new abstract data exporter.
      */
     protected AbstractDataExporter() {
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.dashboard.DataExporter#getName()
      */
     @Override
     public String getName() {
-	return name;
+        return name;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.dashboard.DataExporter#setName(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.report.dashboard.DataExporter#setName(java.lang.String)
      */
     @Override
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
 }

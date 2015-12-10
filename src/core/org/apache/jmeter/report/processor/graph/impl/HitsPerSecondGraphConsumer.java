@@ -45,9 +45,9 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
-	TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
-	keysSelector.setSelectBeginTime(true);
-	return keysSelector;
+        TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
+        keysSelector.setSelectBeginTime(true);
+        return keysSelector;
     }
 
     /*
@@ -58,11 +58,11 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new TimeRateAggregatorFactory(), new StaticSeriesSelector(),
-	        new CountValueSelector(), false, false));
-	return groupInfos;
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new TimeRateAggregatorFactory(), new StaticSeriesSelector(),
+                new CountValueSelector(), false, false));
+        return groupInfos;
     }
 
     /*
@@ -74,11 +74,11 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     public void setGranularity(long granularity) {
-	super.setGranularity(granularity);
-	// Override the granularity of the aggregators factory
-	((TimeRateAggregatorFactory) getGroupInfos().get(
-	        AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-	        .setGranularity(granularity);
+        super.setGranularity(granularity);
+        // Override the granularity of the aggregators factory
+        ((TimeRateAggregatorFactory) getGroupInfos().get(
+                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
+                .setGranularity(granularity);
     }
 
     /*
@@ -90,10 +90,10 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     public void setName(String name) {
-	super.setName(name);
-	// Override the series name with the name of the graph
-	((StaticSeriesSelector) getGroupInfos().get(
-	        AbstractGraphConsumer.DEFAULT_GROUP).getSeriesSelector())
-	        .setSeriesName(name);
+        super.setName(name);
+        // Override the series name with the name of the graph
+        ((StaticSeriesSelector) getGroupInfos().get(
+                AbstractGraphConsumer.DEFAULT_GROUP).getSeriesSelector())
+                .setSeriesName(name);
     }
 }

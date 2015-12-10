@@ -41,7 +41,7 @@ public class SampleContext {
      * @return A file pointing to an existing directory
      */
     public final File getWorkingDirectory() {
-	return workingDirectory;
+        return workingDirectory;
     }
 
     /**
@@ -51,11 +51,11 @@ public class SampleContext {
      *            the new working directory
      */
     public final void setWorkingDirectory(File workingDirectory) {
-	// if (workingDirectory == null)
-	// throw new ArgumentNullException("workingDirectory");
+        // if (workingDirectory == null)
+        // throw new ArgumentNullException("workingDirectory");
 
-	this.workingDirectory = workingDirectory;
-	// workingDirectory.mkdirs();
+        this.workingDirectory = workingDirectory;
+        // workingDirectory.mkdirs();
     }
 
     /**
@@ -64,7 +64,7 @@ public class SampleContext {
      * @return the data
      */
     public final Map<String, Object> getData() {
-	return data;
+        return data;
     }
 
 }

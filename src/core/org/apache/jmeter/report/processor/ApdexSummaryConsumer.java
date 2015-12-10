@@ -44,7 +44,7 @@ public class ApdexSummaryConsumer extends
      * @return the threshold selector
      */
     public final ThresholdSelector getThresholdSelector() {
-	return thresholdSelector;
+        return thresholdSelector;
     }
 
     /**
@@ -54,26 +54,26 @@ public class ApdexSummaryConsumer extends
      *            the APDEX threshold selector to set
      */
     public final void setThresholdSelector(ThresholdSelector thresholdSelector) {
-	this.thresholdSelector = thresholdSelector;
+        this.thresholdSelector = thresholdSelector;
     }
 
     public ApdexSummaryConsumer() {
-	super(true);
+        super(true);
     }
 
     @Override
     protected ListResultData createDataResult(String key, ApdexSummaryData data) {
-	ListResultData result = new ListResultData();
-	result.addResult(new ValueResultData(getApdex(data)));
-	ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
-	result.addResult(new ValueResultData(thresholdsInfo
-	        .getSatisfiedThreshold()));
-	result.addResult(new ValueResultData(thresholdsInfo
-	        .getToleratedThreshold()));
-	result.addResult(new ValueResultData(key != null ? key : JMeterUtils
-	        .getResString("reportgenerator_summary_total")));
+        ListResultData result = new ListResultData();
+        result.addResult(new ValueResultData(getApdex(data)));
+        ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
+        result.addResult(new ValueResultData(thresholdsInfo
+                .getSatisfiedThreshold()));
+        result.addResult(new ValueResultData(thresholdsInfo
+                .getToleratedThreshold()));
+        result.addResult(new ValueResultData(key != null ? key : JMeterUtils
+                .getResString("reportgenerator_summary_total")));
 
-	return result;
+        return result;
     }
 
     /*
@@ -85,7 +85,7 @@ public class ApdexSummaryConsumer extends
      */
     @Override
     protected String getKeyFromSample(Sample sample) {
-	return sample.getName();
+        return sample.getName();
     }
 
     /*
@@ -99,57 +99,57 @@ public class ApdexSummaryConsumer extends
     @Override
     protected void updateData(SummaryInfo info, Sample sample) {
 
-	// Initialize overall data if they don't exist
-	SummaryInfo overallInfo = getOverallInfo();
-	ApdexSummaryData overallData = overallInfo.getData();
-	if (overallData == null) {
-	    overallData = new ApdexSummaryData(getThresholdSelector().select(
-		    null));
-	    overallInfo.setData(overallData);
-	}
+        // Initialize overall data if they don't exist
+        SummaryInfo overallInfo = getOverallInfo();
+        ApdexSummaryData overallData = overallInfo.getData();
+        if (overallData == null) {
+            overallData = new ApdexSummaryData(getThresholdSelector().select(
+                    null));
+            overallInfo.setData(overallData);
+        }
 
-	// Initialize info data if they don't exist
-	ApdexSummaryData data = info.getData();
-	if (data == null) {
-	    data = new ApdexSummaryData(getThresholdSelector().select(
-		    sample.getName()));
-	    info.setData(data);
-	}
+        // Initialize info data if they don't exist
+        ApdexSummaryData data = info.getData();
+        if (data == null) {
+            data = new ApdexSummaryData(getThresholdSelector().select(
+                    sample.getName()));
+            info.setData(data);
+        }
 
-	// Increment the total count of samples with the current name
-	data.IncTotalCount();
+        // Increment the total count of samples with the current name
+        data.IncTotalCount();
 
-	// Increment the total count of samples
-	overallData.IncTotalCount();
+        // Increment the total count of samples
+        overallData.IncTotalCount();
 
-	// Process only succeeded samples
-	if (sample.getSuccess()) {
-	    long elapsedTime = sample.getElapsedTime();
+        // Process only succeeded samples
+        if (sample.getSuccess()) {
+            long elapsedTime = sample.getElapsedTime();
 
-	    // Increment the counters depending on the elapsed time.
-	    ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
-	    if (elapsedTime <= thresholdsInfo.getSatisfiedThreshold()) {
-		data.IncSatisfiedCount();
-	    } else if (elapsedTime <= thresholdsInfo.getToleratedThreshold()) {
-		data.IncToleratedCount();
-	    }
+            // Increment the counters depending on the elapsed time.
+            ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
+            if (elapsedTime <= thresholdsInfo.getSatisfiedThreshold()) {
+                data.IncSatisfiedCount();
+            } else if (elapsedTime <= thresholdsInfo.getToleratedThreshold()) {
+                data.IncToleratedCount();
+            }
 
-	    // Increment the overall counters depending on the elapsed time.
-	    ApdexThresholdsInfo overallThresholdsInfo = overallData
-		    .getApdexThresholdInfo();
-	    if (elapsedTime <= overallThresholdsInfo.getSatisfiedThreshold()) {
-		overallData.IncSatisfiedCount();
-	    } else if (elapsedTime <= overallThresholdsInfo
-		    .getToleratedThreshold()) {
-		overallData.IncToleratedCount();
-	    }
-	}
+            // Increment the overall counters depending on the elapsed time.
+            ApdexThresholdsInfo overallThresholdsInfo = overallData
+                    .getApdexThresholdInfo();
+            if (elapsedTime <= overallThresholdsInfo.getSatisfiedThreshold()) {
+                overallData.IncSatisfiedCount();
+            } else if (elapsedTime <= overallThresholdsInfo
+                    .getToleratedThreshold()) {
+                overallData.IncToleratedCount();
+            }
+        }
 
     }
 
     private double getApdex(ApdexSummaryData data) {
-	return (data.getSatisfiedCount() + (double) data.getToleratedCount() / 2)
-	        / data.getTotalCount();
+        return (data.getSatisfiedCount() + (double) data.getToleratedCount() / 2)
+                / data.getTotalCount();
     }
 
     /*
@@ -161,16 +161,16 @@ public class ApdexSummaryConsumer extends
      */
     @Override
     protected ListResultData createResultTitles() {
-	ListResultData titles = new ListResultData();
-	titles.addResult(new ValueResultData(JMeterUtils
-	        .getResString("reportgenerator_summary_apdex_apdex")));
-	titles.addResult(new ValueResultData(JMeterUtils
-	        .getResString("reportgenerator_summary_apdex_satisfied")));
-	titles.addResult(new ValueResultData(JMeterUtils
-	        .getResString("reportgenerator_summary_apdex_tolerated")));
-	titles.addResult(new ValueResultData(JMeterUtils
-	        .getResString("reportgenerator_summary_apdex_samplers")));
-	return titles;
+        ListResultData titles = new ListResultData();
+        titles.addResult(new ValueResultData(JMeterUtils
+                .getResString("reportgenerator_summary_apdex_apdex")));
+        titles.addResult(new ValueResultData(JMeterUtils
+                .getResString("reportgenerator_summary_apdex_satisfied")));
+        titles.addResult(new ValueResultData(JMeterUtils
+                .getResString("reportgenerator_summary_apdex_tolerated")));
+        titles.addResult(new ValueResultData(JMeterUtils
+                .getResString("reportgenerator_summary_apdex_samplers")));
+        return titles;
     }
 
 }

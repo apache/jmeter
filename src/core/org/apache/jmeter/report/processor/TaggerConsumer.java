@@ -49,83 +49,83 @@ public class TaggerConsumer<TIndex> extends AbstractSampleConsumer {
      * @return the label of the tag used by this consumer.
      */
     public final String getTagLabel() {
-	return tagLabel;
+        return tagLabel;
     }
 
     public final void setTagLabel(String tagLabel) {
-	// TODO what if tagLabel is null or empty ?
-	this.tagLabel = tagLabel;
+        // TODO what if tagLabel is null or empty ?
+        this.tagLabel = tagLabel;
     }
 
     public final SampleIndexer<TIndex> getSampleIndexer() {
-	return sampleIndexer;
+        return sampleIndexer;
     }
 
     public final void setSampleIndexer(SampleIndexer<TIndex> sampleIndexer) {
-	this.sampleIndexer = sampleIndexer;
+        this.sampleIndexer = sampleIndexer;
     }
 
     // Adds a new field in the sample metadata for each channel
     private void initProducedMetadata() {
-	builders.clear();
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    // Get the metadata for the current channel
-	    SampleMetadata consumedMetadata = getConsumedMetadata(i);
+        builders.clear();
+        int channelCount = getConsumedChannelCount();
+        for (int i = 0; i < channelCount; i++) {
+            // Get the metadata for the current channel
+            SampleMetadata consumedMetadata = getConsumedMetadata(i);
 
-	    // Copy metadata to an array
-	    int colCount = consumedMetadata.getColumnCount();
-	    String[] names = new String[colCount + 1];
-	    for (int j = 0; j < colCount; j++) {
-		names[j] = consumedMetadata.getColumnName(j);
-	    }
+            // Copy metadata to an array
+            int colCount = consumedMetadata.getColumnCount();
+            String[] names = new String[colCount + 1];
+            for (int j = 0; j < colCount; j++) {
+                names[j] = consumedMetadata.getColumnName(j);
+            }
 
-	    // Add the new field
-	    names[colCount] = tagLabel;
+            // Add the new field
+            names[colCount] = tagLabel;
 
-	    // Build the produced metadata from the array
-	    SampleMetadata producedMetadata = new SampleMetadata(
-		    consumedMetadata.getSeparator(), names);
+            // Build the produced metadata from the array
+            SampleMetadata producedMetadata = new SampleMetadata(
+                    consumedMetadata.getSeparator(), names);
 
-	    // Add a sample builder for the current channel
-	    builders.add(new SampleBuilder(producedMetadata));
-	    super.setProducedMetadata(producedMetadata, i);
-	}
+            // Add a sample builder for the current channel
+            builders.add(new SampleBuilder(producedMetadata));
+            super.setProducedMetadata(producedMetadata, i);
+        }
     }
 
     private Sample createIndexedSample(Sample sample, int channel, TIndex index) {
-	SampleBuilder builder = builders.get(channel);
-	SampleMetadata metadata = builder.getMetadata();
-	int colCount = metadata.getColumnCount();
-	for (int i = 0; i < colCount - 1; i++) {
-	    builder.add(sample.getString(i));
-	}
-	builder.add(String.valueOf(index));
-	return builder.build();
+        SampleBuilder builder = builders.get(channel);
+        SampleMetadata metadata = builder.getMetadata();
+        int colCount = metadata.getColumnCount();
+        for (int i = 0; i < colCount - 1; i++) {
+            builder.add(sample.getString(i));
+        }
+        builder.add(String.valueOf(index));
+        return builder.build();
     }
 
     @Override
     public void startConsuming() {
-	// TODO what if sampleIndexer is null ?
-	if (sampleIndexer != null) {
-	    sampleIndexer.reset();
-	}
-	initProducedMetadata();
-	super.startProducing();
+        // TODO what if sampleIndexer is null ?
+        if (sampleIndexer != null) {
+            sampleIndexer.reset();
+        }
+        initProducedMetadata();
+        super.startProducing();
     }
 
     @Override
     public void consume(Sample sample, int channel) {
-	// TODO what if s or sampleIndexer are null ?
-	if (sample != null && sampleIndexer != null) {
-	    TIndex index = sampleIndexer.calculateIndex(sample);
-	    Sample indexedSample = createIndexedSample(sample, channel, index);
-	    super.produce(indexedSample, channel);
-	}
+        // TODO what if s or sampleIndexer are null ?
+        if (sample != null && sampleIndexer != null) {
+            TIndex index = sampleIndexer.calculateIndex(sample);
+            Sample indexedSample = createIndexedSample(sample, channel, index);
+            super.produce(indexedSample, channel);
+        }
     }
 
     @Override
     public void stopConsuming() {
-	super.stopProducing();
+        super.stopProducing();
     }
 }

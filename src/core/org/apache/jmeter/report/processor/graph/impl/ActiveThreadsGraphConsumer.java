@@ -47,9 +47,9 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
-	TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
-	keysSelector.setSelectBeginTime(false);
-	return keysSelector;
+        TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
+        keysSelector.setSelectBeginTime(false);
+        return keysSelector;
     }
 
     /*
@@ -60,27 +60,27 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new MeanAggregatorFactory(), new AbstractSeriesSelector() {
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new MeanAggregatorFactory(), new AbstractSeriesSelector() {
 
-		    @Override
-		    public Iterable<String> select(Sample sample) {
-		        String threadName = sample.getThreadName();
-		        int index = threadName.lastIndexOf(" ");
-		        if (index >= 0) {
-			    threadName = threadName.substring(0, index);
-		        }
-		        return Arrays.asList(new String[] { threadName });
-		    }
-	        }, new GraphValueSelector() {
+                    @Override
+                    public Iterable<String> select(Sample sample) {
+                        String threadName = sample.getThreadName();
+                        int index = threadName.lastIndexOf(" ");
+                        if (index >= 0) {
+                            threadName = threadName.substring(0, index);
+                        }
+                        return Arrays.asList(new String[] { threadName });
+                    }
+                }, new GraphValueSelector() {
 
-		    @Override
-		    public double select(String series, Sample sample) {
-		        return sample.getGroupThreads();
-		    }
-	        }, false, false));
-	return groupInfos;
+                    @Override
+                    public double select(String series, Sample sample) {
+                        return sample.getGroupThreads();
+                    }
+                }, false, false));
+        return groupInfos;
     }
 
 }

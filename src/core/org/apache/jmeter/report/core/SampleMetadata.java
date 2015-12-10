@@ -54,100 +54,100 @@ public class SampleMetadata {
      *            The list of columns names
      */
     public SampleMetadata(char separator, String... columns) {
-	if (columns == null) {
-	    throw new ArgumentNullException("columns");
-	}
-	initialize(separator, Arrays.asList(columns));
+        if (columns == null) {
+            throw new ArgumentNullException("columns");
+        }
+        initialize(separator, Arrays.asList(columns));
     }
 
     public SampleMetadata(SampleSaveConfiguration saveConfig) {
-	if (saveConfig == null) {
-        throw new ArgumentNullException("saveConfig");
-    }
-	ArrayList<String> columns = new ArrayList<>();
-	if (saveConfig.saveTimestamp()) {
-	    columns.add(CSVSaveService.TIME_STAMP);
-	}
-	if (saveConfig.saveTime()) {
-	    columns.add(CSVSaveService.CSV_ELAPSED);
-	}
-	if (saveConfig.saveLabel()) {
-	    columns.add(CSVSaveService.LABEL);
-	}
-	if (saveConfig.saveCode()) {
-	    columns.add(CSVSaveService.RESPONSE_CODE);
-	}
-	if (saveConfig.saveMessage()) {
-	    columns.add(CSVSaveService.RESPONSE_MESSAGE);
-	}
-	if (saveConfig.saveThreadName()) {
-	    columns.add(CSVSaveService.THREAD_NAME);
-	}
-	if (saveConfig.saveDataType()) {
-	    columns.add(CSVSaveService.DATA_TYPE);
-	}
-	if (saveConfig.saveSuccess()) {
-	    columns.add(CSVSaveService.SUCCESSFUL);
-	}
-	if (saveConfig.saveAssertionResultsFailureMessage()) {
-	    columns.add(CSVSaveService.FAILURE_MESSAGE);
-	}
-	if (saveConfig.saveBytes()) {
-	    columns.add(CSVSaveService.CSV_BYTES);
-	}
-	if (saveConfig.saveThreadCounts()) {
-	    columns.add(CSVSaveService.CSV_THREAD_COUNT1);
-	    columns.add(CSVSaveService.CSV_THREAD_COUNT2);
-	}
-	if (saveConfig.saveUrl()) {
-	    columns.add(CSVSaveService.CSV_URL);
-	}
-	if (saveConfig.saveFileName()) {
-	    columns.add(CSVSaveService.CSV_FILENAME);
-	}
-	if (saveConfig.saveLatency()) {
-	    columns.add(CSVSaveService.CSV_LATENCY);
-	}
-	if (saveConfig.saveEncoding()) {
-	    columns.add(CSVSaveService.CSV_ENCODING);
-	}
-	if (saveConfig.saveSampleCount()) {
-	    columns.add(CSVSaveService.CSV_SAMPLE_COUNT);
-	    columns.add(CSVSaveService.CSV_ERROR_COUNT);
-	}
-	if (saveConfig.saveHostname()) {
-	    columns.add(CSVSaveService.CSV_HOSTNAME);
-	}
-	if (saveConfig.saveIdleTime()) {
-	    columns.add(CSVSaveService.CSV_IDLETIME);
-	}
-	if (saveConfig.saveConnectTime()) {
-	    columns.add(CSVSaveService.CSV_CONNECT_TIME);
-	}
-	initialize(saveConfig.getDelimiter().charAt(0), columns);
+        if (saveConfig == null) {
+            throw new ArgumentNullException("saveConfig");
+        }
+        ArrayList<String> columns = new ArrayList<>();
+        if (saveConfig.saveTimestamp()) {
+            columns.add(CSVSaveService.TIME_STAMP);
+        }
+        if (saveConfig.saveTime()) {
+            columns.add(CSVSaveService.CSV_ELAPSED);
+        }
+        if (saveConfig.saveLabel()) {
+            columns.add(CSVSaveService.LABEL);
+        }
+        if (saveConfig.saveCode()) {
+            columns.add(CSVSaveService.RESPONSE_CODE);
+        }
+        if (saveConfig.saveMessage()) {
+            columns.add(CSVSaveService.RESPONSE_MESSAGE);
+        }
+        if (saveConfig.saveThreadName()) {
+            columns.add(CSVSaveService.THREAD_NAME);
+        }
+        if (saveConfig.saveDataType()) {
+            columns.add(CSVSaveService.DATA_TYPE);
+        }
+        if (saveConfig.saveSuccess()) {
+            columns.add(CSVSaveService.SUCCESSFUL);
+        }
+        if (saveConfig.saveAssertionResultsFailureMessage()) {
+            columns.add(CSVSaveService.FAILURE_MESSAGE);
+        }
+        if (saveConfig.saveBytes()) {
+            columns.add(CSVSaveService.CSV_BYTES);
+        }
+        if (saveConfig.saveThreadCounts()) {
+            columns.add(CSVSaveService.CSV_THREAD_COUNT1);
+            columns.add(CSVSaveService.CSV_THREAD_COUNT2);
+        }
+        if (saveConfig.saveUrl()) {
+            columns.add(CSVSaveService.CSV_URL);
+        }
+        if (saveConfig.saveFileName()) {
+            columns.add(CSVSaveService.CSV_FILENAME);
+        }
+        if (saveConfig.saveLatency()) {
+            columns.add(CSVSaveService.CSV_LATENCY);
+        }
+        if (saveConfig.saveEncoding()) {
+            columns.add(CSVSaveService.CSV_ENCODING);
+        }
+        if (saveConfig.saveSampleCount()) {
+            columns.add(CSVSaveService.CSV_SAMPLE_COUNT);
+            columns.add(CSVSaveService.CSV_ERROR_COUNT);
+        }
+        if (saveConfig.saveHostname()) {
+            columns.add(CSVSaveService.CSV_HOSTNAME);
+        }
+        if (saveConfig.saveIdleTime()) {
+            columns.add(CSVSaveService.CSV_IDLETIME);
+        }
+        if (saveConfig.saveConnectTime()) {
+            columns.add(CSVSaveService.CSV_CONNECT_TIME);
+        }
+        initialize(saveConfig.getDelimiter().charAt(0), columns);
     }
 
     private void initialize(char separator, List<String> columns) {
-	this.separator = separator;
-	this.columns = columns;
-	int size = columns.size();
-	for (int i = 0; i < size; i++) {
-	    index.put(this.columns.get(i).trim(), i);
-	}
+        this.separator = separator;
+        this.columns = columns;
+        int size = columns.size();
+        for (int i = 0; i < size; i++) {
+            index.put(this.columns.get(i).trim(), i);
+        }
     }
 
     /**
      * Gets the character used for separating columns
      */
     public char getSeparator() {
-	return separator;
+        return separator;
     }
 
     /**
      * Returns the number of columns in the metadata
      */
     public int getColumnCount() {
-	return columns.size();
+        return columns.size();
     }
 
     /**
@@ -162,7 +162,7 @@ public class SampleMetadata {
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(int i) {
-	return columns.get(i);
+        return columns.get(i);
     }
 
     /**
@@ -177,7 +177,7 @@ public class SampleMetadata {
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(Integer i) {
-	return columns.get(i.intValue());
+        return columns.get(i.intValue());
     }
 
     /**
@@ -189,8 +189,8 @@ public class SampleMetadata {
      *         does not exist in this metadata
      */
     public int indexOf(String col) {
-	Integer out = index.get(col);
-	return out == null ? -1 : out.intValue();
+        Integer out = index.get(col);
+        return out == null ? -1 : out.intValue();
     }
 
     /*
@@ -200,14 +200,14 @@ public class SampleMetadata {
      */
     @Override
     public String toString() {
-	StringBuffer out = new StringBuffer();
-	int size = columns.size();
-	for (int i = 0; i < size; i++) {
-	    out.append(columns.get(i));
-	    if (i < size - 1) {
-		out.append(separator);
-	    }
-	}
-	return out.toString();
+        StringBuffer out = new StringBuffer();
+        int size = columns.size();
+        for (int i = 0; i < size; i++) {
+            out.append(columns.get(i));
+            if (i < size - 1) {
+                out.append(separator);
+            }
+        }
+        return out.toString();
     }
 }

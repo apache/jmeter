@@ -70,19 +70,19 @@ import org.apache.log.Logger;
 public class ReportGenerator {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-//    /** A properties file indicator for true. * */
-//    private static final String TRUE = "true"; // $NON_NLS-1$
-//
-//    /** A properties file indicator for false. * */
-//    private static final String FALSE = "false"; // $NON_NLS-1$
+    // /** A properties file indicator for true. * */
+    // private static final String TRUE = "true"; // $NON_NLS-1$
+    //
+    // /** A properties file indicator for false. * */
+    // private static final String FALSE = "false"; // $NON_NLS-1$
 
-//    private static final boolean PRINT_FIELD_NAMES = TRUE
-//	    .equalsIgnoreCase(JMeterUtils.getPropDefault(
-//	            "jmeter.save.saveservice.print_field_names", FALSE));
+    // private static final boolean PRINT_FIELD_NAMES = TRUE
+    // .equalsIgnoreCase(JMeterUtils.getPropDefault(
+    // "jmeter.save.saveservice.print_field_names", FALSE));
 
     private static final boolean CSV_OUTPUT_FORMAT = "csv"
-	    .equalsIgnoreCase(JMeterUtils.getPropDefault(
-	            "jmeter.save.saveservice.output_format", "csv"));
+            .equalsIgnoreCase(JMeterUtils.getPropDefault(
+                    "jmeter.save.saveservice.output_format", "csv"));
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
@@ -115,36 +115,36 @@ public class ReportGenerator {
      *            Can be null, used if generation occurs at end of test
      */
     public ReportGenerator(String resultsFile, ResultCollector resultCollector)
-	    throws ConfigurationException {
-	if (!CSV_OUTPUT_FORMAT) {
-	    throw new IllegalArgumentException(
-		    "Report generation requires csv output format, check 'jmeter.save.saveservice.output_format' property");
-	}
-//	if (!PRINT_FIELD_NAMES) {
-//	    throw new IllegalArgumentException(
-//		    "Report generation requires csv to print field names, check 'jmeter.save.saveservice.print_field_names' property");
-//	}
+            throws ConfigurationException {
+        if (!CSV_OUTPUT_FORMAT) {
+            throw new IllegalArgumentException(
+                    "Report generation requires csv output format, check 'jmeter.save.saveservice.output_format' property");
+        }
+        // if (!PRINT_FIELD_NAMES) {
+        // throw new IllegalArgumentException(
+        // "Report generation requires csv to print field names, check 'jmeter.save.saveservice.print_field_names' property");
+        // }
 
-	File file = new File(resultsFile);
-	if (resultCollector == null) {
-	    if (!(file.isFile() && file.canRead())) {
-		throw new IllegalArgumentException(String.format(
-		        "Invalid test results file : %s", file));
-	    }
-	    log.info("Will only generate report from results file:"
-		    + resultsFile);
-	} else {
-	    if (file.exists() && file.length() > 0) {
-		throw new IllegalArgumentException("Results file:"
-		        + resultsFile + " is not empty");
-	    }
-	    log.info("Will generate report at end of test from  results file:"
-		    + resultsFile);
-	}
-	this.resultCollector = resultCollector;
-	this.testFile = file;
-	configuration = ReportGeneratorConfiguration
-	        .LoadFromProperties(JMeterUtils.getJMeterProperties());
+        File file = new File(resultsFile);
+        if (resultCollector == null) {
+            if (!(file.isFile() && file.canRead())) {
+                throw new IllegalArgumentException(String.format(
+                        "Invalid test results file : %s", file));
+            }
+            log.info("Will only generate report from results file:"
+                    + resultsFile);
+        } else {
+            if (file.exists() && file.length() > 0) {
+                throw new IllegalArgumentException("Results file:"
+                        + resultsFile + " is not empty");
+            }
+            log.info("Will generate report at end of test from  results file:"
+                    + resultsFile);
+        }
+        this.resultCollector = resultCollector;
+        this.testFile = file;
+        configuration = ReportGeneratorConfiguration
+                .LoadFromProperties(JMeterUtils.getJMeterProperties());
     }
 
     /**
@@ -160,15 +160,15 @@ public class ReportGenerator {
      * @return the name of the property setter
      */
     private static String getSetterName(String propertyKey) {
-	// TODO use jmeter regex cache
-	Pattern pattern = Pattern.compile("_(.)");
-	Matcher matcher = pattern.matcher(propertyKey);
-	StringBuffer buffer = new StringBuffer();
-	while (matcher.find()) {
-	    matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
-	}
-	matcher.appendTail(buffer);
-	return buffer.toString();
+        // TODO use jmeter regex cache
+        Pattern pattern = Pattern.compile("_(.)");
+        Matcher matcher = pattern.matcher(propertyKey);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString();
     }
 
     /**
@@ -179,255 +179,255 @@ public class ReportGenerator {
      */
     public void generate() throws GenerationException {
 
-	if (resultCollector != null) {
-	    log.info("Flushing result collector before report Generation");
-	    resultCollector.flushFile();
-	}
-	log.debug("Start report generation");
+        if (resultCollector != null) {
+            log.info("Flushing result collector before report Generation");
+            resultCollector.flushFile();
+        }
+        log.debug("Start report generation");
 
-	File tmpDir = configuration.getTempDirectory();
-	boolean tmpDirCreated = false;
-	if (tmpDir.exists() == false) {
-	    tmpDirCreated = tmpDir.mkdir();
-	    if (tmpDirCreated == false) {
-		String message = String.format(
-		        "Cannot create temporary directory \"%s\".", tmpDir);
-		log.error(message);
-		throw new GenerationException(message);
-	    }
-	}
+        File tmpDir = configuration.getTempDirectory();
+        boolean tmpDirCreated = false;
+        if (tmpDir.exists() == false) {
+            tmpDirCreated = tmpDir.mkdir();
+            if (tmpDirCreated == false) {
+                String message = String.format(
+                        "Cannot create temporary directory \"%s\".", tmpDir);
+                log.error(message);
+                throw new GenerationException(message);
+            }
+        }
 
-	// Build consumers chain
-	SampleContext sampleContext = new SampleContext();
-	sampleContext.setWorkingDirectory(tmpDir);
-	SampleSource source = new CsvFileSampleSource(testFile, JMeterUtils
-	        .getPropDefault("jmeter.save.saveservice.default_delimiter",
-	                ",").charAt(0));
-	source.setSampleContext(sampleContext);
+        // Build consumers chain
+        SampleContext sampleContext = new SampleContext();
+        sampleContext.setWorkingDirectory(tmpDir);
+        SampleSource source = new CsvFileSampleSource(testFile, JMeterUtils
+                .getPropDefault("jmeter.save.saveservice.default_delimiter",
+                        ",").charAt(0));
+        source.setSampleContext(sampleContext);
 
-	NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
-	normalizer.setName(NORMALIZER_CONSUMER_NAME);
-	source.addSampleConsumer(normalizer);
+        NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
+        normalizer.setName(NORMALIZER_CONSUMER_NAME);
+        source.addSampleConsumer(normalizer);
 
-	AggregateConsumer beginDateConsumer = new AggregateConsumer(
-	        new MinAggregator(), new SampleSelector<Double>() {
+        AggregateConsumer beginDateConsumer = new AggregateConsumer(
+                new MinAggregator(), new SampleSelector<Double>() {
 
-		    @Override
-		    public Double select(Sample sample) {
-		        return (double) sample.getStartTime();
-		    }
-	        });
-	beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
-	normalizer.addSampleConsumer(beginDateConsumer);
-
-	AggregateConsumer endDateConsumer = new AggregateConsumer(
-	        new MaxAggregator(), new SampleSelector<Double>() {
-
-		    @Override
-		    public Double select(Sample sample) {
-		        return (double) sample.getEndTime();
-		    }
-	        });
-	endDateConsumer.setName(END_DATE_CONSUMER_NAME);
-	normalizer.addSampleConsumer(endDateConsumer);
-
-	FilterConsumer nameFilter = new FilterConsumer();
-	nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
-	nameFilter.setSamplePredicate(new SamplePredicate() {
-
-	    @Override
-	    public boolean matches(Sample sample) {
-		// Get filtered samples from configuration
-		List<String> filteredSamples = configuration
-		        .getFilteredSamples();
-		// Sample is kept if none filter is set or if the filter
-		// contains its name
-		return filteredSamples.size() == 0
-		        || filteredSamples.contains(sample.getName());
-	    }
-	});
-	normalizer.setSampleConsumer(nameFilter);
-
-	ApdexSummaryConsumer apdexSummaryConsumer = new ApdexSummaryConsumer();
-	apdexSummaryConsumer.setName(APDEX_SUMMARY_CONSUMER_NAME);
-	apdexSummaryConsumer.setHasOverallResult(true);
-	apdexSummaryConsumer.setThresholdSelector(new ThresholdSelector() {
-
-	    @Override
-	    public ApdexThresholdsInfo select(String sampleName) {
-		ApdexThresholdsInfo info = new ApdexThresholdsInfo();
-		info.setSatisfiedThreshold(configuration
-		        .getApdexSatisfiedThreshold());
-		info.setToleratedThreshold(configuration
-		        .getApdexToleratedThreshold());
-		return info;
-	    }
-	});
-	nameFilter.setSampleConsumer(apdexSummaryConsumer);
-
-	RequestsSummaryConsumer requestsSummaryConsumer = new RequestsSummaryConsumer();
-	requestsSummaryConsumer.setName(REQUESTS_SUMMARY_CONSUMER_NAME);
-	nameFilter.setSampleConsumer(requestsSummaryConsumer);
-
-	StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
-	statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
-	statisticsSummaryConsumer.setHasOverallResult(true);
-	nameFilter.setSampleConsumer(statisticsSummaryConsumer);
-
-	FilterConsumer excludeControllerFilter = new FilterConsumer();
-	excludeControllerFilter
-	        .setName(START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME);
-	excludeControllerFilter
-	        .setSamplePredicate(new ControllerSamplePredicate());
-	excludeControllerFilter.setReverseFilter(true);
-	nameFilter.setSampleConsumer(excludeControllerFilter);
-
-	ErrorsSummaryConsumer errorsSummaryConsumer = new ErrorsSummaryConsumer();
-	errorsSummaryConsumer.setName(ERRORS_SUMMARY_CONSUMER_NAME);
-	excludeControllerFilter.setSampleConsumer(errorsSummaryConsumer);
-
-	// Get graph configurations
-	Map<String, GraphConfiguration> graphConfigurations = configuration
-	        .getGraphConfigurations();
-
-	// Process configuration to build graph consumers
-	HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap = new HashMap<>();
-	for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations
-	        .entrySet()) {
-	    String graphName = entryGraphCfg.getKey();
-	    GraphConfiguration graphConfiguration = entryGraphCfg.getValue();
-
-	    // Instantiate the class from the classname
-	    String className = graphConfiguration.getClassName();
-	    try {
-		Class<?> clazz = Class.forName(className);
-		Object obj = clazz.newInstance();
-		AbstractGraphConsumer graph = (AbstractGraphConsumer) obj;
-		graph.setName(graphName);
-
-		// Set graph properties using reflection
-		Method[] methods = clazz.getMethods();
-		for (Map.Entry<String, String> entryProperty : graphConfiguration
-		        .getProperties().entrySet()) {
-		    String propertyName = entryProperty.getKey();
-		    String propertyValue = entryProperty.getValue();
-		    String setterName = getSetterName(propertyName);
-
-		    try {
-			int i = 0;
-			boolean invoked = false;
-			while (i < methods.length && invoked == false) {
-			    Method method = methods[i];
-			    if (method.getName().equals(setterName)) {
-				Class<?>[] parameterTypes = method
-				        .getParameterTypes();
-				if (parameterTypes.length == 1) {
-				    Class<?> parameterType = parameterTypes[0];
-				    if (parameterType
-					    .isAssignableFrom(String.class)) {
-					method.invoke(obj, propertyValue);
-				    } else {
-					StringConverter<?> converter = Converters
-					        .getConverter(parameterType);
-					if (converter == null) {
-                        throw new GenerationException(
-						    String.format(
-						            NOT_SUPPORTED_CONVERTION_FMT,
-						            parameterType
-						                    .getName()));
+                    @Override
+                    public Double select(Sample sample) {
+                        return (double) sample.getStartTime();
                     }
-					method.invoke(obj, converter
-					        .convert(propertyValue));
-				    }
-				    invoked = true;
-				}
-			    }
-			    i++;
-			}
-			if (invoked == false) {
-			    log.warn(String
-				    .format("\"%s\" is not a valid property for class \"%s\", skip it",
-				            propertyName, className));
-			}
-		    } catch (InvocationTargetException | ConvertException ex) {
-			String message = String
-			        .format("Cannot assign \"%s\" to property \"%s\" (mapped as \"%s\"), skip it",
-			                propertyValue, propertyName, setterName);
-			log.error(message, ex);
-			throw new GenerationException(message, ex);
-		    }
-		}
+                });
+        beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
+        normalizer.addSampleConsumer(beginDateConsumer);
 
-		// Choose which entry point to use to plug the graph
-		AbstractSampleConsumer entryPoint = graphConfiguration
-		        .excludesControllers() ? excludeControllerFilter
-		        : nameFilter;
-		entryPoint.addSampleConsumer(graph);
+        AggregateConsumer endDateConsumer = new AggregateConsumer(
+                new MaxAggregator(), new SampleSelector<Double>() {
 
-		// Add to the map
-		graphMap.put(graphConfiguration, graph);
-	    } catch (ClassNotFoundException | IllegalAccessException
-		    | InstantiationException | ClassCastException ex) {
-		String error = String.format(INVALID_CLASS_FMT, className);
-		log.error(error, ex);
-		throw new GenerationException(error, ex);
-	    }
-	}
+                    @Override
+                    public Double select(Sample sample) {
+                        return (double) sample.getEndTime();
+                    }
+                });
+        endDateConsumer.setName(END_DATE_CONSUMER_NAME);
+        normalizer.addSampleConsumer(endDateConsumer);
 
-	// Generate data
-	log.debug("Start samples processing");
-	try {
-	    source.run();
-	} catch (SampleException ex) {
-	    String message = "Error while processing samples";
-	    log.error(message, ex);
-	    throw new GenerationException(message, ex);
-	}
-	log.debug("End of samples processing");
+        FilterConsumer nameFilter = new FilterConsumer();
+        nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
+        nameFilter.setSamplePredicate(new SamplePredicate() {
 
-	log.debug("Start data exporting");
+            @Override
+            public boolean matches(Sample sample) {
+                // Get filtered samples from configuration
+                List<String> filteredSamples = configuration
+                        .getFilteredSamples();
+                // Sample is kept if none filter is set or if the filter
+                // contains its name
+                return filteredSamples.size() == 0
+                        || filteredSamples.contains(sample.getName());
+            }
+        });
+        normalizer.setSampleConsumer(nameFilter);
 
-	// Process configuration to build data exporters
-	for (Map.Entry<String, ExporterConfiguration> entry : configuration
-	        .getExportConfigurations().entrySet()) {
-	    String exporterName = entry.getKey();
-	    ExporterConfiguration exporterConfiguration = entry.getValue();
+        ApdexSummaryConsumer apdexSummaryConsumer = new ApdexSummaryConsumer();
+        apdexSummaryConsumer.setName(APDEX_SUMMARY_CONSUMER_NAME);
+        apdexSummaryConsumer.setHasOverallResult(true);
+        apdexSummaryConsumer.setThresholdSelector(new ThresholdSelector() {
 
-	    // Instantiate the class from the classname
-	    String className = exporterConfiguration.getClassName();
-	    try {
-		Class<?> clazz = Class.forName(className);
-		Object obj = clazz.newInstance();
-		DataExporter exporter = (DataExporter) obj;
-		exporter.setName(exporterName);
+            @Override
+            public ApdexThresholdsInfo select(String sampleName) {
+                ApdexThresholdsInfo info = new ApdexThresholdsInfo();
+                info.setSatisfiedThreshold(configuration
+                        .getApdexSatisfiedThreshold());
+                info.setToleratedThreshold(configuration
+                        .getApdexToleratedThreshold());
+                return info;
+            }
+        });
+        nameFilter.setSampleConsumer(apdexSummaryConsumer);
 
-		// Export data
-		exporter.export(sampleContext, testFile, configuration);
-	    } catch (ClassNotFoundException | IllegalAccessException
-		    | InstantiationException | ClassCastException ex) {
-		String error = String.format(INVALID_CLASS_FMT, className);
-		log.error(error, ex);
-		throw new GenerationException(error, ex);
-	    } catch (ExportException ex) {
-		String error = String.format(INVALID_EXPORT_FMT, exporterName);
-		log.error(error, ex);
-		throw new GenerationException(error, ex);
-	    }
-	}
+        RequestsSummaryConsumer requestsSummaryConsumer = new RequestsSummaryConsumer();
+        requestsSummaryConsumer.setName(REQUESTS_SUMMARY_CONSUMER_NAME);
+        nameFilter.setSampleConsumer(requestsSummaryConsumer);
 
-	log.debug("End of data exporting");
+        StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
+        statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
+        statisticsSummaryConsumer.setHasOverallResult(true);
+        nameFilter.setSampleConsumer(statisticsSummaryConsumer);
 
-	if (tmpDirCreated == true) {
-	    try {
-		FileUtils.deleteDirectory(tmpDir);
-	    } catch (IOException ex) {
-		log.warn(String.format(
-		        "Cannot delete created temporary directory \"%s\".",
-		        tmpDir), ex);
-	    }
-	}
+        FilterConsumer excludeControllerFilter = new FilterConsumer();
+        excludeControllerFilter
+                .setName(START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME);
+        excludeControllerFilter
+                .setSamplePredicate(new ControllerSamplePredicate());
+        excludeControllerFilter.setReverseFilter(true);
+        nameFilter.setSampleConsumer(excludeControllerFilter);
 
-	log.debug("End of report generation");
+        ErrorsSummaryConsumer errorsSummaryConsumer = new ErrorsSummaryConsumer();
+        errorsSummaryConsumer.setName(ERRORS_SUMMARY_CONSUMER_NAME);
+        excludeControllerFilter.setSampleConsumer(errorsSummaryConsumer);
+
+        // Get graph configurations
+        Map<String, GraphConfiguration> graphConfigurations = configuration
+                .getGraphConfigurations();
+
+        // Process configuration to build graph consumers
+        HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap = new HashMap<>();
+        for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations
+                .entrySet()) {
+            String graphName = entryGraphCfg.getKey();
+            GraphConfiguration graphConfiguration = entryGraphCfg.getValue();
+
+            // Instantiate the class from the classname
+            String className = graphConfiguration.getClassName();
+            try {
+                Class<?> clazz = Class.forName(className);
+                Object obj = clazz.newInstance();
+                AbstractGraphConsumer graph = (AbstractGraphConsumer) obj;
+                graph.setName(graphName);
+
+                // Set graph properties using reflection
+                Method[] methods = clazz.getMethods();
+                for (Map.Entry<String, String> entryProperty : graphConfiguration
+                        .getProperties().entrySet()) {
+                    String propertyName = entryProperty.getKey();
+                    String propertyValue = entryProperty.getValue();
+                    String setterName = getSetterName(propertyName);
+
+                    try {
+                        int i = 0;
+                        boolean invoked = false;
+                        while (i < methods.length && invoked == false) {
+                            Method method = methods[i];
+                            if (method.getName().equals(setterName)) {
+                                Class<?>[] parameterTypes = method
+                                        .getParameterTypes();
+                                if (parameterTypes.length == 1) {
+                                    Class<?> parameterType = parameterTypes[0];
+                                    if (parameterType
+                                            .isAssignableFrom(String.class)) {
+                                        method.invoke(obj, propertyValue);
+                                    } else {
+                                        StringConverter<?> converter = Converters
+                                                .getConverter(parameterType);
+                                        if (converter == null) {
+                                            throw new GenerationException(
+                                                    String.format(
+                                                            NOT_SUPPORTED_CONVERTION_FMT,
+                                                            parameterType
+                                                                    .getName()));
+                                        }
+                                        method.invoke(obj, converter
+                                                .convert(propertyValue));
+                                    }
+                                    invoked = true;
+                                }
+                            }
+                            i++;
+                        }
+                        if (invoked == false) {
+                            log.warn(String
+                                    .format("\"%s\" is not a valid property for class \"%s\", skip it",
+                                            propertyName, className));
+                        }
+                    } catch (InvocationTargetException | ConvertException ex) {
+                        String message = String
+                                .format("Cannot assign \"%s\" to property \"%s\" (mapped as \"%s\"), skip it",
+                                        propertyValue, propertyName, setterName);
+                        log.error(message, ex);
+                        throw new GenerationException(message, ex);
+                    }
+                }
+
+                // Choose which entry point to use to plug the graph
+                AbstractSampleConsumer entryPoint = graphConfiguration
+                        .excludesControllers() ? excludeControllerFilter
+                        : nameFilter;
+                entryPoint.addSampleConsumer(graph);
+
+                // Add to the map
+                graphMap.put(graphConfiguration, graph);
+            } catch (ClassNotFoundException | IllegalAccessException
+                    | InstantiationException | ClassCastException ex) {
+                String error = String.format(INVALID_CLASS_FMT, className);
+                log.error(error, ex);
+                throw new GenerationException(error, ex);
+            }
+        }
+
+        // Generate data
+        log.debug("Start samples processing");
+        try {
+            source.run();
+        } catch (SampleException ex) {
+            String message = "Error while processing samples";
+            log.error(message, ex);
+            throw new GenerationException(message, ex);
+        }
+        log.debug("End of samples processing");
+
+        log.debug("Start data exporting");
+
+        // Process configuration to build data exporters
+        for (Map.Entry<String, ExporterConfiguration> entry : configuration
+                .getExportConfigurations().entrySet()) {
+            String exporterName = entry.getKey();
+            ExporterConfiguration exporterConfiguration = entry.getValue();
+
+            // Instantiate the class from the classname
+            String className = exporterConfiguration.getClassName();
+            try {
+                Class<?> clazz = Class.forName(className);
+                Object obj = clazz.newInstance();
+                DataExporter exporter = (DataExporter) obj;
+                exporter.setName(exporterName);
+
+                // Export data
+                exporter.export(sampleContext, testFile, configuration);
+            } catch (ClassNotFoundException | IllegalAccessException
+                    | InstantiationException | ClassCastException ex) {
+                String error = String.format(INVALID_CLASS_FMT, className);
+                log.error(error, ex);
+                throw new GenerationException(error, ex);
+            } catch (ExportException ex) {
+                String error = String.format(INVALID_EXPORT_FMT, exporterName);
+                log.error(error, ex);
+                throw new GenerationException(error, ex);
+            }
+        }
+
+        log.debug("End of data exporting");
+
+        if (tmpDirCreated == true) {
+            try {
+                FileUtils.deleteDirectory(tmpDir);
+            } catch (IOException ex) {
+                log.warn(String.format(
+                        "Cannot delete created temporary directory \"%s\".",
+                        tmpDir), ex);
+            }
+        }
+
+        log.debug("End of report generation");
 
     }
 }

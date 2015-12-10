@@ -32,7 +32,7 @@ public class NameSeriesSelector extends AbstractSeriesSelector {
      * Instantiates a new name series selector.
      */
     public NameSeriesSelector() {
-	super(true);
+        super(true);
     }
     
     /*
@@ -44,7 +44,7 @@ public class NameSeriesSelector extends AbstractSeriesSelector {
      */
     @Override
     public Iterable<String> select(Sample sample) {
-	return Arrays.asList(sample.getName());
+        return Arrays.asList(sample.getName());
     }
 
 }

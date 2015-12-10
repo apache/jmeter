@@ -38,7 +38,7 @@ public class CodeSeriesSelector extends AbstractSeriesSelector {
      */
     @Override
     public Iterable<String> select(Sample sample) {
-	return Arrays.asList(sample.getResponseCode());
+        return Arrays.asList(sample.getResponseCode());
     }
 
 }

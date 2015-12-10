@@ -50,9 +50,9 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
      */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
-	TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
-	keysSelector.setSelectBeginTime(false);
-	return keysSelector;
+        TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
+        keysSelector.setSelectBeginTime(false);
+        return keysSelector;
     }
 
     /*
@@ -63,27 +63,27 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(2);
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new TimeRateAggregatorFactory(), new AbstractSeriesSelector() {
-		    private final Iterable<String> values = Arrays.asList(
-		            RECEIVED_BYTES_SERIES_LABEL,
-		            SENT_BYTES_SERIES_LABEL);
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(2);
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new TimeRateAggregatorFactory(), new AbstractSeriesSelector() {
+                    private final Iterable<String> values = Arrays.asList(
+                            RECEIVED_BYTES_SERIES_LABEL,
+                            SENT_BYTES_SERIES_LABEL);
 
-		    @Override
-		    public Iterable<String> select(Sample sample) {
-		        return values;
-		    }
-	        }, new GraphValueSelector() {
+                    @Override
+                    public Iterable<String> select(Sample sample) {
+                        return values;
+                    }
+                }, new GraphValueSelector() {
 
-		    @Override
-		    public double select(String series, Sample sample) {
-		        // TODO Add Received bytes support
-		        return (series == SENT_BYTES_SERIES_LABEL) ? sample
-		                .getSentBytes() : 0;
-		    }
-	        }, false, false));
-	return groupInfos;
+                    @Override
+                    public double select(String series, Sample sample) {
+                        // TODO Add Received bytes support
+                        return (series == SENT_BYTES_SERIES_LABEL) ? sample
+                                .getSentBytes() : 0;
+                    }
+                }, false, false));
+        return groupInfos;
     }
 
     /*
@@ -95,10 +95,10 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
      */
     @Override
     public void setGranularity(long granularity) {
-	super.setGranularity(granularity);
-	// Override the granularity of the aggregators factory
-	((TimeRateAggregatorFactory) getGroupInfos().get(
-	        AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-	        .setGranularity(granularity);
+        super.setGranularity(granularity);
+        // Override the granularity of the aggregators factory
+        ((TimeRateAggregatorFactory) getGroupInfos().get(
+                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
+                .setGranularity(granularity);
     }
 }

@@ -32,7 +32,7 @@ public class PercentileAggregatorFactory extends AbstractAggregatorFactory {
      * @return the percentile index
      */
     public final double getPercentileIndex() {
-	return percentileIndex;
+        return percentileIndex;
     }
 
     /**
@@ -42,7 +42,7 @@ public class PercentileAggregatorFactory extends AbstractAggregatorFactory {
      *            the index of the percentile to set
      */
     public void setPercentileIndex(double percentileIndex) {
-	this.percentileIndex = percentileIndex;
+        this.percentileIndex = percentileIndex;
     }
 
     /*
@@ -54,7 +54,7 @@ public class PercentileAggregatorFactory extends AbstractAggregatorFactory {
      */
     @Override
     protected Aggregator createAggregator() {
-	return new PercentileAggregator(percentileIndex);
+        return new PercentileAggregator(percentileIndex);
     }
 
 }

@@ -41,7 +41,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      * @return the aggregator
      */
     public final Aggregator getAggregator() {
-	return aggregator;
+        return aggregator;
     }
 
     /**
@@ -50,7 +50,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      * @return the selector
      */
     public final SampleSelector<Double> getSelector() {
-	return selector;
+        return selector;
     }
 
     /**
@@ -62,16 +62,16 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      *            the selector
      */
     public AggregateConsumer(Aggregator aggregator,
-	    SampleSelector<Double> selector) {
-	if (aggregator == null) {
-	    throw new ArgumentNullException("aggregator");
-	}
-	if (selector == null) {
-	    throw new ArgumentNullException("selector");
-	}
+            SampleSelector<Double> selector) {
+        if (aggregator == null) {
+            throw new ArgumentNullException("aggregator");
+        }
+        if (selector == null) {
+            throw new ArgumentNullException("selector");
+        }
 
-	this.aggregator = aggregator;
-	this.selector = selector;
+        this.aggregator = aggregator;
+        this.selector = selector;
     }
 
     /*
@@ -81,13 +81,13 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void startConsuming() {
-	// Broadcast metadata to consumes for each channel
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    super.setProducedMetadata(getConsumedMetadata(i), i);
-	}
+        // Broadcast metadata to consumes for each channel
+        int channelCount = getConsumedChannelCount();
+        for (int i = 0; i < channelCount; i++) {
+            super.setProducedMetadata(getConsumedMetadata(i), i);
+        }
 
-	super.startProducing();
+        super.startProducing();
     }
 
     /*
@@ -99,8 +99,8 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void consume(Sample sample, int channel) {
-	aggregator.addValue(selector.select(sample));
-	super.produce(sample, channel);
+        aggregator.addValue(selector.select(sample));
+        super.produce(sample, channel);
     }
 
     /*
@@ -110,8 +110,8 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void stopConsuming() {
-	setDataToContext(getName(), new ValueResultData(aggregator.getResult()));
-	super.stopProducing();
+        setDataToContext(getName(), new ValueResultData(aggregator.getResult()));
+        super.stopProducing();
     }
 
 }

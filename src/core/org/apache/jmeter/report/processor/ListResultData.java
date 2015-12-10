@@ -41,10 +41,10 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      */
     @Override
     public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
-	if (visitor == null) {
-        throw new ArgumentNullException("visitor");
-    }
-	return visitor.visitListResult(this);
+        if (visitor == null) {
+            throw new ArgumentNullException("visitor");
+        }
+        return visitor.visitListResult(this);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      * @return true, if the result is added
      */
     public boolean addResult(ResultData result) {
-	return items.add(result);
+        return items.add(result);
     }
 
     /**
@@ -66,7 +66,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      * @return the removed result data
      */
     public ResultData removeResult(int index) {
-	return items.remove(index);
+        return items.remove(index);
     }
 
     /**
@@ -77,7 +77,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      * @return the result data
      */
     public ResultData get(int index) {
-	return items.get(index);
+        return items.get(index);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      * @return the size of the list
      */
     public int getSize() {
-	return items.size();
+        return items.size();
     }
 
     /*
@@ -96,6 +96,6 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      */
     @Override
     public Iterator<ResultData> iterator() {
-	return items.iterator();
+        return items.iterator();
     }
 }

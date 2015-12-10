@@ -37,16 +37,16 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void startConsuming() {
-	count = 0L;
-	errorCount = 0L;
+        count = 0L;
+        errorCount = 0L;
 
-	// Broadcast metadata to consumes for each channel
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    super.setProducedMetadata(getConsumedMetadata(i), i);
-	}
+        // Broadcast metadata to consumes for each channel
+        int channelCount = getConsumedChannelCount();
+        for (int i = 0; i < channelCount; i++) {
+            super.setProducedMetadata(getConsumedMetadata(i), i);
+        }
 
-	super.startProducing();
+        super.startProducing();
     }
 
     /* (non-Javadoc)
@@ -54,24 +54,26 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void consume(Sample sample, int channel) {
-	count++;
-	if (sample.getSuccess() == false) {
-	    errorCount++;
-	}
-	super.produce(sample, channel);
+        count++;
+        if (sample.getSuccess() == false) {
+            errorCount++;
+        }
+        super.produce(sample, channel);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
      */
     @Override
     public void stopConsuming() {
-	MapResultData result = new MapResultData();
-	result.setResult("KoPercent", new ValueResultData((double) errorCount
-	        * 100 / count));
-	result.setResult("OkPercent", new ValueResultData(
-	        (double) (count - errorCount) * 100 / count));
-	setDataToContext(getName(), result);
-	super.stopProducing();
+        MapResultData result = new MapResultData();
+        result.setResult("KoPercent", new ValueResultData((double) errorCount
+                * 100 / count));
+        result.setResult("OkPercent", new ValueResultData(
+                (double) (count - errorCount) * 100 / count));
+        setDataToContext(getName(), result);
+        super.stopProducing();
     }
 }

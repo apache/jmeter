@@ -40,7 +40,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
      */
     @Override
     public SampleContext getSampleContext() {
-	return sampleContext;
+        return sampleContext;
     }
 
     /*
@@ -52,7 +52,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
      */
     @Override
     public void setSampleContext(SampleContext sampleContext) {
-	this.sampleContext = sampleContext;
+        this.sampleContext = sampleContext;
     }
 
     /**
@@ -65,11 +65,11 @@ public class AbstractSampleProcessor implements SampleProcessor {
      * @return The channel context associated to the specified channel.
      */
     private ChannelContext getChannelContext(int channel) {
-	while (channelContexts.size() <= channel) {
-	    channelContexts.add(new ChannelContext());
-	}
-	ChannelContext out = channelContexts.get(channel);
-	return out;
+        while (channelContexts.size() <= channel) {
+            channelContexts.add(new ChannelContext());
+        }
+        ChannelContext out = channelContexts.get(channel);
+        return out;
     }
 
     /*
@@ -81,7 +81,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
      */
     @Override
     public void setChannelAttribute(int channel, String key, Object value) {
-	getChannelContext(channel).put(key, value);
+        getChannelContext(channel).put(key, value);
     }
 
     /*
@@ -93,6 +93,6 @@ public class AbstractSampleProcessor implements SampleProcessor {
      */
     @Override
     public Object getChannelAttribute(int channel, String key) {
-	return getChannelContext(channel).get(key);
+        return getChannelContext(channel).get(key);
     }
 }

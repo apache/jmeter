@@ -29,12 +29,12 @@ public class SampleMetaDataParser {
     private char separator;
 
     public SampleMetaDataParser(char separator) {
-	this.separator = separator;
+        this.separator = separator;
     }
 
     public SampleMetadata parse(String headRow) {
-	String[] cols = headRow.split(Character.toString(separator));
-	SampleMetadata out = new SampleMetadata(separator, cols);
-	return out;
+        String[] cols = headRow.split(Character.toString(separator));
+        SampleMetadata out = new SampleMetadata(separator, cols);
+        return out;
     }
 }
