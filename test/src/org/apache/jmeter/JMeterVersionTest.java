@@ -96,6 +96,10 @@ public class JMeterVersionTest extends JMeterTestCase {
         // remove docs-only jars
         propNames.remove("velocity");
         propNames.remove("commons-lang");
+        // remove optional checkstyle name
+        propNames.remove("checkstyle-all"); // not needed in Maven
+        buildProp.remove("checkstyle-all.loc"); // not a Maven download
+        versions.remove("checkstyle-all");
         prop = buildProp;
     }
 
