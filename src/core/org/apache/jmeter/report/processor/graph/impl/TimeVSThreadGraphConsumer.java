@@ -44,13 +44,13 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-	return new GraphKeysSelector() {
+        return new GraphKeysSelector() {
 
-	    @Override
-	    public Double select(Sample sample) {
-		return (double) sample.getAllThreads();
-	    }
-	};
+            @Override
+            public Double select(Sample sample) {
+                return (double) sample.getAllThreads();
+            }
+        };
     }
 
     /*
@@ -61,17 +61,20 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
 
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new MeanAggregatorFactory(), new NameSeriesSelector(),
-	        new ElapsedTimeValueSelector(), false, false));
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new MeanAggregatorFactory(), new NameSeriesSelector(),
+                new ElapsedTimeValueSelector(), false, false));
 
-	return groupInfos;
+        return groupInfos;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
+     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
      */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {

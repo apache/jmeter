@@ -32,7 +32,7 @@ public class GenerationException extends Exception {
      * Instantiates a new configuration exception.
      */
     public GenerationException() {
-	super();
+        super();
     }
 
     /**
@@ -42,7 +42,7 @@ public class GenerationException extends Exception {
      *            the message
      */
     public GenerationException(String message) {
-	super(message);
+        super(message);
     }
 
     /**
@@ -54,7 +54,7 @@ public class GenerationException extends Exception {
      *            the cause
      */
     public GenerationException(String message, Throwable cause) {
-	super(message, cause);
+        super(message, cause);
     }
 
 }

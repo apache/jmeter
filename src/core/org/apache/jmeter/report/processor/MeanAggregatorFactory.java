@@ -33,7 +33,7 @@ public class MeanAggregatorFactory extends AbstractAggregatorFactory {
      */
     @Override
     protected Aggregator createAggregator() {
-	return new MeanAggregator();
+        return new MeanAggregator();
     }
 
 }

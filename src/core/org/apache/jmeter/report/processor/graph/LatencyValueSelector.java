@@ -36,7 +36,7 @@ public class LatencyValueSelector implements GraphValueSelector {
      */
     @Override
     public double select(String series, Sample sample) {
-	return sample.getLatency();
+        return sample.getLatency();
     }
 
 }

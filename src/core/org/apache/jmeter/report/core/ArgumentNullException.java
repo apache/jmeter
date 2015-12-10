@@ -40,7 +40,7 @@ public class ArgumentNullException extends IllegalArgumentException {
      *            the name of the parameter
      */
     public ArgumentNullException(String parameter) {
-	super(String.format(MESSAGE_FMT, parameter));
+        super(String.format(MESSAGE_FMT, parameter));
     }
 
     /**
@@ -50,7 +50,7 @@ public class ArgumentNullException extends IllegalArgumentException {
      *            the inner cause
      */
     public ArgumentNullException(Throwable cause) {
-	super(cause);
+        super(cause);
     }
 
     /**
@@ -62,7 +62,7 @@ public class ArgumentNullException extends IllegalArgumentException {
      *            the inner cause
      */
     public ArgumentNullException(String parameter, Throwable cause) {
-	super(String.format(MESSAGE_FMT, parameter), cause);
+        super(String.format(MESSAGE_FMT, parameter), cause);
     }
 
 }

@@ -43,53 +43,53 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
     private int timestamp;
 
     private SimpleDateFormat df = new SimpleDateFormat(
-	    JMeterUtils.getPropDefault(
-	            "jmeter.save.saveservice.timestamp_format",
-	            DEFAULT_DATE_FORMAT));
+            JMeterUtils.getPropDefault(
+                    "jmeter.save.saveservice.timestamp_format",
+                    DEFAULT_DATE_FORMAT));
 
     private SampleMetadata sampleMetadata;
 
     @Override
     public void startConsuming() {
-	sampleMetadata = getConsumedMetadata(0);
-	timestamp = sampleMetadata.indexOf(CSVSaveService.TIME_STAMP);
-	super.setProducedMetadata(sampleMetadata, 0);
-	startProducing();
+        sampleMetadata = getConsumedMetadata(0);
+        timestamp = sampleMetadata.indexOf(CSVSaveService.TIME_STAMP);
+        super.setProducedMetadata(sampleMetadata, 0);
+        startProducing();
     }
 
     @Override
     public void consume(Sample s, int channel) {
-	Date date = null;
-	try {
-	    String tStr = s.getString(timestamp);
-	    try {
-		// Try to parse the timestamp assuming is a long
-		date = new Date(Long.parseLong(tStr));
-	    } catch (NumberFormatException ex) {
-		// Try to parse the timestamp assuming it has HH:mm:ss format
-		date = df.parse(tStr);
-	    }
-	} catch (Exception e) {
-	    throw new SampleException(String.format(
-		    PARSE_TIMESTAMP_EXCEPTION_MESSAGE, s.getString(timestamp),
-		    s.toString()), e);
-	}
-	long time = date.getTime();
-	int cc = sampleMetadata.getColumnCount();
-	String[] data = new String[cc];
-	for (int i = 0; i < cc; i++) {
-	    if (i == timestamp) {
-		data[i] = Long.toString(time);
-	    } else {
-		data[i] = s.getString(i);
-	    }
-	}
-	Sample rewrited = new Sample(s.getSampleRow(), sampleMetadata, data);
-	super.produce(rewrited, 0);
+        Date date = null;
+        try {
+            String tStr = s.getString(timestamp);
+            try {
+                // Try to parse the timestamp assuming is a long
+                date = new Date(Long.parseLong(tStr));
+            } catch (NumberFormatException ex) {
+                // Try to parse the timestamp assuming it has HH:mm:ss format
+                date = df.parse(tStr);
+            }
+        } catch (Exception e) {
+            throw new SampleException(String.format(
+                    PARSE_TIMESTAMP_EXCEPTION_MESSAGE, s.getString(timestamp),
+                    s.toString()), e);
+        }
+        long time = date.getTime();
+        int cc = sampleMetadata.getColumnCount();
+        String[] data = new String[cc];
+        for (int i = 0; i < cc; i++) {
+            if (i == timestamp) {
+                data[i] = Long.toString(time);
+            } else {
+                data[i] = s.getString(i);
+            }
+        }
+        Sample rewrited = new Sample(s.getSampleRow(), sampleMetadata, data);
+        super.produce(rewrited, 0);
     }
 
     @Override
     public void stopConsuming() {
-	super.stopProducing();
+        super.stopProducing();
     }
 }

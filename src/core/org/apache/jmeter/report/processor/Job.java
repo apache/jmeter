@@ -36,22 +36,22 @@ abstract class Job<T> implements Runnable {
 
     @Override
     public final void run() {
-	resultReady = false;
-	result = exec();
-	synchronized (lock) {
-	    resultReady = true;
-	    lock.notify();
-	}
+        resultReady = false;
+        result = exec();
+        synchronized (lock) {
+            resultReady = true;
+            lock.notify();
+        }
     }
 
     protected abstract T exec();
 
     public T getResult() throws InterruptedException {
-	synchronized (lock) {
-	    while (!resultReady) {
-		lock.wait();
-	    }
-	}
-	return result;
+        synchronized (lock) {
+            while (!resultReady) {
+                lock.wait();
+            }
+        }
+        return result;
     }
 }

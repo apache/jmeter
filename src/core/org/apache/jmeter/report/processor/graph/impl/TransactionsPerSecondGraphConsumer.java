@@ -52,9 +52,9 @@ public class TransactionsPerSecondGraphConsumer extends
      */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
-	TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
-	keysSelector.setSelectBeginTime(false);
-	return keysSelector;
+        TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
+        keysSelector.setSelectBeginTime(false);
+        return keysSelector;
     }
 
     /*
@@ -65,21 +65,21 @@ public class TransactionsPerSecondGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-	HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
-	groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
-	        new TimeRateAggregatorFactory(), new AbstractSeriesSelector(
-	                true) {
+        HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
+        groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
+                new TimeRateAggregatorFactory(), new AbstractSeriesSelector(
+                        true) {
 
-		    @Override
-		    public Iterable<String> select(Sample sample) {
-		        String label = String.format(STATUS_SERIES_FORMAT,
-		                sample.getName(),
-		                sample.getSuccess() ? SUCCESS_SERIES_SUFFIX
-		                        : FAILURE_SERIES_SUFFIX);
-		        return Arrays.asList(label);
-		    }
-	        }, new CountValueSelector(), false, false));
-	return groupInfos;
+                    @Override
+                    public Iterable<String> select(Sample sample) {
+                        String label = String.format(STATUS_SERIES_FORMAT,
+                                sample.getName(),
+                                sample.getSuccess() ? SUCCESS_SERIES_SUFFIX
+                                        : FAILURE_SERIES_SUFFIX);
+                        return Arrays.asList(label);
+                    }
+                }, new CountValueSelector(), false, false));
+        return groupInfos;
     }
 
     /*
@@ -91,11 +91,11 @@ public class TransactionsPerSecondGraphConsumer extends
      */
     @Override
     public void setGranularity(long granularity) {
-	super.setGranularity(granularity);
-	// Override the granularity of the aggregators factory
-	((TimeRateAggregatorFactory) getGroupInfos().get(
-	        AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
-	        .setGranularity(granularity);
+        super.setGranularity(granularity);
+        // Override the granularity of the aggregators factory
+        ((TimeRateAggregatorFactory) getGroupInfos().get(
+                AbstractGraphConsumer.DEFAULT_GROUP).getAggregatorFactory())
+                .setGranularity(granularity);
     }
 
 }

@@ -32,28 +32,28 @@ public class TimeHelper {
     private static final String TIMESTAMP_FORMAT_PROPERTY = "jmeter.save.saveservice.timestamp_format";
 
     public static final String time(long t) {
-	long h = t / 3600000;
-	t %= 3600000;
-	long m = t / 60000;
-	t %= 60000;
-	long s = t / 1000;
-	t %= 1000;
-	long ms = t;
-	if (h > 0) {
-	    return h + "h " + m + "m " + s + "s " + ms + " ms";
-	}
-	if (m > 0) {
-	    return m + "m " + s + "s " + ms + " ms";
-	}
-	if (s > 0) {
-	    return s + "s " + ms + " ms";
-	}
-	if (ms > 0) {
-	    return ms + "ms";
-	}
-	return "0 ms";
+        long h = t / 3600000;
+        t %= 3600000;
+        long m = t / 60000;
+        t %= 60000;
+        long s = t / 1000;
+        t %= 1000;
+        long ms = t;
+        if (h > 0) {
+            return h + "h " + m + "m " + s + "s " + ms + " ms";
+        }
+        if (m > 0) {
+            return m + "m " + s + "s " + ms + " ms";
+        }
+        if (s > 0) {
+            return s + "s " + ms + " ms";
+        }
+        if (ms > 0) {
+            return ms + "ms";
+        }
+        return "0 ms";
     }
-    
+
     /**
      * Format the specified time stamp to string using JMeter properties.
      *
@@ -62,8 +62,8 @@ public class TimeHelper {
      * @return the string
      */
     public static final String formatTimeStamp(long timeStamp) {
-	return formatTimeStamp(timeStamp,
-	        JMeterUtils.getProperty(TIMESTAMP_FORMAT_PROPERTY));
+        return formatTimeStamp(timeStamp,
+                JMeterUtils.getProperty(TIMESTAMP_FORMAT_PROPERTY));
     }
 
     /**
@@ -76,8 +76,8 @@ public class TimeHelper {
      * @return the string
      */
     public static final String formatTimeStamp(long timeStamp, String format) {
-	SimpleDateFormat dateFormat = format != null ? new SimpleDateFormat(
-	        format) : new SimpleDateFormat();
-	return dateFormat.format(new Date(timeStamp));
+        SimpleDateFormat dateFormat = format != null ? new SimpleDateFormat(
+                format) : new SimpleDateFormat();
+        return dateFormat.format(new Date(timeStamp));
     }
 }
