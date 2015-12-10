@@ -86,6 +86,10 @@
   <!-- The version of this file -->
   <property name="version.build" value="$Revision$"/>
 
+  <script language="javascript">
+    project.setProperty('EPOCHSECONDS', new Date().getTime());
+  </script>
+
   <property file="build-local.properties"/> <!-- allow local overrides -->
 
    <!-- Findbugs task and target -->
@@ -2898,6 +2902,10 @@ run JMeter unless all the JMeter jars are added.
       <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
 
+    <target name="_process_checkstyle_jars">
+      <process_jarfile jarname="checkstyle-all"    dest.dir="${lib.opt}"/>
+    </target>
+
     <!-- Update a jar (clean, download, package in one shot.-->
     <target name="update_jar" depends="clean, download_jars, package">
     </target>
@@ -2926,6 +2934,14 @@ run JMeter unless all the JMeter jars are added.
       <mkdir dir="${build.dir}" />
       <antcall target="_process_doc_jars">
           <param name="_get_file" value="true"/>
+      </antcall>
+    </target>
+
+    <target name="download_checkstyle">
+      <!-- build.dir may be needed as a temporary work area -->
+     <mkdir dir="${build.dir}" />
+      <antcall target="_process_checkstyle_jars">
+        <param name="_get_file" value="true"/>
       </antcall>
     </target>
 
