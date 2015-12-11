@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.report.dashboard;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -109,13 +110,11 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
             Template template = configuration.getTemplate(templatePath);
             Path newPath = target.resolve(FilenameUtils
                     .removeExtension(templatePath));
-            Writer file = new FileWriter(newPath.toString());
-            try {
-                template.process(data, file);
+            try (Writer writer = new FileWriter(newPath.toString());
+        	    BufferedWriter bufferedWriter = new BufferedWriter(writer)){
+                template.process(data, bufferedWriter);
             } catch (TemplateException ex) {
                 throw new IOException(ex);
-            } finally {
-                file.close();
             }
 
         } else {
