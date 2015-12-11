@@ -28,6 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.jmeter.report.core.ArgumentNullException;
 import org.apache.jmeter.report.core.CsvFile;
@@ -98,9 +99,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private boolean parallelize;
 
-    private volatile long chunkedSampleCount;
+    private AtomicLong chunkedSampleCount = new AtomicLong();
 
-    private volatile long inputSampleCount;
+    private AtomicLong inputSampleCount = new AtomicLong();
 
     private LinkedList<File> chunks;
 
@@ -303,8 +304,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         File workDir = getWorkingDirectory();
         workDir.mkdir();
         this.pool.prestartAllCoreThreads();
-        inputSampleCount = 0;
-        chunkedSampleCount = 0;
+        inputSampleCount.set(0);;
+        chunkedSampleCount.set(0);
         chunks = new LinkedList<>();
         samples = new LinkedList<>();
         sampleMetadata = getConsumedMetadata(0);
@@ -314,7 +315,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     @Override
     public void consume(Sample s, int channel) {
         samples.add(s);
-        inputSampleCount++;
+        inputSampleCount.incrementAndGet();
         if (samples.size() >= chunkSize) {
             chunks.add(sortAndDump(samples, sampleMetadata));
             samples.clear();
@@ -327,11 +328,11 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             chunks.add(sortAndDump(samples, sampleMetadata));
         }
         if (log.isDebugEnabled()) {
-            log.debug("sort(): " + inputSampleCount
-                    + " samples read from input, " + chunkedSampleCount
+            log.debug("sort(): " + inputSampleCount.longValue()
+                    + " samples read from input, " + chunkedSampleCount.longValue()
                     + " samples written to chunk files");
-            if (inputSampleCount != chunkedSampleCount) {
-                log.error("Failure !");
+            if (inputSampleCount.get() != chunkedSampleCount.get()) {
+                log.error("Failure! Number of samples read from input and written to chunk files differ");
             } else {
                 log.info("chunked samples dumps succeeded.");
             }
@@ -374,7 +375,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         try {
             for (Sample sample : sortedSamples) {
                 csvWriter.write(sample);
-                chunkedSampleCount++;
+                chunkedSampleCount.incrementAndGet();
             }
         } finally {
             csvWriter.close();
