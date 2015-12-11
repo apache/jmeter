@@ -26,7 +26,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import org.apache.jmeter.report.core.SampleException;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Base class for implementing sample writer.<br>
@@ -68,7 +68,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
 
         if (this.writer != null) {
             // flush and close previous writer
-            safeClose(this.writer);
+            JOrphanUtils.closeQuietly(this.writer);
         }
         this.writer = new PrintWriter(new BufferedWriter(writer, BUF_SIZE), false);
     }
@@ -116,21 +116,8 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      */
     @Override
     public void close() {
-        safeClose(this.writer);
+	JOrphanUtils.closeQuietly(writer);
         this.writer = null;
-    }
-
-    private void safeClose(Writer w) {
-        try {
-            w.flush();
-        } catch (Exception e) {
-            // ignore
-        }
-        try {
-            w.close();
-        } catch (Exception e) {
-            // ignore
-        }
     }
 
     public void flush() {
