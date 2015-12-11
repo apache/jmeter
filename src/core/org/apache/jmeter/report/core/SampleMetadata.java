@@ -137,14 +137,14 @@ public class SampleMetadata {
     }
 
     /**
-     * Gets the character used for separating columns
+     * @return the character used for separating columns
      */
     public char getSeparator() {
         return separator;
     }
 
     /**
-     * Returns the number of columns in the metadata
+     * @return the number of columns in the metadata
      */
     public int getColumnCount() {
         return columns.size();
