@@ -99,10 +99,10 @@ public class FilterConsumer extends AbstractSampleConsumer {
         // OR
         // None predicate is defined or the sample does not match when
         // reverseFilter is true.
-        if ((reverseFilter == false && samplePredicate != null && samplePredicate
+        if ((!reverseFilter && samplePredicate != null && samplePredicate
                 .matches(sample))
-                || (reverseFilter == true && (samplePredicate == null || samplePredicate
-                        .matches(sample) == false))) {
+                || (reverseFilter && (samplePredicate == null || !samplePredicate
+                        .matches(sample)))) {
             super.produce(sample, channel);
         }
     }

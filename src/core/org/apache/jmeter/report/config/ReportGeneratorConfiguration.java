@@ -143,7 +143,7 @@ public class ReportGeneratorConfiguration {
      *            the new overall sample filter
      */
     public final void setSampleFilter(String sampleFilter) {
-        if (Objects.equals(this.sampleFilter, sampleFilter) == false) {
+        if (!Objects.equals(this.sampleFilter, sampleFilter)) {
             this.sampleFilter = sampleFilter;
             filteredSamples.clear();
             if (sampleFilter != null) {
