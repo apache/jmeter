@@ -38,8 +38,6 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleComparator;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
-import org.apache.jmeter.report.processor.AbstractSampleConsumer;
-import org.apache.jmeter.report.processor.SampleProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -198,13 +196,11 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                     outputFile.getAbsolutePath()
                             + " is a directory. Please provide a valid output sample file path (not a directory)");
         }
-        CsvSampleReader csvReader = new CsvSampleReader(inputFile,
-                inputFile.getSeparator(), false);
-        try {
+        
+        try (CsvSampleReader csvReader = new CsvSampleReader(inputFile,
+                inputFile.getSeparator(), false)){
             sort(csvReader, outputFile, writeHeader);
-        } finally {
-            csvReader.close();
-        }
+        } 
     }
 
     /**
@@ -246,12 +242,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                     outputFile.getAbsolutePath()
                             + " is a directory. Please provide a valid output sample file path (not a directory)");
         }
-        CsvSampleReader csvReader = new CsvSampleReader(inputFile,
-                sampleMetadata);
-        try {
+        try (CsvSampleReader csvReader = new CsvSampleReader(inputFile,
+                sampleMetadata)){
             sort(csvReader, outputFile, writeHeader);
-        } finally {
-            csvReader.close();
         }
     }
 
@@ -304,7 +297,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         File workDir = getWorkingDirectory();
         workDir.mkdir();
         this.pool.prestartAllCoreThreads();
-        inputSampleCount.set(0);;
+        inputSampleCount.set(0);
         chunkedSampleCount.set(0);
         chunks = new LinkedList<>();
         samples = new LinkedList<>();
@@ -331,7 +324,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             log.debug("sort(): " + inputSampleCount.longValue()
                     + " samples read from input, " + chunkedSampleCount.longValue()
                     + " samples written to chunk files");
-            if (inputSampleCount.get() != chunkedSampleCount.get()) {
+            if (!inputSampleCount.equals(chunkedSampleCount)) {
                 log.error("Failure! Number of samples read from input and written to chunk files differ");
             } else {
                 log.info("chunked samples dumps succeeded.");
@@ -371,14 +364,11 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             log.debug("sortAndDump(): Dumping chunk " + out);
             start = System.currentTimeMillis();
         }
-        CsvSampleWriter csvWriter = new CsvSampleWriter(out, sampleMetadata);
-        try {
+        try (CsvSampleWriter csvWriter = new CsvSampleWriter(out, sampleMetadata)){
             for (Sample sample : sortedSamples) {
                 csvWriter.write(sample);
                 chunkedSampleCount.incrementAndGet();
             }
-        } finally {
-            csvWriter.close();
         }
         if (log.isDebugEnabled()) {
             stop = System.currentTimeMillis();
@@ -509,28 +499,14 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             mergeFiles(metadata, leftFile, rightFile, out);
         } else {
             File f = chunks.get(0);
-            CsvSampleReader reader = new CsvSampleReader(f, metadata);
-            Sample s = null;
-            while ((s = reader.readSample()) != null) {
-                out.produce(s, 0);
+            try (CsvSampleReader reader = new CsvSampleReader(f, metadata)) {
+        	Sample s = null;
+        	while ((s = reader.readSample()) != null) {
+        	    out.produce(s, 0);
+        	}
             }
         }
     }
-
-    // private static long countSamples(File f, SampleMetadata metadata) {
-    // long out = 0;
-    // CsvSampleReader reader = null;
-    //
-    // if (metadata != null) {
-    // reader = new CsvSampleReader(f, metadata);
-    // } else {
-    // reader = new CsvSampleReader(f, ';');
-    // }
-    // while (reader.readSample() != null) {
-    // out++;
-    // }
-    // return out;
-    // }
 
     private File mergeSortFiles(List<File> chunks, SampleMetadata metadata) {
         int sz = chunks.size();
@@ -556,10 +532,10 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         if (out == null) {
             out = getChunkFile();
         }
-        CsvSampleWriter csvWriter = new CsvSampleWriter(out, metadata);
-        CsvSampleReader l = new CsvSampleReader(left, metadata);
-        CsvSampleReader r = new CsvSampleReader(right, metadata);
-        try {
+        
+        try (CsvSampleWriter csvWriter = new CsvSampleWriter(out, metadata);
+        	CsvSampleReader l = new CsvSampleReader(left, metadata);
+                CsvSampleReader r = new CsvSampleReader(right, metadata)) {
             if (writeHeader) {
                 csvWriter.writeHeader();
             }
@@ -583,18 +559,13 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                     csvWriter.write(r.readSample());
                 }
             }
-        } finally {
-            csvWriter.close();
-            l.close();
-            r.close();
         }
     }
 
     private void mergeFiles(SampleMetadata metadata, File left, File right,
             SampleProducer out) {
-        CsvSampleReader l = new CsvSampleReader(left, metadata);
-        CsvSampleReader r = new CsvSampleReader(right, metadata);
-        try {
+        try (CsvSampleReader l = new CsvSampleReader(left, metadata);
+        	CsvSampleReader r = new CsvSampleReader(right, metadata)){
             while (l.hasNext() || r.hasNext()) {
                 if (l.hasNext() && r.hasNext()) {
                     Sample firstLeft = l.peek();
@@ -615,9 +586,6 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                     out.produce(r.readSample(), 0);
                 }
             }
-        } finally {
-            l.close();
-            r.close();
         }
     }
 
@@ -645,35 +613,4 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     public final void setRevertedSort(boolean revertedSort) {
         this.revertedSort = revertedSort;
     }
-
-    // private static void test(String wd, String in, String out) {
-    // File workDir = new File(wd);
-    //
-    // CsvFile input = new CsvFile(in, ';');
-    // File output = new File(out);
-    //
-    // ElapsedSampleComparator comparator = new ElapsedSampleComparator();
-    // ExternalSampleSorter sorter = new ExternalSampleSorter();
-    // sorter.setWorkDir(workDir);
-    // sorter.setChunkSize(800000);
-    // sorter.setSampleComparator(comparator);
-    // sorter.setParallelize(true);
-    // for (int i = 0; i < 1; i++) {
-    // long start = System.currentTimeMillis();
-    // sorter.sort(input, output, true);
-    // long stop = System.currentTimeMillis();
-    // log.info((stop - start) / 1000f / 60f + " m");
-    // log.debug("Checking output sample count...");
-    // long sampleCount = countSamples(output, null);
-    // log.debug("Counted " + sampleCount +
-    // " samples in generated sorted file : output=" + output.length() +
-    // " bytes, input=" + input.length() + " bytes");
-    // if (input.length() != output.length()) {
-    // log.error("Sort failed ! sizes differ.");
-    // } else {
-    // log.info("sort success !");
-    // }
-    // }
-    // }
-
 }
