@@ -330,9 +330,8 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
                 // Create a reader and use it to get the buffered samples
                 File file = fileInfo.getFile();
-                CsvSampleReader reader = new CsvSampleReader(file,
-                        getConsumedMetadata(i));
-                try {
+                try (CsvSampleReader reader = new CsvSampleReader(file,
+                        getConsumedMetadata(i))) {
                     while (reader.hasNext()) {
                         Sample sample = reader.readSample();
                         // Ask parent to consume the altered sample
@@ -342,7 +341,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                                                 % parent.getGranularity()), i);
                     }
                 } finally {
-                    reader.close();
                     file.delete();
                 }
             }
