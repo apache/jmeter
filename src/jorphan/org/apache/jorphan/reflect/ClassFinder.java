@@ -181,6 +181,7 @@ public final class ClassFinder {
                             return name.endsWith(DOT_JAR);
                         }
                     });
+                    // jars cannot be null
                     Collections.addAll(fullList, jars);
                 }
             }
@@ -559,6 +560,10 @@ public final class ClassFinder {
 
     private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses) throws IOException {
         String[] list = dir.list();
+        if(list==null) {
+            log.warn(dir.getAbsolutePath()+" is not a folder");
+            return;
+        }
         for (String aList : list) {
             File file = new File(dir, aList);
             if (file.isDirectory()) {
