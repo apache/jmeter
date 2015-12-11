@@ -91,7 +91,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
     public List<Controller> getControllersToRoot() {
         List<Controller> result = new ArrayList<>(stack.size());
         LinkedList<TestElement> stackLocalCopy = new LinkedList<>(stack);
-        while(stackLocalCopy.size()>0) {
+        while(!stackLocalCopy.isEmpty()) {
             TestElement te = stackLocalCopy.getLast();
             if(te instanceof Controller) {
                 result.add((Controller)te);

@@ -20,7 +20,6 @@ package org.apache.jmeter.threads;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
@@ -329,21 +328,18 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private void triggerEndOfLoopOnParentControllers(Sampler sam, JMeterContext threadContext) {
         // Find parent controllers of current sampler
-        FindTestElementsUpToRootTraverser pathToRootTraverser=null;
+        FindTestElementsUpToRootTraverser pathToRootTraverser = null;
         TransactionSampler transactionSampler = null;
         if(sam instanceof TransactionSampler) {
             transactionSampler = (TransactionSampler) sam;
-            pathToRootTraverser = new FindTestElementsUpToRootTraverser((transactionSampler).getTransactionController());
+            pathToRootTraverser = new FindTestElementsUpToRootTraverser(transactionSampler.getTransactionController());
         } else {
             pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
         }
         testTree.traverse(pathToRootTraverser);
         List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
-
         // Trigger end of loop condition on all parent controllers of current sampler
-        for (Iterator<Controller> iterator = controllersToReinit
-                .iterator(); iterator.hasNext();) {
-            Controller parentController =  iterator.next();
+        for (Controller parentController : controllersToReinit) {
             if(parentController instanceof AbstractThreadGroup) {
                 AbstractThreadGroup tg = (AbstractThreadGroup) parentController;
                 tg.startNextLoop();
@@ -351,7 +347,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 parentController.triggerEndOfLoop();
             }
         }
-        if(transactionSampler!=null) {
+        if(transactionSampler != null) {
             processSampler(transactionSampler, null, threadContext);
         }
     }
